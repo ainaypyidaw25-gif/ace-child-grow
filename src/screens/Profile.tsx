@@ -56,8 +56,15 @@ export function Profile() {
                       {labels.corrected && ` · ${labels.corrected} (corrected)`}
                     </span>
                   </button>
-                  <button type="button" onClick={() => setConfirming('child')}
-                    className="text-sm text-state-red">✕</button>
+                  <span className="flex items-center gap-2">
+                    {active && (
+                      <Link to="/edit-child" className="text-sm text-sky-deep">
+                        {locale === 'mm' ? 'ပြင်ရန်' : 'Edit'}
+                      </Link>
+                    )}
+                    <button type="button" onClick={() => { dispatch({ type: 'switch_child', id: c.id }); setConfirming('child'); }}
+                      className="text-sm text-state-red">✕</button>
+                  </span>
                 </li>
               );
             })}

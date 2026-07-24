@@ -3,6 +3,7 @@ import { Layout } from '../components/Layout';
 import { Welcome } from '../screens/Welcome';
 import { Consent } from '../screens/Consent';
 import { AddChild } from '../screens/AddChild';
+import { EditChild } from '../screens/EditChild';
 import { Home } from '../screens/Home';
 import { MilestoneDemo } from '../screens/MilestoneDemo';
 import { Activities } from '../screens/Activities';
@@ -22,6 +23,7 @@ export function App() {
       <Route path="/" element={<Layout showNav={false}><Welcome /></Layout>} />
       <Route path="/consent" element={<Layout showNav={false}><Consent /></Layout>} />
       <Route path="/add-child" element={<Layout showNav={false}><AddChild /></Layout>} />
+      <Route path="/edit-child" element={<Layout showNav={false}><EditChild /></Layout>} />
       <Route path="/home" element={<Layout><Home /></Layout>} />
       <Route path="/journey" element={<Layout><MilestoneDemo /></Layout>} />
       <Route path="/activities" element={<Layout><Activities /></Layout>} />
