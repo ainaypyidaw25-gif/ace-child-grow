@@ -6,15 +6,17 @@
 | Check | Result |
 |-------|--------|
 | TypeScript typecheck (`tsc -b --noEmit`) | ✅ PASS (0 errors) |
-| Unit + component tests | ✅ **51 / 51 passing** |
+| Unit + component tests | ✅ **62 / 62 passing** |
 | Production build (`vite build`) | ✅ PASS |
-| PWA service worker generated | ✅ 8 precache entries (public content only) |
+| PWA service worker generated | ✅ precache public content only |
 | Dependency audit | ⚠️ 8 (dev-toolchain only) — see limitations |
 
-## Test files (8)
+## Test files (10)
 ```
 ✓ src/domain/__tests__/age.test.ts          (15)
 ✓ src/domain/__tests__/resultEngine.test.ts  (9)
+✓ src/domain/__tests__/recommend.test.ts     (6)
+✓ src/domain/__tests__/report.test.ts        (5)
 ✓ src/domain/__tests__/sleep.test.ts         (7)
 ✓ src/domain/__tests__/safety.test.ts        (5)
 ✓ src/domain/__tests__/units.test.ts         (4)
