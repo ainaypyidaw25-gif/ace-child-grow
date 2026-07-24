@@ -1,0 +1,63 @@
+// English (secondary) translation dictionary. Keys mirror mm.ts exactly.
+import type { TranslationKey } from './mm';
+
+export const en: Record<TranslationKey, string> = {
+  'app.name': 'ACE Child Grow',
+  'app.tagline': 'Every Child Can Grow',
+
+  'nav.home': 'Home',
+  'nav.journey': 'Journey',
+  'nav.activities': 'Activities',
+  'nav.learn': 'Learn',
+  'nav.profile': 'Profile',
+
+  'home.cta.start': "Start today's plan",
+  'home.greeting': 'Hello',
+  'home.todayPlan': "Today's plan",
+  'home.morning': 'Morning',
+  'home.afternoon': 'Afternoon',
+  'home.evening': 'Evening',
+  'home.snapshot': 'Development snapshot',
+  'home.parentTip': 'Parent tip',
+
+  'milestone.answer.yes': 'Yes',
+  'milestone.answer.sometimes': 'Sometimes',
+  'milestone.answer.not_yet': 'Not Yet',
+  'milestone.answer.not_sure': 'Not Sure',
+  'milestone.save': 'Save',
+  'milestone.next': 'Next',
+  'milestone.prev': 'Previous',
+  'milestone.resume': 'Resume',
+
+  'result.disclaimer.nonDiagnostic':
+    'This result is not a diagnosis. It is educational information to help you understand your child’s development.',
+  'result.strengths': 'Strengths your child shows',
+  'result.emerging': 'Emerging skills',
+  'result.activities': 'Suggested activities',
+  'result.repeat.green': 'You can review again in about 3 months.',
+  'result.repeat.yellow': 'Review again in about 4 weeks.',
+  'result.repeat.orange': 'Review again within 2 weeks.',
+  'result.repeat.red': 'Prompt action is needed now.',
+  'result.consult.green': 'Keep observing.',
+  'result.consult.yellow': 'Continue home activities and keep observing.',
+  'result.consult.orange': 'Consulting a qualified professional may be helpful.',
+  'result.consult.red': 'Seek a professional or emergency service immediately.',
+
+  'safety.emergency':
+    'Go to the nearest emergency health service immediately, or call your local emergency number.',
+  'safety.skillLoss.question': 'Has your child lost any skill they could previously do?',
+
+  'hope.title': 'Hope & Understanding Center',
+  'growth.title': 'Growth Tracker',
+  'growth.who.pending': 'Validated WHO growth-standard integration is pending.',
+  'sleep.title': 'Sleep Tracker',
+  'report.title': 'Monthly Report',
+  'directory.empty':
+    'Verified local health-service information is not available yet.',
+
+  'review.required': 'Clinical Review Required',
+  'common.offline': 'Offline',
+  'common.online': 'Online',
+  'common.cancel': 'Cancel',
+  'common.confirm': 'Confirm',
+};

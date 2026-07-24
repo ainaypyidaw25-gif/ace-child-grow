@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Myanmar-first typography. Body >= 16px, generous line-height, no clipped glyphs. */
+:root {
+  color-scheme: light; /* light theme default; avoid accidental dark mode */
+}
+html,
+body {
+  margin: 0;
+  background: #f5fafd;
+  color: #263238;
+  font-family: 'Noto Sans Myanmar', 'Pyidaungsu', 'Myanmar Text', system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Ensure interactive targets meet the 44px minimum. */
+button,
+a[role='button'] {
+  min-height: 44px;
+}
+
+/* Respect reduced-motion preference. */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Visible keyboard focus for accessibility. */
+:focus-visible {
+  outline: 3px solid #2f80ed;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
