@@ -33,3 +33,6 @@ npm-debug.log*
 # Supabase local
 supabase/.branches
 supabase/.temp
+
+# TS build info
+*.tsbuildinfo
