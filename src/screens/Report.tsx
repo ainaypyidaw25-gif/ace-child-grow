@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react';
 import { useLocale } from '../app/LocaleContext';
+import { useAppState } from '../app/AppState';
 import { buildReport, type ReportType } from '../domain/reports/report';
+import { ageLabels } from '../domain/age/ageLabel';
 import { DEMO_CHILD } from '../data/demo';
 
 // Print/PDF: uses the browser print dialog (Save as PDF). A server-side
@@ -24,9 +26,23 @@ const DEMO_SOURCE = {
 };
 
 export function Report() {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
+  const { activeChild } = useAppState();
   const [type, setType] = useState<ReportType>('parent_monthly');
-  const report = useMemo(() => buildReport(type, DEMO_SOURCE), [type]);
+  const source = useMemo(() => {
+    if (!activeChild) return DEMO_SOURCE;
+    const labels = ageLabels(new Date(activeChild.birthDate), new Date(), locale, {
+      gestationalWeeks: activeChild.gestationalWeeks,
+      useCorrected: activeChild.useCorrectedAge,
+    });
+    return {
+      ...DEMO_SOURCE,
+      childNickname: activeChild.nickname,
+      chronologicalAgeLabel: labels.chronological,
+      correctedAgeLabel: labels.corrected,
+    };
+  }, [activeChild, locale]);
+  const report = useMemo(() => buildReport(type, source), [type, source]);
 
   const types: { key: ReportType; label: string }[] = [
     { key: 'parent_monthly', label: t('report.parentMonthly') },

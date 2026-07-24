@@ -1,15 +1,23 @@
 import { useMemo } from 'react';
 import { useLocale } from '../app/LocaleContext';
+import { useAppState } from '../app/AppState';
 import { buildDailyPlan } from '../domain/activities/recommend';
 import { DEMO_CHILD, DEMO_ACTIVITY_CATALOGUE } from '../data/demo';
 import { SAMPLE_ACTIVITIES, isApprovedForParents } from '../data/seed/content';
+import { chronologicalAge } from '../domain/age/age';
 import { ReviewBadge } from '../components/ReviewBadge';
 
 export function Activities() {
   const { t, locale } = useLocale();
+  const { activeChild } = useAppState();
+  // Use the active child's real age when available; else a demo age.
+  const ageMonths = activeChild
+    ? chronologicalAge(new Date(activeChild.birthDate), new Date()).totalMonths
+    : DEMO_CHILD.ageMonths;
+  const childName = activeChild?.nickname ?? DEMO_CHILD.nickname;
   const plan = useMemo(
-    () => buildDailyPlan({ ageMonths: DEMO_CHILD.ageMonths, catalogue: DEMO_ACTIVITY_CATALOGUE }),
-    [],
+    () => buildDailyPlan({ ageMonths, catalogue: DEMO_ACTIVITY_CATALOGUE }),
+    [ageMonths],
   );
   const slots = [
     { key: t('home.morning'), a: plan.morning },
@@ -21,7 +29,7 @@ export function Activities() {
     <div className="space-y-4">
       <h1 className="text-xl font-bold text-sky-deep">{t('activities.title')}</h1>
       <p className="text-sm text-ink-soft">
-        {t('activities.dailyPlan')} · {DEMO_CHILD.nickname}
+        {t('activities.dailyPlan')} · {childName}
       </p>
 
       <ul className="space-y-3">

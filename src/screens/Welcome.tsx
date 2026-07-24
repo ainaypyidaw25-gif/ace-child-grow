@@ -11,7 +11,7 @@ export function Welcome() {
         <p className="mt-1 text-ink-soft">{t('app.tagline')}</p>
       </div>
       <Link
-        to="/home"
+        to="/consent"
         role="button"
         className="rounded-pill bg-sky px-6 py-3 font-semibold text-white shadow-card"
       >

@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useLocale } from '../app/LocaleContext';
+import { useAppState } from '../app/AppState';
+import { ageLabels } from '../domain/age/ageLabel';
 
 function Card({ title, children }: { title: string; children: React.ReactNode }) {
   return (
@@ -11,17 +13,31 @@ function Card({ title, children }: { title: string; children: React.ReactNode })
 }
 
 export function Home() {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
+  const { activeChild } = useAppState();
   const plans = [
     { label: t('home.morning'), emoji: '🌅' },
     { label: t('home.afternoon'), emoji: '☀️' },
     { label: t('home.evening'), emoji: '🌙' },
   ];
+  const labels = activeChild
+    ? ageLabels(new Date(activeChild.birthDate), new Date(), locale, {
+        gestationalWeeks: activeChild.gestationalWeeks,
+        useCorrected: activeChild.useCorrectedAge,
+      })
+    : null;
   return (
     <div className="space-y-4">
       <div className="rounded-card bg-mint-soft p-5">
         <p className="text-ink-soft">{t('home.greeting')} 👋</p>
-        <p className="mt-1 text-lg font-bold text-sky-deep">{t('app.tagline')}</p>
+        {activeChild ? (
+          <p className="mt-1 text-lg font-bold text-sky-deep">
+            {activeChild.nickname} · {labels?.chronological}
+            {labels?.corrected && ` (${labels.corrected} corrected)`}
+          </p>
+        ) : (
+          <p className="mt-1 text-lg font-bold text-sky-deep">{t('app.tagline')}</p>
+        )}
       </div>
 
       <Card title={t('home.todayPlan')}>
