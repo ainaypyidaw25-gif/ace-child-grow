@@ -6,7 +6,7 @@
 | Check | Result |
 |-------|--------|
 | TypeScript typecheck (`tsc -b --noEmit`) | ✅ PASS (0 errors) |
-| Unit + component tests | ✅ **86 / 86 passing** |
+| Unit + component tests | ✅ **90 / 90 passing** |
 | **E2E tests (Playwright, real Chromium)** | ✅ **4 / 4 passing** |
 | Production build (`vite build`) | ✅ PASS |
 | PWA service worker generated | ✅ precache public content only |
