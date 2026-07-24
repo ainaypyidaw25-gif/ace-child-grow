@@ -36,3 +36,7 @@ supabase/.temp
 
 # TS build info
 *.tsbuildinfo
+
+# Generated sample PDFs / previews (regenerate via npm run report:pdf)
+sample-report-*.pdf
+*_preview*.png
