@@ -17,7 +17,37 @@ export default defineSchema({
     preferredLocale: v.union(v.literal('mm'), v.literal('en')),
     consentAcceptedAt: v.optional(v.number()),
     privacyNoticeVersion: v.optional(v.string()),
+    // Staff flag for the Admin CMS. Granted by a super admin (or, in dev, via the
+    // Convex dashboard). Content-workflow mutations require this to be true.
+    isStaff: v.optional(v.boolean()),
   }).index('by_user', ['userId']),
+
+  // Saved (favourite) activities — private to the parent.
+  favorites: defineTable({
+    userId: v.id('users'),
+    activityKey: v.string(),
+  })
+    .index('by_user', ['userId'])
+    .index('by_user_activity', ['userId', 'activityKey']),
+
+  // Per-parent notifications (e.g. review reminders). Private.
+  notifications: defineTable({
+    userId: v.id('users'),
+    titleMm: v.string(),
+    titleEn: v.string(),
+    bodyMm: v.optional(v.string()),
+    bodyEn: v.optional(v.string()),
+    readAt: v.optional(v.number()),
+  }).index('by_user', ['userId']),
+
+  // Admin CMS content items carrying review-workflow state. Readable by any
+  // authenticated user only when 'published'; staff see all and can transition.
+  contentItems: defineTable({
+    kind: v.string(), // milestone | activity | awareness | lesson
+    titleMm: v.string(),
+    titleEn: v.string(),
+    reviewStatus: v.string(), // matches src/domain/content/workflow.ts states
+  }).index('by_status', ['reviewStatus']),
 
   children: defineTable({
     userId: v.id('users'),

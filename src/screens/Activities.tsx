@@ -1,4 +1,6 @@
 import { useMemo } from 'react';
+import { useQuery, useMutation } from 'convex/react';
+import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
 import { useAppState } from '../app/AppState';
 import { buildDailyPlan } from '../domain/activities/recommend';
@@ -24,6 +26,9 @@ export function Activities() {
     { key: t('home.afternoon'), a: plan.afternoon },
     { key: t('home.evening'), a: plan.evening },
   ];
+
+  const favKeys = useQuery(api.favorites.list) ?? [];
+  const toggleFav = useMutation(api.favorites.toggle);
 
   return (
     <div className="space-y-4">
@@ -53,7 +58,18 @@ export function Activities() {
           <li key={i} className="rounded-card border border-line bg-white p-4">
             <div className="flex items-center justify-between gap-2">
               <span className="font-semibold">{locale === 'mm' ? a.titleMm : a.titleEn}</span>
-              <ReviewBadge published={isApprovedForParents(a.reviewStatus)} />
+              <div className="flex items-center gap-2">
+                <ReviewBadge published={isApprovedForParents(a.reviewStatus)} />
+                <button
+                  type="button"
+                  aria-label="Save activity"
+                  aria-pressed={favKeys.includes(`act-${i}`)}
+                  onClick={() => void toggleFav({ activityKey: `act-${i}` })}
+                  className="min-h-touch min-w-touch text-lg"
+                >
+                  {favKeys.includes(`act-${i}`) ? '❤️' : '🤍'}
+                </button>
+              </div>
             </div>
             <p className="mt-1 text-sm text-ink-soft">{a.objectiveEn}</p>
             <p className="mt-2 rounded-lg bg-pink/40 px-3 py-2 text-xs text-ink">

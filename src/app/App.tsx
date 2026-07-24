@@ -16,6 +16,8 @@ import { HopeCenter } from '../screens/HopeCenter';
 import { Report } from '../screens/Report';
 import { Profile } from '../screens/Profile';
 import { OfflineDownloads } from '../screens/OfflineDownloads';
+import { Favorites } from '../screens/Favorites';
+import { Notifications } from '../screens/Notifications';
 import { AdminReviewQueue } from '../screens/AdminReviewQueue';
 
 // Authentication gate: unauthenticated visitors see sign-in; the app (and all
@@ -53,6 +55,8 @@ function AppRoutes() {
       <Route path="/report" element={<Layout><Report /></Layout>} />
       <Route path="/profile" element={<Layout><Profile /></Layout>} />
       <Route path="/offline" element={<Layout><OfflineDownloads /></Layout>} />
+      <Route path="/favorites" element={<Layout><Favorites /></Layout>} />
+      <Route path="/notifications" element={<Layout><Notifications /></Layout>} />
       <Route path="/admin" element={<Layout><AdminReviewQueue /></Layout>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

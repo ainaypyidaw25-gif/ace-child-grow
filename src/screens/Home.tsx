@@ -70,6 +70,8 @@ export function Home() {
           { to: '/sleep', label: t('sleep.title'), emoji: '😴' },
           { to: '/hope', label: t('hope.title'), emoji: '💛' },
           { to: '/report', label: t('report.title'), emoji: '📄' },
+          { to: '/favorites', label: t('favorites.title'), emoji: '❤️' },
+          { to: '/admin', label: 'Admin', emoji: '🗂️' },
         ].map((q) => (
           <Link
             key={q.to}

@@ -99,4 +99,12 @@ export const en: Record<TranslationKey, string> = {
   'report.print': 'Print / Save PDF',
   'report.questions': 'Questions for a professional',
   'report.nextReview': 'Next review date',
+
+  'favorites.title': 'Saved activities',
+  'favorites.empty': 'No saved activities yet. Tap ❤ to save one.',
+  'notifications.title': 'Notifications',
+  'notifications.empty': 'No notifications yet.',
+  'notifications.markRead': 'Mark all as read',
+  'admin.seed': 'Add sample content',
+  'admin.staffOnly': 'Only staff can advance content.',
 };

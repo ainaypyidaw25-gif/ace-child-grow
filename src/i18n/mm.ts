@@ -98,6 +98,14 @@ export const mm = {
   'report.print': 'ပုံနှိပ် / PDF သိမ်းမည်',
   'report.questions': 'ပညာရှင်ကို မေးရန် မေးခွန်းများ',
   'report.nextReview': 'နောက်ပြန်စစ်ရန်ရက်',
+
+  'favorites.title': 'သိမ်းထားသော လှုပ်ရှားမှုများ',
+  'favorites.empty': 'သိမ်းထားသော လှုပ်ရှားမှု မရှိသေးပါ။ ❤ ကို နှိပ်ပြီး သိမ်းပါ။',
+  'notifications.title': 'အသိပေးချက်များ',
+  'notifications.empty': 'အသိပေးချက် မရှိသေးပါ။',
+  'notifications.markRead': 'အားလုံး ဖတ်ပြီးအဖြစ် မှတ်မည်',
+  'admin.seed': 'နမူနာ content ထည့်မည်',
+  'admin.staffOnly': 'အဆင့်ရွှေ့ခြင်းကို staff သာ ပြုလုပ်နိုင်သည်။',
 } as const;
 
 export type TranslationKey = keyof typeof mm;
