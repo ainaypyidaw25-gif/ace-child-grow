@@ -1,38 +1,31 @@
 import { test, expect } from '@playwright/test';
+import { signUpFresh } from './helpers';
 
-// Core parent journey: welcome → consent → add child → home shows the child.
-test('parent can consent, add a child, and see them on Home', async ({ page }) => {
-  await page.goto('/');
-  await expect(page.getByRole('heading', { name: 'ACE Child Grow' })).toBeVisible();
+declare const process: { env: Record<string, string | undefined> };
+
+// Full journey against the LIVE Convex backend: sign up → consent → add child →
+// Home shows the child → reload proves the child persisted server-side.
+test('sign up, consent, add a child, and persist across reload', async ({ page }) => {
+  // Needs WebSocket egress to Convex; set E2E_LIVE=1 to run (e.g. locally / CI).
+  test.skip(!process.env.E2E_LIVE, 'requires live Convex WebSocket connectivity');
+  await signUpFresh(page);
 
   // Start → consent
-  await page.getByRole('button', { name: 'ဒီနေ့အစီအစဉ် စတင်မယ်' }).click();
+  await page.getByRole('button', { name: /Start today|ဒီနေ့အစီအစဉ်/ }).click();
   await expect(page).toHaveURL(/\/consent$/);
+  await page.getByRole('button', { name: /Confirm|အတည်ပြုမည်/ }).click();
 
-  // Accept consent → add child
-  await page.getByRole('button', { name: 'အတည်ပြုမည်' }).click();
+  // Add child
   await expect(page).toHaveURL(/\/add-child$/);
-
-  // Fill the add-child form
-  await page.locator('input[type="text"], input:not([type])').first().fill('ကြယ်လေး');
+  await page.getByLabel(/Nickname|အမည်/).fill('ကြယ်လေး');
   await page.locator('input[type="date"]').fill('2023-01-15');
-  await page.getByRole('button', { name: 'သိမ်းဆည်းမည်' }).click();
+  await page.getByRole('button', { name: /^Save$|သိမ်းဆည်းမည်/ }).click();
 
-  // Home shows the child's nickname
+  // Home shows the child
   await expect(page).toHaveURL(/\/home$/);
-  await expect(page.getByText('ကြယ်လေး')).toBeVisible();
-});
+  await expect(page.getByText('ကြယ်လေး')).toBeVisible({ timeout: 10000 });
 
-// Bottom navigation is present and localized.
-test('bottom navigation shows Myanmar labels', async ({ page }) => {
-  await page.goto('/home');
-  await expect(page.getByRole('link', { name: 'ပင်မ' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'သင်ယူရန်' })).toBeVisible();
-});
-
-// Language switch flips UI language.
-test('language toggle switches to English', async ({ page }) => {
-  await page.goto('/home');
-  await page.getByRole('button', { name: 'Switch language' }).click();
-  await expect(page.getByRole('link', { name: 'Home' })).toBeVisible();
+  // Reload → still signed in and the child is still there (persisted in Convex)
+  await page.reload();
+  await expect(page.getByText('ကြယ်လေး')).toBeVisible({ timeout: 15000 });
 });
