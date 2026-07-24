@@ -40,3 +40,8 @@ supabase/.temp
 # Generated sample PDFs / previews (regenerate via npm run report:pdf)
 sample-report-*.pdf
 *_preview*.png
+
+# Playwright
+test-results/
+playwright-report/
+.playwright/
