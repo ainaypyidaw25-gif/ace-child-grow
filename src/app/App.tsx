@@ -12,6 +12,7 @@ import { Learn } from '../screens/Learn';
 import { HopeCenter } from '../screens/HopeCenter';
 import { Report } from '../screens/Report';
 import { Profile } from '../screens/Profile';
+import { OfflineDownloads } from '../screens/OfflineDownloads';
 import { AdminReviewQueue } from '../screens/AdminReviewQueue';
 
 // Every route is wired to real domain logic and state (no fake success screens).
@@ -30,6 +31,7 @@ export function App() {
       <Route path="/sleep" element={<Layout><Sleep /></Layout>} />
       <Route path="/report" element={<Layout><Report /></Layout>} />
       <Route path="/profile" element={<Layout><Profile /></Layout>} />
+      <Route path="/offline" element={<Layout><OfflineDownloads /></Layout>} />
       <Route path="/admin" element={<Layout><AdminReviewQueue /></Layout>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

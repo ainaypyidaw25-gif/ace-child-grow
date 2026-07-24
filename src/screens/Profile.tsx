@@ -80,6 +80,10 @@ export function Profile() {
             {locale === 'mm' ? 'မြန်မာ' : 'English'}
           </button>
         </div>
+        <Link to="/offline" className="flex items-center justify-between py-2 text-sky-deep">
+          <span>{locale === 'mm' ? 'အော့ဖ်လိုင်း ဒေါင်းလုဒ်များ' : 'Offline downloads'}</span>
+          <span aria-hidden>→</span>
+        </Link>
       </section>
 
       {/* Privacy controls */}
