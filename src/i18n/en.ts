@@ -60,4 +60,43 @@ export const en: Record<TranslationKey, string> = {
   'common.online': 'Online',
   'common.cancel': 'Cancel',
   'common.confirm': 'Confirm',
+  'common.save': 'Save',
+  'common.back': 'Back',
+  'common.minutes': 'minutes',
+  'common.empty': 'No records yet',
+
+  'activities.title': 'Activities',
+  'activities.dailyPlan': "Today's activity plan",
+  'activities.materials': 'Materials',
+  'activities.safety': 'Safety note',
+  'activities.duration': 'Duration',
+
+  'growth.add': 'Add measurement',
+  'growth.date': 'Measurement date',
+  'growth.weight': 'Weight',
+  'growth.height': 'Height',
+  'growth.head': 'Head circumference',
+  'growth.history': 'Measurement history',
+
+  'sleep.add': 'Add sleep',
+  'sleep.bedtime': 'Bedtime',
+  'sleep.wake': 'Wake time',
+  'sleep.naps': 'Nap (minutes)',
+  'sleep.waking': 'Night wakings',
+  'sleep.total': 'Total sleep',
+
+  'learn.title': 'Learning Library',
+  'learn.readMinutes': 'Reading time',
+
+  'hope.intro': 'Understand special needs without stigma or blame.',
+  'hope.whatItMeans': 'What it means',
+  'hope.whatItDoesNotMean': 'What it does not mean',
+
+  'report.generate': 'Generate report',
+  'report.parentMonthly': 'Parent Monthly Summary',
+  'report.doctorVisit': 'Doctor Visit Summary',
+  'report.shareSafe': 'Share-safe Summary',
+  'report.print': 'Print / Save PDF',
+  'report.questions': 'Questions for a professional',
+  'report.nextReview': 'Next review date',
 };

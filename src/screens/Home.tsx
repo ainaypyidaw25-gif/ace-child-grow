@@ -47,6 +47,25 @@ export function Home() {
       <Card title={t('home.parentTip')}>
         <p className="text-ink-soft">{t('result.consult.green')}</p>
       </Card>
+
+      <div className="grid grid-cols-2 gap-3">
+        {[
+          { to: '/growth', label: t('growth.title'), emoji: '📏' },
+          { to: '/sleep', label: t('sleep.title'), emoji: '😴' },
+          { to: '/hope', label: t('hope.title'), emoji: '💛' },
+          { to: '/report', label: t('report.title'), emoji: '📄' },
+        ].map((q) => (
+          <Link
+            key={q.to}
+            to={q.to}
+            role="button"
+            className="flex min-h-touch flex-col items-start gap-1 rounded-card border border-line bg-white p-4 shadow-card"
+          >
+            <span aria-hidden className="text-xl">{q.emoji}</span>
+            <span className="text-sm font-medium text-ink">{q.label}</span>
+          </Link>
+        ))}
+      </div>
     </div>
   );
 }

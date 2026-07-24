@@ -210,6 +210,47 @@ export const SAMPLE_AWARENESS: SeedAwarenessTopic[] = [
   },
 ];
 
+export interface SeedLesson {
+  category: string;
+  titleMm: string;
+  titleEn: string;
+  summaryMm: string;
+  summaryEn: string;
+  readingMinutes: number;
+  reviewStatus: SeedReviewStatus;
+}
+
+export const SAMPLE_LESSONS: SeedLesson[] = [
+  {
+    category: 'Speech and Communication',
+    titleMm: 'ကလေးနှင့် စကားပြောခြင်း', titleEn: 'Talking with your baby',
+    summaryMm: 'နေ့စဉ်လုပ်ရိုးလုပ်စဉ်တွင် စကားပြောခြင်းက ဘာသာစကားဖွံ့ဖြိုးမှုကို အားပေးသည်။',
+    summaryEn: 'Everyday talking during routines helps language grow.',
+    readingMinutes: 4, reviewStatus: 'clinical_review',
+  },
+  {
+    category: 'Play and Learning',
+    titleMm: 'ကစားခြင်းဖြင့် သင်ယူခြင်း', titleEn: 'Learning through play',
+    summaryMm: 'ရိုးရှင်းသောကစားနည်းများက အသိဉာဏ်နှင့် လက်လှုပ်ရှားမှုကို တည်ဆောက်ပေးသည်။',
+    summaryEn: 'Simple play builds thinking and motor skills.',
+    readingMinutes: 5, reviewStatus: 'clinical_review',
+  },
+  {
+    category: 'Sleep',
+    titleMm: 'ကျန်းမာသော အိပ်စက်မှု အလေ့အထ', titleEn: 'Healthy sleep habits',
+    summaryMm: 'တည်ငြိမ်သော အိပ်ရာဝင်ချိန် အစီအစဉ်က ကလေးအိပ်စက်မှုကို ကူညီသည်။',
+    summaryEn: 'A steady bedtime routine supports better sleep.',
+    readingMinutes: 3, reviewStatus: 'clinical_review',
+  },
+  {
+    category: 'Preparing for a Professional Visit',
+    titleMm: 'ဆရာဝန်ပြရန် ပြင်ဆင်ခြင်း', titleEn: 'Preparing for a professional visit',
+    summaryMm: 'မေးခွန်းများနှင့် မှတ်တမ်းများ ကြိုတင်ပြင်ဆင်ခြင်းက ဆွေးနွေးမှုကို ပိုအကျိုးရှိစေသည်။',
+    summaryEn: 'Bring questions and records to make the visit more useful.',
+    readingMinutes: 4, reviewStatus: 'clinical_review',
+  },
+];
+
 /** Guard used by UI + tests: content is shown as guidance ONLY when published. */
 export function isApprovedForParents(reviewStatus: SeedReviewStatus): boolean {
   return reviewStatus === 'published';

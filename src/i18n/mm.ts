@@ -59,6 +59,45 @@ export const mm = {
   'common.online': 'အွန်လိုင်း',
   'common.cancel': 'ပယ်ဖျက်မည်',
   'common.confirm': 'အတည်ပြုမည်',
+  'common.save': 'သိမ်းဆည်းမည်',
+  'common.back': 'နောက်သို့',
+  'common.minutes': 'မိနစ်',
+  'common.empty': 'မှတ်တမ်း မရှိသေးပါ',
+
+  'activities.title': 'လှုပ်ရှားမှုများ',
+  'activities.dailyPlan': 'ဒီနေ့ လှုပ်ရှားမှု အစီအစဉ်',
+  'activities.materials': 'ပစ္စည်းများ',
+  'activities.safety': 'ဘေးကင်းရေး မှတ်ချက်',
+  'activities.duration': 'ကြာချိန်',
+
+  'growth.add': 'တိုင်းတာမှု ထည့်မည်',
+  'growth.date': 'တိုင်းတာသည့်ရက်',
+  'growth.weight': 'ကိုယ်အလေးချိန်',
+  'growth.height': 'အရပ်',
+  'growth.head': 'ဦးခေါင်းပတ်လည်',
+  'growth.history': 'တိုင်းတာမှု မှတ်တမ်း',
+
+  'sleep.add': 'အိပ်စက်မှု ထည့်မည်',
+  'sleep.bedtime': 'အိပ်ရာဝင်ချိန်',
+  'sleep.wake': 'နိုးချိန်',
+  'sleep.naps': 'နေ့ခင်းအိပ် (မိနစ်)',
+  'sleep.waking': 'ညအိပ် နိုးကြိမ်',
+  'sleep.total': 'စုစုပေါင်း အိပ်ချိန်',
+
+  'learn.title': 'သင်ယူရန် စာကြည့်တိုက်',
+  'learn.readMinutes': 'ဖတ်ရန်ကြာချိန်',
+
+  'hope.intro': 'အထူးလိုအပ်ချက်များကို ရှက်ရွံ့မှု၊ အပြစ်တင်မှုမရှိဘဲ နားလည်ရန်။',
+  'hope.whatItMeans': 'ဆိုလိုသည်မှာ',
+  'hope.whatItDoesNotMean': 'ဆိုလိုခြင်း မဟုတ်သည်မှာ',
+
+  'report.generate': 'အစီရင်ခံစာ ဖန်တီးမည်',
+  'report.parentMonthly': 'မိဘ လစဉ်အနှစ်ချုပ်',
+  'report.doctorVisit': 'ဆရာဝန်ပြ အနှစ်ချုပ်',
+  'report.shareSafe': 'မျှဝေရန် လုံခြုံသော အနှစ်ချုပ်',
+  'report.print': 'ပုံနှိပ် / PDF သိမ်းမည်',
+  'report.questions': 'ပညာရှင်ကို မေးရန် မေးခွန်းများ',
+  'report.nextReview': 'နောက်ပြန်စစ်ရန်ရက်',
 } as const;
 
 export type TranslationKey = keyof typeof mm;
