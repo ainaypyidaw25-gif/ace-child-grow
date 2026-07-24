@@ -76,3 +76,31 @@ a backup. See `docs/deployment/rollback-plan.md`.
 - **Firebase:** NoSQL rules are harder to audit for the strict per-row child
   ownership guarantee this product requires.
 - **Dual backend:** explicitly avoided per spec (needless complexity/cost).
+
+---
+
+## ADR 0002 — Backend switched from Supabase to Convex (2026-07-24)
+
+**Status:** Accepted · supersedes the backend choice in ADR 0001.
+
+**Context.** The organization (Hotel ACE Groups) already runs its systems on
+Convex (ace-scan, ace-cashbook, hotel-ace-pms, ace-family-health, …). Operational
+consistency, shared tooling, and team familiarity outweigh the RLS advantage that
+drove the original Supabase choice.
+
+**Decision.** Use **Convex** as the single backend. A dedicated, isolated project
+`ace-child-grow` was created (separate from the hotel/finance projects). Auth is
+**Convex Auth** (email/password). Deployed to the dev deployment
+`uncommon-orca-603`.
+
+**Security model change.** Postgres RLS is replaced by **function-level
+authorization**: every query/mutation derives the owner from
+`getAuthUserId(ctx)` (the authenticated identity) and filters by `userId`, never
+trusting client input. The P0 guarantee ("no child data across accounts") is
+enforced in `convex/children.ts`, `convex/parent.ts`, etc. This must be upheld in
+every new function by convention (there is no automatic row-level fallback), so
+new data functions require an authorization review.
+
+**Consequences.** SQL migrations + RLS policies (`supabase/`) are retired in
+favour of `convex/schema.ts`. The client uses `convex/react` hooks. Real-time
+sync is built in. The interim `src/lib` Supabase layer was removed.

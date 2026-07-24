@@ -13,11 +13,23 @@
 | **Myanmar PDF generation** | ✅ **verified** — sample A4 PDF renders Myanmar correctly |
 | Dependency audit | ⚠️ 8 (dev-toolchain only) — see limitations |
 
+## Backend (Convex) — verified
+- Convex deploy of schema + auth + functions to `uncommon-orca-603` **succeeded**.
+- Deployment reachable + functions execute: a Node `ConvexHttpClient` query to
+  `parent:me` returned `null` (unauthenticated) as expected.
+- Frontend builds with the Convex client + auth gate bundled.
+
 ## E2E (Playwright, `npm run test:e2e`)
-Runs against the production build in real Chromium. 4/4 passing:
-consent → add child → Home shows child · bottom-nav Myanmar labels · language
-toggle to English · **skill-loss answer triggers the fixed urgent safety banner**
-(safety-critical path verified end to end).
+- `boot.spec.ts` — app boots and shows the sign-in gate (runs anywhere).
+- `parent-flow.spec.ts` / `safety.spec.ts` — full sign-up → consent → add child →
+  **persist across reload**, and **skill-loss → urgent safety banner**. Gated
+  behind `E2E_LIVE=1` because they need a real WebSocket connection to Convex.
+
+**Sandbox note:** the build sandbox blocks browser WebSocket (WSS) egress to
+`*.convex.cloud` (verified: Node HTTPS works, browser WSS times out), so the
+live-backend E2E cannot execute here. It runs in a normal browser/CI. This is an
+environment limitation, not an app defect — the deployment itself is confirmed
+reachable and the app boots against it.
 
 ## Myanmar PDF verification
 `npm run report:pdf` generates a real A4 PDF via Chromium (HarfBuzz shaping) with an
