@@ -17,10 +17,13 @@ Font stack: `"Noto Sans Myanmar", "Pyidaungsu", "Myanmar Text", sans-serif`.
 Body ≥ 16px, line-height 1.65–1.85, no clipped glyphs, correct wrapping, no
 excessive bold. Tokens live in `tailwind.config.ts` / `src/index.css`.
 
-## PDF rendering
-Monthly reports must render Myanmar correctly in PDF (embedded Myanmar font, no
-clipped text, correct page breaks). PDF generation is a planned module; the
-font requirement is captured here so it is honoured at implementation time.
+## PDF rendering (implemented + verified)
+Monthly reports render Myanmar correctly in PDF via Chromium (HarfBuzz shaping)
+with an embedded Noto Sans Myanmar font — `scripts/pdf/renderReportPdf.mjs`,
+run with `npm run report:pdf`. Verified against a generated `sample-report-mm.pdf`:
+correct shaping/stacking, no clipped text, A4 layout, non-diagnostic disclaimer
+present. In production this module runs server-side (Supabase Edge Function); the
+in-app Report screen also offers browser print-to-PDF.
 
 ## Adding a key
 1. Add to `mm.ts` (source of truth for the key set) and `en.ts`.

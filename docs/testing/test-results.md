@@ -6,12 +6,21 @@
 | Check | Result |
 |-------|--------|
 | TypeScript typecheck (`tsc -b --noEmit`) | ✅ PASS (0 errors) |
-| Unit + component tests | ✅ **75 / 75 passing** |
+| Unit + component tests | ✅ **80 / 80 passing** |
 | Production build (`vite build`) | ✅ PASS |
 | PWA service worker generated | ✅ precache public content only |
+| **Myanmar PDF generation** | ✅ **verified** — sample A4 PDF renders Myanmar correctly |
 | Dependency audit | ⚠️ 8 (dev-toolchain only) — see limitations |
 
-## Test files (12)
+## Myanmar PDF verification
+`npm run report:pdf` generates a real A4 PDF via Chromium (HarfBuzz shaping) with an
+embedded Noto Sans Myanmar font. The generated `sample-report-mm.pdf` was rendered
+to an image and visually confirmed: correct Myanmar glyph shaping, stacking and
+reordering, no tofu boxes, no clipped text, single-page A4, with the Myanmar
+non-diagnostic disclaimer present. This satisfies the spec rule "do not claim PDF
+export works unless tested with an actual generated PDF."
+
+## Test files (13)
 ```
 ✓ src/domain/__tests__/age.test.ts          (15)
 ✓ src/domain/__tests__/resultEngine.test.ts  (9)
@@ -22,6 +31,7 @@
 ✓ src/domain/__tests__/units.test.ts         (4)
 ✓ src/domain/__tests__/childStore.test.ts    (9)
 ✓ src/domain/__tests__/ageLabel.test.ts      (4)
+✓ src/domain/__tests__/manifest.test.ts      (5)
 ✓ src/i18n/i18n.test.ts                       (5)
 ✓ src/data/seed/content.test.ts              (3)
 ✓ src/components/__tests__/MilestoneDemo.test.tsx (3)
