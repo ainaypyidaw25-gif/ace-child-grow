@@ -40,3 +40,9 @@ Create a Convex **production** deployment for this project, generate a prod depl
 key, set the same auth env vars + the production `SITE_URL`, point
 `VITE_CONVEX_URL` at the prod deployment, and deploy the frontend to Vercel.
 Production requires explicit approval.
+
+## Granting Admin (staff) access
+Content-workflow transitions are staff-only. To make a signed-in user staff
+(e.g. to try the Admin CMS), set `isStaff: true` on their `parentProfiles` row in
+the Convex dashboard (Data → parentProfiles), or via the CLI. In production a
+super admin performs this. Non-staff users see the Admin queue read-only.
