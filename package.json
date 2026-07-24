@@ -16,8 +16,11 @@
     "report:pdf": "node scripts/generate-report-pdf.mjs"
   },
   "dependencies": {
+    "@auth/core": "^0.41.1",
+    "@convex-dev/auth": "^0.0.94",
     "@fontsource/noto-sans-myanmar": "^5.3.0",
     "@supabase/supabase-js": "^2.110.8",
+    "convex": "^1.42.3",
     "playwright-core": "^1.61.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
