@@ -6,11 +6,18 @@
 | Check | Result |
 |-------|--------|
 | TypeScript typecheck (`tsc -b --noEmit`) | ✅ PASS (0 errors) |
-| Unit + component tests | ✅ **80 / 80 passing** |
+| Unit + component tests | ✅ **86 / 86 passing** |
+| **E2E tests (Playwright, real Chromium)** | ✅ **4 / 4 passing** |
 | Production build (`vite build`) | ✅ PASS |
 | PWA service worker generated | ✅ precache public content only |
 | **Myanmar PDF generation** | ✅ **verified** — sample A4 PDF renders Myanmar correctly |
 | Dependency audit | ⚠️ 8 (dev-toolchain only) — see limitations |
+
+## E2E (Playwright, `npm run test:e2e`)
+Runs against the production build in real Chromium. 4/4 passing:
+consent → add child → Home shows child · bottom-nav Myanmar labels · language
+toggle to English · **skill-loss answer triggers the fixed urgent safety banner**
+(safety-critical path verified end to end).
 
 ## Myanmar PDF verification
 `npm run report:pdf` generates a real A4 PDF via Chromium (HarfBuzz shaping) with an
@@ -20,7 +27,7 @@ reordering, no tofu boxes, no clipped text, single-page A4, with the Myanmar
 non-diagnostic disclaimer present. This satisfies the spec rule "do not claim PDF
 export works unless tested with an actual generated PDF."
 
-## Test files (13)
+## Test files (14 unit + 2 E2E)
 ```
 ✓ src/domain/__tests__/age.test.ts          (15)
 ✓ src/domain/__tests__/resultEngine.test.ts  (9)
@@ -32,6 +39,7 @@ export works unless tested with an actual generated PDF."
 ✓ src/domain/__tests__/childStore.test.ts    (9)
 ✓ src/domain/__tests__/ageLabel.test.ts      (4)
 ✓ src/domain/__tests__/manifest.test.ts      (5)
+✓ src/domain/__tests__/workflow.test.ts      (6)
 ✓ src/i18n/i18n.test.ts                       (5)
 ✓ src/data/seed/content.test.ts              (3)
 ✓ src/components/__tests__/MilestoneDemo.test.tsx (3)

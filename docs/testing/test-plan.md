@@ -27,10 +27,11 @@ Auth, child ownership (cross-account denial), milestone save, result generation,
 activity completion, growth/sleep entry, report generation, PDF export, offline
 manifest, admin publishing.
 
-## E2E (planned — Playwright)
-Sign up → consent → onboarding → add child → complete checklist → result →
-skill-loss warning → activity → growth → sleep → report → PDF → switch language →
-switch child → delete child.
+## E2E (Playwright — partially implemented, runs in real Chromium)
+Implemented + passing: consent → add child → Home; bottom-nav localization;
+language switch; **skill-loss → urgent safety banner**. Planned next (needs live
+backend for some): full sign-up, activity/growth/sleep entry, report+PDF export,
+switch/delete child.
 
 ## Security (partial now; full needs backend)
 Cross-account access, role escalation, direct-URL access, secret exposure,
