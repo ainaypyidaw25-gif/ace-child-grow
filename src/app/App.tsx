@@ -1,5 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { Authenticated, Unauthenticated, AuthLoading } from 'convex/react';
 import { Layout } from '../components/Layout';
+import { SignIn } from '../screens/SignIn';
 import { Welcome } from '../screens/Welcome';
 import { Consent } from '../screens/Consent';
 import { AddChild } from '../screens/AddChild';
@@ -16,8 +18,25 @@ import { Profile } from '../screens/Profile';
 import { OfflineDownloads } from '../screens/OfflineDownloads';
 import { AdminReviewQueue } from '../screens/AdminReviewQueue';
 
-// Every route is wired to real domain logic and state (no fake success screens).
+// Authentication gate: unauthenticated visitors see sign-in; the app (and all
+// child data) is only reachable once signed in.
 export function App() {
+  return (
+    <>
+      <AuthLoading>
+        <div className="flex min-h-screen items-center justify-center text-ink-soft">…</div>
+      </AuthLoading>
+      <Unauthenticated>
+        <SignIn />
+      </Unauthenticated>
+      <Authenticated>
+        <AppRoutes />
+      </Authenticated>
+    </>
+  );
+}
+
+function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Layout showNav={false}><Welcome /></Layout>} />

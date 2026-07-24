@@ -2,13 +2,14 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useLocale } from '../app/LocaleContext';
 import { useAppState } from '../app/AppState';
+import { useAuthActions } from '@convex-dev/auth/react';
 import { exportData } from '../app/childStore';
 import { ageLabels } from '../domain/age/ageLabel';
-import { isSupabaseConfigured } from '../lib/supabase';
 
 export function Profile() {
   const { t, locale, setLocale } = useLocale();
   const { state, dispatch } = useAppState();
+  const { signOut } = useAuthActions();
   const navigate = useNavigate();
   const [confirming, setConfirming] = useState<null | 'child' | 'account'>(null);
 
@@ -25,14 +26,6 @@ export function Profile() {
   return (
     <div className="space-y-5">
       <h1 className="text-xl font-bold text-sky-deep">{t('nav.profile')}</h1>
-
-      {!isSupabaseConfigured() && (
-        <p className="rounded-lg bg-pastel-yellow/60 px-3 py-2 text-xs text-ink">
-          {locale === 'mm'
-            ? 'Demo mode — Backend (Supabase) မချိတ်ရသေးပါ။ အချက်အလက်များကို ဤစက်ပေါ်တွင်သာ ယာယီသိမ်းထားပါသည်။'
-            : 'Demo mode — no backend (Supabase) connected yet. Data is kept only on this device for now.'}
-        </p>
-      )}
 
       {/* Child switcher */}
       <section className="rounded-card border border-line bg-white p-4 shadow-card">
@@ -100,6 +93,10 @@ export function Profile() {
           <span>{locale === 'mm' ? 'အော့ဖ်လိုင်း ဒေါင်းလုဒ်များ' : 'Offline downloads'}</span>
           <span aria-hidden>→</span>
         </Link>
+        <button type="button" onClick={() => void signOut()}
+          className="mt-1 w-full rounded-pill border border-line px-4 py-2 text-left">
+          🚪 {locale === 'mm' ? 'ထွက်မည်' : 'Sign out'}
+        </button>
       </section>
 
       {/* Privacy controls */}
