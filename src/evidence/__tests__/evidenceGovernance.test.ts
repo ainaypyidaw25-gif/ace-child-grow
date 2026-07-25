@@ -1,0 +1,421 @@
+// Governance tests for the live evidence path: invalid review transitions,
+// audit completeness, and the staleness rules the live integrity probe uses.
+//
+// These read the deployed server source rather than the browser code, because
+// the guarantees they protect are server-side. A hidden button is not a
+// control; the mutation refusing the write is the control.
+import { describe, it, expect } from 'vitest';
+import { OUTDATED_AFTER_YEARS, REVIEW_CADENCE_MONTHS } from '../types';
+
+const raw = (glob: Record<string, string>) => Object.values(glob)[0] ?? '';
+
+const evidenceSrc = raw(
+  import.meta.glob('../../../convex/evidence.ts', {
+    query: '?raw',
+    import: 'default',
+    eager: true,
+  }) as Record<string, string>,
+);
+const auditSrc = raw(
+  import.meta.glob('../../../convex/audit.ts', {
+    query: '?raw',
+    import: 'default',
+    eager: true,
+  }) as Record<string, string>,
+);
+const schemaSrc = raw(
+  import.meta.glob('../../../convex/schema.ts', {
+    query: '?raw',
+    import: 'default',
+    eager: true,
+  }) as Record<string, string>,
+);
+
+const CONVEX_FN = /^export const \w+ = \w+\(/;
+const PLAIN_FN = /^(export )?async function \w+\(/;
+
+/**
+ * The body of one top-level function, from its declaration to the next.
+ *
+ * Both forms are accepted because an import that two callers must run
+ * identically — the admin screen and the activation CLI — belongs in a plain
+ * function that both wrap, and these guarantees follow the logic rather than
+ * the wrapper it happens to live behind today.
+ */
+function functionBody(src: string, name: string): string {
+  const lines = src.split('\n');
+  const start = lines.findIndex(
+    (l) =>
+      new RegExp(
+        `^export const ${name} = (query|mutation|action|internalQuery|internalMutation)\\(`,
+      ).test(l) || new RegExp(`^(export )?async function ${name}\\(`).test(l),
+  );
+  expect(start, `${name} is not a top-level function in this module`).toBeGreaterThan(-1);
+  let body = '';
+  for (let j = start; j < lines.length; j += 1) {
+    if (j > start && (CONVEX_FN.test(lines[j]) || PLAIN_FN.test(lines[j]))) break;
+    body += `${lines[j]}\n`;
+  }
+  return body;
+}
+
+describe('invalid review transitions', () => {
+  const setReview = functionBody(evidenceSrc, 'setReview');
+
+  // Every one of these is a way a review decision could be recorded that a
+  // clinician did not actually make. Each must be refused by the server.
+  const refusals = [
+    ['an unknown review status', 'unknown_status'],
+    ['an approval with no named reviewer', 'reviewer_required'],
+    ['an approval with no stated qualification', 'qualification_required'],
+    ['a decision with no review date', 'review_date_required'],
+    ['a decision on a reference that does not exist', 'not_found'],
+    ['approving a record held at evidence_required', 'evidence_required'],
+  ] as const;
+
+  it.each(refusals)('refuses %s', (_case, code) => {
+    expect(setReview, `no refusal path for ${code}`).toContain(`'${code}'`);
+  });
+
+  it('refuses in-band so the refusal survives to be audited', () => {
+    // Convex discards the writes of a mutation that throws. A refusal that
+    // threw would erase its own audit record, so the attempt would leave no
+    // trace at all — the opposite of what an audit trail is for.
+    expect(setReview).toContain('return refuse(');
+    expect(setReview).toContain("result: 'rejected'");
+    expect(setReview).not.toMatch(/throw new Error\(/);
+  });
+
+  it('writes nothing on a refusal', () => {
+    // Every refusal returns before the patch; the patch appears once, after
+    // the last guard.
+    const patchAt = setReview.indexOf('ctx.db.patch');
+    const lastRefuse = setReview.lastIndexOf('return refuse(');
+    expect(patchAt).toBeGreaterThan(lastRefuse);
+    expect(setReview.split('ctx.db.patch').length - 1).toBe(1);
+  });
+
+  it('keeps approval the only status that evidence_required blocks', () => {
+    expect(setReview).toContain("args.status === 'approved' && row.reviewStatus === 'evidence_required'");
+  });
+
+  it('records the review date and supports a next review date', () => {
+    expect(setReview).toContain('reviewDate: args.reviewDate');
+    expect(setReview).toContain('nextReviewDate: args.nextReviewDate ?? row.nextReviewDate');
+  });
+
+  it('makes the caller check the outcome instead of assuming success', () => {
+    const admin = raw(
+      import.meta.glob('../../screens/EvidenceAdmin.tsx', {
+        query: '?raw',
+        import: 'default',
+        eager: true,
+      }) as Record<string, string>,
+    );
+    expect(admin).toContain('if (!res.ok)');
+  });
+});
+
+describe('audit trail', () => {
+  it('records actor, action, target, result and a before/after summary', () => {
+    for (const field of ['actorId', 'action', 'entityTable', 'entityId', 'summary', 'result', 'before', 'after']) {
+      expect(auditSrc, `audit entry has no ${field}`).toContain(field);
+    }
+    // _creationTime is the timestamp; Convex sets it on every row, so an
+    // entry cannot be written without one.
+    expect(schemaSrc).toContain('auditLogs: defineTable({');
+    expect(schemaSrc).toContain('result: v.optional(v.string())');
+  });
+
+  it('audits every evidence write, refused or carried out', () => {
+    for (const fn of ['applySources', 'applyLinks', 'setReview']) {
+      expect(functionBody(evidenceSrc, fn), `${fn} is not audited`).toContain('logAudit(');
+    }
+  });
+
+  it('audits a failed import distinctly from a clean one', () => {
+    expect(functionBody(evidenceSrc, 'applySources')).toContain("failed.length > 0 ? 'failed' : 'ok'");
+    expect(functionBody(evidenceSrc, 'applyLinks')).toContain("failed.length > 0 ? 'failed' : 'ok'");
+  });
+
+  // A CLI import has no signed-in user. Recording it as an anonymous action
+  // that names its own channel is honest; borrowing a staff member's id to
+  // fill the column would put a name on something they did not do.
+  it('names the channel an import came through', () => {
+    expect(functionBody(evidenceSrc, 'applySources')).toContain('(via ${via})');
+    expect(evidenceSrc).toContain("'admin screen'");
+    expect(evidenceSrc).toContain("'deploy key (CLI)'");
+  });
+});
+
+// The import body is shared by a staff-authenticated mutation and a CLI-only
+// internal mutation. That is only safe while the browser-reachable one still
+// goes through requireStaff and the unauthenticated one stays unreachable from
+// a browser — so both halves are asserted here.
+describe('import entry points', () => {
+  it.each([
+    ['importSources', 'applySources'],
+    ['importLinks', 'applyLinks'],
+  ])('%s stays staff-gated', (fn, apply) => {
+    const body = functionBody(evidenceSrc, fn);
+    expect(body).toContain('await requireStaff(ctx)');
+    expect(body).toContain(apply);
+  });
+
+  it.each(['importSourcesFromCli', 'importLinksFromCli'])(
+    '%s is internal, so no browser can reach the unauthenticated path',
+    (fn) => {
+      expect(evidenceSrc).toContain(`export const ${fn} = internalMutation(`);
+      expect(evidenceSrc).not.toContain(`export const ${fn} = mutation(`);
+    },
+  );
+
+  it('keeps the audit log staff-only', () => {
+    expect(auditSrc).toContain('isStaff(ctx, userId)');
+    expect(auditSrc).toContain('allowed: false');
+  });
+});
+
+describe('import result reporting', () => {
+  const importSources = functionBody(evidenceSrc, 'applySources');
+  const importLinks = functionBody(evidenceSrc, 'applyLinks');
+
+  it.each([
+    ['created', 'created'],
+    ['updated', 'updated'],
+    ['unchanged', 'unchanged'],
+    ['skipped', 'skipped'],
+    ['failed', 'failed'],
+  ])('reports %s for both imports', (_label, key) => {
+    expect(importSources, `importSources does not report ${key}`).toContain(key);
+    expect(importLinks, `importLinks does not report ${key}`).toContain(key);
+  });
+
+  // An idempotent re-import that reports 90 updates looks identical to a run
+  // that rewrote all 90 records. Distinguishing unchanged from updated is what
+  // makes "safe to re-run" observable rather than asserted.
+  it('separates an unchanged row from a rewritten one', () => {
+    expect(importSources).toContain('sameSource(existing, next)');
+    expect(importLinks).toContain('unchanged += 1');
+  });
+
+  it('never lets an import assert approval or wipe a review decision', () => {
+    expect(importSources).toContain("rest.reviewStatus === 'approved' ? 'awaiting_review'");
+    for (const field of ['reviewStatus', 'reviewer', 'reviewerQualification', 'reviewDate', 'reviewNote']) {
+      expect(importSources, `${field} is not preserved on re-import`).toContain(`${field}: existing.${field}`);
+    }
+  });
+});
+
+// The live probe classifies a stored row; the reports classify the same record
+// from the local registry. If the two tables ever disagree, an operator gets
+// two different answers to "is this reference expired" depending on where they
+// looked — so the duplication is allowed, but only under this test.
+describe('staleness rules match between the server and the local reports', () => {
+  const table = (name: string): Record<string, number> => {
+    const m = evidenceSrc.match(new RegExp(`const ${name}: Record<string, number> = \\{([^}]*)\\}`));
+    expect(m, `${name} is not defined in convex/evidence.ts`).toBeTruthy();
+    const out: Record<string, number> = {};
+    for (const line of m![1].split('\n')) {
+      const kv = line.match(/(\w+):\s*(\d+)/);
+      if (kv) out[kv[1]] = Number(kv[2]);
+    }
+    return out;
+  };
+
+  it('uses the same review cadence', () => {
+    expect(table('REVIEW_CADENCE_MONTHS')).toEqual(REVIEW_CADENCE_MONTHS);
+  });
+
+  it('uses the same outdated-after thresholds', () => {
+    expect(table('OUTDATED_AFTER_YEARS')).toEqual(OUTDATED_AFTER_YEARS);
+  });
+
+  it('treats a record with no review anchor as due, not as fresh', () => {
+    expect(functionBody(evidenceSrc, 'integrity')).toContain('if (!due || due < today)');
+  });
+
+  it('reports outdated separately from expired, and neither as an error', () => {
+    const integrity = functionBody(evidenceSrc, 'integrity');
+    expect(integrity).toContain('expired');
+    expect(integrity).toContain('outdated');
+    expect(integrity).not.toMatch(/throw new Error/);
+  });
+});
+
+// The live checker is the only thing that speaks to the deployment, so its
+// verdict is the only signal an operator gets about it. What that verdict is
+// allowed to say — and which states may fail a build — is a policy decision,
+// and policy decisions belong under test.
+describe('live check state machine', () => {
+  const liveSrc = raw(
+    import.meta.glob('../../../scripts/evidence-live-check.mjs', {
+      query: '?raw',
+      import: 'default',
+      eager: true,
+    }) as Record<string, string>,
+  );
+
+  /** exit code declared for each state in the STATES table. */
+  const exits = (): Record<string, number> => {
+    const table = liveSrc.slice(liveSrc.indexOf('const STATES = {'));
+    const out: Record<string, number> = {};
+    const re = /(\w+):\s*\{\s*\n\s*exit:\s*(\d)/g;
+    let m: RegExpExecArray | null = re.exec(table);
+    while (m) {
+      out[m[1]] = Number(m[2]);
+      m = re.exec(table);
+    }
+    return out;
+  };
+
+  it.each([
+    ['module not deployed', 'not_deployed'],
+    ['unauthorized', 'unauthorized'],
+    ['empty registry', 'empty_registry'],
+    ['partial import', 'partial_import'],
+    ['a valid live registry', 'live_registry_valid'],
+    ['integrity failure', 'integrity_failure'],
+  ])('names %s as its own state', (_label, state) => {
+    expect(exits(), `${state} is not a declared state`).toHaveProperty(state);
+  });
+
+  it('fails the build only for deployment, authorization or integrity problems', () => {
+    const e = exits();
+    for (const state of [
+      'not_deployed',
+      'unauthorized',
+      'authorization_failure',
+      'empty_registry',
+      'partial_import',
+      'integrity_failure',
+    ]) {
+      expect(e[state], `${state} must exit non-zero`).toBe(1);
+    }
+    expect(e.live_registry_valid, 'a valid live registry must exit 0').toBe(0);
+    // A missing key on this machine is a fact about the machine, not about the
+    // deployment — but it is reported as unverified, never as passed.
+    expect(e.unverified, 'a missing deploy key must not fail the build').toBe(0);
+    expect(liveSrc).toContain('UNVERIFIED —');
+  });
+
+  // A guideline is not wrong because it is old, and a build that breaks on the
+  // passage of time trains people to ignore it.
+  it('treats outdated and expired references as advisories, never as failures', () => {
+    expect(liveSrc).toContain("advise(L, 'no reference is old enough to need a newer edition'");
+    expect(liveSrc).toContain("advise(L, 'no reference is past its review date'");
+    expect(liveSrc).not.toMatch(/check\(\s*L,\s*'no reference is (past its review date|old enough)/);
+    // and neither may reach the state that fails the run
+    const broken = liveSrc.slice(liveSrc.indexOf('const broken ='), liveSrc.indexOf('return { state: broken'));
+    expect(broken).not.toContain('outdated');
+    expect(broken).not.toContain('expired');
+    expect(broken).not.toContain('unusedSources');
+  });
+
+  it('never lets an absent function pass as a working authorization gate', () => {
+    expect(liveSrc).toContain('const NOT_DEPLOYED =');
+    expect(liveSrc).toContain('const UNAUTHORIZED =');
+    // presence is established before any refusal is credited as a gate
+    expect(liveSrc.indexOf('isModuleDeployed')).toBeLessThan(liveSrc.indexOf("evidence:list refuses"));
+  });
+
+  it('reports every live count requirement 3 asks for', () => {
+    for (const key of [
+      'sources',
+      'links',
+      'orphanLinks',
+      'danglingLinks',
+      'duplicateIdentifier',
+      'duplicateTitle',
+      'unusedSources',
+      'expired',
+      'outdated',
+      'evidenceRequired',
+      'awaitingReview',
+      'approved',
+    ]) {
+      expect(liveSrc, `the live check does not report ${key}`).toContain(`live.${key}`);
+    }
+  });
+});
+
+// The activation script is the one thing in this repository that holds a deploy
+// key and writes to a live deployment. What it is allowed to do is therefore
+// worth stating as a test rather than as a comment in its own header.
+describe('activation script safety', () => {
+  const activateSrc = raw(
+    import.meta.glob('../../../scripts/evidence-activate.mjs', {
+      query: '?raw',
+      import: 'default',
+      eager: true,
+    }) as Record<string, string>,
+  );
+
+  // Asserted on what the script actually invokes, not on what its comments
+  // claim: a prose promise not to publish is not a control.
+  it('calls only the three functions activation needs', () => {
+    const invoked = [
+      ...activateSrc.matchAll(/(?:runFunction|importBatched)\(\s*\n?\s*'([^']+)'/g),
+    ].map((m) => m[1]);
+    expect(new Set(invoked)).toEqual(
+      new Set(['evidence:importSourcesFromCli', 'evidence:importLinksFromCli', 'evidence:integrity']),
+    );
+    // in particular, nothing that records a review decision or publishes
+    expect(invoked.join(' ')).not.toMatch(/setReview|publish|content:/);
+  });
+
+  it('runs no destructive Convex CLI command', () => {
+    const cli = [...activateSrc.matchAll(/convex\(\s*\[([^\]]*)\]/g)].map((m) => m[1]);
+    expect(cli.length).toBeGreaterThan(0);
+    for (const args of cli) {
+      expect(args, `unexpected convex CLI invocation: ${args}`).toMatch(/'deploy'|'run'/);
+      expect(args).not.toMatch(/import|--replace|--clear|data|env|logs\s*remove/);
+    }
+  });
+
+  // A key for a different project would activate the wrong backend, and that
+  // is not a thing to find out afterwards.
+  it('refuses a key that targets a different deployment', () => {
+    expect(activateSrc).toContain('The deploy key targets');
+    expect(activateSrc).toContain('Nothing was changed.');
+  });
+
+  it('never prints the key it was given', () => {
+    expect(activateSrc).not.toMatch(/say\([^)]*found\.key/);
+    expect(activateSrc).not.toMatch(/console\.log\([^)]*key\b/);
+  });
+
+  it('reads the live counts back instead of reporting what it submitted', () => {
+    expect(activateSrc).toContain("runFunction('evidence:integrity'");
+    expect(activateSrc).toContain('LIVE COUNTS (queried from the deployment, not assumed)');
+  });
+});
+
+describe('live integrity probe coverage', () => {
+  const integrity = functionBody(evidenceSrc, 'integrity');
+
+  it.each([
+    'sources',
+    'links',
+    'danglingLinks',
+    'orphanLinks',
+    'unusedSources',
+    'duplicateIdentifier',
+    'duplicateTitle',
+    'expired',
+    'outdated',
+    'evidenceRequired',
+    'awaitingReview',
+    'approved',
+    'approvedWithoutReviewer',
+    'publishedWithoutEvidence',
+    'indexProbe',
+  ])('reports %s', (key) => {
+    expect(integrity, `integrity does not report ${key}`).toContain(key);
+  });
+
+  it('stays internal so no browser can reach it', () => {
+    expect(evidenceSrc).toContain('export const integrity = internalQuery(');
+    expect(evidenceSrc).not.toMatch(/export const integrity = query\(/);
+  });
+});
