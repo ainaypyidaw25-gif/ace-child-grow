@@ -27,6 +27,7 @@ import { AdminReviewQueue } from '../screens/AdminReviewQueue';
 import { ContentLibrary } from '../screens/ContentLibrary';
 import { ContentDetail } from '../screens/ContentDetail';
 import { LibraryAdmin } from '../screens/LibraryAdmin';
+import { EvidenceAdmin } from '../screens/EvidenceAdmin';
 
 // Authentication gate: unauthenticated visitors see sign-in; the app (and all
 // child data) is only reachable once signed in.
@@ -99,6 +100,7 @@ function AppRoutes() {
       <Route path="/content/:slug" element={<Layout><ContentDetail /></Layout>} />
       <Route path="/admin" element={<Layout><AdminReviewQueue /></Layout>} />
       <Route path="/admin/library" element={<Layout><LibraryAdmin /></Layout>} />
+      <Route path="/admin/evidence" element={<Layout><EvidenceAdmin /></Layout>} />
       <Route path="/audit" element={<Layout><AuditLog /></Layout>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
