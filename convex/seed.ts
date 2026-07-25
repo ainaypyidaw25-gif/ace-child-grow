@@ -4,8 +4,37 @@
 // it safely skips the staff auth gate that guards the public importSeed. It is
 // idempotent (upsert by slug) and never overrides an existing review decision.
 import { internalMutation } from './_generated/server';
+import { v } from 'convex/values';
 import { logAudit } from './audit';
 import seedData from './seedData.json';
+
+// Grant staff (CMS access) to an account by email. INTERNAL — CLI/admin only,
+// never callable from the app. Used to bootstrap the first reviewer account.
+export const grantStaffByEmail = internalMutation({
+  args: { email: v.string() },
+  handler: async (ctx, { email }) => {
+    const user = await ctx.db
+      .query('users')
+      .filter((q) => q.eq(q.field('email'), email))
+      .first();
+    if (!user) return { ok: false, reason: 'no such user' };
+    const profile = await ctx.db
+      .query('parentProfiles')
+      .withIndex('by_user', (q) => q.eq('userId', user._id))
+      .unique();
+    if (profile) {
+      await ctx.db.patch(profile._id, { isStaff: true });
+    } else {
+      await ctx.db.insert('parentProfiles', {
+        userId: user._id,
+        preferredLocale: 'mm',
+        isStaff: true,
+      });
+    }
+    await logAudit(ctx, user._id, 'staff.grant', 'parentProfiles', user._id, email);
+    return { ok: true, userId: user._id };
+  },
+});
 
 type Media = { kind: string; placeholder?: boolean; offline?: boolean; note?: string };
 type Item = {
