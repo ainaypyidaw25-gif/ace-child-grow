@@ -71,6 +71,8 @@ export function Home() {
           { to: '/hope', label: t('hope.title'), emoji: '💛' },
           { to: '/report', label: t('report.title'), emoji: '📄' },
           { to: '/favorites', label: t('favorites.title'), emoji: '❤️' },
+          { to: '/child-profile', label: locale === 'mm' ? 'ကလေး ပရိုဖိုင်' : 'Child profile', emoji: '👶' },
+          { to: '/directory', label: locale === 'mm' ? 'ကျန်းမာရေး လမ်းညွှန်' : 'Healthcare', emoji: '🏥' },
           { to: '/admin', label: 'Admin', emoji: '🗂️' },
         ].map((q) => (
           <Link

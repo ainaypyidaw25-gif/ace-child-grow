@@ -18,6 +18,9 @@ import { Profile } from '../screens/Profile';
 import { OfflineDownloads } from '../screens/OfflineDownloads';
 import { Favorites } from '../screens/Favorites';
 import { Notifications } from '../screens/Notifications';
+import { HealthcareDirectory } from '../screens/HealthcareDirectory';
+import { ChildProfile } from '../screens/ChildProfile';
+import { AuditLog } from '../screens/AuditLog';
 import { AdminReviewQueue } from '../screens/AdminReviewQueue';
 
 // Authentication gate: unauthenticated visitors see sign-in; the app (and all
@@ -57,7 +60,10 @@ function AppRoutes() {
       <Route path="/offline" element={<Layout><OfflineDownloads /></Layout>} />
       <Route path="/favorites" element={<Layout><Favorites /></Layout>} />
       <Route path="/notifications" element={<Layout><Notifications /></Layout>} />
+      <Route path="/directory" element={<Layout><HealthcareDirectory /></Layout>} />
+      <Route path="/child-profile" element={<Layout><ChildProfile /></Layout>} />
       <Route path="/admin" element={<Layout><AdminReviewQueue /></Layout>} />
+      <Route path="/audit" element={<Layout><AuditLog /></Layout>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
