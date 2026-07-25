@@ -22,11 +22,11 @@ export function HopeCenter() {
         </div>
         <section className="rounded-card border border-line bg-white p-4">
           <h2 className="font-semibold text-mint">{t('hope.whatItMeans')}</h2>
-          <p className="mt-1 text-ink-soft">{open.whatItMeansEn}</p>
+          <p className="mt-1 text-ink-soft">{locale === 'mm' ? open.whatItMeansMm : open.whatItMeansEn}</p>
         </section>
         <section className="rounded-card border border-line bg-mint-soft p-4">
           <h2 className="font-semibold text-sky-deep">{t('hope.whatItDoesNotMean')}</h2>
-          <p className="mt-1 text-ink">{open.whatItDoesNotMeanEn}</p>
+          <p className="mt-1 text-ink">{locale === 'mm' ? open.whatItDoesNotMeanMm : open.whatItDoesNotMeanEn}</p>
         </section>
         <p className="rounded-lg bg-canvas p-3 text-xs text-ink-soft">
           {t('result.disclaimer.nonDiagnostic')}

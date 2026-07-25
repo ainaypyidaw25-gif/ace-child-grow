@@ -106,6 +106,12 @@ export const mm = {
   'notifications.markRead': 'အားလုံး ဖတ်ပြီးအဖြစ် မှတ်မည်',
   'admin.seed': 'နမူနာ content ထည့်မည်',
   'admin.staffOnly': 'အဆင့်ရွှေ့ခြင်းကို staff သာ ပြုလုပ်နိုင်သည်။',
+  'review.short': 'သုံးသပ်ဆဲ',
+  'activities.today': 'ဒီနေ့အတွက်',
+  'learn.category.speech': 'စကားနှင့် ဆက်သွယ်ပြောဆိုမှု',
+  'learn.category.play': 'ကစားခြင်းနှင့် သင်ယူမှု',
+  'learn.category.sleep': 'အိပ်စက်ခြင်း',
+  'learn.category.visit': 'ဆရာဝန်ပြရန် ပြင်ဆင်ခြင်း',
 } as const;
 
 export type TranslationKey = keyof typeof mm;

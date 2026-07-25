@@ -20,7 +20,7 @@ export function Favorites() {
           {saved.map(({ a, key }) => (
             <li key={key} className="rounded-card border border-line bg-white p-4 shadow-card">
               <p className="font-semibold text-ink">{locale === 'mm' ? a.titleMm : a.titleEn}</p>
-              <p className="mt-1 text-sm text-ink-soft">{a.objectiveEn}</p>
+              <p className="mt-1 text-sm text-ink-soft">{locale === 'mm' ? a.objectiveMm : a.objectiveEn}</p>
             </li>
           ))}
         </ul>

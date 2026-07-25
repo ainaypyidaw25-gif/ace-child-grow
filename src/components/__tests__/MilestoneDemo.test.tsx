@@ -15,9 +15,9 @@ function renderWithProviders() {
 }
 
 describe('MilestoneDemo (component)', () => {
-  it('shows a Clinical Review Required badge on milestone content', () => {
+  it('shows an in-review badge on milestone content', () => {
     renderWithProviders();
-    expect(screen.getByText(/ဆေးပညာဆိုင်ရာ/)).toBeInTheDocument();
+    expect(screen.getByText(/သုံးသပ်ဆဲ/)).toBeInTheDocument();
   });
 
   it('renders the four Myanmar answer options by default', () => {

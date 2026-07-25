@@ -1,12 +1,20 @@
 import { useLocale } from '../app/LocaleContext';
 
-/** Shows "Clinical Review Required" for any content not yet published. */
+/**
+ * Compact "in review" marker for content not yet published. Deliberately small
+ * and subtle (a tiny amber dot + short label) so it never dominates a card.
+ * The full "Clinical Review Required" wording lives in the Admin CMS, not here.
+ */
 export function ReviewBadge({ published }: { published: boolean }) {
   const { t } = useLocale();
   if (published) return null;
   return (
-    <span className="inline-block rounded-pill bg-pastel-yellow px-3 py-1 text-xs font-medium text-ink">
-      {t('review.required')}
+    <span
+      title={t('review.required')}
+      className="inline-flex shrink-0 items-center gap-1 rounded-pill bg-pastel-yellow/70 px-2 py-0.5 text-[11px] font-medium text-ink-soft"
+    >
+      <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-state-yellow" />
+      {t('review.short')}
     </span>
   );
 }

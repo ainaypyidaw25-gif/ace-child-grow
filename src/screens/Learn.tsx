@@ -24,7 +24,7 @@ export function Learn() {
         {lessons.map((l, i) => (
           <li key={i} className="rounded-card border border-line bg-white p-4 shadow-card">
             <div className="flex items-center justify-between gap-2">
-              <span className="rounded-pill bg-lavender/50 px-3 py-0.5 text-xs">{l.category}</span>
+              <span className="rounded-pill bg-lavender/50 px-3 py-0.5 text-xs">{t(l.categoryKey)}</span>
               <ReviewBadge published={isApprovedForParents(l.reviewStatus)} />
             </div>
             <h2 className="mt-2 font-semibold text-ink">{locale === 'mm' ? l.titleMm : l.titleEn}</h2>

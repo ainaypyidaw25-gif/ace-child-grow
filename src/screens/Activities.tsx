@@ -71,9 +71,11 @@ export function Activities() {
                 </button>
               </div>
             </div>
-            <p className="mt-1 text-sm text-ink-soft">{a.objectiveEn}</p>
+            <p className="mt-1 text-sm text-ink-soft">
+              {locale === 'mm' ? a.objectiveMm : a.objectiveEn}
+            </p>
             <p className="mt-2 rounded-lg bg-pink/40 px-3 py-2 text-xs text-ink">
-              ⚠️ {t('activities.safety')}: {a.safetyNoteEn}
+              ⚠️ {t('activities.safety')}: {locale === 'mm' ? a.safetyNoteMm : a.safetyNoteEn}
             </p>
             <p className="mt-1 text-xs text-ink-soft">
               {t('activities.duration')}: {a.durationMinutes} {t('common.minutes')}

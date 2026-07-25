@@ -107,4 +107,10 @@ export const en: Record<TranslationKey, string> = {
   'notifications.markRead': 'Mark all as read',
   'admin.seed': 'Add sample content',
   'admin.staffOnly': 'Only staff can advance content.',
+  'review.short': 'In review',
+  'activities.today': 'For today',
+  'learn.category.speech': 'Speech and Communication',
+  'learn.category.play': 'Play and Learning',
+  'learn.category.sleep': 'Sleep',
+  'learn.category.visit': 'Preparing for a Professional Visit',
 };
