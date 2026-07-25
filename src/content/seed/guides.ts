@@ -266,7 +266,16 @@ export const GUIDES: SeedItem[] = [
     safety: b('ပျားရည်ကို ၁ နှစ်အောက် မပေးပါနှင့်။ choking အန္တရာယ်ရှိသော ပုံစံများ ရှောင်ပါ။ စားစဉ် အမြဲ ကြီးကြပ်ပါ။', 'No honey under 1 year; avoid choking shapes; always supervise eating.'),
     commonMistakes: [b('ဆား/သကြား ထည့်ခြင်း သို့မဟုတ် ဆီးပုလင်းဖြင့် အာဟာရ အစားထိုးခြင်း။', 'Adding salt/sugar, or replacing meals with bottles.')],
     parentTips: [b('မိခင်နို့/နို့ကို ဆက်တိုက်ပေးရင်း အစိုင်အခဲကို ဖြည့်ပါ။', 'Continue breast/formula milk alongside solids.')],
-    faq: [{ q: b('အစားအစာ ငြင်းရင် ဘယ်လိုလုပ်မလဲ။', 'What if baby refuses food?'), a: b('ထပ်ခါ တင်ပြပါ — အသစ်တစ်ခုကို လက်ခံဖို့ အကြိမ်များစွာ လိုနိုင်သည်။', 'Keep offering — new foods often take many tries.') }],
+    faq: [
+      { q: b('အစားအစာ ငြင်းရင် ဘယ်လိုလုပ်မလဲ။', 'What if baby refuses food?'), a: b('ထပ်ခါ တင်ပြပါ — အသစ်တစ်ခုကို လက်ခံဖို့ အကြိမ်များစွာ လိုနိုင်သည်။', 'Keep offering — new foods often take many tries.') },
+      {
+        q: b('ဓာတ်မတည့်တတ်သော အစားအစာများ (ဥ၊ မြေပဲ၊ ငါး) ကို ရှောင်သင့်ပါသလား။', 'Should I avoid common allergy foods (egg, peanut, fish)?'),
+        a: b(
+          'ရှောင်ရန် မလိုပါ။ ကလေးသည် အစိုင်အခဲ စတင်ရန် အသင့်ဖြစ်ပြီ (ခြောက်လခန့်၊ ခေါင်းကို တည်ငြိမ်စွာ ထိန်း၍ အထောက်ဖြင့် ထိုင်နိုင်) ဆိုလျှင် ဥ၊ ငါး၊ မြေပဲထောပတ် (ချောမွေ့အောင် ဖျော်ထားသော)၊ နို့ထွက်ပစ္စည်း စသည်တို့ကို တစ်မျိုးချင်း၊ အနည်းငယ်စီ စတင်ပေးနိုင်ပါသည်။ choking မဖြစ်စေရန် ချောမွေ့ နူးညံ့သော ပုံစံဖြင့်သာ ပေးပြီး စားနေစဉ် အမြဲ ကြီးကြပ်ပါ။ တစ်မျိုးပေးပြီးနောက် ရက်အနည်းငယ် စောင့်ကြည့်ပါ။ အရေပြားယားယံ၊ ဖုထစ်ပေါ်ခြင်း သို့မဟုတ် အော့အန်ခြင်း ဖြစ်လျှင် ရပ်ပြီး ကျန်းမာရေးဝန်ထမ်းနှင့် တိုင်ပင်ပါ။ နှုတ်ခမ်း/မျက်နှာ ရောင်ခြင်း သို့မဟုတ် အသက်ရှူ ခက်ခြင်း ဖြစ်လျှင် ချက်ချင်း အရေးပေါ် ဆေးကုသမှု ရယူပါ။ ကလေးတွင် ပြင်းထန်သော အရေပြားရောင်ရမ်းနာ (eczema)၊ သိရှိထားသော ဓာတ်မတည့်မှု၊ ယခင်က ဓာတ်မတည့် တုံ့ပြန်ဖူးမှု သို့မဟုတ် မိသားစုတွင် ဓာတ်မတည့်မှု သမိုင်း ရှိပါက စတင်မီ ကျန်းမာရေးဝန်ထမ်း သို့မဟုတ် ဆရာဝန်နှင့် အရင် တိုင်ပင်ပါ။',
+          'There is no need to avoid them. Once your baby is developmentally ready for solids (around six months, holding the head steady and sitting with support), common allergen foods — egg, fish, smooth peanut paste and dairy — can be introduced one at a time in small amounts. Offer them only in a smooth, soft, choking-safe texture and always supervise eating. Wait a few days after each new food. If you see a rash, hives or vomiting, stop and talk to a health worker. If the lips or face swell or breathing becomes difficult, seek emergency care immediately. If your child has severe eczema, a known food allergy, a previous allergic reaction, or a family history of allergy, talk with a health worker or doctor before you start.',
+        ),
+      },
+    ],
     redFlags: [b('ကိုယ်အလေးချိန် မတိုးခြင်း၊ ထပ်ခါ အန်ခြင်း/ဝမ်းလျှောခြင်း၊ သို့မဟုတ် မျိုချရ အခက်အခဲ။', 'Poor weight gain, repeated vomiting/diarrhea, or trouble swallowing.')],
     referral: b('အာဟာရ/ကြီးထွားမှု စိုးရိမ်ပါက ကလေးကျန်းမာရေးဆရာဝန် သို့မဟုတ် အာဟာရပညာရှင်နှင့် တိုင်ပင်ပါ။', 'If concerned about feeding/growth, consult a pediatrician or nutritionist.'),
     encouragement: b('စားခြင်းကို ပျော်ရွှင်ဖွယ် ဖြစ်စေပါ — ဖိအားမပေးပါနှင့်။', 'Keep mealtimes happy — no pressure.'),

@@ -13,8 +13,13 @@ build/
 .env
 .env.*
 !.env.example
+!.env.production
 *.pem
 *.key
+# Local tooling dirs that can hold deploy keys / admin tokens
+.convex/
+.vercel/
+.git-credentials
 
 # Test / coverage
 coverage/

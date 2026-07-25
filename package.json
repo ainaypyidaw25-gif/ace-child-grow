@@ -19,7 +19,7 @@
     "evidence:gate": "node scripts/evidence-gate-probe.mjs",
     "evidence:batch": "node scripts/evidence-review-pack.mjs",
     "evidence:batch:live": "node scripts/evidence-batch-live.mjs",
-    "seed:dump": "esbuild src/content/seed/index.ts --bundle --format=esm --platform=node --outfile=/tmp/seed.mjs && node --input-type=module -e \"import{seedPayload}from(\"/tmp/seed.mjs\");import{writeFileSync}from(\"node:fs\");writeFileSync(\"convex/seedData.json\",JSON.stringify(seedPayload()))\""
+    "seed:dump": "node scripts/dumpSeed.mjs"
   },
   "dependencies": {
     "@auth/core": "^0.41.1",
