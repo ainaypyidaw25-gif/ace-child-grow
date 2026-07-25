@@ -80,6 +80,59 @@ export default defineSchema({
     summary: v.optional(v.string()),
   }).index('by_time', ['action']),
 
+  // ------------------------------------------------------------------
+  // Content Library (database-driven; nothing hardcoded in components).
+  // One row per content item across all types (milestone/guide/activity/
+  // lesson/special_need/story/printable). Type-specific structure lives in
+  // `data`; first-class columns carry the searchable/indexed metadata and the
+  // clinical-review lifecycle. Nothing is 'published' until a reviewer approves.
+  // ------------------------------------------------------------------
+  libraryContent: defineTable({
+    type: v.string(),
+    slug: v.string(),
+    ageGroupKey: v.optional(v.string()),
+    domainKey: v.optional(v.string()),
+    category: v.optional(v.string()),
+    titleMm: v.string(),
+    titleEn: v.string(),
+    summaryMm: v.optional(v.string()),
+    summaryEn: v.optional(v.string()),
+    tags: v.array(v.string()),
+    difficulty: v.optional(v.string()),
+    durationMinutes: v.optional(v.number()),
+    offline: v.optional(v.boolean()),
+    data: v.any(), // type-specific bilingual payload
+    source: v.string(),
+    version: v.number(),
+    clinicalStatus: v.string(), // draft | clinical_review | published
+    reviewerId: v.optional(v.id('users')),
+    reviewedAt: v.optional(v.number()),
+    nextReviewAt: v.optional(v.number()),
+    reviewNote: v.optional(v.string()),
+    searchText: v.string(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index('by_slug', ['slug'])
+    .index('by_type', ['type'])
+    .index('by_type_age', ['type', 'ageGroupKey'])
+    .index('by_type_domain', ['type', 'domainKey'])
+    .index('by_type_category', ['type', 'category'])
+    .index('by_status', ['clinicalStatus']),
+
+  // Media architecture for library content. Only architecture + placeholders are
+  // seeded; real assets are attached later via the CMS media system.
+  libraryMedia: defineTable({
+    contentSlug: v.string(),
+    kind: v.string(), // illustration | animation | audio | video | pdf | download | offline_bundle
+    url: v.optional(v.string()),
+    placeholder: v.boolean(),
+    offline: v.optional(v.boolean()),
+    note: v.optional(v.string()),
+  })
+    .index('by_content', ['contentSlug'])
+    .index('by_kind', ['kind']),
+
   children: defineTable({
     userId: v.id('users'),
     nickname: v.string(),
