@@ -134,6 +134,61 @@ export default defineSchema({
     .index('by_content', ['contentSlug'])
     .index('by_kind', ['kind']),
 
+  // ------------------------------------------------------------------
+  // Evidence Base. Every knowledge item in the library must be traceable to a
+  // reference a human can open. Records here are metadata READ OFF a publisher
+  // page — never inferred. A record that cannot be verified carries
+  // reviewStatus 'evidence_required' and is not citable.
+  // ------------------------------------------------------------------
+  evidenceSources: defineTable({
+    sourceId: v.string(), // stable slug, the foreign key used by evidenceLinks
+    org: v.string(),
+    orgKey: v.string(),
+    title: v.string(),
+    authors: v.union(v.string(), v.null()),
+    year: v.union(v.number(), v.null()),
+    edition: v.union(v.string(), v.null()),
+    country: v.union(v.string(), v.null()),
+    language: v.string(),
+    url: v.string(),
+    doi: v.union(v.string(), v.null()),
+    isbn: v.union(v.string(), v.null()),
+    pmid: v.union(v.string(), v.null()),
+    evidenceLevel: v.string(),
+    reviewStatus: v.string(), // evidence_required | awaiting_review | in_review | approved | retired
+    reviewer: v.union(v.string(), v.null()),
+    reviewDate: v.union(v.string(), v.null()),
+    nextReviewDate: v.union(v.string(), v.null()),
+    reviewNote: v.optional(v.string()),
+    reviewerId: v.optional(v.id('users')),
+    keywords: v.array(v.string()),
+    topics: v.array(v.string()),
+    ageMonthsMin: v.union(v.number(), v.null()),
+    ageMonthsMax: v.union(v.number(), v.null()),
+    verifiedOn: v.union(v.string(), v.null()),
+    verifiedNote: v.string(),
+    searchText: v.string(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index('by_source_id', ['sourceId'])
+    .index('by_org', ['orgKey'])
+    .index('by_review_status', ['reviewStatus'])
+    .index('by_level', ['evidenceLevel']),
+
+  // Content-to-reference edges. NO ORPHAN CONTENT: every content slug, urgent
+  // safety rule and Hope Center topic must appear here with >= 1 sourceId.
+  evidenceLinks: defineTable({
+    kind: v.string(), // milestone | guide | activity | lesson | special_need | story | printable | safety_rule | hope_topic
+    slug: v.string(),
+    sourceIds: v.array(v.string()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index('by_kind_slug', ['kind', 'slug'])
+    .index('by_kind', ['kind'])
+    .index('by_slug', ['slug']),
+
   children: defineTable({
     userId: v.id('users'),
     nickname: v.string(),

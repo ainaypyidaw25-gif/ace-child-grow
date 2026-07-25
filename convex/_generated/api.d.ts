@@ -13,6 +13,7 @@ import type * as auth from "../auth.js";
 import type * as children from "../children.js";
 import type * as content from "../content.js";
 import type * as directory from "../directory.js";
+import type * as evidence from "../evidence.js";
 import type * as favorites from "../favorites.js";
 import type * as growth from "../growth.js";
 import type * as http from "../http.js";
@@ -36,6 +37,7 @@ declare const fullApi: ApiFromModules<{
   children: typeof children;
   content: typeof content;
   directory: typeof directory;
+  evidence: typeof evidence;
   favorites: typeof favorites;
   growth: typeof growth;
   http: typeof http;
