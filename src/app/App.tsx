@@ -22,6 +22,9 @@ import { HealthcareDirectory } from '../screens/HealthcareDirectory';
 import { ChildProfile } from '../screens/ChildProfile';
 import { AuditLog } from '../screens/AuditLog';
 import { AdminReviewQueue } from '../screens/AdminReviewQueue';
+import { ContentLibrary } from '../screens/ContentLibrary';
+import { ContentDetail } from '../screens/ContentDetail';
+import { LibraryAdmin } from '../screens/LibraryAdmin';
 
 // Authentication gate: unauthenticated visitors see sign-in; the app (and all
 // child data) is only reachable once signed in.
@@ -62,7 +65,10 @@ function AppRoutes() {
       <Route path="/notifications" element={<Layout><Notifications /></Layout>} />
       <Route path="/directory" element={<Layout><HealthcareDirectory /></Layout>} />
       <Route path="/child-profile" element={<Layout><ChildProfile /></Layout>} />
+      <Route path="/library" element={<Layout><ContentLibrary /></Layout>} />
+      <Route path="/content/:slug" element={<Layout><ContentDetail /></Layout>} />
       <Route path="/admin" element={<Layout><AdminReviewQueue /></Layout>} />
+      <Route path="/admin/library" element={<Layout><LibraryAdmin /></Layout>} />
       <Route path="/audit" element={<Layout><AuditLog /></Layout>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

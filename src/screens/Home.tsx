@@ -66,6 +66,7 @@ export function Home() {
 
       <div className="grid grid-cols-2 gap-3">
         {[
+          { to: '/library', label: locale === 'mm' ? 'စာကြည့်တိုက်' : 'Library', emoji: '📚' },
           { to: '/growth', label: t('growth.title'), emoji: '📏' },
           { to: '/sleep', label: t('sleep.title'), emoji: '😴' },
           { to: '/hope', label: t('hope.title'), emoji: '💛' },
