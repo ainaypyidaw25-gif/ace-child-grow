@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLocale } from '../app/LocaleContext';
 import { useAppState } from '../app/AppState';
@@ -5,8 +6,9 @@ import { useAppState } from '../app/AppState';
 /** Parent consent gate. Consent is recorded before any child data is added. */
 export function Consent() {
   const { t, locale } = useLocale();
-  const { state, dispatch } = useAppState();
+  const { state, acceptConsentAsync } = useAppState();
   const navigate = useNavigate();
+  const [busy, setBusy] = useState(false);
 
   const points =
     locale === 'mm'
@@ -36,15 +38,22 @@ export function Consent() {
       <p className="text-xs text-ink-soft">{t('result.disclaimer.nonDiagnostic')}</p>
       <button
         type="button"
-        onClick={() => {
-          dispatch({ type: 'accept_consent', at: new Date().toISOString() });
-          // Route through the bootstrap gate so a parent who already has a child
-          // lands on Home instead of being asked to add another.
-          navigate('/');
+        disabled={busy}
+        onClick={async () => {
+          if (busy) return;
+          setBusy(true);
+          try {
+            // Await persistence so the bootstrap gate reads fresh consent, then
+            // route through it (a parent who already has a child lands on Home).
+            await acceptConsentAsync();
+            navigate('/');
+          } catch {
+            setBusy(false);
+          }
         }}
-        className="min-h-touch w-full rounded-pill bg-sky px-6 py-3 font-semibold text-white"
+        className="min-h-touch w-full rounded-pill bg-sky px-6 py-3 font-semibold text-white disabled:opacity-50"
       >
-        {t('common.confirm')}
+        {busy ? '…' : t('common.confirm')}
       </button>
       {state.consentAcceptedAt && (
         <p className="text-center text-xs text-mint">✓ {t('common.confirm')}</p>

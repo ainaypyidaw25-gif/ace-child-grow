@@ -5,9 +5,9 @@ import { useLocale } from '../app/LocaleContext';
 
 export function Notifications() {
   const { t, locale } = useLocale();
-  const items = useQuery(api.notifications.list) ?? [];
+  const items = useQuery(api.notifications.list); // undefined === loading
   const markAllRead = useMutation(api.notifications.markAllRead);
-  const unread = items.filter((n) => !n.readAt).length;
+  const unread = (items ?? []).filter((n) => !n.readAt).length;
 
   // Mark everything read when the screen is opened (depends on a stable count).
   useEffect(() => {
@@ -17,7 +17,9 @@ export function Notifications() {
   return (
     <div className="space-y-4">
       <h1 className="text-xl font-bold text-sky-deep">{t('notifications.title')}</h1>
-      {items.length === 0 ? (
+      {items === undefined ? (
+        <p className="text-ink-soft" role="status">…</p>
+      ) : items.length === 0 ? (
         <p className="text-ink-soft">{t('notifications.empty')}</p>
       ) : (
         <ul className="space-y-2">

@@ -14,6 +14,10 @@ interface AppStateContextValue {
   hasChild: boolean;
   /** Awaitable child creation (resolves after the mutation commits). */
   addChildAsync: (child: Omit<Child, 'id'>) => Promise<void>;
+  /** Awaitable child update. */
+  updateChildAsync: (child: Child) => Promise<void>;
+  /** Awaitable consent acceptance (resolves after the mutation commits). */
+  acceptConsentAsync: () => Promise<void>;
 }
 
 const AppStateContext = createContext<AppStateContextValue | null>(null);
@@ -61,11 +65,13 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     }
   }, [list, activeChildId]);
 
-  const state: AppState = {
-    consentAcceptedAt: me?.consentAcceptedAt ? new Date(me.consentAcceptedAt).toISOString() : null,
-    children: list,
-    activeChildId,
-  };
+  const consentAcceptedAt = me?.consentAcceptedAt
+    ? new Date(me.consentAcceptedAt).toISOString()
+    : null;
+  const state: AppState = useMemo(
+    () => ({ consentAcceptedAt, children: list, activeChildId }),
+    [consentAcceptedAt, list, activeChildId],
+  );
 
   function dispatch(action: Action) {
     switch (action.type) {
@@ -115,14 +121,30 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     });
   }
 
+  async function updateChildAsync(child: Child): Promise<void> {
+    await updateChild({
+      id: child.id as never,
+      nickname: child.nickname,
+      birthDate: child.birthDate,
+      gestationalWeeks: child.gestationalWeeks,
+      useCorrectedAge: child.useCorrectedAge,
+    });
+  }
+
+  async function acceptConsentAsync(): Promise<void> {
+    await acceptConsent({});
+  }
+
   const activeChild = list.find((c) => c.id === activeChildId) ?? null;
   const hasChild = childrenLoaded && list.length > 0;
 
-  return (
-    <AppStateContext.Provider value={{ state, dispatch, activeChild, ready, hasChild, addChildAsync }}>
-      {children}
-    </AppStateContext.Provider>
+  const value = useMemo(
+    () => ({ state, dispatch, activeChild, ready, hasChild, addChildAsync, updateChildAsync, acceptConsentAsync }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [state, activeChild, ready, hasChild],
   );
+
+  return <AppStateContext.Provider value={value}>{children}</AppStateContext.Provider>;
 }
 
 export function useAppState(): AppStateContextValue {

@@ -61,7 +61,7 @@ export function Activities() {
       {ageAppropriate.length === 0 ? (
         <p className="rounded-card bg-pastel-yellow/40 p-4 text-sm text-ink-soft">
           {locale === 'mm'
-            ? 'ဤအရွယ်အတွက် နမူနာ လှုပ်ရှားမှု မရှိသေးပါ။ (ပြည့်စုံသော catalogue ကို clinical review ဖြင့် ထည့်သွင်းမည်။)'
+            ? 'ဤအရွယ်အတွက် နမူနာ လှုပ်ရှားမှု မရှိသေးပါ။ (အကြောင်းအရာ အပြည့်အစုံကို ဆေးပညာ သုံးသပ်ပြီးမှ ထည့်သွင်းပါမည်။)'
             : 'No sample activities for this age yet. (Full catalogue is added under clinical review.)'}
         </p>
       ) : (
