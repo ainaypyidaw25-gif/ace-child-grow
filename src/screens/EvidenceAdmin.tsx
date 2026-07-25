@@ -10,10 +10,13 @@ import {
   EVIDENCE_REVIEW_STATUSES,
   EVIDENCE_TOPICS,
   effectiveNextReview,
+  isExpired,
+  isOutdated,
   resolveReviewStatus,
   verificationProblems,
 } from '../evidence/types';
 import { buildReports } from '../evidence/reports';
+import { ReviewBatchPanel } from './ReviewBatchPanel';
 
 // Admin Evidence Library — STAFF ONLY (the server returns `allowed: false` to
 // anyone else). This screen shows the reference registry, the eight filters the
@@ -34,10 +37,11 @@ export function EvidenceAdmin() {
   const [yearFrom, setYearFrom] = useState('');
   const [ageMonths, setAgeMonths] = useState('');
   const [q, setQ] = useState('');
-  const [tab, setTab] = useState<'registry' | 'reports'>('registry');
+  const [tab, setTab] = useState<'registry' | 'reports' | 'batch'>('registry');
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState('');
   const [reviewer, setReviewer] = useState('');
+  const [reviewerQualification, setReviewerQualification] = useState('');
   const [pending, setPending] = useState<string | null>(null);
 
   const stats = useQuery(api.evidence.stats, {});
@@ -109,10 +113,25 @@ export function EvidenceAdmin() {
       setMsg(L('သုံးသပ်သူ အမည် ထည့်ပါ။', 'Enter the reviewer name first.'));
       return;
     }
+    if (!reviewerQualification.trim()) {
+      setMsg(
+        L(
+          'သုံးသပ်သူ၏ ပညာအရည်အချင်း ထည့်ပါ (ဥပမာ — MBBS, MMedSc (Paediatrics))။',
+          'Enter the reviewer qualification first (e.g. MBBS, MMedSc (Paediatrics)).',
+        ),
+      );
+      return;
+    }
     setPending(sourceId);
     setMsg('');
     try {
-      await setReview({ sourceId, status, reviewer: reviewer.trim(), reviewDate: todayIso });
+      await setReview({
+        sourceId,
+        status,
+        reviewer: reviewer.trim(),
+        reviewerQualification: reviewerQualification.trim(),
+        reviewDate: todayIso,
+      });
     } catch (e) {
       setMsg((e as Error).message);
     } finally {
@@ -165,7 +184,15 @@ export function EvidenceAdmin() {
           <input
             value={reviewer}
             onChange={(e) => setReviewer(e.target.value)}
+            aria-label={L('သုံးသပ်သူ အမည်', 'Reviewer name')}
             placeholder={L('သုံးသပ်သူ အမည်', 'Reviewer name')}
+            className="min-h-touch rounded-pill border border-line px-3 py-1 text-sm"
+          />
+          <input
+            value={reviewerQualification}
+            onChange={(e) => setReviewerQualification(e.target.value)}
+            aria-label={L('ပညာအရည်အချင်း', 'Reviewer qualification')}
+            placeholder={L('ပညာအရည်အချင်း (ဥပမာ MBBS)', 'Qualification (e.g. MBBS)')}
             className="min-h-touch rounded-pill border border-line px-3 py-1 text-sm"
           />
         </div>
@@ -173,7 +200,7 @@ export function EvidenceAdmin() {
       </section>
 
       <div className="flex gap-2">
-        {(['registry', 'reports'] as const).map((k) => (
+        {(['registry', 'reports', 'batch'] as const).map((k) => (
           <button
             key={k}
             type="button"
@@ -182,7 +209,11 @@ export function EvidenceAdmin() {
               tab === k ? 'bg-sky text-white' : 'bg-canvas text-ink-soft'
             }`}
           >
-            {k === 'registry' ? L('ကိုးကားစာရင်း', 'Registry') : L('အစီရင်ခံစာများ', 'Reports')}
+            {k === 'registry'
+              ? L('ကိုးကားစာရင်း', 'Registry')
+              : k === 'reports'
+                ? L('အစီရင်ခံစာများ', 'Reports')
+                : L('သုံးသပ်ရန် အစု ၀–၁၂ လ', 'Review batch 0–12m')}
           </button>
         ))}
       </div>
@@ -282,6 +313,20 @@ export function EvidenceAdmin() {
                         <span>{r.year ?? L('နှစ် မဖော်ပြထား', 'year not printed')}</span>
                         {r.country && <span>{r.country}</span>}
                         <span>{r.language}</span>
+                        {/* Expired = OUR re-check of the reference is overdue.
+                            Outdated = the DOCUMENT is old enough that a newer
+                            edition should be looked for. Both are review
+                            prompts shown to a human, never build failures. */}
+                        {local && isExpired(local, todayIso) && (
+                          <span className="rounded-pill bg-pastel-orange px-2 py-0.5 font-semibold text-ink">
+                            {L('သုံးသပ်ရန် ကျော်လွန်', 'EXPIRED — re-check overdue')}
+                          </span>
+                        )}
+                        {local && isOutdated(local, todayIso) && (
+                          <span className="rounded-pill bg-pastel-yellow px-2 py-0.5 font-semibold text-ink">
+                            {L('စာတမ်း ဟောင်းနေပြီ', 'OUTDATED — look for a newer edition')}
+                          </span>
+                        )}
                       </div>
                       <p className="mt-1 text-sm font-medium text-ink">{r.title}</p>
                       <p className="text-xs text-ink-soft">{r.org}{r.edition ? ` · ${r.edition}` : ''}</p>
@@ -318,6 +363,8 @@ export function EvidenceAdmin() {
                             disabled={
                               pending === r.sourceId ||
                               r.reviewStatus === next ||
+                              !reviewer.trim() ||
+                              !reviewerQualification.trim() ||
                               (next === 'approved' && (local ? resolveReviewStatus(local) : r.reviewStatus) === 'evidence_required')
                             }
                             onClick={() => review(r.sourceId, next)}
@@ -372,6 +419,8 @@ export function EvidenceAdmin() {
           />
         </div>
       )}
+
+      {tab === 'batch' && <ReviewBatchPanel todayIso={todayIso} />}
     </div>
   );
 }

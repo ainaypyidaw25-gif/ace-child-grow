@@ -11,7 +11,7 @@
 // pushed here by importSources. Nothing in this file fabricates a DOI, ISBN,
 // edition or year, and nothing promotes a record to 'approved' except an
 // explicit, named human decision made through setReview.
-import { query, mutation } from './_generated/server';
+import { query, mutation, internalQuery } from './_generated/server';
 import { v } from 'convex/values';
 import { getAuthUserId } from '@convex-dev/auth/server';
 import { isStaff, requireStaff } from './lib/auth';
@@ -233,7 +233,10 @@ export const importSources = mutation({
           // Human review decisions survive re-import.
           reviewStatus: existing.reviewStatus,
           reviewer: existing.reviewer,
+          reviewerQualification: existing.reviewerQualification,
           reviewDate: existing.reviewDate,
+          reviewNote: existing.reviewNote,
+          nextReviewDate: existing.nextReviewDate ?? rest.nextReviewDate,
           reviewerId: existing.reviewerId,
           searchText,
           updatedAt: now,
@@ -328,6 +331,7 @@ export const setReview = mutation({
     sourceId: v.string(),
     status: v.string(),
     reviewer: v.string(),
+    reviewerQualification: v.string(),
     reviewDate: v.string(),
     nextReviewDate: v.optional(v.string()),
     note: v.optional(v.string()),
@@ -338,6 +342,11 @@ export const setReview = mutation({
       throw new Error(`Unknown review status: ${args.status}`);
     }
     if (!args.reviewer.trim()) throw new Error('A named reviewer is required');
+    // A sign-off is only auditable if the person signing states what they are
+    // qualified to sign off. Unqualified approval is not approval.
+    if (!args.reviewerQualification.trim()) {
+      throw new Error('A reviewer qualification is required');
+    }
 
     const row = await ctx.db
       .query('evidenceSources')
@@ -354,6 +363,7 @@ export const setReview = mutation({
     await ctx.db.patch(row._id, {
       reviewStatus: args.status,
       reviewer: args.reviewer.trim(),
+      reviewerQualification: args.reviewerQualification.trim(),
       reviewDate: args.reviewDate,
       nextReviewDate: args.nextReviewDate ?? row.nextReviewDate,
       reviewNote: args.note,
@@ -367,8 +377,110 @@ export const setReview = mutation({
       'evidence.setReview',
       'evidenceSources',
       args.sourceId,
-      `${row.reviewStatus} → ${args.status} by ${args.reviewer.trim()}`,
+      `${row.reviewStatus} → ${args.status} by ${args.reviewer.trim()} (${args.reviewerQualification.trim()})`,
     );
     return { ok: true };
+  },
+});
+
+// ---------------------------------------------------------------------------
+// Live integrity probe (INTERNAL — not reachable from any browser).
+//
+// internalQuery is callable only from the server or from the CLI with an admin
+// key (`npx convex run evidence:integrity`). It exists so a deployment can be
+// checked against the source of truth after a deploy or an import: are the
+// evidence tables live, do the indexes answer, how many rows are actually
+// there, and has anything been approved that should not have been.
+// ---------------------------------------------------------------------------
+export const integrity = internalQuery({
+  args: {},
+  handler: async (ctx) => {
+    const sources = await ctx.db.query('evidenceSources').collect();
+    const links = await ctx.db.query('evidenceLinks').collect();
+
+    // Exercise every index so a missing one fails loudly rather than silently
+    // falling back to a full scan in some later query.
+    const indexProbe = {
+      by_source_id: (
+        await ctx.db
+          .query('evidenceSources')
+          .withIndex('by_source_id', (q) => q.eq('sourceId', sources[0]?.sourceId ?? '__none__'))
+          .collect()
+      ).length,
+      by_org: (
+        await ctx.db
+          .query('evidenceSources')
+          .withIndex('by_org', (q) => q.eq('orgKey', 'WHO'))
+          .collect()
+      ).length,
+      by_review_status: (
+        await ctx.db
+          .query('evidenceSources')
+          .withIndex('by_review_status', (q) => q.eq('reviewStatus', 'awaiting_review'))
+          .collect()
+      ).length,
+      by_level: (
+        await ctx.db
+          .query('evidenceSources')
+          .withIndex('by_level', (q) => q.eq('evidenceLevel', 'guideline'))
+          .collect()
+      ).length,
+      by_kind: (
+        await ctx.db
+          .query('evidenceLinks')
+          .withIndex('by_kind', (q) => q.eq('kind', 'milestone'))
+          .collect()
+      ).length,
+      by_kind_slug: (
+        await ctx.db
+          .query('evidenceLinks')
+          .withIndex('by_kind_slug', (q) =>
+            q.eq('kind', links[0]?.kind ?? 'milestone').eq('slug', links[0]?.slug ?? '__none__'),
+          )
+          .collect()
+      ).length,
+    };
+
+    const byStatus: Record<string, number> = {};
+    sources.forEach((s) => {
+      byStatus[s.reviewStatus] = (byStatus[s.reviewStatus] ?? 0) + 1;
+    });
+
+    const known = new Set(sources.map((s) => s.sourceId));
+    const danglingLinks = links
+      .filter((l) => l.sourceIds.some((id) => !known.has(id)))
+      .map((l) => `${l.kind}:${l.slug}`);
+    const orphanLinks = links.filter((l) => l.sourceIds.length === 0).map((l) => `${l.kind}:${l.slug}`);
+
+    // An approval with no named reviewer or no stated qualification is not a
+    // sign-off; report it so it can be reversed.
+    const approvedWithoutReviewer = sources
+      .filter(
+        (s) =>
+          s.reviewStatus === 'approved' &&
+          (!s.reviewer?.trim() || !s.reviewerQualification?.trim()),
+      )
+      .map((s) => s.sourceId);
+
+    const publishedContent = (await ctx.db.query('libraryContent').collect()).filter(
+      (c) => c.clinicalStatus === 'published',
+    );
+    const linkedSlugs = new Set(links.map((l) => l.slug));
+    const publishedWithoutEvidence = publishedContent
+      .filter((c) => !linkedSlugs.has(c.slug))
+      .map((c) => c.slug);
+
+    return {
+      sources: sources.length,
+      links: links.length,
+      linkedSlugs: linkedSlugs.size,
+      byStatus,
+      indexProbe,
+      danglingLinks,
+      orphanLinks,
+      approvedWithoutReviewer,
+      publishedContent: publishedContent.length,
+      publishedWithoutEvidence,
+    };
   },
 });

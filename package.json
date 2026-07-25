@@ -14,6 +14,8 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "report:pdf": "node scripts/generate-report-pdf.mjs",
+    "evidence:live": "node scripts/evidence-live-check.mjs",
+    "evidence:batch": "node scripts/evidence-review-pack.mjs",
     "seed:dump": "esbuild src/content/seed/index.ts --bundle --format=esm --platform=node --outfile=/tmp/seed.mjs && node --input-type=module -e \"import{seedPayload}from(\"/tmp/seed.mjs\");import{writeFileSync}from(\"node:fs\");writeFileSync(\"convex/seedData.json\",JSON.stringify(seedPayload()))\""
   },
   "dependencies": {

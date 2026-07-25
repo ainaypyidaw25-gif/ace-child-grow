@@ -283,4 +283,33 @@ describe('convex/evidence.ts authorization', () => {
     expect(src).toContain('A named reviewer is required');
     expect(src).toContain("args.status === 'approved' && row.reviewStatus === 'evidence_required'");
   });
+
+  // A sign-off is auditable only if the person signing states what they are
+  // qualified to sign off. "Approved by Dr X" with no discipline attached is a
+  // name, not a clinical decision — so the server refuses it outright.
+  it('requires the reviewer to state a qualification', () => {
+    expect(src).toContain('A reviewer qualification is required');
+    expect(src).toContain('reviewerQualification: v.string()');
+  });
+
+  // Re-importing publisher metadata must not quietly wipe the qualification a
+  // reviewer signed with, or an audited approval degrades into an anonymous one.
+  it('preserves the reviewer qualification across a re-import', () => {
+    expect(src).toContain('reviewerQualification: existing.reviewerQualification');
+  });
+
+  // The integrity probe returns live counts, dangling links and the identities
+  // of unqualified approvals. Declared as `query` it would be world-readable to
+  // any browser that knows the function name; as `internalQuery` it is not
+  // routed to clients at all and needs an admin key. The distinction is one
+  // keyword, so it is asserted rather than trusted.
+  it('exposes the integrity probe as an internal function only', () => {
+    expect(src).toContain('export const integrity = internalQuery(');
+    expect(src).not.toMatch(/export const integrity = query\(/);
+  });
+
+  it('declares no public function that leaks the integrity probe', () => {
+    const publicNames = [...src.matchAll(/export const (\w+) = (?:query|mutation|action)\(/g)].map((m) => m[1]);
+    expect(publicNames).not.toContain('integrity');
+  });
 });

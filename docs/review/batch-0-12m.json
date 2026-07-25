@@ -1,0 +1,2482 @@
+{
+  "batch": {
+    "batchId": "batch-0-12m",
+    "generatedOn": "2026-07-25",
+    "ageRangeMonths": {
+      "min": 0,
+      "max": 12
+    },
+    "items": [
+      {
+        "slug": "ms_birth_2m_gross_motor_1",
+        "type": "milestone",
+        "titleMm": "မှောက်အိပ်စဉ် ခေါင်းမော့ခြင်း",
+        "titleEn": "Lifts head during tummy time",
+        "ageGroupKey": "birth_2m",
+        "ageGroupLabelEn": "Birth–2 months",
+        "ageGroupLabelMm": "မွေးကင်း – ၂ လ",
+        "domainKey": "gross_motor",
+        "domainLabelEn": "Gross Motor",
+        "domainLabelMm": "ကြွက်သားကြီး လှုပ်ရှားမှု",
+        "clinicalStatus": "clinical_review",
+        "references": [
+          {
+            "id": "aap-milestones-2022",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Evidence-Informed Milestones for Developmental Surveillance Tools",
+            "year": 2022,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "cdc-milestones-2026",
+            "org": "Centers for Disease Control and Prevention",
+            "orgKey": "CDC",
+            "title": "CDC's Developmental Milestones",
+            "year": 2026,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "aap-surveillance-2020",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Promoting Optimal Development: Identifying Infants and Young Children With Developmental Disorders Through Developmental Surveillance and Screening",
+            "year": 2020,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "jr-who-motor-windows-2006",
+            "org": "Acta Paediatrica (WHO Multicentre Growth Reference Study Group)",
+            "orgKey": "JOURNAL",
+            "title": "WHO Motor Development Study: windows of achievement for six gross motor development milestones",
+            "year": 2006,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "tb-campbell-pt-6e-2022",
+            "org": "Elsevier",
+            "orgKey": "TEXTBOOK",
+            "title": "Campbell's Physical Therapy for Children",
+            "year": 2022,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "who-pa-sleep-under5-2019",
+            "org": "World Health Organization",
+            "orgKey": "WHO",
+            "title": "Guidelines on physical activity, sedentary behaviour and sleep for children under 5 years of age",
+            "year": 2019,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          }
+        ],
+        "orgKeys": [
+          "AAP",
+          "CDC",
+          "JOURNAL",
+          "TEXTBOOK",
+          "WHO"
+        ],
+        "blockers": [],
+        "advisories": []
+      },
+      {
+        "slug": "ms_birth_2m_social_1",
+        "type": "milestone",
+        "titleMm": "မျက်လုံးချင်းဆုံ ကြည့်ခြင်း",
+        "titleEn": "Makes eye contact",
+        "ageGroupKey": "birth_2m",
+        "ageGroupLabelEn": "Birth–2 months",
+        "ageGroupLabelMm": "မွေးကင်း – ၂ လ",
+        "domainKey": "social",
+        "domainLabelEn": "Social",
+        "domainLabelMm": "လူမှုဆက်ဆံရေး",
+        "clinicalStatus": "clinical_review",
+        "references": [
+          {
+            "id": "aap-milestones-2022",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Evidence-Informed Milestones for Developmental Surveillance Tools",
+            "year": 2022,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "cdc-milestones-2026",
+            "org": "Centers for Disease Control and Prevention",
+            "orgKey": "CDC",
+            "title": "CDC's Developmental Milestones",
+            "year": 2026,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "aap-surveillance-2020",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Promoting Optimal Development: Identifying Infants and Young Children With Developmental Disorders Through Developmental Surveillance and Screening",
+            "year": 2020,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "nice-ph40-social-emotional-2012",
+            "org": "National Institute for Health and Care Excellence",
+            "orgKey": "NICE",
+            "title": "Social and emotional wellbeing: early years",
+            "year": 2012,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": true
+          },
+          {
+            "id": "tb-dbp-5e-2022",
+            "org": "Elsevier",
+            "orgKey": "TEXTBOOK",
+            "title": "Developmental-Behavioral Pediatrics",
+            "year": 2022,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          }
+        ],
+        "orgKeys": [
+          "AAP",
+          "CDC",
+          "NICE",
+          "TEXTBOOK"
+        ],
+        "blockers": [],
+        "advisories": [
+          "1 linked reference(s) old enough to look for a newer edition: nice-ph40-social-emotional-2012"
+        ]
+      },
+      {
+        "slug": "ms_birth_2m_communication_1",
+        "type": "milestone",
+        "titleMm": "အသံကြားလျှင် တုံ့ပြန်ခြင်း",
+        "titleEn": "Responds to sound",
+        "ageGroupKey": "birth_2m",
+        "ageGroupLabelEn": "Birth–2 months",
+        "ageGroupLabelMm": "မွေးကင်း – ၂ လ",
+        "domainKey": "communication",
+        "domainLabelEn": "Communication",
+        "domainLabelMm": "ဆက်သွယ်ပြောဆိုမှု",
+        "clinicalStatus": "clinical_review",
+        "references": [
+          {
+            "id": "aap-milestones-2022",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Evidence-Informed Milestones for Developmental Surveillance Tools",
+            "year": 2022,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "cdc-milestones-2026",
+            "org": "Centers for Disease Control and Prevention",
+            "orgKey": "CDC",
+            "title": "CDC's Developmental Milestones",
+            "year": 2026,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "aap-surveillance-2020",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Promoting Optimal Development: Identifying Infants and Young Children With Developmental Disorders Through Developmental Surveillance and Screening",
+            "year": 2020,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "who-care-for-child-development-2012",
+            "org": "World Health Organization / UNICEF",
+            "orgKey": "WHO",
+            "title": "Care for child development: improving the care of young children",
+            "year": 2012,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": true
+          },
+          {
+            "id": "nhs-learn-to-talk-2023",
+            "org": "National Health Service (UK)",
+            "orgKey": "NHS",
+            "title": "Help your baby learn to talk",
+            "year": 2023,
+            "reviewStatus": "awaiting_review",
+            "expired": true,
+            "outdated": false
+          }
+        ],
+        "orgKeys": [
+          "AAP",
+          "CDC",
+          "NHS",
+          "WHO"
+        ],
+        "blockers": [],
+        "advisories": [
+          "1 linked reference(s) overdue for re-check: nhs-learn-to-talk-2023",
+          "1 linked reference(s) old enough to look for a newer edition: who-care-for-child-development-2012"
+        ]
+      },
+      {
+        "slug": "ms_birth_2m_social_2",
+        "type": "milestone",
+        "titleMm": "ပြုံးပြခြင်း (လူမှုပြုံး)",
+        "titleEn": "Social smile",
+        "ageGroupKey": "birth_2m",
+        "ageGroupLabelEn": "Birth–2 months",
+        "ageGroupLabelMm": "မွေးကင်း – ၂ လ",
+        "domainKey": "social",
+        "domainLabelEn": "Social",
+        "domainLabelMm": "လူမှုဆက်ဆံရေး",
+        "clinicalStatus": "clinical_review",
+        "references": [
+          {
+            "id": "aap-milestones-2022",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Evidence-Informed Milestones for Developmental Surveillance Tools",
+            "year": 2022,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "cdc-milestones-2026",
+            "org": "Centers for Disease Control and Prevention",
+            "orgKey": "CDC",
+            "title": "CDC's Developmental Milestones",
+            "year": 2026,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "aap-surveillance-2020",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Promoting Optimal Development: Identifying Infants and Young Children With Developmental Disorders Through Developmental Surveillance and Screening",
+            "year": 2020,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "nice-ph40-social-emotional-2012",
+            "org": "National Institute for Health and Care Excellence",
+            "orgKey": "NICE",
+            "title": "Social and emotional wellbeing: early years",
+            "year": 2012,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": true
+          },
+          {
+            "id": "tb-dbp-5e-2022",
+            "org": "Elsevier",
+            "orgKey": "TEXTBOOK",
+            "title": "Developmental-Behavioral Pediatrics",
+            "year": 2022,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          }
+        ],
+        "orgKeys": [
+          "AAP",
+          "CDC",
+          "NICE",
+          "TEXTBOOK"
+        ],
+        "blockers": [],
+        "advisories": [
+          "1 linked reference(s) old enough to look for a newer edition: nice-ph40-social-emotional-2012"
+        ]
+      },
+      {
+        "slug": "ms_3_4m_gross_motor_1",
+        "type": "milestone",
+        "titleMm": "ခေါင်းကို တည်ငြိမ်စွာ ထိန်းခြင်း",
+        "titleEn": "Holds head steady",
+        "ageGroupKey": "3_4m",
+        "ageGroupLabelEn": "3–4 months",
+        "ageGroupLabelMm": "၃ – ၄ လ",
+        "domainKey": "gross_motor",
+        "domainLabelEn": "Gross Motor",
+        "domainLabelMm": "ကြွက်သားကြီး လှုပ်ရှားမှု",
+        "clinicalStatus": "clinical_review",
+        "references": [
+          {
+            "id": "aap-milestones-2022",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Evidence-Informed Milestones for Developmental Surveillance Tools",
+            "year": 2022,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "cdc-milestones-2026",
+            "org": "Centers for Disease Control and Prevention",
+            "orgKey": "CDC",
+            "title": "CDC's Developmental Milestones",
+            "year": 2026,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "aap-surveillance-2020",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Promoting Optimal Development: Identifying Infants and Young Children With Developmental Disorders Through Developmental Surveillance and Screening",
+            "year": 2020,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "jr-who-motor-windows-2006",
+            "org": "Acta Paediatrica (WHO Multicentre Growth Reference Study Group)",
+            "orgKey": "JOURNAL",
+            "title": "WHO Motor Development Study: windows of achievement for six gross motor development milestones",
+            "year": 2006,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "tb-campbell-pt-6e-2022",
+            "org": "Elsevier",
+            "orgKey": "TEXTBOOK",
+            "title": "Campbell's Physical Therapy for Children",
+            "year": 2022,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "who-pa-sleep-under5-2019",
+            "org": "World Health Organization",
+            "orgKey": "WHO",
+            "title": "Guidelines on physical activity, sedentary behaviour and sleep for children under 5 years of age",
+            "year": 2019,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          }
+        ],
+        "orgKeys": [
+          "AAP",
+          "CDC",
+          "JOURNAL",
+          "TEXTBOOK",
+          "WHO"
+        ],
+        "blockers": [],
+        "advisories": []
+      },
+      {
+        "slug": "ms_3_4m_fine_motor_1",
+        "type": "milestone",
+        "titleMm": "လက်များကို ဆုံစည်းခြင်း",
+        "titleEn": "Brings hands together",
+        "ageGroupKey": "3_4m",
+        "ageGroupLabelEn": "3–4 months",
+        "ageGroupLabelMm": "၃ – ၄ လ",
+        "domainKey": "fine_motor",
+        "domainLabelEn": "Fine Motor",
+        "domainLabelMm": "လက်ချောင်းငယ် လှုပ်ရှားမှု",
+        "clinicalStatus": "clinical_review",
+        "references": [
+          {
+            "id": "aap-milestones-2022",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Evidence-Informed Milestones for Developmental Surveillance Tools",
+            "year": 2022,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "cdc-milestones-2026",
+            "org": "Centers for Disease Control and Prevention",
+            "orgKey": "CDC",
+            "title": "CDC's Developmental Milestones",
+            "year": 2026,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "aap-surveillance-2020",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Promoting Optimal Development: Identifying Infants and Young Children With Developmental Disorders Through Developmental Surveillance and Screening",
+            "year": 2020,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "tb-case-smith-9e-2025",
+            "org": "Elsevier",
+            "orgKey": "TEXTBOOK",
+            "title": "Case-Smith's Occupational Therapy for Children and Adolescents",
+            "year": 2025,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "cdc-milestone-checklists-2025",
+            "org": "Centers for Disease Control and Prevention",
+            "orgKey": "CDC",
+            "title": "Milestone Checklists by Age",
+            "year": 2025,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          }
+        ],
+        "orgKeys": [
+          "AAP",
+          "CDC",
+          "TEXTBOOK"
+        ],
+        "blockers": [],
+        "advisories": []
+      },
+      {
+        "slug": "ms_3_4m_communication_1",
+        "type": "milestone",
+        "titleMm": "အသံထွက်၍ ကစားခြင်း (ကူးဝဲ)",
+        "titleEn": "Coos and makes sounds",
+        "ageGroupKey": "3_4m",
+        "ageGroupLabelEn": "3–4 months",
+        "ageGroupLabelMm": "၃ – ၄ လ",
+        "domainKey": "communication",
+        "domainLabelEn": "Communication",
+        "domainLabelMm": "ဆက်သွယ်ပြောဆိုမှု",
+        "clinicalStatus": "clinical_review",
+        "references": [
+          {
+            "id": "aap-milestones-2022",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Evidence-Informed Milestones for Developmental Surveillance Tools",
+            "year": 2022,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "cdc-milestones-2026",
+            "org": "Centers for Disease Control and Prevention",
+            "orgKey": "CDC",
+            "title": "CDC's Developmental Milestones",
+            "year": 2026,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "aap-surveillance-2020",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Promoting Optimal Development: Identifying Infants and Young Children With Developmental Disorders Through Developmental Surveillance and Screening",
+            "year": 2020,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "who-care-for-child-development-2012",
+            "org": "World Health Organization / UNICEF",
+            "orgKey": "WHO",
+            "title": "Care for child development: improving the care of young children",
+            "year": 2012,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": true
+          },
+          {
+            "id": "nhs-learn-to-talk-2023",
+            "org": "National Health Service (UK)",
+            "orgKey": "NHS",
+            "title": "Help your baby learn to talk",
+            "year": 2023,
+            "reviewStatus": "awaiting_review",
+            "expired": true,
+            "outdated": false
+          }
+        ],
+        "orgKeys": [
+          "AAP",
+          "CDC",
+          "NHS",
+          "WHO"
+        ],
+        "blockers": [],
+        "advisories": [
+          "1 linked reference(s) overdue for re-check: nhs-learn-to-talk-2023",
+          "1 linked reference(s) old enough to look for a newer edition: who-care-for-child-development-2012"
+        ]
+      },
+      {
+        "slug": "ms_3_4m_emotional_1",
+        "type": "milestone",
+        "titleMm": "ပျော်ရွှင်မှု ဖော်ပြခြင်း",
+        "titleEn": "Shows joy",
+        "ageGroupKey": "3_4m",
+        "ageGroupLabelEn": "3–4 months",
+        "ageGroupLabelMm": "၃ – ၄ လ",
+        "domainKey": "emotional",
+        "domainLabelEn": "Emotional",
+        "domainLabelMm": "စိတ်ခံစားမှု",
+        "clinicalStatus": "clinical_review",
+        "references": [
+          {
+            "id": "aap-milestones-2022",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Evidence-Informed Milestones for Developmental Surveillance Tools",
+            "year": 2022,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "cdc-milestones-2026",
+            "org": "Centers for Disease Control and Prevention",
+            "orgKey": "CDC",
+            "title": "CDC's Developmental Milestones",
+            "year": 2026,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "aap-surveillance-2020",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Promoting Optimal Development: Identifying Infants and Young Children With Developmental Disorders Through Developmental Surveillance and Screening",
+            "year": 2020,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "nice-ph40-social-emotional-2012",
+            "org": "National Institute for Health and Care Excellence",
+            "orgKey": "NICE",
+            "title": "Social and emotional wellbeing: early years",
+            "year": 2012,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": true
+          },
+          {
+            "id": "aap-toxic-stress-2021",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Preventing Childhood Toxic Stress: Partnering With Families and Communities to Promote Relational Health",
+            "year": 2021,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          }
+        ],
+        "orgKeys": [
+          "AAP",
+          "CDC",
+          "NICE"
+        ],
+        "blockers": [],
+        "advisories": [
+          "1 linked reference(s) old enough to look for a newer edition: nice-ph40-social-emotional-2012"
+        ]
+      },
+      {
+        "slug": "ms_5_6m_gross_motor_1",
+        "type": "milestone",
+        "titleMm": "တစ်ဘက်မှ တစ်ဘက်သို့ လှိမ့်ခြင်း",
+        "titleEn": "Rolls over",
+        "ageGroupKey": "5_6m",
+        "ageGroupLabelEn": "5–6 months",
+        "ageGroupLabelMm": "၅ – ၆ လ",
+        "domainKey": "gross_motor",
+        "domainLabelEn": "Gross Motor",
+        "domainLabelMm": "ကြွက်သားကြီး လှုပ်ရှားမှု",
+        "clinicalStatus": "clinical_review",
+        "references": [
+          {
+            "id": "aap-milestones-2022",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Evidence-Informed Milestones for Developmental Surveillance Tools",
+            "year": 2022,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "cdc-milestones-2026",
+            "org": "Centers for Disease Control and Prevention",
+            "orgKey": "CDC",
+            "title": "CDC's Developmental Milestones",
+            "year": 2026,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "aap-surveillance-2020",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Promoting Optimal Development: Identifying Infants and Young Children With Developmental Disorders Through Developmental Surveillance and Screening",
+            "year": 2020,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "jr-who-motor-windows-2006",
+            "org": "Acta Paediatrica (WHO Multicentre Growth Reference Study Group)",
+            "orgKey": "JOURNAL",
+            "title": "WHO Motor Development Study: windows of achievement for six gross motor development milestones",
+            "year": 2006,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "tb-campbell-pt-6e-2022",
+            "org": "Elsevier",
+            "orgKey": "TEXTBOOK",
+            "title": "Campbell's Physical Therapy for Children",
+            "year": 2022,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "who-pa-sleep-under5-2019",
+            "org": "World Health Organization",
+            "orgKey": "WHO",
+            "title": "Guidelines on physical activity, sedentary behaviour and sleep for children under 5 years of age",
+            "year": 2019,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          }
+        ],
+        "orgKeys": [
+          "AAP",
+          "CDC",
+          "JOURNAL",
+          "TEXTBOOK",
+          "WHO"
+        ],
+        "blockers": [],
+        "advisories": []
+      },
+      {
+        "slug": "ms_5_6m_speech_1",
+        "type": "milestone",
+        "titleMm": "ဗျည်းသံများ တွဲရွတ်ခြင်း",
+        "titleEn": "Babbles with consonants",
+        "ageGroupKey": "5_6m",
+        "ageGroupLabelEn": "5–6 months",
+        "ageGroupLabelMm": "၅ – ၆ လ",
+        "domainKey": "speech",
+        "domainLabelEn": "Speech",
+        "domainLabelMm": "စကားသံ ထွက်ဆိုမှု",
+        "clinicalStatus": "clinical_review",
+        "references": [
+          {
+            "id": "aap-milestones-2022",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Evidence-Informed Milestones for Developmental Surveillance Tools",
+            "year": 2022,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "cdc-milestones-2026",
+            "org": "Centers for Disease Control and Prevention",
+            "orgKey": "CDC",
+            "title": "CDC's Developmental Milestones",
+            "year": 2026,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "aap-surveillance-2020",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Promoting Optimal Development: Identifying Infants and Young Children With Developmental Disorders Through Developmental Surveillance and Screening",
+            "year": 2020,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "tb-paul-language-6e-2024",
+            "org": "Elsevier",
+            "orgKey": "TEXTBOOK",
+            "title": "Language Disorders from Infancy through Adolescence",
+            "year": 2024,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "nhs-learn-to-talk-2023",
+            "org": "National Health Service (UK)",
+            "orgKey": "NHS",
+            "title": "Help your baby learn to talk",
+            "year": 2023,
+            "reviewStatus": "awaiting_review",
+            "expired": true,
+            "outdated": false
+          }
+        ],
+        "orgKeys": [
+          "AAP",
+          "CDC",
+          "NHS",
+          "TEXTBOOK"
+        ],
+        "blockers": [],
+        "advisories": [
+          "1 linked reference(s) overdue for re-check: nhs-learn-to-talk-2023"
+        ]
+      },
+      {
+        "slug": "ms_5_6m_cognitive_1",
+        "type": "milestone",
+        "titleMm": "ပစ္စည်းများကို လက်လှမ်း၍ ကိုင်ခြင်း",
+        "titleEn": "Reaches for objects",
+        "ageGroupKey": "5_6m",
+        "ageGroupLabelEn": "5–6 months",
+        "ageGroupLabelMm": "၅ – ၆ လ",
+        "domainKey": "cognitive",
+        "domainLabelEn": "Cognitive",
+        "domainLabelMm": "အသိဉာဏ် ဖွံ့ဖြိုးမှု",
+        "clinicalStatus": "clinical_review",
+        "references": [
+          {
+            "id": "aap-milestones-2022",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Evidence-Informed Milestones for Developmental Surveillance Tools",
+            "year": 2022,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "cdc-milestones-2026",
+            "org": "Centers for Disease Control and Prevention",
+            "orgKey": "CDC",
+            "title": "CDC's Developmental Milestones",
+            "year": 2026,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "aap-surveillance-2020",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Promoting Optimal Development: Identifying Infants and Young Children With Developmental Disorders Through Developmental Surveillance and Screening",
+            "year": 2020,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "tb-dbp-5e-2022",
+            "org": "Elsevier",
+            "orgKey": "TEXTBOOK",
+            "title": "Developmental-Behavioral Pediatrics",
+            "year": 2022,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "aap-power-of-play-2018",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "The Power of Play: A Pediatric Role in Enhancing Development in Young Children",
+            "year": 2018,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          }
+        ],
+        "orgKeys": [
+          "AAP",
+          "CDC",
+          "TEXTBOOK"
+        ],
+        "blockers": [],
+        "advisories": []
+      },
+      {
+        "slug": "ms_5_6m_play_1",
+        "type": "milestone",
+        "titleMm": "ကစားစရာများကို နှုတ်ခမ်းဖြင့် စူးစမ်းခြင်း",
+        "titleEn": "Explores toys by mouthing",
+        "ageGroupKey": "5_6m",
+        "ageGroupLabelEn": "5–6 months",
+        "ageGroupLabelMm": "၅ – ၆ လ",
+        "domainKey": "play",
+        "domainLabelEn": "Play",
+        "domainLabelMm": "ကစားခြင်း",
+        "clinicalStatus": "clinical_review",
+        "references": [
+          {
+            "id": "aap-milestones-2022",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Evidence-Informed Milestones for Developmental Surveillance Tools",
+            "year": 2022,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "cdc-milestones-2026",
+            "org": "Centers for Disease Control and Prevention",
+            "orgKey": "CDC",
+            "title": "CDC's Developmental Milestones",
+            "year": 2026,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "aap-surveillance-2020",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Promoting Optimal Development: Identifying Infants and Young Children With Developmental Disorders Through Developmental Surveillance and Screening",
+            "year": 2020,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "aap-power-of-play-2018",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "The Power of Play: A Pediatric Role in Enhancing Development in Young Children",
+            "year": 2018,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "who-care-for-child-development-2012",
+            "org": "World Health Organization / UNICEF",
+            "orgKey": "WHO",
+            "title": "Care for child development: improving the care of young children",
+            "year": 2012,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": true
+          }
+        ],
+        "orgKeys": [
+          "AAP",
+          "CDC",
+          "WHO"
+        ],
+        "blockers": [],
+        "advisories": [
+          "1 linked reference(s) old enough to look for a newer edition: who-care-for-child-development-2012"
+        ]
+      },
+      {
+        "slug": "ms_7_9m_gross_motor_1",
+        "type": "milestone",
+        "titleMm": "အထောက်မပါဘဲ ထိုင်ခြင်း",
+        "titleEn": "Sits without support",
+        "ageGroupKey": "7_9m",
+        "ageGroupLabelEn": "7–9 months",
+        "ageGroupLabelMm": "၇ – ၉ လ",
+        "domainKey": "gross_motor",
+        "domainLabelEn": "Gross Motor",
+        "domainLabelMm": "ကြွက်သားကြီး လှုပ်ရှားမှု",
+        "clinicalStatus": "clinical_review",
+        "references": [
+          {
+            "id": "aap-milestones-2022",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Evidence-Informed Milestones for Developmental Surveillance Tools",
+            "year": 2022,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "cdc-milestones-2026",
+            "org": "Centers for Disease Control and Prevention",
+            "orgKey": "CDC",
+            "title": "CDC's Developmental Milestones",
+            "year": 2026,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "aap-surveillance-2020",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Promoting Optimal Development: Identifying Infants and Young Children With Developmental Disorders Through Developmental Surveillance and Screening",
+            "year": 2020,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "jr-who-motor-windows-2006",
+            "org": "Acta Paediatrica (WHO Multicentre Growth Reference Study Group)",
+            "orgKey": "JOURNAL",
+            "title": "WHO Motor Development Study: windows of achievement for six gross motor development milestones",
+            "year": 2006,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "tb-campbell-pt-6e-2022",
+            "org": "Elsevier",
+            "orgKey": "TEXTBOOK",
+            "title": "Campbell's Physical Therapy for Children",
+            "year": 2022,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "who-pa-sleep-under5-2019",
+            "org": "World Health Organization",
+            "orgKey": "WHO",
+            "title": "Guidelines on physical activity, sedentary behaviour and sleep for children under 5 years of age",
+            "year": 2019,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          }
+        ],
+        "orgKeys": [
+          "AAP",
+          "CDC",
+          "JOURNAL",
+          "TEXTBOOK",
+          "WHO"
+        ],
+        "blockers": [],
+        "advisories": []
+      },
+      {
+        "slug": "ms_7_9m_fine_motor_1",
+        "type": "milestone",
+        "titleMm": "ပစ္စည်းကို လက်တစ်ဖက်မှ တစ်ဖက်သို့ ကူးခြင်း",
+        "titleEn": "Passes objects hand to hand",
+        "ageGroupKey": "7_9m",
+        "ageGroupLabelEn": "7–9 months",
+        "ageGroupLabelMm": "၇ – ၉ လ",
+        "domainKey": "fine_motor",
+        "domainLabelEn": "Fine Motor",
+        "domainLabelMm": "လက်ချောင်းငယ် လှုပ်ရှားမှု",
+        "clinicalStatus": "clinical_review",
+        "references": [
+          {
+            "id": "aap-milestones-2022",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Evidence-Informed Milestones for Developmental Surveillance Tools",
+            "year": 2022,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "cdc-milestones-2026",
+            "org": "Centers for Disease Control and Prevention",
+            "orgKey": "CDC",
+            "title": "CDC's Developmental Milestones",
+            "year": 2026,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "aap-surveillance-2020",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Promoting Optimal Development: Identifying Infants and Young Children With Developmental Disorders Through Developmental Surveillance and Screening",
+            "year": 2020,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "tb-case-smith-9e-2025",
+            "org": "Elsevier",
+            "orgKey": "TEXTBOOK",
+            "title": "Case-Smith's Occupational Therapy for Children and Adolescents",
+            "year": 2025,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "cdc-milestone-checklists-2025",
+            "org": "Centers for Disease Control and Prevention",
+            "orgKey": "CDC",
+            "title": "Milestone Checklists by Age",
+            "year": 2025,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          }
+        ],
+        "orgKeys": [
+          "AAP",
+          "CDC",
+          "TEXTBOOK"
+        ],
+        "blockers": [],
+        "advisories": []
+      },
+      {
+        "slug": "ms_7_9m_language_1",
+        "type": "milestone",
+        "titleMm": "မိမိနာမည်ကို တုံ့ပြန်ခြင်း",
+        "titleEn": "Responds to own name",
+        "ageGroupKey": "7_9m",
+        "ageGroupLabelEn": "7–9 months",
+        "ageGroupLabelMm": "၇ – ၉ လ",
+        "domainKey": "language",
+        "domainLabelEn": "Language",
+        "domainLabelMm": "ဘာသာစကား နားလည်မှု",
+        "clinicalStatus": "clinical_review",
+        "references": [
+          {
+            "id": "aap-milestones-2022",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Evidence-Informed Milestones for Developmental Surveillance Tools",
+            "year": 2022,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "cdc-milestones-2026",
+            "org": "Centers for Disease Control and Prevention",
+            "orgKey": "CDC",
+            "title": "CDC's Developmental Milestones",
+            "year": 2026,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "aap-surveillance-2020",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Promoting Optimal Development: Identifying Infants and Young Children With Developmental Disorders Through Developmental Surveillance and Screening",
+            "year": 2020,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "tb-paul-language-6e-2024",
+            "org": "Elsevier",
+            "orgKey": "TEXTBOOK",
+            "title": "Language Disorders from Infancy through Adolescence",
+            "year": 2024,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "jr-weisleder-2013",
+            "org": "Psychological Science",
+            "orgKey": "JOURNAL",
+            "title": "Talking to children matters: early language experience strengthens processing and builds vocabulary",
+            "year": 2013,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          }
+        ],
+        "orgKeys": [
+          "AAP",
+          "CDC",
+          "JOURNAL",
+          "TEXTBOOK"
+        ],
+        "blockers": [],
+        "advisories": []
+      },
+      {
+        "slug": "ms_7_9m_social_1",
+        "type": "milestone",
+        "titleMm": "ရင်းနှီးသူ/မရင်းနှီးသူ ခွဲခြားခြင်း",
+        "titleEn": "Knows familiar people",
+        "ageGroupKey": "7_9m",
+        "ageGroupLabelEn": "7–9 months",
+        "ageGroupLabelMm": "၇ – ၉ လ",
+        "domainKey": "social",
+        "domainLabelEn": "Social",
+        "domainLabelMm": "လူမှုဆက်ဆံရေး",
+        "clinicalStatus": "clinical_review",
+        "references": [
+          {
+            "id": "aap-milestones-2022",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Evidence-Informed Milestones for Developmental Surveillance Tools",
+            "year": 2022,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "cdc-milestones-2026",
+            "org": "Centers for Disease Control and Prevention",
+            "orgKey": "CDC",
+            "title": "CDC's Developmental Milestones",
+            "year": 2026,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "aap-surveillance-2020",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Promoting Optimal Development: Identifying Infants and Young Children With Developmental Disorders Through Developmental Surveillance and Screening",
+            "year": 2020,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "nice-ph40-social-emotional-2012",
+            "org": "National Institute for Health and Care Excellence",
+            "orgKey": "NICE",
+            "title": "Social and emotional wellbeing: early years",
+            "year": 2012,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": true
+          },
+          {
+            "id": "tb-dbp-5e-2022",
+            "org": "Elsevier",
+            "orgKey": "TEXTBOOK",
+            "title": "Developmental-Behavioral Pediatrics",
+            "year": 2022,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          }
+        ],
+        "orgKeys": [
+          "AAP",
+          "CDC",
+          "NICE",
+          "TEXTBOOK"
+        ],
+        "blockers": [],
+        "advisories": [
+          "1 linked reference(s) old enough to look for a newer edition: nice-ph40-social-emotional-2012"
+        ]
+      },
+      {
+        "slug": "ms_10_12m_gross_motor_1",
+        "type": "milestone",
+        "titleMm": "ပရိဘောဂကိုကိုင်၍ မတ်တပ်ရပ်ခြင်း",
+        "titleEn": "Pulls up to stand",
+        "ageGroupKey": "10_12m",
+        "ageGroupLabelEn": "10–12 months",
+        "ageGroupLabelMm": "၁၀ – ၁၂ လ",
+        "domainKey": "gross_motor",
+        "domainLabelEn": "Gross Motor",
+        "domainLabelMm": "ကြွက်သားကြီး လှုပ်ရှားမှု",
+        "clinicalStatus": "clinical_review",
+        "references": [
+          {
+            "id": "aap-milestones-2022",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Evidence-Informed Milestones for Developmental Surveillance Tools",
+            "year": 2022,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "cdc-milestones-2026",
+            "org": "Centers for Disease Control and Prevention",
+            "orgKey": "CDC",
+            "title": "CDC's Developmental Milestones",
+            "year": 2026,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "aap-surveillance-2020",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Promoting Optimal Development: Identifying Infants and Young Children With Developmental Disorders Through Developmental Surveillance and Screening",
+            "year": 2020,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "jr-who-motor-windows-2006",
+            "org": "Acta Paediatrica (WHO Multicentre Growth Reference Study Group)",
+            "orgKey": "JOURNAL",
+            "title": "WHO Motor Development Study: windows of achievement for six gross motor development milestones",
+            "year": 2006,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "tb-campbell-pt-6e-2022",
+            "org": "Elsevier",
+            "orgKey": "TEXTBOOK",
+            "title": "Campbell's Physical Therapy for Children",
+            "year": 2022,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "who-pa-sleep-under5-2019",
+            "org": "World Health Organization",
+            "orgKey": "WHO",
+            "title": "Guidelines on physical activity, sedentary behaviour and sleep for children under 5 years of age",
+            "year": 2019,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          }
+        ],
+        "orgKeys": [
+          "AAP",
+          "CDC",
+          "JOURNAL",
+          "TEXTBOOK",
+          "WHO"
+        ],
+        "blockers": [],
+        "advisories": []
+      },
+      {
+        "slug": "ms_10_12m_communication_1",
+        "type": "milestone",
+        "titleMm": "လက်ညှိုးထိုး၍ ပြသခြင်း",
+        "titleEn": "Points to show",
+        "ageGroupKey": "10_12m",
+        "ageGroupLabelEn": "10–12 months",
+        "ageGroupLabelMm": "၁၀ – ၁၂ လ",
+        "domainKey": "communication",
+        "domainLabelEn": "Communication",
+        "domainLabelMm": "ဆက်သွယ်ပြောဆိုမှု",
+        "clinicalStatus": "clinical_review",
+        "references": [
+          {
+            "id": "aap-milestones-2022",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Evidence-Informed Milestones for Developmental Surveillance Tools",
+            "year": 2022,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "cdc-milestones-2026",
+            "org": "Centers for Disease Control and Prevention",
+            "orgKey": "CDC",
+            "title": "CDC's Developmental Milestones",
+            "year": 2026,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "aap-surveillance-2020",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Promoting Optimal Development: Identifying Infants and Young Children With Developmental Disorders Through Developmental Surveillance and Screening",
+            "year": 2020,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "who-care-for-child-development-2012",
+            "org": "World Health Organization / UNICEF",
+            "orgKey": "WHO",
+            "title": "Care for child development: improving the care of young children",
+            "year": 2012,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": true
+          },
+          {
+            "id": "nhs-learn-to-talk-2023",
+            "org": "National Health Service (UK)",
+            "orgKey": "NHS",
+            "title": "Help your baby learn to talk",
+            "year": 2023,
+            "reviewStatus": "awaiting_review",
+            "expired": true,
+            "outdated": false
+          }
+        ],
+        "orgKeys": [
+          "AAP",
+          "CDC",
+          "NHS",
+          "WHO"
+        ],
+        "blockers": [],
+        "advisories": [
+          "1 linked reference(s) overdue for re-check: nhs-learn-to-talk-2023",
+          "1 linked reference(s) old enough to look for a newer edition: who-care-for-child-development-2012"
+        ]
+      },
+      {
+        "slug": "ms_10_12m_problem_solving_1",
+        "type": "milestone",
+        "titleMm": "ဖုံးထားသော ပစ္စည်းကို ရှာဖွေခြင်း",
+        "titleEn": "Looks for hidden objects",
+        "ageGroupKey": "10_12m",
+        "ageGroupLabelEn": "10–12 months",
+        "ageGroupLabelMm": "၁၀ – ၁၂ လ",
+        "domainKey": "problem_solving",
+        "domainLabelEn": "Problem Solving",
+        "domainLabelMm": "ပြဿနာ ဖြေရှင်းခြင်း",
+        "clinicalStatus": "clinical_review",
+        "references": [
+          {
+            "id": "aap-milestones-2022",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Evidence-Informed Milestones for Developmental Surveillance Tools",
+            "year": 2022,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "cdc-milestones-2026",
+            "org": "Centers for Disease Control and Prevention",
+            "orgKey": "CDC",
+            "title": "CDC's Developmental Milestones",
+            "year": 2026,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "aap-surveillance-2020",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Promoting Optimal Development: Identifying Infants and Young Children With Developmental Disorders Through Developmental Surveillance and Screening",
+            "year": 2020,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "aap-power-of-play-2018",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "The Power of Play: A Pediatric Role in Enhancing Development in Young Children",
+            "year": 2018,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "tb-dbp-5e-2022",
+            "org": "Elsevier",
+            "orgKey": "TEXTBOOK",
+            "title": "Developmental-Behavioral Pediatrics",
+            "year": 2022,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          }
+        ],
+        "orgKeys": [
+          "AAP",
+          "CDC",
+          "TEXTBOOK"
+        ],
+        "blockers": [],
+        "advisories": []
+      },
+      {
+        "slug": "ms_10_12m_self_help_1",
+        "type": "milestone",
+        "titleMm": "လက်ဖြင့် ကိုယ်တိုင်စားခြင်း",
+        "titleEn": "Finger-feeds self",
+        "ageGroupKey": "10_12m",
+        "ageGroupLabelEn": "10–12 months",
+        "ageGroupLabelMm": "၁၀ – ၁၂ လ",
+        "domainKey": "self_help",
+        "domainLabelEn": "Self Help",
+        "domainLabelMm": "ကိုယ်တိုင် လုပ်ဆောင်နိုင်မှု",
+        "clinicalStatus": "clinical_review",
+        "references": [
+          {
+            "id": "aap-milestones-2022",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Evidence-Informed Milestones for Developmental Surveillance Tools",
+            "year": 2022,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "cdc-milestones-2026",
+            "org": "Centers for Disease Control and Prevention",
+            "orgKey": "CDC",
+            "title": "CDC's Developmental Milestones",
+            "year": 2026,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "aap-surveillance-2020",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Promoting Optimal Development: Identifying Infants and Young Children With Developmental Disorders Through Developmental Surveillance and Screening",
+            "year": 2020,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "tb-case-smith-9e-2025",
+            "org": "Elsevier",
+            "orgKey": "TEXTBOOK",
+            "title": "Case-Smith's Occupational Therapy for Children and Adolescents",
+            "year": 2025,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "tb-bright-futures-4e-2017",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "TEXTBOOK",
+            "title": "Bright Futures: Guidelines for Health Supervision of Infants, Children and Adolescents, 4th Edition",
+            "year": 2017,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": true
+          }
+        ],
+        "orgKeys": [
+          "AAP",
+          "CDC",
+          "TEXTBOOK"
+        ],
+        "blockers": [],
+        "advisories": [
+          "1 linked reference(s) old enough to look for a newer edition: tb-bright-futures-4e-2017"
+        ]
+      },
+      {
+        "slug": "gd_7_9m_gross_motor",
+        "type": "guide",
+        "titleMm": "၇–၉ လ — ကြွက်သားကြီး လှုပ်ရှားမှု",
+        "titleEn": "7–9 months — Gross Motor",
+        "ageGroupKey": "7_9m",
+        "ageGroupLabelEn": "7–9 months",
+        "ageGroupLabelMm": "၇ – ၉ လ",
+        "domainKey": "gross_motor",
+        "domainLabelEn": "Gross Motor",
+        "domainLabelMm": "ကြွက်သားကြီး လှုပ်ရှားမှု",
+        "clinicalStatus": "clinical_review",
+        "references": [
+          {
+            "id": "jr-who-motor-windows-2006",
+            "org": "Acta Paediatrica (WHO Multicentre Growth Reference Study Group)",
+            "orgKey": "JOURNAL",
+            "title": "WHO Motor Development Study: windows of achievement for six gross motor development milestones",
+            "year": 2006,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "cdc-milestone-checklists-2025",
+            "org": "Centers for Disease Control and Prevention",
+            "orgKey": "CDC",
+            "title": "Milestone Checklists by Age",
+            "year": 2025,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "tb-campbell-pt-6e-2022",
+            "org": "Elsevier",
+            "orgKey": "TEXTBOOK",
+            "title": "Campbell's Physical Therapy for Children",
+            "year": 2022,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          }
+        ],
+        "orgKeys": [
+          "CDC",
+          "JOURNAL",
+          "TEXTBOOK"
+        ],
+        "blockers": [],
+        "advisories": []
+      },
+      {
+        "slug": "gd_10_12m_communication",
+        "type": "guide",
+        "titleMm": "၁၀–၁၂ လ — ဆက်သွယ်ပြောဆိုမှု",
+        "titleEn": "10–12 months — Communication",
+        "ageGroupKey": "10_12m",
+        "ageGroupLabelEn": "10–12 months",
+        "ageGroupLabelMm": "၁၀ – ၁၂ လ",
+        "domainKey": "communication",
+        "domainLabelEn": "Communication",
+        "domainLabelMm": "ဆက်သွယ်ပြောဆိုမှု",
+        "clinicalStatus": "clinical_review",
+        "references": [
+          {
+            "id": "who-care-for-child-development-2012",
+            "org": "World Health Organization / UNICEF",
+            "orgKey": "WHO",
+            "title": "Care for child development: improving the care of young children",
+            "year": 2012,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": true
+          },
+          {
+            "id": "cdc-milestones-2026",
+            "org": "Centers for Disease Control and Prevention",
+            "orgKey": "CDC",
+            "title": "CDC's Developmental Milestones",
+            "year": 2026,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          }
+        ],
+        "orgKeys": [
+          "CDC",
+          "WHO"
+        ],
+        "blockers": [],
+        "advisories": [
+          "1 linked reference(s) old enough to look for a newer edition: who-care-for-child-development-2012"
+        ]
+      },
+      {
+        "slug": "gd_5_6m_play",
+        "type": "guide",
+        "titleMm": "၅–၆ လ — ကစားခြင်း",
+        "titleEn": "5–6 months — Play",
+        "ageGroupKey": "5_6m",
+        "ageGroupLabelEn": "5–6 months",
+        "ageGroupLabelMm": "၅ – ၆ လ",
+        "domainKey": "play",
+        "domainLabelEn": "Play",
+        "domainLabelMm": "ကစားခြင်း",
+        "clinicalStatus": "clinical_review",
+        "references": [
+          {
+            "id": "aap-power-of-play-2018",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "The Power of Play: A Pediatric Role in Enhancing Development in Young Children",
+            "year": 2018,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "who-care-for-child-development-2012",
+            "org": "World Health Organization / UNICEF",
+            "orgKey": "WHO",
+            "title": "Care for child development: improving the care of young children",
+            "year": 2012,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": true
+          }
+        ],
+        "orgKeys": [
+          "AAP",
+          "WHO"
+        ],
+        "blockers": [],
+        "advisories": [
+          "1 linked reference(s) old enough to look for a newer edition: who-care-for-child-development-2012"
+        ]
+      },
+      {
+        "slug": "gd_5_6m_nutrition",
+        "type": "guide",
+        "titleMm": "၅–၆ လ — အာဟာရ (အစိုင်အခဲ စတင်ခြင်း)",
+        "titleEn": "5–6 months — Nutrition (starting solids)",
+        "ageGroupKey": "5_6m",
+        "ageGroupLabelEn": "5–6 months",
+        "ageGroupLabelMm": "၅ – ၆ လ",
+        "domainKey": "nutrition",
+        "domainLabelEn": "Nutrition",
+        "domainLabelMm": "အာဟာရ",
+        "clinicalStatus": "clinical_review",
+        "references": [
+          {
+            "id": "who-complementary-feeding-2023",
+            "org": "World Health Organization",
+            "orgKey": "WHO",
+            "title": "WHO Guideline for complementary feeding of infants and young children 6-23 months of age",
+            "year": 2023,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "nhs-first-solid-foods-2026",
+            "org": "National Health Service (UK)",
+            "orgKey": "NHS",
+            "title": "Your baby's first solid foods",
+            "year": 2026,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "cdc-foods-6-24m-2025",
+            "org": "Centers for Disease Control and Prevention",
+            "orgKey": "CDC",
+            "title": "Foods and Drinks for 6 to 24 Month Olds",
+            "year": 2025,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "who-iycf-model-chapter-2025",
+            "org": "World Health Organization",
+            "orgKey": "WHO",
+            "title": "Infant and young child feeding: model chapter for textbooks for medical students and allied health professionals, 2nd ed.",
+            "year": 2025,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "aap-breastfeeding-2022",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Policy Statement: Breastfeeding and the Use of Human Milk",
+            "year": 2022,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "nhs-breastfeeding-first-days-2023",
+            "org": "National Health Service (UK)",
+            "orgKey": "NHS",
+            "title": "Breastfeeding: the first few days",
+            "year": 2023,
+            "reviewStatus": "awaiting_review",
+            "expired": true,
+            "outdated": false
+          },
+          {
+            "id": "asha-pediatric-feeding-swallowing",
+            "org": "American Speech-Language-Hearing Association",
+            "orgKey": "ASHA",
+            "title": "Pediatric Feeding and Swallowing",
+            "year": null,
+            "reviewStatus": "evidence_required",
+            "expired": false,
+            "outdated": true
+          }
+        ],
+        "orgKeys": [
+          "AAP",
+          "ASHA",
+          "CDC",
+          "NHS",
+          "WHO"
+        ],
+        "blockers": [],
+        "advisories": [
+          "1 linked reference(s) evidence_required: asha-pediatric-feeding-swallowing",
+          "1 linked reference(s) overdue for re-check: nhs-breastfeeding-first-days-2023",
+          "1 linked reference(s) old enough to look for a newer edition: asha-pediatric-feeding-swallowing"
+        ]
+      },
+      {
+        "slug": "gd_birth_2m_sleep",
+        "type": "guide",
+        "titleMm": "မွေးကင်း–၂ လ — အိပ်စက်ခြင်း",
+        "titleEn": "Birth–2 months — Sleep",
+        "ageGroupKey": "birth_2m",
+        "ageGroupLabelEn": "Birth–2 months",
+        "ageGroupLabelMm": "မွေးကင်း – ၂ လ",
+        "domainKey": "sleep",
+        "domainLabelEn": "Sleep",
+        "domainLabelMm": "အိပ်စက်ခြင်း",
+        "clinicalStatus": "clinical_review",
+        "references": [
+          {
+            "id": "aap-safe-sleep-2022",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Sleep-Related Infant Deaths: Updated 2022 Recommendations for Reducing Infant Deaths in the Sleep Environment",
+            "year": 2022,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "nhs-sids-2025",
+            "org": "National Health Service (UK)",
+            "orgKey": "NHS",
+            "title": "Sudden infant death syndrome (SIDS)",
+            "year": 2025,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "who-pa-sleep-under5-2019",
+            "org": "World Health Organization",
+            "orgKey": "WHO",
+            "title": "Guidelines on physical activity, sedentary behaviour and sleep for children under 5 years of age",
+            "year": 2019,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "hc-safe-sleep-2026",
+            "org": "HealthyChildren.org (American Academy of Pediatrics)",
+            "orgKey": "HealthyChildren",
+            "title": "How to Keep Your Sleeping Baby Safe: AAP Policy Explained",
+            "year": 2026,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          }
+        ],
+        "orgKeys": [
+          "AAP",
+          "HealthyChildren",
+          "NHS",
+          "WHO"
+        ],
+        "blockers": [],
+        "advisories": []
+      },
+      {
+        "slug": "gd_10_12m_safety",
+        "type": "guide",
+        "titleMm": "၁၀–၁၂ လ — ဘေးကင်းလုံခြုံရေး",
+        "titleEn": "10–12 months — Safety",
+        "ageGroupKey": "10_12m",
+        "ageGroupLabelEn": "10–12 months",
+        "ageGroupLabelMm": "၁၀ – ၁၂ လ",
+        "domainKey": "safety",
+        "domainLabelEn": "Safety",
+        "domainLabelMm": "ဘေးကင်းလုံခြုံရေး",
+        "clinicalStatus": "clinical_review",
+        "references": [
+          {
+            "id": "aap-drowning-2021",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Prevention of Drowning",
+            "year": 2021,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "cdc-positive-parenting-toddlers-2026",
+            "org": "Centers for Disease Control and Prevention",
+            "orgKey": "CDC",
+            "title": "Positive Parenting Tips: Toddlers (1-2 years old)",
+            "year": 2026,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "tb-bright-futures-4e-2017",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "TEXTBOOK",
+            "title": "Bright Futures: Guidelines for Health Supervision of Infants, Children and Adolescents, 4th Edition",
+            "year": 2017,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": true
+          }
+        ],
+        "orgKeys": [
+          "AAP",
+          "CDC",
+          "TEXTBOOK"
+        ],
+        "blockers": [],
+        "advisories": [
+          "1 linked reference(s) old enough to look for a newer edition: tb-bright-futures-4e-2017"
+        ]
+      },
+      {
+        "slug": "act_tummy_time_mirror",
+        "type": "activity",
+        "titleMm": "မှောက်လျက် မှန်ကြည့်ကစားခြင်း",
+        "titleEn": "Tummy-time mirror play",
+        "ageGroupKey": "birth_2m",
+        "ageGroupLabelEn": "Birth–2 months",
+        "ageGroupLabelMm": "မွေးကင်း – ၂ လ",
+        "domainKey": "gross_motor",
+        "domainLabelEn": "Gross Motor",
+        "domainLabelMm": "ကြွက်သားကြီး လှုပ်ရှားမှု",
+        "clinicalStatus": "clinical_review",
+        "references": [
+          {
+            "id": "jr-who-motor-windows-2006",
+            "org": "Acta Paediatrica (WHO Multicentre Growth Reference Study Group)",
+            "orgKey": "JOURNAL",
+            "title": "WHO Motor Development Study: windows of achievement for six gross motor development milestones",
+            "year": 2006,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "aap-safe-sleep-2022",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "Sleep-Related Infant Deaths: Updated 2022 Recommendations for Reducing Infant Deaths in the Sleep Environment",
+            "year": 2022,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "tb-campbell-pt-6e-2022",
+            "org": "Elsevier",
+            "orgKey": "TEXTBOOK",
+            "title": "Campbell's Physical Therapy for Children",
+            "year": 2022,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          }
+        ],
+        "orgKeys": [
+          "AAP",
+          "JOURNAL",
+          "TEXTBOOK"
+        ],
+        "blockers": [],
+        "advisories": []
+      },
+      {
+        "slug": "act_sound_tracking",
+        "type": "activity",
+        "titleMm": "အသံလိုက် လှည့်ကြည့်ကစားခြင်း",
+        "titleEn": "Sound-tracking play",
+        "ageGroupKey": "3_4m",
+        "ageGroupLabelEn": "3–4 months",
+        "ageGroupLabelMm": "၃ – ၄ လ",
+        "domainKey": "communication",
+        "domainLabelEn": "Communication",
+        "domainLabelMm": "ဆက်သွယ်ပြောဆိုမှု",
+        "clinicalStatus": "clinical_review",
+        "references": [
+          {
+            "id": "who-care-for-child-development-2012",
+            "org": "World Health Organization / UNICEF",
+            "orgKey": "WHO",
+            "title": "Care for child development: improving the care of young children",
+            "year": 2012,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": true
+          },
+          {
+            "id": "cdc-milestones-2026",
+            "org": "Centers for Disease Control and Prevention",
+            "orgKey": "CDC",
+            "title": "CDC's Developmental Milestones",
+            "year": 2026,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          }
+        ],
+        "orgKeys": [
+          "CDC",
+          "WHO"
+        ],
+        "blockers": [],
+        "advisories": [
+          "1 linked reference(s) old enough to look for a newer edition: who-care-for-child-development-2012"
+        ]
+      },
+      {
+        "slug": "act_peekaboo",
+        "type": "activity",
+        "titleMm": "“ဘယ်မှာလဲ” ကစားခြင်း (peek-a-boo)",
+        "titleEn": "Peek-a-boo",
+        "ageGroupKey": "7_9m",
+        "ageGroupLabelEn": "7–9 months",
+        "ageGroupLabelMm": "၇ – ၉ လ",
+        "domainKey": "social",
+        "domainLabelEn": "Social",
+        "domainLabelMm": "လူမှုဆက်ဆံရေး",
+        "clinicalStatus": "clinical_review",
+        "references": [
+          {
+            "id": "aap-power-of-play-2018",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "The Power of Play: A Pediatric Role in Enhancing Development in Young Children",
+            "year": 2018,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "who-care-for-child-development-2012",
+            "org": "World Health Organization / UNICEF",
+            "orgKey": "WHO",
+            "title": "Care for child development: improving the care of young children",
+            "year": 2012,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": true
+          }
+        ],
+        "orgKeys": [
+          "AAP",
+          "WHO"
+        ],
+        "blockers": [],
+        "advisories": [
+          "1 linked reference(s) old enough to look for a newer edition: who-care-for-child-development-2012"
+        ]
+      },
+      {
+        "slug": "act_cup_stacking",
+        "type": "activity",
+        "titleMm": "ခွက်စီ ကစားခြင်း",
+        "titleEn": "Cup stacking and nesting",
+        "ageGroupKey": "10_12m",
+        "ageGroupLabelEn": "10–12 months",
+        "ageGroupLabelMm": "၁၀ – ၁၂ လ",
+        "domainKey": "fine_motor",
+        "domainLabelEn": "Fine Motor",
+        "domainLabelMm": "လက်ချောင်းငယ် လှုပ်ရှားမှု",
+        "clinicalStatus": "clinical_review",
+        "references": [
+          {
+            "id": "tb-case-smith-9e-2025",
+            "org": "Elsevier",
+            "orgKey": "TEXTBOOK",
+            "title": "Case-Smith's Occupational Therapy for Children and Adolescents",
+            "year": 2025,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "aap-power-of-play-2018",
+            "org": "American Academy of Pediatrics",
+            "orgKey": "AAP",
+            "title": "The Power of Play: A Pediatric Role in Enhancing Development in Young Children",
+            "year": 2018,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          }
+        ],
+        "orgKeys": [
+          "AAP",
+          "TEXTBOOK"
+        ],
+        "blockers": [],
+        "advisories": []
+      },
+      {
+        "slug": "act_obstacle_crawl",
+        "type": "activity",
+        "titleMm": "ခေါင်းအုံး အတားအဆီး တွားကစားခြင်း",
+        "titleEn": "Pillow obstacle crawl",
+        "ageGroupKey": "10_12m",
+        "ageGroupLabelEn": "10–12 months",
+        "ageGroupLabelMm": "၁၀ – ၁၂ လ",
+        "domainKey": "gross_motor",
+        "domainLabelEn": "Gross Motor",
+        "domainLabelMm": "ကြွက်သားကြီး လှုပ်ရှားမှု",
+        "clinicalStatus": "clinical_review",
+        "references": [
+          {
+            "id": "jr-who-motor-windows-2006",
+            "org": "Acta Paediatrica (WHO Multicentre Growth Reference Study Group)",
+            "orgKey": "JOURNAL",
+            "title": "WHO Motor Development Study: windows of achievement for six gross motor development milestones",
+            "year": 2006,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          },
+          {
+            "id": "who-pa-sleep-under5-2019",
+            "org": "World Health Organization",
+            "orgKey": "WHO",
+            "title": "Guidelines on physical activity, sedentary behaviour and sleep for children under 5 years of age",
+            "year": 2019,
+            "reviewStatus": "awaiting_review",
+            "expired": false,
+            "outdated": false
+          }
+        ],
+        "orgKeys": [
+          "JOURNAL",
+          "WHO"
+        ],
+        "blockers": [],
+        "advisories": []
+      }
+    ],
+    "groups": {
+      "byAgeGroup": [
+        {
+          "key": "birth_2m",
+          "label": "Birth–2 months",
+          "labelMm": "မွေးကင်း – ၂ လ",
+          "count": 6
+        },
+        {
+          "key": "3_4m",
+          "label": "3–4 months",
+          "labelMm": "၃ – ၄ လ",
+          "count": 5
+        },
+        {
+          "key": "5_6m",
+          "label": "5–6 months",
+          "labelMm": "၅ – ၆ လ",
+          "count": 6
+        },
+        {
+          "key": "7_9m",
+          "label": "7–9 months",
+          "labelMm": "၇ – ၉ လ",
+          "count": 6
+        },
+        {
+          "key": "10_12m",
+          "label": "10–12 months",
+          "labelMm": "၁၀ – ၁၂ လ",
+          "count": 8
+        }
+      ],
+      "byDomain": [
+        {
+          "key": "gross_motor",
+          "label": "Gross Motor",
+          "labelMm": "ကြွက်သားကြီး လှုပ်ရှားမှု",
+          "count": 8
+        },
+        {
+          "key": "communication",
+          "label": "Communication",
+          "labelMm": "ဆက်သွယ်ပြောဆိုမှု",
+          "count": 5
+        },
+        {
+          "key": "social",
+          "label": "Social",
+          "labelMm": "လူမှုဆက်ဆံရေး",
+          "count": 4
+        },
+        {
+          "key": "fine_motor",
+          "label": "Fine Motor",
+          "labelMm": "လက်ချောင်းငယ် လှုပ်ရှားမှု",
+          "count": 3
+        },
+        {
+          "key": "play",
+          "label": "Play",
+          "labelMm": "ကစားခြင်း",
+          "count": 2
+        },
+        {
+          "key": "cognitive",
+          "label": "Cognitive",
+          "labelMm": "အသိဉာဏ် ဖွံ့ဖြိုးမှု",
+          "count": 1
+        },
+        {
+          "key": "emotional",
+          "label": "Emotional",
+          "labelMm": "စိတ်ခံစားမှု",
+          "count": 1
+        },
+        {
+          "key": "language",
+          "label": "Language",
+          "labelMm": "ဘာသာစကား နားလည်မှု",
+          "count": 1
+        },
+        {
+          "key": "nutrition",
+          "label": "Nutrition",
+          "labelMm": "အာဟာရ",
+          "count": 1
+        },
+        {
+          "key": "problem_solving",
+          "label": "Problem Solving",
+          "labelMm": "ပြဿနာ ဖြေရှင်းခြင်း",
+          "count": 1
+        },
+        {
+          "key": "safety",
+          "label": "Safety",
+          "labelMm": "ဘေးကင်းလုံခြုံရေး",
+          "count": 1
+        },
+        {
+          "key": "self_help",
+          "label": "Self Help",
+          "labelMm": "ကိုယ်တိုင် လုပ်ဆောင်နိုင်မှု",
+          "count": 1
+        },
+        {
+          "key": "sleep",
+          "label": "Sleep",
+          "labelMm": "အိပ်စက်ခြင်း",
+          "count": 1
+        },
+        {
+          "key": "speech",
+          "label": "Speech",
+          "labelMm": "စကားသံ ထွက်ဆိုမှု",
+          "count": 1
+        }
+      ],
+      "byType": [
+        {
+          "key": "milestone",
+          "label": "milestone",
+          "labelMm": "မှတ်တိုင်",
+          "count": 20
+        },
+        {
+          "key": "guide",
+          "label": "guide",
+          "labelMm": "လမ်းညွှန်",
+          "count": 6
+        },
+        {
+          "key": "activity",
+          "label": "activity",
+          "labelMm": "လှုပ်ရှားမှု",
+          "count": 5
+        }
+      ],
+      "byOrganization": [
+        {
+          "key": "AAP",
+          "label": "AAP",
+          "labelMm": "AAP",
+          "count": 27
+        },
+        {
+          "key": "CDC",
+          "label": "CDC",
+          "labelMm": "CDC",
+          "count": 25
+        },
+        {
+          "key": "TEXTBOOK",
+          "label": "TEXTBOOK",
+          "labelMm": "TEXTBOOK",
+          "count": 19
+        },
+        {
+          "key": "WHO",
+          "label": "WHO",
+          "labelMm": "WHO",
+          "count": 16
+        },
+        {
+          "key": "JOURNAL",
+          "label": "JOURNAL",
+          "labelMm": "JOURNAL",
+          "count": 9
+        },
+        {
+          "key": "NHS",
+          "label": "NHS",
+          "labelMm": "NHS",
+          "count": 6
+        },
+        {
+          "key": "NICE",
+          "label": "NICE",
+          "labelMm": "NICE",
+          "count": 4
+        },
+        {
+          "key": "ASHA",
+          "label": "ASHA",
+          "labelMm": "ASHA",
+          "count": 1
+        },
+        {
+          "key": "HealthyChildren",
+          "label": "HealthyChildren",
+          "labelMm": "HealthyChildren",
+          "count": 1
+        }
+      ],
+      "byReviewStatus": [
+        {
+          "key": "clinical_review",
+          "label": "clinical_review",
+          "labelMm": "ဆေးပညာ သုံးသပ်ဆဲ",
+          "count": 31
+        }
+      ]
+    },
+    "checklist": [
+      {
+        "key": "factual_accuracy",
+        "labelMm": "အချက်အလက် မှန်ကန်မှု",
+        "labelEn": "Factual accuracy",
+        "promptMm": "ဤအကြောင်းအရာထဲက ဖွံ့ဖြိုးမှုဆိုင်ရာ အချက်အလက်တိုင်းသည် ချိတ်ဆက်ထားသော ကိုးကားချက်နှင့် ကိုက်ညီပါသလား။ ကိုးကားချက်တွင် မပါသော အချက် ထည့်ထားခြင်း ရှိပါသလား။",
+        "promptEn": "Does every developmental statement in this item match the linked references? Is anything asserted that the references do not support?",
+        "blocking": true
+      },
+      {
+        "key": "age_appropriateness",
+        "labelMm": "အသက်အရွယ်နှင့် သင့်တော်မှု",
+        "labelEn": "Age appropriateness",
+        "promptMm": "ဤအကြောင်းအရာကို သတ်မှတ်ထားသည့် အသက်အုပ်စုအတွက် သင့်တော်ပါသလား။ စောလွန်း/နောက်ကျလွန်းသော မျှော်မှန်းချက် ပါနေပါသလား။",
+        "promptEn": "Is this item right for the age group it is filed under? Does it set an expectation that is too early or too late for that age?",
+        "blocking": true
+      },
+      {
+        "key": "safety",
+        "labelMm": "ဘေးကင်းလုံခြုံရေး",
+        "labelEn": "Safety",
+        "promptMm": "အိမ်တွင်း လုပ်ဆောင်ချက်များတွင် ကလေးအား ထိခိုက်စေနိုင်သည့် အချက် ရှိပါသလား (လဲကျခြင်း၊ လည်ချောင်းပိတ်ခြင်း၊ အိပ်ရာဘေးအန္တရာယ်၊ ရေဘေး၊ အပူလောင်ခြင်း)။ ကြီးကြပ်မှု လိုအပ်ကြောင်း ရှင်းလင်းစွာ ဖော်ပြထားပါသလား။",
+        "promptEn": "Could any home activity here harm a child (falls, choking, sleep hazard, water, burns)? Is required adult supervision stated plainly?",
+        "blocking": true
+      },
+      {
+        "key": "myanmar_wording",
+        "labelMm": "မြန်မာစာ သုံးနှုန်းမှု",
+        "labelEn": "Myanmar wording",
+        "promptMm": "မြန်မာဘာသာပြန်သည် သဘာဝကျပြီး မိဘတစ်ဦး နားလည်လွယ်ပါသလား။ ဆေးပညာဝေါဟာရများကို မှန်ကန်စွာ သုံးထားပါသလား။ ကလေးအား အထင်သေးစေသော အသုံးအနှုန်း ပါနေပါသလား။",
+        "promptEn": "Does the Myanmar read naturally to a parent, use the correct clinical terms, and avoid any wording that belittles the child?",
+        "blocking": true
+      },
+      {
+        "key": "non_diagnostic_language",
+        "labelMm": "ရောဂါအမည်တပ်ခြင်း မပါရှိမှု",
+        "labelEn": "Non-diagnostic language",
+        "promptMm": "ဤအကြောင်းအရာသည် ရောဂါအမည် တပ်နေခြင်း၊ ရာခိုင်နှုန်း/ဖြစ်နိုင်ခြေ ခန့်မှန်းပေးခြင်း၊ \"ပုံမှန်မဟုတ်သော ကလေး\" ဟု တံဆိပ်ကပ်ခြင်း လုံးဝ မရှိကြောင်း သေချာပါသလား။",
+        "promptEn": "Is this item free of any diagnosis, any probability or percentage estimate, and any label that frames a child as abnormal?",
+        "blocking": true
+      },
+      {
+        "key": "reference_relevance",
+        "labelMm": "ကိုးကားချက် သက်ဆိုင်မှု",
+        "labelEn": "Reference relevance",
+        "promptMm": "ချိတ်ဆက်ထားသော ကိုးကားချက်တိုင်းသည် ဤအကြောင်းအရာနှင့် တကယ် သက်ဆိုင်ပါသလား။ လိုအပ်သော ကိုးကားချက် ကျန်နေပါသလား။",
+        "promptEn": "Is each linked reference actually about this item, and is any needed reference missing?",
+        "blocking": true
+      },
+      {
+        "key": "outdated_evidence",
+        "labelMm": "ဟောင်းနွမ်းနေသော အထောက်အထား",
+        "labelEn": "Outdated evidence",
+        "promptMm": "ချိတ်ဆက်ထားသော ကိုးကားချက်များတွင် ဗားရှင်းအသစ် ထွက်ပြီးသား ရှိပါသလား။ ဟောင်းနေသည်ဟု အမှတ်အသားပြုထားသည့် ကိုးကားချက်ကို ဆက်သုံးရန် သင့်တော်ပါသလား။",
+        "promptEn": "Has any linked reference been superseded by a newer edition, and is it still appropriate to rely on the ones flagged as outdated?",
+        "blocking": false
+      },
+      {
+        "key": "referral_guidance",
+        "labelMm": "ဆရာဝန်ထံ ညွှန်းပို့ရန် လမ်းညွှန်",
+        "labelEn": "Referral guidance",
+        "promptMm": "မိဘတစ်ဦး ကျန်းမာရေးဝန်ထမ်းထံ ဘယ်အချိန် သွားပြရမည်ကို ရှင်းလင်းစွာ ဖော်ပြထားပါသလား။ အရေးပေါ် လက္ခဏာများအတွက် လမ်းညွှန်ချက် မှန်ကန်ပါသလား။",
+        "promptEn": "Does the item tell a parent clearly when to see a health worker, and is the guidance for urgent signs correct?",
+        "blocking": true
+      }
+    ],
+    "progress": {
+      "total": 31,
+      "checklistAnswers": 248,
+      "published": 0,
+      "inClinicalReview": 31,
+      "draft": 0,
+      "reviewableNow": 31,
+      "blocked": 0,
+      "withAdvisories": 16,
+      "distinctReferences": 29,
+      "referencesApproved": 0,
+      "referencesAwaiting": 28,
+      "referencesEvidenceRequired": 1,
+      "expiredReferences": 2,
+      "outdatedReferences": 4
+    },
+    "outOfScopeAgeAgnostic": [
+      {
+        "type": "lesson",
+        "count": 20
+      },
+      {
+        "type": "special_need",
+        "count": 13
+      },
+      {
+        "type": "printable",
+        "count": 11
+      }
+    ]
+  },
+  "checklist": [
+    {
+      "key": "factual_accuracy",
+      "labelMm": "အချက်အလက် မှန်ကန်မှု",
+      "labelEn": "Factual accuracy",
+      "promptMm": "ဤအကြောင်းအရာထဲက ဖွံ့ဖြိုးမှုဆိုင်ရာ အချက်အလက်တိုင်းသည် ချိတ်ဆက်ထားသော ကိုးကားချက်နှင့် ကိုက်ညီပါသလား။ ကိုးကားချက်တွင် မပါသော အချက် ထည့်ထားခြင်း ရှိပါသလား။",
+      "promptEn": "Does every developmental statement in this item match the linked references? Is anything asserted that the references do not support?",
+      "blocking": true
+    },
+    {
+      "key": "age_appropriateness",
+      "labelMm": "အသက်အရွယ်နှင့် သင့်တော်မှု",
+      "labelEn": "Age appropriateness",
+      "promptMm": "ဤအကြောင်းအရာကို သတ်မှတ်ထားသည့် အသက်အုပ်စုအတွက် သင့်တော်ပါသလား။ စောလွန်း/နောက်ကျလွန်းသော မျှော်မှန်းချက် ပါနေပါသလား။",
+      "promptEn": "Is this item right for the age group it is filed under? Does it set an expectation that is too early or too late for that age?",
+      "blocking": true
+    },
+    {
+      "key": "safety",
+      "labelMm": "ဘေးကင်းလုံခြုံရေး",
+      "labelEn": "Safety",
+      "promptMm": "အိမ်တွင်း လုပ်ဆောင်ချက်များတွင် ကလေးအား ထိခိုက်စေနိုင်သည့် အချက် ရှိပါသလား (လဲကျခြင်း၊ လည်ချောင်းပိတ်ခြင်း၊ အိပ်ရာဘေးအန္တရာယ်၊ ရေဘေး၊ အပူလောင်ခြင်း)။ ကြီးကြပ်မှု လိုအပ်ကြောင်း ရှင်းလင်းစွာ ဖော်ပြထားပါသလား။",
+      "promptEn": "Could any home activity here harm a child (falls, choking, sleep hazard, water, burns)? Is required adult supervision stated plainly?",
+      "blocking": true
+    },
+    {
+      "key": "myanmar_wording",
+      "labelMm": "မြန်မာစာ သုံးနှုန်းမှု",
+      "labelEn": "Myanmar wording",
+      "promptMm": "မြန်မာဘာသာပြန်သည် သဘာဝကျပြီး မိဘတစ်ဦး နားလည်လွယ်ပါသလား။ ဆေးပညာဝေါဟာရများကို မှန်ကန်စွာ သုံးထားပါသလား။ ကလေးအား အထင်သေးစေသော အသုံးအနှုန်း ပါနေပါသလား။",
+      "promptEn": "Does the Myanmar read naturally to a parent, use the correct clinical terms, and avoid any wording that belittles the child?",
+      "blocking": true
+    },
+    {
+      "key": "non_diagnostic_language",
+      "labelMm": "ရောဂါအမည်တပ်ခြင်း မပါရှိမှု",
+      "labelEn": "Non-diagnostic language",
+      "promptMm": "ဤအကြောင်းအရာသည် ရောဂါအမည် တပ်နေခြင်း၊ ရာခိုင်နှုန်း/ဖြစ်နိုင်ခြေ ခန့်မှန်းပေးခြင်း၊ \"ပုံမှန်မဟုတ်သော ကလေး\" ဟု တံဆိပ်ကပ်ခြင်း လုံးဝ မရှိကြောင်း သေချာပါသလား။",
+      "promptEn": "Is this item free of any diagnosis, any probability or percentage estimate, and any label that frames a child as abnormal?",
+      "blocking": true
+    },
+    {
+      "key": "reference_relevance",
+      "labelMm": "ကိုးကားချက် သက်ဆိုင်မှု",
+      "labelEn": "Reference relevance",
+      "promptMm": "ချိတ်ဆက်ထားသော ကိုးကားချက်တိုင်းသည် ဤအကြောင်းအရာနှင့် တကယ် သက်ဆိုင်ပါသလား။ လိုအပ်သော ကိုးကားချက် ကျန်နေပါသလား။",
+      "promptEn": "Is each linked reference actually about this item, and is any needed reference missing?",
+      "blocking": true
+    },
+    {
+      "key": "outdated_evidence",
+      "labelMm": "ဟောင်းနွမ်းနေသော အထောက်အထား",
+      "labelEn": "Outdated evidence",
+      "promptMm": "ချိတ်ဆက်ထားသော ကိုးကားချက်များတွင် ဗားရှင်းအသစ် ထွက်ပြီးသား ရှိပါသလား။ ဟောင်းနေသည်ဟု အမှတ်အသားပြုထားသည့် ကိုးကားချက်ကို ဆက်သုံးရန် သင့်တော်ပါသလား။",
+      "promptEn": "Has any linked reference been superseded by a newer edition, and is it still appropriate to rely on the ones flagged as outdated?",
+      "blocking": false
+    },
+    {
+      "key": "referral_guidance",
+      "labelMm": "ဆရာဝန်ထံ ညွှန်းပို့ရန် လမ်းညွှန်",
+      "labelEn": "Referral guidance",
+      "promptMm": "မိဘတစ်ဦး ကျန်းမာရေးဝန်ထမ်းထံ ဘယ်အချိန် သွားပြရမည်ကို ရှင်းလင်းစွာ ဖော်ပြထားပါသလား။ အရေးပေါ် လက္ခဏာများအတွက် လမ်းညွှန်ချက် မှန်ကန်ပါသလား။",
+      "promptEn": "Does the item tell a parent clearly when to see a health worker, and is the guidance for urgent signs correct?",
+      "blocking": true
+    }
+  ]
+}
