@@ -96,8 +96,10 @@ export function EvidenceAdmin() {
       });
       setMsg(
         L(
-          `ကိုးကား ${src.created} ခု အသစ်၊ ${src.updated} ခု ပြင်ဆင်။ ချိတ်ဆက်မှု ${lnk.created} ခု အသစ်၊ ${lnk.updated} ခု ပြင်ဆင်။`,
-          `References: ${src.created} new, ${src.updated} updated. Links: ${lnk.created} new, ${lnk.updated} updated.`,
+          `ကိုးကား — အသစ် ${src.created}၊ ပြင်ဆင် ${src.updated}၊ မပြောင်းလဲ ${src.unchanged}၊ ကျော် ${src.skipped}၊ မအောင်မြင် ${src.failed}။ ` +
+            `ချိတ်ဆက်မှု — အသစ် ${lnk.created}၊ ပြင်ဆင် ${lnk.updated}၊ မပြောင်းလဲ ${lnk.unchanged}၊ ကျော် ${lnk.skipped}၊ မအောင်မြင် ${lnk.failed}။`,
+          `References: ${src.created} created, ${src.updated} updated, ${src.unchanged} unchanged, ${src.skipped} skipped, ${src.failed} failed. ` +
+            `Links: ${lnk.created} created, ${lnk.updated} updated, ${lnk.unchanged} unchanged, ${lnk.skipped} skipped, ${lnk.failed} failed.`,
         ),
       );
     } catch (e) {
@@ -125,13 +127,18 @@ export function EvidenceAdmin() {
     setPending(sourceId);
     setMsg('');
     try {
-      await setReview({
+      // The server refuses in-band so the refusal can be audited; a caller that
+      // ignored `ok` would report a sign-off that never happened.
+      const res = await setReview({
         sourceId,
         status,
         reviewer: reviewer.trim(),
         reviewerQualification: reviewerQualification.trim(),
         reviewDate: todayIso,
       });
+      if (!res.ok) {
+        setMsg(L('သုံးသပ်မှု မှတ်တမ်းတင်၍ မရပါ။ ', 'The review was refused. ') + res.message);
+      }
     } catch (e) {
       setMsg((e as Error).message);
     } finally {

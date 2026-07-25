@@ -11,8 +11,15 @@
 // pushed here by importSources. Nothing in this file fabricates a DOI, ISBN,
 // edition or year, and nothing promotes a record to 'approved' except an
 // explicit, named human decision made through setReview.
-import { query, mutation, internalQuery } from './_generated/server';
-import { v } from 'convex/values';
+import {
+  query,
+  mutation,
+  internalQuery,
+  internalMutation,
+  type MutationCtx,
+} from './_generated/server';
+import { v, type Infer } from 'convex/values';
+import type { Id } from './_generated/dataModel';
 import { getAuthUserId } from '@convex-dev/auth/server';
 import { isStaff, requireStaff } from './lib/auth';
 import { logAudit } from './audit';
@@ -24,6 +31,38 @@ const REVIEW_STATUSES = [
   'approved',
   'retired',
 ] as const;
+
+// Staleness rules, mirrored from src/evidence/types.ts so the live integrity
+// probe classifies a stored row exactly as the local reports classify the same
+// record. They are duplicated rather than imported because a Convex function
+// bundle should not reach into the browser source tree; a test compares the two
+// tables field by field, so a change on either side fails CI rather than
+// producing two different answers to "is this reference expired".
+const REVIEW_CADENCE_MONTHS: Record<string, number> = {
+  guideline: 24,
+  parent_education: 24,
+  expert_consensus: 36,
+  systematic_review: 48,
+  rct: 60,
+  cohort: 60,
+  textbook: 60,
+};
+const OUTDATED_AFTER_YEARS: Record<string, number> = {
+  guideline: 8,
+  parent_education: 5,
+  expert_consensus: 10,
+  systematic_review: 10,
+  rct: 20,
+  cohort: 20,
+  textbook: 12,
+};
+
+function addMonthsIso(isoDate: string, months: number): string {
+  const d = new Date(`${isoDate}T00:00:00Z`);
+  if (Number.isNaN(d.getTime())) return isoDate;
+  d.setUTCMonth(d.getUTCMonth() + months);
+  return d.toISOString().slice(0, 10);
+}
 
 const sourceValidator = v.object({
   id: v.string(),
@@ -59,18 +98,53 @@ const linkValidator = v.object({
 });
 
 function searchTextFor(src: {
-  org: string; title: string; authors: string | null; keywords: string[];
-  topics: string[]; url: string; doi: string | null; isbn: string | null;
+  org: string;
+  title: string;
+  authors: string | null;
+  keywords: string[];
+  topics: string[];
+  url: string;
+  doi: string | null;
+  isbn: string | null;
 }): string {
   return [
-    src.org, src.title, src.authors ?? '', src.url, src.doi ?? '', src.isbn ?? '',
-    ...src.keywords, ...src.topics,
+    src.org,
+    src.title,
+    src.authors ?? '',
+    src.url,
+    src.doi ?? '',
+    src.isbn ?? '',
+    ...src.keywords,
+    ...src.topics,
   ]
     .join(' ')
     .toLowerCase();
 }
 
-const EMPTY_LIST = { allowed: false as const, total: 0, sources: [], links: [] };
+/**
+ * Would this import actually change the stored row? Compared field by field on
+ * the values the import owns; `_id`, `_creationTime`, `createdAt` and
+ * `updatedAt` are storage bookkeeping, not content.
+ */
+function sameSource(existing: Record<string, unknown>, next: Record<string, unknown>): boolean {
+  return Object.keys(next).every((k) => {
+    const a = existing[k];
+    const b = next[k];
+    if (Array.isArray(a) && Array.isArray(b)) {
+      return a.length === b.length && a.every((v2, i) => v2 === b[i]);
+    }
+    // An absent optional and an explicit null mean the same thing here.
+    if ((a ?? null) === null && (b ?? null) === null) return true;
+    return a === b;
+  });
+}
+
+const EMPTY_LIST = {
+  allowed: false as const,
+  total: 0,
+  sources: [],
+  links: [],
+};
 
 /**
  * Filtered reference list. Supports every filter the mission names:
@@ -178,7 +252,15 @@ export const stats = query({
   handler: async (ctx) => {
     const userId = await getAuthUserId(ctx);
     if (!userId || !(await isStaff(ctx, userId))) {
-      return { allowed: false as const, total: 0, byOrg: {}, byStatus: {}, byLevel: {}, links: 0, linkedSlugs: 0 };
+      return {
+        allowed: false as const,
+        total: 0,
+        byOrg: {},
+        byStatus: {},
+        byLevel: {},
+        links: 0,
+        linkedSlugs: 0,
+      };
     }
     const rows = await ctx.db.query('evidenceSources').collect();
     const links = await ctx.db.query('evidenceLinks').collect();
@@ -209,17 +291,41 @@ export const stats = query({
  * decision — reviewStatus, reviewer and reviewDate on an existing row are kept.
  * An insert can never arrive as 'approved': approval is a human act performed
  * through setReview, not something an import can assert.
+ *
+ * The body lives here rather than inside the mutation because there are two
+ * legitimate ways to run an import — a signed-in staff member using the admin
+ * screen, and an operator holding a deploy key running it from the CLI during
+ * activation — and they must behave identically. `actorId` is the only
+ * difference: a CLI run has no user, and the audit entry says so rather than
+ * borrowing someone's name.
  */
-export const importSources = mutation({
-  args: { sources: v.array(sourceValidator) },
-  handler: async (ctx, { sources }) => {
-    const userId = await requireStaff(ctx);
-    const now = Date.now();
-    let created = 0;
-    let updated = 0;
+async function applySources(
+  ctx: MutationCtx,
+  sources: Infer<typeof sourceValidator>[],
+  actorId: Id<'users'> | null,
+  via: string,
+) {
+  const userId = actorId;
+  const now = Date.now();
+  let created = 0;
+  let updated = 0;
+  let unchanged = 0;
+  let skipped = 0;
+  const failed: string[] = [];
 
-    for (const src of sources) {
-      const { id, ...rest } = src;
+  // A second copy of the same sourceId inside one payload would silently
+  // overwrite the first; report it as skipped rather than importing twice.
+  const seen = new Set<string>();
+
+  for (const src of sources) {
+    const { id, ...rest } = src;
+    if (seen.has(id)) {
+      skipped += 1;
+      continue;
+    }
+    seen.add(id);
+
+    try {
       const existing = await ctx.db
         .query('evidenceSources')
         .withIndex('by_source_id', (qq) => qq.eq('sourceId', id))
@@ -227,7 +333,7 @@ export const importSources = mutation({
       const searchText = searchTextFor(rest);
 
       if (existing) {
-        await ctx.db.patch(existing._id, {
+        const next = {
           ...rest,
           sourceId: id,
           // Human review decisions survive re-import.
@@ -239,11 +345,20 @@ export const importSources = mutation({
           nextReviewDate: existing.nextReviewDate ?? rest.nextReviewDate,
           reviewerId: existing.reviewerId,
           searchText,
-          updatedAt: now,
-        });
-        updated += 1;
+        };
+        // 'updated' should mean something changed. Counting an identical
+        // re-import as an update makes an idempotent run look like a rewrite
+        // of all 90 records, which is exactly the thing an operator is
+        // watching for.
+        if (sameSource(existing, next)) {
+          unchanged += 1;
+        } else {
+          await ctx.db.patch(existing._id, { ...next, updatedAt: now });
+          updated += 1;
+        }
       } else {
-        const reviewStatus = rest.reviewStatus === 'approved' ? 'awaiting_review' : rest.reviewStatus;
+        const reviewStatus =
+          rest.reviewStatus === 'approved' ? 'awaiting_review' : rest.reviewStatus;
         await ctx.db.insert('evidenceSources', {
           ...rest,
           sourceId: id,
@@ -256,18 +371,51 @@ export const importSources = mutation({
         });
         created += 1;
       }
+    } catch {
+      failed.push(id);
     }
+  }
 
-    await logAudit(
-      ctx,
-      userId,
-      'evidence.importSources',
-      'evidenceSources',
-      undefined,
-      `created ${created}, updated ${updated}`,
-    );
-    return { created, updated };
-  },
+  const summary = `created ${created}, updated ${updated}, unchanged ${unchanged}, skipped ${skipped}, failed ${failed.length}`;
+  await logAudit(
+    ctx,
+    userId,
+    'evidence.importSources',
+    'evidenceSources',
+    undefined,
+    `${summary} (via ${via})`,
+    {
+      result: failed.length > 0 ? 'failed' : 'ok',
+      before: `${sources.length} submitted`,
+      after: summary,
+    },
+  );
+  return {
+    created,
+    updated,
+    unchanged,
+    skipped,
+    failed: failed.length,
+    failedIds: failed,
+  };
+}
+
+export const importSources = mutation({
+  args: { sources: v.array(sourceValidator) },
+  handler: async (ctx, { sources }) =>
+    applySources(ctx, sources, await requireStaff(ctx), 'admin screen'),
+});
+
+/**
+ * The same import, reachable only with a deploy key. internalMutation is not
+ * routed to browsers, so this widens nothing a parent or a signed-in user can
+ * do: the only caller is an operator who could already write these tables from
+ * the Convex dashboard. It exists so first activation of an empty deployment
+ * does not require a staff account to have been created first.
+ */
+export const importSourcesFromCli = internalMutation({
+  args: { sources: v.array(sourceValidator) },
+  handler: async (ctx, { sources }) => applySources(ctx, sources, null, 'deploy key (CLI)'),
 });
 
 /**
@@ -275,56 +423,125 @@ export const importSources = mutation({
  * A link naming a sourceId that is not in the registry is rejected outright —
  * a dangling citation is worse than no citation.
  */
-export const importLinks = mutation({
-  args: { links: v.array(linkValidator) },
-  handler: async (ctx, { links }) => {
-    const userId = await requireStaff(ctx);
-    const now = Date.now();
-    const known = new Set((await ctx.db.query('evidenceSources').collect()).map((r) => r.sourceId));
+async function applyLinks(
+  ctx: MutationCtx,
+  links: Infer<typeof linkValidator>[],
+  actorId: Id<'users'> | null,
+  via: string,
+) {
+  const userId = actorId;
+  const now = Date.now();
+  const known = new Set((await ctx.db.query('evidenceSources').collect()).map((r) => r.sourceId));
 
-    const unknown = [...new Set(links.flatMap((l) => l.sourceIds).filter((id) => !known.has(id)))];
-    if (unknown.length > 0) {
-      throw new Error(`Unknown reference ids: ${unknown.slice(0, 10).join(', ')}`);
-    }
-    const empty = links.filter((l) => l.sourceIds.length === 0);
-    if (empty.length > 0) {
-      throw new Error(`Orphan content rejected: ${empty.map((l) => `${l.kind}:${l.slug}`).slice(0, 10).join(', ')}`);
-    }
+  const unknown = [...new Set(links.flatMap((l) => l.sourceIds).filter((id) => !known.has(id)))];
+  if (unknown.length > 0) {
+    throw new Error(`Unknown reference ids: ${unknown.slice(0, 10).join(', ')}`);
+  }
+  const empty = links.filter((l) => l.sourceIds.length === 0);
+  if (empty.length > 0) {
+    throw new Error(
+      `Orphan content rejected: ${empty
+        .map((l) => `${l.kind}:${l.slug}`)
+        .slice(0, 10)
+        .join(', ')}`,
+    );
+  }
 
-    let created = 0;
-    let updated = 0;
-    for (const link of links) {
+  let created = 0;
+  let updated = 0;
+  let unchanged = 0;
+  let skipped = 0;
+  const failed: string[] = [];
+  const seen = new Set<string>();
+
+  for (const link of links) {
+    const key = `${link.kind}:${link.slug}`;
+    if (seen.has(key)) {
+      skipped += 1;
+      continue;
+    }
+    seen.add(key);
+
+    try {
       const existing = await ctx.db
         .query('evidenceLinks')
         .withIndex('by_kind_slug', (qq) => qq.eq('kind', link.kind).eq('slug', link.slug))
         .unique();
       if (existing) {
-        await ctx.db.patch(existing._id, { sourceIds: link.sourceIds, updatedAt: now });
-        updated += 1;
+        const same =
+          existing.sourceIds.length === link.sourceIds.length &&
+          existing.sourceIds.every((id, i) => id === link.sourceIds[i]);
+        if (same) {
+          unchanged += 1;
+        } else {
+          await ctx.db.patch(existing._id, {
+            sourceIds: link.sourceIds,
+            updatedAt: now,
+          });
+          updated += 1;
+        }
       } else {
-        await ctx.db.insert('evidenceLinks', { ...link, createdAt: now, updatedAt: now });
+        await ctx.db.insert('evidenceLinks', {
+          ...link,
+          createdAt: now,
+          updatedAt: now,
+        });
         created += 1;
       }
+    } catch {
+      failed.push(key);
     }
+  }
 
-    await logAudit(
-      ctx,
-      userId,
-      'evidence.importLinks',
-      'evidenceLinks',
-      undefined,
-      `created ${created}, updated ${updated}`,
-    );
-    return { created, updated };
-  },
+  const summary = `created ${created}, updated ${updated}, unchanged ${unchanged}, skipped ${skipped}, failed ${failed.length}`;
+  await logAudit(
+    ctx,
+    userId,
+    'evidence.importLinks',
+    'evidenceLinks',
+    undefined,
+    `${summary} (via ${via})`,
+    {
+      result: failed.length > 0 ? 'failed' : 'ok',
+      before: `${links.length} submitted`,
+      after: summary,
+    },
+  );
+  return {
+    created,
+    updated,
+    unchanged,
+    skipped,
+    failed: failed.length,
+    failedKeys: failed,
+  };
+}
+
+export const importLinks = mutation({
+  args: { links: v.array(linkValidator) },
+  handler: async (ctx, { links }) =>
+    applyLinks(ctx, links, await requireStaff(ctx), 'admin screen'),
+});
+
+/** CLI-only counterpart to importLinks. See importSourcesFromCli. */
+export const importLinksFromCli = internalMutation({
+  args: { links: v.array(linkValidator) },
+  handler: async (ctx, { links }) => applyLinks(ctx, links, null, 'deploy key (CLI)'),
 });
 
 /**
  * Record a clinical review decision on one reference. This is the ONLY path to
- * 'approved', it requires a named reviewer, and it is audited. A record that
- * was imported as 'evidence_required' (metadata that could not be verified
- * against the publisher page) cannot be approved until the metadata is fixed
- * and re-imported.
+ * 'approved', it requires a named and qualified reviewer, and it is audited —
+ * whether it succeeds or is refused. A record that was imported as
+ * 'evidence_required' (metadata that could not be verified against the
+ * publisher page) cannot be approved until the metadata is fixed and
+ * re-imported.
+ *
+ * Refusals return `{ ok: false, code, message }` instead of throwing. That is
+ * deliberate: Convex discards every write of a mutation that throws, so a
+ * refusal that threw would take its own audit record down with it, and the
+ * attempt to approve an unapprovable reference would leave no trace. Callers
+ * must check `ok` — nothing is written when it is false.
  */
 export const setReview = mutation({
   args: {
@@ -338,28 +555,50 @@ export const setReview = mutation({
   },
   handler: async (ctx, args) => {
     const userId = await requireStaff(ctx);
+
+    const refuse = async (code: string, message: string, before: string) => {
+      await logAudit(
+        ctx,
+        userId,
+        'evidence.setReview',
+        'evidenceSources',
+        args.sourceId,
+        `refused (${code}): ${message}`,
+        { result: 'rejected', before, after: before },
+      );
+      return { ok: false as const, code, message };
+    };
+
     if (!(REVIEW_STATUSES as readonly string[]).includes(args.status)) {
-      throw new Error(`Unknown review status: ${args.status}`);
+      return refuse('unknown_status', `Unknown review status: ${args.status}`, 'unchanged');
     }
-    if (!args.reviewer.trim()) throw new Error('A named reviewer is required');
+    if (!args.reviewer.trim()) {
+      return refuse('reviewer_required', 'A named reviewer is required', 'unchanged');
+    }
     // A sign-off is only auditable if the person signing states what they are
     // qualified to sign off. Unqualified approval is not approval.
     if (!args.reviewerQualification.trim()) {
-      throw new Error('A reviewer qualification is required');
+      return refuse('qualification_required', 'A reviewer qualification is required', 'unchanged');
+    }
+    if (!args.reviewDate.trim()) {
+      return refuse('review_date_required', 'A review date is required', 'unchanged');
     }
 
     const row = await ctx.db
       .query('evidenceSources')
       .withIndex('by_source_id', (qq) => qq.eq('sourceId', args.sourceId))
       .unique();
-    if (!row) throw new Error('Reference not found');
+    if (!row) return refuse('not_found', 'Reference not found', 'unchanged');
 
     if (args.status === 'approved' && row.reviewStatus === 'evidence_required') {
-      throw new Error(
+      return refuse(
+        'evidence_required',
         'This reference is marked evidence_required: its metadata could not be verified against the publisher page. Fix and re-import before approving.',
+        `${row.reviewStatus} / ${row.reviewer ?? 'no reviewer'}`,
       );
     }
 
+    const before = `${row.reviewStatus} / ${row.reviewer ?? 'no reviewer'} / ${row.reviewDate ?? 'no date'}`;
     await ctx.db.patch(row._id, {
       reviewStatus: args.status,
       reviewer: args.reviewer.trim(),
@@ -370,6 +609,7 @@ export const setReview = mutation({
       reviewerId: userId,
       updatedAt: Date.now(),
     });
+    const after = `${args.status} / ${args.reviewer.trim()} (${args.reviewerQualification.trim()}) / ${args.reviewDate}`;
 
     await logAudit(
       ctx,
@@ -378,8 +618,9 @@ export const setReview = mutation({
       'evidenceSources',
       args.sourceId,
       `${row.reviewStatus} → ${args.status} by ${args.reviewer.trim()} (${args.reviewerQualification.trim()})`,
+      { result: 'ok', before, after },
     );
-    return { ok: true };
+    return { ok: true as const };
   },
 });
 
@@ -393,8 +634,9 @@ export const setReview = mutation({
 // there, and has anything been approved that should not have been.
 // ---------------------------------------------------------------------------
 export const integrity = internalQuery({
-  args: {},
-  handler: async (ctx) => {
+  args: { todayIso: v.optional(v.string()) },
+  handler: async (ctx, args) => {
+    const today = args.todayIso ?? new Date().toISOString().slice(0, 10);
     const sources = await ctx.db.query('evidenceSources').collect();
     const links = await ctx.db.query('evidenceLinks').collect();
 
@@ -450,7 +692,9 @@ export const integrity = internalQuery({
     const danglingLinks = links
       .filter((l) => l.sourceIds.some((id) => !known.has(id)))
       .map((l) => `${l.kind}:${l.slug}`);
-    const orphanLinks = links.filter((l) => l.sourceIds.length === 0).map((l) => `${l.kind}:${l.slug}`);
+    const orphanLinks = links
+      .filter((l) => l.sourceIds.length === 0)
+      .map((l) => `${l.kind}:${l.slug}`);
 
     // An approval with no named reviewer or no stated qualification is not a
     // sign-off; report it so it can be reversed.
@@ -470,14 +714,76 @@ export const integrity = internalQuery({
       .filter((c) => !linkedSlugs.has(c.slug))
       .map((c) => c.slug);
 
+    // A reference nothing cites is either a link that was never made or a
+    // record that should be retired; either way an operator should see it.
+    const citedIds = new Set(links.flatMap((l) => l.sourceIds));
+    const unusedSources = sources.filter((s) => !citedIds.has(s.sourceId)).map((s) => s.sourceId);
+
+    // Two records pointing at the same document. Identifier matches are hard
+    // duplicates; a title+year match from the same organisation is a candidate
+    // a human judges, so the two are reported separately rather than summed.
+    const byIdentifier = new Map<string, string[]>();
+    const byTitle = new Map<string, string[]>();
+    for (const s of sources) {
+      const idKey = s.doi
+        ? `doi:${s.doi.toLowerCase()}`
+        : s.isbn
+          ? `isbn:${s.isbn.replace(/[\s-]/g, '').toUpperCase()}`
+          : s.pmid
+            ? `pmid:${s.pmid}`
+            : `url:${s.url.replace(/\/$/, '').toLowerCase()}`;
+      byIdentifier.set(idKey, [...(byIdentifier.get(idKey) ?? []), s.sourceId]);
+      const tKey = `${s.orgKey}:${s.title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, ' ')
+        .trim()}:${s.year ?? '?'}`;
+      byTitle.set(tKey, [...(byTitle.get(tKey) ?? []), s.sourceId]);
+    }
+    const duplicateIdentifier = [...byIdentifier.entries()].filter(([, ids]) => ids.length > 1);
+    const duplicateTitle = [...byTitle.entries()].filter(([, ids]) => ids.length > 1);
+
+    // Expired: OUR review of the record has lapsed. Outdated: the DOCUMENT is
+    // old enough that a newer edition should be sought. The second is a
+    // scheduling prompt, never a failure — a 2015 guideline is not wrong
+    // because it is old.
+    const expired: string[] = [];
+    const outdated: string[] = [];
+    const thisYear = Number(today.slice(0, 4));
+    for (const s of sources) {
+      const due =
+        s.nextReviewDate ??
+        ((s.reviewDate ?? s.verifiedOn)
+          ? addMonthsIso(
+              (s.reviewDate ?? s.verifiedOn) as string,
+              REVIEW_CADENCE_MONTHS[s.evidenceLevel] ?? 24,
+            )
+          : null);
+      if (!due || due < today) expired.push(s.sourceId);
+      if (s.year === null || thisYear - s.year > (OUTDATED_AFTER_YEARS[s.evidenceLevel] ?? 8)) {
+        outdated.push(s.sourceId);
+      }
+    }
+
     return {
+      todayIso: today,
       sources: sources.length,
       links: links.length,
       linkedSlugs: linkedSlugs.size,
       byStatus,
+      approved: byStatus.approved ?? 0,
+      awaitingReview: byStatus.awaiting_review ?? 0,
+      evidenceRequired: byStatus.evidence_required ?? 0,
       indexProbe,
       danglingLinks,
       orphanLinks,
+      unusedSources,
+      duplicateIdentifier: duplicateIdentifier.map(([key, ids]) => ({
+        key,
+        ids,
+      })),
+      duplicateTitle: duplicateTitle.map(([key, ids]) => ({ key, ids })),
+      expired,
+      outdated,
       approvedWithoutReviewer,
       publishedContent: publishedContent.length,
       publishedWithoutEvidence,

@@ -79,7 +79,16 @@ export default defineSchema({
     entityTable: v.optional(v.string()),
     entityId: v.optional(v.string()),
     summary: v.optional(v.string()),
-  }).index('by_action', ['action']),
+    // A refused action is the one most worth recording: an attempt to approve a
+    // reference that may not be approved is a fact about the review process,
+    // not a non-event. 'ok' | 'rejected' | 'failed'. All three fields are
+    // optional so existing rows stay valid — this is an additive change.
+    result: v.optional(v.string()),
+    before: v.optional(v.string()),
+    after: v.optional(v.string()),
+  })
+    .index('by_action', ['action'])
+    .index('by_result', ['result']),
 
   // ------------------------------------------------------------------
   // Content Library (database-driven; nothing hardcoded in components).
