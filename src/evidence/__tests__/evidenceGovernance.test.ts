@@ -32,7 +32,7 @@ const schemaSrc = raw(
 );
 
 const CONVEX_FN = /^export const \w+ = \w+\(/;
-const PLAIN_FN = /^(export )?async function \w+\(/;
+const PLAIN_FN = /^(export )?(async )?function \w+\(/;
 
 /**
  * The body of one top-level function, from its declaration to the next.
@@ -48,7 +48,7 @@ function functionBody(src: string, name: string): string {
     (l) =>
       new RegExp(
         `^export const ${name} = (query|mutation|action|internalQuery|internalMutation)\\(`,
-      ).test(l) || new RegExp(`^(export )?async function ${name}\\(`).test(l),
+      ).test(l) || new RegExp(`^(export )?(async )?function ${name}\\(`).test(l),
   );
   expect(start, `${name} is not a top-level function in this module`).toBeGreaterThan(-1);
   let body = '';
@@ -61,6 +61,11 @@ function functionBody(src: string, name: string): string {
 
 describe('invalid review transitions', () => {
   const setReview = functionBody(evidenceSrc, 'setReview');
+  // The policy itself lives apart from the write that applies it, so that the
+  // gate a release check reads and the gate a reviewer meets cannot drift into
+  // disagreeing. The refusal codes are asserted where the decision is made.
+  const reviewRefusal = functionBody(evidenceSrc, 'reviewRefusal');
+  const reviewGate = functionBody(evidenceSrc, 'reviewGate');
 
   // Every one of these is a way a review decision could be recorded that a
   // clinician did not actually make. Each must be refused by the server.
@@ -74,7 +79,22 @@ describe('invalid review transitions', () => {
   ] as const;
 
   it.each(refusals)('refuses %s', (_case, code) => {
-    expect(setReview, `no refusal path for ${code}`).toContain(`'${code}'`);
+    expect(reviewRefusal, `no refusal path for ${code}`).toContain(`'${code}'`);
+  });
+
+  it('decides the policy in exactly one place', () => {
+    // Both callers must consult reviewRefusal rather than re-implementing it.
+    // A second copy of these rules is how a gate starts answering a reviewer
+    // and a release check differently.
+    expect(setReview).toContain('reviewRefusal(args, row)');
+    expect(reviewGate).toContain('reviewRefusal(args, row)');
+  });
+
+  it('reports the decision without taking it', () => {
+    // reviewGate exists so invalid transitions can be probed against a live
+    // deployment without anything being approved to prove the gate works.
+    expect(evidenceSrc).toContain('export const reviewGate = internalQuery(');
+    expect(reviewGate).not.toMatch(/ctx\.db\.(patch|insert|delete|replace)\(/);
   });
 
   it('refuses in-band so the refusal survives to be audited', () => {
@@ -96,7 +116,9 @@ describe('invalid review transitions', () => {
   });
 
   it('keeps approval the only status that evidence_required blocks', () => {
-    expect(setReview).toContain("args.status === 'approved' && row.reviewStatus === 'evidence_required'");
+    expect(reviewRefusal).toContain(
+      "args.status === 'approved' && row.reviewStatus === 'evidence_required'",
+    );
   });
 
   it('records the review date and supports a next review date', () => {
@@ -118,7 +140,16 @@ describe('invalid review transitions', () => {
 
 describe('audit trail', () => {
   it('records actor, action, target, result and a before/after summary', () => {
-    for (const field of ['actorId', 'action', 'entityTable', 'entityId', 'summary', 'result', 'before', 'after']) {
+    for (const field of [
+      'actorId',
+      'action',
+      'entityTable',
+      'entityId',
+      'summary',
+      'result',
+      'before',
+      'after',
+    ]) {
       expect(auditSrc, `audit entry has no ${field}`).toContain(field);
     }
     // _creationTime is the timestamp; Convex sets it on every row, so an
@@ -134,8 +165,12 @@ describe('audit trail', () => {
   });
 
   it('audits a failed import distinctly from a clean one', () => {
-    expect(functionBody(evidenceSrc, 'applySources')).toContain("failed.length > 0 ? 'failed' : 'ok'");
-    expect(functionBody(evidenceSrc, 'applyLinks')).toContain("failed.length > 0 ? 'failed' : 'ok'");
+    expect(functionBody(evidenceSrc, 'applySources')).toContain(
+      "failed.length > 0 ? 'failed' : 'ok'",
+    );
+    expect(functionBody(evidenceSrc, 'applyLinks')).toContain(
+      "failed.length > 0 ? 'failed' : 'ok'",
+    );
   });
 
   // A CLI import has no signed-in user. Recording it as an anonymous action
@@ -201,8 +236,16 @@ describe('import result reporting', () => {
 
   it('never lets an import assert approval or wipe a review decision', () => {
     expect(importSources).toContain("rest.reviewStatus === 'approved' ? 'awaiting_review'");
-    for (const field of ['reviewStatus', 'reviewer', 'reviewerQualification', 'reviewDate', 'reviewNote']) {
-      expect(importSources, `${field} is not preserved on re-import`).toContain(`${field}: existing.${field}`);
+    for (const field of [
+      'reviewStatus',
+      'reviewer',
+      'reviewerQualification',
+      'reviewDate',
+      'reviewNote',
+    ]) {
+      expect(importSources, `${field} is not preserved on re-import`).toContain(
+        `${field}: existing.${field}`,
+      );
     }
   });
 });
@@ -213,7 +256,9 @@ describe('import result reporting', () => {
 // looked — so the duplication is allowed, but only under this test.
 describe('staleness rules match between the server and the local reports', () => {
   const table = (name: string): Record<string, number> => {
-    const m = evidenceSrc.match(new RegExp(`const ${name}: Record<string, number> = \\{([^}]*)\\}`));
+    const m = evidenceSrc.match(
+      new RegExp(`const ${name}: Record<string, number> = \\{([^}]*)\\}`),
+    );
     expect(m, `${name} is not defined in convex/evidence.ts`).toBeTruthy();
     const out: Record<string, number> = {};
     for (const line of m![1].split('\n')) {
@@ -302,11 +347,19 @@ describe('live check state machine', () => {
   // A guideline is not wrong because it is old, and a build that breaks on the
   // passage of time trains people to ignore it.
   it('treats outdated and expired references as advisories, never as failures', () => {
-    expect(liveSrc).toContain("advise(L, 'no reference is old enough to need a newer edition'");
-    expect(liveSrc).toContain("advise(L, 'no reference is past its review date'");
-    expect(liveSrc).not.toMatch(/check\(\s*L,\s*'no reference is (past its review date|old enough)/);
+    // Whitespace-tolerant: the formatter is free to break these calls across
+    // lines, and a governance test that a reformat can break is a test people
+    // learn to edit rather than to read.
+    expect(liveSrc).toMatch(/advise\(\s*L,\s*'no reference is old enough to need a newer edition'/);
+    expect(liveSrc).toMatch(/advise\(\s*L,\s*'no reference is past its review date'/);
+    expect(liveSrc).not.toMatch(
+      /check\(\s*L,\s*'no reference is (past its review date|old enough)/,
+    );
     // and neither may reach the state that fails the run
-    const broken = liveSrc.slice(liveSrc.indexOf('const broken ='), liveSrc.indexOf('return { state: broken'));
+    const broken = liveSrc.slice(
+      liveSrc.indexOf('const broken ='),
+      liveSrc.indexOf('return { state: broken'),
+    );
     expect(broken).not.toContain('outdated');
     expect(broken).not.toContain('expired');
     expect(broken).not.toContain('unusedSources');
@@ -316,7 +369,9 @@ describe('live check state machine', () => {
     expect(liveSrc).toContain('const NOT_DEPLOYED =');
     expect(liveSrc).toContain('const UNAUTHORIZED =');
     // presence is established before any refusal is credited as a gate
-    expect(liveSrc.indexOf('isModuleDeployed')).toBeLessThan(liveSrc.indexOf("evidence:list refuses"));
+    expect(liveSrc.indexOf('isModuleDeployed')).toBeLessThan(
+      liveSrc.indexOf('evidence:list refuses'),
+    );
   });
 
   it('reports every live count requirement 3 asks for', () => {
@@ -358,7 +413,11 @@ describe('activation script safety', () => {
       ...activateSrc.matchAll(/(?:runFunction|importBatched)\(\s*\n?\s*'([^']+)'/g),
     ].map((m) => m[1]);
     expect(new Set(invoked)).toEqual(
-      new Set(['evidence:importSourcesFromCli', 'evidence:importLinksFromCli', 'evidence:integrity']),
+      new Set([
+        'evidence:importSourcesFromCli',
+        'evidence:importLinksFromCli',
+        'evidence:integrity',
+      ]),
     );
     // in particular, nothing that records a review decision or publishes
     expect(invoked.join(' ')).not.toMatch(/setReview|publish|content:/);

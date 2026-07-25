@@ -543,6 +543,51 @@ export const importLinksFromCli = internalMutation({
  * attempt to approve an unapprovable reference would leave no trace. Callers
  * must check `ok` — nothing is written when it is false.
  */
+
+/**
+ * The approval policy, expressed as a decision that is separate from the write.
+ *
+ * `setReview` performs it and `reviewGate` merely reports it, and the two must
+ * never be able to disagree about what is allowed — a gate that answers one way
+ * to a release check and another way to a reviewer is worse than no gate. So
+ * the rules live here once. Returns the refusal, or null to permit.
+ */
+export function reviewRefusal(
+  args: {
+    status: string;
+    reviewer: string;
+    reviewerQualification: string;
+    reviewDate: string;
+  },
+  row: { reviewStatus: string } | null,
+): { code: string; message: string } | null {
+  if (!(REVIEW_STATUSES as readonly string[]).includes(args.status)) {
+    return { code: 'unknown_status', message: `Unknown review status: ${args.status}` };
+  }
+  if (!args.reviewer.trim()) {
+    return { code: 'reviewer_required', message: 'A named reviewer is required' };
+  }
+  // A sign-off is only auditable if the person signing states what they are
+  // qualified to sign off. Unqualified approval is not approval.
+  if (!args.reviewerQualification.trim()) {
+    return { code: 'qualification_required', message: 'A reviewer qualification is required' };
+  }
+  if (!args.reviewDate.trim()) {
+    return { code: 'review_date_required', message: 'A review date is required' };
+  }
+  if (!row) {
+    return { code: 'not_found', message: 'Reference not found' };
+  }
+  if (args.status === 'approved' && row.reviewStatus === 'evidence_required') {
+    return {
+      code: 'evidence_required',
+      message:
+        'This reference is marked evidence_required: its metadata could not be verified against the publisher page. Fix and re-import before approving.',
+    };
+  }
+  return null;
+}
+
 export const setReview = mutation({
   args: {
     sourceId: v.string(),
@@ -569,34 +614,25 @@ export const setReview = mutation({
       return { ok: false as const, code, message };
     };
 
-    if (!(REVIEW_STATUSES as readonly string[]).includes(args.status)) {
-      return refuse('unknown_status', `Unknown review status: ${args.status}`, 'unchanged');
-    }
-    if (!args.reviewer.trim()) {
-      return refuse('reviewer_required', 'A named reviewer is required', 'unchanged');
-    }
-    // A sign-off is only auditable if the person signing states what they are
-    // qualified to sign off. Unqualified approval is not approval.
-    if (!args.reviewerQualification.trim()) {
-      return refuse('qualification_required', 'A reviewer qualification is required', 'unchanged');
-    }
-    if (!args.reviewDate.trim()) {
-      return refuse('review_date_required', 'A review date is required', 'unchanged');
-    }
-
     const row = await ctx.db
       .query('evidenceSources')
       .withIndex('by_source_id', (qq) => qq.eq('sourceId', args.sourceId))
       .unique();
-    if (!row) return refuse('not_found', 'Reference not found', 'unchanged');
 
-    if (args.status === 'approved' && row.reviewStatus === 'evidence_required') {
+    // One policy, evaluated once. See reviewRefusal.
+    const refusal = reviewRefusal(args, row);
+    if (refusal) {
       return refuse(
-        'evidence_required',
-        'This reference is marked evidence_required: its metadata could not be verified against the publisher page. Fix and re-import before approving.',
-        `${row.reviewStatus} / ${row.reviewer ?? 'no reviewer'}`,
+        refusal.code,
+        refusal.message,
+        row ? `${row.reviewStatus} / ${row.reviewer ?? 'no reviewer'}` : 'unchanged',
       );
     }
+    // Unreachable: reviewRefusal already returns 'not_found' for a missing row.
+    // Kept so the compiler can narrow `row` below rather than being told to
+    // trust an assertion, because a non-null assertion here would be exactly
+    // the kind of thing that stops being true after a future edit.
+    if (!row) return refuse('not_found', 'Reference not found', 'unchanged');
 
     const before = `${row.reviewStatus} / ${row.reviewer ?? 'no reviewer'} / ${row.reviewDate ?? 'no date'}`;
     await ctx.db.patch(row._id, {
@@ -633,6 +669,84 @@ export const setReview = mutation({
 // evidence tables live, do the indexes answer, how many rows are actually
 // there, and has anything been approved that should not have been.
 // ---------------------------------------------------------------------------
+/**
+ * What would the approval gate decide for this input? Read-only.
+ *
+ * A gate can only be trusted if it has been pushed against. Testing it by
+ * actually approving something is not an option — approval is a clinical act
+ * and this deployment holds real content — and the CLI cannot impersonate a
+ * staff session, so the write path cannot be driven from a release check at
+ * all. This reports the decision without performing it: it reads one row,
+ * evaluates the same policy `setReview` evaluates, and writes nothing.
+ *
+ * internalQuery, so it is not reachable from any browser: it describes the gate
+ * but does not open it, and it is not a hint to a parent about what would be
+ * allowed if they were staff.
+ */
+export const reviewGate = internalQuery({
+  args: {
+    sourceId: v.string(),
+    status: v.string(),
+    reviewer: v.string(),
+    reviewerQualification: v.string(),
+    reviewDate: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const row = await ctx.db
+      .query('evidenceSources')
+      .withIndex('by_source_id', (qq) => qq.eq('sourceId', args.sourceId))
+      .unique();
+    const refusal = reviewRefusal(args, row);
+    return {
+      allowed: refusal === null,
+      code: refusal?.code ?? null,
+      message: refusal?.message ?? null,
+      currentStatus: row?.reviewStatus ?? null,
+    };
+  },
+});
+
+/**
+ * The live citations behind a named set of content slugs.
+ *
+ * A review batch is assembled in the browser from the TypeScript registry. That
+ * is the right place to assemble it, but it means the batch a reviewer signs is
+ * built from the repository while the app serves citations from the database —
+ * and nothing so far compared the two. This returns what the DEPLOYMENT holds
+ * for those slugs, so a release check can confirm the reviewer's paperwork and
+ * the running system describe the same evidence.
+ *
+ * Read-only and internal: it reports review status across every reference a
+ * batch touches, which is an operator's view rather than a parent's.
+ */
+export const batchSnapshot = internalQuery({
+  args: { slugs: v.array(v.string()) },
+  handler: async (ctx, args) => {
+    const wanted = new Set(args.slugs);
+    const links = (await ctx.db.query('evidenceLinks').collect()).filter((l) => wanted.has(l.slug));
+    const cited = new Set(links.flatMap((l) => l.sourceIds));
+    const sources = (await ctx.db.query('evidenceSources').collect()).filter((s) =>
+      cited.has(s.sourceId),
+    );
+    return {
+      requestedSlugs: args.slugs.length,
+      linkedSlugs: links.length,
+      missingSlugs: args.slugs.filter((s) => !links.some((l) => l.slug === s)),
+      links: links.map((l) => ({ slug: l.slug, kind: l.kind, sourceIds: l.sourceIds })),
+      sources: sources.map((s) => ({
+        sourceId: s.sourceId,
+        org: s.org,
+        orgKey: s.orgKey,
+        title: s.title,
+        year: s.year ?? null,
+        reviewStatus: s.reviewStatus,
+        reviewer: s.reviewer ?? null,
+        reviewerQualification: s.reviewerQualification ?? null,
+      })),
+    };
+  },
+});
+
 export const integrity = internalQuery({
   args: { todayIso: v.optional(v.string()) },
   handler: async (ctx, args) => {
