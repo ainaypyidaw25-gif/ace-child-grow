@@ -10,5 +10,6 @@ import { BIRTH_2M } from './birth2m';
 import { M3_4M } from './m3_4';
 import { M5_6M } from './m5_6';
 import { M7_9M } from './m7_9';
+import { M10_12M } from './m10_12';
 
-export const INFANT_CONTENT: SeedItem[] = [...BIRTH_2M, ...M3_4M, ...M5_6M, ...M7_9M];
+export const INFANT_CONTENT: SeedItem[] = [...BIRTH_2M, ...M3_4M, ...M5_6M, ...M7_9M, ...M10_12M];

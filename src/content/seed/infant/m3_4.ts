@@ -47,7 +47,7 @@ const MILESTONES: SeedItem[] = [
       red: b('ကျယ်လောင်သော အသံကို လုံးဝ မတုံ့ပြန်ခြင်းအတွက် နားကြားစမ်းသပ်မှု တောင်းခံပါ။', 'No response at all to loud sound — ask for a hearing check.'),
       encouragement: b('ဘေးနှစ်ဖက်မှ လှည့်ပြောင်း၍ ခေါ်ကြည့်ပါ။', 'Call your baby from alternating sides.'),
     }),
-    'Sound localisation at this age follows CDC and AAP milestone guidance; the hearing-check advice follows NHS guidance and the speech-language references in the registry.',
+    'Sound localisation at this age follows CDC and AAP milestone guidance and the AAP developmental-surveillance report; the wording about hearing and early language draws on the language-development textbook and the conversational-turns research in the registry.',
   ),
   kb(
     milestone('3_4m', 'social', 1, {
@@ -77,7 +77,7 @@ const MILESTONES: SeedItem[] = [
       red: b('ကိုယ်အလေးချိန် မတက်ခြင်း၊ နို့စို့ရန် ငြင်းဆန်ခြင်းကို ကျန်းမာရေးဝန်ထမ်းအား ပြပါ။', 'Weight not rising, or refusing feeds, should be checked by a health worker.'),
       encouragement: b('ဆာလောင်လက္ခဏာအလိုက် ဆက်လက် တိုက်ကျွေးပါ။', 'Keep feeding on cue.'),
     }),
-    'Exclusive milk feeding to around six months follows WHO infant and young child feeding guidance, the WHO/UNICEF IYCF strategy and NHS advice on starting solid foods.',
+    'Exclusive milk feeding to around six months follows WHO complementary-feeding guidance, the WHO infant and young child feeding model chapter and NHS advice on starting solid foods in the registry.',
   ),
   kb(
     milestone('3_4m', 'sleep', 1, {
@@ -87,7 +87,7 @@ const MILESTONES: SeedItem[] = [
       red: b('နိုးရန် အလွန်ခက်ခဲခြင်း၊ အသက်ရှူ ရပ်တန့်ခြင်း၊ အသံမြည်၍ အသက်ရှူခြင်းကို ချက်ချင်း ပြသပါ။', 'Very hard to rouse, pauses in breathing, or noisy laboured breathing need prompt medical review.'),
       encouragement: b('ညဘက် နိုးခြင်းသည် အမှား မဟုတ်ပါ — အလှည့်ကျ ကူညီပေးမည့်သူ ရှာပါ။', 'Night waking is not a failure — arrange to share the load.'),
     }),
-    'Sleep amounts at 4–11 months follow WHO physical activity and sleep guidance for under-5s; the urgent breathing signs follow NHS seriously-ill-child advice and the WHO IMCI danger signs.',
+    'Sleep amounts at 4–11 months follow WHO physical activity and sleep guidance for under-5s; the safe-sleep points follow AAP safe-sleep guidance and NHS guidance on reducing the risk of sudden infant death in the registry, and the urgent-symptom wording is kept conservative and directs parents to a health worker.',
   ),
 ];
 

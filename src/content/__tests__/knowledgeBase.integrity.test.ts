@@ -10,7 +10,7 @@ import { sourcesForContent } from '../../evidence/links';
 // status that requires a named human, every item must resolve to at least one
 // verified reference, and nothing may promise an outcome or diagnose.
 
-const BANDS_SHIPPED = ['birth_2m', '3_4m', '5_6m', '7_9m'];
+const BANDS_SHIPPED = ['birth_2m', '3_4m', '5_6m', '7_9m', '10_12m'];
 
 describe('knowledge base — 0–12 months', () => {
   it('every authored item carries an editorial status an author is allowed to assert', () => {

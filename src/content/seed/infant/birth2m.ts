@@ -122,7 +122,7 @@ const MILESTONES: SeedItem[] = [
         'Use skin-to-skin daily, and ask for help so you get rest too.',
       ),
     }),
-    'Responsive caregiving and soothing are covered by the WHO nurturing care framework and WHO Care for Child Development materials in the registry; the "cannot be roused / floppy" wording follows NHS advice on spotting a seriously ill infant.',
+    'Early soothing and responsive caregiving at this age follow CDC and AAP milestone guidance, the AAP developmental-surveillance report, NICE guidance on social and emotional wellbeing and the AAP report on early relationships and toxic stress in the registry; the "cannot be roused / floppy" wording is kept deliberately conservative and directs parents to a health worker rather than describing a diagnosis.',
   ),
   kb(
     milestone('birth_2m', 'play', 1, {
@@ -264,7 +264,7 @@ const GUIDES: SeedItem[] = [
         'Every cuddle and every chat you already give is helping your baby grow.',
       ),
     }),
-    'Tummy time, back-to-sleep and early head control follow AAP safe sleep guidance and AAP/CDC milestone guidance; the "not a diagnosis, ask a health worker" framing follows AAP developmental surveillance guidance.',
+    'Tummy time, back-to-sleep and early head control follow AAP safe-sleep guidance, AAP milestone guidance, the WHO motor-milestone windows study and the paediatric physical-therapy textbook in the registry; the "not a diagnosis, ask a health worker" framing follows the same AAP milestone guidance.',
   ),
   kb(
     guide('birth_2m', 'fine_motor', {
@@ -431,7 +431,7 @@ const GUIDES_B: SeedItem[] = [
       ),
       encouragement: b('သင်နှင့် ကလေး၏ ဆက်ဆံရေးသည် အကောင်းဆုံး သင်ခန်းစာ ဖြစ်သည်။', 'Your relationship is your baby’s best classroom.'),
     }),
-    'Face preference, the timing range for a social smile and postnatal parental mental-health support follow AAP/CDC milestone guidance, the WHO nurturing care framework and NICE postnatal care guidance.',
+    'Face preference, the timing range for a social smile and postnatal parental mental-health support follow CDC milestone guidance, the WHO nurturing care framework, NICE postnatal care guidance and NICE guidance on social and emotional wellbeing in the registry.',
   ),
 ];
 
@@ -540,7 +540,7 @@ const GUIDES_C: SeedItem[] = [
       ),
       encouragement: b('ရိုးရှင်းသော နေ့စဉ် ဆက်ဆံမှုများသည် အကောင်းဆုံး ဦးနှောက် လေ့ကျင့်ခန်း ဖြစ်သည်။', 'Simple everyday interaction is the best brain exercise there is.'),
     }),
-    'Early sensory learning, close-range vision and the value of predictable routines follow AAP/CDC milestone guidance, the WHO Care for Child Development counselling materials and AAP media guidance on screens for infants.',
+    'Early sensory learning, close-range vision and the value of predictable routines follow the developmental-behavioural paediatrics textbook, AAP guidance on the power of play, the WHO Care for Child Development counselling materials and AAP media guidance on screens for infants in the registry.',
   ),
   kb(
     guide('birth_2m', 'play', {
@@ -876,7 +876,7 @@ const ACTIVITIES: SeedItem[] = [
       variations: [b('စာအုပ် မရှိလျှင် အိမ်တွင်း ပစ္စည်းများကို ပြော၍ ပြပါ။', 'No book? Name and show household objects instead.')],
       tags: ['reading_activity'],
     }),
-    'Shared book-looking from early infancy and describing rather than reading verbatim follow AAP early-literacy guidance, NHS early-literacy advice and the shared book-reading research in the registry.',
+    'Shared book-looking from early infancy and describing rather than reading verbatim follow AAP early-literacy guidance, the HealthyChildren.org early-literacy materials and the shared book-reading research in the registry.',
   ),
   kb(
     activity({

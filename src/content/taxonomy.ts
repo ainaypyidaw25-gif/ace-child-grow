@@ -96,6 +96,7 @@ export const PRINTABLE_TYPES = [
   // Per-age-band parent checklists produced by the knowledge base. Guidance
   // sheets, never screening or diagnostic instruments.
   'checklist_birth_2m', 'checklist_3_4m', 'checklist_5_6m', 'checklist_7_9m',
+  'checklist_10_12m',
 ] as const;
 
 export const CONTENT_TYPES = [

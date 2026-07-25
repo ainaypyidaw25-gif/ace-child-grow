@@ -666,6 +666,10 @@ const GUIDES_D: SeedItem[] = [
           q: b('နွားနို့ တိုက်လို့ ရပြီလား။', 'Can she drink cow’s milk now?'),
           a: b('နွားနို့ကို အဓိက သောက်စရာအဖြစ် တစ်နှစ်မပြည့်မီ မတိုက်သင့်ပါ။ သို့သော် ဟင်းချက်ရာတွင် အနည်းငယ် ထည့်နိုင်ပါသည်။', 'Cow’s milk should not be her main drink before 12 months, though small amounts in cooking are fine.'),
         },
+        {
+          q: b('ဓာတ်မတည့်တတ်သော အစားအစာများကို ရှောင်သင့်သလား။', 'Should I avoid foods that commonly cause allergy?'),
+          a: b('ရှောင်ရန် မလိုပါ။ ဥ၊ ငါး၊ မြေပဲထောပတ် (ချောမွေ့အောင် ဖျော်ထားသော)၊ နို့ထွက်ပစ္စည်း စသည်တို့ကို ခြောက်လအရွယ်မှစ၍ တစ်မျိုးချင်း၊ အနည်းငယ်စီ စတင်ပေးနိုင်ပါသည်။ တစ်မျိုးပေးပြီးနောက် နှစ်ရက်ခန့် စောင့်ကြည့်ပါ။ အရေပြားယားယံ၊ ဖုထစ်ပေါ်ခြင်း၊ အော့အန်ခြင်း ဖြစ်လျှင် ရပ်ပြီး ကျန်းမာရေးဝန်ထမ်းနှင့် ဆွေးနွေးပါ။ နှုတ်ခမ်း/မျက်နှာ ရောင်ခြင်း သို့မဟုတ် အသက်ရှူ ခက်ခြင်း ဖြစ်လျှင် ချက်ချင်း အရေးပေါ် ဆေးကုသမှု ရယူပါ။ မိသားစုတွင် ဓာတ်မတည့်မှု သမိုင်း ရှိပါက အရင်ဆုံး ကျန်းမာရေးဝန်ထမ်းနှင့် တိုင်ပင်ပါ။', 'There is no need to avoid them. Egg, fish, smooth peanut paste and dairy can be introduced from around six months, one at a time and in small amounts. Wait about two days after each new food. If you see a rash, hives or vomiting, stop and talk to a health worker. If the lips or face swell or breathing becomes difficult, seek emergency care immediately. If allergy runs in your family, discuss it with a health worker first.'),
+        },
       ],
       redFlags: [
         b('အစာ လုံးဝ ငြင်းပယ်ခြင်း၊ မျိုချရ ခက်ခဲခြင်း။', 'Refusing all food or difficulty swallowing.'),
@@ -1182,7 +1186,7 @@ const PRINTABLES: SeedItem[] = [
       key: 'checklist_7_9m',
       title: b('၇–၉ လ မိဘ စစ်ဆေးစာရင်း', '7–9 month parent checklist'),
       description: b('၇–၉ လအရွယ်တွင် များသောအားဖြင့် တွေ့ရလေ့ရှိသည့် အချက်များ၊ နေ့စဉ် လုပ်ဆောင်နိုင်သည့် အရာများနှင့် ဆရာဝန်နှင့် ပြသင့်သည့် အချက်များကို ပုံနှိပ်၍ သုံးနိုင်သော စာရွက်။ ဤသည် ရောဂါရှာဖွေရေး စစ်ဆေးမှု မဟုတ်ပါ — မိဘများ လေ့လာမှတ်သားရန်နှင့် ဆရာဝန်နှင့် ပြောဆိုရန် အထောက်အကူ စာရွက်သာ ဖြစ်သည်။', 'A printable sheet of what is often seen between 7 and 9 months, what you can do each day, and what to raise with a health worker. This is not a screening or diagnostic test — it is a guidance sheet to help you observe and to help you talk with your health worker.'),
-      format: 'a4_portrait',
+      format: 'A4 PDF',
     }),
     'The observation prompts follow CDC milestone checklists and AAP milestone guidance, the feeding prompts follow the WHO infant and young child feeding model chapter, the sleep prompts follow AAP safe-sleep guidance, and the schedule of routine reviews follows NHS baby review guidance.',
   ),

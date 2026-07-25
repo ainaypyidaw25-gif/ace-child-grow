@@ -1120,7 +1120,7 @@ const PRINTABLES: SeedItem[] = [
         'ဤစာရွက်သည် ရောဂါ ဖော်ထုတ်သည့် စစ်ဆေးမှု မဟုတ်ပါ။ ကလေး၏ ဖွံ့ဖြိုးမှုကို စောင့်ကြည့်ရန်နှင့် ကျန်းမာရေးဝန်ထမ်းနှင့် တွေ့ဆုံစဉ် ပြောဆိုရန် အထောက်အကူ ဖြစ်စေရန်သာ ဖြစ်သည်။ ကလေးတိုင်း အချိန်တူ မဟုတ်ကြောင်း သတိရပါ။ စာရင်းတွင် ပါဝင်သည်များ — လှိမ့်ခြင်း၊ ထောက်ပံ့ဖြင့် ထိုင်ခြင်း၊ ပစ္စည်း လှမ်းယူခြင်းနှင့် လက်လွှဲပြောင်းခြင်း၊ ဗျည်းသံ ထွက်ခြင်း၊ အမည်ခေါ်လျှင် လှည့်ကြည့်ခြင်း၊ အသိမျက်နှာ ခွဲခြားခြင်း၊ ကျသွားသော ပစ္စည်းကို ရှာခြင်း၊ အစားအစာ စတင်ရန် အသင့်ဖြစ်မှု လက္ခဏာ ၃ ချက်၊ အိပ်စက်မှု ပုံစံ၊ ဘေးကင်းရေး စစ်ဆေးချက် (ပက်လက်အိပ်ခြင်း၊ လိမ့်ကျမှု၊ လည်ချောင်းပိတ်၊ ရေနစ်၊ မီးလောင်)၊ ချက်ချင်း ဆေးကုသမှု လိုအပ်သော လက္ခဏာများနှင့် ကာကွယ်ဆေး မှတ်တမ်း။',
         'This sheet is not a screening or diagnostic test. It is only to help you watch your baby’s development and to talk with a health worker. Remember that babies vary. It covers rolling, supported sitting, reaching and hand-to-hand transfer, consonant babble, turning to her name, telling familiar people from strangers, looking for a dropped object, the three readiness signs for first foods, the sleep pattern, a safety check (back to sleep, falls, choking, drowning, burns), the signs that need urgent care, and a place to note immunisations.',
       ),
-      format: 'a4_portrait',
+      format: 'A4 PDF',
     }),
     'The observation items follow CDC milestone checklists and AAP milestone guidance; the feeding-readiness items follow the WHO infant and young child feeding model chapter; the safe sleep items follow AAP safe sleep guidance; the review timing follows NHS guidance on baby health reviews.',
   ),
