@@ -1,16 +1,8 @@
-import { query, mutation, type QueryCtx } from './_generated/server';
+import { query, mutation } from './_generated/server';
 import { v } from 'convex/values';
 import { getAuthUserId } from '@convex-dev/auth/server';
-import type { Id } from './_generated/dataModel';
+import { isStaff, requireStaff } from './lib/auth';
 import { logAudit } from './audit';
-
-async function isStaff(ctx: QueryCtx, userId: Id<'users'>): Promise<boolean> {
-  const p = await ctx.db
-    .query('parentProfiles')
-    .withIndex('by_user', (q) => q.eq('userId', userId))
-    .unique();
-  return p?.isStaff === true;
-}
 
 // Public directory: ONLY active + verified facilities. Never invented data.
 export const listPublic = query({
@@ -45,8 +37,7 @@ export const create = mutation({
     address: v.optional(v.string()), services: v.optional(v.string()), source: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId || !(await isStaff(ctx, userId))) throw new Error('Staff only');
+    const userId = await requireStaff(ctx);
     const id = await ctx.db.insert('healthcareFacilities', { ...args, isActive: false });
     await logAudit(ctx, userId, 'facility.create', 'healthcareFacilities', id, args.name);
     return id;
@@ -57,8 +48,7 @@ export const create = mutation({
 export const verify = mutation({
   args: { id: v.id('healthcareFacilities') },
   handler: async (ctx, { id }) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId || !(await isStaff(ctx, userId))) throw new Error('Staff only');
+    const userId = await requireStaff(ctx);
     await ctx.db.patch(id, { isActive: true, verifiedBy: userId, lastVerifiedAt: Date.now() });
     await logAudit(ctx, userId, 'facility.verify', 'healthcareFacilities', id);
   },
@@ -67,8 +57,7 @@ export const verify = mutation({
 export const deactivate = mutation({
   args: { id: v.id('healthcareFacilities') },
   handler: async (ctx, { id }) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId || !(await isStaff(ctx, userId))) throw new Error('Staff only');
+    const userId = await requireStaff(ctx);
     await ctx.db.patch(id, { isActive: false });
     await logAudit(ctx, userId, 'facility.deactivate', 'healthcareFacilities', id);
   },

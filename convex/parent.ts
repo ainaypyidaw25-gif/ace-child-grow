@@ -1,5 +1,6 @@
 import { query, mutation } from './_generated/server';
 import { getAuthUserId } from '@convex-dev/auth/server';
+import { requireUser } from './lib/auth';
 
 export const me = query({
   args: {},
@@ -23,8 +24,7 @@ export const me = query({
 export const acceptConsent = mutation({
   args: {},
   handler: async (ctx) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId) throw new Error('Not authenticated');
+    const userId = await requireUser(ctx);
     const existing = await ctx.db
       .query('parentProfiles')
       .withIndex('by_user', (q) => q.eq('userId', userId))

@@ -1,5 +1,6 @@
 import { query, mutation } from './_generated/server';
 import { getAuthUserId } from '@convex-dev/auth/server';
+import { requireUser } from './lib/auth';
 
 export const list = query({
   args: {},
@@ -30,8 +31,7 @@ export const unreadCount = query({
 export const markAllRead = mutation({
   args: {},
   handler: async (ctx) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId) throw new Error('Not authenticated');
+    const userId = await requireUser(ctx);
     const rows = await ctx.db
       .query('notifications')
       .withIndex('by_user', (q) => q.eq('userId', userId))

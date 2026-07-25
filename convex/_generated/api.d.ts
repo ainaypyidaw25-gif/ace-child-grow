@@ -16,6 +16,7 @@ import type * as directory from "../directory.js";
 import type * as favorites from "../favorites.js";
 import type * as growth from "../growth.js";
 import type * as http from "../http.js";
+import type * as lib_auth from "../lib/auth.js";
 import type * as library from "../library.js";
 import type * as milestones from "../milestones.js";
 import type * as notifications from "../notifications.js";
@@ -38,6 +39,7 @@ declare const fullApi: ApiFromModules<{
   favorites: typeof favorites;
   growth: typeof growth;
   http: typeof http;
+  "lib/auth": typeof lib_auth;
   library: typeof library;
   milestones: typeof milestones;
   notifications: typeof notifications;

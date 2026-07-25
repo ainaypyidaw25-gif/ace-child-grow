@@ -71,14 +71,15 @@ export default defineSchema({
     isActive: v.boolean(), // inactive until verified
   }).index('by_active', ['isActive']),
 
-  // Immutable audit trail. Insert-only; readable by staff/super-admin.
+  // Immutable audit trail. Insert-only; readable by staff/super-admin. Listed via
+  // the implicit _creationTime order (newest first), so no extra index is needed.
   auditLogs: defineTable({
     actorId: v.optional(v.id('users')),
     action: v.string(),
     entityTable: v.optional(v.string()),
     entityId: v.optional(v.string()),
     summary: v.optional(v.string()),
-  }).index('by_time', ['action']),
+  }).index('by_action', ['action']),
 
   // ------------------------------------------------------------------
   // Content Library (database-driven; nothing hardcoded in components).

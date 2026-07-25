@@ -1,7 +1,7 @@
-import { query, mutation, type QueryCtx, type MutationCtx } from './_generated/server';
+import { query, mutation } from './_generated/server';
 import { v } from 'convex/values';
 import { getAuthUserId } from '@convex-dev/auth/server';
-import type { Id } from './_generated/dataModel';
+import { isStaff, requireStaff } from './lib/auth';
 import { logAudit } from './audit';
 
 // Mirror of src/domain/content/workflow.ts (convex functions can't import src/).
@@ -15,14 +15,6 @@ const TRANSITIONS: Record<string, string[]> = {
   archived: ['draft'],
 };
 
-async function isStaff(ctx: QueryCtx | MutationCtx, userId: Id<'users'>): Promise<boolean> {
-  const profile = await ctx.db
-    .query('parentProfiles')
-    .withIndex('by_user', (q) => q.eq('userId', userId))
-    .unique();
-  return profile?.isStaff === true;
-}
-
 export const list = query({
   args: {},
   handler: async (ctx) => {
@@ -34,13 +26,12 @@ export const list = query({
   },
 });
 
-// Idempotent seed so the Admin CMS has content to manage. Any authenticated user
-// may seed the initial catalogue (all items start in clinical_review).
+// Idempotent seed so the Admin CMS has content to manage. Staff-only; every item
+// starts in clinical_review (never published without the review workflow below).
 export const seedIfEmpty = mutation({
   args: { items: v.array(v.object({ kind: v.string(), titleMm: v.string(), titleEn: v.string() })) },
   handler: async (ctx, { items }) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId) throw new Error('Not authenticated');
+    await requireStaff(ctx);
     const existing = await ctx.db.query('contentItems').take(1);
     if (existing.length > 0) return;
     for (const it of items) {
@@ -52,9 +43,7 @@ export const seedIfEmpty = mutation({
 export const transition = mutation({
   args: { id: v.id('contentItems'), to: v.string() },
   handler: async (ctx, { id, to }) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId) throw new Error('Not authenticated');
-    if (!(await isStaff(ctx, userId))) throw new Error('Staff only');
+    const userId = await requireStaff(ctx);
     const item = await ctx.db.get(id);
     if (!item) throw new Error('Not found');
     const allowed = TRANSITIONS[item.reviewStatus] ?? [];
@@ -76,8 +65,7 @@ export const setTranslation = mutation({
     translationNote: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId || !(await isStaff(ctx, userId))) throw new Error('Staff only');
+    const userId = await requireStaff(ctx);
     const { id, ...patch } = args;
     await ctx.db.patch(id, patch);
     await logAudit(ctx, userId, `translation.${args.translationStatus}`, 'contentItems', id);

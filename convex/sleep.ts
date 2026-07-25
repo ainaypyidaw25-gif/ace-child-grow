@@ -1,12 +1,7 @@
-import { query, mutation, type QueryCtx, type MutationCtx } from './_generated/server';
+import { query, mutation } from './_generated/server';
 import { v } from 'convex/values';
 import { getAuthUserId } from '@convex-dev/auth/server';
-import type { Id } from './_generated/dataModel';
-
-async function ownChild(ctx: QueryCtx | MutationCtx, childId: Id<'children'>, userId: Id<'users'>) {
-  const child = await ctx.db.get(childId);
-  if (!child || child.userId !== userId) throw new Error('Not found');
-}
+import { requireUser, ownChild } from './lib/auth';
 
 export const list = query({
   args: { childId: v.id('children') },
@@ -34,8 +29,7 @@ export const add = mutation({
     notes: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId) throw new Error('Not authenticated');
+    const userId = await requireUser(ctx);
     await ownChild(ctx, args.childId, userId);
     await ctx.db.insert('sleepRecords', { userId, ...args });
   },

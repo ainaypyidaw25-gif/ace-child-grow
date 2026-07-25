@@ -1,6 +1,7 @@
 import { query, mutation } from './_generated/server';
 import { v } from 'convex/values';
 import { getAuthUserId } from '@convex-dev/auth/server';
+import { requireUser, ownChild } from './lib/auth';
 
 // Persist a completed milestone review session (result snapshot) for history.
 export const recordSession = mutation({
@@ -11,10 +12,8 @@ export const recordSession = mutation({
     resultSnapshot: v.any(),
   },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId) throw new Error('Not authenticated');
-    const child = await ctx.db.get(args.childId);
-    if (!child || child.userId !== userId) throw new Error('Not found');
+    const userId = await requireUser(ctx);
+    await ownChild(ctx, args.childId, userId);
     await ctx.db.insert('milestoneSessions', {
       userId,
       childId: args.childId,

@@ -68,7 +68,9 @@ export const run = internalMutation({
         });
         updated++;
       } else {
-        await ctx.db.insert('libraryContent', { ...content, createdAt: now, updatedAt: now });
+        // Seeding can never create published content (clinical-review gate).
+        const clinicalStatus = content.clinicalStatus === 'published' ? 'clinical_review' : content.clinicalStatus;
+        await ctx.db.insert('libraryContent', { ...content, clinicalStatus, createdAt: now, updatedAt: now });
         created++;
       }
       const existingMedia = await ctx.db

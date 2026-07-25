@@ -1,6 +1,7 @@
 import { query, mutation } from './_generated/server';
 import { v } from 'convex/values';
 import { getAuthUserId } from '@convex-dev/auth/server';
+import { requireUser } from './lib/auth';
 
 export const list = query({
   args: {},
@@ -18,8 +19,7 @@ export const list = query({
 export const toggle = mutation({
   args: { activityKey: v.string() },
   handler: async (ctx, { activityKey }) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId) throw new Error('Not authenticated');
+    const userId = await requireUser(ctx);
     const existing = await ctx.db
       .query('favorites')
       .withIndex('by_user_activity', (q) => q.eq('userId', userId).eq('activityKey', activityKey))

@@ -4,19 +4,11 @@
 // everything (all clinical statuses). Write access (import, review transitions,
 // media) is staff-only and audited. The library carries NO per-parent private
 // data, so reads are shared catalogue — but still behind authentication.
-import { query, mutation, type QueryCtx } from './_generated/server';
+import { query, mutation } from './_generated/server';
 import { v } from 'convex/values';
 import { getAuthUserId } from '@convex-dev/auth/server';
-import type { Id } from './_generated/dataModel';
+import { isStaff, requireStaff } from './lib/auth';
 import { logAudit } from './audit';
-
-async function isStaff(ctx: QueryCtx, userId: Id<'users'>): Promise<boolean> {
-  const p = await ctx.db
-    .query('parentProfiles')
-    .withIndex('by_user', (q) => q.eq('userId', userId))
-    .unique();
-  return p?.isStaff === true;
-}
 
 // List content by type, optionally filtered by age/domain/category and a query.
 // Non-staff receive only 'published'; staff receive all statuses.
@@ -98,7 +90,10 @@ export const stats = query({
   args: {},
   handler: async (ctx) => {
     const userId = await getAuthUserId(ctx);
-    if (!userId) return { allowed: false, total: 0, byType: {}, byStatus: {}, ages: [], domains: [] };
+    // Staff-only: coverage/status counts (incl. unpublished) are an admin view.
+    if (!userId || !(await isStaff(ctx, userId))) {
+      return { allowed: false, total: 0, byType: {}, byStatus: {}, ages: [], domains: [] };
+    }
     const rows = await ctx.db.query('libraryContent').collect();
     const byType: Record<string, number> = {};
     const byStatus: Record<string, number> = {};
@@ -149,8 +144,7 @@ const seedItemValidator = v.object({
 export const importSeed = mutation({
   args: { items: v.array(seedItemValidator) },
   handler: async (ctx, { items }) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId || !(await isStaff(ctx, userId))) throw new Error('Staff only');
+    const userId = await requireStaff(ctx);
     const now = Date.now();
     let created = 0;
     let updated = 0;
@@ -172,7 +166,10 @@ export const importSeed = mutation({
         });
         updated++;
       } else {
-        await ctx.db.insert('libraryContent', { ...content, createdAt: now, updatedAt: now });
+        // Import can NEVER create published content — reaching 'published' is only
+        // possible through setReview (the clinical-review workflow). Clamp on insert.
+        const clinicalStatus = content.clinicalStatus === 'published' ? 'clinical_review' : content.clinicalStatus;
+        await ctx.db.insert('libraryContent', { ...content, clinicalStatus, createdAt: now, updatedAt: now });
         created++;
       }
       // Refresh media placeholders for this slug.
@@ -205,8 +202,7 @@ export const setReview = mutation({
     nextReviewAt: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
-    const userId = await getAuthUserId(ctx);
-    if (!userId || !(await isStaff(ctx, userId))) throw new Error('Staff only');
+    const userId = await requireStaff(ctx);
     if (!['draft', 'clinical_review', 'published'].includes(args.clinicalStatus)) {
       throw new Error('Invalid status');
     }

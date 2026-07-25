@@ -1,6 +1,7 @@
-import { query, type MutationCtx, type QueryCtx } from './_generated/server';
+import { query, type MutationCtx } from './_generated/server';
 import { getAuthUserId } from '@convex-dev/auth/server';
 import type { Id } from './_generated/dataModel';
+import { isStaff } from './lib/auth';
 
 /** Insert an immutable audit entry. Called from other mutations. */
 export async function logAudit(
@@ -18,14 +19,6 @@ export async function logAudit(
     entityId,
     summary,
   });
-}
-
-async function isStaff(ctx: QueryCtx, userId: Id<'users'>): Promise<boolean> {
-  const p = await ctx.db
-    .query('parentProfiles')
-    .withIndex('by_user', (q) => q.eq('userId', userId))
-    .unique();
-  return p?.isStaff === true;
 }
 
 // Audit viewer — staff/super-admin only. Parents get an empty list (never data).
