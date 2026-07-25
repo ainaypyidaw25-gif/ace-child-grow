@@ -8,6 +8,12 @@ interface AppStateContextValue {
   state: AppState;
   dispatch: (action: Action) => void;
   activeChild: Child | null;
+  /** True once BOTH the parent-profile and children queries have resolved. */
+  ready: boolean;
+  /** True only when loaded AND the server returned at least one active child. */
+  hasChild: boolean;
+  /** Awaitable child creation (resolves after the mutation commits). */
+  addChildAsync: (child: Omit<Child, 'id'>) => Promise<void>;
 }
 
 const AppStateContext = createContext<AppStateContextValue | null>(null);
@@ -25,6 +31,13 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const { signOut } = useAuthActions();
 
   const [activeChildId, setActiveChildId] = useState<string | null>(null);
+
+  // Loading discipline: `rows`/`me` are `undefined` while their queries are in
+  // flight. We must NOT collapse "loading" into "empty" — the route guard keys
+  // off `ready` so it never redirects to Add Child mid-load.
+  const childrenLoaded = rows !== undefined;
+  const profileLoaded = me !== undefined;
+  const ready = childrenLoaded && profileLoaded;
 
   const list: Child[] = useMemo(
     () =>
@@ -89,10 +102,24 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  // Awaitable add-child: resolves after the mutation commits, so callers can
+  // disable their submit button and navigate only on success (no double-create,
+  // no navigate-before-persist race).
+  async function addChildAsync(child: Omit<Child, 'id'>): Promise<void> {
+    await addChild({
+      nickname: child.nickname,
+      birthDate: child.birthDate,
+      sex: child.sex,
+      gestationalWeeks: child.gestationalWeeks,
+      useCorrectedAge: child.useCorrectedAge,
+    });
+  }
+
   const activeChild = list.find((c) => c.id === activeChildId) ?? null;
+  const hasChild = childrenLoaded && list.length > 0;
 
   return (
-    <AppStateContext.Provider value={{ state, dispatch, activeChild }}>
+    <AppStateContext.Provider value={{ state, dispatch, activeChild, ready, hasChild, addChildAsync }}>
       {children}
     </AppStateContext.Provider>
   );

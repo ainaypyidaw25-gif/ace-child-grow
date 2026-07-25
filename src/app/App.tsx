@@ -1,6 +1,8 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Authenticated, Unauthenticated, AuthLoading } from 'convex/react';
 import { Layout } from '../components/Layout';
+import { useAppState } from './AppState';
+import { decideRoute } from './bootstrap';
 import { SignIn } from '../screens/SignIn';
 import { Welcome } from '../screens/Welcome';
 import { Consent } from '../screens/Consent';
@@ -44,10 +46,38 @@ export function App() {
   );
 }
 
+// Bootstrap gate for the index route. Decides where an authenticated user lands
+// based on SERVER state (consent + children), and never redirects while those
+// queries are still loading. This is the fix for returning users being asked to
+// add a child again on every login.
+function Bootstrap() {
+  const { ready, hasChild, state } = useAppState();
+  const route = decideRoute({
+    ready,
+    consentAccepted: Boolean(state.consentAcceptedAt),
+    hasChild,
+  });
+  switch (route) {
+    case 'loading':
+      return (
+        <div className="flex min-h-screen items-center justify-center text-ink-soft" role="status" aria-live="polite">
+          <span className="animate-pulse">…</span>
+        </div>
+      );
+    case 'home':
+      return <Navigate to="/home" replace />;
+    case 'add-child':
+      return <Navigate to="/add-child" replace />;
+    case 'welcome':
+    default:
+      return <Layout showNav={false}><Welcome /></Layout>;
+  }
+}
+
 function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<Layout showNav={false}><Welcome /></Layout>} />
+      <Route path="/" element={<Bootstrap />} />
       <Route path="/consent" element={<Layout showNav={false}><Consent /></Layout>} />
       <Route path="/add-child" element={<Layout showNav={false}><AddChild /></Layout>} />
       <Route path="/edit-child" element={<Layout showNav={false}><EditChild /></Layout>} />
