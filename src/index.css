@@ -1,3 +1,15 @@
+/* The Myanmar font travels with the app; it is not assumed to be on the device.
+   The family was named in font-family below from the start, but nothing shipped
+   it, so rendering fell back to whatever the reader happened to have — 'Myanmar
+   Text' on Windows, and on an Android phone without a Myanmar font, boxes. For
+   a Myanmar-first product read mostly on low-end phones, that is the difference
+   between a working app and an unreadable one, so the font is bundled. Weights
+   are limited to the three the UI actually uses; each extra weight is a file a
+   parent on a slow connection waits for. */
+@import '@fontsource/noto-sans-myanmar/400.css';
+@import '@fontsource/noto-sans-myanmar/500.css';
+@import '@fontsource/noto-sans-myanmar/700.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

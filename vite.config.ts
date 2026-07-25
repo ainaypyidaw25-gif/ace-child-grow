@@ -32,6 +32,15 @@ export default defineConfig({
         ],
       },
       workbox: {
+        // The Myanmar font is precached with the rest of the shell. Workbox's
+        // default glob does not include font files, so offline the stylesheet
+        // was cached while the glyphs it names were not — the app would open
+        // offline and render Myanmar in whatever the device happened to have.
+        // For an offline-first, Myanmar-first product that is not a cosmetic
+        // difference. woff2 only: every browser that can install a PWA reads
+        // it, and precaching the woff duplicates would double the cost for no
+        // one. About 160 KB, of which the Myanmar subsets are ~145 KB.
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,webmanifest,woff2}'],
         // Only public educational routes are cached. Anything under /api/ (authenticated
         // child data) is explicitly excluded from runtime caching.
         navigateFallbackDenylist: [/^\/api\//, /^\/admin\//],
