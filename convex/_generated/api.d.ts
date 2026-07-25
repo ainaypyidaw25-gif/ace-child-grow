@@ -20,6 +20,7 @@ import type * as library from "../library.js";
 import type * as milestones from "../milestones.js";
 import type * as notifications from "../notifications.js";
 import type * as parent from "../parent.js";
+import type * as seed from "../seed.js";
 import type * as sleep from "../sleep.js";
 
 import type {
@@ -41,6 +42,7 @@ declare const fullApi: ApiFromModules<{
   milestones: typeof milestones;
   notifications: typeof notifications;
   parent: typeof parent;
+  seed: typeof seed;
   sleep: typeof sleep;
 }>;
 
