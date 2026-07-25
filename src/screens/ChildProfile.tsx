@@ -7,6 +7,7 @@ import { useAppState } from '../app/AppState';
 import { ageLabels } from '../domain/age/ageLabel';
 import { chronologicalAge } from '../domain/age/age';
 import { NoChild } from './Growth';
+import { ConfirmDialog } from '../components/ConfirmDialog';
 
 // Dedicated child profile — separate from parent account settings.
 // Aggregates the child's records; never exposes sensitive notes in shared views.
@@ -80,18 +81,13 @@ export function ChildProfile() {
       </button>
 
       {confirm && (
-        <div role="dialog" aria-modal className="rounded-card border-2 border-state-red bg-pink/40 p-4">
-          <p className="font-semibold">
-            {locale === 'mm' ? 'ဤကလေး၏ မှတ်တမ်းများ ဖျက်မှာ သေချာပါသလား။' : "Delete this child's records?"}
-          </p>
-          <div className="mt-3 flex gap-2">
-            <button type="button" onClick={() => setConfirm(false)}
-              className="rounded-pill border border-line px-4 py-2">{t('common.cancel')}</button>
-            <button type="button"
-              onClick={() => { dispatch({ type: 'delete_child', id: activeChild.id }); navigate('/profile'); }}
-              className="rounded-pill bg-state-red px-4 py-2 font-semibold text-white">{t('common.confirm')}</button>
-          </div>
-        </div>
+        <ConfirmDialog
+          message={locale === 'mm' ? 'ဤကလေး၏ မှတ်တမ်းများ ဖျက်မှာ သေချာပါသလား။' : "Delete this child's records?"}
+          cancelLabel={t('common.cancel')}
+          confirmLabel={t('common.confirm')}
+          onCancel={() => setConfirm(false)}
+          onConfirm={() => { dispatch({ type: 'delete_child', id: activeChild.id }); navigate('/profile'); }}
+        />
       )}
     </div>
   );

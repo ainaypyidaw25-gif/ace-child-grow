@@ -18,6 +18,7 @@ export function Learn() {
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="🔎"
+        aria-label={locale === 'mm' ? 'သင်ခန်းစာ ရှာဖွေရန်' : 'Search lessons'}
         className="w-full rounded-pill border border-line bg-white px-4 py-2"
       />
       <ul className="grid grid-cols-1 gap-3">

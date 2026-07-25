@@ -17,6 +17,10 @@ const modules = import.meta.glob('../../../convex/*.ts', {
 
 const SKIP_FILES = ['schema.ts', 'auth.ts', 'auth.config.ts', 'http.ts'];
 
+// Cross-file helpers that themselves derive the caller via getAuthUserId (defined
+// in convex/lib/auth.ts). A handler delegating to one of these is authed.
+const KNOWN_AUTH_CALLS = ['getAuthUserId', 'requireUser', 'requireStaff'];
+
 // Functions that are INTENTIONALLY public. Each must only expose data that is
 // safe for anonymous callers. Keep this list tiny and justified.
 const PUBLIC_ALLOWLIST: Record<string, string> = {
@@ -72,7 +76,7 @@ describe('Convex authorization guard (P0 regression)', () => {
       const key = `${file}:${fn.name}`;
       it(`${key} enforces authentication (or is an allowlisted public endpoint)`, () => {
         const usesAuth =
-          fn.body.includes('getAuthUserId') ||
+          KNOWN_AUTH_CALLS.some((c) => fn.body.includes(c)) ||
           helpers.some((h) => fn.body.includes(`${h}(ctx`));
         const allowed = key in PUBLIC_ALLOWLIST;
         expect(

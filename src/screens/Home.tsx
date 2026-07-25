@@ -28,12 +28,13 @@ export function Home() {
     : null;
   return (
     <div className="space-y-4">
+      <h1 className="sr-only">{t('app.name')}</h1>
       <div className="rounded-card bg-mint-soft p-5">
         <p className="text-ink-soft">{t('home.greeting')} 👋</p>
         {activeChild ? (
           <p className="mt-1 text-lg font-bold text-sky-deep">
             {activeChild.nickname} · {labels?.chronological}
-            {labels?.corrected && ` (${labels.corrected} corrected)`}
+            {labels?.corrected && ` (${labels.corrected} ${t('common.corrected')})`}
           </p>
         ) : (
           <p className="mt-1 text-lg font-bold text-sky-deep">{t('app.tagline')}</p>
@@ -74,7 +75,7 @@ export function Home() {
           { to: '/favorites', label: t('favorites.title'), emoji: '❤️' },
           { to: '/child-profile', label: locale === 'mm' ? 'ကလေး ပရိုဖိုင်' : 'Child profile', emoji: '👶' },
           { to: '/directory', label: locale === 'mm' ? 'ကျန်းမာရေး လမ်းညွှန်' : 'Healthcare', emoji: '🏥' },
-          { to: '/admin', label: 'Admin', emoji: '🗂️' },
+          { to: '/admin', label: locale === 'mm' ? 'စီမံခန့်ခွဲမှု' : 'Admin', emoji: '🗂️' },
         ].map((q) => (
           <Link
             key={q.to}

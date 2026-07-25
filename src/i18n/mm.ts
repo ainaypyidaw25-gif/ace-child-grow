@@ -63,6 +63,7 @@ export const mm = {
   'common.back': 'နောက်သို့',
   'common.minutes': 'မိနစ်',
   'common.empty': 'မှတ်တမ်း မရှိသေးပါ',
+  'common.corrected': 'ပြင်ဆင်အသက်',
 
   'activities.title': 'လှုပ်ရှားမှုများ',
   'activities.dailyPlan': 'ဒီနေ့ လှုပ်ရှားမှု အစီအစဉ်',
@@ -104,8 +105,8 @@ export const mm = {
   'notifications.title': 'အသိပေးချက်များ',
   'notifications.empty': 'အသိပေးချက် မရှိသေးပါ။',
   'notifications.markRead': 'အားလုံး ဖတ်ပြီးအဖြစ် မှတ်မည်',
-  'admin.seed': 'နမူနာ content ထည့်မည်',
-  'admin.staffOnly': 'အဆင့်ရွှေ့ခြင်းကို staff သာ ပြုလုပ်နိုင်သည်။',
+  'admin.seed': 'နမူနာ အကြောင်းအရာ ထည့်မည်',
+  'admin.staffOnly': 'အဆင့်ရွှေ့ခြင်းကို ဝန်ထမ်းသာ ပြုလုပ်နိုင်သည်။',
   'review.short': 'သုံးသပ်ဆဲ',
   'activities.today': 'ဒီနေ့အတွက်',
   'learn.category.speech': 'စကားနှင့် ဆက်သွယ်ပြောဆိုမှု',

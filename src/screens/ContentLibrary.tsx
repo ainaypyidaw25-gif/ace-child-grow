@@ -64,6 +64,7 @@ export function ContentLibrary() {
       <input
         value={q} onChange={(e) => setQ(e.target.value)}
         placeholder={locale === 'mm' ? '🔎 ရှာဖွေရန်' : '🔎 Search'}
+        aria-label={locale === 'mm' ? 'အကြောင်းအရာ ရှာဖွေရန်' : 'Search content'}
         className="w-full rounded-pill border border-line bg-white px-4 py-2 text-sm"
       />
 
@@ -71,6 +72,7 @@ export function ContentLibrary() {
         <div className="flex flex-wrap gap-2">
           {usesAge && (
             <select value={ageKey} onChange={(e) => setAgeKey(e.target.value)}
+              aria-label={locale === 'mm' ? 'အသက်အုပ်စု စစ်ထုတ်ရန်' : 'Filter by age group'}
               className="rounded-pill border border-line bg-white px-3 py-1.5 text-sm">
               <option value="">{locale === 'mm' ? 'အသက်အုပ်စု အားလုံး' : 'All ages'}</option>
               {AGE_GROUPS.map((a) => (
@@ -80,6 +82,7 @@ export function ContentLibrary() {
           )}
           {usesDomain && (
             <select value={domainKey} onChange={(e) => setDomainKey(e.target.value)}
+              aria-label={locale === 'mm' ? 'နယ်ပယ် စစ်ထုတ်ရန်' : 'Filter by domain'}
               className="rounded-pill border border-line bg-white px-3 py-1.5 text-sm">
               <option value="">{locale === 'mm' ? 'နယ်ပယ် အားလုံး' : 'All domains'}</option>
               {DOMAINS.map((d) => (

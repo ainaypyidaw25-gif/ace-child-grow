@@ -67,6 +67,7 @@ export function Growth() {
             <input inputMode="decimal" value={weight} onChange={(e) => setWeight(e.target.value)}
               className="block w-full rounded-lg border border-line px-3 py-2" />
             <select value={wUnit} onChange={(e) => setWUnit(e.target.value as WeightUnit)}
+              aria-label={locale === 'mm' ? 'အလေးချိန် ယူနစ်' : 'Weight unit'}
               className="rounded-lg border border-line px-2">
               <option value="kg">kg</option>
               <option value="lb">lb</option>
@@ -79,6 +80,7 @@ export function Growth() {
             <input inputMode="decimal" value={height} onChange={(e) => setHeight(e.target.value)}
               className="block w-full rounded-lg border border-line px-3 py-2" />
             <select value={lUnit} onChange={(e) => setLUnit(e.target.value as LengthUnit)}
+              aria-label={locale === 'mm' ? 'အရပ် ယူနစ်' : 'Height unit'}
               className="rounded-lg border border-line px-2">
               <option value="cm">cm</option>
               <option value="in">in</option>

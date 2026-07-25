@@ -32,7 +32,8 @@ export function AuditLog() {
       <h1 className="text-xl font-bold text-sky-deep">{locale === 'mm' ? 'စိစစ်မှတ်တမ်း (Audit Log)' : 'Audit Log'}</h1>
       <input
         value={filter} onChange={(e) => setFilter(e.target.value)}
-        placeholder={locale === 'mm' ? 'action ဖြင့် စစ်ထုတ်ရန်' : 'Filter by action'}
+        placeholder={locale === 'mm' ? 'လုပ်ဆောင်ချက်ဖြင့် စစ်ထုတ်ရန်' : 'Filter by action'}
+        aria-label={locale === 'mm' ? 'လုပ်ဆောင်ချက်ဖြင့် စစ်ထုတ်ရန်' : 'Filter by action'}
         className="w-full rounded-pill border border-line bg-white px-4 py-2 text-sm"
       />
       {rows.length === 0 ? (

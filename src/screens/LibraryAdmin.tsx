@@ -18,6 +18,7 @@ export function LibraryAdmin() {
   const setReview = useMutation(api.library.setReview);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState('');
+  const [pending, setPending] = useState<string | null>(null);
 
   if (stats === undefined) return <p className="text-ink-soft">…</p>;
   if (!stats.allowed) {
@@ -41,7 +42,13 @@ export function LibraryAdmin() {
   };
 
   const transition = async (slug: string, clinicalStatus: string) => {
-    await setReview({ slug, clinicalStatus });
+    if (pending) return; // guard against double-clicks
+    setPending(slug);
+    try {
+      await setReview({ slug, clinicalStatus });
+    } finally {
+      setPending(null);
+    }
   };
 
   return (
@@ -92,8 +99,8 @@ export function LibraryAdmin() {
                 <div className="mt-1 flex flex-wrap gap-1.5">
                   {['draft', 'clinical_review', 'published'].map((s) => (
                     <button key={s} type="button" onClick={() => transition(it.slug, s)}
-                      disabled={it.clinicalStatus === s}
-                      className={`rounded-pill px-2.5 py-0.5 text-xs ${
+                      disabled={it.clinicalStatus === s || pending === it.slug}
+                      className={`min-h-touch rounded-pill px-2.5 py-1 text-xs disabled:opacity-50 ${
                         it.clinicalStatus === s ? 'bg-lavender/40 text-ink-soft' : 'border border-line text-ink'
                       }`}>
                       {s === 'published' ? L('ထုတ်ဝေ', 'Publish') : s === 'clinical_review' ? L('သုံးသပ်ရန်', 'Review') : L('မူကြမ်း', 'Draft')}

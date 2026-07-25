@@ -64,6 +64,7 @@ export const en: Record<TranslationKey, string> = {
   'common.back': 'Back',
   'common.minutes': 'minutes',
   'common.empty': 'No records yet',
+  'common.corrected': 'corrected',
 
   'activities.title': 'Activities',
   'activities.dailyPlan': "Today's activity plan",

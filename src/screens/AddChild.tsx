@@ -93,7 +93,7 @@ export function AddChild() {
       <label className="flex items-center gap-2 text-sm">
         <input type="checkbox" checked={premature} onChange={(e) => setPremature(e.target.checked)}
           className="h-5 w-5" />
-        {locale === 'mm' ? 'အချိန်မတိုင်မီ မွေးဖွားခြင်း (corrected age သုံးရန်)' : 'Premature (use corrected age)'}
+        {locale === 'mm' ? 'အချိန်မတိုင်မီ မွေးဖွားခြင်း (ပြင်ဆင်အသက် သုံးရန်)' : 'Premature (use corrected age)'}
       </label>
 
       {premature && (

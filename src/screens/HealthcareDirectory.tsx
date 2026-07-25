@@ -24,11 +24,13 @@ export function HealthcareDirectory() {
         <input
           value={region} onChange={(e) => setRegion(e.target.value)}
           placeholder={locale === 'mm' ? 'တိုင်း/ပြည်နယ်' : 'Region/State'}
+          aria-label={locale === 'mm' ? 'တိုင်း/ပြည်နယ်ဖြင့် စစ်ထုတ်ရန်' : 'Filter by region/state'}
           className="flex-1 rounded-pill border border-line bg-white px-4 py-2 text-sm"
         />
         <input
           value={type} onChange={(e) => setType(e.target.value)}
           placeholder={locale === 'mm' ? 'အမျိုးအစား' : 'Facility type'}
+          aria-label={locale === 'mm' ? 'အမျိုးအစားဖြင့် စစ်ထုတ်ရန်' : 'Filter by facility type'}
           className="flex-1 rounded-pill border border-line bg-white px-4 py-2 text-sm"
         />
       </div>

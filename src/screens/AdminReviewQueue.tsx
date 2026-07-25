@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useQuery, useMutation } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
@@ -17,6 +17,8 @@ export function AdminReviewQueue() {
   const data = useQuery(api.content.list);
   const seed = useMutation(api.content.seedIfEmpty);
   const transition = useMutation(api.content.transition);
+  const [seeding, setSeeding] = useState(false);
+  const [busyId, setBusyId] = useState<string | null>(null);
 
   const seedItems = useMemo(
     () => [
@@ -45,9 +47,14 @@ export function AdminReviewQueue() {
       </p>
 
       {items.length === 0 && (
-        <button type="button" onClick={() => void seed({ items: seedItems })}
-          className="min-h-touch rounded-pill bg-sky px-5 py-2 font-semibold text-white">
-          {t('admin.seed')}
+        <button type="button" disabled={seeding}
+          onClick={async () => {
+            if (seeding) return;
+            setSeeding(true);
+            try { await seed({ items: seedItems }); } finally { setSeeding(false); }
+          }}
+          className="min-h-touch rounded-pill bg-sky px-5 py-2 font-semibold text-white disabled:opacity-50">
+          {seeding ? '…' : t('admin.seed')}
         </button>
       )}
 
@@ -73,9 +80,13 @@ export function AdminReviewQueue() {
                   {it.reviewStatus}
                 </span>
                 {staff && to && (
-                  <button type="button"
-                    onClick={() => void transition({ id: it._id, to })}
-                    className="min-h-touch rounded-pill bg-sky px-3 py-1 text-xs font-semibold text-white">
+                  <button type="button" disabled={busyId === it._id}
+                    onClick={async () => {
+                      if (busyId) return;
+                      setBusyId(it._id);
+                      try { await transition({ id: it._id, to }); } finally { setBusyId(null); }
+                    }}
+                    className="min-h-touch rounded-pill bg-sky px-3 py-1 text-xs font-semibold text-white disabled:opacity-50">
                     → {to}
                   </button>
                 )}
