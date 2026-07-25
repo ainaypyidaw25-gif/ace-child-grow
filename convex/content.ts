@@ -2,6 +2,7 @@ import { query, mutation, type QueryCtx, type MutationCtx } from './_generated/s
 import { v } from 'convex/values';
 import { getAuthUserId } from '@convex-dev/auth/server';
 import type { Id } from './_generated/dataModel';
+import { logAudit } from './audit';
 
 // Mirror of src/domain/content/workflow.ts (convex functions can't import src/).
 const TRANSITIONS: Record<string, string[]> = {
@@ -59,5 +60,26 @@ export const transition = mutation({
     const allowed = TRANSITIONS[item.reviewStatus] ?? [];
     if (!allowed.includes(to)) throw new Error(`Invalid transition ${item.reviewStatus} -> ${to}`);
     await ctx.db.patch(id, { reviewStatus: to });
+    // All content transitions (esp. publish) are audited.
+    await logAudit(ctx, userId, `content.${to}`, 'contentItems', id, item.titleEn);
+  },
+});
+
+// Translation review: staff edit the mm/en pair and move its translation state.
+// Clinical content still cannot be published without the review workflow above.
+export const setTranslation = mutation({
+  args: {
+    id: v.id('contentItems'),
+    bodyMm: v.optional(v.string()),
+    bodyEn: v.optional(v.string()),
+    translationStatus: v.string(),
+    translationNote: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId || !(await isStaff(ctx, userId))) throw new Error('Staff only');
+    const { id, ...patch } = args;
+    await ctx.db.patch(id, patch);
+    await logAudit(ctx, userId, `translation.${args.translationStatus}`, 'contentItems', id);
   },
 });

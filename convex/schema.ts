@@ -47,7 +47,38 @@ export default defineSchema({
     titleMm: v.string(),
     titleEn: v.string(),
     reviewStatus: v.string(), // matches src/domain/content/workflow.ts states
+    // Optional translation-review fields (side-by-side en/mm editing).
+    bodyMm: v.optional(v.string()),
+    bodyEn: v.optional(v.string()),
+    translationStatus: v.optional(v.string()), // draft | submitted | approved | changes_requested
+    translationNote: v.optional(v.string()),
   }).index('by_status', ['reviewStatus']),
+
+  // Verified healthcare facilities. NEVER seeded with invented data. Only
+  // active + verified rows are shown to parents (directory.listPublic).
+  healthcareFacilities: defineTable({
+    country: v.string(),
+    region: v.optional(v.string()),
+    township: v.optional(v.string()),
+    name: v.string(),
+    facilityType: v.optional(v.string()),
+    phone: v.optional(v.string()),
+    address: v.optional(v.string()),
+    services: v.optional(v.string()),
+    source: v.optional(v.string()),
+    lastVerifiedAt: v.optional(v.number()),
+    verifiedBy: v.optional(v.id('users')),
+    isActive: v.boolean(), // inactive until verified
+  }).index('by_active', ['isActive']),
+
+  // Immutable audit trail. Insert-only; readable by staff/super-admin.
+  auditLogs: defineTable({
+    actorId: v.optional(v.id('users')),
+    action: v.string(),
+    entityTable: v.optional(v.string()),
+    entityId: v.optional(v.string()),
+    summary: v.optional(v.string()),
+  }).index('by_time', ['action']),
 
   children: defineTable({
     userId: v.id('users'),
