@@ -3,46 +3,53 @@ import { useLocale } from '../app/LocaleContext';
 import { useAppState } from '../app/AppState';
 import { buildReport, type ReportType } from '../domain/reports/report';
 import { ageLabels } from '../domain/age/ageLabel';
-import { DEMO_CHILD } from '../data/demo';
+import { NoChild } from './Growth';
+import type { Locale } from '../domain/types';
 
-// Print/PDF: uses the browser print dialog (Save as PDF). A server-side
-// Myanmar-font-embedded PDF generator is a planned module (see docs).
-const DEMO_SOURCE = {
-  childNickname: DEMO_CHILD.nickname,
-  periodStart: '2026-06-24',
-  periodEnd: '2026-07-24',
-  chronologicalAgeLabel: '2 years 6 months',
-  correctedAgeLabel: undefined,
-  strengths: ['Names familiar pictures', 'Enjoys shared reading'],
-  emergingSkills: ['Two-word phrases'],
-  latestResultState: 'yellow' as const,
-  completedActivities: ['Shared picture-book reading'],
-  parentNotes: ['A little shy with new people'],
-  savedConcerns: [],
-  growthSummary: 'Weight and height tracked this month.',
-  sleepSummary: 'Average total sleep ~11h.',
-  questionsForProfessional: ['How can I support two-word phrases?'],
-  nextReviewDate: '2026-08-21',
-};
+// Sample report content, localized. Real aggregation from stored milestone/
+// growth/sleep data is a follow-up; until then this is clearly labelled sample.
+function sampleSource(locale: Locale) {
+  const mm = locale === 'mm';
+  return {
+    periodStart: '2026-06-24',
+    periodEnd: '2026-07-24',
+    strengths: mm ? ['ရုပ်ပုံများကို အမည်ပြောနိုင်သည်', 'စာအုပ်အတူဖတ်ရသည်ကို နှစ်သက်သည်'] : ['Names familiar pictures', 'Enjoys shared reading'],
+    emergingSkills: mm ? ['စကားနှစ်လုံးတွဲ ပြောခြင်း'] : ['Two-word phrases'],
+    latestResultState: 'yellow' as const,
+    completedActivities: mm ? ['ပုံစာအုပ် အတူဖတ်ခြင်း'] : ['Shared picture-book reading'],
+    parentNotes: mm ? ['လူသစ်နှင့် နည်းနည်း ရှက်တတ်သည်'] : ['A little shy with new people'],
+    savedConcerns: [] as string[],
+    growthSummary: mm ? 'ဤလတွင် ကိုယ်အလေးချိန်နှင့် အရပ် မှတ်တမ်းတင်ထားသည်။' : 'Weight and height tracked this month.',
+    sleepSummary: mm ? 'ပျမ်းမျှ အိပ်ချိန် ~၁၁ နာရီ။' : 'Average total sleep ~11h.',
+    questionsForProfessional: mm ? ['စကားနှစ်လုံးတွဲ ပြောနိုင်ရန် မည်သို့ ကူညီနိုင်မလဲ။'] : ['How can I support two-word phrases?'],
+    nextReviewDate: '2026-08-21',
+  };
+}
 
 export function Report() {
   const { t, locale } = useLocale();
   const { activeChild } = useAppState();
   const [type, setType] = useState<ReportType>('parent_monthly');
+
   const source = useMemo(() => {
-    if (!activeChild) return DEMO_SOURCE;
-    const labels = ageLabels(new Date(activeChild.birthDate), new Date(), locale, {
-      gestationalWeeks: activeChild.gestationalWeeks,
-      useCorrected: activeChild.useCorrectedAge,
-    });
+    const base = sampleSource(locale);
+    const labels = activeChild
+      ? ageLabels(new Date(activeChild!.birthDate), new Date(), locale, {
+          gestationalWeeks: activeChild!.gestationalWeeks,
+          useCorrected: activeChild!.useCorrectedAge,
+        })
+      : null;
     return {
-      ...DEMO_SOURCE,
-      childNickname: activeChild.nickname,
-      chronologicalAgeLabel: labels.chronological,
-      correctedAgeLabel: labels.corrected,
+      ...base,
+      childNickname: activeChild?.nickname ?? '',
+      chronologicalAgeLabel: labels?.chronological ?? '',
+      correctedAgeLabel: labels?.corrected,
     };
   }, [activeChild, locale]);
+
   const report = useMemo(() => buildReport(type, source), [type, source]);
+
+  if (!activeChild) return <NoChild />;
 
   const types: { key: ReportType; label: string }[] = [
     { key: 'parent_monthly', label: t('report.parentMonthly') },
@@ -53,6 +60,11 @@ export function Report() {
   return (
     <div className="space-y-4">
       <h1 className="text-xl font-bold text-sky-deep">{t('report.title')}</h1>
+      <p className="rounded-lg bg-pastel-yellow/50 px-3 py-2 text-xs text-ink-soft">
+        {locale === 'mm'
+          ? 'ဤသည်မှာ နမူနာ အစီရင်ခံစာ ဖြစ်သည် — milestone/growth/sleep မှတ်တမ်းများမှ အလိုအလျောက် စုစည်းမှုကို ဆက်လက် တပ်ဆင်နေဆဲ ဖြစ်သည်။'
+          : 'This is a sample report — automatic aggregation from your milestone/growth/sleep records is being wired next.'}
+      </p>
 
       <div className="flex flex-wrap gap-2">
         {types.map((ty) => (

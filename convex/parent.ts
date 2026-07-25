@@ -13,7 +13,7 @@ export const me = query({
       .unique();
     return {
       userId,
-      email: (user as any)?.email ?? null,
+      email: user?.email ?? null,
       consentAcceptedAt: profile?.consentAcceptedAt ?? null,
       isStaff: profile?.isStaff === true,
     };

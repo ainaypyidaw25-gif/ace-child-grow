@@ -7,11 +7,12 @@ export function Notifications() {
   const { t, locale } = useLocale();
   const items = useQuery(api.notifications.list) ?? [];
   const markAllRead = useMutation(api.notifications.markAllRead);
+  const unread = items.filter((n) => !n.readAt).length;
 
-  // Mark everything read when the screen is opened.
+  // Mark everything read when the screen is opened (depends on a stable count).
   useEffect(() => {
-    if (items.some((n) => !n.readAt)) void markAllRead({});
-  }, [items, markAllRead]);
+    if (unread > 0) void markAllRead({});
+  }, [unread, markAllRead]);
 
   return (
     <div className="space-y-4">

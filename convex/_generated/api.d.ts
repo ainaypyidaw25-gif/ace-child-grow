@@ -12,9 +12,12 @@ import type * as auth from "../auth.js";
 import type * as children from "../children.js";
 import type * as content from "../content.js";
 import type * as favorites from "../favorites.js";
+import type * as growth from "../growth.js";
 import type * as http from "../http.js";
+import type * as milestones from "../milestones.js";
 import type * as notifications from "../notifications.js";
 import type * as parent from "../parent.js";
+import type * as sleep from "../sleep.js";
 
 import type {
   ApiFromModules,
@@ -27,9 +30,12 @@ declare const fullApi: ApiFromModules<{
   children: typeof children;
   content: typeof content;
   favorites: typeof favorites;
+  growth: typeof growth;
   http: typeof http;
+  milestones: typeof milestones;
   notifications: typeof notifications;
   parent: typeof parent;
+  sleep: typeof sleep;
 }>;
 
 /**

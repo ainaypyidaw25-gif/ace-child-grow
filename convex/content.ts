@@ -1,6 +1,7 @@
-import { query, mutation } from './_generated/server';
+import { query, mutation, type QueryCtx, type MutationCtx } from './_generated/server';
 import { v } from 'convex/values';
 import { getAuthUserId } from '@convex-dev/auth/server';
+import type { Id } from './_generated/dataModel';
 
 // Mirror of src/domain/content/workflow.ts (convex functions can't import src/).
 const TRANSITIONS: Record<string, string[]> = {
@@ -13,10 +14,10 @@ const TRANSITIONS: Record<string, string[]> = {
   archived: ['draft'],
 };
 
-async function isStaff(ctx: any, userId: any): Promise<boolean> {
+async function isStaff(ctx: QueryCtx | MutationCtx, userId: Id<'users'>): Promise<boolean> {
   const profile = await ctx.db
     .query('parentProfiles')
-    .withIndex('by_user', (q: any) => q.eq('userId', userId))
+    .withIndex('by_user', (q) => q.eq('userId', userId))
     .unique();
   return profile?.isStaff === true;
 }
