@@ -19,7 +19,13 @@ export const list = query({
   args: {},
   handler: async (ctx) => {
     const userId = await getAuthUserId(ctx);
-    const staff = userId ? await isStaff(ctx, userId) : false;
+    // Behind authentication, like every other catalogue read in this codebase.
+    // Nothing here is private — these are approved milestone and lesson titles —
+    // and a signed-out caller only ever saw published rows. But a live probe
+    // found this to be the one read a stranger could reach, and an exception to
+    // a rule is how the rule stops being checked. Signed out is signed out.
+    if (!userId) return { staff: false, items: [] };
+    const staff = await isStaff(ctx, userId);
     const all = await ctx.db.query('contentItems').collect();
     // Non-staff see only published items; staff see everything.
     return { staff, items: staff ? all : all.filter((i) => i.reviewStatus === 'published') };
@@ -29,7 +35,9 @@ export const list = query({
 // Idempotent seed so the Admin CMS has content to manage. Staff-only; every item
 // starts in clinical_review (never published without the review workflow below).
 export const seedIfEmpty = mutation({
-  args: { items: v.array(v.object({ kind: v.string(), titleMm: v.string(), titleEn: v.string() })) },
+  args: {
+    items: v.array(v.object({ kind: v.string(), titleMm: v.string(), titleEn: v.string() })),
+  },
   handler: async (ctx, { items }) => {
     await requireStaff(ctx);
     const existing = await ctx.db.query('contentItems').take(1);
