@@ -93,6 +93,9 @@ export const PRINTABLE_TYPES = [
   'flash_cards', 'emotion_cards', 'communication_cards', 'routine_chart',
   'reward_chart', 'behavior_chart', 'visual_schedule', 'doctor_visit_checklist',
   'growth_log', 'sleep_diary', 'milestone_checklist',
+  // Per-age-band parent checklists produced by the knowledge base. Guidance
+  // sheets, never screening or diagnostic instruments.
+  'checklist_birth_2m',
 ] as const;
 
 export const CONTENT_TYPES = [

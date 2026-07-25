@@ -57,6 +57,9 @@ export const MILESTONE_DOMAIN_SOURCES: Record<string, string[]> = {
   emotional: ['nice-ph40-social-emotional-2012', 'aap-toxic-stress-2021'],
   self_help: ['tb-case-smith-9e-2025', 'tb-bright-futures-4e-2017'],
   play: ['aap-power-of-play-2018', 'who-care-for-child-development-2012'],
+  nutrition: ['who-iycf-model-chapter-2025', 'who-complementary-feeding-2023', 'nhs-first-solid-foods-2026'],
+  sleep: ['who-pa-sleep-under5-2019', 'aap-safe-sleep-2022', 'nhs-sids-2025'],
+  safety: ['aap-drowning-2021', 'tb-bright-futures-4e-2017', 'nhs-seriously-ill-2023'],
   daily_routine: ['tb-bright-futures-4e-2017', 'jr-aasm-bedtime-2006'],
   school_readiness: ['hc-early-literacy-2023', 'tb-handbook-ecse-2016'],
 };
@@ -84,6 +87,27 @@ export const EXPLICIT_CONTENT_SOURCES: Record<string, string[]> = {
   gd_10_12m_safety: ['aap-drowning-2021', 'cdc-positive-parenting-toddlers-2026', 'tb-bright-futures-4e-2017'],
   gd_2y_daily_routine: ['jr-aasm-bedtime-2006', 'tb-bright-futures-4e-2017', 'aap-oral-health-2023', 'who-caries-2020'],
   gd_4y_school_readiness: ['hc-early-literacy-2023', 'tb-handbook-ecse-2016', 'aap-literacy-2024'],
+
+  // --- Knowledge base: Birth–2 months (guides) ------------------------------
+  gd_birth_2m_gross_motor: ['aap-safe-sleep-2022', 'jr-who-motor-windows-2006', 'tb-campbell-pt-6e-2022', 'aap-milestones-2022'],
+  gd_birth_2m_fine_motor: ['tb-case-smith-9e-2025', 'aap-milestones-2022', 'cdc-milestone-checklists-2025'],
+  gd_birth_2m_communication: ['nhs-learn-to-talk-2023', 'aap-media-young-minds-2016', 'who-care-for-child-development-2012', 'jr-weisleder-2013'],
+  gd_birth_2m_social: ['nice-ph40-social-emotional-2012', 'nice-ng194-postnatal-2021', 'who-nurturing-care-2018', 'cdc-milestones-2026'],
+  gd_birth_2m_emotional: ['aap-toxic-stress-2021', 'who-nurturing-care-2018', 'nhs-seriously-ill-2023', 'nice-ng143-fever-2019'],
+  gd_birth_2m_cognitive: ['tb-dbp-5e-2022', 'aap-power-of-play-2018', 'who-care-for-child-development-2012', 'aap-media-young-minds-2016'],
+  gd_birth_2m_play: ['aap-power-of-play-2018', 'who-care-for-child-development-2012', 'unicef-early-moments-2017'],
+  gd_birth_2m_nutrition: ['who-iycf-model-chapter-2025', 'who-bf-counselling-2018', 'nhs-breastfeeding-first-days-2023', 'who-unicef-iycf-strategy-2003', 'nice-ng75-faltering-growth-2017', 'who-growth-standards-2006'],
+  gd_birth_2m_safety: ['aap-safe-sleep-2022', 'nhs-sids-2025', 'aap-drowning-2021', 'nhs-seriously-ill-2023', 'nice-ng143-fever-2019', 'who-imci-chart-2014', 'hc-safe-sleep-2026'],
+  gd_birth_2m_daily_routine: ['jr-aasm-bedtime-2006', 'who-pa-sleep-under5-2019', 'aap-safe-sleep-2022', 'tb-bright-futures-4e-2017'],
+
+  // --- Knowledge base: Birth–2 months (activities + printable) --------------
+  act_face_to_face_talk: ['nhs-learn-to-talk-2023', 'who-care-for-child-development-2012', 'jr-weisleder-2013'],
+  act_gentle_bicycle_legs: ['who-care-for-child-development-2012', 'tb-campbell-pt-6e-2022'],
+  act_skin_to_skin_calm: ['who-bfhi-2017', 'who-bf-counselling-2018', 'aap-safe-sleep-2022', 'nhs-sids-2025'],
+  act_first_book_share: ['aap-literacy-2024', 'hc-early-literacy-2023', 'jr-dowdall-bookreading-2020'],
+  act_lullaby_and_rock: ['jr-aasm-bedtime-2006', 'who-care-for-child-development-2012', 'aap-safe-sleep-2022'],
+  act_texture_touch: ['tb-case-smith-9e-2025', 'who-care-for-child-development-2012', 'aap-safe-sleep-2022'],
+  prt_checklist_birth_2m: ['cdc-milestone-checklists-2025', 'aap-milestones-2022', 'aap-safe-sleep-2022', 'nhs-baby-reviews-2023'],
 
   // --- Activities -----------------------------------------------------------
   act_tummy_time_mirror: ['jr-who-motor-windows-2006', 'aap-safe-sleep-2022', 'tb-campbell-pt-6e-2022'],
