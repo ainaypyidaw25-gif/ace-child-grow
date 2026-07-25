@@ -28,9 +28,38 @@
  *   node scripts/evidence-live-check.mjs
  *   node scripts/evidence-live-check.mjs --json
  *
- * Exit code 0 = every check that could run passed. 1 = a check failed.
- * A skipped admin layer is NOT a pass; it is reported as skipped and the
- * verdict says so.
+ * ---------------------------------------------------------------------------
+ * STATES
+ *
+ * The script ends in exactly one state, because "did it work" has more than two
+ * answers here and collapsing them hides the ones that matter:
+ *
+ *   not_deployed          the evidence module is absent from this backend
+ *   authorization_failure a stranger could read staff-only evidence data
+ *   unauthorized          a deploy key was offered and the backend rejected it
+ *   unverified            no deploy key at all; the anonymous layer passed and
+ *                         the live registry was not inspected
+ *   empty_registry        deployed, reachable, and holding zero references
+ *   partial_import        holding some references, but fewer than the registry
+ *   integrity_failure     live data contradicts itself (dangling, orphan,
+ *                         duplicated, uncited-but-published, approved with no
+ *                         qualified reviewer)
+ *   live_registry_valid   counts match the registry and nothing contradicts
+ *
+ * EXIT CODES
+ *
+ * Non-zero is reserved for a real deployment, authorization or integrity
+ * failure. In particular:
+ *
+ *   - Outdated references NEVER fail the run. A 2015 guideline is not wrong
+ *     because it is old; it is a scheduling prompt for a human, and a build
+ *     that breaks on the passage of time trains people to ignore it.
+ *   - Expired reviews and uncited references are advisories for the same
+ *     reason: they describe work a reviewer owes, not a broken deployment.
+ *   - `unverified` exits 0, because a missing key is a fact about this machine,
+ *     not about the deployment. It is reported as unverified, never as passed.
+ *   - `unauthorized` exits 1, because someone supplied a key intending the live
+ *     layer to run. Exiting 0 there would report a check that never happened.
  */
 import { readFileSync, existsSync, mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -45,12 +74,18 @@ const results = [];
 function record(layer, name, status, detail) {
   results.push({ layer, name, status, detail });
   if (JSON_OUT) return;
-  const mark = status === 'pass' ? 'PASS' : status === 'skip' ? 'SKIP' : 'FAIL';
+  const mark =
+    status === 'pass' ? 'PASS' : status === 'skip' ? 'SKIP' : status === 'warn' ? 'NOTE' : 'FAIL';
   console.log(`${mark.padEnd(4)}  [${layer}] ${name}${detail ? ` — ${detail}` : ''}`);
 }
 
 function check(layer, name, condition, detail) {
   record(layer, name, condition ? 'pass' : 'fail', detail);
+}
+
+/** An observation a human should act on that does not make the deployment wrong. */
+function advise(layer, name, clean, detail) {
+  record(layer, name, clean ? 'pass' : 'warn', detail);
 }
 
 // --- deployment url -------------------------------------------------------
@@ -141,10 +176,14 @@ async function anonymousLayer(url, expect) {
   check(L, 'the deployment is reachable and serving functions', backendAlive, url);
 
   if (!(await isModuleDeployed(client))) {
-    record(L, 'convex/evidence.ts is deployed to this backend', 'fail',
+    record(
+      L,
+      'convex/evidence.ts is deployed to this backend',
+      'fail',
       backendAlive
         ? 'the backend is up but serves no evidence functions — the schema and functions have not been pushed'
-        : 'the deployment did not answer at all — check the URL before concluding anything about evidence');
+        : 'the deployment did not answer at all — check the URL before concluding anything about evidence',
+    );
     for (const name of [
       'evidence:list refuses an unauthenticated caller',
       'evidence:stats refuses an unauthenticated caller',
@@ -163,33 +202,62 @@ async function anonymousLayer(url, expect) {
   // staff", not a row count, nothing that describes the library's contents.
   try {
     const listed = await client.query('evidence:list', {});
-    check(L, 'evidence:list refuses an unauthenticated caller', listed?.allowed === false,
-      `allowed=${listed?.allowed}`);
-    check(L, 'evidence:list leaks no rows', (listed?.sources?.length ?? -1) === 0 && listed?.total === 0,
-      `total=${listed?.total} rows=${listed?.sources?.length}`);
+    check(
+      L,
+      'evidence:list refuses an unauthenticated caller',
+      listed?.allowed === false,
+      `allowed=${listed?.allowed}`,
+    );
+    check(
+      L,
+      'evidence:list leaks no rows',
+      (listed?.sources?.length ?? -1) === 0 && listed?.total === 0,
+      `total=${listed?.total} rows=${listed?.sources?.length}`,
+    );
   } catch (err) {
-    check(L, 'evidence:list refuses an unauthenticated caller', /not authenticated|staff/i.test(String(err)),
-      `threw: ${String(err).slice(0, 120)}`);
+    check(
+      L,
+      'evidence:list refuses an unauthenticated caller',
+      /not authenticated|staff/i.test(String(err)),
+      `threw: ${String(err).slice(0, 120)}`,
+    );
   }
 
   try {
     const s = await client.query('evidence:stats', {});
     check(L, 'evidence:stats refuses an unauthenticated caller', s?.allowed === false, `allowed=${s?.allowed}`);
-    check(L, 'evidence:stats leaks no counts', s?.total === 0 && s?.links === 0,
-      `total=${s?.total} links=${s?.links}`);
+    check(
+      L,
+      'evidence:stats leaks no counts',
+      s?.total === 0 && s?.links === 0,
+      `total=${s?.total} links=${s?.links}`,
+    );
   } catch (err) {
-    check(L, 'evidence:stats refuses an unauthenticated caller', /not authenticated|staff/i.test(String(err)),
-      `threw: ${String(err).slice(0, 120)}`);
+    check(
+      L,
+      'evidence:stats refuses an unauthenticated caller',
+      /not authenticated|staff/i.test(String(err)),
+      `threw: ${String(err).slice(0, 120)}`,
+    );
   }
 
   // Reviewer names and verification notes live on the source record. A stranger
   // must not be able to fetch one by guessing an id.
   try {
     const one = await client.query('evidence:getSource', { sourceId: expect.sampleSourceId });
-    check(L, 'evidence:getSource returns nothing to a stranger', one === null, `got ${one === null ? 'null' : 'a row'}`);
+    check(
+      L,
+      'evidence:getSource returns nothing to a stranger',
+      one === null,
+      `got ${one === null ? 'null' : 'a row'}`,
+    );
   } catch (err) {
-    check(L, 'evidence:getSource returns nothing to a stranger', /not authenticated|staff/i.test(String(err)),
-      `threw: ${String(err).slice(0, 120)}`);
+    check(
+      L,
+      'evidence:getSource returns nothing to a stranger',
+      /not authenticated|staff/i.test(String(err)),
+      `threw: ${String(err).slice(0, 120)}`,
+    );
   }
 
   // forContent is the one parent-facing lookup, and it is still auth-only:
@@ -197,11 +265,19 @@ async function anonymousLayer(url, expect) {
   try {
     const cites = await client.query('evidence:forContent', { slug: expect.sampleSlug });
     const approvedOnly = Array.isArray(cites) && cites.every((c) => c?.reviewStatus === 'approved');
-    check(L, 'evidence:forContent returns approved references only', approvedOnly,
-      `${Array.isArray(cites) ? cites.length : '?'} returned`);
+    check(
+      L,
+      'evidence:forContent returns approved references only',
+      approvedOnly,
+      `${Array.isArray(cites) ? cites.length : '?'} returned`,
+    );
   } catch (err) {
-    check(L, 'evidence:forContent requires authentication', /not authenticated/i.test(String(err)),
-      `threw: ${String(err).slice(0, 120)}`);
+    check(
+      L,
+      'evidence:forContent requires authentication',
+      /not authenticated/i.test(String(err)),
+      `threw: ${String(err).slice(0, 120)}`,
+    );
   }
 
   // The integrity probe is an internalQuery. If a browser can call it, it was
@@ -210,9 +286,10 @@ async function anonymousLayer(url, expect) {
     await client.query('evidence:integrity', {});
     check(L, 'evidence:integrity is not reachable from a client', false, 'a browser call SUCCEEDED');
   } catch (err) {
-    const notPublic = /could not find public function|not a public|internalQuery|no such function/i.test(String(err));
-    check(L, 'evidence:integrity is not reachable from a client', notPublic,
-      `threw: ${String(err).slice(0, 120)}`);
+    const notPublic = /could not find public function|not a public|internalQuery|no such function/i.test(
+      String(err),
+    );
+    check(L, 'evidence:integrity is not reachable from a client', notPublic, `threw: ${String(err).slice(0, 120)}`);
   }
 
   return true;
@@ -231,12 +308,21 @@ function findDeployKey() {
   return null;
 }
 
+/** Convex's own words for "your credentials are not good enough for this". */
+const UNAUTHORIZED = /unauthorized|invalid deploy key|not authorized|forbidden|401|403/i;
+
+/**
+ * @returns {{state: string, live: object|null}} — the admin layer's own state,
+ * which the caller folds into the overall verdict. Returning it rather than
+ * inferring it from failure counts keeps "the key was rejected" distinct from
+ * "the data is wrong", which are different problems for different people.
+ */
 function adminLayer(expect) {
   const L = 'admin';
   const found = findDeployKey();
   if (!found) {
-    record(L, 'evidence:integrity on the live deployment', 'skip', 'no deploy key available');
-    return null;
+    record(L, 'evidence:integrity on the live deployment', 'skip', 'no deploy key available on this machine');
+    return { state: 'unverified', live: null };
   }
 
   let raw;
@@ -247,9 +333,17 @@ function adminLayer(expect) {
       stdio: ['ignore', 'pipe', 'pipe'],
     });
   } catch (err) {
-    check(L, 'evidence:integrity ran against the live deployment', false,
-      String(err.stderr ?? err).slice(0, 200));
-    return null;
+    const message = String(err.stderr ?? err);
+    if (UNAUTHORIZED.test(message)) {
+      record(L, 'the deploy key is accepted by this deployment', 'fail', message.slice(0, 200));
+      return { state: 'unauthorized', live: null };
+    }
+    if (NOT_DEPLOYED.test(message) || /could not find function/i.test(message)) {
+      record(L, 'evidence:integrity exists on this deployment', 'fail', message.slice(0, 200));
+      return { state: 'not_deployed', live: null };
+    }
+    check(L, 'evidence:integrity ran against the live deployment', false, message.slice(0, 200));
+    return { state: 'integrity_failure', live: null };
   }
 
   let live;
@@ -257,7 +351,7 @@ function adminLayer(expect) {
     live = JSON.parse(raw.slice(raw.indexOf('{')));
   } catch {
     check(L, 'evidence:integrity returned parseable output', false, raw.slice(0, 200));
-    return null;
+    return { state: 'integrity_failure', live: null };
   }
 
   record(L, 'evidence:integrity ran against the live deployment', 'pass', `via ${found.from}`);
@@ -266,9 +360,49 @@ function adminLayer(expect) {
   // index makes the query throw, so reaching here at all proves they exist;
   // the counts confirm the index actually returns the rows.
   const idx = live.indexProbe ?? {};
-  check(L, 'every declared evidence index is live', Object.values(idx).every((n) => typeof n === 'number'),
-    JSON.stringify(idx));
+  check(
+    L,
+    'every declared evidence index is live',
+    Object.values(idx).every((n) => typeof n === 'number'),
+    JSON.stringify(idx),
+  );
 
+  // An empty table and a half-finished import are both "the counts don't
+  // match", but they call for different actions: run the import, versus find
+  // out why the import stopped. They are named separately for that reason.
+  if (live.sources === 0) {
+    record(L, 'the live registry holds references', 'fail', '0 references — the import has not been run');
+    reportCounts(L, live, expect);
+    return { state: 'empty_registry', live };
+  }
+  if (live.sources < expect.sources || live.links < expect.links) {
+    record(
+      L,
+      'the live registry holds the whole registry',
+      'fail',
+      `live ${live.sources}/${expect.sources} references, ${live.links}/${expect.links} links — re-run the import`,
+    );
+    reportCounts(L, live, expect);
+    return { state: 'partial_import', live };
+  }
+
+  reportCounts(L, live, expect);
+
+  const broken =
+    (live.danglingLinks?.length ?? 0) > 0 ||
+    (live.orphanLinks?.length ?? 0) > 0 ||
+    (live.duplicateIdentifier?.length ?? 0) > 0 ||
+    (live.approvedWithoutReviewer?.length ?? 0) > 0 ||
+    (live.publishedWithoutEvidence?.length ?? 0) > 0 ||
+    live.sources !== expect.sources ||
+    live.links !== expect.links ||
+    live.linkedSlugs !== expect.linkedSlugs;
+
+  return { state: broken ? 'integrity_failure' : 'live_registry_valid', live };
+}
+
+/** The eleven live counts, each named for what it would mean if it were not zero. */
+function reportCounts(L, live, expect) {
   check(L, 'live reference count matches the registry', live.sources === expect.sources,
     `live=${live.sources} local=${expect.sources}`);
   check(L, 'live link count matches the registry', live.links === expect.links,
@@ -277,19 +411,32 @@ function adminLayer(expect) {
     `live=${live.linkedSlugs} local=${expect.linkedSlugs}`);
 
   check(L, 'no link names a reference that does not exist', (live.danglingLinks?.length ?? 0) === 0,
-    (live.danglingLinks ?? []).join(', ') || 'none');
+    `${live.danglingLinks?.length ?? 0}: ${(live.danglingLinks ?? []).slice(0, 5).join(', ') || 'none'}`);
   check(L, 'no link carries zero references', (live.orphanLinks?.length ?? 0) === 0,
-    (live.orphanLinks ?? []).join(', ') || 'none');
+    `${live.orphanLinks?.length ?? 0}: ${(live.orphanLinks ?? []).slice(0, 5).join(', ') || 'none'}`);
+  check(L, 'no two records describe the same document', (live.duplicateIdentifier?.length ?? 0) === 0,
+    `${live.duplicateIdentifier?.length ?? 0} identifier collisions`);
 
   // Requirement 7, checked where it actually matters: on the stored rows.
   check(L, 'no approval lacks a named, qualified reviewer', (live.approvedWithoutReviewer?.length ?? 0) === 0,
-    (live.approvedWithoutReviewer ?? []).join(', ') || 'none');
+    `${live.approvedWithoutReviewer?.length ?? 0}: ${(live.approvedWithoutReviewer ?? []).slice(0, 5).join(', ') || 'none'}`);
 
   // Requirement 11: nothing a parent can see may be uncited.
   check(L, 'every published content item has an evidence link', (live.publishedWithoutEvidence?.length ?? 0) === 0,
-    (live.publishedWithoutEvidence ?? []).join(', ') || 'none');
+    `${live.publishedWithoutEvidence?.length ?? 0} of ${live.publishedContent ?? 0} published`);
 
-  return live;
+  // --- advisories: work a human owes, not a broken deployment ---
+  advise(L, 'every reference is cited by at least one content item', (live.unusedSources?.length ?? 0) === 0,
+    `${live.unusedSources?.length ?? 0} uncited`);
+  advise(L, 'no two records look like the same title and year', (live.duplicateTitle?.length ?? 0) === 0,
+    `${live.duplicateTitle?.length ?? 0} candidate pairs for a human to judge`);
+  advise(L, 'no reference is past its review date', (live.expired?.length ?? 0) === 0,
+    `${live.expired?.length ?? 0} due for re-review as of ${live.todayIso}`);
+  advise(L, 'no reference is old enough to need a newer edition', (live.outdated?.length ?? 0) === 0,
+    `${live.outdated?.length ?? 0} to check for a newer edition — a scheduling prompt, not a failure`);
+
+  record(L, 'review status of the live registry', 'pass',
+    `approved=${live.approved ?? 0} awaiting=${live.awaitingReview ?? 0} evidence_required=${live.evidenceRequired ?? 0}`);
 }
 
 // --- main -----------------------------------------------------------------
@@ -304,24 +451,73 @@ const expect = await localExpectations();
 if (!JSON_OUT) console.log(`Deployment: ${url}\n`);
 
 const deployed = await anonymousLayer(url, expect);
-const live = deployed ? adminLayer(expect) : null;
-if (!deployed) record('admin', 'evidence:integrity on the live deployment', 'skip', 'evidence module not deployed');
+let admin = { state: 'unverified', live: null };
+if (deployed) {
+  admin = adminLayer(expect);
+} else {
+  record('admin', 'evidence:integrity on the live deployment', 'skip', 'evidence module not deployed');
+}
 
 const failed = results.filter((r) => r.status === 'fail');
+const warned = results.filter((r) => r.status === 'warn');
 const skipped = results.filter((r) => r.status === 'skip');
-const verdict = !deployed
-  ? 'NOT DEPLOYED — the evidence module is not live on this backend'
-  : failed.length > 0
-    ? 'FAILED'
-    : skipped.length > 0
-      ? 'PASSED (admin layer skipped)'
-      : 'PASSED';
+const passed = results.filter((r) => r.status === 'pass');
+
+// An anonymous-layer failure is a stranger reading staff data. It outranks
+// everything below it, because no count is worth reporting about a backend that
+// hands its registry to the open internet.
+const leaked = failed.some((r) => r.layer === 'anonymous') && deployed;
+
+const state = !deployed ? 'not_deployed' : leaked ? 'authorization_failure' : admin.state;
+
+const STATES = {
+  not_deployed: {
+    exit: 1,
+    verdict: 'NOT DEPLOYED — the evidence module is not live on this backend',
+  },
+  authorization_failure: {
+    exit: 1,
+    verdict: 'AUTHORIZATION FAILURE — an unauthenticated caller reached staff-only evidence data',
+  },
+  unauthorized: {
+    exit: 1,
+    verdict: 'UNAUTHORIZED — a deploy key was supplied and the deployment rejected it; the live layer did not run',
+  },
+  unverified: {
+    exit: 0,
+    verdict: 'UNVERIFIED — the anonymous layer passed; no deploy key, so the live registry was not inspected',
+  },
+  empty_registry: {
+    exit: 1,
+    verdict: 'EMPTY REGISTRY — the module is deployed but holds no references; run the import',
+  },
+  partial_import: {
+    exit: 1,
+    verdict: 'PARTIAL IMPORT — the live registry is incomplete; re-run the import (it is idempotent)',
+  },
+  integrity_failure: {
+    exit: 1,
+    verdict: 'INTEGRITY FAILURE — live evidence data contradicts itself',
+  },
+  live_registry_valid: {
+    exit: 0,
+    verdict: 'VALID LIVE REGISTRY — live counts match the registry and nothing contradicts',
+  },
+};
+
+const { exit, verdict } = STATES[state] ?? STATES.integrity_failure;
 
 if (JSON_OUT) {
-  console.log(JSON.stringify({ url, expect, results, live, verdict }, null, 2));
+  console.log(JSON.stringify({ url, expect, results, live: admin.live, state, verdict, exit }, null, 2));
 } else {
-  console.log(`\n${results.filter((r) => r.status === 'pass').length} passed, ${failed.length} failed, ${skipped.length} skipped`);
+  console.log(
+    `\n${passed.length} passed, ${failed.length} failed, ${warned.length} advisories, ${skipped.length} skipped`,
+  );
+  if (warned.length > 0) {
+    console.log('Advisories describe review work owed by a human; they never fail this run.');
+  }
+  console.log(`State: ${state}`);
   console.log(`Live integrity: ${verdict}`);
 }
 
-process.exit(failed.length > 0 ? 1 : 0);
+process.exit(exit);
