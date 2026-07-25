@@ -38,7 +38,9 @@ export function Consent() {
         type="button"
         onClick={() => {
           dispatch({ type: 'accept_consent', at: new Date().toISOString() });
-          navigate('/add-child');
+          // Route through the bootstrap gate so a parent who already has a child
+          // lands on Home instead of being asked to add another.
+          navigate('/');
         }}
         className="min-h-touch w-full rounded-pill bg-sky px-6 py-3 font-semibold text-white"
       >

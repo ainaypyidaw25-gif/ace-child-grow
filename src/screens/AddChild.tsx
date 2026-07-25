@@ -1,12 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLocale } from '../app/LocaleContext';
 import { useAppState } from '../app/AppState';
+import { isDuplicateChild } from '../app/bootstrap';
 import { MIN_GESTATIONAL_WEEKS, MAX_GESTATIONAL_WEEKS } from '../domain/age/age';
 
 export function AddChild() {
   const { t, locale } = useLocale();
-  const { state, dispatch } = useAppState();
+  const { state, ready, addChildAsync } = useAppState();
   const navigate = useNavigate();
 
   const [nickname, setNickname] = useState('');
@@ -14,14 +15,17 @@ export function AddChild() {
   const [premature, setPremature] = useState(false);
   const [weeks, setWeeks] = useState('37');
   const [error, setError] = useState('');
+  const [busy, setBusy] = useState(false);
+  const [confirmDup, setConfirmDup] = useState(false);
 
-  // Consent must be recorded before adding a child.
-  if (!state.consentAcceptedAt) {
-    navigate('/consent', { replace: true });
-    return null;
-  }
+  // Consent must be recorded before adding a child. Redirect as an effect (never
+  // during render) and only once state has loaded, so a mid-load undefined
+  // consent value can't bounce the user around.
+  useEffect(() => {
+    if (ready && !state.consentAcceptedAt) navigate('/consent', { replace: true });
+  }, [ready, state.consentAcceptedAt, navigate]);
 
-  function save() {
+  async function save() {
     setError('');
     if (!nickname.trim() || !birthDate) {
       setError(locale === 'mm' ? 'အချက်အလက် ဖြည့်ပါ' : 'Please fill in the details');
@@ -36,17 +40,31 @@ export function AddChild() {
       setError(`${MIN_GESTATIONAL_WEEKS}–${MAX_GESTATIONAL_WEEKS} weeks`);
       return;
     }
-    dispatch({
-      type: 'add_child',
-      child: {
-        id: crypto.randomUUID(),
+    // Warn once on an accidental duplicate (same nickname + birth date). A second
+    // press confirms — legitimate siblings differ in name or date and never trip this.
+    if (!confirmDup && isDuplicateChild(state.children, nickname, birthDate)) {
+      setConfirmDup(true);
+      setError(
+        locale === 'mm'
+          ? 'ဤအမည်နှင့် မွေးနေ့တူ ကလေး ရှိပြီးသားဖြစ်သည်။ ထပ်ထည့်ရန် သေချာပါက “သိမ်းမည်” ကို ထပ်နှိပ်ပါ။'
+          : 'A child with this name and birth date already exists. Press Save again to add anyway.',
+      );
+      return;
+    }
+    if (busy) return; // guard against double-submit
+    setBusy(true);
+    try {
+      await addChildAsync({
         nickname: nickname.trim(),
         birthDate,
         gestationalWeeks: g,
         useCorrectedAge: premature,
-      },
-    });
-    navigate('/home');
+      });
+      navigate('/home', { replace: true });
+    } catch {
+      setBusy(false);
+      setError(locale === 'mm' ? 'သိမ်းဆည်းမှု မအောင်မြင်ပါ။ ထပ်ကြိုးစားပါ။' : 'Could not save. Please try again.');
+    }
   }
 
   return (
@@ -86,11 +104,11 @@ export function AddChild() {
         </label>
       )}
 
-      {error && <p className="text-sm text-state-red">⚠️ {error}</p>}
+      {error && <p className={`text-sm ${confirmDup ? 'text-state-orange' : 'text-state-red'}`}>⚠️ {error}</p>}
 
-      <button type="button" onClick={save}
-        className="min-h-touch w-full rounded-pill bg-sky px-6 py-3 font-semibold text-white">
-        {t('common.save')}
+      <button type="button" onClick={save} disabled={busy}
+        className="min-h-touch w-full rounded-pill bg-sky px-6 py-3 font-semibold text-white disabled:opacity-50">
+        {busy ? '…' : confirmDup ? (locale === 'mm' ? 'သေချာသည် — သိမ်းမည်' : 'Yes, add anyway') : t('common.save')}
       </button>
     </div>
   );
