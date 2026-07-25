@@ -7,5 +7,6 @@
 // help, parent tips), themed activities and a printable checklist.
 import type { SeedItem } from '../../types';
 import { BIRTH_2M } from './birth2m';
+import { M3_4M } from './m3_4';
 
-export const INFANT_CONTENT: SeedItem[] = [...BIRTH_2M];
+export const INFANT_CONTENT: SeedItem[] = [...BIRTH_2M, ...M3_4M];

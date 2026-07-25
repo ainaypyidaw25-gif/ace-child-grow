@@ -109,6 +109,28 @@ export const EXPLICIT_CONTENT_SOURCES: Record<string, string[]> = {
   act_texture_touch: ['tb-case-smith-9e-2025', 'who-care-for-child-development-2012', 'aap-safe-sleep-2022'],
   prt_checklist_birth_2m: ['cdc-milestone-checklists-2025', 'aap-milestones-2022', 'aap-safe-sleep-2022', 'nhs-baby-reviews-2023'],
 
+  // --- Knowledge base: 3–4 months (guides) ----------------------------------
+  gd_3_4m_gross_motor: ['aap-milestones-2022', 'cdc-milestone-checklists-2025', 'jr-who-motor-windows-2006', 'tb-campbell-pt-6e-2022', 'aap-safe-sleep-2022'],
+  gd_3_4m_fine_motor: ['tb-case-smith-9e-2025', 'aap-milestones-2022', 'cdc-milestone-checklists-2025', 'aap-power-of-play-2018'],
+  gd_3_4m_communication: ['nhs-learn-to-talk-2023', 'cdc-milestones-2026', 'aap-surveillance-2020', 'who-care-for-child-development-2012', 'jr-weisleder-2013'],
+  gd_3_4m_social: ['cdc-milestones-2026', 'aap-milestones-2022', 'who-nurturing-care-2018', 'nice-ng194-postnatal-2021', 'nice-ph40-social-emotional-2012'],
+  gd_3_4m_emotional: ['aap-toxic-stress-2021', 'who-nurturing-care-2018', 'nhs-seriously-ill-2023', 'nice-ng143-fever-2019', 'who-imci-chart-2014', 'tb-nelson-22e-2024'],
+  gd_3_4m_cognitive: ['tb-dbp-5e-2022', 'cdc-milestone-checklists-2025', 'aap-milestones-2022', 'who-pa-sleep-under5-2019', 'aap-media-young-minds-2016'],
+  gd_3_4m_play: ['aap-power-of-play-2018', 'who-care-for-child-development-2012', 'unicef-early-moments-2017', 'cdc-milestones-2026', 'aap-safe-sleep-2022'],
+  gd_3_4m_nutrition: ['who-iycf-model-chapter-2025', 'who-unicef-iycf-strategy-2003', 'nhs-first-solid-foods-2026', 'who-bf-counselling-2018', 'nice-ng75-faltering-growth-2017', 'aap-breastfeeding-2022'],
+  gd_3_4m_sleep: ['who-pa-sleep-under5-2019', 'aap-safe-sleep-2022', 'nhs-sids-2025', 'hc-safe-sleep-2026', 'jr-aasm-bedtime-2006'],
+  gd_3_4m_safety: ['aap-drowning-2021', 'aap-safe-sleep-2022', 'nhs-seriously-ill-2023', 'nice-ng143-fever-2019', 'who-imci-chart-2014', 'tb-bright-futures-4e-2017'],
+  gd_3_4m_daily_routine: ['who-nurturing-care-2018', 'jr-aasm-bedtime-2006', 'aap-drowning-2021', 'nice-ng143-fever-2019', 'tb-bright-futures-4e-2017', 'cdc-immunization-schedule-2025'],
+
+  // --- Knowledge base: 3–4 months (activities + printable) ------------------
+  act_copy_my_sound: ['nhs-learn-to-talk-2023', 'who-care-for-child-development-2012', 'jr-weisleder-2013', 'cdc-milestones-2026'],
+  act_reach_for_the_toy: ['tb-case-smith-9e-2025', 'cdc-milestone-checklists-2025', 'aap-milestones-2022', 'aap-safe-sleep-2022', 'aap-power-of-play-2018'],
+  act_peek_a_boo_cloth: ['aap-power-of-play-2018', 'who-nurturing-care-2018', 'cdc-milestones-2026', 'aap-safe-sleep-2022'],
+  act_picture_book_naming: ['aap-literacy-2024', 'hc-early-literacy-2023', 'jr-dowdall-bookreading-2020', 'nhs-learn-to-talk-2023', 'aap-media-young-minds-2016'],
+  act_rhythm_and_rock: ['who-care-for-child-development-2012', 'jr-aasm-bedtime-2006', 'aap-safe-sleep-2022'],
+  act_texture_basket_infant: ['tb-case-smith-9e-2025', 'who-care-for-child-development-2012', 'aap-safe-sleep-2022'],
+  prt_checklist_3_4m: ['cdc-milestone-checklists-2025', 'aap-milestones-2022', 'aap-safe-sleep-2022', 'nhs-baby-reviews-2023', 'who-iycf-model-chapter-2025'],
+
   // --- Activities -----------------------------------------------------------
   act_tummy_time_mirror: ['jr-who-motor-windows-2006', 'aap-safe-sleep-2022', 'tb-campbell-pt-6e-2022'],
   act_sound_tracking: ['who-care-for-child-development-2012', 'cdc-milestones-2026'],
