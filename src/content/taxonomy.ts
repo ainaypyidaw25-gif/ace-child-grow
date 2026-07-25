@@ -95,7 +95,7 @@ export const PRINTABLE_TYPES = [
   'growth_log', 'sleep_diary', 'milestone_checklist',
   // Per-age-band parent checklists produced by the knowledge base. Guidance
   // sheets, never screening or diagnostic instruments.
-  'checklist_birth_2m', 'checklist_3_4m', 'checklist_5_6m',
+  'checklist_birth_2m', 'checklist_3_4m', 'checklist_5_6m', 'checklist_7_9m',
 ] as const;
 
 export const CONTENT_TYPES = [
