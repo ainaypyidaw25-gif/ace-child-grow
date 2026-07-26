@@ -30,6 +30,9 @@ import { LibraryAdmin } from '../screens/LibraryAdmin';
 import { EvidenceAdmin } from '../screens/EvidenceAdmin';
 import { AdminTeam } from '../screens/AdminTeam';
 import { AcceptAdminInvite } from '../screens/AcceptAdminInvite';
+import { AdminDirectory } from '../screens/AdminDirectory';
+import { AdminBilling } from '../screens/AdminBilling';
+import { SubscriptionPlans } from '../screens/SubscriptionPlans';
 import { api } from '../../convex/_generated/api';
 import { useEffect } from 'react';
 
@@ -130,6 +133,7 @@ function AppRoutes() {
       <Route path="/sleep" element={<Layout><Sleep /></Layout>} />
       <Route path="/report" element={<Layout><Report /></Layout>} />
       <Route path="/profile" element={<Layout><Profile /></Layout>} />
+      <Route path="/subscription" element={<Layout><SubscriptionPlans /></Layout>} />
       <Route path="/offline" element={<Layout><OfflineDownloads /></Layout>} />
       <Route path="/favorites" element={<Layout><Favorites /></Layout>} />
       <Route path="/notifications" element={<Layout><Notifications /></Layout>} />
@@ -141,6 +145,8 @@ function AppRoutes() {
       <Route path="/admin/library" element={<Layout><LibraryAdmin /></Layout>} />
       <Route path="/admin/evidence" element={<Layout><EvidenceAdmin /></Layout>} />
       <Route path="/admin/team" element={<Layout><AdminTeam /></Layout>} />
+      <Route path="/admin/directory" element={<Layout><AdminDirectory /></Layout>} />
+      <Route path="/admin/billing" element={<Layout><AdminBilling /></Layout>} />
       <Route path="/admin/accept-invite" element={<Layout><AcceptAdminInvite /></Layout>} />
       <Route path="/audit" element={<Layout><AuditLog /></Layout>} />
       <Route path="*" element={<Navigate to="/" replace />} />

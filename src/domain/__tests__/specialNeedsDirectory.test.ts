@@ -6,12 +6,14 @@ const schema = readFileSync('convex/schema.ts', 'utf8');
 const signIn = readFileSync('src/screens/SignIn.tsx', 'utf8');
 
 describe('special-needs directory and staff portal', () => {
-  it('seeds only source-traceable active directory entries through an internal mutation', () => {
-    expect(source).toContain('seedVerifiedSpecialNeedsDirectory = internalMutation');
-    expect(source.match(/source: 'https:\/\//g)).toHaveLength(5);
-    expect(source).toContain("isActive: true, lastVerifiedAt: now");
-    expect(source).toContain("withIndex('by_name'");
-    expect(schema).toContain(".index('by_name', ['name'])");
+  it('uses owner-managed database records rather than a hard-coded school list', () => {
+    expect(source).not.toContain('seedVerifiedSpecialNeedsDirectory');
+    expect(source).not.toContain("source: 'https://");
+    expect(source).toContain('export const create = mutation');
+    expect(source).toContain('export const update = mutation');
+    expect(source).toContain('export const verify = mutation');
+    expect(source).toContain('await requireOwner(ctx)');
+    expect(schema).toContain('nextVerificationAt: v.optional(v.number())');
   });
 
   it('keeps public reads bounded and exposes a distinct staff sign-in choice', () => {
@@ -19,5 +21,11 @@ describe('special-needs directory and staff portal', () => {
     expect(source).not.toContain("query('healthcareFacilities').collect()");
     expect(signIn).toContain('အဖွဲ့ဝင်/ပညာရှင်ဝင်ရန်');
     expect(signIn).toContain("localStorage.setItem('ace-login-destination', 'staff')");
+  });
+
+  it('automatically deactivates owner-managed entries after their verification period', () => {
+    expect(source).toContain('expireOverdue = internalMutation');
+    expect(source).toContain('180 * 24 * 60 * 60 * 1000');
+    expect(source).toContain('nextVerificationAt <= now');
   });
 });

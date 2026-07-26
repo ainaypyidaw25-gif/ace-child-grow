@@ -377,9 +377,9 @@ export function EvidenceAdmin() {
                             type="button"
                             disabled={
                               pending === r.sourceId ||
-                              r.reviewStatus === next ||
+                              (r.reviewStatus === next && !(next === 'approved' && access?.role === 'clinical_reviewer' && r.reviewScope !== 'clinical')) ||
                               (next !== 'approved' && (!reviewer.trim() || !reviewerQualification.trim())) ||
-                              (next === 'approved' && (!access?.displayName || !access.qualification)) ||
+                              (next === 'approved' && (!access?.qualification || (access?.role === 'clinical_reviewer' && !access.displayName))) ||
                               (next === 'approved' && !canApprove) ||
                               (next === 'approved' && (local ? resolveReviewStatus(local) : r.reviewStatus) === 'evidence_required')
                             }

@@ -77,9 +77,17 @@ export function AdminReviewQueue() {
               {locale === 'mm' ? 'ကိုးကားချက်များ ကြည့်ရန်' : 'View evidence'}
             </Link>
             {access?.role === 'owner' && (
-              <Link to="/admin/team" className="rounded-pill border border-line px-4 py-2 text-sky-deep">
-                {locale === 'mm' ? 'စီမံခန့်ခွဲရေးအဖွဲ့' : 'Manage admin team'}
-              </Link>
+              <>
+                <Link to="/admin/team" className="rounded-pill border border-line px-4 py-2 text-sky-deep">
+                  {locale === 'mm' ? 'စီမံခန့်ခွဲရေးအဖွဲ့' : 'Manage admin team'}
+                </Link>
+                <Link to="/admin/directory" className="rounded-pill border border-line px-4 py-2 text-sky-deep">
+                  {locale === 'mm' ? 'ကျောင်း/ဝန်ဆောင်မှုစာရင်း' : 'School directory'}
+                </Link>
+                <Link to="/admin/billing" className="rounded-pill border border-line px-4 py-2 text-sky-deep">
+                  {locale === 'mm' ? 'Subscription နှင့် ငွေပေးချေမှု' : 'Subscriptions and billing'}
+                </Link>
+              </>
             )}
           </div>
         </section>

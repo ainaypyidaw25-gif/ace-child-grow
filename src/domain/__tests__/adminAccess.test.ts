@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-const modules = import.meta.glob('../../../convex/{schema,admin,subscriptions,lib/auth}.ts', {
+const modules = import.meta.glob('../../../convex/{schema,admin,subscriptions,billing,lib/auth}.ts', {
   query: '?raw',
   import: 'default',
   eager: true,
@@ -16,6 +16,7 @@ describe('admin team and subscription security', () => {
   const schema = source('schema.ts');
   const admin = source('admin.ts');
   const subscriptions = source('subscriptions.ts');
+  const billing = source('billing.ts');
   const auth = source('auth.ts');
 
   it('defines explicit staff roles and invite indexes', () => {
@@ -50,5 +51,13 @@ describe('admin team and subscription security', () => {
     expect(subscriptions).toContain('export const syncProviderSubscription = internalMutation({');
     expect(subscriptions).not.toContain('export const syncProviderSubscription = mutation({');
     expect(subscriptions).toContain("provider: 'manual'");
+  });
+
+  it('binds payment requests to the signed-in parent and owner review', () => {
+    expect(billing).toContain('const userId = await requireUser(ctx)');
+    expect(billing).toContain(".withIndex('by_user', (q) => q.eq('userId', userId))");
+    expect(billing).toContain('const ownerId = await requireOwner(ctx)');
+    expect(billing).toContain("status: 'pending'");
+    expect(billing).toContain("provider: 'manual_verified'");
   });
 });

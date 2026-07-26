@@ -91,7 +91,7 @@ export function Profile() {
         )}
       </section>
 
-      {/* Subscription-ready account status. Billing is connected later. */}
+      {/* Subscription account status and payment entry point. */}
       <section className="rounded-card border border-line bg-white p-4 shadow-card">
         <h2 className="font-semibold text-ink">{locale === 'mm' ? 'အသုံးပြုမှုအစီအစဉ်' : 'Membership plan'}</h2>
         {subscription === undefined ? <p className="text-ink-soft">…</p> : (
@@ -100,12 +100,15 @@ export function Profile() {
             <p className="mt-1 text-sm text-ink-soft">
               {locale === 'mm'
                 ? subscription.planKey === 'free'
-                  ? 'လက်ရှိအခြေခံလုပ်ဆောင်ချက်များကို အခမဲ့ အသုံးပြုနိုင်ပါသည်။ အခပေးအစီအစဉ်များကို နောက်ပိုင်းတွင် ထည့်သွင်းနိုင်ရန် ပြင်ဆင်ထားသည်။'
+                  ? 'လက်ရှိအခြေခံလုပ်ဆောင်ချက်များကို အခမဲ့ အသုံးပြုနိုင်ပါသည်။ အခပေးအစီအစဉ်များကို ကြည့်ရှုနိုင်ပါသည်။'
                   : 'ဤအကောင့်တွင် အထူးလုပ်ဆောင်ချက်များ အသုံးပြုနိုင်ပါသည်။'
                 : subscription.planKey === 'free'
-                  ? 'Core features are free. Paid plans can be connected later.'
+                  ? 'Core features are free. You can view available paid plans.'
                   : 'Premium features are enabled for this account.'}
             </p>
+            <Link to="/subscription" className="mt-3 inline-block rounded-pill bg-sky px-4 py-2 text-sm font-semibold text-white">
+              {locale === 'mm' ? 'အစီအစဉ်နှင့် ငွေပေးချေမှု ကြည့်ရန်' : 'View plans and payment'}
+            </Link>
           </>
         )}
       </section>

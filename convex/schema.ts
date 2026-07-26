@@ -82,6 +82,59 @@ export default defineSchema({
     .index('by_user', ['userId'])
     .index('by_provider_subscription', ['provider', 'providerSubscriptionId']),
 
+  // Owner-configured prices. No amount or payment destination is shipped in
+  // the frontend bundle; production configuration lives in Convex.
+  subscriptionPlans: defineTable({
+    planKey: v.union(v.literal('premium'), v.literal('family')),
+    nameMm: v.string(),
+    nameEn: v.string(),
+    descriptionMm: v.optional(v.string()),
+    descriptionEn: v.optional(v.string()),
+    amount: v.number(),
+    currency: v.string(),
+    interval: v.union(v.literal('month'), v.literal('year')),
+    features: v.array(v.string()),
+    isActive: v.boolean(),
+    sortOrder: v.number(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index('by_plan_key', ['planKey'])
+    .index('by_active_and_sort_order', ['isActive', 'sortOrder']),
+
+  // Configurable local/manual payment destinations (e.g. a merchant wallet or
+  // bank transfer). Secrets are never stored here.
+  paymentMethods: defineTable({
+    nameMm: v.string(),
+    nameEn: v.string(),
+    accountName: v.string(),
+    accountIdentifier: v.string(),
+    instructionsMm: v.optional(v.string()),
+    instructionsEn: v.optional(v.string()),
+    isActive: v.boolean(),
+    sortOrder: v.number(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }).index('by_active_and_sort_order', ['isActive', 'sortOrder']),
+
+  paymentRequests: defineTable({
+    userId: v.id('users'),
+    planKey: v.union(v.literal('premium'), v.literal('family')),
+    paymentMethodId: v.id('paymentMethods'),
+    amount: v.number(),
+    currency: v.string(),
+    paymentReference: v.string(),
+    proofStorageId: v.optional(v.id('_storage')),
+    status: v.union(v.literal('pending'), v.literal('approved'), v.literal('rejected'), v.literal('canceled')),
+    reviewedBy: v.optional(v.id('users')),
+    reviewNote: v.optional(v.string()),
+    reviewedAt: v.optional(v.number()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index('by_user', ['userId'])
+    .index('by_status', ['status']),
+
   // Saved (favourite) activities — private to the parent.
   favorites: defineTable({
     userId: v.id('users'),
@@ -130,6 +183,7 @@ export default defineSchema({
     services: v.optional(v.string()),
     source: v.optional(v.string()),
     lastVerifiedAt: v.optional(v.number()),
+    nextVerificationAt: v.optional(v.number()),
     verifiedBy: v.optional(v.id('users')),
     isActive: v.boolean(), // inactive until verified
   })

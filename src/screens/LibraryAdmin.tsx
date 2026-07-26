@@ -121,14 +121,18 @@ export function LibraryAdmin() {
                   {['draft', 'clinical_review', 'published'].map((s) => (
                     <button key={s} type="button" onClick={() => transition(it.slug, s)}
                       disabled={
-                        it.clinicalStatus === s ||
+                        (it.clinicalStatus === s && !(s === 'published' && access?.role === 'clinical_reviewer' && it.reviewScope !== 'clinical')) ||
                         pending === it.slug ||
                         (s === 'published' ? !canReview : !canEdit)
                       }
                       className={`min-h-touch rounded-pill px-2.5 py-1 text-xs disabled:opacity-50 ${
                         it.clinicalStatus === s ? 'bg-lavender/40 text-ink-soft' : 'border border-line text-ink'
                       }`}>
-                      {s === 'published' ? L('ထုတ်ဝေမည်', 'Publish') : s === 'clinical_review' ? L('သုံးသပ်ရန်', 'Review') : L('မူကြမ်း', 'Draft')}
+                      {s === 'published'
+                        ? access?.role === 'clinical_reviewer' && it.reviewScope !== 'clinical'
+                          ? L('ဆေးဘက်ဆိုင်ရာ အတည်ပြုမည်', 'Clinical approval')
+                          : L('ထုတ်ဝေမည်', 'Publish')
+                        : s === 'clinical_review' ? L('သုံးသပ်ရန်', 'Review') : L('မူကြမ်း', 'Draft')}
                     </button>
                   ))}
                 </div>

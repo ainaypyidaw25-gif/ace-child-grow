@@ -11,8 +11,10 @@
 import type * as admin from "../admin.js";
 import type * as audit from "../audit.js";
 import type * as auth from "../auth.js";
+import type * as billing from "../billing.js";
 import type * as children from "../children.js";
 import type * as content from "../content.js";
+import type * as crons from "../crons.js";
 import type * as directory from "../directory.js";
 import type * as evidence from "../evidence.js";
 import type * as favorites from "../favorites.js";
@@ -38,8 +40,10 @@ declare const fullApi: ApiFromModules<{
   admin: typeof admin;
   audit: typeof audit;
   auth: typeof auth;
+  billing: typeof billing;
   children: typeof children;
   content: typeof content;
+  crons: typeof crons;
   directory: typeof directory;
   evidence: typeof evidence;
   favorites: typeof favorites;
