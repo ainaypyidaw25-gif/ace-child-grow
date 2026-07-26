@@ -17,6 +17,7 @@ import {
 } from '../evidence/types';
 import { buildReports } from '../evidence/reports';
 import { ReviewBatchPanel } from './ReviewBatchPanel';
+import { needsEvidenceAttention } from '../evidence/registryVisibility';
 
 // Admin Evidence Library — STAFF ONLY (the server returns `allowed: false` to
 // anyone else). This screen shows the reference registry, the eight filters the
@@ -43,6 +44,7 @@ export function EvidenceAdmin() {
   const [reviewer, setReviewer] = useState('');
   const [reviewerQualification, setReviewerQualification] = useState('');
   const [pending, setPending] = useState<string | null>(null);
+  const [showAllReferences, setShowAllReferences] = useState(false);
 
   const stats = useQuery(api.evidence.stats, {});
   const access = useQuery(api.admin.myAccess);
@@ -155,6 +157,16 @@ export function EvidenceAdmin() {
 
   const sel = 'min-h-touch rounded-pill border border-line bg-white px-3 py-1 text-sm';
   const rows = list?.sources ?? [];
+  const hasRegistryFilter = Boolean(
+    orgKey || topic || evidenceLevel || reviewStatus || country || language || yearFrom || ageMonths || q,
+  );
+  const visibleRows = showAllReferences || hasRegistryFilter
+    ? rows
+    : rows.filter((row) => {
+        const local = EVIDENCE_SOURCES.find((source) => source.id === row.sourceId);
+        return needsEvidenceAttention(row.reviewStatus, local ? isExpired(local, todayIso) : false);
+      });
+  const hiddenReferenceCount = Math.max(0, rows.length - visibleRows.length);
   const canApprove = access?.role === 'clinical_reviewer' || (access?.role === 'owner' && !!access.qualification);
 
   return (
@@ -235,6 +247,41 @@ export function EvidenceAdmin() {
 
       {tab === 'registry' && (
         <>
+          <section className="rounded-card border border-line bg-white p-4 shadow-card">
+            <div className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => setShowAllReferences(false)}
+                className={`rounded-pill px-4 py-2 text-sm font-semibold ${
+                  !showAllReferences ? 'bg-sky text-white' : 'bg-canvas text-ink-soft'
+                }`}
+              >
+                {L('ယခု စစ်ဆေးရန်', 'Needs attention now')}
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowAllReferences(true)}
+                className={`rounded-pill px-4 py-2 text-sm font-semibold ${
+                  showAllReferences ? 'bg-sky text-white' : 'bg-canvas text-ink-soft'
+                }`}
+              >
+                {L('ကိုးကားစာတမ်းအားလုံး', 'Show all references')}
+              </button>
+            </div>
+            {!showAllReferences && !hasRegistryFilter && (
+              <p className="mt-2 text-sm text-ink-soft">
+                {visibleRows.length === 0
+                  ? L(
+                      `လက်ရှိ စစ်ဆေးရန်လိုသော စာတမ်းမရှိပါ။ ကိုးကားစာတမ်း ${hiddenReferenceCount} ခုကို လိုအပ်ချိန် ပြန်ကြည့်နိုင်ရန် မှတ်တမ်းအဖြစ် ဆက်လက်သိမ်းထားသည်။`,
+                      `Nothing needs attention now. ${hiddenReferenceCount} references remain available in the archive.`,
+                    )
+                  : L(
+                      `စစ်ဆေးရန် သို့မဟုတ် ပြန်လည်အတည်ပြုရန်လိုသော စာတမ်း ${visibleRows.length} ခုကိုသာ ပြထားသည်။`,
+                      `Showing only ${visibleRows.length} references that need review or re-checking.`,
+                    )}
+              </p>
+            )}
+          </section>
           <section className="flex flex-wrap gap-2">
             <select className={sel} value={orgKey} onChange={(e) => setOrgKey(e.target.value)}>
               <option value="">{L('အဖွဲ့အစည်း — အားလုံး', 'Organization — all')}</option>
@@ -299,10 +346,15 @@ export function EvidenceAdmin() {
           ) : (
             <>
               <p className="text-sm text-ink-soft">
-                {L(`${list.total} ခု တွေ့ရှိသည်။`, `${list.total} references.`)}
+                {L(`${visibleRows.length} ခု ပြထားသည်။`, `${visibleRows.length} references shown.`)}
               </p>
-              <ul className="space-y-2">
-                {rows.map((r) => {
+              {visibleRows.length === 0 && (showAllReferences || hasRegistryFilter) ? (
+                <p className="rounded-xl border border-line bg-white p-4 text-sm text-ink-soft">
+                  {L('ကိုက်ညီသော စာတမ်းမရှိပါ။', 'No matching references.')}
+                </p>
+              ) : (
+                <ul className="space-y-2">
+                {visibleRows.map((r) => {
                   const local = EVIDENCE_SOURCES.find((s) => s.id === r.sourceId);
                   const problems = local ? verificationProblems(local) : [];
                   const related = local ? relatedContent(local.id) : null;
@@ -393,7 +445,8 @@ export function EvidenceAdmin() {
                     </li>
                   );
                 })}
-              </ul>
+                </ul>
+              )}
             </>
           )}
         </>
