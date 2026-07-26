@@ -3946,7 +3946,7 @@
   },
   {
     "category": "learning_through_play",
-    "summaryMm": "ကစားခြင်းသည် ကလေး၏ အဓိက သင်ယူနည်းဖြစ်ကြောင်း။",
+    "summaryMm": "ကလေးငယ်များသည် ကစားရင်း အကောင်းဆုံး သင်ယူကြသည်။",
     "summaryEn": "Play is how young children learn best.",
     "durationMinutes": 3,
     "tags": [
@@ -3956,28 +3956,28 @@
     "data": {
       "objectives": [
         {
-          "mm": "ကစားခြင်း၏ အကျိုးကို သိရှိရန်။",
+          "mm": "ကစားခြင်းက ကလေးဖွံ့ဖြိုးမှုကို မည်သို့ အထောက်အကူပြုသည်ကို သိရှိရန်။",
           "en": "Know the benefits of play."
         }
       ],
       "readingMinutes": 3,
       "body": {
-        "mm": "ကစားခြင်းသည် ကလေးအတွက် “အလုပ်” ဖြစ်သည်။ ကစားရင်း ဦးနှောက်၊ ဘာသာစကား၊ ခန္ဓာကိုယ်နှင့် ဆက်ဆံရေးများ ဖွံ့ဖြိုးသည်။ အဈေးကြီး ကစားစရာ မလိုပါ — သင်၏ အာရုံစိုက်မှုနှင့် အိမ်သုံးပစ္စည်းများ လုံလောက်သည်။",
+        "mm": "ကစားခြင်းသည် ကလေးငယ်များအတွက် အရေးပါသော သင်ယူနည်းတစ်ခု ဖြစ်သည်။ ကစားနေစဉ် စဉ်းစားတွေးခေါ်နိုင်စွမ်း၊ ဘာသာစကား၊ ကိုယ်လက်လှုပ်ရှားမှုနှင့် လူမှုဆက်ဆံရေးတို့ တဖြည်းဖြည်း ဖွံ့ဖြိုးလာသည်။ အဈေးကြီးသော ကစားစရာများ မလိုအပ်ပါ။ မိဘ၏ အာရုံစိုက်ပေးမှုနှင့် ဘေးကင်းသော အိမ်သုံးပစ္စည်းများဖြင့်လည်း ကောင်းစွာ ကစားသင်ယူနိုင်သည်။",
         "en": "Play is a child’s work. Through play, the brain, language, body, and relationships grow. Expensive toys are not needed — your attention and household objects are enough."
       },
       "quiz": [
         {
           "q": {
-            "mm": "ကစားရန် အဈေးကြီး ကစားစရာ —",
+            "mm": "ကလေးနှင့် ကစားရန် အဈေးကြီးသော ကစားစရာများ —",
             "en": "Expensive toys are —"
           },
           "options": [
             {
-              "mm": "မဖြစ်မနေ လိုအပ်",
+              "mm": "မဖြစ်မနေ လိုအပ်သည်",
               "en": "essential"
             },
             {
-              "mm": "မလိုအပ်",
+              "mm": "မလိုအပ်ပါ",
               "en": "not needed"
             }
           ],
@@ -3985,11 +3985,11 @@
         }
       ],
       "takeaway": {
-        "mm": "သင်နှင့်အတူ ကစားခြင်းက အကောင်းဆုံးဖြစ်သည်။",
+        "mm": "မိဘနှင့်အတူ ကစားချိန်သည် ကလေးအတွက် အဖိုးတန်သော သင်ယူချိန် ဖြစ်သည်။",
         "en": "Playing with you is best."
       },
       "actionToday": {
-        "mm": "အိမ်သုံးပစ္စည်းတစ်ခုဖြင့် ကစားနည်းတစ်ခု ဖန်တီးပါ။",
+        "mm": "ယနေ့ အိမ်တွင်ရှိသော ဘေးကင်းသည့် ပစ္စည်းတစ်ခုကို အသုံးပြုပြီး ကလေးနှင့်အတူ ကစားပါ။",
         "en": "Invent one game with a household object."
       }
     },
@@ -4002,12 +4002,12 @@
     ],
     "type": "lesson",
     "slug": "lsn_power_of_play",
-    "titleMm": "ကစားခြင်း၏ တန်ခိုး",
+    "titleMm": "ကစားခြင်း၏ အကျိုးကျေးဇူးများ",
     "titleEn": "The power of play",
     "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
     "version": 1,
     "clinicalStatus": "clinical_review",
-    "searchText": "ကစားခြင်း၏ တန်ခိုး the power of play ကစားခြင်းသည် ကလေး၏ အဓိက သင်ယူနည်းဖြစ်ကြောင်း။ play is how young children learn best. learning_through_play lesson ကစားခြင်း၏ အကျိုးကို သိရှိရန်။ know the benefits of play. ကစားခြင်းသည် ကလေးအတွက် “အလုပ်” ဖြစ်သည်။ ကစားရင်း ဦးနှောက်၊ ဘာသာစကား၊ ခန္ဓာကိုယ်နှင့် ဆက်ဆံရေးများ ဖွံ့ဖြိုးသည်။ အဈေးကြီး ကစားစရာ မလိုပါ — သင်၏ အာရုံစိုက်မှုနှင့် အိမ်သုံးပစ္စည်းများ လုံလောက်သည်။ play is a child’s work. through play, the brain, language, body, and relationships grow. expensive toys are not needed — your attention and household objects are enough. ကစားရန် အဈေးကြီး ကစားစရာ — expensive toys are — မဖြစ်မနေ လိုအပ် essential မလိုအပ် not needed သင်နှင့်အတူ ကစားခြင်းက အကောင်းဆုံးဖြစ်သည်။ playing with you is best. အိမ်သုံးပစ္စည်းတစ်ခုဖြင့် ကစားနည်းတစ်ခု ဖန်တီးပါ။ invent one game with a household object."
+    "searchText": "ကစားခြင်း၏ အကျိုးကျေးဇူးများ the power of play ကလေးငယ်များသည် ကစားရင်း အကောင်းဆုံး သင်ယူကြသည်။ play is how young children learn best. learning_through_play lesson ကစားခြင်းက ကလေးဖွံ့ဖြိုးမှုကို မည်သို့ အထောက်အကူပြုသည်ကို သိရှိရန်။ know the benefits of play. ကစားခြင်းသည် ကလေးငယ်များအတွက် အရေးပါသော သင်ယူနည်းတစ်ခု ဖြစ်သည်။ ကစားနေစဉ် စဉ်းစားတွေးခေါ်နိုင်စွမ်း၊ ဘာသာစကား၊ ကိုယ်လက်လှုပ်ရှားမှုနှင့် လူမှုဆက်ဆံရေးတို့ တဖြည်းဖြည်း ဖွံ့ဖြိုးလာသည်။ အဈေးကြီးသော ကစားစရာများ မလိုအပ်ပါ။ မိဘ၏ အာရုံစိုက်ပေးမှုနှင့် ဘေးကင်းသော အိမ်သုံးပစ္စည်းများဖြင့်လည်း ကောင်းစွာ ကစားသင်ယူနိုင်သည်။ play is a child’s work. through play, the brain, language, body, and relationships grow. expensive toys are not needed — your attention and household objects are enough. ကလေးနှင့် ကစားရန် အဈေးကြီးသော ကစားစရာများ — expensive toys are — မဖြစ်မနေ လိုအပ်သည် essential မလိုအပ်ပါ not needed မိဘနှင့်အတူ ကစားချိန်သည် ကလေးအတွက် အဖိုးတန်သော သင်ယူချိန် ဖြစ်သည်။ playing with you is best. ယနေ့ အိမ်တွင်ရှိသော ဘေးကင်းသည့် ပစ္စည်းတစ်ခုကို အသုံးပြုပြီး ကလေးနှင့်အတူ ကစားပါ။ invent one game with a household object."
   },
   {
     "category": "speech_development",
@@ -4336,7 +4336,7 @@
   },
   {
     "category": "safety",
-    "summaryMm": "ရွေ့လျားနိုင်သော ကလေးအတွက် အိမ်ကို ဘေးကင်းအောင် ပြင်ဆင်ခြင်း။",
+    "summaryMm": "ကလေး စတင်လှုပ်ရှားသွားလာချိန်တွင် အိမ်ကို ဘေးကင်းအောင် ကြိုတင်ပြင်ဆင်ပါ။",
     "summaryEn": "Baby-proofing for a mobile child.",
     "durationMinutes": 3,
     "tags": [
@@ -4346,28 +4346,28 @@
     "data": {
       "objectives": [
         {
-          "mm": "အဓိက အိမ်တွင်း အန္တရာယ်များ သိရှိရန်။",
+          "mm": "အိမ်တွင်းတွင် ဖြစ်ပေါ်နိုင်သည့် အဓိကအန္တရာယ်များကို သိရှိရန်။",
           "en": "Know the main home hazards."
         }
       ],
       "readingMinutes": 3,
       "body": {
-        "mm": "ဆေး၊ ဓာတုပစ္စည်း၊ ချက်ပြုတ်ဆီ၊ ရေနွေးများကို ကလေး လက်လှမ်းမမီရာ ထားပါ။ ပလပ်ခေါင်း၊ လှေကား၊ ရေအိုးအနီး သတိထားပါ။ choking အန္တရာယ်ရှိသော ငယ်သောပစ္စည်းများ ဖယ်ရှားပါ။ ဒေသ အရေးပေါ် ဖုန်းနံပါတ်ကို ကြိုတင် သိထားပါ။",
+        "mm": "ဆေးဝါးများ၊ သန့်ရှင်းရေးသုံး ဓာတုပစ္စည်းများနှင့် ပူသောအရည်များကို ကလေးလက်လှမ်းမမီသည့် သော့ခတ်ထားသော နေရာတွင် သိမ်းဆည်းပါ။ လျှပ်စစ်ပလပ်ပေါက်များကို ဖုံးအုပ်ထားပြီး လှေကား၊ ရေထည့်ထားသော ပုံးနှင့် ရေချိုးခန်းအနီးတွင် ကလေးကို အမြဲ အနီးကပ်ကြီးကြပ်ပါ။ အသက်ရှူလမ်းကြောင်း ပိတ်ဆို့စေနိုင်သည့် ပစ္စည်းငယ်များကို ဖယ်ရှားထားပါ။ အရေးပေါ်အခြေအနေတွင် ဆက်သွယ်ရမည့် ဒေသဆိုင်ရာ ဖုန်းနံပါတ်များကို ကြိုတင်မှတ်သားထားပါ။",
         "en": "Keep medicines, chemicals, hot liquids out of reach. Watch sockets, stairs, and water. Remove small choking hazards. Know your local emergency number in advance."
       },
       "quiz": [
         {
           "q": {
-            "mm": "ဆေးဗူးများကို —",
+            "mm": "ဆေးဝါးများကို မည်သည့်နေရာတွင် သိမ်းဆည်းသင့်သနည်း။",
             "en": "Medicines should be —"
           },
           "options": [
             {
-              "mm": "ကလေး လက်လှမ်းမမီရာ သော့ခတ်",
+              "mm": "ကလေးလက်လှမ်းမမီသည့် သော့ခတ်ထားသောနေရာတွင်",
               "en": "locked out of reach"
             },
             {
-              "mm": "စားပွဲပေါ်",
+              "mm": "စားပွဲပေါ်တွင်",
               "en": "left on the table"
             }
           ],
@@ -4375,11 +4375,11 @@
         }
       ],
       "takeaway": {
-        "mm": "ဘေးကင်းသော အိမ်က လွတ်လပ်စွာ စူးစမ်းခွင့် ပေးသည်။",
+        "mm": "ဘေးကင်းအောင် ပြင်ဆင်ထားသော အိမ်တွင် ကလေးသည် ပိုမိုလုံခြုံစွာ စူးစမ်းသင်ယူနိုင်သည်။",
         "en": "A safe home lets children explore freely."
       },
       "actionToday": {
-        "mm": "ယနေ့ အခန်းတစ်ခန်းကို ကလေး၏ အမြင့်မှ စစ်ဆေးပါ။",
+        "mm": "ယနေ့ အခန်းတစ်ခန်းကို ကလေး၏ မျက်စိအမြင့်မှ ကြည့်ပြီး အန္တရာယ်ရှိနိုင်သည့် အရာများကို စစ်ဆေးပါ။",
         "en": "Check one room from your child’s eye level today."
       }
     },
@@ -4392,12 +4392,12 @@
     ],
     "type": "lesson",
     "slug": "lsn_home_safety",
-    "titleMm": "အိမ်တွင်း ဘေးကင်းရေး",
+    "titleMm": "ကလေးငယ်အတွက် အိမ်တွင်းဘေးကင်းရေး",
     "titleEn": "Home safety essentials",
     "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
     "version": 1,
     "clinicalStatus": "clinical_review",
-    "searchText": "အိမ်တွင်း ဘေးကင်းရေး home safety essentials ရွေ့လျားနိုင်သော ကလေးအတွက် အိမ်ကို ဘေးကင်းအောင် ပြင်ဆင်ခြင်း။ baby-proofing for a mobile child. safety lesson အဓိက အိမ်တွင်း အန္တရာယ်များ သိရှိရန်။ know the main home hazards. ဆေး၊ ဓာတုပစ္စည်း၊ ချက်ပြုတ်ဆီ၊ ရေနွေးများကို ကလေး လက်လှမ်းမမီရာ ထားပါ။ ပလပ်ခေါင်း၊ လှေကား၊ ရေအိုးအနီး သတိထားပါ။ choking အန္တရာယ်ရှိသော ငယ်သောပစ္စည်းများ ဖယ်ရှားပါ။ ဒေသ အရေးပေါ် ဖုန်းနံပါတ်ကို ကြိုတင် သိထားပါ။ keep medicines, chemicals, hot liquids out of reach. watch sockets, stairs, and water. remove small choking hazards. know your local emergency number in advance. ဆေးဗူးများကို — medicines should be — ကလေး လက်လှမ်းမမီရာ သော့ခတ် locked out of reach စားပွဲပေါ် left on the table ဘေးကင်းသော အိမ်က လွတ်လပ်စွာ စူးစမ်းခွင့် ပေးသည်။ a safe home lets children explore freely. ယနေ့ အခန်းတစ်ခန်းကို ကလေး၏ အမြင့်မှ စစ်ဆေးပါ။ check one room from your child’s eye level today."
+    "searchText": "ကလေးငယ်အတွက် အိမ်တွင်းဘေးကင်းရေး home safety essentials ကလေး စတင်လှုပ်ရှားသွားလာချိန်တွင် အိမ်ကို ဘေးကင်းအောင် ကြိုတင်ပြင်ဆင်ပါ။ baby-proofing for a mobile child. safety lesson အိမ်တွင်းတွင် ဖြစ်ပေါ်နိုင်သည့် အဓိကအန္တရာယ်များကို သိရှိရန်။ know the main home hazards. ဆေးဝါးများ၊ သန့်ရှင်းရေးသုံး ဓာတုပစ္စည်းများနှင့် ပူသောအရည်များကို ကလေးလက်လှမ်းမမီသည့် သော့ခတ်ထားသော နေရာတွင် သိမ်းဆည်းပါ။ လျှပ်စစ်ပလပ်ပေါက်များကို ဖုံးအုပ်ထားပြီး လှေကား၊ ရေထည့်ထားသော ပုံးနှင့် ရေချိုးခန်းအနီးတွင် ကလေးကို အမြဲ အနီးကပ်ကြီးကြပ်ပါ။ အသက်ရှူလမ်းကြောင်း ပိတ်ဆို့စေနိုင်သည့် ပစ္စည်းငယ်များကို ဖယ်ရှားထားပါ။ အရေးပေါ်အခြေအနေတွင် ဆက်သွယ်ရမည့် ဒေသဆိုင်ရာ ဖုန်းနံပါတ်များကို ကြိုတင်မှတ်သားထားပါ။ keep medicines, chemicals, hot liquids out of reach. watch sockets, stairs, and water. remove small choking hazards. know your local emergency number in advance. ဆေးဝါးများကို မည်သည့်နေရာတွင် သိမ်းဆည်းသင့်သနည်း။ medicines should be — ကလေးလက်လှမ်းမမီသည့် သော့ခတ်ထားသောနေရာတွင် locked out of reach စားပွဲပေါ်တွင် left on the table ဘေးကင်းအောင် ပြင်ဆင်ထားသော အိမ်တွင် ကလေးသည် ပိုမိုလုံခြုံစွာ စူးစမ်းသင်ယူနိုင်သည်။ a safe home lets children explore freely. ယနေ့ အခန်းတစ်ခန်းကို ကလေး၏ မျက်စိအမြင့်မှ ကြည့်ပြီး အန္တရာယ်ရှိနိုင်သည့် အရာများကို စစ်ဆေးပါ။ check one room from your child’s eye level today."
   },
   {
     "category": "screen_time",

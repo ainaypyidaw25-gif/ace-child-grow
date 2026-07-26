@@ -213,8 +213,10 @@ export function ContentDetail() {
         </Section>
       )}
 
-      <p className="pt-2 text-[11px] text-ink-soft">
-        {L('အရင်းအမြစ်', 'Source')}: {item.source}
+      <p className="pt-2 text-[11px] leading-relaxed text-ink-soft">
+        {locale === 'mm'
+          ? 'မှတ်ချက် — ဤအကြောင်းအရာသည် ယုံကြည်ရသော ကိုးကားချက်များအပေါ် အခြေခံထားသည့် အထွေထွေ မိဘလမ်းညွှန် ဖြစ်ပါသည်။ ကျန်းမာရေးပညာရှင်၏ သုံးသပ်အတည်ပြုမှု မရရှိသေးသဖြင့် ဆေးဘက်ဆိုင်ရာ အကြံဉာဏ်အဖြစ် မယူဆသင့်ပါ။'
+          : `Source: ${item.source}`}
       </p>
     </div>
   );
