@@ -43,7 +43,7 @@ export const MILESTONES: SeedItem[] = [
     why: { mm: 'လက်နှစ်ဖက် ပူးတွဲသုံးခြင်းသည် ကိုင်တွယ်မှု ဖွံ့ဖြိုးမှု၏ အစဖြစ်သည်။', en: 'Using two hands together starts grasping skills.' },
   }),
   m('3_4m', 'communication', 1, {
-    title: { mm: 'အသံထွက်၍ ကစားခြင်း (ကူးဝဲ)', en: 'Coos and makes sounds' },
+    title: { mm: '“အူး”၊ “အား” အသံများ ထွက်ခြင်း', en: 'Coos and makes sounds' },
     observe: { mm: '“အူး” “အာ” ကဲ့သို့ အသံများ ထုတ်ပါသလား။', en: 'Makes cooing sounds like “ooh”, “aah”?' },
     why: { mm: 'ဤအသံများသည် စကားပြောရန် လေ့ကျင့်ခြင်းဖြစ်သည်။', en: 'These sounds are early speech practice.' },
   }),
@@ -70,7 +70,7 @@ export const MILESTONES: SeedItem[] = [
     why: { mm: 'လက်လှမ်းခြင်းသည် မျက်စိနှင့် လက် ပေါင်းစပ်မှုကို လေ့ကျင့်စေသည်။', en: 'Reaching builds eye–hand coordination.' },
   }),
   m('5_6m', 'play', 1, {
-    title: { mm: 'ကစားစရာများကို နှုတ်ခမ်းဖြင့် စူးစမ်းခြင်း', en: 'Explores toys by mouthing' },
+    title: { mm: 'ကစားစရာများကို ပါးစပ်ဖြင့် စူးစမ်းခြင်း', en: 'Explores toys by mouthing' },
     observe: { mm: 'ကစားစရာများကို ကိုင်ပြီး ပါးစပ်သို့ ယူပါသလား။', en: 'Brings toys to the mouth to explore?' },
     why: { mm: 'ဤသည်မှာ ပုံမှန်စူးစမ်းမှုဖြစ်၍ ဘေးကင်းသော ပစ္စည်းများသာ ပေးပါ။', en: 'Mouthing is normal exploring — offer only safe objects.' },
   }),
@@ -107,7 +107,7 @@ export const MILESTONES: SeedItem[] = [
   m('10_12m', 'communication', 1, {
     title: { mm: 'လက်ညှိုးထိုး၍ ပြသခြင်း', en: 'Points to show' },
     observe: { mm: 'အလိုရှိသည်ကို လက်ညှိုးထိုး၍ ပြသပါသလား။', en: 'Points at things they want or notice?' },
-    why: { mm: 'လက်ညှိုးထိုးခြင်းသည် အင်အားကြီးသော ဆက်သွယ်မှုဖြစ်သည်။', en: 'Pointing is powerful early communication.' },
+    why: { mm: 'လက်ညှိုးထိုးပြခြင်းသည် စကားမပြောတတ်မီ အရေးပါသော ဆက်သွယ်နည်းတစ်ခု ဖြစ်သည်။', en: 'Pointing is powerful early communication.' },
   }),
   m('10_12m', 'problem_solving', 1, {
     title: { mm: 'ဖုံးထားသော ပစ္စည်းကို ရှာဖွေခြင်း', en: 'Looks for hidden objects' },
@@ -116,7 +116,7 @@ export const MILESTONES: SeedItem[] = [
   }),
   m('10_12m', 'self_help', 1, {
     title: { mm: 'လက်ဖြင့် ကိုယ်တိုင်စားခြင်း', en: 'Finger-feeds self' },
-    observe: { mm: 'ငယ်စိတ်စိတ် အစားအစာများကို လက်ဖြင့် စားပါသလား။', en: 'Picks up small soft foods to eat?' },
+    observe: { mm: 'နူးညံ့ပြီး အရွယ်သင့်အောင် ပြင်ဆင်ထားသော အစားအစာများကို လက်ဖြင့် ကောက်စားပါသလား။', en: 'Picks up small soft foods to eat?' },
     why: { mm: 'ကိုယ်တိုင်စားခြင်းသည် လွတ်လပ်မှုနှင့် လက်ကျွမ်းကျင်မှုကို လေ့ကျင့်စေသည်။', en: 'Self-feeding builds independence and hand skill.' },
   }),
 
@@ -139,7 +139,7 @@ export const MILESTONES: SeedItem[] = [
   m('13_18m', 'self_help', 1, {
     title: { mm: 'ဇွန်း/ခွက်ကို ကြိုးစားသုံးခြင်း', en: 'Tries spoon and cup' },
     observe: { mm: 'ဇွန်း သို့မဟုတ် ခွက်ကို ကိုယ်တိုင် သုံးရန် ကြိုးစားပါသလား။', en: 'Tries to use a spoon or cup?' },
-    why: { mm: 'သန့်ရှင်းမှု အနည်းငယ် ကျန်လည်း ကြိုးစားခြင်းက အရေးကြီးသည်။', en: 'Some mess is fine — trying is what matters.' },
+    why: { mm: 'စားပွဲပေါ် အနည်းငယ် ပေကျံနိုင်သော်လည်း ကိုယ်တိုင် ကြိုးစားသုံးတတ်လာခြင်းက အရေးကြီးသည်။', en: 'Some mess is fine — trying is what matters.' },
   }),
 
   // ---- 19–24 months ----
@@ -156,7 +156,7 @@ export const MILESTONES: SeedItem[] = [
   m('19_24m', 'emotional', 1, {
     title: { mm: 'အခြားသူများ၏ ခံစားမှုကို သတိပြုခြင်း', en: 'Notices others’ feelings' },
     observe: { mm: 'တစ်ယောက်ငိုပါက စိတ်ဝင်စား/စိုးရိမ်ဟန် ပြပါသလား။', en: 'Reacts when someone is upset?' },
-    why: { mm: 'ဤသည်မှာ ကရုဏာ (empathy) ၏ အစဖြစ်သည်။', en: 'This is the beginning of empathy.' },
+    why: { mm: 'ဤသည်မှာ သူတစ်ပါး၏ ခံစားချက်ကို နားလည်စာနာတတ်လာခြင်း၏ အစဖြစ်သည်။', en: 'This is the beginning of empathy.' },
   }),
   m('19_24m', 'play', 1, {
     title: { mm: 'ဟန်ဆောင်ကစားခြင်း', en: 'Pretend play' },

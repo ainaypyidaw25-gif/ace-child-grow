@@ -198,7 +198,7 @@ const GUIDES: SeedItem[] = [
     guide('birth_2m', 'gross_motor', {
       title: b('မွေးကင်း – ၂ လ — ကိုယ်လုံးလှုပ်ရှားမှု လမ်းညွှန်', 'Birth–2 months — Big movement guide'),
       why: b(
-        'ဤအရွယ်တွင် ကလေးသည် ခေါင်းကို ထိန်းရန် သင်ယူနေသည်။ လည်ပင်းနှင့် ကျောကုန်း ကြွက်သားများ အားကောင်းလာစေရန် နိုးနေချိန် မှောက်ချထားပေးခြင်း (tummy time) က အဓိက ဖြစ်သည်။ လှုပ်ရှားမှုများ မညီညာသေးဘဲ တုန်ခါနေတတ်သည် — ဤသည် ပုံမှန် ဖြစ်သည်။',
+        'ဤအရွယ်တွင် ကလေးသည် ခေါင်းကို ထိန်းနိုင်ရန် သင်ယူနေဆဲ ဖြစ်သည်။ လည်ပင်းနှင့် ကျောကုန်းကြွက်သားများ အားကောင်းလာစေရန် ကလေးနိုးနေချိန်တွင် အနီးကပ်ကြီးကြပ်ပြီး ခဏစီ မှောက်လျက်ထားပေးခြင်းက အရေးကြီးသည်။ လှုပ်ရှားမှုများ မညီညာသေးဘဲ တုန်ခါသကဲ့သို့ ဖြစ်တတ်ခြင်းသည် ဤအရွယ်တွင် တွေ့ရနိုင်သည်။',
         'At this age your baby is learning to control the head. Supervised tummy time while awake is the main way neck and back muscles get stronger. Movements are still jerky and uneven — that is normal.',
       ),
       observationQuestions: [
@@ -345,7 +345,7 @@ const GUIDES_B: SeedItem[] = [
         b('ရုပ်ပုံစာအုပ် တစ်အုပ်ကို အတူ ကြည့်ပြီး ပြောပြပါ။', 'Look at a picture book together and describe it.'),
       ],
       indoor: [b('တိတ်ဆိတ်သော အခန်းတွင် မျက်နှာချင်းဆိုင် စကားပြောပါ။', 'Face-to-face talking in a quiet room.')],
-      outdoor: [b('အပြင်ထွက်စဉ် ကြားရသော အသံများကို အမည်တပ်ပြောပြပါ။', 'Name the sounds you hear when outside.')],
+      outdoor: [b('အပြင်ထွက်စဉ် ကြားရသော အသံများအကြောင်း ကလေးကို ပြောပြပေးပါ။', 'Name the sounds you hear when outside.')],
       lowCost: [b('စကားပြောခြင်း၊ သီချင်းဆိုခြင်းသည် အခမဲ့ဖြစ်ပြီး အထိရောက်ဆုံး ဖြစ်သည်။', 'Talking and singing are free and the most effective of all.')],
       materials: b('မလိုအပ်ပါ — သင့်အသံသာ လိုသည်။', 'None — your voice is enough.'),
       safety: b(

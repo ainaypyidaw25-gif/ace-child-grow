@@ -41,11 +41,11 @@ export function EditChild() {
     if (!activeChild) return;
     setError('');
     if (!nickname.trim() || !birthDate) {
-      setError(locale === 'mm' ? 'အချက်အလက် ဖြည့်ပါ' : 'Please fill in the details');
+      setError(locale === 'mm' ? 'လိုအပ်သော အချက်အလက်များကို ဖြည့်ပါ။' : 'Please fill in the details');
       return;
     }
     if (new Date(birthDate) > new Date()) {
-      setError(locale === 'mm' ? 'မွေးနေ့ အနာဂတ်ဖြစ်နေတယ်' : 'Birth date is in the future');
+      setError(locale === 'mm' ? 'မွေးသက္ကရာဇ်ကို ယနေ့ရက်ထက် နောက်ကျ၍ မသတ်မှတ်နိုင်ပါ။' : 'Birth date is in the future');
       return;
     }
     const g = premature ? Number(weeks) : undefined;
@@ -77,7 +77,7 @@ export function EditChild() {
       </h1>
 
       <label className="block text-sm">
-        {locale === 'mm' ? 'အမည် (ချစ်စနာမည်)' : 'Nickname'}
+        {locale === 'mm' ? 'ကလေးအမည် (အိမ်ခေါ်အမည်)' : 'Nickname'}
         <input value={nickname} onChange={(e) => setNickname(e.target.value)}
           className="mt-1 block w-full rounded-lg border border-line px-3 py-2" />
       </label>

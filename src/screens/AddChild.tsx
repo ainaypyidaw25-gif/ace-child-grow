@@ -28,11 +28,11 @@ export function AddChild() {
   async function save() {
     setError('');
     if (!nickname.trim() || !birthDate) {
-      setError(locale === 'mm' ? 'အချက်အလက် ဖြည့်ပါ' : 'Please fill in the details');
+      setError(locale === 'mm' ? 'လိုအပ်သော အချက်အလက်များကို ဖြည့်ပါ။' : 'Please fill in the details');
       return;
     }
     if (new Date(birthDate) > new Date()) {
-      setError(locale === 'mm' ? 'မွေးနေ့ အနာဂတ်ဖြစ်နေသည်' : 'Birth date is in the future');
+      setError(locale === 'mm' ? 'မွေးသက္ကရာဇ်ကို ယနေ့ရက်ထက် နောက်ကျ၍ မသတ်မှတ်နိုင်ပါ။' : 'Birth date is in the future');
       return;
     }
     const g = premature ? Number(weeks) : undefined;
@@ -74,12 +74,12 @@ export function AddChild() {
       </h1>
       <p className="text-xs text-ink-soft">
         {locale === 'mm'
-          ? 'ကလေးကို ခွဲခြားသိနိုင်ရန် ချစ်စနိုးအမည်နှင့် မွေးသက္ကရာဇ်ကိုသာ ထည့်ပါ။ အမည်အပြည့်အစုံ မလိုအပ်ပါ။'
+          ? 'ကလေးကို ခွဲခြားသိရှိနိုင်ရန် အိမ်တွင်ခေါ်သည့်အမည်နှင့် မွေးသက္ကရာဇ်ကိုသာ ထည့်ပါ။ အမည်အပြည့်အစုံ ထည့်ရန် မလိုအပ်ပါ။'
           : 'Data minimization — nickname only, no full legal name.'}
       </p>
 
       <label className="block text-sm">
-        {locale === 'mm' ? 'ချစ်စနိုးအမည်' : 'Nickname'}
+        {locale === 'mm' ? 'ကလေးအမည် (အိမ်ခေါ်အမည်)' : 'Nickname'}
         <input value={nickname} onChange={(e) => setNickname(e.target.value)}
           className="mt-1 block w-full rounded-lg border border-line px-3 py-2" />
       </label>

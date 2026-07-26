@@ -172,7 +172,7 @@ const GUIDES: SeedItem[] = [
     guide('10_12m', 'gross_motor', {
       title: b('၁၀ – ၁၂ လ — ကြွက်သားကြီး လှုပ်ရှားမှု လမ်းညွှန်', '10–12 months — Gross motor guide'),
       why: b(
-        'ဤအရွယ်တွင် ကလေးအများစုသည် ပစ္စည်းကို ဆွဲကိုင်၍ မတ်တပ် ထရပ်ခြင်း၊ ပရိဘောဂကို ကိုင်လျက် ဘေးတိုက် လျှောက်ခြင်း (cruising) ကို စတင်လုပ်နိုင်သည်။ အချို့မှာ ခဏတာ လက်လွှတ် ရပ်နိုင်ပြီး အချို့မှာ ပထမဆုံး ခြေလှမ်းများကို လှမ်းကြသည်။ သို့သော် ၁၂ လတွင် လျှောက်နိုင်ရမည် ဟူသည် မရှိပါ — ကျန်းမာသော ကလေးများသည် ၉ လမှ ၁၈ လအတွင်း လျှောက်တတ်ကြပြီး ဤအကွာအဝေးမှာ ပုံမှန် ဖြစ်သည်။ တွားသွားပုံလည်း ကလေးတစ်ဦးနှင့်တစ်ဦး ကွဲပြားနိုင်ပြီး အချို့မှာ တွားခြင်း လုံးဝ မလုပ်ဘဲ တိုက်ရိုက် လျှောက်ကြသည်။',
+        'ဤအရွယ်တွင် ကလေးအများစုသည် ပစ္စည်းကို ဆွဲကိုင်၍ မတ်တပ်ရပ်ခြင်းနှင့် ပရိဘောဂကို ကိုင်လျက် ဘေးတိုက်လျှောက်ခြင်းတို့ကို စတင်လုပ်နိုင်သည်။ အချို့က ခဏတာ လက်လွှတ်ရပ်နိုင်ပြီး အချို့က ပထမဆုံး ခြေလှမ်းများကို လှမ်းကြသည်။ သို့သော် ၁၂ လတွင် လျှောက်နိုင်ရမည်ဟု မသတ်မှတ်နိုင်ပါ။ ကျန်းမာသော ကလေးများသည် ၉ လမှ ၁၈ လအတွင်း လျှောက်တတ်ကြပြီး ဤအချိန်ကွာခြားမှုမှာ ပုံမှန်ဖြစ်သည်။ တွားသွားပုံလည်း ကလေးတစ်ဦးနှင့်တစ်ဦး ကွဲပြားနိုင်ပြီး အချို့က တွားခြင်းမရှိဘဲ တိုက်ရိုက်လျှောက်တတ်ကြသည်။',
         'Around now many babies pull to stand and cruise sideways holding furniture. Some stand alone briefly, and some take first steps. But walking by 12 months is not required — healthy children walk anywhere between about 9 and 18 months, and that whole range is normal. Ways of moving also vary: some babies bottom-shuffle or roll, and some skip crawling altogether.',
       ),
       observationQuestions: [
@@ -203,7 +203,7 @@ const GUIDES: SeedItem[] = [
       ],
       materials: b('ဖျာ၊ ခိုင်ခံ့သော နိမ့်ခုံ၊ ပျော့သော ခေါင်းအုံးများ', 'A mat, a stable low bench, soft pillows'),
       safety: b(
-        'ကလေး ထရပ်လာသည်နှင့် အိမ်ကို ပြန်စစ်ပါ — မှီ၍ လဲနိုင်သော စားပွဲ၊ စင်၊ တီဗီများကို နံရံနှင့် တွယ်ထားပါ။ လှေကားများတွင် အထက်နှင့် အောက် နှစ်နေရာစလုံး တံခါးကာ တပ်ပါ။ ပြတင်းပေါက်များကို ပိတ်ထားပါ သို့မဟုတ် ကာရံပါ — ကလေးသည် ပရိဘောဂပေါ် တက်နိုင်သည်။ လိုက်ကာကြိုးများကို အမြင့်တွင် ချည်ထားပါ (လည်ပင်း ညှစ်နိုင်သည်)။ မီးပလပ်ပေါက်များကို ပိတ်ပါ။ ရေဗူး၊ ရေပုံး၊ ရေချိုးခွက်များကို ဗလာထားပါ။ မီးဖို၊ ရေနွေးအိုး၊ မီးပူများကို အလှမ်းမမီ ထားပါ။ ဆေးများနှင့် ဓာတုပစ္စည်းများကို သော့ခတ်ထားပါ။ ပါးစပ်ထဲ ဝင်နိုင်သော ပစ္စည်းငယ်များကို ဖယ်ပါ။ **ကလေး လျှောက်ကား (baby walker) ကို မသုံးပါနှင့်** — ၎င်းသည် လဲကျမှုနှင့် လှေကားမှ ကျမှု အန္တရာယ်ကို တိုးစေပြီး လျှောက်တတ်ချိန်ကို မမြန်စေပါ။',
+        'ကလေး ထရပ်လာသည်နှင့် အိမ်တွင်းဘေးကင်းရေးကို ပြန်စစ်ပါ။ မှီလိုက်လျှင် လဲနိုင်သော စားပွဲ၊ စင်နှင့် တီဗွီများကို နံရံတွင် ခိုင်ခန့်စွာ တွယ်ထားပါ။ လှေကား၏ အပေါ်နှင့် အောက် နှစ်နေရာစလုံးတွင် တံခါးကာ တပ်ပါ။ ကလေးသည် ပရိဘောဂပေါ် တက်နိုင်သဖြင့် ပြတင်းပေါက်များကို ပိတ်ထားပါ သို့မဟုတ် ကာရံထားပါ။ လိုက်ကာကြိုးများကို ကလေးလက်လှမ်းမမီအောင် ထားပါ။ မီးပလပ်ပေါက်များကို ပိတ်ကာထားပြီး ရေဗူး၊ ရေပုံးနှင့် ရေချိုးခွက်များကို ဗလာထားပါ။ မီးဖို၊ ရေနွေးအိုးနှင့် မီးပူများကို လက်လှမ်းမမီအောင် ထားပါ။ ဆေးဝါးနှင့် ဓာတုပစ္စည်းများကို သော့ခတ်သိမ်းဆည်းပြီး ပါးစပ်ထဲ ဝင်နိုင်သော ပစ္စည်းငယ်များကို ဖယ်ရှားပါ။ ကလေးလမ်းလျှောက်စက်ကို မသုံးပါနှင့်။ ယင်းသည် ပြုတ်ကျမှုနှင့် လှေကားမှ ကျမှုအန္တရာယ်ကို တိုးစေပြီး လမ်းလျှောက်တတ်ချိန်ကို မမြန်စေပါ။',
         'Once she pulls to stand, walk the house again. Anchor tables, shelves and TVs that could tip. Fit gates at the top and bottom of stairs. Keep windows closed or guarded — she can climb onto furniture. Tie blind and curtain cords high out of reach (they are a strangulation hazard). Cover sockets. Empty buckets, basins and bath water. Keep the stove, hot drinks, kettles and irons out of reach. Lock away medicines and cleaning products. Remove small objects that fit in her mouth. **Do not use a baby walker** — walkers increase falls and stair injuries and do not make walking come sooner.',
       ),
       commonMistakes: [
@@ -245,7 +245,7 @@ const GUIDES: SeedItem[] = [
     guide('10_12m', 'fine_motor', {
       title: b('၁၀ – ၁၂ လ — လက်ချောင်းငယ် လှုပ်ရှားမှု လမ်းညွှန်', '10–12 months — Fine motor guide'),
       why: b(
-        'ဤအရွယ်တွင် လက်မနှင့် လက်ညှိုးဖြင့် ညှပ်ယူခြင်း (pincer grasp) ပိုမို ကျွမ်းကျင်လာသည်။ ပစ္စည်းငယ်လေးများကို ကောက်ယူခြင်း၊ လက်တစ်ဖက်မှ တစ်ဖက်သို့ ပြောင်းကိုင်ခြင်း၊ ဗူးထဲ ထည့်ပြီး ပြန်ထုတ်ခြင်းကို အကြိမ်ကြိမ် လုပ်ချင်တတ်သည်။ ဤ ထည့်-ထုတ် ကစားနည်းသည် လက်နှင့် မျက်စိ ပူးတွဲ အလုပ်လုပ်မှုကို လေ့ကျင့်ပေးပြီး "ဗူးထဲမှာ ပစ္စည်း ရှိနေသေးသည်" ဟူသော အသိကိုလည်း တည်ဆောက်ပေးသည်။',
+        'ဤအရွယ်တွင် လက်မနှင့် လက်ညှိုးဖြင့် ညှပ်ယူနိုင်မှု ပိုမို ကျွမ်းကျင်လာသည်။ ပစ္စည်းငယ်များကို ကောက်ယူခြင်း၊ လက်တစ်ဖက်မှ တစ်ဖက်သို့ ပြောင်းကိုင်ခြင်း၊ ဗူးထဲ ထည့်ပြီး ပြန်ထုတ်ခြင်းတို့ကို အကြိမ်ကြိမ် လုပ်ချင်တတ်သည်။ ဤထည့်ထုတ်ကစားနည်းသည် လက်နှင့် မျက်စိ ပူးတွဲလုပ်ဆောင်နိုင်မှုကို လေ့ကျင့်ပေးပြီး ဗူးထဲတွင် ပစ္စည်းရှိနေဆဲဖြစ်ကြောင်းလည်း နားလည်လာစေသည်။',
         'The thumb-and-finger pincer grasp becomes more skilled now. She picks up small pieces, passes them hand to hand, and wants to put things into a container and take them out again, over and over. That in-and-out play trains hand–eye coordination and also builds the idea that an object still exists inside the container.',
       ),
       observationQuestions: [
@@ -280,7 +280,7 @@ const GUIDES: SeedItem[] = [
         'Everything used for in-and-out play must be too big to fit in her mouth. Never offer coins, buttons, nuts, dried beans, button batteries or small magnets. A swallowed button battery or magnet needs emergency hospital care immediately. Keep plastic bags, balloons and long cords well away. Never leave her playing alone.',
       ),
       commonMistakes: [
-        b('အလွန် ပါးလွှာ၍ ငယ်သော ပစ္စည်းများကို ညှပ်လေ့ကျင့်ရန် ပေးခြင်း — အန်တံ ပိတ်နိုင်သည်။', 'Offering tiny objects to practise pinching — a choking risk.'),
+        b('လက်ညှိုးနှင့် လက်မဖြင့် ကောက်ကိုင်လေ့ကျင့်ရန် ပစ္စည်းအလွန်သေးသေးများ ပေးခြင်း — မျိုချမိပြီး အသက်ရှူလမ်းကြောင်း ပိတ်ဆို့နိုင်သည်။', 'Offering tiny objects to practise pinching — a choking risk.'),
         b('ကလေးအတွက် အမြဲ ကူညီပေးခြင်း — ကိုယ်တိုင် ကြိုးစားခွင့် ပေးပါ။', 'Doing it for her every time — let her try and struggle a little.'),
       ],
       parentTips: [
@@ -332,22 +332,22 @@ const GUIDES_B: SeedItem[] = [
       dailyActivities: [
         b('ကလေး ထွက်သော အသံကို ပြန်တုပြီး စောင့်ပေးပါ — အလှည့်ကျ စကားပြောခြင်း ဖြစ်သည်။', 'Copy her sound back and then wait — that is turn-taking.'),
         b('လုပ်နေသည့် အလုပ်ကို စကားဖြင့် ပြောပြပါ ("ရေခပ်နေတယ်")။', 'Narrate what you are doing ("I am pouring water").'),
-        b('ပစ္စည်းကို အမည်တပ်၍ ခေါ်ပါ — "ခွက်"၊ "ဘောလုံး"။', 'Name objects clearly — "cup", "ball".'),
+        b('ပစ္စည်းတစ်ခုစီ၏ အမည်ကို ရှင်းရှင်းလင်းလင်း ပြောပေးပါ — “ခွက်”၊ “ဘောလုံး”။', 'Name objects clearly — "cup", "ball".'),
       ],
       weeklyActivities: [
         b('တူညီသော သီချင်း ၂–၃ ပုဒ်ကို ထပ်ခါထပ်ခါ ဆိုပေးပါ။', 'Sing the same two or three songs repeatedly.'),
-        b('ပုံစာအုပ်တစ်အုပ်ကို အတူတူ ကြည့်၍ ပုံများကို အမည်တပ်ပါ။', 'Look at one picture book together and name the pictures.'),
+        b('ပုံစာအုပ်တစ်အုပ်ကို အတူတူကြည့်ပြီး ပုံတစ်ပုံစီ၏ အမည်ကို ပြောပေးပါ။', 'Look at one picture book together and name the pictures.'),
       ],
       indoor: [
         b('တိရစ္ဆာန် အသံများ ("မီးမီး"၊ "ဝုတ်ဝုတ်") ကို အတူတူ လုပ်ခြင်း။', 'Making animal sounds together.'),
         b('မှန်ရှေ့တွင် အတူရပ်၍ စကားပြောခြင်း။', 'Talking together in front of a mirror.'),
       ],
       outdoor: [
-        b('လမ်းလျှောက်ရင်း မြင်ရသည့်အရာများကို အမည်တပ်ပြောပြခြင်း။', 'Naming what you both see while out walking.'),
+        b('လမ်းလျှောက်ရင်း မြင်တွေ့သည့် အရာများ၏ အမည်ကို ပြောပြပေးခြင်း။', 'Naming what you both see while out walking.'),
       ],
       lowCost: [
         b('စကားပြောခြင်း၊ သီချင်းဆိုခြင်းသည် အခမဲ့ဖြစ်ပြီး အထိရောက်ဆုံး ဖြစ်သည်။', 'Talking and singing cost nothing and work best.'),
-        b('စာအုပ် မရှိလျှင် အိမ်သုံးပစ္စည်းများကို အမည်တပ်ပြောပြပါ။', 'With no book, name household objects instead.'),
+        b('စာအုပ်မရှိလျှင် အိမ်သုံးပစ္စည်းများကို ပြသပြီး အမည်ပြောပေးပါ။', 'With no book, name household objects instead.'),
       ],
       materials: b('မလို — မိဘ၏ အသံသာ လိုသည်', 'None — your voice is enough'),
       safety: b(
@@ -408,7 +408,7 @@ const GUIDES_B: SeedItem[] = [
       ],
       weeklyActivities: [
         b('ပုံစာအုပ်ထဲမှ ပစ္စည်းများကို "ဘယ်မှာလဲ" ဟု မေးပါ။', 'Ask "where is the…?" with a picture book.'),
-        b('မိသားစု ဓာတ်ပုံများကို ကြည့်၍ လူတိုင်းကို အမည်တပ်ခေါ်ပါ။', 'Look at family photos and name everyone.'),
+        b('မိသားစုဓာတ်ပုံများကို အတူကြည့်ပြီး ပုံထဲမှ လူတစ်ဦးစီ၏ အမည်ကို ပြောပေးပါ။', 'Look at family photos and name everyone.'),
       ],
       indoor: [
         b('ကစားစရာ ၂ ခုထဲမှ တစ်ခုကို "ဘယ်ဟာလိုချင်လဲ" ဟု ရွေးခိုင်းခြင်း။', 'Offering a choice between two toys.'),
@@ -432,7 +432,7 @@ const GUIDES_B: SeedItem[] = [
       ],
       parentTips: [
         b('တစ်နေ့လျှင် အနည်းဆုံး နှစ်ကြိမ် ကလေးနှင့် မျက်နှာချင်းဆိုင် စကားပြောချိန် ယူပါ။', 'Take at least two face-to-face talking times a day.'),
-        b('ကလေး ကြည့်နေသည့် အရာကို အမည်တပ်ပေးပါ — အာရုံစိုက်ရာကို လိုက်ပါ။', 'Name whatever she is already looking at — follow her attention.'),
+        b('ကလေး ကြည့်နေသည့်အရာ၏ အမည်ကို ပြောပေးပါ။ ကလေး စိတ်ဝင်စားနေသည့် အရာကို လိုက်၍ စကားပြောပါ။', 'Name whatever she is already looking at — follow her attention.'),
       ],
       faq: [
         {
@@ -467,7 +467,7 @@ const GUIDES_C: SeedItem[] = [
     guide('10_12m', 'cognitive', {
       title: b('၁၀ – ၁၂ လ — အသိဉာဏ် ဖွံ့ဖြိုးမှု လမ်းညွှန်', '10–12 months — Cognitive guide'),
       why: b(
-        'ဤအရွယ်တွင် ကလေးသည် "မမြင်ရသော်လည်း ရှိနေသေးသည်" ဟူသော အသိ (object permanence) ကို ပိုမို ခိုင်မာစွာ ရရှိလာသည်။ ထို့ကြောင့် ဝှက်ထားသော ကစားစရာကို ရှာတတ်ပြီး၊ ပုန်းတမ်းကစားခြင်းကို နှစ်သက်သည်။ တစ်ချိန်တည်းမှာပင် အကြောင်းနှင့် အကျိုး (ခလုတ်နှိပ်လျှင် အသံထွက်သည်၊ ပစ်ချလျှင် ကျသည်) ကိုလည်း စမ်းသပ်နေသည်။ ဤစမ်းသပ်မှုများသည် ဖျက်ဆီးလိုစိတ် မဟုတ်ဘဲ သိပ္ပံနည်းကျ လေ့လာမှု ဖြစ်သည်။',
+        'ဤအရွယ်တွင် ကလေးသည် မျက်စိရှေ့တွင် မမြင်ရသော်လည်း ပစ္စည်းရှိနေဆဲဖြစ်ကြောင်း ပိုမို ခိုင်မာစွာ နားလည်လာသည်။ ထို့ကြောင့် ဝှက်ထားသော ကစားစရာကို ရှာတတ်ပြီး ပုန်းတမ်းကစားခြင်းကို နှစ်သက်သည်။ တစ်ချိန်တည်းတွင် ခလုတ်နှိပ်လျှင် အသံထွက်ခြင်း၊ ပစ္စည်းပစ်ချလျှင် ကျသွားခြင်းကဲ့သို့ အကြောင်းနှင့် အကျိုးကိုလည်း စမ်းသပ်နေသည်။ ယင်းသည် ဖျက်ဆီးလိုစိတ်ကြောင့် မဟုတ်ဘဲ စူးစမ်းလေ့လာနေခြင်း ဖြစ်သည်။',
         'Object permanence — knowing that something still exists when it is out of sight — becomes firmer now. That is why she searches for a hidden toy and loves peekaboo. At the same time she is testing cause and effect: press this and it makes a noise, drop that and it falls. This is experimentation, not naughtiness.',
       ),
       observationQuestions: [
@@ -539,7 +539,7 @@ const GUIDES_C: SeedItem[] = [
     guide('10_12m', 'social', {
       title: b('၁၀ – ၁၂ လ — လူမှုဆက်ဆံရေး လမ်းညွှန်', '10–12 months — Social guide'),
       why: b(
-        'ဤအရွယ်တွင် ကလေးသည် လူကြီးများကို တုပရန် အလွန် စိတ်ဝင်စားသည် — လက်ပြခြင်း၊ လက်ခုပ်တီးခြင်း၊ မျက်နှာအမူအရာ တုပခြင်း။ တစ်ခုခုကို မြင်လျှင် သင့်ဘက် လှည့်ကြည့်ပြီး "ဒါကို အတူတူ ကြည့်ရအောင်" ဟု ဆိုလိုသည့် ပူးတွဲအာရုံစိုက်မှု (joint attention) ပေါ်လာသည်။ ၎င်းသည် နောင်တွင် ဘာသာစကားနှင့် လူမှုဆက်ဆံရေး၏ အခြေခံ ဖြစ်သည်။',
+        'ဤအရွယ်တွင် ကလေးသည် လက်ပြခြင်း၊ လက်ခုပ်တီးခြင်းနှင့် မျက်နှာအမူအရာများကို လူကြီးထံမှ တုပရန် အလွန် စိတ်ဝင်စားလာသည်။ စိတ်ဝင်စားဖွယ်အရာတစ်ခုကို မြင်လျှင် ထိုအရာနှင့် လူကြီးကို အပြန်အလှန် ကြည့်ပြီး အာရုံစိုက်မှုကို မျှဝေတတ်လာသည်။ ယင်းသည် နောင်တွင် ဘာသာစကားနှင့် လူမှုဆက်ဆံရေး ဖွံ့ဖြိုးရန် အရေးကြီးသော အခြေခံတစ်ခု ဖြစ်သည်။',
         'Copying adults becomes a favourite activity — waving, clapping, copying faces. She now looks from an interesting thing back to you, sharing it: joint attention. That shared looking is a foundation for later language and social skills.',
       ),
       observationQuestions: [
@@ -550,7 +550,7 @@ const GUIDES_C: SeedItem[] = [
       ],
       dailyActivities: [
         b('လက်ပြခြင်း၊ လက်ခုပ်တီးခြင်းကို နေ့စဉ် အတူတူ လုပ်ပါ။', 'Wave and clap together every day.'),
-        b('ကလေး ပြသည့် ပစ္စည်းကို စိတ်ဝင်စားစွာ ကြည့်ပြီး အမည်တပ်ပေးပါ။', 'When she shows you something, look at it with interest and name it.'),
+        b('ကလေး ပြသည့်ပစ္စည်းကို စိတ်ဝင်စားစွာ ကြည့်ပြီး ထိုပစ္စည်း၏ အမည်ကို ပြောပေးပါ။', 'When she shows you something, look at it with interest and name it.'),
         b('ရိုးရှင်းသော အလှည့်ကျ ကစားနည်း — သင် တစ်လှည့်၊ ကလေး တစ်လှည့်။', 'Play simple turn-taking games — your turn, her turn.'),
       ],
       weeklyActivities: [
@@ -613,7 +613,7 @@ const GUIDES_D: SeedItem[] = [
     guide('10_12m', 'emotional', {
       title: b('၁၀ – ၁၂ လ — စိတ်ခံစားမှု ဖွံ့ဖြိုးမှု လမ်းညွှန်', '10–12 months — Emotional guide'),
       why: b(
-        'ဤအရွယ်တွင် ကလေး၏ ခံစားချက်များသည် ပိုမို ပြင်းထန်လာပြီး ခွဲခွာမှု စိုးရိမ်ခြင်းသည် အထွတ်အထိပ် ရောက်တတ်သည်။ ကလေးသည် မိမိကိုယ်ကို ငြိမ်းအောင် မလုပ်နိုင်သေးပါ — လူကြီး၏ တည်ငြိမ်မှုကို "ချေးငှား" ပြီး စိတ်ကို ပြန်တည်ငြိမ်စေသည်။ ဤအရာကို co-regulation ဟု ခေါ်သည်။ တုံ့ပြန်မှု မြန်ဆန်၍ တည်ငြိမ်သော ပြုစုစောင့်ရှောက်မှုသည် ကလေး၏ စိတ်ခံစားမှု အခြေခံကို တည်ဆောက်ပေးသည်။',
+        'ဤအရွယ်တွင် ကလေး၏ ခံစားချက်များ ပိုမိုပြင်းထန်လာပြီး မိဘနှင့် ခွဲခွာရမည်ကို စိုးရိမ်မှုလည်း များလာတတ်သည်။ ကလေးသည် မိမိကိုယ်ကို အပြည့်အဝ မတည်ငြိမ်စေနိုင်သေးသဖြင့် ပြုစုစောင့်ရှောက်သူက ပွေ့ဖက်ခြင်း၊ နူးညံ့စွာ ပြောခြင်းနှင့် အနီးတွင် ရှိပေးခြင်းတို့ဖြင့် ကူညီပေးရသည်။ နွေးထွေးပြီး တည်ငြိမ်စွာ တုံ့ပြန်ပေးသည့် ပြုစုစောင့်ရှောက်မှုသည် ကလေး၏ စိတ်ခံစားမှု ဖွံ့ဖြိုးရေးအတွက် အရေးကြီးသည်။',
         'Feelings run stronger now and separation anxiety often peaks. She cannot calm herself yet — she borrows an adult’s steadiness to settle, which is called co-regulation. Warm, predictable, responsive care is what builds her emotional foundation.',
       ),
       observationQuestions: [
@@ -624,7 +624,7 @@ const GUIDES_D: SeedItem[] = [
       ],
       dailyActivities: [
         b('ငိုလျှင် အနီးသို့ သွား၍ ငြိမ်သက်သော အသံဖြင့် ပြောပေးပါ။', 'Go to her when she cries and speak in a calm voice.'),
-        b('ခံစားချက်ကို အမည်တပ်ပေးပါ — "စိတ်ဆိုးနေတာလား"၊ "ပျော်နေတယ်နော်"။', 'Name the feeling — "you are cross", "you are happy".'),
+        b('ကလေး၏ ခံစားချက်ကို စကားလုံးဖြင့် ဖော်ပြပေးပါ — “စိတ်ဆိုးနေတာလား”၊ “ပျော်နေတယ်နော်”။', 'Name the feeling — "you are cross", "you are happy".'),
         b('ထွက်သွားရာတွင် အမြဲ တူညီသော နှုတ်ဆက်စကား သုံးပါ။', 'Use the same short goodbye every time you leave.'),
       ],
       weeklyActivities: [
@@ -684,7 +684,7 @@ const GUIDES_D: SeedItem[] = [
     guide('10_12m', 'self_help', {
       title: b('၁၀ – ၁၂ လ — ကိုယ်တိုင် လုပ်ဆောင်နိုင်မှု လမ်းညွှန်', '10–12 months — Self-help guide'),
       why: b(
-        'ဤအရွယ်တွင် ကလေးသည် ကိုယ်တိုင် စားရန် စိတ်ဝင်စားလာသည် — လက်ဖြင့် အစာကောက်စားခြင်း၊ ဇွန်းကို ကိုင်ကြည့်ခြင်း၊ ဖွင့်ထားသော ခွက် (open cup) ဖြင့် သောက်ကြည့်ခြင်း။ ဤအရာများသည် ရှုပ်ပွမည်မှာ သေချာသော်လည်း လက်ကျွမ်းကျင်မှု၊ ကိုယ်ပိုင် ဆုံးဖြတ်နိုင်မှုနှင့် ဗိုက်ပြည့်မှုကို ကိုယ်တိုင် သိရှိနိုင်မှုကို လေ့ကျင့်ပေးသည်။ ဤအရွယ်တွင် သွား စတင် ပေါက်လာတတ်၍ ပါးစပ် သန့်ရှင်းရေးကိုလည်း စတင်သင့်သည်။',
+        'ဤအရွယ်တွင် ကလေးသည် ကိုယ်တိုင် စားသောက်ရန် စိတ်ဝင်စားလာတတ်သည်။ လက်ဖြင့် အစာကောက်စားခြင်း၊ ဇွန်းကို ကိုင်ကြည့်ခြင်းနှင့် အဖုံးမပါသော ခွက်ဖြင့် သောက်ကြည့်ခြင်းတို့ကို စတင်နိုင်သည်။ အစာစားရာတွင် ရှုပ်ပွနိုင်သော်လည်း ယင်းအတွေ့အကြုံများက လက်ချောင်းလှုပ်ရှားမှု၊ ကိုယ်တိုင်ရွေးချယ်နိုင်မှုနှင့် ဗိုက်ပြည့်မှုကို သိရှိတတ်လာစေရန် ကူညီပေးသည်။ သွားစတင်ပေါက်လာချိန်ဖြစ်သဖြင့် ခံတွင်းသန့်ရှင်းရေးကိုလည်း စတင်ပေးသင့်သည်။',
         'She now wants to do things herself — picking up finger foods, holding a spoon, sipping from an open cup. It will be messy, but it trains hand skills, choice-making and her own sense of fullness. Teeth are usually appearing too, so oral care starts now.',
       ),
       observationQuestions: [
@@ -715,20 +715,20 @@ const GUIDES_D: SeedItem[] = [
       ],
       materials: b('ခွက်ငယ်၊ ဇွန်း၊ ပျော့သော သွားတိုက်တံ', 'A small cup, a spoon, a soft toothbrush'),
       safety: b(
-        'အစာစားစဉ် ကလေးအား အမြဲ ကြီးကြပ်ပါ၊ မတ်မတ် ထိုင်စေပါ၊ လမ်းလျှောက်ရင်း သို့မဟုတ် ကားစီးရင်း မစားစေပါနှင့်။ အန်တံ ပိတ်နိုင်သော အစာများ — အခွံမာသီး၊ ပဲစေ့ လုံးလုံး၊ စပျစ်သီး လုံးလုံး၊ ချယ်ရီသီး၊ ပေါက်ပေါက်၊ ဆားလုံး၊ ကြက်ဆူ၊ ငါးရိုးပါသော အသား၊ မာသော အသီးအရွက် အတုံးလိုက် — ကို မပေးပါနှင့်။ စပျစ်သီးနှင့် ချယ်ရီသီးကို လေးပိုင်း ဖြတ်ပါ။ ပျားရည်ကို ၁ နှစ်အောက် ကလေးအား လုံးဝ မတိုက်ပါနှင့် (infant botulism အန္တရာယ်)။ နွားနို့ကို ၁၂ လအောက်တွင် အဓိက သောက်စရာအဖြစ် မတိုက်ပါနှင့် — ချက်ပြုတ်ရာတွင် အနည်းငယ် ထည့်သုံးနိုင်သည်။ ဆားနှင့် သကြားကို ထပ်မထည့်ပါနှင့်။ သွားတိုက်ဆေးသုံးလျှင် ဆန်စေ့ခန့်သာ သုံးပါ။ ခွက်ဖြင့် ညအိပ်ရာဝင်ချိန် နို့ထားပေးခြင်းကို ရှောင်ပါ — သွားပိုးစားနိုင်သည်။',
+        'ကလေး စားနေစဉ် အမြဲ အနီးကပ်ကြီးကြပ်ပြီး မတ်မတ်ထိုင်စေပါ။ လမ်းလျှောက်နေစဉ် သို့မဟုတ် ကားစီးနေစဉ် မစားစေပါနှင့်။ အသက်ရှူလမ်းကြောင်း ပိတ်ဆို့စေနိုင်သော အခွံမာသီးလုံး၊ ပဲစေ့လုံး၊ စပျစ်သီးလုံး၊ ချယ်ရီသီးလုံး၊ ပြောင်းဖူးပေါက်ပေါက်၊ သကြားလုံးမာ၊ ဝက်အူချောင်းအဝိုင်း၊ ငါးရိုးပါသောအသားနှင့် မာသော ဟင်းသီးဟင်းရွက်အတုံးများကို မပေးပါနှင့်။ စပျစ်သီးနှင့် ချယ်ရီသီးကို အလျားလိုက် လေးစိတ်ခွဲပေးပါ။ အသက် ၁ နှစ်မပြည့်မီ ပျားရည် မပေးပါနှင့်။ အသက် ၁၂ လမပြည့်မီ နွားနို့ကို အဓိကသောက်စရာအဖြစ် မပေးသင့်သော်လည်း ချက်ပြုတ်ရာတွင် အနည်းငယ် ထည့်သုံးနိုင်သည်။ ဆားနှင့် သကြား ထပ်မထည့်ပါနှင့်။ သွားတိုက်ဆေးသုံးပါက ဆန်စေ့ပမာဏခန့်သာ သုံးပါ။ အိပ်ရာဝင်ချိန်တွင် နို့ဗူး သို့မဟုတ် နို့ခွက်ကို ပါးစပ်တွင် တပ်ထားပေးခြင်းက သွားပိုးစားစေနိုင်သဖြင့် ရှောင်ပါ။',
         'Always supervise eating, keep her sitting upright, and never let her eat while walking or in a moving vehicle. Avoid choking foods — nuts, whole beans, whole grapes, whole cherries, popcorn, hard sweets, sausage rounds, fish with bones, and hard raw vegetable chunks. Quarter grapes and cherries lengthways. Never give honey before 12 months (risk of infant botulism). Do not give cow’s milk as a main drink before 12 months, though small amounts in cooking are fine. Add no salt or sugar. If using toothpaste, use only a rice-grain smear. Avoid leaving her with a bottle or cup of milk at bedtime — it causes tooth decay.',
       ),
       commonMistakes: [
         b('ရှုပ်ပွမည် စိုးရိမ်၍ ကိုယ်တိုင် စားခွင့် မပေးခြင်း။', 'Not letting her self-feed because of the mess.'),
-        b('ချောင်းဆိုးသံ ကြားတိုင်း အန်တံပိတ်ခြင်းဟု ထင်ခြင်း — ချောင်းဆိုးခြင်းသည် ကိုယ်တိုင် ရှင်းနေခြင်း ဖြစ်နိုင်သည်။', 'Confusing coughing with choking — coughing usually means she is clearing it herself.'),
+        b('ကလေး ချောင်းဆိုးတိုင်း အစာကြောင့် အသက်ရှူလမ်းကြောင်း ပိတ်နေသည်ဟု ထင်ခြင်း။ ချောင်းဆိုးနိုင်သေးခြင်းက အစာကို ကိုယ်တိုင်ဖယ်ရှားရန် ကြိုးစားနေခြင်း ဖြစ်နိုင်သည်။', 'Confusing coughing with choking — coughing usually means she is clearing it herself.'),
       ],
       parentTips: [
         b('အစာကို ကလေး၏ လက်ညှိုးအရွယ် အရှည်လိုက် ဖြတ်ပေးပါ — ကိုင်ရလွယ်ပြီး ပိုလုံခြုံသည်။', 'Cut food into finger-length strips — easier to hold and safer.'),
-        b('အန်တံ ပိတ်ခြင်းအတွက် ရှေးဦး ကုသနည်းကို လေ့လာထားပါ။', 'Learn basic infant choking first aid in advance.'),
+        b('ကလေး အစာသီးပြီး အသက်ရှူလမ်းကြောင်း ပိတ်ဆို့သည့်အခါ လုပ်ဆောင်ရမည့် ရှေးဦးပြုစုနည်းကို ကြိုတင်လေ့လာထားပါ။', 'Learn basic infant choking first aid in advance.'),
       ],
       faq: [
         {
-          q: b('ကိုယ်တိုင် စားခိုင်းရင် အန်တံ ပိတ်မှာ စိုးရိမ်တယ်။', 'I am afraid she will choke if she feeds herself.'),
+          q: b('ကလေးကို ကိုယ်တိုင်စားခိုင်းလျှင် အစာသီးမှာ စိုးရိမ်ပါတယ်။', 'I am afraid she will choke if she feeds herself.'),
           a: b('စိုးရိမ်မှုသည် သဘာဝ ဖြစ်ပါသည်။ လုံခြုံရေး၏ အဓိကမှာ အစာ၏ ပုံသဏ္ဌာန်နှင့် ကြီးကြပ်မှု ဖြစ်သည် — ပျော့ပြီး လက်ဖြင့် ဖိလျှင် ကြေသော အစာကို အရှည်လိုက် ဖြတ်ပေးပါ၊ မတ်မတ် ထိုင်စေပါ၊ အနားတွင် အမြဲ ရှိပါ။', 'That worry is natural. Safety comes from food shape and supervision — offer soft foods that squash between your fingers, cut into strips, keep her sitting upright, and stay with her.'),
         },
         {
@@ -834,12 +834,12 @@ const GUIDES_F: SeedItem[] = [
     guide('10_12m', 'nutrition', {
       title: b('၁၀ – ၁၂ လ — အာဟာရ လမ်းညွှန်', '10–12 months — Nutrition guide'),
       why: b(
-        'ဤအရွယ်တွင် အစားအစာသည် ကလေး၏ အာဟာရတွင် အခန်းကဏ္ဍ ပိုကြီးလာသည်။ တစ်နေ့လျှင် အဓိက အစာ ၃ နပ်နှင့် အကြားစာ ၁–၂ ကြိမ် ခန့် ဖြစ်လာနိုင်ပြီး၊ မိခင်နို့ကို ၂ နှစ် သို့မဟုတ် ထို့ထက်ကျော်၍ ဆက်တိုက်ကျွေးနိုင်သည်။ အသွင်အပြင်ကို တဖြည်းဖြည်း တိုးမြှင့်ရမည် — ချေဖတ်ထားသည်မှ ခဲဖတ်ပါသည်၊ ထို့နောက် လက်ဖြင့် ကိုင်စားနိုင်သော အတုံးများ။ သံဓာတ် ကြွယ်ဝသော အစာများ (အသား၊ ငါး၊ ဥ၊ ပဲ၊ အစိမ်းရောင် ဟင်းသီးဟင်းရွက်) သည် အထူး အရေးကြီးသည်။',
+        'ဤအရွယ်တွင် ဖြည့်စွက်အစားအစာက ကလေး၏ အာဟာရအတွက် ပိုမိုအရေးပါလာသည်။ တစ်နေ့လျှင် အဓိကအစာ သုံးနပ်နှင့် အကြားစာ တစ်ကြိမ်မှ နှစ်ကြိမ်ခန့် ပေးနိုင်ပြီး မိခင်နို့ကို အသက် ၂ နှစ် သို့မဟုတ် ထို့ထက်ကျော်လွန်၍ ဆက်လက်တိုက်ကျွေးနိုင်သည်။ အစာကို ချောမွေ့အောင် ကြိတ်ထားသည့်ပုံစံမှ အဖတ်အနည်းငယ်ပါသည့်ပုံစံ၊ ထို့နောက် လက်ဖြင့် ကိုင်စားနိုင်သည့် နူးညံ့သောအတုံးများအဖြစ် တဖြည်းဖြည်း ပြောင်းပေးပါ။ အသား၊ ငါး၊ ဥ၊ ပဲနှင့် အစိမ်းရောင် ဟင်းသီးဟင်းရွက်ကဲ့သို့ သံဓာတ်ကြွယ်ဝသော အစားအစာများသည် အထူးအရေးကြီးသည်။',
         'Food now plays a larger part in her nutrition — often about three main meals plus one or two snacks a day, alongside breastfeeding which can continue to two years and beyond. Texture should progress gradually from puréed to mashed with soft lumps, then to soft finger pieces. Iron-rich foods — meat, fish, eggs, beans and dark green vegetables — matter especially at this age.',
       ),
       observationQuestions: [
         b('တစ်နေ့လျှင် အဓိက အစာ ၃ နပ် စားပါသလား။', 'Is she eating about three main meals a day?'),
-        b('ခဲဖတ်ပါသော အစာနှင့် လက်ဖြင့် ကိုင်စားရသော အစာများကို လက်ခံပါသလား။', 'Does she accept lumpy food and finger pieces?'),
+        b('အဖတ်အနည်းငယ်ပါသော အစာနှင့် လက်ဖြင့်ကိုင်စားနိုင်သည့် နူးညံ့သောအစာများကို စားနိုင်ပါသလား။', 'Does she accept lumpy food and finger pieces?'),
         b('သံဓာတ် ကြွယ်ဝသော အစာ နေ့စဉ် ပါဝင်ပါသလား။', 'Is an iron-rich food included every day?'),
         b('ဗိုက်ပြည့်လျှင် ခေါင်းလွှဲခြင်း၊ ပါးစပ်ပိတ်ခြင်း ကဲ့သို့ အချက်ပြပါသလား။', 'Does she signal fullness by turning away or closing her mouth?'),
       ],
@@ -857,7 +857,7 @@ const GUIDES_F: SeedItem[] = [
         b('အစာကို လက်ညှိုးအရွယ် အရှည်လိုက် ဖြတ်၍ ကိုယ်တိုင် စားစေခြင်း။', 'Cutting food into finger-length strips for self-feeding.'),
       ],
       outdoor: [
-        b('ဈေးသို့ အတူသွား၍ အသီးအရွက်များကို ပြသ၍ အမည်တပ်ပေးခြင်း။', 'Visiting the market together and naming fruits and vegetables.'),
+        b('ဈေးသို့ အတူသွားသည့်အခါ သစ်သီးနှင့် ဟင်းသီးဟင်းရွက်များကို ပြသပြီး အမည်ပြောပေးခြင်း။', 'Visiting the market together and naming fruits and vegetables.'),
       ],
       lowCost: [
         b('ဒေသထွက် ပဲ၊ ဥ၊ ငါး၊ အစိမ်းရောင် ဟင်းရွက်များသည် ဈေးသက်သာပြီး အာဟာရ ပြည့်ဝသည်။', 'Local beans, eggs, fish and dark green leaves are cheap and nutritious.'),
@@ -865,11 +865,11 @@ const GUIDES_F: SeedItem[] = [
       ],
       materials: b('ခွက်၊ ဇွန်း၊ မိသားစု အစာ (ဆား၊ သကြား မထည့်ရသေးသော အပိုင်း)', 'A cup, a spoon and family food set aside before salt or sugar'),
       safety: b(
-        'အန်တံ ပိတ်နိုင်သော အစာများကို ရှောင်ပါ — အခွံမာသီး၊ ပဲစေ့ လုံးလုံး၊ စပျစ်သီးနှင့် ချယ်ရီသီး လုံးလုံး (လေးပိုင်း ဖြတ်ပါ)၊ ပေါက်ပေါက်၊ ဆားလုံး၊ ကြက်ဆူကို အလုံးလိုက်၊ ငါးရိုးပါသော အသား၊ မာသော အသီးအရွက် အတုံးများ။ အစာစားစဉ် အမြဲ ကြီးကြပ်ပြီး မတ်မတ် ထိုင်စေပါ။ ပျားရည်ကို ၁၂ လအောက်တွင် လုံးဝ မတိုက်ပါနှင့်။ နွားနို့ကို ၁၂ လအောက်တွင် အဓိက သောက်စရာအဖြစ် မတိုက်ပါနှင့်။ ဆားနှင့် သကြား ထပ်မထည့်ပါနှင့်၊ ချိုသော အချိုရည်နှင့် လက်ဖက်ရည် မတိုက်ပါနှင့်။ ပျားရည်၊ အခွံမာသီး၊ ငါး၊ ဥ၊ နို့ထွက်ပစ္စည်း ကဲ့သို့ ဓာတ်မတည့်နိုင်သော အစာများကို ရှောင်ရန် မလိုပါ (ပျားရည် မှလွဲ၍) — တစ်မျိုးချင်း တဖြည်းဖြည်း မိတ်ဆက်ပြီး တုံ့ပြန်မှုကို စောင့်ကြည့်ပါ။ မိသားစုတွင် ဓာတ်မတည့်မှု သမိုင်း ရှိလျှင် ကျန်းမာရေးဝန်ထမ်းနှင့် တိုင်ပင်ပါ။ အစာကို ကောင်းစွာ ချက်ပြုတ်ပါ၊ လက်ဆေးပါ၊ သန့်ရှင်းသော ရေကို သုံးပါ။ ကျန်ကြွင်းသော အစာကို ကြာရှည် မထားပါနှင့်။',
+        'အသက်ရှူလမ်းကြောင်း ပိတ်ဆို့စေနိုင်သော အခွံမာသီးလုံး၊ ပဲစေ့လုံး၊ စပျစ်သီးနှင့် ချယ်ရီသီးလုံး၊ ပြောင်းဖူးပေါက်ပေါက်၊ သကြားလုံးမာ၊ ဝက်အူချောင်းအဝိုင်း၊ ငါးရိုးပါသောအသားနှင့် မာသော ဟင်းသီးဟင်းရွက်အတုံးများကို ရှောင်ပါ။ စပျစ်သီးနှင့် ချယ်ရီသီးကို အလျားလိုက် လေးစိတ်ခွဲပေးပါ။ အစာစားစဉ် အမြဲ အနီးကပ်ကြီးကြပ်ပြီး ကလေးကို မတ်မတ်ထိုင်စေပါ။ အသက် ၁၂ လမပြည့်မီ ပျားရည် မပေးပါနှင့်။ နွားနို့ကိုလည်း အဓိကသောက်စရာအဖြစ် မပေးပါနှင့်။ ဆားနှင့် သကြား ထပ်မထည့်ဘဲ ချိုသောအချိုရည်နှင့် လက်ဖက်ရည်ကို ရှောင်ပါ။ ဥ၊ ငါး၊ နို့ထွက်ပစ္စည်းနှင့် ချောမွေ့အောင် ဖျော်ထားသော အခွံမာသီးထုတ်ကုန်များကဲ့သို့ ဓာတ်မတည့်နိုင်သော အစားအစာများကို တစ်မျိုးချင်း အနည်းငယ်စီ စတင်ပေးပြီး တုံ့ပြန်မှုကို စောင့်ကြည့်နိုင်သည်။ မိသားစုတွင် ဓာတ်မတည့်မှုမှတ်တမ်းရှိပါက ကျန်းမာရေးဝန်ထမ်းနှင့် တိုင်ပင်ပါ။ အစားအစာကို ကောင်းစွာချက်ပြုတ်ပြီး လက်နှင့် အသုံးအဆောင်များကို သန့်ရှင်းစွာထားပါ။ သန့်ရှင်းသောရေကို သုံးပြီး ကျန်ရှိသောအစာကို အချိန်ကြာမြင့်စွာ မထားပါနှင့်။',
         'Avoid choking foods — nuts, whole beans, whole grapes and cherries (quarter them), popcorn, hard sweets, whole sausage rounds, fish with bones and hard raw vegetable chunks. Always supervise meals with her sitting upright. Never give honey before 12 months. Do not use cow’s milk as a main drink before 12 months. Add no salt or sugar and avoid sweet drinks and tea. Common allergenic foods such as egg, fish, dairy and nut products (as smooth pastes, never whole nuts) do not need to be avoided — introduce them one at a time and watch the response. If there is a family history of allergy, discuss it with a health worker first. Cook food thoroughly, wash hands, use clean water, and do not keep leftovers for long.',
       ),
       commonMistakes: [
-        b('ချေဖတ်ထားသော အစာကိုသာ ကြာရှည် ကျွေးခြင်း — အသွင်အပြင် တိုးမြှင့်ရန် လိုသည်။', 'Staying on purée too long — textures need to progress.'),
+        b('ချောမွေ့အောင် ကြိတ်ထားသော အစာကိုသာ အချိန်ကြာမြင့်စွာ ကျွေးခြင်း။ ကလေးစားနိုင်သည့် အစာအဖတ်နှင့် ပုံစံကို တဖြည်းဖြည်း ပြောင်းပေးရန် လိုသည်။', 'Staying on purée too long — textures need to progress.'),
         b('အတင်း ကျွေးခြင်း သို့မဟုတ် ငိုအောင် တိုက်တွန်းခြင်း။', 'Force-feeding or pressuring until she cries.'),
         b('အချိုရည်၊ လက်ဖက်ရည် သို့မဟုတ် ဆားပါသော အစာ တိုက်ခြင်း။', 'Giving sweet drinks, tea or salty food.'),
       ],
@@ -972,7 +972,7 @@ const GUIDES_G: SeedItem[] = [
         'Discuss abnormal breathing with a health worker promptly. A baby who is hard to rouse and unresponsive needs urgent medical care. This is not a diagnosis.',
       ),
       encouragement: b(
-        'အိပ်ရေးသည် မျဉ်းဖြောင့်အတိုင်း တိုးတက်လာသည် မဟုတ်ပါ — တည်ငြိမ်သော ပုံစံသည် အချိန်ကြာလာလျှင် အလုပ်ဖြစ်ပါသည်။',
+        'ကလေး၏ အိပ်စက်မှုပုံစံသည် အမြဲ တဖြည်းဖြည်း ကောင်းမွန်လာမည် မဟုတ်ပါ။ တစ်ခါတစ်ရံ ပြန်လည်မတည်ငြိမ်နိုင်သော်လည်း ပုံမှန်လုပ်ရိုးလုပ်စဉ်ကို ဆက်လက်လုပ်ပေးခြင်းက အချိန်ကြာလာသည်နှင့်အမျှ အထောက်အကူပြုနိုင်သည်။',
         'Sleep does not improve in a straight line — a steady routine pays off over time.',
       ),
     }),
@@ -1057,7 +1057,7 @@ const ACTIVITIES: SeedItem[] = [
     activity({
       slug: 'container_in_and_out',
       title: b('ဗူးထဲ ထည့်၊ ပြန်ထုတ်', 'In and out of the container'),
-      summary: b('ပစ္စည်းများကို ဗူးထဲ ထည့်ပြီး ပြန်ထုတ်ခြင်းဖြင့် လက်ကျွမ်းကျင်မှုနှင့် အကြောင်းအကျိုး နားလည်မှုကို လေ့ကျင့်ပေးသည်။', 'Putting objects into a container and taking them out builds hand skills and an understanding of where things go.'),
+      summary: b('ပစ္စည်းများကို ဘူးထဲထည့်ပြီး ပြန်ထုတ်ကစားခြင်းဖြင့် လက်ချောင်းလှုပ်ရှားမှုနှင့် အကြောင်းအကျိုးဆက်စပ်မှုကို နားလည်လာစေသည်။', 'Putting objects into a container and taking them out builds hand skills and an understanding of where things go.'),
       ageGroupKey: '10_12m',
       domains: ['fine_motor', 'problem_solving', 'cognitive'],
       difficulty: 'easy',
@@ -1149,7 +1149,7 @@ const ACTIVITIES: SeedItem[] = [
         b('ရောက်လျှင် အားပေးပြီး ကစားစရာဖြင့် ခဏ ကစားခွင့် ပေးပါ။', 'When she arrives, celebrate and let her play with the toy.'),
         b('ကလေး ပင်ပန်းလျှင် သို့မဟုတ် စိတ်ပျက်လျှင် ရပ်ပါ။', 'Stop if she is tired or frustrated.'),
       ],
-      safety: b('ပရိဘောဂသည် လုံးဝ မလှုပ်ရ — မှီလျှင် လဲနိုင်သော စားပွဲ၊ စင်များကို မသုံးပါနှင့်၊ နံရံနှင့် တွယ်ထားပါ။ ထောင့်ချွန်များကို ဖုံးပါ။ ကြမ်းပြင်ပေါ်တွင် အန္တရာယ်ရှိသော ပစ္စည်းများ မထားပါနှင့်။ ကလေး လျှောက်ကား (baby walker) ကို မသုံးပါနှင့်။ ကလေး၏ အနီးတွင် အမြဲ ရှိပါ။', 'The furniture must not move — do not use anything that could tip, and anchor it to the wall. Pad sharp corners. Keep hazards off the floor. Do not use a baby walker. Stay beside her throughout.'),
+      safety: b('ကလေး ကိုင်တွယ်မည့် ပရိဘောဂသည် မရွေ့မလှုပ်ဘဲ ခိုင်ခံ့ရမည်။ ကလေးမှီလိုက်လျှင် လဲကျနိုင်သော စားပွဲနှင့် စင်များကို မသုံးပါနှင့်။ လိုအပ်ပါက နံရံတွင် ခိုင်ခန့်စွာ တပ်ဆင်ထားပါ။ ထောင့်ချွန်များကို ဖုံးအုပ်ပြီး ကြမ်းပြင်ပေါ်မှ အန္တရာယ်ရှိသော ပစ္စည်းများကို ဖယ်ရှားပါ။ ကလေးလမ်းလျှောက်စက်ကို မသုံးပါနှင့်။ လေ့ကျင့်နေစဉ် ကလေးအနီးတွင် အမြဲရှိနေပါ။', 'The furniture must not move — do not use anything that could tip, and anchor it to the wall. Pad sharp corners. Keep hazards off the floor. Do not use a baby walker. Stay beside her throughout.'),
       indoor: true,
       outdoor: false,
       oneChild: true,
@@ -1190,7 +1190,7 @@ const ACTIVITIES_B: SeedItem[] = [
         b('ပြန်မလှိမ့်သေးလျှင် စိတ်မပူပါနှင့် — အနီးမှ ယူပြီး ထပ်စတင်ပါ။', 'If she does not roll it back yet, that is fine — take it gently and start again.'),
         b('အလှည့်ကျ ဖြစ်လာလျှင် ရယ်မောပြီး ဆက်ကစားပါ။', 'As turn-taking appears, laugh together and keep going.'),
       ],
-      safety: b('ပါးစပ်ထဲ ဝင်နိုင်သော သေးငယ်သည့် ဘောလုံးကို မသုံးပါနှင့် — အသက်ရှူ ပိတ်နိုင်သည်။ လေဖောင်း (balloon) ကို လုံးဝ မသုံးပါနှင့်။ ပြင်ပတွင် ကစားပါက မော်တော်ယာဉ်လမ်း၊ ရေအိုင်၊ လှေကားနှင့် ဝေးရာတွင် ကစားပါ။', 'Do not use a ball small enough to enter her mouth — it is a choking risk. Never use a balloon. If playing outside, stay away from roads, water and steps.'),
+      safety: b('ကလေးပါးစပ်ထဲ ဝင်နိုင်လောက်အောင် သေးသော ဘောလုံးကို မသုံးပါနှင့်။ မျိုချမိပြီး အသက်ရှူလမ်းကြောင်း ပိတ်ဆို့နိုင်သည်။ လေပူဖောင်းကိုလည်း မသုံးပါနှင့်။ အပြင်တွင် ကစားပါက ကားလမ်း၊ ရေအိုင်နှင့် လှေကားများမှ ဝေးသောနေရာကို ရွေးပါ။', 'Do not use a ball small enough to enter her mouth — it is a choking risk. Never use a balloon. If playing outside, stay away from roads, water and steps.'),
       indoor: true,
       outdoor: true,
       oneChild: true,

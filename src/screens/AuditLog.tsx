@@ -19,7 +19,7 @@ export function AuditLog() {
           {locale === 'mm' ? 'ဤစာမျက်နှာသို့ ဝင်ခွင့် မရှိပါ။' : 'You do not have access to this page.'}
         </p>
         <p className="text-sm text-ink-soft">
-          {locale === 'mm' ? 'Audit log ကို staff/super-admin သာ ကြည့်နိုင်သည်။' : 'Audit logs are visible to staff/super-admin only.'}
+          {locale === 'mm' ? 'စိစစ်မှတ်တမ်းကို ဝန်ထမ်းနှင့် အဆင့်မြင့်စီမံခန့်ခွဲသူများသာ ကြည့်နိုင်သည်။' : 'Audit logs are visible to staff/super-admin only.'}
         </p>
       </div>
     );
@@ -29,7 +29,7 @@ export function AuditLog() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-xl font-bold text-sky-deep">{locale === 'mm' ? 'စိစစ်မှတ်တမ်း (Audit Log)' : 'Audit Log'}</h1>
+      <h1 className="text-xl font-bold text-sky-deep">{locale === 'mm' ? 'စိစစ်မှတ်တမ်း' : 'Audit Log'}</h1>
       <input
         value={filter} onChange={(e) => setFilter(e.target.value)}
         placeholder={locale === 'mm' ? 'လုပ်ဆောင်ချက်ဖြင့် စစ်ထုတ်ရန်' : 'Filter by action'}

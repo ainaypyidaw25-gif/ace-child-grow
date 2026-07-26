@@ -120,8 +120,8 @@ export function Profile() {
         <ConfirmDialog
           message={
             confirming === 'account'
-              ? locale === 'mm' ? 'အကောင့်နှင့် အချက်အလက်အားလုံး ဖျက်မှာ သေချာပါသလား။' : 'Delete your account and all data?'
-              : locale === 'mm' ? 'ဤကလေး၏ မှတ်တမ်းများ ဖျက်မှာ သေချာပါသလား။' : 'Delete this child’s records?'
+              ? locale === 'mm' ? 'အကောင့်နှင့် အချက်အလက်အားလုံးကို အပြီးတိုင်ဖျက်ရန် သေချာပါသလား။' : 'Delete your account and all data?'
+              : locale === 'mm' ? 'ဤကလေး၏ မှတ်တမ်းအားလုံးကို ဖျက်ရန် သေချာပါသလား။' : 'Delete this child’s records?'
           }
           cancelLabel={t('common.cancel')}
           confirmLabel={t('common.confirm')}

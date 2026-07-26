@@ -47,7 +47,7 @@ export function Growth() {
 
   const errText =
     error === 'date' ? t('growth.date')
-    : error === 'future' ? (locale === 'mm' ? 'ရက်စွဲ အနာဂတ်ဖြစ်နေသည်' : 'Date is in the future')
+    : error === 'future' ? (locale === 'mm' ? 'တိုင်းတာသည့်ရက်ကို ယနေ့ရက်ထက် နောက်ကျ၍ မသတ်မှတ်နိုင်ပါ။' : 'Date is in the future')
     : t('growth.weight');
 
   return (

@@ -26,7 +26,7 @@ export function LibraryAdmin() {
       <div className="flex min-h-[50vh] flex-col items-center justify-center gap-2 text-center">
         <div aria-hidden className="text-4xl">🔒</div>
         <p className="font-semibold text-ink">{L('ဝင်ခွင့် မရှိပါ။', 'You do not have access.')}</p>
-        <p className="text-sm text-ink-soft">{L('CMS ကို staff သာ သုံးနိုင်သည်။', 'The CMS is staff-only.')}</p>
+        <p className="text-sm text-ink-soft">{L('အကြောင်းအရာစီမံခန့်ခွဲရေးစနစ်ကို ဝန်ထမ်းများသာ အသုံးပြုနိုင်သည်။', 'The CMS is staff-only.')}</p>
       </div>
     );
   }
@@ -53,7 +53,7 @@ export function LibraryAdmin() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-xl font-bold text-sky-deep">{L('အကြောင်းအရာ CMS', 'Content CMS')}</h1>
+      <h1 className="text-xl font-bold text-sky-deep">{L('အကြောင်းအရာ စီမံခန့်ခွဲရေး', 'Content CMS')}</h1>
 
       <p className="rounded-lg bg-pastel-yellow/60 px-3 py-2 text-sm text-ink">
         {L(
@@ -84,7 +84,7 @@ export function LibraryAdmin() {
         </button>
         {msg && <p className="mt-2 text-sm text-ink-soft">{msg}</p>}
         <p className="mt-2 text-[11px] text-ink-soft">
-          {L('တင်သွင်းမှုသည် idempotent ဖြစ်၍ ပြန်လည်သုံးသပ်ပြီးသား အခြေအနေကို မဖျက်ပါ။',
+          {L('အကြောင်းအရာကို ထပ်မပွားစေဘဲ တင်သွင်းနိုင်ပြီး ပြန်လည်သုံးသပ်ထားသည့် အခြေအနေကို မပြောင်းလဲပါ။',
              'Import is idempotent and never overrides an existing review decision.')}
         </p>
       </section>
@@ -116,7 +116,7 @@ export function LibraryAdmin() {
                 </div>
               </li>
             ))}
-            {list.items.length === 0 && <p className="text-sm text-ink-soft">{L('မရှိသေးပါ — အထက်တွင် Seed တင်သွင်းပါ။', 'Empty — import the seed above.')}</p>}
+            {list.items.length === 0 && <p className="text-sm text-ink-soft">{L('အကြောင်းအရာ မရှိသေးပါ။ အထက်ရှိ မူလအကြောင်းအရာများကို တင်သွင်းပါ။', 'Empty — import the seed above.')}</p>}
           </ul>
         )}
       </section>

@@ -102,7 +102,7 @@ export function ContentDetail() {
           {bl('materials') && <Section title={L('ပစ္စည်းများ', 'Materials')}><p className="text-sm text-ink-soft">{T(bl('materials'))}</p></Section>}
           {bl('safety') && <Section title={L('ဘေးကင်းရေး', 'Safety')}><p className="text-sm text-ink-soft">{T(bl('safety'))}</p></Section>}
           {list('commonMistakes').length > 0 && (
-            <Section title={L('အများ မှားတတ်သည်များ', 'Common mistakes')}><Bullets items={list('commonMistakes')} /></Section>
+            <Section title={L('ရှောင်ရှားသင့်သည့် အမှားများ', 'Common mistakes')}><Bullets items={list('commonMistakes')} /></Section>
           )}
           {list('parentTips').length > 0 && (
             <Section title={L('မိဘ အကြံပြုချက်', 'Parent tips')}><Bullets items={list('parentTips')} /></Section>
@@ -114,7 +114,7 @@ export function ContentDetail() {
               </ul>
             </Section>
           )}
-          {bl('referral') && <Section title={L('လမ်းညွှန်', 'Referral guidance')}><p className="text-sm text-ink-soft">{T(bl('referral'))}</p></Section>}
+          {bl('referral') && <Section title={L('မည်သည့်အချိန်တွင် တိုင်ပင်မလဲ', 'Referral guidance')}><p className="text-sm text-ink-soft">{T(bl('referral'))}</p></Section>}
           {bl('encouragement') && (
             <div className="rounded-card bg-mint-soft p-4 text-sm text-ink">{T(bl('encouragement'))}</div>
           )}
@@ -141,18 +141,18 @@ export function ContentDetail() {
             </Section>
           )}
           {bl('safety') && <Section title={L('ဘေးကင်းရေး', 'Safety')}><p className="text-sm text-ink-soft">{T(bl('safety'))}</p></Section>}
-          {list('outcomes').length > 0 && <Section title={L('ဖွံ့ဖြိုးမှု ရလဒ်', 'Development outcomes')}><Bullets items={list('outcomes')} /></Section>}
-          {list('variations').length > 0 && <Section title={L('ကွဲပြားချက်များ', 'Variations')}><Bullets items={list('variations')} /></Section>}
+          {list('outcomes').length > 0 && <Section title={L('လေ့ကျင့်ပေးနိုင်သည့် စွမ်းရည်များ', 'Development outcomes')}><Bullets items={list('outcomes')} /></Section>}
+          {list('variations').length > 0 && <Section title={L('အခြားနည်းဖြင့် လုပ်နိုင်ပုံများ', 'Variations')}><Bullets items={list('variations')} /></Section>}
         </>
       )}
 
       {/* Lesson */}
       {item.type === 'lesson' && (
         <>
-          {list('objectives').length > 0 && <Section title={L('သင်ယူရမည့် ရည်မှန်းချက်', 'Learning objectives')}><Bullets items={list('objectives')} /></Section>}
+          {list('objectives').length > 0 && <Section title={L('ဒီသင်ခန်းစာမှ သိရှိနိုင်မည့်အချက်', 'Learning objectives')}><Bullets items={list('objectives')} /></Section>}
           {bl('body') && <Section title={L('သင်ခန်းစာ', 'Lesson')}><p className="whitespace-pre-line text-sm text-ink-soft">{T(bl('body'))}</p></Section>}
           {bl('takeaway') && <div className="rounded-card bg-mint-soft p-4 text-sm text-ink">💡 {T(bl('takeaway'))}</div>}
-          {bl('actionToday') && <Section title={L('ယနေ့ လုပ်စရာ', 'Action today')}><p className="text-sm text-ink-soft">{T(bl('actionToday'))}</p></Section>}
+          {bl('actionToday') && <Section title={L('ယနေ့ စမ်းလုပ်ကြည့်ရန်', 'Action today')}><p className="text-sm text-ink-soft">{T(bl('actionToday'))}</p></Section>}
         </>
       )}
 
@@ -164,9 +164,9 @@ export function ContentDetail() {
                'This app does not diagnose. If concerned, consult a professional.')}
           </div>
           {list('strengths').length > 0 && <Section title={L('အားသာချက်များ', 'Strengths')}><Bullets items={list('strengths')} /></Section>}
-          {list('possibleSigns').length > 0 && <Section title={L('တွေ့နိုင်သည့် လက္ခဏာများ (ရောဂါ မဟုတ်)', 'Possible signs (not a diagnosis)')}><Bullets items={list('possibleSigns')} /></Section>}
+          {list('possibleSigns').length > 0 && <Section title={L('သတိပြုမိနိုင်သည့် အချက်များ (ရောဂါသတ်မှတ်ချက် မဟုတ်ပါ)', 'Possible signs (not a diagnosis)')}><Bullets items={list('possibleSigns')} /></Section>}
           {Array.isArray(d.myths) && (d.myths as { myth: BL; fact: BL }[]).length > 0 && (
-            <Section title={L('အထင်အမြင်လွဲ vs အမှန်', 'Myths vs Facts')}>
+            <Section title={L('အယူအဆမှားနှင့် အမှန်', 'Myths vs Facts')}>
               <ul className="space-y-2 text-sm">
                 {(d.myths as { myth: BL; fact: BL }[]).map((m, i) => (
                   <li key={i} className="rounded-lg bg-canvas p-2">
@@ -205,10 +205,10 @@ export function ContentDetail() {
 
       {/* Printable */}
       {item.type === 'printable' && (
-        <Section title={L('ပုံနှိပ်ကိရိယာ', 'Printable resource')}>
+        <Section title={L('ပုံနှိပ်အသုံးပြုနိုင်သော စာရွက်', 'Printable resource')}>
           <p className="text-sm text-ink-soft">{locale === 'mm' ? item.summaryMm : item.summaryEn}</p>
           <p className="mt-2 text-xs text-ink-soft">
-            {L('ပုံနှိပ်ဖိုင် (PDF) ကို CMS မှတစ်ဆင့် ပြင်ဆင်တင်ပါမည်။', 'The printable PDF is prepared via the CMS.')}
+            {L('ပုံနှိပ်အသုံးပြုနိုင်သော ဖိုင်ကို အကြောင်းအရာစီမံခန့်ခွဲရေးစနစ်မှတစ်ဆင့် ပြင်ဆင်တင်ပါမည်။', 'The printable PDF is prepared via the CMS.')}
           </p>
         </Section>
       )}

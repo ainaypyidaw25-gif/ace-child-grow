@@ -13,7 +13,7 @@ const TYPE_LABEL: Record<string, { mm: string; en: string; emoji: string }> = {
   lesson: { mm: 'သင်ခန်းစာ', en: 'Lessons', emoji: '🎓' },
   special_need: { mm: 'အထူးလိုအပ်ချက်', en: 'Hope Center', emoji: '💛' },
   story: { mm: 'ပုံပြင်', en: 'Stories', emoji: '📖' },
-  printable: { mm: 'ပုံနှိပ်ကိရိယာ', en: 'Toolkit', emoji: '🖨️' },
+  printable: { mm: 'ပုံနှိပ်အသုံးပြုရန်', en: 'Toolkit', emoji: '🖨️' },
 };
 
 export function ContentLibrary() {

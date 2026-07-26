@@ -829,7 +829,7 @@ const GUIDES_E: SeedItem[] = [
         'Seek medical care immediately for the urgent signs above. Raise other sleep concerns with a health worker. This is not a diagnosis.',
       ),
       encouragement: b(
-        'အိပ်စက်မှုသည် မျဉ်းဖြောင့်အတိုင်း တိုးတက်လာသည် မဟုတ်ပါ — နောက်ပြန်ဆုတ်ခြင်းသည် ပုံမှန် ဖြစ်သည်။',
+        'ကလေး၏ အိပ်စက်မှုပုံစံသည် အမြဲ တဖြည်းဖြည်း ကောင်းမွန်လာမည် မဟုတ်ပါ။ တစ်ခါတစ်ရံ ပြန်လည်မတည်ငြိမ်ခြင်းသည်လည်း တွေ့ရတတ်ပါသည်။',
         'Sleep does not improve in a straight line — steps backwards are normal.',
       ),
     }),
@@ -839,7 +839,7 @@ const GUIDES_E: SeedItem[] = [
     guide('7_9m', 'safety', {
       title: b('၇ – ၉ လ — ဘေးကင်းလုံခြုံရေး လမ်းညွှန်', '7–9 months — Safety guide'),
       why: b(
-        'ဤအရွယ်တွင် ကလေးသည် လှိမ့်ခြင်း၊ ထိုင်ခြင်း၊ တွားသွားခြင်းများ စတင်နိုင်သဖြင့် ရောက်နိုင်သော နေရာ ရုတ်တရက် ကျယ်လာသည်။ ထို့ကြောင့် အိမ်တွင်း ဘေးကင်းရေးကို ပြန်လည် စစ်ဆေးရန် အချိန်ကောင်း ဖြစ်သည်။ ကြီးကြပ်မှုသည် အခြေခံဆုံး ကာကွယ်မှု ဖြစ်ပြီး ပတ်ဝန်းကျင်ကို လုံခြုံအောင် ပြင်ဆင်ခြင်းက ၎င်းကို ပိုမို ခိုင်မာစေသည်။',
+        'ဤအရွယ်တွင် ကလေးသည် လှိမ့်ခြင်း၊ ထိုင်ခြင်းနှင့် တွားသွားခြင်းတို့ စတင်နိုင်သဖြင့် လက်လှမ်းမီသောနေရာ ပိုမိုကျယ်လာသည်။ ထို့ကြောင့် အိမ်တွင်းဘေးကင်းရေးကို ပြန်လည်စစ်ဆေးရန် အချိန်ကောင်းဖြစ်သည်။ ကလေးကို အနီးကပ်ကြီးကြပ်ခြင်းနှင့် အိမ်ပတ်ဝန်းကျင်ကို ဘေးကင်းအောင် ကြိုတင်ပြင်ဆင်ခြင်း နှစ်မျိုးလုံး လိုအပ်သည်။',
         'She may now roll, sit and start to crawl, so her reach suddenly widens. This is the moment to re-check the home. Supervision is the basic protection, and preparing the environment makes it stronger.',
       ),
       observationQuestions: [
@@ -883,7 +883,7 @@ const GUIDES_E: SeedItem[] = [
       ],
       faq: [
         {
-          q: b('လမ်းလျှောက်ကူ ကလေးကား (walker) သုံးလို့ ရလား။', 'Are baby walkers safe?'),
+          q: b('ကလေးလမ်းလျှောက်စက် သုံးလို့ရပါသလား။', 'Are baby walkers safe?'),
           a: b('လမ်းလျှောက်ကူ ကလေးကားများသည် လှေကားမှ ပြုတ်ကျခြင်း၊ မီးဖိုသို့ ရောက်ခြင်း စသည့် ထိခိုက်မှုများနှင့် ဆက်စပ်နေသဖြင့် အကြံမပြုပါ။ ကြမ်းပြင်ပေါ် လုံခြုံစွာ ကစားခြင်းက ပိုကောင်းပါသည်။', 'Baby walkers are linked to falls down stairs and reaching hazards such as cooking fires, so they are not recommended. Safe floor play is better.'),
         },
         {
@@ -1034,7 +1034,7 @@ const ACTIVITIES: SeedItem[] = [
         b('တစ်ဖက်ပြီး တစ်ဖက် အလှည့်ကျ လုပ်ပါ။', 'Take turns on each side.'),
         b('ကလေး မောလျှင် ပက်လက် သို့မဟုတ် မှောက်လှဲ၍ နားပေးပါ။', 'When she tires, let her rest on her back or tummy.'),
       ],
-      safety: b('ကြမ်းပြင်ပေါ်တွင်သာ လုပ်ပါ — အိပ်ရာ၊ စားပွဲ၊ ဆိုဖာပေါ်တွင် တစ်ယောက်တည်း လုံးဝ မထားပါနှင့်။ ကလေးအနီးတွင် အမြဲ ရှိနေပါ။ ကလေးလမ်းလျှောက်စက် (baby walker) ကို အသုံးမပြုရန် အကြံပြုသည်။', 'Do this on the floor only — never leave her alone on a bed, table or sofa. Stay beside her. Baby walkers are not recommended.'),
+      safety: b('ကြမ်းပြင်ပေါ်တွင်သာ လုပ်ပါ။ ကလေးကို အိပ်ရာ၊ စားပွဲ သို့မဟုတ် ဆိုဖာပေါ်တွင် တစ်ယောက်တည်း လုံးဝ မထားပါနှင့်။ ကလေးအနီးတွင် အမြဲ ရှိနေပြီး ကလေးလမ်းလျှောက်စက်ကို မသုံးပါနှင့်။', 'Do this on the floor only — never leave her alone on a bed, table or sofa. Stay beside her. Baby walkers are not recommended.'),
       indoor: true, outdoor: false, oneChild: true, group: false, parentChild: true,
       outcomes: [
         b('သင်ယူရမည့် ရည်မှန်းချက် — ထိုင်ဟန်ချက်နှင့် လက်လှမ်းယူမှုကို အားပေးရန်။', 'Learning objective — to strengthen sitting balance and reaching.'),
@@ -1091,7 +1091,7 @@ const ACTIVITIES_B: SeedItem[] = [
       domains: ['language', 'cognitive', 'fine_motor'],
       difficulty: 'easy',
       durationMinutes: 10,
-      materials: b('ခိုင်ခံ့သော ပုံစာအုပ် တစ်အုပ် (board book)။ မရှိလျှင် ပုံရိပ်များပါသော ခိုင်ခံ့သည့် စာရွက်ကို ကိုယ်တိုင် ပြုလုပ်နိုင်သည်။', 'One sturdy board book. If you do not have one, make simple picture cards from thick paper.'),
+      materials: b('စာမျက်နှာထူပြီး ခိုင်ခံ့သော ပုံစာအုပ်တစ်အုပ်။ မရှိလျှင် စက္ကူထူပေါ်တွင် ရိုးရှင်းသော ပုံကတ်များကို ကိုယ်တိုင် ပြုလုပ်နိုင်သည်။', 'One sturdy board book. If you do not have one, make simple picture cards from thick paper.'),
       setup: b('ကလေးကို ရင်ခွင်ထဲ ထိုင်စေပါ။ အလင်းရောင် လုံလောက်စေပါ။ ဖုန်း၊ တီဗွီ ပိတ်ပါ။', 'Sit her on your lap in good light with the phone and TV off.'),
       instructions: [
         b('စာအုပ်ကို ကလေး၏ မျက်လုံးရှေ့ ၃၀ စင်တီမီတာခန့်တွင် ကိုင်ပါ။', 'Hold the book about 30 cm from her eyes.'),

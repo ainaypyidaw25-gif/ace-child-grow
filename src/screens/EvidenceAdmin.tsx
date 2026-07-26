@@ -77,7 +77,7 @@ export function EvidenceAdmin() {
         <div aria-hidden className="text-4xl">🔒</div>
         <p className="font-semibold text-ink">{L('ဝင်ခွင့် မရှိပါ။', 'You do not have access.')}</p>
         <p className="text-sm text-ink-soft">
-          {L('Evidence Library ကို staff သာ သုံးနိုင်သည်။', 'The Evidence Library is staff-only.')}
+          {L('ကိုးကားချက်စာကြည့်တိုက်ကို ဝန်ထမ်းများသာ အသုံးပြုနိုင်သည်။', 'The Evidence Library is staff-only.')}
         </p>
       </div>
     );
@@ -155,7 +155,7 @@ export function EvidenceAdmin() {
 
       <p className="rounded-lg bg-pastel-yellow/60 px-3 py-2 text-sm text-ink">
         {L(
-          'ကိုးကားချက် တစ်ခုချင်းစီကို ထုတ်ဝေသူစာမျက်နှာမှ တိုက်ရိုက် ဖတ်ပြီး မှတ်တမ်းတင်ထားသည်။ မစစ်ဆေးရသေးသော အချက်အလက်ကို မဖြည့်ပါ — ကွက်လပ်အဖြစ်သာ ထားပြီး evidence_required ဟု အမှတ်အသား ပြုသည်။',
+          'ကိုးကားချက်တစ်ခုချင်းစီကို ထုတ်ဝေသူ၏ မူရင်းစာမျက်နှာမှ တိုက်ရိုက်ဖတ်ရှုပြီး မှတ်တမ်းတင်ထားသည်။ မစစ်ဆေးရသေးသော အချက်အလက်ကို မဖြည့်ဘဲ ကွက်လပ်ထားကာ “ကိုးကားချက်လိုအပ်” ဟု အမှတ်အသား ပြုသည်။',
           'Every field here was read off the publisher page named in the URL. Nothing is inferred: an unverifiable field stays blank and the record is marked evidence_required.',
         )}
       </p>

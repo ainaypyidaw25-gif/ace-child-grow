@@ -36,7 +36,7 @@ const MILESTONES: SeedItem[] = [
     milestone('5_6m', 'speech', 2, {
       title: b('"ဘ"၊ "ဒ" ကဲ့သို့ ဗျည်းသံများ ပေါင်းစပ် မြည်တွန်ခြင်း', 'Babbling with consonant sounds like "ba" and "da"'),
       observe: b('"ဘဘဘ"၊ "ဒဒဒ" ကဲ့သို့ အသံများ ထွက်ပါသလား။', 'Do you hear strings like "ba-ba-ba" or "da-da-da"?'),
-      why: b('ဗျည်းသံ ပေါင်းစပ် မြည်တွန်ခြင်း (babbling) သည် စကားပြောရန် ပြင်ဆင်နေခြင်း ဖြစ်သည်။ အဓိပ္ပာယ် မရှိသေးသော်လည်း အလွန် အရေးကြီးသော ခြေလှမ်း ဖြစ်သည်။', 'Consonant babble is the practice run for speech. It does not carry meaning yet, but it is an important step.'),
+      why: b('“ဘဘ”၊ “မမ” ကဲ့သို့ ဗျည်းသံတွဲများ ထပ်ခါတလဲလဲ ထွက်လာခြင်းသည် နောက်ပိုင်း စကားပြောနိုင်ရန် အသံထွက်လေ့ကျင့်နေခြင်း ဖြစ်သည်။ အဓိပ္ပာယ်ရှိသော စကားလုံး မဟုတ်သေးသော်လည်း အရေးကြီးသော ဖွံ့ဖြိုးမှုအဆင့်တစ်ခု ဖြစ်သည်။', 'Consonant babble is the practice run for speech. It does not carry meaning yet, but it is an important step.'),
       red: b('လ ၆ လအရွယ်တွင် အသံ လုံးဝ မထွက်ခြင်း၊ ကျယ်လောင်သော အသံကို မတုံ့ပြန်ခြင်း သို့မဟုတ် ယခင်က ထွက်ခဲ့သော အသံများ ရပ်သွားခြင်းကို ပြပါ။', 'No sounds at all by 6 months, no reaction to loud sounds, or losing sounds she used to make should be checked.'),
       encouragement: b('ကလေးထွက်သော အသံကို ပြန်အတုယူပါ — စကားဝိုင်း ဖြစ်လာပါမည်။', 'Copy her sounds back — that turns babble into conversation.'),
     }),
@@ -137,7 +137,7 @@ const GUIDES: SeedItem[] = [
       ),
       commonMistakes: [
         b('အခြားကလေးနှင့် နှိုင်းယှဉ်၍ စိတ်ပူခြင်း — အချိန်ကွာခြားမှုသည် ပုံမှန် ဖြစ်သည်။', 'Comparing with another baby — differences in timing are normal.'),
-        b('ကလေးထိုင်စက် (baby walker) သုံးခြင်း — မလိုအပ်သည့်အပြင် ထိခိုက်နိုင်သည်။', 'Using a baby walker — it is unnecessary and can cause injury.'),
+        b('ကလေးလမ်းလျှောက်စက် သုံးခြင်း — မလိုအပ်သည့်အပြင် ထိခိုက်ဒဏ်ရာရစေနိုင်သည်။', 'Using a baby walker — it is unnecessary and can cause injury.'),
         b('တစ်နေကုန် ချီထားခြင်း — ကြမ်းပြင်ပေါ် လွတ်လပ်စွာ လှုပ်ရှားခွင့် လိုအပ်သည်။', 'Holding her all day — she needs free floor time to move.'),
       ],
       parentTips: [
@@ -175,7 +175,7 @@ const GUIDES: SeedItem[] = [
     guide('5_6m', 'fine_motor', {
       title: b('၅ – ၆ လ — လက်ချောင်းငယ် လှုပ်ရှားမှု လမ်းညွှန်', '5–6 months — Fine motor guide'),
       why: b(
-        'ဤအရွယ်တွင် ကလေးသည် ပစ္စည်းကို ရည်ရွယ်ချက်ရှိရှိ လှမ်းယူတတ်လာပြီး လက်တစ်ဖက်မှ တစ်ဖက်သို့ လွှဲပြောင်းနိုင်လာသည်။ လက်ဝါးတစ်ခုလုံးဖြင့် ဆုပ်ကိုင်ခြင်း (palmar grasp) သည် ဤအရွယ် ပုံမှန် ဖြစ်သည်။ ကိုင်မိသမျှကို ပါးစပ်ထဲ ထည့်ခြင်းသည် ရောဂါ မဟုတ်ဘဲ လေ့လာသင်ယူခြင်း ဖြစ်သည်။',
+        'ဤအရွယ်တွင် ကလေးသည် ပစ္စည်းကို ရည်ရွယ်ချက်ရှိရှိ လှမ်းယူတတ်လာပြီး လက်တစ်ဖက်မှ တစ်ဖက်သို့ လွှဲပြောင်းနိုင်လာသည်။ လက်ဝါးတစ်ခုလုံးဖြင့် ဆုပ်ကိုင်ခြင်းသည် ဤအရွယ်တွင် ပုံမှန်ဖြစ်သည်။ ကိုင်မိသမျှကို ပါးစပ်ထဲ ထည့်ခြင်းသည် ရောဂါလက္ခဏာ မဟုတ်ဘဲ ပတ်ဝန်းကျင်ကို လေ့လာသင်ယူသည့် နည်းလမ်းတစ်ခု ဖြစ်သည်။',
         'Babies now reach on purpose and pass an object from hand to hand. A whole-hand palmar grasp is normal at this stage. Mouthing everything is not a problem — it is how she explores.',
       ),
       observationQuestions: [
@@ -250,7 +250,7 @@ const GUIDES_B: SeedItem[] = [
     guide('5_6m', 'speech', {
       title: b('၅ – ၆ လ — စကားသံ ထွက်ဆိုမှု လမ်းညွှန်', '5–6 months — Speech guide'),
       why: b(
-        'ဤအရွယ်တွင် ကလေးသည် သရသံများမှ တစ်ဆင့် ဗျည်းသံပါသော "ဘဘ"၊ "ဒဒ"၊ "မမ" ကဲ့သို့ အသံများ ထွက်လာသည်။ ဤသည်ကို babbling ဟု ခေါ်သည် — စကားလုံး မဟုတ်သေးဘဲ စကားပြောရန် ပါးစပ်နှင့် လျှာကို လေ့ကျင့်နေခြင်း ဖြစ်သည်။ မိဘက ပြန်တုံ့ပြန်လေ ကလေး အသံထွက်လေ ဖြစ်သည်။',
+        'ဤအရွယ်တွင် ကလေးသည် သရသံများမှ တစ်ဆင့် "ဘဘ"၊ "ဒဒ"၊ "မမ" ကဲ့သို့ ဗျည်းသံပါသော အသံတွဲများ စတင်ထွက်လာသည်။ ယင်းတို့သည် အဓိပ္ပာယ်ရှိသော စကားလုံးများ မဟုတ်သေးဘဲ စကားပြောရန် ပါးစပ်နှင့် လျှာကို လေ့ကျင့်နေခြင်း ဖြစ်သည်။ မိဘက အပြန်အလှန် တုံ့ပြန်ပေးလေလေ ကလေးကလည်း အသံပိုထွက်လေလေ ဖြစ်သည်။',
         'Vowel cooing now grows into consonant babble — "ba-ba", "da-da", "ma-ma". Babbling is not words yet; it is the mouth and tongue practising for speech. The more you answer, the more she babbles.',
       ),
       observationQuestions: [
@@ -274,7 +274,7 @@ const GUIDES_B: SeedItem[] = [
         b('ကလေး၏ အသံကို "စကားပြောသလို" အလှည့်ကျ ဖလှယ်ခြင်း။', 'Taking turns with her sounds as if having a conversation.'),
       ],
       outdoor: [
-        b('အပြင်တွင် ကြားရသော အသံများ (ငှက်၊ မိုး၊ ကား) ကို အမည်တပ် ပြောပြခြင်း။', 'Naming outdoor sounds — birds, rain, a car.'),
+        b('အပြင်တွင် ကြားရသော ငှက်သံ၊ မိုးသံနှင့် ကားသံတို့အကြောင်း ကလေးကို ပြောပြပေးခြင်း။', 'Naming outdoor sounds — birds, rain, a car.'),
       ],
       lowCost: [
         b('သင့်အသံသည် အကောင်းဆုံး ကိရိယာ ဖြစ်သည် — ကုန်ကျစရိတ် လုံးဝ မရှိပါ။', 'Your voice is the best tool and costs nothing.'),
@@ -336,11 +336,11 @@ const GUIDES_B: SeedItem[] = [
       dailyActivities: [
         b('တစ်နေ့လုံး လုပ်နေသည်များကို ပြောပြပါ — အသုံးအများဆုံး နည်းလမ်း ဖြစ်သည်။', 'Talk through what you are doing all day — this is the single most useful habit.'),
         b('ကလေးအမည်ကို မကြာခဏ ခေါ်ပြီး တုံ့ပြန်လျှင် ပြုံးပြပါ။', 'Use her name often and smile when she responds.'),
-        b('ပစ္စည်းများကို ကိုင်ပြရင်း အမည်တပ်ပါ ("ခွက်"၊ "ဇွန်း")။', 'Hold up objects and name them — "cup", "spoon".'),
+        b('ပစ္စည်းများကို ကိုင်ပြပြီး အမည်ကို ပြောပေးပါ — “ခွက်”၊ “ဇွန်း”။', 'Hold up objects and name them — "cup", "spoon".'),
         b('ပုံစာအုပ်ကို နေ့စဉ် ခဏ ဖတ်ပြပါ။', 'Share a picture book for a short time each day.'),
       ],
       weeklyActivities: [
-        b('အိမ်ရှိ အခန်းတစ်ခန်းစီသို့ ခေါ်သွား၍ တွေ့သမျှကို အမည်တပ်ပြပါ။', 'Carry her around the house naming what you see in each room.'),
+        b('ကလေးကို အိမ်ထဲ လှည့်လည်ပြသပြီး မြင်တွေ့သည့် အရာများ၏ အမည်ကို ပြောပေးပါ။', 'Carry her around the house naming what you see in each room.'),
         b('တစ်ပတ်လျှင် စာအုပ် သို့မဟုတ် ပုံကတ် အသစ် တစ်ခု ထပ်ထည့်ပါ။', 'Add one new book or picture card each week.'),
       ],
       indoor: [
@@ -348,7 +348,7 @@ const GUIDES_B: SeedItem[] = [
         b('မိသားစုဝင်များ၏ ဓာတ်ပုံကို ပြ၍ အမည်ခေါ်ခြင်း။', 'Showing family photos and saying who they are.'),
       ],
       outdoor: [
-        b('အပြင်ထွက်စဉ် တွေ့သမျှကို အမည်တပ်ပြောပြခြင်း။', 'Naming what you both see when you go outside.'),
+        b('အပြင်ထွက်စဉ် မြင်တွေ့သည့် အရာများအကြောင်း ကလေးကို ပြောပြပေးခြင်း။', 'Naming what you both see when you go outside.'),
       ],
       lowCost: [
         b('မဂ္ဂဇင်း၊ သတင်းစာမှ ပုံများကို ဖြတ်၍ ပုံကတ် လုပ်ပါ။', 'Cut pictures from a magazine or newspaper to make picture cards.'),
@@ -356,7 +356,7 @@ const GUIDES_B: SeedItem[] = [
       ],
       materials: b('ပုံစာအုပ်၊ ဓာတ်ပုံ၊ အိမ်တွင်း ပစ္စည်းများ', 'Picture books, photos, household objects'),
       safety: b(
-        'စာအုပ်များကို ခံနိုင်ရည်ရှိသော ထူထပ်စာအုပ် (board book) သုံးပါ — စက္ကူပါးများကို ဆုတ်၍ မျိုချမိနိုင်သည်။ ပုံကတ်များ၏ အနားကို ချွန်ထက်မှု မရှိစေရန် စစ်ပါ။ ကလေးအား တီဗွီ၊ ဖုန်း ဖန်သားပြင်ရှေ့တွင် မထားပါနှင့် — ဤအရွယ်တွင် ဖန်သားပြင် အသုံးပြုမှုကို အကြံမပြုပါ (ဗီဒီယိုခေါ်ဆိုမှု မှလွဲ၍)။',
+        'စာမျက်နှာထူပြီး ခိုင်ခံ့သော ပုံစာအုပ်ကို သုံးပါ။ စက္ကူပါးများကို ဆုတ်ဖြဲ၍ မျိုချမိနိုင်သည်။ ပုံကတ်များ၏ အနားများ မချွန်ကြောင်း စစ်ဆေးပါ။ မိသားစုနှင့် ရုပ်သံခေါ်ဆိုခြင်းမှလွဲ၍ ဤအရွယ်ကလေးကို တီဗွီနှင့် ဖုန်းမျက်နှာပြင်ရှေ့တွင် မထားရန် အကြံပြုထားသည်။',
         'Use thick board books — thin paper can be torn and swallowed. Check card edges are not sharp. Screens are not recommended at this age apart from video calls with family.',
       ),
       commonMistakes: [
@@ -473,7 +473,7 @@ const GUIDES_C: SeedItem[] = [
     guide('5_6m', 'social', {
       title: b('၅ – ၆ လ — လူမှုဆက်ဆံရေး လမ်းညွှန်', '5–6 months — Social guide'),
       why: b(
-        'ဤအရွယ်တွင် ကလေးသည် အသိမျက်နှာနှင့် သူစိမ်းကို ခွဲခြားတတ်လာသည်။ မိဘကို မြင်လျှင် ပိုပျော်ပြီး သူစိမ်းကို မြင်လျှင် ခေါင်းလှည့်ခြင်း၊ ငိုခြင်း ရှိတတ်သည်။ ဤသည် ကလေး ရှက်တတ်ခြင်း မဟုတ်ဘဲ ဆက်နွယ်မှု (attachment) ကျန်းမာစွာ ဖွံ့ဖြိုးနေခြင်း ဖြစ်သည်။',
+        'ဤအရွယ်တွင် ကလေးသည် ရင်းနှီးသူနှင့် မရင်းနှီးသူကို ခွဲခြားတတ်လာသည်။ မိဘကို မြင်လျှင် ပိုပျော်ပြီး မရင်းနှီးသူကို မြင်လျှင် ခေါင်းလှည့်ခြင်း သို့မဟုတ် ငိုခြင်း ရှိတတ်သည်။ ယင်းသည် ရှက်တတ်ခြင်းကြောင့် မဟုတ်ဘဲ ပြုစုစောင့်ရှောက်သူနှင့် စိတ်ချလုံခြုံစွာ ချိတ်ဆက်မှု ဖွံ့ဖြိုးလာခြင်း ဖြစ်သည်။',
         'She now tells familiar people from strangers. She may light up for you and turn away or cry with someone new. This is not shyness to be corrected — it is healthy attachment developing.',
       ),
       observationQuestions: [
@@ -484,7 +484,7 @@ const GUIDES_C: SeedItem[] = [
       ],
       dailyActivities: [
         b('နေ့စဉ် မျက်နှာချင်းဆိုင် ကစားချိန် အကြိမ်များစွာ ပေးပါ။', 'Give many short face-to-face play times each day.'),
-        b('ကလေး၏ ခံစားချက်ကို အမည်တပ် ပြောပေးပါ ("ပျော်နေတယ်နော်"၊ "ကြောက်သွားလား")။', 'Name her feelings — "you look happy", "that surprised you".'),
+        b('ကလေး၏ ခံစားချက်ကို စကားလုံးဖြင့် ဖော်ပြပေးပါ — “ပျော်နေတယ်နော်”၊ “လန့်သွားလား”။', 'Name her feelings — "you look happy", "that surprised you".'),
         b('သူစိမ်းနှင့် တွေ့စဉ် သင်၏ ရင်ခွင်တွင် ထားပေးပြီး တဖြည်းဖြည်း မိတ်ဆက်ပါ။', 'When meeting someone new, hold her and introduce them slowly.'),
       ],
       weeklyActivities: [
@@ -556,7 +556,7 @@ const GUIDES_C: SeedItem[] = [
       ],
       dailyActivities: [
         b('ငိုလျှင် ဖြည်းညှင်းစွာ တုံ့ပြန်ပါ — ချီပေးခြင်း၊ အသံပြောပေးခြင်း။', 'Respond gently to crying — hold her, talk softly.'),
-        b('ကလေး၏ ခံစားချက်ကို စကားဖြင့် အမည်တပ်ပေးပါ။', 'Name her feelings out loud.'),
+        b('ကလေး၏ ခံစားချက်ကို စကားလုံးဖြင့် ဖော်ပြပေးပါ။', 'Name her feelings out loud.'),
         b('တည်ငြိမ်သော နေ့စဉ် အစီအစဉ် (နို့တိုက်၊ ကစား၊ အိပ်) ကို ထိန်းသိမ်းပါ။', 'Keep a steady daily rhythm of feed, play and sleep.'),
         b('အသားချင်းထိ ပွေ့ဖက်ခြင်းကို နေ့စဉ် ထည့်သွင်းပါ။', 'Include skin-to-skin cuddles every day.'),
       ],
@@ -566,7 +566,7 @@ const GUIDES_C: SeedItem[] = [
       ],
       indoor: [
         b('ငြိမ်သက်သော သီချင်း ဆိုပေးရင်း ပွေ့ချီခြင်း။', 'Holding her while singing something calm.'),
-        b('ဖြည်းညှင်းသော ကိုယ်နှိပ်ပေးခြင်း (baby massage)။', 'A gentle baby massage.'),
+        b('ကလေးကို ဖြည်းညှင်းစွာ ကိုယ်နှိပ်ပေးခြင်း။', 'A gentle baby massage.'),
       ],
       outdoor: [
         b('အရိပ်တွင် ဖြည်းညှင်းစွာ လမ်းလျှောက်ခြင်း — မိဘအတွက်လည်း ကောင်းသည်။', 'A gentle walk in the shade — good for you as well as her.'),
@@ -620,7 +620,7 @@ const GUIDES_D: SeedItem[] = [
     guide('5_6m', 'cognitive', {
       title: b('၅ – ၆ လ — အသိဉာဏ် ဖွံ့ဖြိုးမှု လမ်းညွှန်', '5–6 months — Cognitive guide'),
       why: b(
-        'ဤအရွယ်တွင် ကလေးသည် "ငါ လုပ်လိုက်ရင် ဘာဖြစ်လဲ" ဟု စတင် လေ့လာနေသည်။ ပစ္စည်း ချလိုက်လျှင် အသံမြည်သည်ကို သဘောကျပြီး ထပ်ခါထပ်ခါ လုပ်တတ်သည်။ ကျသွားသော ပစ္စည်းကို လိုက်ရှာခြင်းသည် "မမြင်ရသော်လည်း ရှိနေသေးသည်" ဟူသော အတွေးအခေါ် (object permanence) ၏ အစ ဖြစ်သည်။',
+        'ဤအရွယ်တွင် ကလေးသည် "ငါ လုပ်လိုက်ရင် ဘာဖြစ်မလဲ" ဟု စတင် စူးစမ်းနေသည်။ ပစ္စည်းကို ချလိုက်လျှင် အသံမြည်သည်ကို သဘောကျပြီး ထပ်ခါထပ်ခါ လုပ်တတ်သည်။ ကျသွားသော ပစ္စည်းကို လိုက်ရှာခြင်းသည် မျက်စိရှေ့တွင် မမြင်ရသော်လည်း ပစ္စည်းရှိနေဆဲဖြစ်ကြောင်း စတင်နားလည်လာခြင်း ဖြစ်သည်။',
         'She is starting to learn "what happens if I do this?". Dropping something and hearing it land is fascinating, so she does it again and again. Looking for a dropped toy is the beginning of understanding that things still exist when out of sight.',
       ),
       observationQuestions: [
@@ -812,7 +812,7 @@ const GUIDES_E: SeedItem[] = [
       commonMistakes: [
         b('"ခဏလေးပဲ" ဟုဆိုကာ အိပ်ရာပေါ် ချန်ထားခြင်း — လိမ့်ကျမှုအများစုသည် ဤသို့ ဖြစ်သည်။', 'Leaving her on a bed "just for a second" — this is how most falls happen.'),
         b('အစ်ကို/အစ်မ ကြီးကို ကြည့်ခိုင်းပြီး လူကြီး မရှိခြင်း — ကလေးက ကလေးကို မစောင့်ရှောက်နိုင်ပါ။', 'Leaving an older child in charge — a child cannot supervise a baby.'),
-        b('ကလေးထိုင်စက် (walker) သုံးခြင်း — လှေကားမှ ကျခြင်း၊ မီးလောင်ခြင်း အန္တရာယ် ရှိသည်။', 'Using a baby walker — it adds risk of falls and burns.'),
+        b('ကလေးလမ်းလျှောက်စက် သုံးခြင်း — လှေကားမှ ပြုတ်ကျခြင်းနှင့် အပူလောင်ခြင်းအန္တရာယ် တိုးစေနိုင်သည်။', 'Using a baby walker — it adds risk of falls and burns.'),
       ],
       parentTips: [
         b('အန္တရာယ် ဖယ်ရှားခြင်းသည် အမြဲ ကြည့်နေရခြင်းထက် ပိုယုံကြည်ရသည်။', 'Removing the hazard is more reliable than constant watching.'),
@@ -1025,7 +1025,7 @@ const ACTIVITIES: SeedItem[] = [
       domains: ['language', 'cognitive', 'social'],
       difficulty: 'easy',
       durationMinutes: 5,
-      materials: b('ထူထပ်သော ပုံစာအုပ် တစ်အုပ် (board book)။ မရှိလျှင် အိမ်လုပ် ပုံကတ်။', 'One board book, or home-made picture cards.'),
+      materials: b('စာမျက်နှာထူပြီး ခိုင်ခံ့သော ပုံစာအုပ်တစ်အုပ်။ မရှိလျှင် အိမ်တွင် ပြုလုပ်ထားသော ပုံကတ်များ။', 'One board book, or home-made picture cards.'),
       setup: b('ကလေးကို ရင်ခွင်တွင် ထားပါ။ အလင်းရောင် လုံလောက်သော နေရာ ရွေးပါ။', 'Hold her on your lap in good light.'),
       instructions: [
         b('စာမျက်နှာ တစ်မျက်နှာကို ဖွင့်ပါ။', 'Open one page.'),
@@ -1034,7 +1034,7 @@ const ACTIVITIES: SeedItem[] = [
         b('ကလေး စာအုပ်ကို ကိုင်ချင်လျှင် ကိုင်ခွင့် ပေးပါ — ပါးစပ်ထဲ ထည့်လျှင်လည်း ရပါသည်။', 'Let her hold the book if she wants — mouthing it is fine.'),
         b('စာမျက်နှာ ၂–၃ မျက်နှာဖြင့် ရပ်ပါ — အားလုံး မဖတ်ရန် မလိုပါ။', 'Two or three pages is plenty — you do not have to finish the book.'),
       ],
-      safety: b('ထူထပ်သော စာအုပ်ကိုသာ သုံးပါ — စက္ကူပါးကို ဆုတ်၍ မျိုချမိနိုင်သည်။ အနား ချွန်ထက်ခြင်း ရှိ/မရှိ စစ်ပါ။ စာအုပ်ကို သန့်ရှင်းစွာ ထားပါ။ ဤအရွယ်တွင် ဖန်သားပြင် စာအုပ် (tablet) ကို အကြံမပြုပါ။', 'Use thick board books only — thin paper can be torn and swallowed. Check for sharp edges and keep the book clean. A screen book is not recommended at this age.'),
+      safety: b('စာမျက်နှာထူပြီး ခိုင်ခံ့သော စာအုပ်ကိုသာ သုံးပါ။ စက္ကူပါးကို ဆုတ်ဖြဲပြီး မျိုချမိနိုင်သည်။ စာအုပ်အနားများ ချွန်ထက်ခြင်းရှိမရှိ စစ်ဆေးပြီး သန့်ရှင်းစွာ ထားပါ။ ဤအရွယ်တွင် ပုံစာအုပ်အစား ဖုန်း သို့မဟုတ် တက်ဘလက်ကို အသုံးမပြုရန် အကြံပြုထားသည်။', 'Use thick board books only — thin paper can be torn and swallowed. Check for sharp edges and keep the book clean. A screen book is not recommended at this age.'),
       indoor: true, outdoor: true, oneChild: true, group: true, parentChild: true,
       outcomes: [
         b('သင်ယူရမည့် ရည်မှန်းချက် — ဝေါဟာရ နားလည်မှုနှင့် ပူးတွဲ အာရုံစိုက်မှုကို အားပေးရန်။', 'Learning objective — to build early vocabulary understanding and shared attention.'),

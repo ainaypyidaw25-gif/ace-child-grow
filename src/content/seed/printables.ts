@@ -11,7 +11,7 @@ export const PRINTABLES: SeedItem[] = [
     description: b('ဝေါဟာရ တိုးပွားစေရန် ရုပ်ပုံ/စကားလုံး ကတ်များ။', 'Picture/word cards to grow vocabulary.') }),
   printable({ key: 'emotion_cards', format: 'A4 PDF',
     title: b('ခံစားမှု ကတ်များ', 'Emotion Cards'),
-    description: b('ခံစားမှုများကို အမည်တပ်၍ ဆွေးနွေးရန် မျက်နှာ ကတ်များ။', 'Feeling-face cards to name and discuss emotions.') }),
+    description: b('ခံစားချက်များကို စကားလုံးဖြင့် ဖော်ပြပြီး အတူဆွေးနွေးရန် အသုံးပြုနိုင်သော မျက်နှာပုံကတ်များ။', 'Feeling-face cards to name and discuss emotions.') }),
   printable({ key: 'communication_cards', format: 'A4 PDF',
     title: b('ဆက်သွယ်ရေး ကတ်များ', 'Communication Cards'),
     description: b('စကားမပြောနိုင်သေးသော ကလေးများအတွက် ညွှန်ပြ ဆက်သွယ်ကတ်များ။', 'Point-to-communicate cards for pre-verbal children.') }),

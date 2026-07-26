@@ -49,7 +49,7 @@ export function ChildProfile() {
           <Row label={locale === 'mm' ? 'ပြင်ဆင်အသက်' : 'Corrected age'} value={labels.corrected} />
         )}
         {activeChild.gestationalWeeks && (
-          <Row label={locale === 'mm' ? 'ကိုယ်ဝန်သက်တမ်း' : 'Gestational age'} value={`${activeChild.gestationalWeeks} wks`} />
+          <Row label={locale === 'mm' ? 'မွေးဖွားချိန် ကိုယ်ဝန်သက်တမ်း' : 'Gestational age'} value={`${activeChild.gestationalWeeks} ${locale === 'mm' ? 'ပတ်' : 'wks'}`} />
         )}
         <Row label={locale === 'mm' ? 'အသက် (လ)' : 'Age (months)'} value={String(chrono.totalMonths)} />
       </section>
@@ -82,7 +82,7 @@ export function ChildProfile() {
 
       {confirm && (
         <ConfirmDialog
-          message={locale === 'mm' ? 'ဤကလေး၏ မှတ်တမ်းများ ဖျက်မှာ သေချာပါသလား။' : "Delete this child's records?"}
+          message={locale === 'mm' ? 'ဤကလေး၏ မှတ်တမ်းအားလုံးကို ဖျက်ရန် သေချာပါသလား။' : "Delete this child's records?"}
           cancelLabel={t('common.cancel')}
           confirmLabel={t('common.confirm')}
           onCancel={() => setConfirm(false)}

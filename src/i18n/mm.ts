@@ -82,8 +82,8 @@ export const mm = {
   'sleep.add': 'အိပ်စက်မှု ထည့်မည်',
   'sleep.bedtime': 'အိပ်ရာဝင်ချိန်',
   'sleep.wake': 'နိုးချိန်',
-  'sleep.naps': 'နေ့ခင်းအိပ် (မိနစ်)',
-  'sleep.waking': 'ညအိပ် နိုးကြိမ်',
+  'sleep.naps': 'နေ့ခင်းအိပ်ချိန် (မိနစ်)',
+  'sleep.waking': 'ညဘက် နိုးသည့်အကြိမ်',
   'sleep.total': 'စုစုပေါင်း အိပ်ချိန်',
 
   'learn.title': 'သင်ယူရန် စာကြည့်တိုက်',
@@ -97,9 +97,9 @@ export const mm = {
   'report.parentMonthly': 'မိဘ လစဉ်အနှစ်ချုပ်',
   'report.doctorVisit': 'ဆရာဝန်ပြ အနှစ်ချုပ်',
   'report.shareSafe': 'မျှဝေရန် လုံခြုံသော အနှစ်ချုပ်',
-  'report.print': 'ပုံနှိပ် / PDF သိမ်းမည်',
+  'report.print': 'ပုံနှိပ်မည် / ဖိုင်သိမ်းမည်',
   'report.questions': 'ပညာရှင်ကို မေးရန် မေးခွန်းများ',
-  'report.nextReview': 'နောက်ပြန်စစ်ရန်ရက်',
+  'report.nextReview': 'နောက်တစ်ကြိမ် ပြန်လည်သုံးသပ်မည့်ရက်',
 
   'favorites.title': 'သိမ်းထားသော လှုပ်ရှားမှုများ',
   'favorites.empty': 'သိမ်းထားသော လှုပ်ရှားမှု မရှိသေးပါ။ ❤ ကို နှိပ်ပြီး သိမ်းပါ။',

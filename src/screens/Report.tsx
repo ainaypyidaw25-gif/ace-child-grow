@@ -62,7 +62,7 @@ export function Report() {
       <h1 className="text-xl font-bold text-sky-deep">{t('report.title')}</h1>
       <p className="rounded-lg bg-pastel-yellow/50 px-3 py-2 text-xs text-ink-soft">
         {locale === 'mm'
-          ? 'ဤသည်မှာ နမူနာ အစီရင်ခံစာ ဖြစ်သည် — milestone/growth/sleep မှတ်တမ်းများမှ အလိုအလျောက် စုစည်းမှုကို ဆက်လက် တပ်ဆင်နေဆဲ ဖြစ်သည်။'
+          ? 'ဤသည်မှာ နမူနာအစီရင်ခံစာ ဖြစ်သည်။ ဖွံ့ဖြိုးမှု၊ ကြီးထွားမှုနှင့် အိပ်စက်မှုမှတ်တမ်းများကို အလိုအလျောက် စုစည်းပေးသည့်စနစ်ကို ပြင်ဆင်နေဆဲ ဖြစ်သည်။'
           : 'This is a sample report — automatic aggregation from your milestone/growth/sleep records is being wired next.'}
       </p>
 

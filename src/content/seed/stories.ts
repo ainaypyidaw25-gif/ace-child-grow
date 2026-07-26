@@ -19,12 +19,12 @@ export const STORIES: SeedItem[] = [
   story({
     slug: 'ba_ba_sounds', storyType: 'speech', ageGroupKey: '13_18m',
     title: b('“ဘ ဘ” အသံလေးများ', 'The “Ba-Ba” Sounds'),
-    summary: b('ကလ်းလေးက အသံလေးများ တုပြော၍ ပျော်ရွှင်ပုံ။', 'A toddler joyfully copies simple sounds.'),
+    summary: b('ကလေးငယ်က အသံလေးများကို ပျော်ရွှင်စွာ လိုက်တုပြောသည့် ပုံပြင်။', 'A toddler joyfully copies simple sounds.'),
     readingLevel: 'Beginner', readingMinutes: 2,
     vocabulary: [b('ဘ', 'ba'), b('မ', 'ma'), b('ပ', 'pa')],
     body: b('မိုးမိုးက “ဘ ဘ” လို့ ဆိုတယ်။ မေမေက “ဘ ဘ” လို့ ပြန်ဆိုတယ်။ မိုးမိုးက ရယ်ပြီး “မ မ” လို့ ထပ်ဆိုတယ်။ အသံလေးတွေနဲ့ အတူ ကစားရတာ ပျော်စရာပဲ။', 'Mo-Mo said “ba-ba”. Mommy said “ba-ba” back. Mo-Mo laughed and said “ma-ma”. Playing with sounds together is fun.'),
     questions: [b('မိုးမိုး ဘယ်အသံတွေ ဆိုလဲ။', 'What sounds did Mo-Mo make?')],
-    activities: [b('ကလ်းနှင့် အသံလေးများ တုပြော ကစားပါ။', 'Copy simple sounds together.')],
+    activities: [b('ကလေးနှင့်အတူ အသံလေးများကို အပြန်အလှန် လိုက်တုပြောကစားပါ။', 'Copy simple sounds together.')],
   }),
   story({
     slug: 'when_i_feel_angry', storyType: 'emotion', ageGroupKey: '3y',
@@ -52,7 +52,7 @@ export const STORIES: SeedItem[] = [
     summary: b('ည အိပ်ရာဝင်ချိန် ငြိမ်သက်စေသော ပုံပြင်လေး။', 'A calming bedtime story.'),
     readingLevel: 'Beginner', readingMinutes: 3,
     vocabulary: [b('ည', 'night'), b('လ', 'moon'), b('အိပ်', 'sleep')],
-    body: b('နေဝင်ပြီ။ ကြယ်လေးတွေ တဖျတ်ဖျတ် တောက်တယ်။ ငှက်ကလေးတွေ အိပ်ပြီ။ ကလ်းလေးလည်း စောင်လေး ခြုံ၍ မျက်လုံးလေး မှိတ်တယ်။ “ကောင်းသောည” လို့ လရဲ့ကို နှုတ်ဆက်တယ်။', 'The sun has set. The little stars twinkle. The little birds are asleep. The child pulls up the blanket and closes their eyes. “Goodnight,” they say to the moon.'),
+    body: b('နေဝင်သွားပြီ။ ကောင်းကင်မှာ ကြယ်လေးတွေ တဖျတ်ဖျတ် လင်းလက်နေတယ်။ ငှက်ကလေးတွေလည်း အိပ်ပျော်နေပြီ။ ကလေးငယ်က စောင်လေးခြုံပြီး မျက်လုံးမှိတ်လိုက်တယ်။ “ကောင်းသောညပါ” လို့ လမင်းကြီးကို နှုတ်ဆက်လိုက်တယ်။', 'The sun has set. The little stars twinkle. The little birds are asleep. The child pulls up the blanket and closes their eyes. “Goodnight,” they say to the moon.'),
     questions: [b('ညဘက် ဘယ်သူတွေ အိပ်ကြလဲ။', 'Who goes to sleep at night?')],
     activities: [b('အိပ်ရာမဝင်မီ ဤပုံပြင်ကို တိုးတိုးလေး ဖတ်ပြပါ။', 'Read this softly before bed.')],
   }),
