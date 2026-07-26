@@ -8,6 +8,7 @@ import { DEMO_ACTIVITY_CATALOGUE } from '../data/demo';
 import { SAMPLE_ACTIVITIES, isApprovedForParents } from '../data/seed/content';
 import { chronologicalAge } from '../domain/age/age';
 import { ReviewBadge } from '../components/ReviewBadge';
+import { StaffPreviewBanner, UnreviewedContentNotice, useStaffPreviewAccess } from '../components/StaffPreviewGate';
 import { NoChild } from './Growth';
 
 export function Activities() {
@@ -15,6 +16,7 @@ export function Activities() {
   const { activeChild } = useAppState();
   const favKeys = useQuery(api.favorites.list) ?? [];
   const toggleFav = useMutation(api.favorites.toggle);
+  const staffPreview = useStaffPreviewAccess();
 
   const ageMonths = activeChild
     ? chronologicalAge(new Date(activeChild.birthDate), new Date()).totalMonths
@@ -26,6 +28,8 @@ export function Activities() {
 
   // No active child → don't invent a demo child; prompt to add one.
   if (!activeChild) return <NoChild />;
+  if (staffPreview === undefined) return <p className="text-ink-soft" role="status">…</p>;
+  if (!staffPreview) return <UnreviewedContentNotice />;
 
   const slots = [
     { key: t('home.morning'), a: plan.morning },
@@ -41,6 +45,7 @@ export function Activities() {
 
   return (
     <div className="space-y-4">
+      <StaffPreviewBanner />
       <h1 className="text-xl font-bold text-sky-deep">{t('activities.title')}</h1>
       <p className="text-sm text-ink-soft">{t('activities.dailyPlan')} · {activeChild.nickname}</p>
 

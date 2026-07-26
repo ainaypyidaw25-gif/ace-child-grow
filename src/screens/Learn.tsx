@@ -2,17 +2,23 @@ import { useState } from 'react';
 import { useLocale } from '../app/LocaleContext';
 import { SAMPLE_LESSONS, isApprovedForParents } from '../data/seed/content';
 import { ReviewBadge } from '../components/ReviewBadge';
+import { StaffPreviewBanner, UnreviewedContentNotice, useStaffPreviewAccess } from '../components/StaffPreviewGate';
 
 export function Learn() {
   const { t, locale } = useLocale();
   const [query, setQuery] = useState('');
+  const staffPreview = useStaffPreviewAccess();
   const lessons = SAMPLE_LESSONS.filter((l) =>
     (locale === 'mm' ? l.titleMm : l.titleEn).toLowerCase().includes(query.toLowerCase()) ||
     l.category.toLowerCase().includes(query.toLowerCase()),
   );
 
+  if (staffPreview === undefined) return <p className="text-ink-soft" role="status">…</p>;
+  if (!staffPreview) return <UnreviewedContentNotice />;
+
   return (
     <div className="space-y-4">
+      <StaffPreviewBanner />
       <h1 className="text-xl font-bold text-sky-deep">{t('learn.title')}</h1>
       <input
         value={query}

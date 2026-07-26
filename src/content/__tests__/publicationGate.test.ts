@@ -14,4 +14,12 @@ describe('clinical publication gate', () => {
     expect(workflowSource).toContain("['approved', 'published'].includes(to)");
     expect(workflowSource).toContain('Approval and publishing require a qualified clinical reviewer');
   });
+
+  it('keeps unreviewed frontend samples behind the staff preview gate', () => {
+    for (const file of ['MilestoneDemo', 'Activities', 'Learn', 'HopeCenter', 'Favorites']) {
+      const source = readFileSync(`src/screens/${file}.tsx`, 'utf8');
+      expect(source, file).toContain('useStaffPreviewAccess');
+      expect(source, file).toContain('UnreviewedContentNotice');
+    }
+  });
 });

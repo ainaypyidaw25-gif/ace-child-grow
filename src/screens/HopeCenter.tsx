@@ -2,14 +2,20 @@ import { useState } from 'react';
 import { useLocale } from '../app/LocaleContext';
 import { SAMPLE_AWARENESS, isApprovedForParents, type SeedAwarenessTopic } from '../data/seed/content';
 import { ReviewBadge } from '../components/ReviewBadge';
+import { StaffPreviewBanner, UnreviewedContentNotice, useStaffPreviewAccess } from '../components/StaffPreviewGate';
 
 export function HopeCenter() {
   const { t, locale } = useLocale();
   const [open, setOpen] = useState<SeedAwarenessTopic | null>(null);
+  const staffPreview = useStaffPreviewAccess();
+
+  if (staffPreview === undefined) return <p className="text-ink-soft" role="status">…</p>;
+  if (!staffPreview) return <UnreviewedContentNotice />;
 
   if (open) {
     return (
       <div className="space-y-4">
+        <StaffPreviewBanner />
         <button type="button" onClick={() => setOpen(null)}
           className="min-h-touch rounded-pill border border-line bg-white px-4 py-2 text-sm">
           ← {t('common.back')}
@@ -37,6 +43,7 @@ export function HopeCenter() {
 
   return (
     <div className="space-y-4">
+      <StaffPreviewBanner />
       <h1 className="text-xl font-bold text-sky-deep">{t('hope.title')}</h1>
       <p className="text-sm text-ink-soft">{t('hope.intro')}</p>
       <ul className="grid grid-cols-1 gap-3">

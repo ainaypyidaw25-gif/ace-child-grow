@@ -4,6 +4,7 @@ import { SAMPLE_MILESTONES, isApprovedForParents } from '../data/seed/content';
 import { computeResult, type MilestoneResponseInput } from '../domain/rules/resultEngine';
 import { SafetyBanner } from '../components/SafetyBanner';
 import { ReviewBadge } from '../components/ReviewBadge';
+import { StaffPreviewBanner, UnreviewedContentNotice, useStaffPreviewAccess } from '../components/StaffPreviewGate';
 import type { MilestoneAnswer } from '../domain/types';
 import type { TranslationKey } from '../i18n';
 
@@ -32,6 +33,7 @@ export function MilestoneDemo() {
   const [answers, setAnswers] = useState<Record<number, MilestoneAnswer>>({});
   const [lostSkill, setLostSkill] = useState<boolean | null>(null);
   const [submitted, setSubmitted] = useState(false);
+  const staffPreview = useStaffPreviewAccess();
 
   const current = items[step];
   const answered = Object.keys(answers).length;
@@ -46,9 +48,13 @@ export function MilestoneDemo() {
     return computeResult(responses, { confirmedSymptoms: [], lostSkill: lostSkill === true });
   }, [submitted, answers, lostSkill, items]);
 
+  if (staffPreview === undefined) return <p className="text-ink-soft" role="status">…</p>;
+  if (!staffPreview) return <UnreviewedContentNotice />;
+
   if (result) {
     return (
       <div className="space-y-4">
+        <StaffPreviewBanner />
         {result.safety.urgent && <SafetyBanner />}
         <section className={`rounded-card border-2 ${STATE_COLOR[result.state]} bg-white p-5`}>
           <h1 className="text-lg font-bold">{t('report.title')}</h1>
@@ -75,6 +81,7 @@ export function MilestoneDemo() {
 
   return (
     <div className="space-y-4">
+      <StaffPreviewBanner />
       <div className="flex items-center justify-between">
         <span className="text-sm text-ink-soft">
           {step + 1} / {items.length}

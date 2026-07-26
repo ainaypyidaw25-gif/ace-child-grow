@@ -2,16 +2,22 @@ import { useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
 import { SAMPLE_ACTIVITIES } from '../data/seed/content';
+import { StaffPreviewBanner, UnreviewedContentNotice, useStaffPreviewAccess } from '../components/StaffPreviewGate';
 
 export function Favorites() {
   const { t, locale } = useLocale();
   const favKeys = useQuery(api.favorites.list); // undefined === loading
+  const staffPreview = useStaffPreviewAccess();
   const saved = SAMPLE_ACTIVITIES.map((a, i) => ({ a, key: `act-${i}` })).filter((x) =>
     (favKeys ?? []).includes(x.key),
   );
 
+  if (staffPreview === undefined) return <p className="text-ink-soft" role="status">…</p>;
+  if (!staffPreview) return <UnreviewedContentNotice />;
+
   return (
     <div className="space-y-4">
+      <StaffPreviewBanner />
       <h1 className="text-xl font-bold text-sky-deep">{t('favorites.title')}</h1>
       {favKeys === undefined ? (
         <p className="text-ink-soft" role="status">…</p>
