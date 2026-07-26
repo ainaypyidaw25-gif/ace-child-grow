@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
 import { useLocale } from '../app/LocaleContext';
 import { useAppState } from '../app/AppState';
+import { useQuery } from 'convex/react';
+import { api } from '../../convex/_generated/api';
 import { ageLabels } from '../domain/age/ageLabel';
 
 function Card({ title, children }: { title: string; children: React.ReactNode }) {
@@ -15,6 +17,7 @@ function Card({ title, children }: { title: string; children: React.ReactNode })
 export function Home() {
   const { t, locale } = useLocale();
   const { activeChild } = useAppState();
+  const adminAccess = useQuery(api.admin.myAccess);
   const plans = [
     { label: t('home.morning'), emoji: '🌅' },
     { label: t('home.afternoon'), emoji: '☀️' },
@@ -75,7 +78,9 @@ export function Home() {
           { to: '/favorites', label: t('favorites.title'), emoji: '❤️' },
           { to: '/child-profile', label: locale === 'mm' ? 'ကလေး ပရိုဖိုင်' : 'Child profile', emoji: '👶' },
           { to: '/directory', label: locale === 'mm' ? 'ကျန်းမာရေး လမ်းညွှန်' : 'Healthcare', emoji: '🏥' },
-          { to: '/admin', label: locale === 'mm' ? 'စီမံခန့်ခွဲမှု' : 'Admin', emoji: '🗂️' },
+          ...(adminAccess?.isStaff
+            ? [{ to: '/admin', label: locale === 'mm' ? 'စီမံခန့်ခွဲမှု' : 'Admin', emoji: '🗂️' }]
+            : []),
         ].map((q) => (
           <Link
             key={q.to}

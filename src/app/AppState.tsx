@@ -32,9 +32,14 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const updateChild = useMutation(api.children.update);
   const removeChild = useMutation(api.children.remove);
   const acceptConsent = useMutation(api.parent.acceptConsent);
+  const ensureFreeSubscription = useMutation(api.subscriptions.ensureFree);
   const { signOut } = useAuthActions();
 
   const [activeChildId, setActiveChildId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (me) void ensureFreeSubscription({});
+  }, [ensureFreeSubscription, me]);
 
   // Loading discipline: `rows`/`me` are `undefined` while their queries are in
   // flight. We must NOT collapse "loading" into "empty" — the route guard keys

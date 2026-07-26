@@ -270,7 +270,12 @@ describe('convex/evidence.ts authorization', () => {
         );
         continue;
       }
-      const staffGated = fn.body.includes('requireStaff') || fn.body.includes('isStaff(ctx');
+      const staffGated =
+        fn.body.includes('requireStaff') ||
+        fn.body.includes('requireEvidenceEditor') ||
+        fn.body.includes('requireClinicalReviewer') ||
+        fn.body.includes('hasStaffRole') ||
+        fn.body.includes('isStaff(ctx');
       expect(staffGated, `${fn.name} is not staff-gated`).toBe(true);
     }
   });

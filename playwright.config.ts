@@ -1,7 +1,9 @@
 import { defineConfig } from '@playwright/test';
+import { existsSync } from 'node:fs';
 
-// E2E runs against the production build served by `vite preview`, using the
-// Chromium that ships in this environment (see executablePath).
+// E2E runs against the production build served by `vite preview`. The hosted
+// runner keeps Chromium at a fixed path; local development uses Playwright's
+// installed browser instead.
 const CHROMIUM = '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
 const PORT = 4173;
 
@@ -13,7 +15,10 @@ export default defineConfig({
   reporter: [['list']],
   use: {
     baseURL: `http://localhost:${PORT}`,
-    launchOptions: { executablePath: CHROMIUM, args: ['--no-sandbox'] },
+    launchOptions: {
+      ...(existsSync(CHROMIUM) ? { executablePath: CHROMIUM } : {}),
+      args: ['--no-sandbox'],
+    },
   },
   webServer: {
     command: `npm run build && npm run preview -- --port ${PORT} --strictPort`,

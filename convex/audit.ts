@@ -2,7 +2,7 @@ import { query, internalQuery, type MutationCtx } from './_generated/server';
 import { v } from 'convex/values';
 import { getAuthUserId } from '@convex-dev/auth/server';
 import type { Id } from './_generated/dataModel';
-import { isStaff } from './lib/auth';
+import { hasStaffRole } from './lib/auth';
 
 /**
  * Insert an immutable audit entry. Called from other mutations.
@@ -43,7 +43,7 @@ export const list = query({
   args: {},
   handler: async (ctx) => {
     const userId = await getAuthUserId(ctx);
-    if (!userId || !(await isStaff(ctx, userId))) return { allowed: false, rows: [] };
+    if (!userId || !(await hasStaffRole(ctx, userId, ['owner']))) return { allowed: false, rows: [] };
     const rows = await ctx.db.query('auditLogs').order('desc').take(200);
     return { allowed: true, rows };
   },

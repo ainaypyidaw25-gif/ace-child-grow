@@ -19,7 +19,16 @@ const SKIP_FILES = ['schema.ts', 'auth.ts', 'auth.config.ts', 'http.ts'];
 
 // Cross-file helpers that themselves derive the caller via getAuthUserId (defined
 // in convex/lib/auth.ts). A handler delegating to one of these is authed.
-const KNOWN_AUTH_CALLS = ['getAuthUserId', 'requireUser', 'requireStaff'];
+const KNOWN_AUTH_CALLS = [
+  'getAuthUserId',
+  'requireUser',
+  'requireStaff',
+  'requireOwner',
+  'requireContentEditor',
+  'requireEvidenceEditor',
+  'requireClinicalReviewer',
+  'hasStaffRole',
+];
 
 // Functions that are INTENTIONALLY public. Each must only expose data that is
 // safe for anonymous callers. Keep this list tiny and justified.

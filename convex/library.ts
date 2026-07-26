@@ -7,7 +7,7 @@
 import { query, mutation } from './_generated/server';
 import { v } from 'convex/values';
 import { getAuthUserId } from '@convex-dev/auth/server';
-import { isStaff, requireStaff } from './lib/auth';
+import { hasStaffRole, requireClinicalReviewer, requireContentEditor } from './lib/auth';
 import { logAudit } from './audit';
 
 // List content by type, optionally filtered by age/domain/category and a query.
@@ -23,7 +23,7 @@ export const listByType = query({
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) return { staff: false, items: [] };
-    const staff = await isStaff(ctx, userId);
+    const staff = await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'clinical_reviewer']);
 
     let rows = await ctx.db
       .query('libraryContent')
@@ -50,7 +50,7 @@ export const getBySlug = query({
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) return null;
-    const staff = await isStaff(ctx, userId);
+    const staff = await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'clinical_reviewer']);
     const item = await ctx.db
       .query('libraryContent')
       .withIndex('by_slug', (qq) => qq.eq('slug', args.slug))
@@ -71,7 +71,7 @@ export const search = query({
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) return [];
-    const staff = await isStaff(ctx, userId);
+    const staff = await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'clinical_reviewer']);
     const needle = args.q.trim().toLowerCase();
     if (!needle) return [];
     let rows = args.type
@@ -91,7 +91,7 @@ export const stats = query({
   handler: async (ctx) => {
     const userId = await getAuthUserId(ctx);
     // Staff-only: coverage/status counts (incl. unpublished) are an admin view.
-    if (!userId || !(await isStaff(ctx, userId))) {
+    if (!userId || !(await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'clinical_reviewer']))) {
       return { allowed: false, total: 0, byType: {}, byStatus: {}, ages: [], domains: [] };
     }
     const rows = await ctx.db.query('libraryContent').collect();
@@ -144,7 +144,7 @@ const seedItemValidator = v.object({
 export const importSeed = mutation({
   args: { items: v.array(seedItemValidator) },
   handler: async (ctx, { items }) => {
-    const userId = await requireStaff(ctx);
+    const userId = await requireContentEditor(ctx);
     const now = Date.now();
     let created = 0;
     let updated = 0;
@@ -203,13 +203,13 @@ export const setReview = mutation({
     nextReviewAt: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
-    const userId = await requireStaff(ctx);
     if (!['draft', 'clinical_review', 'published'].includes(args.clinicalStatus)) {
       throw new Error('Invalid status');
     }
-    if (args.clinicalStatus === 'published' && !args.reviewerQualification?.trim()) {
-      throw new Error('Publishing requires a qualified clinical reviewer');
-    }
+    const approval = args.clinicalStatus === 'published'
+      ? await requireClinicalReviewer(ctx)
+      : null;
+    const userId = approval?.userId ?? await requireContentEditor(ctx);
     const item = await ctx.db
       .query('libraryContent')
       .withIndex('by_slug', (qq) => qq.eq('slug', args.slug))
@@ -219,7 +219,7 @@ export const setReview = mutation({
     await ctx.db.patch(item._id, {
       clinicalStatus: args.clinicalStatus,
       reviewerId: userId,
-      reviewerQualification: args.reviewerQualification?.trim(),
+      reviewerQualification: approval?.qualification ?? args.reviewerQualification?.trim(),
       reviewedAt: now,
       nextReviewAt: args.nextReviewAt,
       reviewNote: args.reviewNote,

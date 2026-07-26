@@ -15,20 +15,21 @@ export const grantStaffByEmail = internalMutation({
   handler: async (ctx, { email }) => {
     const user = await ctx.db
       .query('users')
-      .filter((q) => q.eq(q.field('email'), email))
-      .first();
+      .withIndex('email', (q) => q.eq('email', email.trim().toLowerCase()))
+      .unique();
     if (!user) return { ok: false, reason: 'no such user' };
     const profile = await ctx.db
       .query('parentProfiles')
       .withIndex('by_user', (q) => q.eq('userId', user._id))
       .unique();
     if (profile) {
-      await ctx.db.patch(profile._id, { isStaff: true });
+      await ctx.db.patch(profile._id, { isStaff: true, staffRole: 'owner' });
     } else {
       await ctx.db.insert('parentProfiles', {
         userId: user._id,
         preferredLocale: 'mm',
         isStaff: true,
+        staffRole: 'owner',
       });
     }
     await logAudit(ctx, user._id, 'staff.grant', 'parentProfiles', user._id, email);

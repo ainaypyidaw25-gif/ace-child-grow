@@ -21,7 +21,7 @@ import {
 import { v, type Infer } from 'convex/values';
 import type { Id } from './_generated/dataModel';
 import { getAuthUserId } from '@convex-dev/auth/server';
-import { isStaff, requireStaff } from './lib/auth';
+import { hasStaffRole, requireClinicalReviewer, requireEvidenceEditor } from './lib/auth';
 import { logAudit } from './audit';
 
 const REVIEW_STATUSES = [
@@ -166,7 +166,7 @@ export const list = query({
   },
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
-    if (!userId || !(await isStaff(ctx, userId))) return EMPTY_LIST;
+    if (!userId || !(await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'clinical_reviewer']))) return EMPTY_LIST;
 
     let rows = await ctx.db.query('evidenceSources').collect();
 
@@ -207,7 +207,7 @@ export const getSource = query({
   args: { sourceId: v.string() },
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
-    if (!userId || !(await isStaff(ctx, userId))) return null;
+    if (!userId || !(await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'clinical_reviewer']))) return null;
     const source = await ctx.db
       .query('evidenceSources')
       .withIndex('by_source_id', (qq) => qq.eq('sourceId', args.sourceId))
@@ -251,7 +251,7 @@ export const stats = query({
   args: {},
   handler: async (ctx) => {
     const userId = await getAuthUserId(ctx);
-    if (!userId || !(await isStaff(ctx, userId))) {
+    if (!userId || !(await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'clinical_reviewer']))) {
       return {
         allowed: false as const,
         total: 0,
@@ -403,7 +403,7 @@ async function applySources(
 export const importSources = mutation({
   args: { sources: v.array(sourceValidator) },
   handler: async (ctx, { sources }) =>
-    applySources(ctx, sources, await requireStaff(ctx), 'admin screen'),
+    applySources(ctx, sources, await requireEvidenceEditor(ctx), 'admin screen'),
 });
 
 /**
@@ -520,7 +520,7 @@ async function applyLinks(
 export const importLinks = mutation({
   args: { links: v.array(linkValidator) },
   handler: async (ctx, { links }) =>
-    applyLinks(ctx, links, await requireStaff(ctx), 'admin screen'),
+    applyLinks(ctx, links, await requireEvidenceEditor(ctx), 'admin screen'),
 });
 
 /** CLI-only counterpart to importLinks. See importSourcesFromCli. */
@@ -599,7 +599,17 @@ export const setReview = mutation({
     note: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const userId = await requireStaff(ctx);
+    const approval = args.status === 'approved'
+      ? await requireClinicalReviewer(ctx)
+      : null;
+    const userId = approval?.userId ?? await requireEvidenceEditor(ctx);
+    const reviewArgs = approval
+      ? {
+          ...args,
+          reviewer: approval.reviewerName,
+          reviewerQualification: approval.qualification,
+        }
+      : args;
 
     const refuse = async (code: string, message: string, before: string) => {
       await logAudit(
@@ -620,7 +630,7 @@ export const setReview = mutation({
       .unique();
 
     // One policy, evaluated once. See reviewRefusal.
-    const refusal = reviewRefusal(args, row);
+    const refusal = reviewRefusal(reviewArgs, row);
     if (refusal) {
       return refuse(
         refusal.code,
@@ -637,15 +647,15 @@ export const setReview = mutation({
     const before = `${row.reviewStatus} / ${row.reviewer ?? 'no reviewer'} / ${row.reviewDate ?? 'no date'}`;
     await ctx.db.patch(row._id, {
       reviewStatus: args.status,
-      reviewer: args.reviewer.trim(),
-      reviewerQualification: args.reviewerQualification.trim(),
+      reviewer: reviewArgs.reviewer.trim(),
+      reviewerQualification: reviewArgs.reviewerQualification.trim(),
       reviewDate: args.reviewDate,
       nextReviewDate: args.nextReviewDate ?? row.nextReviewDate,
       reviewNote: args.note,
       reviewerId: userId,
       updatedAt: Date.now(),
     });
-    const after = `${args.status} / ${args.reviewer.trim()} (${args.reviewerQualification.trim()}) / ${args.reviewDate}`;
+    const after = `${args.status} / ${reviewArgs.reviewer.trim()} (${reviewArgs.reviewerQualification.trim()}) / ${args.reviewDate}`;
 
     await logAudit(
       ctx,
@@ -653,7 +663,7 @@ export const setReview = mutation({
       'evidence.setReview',
       'evidenceSources',
       args.sourceId,
-      `${row.reviewStatus} → ${args.status} by ${args.reviewer.trim()} (${args.reviewerQualification.trim()})`,
+      `${row.reviewStatus} → ${args.status} by ${reviewArgs.reviewer.trim()} (${reviewArgs.reviewerQualification.trim()})`,
       { result: 'ok', before, after },
     );
     return { ok: true as const };

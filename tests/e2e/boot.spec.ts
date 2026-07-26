@@ -6,7 +6,7 @@ import { test, expect } from '@playwright/test';
 test('app boots and shows the sign-in gate', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: 'ACE Child Grow' })).toBeVisible();
-  await expect(page.getByText('ကလေးတိုင်း ကြီးထွားနိုင်ပါတယ်')).toBeVisible();
+  await expect(page.getByText('ကလေးတိုင်း ဖွံ့ဖြိုးတိုးတက်နိုင်ပါတယ်')).toBeVisible();
   // Password fields present (the Convex Auth gate).
   await expect(page.locator('input[type="email"]')).toBeVisible();
   await expect(page.locator('input[type="password"]')).toBeVisible();

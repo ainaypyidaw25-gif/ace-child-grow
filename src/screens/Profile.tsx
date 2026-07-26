@@ -6,12 +6,21 @@ import { useAuthActions } from '@convex-dev/auth/react';
 import { exportData } from '../app/childStore';
 import { ageLabels } from '../domain/age/ageLabel';
 import { ConfirmDialog } from '../components/ConfirmDialog';
+import { useQuery } from 'convex/react';
+import { api } from '../../convex/_generated/api';
+
+const PLAN_LABELS = {
+  free: { mm: 'အခမဲ့အစီအစဉ်', en: 'Free plan' },
+  premium: { mm: 'အထူးအစီအစဉ်', en: 'Premium plan' },
+  family: { mm: 'မိသားစုအစီအစဉ်', en: 'Family plan' },
+} as const;
 
 export function Profile() {
   const { t, locale, setLocale } = useLocale();
   const { state, dispatch } = useAppState();
   const { signOut } = useAuthActions();
   const navigate = useNavigate();
+  const subscription = useQuery(api.subscriptions.mine);
   const [confirming, setConfirming] = useState<null | 'child' | 'account'>(null);
 
   function download() {
@@ -79,6 +88,25 @@ export function Profile() {
           <Link to="/add-child" className="mt-3 inline-block text-sm text-sky-deep">
             + {locale === 'mm' ? 'ကလေး ထပ်ထည့်ရန်' : 'Add another child'}
           </Link>
+        )}
+      </section>
+
+      {/* Subscription-ready account status. Billing is connected later. */}
+      <section className="rounded-card border border-line bg-white p-4 shadow-card">
+        <h2 className="font-semibold text-ink">{locale === 'mm' ? 'အသုံးပြုမှုအစီအစဉ်' : 'Membership plan'}</h2>
+        {subscription === undefined ? <p className="text-ink-soft">…</p> : (
+          <>
+            <p className="mt-1 text-lg font-semibold text-sky-deep">{PLAN_LABELS[subscription.planKey][locale]}</p>
+            <p className="mt-1 text-sm text-ink-soft">
+              {locale === 'mm'
+                ? subscription.planKey === 'free'
+                  ? 'လက်ရှိအခြေခံလုပ်ဆောင်ချက်များကို အခမဲ့ အသုံးပြုနိုင်ပါသည်။ အခပေးအစီအစဉ်များကို နောက်ပိုင်းတွင် ထည့်သွင်းနိုင်ရန် ပြင်ဆင်ထားသည်။'
+                  : 'ဤအကောင့်တွင် အထူးလုပ်ဆောင်ချက်များ အသုံးပြုနိုင်ပါသည်။'
+                : subscription.planKey === 'free'
+                  ? 'Core features are free. Paid plans can be connected later.'
+                  : 'Premium features are enabled for this account.'}
+            </p>
+          </>
         )}
       </section>
 

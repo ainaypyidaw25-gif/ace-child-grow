@@ -16,6 +16,7 @@ import { REVIEW_STATES, nextStep, isParentVisible, type ReviewState } from '../d
 export function AdminReviewQueue() {
   const { t, locale } = useLocale();
   const data = useQuery(api.content.list);
+  const access = useQuery(api.admin.myAccess);
   const seed = useMutation(api.content.seedIfEmpty);
   const transition = useMutation(api.content.transition);
   const [seeding, setSeeding] = useState(false);
@@ -33,6 +34,8 @@ export function AdminReviewQueue() {
 
   if (data === undefined) return <p className="text-ink-soft">…</p>;
   const { staff, items } = data;
+  const canEdit = access?.role === 'owner' || access?.role === 'content_editor';
+  const canReview = access?.role === 'clinical_reviewer';
   const pending = items.filter((i) => !isParentVisible(i.reviewStatus as ReviewState)).length;
 
   return (
@@ -51,8 +54,12 @@ export function AdminReviewQueue() {
         <section className="rounded-card border border-line bg-white p-4 shadow-card">
           <p className="text-sm text-ink">
             {locale === 'mm'
-              ? 'သင်သည် ပိုင်ရှင်အဖြစ် မူကြမ်းများကို ကြည့်ရှုနိုင်ပါသည်။ အရည်အချင်းပြည့်မီသော ကျန်းမာရေးပညာရှင် မရှိသေးသဖြင့် အတည်ပြုခြင်းနှင့် ထုတ်ဝေခြင်းကို ပိတ်ထားပါသည်။'
-              : 'You can inspect drafts as the owner. Approval and publishing remain locked until a qualified clinical reviewer is assigned.'}
+              ? canReview
+                ? 'ဆေးဘက်ဆိုင်ရာ သုံးသပ်သူအဖြစ် အတည်ပြုခြင်းနှင့် ထုတ်ဝေခြင်းကို ဆောင်ရွက်နိုင်ပါသည်။ လုပ်ဆောင်ချက်တိုင်းကို စိစစ်မှတ်တမ်းတင်ထားသည်။'
+                : 'မူကြမ်းများကို ကြည့်ရှုတည်းဖြတ်နိုင်ပါသည်။ အတည်ပြုခြင်းနှင့် ထုတ်ဝေခြင်းကို ဆေးဘက်ဆိုင်ရာ သုံးသပ်သူကသာ ဆောင်ရွက်နိုင်သည်။'
+              : canReview
+                ? 'You may approve and publish as the assigned clinical reviewer. Every action is audited.'
+                : 'You may inspect and edit drafts. Only an assigned clinical reviewer can approve or publish.'}
           </p>
           <div className="mt-3 flex flex-wrap gap-2 text-sm">
             <Link to="/library" className="rounded-pill bg-sky px-4 py-2 font-semibold text-white">
@@ -64,11 +71,16 @@ export function AdminReviewQueue() {
             <Link to="/admin/evidence" className="rounded-pill border border-line px-4 py-2 text-sky-deep">
               {locale === 'mm' ? 'ကိုးကားချက်များ ကြည့်ရန်' : 'View evidence'}
             </Link>
+            {access?.role === 'owner' && (
+              <Link to="/admin/team" className="rounded-pill border border-line px-4 py-2 text-sky-deep">
+                {locale === 'mm' ? 'စီမံခန့်ခွဲရေးအဖွဲ့' : 'Manage admin team'}
+              </Link>
+            )}
           </div>
         </section>
       )}
 
-      {items.length === 0 && (
+      {items.length === 0 && canEdit && (
         <button type="button" disabled={seeding}
           onClick={async () => {
             if (seeding) return;
@@ -101,7 +113,10 @@ export function AdminReviewQueue() {
                 }`}>
                   {it.reviewStatus}
                 </span>
-                {staff && to && !['approved', 'published'].includes(to) && (
+                {staff && to && (
+                  (['approved', 'published'].includes(to) && canReview) ||
+                  (!['approved', 'published'].includes(to) && canEdit)
+                ) && (
                   <button type="button" disabled={busyId === it._id}
                     onClick={async () => {
                       if (busyId) return;

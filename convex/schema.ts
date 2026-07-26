@@ -20,7 +20,67 @@ export default defineSchema({
     // Staff flag for the Admin CMS. Granted by a super admin (or, in dev, via the
     // Convex dashboard). Content-workflow mutations require this to be true.
     isStaff: v.optional(v.boolean()),
-  }).index('by_user', ['userId']),
+    staffRole: v.optional(
+      v.union(
+        v.literal('owner'),
+        v.literal('content_editor'),
+        v.literal('clinical_reviewer'),
+        v.literal('support'),
+      ),
+    ),
+    staffQualification: v.optional(v.string()),
+  })
+    .index('by_user', ['userId'])
+    .index('by_is_staff', ['isStaff'])
+    .index('by_staff_role', ['staffRole']),
+
+  // Invite-only staff onboarding. The raw invitation code is returned once to
+  // the owner and never stored; only its SHA-256 digest is persisted.
+  staffInvites: defineTable({
+    email: v.string(),
+    displayName: v.string(),
+    role: v.union(
+      v.literal('owner'),
+      v.literal('content_editor'),
+      v.literal('clinical_reviewer'),
+      v.literal('support'),
+    ),
+    reviewerQualification: v.optional(v.string()),
+    codeHash: v.string(),
+    targetUserId: v.id('users'),
+    status: v.union(v.literal('pending'), v.literal('accepted'), v.literal('revoked'), v.literal('expired')),
+    invitedBy: v.id('users'),
+    invitedAt: v.number(),
+    expiresAt: v.number(),
+    acceptedBy: v.optional(v.id('users')),
+    acceptedAt: v.optional(v.number()),
+  })
+    .index('by_email', ['email'])
+    .index('by_code_hash', ['codeHash'])
+    .index('by_status', ['status']),
+
+  // Billing-provider-neutral subscription state. Stripe (or another provider)
+  // can be connected later without changing parent or child records.
+  subscriptions: defineTable({
+    userId: v.id('users'),
+    planKey: v.union(v.literal('free'), v.literal('premium'), v.literal('family')),
+    status: v.union(
+      v.literal('active'),
+      v.literal('trialing'),
+      v.literal('past_due'),
+      v.literal('canceled'),
+      v.literal('paused'),
+    ),
+    provider: v.optional(v.string()),
+    providerCustomerId: v.optional(v.string()),
+    providerSubscriptionId: v.optional(v.string()),
+    currentPeriodEnd: v.optional(v.number()),
+    cancelAtPeriodEnd: v.optional(v.boolean()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index('by_user', ['userId'])
+    .index('by_provider_subscription', ['provider', 'providerSubscriptionId']),
 
   // Saved (favourite) activities — private to the parent.
   favorites: defineTable({

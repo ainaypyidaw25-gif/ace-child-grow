@@ -8,6 +8,7 @@
  * @module
  */
 
+import type * as admin from "../admin.js";
 import type * as audit from "../audit.js";
 import type * as auth from "../auth.js";
 import type * as children from "../children.js";
@@ -24,6 +25,7 @@ import type * as notifications from "../notifications.js";
 import type * as parent from "../parent.js";
 import type * as seed from "../seed.js";
 import type * as sleep from "../sleep.js";
+import type * as subscriptions from "../subscriptions.js";
 
 import type {
   ApiFromModules,
@@ -32,6 +34,7 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  admin: typeof admin;
   audit: typeof audit;
   auth: typeof auth;
   children: typeof children;
@@ -48,6 +51,7 @@ declare const fullApi: ApiFromModules<{
   parent: typeof parent;
   seed: typeof seed;
   sleep: typeof sleep;
+  subscriptions: typeof subscriptions;
 }>;
 
 /**

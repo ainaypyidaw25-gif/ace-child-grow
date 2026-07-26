@@ -1,6 +1,7 @@
 import { query, mutation } from './_generated/server';
 import { getAuthUserId } from '@convex-dev/auth/server';
 import { requireUser } from './lib/auth';
+import { getStaffAccess } from './lib/auth';
 
 export const me = query({
   args: {},
@@ -12,11 +13,13 @@ export const me = query({
       .query('parentProfiles')
       .withIndex('by_user', (q) => q.eq('userId', userId))
       .unique();
+    const staffAccess = await getStaffAccess(ctx, userId);
     return {
       userId,
       email: user?.email ?? null,
       consentAcceptedAt: profile?.consentAcceptedAt ?? null,
       isStaff: profile?.isStaff === true,
+      staffRole: staffAccess?.role ?? null,
     };
   },
 });

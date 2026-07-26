@@ -86,7 +86,7 @@ describe('invalid review transitions', () => {
     // Both callers must consult reviewRefusal rather than re-implementing it.
     // A second copy of these rules is how a gate starts answering a reviewer
     // and a release check differently.
-    expect(setReview).toContain('reviewRefusal(args, row)');
+    expect(setReview).toContain('reviewRefusal(reviewArgs, row)');
     expect(reviewGate).toContain('reviewRefusal(args, row)');
   });
 
@@ -193,7 +193,7 @@ describe('import entry points', () => {
     ['importLinks', 'applyLinks'],
   ])('%s stays staff-gated', (fn, apply) => {
     const body = functionBody(evidenceSrc, fn);
-    expect(body).toContain('await requireStaff(ctx)');
+    expect(body).toContain('await requireEvidenceEditor(ctx)');
     expect(body).toContain(apply);
   });
 
@@ -206,7 +206,7 @@ describe('import entry points', () => {
   );
 
   it('keeps the audit log staff-only', () => {
-    expect(auditSrc).toContain('isStaff(ctx, userId)');
+    expect(auditSrc).toContain("hasStaffRole(ctx, userId, ['owner'])");
     expect(auditSrc).toContain('allowed: false');
   });
 });

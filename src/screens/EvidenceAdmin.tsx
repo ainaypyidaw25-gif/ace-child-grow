@@ -45,6 +45,7 @@ export function EvidenceAdmin() {
   const [pending, setPending] = useState<string | null>(null);
 
   const stats = useQuery(api.evidence.stats, {});
+  const access = useQuery(api.admin.myAccess);
   const listArgs = {
     ...(orgKey ? { orgKey } : {}),
     ...(topic ? { topic } : {}),
@@ -111,11 +112,14 @@ export function EvidenceAdmin() {
 
   const review = async (sourceId: string, status: string) => {
     if (pending) return;
-    if (!reviewer.trim()) {
+    const boundClinicalReviewer = status === 'approved' && access?.role === 'clinical_reviewer';
+    const reviewerName = boundClinicalReviewer ? access.displayName ?? '' : reviewer.trim();
+    const qualification = boundClinicalReviewer ? access.qualification ?? '' : reviewerQualification.trim();
+    if (!reviewerName) {
       setMsg(L('သုံးသပ်သူ အမည် ထည့်ပါ။', 'Enter the reviewer name first.'));
       return;
     }
-    if (!reviewerQualification.trim()) {
+    if (!qualification) {
       setMsg(
         L(
           'သုံးသပ်သူ၏ ပညာအရည်အချင်း ထည့်ပါ (ဥပမာ — MBBS, MMedSc (Paediatrics))။',
@@ -132,8 +136,8 @@ export function EvidenceAdmin() {
       const res = await setReview({
         sourceId,
         status,
-        reviewer: reviewer.trim(),
-        reviewerQualification: reviewerQualification.trim(),
+        reviewer: reviewerName,
+        reviewerQualification: qualification,
         reviewDate: todayIso,
       });
       if (!res.ok) {
@@ -148,6 +152,7 @@ export function EvidenceAdmin() {
 
   const sel = 'min-h-touch rounded-pill border border-line bg-white px-3 py-1 text-sm';
   const rows = list?.sources ?? [];
+  const canApprove = access?.role === 'clinical_reviewer';
 
   return (
     <div className="space-y-4">
@@ -370,8 +375,9 @@ export function EvidenceAdmin() {
                             disabled={
                               pending === r.sourceId ||
                               r.reviewStatus === next ||
-                              !reviewer.trim() ||
-                              !reviewerQualification.trim() ||
+                              (next !== 'approved' && (!reviewer.trim() || !reviewerQualification.trim())) ||
+                              (next === 'approved' && (!access?.displayName || !access.qualification)) ||
+                              (next === 'approved' && !canApprove) ||
                               (next === 'approved' && (local ? resolveReviewStatus(local) : r.reviewStatus) === 'evidence_required')
                             }
                             onClick={() => review(r.sourceId, next)}

@@ -1,7 +1,7 @@
 import { query, mutation } from './_generated/server';
 import { v } from 'convex/values';
 import { getAuthUserId } from '@convex-dev/auth/server';
-import { isStaff, requireStaff } from './lib/auth';
+import { hasStaffRole, requireClinicalReviewer, requireContentEditor } from './lib/auth';
 import { logAudit } from './audit';
 
 // Mirror of src/domain/content/workflow.ts (convex functions can't import src/).
@@ -25,7 +25,7 @@ export const list = query({
     // found this to be the one read a stranger could reach, and an exception to
     // a rule is how the rule stops being checked. Signed out is signed out.
     if (!userId) return { staff: false, items: [] };
-    const staff = await isStaff(ctx, userId);
+    const staff = await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'clinical_reviewer']);
     const all = await ctx.db.query('contentItems').collect();
     // Non-staff see only published items; staff see everything.
     return { staff, items: staff ? all : all.filter((i) => i.reviewStatus === 'published') };
@@ -39,7 +39,7 @@ export const seedIfEmpty = mutation({
     items: v.array(v.object({ kind: v.string(), titleMm: v.string(), titleEn: v.string() })),
   },
   handler: async (ctx, { items }) => {
-    await requireStaff(ctx);
+    await requireContentEditor(ctx);
     const existing = await ctx.db.query('contentItems').take(1);
     if (existing.length > 0) return;
     for (const it of items) {
@@ -55,18 +55,18 @@ export const transition = mutation({
     reviewerQualification: v.optional(v.string()),
   },
   handler: async (ctx, { id, to, reviewerQualification }) => {
-    const userId = await requireStaff(ctx);
+    const approval = ['approved', 'published'].includes(to)
+      ? await requireClinicalReviewer(ctx)
+      : null;
+    const userId = approval?.userId ?? await requireContentEditor(ctx);
     const item = await ctx.db.get(id);
     if (!item) throw new Error('Not found');
     const allowed = TRANSITIONS[item.reviewStatus] ?? [];
     if (!allowed.includes(to)) throw new Error(`Invalid transition ${item.reviewStatus} -> ${to}`);
-    if (['approved', 'published'].includes(to) && !reviewerQualification?.trim()) {
-      throw new Error('Approval and publishing require a qualified clinical reviewer');
-    }
     await ctx.db.patch(id, {
       reviewStatus: to,
-      ...(reviewerQualification?.trim()
-        ? { reviewerQualification: reviewerQualification.trim() }
+      ...(approval?.qualification || reviewerQualification?.trim()
+        ? { reviewerQualification: approval?.qualification ?? reviewerQualification?.trim() }
         : {}),
     });
     // All content transitions (esp. publish) are audited.
@@ -85,7 +85,7 @@ export const setTranslation = mutation({
     translationNote: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
-    const userId = await requireStaff(ctx);
+    const userId = await requireContentEditor(ctx);
     const { id, ...patch } = args;
     await ctx.db.patch(id, patch);
     await logAudit(ctx, userId, `translation.${args.translationStatus}`, 'contentItems', id);

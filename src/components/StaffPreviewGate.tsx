@@ -4,7 +4,9 @@ import { useLocale } from '../app/LocaleContext';
 
 export function useStaffPreviewAccess(): boolean | undefined {
   const me = useQuery(api.parent.me);
-  return me === undefined ? undefined : me?.isStaff === true;
+  return me === undefined
+    ? undefined
+    : me?.isStaff === true && me.staffRole !== 'support';
 }
 
 export function UnreviewedContentNotice() {
@@ -26,8 +28,8 @@ export function StaffPreviewBanner() {
   return (
     <p className="rounded-lg bg-pastel-yellow/60 px-3 py-2 text-xs text-ink">
       {locale === 'mm'
-        ? 'ပိုင်ရှင်အတွက် မူကြမ်းကြည့်ရှုမှုသာ ဖြစ်သည်။ ကျန်းမာရေးပညာရှင်၏ အတည်ပြုချက် မရသေးပါ။'
-        : 'Owner draft preview only. This content has not been clinically approved.'}
+        ? 'ဝန်ထမ်းများအတွက် မူကြမ်းကြည့်ရှုမှုသာ ဖြစ်သည်။ ကျန်းမာရေးပညာရှင်၏ အတည်ပြုချက် မရသေးပါ။'
+        : 'Staff draft preview only. This content has not been clinically approved.'}
     </p>
   );
 }

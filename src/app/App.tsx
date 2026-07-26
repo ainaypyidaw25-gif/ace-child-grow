@@ -28,6 +28,8 @@ import { ContentLibrary } from '../screens/ContentLibrary';
 import { ContentDetail } from '../screens/ContentDetail';
 import { LibraryAdmin } from '../screens/LibraryAdmin';
 import { EvidenceAdmin } from '../screens/EvidenceAdmin';
+import { AdminTeam } from '../screens/AdminTeam';
+import { AcceptAdminInvite } from '../screens/AcceptAdminInvite';
 
 // Authentication gate: unauthenticated visitors see sign-in; the app (and all
 // child data) is only reachable once signed in.
@@ -101,6 +103,8 @@ function AppRoutes() {
       <Route path="/admin" element={<Layout><AdminReviewQueue /></Layout>} />
       <Route path="/admin/library" element={<Layout><LibraryAdmin /></Layout>} />
       <Route path="/admin/evidence" element={<Layout><EvidenceAdmin /></Layout>} />
+      <Route path="/admin/team" element={<Layout><AdminTeam /></Layout>} />
+      <Route path="/admin/accept-invite" element={<Layout><AcceptAdminInvite /></Layout>} />
       <Route path="/audit" element={<Layout><AuditLog /></Layout>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
