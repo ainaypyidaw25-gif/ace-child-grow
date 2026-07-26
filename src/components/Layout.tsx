@@ -1,15 +1,19 @@
 import type { ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { BottomNav } from './BottomNav';
 import { useLocale } from '../app/LocaleContext';
 import { useOnlineStatus } from '../app/useOnlineStatus';
+import { setPortalMode } from '../app/portalMode';
 
 export function Layout({ children, showNav = true }: { children: ReactNode; showNav?: boolean }) {
   const { locale, setLocale } = useLocale();
   const online = useOnlineStatus();
   const unread = useQuery(api.notifications.unreadCount) ?? 0;
+  const staffAccess = useQuery(api.admin.myAccess);
+  const location = useLocation();
+  const inStaffWorkspace = location.pathname.startsWith('/admin') || location.pathname === '/audit';
   return (
     <div className="min-h-screen bg-canvas">
       <header className="sticky top-0 z-10 flex items-center justify-between border-b border-line
@@ -23,6 +27,17 @@ export function Layout({ children, showNav = true }: { children: ReactNode; show
           )}
         </span>
         <div className="flex items-center gap-2">
+          {staffAccess?.isStaff && (
+            <Link
+              to={inStaffWorkspace ? '/home' : '/admin'}
+              onClick={() => setPortalMode(inStaffWorkspace ? 'parent' : 'staff')}
+              className="rounded-pill border border-sky/40 bg-white px-3 py-1 text-xs font-semibold text-sky-deep"
+            >
+              {inStaffWorkspace
+                ? locale === 'mm' ? 'မိဘမြင်ကွင်း' : 'Parent view'
+                : locale === 'mm' ? 'စီမံခန့်ခွဲရန်' : 'Admin'}
+            </Link>
+          )}
           <Link to="/notifications" aria-label="Notifications" className="relative min-h-touch min-w-touch text-xl leading-none flex items-center justify-center">
             🔔
             {unread > 0 && (

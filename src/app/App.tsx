@@ -35,6 +35,7 @@ import { AdminBilling } from '../screens/AdminBilling';
 import { SubscriptionPlans } from '../screens/SubscriptionPlans';
 import { api } from '../../convex/_generated/api';
 import { useEffect } from 'react';
+import { getPortalMode, setPortalMode } from './portalMode';
 
 // Authentication gate: unauthenticated visitors see sign-in; the app (and all
 // child data) is only reachable once signed in.
@@ -60,7 +61,7 @@ export function App() {
 // add a child again on every login.
 function Bootstrap() {
   const { ready, hasChild, state } = useAppState();
-  const wantsStaffPortal = localStorage.getItem('ace-login-destination') === 'staff';
+  const wantsStaffPortal = getPortalMode() === 'staff';
   const staffAccess = useQuery(api.admin.myAccess, wantsStaffPortal ? {} : 'skip');
   if (wantsStaffPortal && staffAccess === undefined) {
     return (
@@ -71,9 +72,9 @@ function Bootstrap() {
   }
   if (wantsStaffPortal) {
     return staffAccess?.isStaff
-      ? <ClearStaffDestination><Navigate to="/admin" replace /></ClearStaffDestination>
+      ? <Navigate to="/admin" replace />
       : (
-        <ClearStaffDestination>
+        <ResetStaffPortalMode>
           <Layout showNav={false}>
             <div className="rounded-card border border-line bg-white p-5 shadow-card">
               <h1 className="font-bold text-ink">စီမံခန့်ခွဲရေးဝင်ခွင့် မရှိသေးပါ</h1>
@@ -85,7 +86,7 @@ function Bootstrap() {
               </a>
             </div>
           </Layout>
-        </ClearStaffDestination>
+        </ResetStaffPortalMode>
       );
   }
   const route = decideRoute({
@@ -110,9 +111,9 @@ function Bootstrap() {
   }
 }
 
-function ClearStaffDestination({ children }: { children: React.ReactNode }) {
+function ResetStaffPortalMode({ children }: { children: React.ReactNode }) {
   useEffect(() => {
-    localStorage.removeItem('ace-login-destination');
+    setPortalMode('parent');
   }, []);
   return children;
 }

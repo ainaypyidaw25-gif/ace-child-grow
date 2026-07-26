@@ -4,6 +4,8 @@ import { describe, expect, it } from 'vitest';
 const source = readFileSync('convex/directory.ts', 'utf8');
 const schema = readFileSync('convex/schema.ts', 'utf8');
 const signIn = readFileSync('src/screens/SignIn.tsx', 'utf8');
+const app = readFileSync('src/app/App.tsx', 'utf8');
+const layout = readFileSync('src/components/Layout.tsx', 'utf8');
 
 describe('special-needs directory and staff portal', () => {
   it('uses owner-managed database records rather than a hard-coded school list', () => {
@@ -20,7 +22,11 @@ describe('special-needs directory and staff portal', () => {
     expect(source).toContain('.take(200)');
     expect(source).not.toContain("query('healthcareFacilities').collect()");
     expect(signIn).toContain('အဖွဲ့ဝင်/ပညာရှင်ဝင်ရန်');
-    expect(signIn).toContain("localStorage.setItem('ace-login-destination', 'staff')");
+    expect(signIn).toContain('setPortalMode(portal)');
+    expect(app).toContain("getPortalMode() === 'staff'");
+    expect(app).not.toContain('<ClearStaffDestination>');
+    expect(layout).toContain("setPortalMode(inStaffWorkspace ? 'parent' : 'staff')");
+    expect(layout).toContain("to={inStaffWorkspace ? '/home' : '/admin'}");
   });
 
   it('automatically deactivates owner-managed entries after their verification period', () => {

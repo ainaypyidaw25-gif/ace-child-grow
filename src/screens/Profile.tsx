@@ -8,6 +8,7 @@ import { ageLabels } from '../domain/age/ageLabel';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
+import { clearPortalMode } from '../app/portalMode';
 
 const PLAN_LABELS = {
   free: { mm: 'အခမဲ့အစီအစဉ်', en: 'Free plan' },
@@ -127,7 +128,7 @@ export function Profile() {
           <span>{locale === 'mm' ? 'အင်တာနက်မရှိချိန် ဖတ်ရန် သိမ်းထားမှု' : 'Offline downloads'}</span>
           <span aria-hidden>→</span>
         </Link>
-        <button type="button" onClick={() => void signOut()}
+        <button type="button" onClick={() => { clearPortalMode(); void signOut(); }}
           className="mt-1 w-full rounded-pill border border-line px-4 py-2 text-left">
           🚪 {locale === 'mm' ? 'ထွက်မည်' : 'Sign out'}
         </button>

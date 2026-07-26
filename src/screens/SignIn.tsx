@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAuthActions } from '@convex-dev/auth/react';
 import { useLocale } from '../app/LocaleContext';
+import { clearPortalMode, setPortalMode } from '../app/portalMode';
 
 // Email + password auth (Convex Auth). Sign up or sign in; the same screen.
 export function SignIn() {
@@ -19,12 +20,11 @@ export function SignIn() {
     e.preventDefault();
     setError('');
     setBusy(true);
-    if (portal === 'staff') localStorage.setItem('ace-login-destination', 'staff');
-    else localStorage.removeItem('ace-login-destination');
+    setPortalMode(portal);
     try {
       await signIn('password', { email, password, flow });
     } catch {
-      localStorage.removeItem('ace-login-destination');
+      clearPortalMode();
       setError(
         locale === 'mm'
           ? 'အီးမေးလ် သို့မဟုတ် စကားဝှက် မှားနေသည် (သို့) အကောင့်ရှိပြီးသား ဖြစ်နိုင်သည်။'
