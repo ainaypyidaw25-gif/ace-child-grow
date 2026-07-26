@@ -76,10 +76,13 @@ export default defineSchema({
     providerSubscriptionId: v.optional(v.string()),
     currentPeriodEnd: v.optional(v.number()),
     cancelAtPeriodEnd: v.optional(v.boolean()),
+    trialStartedAt: v.optional(v.number()),
+    trialUsedAt: v.optional(v.number()),
     createdAt: v.number(),
     updatedAt: v.number(),
   })
     .index('by_user', ['userId'])
+    .index('by_status_period_end', ['status', 'currentPeriodEnd'])
     .index('by_provider_subscription', ['provider', 'providerSubscriptionId']),
 
   // Owner-configured prices. No amount or payment destination is shipped in
@@ -100,6 +103,7 @@ export default defineSchema({
     updatedAt: v.number(),
   })
     .index('by_plan_key', ['planKey'])
+    .index('by_plan_key_interval', ['planKey', 'interval'])
     .index('by_active_and_sort_order', ['isActive', 'sortOrder']),
 
   // Configurable local/manual payment destinations (e.g. a merchant wallet or
@@ -120,6 +124,7 @@ export default defineSchema({
   paymentRequests: defineTable({
     userId: v.id('users'),
     planKey: v.union(v.literal('premium'), v.literal('family')),
+    planId: v.optional(v.id('subscriptionPlans')),
     paymentMethodId: v.id('paymentMethods'),
     amount: v.number(),
     currency: v.string(),
@@ -134,6 +139,57 @@ export default defineSchema({
   })
     .index('by_user', ['userId'])
     .index('by_status', ['status']),
+
+  // Myan Myan Pay transactions are kept separate from the legacy/manual
+  // screenshot-review flow above. Provider credentials live only in Convex
+  // environment variables; this table contains non-secret reconciliation data.
+  mmpayTransactions: defineTable({
+    userId: v.id('users'),
+    planKey: v.union(v.literal('premium'), v.literal('family')),
+    planId: v.optional(v.id('subscriptionPlans')),
+    planInterval: v.optional(v.union(v.literal('month'), v.literal('year'))),
+    environment: v.union(v.literal('sandbox'), v.literal('production')),
+    orderId: v.string(),
+    amount: v.number(),
+    currency: v.literal('MMK'),
+    status: v.union(
+      v.literal('INITIATING'),
+      v.literal('PENDING'),
+      v.literal('SUCCESS'),
+      v.literal('FAILED'),
+      v.literal('REFUNDED'),
+      v.literal('CANCELLED'),
+      v.literal('EXPIRED'),
+    ),
+    condition: v.optional(v.union(v.literal('PRISTINE'), v.literal('TOUCHED'), v.literal('DIRTY'), v.literal('EXPIRED'))),
+    qrPayload: v.optional(v.string()),
+    checkoutUrl: v.optional(v.string()),
+    vendor: v.optional(v.string()),
+    method: v.optional(v.union(v.literal('QR'), v.literal('PIN'), v.literal('PWA'), v.literal('CARD'))),
+    vendorQrRefId: v.optional(v.string()),
+    transactionRefId: v.optional(v.string()),
+    failureReason: v.optional(v.string()),
+    callbackReceivedAt: v.optional(v.number()),
+    completedAt: v.optional(v.number()),
+    lastSyncedAt: v.optional(v.number()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index('by_order_id', ['orderId'])
+    .index('by_user', ['userId'])
+    .index('by_status', ['status'])
+    .index('by_transaction_ref_id', ['transactionRefId']),
+
+  // A signed callback can be delivered more than once. Persisting a digest of
+  // its nonce makes processing idempotent without retaining the raw nonce.
+  mmpayWebhookEvents: defineTable({
+    nonceHash: v.string(),
+    orderId: v.string(),
+    status: v.string(),
+    receivedAt: v.number(),
+  })
+    .index('by_nonce_hash', ['nonceHash'])
+    .index('by_order_id', ['orderId']),
 
   // Saved (favourite) activities — private to the parent.
   favorites: defineTable({
@@ -258,9 +314,32 @@ export default defineSchema({
     contentSlug: v.string(),
     kind: v.string(), // illustration | animation | audio | video | pdf | download | offline_bundle
     url: v.optional(v.string()),
+    storageId: v.optional(v.id('_storage')),
+    mimeType: v.optional(v.string()),
+    altMm: v.optional(v.string()),
+    altEn: v.optional(v.string()),
+    captionMm: v.optional(v.string()),
+    captionEn: v.optional(v.string()),
     placeholder: v.boolean(),
     offline: v.optional(v.boolean()),
     note: v.optional(v.string()),
+    durationSeconds: v.optional(v.number()),
+    transcriptMm: v.optional(v.string()),
+    transcriptEn: v.optional(v.string()),
+    rightsOwner: v.optional(v.string()),
+    rightsSourceUrl: v.optional(v.string()),
+    licenseType: v.optional(v.string()),
+    attributionMm: v.optional(v.string()),
+    attributionEn: v.optional(v.string()),
+    reviewStatus: v.optional(
+      v.union(v.literal('planned'), v.literal('in_review'), v.literal('approved'), v.literal('retired')),
+    ),
+    reviewedBy: v.optional(v.id('users')),
+    reviewerQualification: v.optional(v.string()),
+    reviewedAt: v.optional(v.number()),
+    nextReviewAt: v.optional(v.number()),
+    accessLevel: v.optional(v.union(v.literal('free_sample'), v.literal('premium'))),
+    sortOrder: v.optional(v.number()),
   })
     .index('by_content', ['contentSlug'])
     .index('by_kind', ['kind']),
@@ -377,4 +456,68 @@ export default defineSchema({
   })
     .index('by_user', ['userId'])
     .index('by_child', ['childId']),
+
+  milestoneResponses: defineTable({
+    userId: v.id('users'),
+    childId: v.id('children'),
+    sessionId: v.id('milestoneSessions'),
+    milestoneKey: v.string(),
+    titleMm: v.optional(v.string()),
+    titleEn: v.optional(v.string()),
+    domain: v.string(),
+    answer: v.union(
+      v.literal('yes'),
+      v.literal('sometimes'),
+      v.literal('not_yet'),
+      v.literal('not_sure'),
+    ),
+    note: v.optional(v.string()),
+    answeredAt: v.number(),
+  })
+    .index('by_session', ['sessionId'])
+    .index('by_child', ['childId'])
+    .index('by_user_and_child', ['userId', 'childId']),
+
+  activityCompletions: defineTable({
+    userId: v.id('users'),
+    childId: v.id('children'),
+    contentSlug: v.string(),
+    completedAt: v.number(),
+    durationMinutes: v.optional(v.number()),
+    note: v.optional(v.string()),
+  })
+    .index('by_child_and_completed_at', ['childId', 'completedAt'])
+    .index('by_user_and_completed_at', ['userId', 'completedAt']),
+
+  appointments: defineTable({
+    userId: v.id('users'),
+    childId: v.id('children'),
+    title: v.string(),
+    providerName: v.optional(v.string()),
+    appointmentAt: v.number(),
+    questions: v.optional(v.string()),
+    notes: v.optional(v.string()),
+    reminderAt: v.optional(v.number()),
+    status: v.union(v.literal('scheduled'), v.literal('completed'), v.literal('canceled')),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index('by_user_and_appointment_at', ['userId', 'appointmentAt'])
+    .index('by_child_and_appointment_at', ['childId', 'appointmentAt'])
+    .index('by_reminder_at', ['reminderAt']),
+
+  familyCaregivers: defineTable({
+    ownerId: v.id('users'),
+    caregiverUserId: v.optional(v.id('users')),
+    caregiverEmail: v.string(),
+    displayName: v.optional(v.string()),
+    status: v.union(v.literal('pending'), v.literal('active'), v.literal('revoked')),
+    invitedAt: v.number(),
+    acceptedAt: v.optional(v.number()),
+    revokedAt: v.optional(v.number()),
+  })
+    .index('by_owner', ['ownerId'])
+    .index('by_owner_and_email', ['ownerId', 'caregiverEmail'])
+    .index('by_email_and_status', ['caregiverEmail', 'status'])
+    .index('by_caregiver_user', ['caregiverUserId']),
 });

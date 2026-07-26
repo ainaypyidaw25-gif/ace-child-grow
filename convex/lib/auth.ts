@@ -6,7 +6,7 @@
 // modules; consolidating them here removes that duplication.
 import { getAuthUserId } from '@convex-dev/auth/server';
 import type { QueryCtx, MutationCtx } from '../_generated/server';
-import type { Id } from '../_generated/dataModel';
+import type { Doc, Id } from '../_generated/dataModel';
 
 export type Ctx = QueryCtx | MutationCtx;
 export type StaffRole = 'owner' | 'content_editor' | 'clinical_reviewer' | 'support';
@@ -130,7 +130,18 @@ export async function ownChild(
   ctx: Ctx,
   childId: Id<'children'>,
   userId: Id<'users'>,
-): Promise<void> {
+): Promise<Doc<'children'>> {
   const child = await ctx.db.get(childId);
-  if (!child || child.userId !== userId) throw new Error('Not found');
+  if (!child) throw new Error('Not found');
+  if (child.userId !== userId) {
+    const memberships = await ctx.db
+      .query('familyCaregivers')
+      .withIndex('by_caregiver_user', (q) => q.eq('caregiverUserId', userId))
+      .take(5);
+    const allowed = memberships.some(
+      (membership) => membership.ownerId === child.userId && membership.status === 'active',
+    );
+    if (!allowed) throw new Error('Not found');
+  }
+  return child;
 }

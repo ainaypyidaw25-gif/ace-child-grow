@@ -9,6 +9,8 @@ import { v } from 'convex/values';
 import { getAuthUserId } from '@convex-dev/auth/server';
 import { hasStaffRole, requireContentEditor, requireProfessionalPublisher } from './lib/auth';
 import { logAudit } from './audit';
+import { resolveEntitlements } from './lib/entitlements';
+import { STARTER_ANIMATION_SLUGS } from './animationPlan';
 
 // List content by type, optionally filtered by age/domain/category and a query.
 // Non-staff receive only 'published'; staff receive all statuses.
@@ -57,11 +59,194 @@ export const getBySlug = query({
       .unique();
     if (!item) return null;
     if (!staff && item.clinicalStatus !== 'published') return { restricted: true };
-    const media = await ctx.db
+    let mediaRows = await ctx.db
       .query('libraryMedia')
       .withIndex('by_content', (qq) => qq.eq('contentSlug', args.slug))
-      .collect();
+      .take(20);
+    if (!staff) {
+      const entitlements = await resolveEntitlements(ctx, userId);
+      const canViewPremium = entitlements.features.includes('premium_media');
+      mediaRows = mediaRows
+        .filter((row) => !row.placeholder && row.reviewStatus === 'approved')
+        .filter((row) => (row.accessLevel ?? 'free_sample') === 'free_sample' || canViewPremium);
+    }
+    const media = await Promise.all(mediaRows.map(async (row) => ({
+      ...row,
+      url: row.storageId ? await ctx.storage.getUrl(row.storageId) : row.url,
+    })));
     return { item, media, staff };
+  },
+});
+
+const uploadedMediaKind = v.union(v.literal('illustration'), v.literal('video'));
+
+export const generateMediaUploadUrl = mutation({
+  args: {},
+  returns: v.string(),
+  handler: async (ctx) => {
+    await requireContentEditor(ctx);
+    return await ctx.storage.generateUploadUrl();
+  },
+});
+
+export const attachUploadedMedia = mutation({
+  args: {
+    contentSlug: v.string(),
+    kind: uploadedMediaKind,
+    storageId: v.id('_storage'),
+    altMm: v.string(),
+    altEn: v.string(),
+    captionMm: v.optional(v.string()),
+      captionEn: v.optional(v.string()),
+      durationSeconds: v.optional(v.number()),
+      transcriptMm: v.optional(v.string()),
+      transcriptEn: v.optional(v.string()),
+      rightsOwner: v.string(),
+      rightsSourceUrl: v.optional(v.string()),
+      licenseType: v.string(),
+      attributionMm: v.optional(v.string()),
+      attributionEn: v.optional(v.string()),
+      accessLevel: v.union(v.literal('free_sample'), v.literal('premium')),
+      sortOrder: v.optional(v.number()),
+    },
+  returns: v.object({ ok: v.literal(true) }),
+  handler: async (ctx, args) => {
+    const userId = await requireContentEditor(ctx);
+    const content = await ctx.db
+      .query('libraryContent')
+      .withIndex('by_slug', (q) => q.eq('slug', args.contentSlug))
+      .unique();
+    if (!content) throw new Error('Content not found');
+
+    const metadata = await ctx.db.system.get(args.storageId);
+    if (!metadata) throw new Error('Uploaded file not found');
+    const mimeType = metadata.contentType ?? '';
+    const allowed = args.kind === 'illustration'
+      ? ['image/jpeg', 'image/png', 'image/webp']
+      : ['video/mp4', 'video/webm'];
+    const maxBytes = args.kind === 'illustration' ? 5 * 1024 * 1024 : 100 * 1024 * 1024;
+    if (!allowed.includes(mimeType) || metadata.size > maxBytes) {
+      await ctx.storage.delete(args.storageId);
+      throw new Error(args.kind === 'illustration'
+        ? 'Use a JPG, PNG, or WebP image up to 5 MB'
+        : 'Use an MP4 or WebM video up to 100 MB');
+    }
+
+    const rows = await ctx.db
+      .query('libraryMedia')
+      .withIndex('by_content', (q) => q.eq('contentSlug', args.contentSlug))
+      .collect();
+    const existing = rows.find((row) => row.kind === args.kind);
+    const values = {
+      storageId: args.storageId,
+      mimeType,
+      altMm: args.altMm.trim(),
+      altEn: args.altEn.trim(),
+      captionMm: args.captionMm?.trim() || undefined,
+      captionEn: args.captionEn?.trim() || undefined,
+      placeholder: false,
+      durationSeconds: args.durationSeconds,
+      transcriptMm: args.transcriptMm?.trim() || undefined,
+      transcriptEn: args.transcriptEn?.trim() || undefined,
+      rightsOwner: args.rightsOwner.trim(),
+      rightsSourceUrl: args.rightsSourceUrl?.trim() || undefined,
+      licenseType: args.licenseType.trim(),
+      attributionMm: args.attributionMm?.trim() || undefined,
+      attributionEn: args.attributionEn?.trim() || undefined,
+      accessLevel: args.accessLevel,
+      sortOrder: args.sortOrder,
+      reviewStatus: 'in_review' as const,
+      reviewedBy: undefined,
+      reviewerQualification: undefined,
+      reviewedAt: undefined,
+    };
+    if (existing) {
+      const previousStorageId = existing.storageId;
+      await ctx.db.patch(existing._id, values);
+      if (previousStorageId && previousStorageId !== args.storageId) {
+        await ctx.storage.delete(previousStorageId);
+      }
+    } else {
+      await ctx.db.insert('libraryMedia', {
+        contentSlug: args.contentSlug,
+        kind: args.kind,
+        ...values,
+      });
+    }
+    await logAudit(ctx, userId, 'library.media.attach', 'libraryContent', content._id, `${args.contentSlug}: ${args.kind}`);
+    return { ok: true as const };
+  },
+});
+
+export const approveMedia = mutation({
+  args: {
+    mediaId: v.id('libraryMedia'),
+    nextReviewAt: v.optional(v.number()),
+  },
+  returns: v.object({ ok: v.literal(true) }),
+  handler: async (ctx, args) => {
+    const approval = await requireProfessionalPublisher(ctx);
+    const media = await ctx.db.get(args.mediaId);
+    if (!media || media.placeholder || (!media.storageId && !media.url)) throw new Error('Media asset not found');
+    if (!media.rightsOwner?.trim() || !media.licenseType?.trim()) {
+      throw new Error('Rights owner and license type are required');
+    }
+    await ctx.db.patch(args.mediaId, {
+      reviewStatus: 'approved',
+      reviewedBy: approval.userId,
+      reviewerQualification: approval.qualification,
+      reviewedAt: Date.now(),
+      nextReviewAt: args.nextReviewAt,
+    });
+    await logAudit(
+      ctx,
+      approval.userId,
+      'library.media.approve',
+      'libraryMedia',
+      args.mediaId,
+      `${media.contentSlug}: ${approval.scope}`,
+    );
+    return { ok: true as const };
+  },
+});
+
+export const createStarterAnimationQueue = mutation({
+  args: {},
+  returns: v.object({ created: v.number(), existing: v.number() }),
+  handler: async (ctx) => {
+    const userId = await requireContentEditor(ctx);
+    let created = 0;
+    let existing = 0;
+    for (const [sortOrder, contentSlug] of STARTER_ANIMATION_SLUGS.entries()) {
+      const content = await ctx.db
+        .query('libraryContent')
+        .withIndex('by_slug', (q) => q.eq('slug', contentSlug))
+        .unique();
+      if (!content) continue;
+      const rows = await ctx.db
+        .query('libraryMedia')
+        .withIndex('by_content', (q) => q.eq('contentSlug', contentSlug))
+        .take(20);
+      if (rows.some((row) => row.kind === 'animation')) {
+        existing += 1;
+        continue;
+      }
+      await ctx.db.insert('libraryMedia', {
+        contentSlug,
+        kind: 'animation',
+        placeholder: true,
+        offline: true,
+        note: 'Original ACE animation production brief — upload, rights check, and professional review required.',
+        rightsOwner: 'ACE Child Grow',
+        licenseType: 'Original work — all rights reserved',
+        reviewStatus: 'planned',
+        accessLevel: sortOrder % 5 === 0 ? 'free_sample' : 'premium',
+        sortOrder,
+      });
+      created += 1;
+    }
+    await logAudit(ctx, userId, 'library.animation_queue.create', 'libraryMedia', undefined, `${created} created, ${existing} existing`);
+    return { created, existing };
   },
 });
 
@@ -172,13 +357,16 @@ export const importSeed = mutation({
         await ctx.db.insert('libraryContent', { ...content, clinicalStatus, createdAt: now, updatedAt: now });
         created++;
       }
-      // Refresh media placeholders for this slug.
+      // Refresh placeholders without deleting media uploaded by an editor.
       const existingMedia = await ctx.db
         .query('libraryMedia')
         .withIndex('by_content', (qq) => qq.eq('contentSlug', it.slug))
         .collect();
-      for (const mrow of existingMedia) await ctx.db.delete(mrow._id);
+      for (const mrow of existingMedia) {
+        if (mrow.placeholder && !mrow.storageId && !mrow.url) await ctx.db.delete(mrow._id);
+      }
       for (const mref of media) {
+        if (existingMedia.some((row) => row.kind === mref.kind && (!row.placeholder || row.storageId || row.url))) continue;
         await ctx.db.insert('libraryMedia', {
           contentSlug: it.slug,
           kind: mref.kind,

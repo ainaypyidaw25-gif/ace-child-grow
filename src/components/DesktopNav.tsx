@@ -32,6 +32,22 @@ export function DesktopNav() {
           </ul>
         </nav>
 
+        <nav aria-label={locale === 'mm' ? 'မိသားစုကိရိယာများ' : 'Family tools'}>
+          <p className="px-3 text-[11px] font-bold uppercase tracking-[0.16em] text-ink-soft">
+            {locale === 'mm' ? 'မှတ်တမ်းကိရိယာများ' : 'Tools'}
+          </p>
+          <div className="mt-2 space-y-1">
+            <Link to="/appointments" className="flex min-h-touch items-center gap-3 rounded-2xl px-3 py-2 text-sm font-medium text-ink-soft hover:bg-white">
+              <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-pastel-yellow/50">⌁</span>
+              {locale === 'mm' ? 'ချိန်းဆိုမှုများ' : 'Appointments'}
+            </Link>
+            <Link to="/report" className="flex min-h-touch items-center gap-3 rounded-2xl px-3 py-2 text-sm font-medium text-ink-soft hover:bg-white">
+              <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-mint-soft">▤</span>
+              {locale === 'mm' ? 'တိုးတက်မှုအစီရင်ခံစာ' : 'Progress report'}
+            </Link>
+          </div>
+        </nav>
+
         <div className="overflow-hidden rounded-3xl bg-ink p-4 text-white shadow-card">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-mint">
             ACE Premium

@@ -1,55 +1,67 @@
 import { useMemo, useState } from 'react';
+import { useQuery } from 'convex/react';
+import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
 import { useAppState } from '../app/AppState';
 import { buildReport, type ReportType } from '../domain/reports/report';
 import { ageLabels } from '../domain/age/ageLabel';
 import { NoChild } from './Growth';
-import type { Locale } from '../domain/types';
-
-// Sample report content, localized. Real aggregation from stored milestone/
-// growth/sleep data is a follow-up; until then this is clearly labelled sample.
-function sampleSource(locale: Locale) {
-  const mm = locale === 'mm';
-  return {
-    periodStart: '2026-06-24',
-    periodEnd: '2026-07-24',
-    strengths: mm ? ['ရုပ်ပုံများကို အမည်ပြောနိုင်သည်', 'စာအုပ်အတူဖတ်ရသည်ကို နှစ်သက်သည်'] : ['Names familiar pictures', 'Enjoys shared reading'],
-    emergingSkills: mm ? ['စကားနှစ်လုံးတွဲ ပြောခြင်း'] : ['Two-word phrases'],
-    latestResultState: 'yellow' as const,
-    completedActivities: mm ? ['ပုံစာအုပ် အတူဖတ်ခြင်း'] : ['Shared picture-book reading'],
-    parentNotes: mm ? ['လူသစ်နှင့် နည်းနည်း ရှက်တတ်သည်'] : ['A little shy with new people'],
-    savedConcerns: [] as string[],
-    growthSummary: mm ? 'ဤလတွင် ကိုယ်အလေးချိန်နှင့် အရပ် မှတ်တမ်းတင်ထားသည်။' : 'Weight and height tracked this month.',
-    sleepSummary: mm ? 'ပျမ်းမျှ အိပ်ချိန် ~၁၁ နာရီ။' : 'Average total sleep ~11h.',
-    questionsForProfessional: mm ? ['စကားနှစ်လုံးတွဲ ပြောနိုင်ရန် မည်သို့ ကူညီနိုင်မလဲ။'] : ['How can I support two-word phrases?'],
-    nextReviewDate: '2026-08-21',
-  };
-}
+import { PremiumGate } from '../components/PremiumGate';
 
 export function Report() {
   const { t, locale } = useLocale();
   const { activeChild } = useAppState();
   const [type, setType] = useState<ReportType>('parent_monthly');
+  const [asOf] = useState(() => Date.now());
+  const subscription = useQuery(api.subscriptions.mine);
+  const canView = subscription?.features.includes('advanced_reports') ?? false;
+  const data = useQuery(
+    api.reports.childSummary,
+    activeChild && canView ? { childId: activeChild.id as never, asOf } : 'skip',
+  );
 
   const source = useMemo(() => {
-    const base = sampleSource(locale);
-    const labels = activeChild
+    const labels = activeChild && data
       ? ageLabels(new Date(activeChild!.birthDate), new Date(), locale, {
           gestationalWeeks: activeChild!.gestationalWeeks,
           useCorrected: activeChild!.useCorrectedAge,
         })
       : null;
+    if (!data || !labels) return null;
     return {
-      ...base,
-      childNickname: activeChild?.nickname ?? '',
+      childNickname: data.childNickname,
+      periodStart: data.periodStart,
+      periodEnd: data.periodEnd,
       chronologicalAgeLabel: labels?.chronological ?? '',
       correctedAgeLabel: labels?.corrected,
+      strengths: locale === 'mm' ? data.strengthsMm : data.strengthsEn,
+      emergingSkills: locale === 'mm' ? data.emergingMm : data.emergingEn,
+      latestResultState: data.latestResultState ?? undefined,
+      completedActivities: locale === 'mm' ? data.completedActivitiesMm : data.completedActivitiesEn,
+      parentNotes: data.parentNotes,
+      savedConcerns: [],
+      growthSummary: (locale === 'mm' ? data.growthSummaryMm : data.growthSummaryEn) ?? undefined,
+      sleepSummary: (locale === 'mm' ? data.sleepSummaryMm : data.sleepSummaryEn) ?? undefined,
+      questionsForProfessional: data.questionsForProfessional,
+      nextReviewDate: data.nextAppointmentAt
+        ? new Date(data.nextAppointmentAt).toISOString().slice(0, 10)
+        : undefined,
     };
-  }, [activeChild, locale]);
+  }, [activeChild, data, locale]);
 
-  const report = useMemo(() => buildReport(type, source), [type, source]);
+  const report = useMemo(() => source ? buildReport(type, source) : null, [type, source]);
 
   if (!activeChild) return <NoChild />;
+  if (subscription === undefined) return <p className="text-ink-soft" role="status">…</p>;
+  if (!canView) {
+    return (
+      <PremiumGate feature="advanced_reports">
+        <p className="text-ink-soft">…</p>
+      </PremiumGate>
+    );
+  }
+  if (data === undefined) return <p className="text-ink-soft" role="status">…</p>;
+  if (!report) return null;
 
   const types: { key: ReportType; label: string }[] = [
     { key: 'parent_monthly', label: t('report.parentMonthly') },
@@ -58,12 +70,13 @@ export function Report() {
   ];
 
   return (
+    <PremiumGate feature="advanced_reports">
     <div className="space-y-4">
       <h1 className="text-xl font-bold text-sky-deep">{t('report.title')}</h1>
-      <p className="rounded-lg bg-pastel-yellow/50 px-3 py-2 text-xs text-ink-soft">
+      <p className="rounded-lg bg-mint-soft/60 px-3 py-2 text-xs text-ink-soft">
         {locale === 'mm'
-          ? 'ဤသည်မှာ နမူနာအစီရင်ခံစာ ဖြစ်သည်။ ဖွံ့ဖြိုးမှု၊ ကြီးထွားမှုနှင့် အိပ်စက်မှုမှတ်တမ်းများကို အလိုအလျောက် စုစည်းပေးသည့်စနစ်ကို ပြင်ဆင်နေဆဲ ဖြစ်သည်။'
-          : 'This is a sample report — automatic aggregation from your milestone/growth/sleep records is being wired next.'}
+          ? 'ဤအစီရင်ခံစာကို ကလေး၏ ဖွံ့ဖြိုးမှု၊ လှုပ်ရှားမှု၊ ကြီးထွားမှု၊ အိပ်စက်မှုနှင့် ချိန်းဆိုမှုမှတ်တမ်းများမှ အလိုအလျောက် စုစည်းထားပါသည်။'
+          : 'This report is assembled automatically from your child’s milestone, activity, growth, sleep, and appointment records.'}
       </p>
 
       <div className="flex flex-wrap gap-2">
@@ -121,6 +134,7 @@ export function Report() {
         {t('report.print')}
       </button>
     </div>
+    </PremiumGate>
   );
 }
 

@@ -33,13 +33,17 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const removeChild = useMutation(api.children.remove);
   const acceptConsent = useMutation(api.parent.acceptConsent);
   const ensureFreeSubscription = useMutation(api.subscriptions.ensureFree);
+  const acceptFamilyInvites = useMutation(api.family.acceptPendingInvites);
   const { signOut } = useAuthActions();
 
   const [activeChildId, setActiveChildId] = useState<string | null>(null);
 
   useEffect(() => {
-    if (me) void ensureFreeSubscription({});
-  }, [ensureFreeSubscription, me]);
+    if (me) {
+      void ensureFreeSubscription({});
+      if (me.email) void acceptFamilyInvites({});
+    }
+  }, [acceptFamilyInvites, ensureFreeSubscription, me]);
 
   // Loading discipline: `rows`/`me` are `undefined` while their queries are in
   // flight. We must NOT collapse "loading" into "empty" — the route guard keys
@@ -57,8 +61,9 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
         sex: c.sex ?? undefined,
         gestationalWeeks: c.gestationalWeeks ?? undefined,
         useCorrectedAge: c.useCorrectedAge,
+        isShared: Boolean(me?.userId && c.userId !== me.userId),
       })),
-    [rows],
+    [me?.userId, rows],
   );
 
   // Keep an active child selected as the list loads/changes.

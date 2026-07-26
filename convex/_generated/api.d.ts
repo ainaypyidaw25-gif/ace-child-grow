@@ -9,6 +9,9 @@
  */
 
 import type * as admin from "../admin.js";
+import type * as activities from "../activities.js";
+import type * as appointments from "../appointments.js";
+import type * as animationPlan from "../animationPlan.js";
 import type * as audit from "../audit.js";
 import type * as auth from "../auth.js";
 import type * as billing from "../billing.js";
@@ -18,14 +21,19 @@ import type * as crons from "../crons.js";
 import type * as directory from "../directory.js";
 import type * as evidence from "../evidence.js";
 import type * as favorites from "../favorites.js";
+import type * as family from "../family.js";
 import type * as growth from "../growth.js";
 import type * as http from "../http.js";
 import type * as lib_auth from "../lib/auth.js";
 import type * as library from "../library.js";
 import type * as milestones from "../milestones.js";
+import type * as media from "../media.js";
+import type * as mmpay from "../mmpay.js";
+import type * as mmpayData from "../mmpayData.js";
 import type * as notifications from "../notifications.js";
 import type * as parent from "../parent.js";
 import type * as release from "../release.js";
+import type * as reports from "../reports.js";
 import type * as seed from "../seed.js";
 import type * as sleep from "../sleep.js";
 import type * as subscriptions from "../subscriptions.js";
@@ -38,6 +46,9 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   admin: typeof admin;
+  activities: typeof activities;
+  appointments: typeof appointments;
+  animationPlan: typeof animationPlan;
   audit: typeof audit;
   auth: typeof auth;
   billing: typeof billing;
@@ -47,14 +58,19 @@ declare const fullApi: ApiFromModules<{
   directory: typeof directory;
   evidence: typeof evidence;
   favorites: typeof favorites;
+  family: typeof family;
   growth: typeof growth;
   http: typeof http;
   "lib/auth": typeof lib_auth;
   library: typeof library;
   milestones: typeof milestones;
+  media: typeof media;
+  mmpay: typeof mmpay;
+  mmpayData: typeof mmpayData;
   notifications: typeof notifications;
   parent: typeof parent;
   release: typeof release;
+  reports: typeof reports;
   seed: typeof seed;
   sleep: typeof sleep;
   subscriptions: typeof subscriptions;

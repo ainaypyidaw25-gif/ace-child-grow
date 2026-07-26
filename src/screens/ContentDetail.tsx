@@ -31,7 +31,7 @@ export function ContentDetail() {
     );
   }
 
-  const { item, staff } = res;
+  const { item, media, staff } = res;
   const d = (item.data ?? {}) as Record<string, unknown>;
   const list = (k: string): BL[] => (Array.isArray(d[k]) ? (d[k] as BL[]) : []);
   const bl = (k: string): BL | undefined => (d[k] && typeof d[k] === 'object' ? (d[k] as BL) : undefined);
@@ -63,6 +63,52 @@ export function ContentDetail() {
           <p className="mt-1 text-ink-soft">{locale === 'mm' ? item.summaryMm : item.summaryEn}</p>
         )}
       </div>
+
+      {media.some((asset) => !asset.placeholder && asset.url) && (
+        <section className="space-y-4" aria-label={L('သင်ကြားရေး မီဒီယာ', 'Learning media')}>
+          {media.filter((asset) => !asset.placeholder && asset.url).map((asset) => (
+            <figure key={asset._id} className="overflow-hidden rounded-card border border-line bg-white shadow-card">
+              {asset.kind === 'illustration' ? (
+                <img
+                  src={asset.url ?? ''}
+                  alt={locale === 'mm' ? (asset.altMm || asset.altEn || item.titleMm) : (asset.altEn || asset.altMm || item.titleEn)}
+                  loading="lazy"
+                  className="aspect-video w-full bg-canvas object-cover"
+                />
+              ) : asset.kind === 'video' ? (
+                <video
+                  src={asset.url ?? ''}
+                  controls
+                  playsInline
+                  preload="metadata"
+                  aria-label={locale === 'mm' ? (asset.altMm || asset.altEn || item.titleMm) : (asset.altEn || asset.altMm || item.titleEn)}
+                  className="aspect-video w-full bg-black object-contain"
+                />
+              ) : null}
+              {(asset.captionMm || asset.captionEn) && (
+                <figcaption className="px-4 py-3 text-sm leading-6 text-ink-soft">
+                  {locale === 'mm' ? (asset.captionMm || asset.captionEn) : (asset.captionEn || asset.captionMm)}
+                </figcaption>
+              )}
+              {(asset.transcriptMm || asset.transcriptEn) && (
+                <details className="border-t border-line px-4 py-3">
+                  <summary className="cursor-pointer text-sm font-semibold text-sky-deep">
+                    {L('ဗီဒီယိုစာသား ဖတ်ရန်', 'Read transcript')}
+                  </summary>
+                  <p className="mt-2 whitespace-pre-line text-sm leading-7 text-ink-soft">
+                    {locale === 'mm' ? (asset.transcriptMm || asset.transcriptEn) : (asset.transcriptEn || asset.transcriptMm)}
+                  </p>
+                </details>
+              )}
+              {(asset.attributionMm || asset.attributionEn) && (
+                <p className="border-t border-line px-4 py-2 text-[11px] text-ink-soft">
+                  {locale === 'mm' ? (asset.attributionMm || asset.attributionEn) : (asset.attributionEn || asset.attributionMm)}
+                </p>
+              )}
+            </figure>
+          ))}
+        </section>
+      )}
 
       {/* Milestone */}
       {item.type === 'milestone' && (

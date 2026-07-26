@@ -15,8 +15,13 @@ describe('professionally scoped publication gate', () => {
     expect(workflowSource).toContain('await requireProfessionalPublisher(ctx)');
   });
 
-  it('keeps unreviewed frontend samples behind the staff preview gate', () => {
-    for (const file of ['MilestoneDemo', 'Activities', 'Learn', 'HopeCenter', 'Favorites']) {
+  it('keeps unreviewed frontend samples behind the staff preview gate or reads only server-published library content', () => {
+    for (const file of ['MilestoneDemo', 'Activities']) {
+      const source = readFileSync(`src/screens/${file}.tsx`, 'utf8');
+      expect(source, file).toContain('api.library.listByType');
+      expect(source, file).not.toContain('SAMPLE_');
+    }
+    for (const file of ['Learn', 'HopeCenter', 'Favorites']) {
       const source = readFileSync(`src/screens/${file}.tsx`, 'utf8');
       expect(source, file).toContain('useStaffPreviewAccess');
       expect(source, file).toContain('UnreviewedContentNotice');

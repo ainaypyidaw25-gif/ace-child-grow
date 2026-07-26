@@ -6,7 +6,7 @@ import { useAuthActions } from '@convex-dev/auth/react';
 import { exportData } from '../app/childStore';
 import { ageLabels } from '../domain/age/ageLabel';
 import { ConfirmDialog } from '../components/ConfirmDialog';
-import { useQuery } from 'convex/react';
+import { useMutation, useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { clearPortalMode } from '../app/portalMode';
 
@@ -22,6 +22,12 @@ export function Profile() {
   const { signOut } = useAuthActions();
   const navigate = useNavigate();
   const subscription = useQuery(api.subscriptions.mine);
+  const familyEnabled = subscription?.features.includes('family_profiles') ?? false;
+  const caregivers = useQuery(api.family.listCaregivers, familyEnabled ? {} : 'skip');
+  const inviteCaregiver = useMutation(api.family.inviteCaregiver);
+  const revokeCaregiver = useMutation(api.family.revokeCaregiver);
+  const [caregiverEmail, setCaregiverEmail] = useState('');
+  const [caregiverMessage, setCaregiverMessage] = useState('');
   const [confirming, setConfirming] = useState<null | 'child' | 'account'>(null);
 
   function download() {
@@ -70,24 +76,29 @@ export function Profile() {
                     </span>
                   </button>
                   <span className="flex items-center gap-2">
-                    {active && (
+                    {active && !c.isShared && (
                       <Link to="/edit-child" className="text-sm text-sky-deep">
                         {locale === 'mm' ? 'ပြင်ရန်' : 'Edit'}
                       </Link>
                     )}
-                    <button type="button"
+                    {!c.isShared && <button type="button"
                       aria-label={locale === 'mm' ? `${c.nickname} ကို ဖျက်ရန်` : `Remove ${c.nickname}`}
                       onClick={() => { dispatch({ type: 'switch_child', id: c.id }); setConfirming('child'); }}
-                      className="min-h-touch min-w-touch text-sm text-state-red">✕</button>
+                      className="min-h-touch min-w-touch text-sm text-state-red">✕</button>}
                   </span>
                 </li>
               );
             })}
           </ul>
         )}
-        {state.children.length > 0 && (
+        {state.children.length > 0 && familyEnabled && !subscription?.inheritedFamilyAccess && state.children.length < 3 && (
           <Link to="/add-child" className="mt-3 inline-block text-sm text-sky-deep">
             + {locale === 'mm' ? 'ကလေး ထပ်ထည့်ရန်' : 'Add another child'}
+          </Link>
+        )}
+        {state.children.length > 0 && !familyEnabled && (
+          <Link to="/subscription" className="mt-3 inline-block text-sm font-semibold text-sky-deep">
+            {locale === 'mm' ? 'ကလေးတစ်ဦးထက်ပို ထည့်ရန် Family အစီအစဉ် ကြည့်မည် →' : 'View Family to add more children →'}
           </Link>
         )}
       </section>
@@ -113,6 +124,47 @@ export function Profile() {
           </>
         )}
       </section>
+
+      {familyEnabled && !subscription?.inheritedFamilyAccess && (
+        <section className="rounded-card border border-line bg-white p-4 shadow-card">
+          <h2 className="font-semibold text-ink">{locale === 'mm' ? 'မိသားစုစောင့်ရှောက်သူများ' : 'Family caregivers'}</h2>
+          <p className="mt-1 text-sm leading-6 text-ink-soft">
+            {locale === 'mm' ? 'ပိုင်ရှင်အပါအဝင် စောင့်ရှောက်သူ ၃ ဦးအထိ အသုံးပြုနိုင်ပါသည်။' : 'Up to 3 caregivers including the owner.'}
+          </p>
+          <form
+            className="mt-3 flex flex-col gap-2 sm:flex-row"
+            onSubmit={async (event) => {
+              event.preventDefault();
+              setCaregiverMessage('');
+              try {
+                await inviteCaregiver({ caregiverEmail });
+                setCaregiverEmail('');
+                setCaregiverMessage(locale === 'mm' ? 'ဖိတ်ကြားမှုကို မှတ်တမ်းတင်ပြီးပါပြီ။' : 'Invitation recorded.');
+              } catch (error) {
+                setCaregiverMessage(error instanceof Error ? error.message : 'Unable to invite');
+              }
+            }}
+          >
+            <input type="email" required value={caregiverEmail} onChange={(event) => setCaregiverEmail(event.target.value)} placeholder={locale === 'mm' ? 'အီးမေးလ်လိပ်စာ' : 'Email address'} className="min-h-touch flex-1 rounded-pill border border-line px-4 py-2 text-sm" />
+            <button type="submit" className="rounded-pill bg-sky-deep px-5 py-2 text-sm font-semibold text-white">{locale === 'mm' ? 'ဖိတ်မည်' : 'Invite'}</button>
+          </form>
+          {caregiverMessage && <p className="mt-2 text-sm text-ink-soft" role="status">{caregiverMessage}</p>}
+          {caregivers && caregivers.length > 0 && (
+            <ul className="mt-3 divide-y divide-line">
+              {caregivers.map((caregiver) => (
+                <li key={caregiver._id} className="flex items-center justify-between gap-3 py-3 text-sm">
+                  <span><b>{caregiver.caregiverEmail}</b><span className="ml-2 text-ink-soft">{caregiver.status}</span></span>
+                  {caregiver.status !== 'revoked' && (
+                    <button type="button" onClick={() => void revokeCaregiver({ id: caregiver._id })} className="text-state-red">
+                      {locale === 'mm' ? 'ပယ်ဖျက်မည်' : 'Revoke'}
+                    </button>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      )}
 
       {/* Settings */}
       <section className="rounded-card border border-line bg-white p-4 shadow-card">

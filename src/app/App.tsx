@@ -37,6 +37,8 @@ const AcceptAdminInvite = lazy(() => import('../screens/AcceptAdminInvite').then
 const AdminDirectory = lazy(() => import('../screens/AdminDirectory').then((module) => ({ default: module.AdminDirectory })));
 const AdminBilling = lazy(() => import('../screens/AdminBilling').then((module) => ({ default: module.AdminBilling })));
 const SubscriptionPlans = lazy(() => import('../screens/SubscriptionPlans').then((module) => ({ default: module.SubscriptionPlans })));
+const PaymentStatus = lazy(() => import('../screens/PaymentStatus').then((module) => ({ default: module.PaymentStatus })));
+const Appointments = lazy(() => import('../screens/Appointments').then((module) => ({ default: module.Appointments })));
 
 // Authentication gate: unauthenticated visitors see sign-in; the app (and all
 // child data) is only reachable once signed in.
@@ -135,8 +137,12 @@ function AppRoutes() {
       <Route path="/growth" element={<Layout><Growth /></Layout>} />
       <Route path="/sleep" element={<Layout><Sleep /></Layout>} />
       <Route path="/report" element={<Layout><Report /></Layout>} />
+      <Route path="/appointments" element={<Layout><Appointments /></Layout>} />
       <Route path="/profile" element={<Layout><Profile /></Layout>} />
       <Route path="/subscription" element={<Layout><SubscriptionPlans /></Layout>} />
+      <Route path="/payment/success/:orderId" element={<Layout><PaymentStatus view="success" /></Layout>} />
+      <Route path="/payment/cancel/:orderId" element={<Layout><PaymentStatus view="cancel" /></Layout>} />
+      <Route path="/payment/:orderId" element={<Layout><PaymentStatus /></Layout>} />
       <Route path="/offline" element={<Layout><OfflineDownloads /></Layout>} />
       <Route path="/favorites" element={<Layout><Favorites /></Layout>} />
       <Route path="/notifications" element={<Layout><Notifications /></Layout>} />

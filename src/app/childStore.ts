@@ -8,6 +8,7 @@ export interface Child {
   sex?: 'female' | 'male' | 'unspecified';
   gestationalWeeks?: number;
   useCorrectedAge: boolean;
+  isShared?: boolean;
 }
 
 export interface AppState {
