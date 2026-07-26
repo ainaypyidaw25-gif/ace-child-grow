@@ -18,7 +18,7 @@ export function Layout({ children, showNav = true }: { children: ReactNode; show
           ACE Child Grow
           {!online && (
             <span className="rounded-pill bg-pastel-orange px-2 py-0.5 text-xs font-normal text-ink">
-              {locale === 'mm' ? 'အွန်လိုင်းမဟုတ်' : 'Offline'}
+              {locale === 'mm' ? 'အင်တာနက် မချိတ်ဆက်ထားပါ' : 'Offline'}
             </span>
           )}
         </span>

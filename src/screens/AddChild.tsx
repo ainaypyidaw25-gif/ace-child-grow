@@ -70,22 +70,22 @@ export function AddChild() {
   return (
     <div className="space-y-4">
       <h1 className="text-xl font-bold text-sky-deep">
-        {locale === 'mm' ? 'ကလေး ထည့်ရန်' : 'Add child'}
+        {locale === 'mm' ? 'ကလေး၏ အချက်အလက် ထည့်ပါ' : 'Add child'}
       </h1>
       <p className="text-xs text-ink-soft">
         {locale === 'mm'
-          ? 'ကိုယ်ရေးအချက်အလက် အနည်းဆုံးသာ တောင်းသည် — အမည်ပြည့် မလိုပါ။'
+          ? 'ကလေးကို ခွဲခြားသိနိုင်ရန် ချစ်စနိုးအမည်နှင့် မွေးသက္ကရာဇ်ကိုသာ ထည့်ပါ။ အမည်အပြည့်အစုံ မလိုအပ်ပါ။'
           : 'Data minimization — nickname only, no full legal name.'}
       </p>
 
       <label className="block text-sm">
-        {locale === 'mm' ? 'အမည် (ချစ်စနာမည်)' : 'Nickname'}
+        {locale === 'mm' ? 'ချစ်စနိုးအမည်' : 'Nickname'}
         <input value={nickname} onChange={(e) => setNickname(e.target.value)}
           className="mt-1 block w-full rounded-lg border border-line px-3 py-2" />
       </label>
 
       <label className="block text-sm">
-        {locale === 'mm' ? 'မွေးနေ့' : 'Birth date'}
+        {locale === 'mm' ? 'မွေးသက္ကရာဇ်' : 'Birth date'}
         <input type="date" value={birthDate} onChange={(e) => setBirthDate(e.target.value)}
           className="mt-1 block w-full rounded-lg border border-line px-3 py-2" />
       </label>
@@ -93,7 +93,9 @@ export function AddChild() {
       <label className="flex items-center gap-2 text-sm">
         <input type="checkbox" checked={premature} onChange={(e) => setPremature(e.target.checked)}
           className="h-5 w-5" />
-        {locale === 'mm' ? 'အချိန်မတိုင်မီ မွေးဖွားခြင်း (ပြင်ဆင်အသက် သုံးရန်)' : 'Premature (use corrected age)'}
+        {locale === 'mm'
+          ? 'လမစေ့ဘဲ မွေးဖွားခဲ့ပါသည် (အသက်တွက်ချက်ရာတွင် ပြင်ဆင်ထားသည့်အသက်ကို အသုံးပြုမည်)'
+          : 'Premature (use corrected age)'}
       </label>
 
       {premature && (

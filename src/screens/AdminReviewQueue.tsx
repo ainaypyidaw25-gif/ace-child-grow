@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useQuery, useMutation } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
@@ -46,6 +47,27 @@ export function AdminReviewQueue() {
         {!staff && ` · ${t('admin.staffOnly')}`}
       </p>
 
+      {staff && (
+        <section className="rounded-card border border-line bg-white p-4 shadow-card">
+          <p className="text-sm text-ink">
+            {locale === 'mm'
+              ? 'သင်သည် ပိုင်ရှင်အဖြစ် မူကြမ်းများကို ကြည့်ရှုနိုင်ပါသည်။ အရည်အချင်းပြည့်မီသော ကျန်းမာရေးပညာရှင် မရှိသေးသဖြင့် အတည်ပြုခြင်းနှင့် ထုတ်ဝေခြင်းကို ပိတ်ထားပါသည်။'
+              : 'You can inspect drafts as the owner. Approval and publishing remain locked until a qualified clinical reviewer is assigned.'}
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2 text-sm">
+            <Link to="/library" className="rounded-pill bg-sky px-4 py-2 font-semibold text-white">
+              {locale === 'mm' ? 'အကြောင်းအရာစာကြည့်တိုက် ကြည့်ရန်' : 'View content library'}
+            </Link>
+            <Link to="/admin/library" className="rounded-pill border border-line px-4 py-2 text-sky-deep">
+              {locale === 'mm' ? 'အကြောင်းအရာ စီမံခန့်ခွဲမှု' : 'Content CMS'}
+            </Link>
+            <Link to="/admin/evidence" className="rounded-pill border border-line px-4 py-2 text-sky-deep">
+              {locale === 'mm' ? 'ကိုးကားချက်များ ကြည့်ရန်' : 'View evidence'}
+            </Link>
+          </div>
+        </section>
+      )}
+
       {items.length === 0 && (
         <button type="button" disabled={seeding}
           onClick={async () => {
@@ -79,7 +101,7 @@ export function AdminReviewQueue() {
                 }`}>
                   {it.reviewStatus}
                 </span>
-                {staff && to && (
+                {staff && to && !['approved', 'published'].includes(to) && (
                   <button type="button" disabled={busyId === it._id}
                     onClick={async () => {
                       if (busyId) return;

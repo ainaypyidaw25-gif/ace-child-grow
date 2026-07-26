@@ -17,7 +17,7 @@ function renderWithProviders() {
 describe('MilestoneDemo (component)', () => {
   it('shows an in-review badge on milestone content', () => {
     renderWithProviders();
-    expect(screen.getByText(/သုံးသပ်ဆဲ/)).toBeInTheDocument();
+    expect(screen.getByText(/ပညာရှင် အတည်ပြုချက် မရသေး/)).toBeInTheDocument();
   });
 
   it('renders the four Myanmar answer options by default', () => {

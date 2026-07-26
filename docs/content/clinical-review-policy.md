@@ -27,6 +27,13 @@ Published → Archived`. Each transition is recorded in `clinical_reviews` and
 Each review captures `reviewer_id`, `reviewer_qualification`, `decision`,
 `notes`, `reviewed_at`, and sets `next_review_at` for periodic re-review.
 
+## When no clinical reviewer is assigned
+The owner may receive staff access to inspect unpublished drafts, translations,
+evidence links and audit reports. Staff preview access is not clinical approval.
+The application and backend keep approval/publishing locked until a reviewer
+qualification is supplied through the clinical-review workflow. Parent accounts
+continue to receive only published items.
+
 ## WHO growth standards
 Percentiles/z-scores are shown **only** after: official WHO datasets are
 integrated, dataset version documented, sex + exact age handled, logic tested

@@ -49,14 +49,26 @@ export const seedIfEmpty = mutation({
 });
 
 export const transition = mutation({
-  args: { id: v.id('contentItems'), to: v.string() },
-  handler: async (ctx, { id, to }) => {
+  args: {
+    id: v.id('contentItems'),
+    to: v.string(),
+    reviewerQualification: v.optional(v.string()),
+  },
+  handler: async (ctx, { id, to, reviewerQualification }) => {
     const userId = await requireStaff(ctx);
     const item = await ctx.db.get(id);
     if (!item) throw new Error('Not found');
     const allowed = TRANSITIONS[item.reviewStatus] ?? [];
     if (!allowed.includes(to)) throw new Error(`Invalid transition ${item.reviewStatus} -> ${to}`);
-    await ctx.db.patch(id, { reviewStatus: to });
+    if (['approved', 'published'].includes(to) && !reviewerQualification?.trim()) {
+      throw new Error('Approval and publishing require a qualified clinical reviewer');
+    }
+    await ctx.db.patch(id, {
+      reviewStatus: to,
+      ...(reviewerQualification?.trim()
+        ? { reviewerQualification: reviewerQualification.trim() }
+        : {}),
+    });
     // All content transitions (esp. publish) are audited.
     await logAudit(ctx, userId, `content.${to}`, 'contentItems', id, item.titleEn);
   },

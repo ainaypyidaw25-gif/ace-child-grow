@@ -93,7 +93,7 @@ export function Profile() {
           </button>
         </div>
         <Link to="/offline" className="flex items-center justify-between py-2 text-sky-deep">
-          <span>{locale === 'mm' ? 'အော့ဖ်လိုင်း ဒေါင်းလုဒ်များ' : 'Offline downloads'}</span>
+          <span>{locale === 'mm' ? 'အင်တာနက်မရှိချိန် ဖတ်ရန် သိမ်းထားမှု' : 'Offline downloads'}</span>
           <span aria-hidden>→</span>
         </Link>
         <button type="button" onClick={() => void signOut()}

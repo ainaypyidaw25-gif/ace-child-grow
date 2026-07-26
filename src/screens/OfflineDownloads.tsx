@@ -33,7 +33,7 @@ export function OfflineDownloads() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-bold text-sky-deep">
-          {locale === 'mm' ? 'အော့ဖ်လိုင်း ဒေါင်းလုဒ်များ' : 'Offline downloads'}
+          {locale === 'mm' ? 'အင်တာနက်မရှိချိန် ဖတ်ရန် သိမ်းထားမှု' : 'Offline downloads'}
         </h1>
         <span className={`rounded-pill px-3 py-1 text-xs ${online ? 'bg-mint-soft text-mint' : 'bg-pastel-orange text-ink'}`}>
           {online ? `🟢 ${t('common.online')}` : `⚪ ${t('common.offline')}`}
@@ -42,19 +42,19 @@ export function OfflineDownloads() {
 
       <section className="space-y-2 rounded-card border border-line bg-white p-4 shadow-card">
         <label className="flex items-center justify-between">
-          <span>{locale === 'mm' ? 'Wi-Fi ဖြင့်သာ ဒေါင်းလုဒ်' : 'Download on Wi-Fi only'}</span>
+          <span>{locale === 'mm' ? 'Wi-Fi ချိတ်ဆက်ထားချိန်တွင်သာ သိမ်းမည်' : 'Download on Wi-Fi only'}</span>
           <input type="checkbox" checked={wifiOnly} onChange={(e) => setWifiOnly(e.target.checked)}
             className="h-5 w-5" />
         </label>
         <p className="text-sm text-ink-soft">
-          {locale === 'mm' ? 'သိမ်းဆည်းမှု' : 'Storage used'}: {formatBytes(manifest.totalBytes)} · {manifest.count} {locale === 'mm' ? 'ခု' : 'items'}
+          {locale === 'mm' ? 'အသုံးပြုထားသော သိုလှောင်မှုပမာဏ' : 'Storage used'}: {formatBytes(manifest.totalBytes)} · {manifest.count} {locale === 'mm' ? 'ခု' : 'items'}
         </p>
       </section>
 
       {manifest.count === 0 ? (
         <p className="rounded-card bg-pastel-yellow/60 p-4 text-sm text-ink">
           {locale === 'mm'
-            ? 'အတည်ပြုပြီး (published) ပညာပေးအကြောင်းအရာ မရှိသေးသဖြင့် ဒေါင်းလုဒ်ရန် မရနိုင်သေးပါ။ ကလေး၏ ကိုယ်ရေးမှတ်တမ်းများကို အော့ဖ်လိုင်း cache တွင် ဘယ်တော့မှ မသိမ်းပါ။'
+            ? 'မိဘများဖတ်ရှုနိုင်ရန် အတည်ပြုထုတ်ဝေထားသော အကြောင်းအရာ မရှိသေးသဖြင့် ယခုအချိန်တွင် သိမ်းထား၍ မရသေးပါ။ ကလေး၏ ကိုယ်ရေးမှတ်တမ်းများကို ဤနေရာတွင် မသိမ်းဆည်းပါ။'
             : 'No published educational content is available to download yet. Private child records are never stored in the offline cache.'}
         </p>
       ) : (

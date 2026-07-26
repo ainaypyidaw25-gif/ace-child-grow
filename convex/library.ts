@@ -198,6 +198,7 @@ export const setReview = mutation({
   args: {
     slug: v.string(),
     clinicalStatus: v.string(),
+    reviewerQualification: v.optional(v.string()),
     reviewNote: v.optional(v.string()),
     nextReviewAt: v.optional(v.number()),
   },
@@ -205,6 +206,9 @@ export const setReview = mutation({
     const userId = await requireStaff(ctx);
     if (!['draft', 'clinical_review', 'published'].includes(args.clinicalStatus)) {
       throw new Error('Invalid status');
+    }
+    if (args.clinicalStatus === 'published' && !args.reviewerQualification?.trim()) {
+      throw new Error('Publishing requires a qualified clinical reviewer');
     }
     const item = await ctx.db
       .query('libraryContent')
@@ -215,6 +219,7 @@ export const setReview = mutation({
     await ctx.db.patch(item._id, {
       clinicalStatus: args.clinicalStatus,
       reviewerId: userId,
+      reviewerQualification: args.reviewerQualification?.trim(),
       reviewedAt: now,
       nextReviewAt: args.nextReviewAt,
       reviewNote: args.reviewNote,

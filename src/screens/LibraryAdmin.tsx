@@ -55,6 +55,13 @@ export function LibraryAdmin() {
     <div className="space-y-4">
       <h1 className="text-xl font-bold text-sky-deep">{L('အကြောင်းအရာ CMS', 'Content CMS')}</h1>
 
+      <p className="rounded-lg bg-pastel-yellow/60 px-3 py-2 text-sm text-ink">
+        {L(
+          'လက်ရှိတွင် အရည်အချင်းပြည့်မီသော ကျန်းမာရေးပညာရှင်၏ သုံးသပ်ချက် မရှိသေးပါ။ အကြောင်းအရာများကို ကြည့်ရှုနိုင်သော်လည်း ထုတ်ဝေခြင်းကို ပိတ်ထားပါသည်။',
+          'No qualified clinical reviewer is assigned. You may inspect drafts, but publishing is disabled.',
+        )}
+      </p>
+
       <section className="rounded-card border border-line bg-white p-4 shadow-card">
         <h2 className="mb-2 font-semibold text-ink">{L('အနှစ်ချုပ်', 'Overview')}</h2>
         <p className="text-sm text-ink-soft">{L('စုစုပေါင်း', 'Total items')}: <b>{stats.total}</b></p>
@@ -99,11 +106,11 @@ export function LibraryAdmin() {
                 <div className="mt-1 flex flex-wrap gap-1.5">
                   {['draft', 'clinical_review', 'published'].map((s) => (
                     <button key={s} type="button" onClick={() => transition(it.slug, s)}
-                      disabled={it.clinicalStatus === s || pending === it.slug}
+                      disabled={s === 'published' || it.clinicalStatus === s || pending === it.slug}
                       className={`min-h-touch rounded-pill px-2.5 py-1 text-xs disabled:opacity-50 ${
                         it.clinicalStatus === s ? 'bg-lavender/40 text-ink-soft' : 'border border-line text-ink'
                       }`}>
-                      {s === 'published' ? L('ထုတ်ဝေ', 'Publish') : s === 'clinical_review' ? L('သုံးသပ်ရန်', 'Review') : L('မူကြမ်း', 'Draft')}
+                      {s === 'published' ? L('ထုတ်ဝေခွင့် ပိတ်ထားသည်', 'Publishing locked') : s === 'clinical_review' ? L('သုံးသပ်ရန်', 'Review') : L('မူကြမ်း', 'Draft')}
                     </button>
                   ))}
                 </div>

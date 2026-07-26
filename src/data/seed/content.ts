@@ -30,9 +30,9 @@ export interface SeedMilestone {
 export const SAMPLE_MILESTONES: SeedMilestone[] = [
   {
     domain: 'gross_motor', ageMinMonths: 0, ageMaxMonths: 2,
-    titleMm: 'မှောက်အိပ်စဉ် ခေါင်းမော့ခြင်း',
+    titleMm: 'ဝမ်းလျားမှောက်နေစဉ် ခေါင်းမော့နိုင်ခြင်း',
     titleEn: 'Lifts head during tummy time',
-    questionMm: 'ကလေးကို မှောက်ချထားစဉ် ခေါင်းကို ခဏတာ မော့နိုင်ပါသလား။',
+    questionMm: 'ကလေးကို ဝမ်းလျားမှောက်ထားချိန်တွင် ခေါင်းကို ခဏ မော့နိုင်ပါသလား။',
     questionEn: 'Can your baby briefly lift their head during tummy time?',
     whyItMattersEn: 'Early neck strength supports later sitting and crawling.',
     reviewStatus: 'clinical_review',

@@ -2,13 +2,13 @@
 // Keys must stay in sync with en.ts — enforced by a missing-translation test.
 export const mm = {
   'app.name': 'ACE Child Grow',
-  'app.tagline': 'ကလေးတိုင်း ကြီးထွားနိုင်ပါတယ်',
+  'app.tagline': 'ကလေးတိုင်း ဖွံ့ဖြိုးတိုးတက်နိုင်ပါတယ်',
 
   'nav.home': 'ပင်မ',
-  'nav.journey': 'ခရီးစဉ်',
+  'nav.journey': 'ဖွံ့ဖြိုးမှု',
   'nav.activities': 'လှုပ်ရှားမှုများ',
-  'nav.learn': 'သင်ယူရန်',
-  'nav.profile': 'ကိုယ်ရေး',
+  'nav.learn': 'ဗဟုသုတ',
+  'nav.profile': 'ကိုယ်ရေးအချက်အလက်',
 
   'home.cta.start': 'ဒီနေ့အစီအစဉ် စတင်မယ်',
   'home.greeting': 'မင်္ဂလာပါ',
@@ -20,9 +20,9 @@ export const mm = {
   'home.parentTip': 'မိဘအတွက် အကြံပြုချက်',
 
   'milestone.answer.yes': 'လုပ်နိုင်ပြီ',
-  'milestone.answer.sometimes': 'တခါတလေ',
+  'milestone.answer.sometimes': 'တစ်ခါတလေ လုပ်နိုင်',
   'milestone.answer.not_yet': 'မလုပ်နိုင်သေး',
-  'milestone.answer.not_sure': 'မသေချာသေး',
+  'milestone.answer.not_sure': 'မသေချာပါ',
   'milestone.save': 'သိမ်းဆည်းမည်',
   'milestone.next': 'ရှေ့သို့',
   'milestone.prev': 'နောက်သို့',
@@ -48,15 +48,16 @@ export const mm = {
     'ကလေးက အရင်လုပ်နိုင်ခဲ့သော စကားပြောခြင်း၊ လှုပ်ရှားခြင်း သို့မဟုတ် လူမှုဆက်ဆံရေးကျွမ်းကျင်မှု တစ်ခုခုကို မလုပ်နိုင်တော့ပါသလား။',
 
   'hope.title': 'မျှော်လင့်ခြင်းနှင့် နားလည်မှုစင်တာ',
-  'growth.title': 'ကြီးထွားမှု မှတ်တမ်း',
-  'growth.who.pending': 'WHO ကြီးထွားမှုစံနှုန်း ချိတ်ဆက်မှု ဆောင်ရွက်ဆဲ ဖြစ်ပါသည်။',
+  'growth.title': 'ကလေး၏ ကြီးထွားမှုမှတ်တမ်း',
+  'growth.who.pending':
+    'WHO ကြီးထွားမှုစံနှုန်းနှင့် နှိုင်းယှဉ်ဖော်ပြသည့်စနစ်ကို စစ်ဆေးအတည်ပြုနေဆဲဖြစ်သဖြင့် ယခုအချိန်တွင် တိုင်းတာချက်များကိုသာ မှတ်တမ်းတင်ပေးပါမည်။',
   'sleep.title': 'အိပ်စက်မှု မှတ်တမ်း',
   'report.title': 'လစဉ်အစီရင်ခံစာ',
   'directory.empty': 'အတည်ပြုထားသော ဒေသဆိုင်ရာ ကျန်းမာရေးဝန်ဆောင်မှုအချက်အလက် မရရှိသေးပါ။',
 
-  'review.required': 'ဆေးပညာဆိုင်ရာ ပြန်လည်သုံးသပ်မှု လိုအပ်သည်',
-  'common.offline': 'အွန်လိုင်းမဟုတ်ပါ',
-  'common.online': 'အွန်လိုင်း',
+  'review.required': 'ကျန်းမာရေးပညာရှင်၏ သုံးသပ်အတည်ပြုချက် မရသေးပါ',
+  'common.offline': 'အင်တာနက် မချိတ်ဆက်ထားပါ',
+  'common.online': 'အင်တာနက် ချိတ်ဆက်ထားသည်',
   'common.cancel': 'ပယ်ဖျက်မည်',
   'common.confirm': 'အတည်ပြုမည်',
   'common.save': 'သိမ်းဆည်းမည်',
@@ -71,10 +72,10 @@ export const mm = {
   'activities.safety': 'ဘေးကင်းရေး မှတ်ချက်',
   'activities.duration': 'ကြာချိန်',
 
-  'growth.add': 'တိုင်းတာမှု ထည့်မည်',
-  'growth.date': 'တိုင်းတာသည့်ရက်',
+  'growth.add': 'တိုင်းတာချက် သိမ်းမည်',
+  'growth.date': 'တိုင်းတာသည့် ရက်စွဲ',
   'growth.weight': 'ကိုယ်အလေးချိန်',
-  'growth.height': 'အရပ်',
+  'growth.height': 'အရပ် / ကိုယ်အလျား',
   'growth.head': 'ဦးခေါင်းပတ်လည်',
   'growth.history': 'တိုင်းတာမှု မှတ်တမ်း',
 
@@ -107,7 +108,7 @@ export const mm = {
   'notifications.markRead': 'အားလုံး ဖတ်ပြီးအဖြစ် မှတ်မည်',
   'admin.seed': 'နမူနာ အကြောင်းအရာ ထည့်မည်',
   'admin.staffOnly': 'အဆင့်ရွှေ့ခြင်းကို ဝန်ထမ်းသာ ပြုလုပ်နိုင်သည်။',
-  'review.short': 'သုံးသပ်ဆဲ',
+  'review.short': 'ပညာရှင် အတည်ပြုချက် မရသေး',
   'activities.today': 'ဒီနေ့အတွက်',
   'learn.category.speech': 'စကားနှင့် ဆက်သွယ်ပြောဆိုမှု',
   'learn.category.play': 'ကစားခြင်းနှင့် သင်ယူမှု',
