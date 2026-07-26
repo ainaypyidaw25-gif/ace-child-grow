@@ -7,6 +7,9 @@ export function SignIn() {
   const { t, locale, setLocale } = useLocale();
   const { signIn } = useAuthActions();
   const [flow, setFlow] = useState<'signIn' | 'signUp'>('signIn');
+  const [portal, setPortal] = useState<'parent' | 'staff'>(() =>
+    new URLSearchParams(window.location.search).get('portal') === 'staff' ? 'staff' : 'parent',
+  );
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -16,9 +19,12 @@ export function SignIn() {
     e.preventDefault();
     setError('');
     setBusy(true);
+    if (portal === 'staff') localStorage.setItem('ace-login-destination', 'staff');
+    else localStorage.removeItem('ace-login-destination');
     try {
       await signIn('password', { email, password, flow });
     } catch {
+      localStorage.removeItem('ace-login-destination');
       setError(
         locale === 'mm'
           ? 'အီးမေးလ် သို့မဟုတ် စကားဝှက် မှားနေသည် (သို့) အကောင့်ရှိပြီးသား ဖြစ်နိုင်သည်။'
@@ -37,12 +43,38 @@ export function SignIn() {
         <p className="text-ink-soft">{t('app.tagline')}</p>
       </div>
 
+      <div className="grid grid-cols-2 rounded-pill border border-line bg-white p-1">
+        <button
+          type="button"
+          onClick={() => setPortal('parent')}
+          className={`rounded-pill px-3 py-2 text-sm font-semibold ${portal === 'parent' ? 'bg-sky text-white' : 'text-ink-soft'}`}
+        >
+          {locale === 'mm' ? 'မိဘဝင်ရန်' : 'Parent sign in'}
+        </button>
+        <button
+          type="button"
+          onClick={() => { setPortal('staff'); setFlow('signIn'); }}
+          className={`rounded-pill px-3 py-2 text-sm font-semibold ${portal === 'staff' ? 'bg-sky text-white' : 'text-ink-soft'}`}
+        >
+          {locale === 'mm' ? 'အဖွဲ့ဝင်/ပညာရှင်ဝင်ရန်' : 'Staff/reviewer sign in'}
+        </button>
+      </div>
+
       <form onSubmit={submit} className="space-y-3 rounded-card border border-line bg-white p-5 shadow-card">
         <h2 className="font-semibold text-ink">
           {flow === 'signIn'
-            ? locale === 'mm' ? 'အကောင့်ဝင်ရန်' : 'Sign in'
+            ? portal === 'staff'
+              ? locale === 'mm' ? 'စီမံခန့်ခွဲသူ သို့မဟုတ် ပညာရှင်အကောင့်ဝင်ရန်' : 'Staff or reviewer sign in'
+              : locale === 'mm' ? 'မိဘအကောင့်ဝင်ရန်' : 'Parent sign in'
             : locale === 'mm' ? 'အကောင့်သစ် ဖွင့်ရန်' : 'Create account'}
         </h2>
+        {portal === 'staff' && (
+          <p className="rounded-xl bg-pastel-yellow/50 p-3 text-xs text-ink">
+            {locale === 'mm'
+              ? 'ပိုင်ရှင်က ဖိတ်ကြားပြီး ဝင်ခွင့်ပေးထားသော အဖွဲ့ဝင်နှင့် ပညာရှင်အကောင့်များအတွက် ဖြစ်သည်။'
+              : 'For staff and reviewer accounts that have been invited and granted access by the owner.'}
+          </p>
+        )}
         <label className="block text-sm">
           {locale === 'mm' ? 'အီးမေးလ်' : 'Email'}
           <input
@@ -67,15 +99,17 @@ export function SignIn() {
             ? (locale === 'mm' ? 'ဝင်မည်' : 'Sign in')
             : (locale === 'mm' ? 'ဖွင့်မည်' : 'Sign up')}
         </button>
-        <button
-          type="button"
-          onClick={() => setFlow(flow === 'signIn' ? 'signUp' : 'signIn')}
-          className="w-full text-center text-sm text-sky-deep"
-        >
-          {flow === 'signIn'
-            ? (locale === 'mm' ? 'အကောင့်မရှိသေးဘူးလား? အသစ်ဖွင့်ရန်' : 'No account? Create one')
-            : (locale === 'mm' ? 'အကောင့်ရှိပြီးသားလား? ဝင်ရန်' : 'Have an account? Sign in')}
-        </button>
+        {portal === 'parent' && (
+          <button
+            type="button"
+            onClick={() => setFlow(flow === 'signIn' ? 'signUp' : 'signIn')}
+            className="w-full text-center text-sm text-sky-deep"
+          >
+            {flow === 'signIn'
+              ? (locale === 'mm' ? 'အကောင့်မရှိသေးဘူးလား? အသစ်ဖွင့်ရန်' : 'No account? Create one')
+              : (locale === 'mm' ? 'အကောင့်ရှိပြီးသားလား? ဝင်ရန်' : 'Have an account? Sign in')}
+          </button>
+        )}
       </form>
 
       <button

@@ -77,7 +77,7 @@ export function Home() {
           { to: '/report', label: t('report.title'), emoji: '📄' },
           { to: '/favorites', label: t('favorites.title'), emoji: '❤️' },
           { to: '/child-profile', label: locale === 'mm' ? 'ကလေး ပရိုဖိုင်' : 'Child profile', emoji: '👶' },
-          { to: '/directory', label: locale === 'mm' ? 'ကျန်းမာရေး လမ်းညွှန်' : 'Healthcare', emoji: '🏥' },
+          { to: '/directory', label: locale === 'mm' ? 'အထူးလိုအပ်ချက် ဝန်ဆောင်မှုများ' : 'Special-needs services', emoji: '🏫' },
           ...(adminAccess?.isStaff
             ? [{ to: '/admin', label: locale === 'mm' ? 'စီမံခန့်ခွဲမှု' : 'Admin', emoji: '🗂️' }]
             : []),

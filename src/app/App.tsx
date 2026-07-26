@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { Authenticated, Unauthenticated, AuthLoading } from 'convex/react';
+import { Authenticated, Unauthenticated, AuthLoading, useQuery } from 'convex/react';
 import { Layout } from '../components/Layout';
 import { useAppState } from './AppState';
 import { decideRoute } from './bootstrap';
@@ -30,6 +30,8 @@ import { LibraryAdmin } from '../screens/LibraryAdmin';
 import { EvidenceAdmin } from '../screens/EvidenceAdmin';
 import { AdminTeam } from '../screens/AdminTeam';
 import { AcceptAdminInvite } from '../screens/AcceptAdminInvite';
+import { api } from '../../convex/_generated/api';
+import { useEffect } from 'react';
 
 // Authentication gate: unauthenticated visitors see sign-in; the app (and all
 // child data) is only reachable once signed in.
@@ -55,6 +57,34 @@ export function App() {
 // add a child again on every login.
 function Bootstrap() {
   const { ready, hasChild, state } = useAppState();
+  const wantsStaffPortal = localStorage.getItem('ace-login-destination') === 'staff';
+  const staffAccess = useQuery(api.admin.myAccess, wantsStaffPortal ? {} : 'skip');
+  if (wantsStaffPortal && staffAccess === undefined) {
+    return (
+      <div className="flex min-h-screen items-center justify-center text-ink-soft" role="status" aria-live="polite">
+        <span className="animate-pulse">…</span>
+      </div>
+    );
+  }
+  if (wantsStaffPortal) {
+    return staffAccess?.isStaff
+      ? <ClearStaffDestination><Navigate to="/admin" replace /></ClearStaffDestination>
+      : (
+        <ClearStaffDestination>
+          <Layout showNav={false}>
+            <div className="rounded-card border border-line bg-white p-5 shadow-card">
+              <h1 className="font-bold text-ink">စီမံခန့်ခွဲရေးဝင်ခွင့် မရှိသေးပါ</h1>
+              <p className="mt-2 text-sm text-ink-soft">
+                ပိုင်ရှင်ထံမှ ဖိတ်ကြားလင့်ခ်ကို လက်ခံပြီးမှ အဖွဲ့ဝင် သို့မဟုတ် ပညာရှင်စာမျက်နှာသို့ ဝင်နိုင်ပါသည်။
+              </p>
+              <a href="/" className="mt-4 inline-block rounded-pill bg-sky px-5 py-2 text-sm font-semibold text-white">
+                မိဘစာမျက်နှာသို့ သွားမည်
+              </a>
+            </div>
+          </Layout>
+        </ClearStaffDestination>
+      );
+  }
   const route = decideRoute({
     ready,
     consentAccepted: Boolean(state.consentAcceptedAt),
@@ -75,6 +105,13 @@ function Bootstrap() {
     default:
       return <Layout showNav={false}><Welcome /></Layout>;
   }
+}
+
+function ClearStaffDestination({ children }: { children: React.ReactNode }) {
+  useEffect(() => {
+    localStorage.removeItem('ace-login-destination');
+  }, []);
+  return children;
 }
 
 function AppRoutes() {

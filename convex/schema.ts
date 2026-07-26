@@ -130,7 +130,9 @@ export default defineSchema({
     lastVerifiedAt: v.optional(v.number()),
     verifiedBy: v.optional(v.id('users')),
     isActive: v.boolean(), // inactive until verified
-  }).index('by_active', ['isActive']),
+  })
+    .index('by_active', ['isActive'])
+    .index('by_name', ['name']),
 
   // Immutable audit trail. Insert-only; readable by staff/super-admin. Listed via
   // the implicit _creationTime order (newest first), so no extra index is needed.
