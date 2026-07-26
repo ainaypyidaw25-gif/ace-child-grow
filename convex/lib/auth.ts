@@ -17,6 +17,15 @@ export type StaffAccess = {
   displayName: string | null;
 };
 
+export type ReviewScope = 'education' | 'clinical';
+
+export type ProfessionalApproval = {
+  userId: Id<'users'>;
+  qualification: string;
+  reviewerName: string;
+  scope: ReviewScope;
+};
+
 /** The authenticated user id, or throw. Use in mutations that require a caller. */
 export async function requireUser(ctx: Ctx): Promise<Id<'users'>> {
   const userId = await getAuthUserId(ctx);
@@ -89,6 +98,31 @@ export async function requireClinicalReviewer(
   if (!access.qualification) throw new Error('Clinical reviewer qualification is required');
   if (!access.displayName) throw new Error('Clinical reviewer name is required');
   return { userId, qualification: access.qualification, reviewerName: access.displayName };
+}
+
+/**
+ * Publishing authority with an explicit scope. A clinical reviewer signs with
+ * clinical scope. A qualified owner may sign education / special-education
+ * material, but this never turns their decision into medical approval.
+ */
+export async function requireProfessionalPublisher(ctx: Ctx): Promise<ProfessionalApproval> {
+  const { userId, access } = await requireOneOf(ctx, ['owner', 'clinical_reviewer']);
+  if (!access.qualification) throw new Error('Professional qualification is required');
+  if (access.role === 'clinical_reviewer') {
+    if (!access.displayName) throw new Error('Clinical reviewer name is required');
+    return {
+      userId,
+      qualification: access.qualification,
+      reviewerName: access.displayName,
+      scope: 'clinical',
+    };
+  }
+  return {
+    userId,
+    qualification: access.qualification,
+    reviewerName: access.displayName || 'ACE Child Grow Owner / Education Reviewer',
+    scope: 'education',
+  };
 }
 
 /** Assert the child belongs to the caller (ownership guard for child sub-records). */

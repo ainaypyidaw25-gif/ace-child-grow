@@ -1,6 +1,6 @@
 // Evidence Base Convex functions.
 //
-// STAFF ONLY. The evidence library is an internal clinical-governance tool: it
+// STAFF ONLY. The evidence library is an internal professional-governance tool: it
 // carries reviewer names, verification notes and review decisions, none of
 // which belong in a parent-facing surface. Every function here goes through
 // requireStaff (mutations) or returns `{ allowed: false }` (queries), and every
@@ -21,7 +21,7 @@ import {
 import { v, type Infer } from 'convex/values';
 import type { Id } from './_generated/dataModel';
 import { getAuthUserId } from '@convex-dev/auth/server';
-import { hasStaffRole, requireClinicalReviewer, requireEvidenceEditor } from './lib/auth';
+import { hasStaffRole, requireEvidenceEditor, requireProfessionalPublisher } from './lib/auth';
 import { logAudit } from './audit';
 
 const REVIEW_STATUSES = [
@@ -344,6 +344,7 @@ async function applySources(
           reviewNote: existing.reviewNote,
           nextReviewDate: existing.nextReviewDate ?? rest.nextReviewDate,
           reviewerId: existing.reviewerId,
+          reviewScope: existing.reviewScope,
           searchText,
         };
         // 'updated' should mean something changed. Counting an identical
@@ -600,7 +601,7 @@ export const setReview = mutation({
   },
   handler: async (ctx, args) => {
     const approval = args.status === 'approved'
-      ? await requireClinicalReviewer(ctx)
+      ? await requireProfessionalPublisher(ctx)
       : null;
     const userId = approval?.userId ?? await requireEvidenceEditor(ctx);
     const reviewArgs = approval
@@ -653,6 +654,7 @@ export const setReview = mutation({
       nextReviewDate: args.nextReviewDate ?? row.nextReviewDate,
       reviewNote: args.note,
       reviewerId: userId,
+      reviewScope: approval?.scope,
       updatedAt: Date.now(),
     });
     const after = `${args.status} / ${reviewArgs.reviewer.trim()} (${reviewArgs.reviewerQualification.trim()}) / ${args.reviewDate}`;
@@ -666,7 +668,7 @@ export const setReview = mutation({
       `${row.reviewStatus} → ${args.status} by ${reviewArgs.reviewer.trim()} (${reviewArgs.reviewerQualification.trim()})`,
       { result: 'ok', before, after },
     );
-    return { ok: true as const };
+    return { ok: true as const, reviewScope: approval?.scope ?? null };
   },
 });
 

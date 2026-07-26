@@ -6,7 +6,7 @@ import { seedPayload } from '../content/seed';
 import { CONTENT_TYPES } from '../content/taxonomy';
 
 // Staff CMS for the content library: import/seed, coverage overview, and
-// per-item clinical-review transitions. Server enforces staff-only for every
+// per-item professionally scoped review transitions. Server enforces staff-only for every
 // mutation; a non-staff visitor sees the access notice.
 export function LibraryAdmin() {
   const { locale } = useLocale();
@@ -32,7 +32,8 @@ export function LibraryAdmin() {
     );
   }
   const canEdit = access?.role === 'owner' || access?.role === 'content_editor';
-  const canReview = access?.role === 'clinical_reviewer';
+  const canReview = access?.role === 'clinical_reviewer' || (access?.role === 'owner' && !!access.qualification);
+  const educationReviewer = access?.role === 'owner' && !!access.qualification;
 
   const runImport = async () => {
     setBusy(true); setMsg('');
@@ -61,11 +62,15 @@ export function LibraryAdmin() {
       <p className="rounded-lg bg-pastel-yellow/60 px-3 py-2 text-sm text-ink">
         {L(
           canReview
-            ? 'ဆေးဘက်ဆိုင်ရာ သုံးသပ်သူအဖြစ် သုံးသပ်ပြီးသော အကြောင်းအရာကို ထုတ်ဝေနိုင်ပါသည်။ လုပ်ဆောင်ချက်တိုင်းကို မှတ်တမ်းတင်ထားသည်။'
-            : 'အကြောင်းအရာများကို ကြည့်ရှုတည်းဖြတ်နိုင်သော်လည်း ဆေးဘက်ဆိုင်ရာ သုံးသပ်သူသာ ထုတ်ဝေနိုင်သည်။',
+            ? educationReviewer
+              ? 'ပညာရေးနှင့် အထူးပညာရေးဆိုင်ရာ သုံးသပ်သူအဖြစ် အကြောင်းအရာများကို ထုတ်ဝေနိုင်ပါသည်။ ဤအတည်ပြုချက်သည် ဆေးဘက်ဆိုင်ရာ အတည်ပြုချက် မဟုတ်ပါ။ လုပ်ဆောင်ချက်တိုင်းကို မှတ်တမ်းတင်ထားသည်။'
+              : 'ဆေးဘက်ဆိုင်ရာ သုံးသပ်သူအဖြစ် အကြောင်းအရာများကို ထုတ်ဝေနိုင်ပါသည်။ လုပ်ဆောင်ချက်တိုင်းကို မှတ်တမ်းတင်ထားသည်။'
+            : 'အကြောင်းအရာများကို ကြည့်ရှုတည်းဖြတ်နိုင်ပါသည်။ ထုတ်ဝေရန် သတ်မှတ်ထားသော အရည်အချင်းရှိ ပညာရှင်၏ သုံးသပ်ချက် လိုအပ်ပါသည်။',
           canReview
-            ? 'You may publish reviewed content as the assigned clinical reviewer. Every action is audited.'
-            : 'You may inspect and edit content, but only a clinical reviewer can publish.',
+            ? educationReviewer
+              ? 'You may publish with education and special-education review scope. This is not clinical approval. Every action is audited.'
+              : 'You may publish as the assigned clinical reviewer. Every action is audited.'
+            : 'You may inspect and edit content. Publishing requires an assigned qualified reviewer.',
         )}
       </p>
 
@@ -99,7 +104,7 @@ export function LibraryAdmin() {
       </section>
 
       <section className="rounded-card border border-line bg-white p-4 shadow-card">
-        <h2 className="mb-2 font-semibold text-ink">{L('ပြန်လည်သုံးသပ်ခြင်း', 'Clinical review')}</h2>
+        <h2 className="mb-2 font-semibold text-ink">{L('ပညာရှင် သုံးသပ်ခြင်း', 'Professional review')}</h2>
         <select value={type} onChange={(e) => setType(e.target.value)}
           className="mb-3 rounded-pill border border-line bg-white px-3 py-1.5 text-sm">
           {CONTENT_TYPES.map((tk) => <option key={tk} value={tk}>{tk}</option>)}

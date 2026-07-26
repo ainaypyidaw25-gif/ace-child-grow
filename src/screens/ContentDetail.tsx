@@ -213,10 +213,14 @@ export function ContentDetail() {
         </Section>
       )}
 
-      <p className="pt-2 text-[11px] leading-relaxed text-ink-soft">
+      <p className="rounded-lg bg-pastel-yellow/50 px-3 py-2 text-[11px] leading-relaxed text-ink-soft">
         {locale === 'mm'
-          ? 'မှတ်ချက် — ဤအကြောင်းအရာသည် ယုံကြည်ရသော ကိုးကားချက်များအပေါ် အခြေခံထားသည့် အထွေထွေ မိဘလမ်းညွှန် ဖြစ်ပါသည်။ ကျန်းမာရေးပညာရှင်၏ သုံးသပ်အတည်ပြုမှု မရရှိသေးသဖြင့် ဆေးဘက်ဆိုင်ရာ အကြံဉာဏ်အဖြစ် မယူဆသင့်ပါ။'
-          : `Source: ${item.source}`}
+          ? item.reviewScope === 'education'
+            ? 'သုံးသပ်မှုမှတ်တမ်း — ဤအကြောင်းအရာကို ပညာရေးနှင့် အထူးပညာရေးဆိုင်ရာ ပညာရှင်က သုံးသပ်အတည်ပြုထားပါသည်။ ဆေးဘက်ဆိုင်ရာ အကြောင်းအရာများသည် ယုံကြည်ရသော ကိုးကားချက်များအပေါ် အခြေခံထားသည့် အထွေထွေ လမ်းညွှန်သာဖြစ်ပြီး ဆေးဘက်ဆိုင်ရာ အတည်ပြုချက် သို့မဟုတ် ဆရာဝန်၏ အကြံဉာဏ် မဟုတ်ပါ။ စိုးရိမ်စရာရှိပါက သက်ဆိုင်ရာ ကျန်းမာရေးပညာရှင်နှင့် တိုင်ပင်ပါ။'
+            : 'မှတ်ချက် — ဤအကြောင်းအရာသည် ယုံကြည်ရသော ကိုးကားချက်များအပေါ် အခြေခံထားသည့် အထွေထွေ မိဘလမ်းညွှန် ဖြစ်ပါသည်။ ဆေးဘက်ဆိုင်ရာ အကြံဉာဏ်အဖြစ် မယူဆသင့်ပါ။'
+          : item.reviewScope === 'education'
+            ? 'Review record: approved by an education and special-education professional. Medical information is general evidence-based guidance, not clinical approval or medical advice. Consult an appropriate health professional if concerned.'
+            : `General evidence-based parent guidance, not medical advice. Source: ${item.source}`}
       </p>
     </div>
   );

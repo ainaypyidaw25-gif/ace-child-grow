@@ -113,6 +113,8 @@ export default defineSchema({
     translationStatus: v.optional(v.string()), // draft | submitted | approved | changes_requested
     translationNote: v.optional(v.string()),
     reviewerQualification: v.optional(v.string()),
+    reviewerId: v.optional(v.id('users')),
+    reviewScope: v.optional(v.union(v.literal('education'), v.literal('clinical'))),
   }).index('by_status', ['reviewStatus']),
 
   // Verified healthcare facilities. NEVER seeded with invented data. Only
@@ -180,6 +182,8 @@ export default defineSchema({
     clinicalStatus: v.string(), // draft | clinical_review | published
     reviewerId: v.optional(v.id('users')),
     reviewerQualification: v.optional(v.string()),
+    reviewerDisplayName: v.optional(v.string()),
+    reviewScope: v.optional(v.union(v.literal('education'), v.literal('clinical'))),
     reviewedAt: v.optional(v.number()),
     nextReviewAt: v.optional(v.number()),
     reviewNote: v.optional(v.string()),
@@ -238,6 +242,7 @@ export default defineSchema({
     nextReviewDate: v.union(v.string(), v.null()),
     reviewNote: v.optional(v.string()),
     reviewerId: v.optional(v.id('users')),
+    reviewScope: v.optional(v.union(v.literal('education'), v.literal('clinical'))),
     keywords: v.array(v.string()),
     topics: v.array(v.string()),
     ageMonthsMin: v.union(v.number(), v.null()),

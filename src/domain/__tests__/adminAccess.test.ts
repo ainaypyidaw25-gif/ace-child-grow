@@ -40,6 +40,12 @@ describe('admin team and subscription security', () => {
     expect(auth).toContain('Clinical reviewer qualification is required');
   });
 
+  it('records qualified owner publishing as education scope, never clinical scope', () => {
+    expect(auth).toContain("scope: 'education'");
+    expect(auth).toContain("scope: 'clinical'");
+    expect(auth).toContain("requireOneOf(ctx, ['owner', 'clinical_reviewer'])");
+  });
+
   it('keeps provider subscription updates internal', () => {
     expect(subscriptions).toContain('export const syncProviderSubscription = internalMutation({');
     expect(subscriptions).not.toContain('export const syncProviderSubscription = mutation({');

@@ -1,7 +1,7 @@
 import { query, mutation } from './_generated/server';
 import { v } from 'convex/values';
 import { getAuthUserId } from '@convex-dev/auth/server';
-import { hasStaffRole, requireClinicalReviewer, requireContentEditor } from './lib/auth';
+import { hasStaffRole, requireContentEditor, requireProfessionalPublisher } from './lib/auth';
 import { logAudit } from './audit';
 
 // Mirror of src/domain/content/workflow.ts (convex functions can't import src/).
@@ -56,7 +56,7 @@ export const transition = mutation({
   },
   handler: async (ctx, { id, to, reviewerQualification }) => {
     const approval = ['approved', 'published'].includes(to)
-      ? await requireClinicalReviewer(ctx)
+      ? await requireProfessionalPublisher(ctx)
       : null;
     const userId = approval?.userId ?? await requireContentEditor(ctx);
     const item = await ctx.db.get(id);
@@ -68,6 +68,7 @@ export const transition = mutation({
       ...(approval?.qualification || reviewerQualification?.trim()
         ? { reviewerQualification: approval?.qualification ?? reviewerQualification?.trim() }
         : {}),
+      ...(approval ? { reviewerId: approval.userId, reviewScope: approval.scope } : {}),
     });
     // All content transitions (esp. publish) are audited.
     await logAudit(ctx, userId, `content.${to}`, 'contentItems', id, item.titleEn);

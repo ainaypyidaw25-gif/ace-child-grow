@@ -103,8 +103,8 @@ export function ContentLibrary() {
           </p>
           <p className="mt-1 text-sm text-ink-soft">
             {locale === 'mm'
-              ? 'အကြောင်းအရာအားလုံးကို ဆေးပညာဆိုင်ရာ ပြန်လည်သုံးသပ်ပြီးမှသာ ဖော်ပြပါမည်။'
-              : 'All content is shown only after clinical review.'}
+              ? 'အကြောင်းအရာအားလုံးကို သတ်မှတ်ထားသော အရည်အချင်းရှိ ပညာရှင်က သုံးသပ်ပြီးမှသာ ဖော်ပြပါမည်။'
+              : 'All content is shown only after review by an assigned qualified professional.'}
           </p>
         </div>
       ) : (

@@ -112,9 +112,12 @@ export function EvidenceAdmin() {
 
   const review = async (sourceId: string, status: string) => {
     if (pending) return;
-    const boundClinicalReviewer = status === 'approved' && access?.role === 'clinical_reviewer';
-    const reviewerName = boundClinicalReviewer ? access.displayName ?? '' : reviewer.trim();
-    const qualification = boundClinicalReviewer ? access.qualification ?? '' : reviewerQualification.trim();
+    const boundProfessionalReviewer = status === 'approved' &&
+      (access?.role === 'clinical_reviewer' || (access?.role === 'owner' && !!access.qualification));
+    const reviewerName = boundProfessionalReviewer
+      ? access.displayName ?? 'ACE Child Grow Owner / Education Reviewer'
+      : reviewer.trim();
+    const qualification = boundProfessionalReviewer ? access.qualification ?? '' : reviewerQualification.trim();
     if (!reviewerName) {
       setMsg(L('သုံးသပ်သူ အမည် ထည့်ပါ။', 'Enter the reviewer name first.'));
       return;
@@ -152,7 +155,7 @@ export function EvidenceAdmin() {
 
   const sel = 'min-h-touch rounded-pill border border-line bg-white px-3 py-1 text-sm';
   const rows = list?.sources ?? [];
-  const canApprove = access?.role === 'clinical_reviewer';
+  const canApprove = access?.role === 'clinical_reviewer' || (access?.role === 'owner' && !!access.qualification);
 
   return (
     <div className="space-y-4">
@@ -252,7 +255,7 @@ export function EvidenceAdmin() {
               ))}
             </select>
             <select className={sel} value={reviewStatus} onChange={(e) => setReviewStatus(e.target.value)}>
-              <option value="">{L('သုံးသပ်မှု အခြေအနေ — အားလုံး', 'Clinical review — all')}</option>
+              <option value="">{L('သုံးသပ်မှု အခြေအနေ — အားလုံး', 'Professional review — all')}</option>
               {EVIDENCE_REVIEW_STATUSES.map((k) => (
                 <option key={k} value={k}>{k}</option>
               ))}
@@ -404,7 +407,7 @@ export function EvidenceAdmin() {
             rows={reports.contentWithoutReferences.map((r) => `${r.kind} · ${r.slug} — ${r.reason}`)}
           />
           <ReportBlock
-            title={L('သုံးသပ်ရန် စောင့်ဆိုင်းနေသည်', 'Awaiting clinical review')}
+            title={L('ပညာရှင် သုံးသပ်ရန် စောင့်ဆိုင်းနေသည်', 'Awaiting professional review')}
             empty={L('မရှိပါ။', 'None.')}
             rows={reports.contentAwaitingReview.map((r) => `${r.scope} · ${r.kind} · ${r.title} (${r.status})`)}
           />

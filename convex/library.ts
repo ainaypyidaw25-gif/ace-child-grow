@@ -1,13 +1,13 @@
 // Content Library Convex functions.
 //
 // Read access: published items are visible to any authenticated user; staff see
-// everything (all clinical statuses). Write access (import, review transitions,
+// everything (all review statuses). Write access (import, review transitions,
 // media) is staff-only and audited. The library carries NO per-parent private
 // data, so reads are shared catalogue — but still behind authentication.
 import { query, mutation } from './_generated/server';
 import { v } from 'convex/values';
 import { getAuthUserId } from '@convex-dev/auth/server';
-import { hasStaffRole, requireClinicalReviewer, requireContentEditor } from './lib/auth';
+import { hasStaffRole, requireContentEditor, requireProfessionalPublisher } from './lib/auth';
 import { logAudit } from './audit';
 
 // List content by type, optionally filtered by age/domain/category and a query.
@@ -207,7 +207,7 @@ export const setReview = mutation({
       throw new Error('Invalid status');
     }
     const approval = args.clinicalStatus === 'published'
-      ? await requireClinicalReviewer(ctx)
+      ? await requireProfessionalPublisher(ctx)
       : null;
     const userId = approval?.userId ?? await requireContentEditor(ctx);
     const item = await ctx.db
@@ -220,12 +220,14 @@ export const setReview = mutation({
       clinicalStatus: args.clinicalStatus,
       reviewerId: userId,
       reviewerQualification: approval?.qualification ?? args.reviewerQualification?.trim(),
+      reviewerDisplayName: approval?.reviewerName,
+      reviewScope: approval?.scope,
       reviewedAt: now,
       nextReviewAt: args.nextReviewAt,
       reviewNote: args.reviewNote,
       updatedAt: now,
     });
     await logAudit(ctx, userId, `library.${args.clinicalStatus}`, 'libraryContent', item._id, item.titleEn);
-    return { ok: true };
+    return { ok: true, reviewScope: approval?.scope ?? null };
   },
 });

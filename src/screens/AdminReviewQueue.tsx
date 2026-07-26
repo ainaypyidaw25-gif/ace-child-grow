@@ -35,13 +35,14 @@ export function AdminReviewQueue() {
   if (data === undefined) return <p className="text-ink-soft">…</p>;
   const { staff, items } = data;
   const canEdit = access?.role === 'owner' || access?.role === 'content_editor';
-  const canReview = access?.role === 'clinical_reviewer';
+  const canReview = access?.role === 'clinical_reviewer' || (access?.role === 'owner' && !!access.qualification);
+  const educationReviewer = access?.role === 'owner' && !!access.qualification;
   const pending = items.filter((i) => !isParentVisible(i.reviewStatus as ReviewState)).length;
 
   return (
     <div className="space-y-4">
       <h1 className="text-xl font-bold text-sky-deep">
-        {locale === 'mm' ? 'ဆေးပညာ ပြန်လည်သုံးသပ်မှု စာရင်း' : 'Clinical Review Queue'}
+        {locale === 'mm' ? 'ပညာရှင် ပြန်လည်သုံးသပ်မှု စာရင်း' : 'Professional Review Queue'}
       </h1>
       <p className="rounded-lg bg-pastel-yellow/60 px-3 py-2 text-sm text-ink">
         {locale === 'mm'
@@ -55,11 +56,15 @@ export function AdminReviewQueue() {
           <p className="text-sm text-ink">
             {locale === 'mm'
               ? canReview
-                ? 'ဆေးဘက်ဆိုင်ရာ သုံးသပ်သူအဖြစ် အတည်ပြုခြင်းနှင့် ထုတ်ဝေခြင်းကို ဆောင်ရွက်နိုင်ပါသည်။ လုပ်ဆောင်ချက်တိုင်းကို စိစစ်မှတ်တမ်းတင်ထားသည်။'
-                : 'မူကြမ်းများကို ကြည့်ရှုတည်းဖြတ်နိုင်ပါသည်။ အတည်ပြုခြင်းနှင့် ထုတ်ဝေခြင်းကို ဆေးဘက်ဆိုင်ရာ သုံးသပ်သူကသာ ဆောင်ရွက်နိုင်သည်။'
+                ? educationReviewer
+                  ? 'ပညာရေးနှင့် အထူးပညာရေးဆိုင်ရာ အတည်ပြုချက်ဖြင့် ထုတ်ဝေနိုင်ပါသည်။ ဆေးဘက်ဆိုင်ရာ အတည်ပြုချက် မဟုတ်ပါ။ လုပ်ဆောင်ချက်တိုင်းကို မှတ်တမ်းတင်ထားသည်။'
+                  : 'ဆေးဘက်ဆိုင်ရာ သုံးသပ်သူအဖြစ် အတည်ပြုပြီး ထုတ်ဝေနိုင်ပါသည်။ လုပ်ဆောင်ချက်တိုင်းကို မှတ်တမ်းတင်ထားသည်။'
+                : 'မူကြမ်းများကို ကြည့်ရှုတည်းဖြတ်နိုင်ပါသည်။ အတည်ပြုပြီး ထုတ်ဝေရန် အရည်အချင်းရှိ ပညာရှင် လိုအပ်ပါသည်။'
               : canReview
-                ? 'You may approve and publish as the assigned clinical reviewer. Every action is audited.'
-                : 'You may inspect and edit drafts. Only an assigned clinical reviewer can approve or publish.'}
+                ? educationReviewer
+                  ? 'You may publish with education and special-education review scope. This is not clinical approval.'
+                  : 'You may approve and publish as the assigned clinical reviewer. Every action is audited.'
+                : 'You may inspect and edit drafts. A qualified assigned reviewer is required to publish.'}
           </p>
           <div className="mt-3 flex flex-wrap gap-2 text-sm">
             <Link to="/library" className="rounded-pill bg-sky px-4 py-2 font-semibold text-white">
