@@ -7,15 +7,15 @@ export default {
   theme: {
     extend: {
       colors: {
-        sky: { DEFAULT: '#4DA8FF', deep: '#2F80ED' },
-        mint: { DEFAULT: '#66D6B0', soft: '#EAFBF5' },
-        cream: '#FFF9F2',
-        pastel: { yellow: '#FFE9A9', orange: '#FFC78A' },
+        sky: { DEFAULT: '#4B8F83', deep: '#1E5A52' },
+        mint: { DEFAULT: '#73C7A5', soft: '#E7F5EF' },
+        cream: '#FBFAF5',
+        pastel: { yellow: '#FBE8A6', orange: '#FFD28A' },
         lavender: '#D8CCFF',
         pink: '#FFDDE7',
-        ink: { DEFAULT: '#263238', soft: '#60717A' },
-        line: '#E7EEF2',
-        canvas: '#F5FAFD',
+        ink: { DEFAULT: '#18302B', soft: '#64736E' },
+        line: '#DDE7E2',
+        canvas: '#F4F7F3',
         // Result-state semantic colors (rule engine). Never used to imply diagnosis.
         state: {
           green: '#2E9E6B',
@@ -28,7 +28,7 @@ export default {
         mm: ['"Noto Sans Myanmar"', '"Pyidaungsu"', '"Myanmar Text"', 'sans-serif'],
         sans: ['"Noto Sans Myanmar"', '"Pyidaungsu"', 'system-ui', 'sans-serif'],
       },
-      borderRadius: { card: '22px', pill: '999px' },
+      borderRadius: { card: '18px', pill: '999px' },
       fontSize: {
         // Body minimum 16px, generous line-height for Myanmar glyphs.
         base: ['16px', { lineHeight: '1.75' }],
@@ -38,7 +38,7 @@ export default {
       minHeight: { touch: '44px' },
       minWidth: { touch: '44px' },
       boxShadow: {
-        card: '0 6px 24px -12px rgba(47,128,237,0.18)',
+        card: '0 14px 40px -28px rgba(24,48,43,0.42)',
       },
     },
   },

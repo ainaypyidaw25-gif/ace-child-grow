@@ -1,34 +1,30 @@
 import { NavLink } from 'react-router-dom';
 import { useLocale } from '../app/LocaleContext';
-import type { TranslationKey } from '../i18n';
-
-const ITEMS: { to: string; key: TranslationKey; icon: string }[] = [
-  { to: '/home', key: 'nav.home', icon: '🏠' },
-  { to: '/journey', key: 'nav.journey', icon: '🌱' },
-  { to: '/activities', key: 'nav.activities', icon: '🧩' },
-  { to: '/learn', key: 'nav.learn', icon: '📖' },
-  { to: '/profile', key: 'nav.profile', icon: '👤' },
-];
+import { PRIMARY_NAV_ITEMS } from './navigationItems';
 
 export function BottomNav() {
   const { t } = useLocale();
   return (
     <nav
       aria-label={t('nav.home')}
-      className="fixed bottom-0 inset-x-0 z-20 border-t border-line bg-white/95 backdrop-blur
-                 pb-[env(safe-area-inset-bottom)]"
+      className="fixed inset-x-0 bottom-0 z-20 border-t border-line bg-white/95 backdrop-blur
+                 pb-[env(safe-area-inset-bottom)] lg:hidden"
     >
       <ul className="mx-auto flex max-w-lg items-stretch justify-between px-2">
-        {ITEMS.map((item) => (
+        {PRIMARY_NAV_ITEMS.map((item) => (
           <li key={item.to} className="flex-1">
             <NavLink
               to={item.to}
-              className={({ isActive }) =>
-                `flex min-h-touch flex-col items-center justify-center gap-0.5 py-2 text-xs
-                 ${isActive ? 'text-sky-deep font-semibold' : 'text-ink-soft'}`
-              }
+              className={({ isActive }) => `flex min-h-touch flex-col items-center justify-center gap-0.5 py-2 text-xs ${
+                isActive ? 'font-semibold text-sky-deep' : 'text-ink-soft'
+              }`}
             >
-              <span aria-hidden className="text-lg leading-none">{item.icon}</span>
+              <span
+                aria-hidden
+                className="flex h-6 w-8 items-center justify-center rounded-lg bg-mint-soft text-base leading-none"
+              >
+                {item.symbol}
+              </span>
               <span>{t(item.key)}</span>
             </NavLink>
           </li>

@@ -1,41 +1,42 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Authenticated, Unauthenticated, AuthLoading, useQuery } from 'convex/react';
+import { lazy, Suspense, useEffect, type ReactNode } from 'react';
 import { Layout } from '../components/Layout';
 import { useAppState } from './AppState';
 import { decideRoute } from './bootstrap';
 import { SignIn } from '../screens/SignIn';
-import { Welcome } from '../screens/Welcome';
-import { Consent } from '../screens/Consent';
-import { AddChild } from '../screens/AddChild';
-import { EditChild } from '../screens/EditChild';
-import { Home } from '../screens/Home';
-import { MilestoneDemo } from '../screens/MilestoneDemo';
-import { Activities } from '../screens/Activities';
-import { Growth } from '../screens/Growth';
-import { Sleep } from '../screens/Sleep';
-import { Learn } from '../screens/Learn';
-import { HopeCenter } from '../screens/HopeCenter';
-import { Report } from '../screens/Report';
-import { Profile } from '../screens/Profile';
-import { OfflineDownloads } from '../screens/OfflineDownloads';
-import { Favorites } from '../screens/Favorites';
-import { Notifications } from '../screens/Notifications';
-import { HealthcareDirectory } from '../screens/HealthcareDirectory';
-import { ChildProfile } from '../screens/ChildProfile';
-import { AuditLog } from '../screens/AuditLog';
-import { AdminReviewQueue } from '../screens/AdminReviewQueue';
-import { ContentLibrary } from '../screens/ContentLibrary';
-import { ContentDetail } from '../screens/ContentDetail';
-import { LibraryAdmin } from '../screens/LibraryAdmin';
-import { EvidenceAdmin } from '../screens/EvidenceAdmin';
-import { AdminTeam } from '../screens/AdminTeam';
-import { AcceptAdminInvite } from '../screens/AcceptAdminInvite';
-import { AdminDirectory } from '../screens/AdminDirectory';
-import { AdminBilling } from '../screens/AdminBilling';
-import { SubscriptionPlans } from '../screens/SubscriptionPlans';
 import { api } from '../../convex/_generated/api';
-import { useEffect } from 'react';
 import { getPortalMode, setPortalMode } from './portalMode';
+
+const Welcome = lazy(() => import('../screens/Welcome').then((module) => ({ default: module.Welcome })));
+const Consent = lazy(() => import('../screens/Consent').then((module) => ({ default: module.Consent })));
+const AddChild = lazy(() => import('../screens/AddChild').then((module) => ({ default: module.AddChild })));
+const EditChild = lazy(() => import('../screens/EditChild').then((module) => ({ default: module.EditChild })));
+const Home = lazy(() => import('../screens/Home').then((module) => ({ default: module.Home })));
+const MilestoneDemo = lazy(() => import('../screens/MilestoneDemo').then((module) => ({ default: module.MilestoneDemo })));
+const Activities = lazy(() => import('../screens/Activities').then((module) => ({ default: module.Activities })));
+const Growth = lazy(() => import('../screens/Growth').then((module) => ({ default: module.Growth })));
+const Sleep = lazy(() => import('../screens/Sleep').then((module) => ({ default: module.Sleep })));
+const Learn = lazy(() => import('../screens/Learn').then((module) => ({ default: module.Learn })));
+const HopeCenter = lazy(() => import('../screens/HopeCenter').then((module) => ({ default: module.HopeCenter })));
+const Report = lazy(() => import('../screens/Report').then((module) => ({ default: module.Report })));
+const Profile = lazy(() => import('../screens/Profile').then((module) => ({ default: module.Profile })));
+const OfflineDownloads = lazy(() => import('../screens/OfflineDownloads').then((module) => ({ default: module.OfflineDownloads })));
+const Favorites = lazy(() => import('../screens/Favorites').then((module) => ({ default: module.Favorites })));
+const Notifications = lazy(() => import('../screens/Notifications').then((module) => ({ default: module.Notifications })));
+const HealthcareDirectory = lazy(() => import('../screens/HealthcareDirectory').then((module) => ({ default: module.HealthcareDirectory })));
+const ChildProfile = lazy(() => import('../screens/ChildProfile').then((module) => ({ default: module.ChildProfile })));
+const AuditLog = lazy(() => import('../screens/AuditLog').then((module) => ({ default: module.AuditLog })));
+const AdminReviewQueue = lazy(() => import('../screens/AdminReviewQueue').then((module) => ({ default: module.AdminReviewQueue })));
+const ContentLibrary = lazy(() => import('../screens/ContentLibrary').then((module) => ({ default: module.ContentLibrary })));
+const ContentDetail = lazy(() => import('../screens/ContentDetail').then((module) => ({ default: module.ContentDetail })));
+const LibraryAdmin = lazy(() => import('../screens/LibraryAdmin').then((module) => ({ default: module.LibraryAdmin })));
+const EvidenceAdmin = lazy(() => import('../screens/EvidenceAdmin').then((module) => ({ default: module.EvidenceAdmin })));
+const AdminTeam = lazy(() => import('../screens/AdminTeam').then((module) => ({ default: module.AdminTeam })));
+const AcceptAdminInvite = lazy(() => import('../screens/AcceptAdminInvite').then((module) => ({ default: module.AcceptAdminInvite })));
+const AdminDirectory = lazy(() => import('../screens/AdminDirectory').then((module) => ({ default: module.AdminDirectory })));
+const AdminBilling = lazy(() => import('../screens/AdminBilling').then((module) => ({ default: module.AdminBilling })));
+const SubscriptionPlans = lazy(() => import('../screens/SubscriptionPlans').then((module) => ({ default: module.SubscriptionPlans })));
 
 // Authentication gate: unauthenticated visitors see sign-in; the app (and all
 // child data) is only reachable once signed in.
@@ -111,7 +112,7 @@ function Bootstrap() {
   }
 }
 
-function ResetStaffPortalMode({ children }: { children: React.ReactNode }) {
+function ResetStaffPortalMode({ children }: { children: ReactNode }) {
   useEffect(() => {
     setPortalMode('parent');
   }, []);
@@ -120,7 +121,8 @@ function ResetStaffPortalMode({ children }: { children: React.ReactNode }) {
 
 function AppRoutes() {
   return (
-    <Routes>
+    <Suspense fallback={<div className="flex min-h-[50vh] items-center justify-center text-ink-soft" role="status" aria-live="polite">…</div>}>
+      <Routes>
       <Route path="/" element={<Bootstrap />} />
       <Route path="/consent" element={<Layout showNav={false}><Consent /></Layout>} />
       <Route path="/add-child" element={<Layout showNav={false}><AddChild /></Layout>} />
@@ -151,6 +153,7 @@ function AppRoutes() {
       <Route path="/admin/accept-invite" element={<Layout><AcceptAdminInvite /></Layout>} />
       <Route path="/audit" element={<Layout><AuditLog /></Layout>} />
       <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+      </Routes>
+    </Suspense>
   );
 }

@@ -4,10 +4,29 @@ import type { Id } from '../../convex/_generated/dataModel';
 import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
 
+const PLAN_FEATURES = {
+  premium: {
+    mm: ['အဆင့်မြင့် လစဉ်အစီရင်ခံစာ', 'အင်တာနက်မရှိချိန် ဖတ်ရှုနိုင်မှု', 'အသက်အလိုက် လှုပ်ရှားမှုနှင့် မှတ်တမ်း'],
+    en: ['Advanced monthly reports', 'Offline reading', 'Age-based activities and tracking'],
+  },
+  family: {
+    mm: ['Premium အစီအစဉ်၏ ဝန်ဆောင်မှုအားလုံး', 'မိသားစုရှိ ကလေးများအတွက် ပရိုဖိုင်များ', 'မှတ်တမ်းအားလုံးကို တစ်နေရာတည်းမှ ကြည့်ရှုနိုင်မှု'],
+    en: ['Everything in Premium', 'Profiles for children in your family', 'All family records in one place'],
+  },
+} as const;
+
+const REQUEST_STYLES = {
+  pending: 'bg-pastel-yellow/60 text-ink',
+  approved: 'bg-mint-soft text-sky-deep',
+  rejected: 'bg-pink/55 text-state-red',
+  canceled: 'bg-canvas text-ink-soft',
+} as const;
+
 export function SubscriptionPlans() {
   const { locale } = useLocale();
   const options = useQuery(api.billing.options);
   const requests = useQuery(api.billing.myRequests);
+  const subscription = useQuery(api.subscriptions.mine);
   const generateUploadUrl = useMutation(api.billing.generateProofUploadUrl);
   const submit = useMutation(api.billing.submitPaymentRequest);
   const cancel = useMutation(api.billing.cancelMyRequest);
@@ -19,79 +38,191 @@ export function SubscriptionPlans() {
   const [message, setMessage] = useState('');
   const L = (mm: string, en: string) => locale === 'mm' ? mm : en;
 
-  if (!options || !requests) return <p className="text-ink-soft">…</p>;
+  if (!options || !requests || !subscription) return <p className="text-ink-soft" role="status">…</p>;
+
   const selectedPlan = options.plans.find((plan) => plan._id === planId);
+  const selectedMethod = options.methods.find((method) => method._id === methodId);
+  const hasPendingRequest = requests.some((request) => request.status === 'pending');
+  const statusLabel = (status: (typeof requests)[number]['status']) => ({
+    pending: L('စစ်ဆေးဆဲ', 'Pending review'),
+    approved: L('အတည်ပြုပြီး', 'Approved'),
+    rejected: L('အတည်မပြုပါ', 'Not approved'),
+    canceled: L('ပယ်ဖျက်ပြီး', 'Canceled'),
+  })[status];
 
   return (
-    <div className="space-y-5">
-      <div>
-        <h1 className="text-xl font-bold text-sky-deep">{L('အဖွဲ့ဝင်အစီအစဉ်များ', 'Membership plans')}</h1>
-        <p className="text-sm text-ink-soft">{L('ငွေလွှဲပြီးနောက် အထောက်အထားနှင့် ငွေလွှဲနံပါတ်ကို ပို့ပါ။ Owner က စစ်ဆေးအတည်ပြုပြီးမှ အစီအစဉ် စတင်ပါမည်။', 'Transfer payment, then submit the reference and proof. Membership starts after owner verification.')}</p>
-      </div>
+    <div className="mx-auto max-w-6xl space-y-8">
+      <header className="relative overflow-hidden rounded-[30px] bg-ink px-5 py-8 text-white shadow-card sm:px-8 sm:py-10">
+        <div aria-hidden className="absolute -right-16 -top-20 h-56 w-56 rounded-full bg-mint/20" />
+        <div className="relative max-w-3xl">
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-mint">ACE Premium</p>
+          <h1 className="mt-3 text-2xl font-bold leading-relaxed sm:text-4xl">
+            {L('ကလေး၏ ကြီးထွားမှုမှတ်တမ်းကို မိသားစုနဲ့အတူ ဆက်လက်ထိန်းသိမ်းပါ', 'Keep your child’s growth story together')}
+          </h1>
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-white/75 sm:text-base">
+            {L('မိဘအတွက် လိုအပ်သော မှတ်တမ်း၊ အစီရင်ခံစာနှင့် အသက်အလိုက် လမ်းညွှန်ချက်များကို တစ်နေရာတည်းတွင် အသုံးပြုနိုင်ပါသည်။', 'Use age-based guidance, family records, and clear reports in one calm place.')}
+          </p>
+          <p className="mt-5 inline-flex rounded-pill bg-white/10 px-4 py-2 text-xs font-semibold text-white/85">
+            {L(`လက်ရှိအစီအစဉ် — ${subscription.planKey === 'free' ? 'အခမဲ့' : subscription.planKey === 'premium' ? 'Premium' : 'Family'}`, `Current plan — ${subscription.planKey}`)}
+          </p>
+        </div>
+      </header>
 
-      {options.plans.length === 0 || options.methods.length === 0 ? (
-        <p className="rounded-card bg-pastel-yellow/50 p-4 text-sm">{L('အခပေးအစီအစဉ်နှင့် ငွေပေးချေမှုနည်းလမ်းများကို Owner က ပြင်ဆင်နေပါသည်။', 'Paid plans and payment methods are being configured by the owner.')}</p>
-      ) : (
-        <>
-          <div className="grid gap-3">
-            {options.plans.map((plan) => (
-              <button key={plan._id} type="button" onClick={() => setPlanId(plan._id)} className={`rounded-card border p-4 text-left shadow-card ${planId === plan._id ? 'border-sky bg-mint-soft/30' : 'border-line bg-white'}`}>
-                <p className="font-semibold text-sky-deep">{locale === 'mm' ? plan.nameMm : plan.nameEn}</p>
-                <p className="text-lg font-bold">{plan.amount.toLocaleString()} {plan.currency} / {plan.interval === 'month' ? L('လ', 'month') : L('နှစ်', 'year')}</p>
-                <p className="text-sm text-ink-soft">{locale === 'mm' ? plan.descriptionMm : plan.descriptionEn}</p>
-              </button>
-            ))}
+      <section aria-labelledby="choose-plan-title">
+        <div className="mb-4 max-w-2xl">
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-sky-deep">01 · {L('အစီအစဉ်ရွေးချယ်ရန်', 'Choose a plan')}</p>
+          <h2 id="choose-plan-title" className="mt-1 text-xl font-bold text-ink">{L('မိသားစုအတွက် သင့်တော်သည့်အစီအစဉ်', 'A plan that fits your family')}</h2>
+        </div>
+
+        <div className="grid gap-4 lg:grid-cols-3">
+          <div className={`rounded-3xl border p-5 ${subscription.planKey === 'free' ? 'border-sky bg-mint-soft/35' : 'border-line bg-white'}`}>
+            <div className="flex items-center justify-between gap-3">
+              <h3 className="font-bold text-ink">{L('အခမဲ့အစီအစဉ်', 'Free')}</h3>
+              {subscription.planKey === 'free' && <span className="rounded-pill bg-sky-deep px-3 py-1 text-xs font-semibold text-white">{L('လက်ရှိ', 'Current')}</span>}
+            </div>
+            <p className="mt-3 text-2xl font-bold text-ink">0 MMK</p>
+            <p className="mt-2 text-sm text-ink-soft">{L('အခြေခံမှတ်တမ်းများ၊ လှုပ်ရှားမှုများနှင့် လေ့လာရန်စာများ', 'Core tracking, activities, and learning library')}</p>
+            <ul className="mt-5 space-y-2 text-sm text-ink">
+              {[L('ကလေးပရိုဖိုင်နှင့် ဖွံ့ဖြိုးမှုမှတ်တမ်း', 'Child profile and development journey'), L('ကြီးထွားမှုနှင့် အိပ်ချိန်မှတ်တမ်း', 'Growth and sleep tracking'), L('အခြေခံလှုပ်ရှားမှုနှင့် လေ့လာရေးစာများ', 'Core activities and learning library')].map((feature) => <li key={feature} className="flex gap-2"><span className="text-sky-deep">✓</span>{feature}</li>)}
+            </ul>
           </div>
 
-          {selectedPlan && (
-            <form className="space-y-3 rounded-card border border-line bg-white p-4" onSubmit={async (event) => {
-              event.preventDefault();
-              if (!planId || !methodId) return;
-              setBusy(true); setMessage('');
-              try {
-                let proofStorageId: Id<'_storage'> | undefined;
-                if (proof) {
-                  if (!proof.type.startsWith('image/') || proof.size > 5 * 1024 * 1024) throw new Error(L('ပုံဖိုင် 5MB အောက်သာ တင်ပါ။', 'Upload an image smaller than 5MB.'));
-                  const uploadUrl = await generateUploadUrl({});
-                  const response = await fetch(uploadUrl, { method: 'POST', headers: { 'Content-Type': proof.type }, body: proof });
-                  if (!response.ok) throw new Error(L('အထောက်အထားပုံ တင်၍ မရပါ။', 'Unable to upload proof.'));
-                  proofStorageId = (await response.json()).storageId as Id<'_storage'>;
+          {options.plans.map((plan) => {
+            const current = subscription.planKey === plan.planKey;
+            const selected = planId === plan._id;
+            const features = PLAN_FEATURES[plan.planKey][locale === 'mm' ? 'mm' : 'en'];
+            return (
+              <button
+                key={plan._id}
+                type="button"
+                onClick={() => setPlanId(plan._id)}
+                aria-pressed={selected}
+                className={`rounded-3xl border p-5 text-left transition hover:-translate-y-0.5 hover:shadow-card ${selected ? 'border-sky bg-mint-soft/35 shadow-card' : 'border-line bg-white'}`}
+              >
+                <span className="flex items-center justify-between gap-3">
+                  <span className="font-bold text-ink">{locale === 'mm' ? plan.nameMm : plan.nameEn}</span>
+                  {current && <span className="rounded-pill bg-sky-deep px-3 py-1 text-xs font-semibold text-white">{L('လက်ရှိ', 'Current')}</span>}
+                </span>
+                <span className="mt-3 block text-2xl font-bold text-ink">
+                  {plan.amount.toLocaleString()} <span className="text-sm font-semibold">{plan.currency} / {plan.interval === 'month' ? L('လ', 'month') : L('နှစ်', 'year')}</span>
+                </span>
+                <span className="mt-2 block text-sm text-ink-soft">{locale === 'mm' ? plan.descriptionMm : plan.descriptionEn}</span>
+                <span className="mt-5 block space-y-2 text-sm text-ink">
+                  {features.map((feature) => <span key={feature} className="flex gap-2"><span className="text-sky-deep">✓</span>{feature}</span>)}
+                </span>
+                <span className="mt-5 inline-flex font-bold text-sky-deep">{selected ? L('ရွေးချယ်ထားသည်', 'Selected') : L('ရွေးချယ်မည်', 'Choose plan')} →</span>
+              </button>
+            );
+          })}
+        </div>
+        {options.plans.length === 0 && (
+          <p className="mt-4 rounded-2xl bg-pastel-yellow/50 p-4 text-sm">{L('အခပေးအစီအစဉ်များကို Owner က ပြင်ဆင်နေပါသည်။', 'Paid plans are being configured by the owner.')}</p>
+        )}
+      </section>
+
+      {selectedPlan && (
+        <section aria-labelledby="payment-title" className="overflow-hidden rounded-[30px] border border-line bg-white shadow-card">
+          <header className="border-b border-line bg-cream px-5 py-6 sm:px-8">
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-sky-deep">02 · {L('ငွေပေးချေမှု', 'Payment')}</p>
+            <h2 id="payment-title" className="mt-1 text-xl font-bold text-ink">{L('အဆင့်သုံးဆင့်ဖြင့် လွယ်ကူစွာပေးချေပါ', 'Pay in three clear steps')}</h2>
+            <ol className="mt-4 grid gap-3 text-sm text-ink-soft sm:grid-cols-3">
+              {[L('အစီအစဉ်ရွေးရန်', 'Choose a plan'), L('သတ်မှတ်အကောင့်သို့ ငွေလွှဲရန်', 'Make the transfer'), L('ငွေလွှဲနံပါတ် ပို့ရန်', 'Submit the reference')].map((step, index) => <li key={step} className="flex gap-2"><span className="font-bold text-sky-deep">{index + 1}</span><span>{step}</span></li>)}
+            </ol>
+          </header>
+
+          {options.methods.length === 0 ? (
+            <p className="p-5 text-sm text-ink-soft sm:p-8">{L('ငွေပေးချေမှုနည်းလမ်းများကို Owner က ပြင်ဆင်နေပါသည်။', 'Payment methods are being configured by the owner.')}</p>
+          ) : hasPendingRequest ? (
+            <div className="p-5 sm:p-8">
+              <p className="font-bold text-ink">{L('သင့်ငွေပေးချေမှုကို စစ်ဆေးနေပါသည်', 'Your payment is being reviewed')}</p>
+              <p className="mt-2 text-sm text-ink-soft">{L('တစ်ကြိမ်လျှင် ငွေပေးချေမှုတစ်ခုသာ တင်နိုင်ပါသည်။ အောက်ရှိ အခြေအနေမှတ်တမ်းတွင် ဆက်လက်ကြည့်ရှုနိုင်ပါသည်။', 'Only one payment can be reviewed at a time. Follow its status below.')}</p>
+            </div>
+          ) : (
+            <form
+              className="grid gap-0 lg:grid-cols-2"
+              onSubmit={async (event) => {
+                event.preventDefault();
+                if (!planId || !methodId) return;
+                setBusy(true);
+                setMessage('');
+                try {
+                  let proofStorageId: Id<'_storage'> | undefined;
+                  if (proof) {
+                    if (!proof.type.startsWith('image/') || proof.size > 5 * 1024 * 1024) throw new Error(L('ပုံဖိုင်ကို 5MB အောက်သာ တင်ပါ။', 'Upload an image smaller than 5MB.'));
+                    const uploadUrl = await generateUploadUrl({});
+                    const response = await fetch(uploadUrl, { method: 'POST', headers: { 'Content-Type': proof.type }, body: proof });
+                    if (!response.ok) throw new Error(L('အထောက်အထားပုံ တင်၍ မရပါ။', 'Unable to upload proof.'));
+                    proofStorageId = (await response.json()).storageId as Id<'_storage'>;
+                  }
+                  await submit({ planId, paymentMethodId: methodId, paymentReference: reference, proofStorageId });
+                  setReference('');
+                  setProof(null);
+                  setMessage(L('ငွေပေးချေမှုကို အတည်ပြုစစ်ဆေးရန် ပို့ပြီးပါပြီ။', 'Payment submitted for verification.'));
+                } catch (error) {
+                  setMessage(error instanceof Error ? error.message : L('ပို့၍ မရပါ။', 'Unable to submit.'));
+                } finally {
+                  setBusy(false);
                 }
-                await submit({ planId, paymentMethodId: methodId, paymentReference: reference, proofStorageId });
-                setReference(''); setProof(null);
-                setMessage(L('ငွေပေးချေမှုအတည်ပြုရန် ပို့ပြီးပါပြီ။', 'Payment request submitted for verification.'));
-              } catch (error) { setMessage(error instanceof Error ? error.message : L('ပို့၍ မရပါ။', 'Unable to submit.')); }
-              finally { setBusy(false); }
-            }}>
-              <h2 className="font-semibold">{L('ငွေပေးချေမှုနည်းလမ်း', 'Payment method')}</h2>
-              <select required value={methodId} onChange={(event) => setMethodId(event.target.value as Id<'paymentMethods'>)} className="w-full rounded-lg border border-line px-3 py-2">
-                <option value="">{L('ရွေးချယ်ပါ', 'Select')}</option>
-                {options.methods.map((method) => <option key={method._id} value={method._id}>{locale === 'mm' ? method.nameMm : method.nameEn}</option>)}
-              </select>
-              {options.methods.filter((method) => method._id === methodId).map((method) => (
-                <div key={method._id} className="rounded-lg bg-canvas p-3 text-sm">
-                  <p>{method.accountName}</p><p className="font-semibold">{method.accountIdentifier}</p>
-                  <p className="text-ink-soft">{locale === 'mm' ? method.instructionsMm : method.instructionsEn}</p>
+              }}
+            >
+              <div className="border-b border-line p-5 sm:p-8 lg:border-b-0 lg:border-r">
+                <label htmlFor="payment-method" className="text-sm font-bold text-ink">{L('ငွေပေးချေမှုနည်းလမ်း', 'Payment method')}</label>
+                <select id="payment-method" required value={methodId} onChange={(event) => setMethodId(event.target.value as Id<'paymentMethods'>)} className="mt-2 min-h-touch w-full rounded-xl border border-line bg-white px-3 py-2 text-ink">
+                  <option value="">{L('ရွေးချယ်ပါ', 'Select')}</option>
+                  {options.methods.map((method) => <option key={method._id} value={method._id}>{locale === 'mm' ? method.nameMm : method.nameEn}</option>)}
+                </select>
+                {selectedMethod && (
+                  <div className="mt-5 border-l-2 border-mint pl-4 text-sm">
+                    <p className="text-ink-soft">{selectedMethod.accountName}</p>
+                    <p className="mt-1 text-lg font-bold text-ink">{selectedMethod.accountIdentifier}</p>
+                    <p className="mt-2 leading-6 text-ink-soft">{locale === 'mm' ? selectedMethod.instructionsMm : selectedMethod.instructionsEn}</p>
+                  </div>
+                )}
+              </div>
+
+              <div className="space-y-4 p-5 sm:p-8">
+                <div>
+                  <label htmlFor="payment-reference" className="text-sm font-bold text-ink">{L('ငွေလွှဲနံပါတ်', 'Transfer reference')}</label>
+                  <input id="payment-reference" required value={reference} onChange={(event) => setReference(event.target.value)} placeholder={L('Transaction ID ထည့်ပါ', 'Enter transaction ID')} className="mt-2 min-h-touch w-full rounded-xl border border-line px-3 py-2 text-ink" />
                 </div>
-              ))}
-              <input required value={reference} onChange={(event) => setReference(event.target.value)} placeholder={L('ငွေလွှဲနံပါတ် / Transaction ID', 'Transfer reference / Transaction ID')} className="w-full rounded-lg border border-line px-3 py-2" />
-              <label className="block text-sm text-ink-soft">{L('ငွေလွှဲအထောက်အထားပုံ (ရွေးချယ်နိုင်)', 'Payment proof image (optional)')}<input type="file" accept="image/*" onChange={(event) => setProof(event.target.files?.[0] ?? null)} className="mt-1 block w-full" /></label>
-              <button disabled={busy} className="rounded-pill bg-sky px-5 py-2 font-semibold text-white disabled:opacity-50">{busy ? '…' : L('အတည်ပြုရန် ပို့မည်', 'Submit for verification')}</button>
-              {message && <p className="text-sm text-ink-soft">{message}</p>}
+                <label className="block text-sm font-bold text-ink">
+                  {L('ငွေလွှဲအထောက်အထားပုံ', 'Payment proof image')}
+                  <span className="ml-1 font-normal text-ink-soft">({L('မဖြစ်မနေ မဟုတ်ပါ', 'optional')})</span>
+                  <input type="file" accept="image/*" onChange={(event) => setProof(event.target.files?.[0] ?? null)} className="mt-2 block w-full text-sm font-normal text-ink-soft file:mr-3 file:rounded-pill file:border-0 file:bg-mint-soft file:px-4 file:py-2 file:font-semibold file:text-sky-deep" />
+                </label>
+                <p className="text-xs leading-5 text-ink-soft">{L('Owner က ငွေပေးချေမှုကို စစ်ဆေးပြီးမှ အစီအစဉ် စတင်ပါမည်။', 'Your plan starts after the owner verifies the payment.')}</p>
+                <button disabled={busy} className="min-h-touch w-full rounded-pill bg-sky-deep px-5 py-2 font-bold text-white disabled:opacity-50">{busy ? '…' : L('အတည်ပြုစစ်ဆေးရန် ပို့မည်', 'Submit for verification')}</button>
+                {message && <p className="text-sm text-ink-soft" role="status">{message}</p>}
+              </div>
             </form>
           )}
-        </>
+        </section>
       )}
 
-      <section>
-        <h2 className="mb-2 font-semibold">{L('တင်ပြထားသော ငွေပေးချေမှုများ', 'My payment requests')}</h2>
-        {requests.length === 0 ? <p className="text-sm text-ink-soft">{L('မရှိသေးပါ။', 'None yet.')}</p> : <ul className="space-y-2">{requests.map((request) => (
-          <li key={request._id} className="rounded-xl border border-line bg-white p-3 text-sm">
-            <p className="font-medium">{request.planKey} · {request.amount.toLocaleString()} {request.currency}</p>
-            <p className="text-ink-soft">{request.paymentReference} · {request.status}</p>
-            {request.status === 'pending' && <button type="button" onClick={() => void cancel({ id: request._id })} className="mt-2 text-state-red underline">{L('ပယ်ဖျက်မည်', 'Cancel')}</button>}
-          </li>
-        ))}</ul>}
+      <section aria-labelledby="request-history-title" className="border-t border-line pt-7">
+        <div className="flex items-end justify-between gap-3">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-sky-deep">03 · {L('အခြေအနေကြည့်ရန်', 'Track status')}</p>
+            <h2 id="request-history-title" className="mt-1 text-lg font-bold text-ink">{L('ငွေပေးချေမှုမှတ်တမ်း', 'Payment history')}</h2>
+          </div>
+          <p className="text-xs text-ink-soft">{requests.length} {L('ခု', 'requests')}</p>
+        </div>
+        {requests.length === 0 ? (
+          <p className="mt-4 text-sm text-ink-soft">{L('ငွေပေးချေမှုမှတ်တမ်း မရှိသေးပါ။', 'No payment history yet.')}</p>
+        ) : (
+          <ul className="mt-4 divide-y divide-line overflow-hidden rounded-2xl border border-line bg-white">
+            {requests.map((request) => (
+              <li key={request._id} className="flex flex-wrap items-center gap-3 px-4 py-4 sm:px-5">
+                <span className="min-w-0 flex-1">
+                  <span className="block font-semibold capitalize text-ink">{request.planKey} · {request.amount.toLocaleString()} {request.currency}</span>
+                  <span className="mt-1 block text-xs text-ink-soft">{L('ငွေလွှဲနံပါတ်', 'Reference')}: {request.paymentReference}</span>
+                </span>
+                <span className={`rounded-pill px-3 py-1 text-xs font-semibold ${REQUEST_STYLES[request.status]}`}>{statusLabel(request.status)}</span>
+                {request.status === 'pending' && <button type="button" onClick={() => void cancel({ id: request._id })} className="min-h-touch px-2 text-sm font-semibold text-state-red underline">{L('ပယ်ဖျက်မည်', 'Cancel')}</button>}
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
     </div>
   );
