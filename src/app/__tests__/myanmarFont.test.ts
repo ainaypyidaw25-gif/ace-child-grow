@@ -73,4 +73,10 @@ describe('Myanmar font', () => {
   it('names the font family it actually loads', () => {
     expect(indexCss).toMatch(/font-family:\s*'Noto Sans Myanmar'/);
   });
+
+  it('automatically activates a new app shell instead of leaving Safari on stale UI', () => {
+    expect(viteConfig).toContain("registerType: 'autoUpdate'");
+    expect(viteConfig).toContain('skipWaiting: true');
+    expect(viteConfig).toContain('clientsClaim: true');
+  });
 });

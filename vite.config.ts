@@ -15,7 +15,10 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'prompt',
+      // Activate a new application shell as soon as a deployment is available.
+      // `prompt` was previously used without rendering an update prompt, which
+      // could leave Safari displaying an old sign-in screen indefinitely.
+      registerType: 'autoUpdate',
       includeAssets: ['favicon.svg'],
       manifest: {
         name: 'ACE Child Grow',
@@ -32,6 +35,8 @@ export default defineConfig({
         ],
       },
       workbox: {
+        skipWaiting: true,
+        clientsClaim: true,
         // The Myanmar font is precached with the rest of the shell. Workbox's
         // default glob does not include font files, so offline the stylesheet
         // was cached while the glyphs it names were not — the app would open
