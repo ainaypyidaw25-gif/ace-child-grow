@@ -126,6 +126,17 @@ export async function requireProfessionalPublisher(ctx: Ctx): Promise<Profession
   };
 }
 
+/**
+ * Publishing parent-facing developmental or health content is a clinical
+ * decision. Education-scoped owner approval is intentionally insufficient;
+ * it remains valid for evidence/media governance but cannot expose guidance
+ * to parent accounts as clinically reviewed content.
+ */
+export async function requireClinicalPublisher(ctx: Ctx): Promise<ProfessionalApproval> {
+  const reviewer = await requireClinicalReviewer(ctx);
+  return { ...reviewer, scope: 'clinical' };
+}
+
 /** Assert the child belongs to the caller (ownership guard for child sub-records). */
 export async function ownChild(
   ctx: Ctx,

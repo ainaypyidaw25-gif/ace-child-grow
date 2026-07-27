@@ -213,8 +213,8 @@ export function MilestoneDemo() {
             <fieldset className="rounded-2xl border border-line bg-white p-3 text-sm">
               <legend className="px-1 text-ink-soft">{t('safety.skillLoss.question')}</legend>
               <div className="mt-1 flex gap-2">
-                <button type="button" aria-pressed={lostSkill === true} onClick={() => setLostSkill(true)} className={`rounded-pill px-4 py-2 ${lostSkill === true ? 'bg-state-red text-white' : 'border border-line'}`}>{t('milestone.answer.yes')}</button>
-                <button type="button" aria-pressed={lostSkill === false} onClick={() => setLostSkill(false)} className={`rounded-pill px-4 py-2 ${lostSkill === false ? 'bg-mint text-white' : 'border border-line'}`}>{locale === 'mm' ? 'မရှိပါ' : 'No'}</button>
+                <button type="button" aria-pressed={lostSkill === true} onClick={() => setLostSkill(true)} className={`min-h-touch rounded-pill px-4 py-2 ${lostSkill === true ? 'bg-state-red text-white' : 'border border-line'}`}>{t('milestone.answer.yes')}</button>
+                <button type="button" aria-pressed={lostSkill === false} onClick={() => setLostSkill(false)} className={`min-h-touch rounded-pill px-4 py-2 ${lostSkill === false ? 'bg-mint text-white' : 'border border-line'}`}>{locale === 'mm' ? 'မရှိပါ' : 'No'}</button>
               </div>
             </fieldset>
             <button type="button" disabled={busy || answered !== items.length || lostSkill === null} onClick={() => void save()} className="min-h-touch rounded-pill bg-sky-deep px-6 py-2 font-semibold text-white disabled:opacity-40">

@@ -11,9 +11,11 @@ vi.mock('@convex-dev/auth/server', async (importOriginal) => {
 });
 
 import { list as listChildren, update as updateChild } from '../../../convex/children';
-import { importSeed, listByType } from '../../../convex/library';
-import { setReview as setEvidenceReview } from '../../../convex/evidence';
+import { importSeed, listByType, setReview as setLibraryReview } from '../../../convex/library';
+import { forContent as evidenceForContent, setReview as setEvidenceReview } from '../../../convex/evidence';
 import { transition as transitionContent } from '../../../convex/content';
+import { listSessions, recordSession } from '../../../convex/milestones';
+import { complete as completeActivity, list as listActivities } from '../../../convex/activities';
 
 type Row = Record<string, unknown> & { _id?: string };
 
@@ -23,6 +25,9 @@ function ctx(options: {
   profile?: Row | null;
 } = {}) {
   const patch = vi.fn();
+  const insert = vi.fn(async (table: string) => table === 'milestoneSessions'
+    ? 'session-1'
+    : table === 'activityCompletions' ? 'completion-1' : 'insert-1');
   const query = vi.fn((table: string) => {
     const rows = options.rows?.[table] ?? [];
     const terminal = {
@@ -44,7 +49,7 @@ function ctx(options: {
       query,
       get: vi.fn(async () => options.get ?? null),
       patch,
-      insert: vi.fn(),
+      insert,
     },
     storage: {},
   };
@@ -131,5 +136,93 @@ describe('Convex registered handlers enforce authorization', () => {
       to: 'clinical_review',
     })).rejects.toThrow('Insufficient staff permission');
     expect(context.db.patch).not.toHaveBeenCalled();
+  });
+
+  it('a qualified education owner cannot publish parent-facing library content', async () => {
+    authState.userId = 'owner-1';
+    const context = ctx({
+      profile: {
+        userId: 'owner-1', isStaff: true, staffRole: 'owner',
+        staffQualification: 'MEd Early Childhood Education', displayName: 'Education Owner',
+      },
+      rows: { libraryContent: [{ _id: 'content-1', slug: 'clinical-guidance', titleEn: 'Clinical guidance' }] },
+    });
+    await expect(handler(setLibraryReview)(context, {
+      slug: 'clinical-guidance', clinicalStatus: 'published',
+    })).rejects.toThrow('Insufficient staff permission');
+    expect(context.db.patch).not.toHaveBeenCalled();
+  });
+
+  it('a named qualified clinical reviewer can publish and records clinical scope', async () => {
+    authState.userId = 'reviewer-1';
+    const context = ctx({
+      profile: {
+        userId: 'reviewer-1', isStaff: true, staffRole: 'clinical_reviewer',
+        staffQualification: 'MBBS, MMedSc (Paediatrics)', displayName: 'Clinical Reviewer',
+      },
+      rows: { libraryContent: [{ _id: 'content-1', slug: 'clinical-guidance', titleEn: 'Clinical guidance' }] },
+    });
+    await expect(handler(setLibraryReview)(context, {
+      slug: 'clinical-guidance', clinicalStatus: 'published',
+    })).resolves.toEqual({ ok: true, reviewScope: 'clinical' });
+    expect(context.db.patch).toHaveBeenCalledWith('content-1', expect.objectContaining({
+      clinicalStatus: 'published', reviewScope: 'clinical', reviewerDisplayName: 'Clinical Reviewer',
+    }));
+  });
+
+  it('parent citation lookup projects only public bibliographic fields', async () => {
+    authState.userId = 'user-1';
+    const context = ctx({ rows: {
+      evidenceLinks: [{ slug: 'activity-1', kind: 'activity', sourceIds: ['source-1'] }],
+      evidenceSources: [{
+        _id: 'db-source-1', sourceId: 'source-1', org: 'WHO', title: 'Public title',
+        authors: null, year: 2024, edition: null, country: null, language: 'en',
+        url: 'https://example.test/source', doi: null, isbn: null, pmid: null,
+        evidenceLevel: 'guideline', reviewStatus: 'approved', reviewer: 'Private Reviewer',
+        reviewerId: 'reviewer-1', reviewerQualification: 'Private qualification',
+        verifiedNote: 'Internal note', reviewNote: 'Internal review note', searchText: 'internal',
+        createdAt: 1, updatedAt: 2,
+      }],
+    } });
+    const result = await handler(evidenceForContent)(context, { slug: 'activity-1', kind: 'activity' });
+    expect(result).toEqual({ allowed: true, sources: [expect.objectContaining({ sourceId: 'source-1', org: 'WHO' })] });
+    expect(JSON.stringify(result)).not.toMatch(/reviewer|verifiedNote|reviewNote|searchText|createdAt|updatedAt|db-source/);
+  });
+
+  it('milestone handlers reject unauthenticated and cross-user access without writes', async () => {
+    const unauthenticated = ctx({ get: { _id: 'child-1', userId: 'user-1' } });
+    await expect(handler(recordSession)(unauthenticated, {
+      childId: 'child-1', resultState: 'green', lostSkill: false, resultSnapshot: {},
+    })).rejects.toThrow('Not authenticated');
+    expect(unauthenticated.db.insert).not.toHaveBeenCalled();
+
+    authState.userId = 'user-2';
+    const otherOwner = ctx({ get: { _id: 'child-1', userId: 'user-1' } });
+    await expect(handler(listSessions)(otherOwner, { childId: 'child-1' })).rejects.toThrow('Not found');
+    expect(otherOwner.db.insert).not.toHaveBeenCalled();
+  });
+
+  it('milestone owner can record a session for their child', async () => {
+    authState.userId = 'user-1';
+    const context = ctx({ get: { _id: 'child-1', userId: 'user-1' } });
+    await expect(handler(recordSession)(context, {
+      childId: 'child-1', resultState: 'green', lostSkill: false, resultSnapshot: {}, responses: [],
+    })).resolves.toBe('session-1');
+    expect(context.db.insert).toHaveBeenCalledWith('milestoneSessions', expect.objectContaining({
+      userId: 'user-1', childId: 'child-1', resultState: 'green',
+    }));
+  });
+
+  it('activity handlers reject another child owner without recording completion', async () => {
+    authState.userId = 'user-2';
+    const context = ctx({
+      get: { _id: 'child-1', userId: 'user-1' },
+      rows: { subscriptions: [{ userId: 'user-2', planKey: 'premium', status: 'active', currentPeriodEnd: Date.now() + 60_000 }] },
+    });
+    await expect(handler(completeActivity)(context, {
+      childId: 'child-1', contentSlug: 'activity-1',
+    })).rejects.toThrow('Not found');
+    await expect(handler(listActivities)(context, { childId: 'child-1' })).rejects.toThrow('Not found');
+    expect(context.db.insert).not.toHaveBeenCalled();
   });
 });

@@ -79,7 +79,7 @@ export function SignIn() {
           {locale === 'mm' ? 'အီးမေးလ်' : 'Email'}
           <input
             type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
-            className="mt-1 block w-full rounded-lg border border-line px-3 py-2"
+            className="mt-1 block min-h-touch w-full rounded-lg border border-line px-3 py-2"
           />
         </label>
         <label className="block text-sm">
@@ -87,7 +87,7 @@ export function SignIn() {
           <input
             type="password" required minLength={8} value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="mt-1 block w-full rounded-lg border border-line px-3 py-2"
+            className="mt-1 block min-h-touch w-full rounded-lg border border-line px-3 py-2"
           />
         </label>
         {error && <p className="text-sm text-state-red">⚠️ {error}</p>}

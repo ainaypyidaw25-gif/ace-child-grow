@@ -4,15 +4,15 @@ import { describe, expect, it } from 'vitest';
 const librarySource = readFileSync('convex/library.ts', 'utf8');
 const workflowSource = readFileSync('convex/content.ts', 'utf8');
 
-describe('professionally scoped publication gate', () => {
-  it('requires a reviewer qualification before library content can be published', () => {
+describe('clinically scoped publication gate', () => {
+  it('requires a named qualified clinical reviewer before library content can be published', () => {
     expect(librarySource).toContain("args.clinicalStatus === 'published'");
-    expect(librarySource).toContain('await requireProfessionalPublisher(ctx)');
+    expect(librarySource).toContain('await requireClinicalPublisher(ctx)');
   });
 
-  it('requires a reviewer qualification before workflow approval or publishing', () => {
+  it('requires a named qualified clinical reviewer before workflow approval or publishing', () => {
     expect(workflowSource).toContain("['approved', 'published'].includes(to)");
-    expect(workflowSource).toContain('await requireProfessionalPublisher(ctx)');
+    expect(workflowSource).toContain('await requireClinicalPublisher(ctx)');
   });
 
   it('keeps unreviewed frontend samples behind the staff preview gate or reads only server-published library content', () => {

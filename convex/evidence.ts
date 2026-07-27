@@ -97,6 +97,22 @@ const linkValidator = v.object({
   sourceIds: v.array(v.string()),
 });
 
+const publicCitationValidator = v.object({
+  sourceId: v.string(),
+  org: v.string(),
+  title: v.string(),
+  authors: v.union(v.string(), v.null()),
+  year: v.union(v.number(), v.null()),
+  edition: v.union(v.string(), v.null()),
+  country: v.union(v.string(), v.null()),
+  language: v.string(),
+  url: v.string(),
+  doi: v.union(v.string(), v.null()),
+  isbn: v.union(v.string(), v.null()),
+  pmid: v.union(v.string(), v.null()),
+  evidenceLevel: v.string(),
+});
+
 function searchTextFor(src: {
   org: string;
   title: string;
@@ -224,6 +240,10 @@ export const getSource = query({
 /** All references backing one content slug (used by the content detail view). */
 export const forContent = query({
   args: { slug: v.string(), kind: v.optional(v.string()) },
+  returns: v.object({
+    allowed: v.boolean(),
+    sources: v.array(publicCitationValidator),
+  }),
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) return { allowed: false as const, sources: [] };
@@ -240,7 +260,16 @@ export const forContent = query({
         .withIndex('by_source_id', (qq) => qq.eq('sourceId', id))
         .unique();
       // Parents only ever see a citation that a human approved.
-      if (src && src.reviewStatus === 'approved') sources.push(src);
+      if (src && src.reviewStatus === 'approved') {
+        const {
+          sourceId, org, title, authors, year, edition, country, language,
+          url, doi, isbn, pmid, evidenceLevel,
+        } = src;
+        sources.push({
+          sourceId, org, title, authors, year, edition, country, language,
+          url, doi, isbn, pmid, evidenceLevel,
+        });
+      }
     }
     return { allowed: true as const, sources };
   },

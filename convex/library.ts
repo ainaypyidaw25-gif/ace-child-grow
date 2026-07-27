@@ -7,7 +7,7 @@
 import { query, mutation } from './_generated/server';
 import { v } from 'convex/values';
 import { getAuthUserId } from '@convex-dev/auth/server';
-import { hasStaffRole, requireContentEditor, requireProfessionalPublisher } from './lib/auth';
+import { hasStaffRole, requireClinicalPublisher, requireContentEditor, requireProfessionalPublisher } from './lib/auth';
 import { logAudit } from './audit';
 import { resolveEntitlements } from './lib/entitlements';
 import { STARTER_ANIMATION_SLUGS } from './animationPlan';
@@ -28,10 +28,25 @@ export const listByType = query({
     if (!userId) return { staff: false, items: [] };
     const staff = await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'clinical_reviewer']);
 
-    let rows = await ctx.db
-      .query('libraryContent')
-      .withIndex('by_type', (qq) => qq.eq('type', args.type))
-      .collect();
+    let rows = args.ageGroupKey
+      ? await ctx.db
+          .query('libraryContent')
+          .withIndex('by_type_age', (qq) => qq.eq('type', args.type).eq('ageGroupKey', args.ageGroupKey))
+          .collect()
+      : args.domainKey
+        ? await ctx.db
+            .query('libraryContent')
+            .withIndex('by_type_domain', (qq) => qq.eq('type', args.type).eq('domainKey', args.domainKey))
+            .collect()
+        : args.category
+          ? await ctx.db
+              .query('libraryContent')
+              .withIndex('by_type_category', (qq) => qq.eq('type', args.type).eq('category', args.category))
+              .collect()
+          : await ctx.db
+              .query('libraryContent')
+              .withIndex('by_type', (qq) => qq.eq('type', args.type))
+              .collect();
 
     if (args.ageGroupKey) rows = rows.filter((r) => r.ageGroupKey === args.ageGroupKey);
     if (args.domainKey) rows = rows.filter((r) => r.domainKey === args.domainKey);
@@ -409,12 +424,16 @@ export const setReview = mutation({
     reviewNote: v.optional(v.string()),
     nextReviewAt: v.optional(v.number()),
   },
+  returns: v.object({
+    ok: v.literal(true),
+    reviewScope: v.union(v.literal('clinical'), v.null()),
+  }),
   handler: async (ctx, args) => {
     if (!['draft', 'clinical_review', 'published'].includes(args.clinicalStatus)) {
       throw new Error('Invalid status');
     }
     const approval = args.clinicalStatus === 'published'
-      ? await requireProfessionalPublisher(ctx)
+      ? await requireClinicalPublisher(ctx)
       : null;
     const userId = approval?.userId ?? await requireContentEditor(ctx);
     const item = await ctx.db
@@ -435,6 +454,6 @@ export const setReview = mutation({
       updatedAt: now,
     });
     await logAudit(ctx, userId, `library.${args.clinicalStatus}`, 'libraryContent', item._id, item.titleEn);
-    return { ok: true, reviewScope: approval?.scope ?? null };
+    return { ok: true as const, reviewScope: approval ? 'clinical' as const : null };
   },
 });

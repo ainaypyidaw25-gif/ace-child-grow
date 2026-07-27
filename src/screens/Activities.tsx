@@ -61,7 +61,7 @@ export function Activities() {
                     contentSlug: activity.slug,
                     durationMinutes: activity.durationMinutes,
                   })}
-                  className="mt-4 rounded-pill bg-sky-deep px-4 py-2 text-sm font-semibold text-white"
+                  className="mt-4 min-h-touch rounded-pill bg-sky-deep px-4 py-2 text-sm font-semibold text-white"
                 >
                   {L('ပြီးပြီဟု မှတ်မည်', 'Mark complete')}
                 </button>
