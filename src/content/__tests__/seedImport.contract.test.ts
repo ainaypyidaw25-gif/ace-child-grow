@@ -1,6 +1,16 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { CONTENT_SEED, seedPayload } from '../seed';
+import { AGE_GROUP_KEYS, DOMAIN_KEYS } from '../taxonomy';
+import { EVIDENCE_LINKS } from '../../evidence/links';
+import { EVIDENCE_SOURCES } from '../../evidence/sources';
+import {
+  seedAuditSummary,
+  seedMayUpdateExisting,
+  seedMediaIsProtected,
+} from '../../../convex/lib/seedPolicy';
+import { importSeed } from '../../../convex/library';
+import { run as seedRun } from '../../../convex/seed';
 
 // Seed generation + import-safety contract.
 //
@@ -54,6 +64,31 @@ describe('seed generation', () => {
     // hold exactly what the registry produces.
     expect(onDisk.length).toBe(CONTENT_SEED.length);
   });
+
+  it('all taxonomy references resolve and every 13m–5y band is importable', () => {
+    const olderBands = ['13_18m', '19_24m', '2y', '2_5y', '3y', '3_5y', '4y', '4_5y', '5y'];
+    for (const item of seedPayload()) {
+      if (item.ageGroupKey) expect(AGE_GROUP_KEYS, `${item.slug} age band`).toContain(item.ageGroupKey);
+      if (item.domainKey) expect(DOMAIN_KEYS, `${item.slug} domain`).toContain(item.domainKey);
+    }
+    for (const band of olderBands) {
+      expect(seedPayload().some((item) => item.ageGroupKey === band), band).toBe(true);
+    }
+  });
+
+  it('every evidence link points to an existing content item and registry source', () => {
+    const contentSlugs = new Set(seedPayload().map((item) => item.slug));
+    const sourceIds = new Set(EVIDENCE_SOURCES.map((source) => source.id));
+    const contentKinds = new Set(['milestone', 'guide', 'activity', 'lesson', 'special_need', 'story', 'printable']);
+    for (const link of EVIDENCE_LINKS) {
+      if (contentKinds.has(link.kind)) {
+        expect(contentSlugs.has(link.slug), `${link.kind}:${link.slug}`).toBe(true);
+      }
+      for (const sourceId of link.sourceIds) {
+        expect(sourceIds.has(sourceId), `${link.kind}:${link.slug} → ${sourceId}`).toBe(true);
+      }
+    }
+  });
 });
 
 // --- Idempotent upsert model ------------------------------------------------
@@ -63,7 +98,16 @@ describe('seed generation', () => {
 // per slug, and nothing is ever deleted from content or from unrelated tables.
 
 type Row = Record<string, unknown> & { _id: string; slug: string };
-type MediaRow = { _id: string; contentSlug: string; kind: string };
+type MediaRow = {
+  _id: string;
+  contentSlug: string;
+  kind: string;
+  placeholder?: boolean;
+  storageId?: string;
+  url?: string;
+  reviewStatus?: string;
+  note?: string;
+};
 
 class FakeDb {
   libraryContent: Row[] = [];
@@ -97,7 +141,7 @@ class FakeDb {
     this.libraryMedia = this.libraryMedia.filter((m) => m._id !== id);
   }
 
-  insertMedia(doc: { contentSlug: string; kind: string }) {
+  insertMedia(doc: Omit<MediaRow, '_id'>) {
     this.libraryMedia.push({ ...doc, _id: this.id() });
   }
 }
@@ -105,10 +149,15 @@ class FakeDb {
 function runImport(db: FakeDb, items: ReturnType<typeof seedPayload>, now: number) {
   let created = 0;
   let updated = 0;
+  let skippedApproved = 0;
   for (const it of items) {
     const { media, ...content } = it;
     const existing = db.findBySlug(it.slug);
     if (existing) {
+      if (!seedMayUpdateExisting(String(existing.clinicalStatus))) {
+        skippedApproved += 1;
+        continue;
+      }
       db.patchContent(existing._id, {
         ...content,
         // Never override a human review decision on re-seed.
@@ -124,10 +173,29 @@ function runImport(db: FakeDb, items: ReturnType<typeof seedPayload>, now: numbe
       db.insertContent({ ...content, clinicalStatus, createdAt: now, updatedAt: now });
       created += 1;
     }
-    for (const m of db.mediaForSlug(it.slug)) db.deleteMedia(m._id as string);
-    for (const mref of media) db.insertMedia({ contentSlug: it.slug, kind: mref.kind });
+    const existingMedia = db.mediaForSlug(it.slug);
+    for (const m of existingMedia) {
+      if (!seedMediaIsProtected(m)) db.deleteMedia(m._id);
+    }
+    for (const mref of media) {
+      if (existingMedia.some((row) => row.kind === mref.kind && seedMediaIsProtected(row))) continue;
+      db.insertMedia({
+        contentSlug: it.slug,
+        kind: mref.kind,
+        placeholder: mref.placeholder ?? true,
+        offline: mref.offline,
+        note: mref.note,
+      } as Omit<MediaRow, '_id'>);
+    }
   }
-  return { created, updated, total: items.length };
+  return { created, updated, skippedApproved, total: items.length };
+}
+
+function semanticMedia(rows: MediaRow[]) {
+  return rows.map(({ _id, ...row }) => {
+    void _id;
+    return row;
+  });
 }
 
 describe('seed import safety (upsert contract model)', () => {
@@ -152,20 +220,92 @@ describe('seed import safety (upsert contract model)', () => {
     expect(new Set(slugs).size).toBe(slugs.length);
   });
 
-  it('re-import never overwrites a human review decision (published stays published)', () => {
+  it('re-import leaves an approved row and its media byte-stable', () => {
     const db = new FakeDb();
     runImport(db, payload, 1000);
     const target = db.libraryContent[0];
+    const originalMedia = db.mediaForSlug(target.slug).map((row) => ({ ...row }));
     db.patchContent(target._id, {
       clinicalStatus: 'published',
       reviewerId: 'reviewer_1',
       reviewedAt: 1500,
+      titleEn: 'Human-approved title',
+      source: 'Human-approved source',
+      data: { approved: true },
     });
-    runImport(db, payload, 2000);
+    const before = JSON.stringify(target);
+    const result = runImport(db, payload, 2000);
     const after = db.libraryContent.find((r) => r._id === target._id)!;
-    expect(after.clinicalStatus).toBe('published');
-    expect(after.reviewerId).toBe('reviewer_1');
-    expect(after.reviewedAt).toBe(1500);
+    expect(JSON.stringify(after)).toBe(before);
+    expect(db.mediaForSlug(target.slug)).toEqual(originalMedia);
+    expect(result.skippedApproved).toBe(1);
+  });
+
+  it('re-import still updates unapproved rows without duplicating media', () => {
+    const db = new FakeDb();
+    runImport(db, payload, 1000);
+    const target = db.libraryContent[0];
+    db.patchContent(target._id, { titleEn: 'Stale draft title', clinicalStatus: 'clinical_review' });
+    const mediaCount = db.mediaForSlug(target.slug).length;
+    const result = runImport(db, payload, 2000);
+    expect(db.findBySlug(target.slug)?.titleEn).toBe(payload[0].titleEn);
+    expect(db.mediaForSlug(target.slug)).toHaveLength(mediaCount);
+    expect(result.updated).toBe(payload.length);
+    expect(result.skippedApproved).toBe(0);
+  });
+
+  it('updates unapproved content while preserving approved uploaded media byte-stable', () => {
+    const db = new FakeDb();
+    runImport(db, payload, 1000);
+    const target = db.libraryContent.find((row) => {
+      const item = payload.find((candidate) => candidate.slug === row.slug);
+      return item?.media.some((media) => media.kind === 'illustration');
+    })!;
+    db.libraryMedia = db.libraryMedia.filter((row) => row.contentSlug !== target.slug);
+    db.insertMedia({
+      contentSlug: target.slug,
+      kind: 'illustration',
+      placeholder: false,
+      storageId: 'storage-approved',
+      reviewStatus: 'approved',
+      note: 'Human-approved upload',
+    });
+    const protectedBefore = JSON.stringify(
+      db.mediaForSlug(target.slug).filter(seedMediaIsProtected),
+    );
+    db.patchContent(target._id, { titleEn: 'Stale draft title', clinicalStatus: 'clinical_review' });
+
+    const result = runImport(db, payload, 2000);
+
+    expect(db.findBySlug(target.slug)?.titleEn).not.toBe('Stale draft title');
+    expect(JSON.stringify(db.mediaForSlug(target.slug).filter(seedMediaIsProtected))).toBe(protectedBefore);
+    expect(result.updated).toBe(payload.length);
+  });
+
+  it('refreshes unresolved placeholders deterministically without accumulation', () => {
+    const db = new FakeDb();
+    runImport(db, payload, 1000);
+    const firstSemantic = semanticMedia(db.libraryMedia);
+    runImport(db, payload, 2000);
+    const secondSemantic = semanticMedia(db.libraryMedia);
+    expect(secondSemantic).toEqual(firstSemantic);
+  });
+
+  it('declares exact result validators and stable audit counts for both seed paths', () => {
+    const expectedFields = ['created', 'skippedApproved', 'total', 'updated'];
+    for (const registered of [importSeed, seedRun]) {
+      const validator = JSON.parse(
+        (registered as unknown as { exportReturns: () => string }).exportReturns(),
+      );
+      expect(Object.keys(validator.value).sort()).toEqual(expectedFields);
+      for (const field of expectedFields) {
+        expect(validator.value[field]).toEqual({
+          fieldType: { type: 'number' },
+          optional: false,
+        });
+      }
+    }
+    expect(seedAuditSummary(2, 3, 4)).toBe('created 2, updated 3, protected 4');
   });
 
   it('import can never create published content (insert clamps to clinical_review)', () => {

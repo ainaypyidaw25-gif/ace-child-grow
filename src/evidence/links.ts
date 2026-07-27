@@ -206,12 +206,15 @@ export const EXPLICIT_CONTENT_SOURCES: Record<string, string[]> = {
   act_peekaboo: ['aap-power-of-play-2018', 'who-care-for-child-development-2012'],
   act_cup_stacking: ['tb-case-smith-9e-2025', 'aap-power-of-play-2018'],
   act_name_and_point: ['jr-weisleder-2013', 'nhs-learn-to-talk-2023'],
+  act_copy_everyday_actions: ['aap-power-of-play-2018', 'who-care-for-child-development-2012'],
   act_obstacle_crawl: ['jr-who-motor-windows-2006', 'who-pa-sleep-under5-2019'],
   act_color_sort: ['aap-power-of-play-2018', 'tb-dbp-5e-2022'],
   act_feeling_faces: ['nice-ph40-social-emotional-2012', 'aap-toxic-stress-2021'],
+  act_follow_the_pattern: ['aap-power-of-play-2018', 'tb-dbp-5e-2022'],
   act_water_pouring: ['tb-case-smith-9e-2025', 'aap-drowning-2021'],
   act_obstacle_course: ['who-pa-sleep-under5-2019', 'tb-campbell-pt-6e-2022'],
   act_story_sequence: ['jr-dowdall-bookreading-2020', 'hc-early-literacy-2023'],
+  act_draw_and_tell: ['aap-power-of-play-2018', 'hc-early-literacy-2023'],
   act_name_writing: ['hc-early-literacy-2023', 'tb-handbook-ecse-2016'],
 
   // --- Lessons --------------------------------------------------------------

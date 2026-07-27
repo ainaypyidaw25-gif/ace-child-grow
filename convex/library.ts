@@ -11,6 +11,7 @@ import { hasStaffRole, requireContentEditor, requireProfessionalPublisher } from
 import { logAudit } from './audit';
 import { resolveEntitlements } from './lib/entitlements';
 import { STARTER_ANIMATION_SLUGS } from './animationPlan';
+import { seedAuditSummary, seedMayUpdateExisting, seedMediaIsProtected } from './lib/seedPolicy';
 
 // List content by type, optionally filtered by age/domain/category and a query.
 // Non-staff receive only 'published'; staff receive all statuses.
@@ -323,16 +324,23 @@ const seedItemValidator = v.object({
   searchText: v.string(),
 });
 
-// Idempotent import: upsert by slug. Preserves existing clinicalStatus/reviewer
-// on already-imported items (so a re-seed never silently un-publishes reviewed
-// content). Staff-only; audited. Replaces media placeholders for the slug.
+// Idempotent import: upsert by slug. Published/approved rows are skipped in
+// full, including media, so an automated seed can never alter the exact
+// artefact a human approved. Staff-only; audited.
 export const importSeed = mutation({
   args: { items: v.array(seedItemValidator) },
+  returns: v.object({
+    created: v.number(),
+    updated: v.number(),
+    skippedApproved: v.number(),
+    total: v.number(),
+  }),
   handler: async (ctx, { items }) => {
     const userId = await requireContentEditor(ctx);
     const now = Date.now();
     let created = 0;
     let updated = 0;
+    let skippedApproved = 0;
     for (const it of items) {
       const existing = await ctx.db
         .query('libraryContent')
@@ -340,6 +348,10 @@ export const importSeed = mutation({
         .unique();
       const { media, ...content } = it;
       if (existing) {
+        if (!seedMayUpdateExisting(existing.clinicalStatus)) {
+          skippedApproved += 1;
+          continue;
+        }
         await ctx.db.patch(existing._id, {
           ...content,
           // Never override a human review decision on re-seed.
@@ -363,10 +375,10 @@ export const importSeed = mutation({
         .withIndex('by_content', (qq) => qq.eq('contentSlug', it.slug))
         .collect();
       for (const mrow of existingMedia) {
-        if (mrow.placeholder && !mrow.storageId && !mrow.url) await ctx.db.delete(mrow._id);
+        if (!seedMediaIsProtected(mrow)) await ctx.db.delete(mrow._id);
       }
       for (const mref of media) {
-        if (existingMedia.some((row) => row.kind === mref.kind && (!row.placeholder || row.storageId || row.url))) continue;
+        if (existingMedia.some((row) => row.kind === mref.kind && seedMediaIsProtected(row))) continue;
         await ctx.db.insert('libraryMedia', {
           contentSlug: it.slug,
           kind: mref.kind,
@@ -376,8 +388,15 @@ export const importSeed = mutation({
         });
       }
     }
-    await logAudit(ctx, userId, 'library.import', 'libraryContent', undefined, `created ${created}, updated ${updated}`);
-    return { created, updated, total: items.length };
+    await logAudit(
+      ctx,
+      userId,
+      'library.import',
+      'libraryContent',
+      undefined,
+      seedAuditSummary(created, updated, skippedApproved),
+    );
+    return { created, updated, skippedApproved, total: items.length };
   },
 });
 

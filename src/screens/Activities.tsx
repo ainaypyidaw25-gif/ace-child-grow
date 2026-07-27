@@ -4,7 +4,7 @@ import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
 import { useAppState } from '../app/AppState';
 import { chronologicalAge } from '../domain/age/age';
-import { AGE_GROUPS } from '../content/taxonomy';
+import { resolveAgeGroup } from '../content/taxonomy';
 import { NoChild } from './Growth';
 
 export function Activities() {
@@ -13,7 +13,7 @@ export function Activities() {
   const ageMonths = activeChild
     ? chronologicalAge(new Date(activeChild.birthDate), new Date()).totalMonths
     : 0;
-  const ageGroupKey = AGE_GROUPS.find((group) => ageMonths >= group.minMonths && ageMonths <= group.maxMonths)?.key;
+  const ageGroupKey = resolveAgeGroup(ageMonths)?.key;
   const data = useQuery(api.library.listByType, { type: 'activity', ageGroupKey });
   const subscription = useQuery(api.subscriptions.mine);
   const favKeys = useQuery(api.favorites.list) ?? [];
@@ -75,7 +75,7 @@ export function Activities() {
         <section className="rounded-[28px] border border-line bg-white p-6 text-center">
           <div className="text-4xl" aria-hidden>🌱</div>
           <h2 className="mt-3 font-bold text-ink">{L('ဤအသက်အရွယ်အတွက် လှုပ်ရှားမှုများ ပြင်ဆင်ဆဲဖြစ်သည်', 'Activities for this age are being prepared')}</h2>
-          <p className="mt-2 text-sm text-ink-soft">{L('လက်ရှိအပြည့်အစုံ သုံးနိုင်သော အသက်အပိုင်းအခြားမှာ မွေးကင်းမှ ၁၂ လအထိ ဖြစ်ပါသည်။', 'The currently complete range is birth through 12 months.')}</p>
+          <p className="mt-2 text-sm text-ink-soft">{L('ဤအသက်အရွယ်အတွက် လမ်းညွှန်ထားသော အကြောင်းအရာကို ဆေးဘက်ဆိုင်ရာနှင့် ဘာသာစကား ပြန်လည်သုံးသပ်မှု ပြီးစီးမှသာ ဖော်ပြပါမည်။', 'Guidance for this age will appear only after its clinical and language review is complete.')}</p>
         </section>
       ) : (
         <section>

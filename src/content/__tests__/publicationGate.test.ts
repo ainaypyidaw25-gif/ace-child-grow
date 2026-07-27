@@ -27,4 +27,9 @@ describe('professionally scoped publication gate', () => {
       expect(source, file).toContain('UnreviewedContentNotice');
     }
   });
+
+  it('filters clinical-review library rows from both non-staff list and detail queries', () => {
+    expect(librarySource).toContain("if (!staff) rows = rows.filter((r) => r.clinicalStatus === 'published')");
+    expect(librarySource).toContain("if (!staff && item.clinicalStatus !== 'published') return { restricted: true }");
+  });
 });

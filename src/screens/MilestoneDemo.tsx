@@ -8,7 +8,7 @@ import { SafetyBanner } from '../components/SafetyBanner';
 import type { DevelopmentDomain, MilestoneAnswer } from '../domain/types';
 import type { TranslationKey } from '../i18n';
 import { chronologicalAge } from '../domain/age/age';
-import { AGE_GROUPS } from '../content/taxonomy';
+import { resolveAgeGroup } from '../content/taxonomy';
 import { NoChild } from './Growth';
 
 const ANSWER_KEYS: Record<MilestoneAnswer, TranslationKey> = {
@@ -47,7 +47,7 @@ export function MilestoneDemo() {
   const ageMonths = activeChild
     ? chronologicalAge(new Date(activeChild.birthDate), new Date()).totalMonths
     : 0;
-  const ageGroupKey = AGE_GROUPS.find((group) => ageMonths >= group.minMonths && ageMonths <= group.maxMonths)?.key;
+  const ageGroupKey = resolveAgeGroup(ageMonths)?.key;
   const data = useQuery(api.library.listByType, {
     type: 'milestone',
     ageGroupKey,

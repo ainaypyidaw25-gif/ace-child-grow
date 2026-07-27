@@ -138,6 +138,8 @@ export interface ActivityArgs {
   lowCost?: boolean;
   offline?: boolean;
   tags?: string[];
+  /** Editorial evidence note only; never an approval or clinical conclusion. */
+  evidenceSummary?: string;
 }
 
 export function activity(a: ActivityArgs): SeedItem {
@@ -161,6 +163,7 @@ export function activity(a: ActivityArgs): SeedItem {
       outcomes: a.outcomes,
       variations: a.variations ?? [],
       lowCost: a.lowCost ?? true,
+      evidenceSummary: a.evidenceSummary,
     },
     media: [
       { kind: 'illustration', placeholder: true, offline: true },
