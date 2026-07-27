@@ -19,13 +19,18 @@ professional before it reaches parents as approved guidance.
    subject to editorial change without a safety review.
 
 ## Workflow (Admin CMS)
-`Draft → Content Review → Translation Review → Clinical Review → Approved →
-Published → Archived`. Each transition is recorded in `clinical_reviews` and
-`audit_logs` with reviewer identity and qualification.
+Library review is revision-bound. English copy, native-Myanmar language,
+evidence, safety and clinical decisions are recorded separately in
+`contentReviews`. Publishing is blocked until all five areas are approved for
+the current revision and the final publish action is performed by a named,
+qualified clinical reviewer. Every decision and transition is also written to
+`auditLogs`.
 
 ## Reviewer record
-Each review captures `reviewer_id`, `reviewer_qualification`, `decision`,
-`notes`, `reviewed_at`, and sets `next_review_at` for periodic re-review.
+Each review captures `reviewerId`, `reviewerDisplayName`, `reviewerRole`,
+`reviewerQualification`, `decision`, `note`, `reviewedAt`, and the exact
+`contentVersion`. Editing content increments its review revision, so older
+approvals remain visible history but are no longer current.
 
 ## When no clinical reviewer is assigned
 The owner may receive staff access to inspect unpublished drafts, translations,

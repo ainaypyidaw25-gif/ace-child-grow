@@ -17,6 +17,7 @@ import type * as auth from "../auth.js";
 import type * as billing from "../billing.js";
 import type * as children from "../children.js";
 import type * as content from "../content.js";
+import type * as contentReviews from "../contentReviews.js";
 import type * as crons from "../crons.js";
 import type * as directory from "../directory.js";
 import type * as evidence from "../evidence.js";
@@ -56,6 +57,7 @@ declare const fullApi: ApiFromModules<{
   billing: typeof billing;
   children: typeof children;
   content: typeof content;
+  contentReviews: typeof contentReviews;
   crons: typeof crons;
   directory: typeof directory;
   evidence: typeof evidence;

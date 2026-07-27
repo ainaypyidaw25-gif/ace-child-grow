@@ -25,7 +25,7 @@ export const list = query({
     // found this to be the one read a stranger could reach, and an exception to
     // a rule is how the rule stops being checked. Signed out is signed out.
     if (!userId) return { staff: false, items: [] };
-    const staff = await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'clinical_reviewer']);
+    const staff = await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'language_reviewer', 'evidence_reviewer', 'clinical_reviewer']);
     const all = await ctx.db.query('contentItems').collect();
     // Non-staff see only published items; staff see everything.
     return { staff, items: staff ? all : all.filter((i) => i.reviewStatus === 'published') };

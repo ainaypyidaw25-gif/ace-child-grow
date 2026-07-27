@@ -182,7 +182,7 @@ export const list = query({
   },
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
-    if (!userId || !(await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'clinical_reviewer']))) return EMPTY_LIST;
+    if (!userId || !(await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'evidence_reviewer', 'clinical_reviewer']))) return EMPTY_LIST;
 
     let rows = await ctx.db.query('evidenceSources').collect();
 
@@ -223,7 +223,7 @@ export const getSource = query({
   args: { sourceId: v.string() },
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
-    if (!userId || !(await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'clinical_reviewer']))) return null;
+    if (!userId || !(await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'evidence_reviewer', 'clinical_reviewer']))) return null;
     const source = await ctx.db
       .query('evidenceSources')
       .withIndex('by_source_id', (qq) => qq.eq('sourceId', args.sourceId))
@@ -280,7 +280,7 @@ export const stats = query({
   args: {},
   handler: async (ctx) => {
     const userId = await getAuthUserId(ctx);
-    if (!userId || !(await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'clinical_reviewer']))) {
+    if (!userId || !(await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'evidence_reviewer', 'clinical_reviewer']))) {
       return {
         allowed: false as const,
         total: 0,

@@ -4,11 +4,13 @@ import type { Id } from '../../convex/_generated/dataModel';
 import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
 
-type StaffRole = 'owner' | 'content_editor' | 'clinical_reviewer' | 'support';
+type StaffRole = 'owner' | 'content_editor' | 'language_reviewer' | 'evidence_reviewer' | 'clinical_reviewer' | 'support';
 
 const ROLE_LABELS: Record<StaffRole, { mm: string; en: string }> = {
   owner: { mm: 'ပိုင်ရှင်', en: 'Owner' },
   content_editor: { mm: 'အကြောင်းအရာ တည်းဖြတ်သူ', en: 'Content editor' },
+  language_reviewer: { mm: 'မြန်မာဘာသာစကား သုံးသပ်သူ', en: 'Native-language reviewer' },
+  evidence_reviewer: { mm: 'ကိုးကားအထောက်အထား သုံးသပ်သူ', en: 'Evidence reviewer' },
   clinical_reviewer: { mm: 'ဆေးဘက်ဆိုင်ရာ သုံးသပ်သူ', en: 'Clinical reviewer' },
   support: { mm: 'အသုံးပြုသူအကူအညီပေးသူ', en: 'Support' },
 };
@@ -47,7 +49,7 @@ function MemberRow({
             <option key={key} value={key}>{ROLE_LABELS[key][locale]}</option>
           ))}
         </select>
-        {role === 'clinical_reviewer' && (
+        {['clinical_reviewer', 'evidence_reviewer'].includes(role) && (
           <>
             <input
               value={displayName}
@@ -70,7 +72,7 @@ function MemberRow({
         <div className="flex flex-wrap gap-2">
           <button
             type="button"
-            disabled={busy || (role === 'clinical_reviewer' && (!displayName.trim() || !qualification.trim()))}
+            disabled={busy || (['clinical_reviewer', 'evidence_reviewer'].includes(role) && (!displayName.trim() || !qualification.trim()))}
             onClick={async () => {
               setBusy(true);
               try {
@@ -78,7 +80,7 @@ function MemberRow({
                   userId: member.userId,
                   role,
                   displayName: displayName.trim() || undefined,
-                  reviewerQualification: role === 'clinical_reviewer' ? qualification.trim() : undefined,
+                  reviewerQualification: ['clinical_reviewer', 'evidence_reviewer'].includes(role) ? qualification.trim() : undefined,
                 });
               } finally {
                 setBusy(false);
@@ -148,7 +150,7 @@ export function AdminTeam() {
               email,
               displayName,
               role,
-              reviewerQualification: role === 'clinical_reviewer' ? qualification.trim() : undefined,
+              reviewerQualification: ['clinical_reviewer', 'evidence_reviewer'].includes(role) ? qualification.trim() : undefined,
             });
             setInviteLink(`${window.location.origin}/admin/accept-invite?code=${encodeURIComponent(result.inviteCode)}`);
             setEmail('');
@@ -188,12 +190,12 @@ export function AdminTeam() {
             <option key={key} value={key}>{ROLE_LABELS[key][locale]}</option>
           ))}
         </select>
-        {role === 'clinical_reviewer' && (
+        {['clinical_reviewer', 'evidence_reviewer'].includes(role) && (
           <input
             required
             value={qualification}
             onChange={(event) => setQualification(event.target.value)}
-            placeholder={locale === 'mm' ? 'ဆေးဘက်ဆိုင်ရာ ပညာအရည်အချင်း' : 'Clinical qualification'}
+            placeholder={locale === 'mm' ? 'သက်ဆိုင်ရာ ပညာအရည်အချင်း' : 'Relevant professional qualification'}
             className="w-full rounded-lg border border-line px-3 py-2"
           />
         )}

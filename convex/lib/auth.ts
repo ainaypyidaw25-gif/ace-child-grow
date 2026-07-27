@@ -10,7 +10,13 @@ import type { Doc, Id } from '../_generated/dataModel';
 import { activeFamilyOwnerIds } from './entitlements';
 
 export type Ctx = QueryCtx | MutationCtx;
-export type StaffRole = 'owner' | 'content_editor' | 'clinical_reviewer' | 'support';
+export type StaffRole =
+  | 'owner'
+  | 'content_editor'
+  | 'language_reviewer'
+  | 'evidence_reviewer'
+  | 'clinical_reviewer'
+  | 'support';
 
 export type StaffAccess = {
   role: StaffRole;
@@ -89,7 +95,20 @@ export async function requireContentEditor(ctx: Ctx): Promise<Id<'users'>> {
 }
 
 export async function requireEvidenceEditor(ctx: Ctx): Promise<Id<'users'>> {
-  return (await requireOneOf(ctx, ['owner', 'content_editor', 'clinical_reviewer'])).userId;
+  return (await requireOneOf(ctx, ['owner', 'content_editor', 'evidence_reviewer', 'clinical_reviewer'])).userId;
+}
+
+/** Staff who may edit a review draft. Publishing remains a separate permission. */
+export async function requireReviewEditor(
+  ctx: Ctx,
+): Promise<{ userId: Id<'users'>; access: StaffAccess }> {
+  return await requireOneOf(ctx, [
+    'owner',
+    'content_editor',
+    'language_reviewer',
+    'evidence_reviewer',
+    'clinical_reviewer',
+  ]);
 }
 
 export async function requireClinicalReviewer(

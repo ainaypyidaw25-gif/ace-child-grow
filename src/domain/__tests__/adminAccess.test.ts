@@ -20,7 +20,7 @@ describe('admin team and subscription security', () => {
   const auth = source('auth.ts');
 
   it('defines explicit staff roles and invite indexes', () => {
-    for (const role of ['owner', 'content_editor', 'clinical_reviewer', 'support']) {
+    for (const role of ['owner', 'content_editor', 'language_reviewer', 'evidence_reviewer', 'clinical_reviewer', 'support']) {
       expect(schema).toContain(`v.literal('${role}')`);
     }
     expect(schema).toContain(".index('by_code_hash', ['codeHash'])");
@@ -39,6 +39,13 @@ describe('admin team and subscription security', () => {
   it('does not let an owner impersonate a clinical reviewer', () => {
     expect(auth).toContain("requireOneOf(ctx, ['clinical_reviewer'])");
     expect(auth).toContain('Clinical reviewer qualification is required');
+  });
+
+  it('stores version-bound, reviewer-attributed decisions outside content documents', () => {
+    expect(schema).toContain('contentReviews: defineTable({');
+    expect(schema).toContain(".index('by_content_dimension_version'");
+    expect(schema).toContain('reviewerDisplayName: v.string()');
+    expect(schema).toContain('contentVersion: v.number()');
   });
 
   it('records qualified owner publishing as education scope, never clinical scope', () => {

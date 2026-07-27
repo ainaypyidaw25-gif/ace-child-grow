@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react';
+import { Link } from 'react-router-dom';
 import { useQuery, useMutation } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import type { Id } from '../../convex/_generated/dataModel';
@@ -156,6 +157,9 @@ export function LibraryAdmin() {
   return (
     <div className="space-y-4">
       <h1 className="text-xl font-bold text-sky-deep">{L('အကြောင်းအရာ စီမံခန့်ခွဲရေး', 'Content CMS')}</h1>
+      <Link to="/admin/reviews" className="inline-flex rounded-pill bg-sky px-5 py-2 text-sm font-semibold text-white">
+        {L('အကြောင်းအရာ တည်းဖြတ်ပြီး သုံးသပ်ရန်', 'Edit and review content')}
+      </Link>
 
       <p className="rounded-lg bg-pastel-yellow/60 px-3 py-2 text-sm text-ink">
         {L(
@@ -211,8 +215,8 @@ export function LibraryAdmin() {
         )}
         {msg && <p className="mt-2 text-sm text-ink-soft">{msg}</p>}
         <p className="mt-2 text-[11px] text-ink-soft">
-          {L('အကြောင်းအရာကို ထပ်မပွားစေဘဲ တင်သွင်းနိုင်ပြီး ပြန်လည်သုံးသပ်ထားသည့် အခြေအနေကို မပြောင်းလဲပါ။',
-             'Import is idempotent and never overrides an existing review decision.')}
+          {L('အကြောင်းအရာကို ထပ်မပွားစေဘဲ တင်သွင်းနိုင်ပါသည်။ ပြောင်းလဲထားသောမူကွဲသည် အသစ်ပြန်လည်သုံးသပ်ရပြီး ယခင်ဆုံးဖြတ်ချက်များကို မှတ်တမ်းအဖြစ်သာ ထိန်းသိမ်းထားသည်။',
+             'Import is idempotent. Changed revisions require fresh review; prior decisions remain history only.')}
         </p>
       </section>
 
@@ -243,7 +247,7 @@ export function LibraryAdmin() {
                       }`}>
                       {s === 'published'
                         ? access?.role === 'clinical_reviewer' && it.reviewScope !== 'clinical'
-                          ? L('ဆေးဘက်ဆိုင်ရာ အတည်ပြုမည်', 'Clinical approval')
+                          ? L('သုံးသပ်ပြီးသော မူကွဲကို ထုတ်ဝေမည်', 'Publish reviewed revision')
                           : L('ထုတ်ဝေမည်', 'Publish')
                         : s === 'clinical_review' ? L('သုံးသပ်ရန်', 'Review') : L('မူကြမ်း', 'Draft')}
                     </button>

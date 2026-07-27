@@ -7,7 +7,7 @@
 import { query, mutation } from './_generated/server';
 import { v } from 'convex/values';
 import { getAuthUserId } from '@convex-dev/auth/server';
-import { hasStaffRole, requireClinicalPublisher, requireContentEditor, requireProfessionalPublisher } from './lib/auth';
+import { hasStaffRole, requireClinicalPublisher, requireContentEditor, requireProfessionalPublisher, requireReviewEditor } from './lib/auth';
 import { logAudit } from './audit';
 import { resolveEntitlements } from './lib/entitlements';
 import { STARTER_ANIMATION_SLUGS } from './animationPlan';
@@ -26,7 +26,7 @@ export const listByType = query({
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) return { staff: false, items: [] };
-    const staff = await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'clinical_reviewer']);
+    const staff = await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'language_reviewer', 'evidence_reviewer', 'clinical_reviewer']);
 
     let rows = args.ageGroupKey
       ? await ctx.db
@@ -68,7 +68,7 @@ export const getBySlug = query({
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) return null;
-    const staff = await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'clinical_reviewer']);
+    const staff = await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'language_reviewer', 'evidence_reviewer', 'clinical_reviewer']);
     const item = await ctx.db
       .query('libraryContent')
       .withIndex('by_slug', (qq) => qq.eq('slug', args.slug))
@@ -272,7 +272,7 @@ export const search = query({
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) return [];
-    const staff = await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'clinical_reviewer']);
+    const staff = await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'language_reviewer', 'evidence_reviewer', 'clinical_reviewer']);
     const needle = args.q.trim().toLowerCase();
     if (!needle) return [];
     let rows = args.type
@@ -292,7 +292,7 @@ export const stats = query({
   handler: async (ctx) => {
     const userId = await getAuthUserId(ctx);
     // Staff-only: coverage/status counts (incl. unpublished) are an admin view.
-    if (!userId || !(await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'clinical_reviewer']))) {
+    if (!userId || !(await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'language_reviewer', 'evidence_reviewer', 'clinical_reviewer']))) {
       return { allowed: false, total: 0, byType: {}, byStatus: {}, ages: [], domains: [] };
     }
     const rows = await ctx.db.query('libraryContent').collect();
@@ -369,11 +369,19 @@ export const importSeed = mutation({
         }
         await ctx.db.patch(existing._id, {
           ...content,
-          // Never override a human review decision on re-seed.
+          // Preserve the workflow state; review decisions remain in the
+          // append-only review history rather than on this changed revision.
           clinicalStatus: existing.clinicalStatus,
-          reviewerId: existing.reviewerId,
-          reviewedAt: existing.reviewedAt,
-          nextReviewAt: existing.nextReviewAt,
+          // The seed may contain new wording. Preserve old decisions as audit
+          // history, but never let them authorize content they did not review.
+          reviewRevision: (existing.reviewRevision ?? 1) + 1,
+          reviewerId: undefined,
+          reviewerQualification: undefined,
+          reviewerDisplayName: undefined,
+          reviewScope: undefined,
+          reviewedAt: undefined,
+          nextReviewAt: undefined,
+          reviewNote: undefined,
           updatedAt: now,
         });
         updated++;
@@ -415,6 +423,75 @@ export const importSeed = mutation({
   },
 });
 
+// Reviewer-facing editor. Content lives in Convex, not component constants.
+// Every edit creates a new review revision and returns the item to review; old
+// decisions remain in contentReviews as history but cannot publish this revision.
+export const updateDraft = mutation({
+  args: {
+    slug: v.string(),
+    titleMm: v.string(),
+    titleEn: v.string(),
+    summaryMm: v.optional(v.string()),
+    summaryEn: v.optional(v.string()),
+    data: v.any(),
+  },
+  returns: v.object({ ok: v.literal(true), reviewRevision: v.number() }),
+  handler: async (ctx, args) => {
+    const { userId } = await requireReviewEditor(ctx);
+    const item = await ctx.db
+      .query('libraryContent')
+      .withIndex('by_slug', (q) => q.eq('slug', args.slug))
+      .unique();
+    if (!item) throw new Error('Content not found');
+    const titleMm = args.titleMm.trim();
+    const titleEn = args.titleEn.trim();
+    if (!titleMm || !titleEn) throw new Error('Myanmar and English titles are required');
+    const summaryMm = args.summaryMm?.trim() || undefined;
+    const summaryEn = args.summaryEn?.trim() || undefined;
+    const reviewRevision = (item.reviewRevision ?? 1) + 1;
+    const now = Date.now();
+    const searchText = [
+      titleMm,
+      titleEn,
+      summaryMm ?? '',
+      summaryEn ?? '',
+      item.tags.join(' '),
+      JSON.stringify(args.data),
+    ].join(' ').toLowerCase();
+    await ctx.db.patch(item._id, {
+      titleMm,
+      titleEn,
+      summaryMm,
+      summaryEn,
+      data: args.data,
+      searchText,
+      reviewRevision,
+      clinicalStatus: 'clinical_review',
+      reviewerId: undefined,
+      reviewerQualification: undefined,
+      reviewerDisplayName: undefined,
+      reviewScope: undefined,
+      reviewedAt: undefined,
+      nextReviewAt: undefined,
+      reviewNote: undefined,
+      updatedAt: now,
+    });
+    await logAudit(
+      ctx,
+      userId,
+      'library.content.edit',
+      'libraryContent',
+      item._id,
+      `${args.slug} · review revision ${reviewRevision}`,
+      {
+        before: JSON.stringify({ titleMm: item.titleMm, titleEn: item.titleEn, reviewRevision: item.reviewRevision ?? 1 }),
+        after: JSON.stringify({ titleMm, titleEn, reviewRevision }),
+      },
+    );
+    return { ok: true as const, reviewRevision };
+  },
+});
+
 // Review transition (draft/clinical_review/published) with reviewer + dates.
 export const setReview = mutation({
   args: {
@@ -441,6 +518,24 @@ export const setReview = mutation({
       .withIndex('by_slug', (qq) => qq.eq('slug', args.slug))
       .unique();
     if (!item) throw new Error('Not found');
+    if (args.clinicalStatus === 'published') {
+      const revision = item.reviewRevision ?? 1;
+      const decisions = await ctx.db
+        .query('contentReviews')
+        .withIndex('by_content', (q) => q.eq('contentSlug', args.slug))
+        .order('desc')
+        .take(100);
+      const approved = new Set(
+        decisions
+          .filter((row) => row.contentVersion === revision && row.decision === 'approved')
+          .map((row) => row.dimension),
+      );
+      const required = ['english', 'native_myanmar', 'evidence', 'safety', 'clinical'] as const;
+      const missing = required.filter((dimension) => !approved.has(dimension));
+      if (missing.length > 0) {
+        throw new Error(`Current revision is missing review approvals: ${missing.join(', ')}`);
+      }
+    }
     const now = Date.now();
     await ctx.db.patch(item._id, {
       clinicalStatus: args.clinicalStatus,

@@ -73,6 +73,9 @@ export function AdminReviewQueue() {
             <Link to="/admin/library" className="rounded-pill border border-line px-4 py-2 text-sky-deep">
               {locale === 'mm' ? 'အကြောင်းအရာ စီမံခန့်ခွဲမှု' : 'Content CMS'}
             </Link>
+            <Link to="/admin/reviews" className="rounded-pill border border-line px-4 py-2 text-sky-deep">
+              {locale === 'mm' ? 'သုံးသပ်ရေးနေရာ' : 'Review workspace'}
+            </Link>
             <Link to="/admin/evidence" className="rounded-pill border border-line px-4 py-2 text-sky-deep">
               {locale === 'mm' ? 'ကိုးကားချက်များ ကြည့်ရန်' : 'View evidence'}
             </Link>

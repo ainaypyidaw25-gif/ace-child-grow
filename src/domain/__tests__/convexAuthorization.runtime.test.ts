@@ -21,7 +21,7 @@ import {
 type Profile = {
   userId: string;
   isStaff?: boolean;
-  staffRole?: 'owner' | 'content_editor' | 'clinical_reviewer' | 'support';
+  staffRole?: 'owner' | 'content_editor' | 'language_reviewer' | 'evidence_reviewer' | 'clinical_reviewer' | 'support';
   staffQualification?: string;
   displayName?: string;
 };

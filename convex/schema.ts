@@ -24,6 +24,8 @@ export default defineSchema({
       v.union(
         v.literal('owner'),
         v.literal('content_editor'),
+        v.literal('language_reviewer'),
+        v.literal('evidence_reviewer'),
         v.literal('clinical_reviewer'),
         v.literal('support'),
       ),
@@ -42,6 +44,8 @@ export default defineSchema({
     role: v.union(
       v.literal('owner'),
       v.literal('content_editor'),
+      v.literal('language_reviewer'),
+      v.literal('evidence_reviewer'),
       v.literal('clinical_reviewer'),
       v.literal('support'),
     ),
@@ -289,6 +293,7 @@ export default defineSchema({
     data: v.any(), // type-specific bilingual payload
     source: v.string(),
     version: v.number(),
+    reviewRevision: v.optional(v.number()),
     clinicalStatus: v.string(), // draft | clinical_review | published
     reviewerId: v.optional(v.id('users')),
     reviewerQualification: v.optional(v.string()),
@@ -307,6 +312,46 @@ export default defineSchema({
     .index('by_type_domain', ['type', 'domainKey'])
     .index('by_type_category', ['type', 'category'])
     .index('by_status', ['clinicalStatus']),
+
+  // Human review decisions are separate from the content document so the
+  // audit history survives later edits. A decision applies only to the exact
+  // contentVersion it reviewed; editing an item increments its review revision and
+  // makes older approvals visibly stale instead of silently reusing them.
+  contentReviews: defineTable({
+    contentSlug: v.string(),
+    contentVersion: v.number(),
+    dimension: v.union(
+      v.literal('english'),
+      v.literal('native_myanmar'),
+      v.literal('evidence'),
+      v.literal('safety'),
+      v.literal('clinical'),
+    ),
+    decision: v.union(
+      v.literal('in_review'),
+      v.literal('approved'),
+      v.literal('changes_requested'),
+      v.literal('not_applicable'),
+    ),
+    note: v.optional(v.string()),
+    reviewerId: v.id('users'),
+    reviewerDisplayName: v.string(),
+    reviewerQualification: v.optional(v.string()),
+    reviewerRole: v.union(
+      v.literal('owner'),
+      v.literal('content_editor'),
+      v.literal('language_reviewer'),
+      v.literal('evidence_reviewer'),
+      v.literal('clinical_reviewer'),
+      v.literal('support'),
+    ),
+    reviewedAt: v.number(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index('by_content_dimension_version', ['contentSlug', 'dimension', 'contentVersion'])
+    .index('by_content', ['contentSlug'])
+    .index('by_reviewer', ['reviewerId']),
 
   // Media architecture for library content. Only architecture + placeholders are
   // seeded; real assets are attached later via the CMS media system.
