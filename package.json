@@ -19,10 +19,16 @@
     "evidence:gate": "node scripts/evidence-gate-probe.mjs",
     "evidence:batch": "node scripts/evidence-review-pack.mjs",
     "evidence:batch:live": "node scripts/evidence-batch-live.mjs",
-    "seed:dump": "node scripts/dumpSeed.mjs"
+    "seed:dump": "node scripts/dumpSeed.mjs",
+    "android:add": "npx cap add android",
+    "android:sync": "npm run build && npx cap sync android",
+    "android:bundle": "npm run android:sync && cd android && ./gradlew bundleRelease"
   },
   "dependencies": {
     "@auth/core": "^0.41.3",
+    "@capacitor/android": "^8.4.2",
+    "@capacitor/app": "^8.0.1",
+    "@capacitor/core": "^8.4.2",
     "@convex-dev/auth": "^0.0.94",
     "@fontsource/noto-sans-myanmar": "^5.3.0",
     "@supabase/supabase-js": "^2.110.8",
@@ -35,6 +41,8 @@
     "react-router-dom": "^6.30.4"
   },
   "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^8.4.2",
     "@playwright/test": "^1.61.1",
     "@testing-library/jest-dom": "^6.4.8",
     "@testing-library/react": "^16.0.1",

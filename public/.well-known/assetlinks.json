@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "mm.com.acegroup.acechildgrow",
+      "sha256_cert_fingerprints": [
+        "B2:EC:6B:64:17:BD:19:E9:DD:48:CB:DF:F5:4A:C3:2C:F1:89:73:8A:96:91:BB:33:4B:56:98:FC:C6:F5:63:86"
+      ]
+    }
+  }
+]

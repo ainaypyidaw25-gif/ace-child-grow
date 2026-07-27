@@ -7,6 +7,7 @@ import { chronologicalAge } from '../domain/age/age';
 import { resolveAgeGroup } from '../content/taxonomy';
 import { ReviewBadge } from '../components/ReviewBadge';
 import { NoChild } from './Growth';
+import { isGooglePlayBuild } from '../app/platform';
 
 export function Activities() {
   const { locale } = useLocale();
@@ -99,7 +100,7 @@ export function Activities() {
         </section>
       )}
 
-      {!premium && (
+      {!premium && !isGooglePlayBuild() && (
         <Link to="/subscription" className="block rounded-[28px] bg-ink p-6 text-white shadow-card">
           <p className="text-xs font-bold uppercase tracking-[0.16em] text-mint">ACE Premium</p>
           <h2 className="mt-2 text-xl font-bold">{L('နေ့စဉ်အစီအစဉ်နှင့် တိုးတက်မှုမှတ်တမ်း', 'Daily plan & progress history')}</h2>

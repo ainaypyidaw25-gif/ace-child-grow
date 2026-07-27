@@ -9,6 +9,7 @@ import { ConfirmDialog } from '../components/ConfirmDialog';
 import { useMutation, useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { clearPortalMode } from '../app/portalMode';
+import { isGooglePlayBuild } from '../app/platform';
 
 const PLAN_LABELS = {
   free: { mm: 'အခမဲ့အစီအစဉ်', en: 'Free plan' },
@@ -26,6 +27,7 @@ export function Profile() {
   const caregivers = useQuery(api.family.listCaregivers, familyEnabled ? {} : 'skip');
   const inviteCaregiver = useMutation(api.family.inviteCaregiver);
   const revokeCaregiver = useMutation(api.family.revokeCaregiver);
+  const deleteAccount = useMutation(api.account.deleteMine);
   const [caregiverEmail, setCaregiverEmail] = useState('');
   const [caregiverMessage, setCaregiverMessage] = useState('');
   const [confirming, setConfirming] = useState<null | 'child' | 'account'>(null);
@@ -96,7 +98,7 @@ export function Profile() {
             + {locale === 'mm' ? 'ကလေး ထပ်ထည့်ရန်' : 'Add another child'}
           </Link>
         )}
-        {state.children.length > 0 && !familyEnabled && (
+        {state.children.length > 0 && !familyEnabled && !isGooglePlayBuild() && (
           <Link to="/subscription" className="mt-3 inline-block text-sm font-semibold text-sky-deep">
             {locale === 'mm' ? 'ကလေးတစ်ဦးထက်ပို ထည့်ရန် Family အစီအစဉ် ကြည့်မည် →' : 'View Family to add more children →'}
           </Link>
@@ -112,15 +114,17 @@ export function Profile() {
             <p className="mt-1 text-sm text-ink-soft">
               {locale === 'mm'
                 ? subscription.planKey === 'free'
-                  ? 'လက်ရှိအခြေခံလုပ်ဆောင်ချက်များကို အခမဲ့ အသုံးပြုနိုင်ပါသည်။ အခပေးအစီအစဉ်များကို ကြည့်ရှုနိုင်ပါသည်။'
+                  ? 'လက်ရှိအခြေခံလုပ်ဆောင်ချက်များကို အခမဲ့ အသုံးပြုနိုင်ပါသည်။'
                   : 'ဤအကောင့်တွင် အထူးလုပ်ဆောင်ချက်များ အသုံးပြုနိုင်ပါသည်။'
                 : subscription.planKey === 'free'
-                  ? 'Core features are free. You can view available paid plans.'
+                  ? 'Core features are available free.'
                   : 'Premium features are enabled for this account.'}
             </p>
-            <Link to="/subscription" className="mt-3 inline-block rounded-pill bg-sky px-4 py-2 text-sm font-semibold text-white">
-              {locale === 'mm' ? 'အစီအစဉ်နှင့် ငွေပေးချေမှု ကြည့်ရန်' : 'View plans and payment'}
-            </Link>
+            {!isGooglePlayBuild() && (
+              <Link to="/subscription" className="mt-3 inline-block rounded-pill bg-sky px-4 py-2 text-sm font-semibold text-white">
+                {locale === 'mm' ? 'အစီအစဉ်နှင့် ငွေပေးချေမှု ကြည့်ရန်' : 'View plans and payment'}
+              </Link>
+            )}
           </>
         )}
       </section>
@@ -214,10 +218,13 @@ export function Profile() {
           cancelLabel={t('common.cancel')}
           confirmLabel={t('common.confirm')}
           onCancel={() => setConfirming(null)}
-          onConfirm={() => {
+          onConfirm={async () => {
             if (confirming === 'account') {
+              await deleteAccount({ confirmation: 'DELETE' });
               dispatch({ type: 'delete_account' });
-              navigate('/');
+              clearPortalMode();
+              await signOut();
+              navigate('/', { replace: true });
             } else if (state.activeChildId) {
               dispatch({ type: 'delete_child', id: state.activeChildId });
             }

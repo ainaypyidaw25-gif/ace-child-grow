@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">ACE Child Grow</string>
+    <string name="title_activity_main">ACE Child Grow</string>
+    <string name="package_name">mm.com.acegroup.acechildgrow</string>
+    <string name="custom_url_scheme">mm.com.acegroup.acechildgrow</string>
+</resources>

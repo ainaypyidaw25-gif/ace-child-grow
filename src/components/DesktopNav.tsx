@@ -1,6 +1,7 @@
 import { NavLink, Link } from 'react-router-dom';
 import { useLocale } from '../app/LocaleContext';
 import { PRIMARY_NAV_ITEMS } from './navigationItems';
+import { isGooglePlayBuild } from '../app/platform';
 
 export function DesktopNav() {
   const { t, locale } = useLocale();
@@ -48,7 +49,7 @@ export function DesktopNav() {
           </div>
         </nav>
 
-        <div className="overflow-hidden rounded-3xl bg-ink p-4 text-white shadow-card">
+        {!isGooglePlayBuild() && <div className="overflow-hidden rounded-3xl bg-ink p-4 text-white shadow-card">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-mint">
             ACE Premium
           </p>
@@ -63,7 +64,7 @@ export function DesktopNav() {
           >
             {locale === 'mm' ? 'အစီအစဉ်များကြည့်ရန်' : 'View plans'} →
           </Link>
-        </div>
+        </div>}
       </div>
     </aside>
   );

@@ -8,6 +8,7 @@ import { SignIn } from '../screens/SignIn';
 import { api } from '../../convex/_generated/api';
 import { getPortalMode, setPortalMode } from './portalMode';
 import { decideStaffRoute } from './staffRoute';
+import { isGooglePlayBuild, useNativeDeepLinks } from './platform';
 
 const Welcome = lazy(() => import('../screens/Welcome').then((module) => ({ default: module.Welcome })));
 const Consent = lazy(() => import('../screens/Consent').then((module) => ({ default: module.Consent })));
@@ -41,12 +42,17 @@ const ContentReviewWorkspace = lazy(() => import('../screens/ContentReviewWorksp
 const SubscriptionPlans = lazy(() => import('../screens/SubscriptionPlans').then((module) => ({ default: module.SubscriptionPlans })));
 const PaymentStatus = lazy(() => import('../screens/PaymentStatus').then((module) => ({ default: module.PaymentStatus })));
 const Appointments = lazy(() => import('../screens/Appointments').then((module) => ({ default: module.Appointments })));
+const LegalPage = lazy(() => import('../screens/LegalPage').then((module) => ({ default: module.LegalPage })));
 
 // Authentication gate: unauthenticated visitors see sign-in; the app (and all
 // child data) is only reachable once signed in.
 export function App() {
+  useNativeDeepLinks();
   return (
-    <>
+    <Routes>
+      <Route path="/privacy" element={<Suspense fallback={<div className="min-h-screen bg-surface" />}><LegalPage kind="privacy" /></Suspense>} />
+      <Route path="/account-deletion" element={<Suspense fallback={<div className="min-h-screen bg-surface" />}><LegalPage kind="account-deletion" /></Suspense>} />
+      <Route path="*" element={<>
       <AuthLoading>
         <div className="flex min-h-screen items-center justify-center text-ink-soft">…</div>
       </AuthLoading>
@@ -56,7 +62,8 @@ export function App() {
       <Authenticated>
         <AppRoutes />
       </Authenticated>
-    </>
+      </>} />
+    </Routes>
   );
 }
 
@@ -139,6 +146,7 @@ function StaffOnlyRoute({ children }: { children: ReactNode }) {
 }
 
 function AppRoutes() {
+  const googlePlayBuild = isGooglePlayBuild();
   return (
     <Suspense fallback={<div className="flex min-h-[50vh] items-center justify-center text-ink-soft" role="status" aria-live="polite">…</div>}>
       <Routes>
@@ -157,9 +165,9 @@ function AppRoutes() {
       <Route path="/appointments" element={<Layout><Appointments /></Layout>} />
       <Route path="/profile" element={<Layout><Profile /></Layout>} />
       <Route path="/subscription" element={<Layout><SubscriptionPlans /></Layout>} />
-      <Route path="/payment/success/:orderId" element={<Layout><PaymentStatus view="success" /></Layout>} />
-      <Route path="/payment/cancel/:orderId" element={<Layout><PaymentStatus view="cancel" /></Layout>} />
-      <Route path="/payment/:orderId" element={<Layout><PaymentStatus /></Layout>} />
+      <Route path="/payment/success/:orderId" element={googlePlayBuild ? <Navigate to="/home" replace /> : <Layout><PaymentStatus view="success" /></Layout>} />
+      <Route path="/payment/cancel/:orderId" element={googlePlayBuild ? <Navigate to="/home" replace /> : <Layout><PaymentStatus view="cancel" /></Layout>} />
+      <Route path="/payment/:orderId" element={googlePlayBuild ? <Navigate to="/home" replace /> : <Layout><PaymentStatus /></Layout>} />
       <Route path="/offline" element={<Layout><OfflineDownloads /></Layout>} />
       <Route path="/favorites" element={<Layout><Favorites /></Layout>} />
       <Route path="/notifications" element={<Layout><Notifications /></Layout>} />
