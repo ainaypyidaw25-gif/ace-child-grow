@@ -1,0 +1,30 @@
+// Original ACE animation production queue. These are metadata placeholders only:
+// no parent can see or stream an item until a real file is uploaded and a
+// qualified reviewer explicitly approves it.
+export const STARTER_ANIMATION_SLUGS = [
+  'ms_birth_2m_gross_motor_1',
+  'ms_birth_2m_social_1',
+  'ms_birth_2m_communication_1',
+  'ms_birth_2m_social_2',
+  'act_tummy_time_mirror',
+  'ms_3_4m_gross_motor_1',
+  'ms_3_4m_fine_motor_1',
+  'ms_3_4m_communication_1',
+  'ms_3_4m_emotional_1',
+  'act_sound_tracking',
+  'ms_5_6m_gross_motor_1',
+  'ms_5_6m_speech_1',
+  'ms_5_6m_cognitive_1',
+  'ms_5_6m_play_1',
+  'ms_5_6m_gross_motor_2',
+  'ms_7_9m_gross_motor_1',
+  'ms_7_9m_fine_motor_1',
+  'ms_7_9m_language_1',
+  'ms_7_9m_social_1',
+  'act_peekaboo',
+  'ms_10_12m_gross_motor_1',
+  'ms_10_12m_communication_1',
+  'ms_10_12m_problem_solving_1',
+  'ms_10_12m_self_help_1',
+  'act_cup_stacking',
+] as const;

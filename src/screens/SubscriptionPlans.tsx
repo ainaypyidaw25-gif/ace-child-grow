@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { useMutation, useQuery } from 'convex/react';
+import { useAction, useMutation, useQuery } from 'convex/react';
+import { Link, useNavigate } from 'react-router-dom';
 import type { Id } from '../../convex/_generated/dataModel';
 import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
+import { SourceTransparency } from '../components/SourceTransparency';
 
 const PLAN_FEATURES = {
   premium: {
@@ -26,23 +28,30 @@ export function SubscriptionPlans() {
   const { locale } = useLocale();
   const options = useQuery(api.billing.options);
   const requests = useQuery(api.billing.myRequests);
+  const mmpayPayments = useQuery(api.mmpayData.myPayments);
   const subscription = useQuery(api.subscriptions.mine);
+  const startMmpay = useAction(api.mmpay.startPayment);
   const generateUploadUrl = useMutation(api.billing.generateProofUploadUrl);
   const submit = useMutation(api.billing.submitPaymentRequest);
   const cancel = useMutation(api.billing.cancelMyRequest);
+  const startTrial = useMutation(api.subscriptions.startTrial);
   const [planId, setPlanId] = useState<Id<'subscriptionPlans'> | ''>('');
   const [methodId, setMethodId] = useState<Id<'paymentMethods'> | ''>('');
   const [reference, setReference] = useState('');
   const [proof, setProof] = useState<File | null>(null);
   const [busy, setBusy] = useState(false);
+  const [mmpayBusy, setMmpayBusy] = useState(false);
+  const [trialBusy, setTrialBusy] = useState(false);
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
   const L = (mm: string, en: string) => locale === 'mm' ? mm : en;
 
-  if (!options || !requests || !subscription) return <p className="text-ink-soft" role="status">…</p>;
+  if (!options || !requests || !mmpayPayments || !subscription) return <p className="text-ink-soft" role="status">…</p>;
 
   const selectedPlan = options.plans.find((plan) => plan._id === planId);
   const selectedMethod = options.methods.find((method) => method._id === methodId);
   const hasPendingRequest = requests.some((request) => request.status === 'pending');
+  const hasPendingMmpay = mmpayPayments.some((payment) => payment.status === 'INITIATING' || payment.status === 'PENDING');
   const statusLabel = (status: (typeof requests)[number]['status']) => ({
     pending: L('စစ်ဆေးဆဲ', 'Pending review'),
     approved: L('အတည်ပြုပြီး', 'Approved'),
@@ -67,6 +76,45 @@ export function SubscriptionPlans() {
           </p>
         </div>
       </header>
+
+      {subscription.trialEligible && subscription.planKey === 'free' && (
+        <section className="flex flex-col gap-5 rounded-[30px] border border-mint bg-mint-soft/45 p-6 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-sky-deep">7-day free trial</p>
+            <h2 className="mt-1 text-xl font-bold text-ink">{L('Premium ကို ၇ ရက် အခမဲ့ စမ်းသုံးပါ', 'Try Premium free for 7 days')}</h2>
+            <p className="mt-2 max-w-2xl text-sm leading-7 text-ink-soft">
+              {L('ဘဏ်ကတ်ထည့်ရန် မလိုပါ။ စမ်းသုံးကာလပြီးလျှင် အခမဲ့အစီအစဉ်သို့ အလိုအလျောက် ပြန်သွားပါမည်။', 'No card required. You will return to Free automatically when the trial ends.')}
+            </p>
+          </div>
+          <button
+            type="button"
+            disabled={trialBusy}
+            onClick={async () => {
+              setTrialBusy(true);
+              setMessage('');
+              try {
+                await startTrial({});
+                setMessage(L('Premium စမ်းသုံးကာလကို စတင်ပြီးပါပြီ။', 'Your Premium trial has started.'));
+              } catch (error) {
+                setMessage(error instanceof Error ? error.message : L('စမ်းသုံးကာလကို စတင်၍ မရပါ။', 'Could not start the trial.'));
+              } finally {
+                setTrialBusy(false);
+              }
+            }}
+            className="min-h-touch shrink-0 rounded-pill bg-sky-deep px-7 py-3 font-bold text-white disabled:opacity-50"
+          >
+            {trialBusy ? '…' : L('အခမဲ့ စမ်းသုံးမည်', 'Start free trial')}
+          </button>
+        </section>
+      )}
+      {subscription.isTrial && (
+        <p className="rounded-2xl bg-mint-soft px-4 py-3 text-sm font-semibold text-sky-deep">
+          {L(
+            `Premium အခမဲ့စမ်းသုံးကာလ — ${subscription.currentPeriodEnd ? Math.max(0, Math.ceil((subscription.currentPeriodEnd - Date.now()) / 86_400_000)) : 0} ရက် ကျန်`,
+            `Premium trial — ${subscription.currentPeriodEnd ? Math.max(0, Math.ceil((subscription.currentPeriodEnd - Date.now()) / 86_400_000)) : 0} days remaining`,
+          )}
+        </p>
+      )}
 
       <section aria-labelledby="choose-plan-title">
         <div className="mb-4 max-w-2xl">
@@ -121,10 +169,55 @@ export function SubscriptionPlans() {
       </section>
 
       {selectedPlan && (
+        <section aria-labelledby="mmpay-title" className="overflow-hidden rounded-[30px] border border-sky/40 bg-white shadow-card">
+          <header className="border-b border-line bg-mint-soft/45 px-5 py-6 sm:px-8">
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-sky-deep">02 · Myan Myan Pay</p>
+            <h2 id="mmpay-title" className="mt-1 text-xl font-bold text-ink">{L('MMQR ဖြင့် ချက်ချင်းပေးချေပါ', 'Pay instantly with MMQR')}</h2>
+            <p className="mt-2 text-sm leading-6 text-ink-soft">{L('QR ကို KBZPay၊ WavePay သို့မဟုတ် MMQR အသုံးပြုနိုင်သော wallet ဖြင့် scan လုပ်ပါ။ ငွေပေးချေမှုအောင်မြင်သည်နှင့် အစီအစဉ်ကို အလိုအလျောက်ဖွင့်ပေးပါမည်။', 'Scan with KBZPay, WavePay, or another MMQR-compatible wallet. Your plan activates automatically after verified payment.')}</p>
+          </header>
+          <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-8">
+            <div>
+              <p className="font-bold text-ink">{locale === 'mm' ? selectedPlan.nameMm : selectedPlan.nameEn}</p>
+              <p className="mt-1 text-2xl font-bold text-sky-deep">{selectedPlan.amount.toLocaleString()} MMK</p>
+              <p className="mt-2 text-xs text-ink-soft">{L('ငွေလက်ခံအကောင့်နှင့် API secret များကို ဤ browser သို့ မပို့ပါ။', 'Merchant credentials and API secrets never reach this browser.')}</p>
+            </div>
+            {hasPendingMmpay ? (
+              <Link to={`/payment/${mmpayPayments.find((payment) => payment.status === 'INITIATING' || payment.status === 'PENDING')?.orderId}`} className="rounded-pill bg-sky-deep px-6 py-3 text-center font-bold text-white">
+                {L('လက်ရှိ QR ကို ပြန်ကြည့်မည်', 'View pending QR')}
+              </Link>
+            ) : (
+              <button
+                type="button"
+                disabled={mmpayBusy}
+                onClick={async () => {
+                  setMmpayBusy(true);
+                  setMessage('');
+                  try {
+                    const payment = await startMmpay({ planId: selectedPlan._id });
+                    navigate(`/payment/${payment.orderId}`);
+                  } catch (error) {
+                    setMessage(error instanceof Error ? error.message : L('Myan Myan Pay ကို ချိတ်ဆက်၍ မရပါ။', 'Unable to connect to Myan Myan Pay.'));
+                  } finally {
+                    setMmpayBusy(false);
+                  }
+                }}
+                className="min-h-touch rounded-pill bg-sky-deep px-7 py-3 font-bold text-white disabled:opacity-50"
+              >
+                {mmpayBusy ? '…' : L('MMQR ဖန်တီးမည်', 'Generate MMQR')}
+              </button>
+            )}
+          </div>
+          {message && <p className="border-t border-line px-5 py-3 text-sm text-state-red sm:px-8" role="alert">{message}</p>}
+        </section>
+      )}
+
+      <SourceTransparency />
+
+      {selectedPlan && (
         <section aria-labelledby="payment-title" className="overflow-hidden rounded-[30px] border border-line bg-white shadow-card">
           <header className="border-b border-line bg-cream px-5 py-6 sm:px-8">
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-sky-deep">02 · {L('ငွေပေးချေမှု', 'Payment')}</p>
-            <h2 id="payment-title" className="mt-1 text-xl font-bold text-ink">{L('အဆင့်သုံးဆင့်ဖြင့် လွယ်ကူစွာပေးချေပါ', 'Pay in three clear steps')}</h2>
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-sky-deep">{L('အခြားနည်းလမ်း', 'Alternative')} · {L('လက်ဖြင့်ငွေလွှဲခြင်း', 'Manual transfer')}</p>
+            <h2 id="payment-title" className="mt-1 text-xl font-bold text-ink">{L('ငွေလွှဲအထောက်အထားဖြင့် ပေးချေပါ', 'Pay with transfer proof')}</h2>
             <ol className="mt-4 grid gap-3 text-sm text-ink-soft sm:grid-cols-3">
               {[L('အစီအစဉ်ရွေးရန်', 'Choose a plan'), L('သတ်မှတ်အကောင့်သို့ ငွေလွှဲရန်', 'Make the transfer'), L('ငွေလွှဲနံပါတ် ပို့ရန်', 'Submit the reference')].map((step, index) => <li key={step} className="flex gap-2"><span className="font-bold text-sky-deep">{index + 1}</span><span>{step}</span></li>)}
             </ol>
@@ -205,11 +298,25 @@ export function SubscriptionPlans() {
             <p className="text-xs font-bold uppercase tracking-[0.16em] text-sky-deep">03 · {L('အခြေအနေကြည့်ရန်', 'Track status')}</p>
             <h2 id="request-history-title" className="mt-1 text-lg font-bold text-ink">{L('ငွေပေးချေမှုမှတ်တမ်း', 'Payment history')}</h2>
           </div>
-          <p className="text-xs text-ink-soft">{requests.length} {L('ခု', 'requests')}</p>
+          <p className="text-xs text-ink-soft">{requests.length + mmpayPayments.length} {L('ခု', 'payments')}</p>
         </div>
-        {requests.length === 0 ? (
+        {mmpayPayments.length > 0 && (
+          <ul className="mt-4 divide-y divide-line overflow-hidden rounded-2xl border border-line bg-white">
+            {mmpayPayments.map((payment) => (
+              <li key={payment._id} className="flex flex-wrap items-center gap-3 px-4 py-4 sm:px-5">
+                <span className="min-w-0 flex-1">
+                  <span className="block font-semibold capitalize text-ink">Myan Myan Pay · {payment.planKey} · {payment.amount.toLocaleString()} MMK</span>
+                  <span className="mt-1 block break-all text-xs text-ink-soft">{payment.orderId}</span>
+                </span>
+                <span className="rounded-pill bg-mint-soft px-3 py-1 text-xs font-semibold text-sky-deep">{payment.status}</span>
+                <Link to={`/payment/${payment.orderId}`} className="text-sm font-semibold text-sky-deep underline">{L('ကြည့်မည်', 'View')}</Link>
+              </li>
+            ))}
+          </ul>
+        )}
+        {requests.length === 0 && mmpayPayments.length === 0 ? (
           <p className="mt-4 text-sm text-ink-soft">{L('ငွေပေးချေမှုမှတ်တမ်း မရှိသေးပါ။', 'No payment history yet.')}</p>
-        ) : (
+        ) : requests.length > 0 ? (
           <ul className="mt-4 divide-y divide-line overflow-hidden rounded-2xl border border-line bg-white">
             {requests.map((request) => (
               <li key={request._id} className="flex flex-wrap items-center gap-3 px-4 py-4 sm:px-5">
@@ -222,7 +329,7 @@ export function SubscriptionPlans() {
               </li>
             ))}
           </ul>
-        )}
+        ) : null}
       </section>
     </div>
   );

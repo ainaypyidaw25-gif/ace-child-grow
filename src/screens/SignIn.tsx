@@ -7,9 +7,12 @@ import { clearPortalMode, setPortalMode } from '../app/portalMode';
 export function SignIn() {
   const { t, locale, setLocale } = useLocale();
   const { signIn } = useAuthActions();
-  const [flow, setFlow] = useState<'signIn' | 'signUp'>('signIn');
+  const isStaffInvite = window.location.pathname.startsWith('/admin/accept-invite/')
+    || (window.location.pathname === '/admin/accept-invite'
+      && new URLSearchParams(window.location.search).has('invite'));
+  const [flow, setFlow] = useState<'signIn' | 'signUp'>(() => isStaffInvite ? 'signUp' : 'signIn');
   const [portal, setPortal] = useState<'parent' | 'staff'>(() =>
-    new URLSearchParams(window.location.search).get('portal') === 'staff' ? 'staff' : 'parent',
+    isStaffInvite || new URLSearchParams(window.location.search).get('portal') === 'staff' ? 'staff' : 'parent',
   );
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -46,14 +49,15 @@ export function SignIn() {
       <div className="grid grid-cols-2 rounded-pill border border-line bg-white p-1">
         <button
           type="button"
-          onClick={() => setPortal('parent')}
+          onClick={() => { if (!isStaffInvite) setPortal('parent'); }}
+          disabled={isStaffInvite}
           className={`rounded-pill px-3 py-2 text-sm font-semibold ${portal === 'parent' ? 'bg-sky text-white' : 'text-ink-soft'}`}
         >
           {locale === 'mm' ? 'မိဘဝင်ရန်' : 'Parent sign in'}
         </button>
         <button
           type="button"
-          onClick={() => { setPortal('staff'); setFlow('signIn'); }}
+          onClick={() => { setPortal('staff'); if (!isStaffInvite) setFlow('signIn'); }}
           className={`rounded-pill px-3 py-2 text-sm font-semibold ${portal === 'staff' ? 'bg-sky text-white' : 'text-ink-soft'}`}
         >
           {locale === 'mm' ? 'အဖွဲ့ဝင်/ပညာရှင်ဝင်ရန်' : 'Staff/reviewer sign in'}
@@ -71,15 +75,19 @@ export function SignIn() {
         {portal === 'staff' && (
           <p className="rounded-xl bg-pastel-yellow/50 p-3 text-xs text-ink">
             {locale === 'mm'
-              ? 'ပိုင်ရှင်က ဖိတ်ကြားပြီး ဝင်ခွင့်ပေးထားသော အဖွဲ့ဝင်နှင့် ပညာရှင်အကောင့်များအတွက် ဖြစ်သည်။'
-              : 'For staff and reviewer accounts that have been invited and granted access by the owner.'}
+              ? isStaffInvite
+                ? 'ဖိတ်ကြားထားသော အီးမေးလ်အတိအကျဖြင့် အကောင့်သစ်ဖွင့်ပါ။ အကောင့်ရှိပြီးသားဆိုလျှင် “အကောင့်ဝင်ရန်” ကိုရွေးပါ။ ဝင်ပြီးနောက် ဖိတ်ကြားချက်ကို လက်ခံနိုင်ပါမည်။'
+                : 'ပိုင်ရှင်က ဖိတ်ကြားထားသော အဖွဲ့ဝင်နှင့် ပညာရှင်များအတွက် ဖြစ်သည်။'
+              : isStaffInvite
+                ? 'Create an account with the exact invited email, or choose sign in if you already have one. You can accept the invitation after authentication.'
+                : 'For staff and reviewers invited by the owner.'}
           </p>
         )}
         <label className="block text-sm">
           {locale === 'mm' ? 'အီးမေးလ်' : 'Email'}
           <input
             type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
-            className="mt-1 block w-full rounded-lg border border-line px-3 py-2"
+            className="mt-1 block min-h-touch w-full rounded-lg border border-line px-3 py-2"
           />
         </label>
         <label className="block text-sm">
@@ -87,7 +95,7 @@ export function SignIn() {
           <input
             type="password" required minLength={8} value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="mt-1 block w-full rounded-lg border border-line px-3 py-2"
+            className="mt-1 block min-h-touch w-full rounded-lg border border-line px-3 py-2"
           />
         </label>
         {error && <p className="text-sm text-state-red">⚠️ {error}</p>}
@@ -99,7 +107,7 @@ export function SignIn() {
             ? (locale === 'mm' ? 'ဝင်မည်' : 'Sign in')
             : (locale === 'mm' ? 'ဖွင့်မည်' : 'Sign up')}
         </button>
-        {portal === 'parent' && (
+        {(portal === 'parent' || isStaffInvite) && (
           <button
             type="button"
             onClick={() => setFlow(flow === 'signIn' ? 'signUp' : 'signIn')}

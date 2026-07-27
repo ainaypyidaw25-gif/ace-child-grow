@@ -7,6 +7,7 @@ import { internalMutation } from './_generated/server';
 import { v } from 'convex/values';
 import { logAudit } from './audit';
 import seedData from './seedData.json';
+import { seedAuditSummary, seedMayUpdateExisting, seedMediaIsProtected } from './lib/seedPolicy';
 
 // Grant staff (CMS access) to an account by email. INTERNAL — CLI/admin only,
 // never callable from the app. Used to bootstrap the first reviewer account.
@@ -47,11 +48,18 @@ type Item = {
 
 export const run = internalMutation({
   args: {},
+  returns: v.object({
+    created: v.number(),
+    updated: v.number(),
+    skippedApproved: v.number(),
+    total: v.number(),
+  }),
   handler: async (ctx) => {
     const items = seedData as unknown as Item[];
     const now = Date.now();
     let created = 0;
     let updated = 0;
+    let skippedApproved = 0;
     for (const it of items) {
       const { media, ...content } = it;
       const existing = await ctx.db
@@ -59,6 +67,10 @@ export const run = internalMutation({
         .withIndex('by_slug', (q) => q.eq('slug', it.slug))
         .unique();
       if (existing) {
+        if (!seedMayUpdateExisting(existing.clinicalStatus)) {
+          skippedApproved += 1;
+          continue;
+        }
         await ctx.db.patch(existing._id, {
           ...content,
           clinicalStatus: existing.clinicalStatus,
@@ -78,8 +90,11 @@ export const run = internalMutation({
         .query('libraryMedia')
         .withIndex('by_content', (q) => q.eq('contentSlug', it.slug))
         .collect();
-      for (const mrow of existingMedia) await ctx.db.delete(mrow._id);
+      for (const mrow of existingMedia) {
+        if (!seedMediaIsProtected(mrow)) await ctx.db.delete(mrow._id);
+      }
       for (const mref of media) {
+        if (existingMedia.some((row) => row.kind === mref.kind && seedMediaIsProtected(row))) continue;
         await ctx.db.insert('libraryMedia', {
           contentSlug: it.slug,
           kind: mref.kind,
@@ -89,7 +104,14 @@ export const run = internalMutation({
         });
       }
     }
-    await logAudit(ctx, null, 'library.seed', 'libraryContent', undefined, `created ${created}, updated ${updated}`);
-    return { created, updated, total: items.length };
+    await logAudit(
+      ctx,
+      null,
+      'library.seed',
+      'libraryContent',
+      undefined,
+      seedAuditSummary(created, updated, skippedApproved),
+    );
+    return { created, updated, skippedApproved, total: items.length };
   },
 });

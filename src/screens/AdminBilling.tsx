@@ -7,11 +7,13 @@ import { useLocale } from '../app/LocaleContext';
 export function AdminBilling() {
   const { locale } = useLocale();
   const data = useQuery(api.billing.adminDashboard);
+  const mmpay = useQuery(api.mmpayData.adminPayments);
   const upsertPlan = useMutation(api.billing.upsertPlan);
   const upsertMethod = useMutation(api.billing.upsertMethod);
   const review = useMutation(api.billing.reviewPaymentRequest);
   const setPlanActive = useMutation(api.billing.setPlanActive);
   const setMethodActive = useMutation(api.billing.setMethodActive);
+  const installRecommendedPlans = useMutation(api.billing.installRecommendedPlans);
   const [editingPlan, setEditingPlan] = useState<Id<'subscriptionPlans'> | undefined>();
   const [editingMethod, setEditingMethod] = useState<Id<'paymentMethods'> | undefined>();
   const [planKey, setPlanKey] = useState<'premium' | 'family'>('premium');
@@ -25,11 +27,11 @@ export function AdminBilling() {
   const L = (mm: string, en: string) => locale === 'mm' ? mm : en;
   const input = 'w-full rounded-lg border border-line px-3 py-2 text-sm';
 
-  if (data === undefined) return <p className="text-ink-soft">…</p>;
-  if (!data.allowed) return <p className="rounded-card bg-white p-4">{L('Owner သာ အသုံးပြုနိုင်ပါသည်။', 'Owner access only.')}</p>;
+  if (data === undefined || mmpay === undefined) return <p className="text-ink-soft">…</p>;
+  if (!data.allowed || !mmpay.allowed) return <p className="rounded-card bg-white p-4">{L('Owner သာ အသုံးပြုနိုင်ပါသည်။', 'Owner access only.')}</p>;
 
   return <div className="space-y-5">
-    <div><h1 className="text-xl font-bold text-sky-deep">{L('Subscription နှင့် ငွေပေးချေမှု', 'Subscriptions and payments')}</h1><p className="text-sm text-ink-soft">{L('ဈေးနှုန်းနှင့် ငွေလက်ခံအကောင့်များကို ဤနေရာမှ ပြင်ဆင်နိုင်သည်။ ကုဒ်ထဲတွင် အကောင့်နံပါတ် သို့မဟုတ် ဈေးနှုန်း မထားပါ။', 'Configure prices and payment destinations here. No account number or price is stored in code.')}</p></div>
+    <div><h1 className="text-xl font-bold text-sky-deep">{L('Subscription နှင့် ငွေပေးချေမှု', 'Subscriptions and payments')}</h1><p className="text-sm text-ink-soft">{L('ဈေးနှုန်းနှင့် ငွေလက်ခံအကောင့်များကို ဤနေရာမှ ပြင်ဆင်နိုင်သည်။ ငွေလက်ခံအကောင့်ကို frontend ကုဒ်ထဲတွင် မထားပါ။', 'Configure prices and payment destinations here. Payment account details are never stored in frontend code.')}</p><button type="button" onClick={async () => { const result = await installRecommendedPlans({}); setMessage(L(`အကြံပြုဈေးနှုန်း — အသစ် ${result.created}၊ ပြင် ${result.updated}`, `Recommended prices — ${result.created} created, ${result.updated} updated`)); }} className="mt-3 rounded-pill border border-sky px-4 py-2 text-sm font-semibold text-sky-deep">{L('အကြံပြုဈေးနှုန်း ၄ မျိုး ထည့်မည်', 'Install 4 recommended prices')}</button></div>
 
     <form className="space-y-2 rounded-card border border-line bg-white p-4" onSubmit={async (event) => {
       event.preventDefault(); setMessage('');
@@ -59,5 +61,29 @@ export function AdminBilling() {
     <section><h2 className="mb-2 font-semibold">{L('လက်ရှိအစီအစဉ်နှင့် ငွေလက်ခံနည်းလမ်းများ', 'Current plans and payment methods')}</h2><div className="space-y-2 text-sm">{data.plans.map((plan) => <div key={plan._id} className="rounded-lg bg-white p-3"><p>{plan.nameMm} · {plan.amount.toLocaleString()} {plan.currency} · {plan.isActive ? 'active' : 'inactive'}</p><div className="mt-2 flex gap-2"><button type="button" onClick={() => { setEditingPlan(plan._id); setPlanKey(plan.planKey); setPlanMm(plan.nameMm); setPlanEn(plan.nameEn); setAmount(String(plan.amount)); setCurrency(plan.currency); setInterval(plan.interval); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-sky-deep underline">{L('ပြင်မည်', 'Edit')}</button><button type="button" onClick={() => void setPlanActive({ id: plan._id, isActive: !plan.isActive })} className="text-state-orange underline">{plan.isActive ? L('ပိတ်မည်', 'Deactivate') : L('ဖွင့်မည်', 'Activate')}</button></div></div>)}{data.methods.map((method) => <div key={method._id} className="rounded-lg bg-white p-3"><p>{method.nameMm} · {method.accountName} · {method.accountIdentifier}</p><div className="mt-2 flex gap-2"><button type="button" onClick={() => { setEditingMethod(method._id); setMethodMm(method.nameMm); setMethodEn(method.nameEn); setAccountName(method.accountName); setAccountIdentifier(method.accountIdentifier); setInstructionsMm(method.instructionsMm ?? ''); setInstructionsEn(method.instructionsEn ?? ''); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-sky-deep underline">{L('ပြင်မည်', 'Edit')}</button><button type="button" onClick={() => void setMethodActive({ id: method._id, isActive: !method.isActive })} className="text-state-orange underline">{method.isActive ? L('ပိတ်မည်', 'Deactivate') : L('ဖွင့်မည်', 'Activate')}</button></div></div>)}</div></section>
 
     <section><h2 className="mb-2 font-semibold">{L('ငွေပေးချေမှု စစ်ဆေးရန်', 'Payment verification')}</h2>{data.requests.length === 0 ? <p className="text-sm text-ink-soft">{L('မရှိသေးပါ။', 'None yet.')}</p> : <ul className="space-y-3">{data.requests.map(({ request, userEmail, methodName, proofUrl }) => <li key={request._id} className="rounded-card border border-line bg-white p-4"><p className="font-semibold">{userEmail ?? request.userId} · {request.planKey}</p><p className="text-sm text-ink-soft">{request.amount.toLocaleString()} {request.currency} · {methodName} · {request.paymentReference} · {request.status}</p>{proofUrl && <a href={proofUrl} target="_blank" rel="noreferrer" className="text-sm text-sky-deep underline">{L('အထောက်အထားပုံ ကြည့်မည်', 'View proof')}</a>}{request.status === 'pending' && <div className="mt-2 flex gap-2"><button type="button" onClick={() => { if (window.confirm(L('ငွေဝင်ရောက်ပြီးကြောင်း သေချာစစ်ဆေးပြီးပြီလား။ အတည်ပြုလျှင် အခပေးအစီအစဉ် ချက်ချင်းစတင်ပါမည်။', 'Confirm funds have arrived? Approval activates the paid plan immediately.'))) void review({ id: request._id, decision: 'approved' }); }} className="rounded-pill bg-mint px-4 py-1 text-sm font-semibold text-white">{L('ငွေရပြီး အတည်ပြုမည်', 'Approve payment')}</button><button type="button" onClick={() => { if (window.confirm(L('ဤငွေပေးချေမှုကို ပယ်မလား။', 'Reject this payment request?'))) void review({ id: request._id, decision: 'rejected' }); }} className="rounded-pill border border-state-red px-4 py-1 text-sm text-state-red">{L('ပယ်မည်', 'Reject')}</button></div>}</li>)}</ul>}</section>
+
+    <section>
+      <div className="mb-2 flex items-end justify-between gap-3">
+        <div><h2 className="font-semibold">{L('Myan Myan Pay မှတ်တမ်း', 'Myan Myan Pay records')}</h2><p className="text-xs text-ink-soft">{L('Webhook နှင့် status check မှ အတည်ပြုထားသော provider records', 'Provider records verified by webhook and status checks')}</p></div>
+        <span className="rounded-pill bg-mint-soft px-3 py-1 text-xs font-semibold text-sky-deep">{mmpay.rows.length}</span>
+      </div>
+      {mmpay.rows.length === 0 ? <p className="text-sm text-ink-soft">{L('Myan Myan Pay မှတ်တမ်း မရှိသေးပါ။', 'No Myan Myan Pay records yet.')}</p> : (
+        <div className="overflow-x-auto rounded-card border border-line bg-white">
+          <table className="min-w-full text-left text-sm">
+            <thead className="bg-canvas text-xs text-ink-soft"><tr><th className="px-3 py-2">{L('မိဘ', 'Parent')}</th><th className="px-3 py-2">Order</th><th className="px-3 py-2">{L('ငွေ', 'Amount')}</th><th className="px-3 py-2">Status</th><th className="px-3 py-2">{L('Provider', 'Provider')}</th><th className="px-3 py-2">{L('အချိန်', 'Updated')}</th></tr></thead>
+            <tbody className="divide-y divide-line">{mmpay.rows.map(({ payment, userEmail }) => (
+              <tr key={payment._id}>
+                <td className="px-3 py-3">{userEmail ?? '—'}<span className="block text-xs capitalize text-ink-soft">{payment.planKey} · {payment.environment}</span></td>
+                <td className="max-w-[220px] break-all px-3 py-3 font-mono text-xs">{payment.orderId}{payment.transactionRefId && <span className="mt-1 block text-ink-soft">TX: {payment.transactionRefId}</span>}</td>
+                <td className="whitespace-nowrap px-3 py-3 font-semibold">{payment.amount.toLocaleString()} MMK</td>
+                <td className="px-3 py-3"><span className="rounded-pill bg-mint-soft px-2 py-1 text-xs font-semibold text-sky-deep">{payment.status}</span>{payment.condition && <span className="mt-1 block text-xs text-ink-soft">{payment.condition}</span>}</td>
+                <td className="px-3 py-3">{payment.vendor ?? '—'}<span className="block text-xs text-ink-soft">{payment.method ?? '—'}</span></td>
+                <td className="whitespace-nowrap px-3 py-3 text-xs text-ink-soft">{new Date(payment.updatedAt).toLocaleString(locale === 'mm' ? 'my-MM' : 'en-US')}</td>
+              </tr>
+            ))}</tbody>
+          </table>
+        </div>
+      )}
+    </section>
   </div>;
 }

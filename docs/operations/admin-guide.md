@@ -1,18 +1,27 @@
 # Admin & Content Operations Guide
 
 ## Roles
-- **Content Admin** — creates/edits milestones, activities, awareness topics,
-  myths/facts, lessons, safety rules, referral guidance, sources, healthcare
-  facilities; moves content through the workflow.
-- **Translator** — completes/reviews Myanmar/English pairs.
+- **Owner** — invites staff, manages roles, billing and the service directory.
+- **Content editor** — creates and edits library drafts and media.
+- **Native-language reviewer** — reviews English and natural Myanmar wording.
+- **Evidence reviewer** — reviews source support; a name and relevant
+  professional qualification are required for approval decisions.
 - **Clinical Reviewer** — approves/rejects health & development content; cannot
   access parent/child records.
-- **Super Admin** — manages roles, app settings, and audit review.
+- **Support** — support access only; cannot edit or approve content.
 
 ## Content workflow
-`Draft → Content Review → Translation Review → Clinical Review → Approved →
-Published → Archived`. Only `Published` content is visible to parents. Every
-transition writes to `clinical_reviews` + `audit_logs`.
+Open `/admin/reviews` to edit an item and record five independent decisions:
+English copy, native-Myanmar language, evidence, safety and clinical review.
+Each decision is stored in `contentReviews` with the reviewer identity, role,
+qualification, note, timestamp and exact review revision. Editing content or
+refreshing it from the seed creates a new revision; prior decisions stay in the
+history but cannot authorize the new text.
+
+Only `published` library content is visible to parents. Publishing requires all
+five current-revision decisions to be approved and the final action must be
+performed by a named, qualified clinical reviewer. Every edit, decision and
+publish attempt is audited. Nothing is auto-approved.
 
 ## Safety rules
 The nine fixed urgent rules (`safety_rules`) mirror the deterministic engine in

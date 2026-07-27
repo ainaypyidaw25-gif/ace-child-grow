@@ -51,6 +51,7 @@ const requestValidator = v.object({
   _creationTime: v.number(),
   userId: v.id('users'),
   planKey: paidPlanValidator,
+  planId: v.optional(v.id('subscriptionPlans')),
   paymentMethodId: v.id('paymentMethods'),
   amount: v.number(),
   currency: v.string(),
@@ -130,6 +131,7 @@ export const submitPaymentRequest = mutation({
     const id = await ctx.db.insert('paymentRequests', {
       userId,
       planKey: plan.planKey,
+      planId: plan._id,
       paymentMethodId: method._id,
       amount: plan.amount,
       currency: plan.currency,
@@ -222,9 +224,9 @@ export const upsertPlan = mutation({
     if (!args.nameMm.trim() || !args.nameEn.trim() || !args.currency.trim()) throw new Error('Plan fields are required');
     const existingForKey = await ctx.db
       .query('subscriptionPlans')
-      .withIndex('by_plan_key', (q) => q.eq('planKey', args.planKey))
+      .withIndex('by_plan_key_interval', (q) => q.eq('planKey', args.planKey).eq('interval', args.interval))
       .unique();
-    if (existingForKey && existingForKey._id !== args.id) throw new Error('This plan key already exists');
+    if (existingForKey && existingForKey._id !== args.id) throw new Error('This plan and interval already exist');
     const now = Date.now();
     const { id, ...fields } = args;
     const normalized = {
@@ -241,6 +243,51 @@ export const upsertPlan = mutation({
     }
     await logAudit(ctx, ownerId, id ? 'billing.plan.update' : 'billing.plan.create', 'subscriptionPlans', planId, normalized.nameEn);
     return planId;
+  },
+});
+
+export const installRecommendedPlans = mutation({
+  args: {},
+  returns: v.object({ created: v.number(), updated: v.number() }),
+  handler: async (ctx) => {
+    const ownerId = await requireOwner(ctx);
+    const now = Date.now();
+    const templates = [
+      { planKey: 'premium' as const, interval: 'month' as const, amount: 5_900, sortOrder: 1, nameMm: 'Premium လစဉ်', nameEn: 'Premium Monthly' },
+      { planKey: 'premium' as const, interval: 'year' as const, amount: 59_000, sortOrder: 2, nameMm: 'Premium နှစ်စဉ်', nameEn: 'Premium Yearly' },
+      { planKey: 'family' as const, interval: 'month' as const, amount: 9_900, sortOrder: 3, nameMm: 'Family လစဉ်', nameEn: 'Family Monthly' },
+      { planKey: 'family' as const, interval: 'year' as const, amount: 99_000, sortOrder: 4, nameMm: 'Family နှစ်စဉ်', nameEn: 'Family Yearly' },
+    ];
+    let created = 0;
+    let updated = 0;
+    for (const template of templates) {
+      const existing = await ctx.db
+        .query('subscriptionPlans')
+        .withIndex('by_plan_key_interval', (q) => q.eq('planKey', template.planKey).eq('interval', template.interval))
+        .unique();
+      const values = {
+        ...template,
+        descriptionMm: template.planKey === 'family'
+          ? 'ကလေး ၃ ဦးနှင့် စောင့်ရှောက်သူ ၃ ဦးအထိ'
+          : 'ကလေးတစ်ဦးအတွက် ကိုယ်ပိုင်အစီအစဉ်နှင့် အစီရင်ခံစာ',
+        descriptionEn: template.planKey === 'family'
+          ? 'Up to 3 children and 3 caregivers'
+          : 'Personalized plan and reports for one child',
+        currency: 'MMK',
+        features: [],
+        isActive: true,
+        updatedAt: now,
+      };
+      if (existing) {
+        await ctx.db.patch(existing._id, values);
+        updated += 1;
+      } else {
+        await ctx.db.insert('subscriptionPlans', { ...values, createdAt: now });
+        created += 1;
+      }
+    }
+    await logAudit(ctx, ownerId, 'billing.plan.install_recommended', 'subscriptionPlans', undefined, `${created} created, ${updated} updated`);
+    return { created, updated };
   },
 });
 
@@ -322,10 +369,13 @@ export const reviewPaymentRequest = mutation({
       updatedAt: now,
     });
     if (args.decision === 'approved') {
-      const plan = await ctx.db
-        .query('subscriptionPlans')
-        .withIndex('by_plan_key', (q) => q.eq('planKey', row.planKey))
-        .unique();
+      const plan = row.planId
+        ? await ctx.db.get(row.planId)
+        : (await ctx.db
+          .query('subscriptionPlans')
+          .withIndex('by_plan_key', (q) => q.eq('planKey', row.planKey))
+          .take(10))
+          .find((candidate) => candidate.amount === row.amount && candidate.currency === row.currency);
       if (!plan) throw new Error('Subscription plan no longer exists');
       const existing = await ctx.db
         .query('subscriptions')

@@ -27,6 +27,8 @@ const KNOWN_AUTH_CALLS = [
   'requireContentEditor',
   'requireEvidenceEditor',
   'requireClinicalReviewer',
+  'requireProfessionalPublisher',
+  'requireReviewEditor',
   'hasStaffRole',
 ];
 

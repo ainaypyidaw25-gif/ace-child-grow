@@ -6,10 +6,17 @@
 // modules; consolidating them here removes that duplication.
 import { getAuthUserId } from '@convex-dev/auth/server';
 import type { QueryCtx, MutationCtx } from '../_generated/server';
-import type { Id } from '../_generated/dataModel';
+import type { Doc, Id } from '../_generated/dataModel';
+import { activeFamilyOwnerIds } from './entitlements';
 
 export type Ctx = QueryCtx | MutationCtx;
-export type StaffRole = 'owner' | 'content_editor' | 'clinical_reviewer' | 'support';
+export type StaffRole =
+  | 'owner'
+  | 'content_editor'
+  | 'language_reviewer'
+  | 'evidence_reviewer'
+  | 'clinical_reviewer'
+  | 'support';
 
 export type StaffAccess = {
   role: StaffRole;
@@ -88,7 +95,20 @@ export async function requireContentEditor(ctx: Ctx): Promise<Id<'users'>> {
 }
 
 export async function requireEvidenceEditor(ctx: Ctx): Promise<Id<'users'>> {
-  return (await requireOneOf(ctx, ['owner', 'content_editor', 'clinical_reviewer'])).userId;
+  return (await requireOneOf(ctx, ['owner', 'content_editor', 'evidence_reviewer', 'clinical_reviewer'])).userId;
+}
+
+/** Staff who may edit a review draft. Publishing remains a separate permission. */
+export async function requireReviewEditor(
+  ctx: Ctx,
+): Promise<{ userId: Id<'users'>; access: StaffAccess }> {
+  return await requireOneOf(ctx, [
+    'owner',
+    'content_editor',
+    'language_reviewer',
+    'evidence_reviewer',
+    'clinical_reviewer',
+  ]);
 }
 
 export async function requireClinicalReviewer(
@@ -125,12 +145,29 @@ export async function requireProfessionalPublisher(ctx: Ctx): Promise<Profession
   };
 }
 
+/**
+ * Publishing parent-facing developmental or health content is a clinical
+ * decision. Education-scoped owner approval is intentionally insufficient;
+ * it remains valid for evidence/media governance but cannot expose guidance
+ * to parent accounts as clinically reviewed content.
+ */
+export async function requireClinicalPublisher(ctx: Ctx): Promise<ProfessionalApproval> {
+  const reviewer = await requireClinicalReviewer(ctx);
+  return { ...reviewer, scope: 'clinical' };
+}
+
 /** Assert the child belongs to the caller (ownership guard for child sub-records). */
 export async function ownChild(
   ctx: Ctx,
   childId: Id<'children'>,
   userId: Id<'users'>,
-): Promise<void> {
+): Promise<Doc<'children'>> {
   const child = await ctx.db.get(childId);
-  if (!child || child.userId !== userId) throw new Error('Not found');
+  if (!child) throw new Error('Not found');
+  if (child.userId !== userId) {
+    const allowedOwners = await activeFamilyOwnerIds(ctx, userId);
+    const allowed = allowedOwners.includes(child.userId);
+    if (!allowed) throw new Error('Not found');
+  }
+  return child;
 }

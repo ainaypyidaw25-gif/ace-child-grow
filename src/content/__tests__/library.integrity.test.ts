@@ -70,6 +70,36 @@ describe('content library integrity', () => {
     expect(ages.size).toBeGreaterThanOrEqual(12);
   });
 
+  it('provides a draft milestone-and-activity baseline for every 13-month-through-5-year band', () => {
+    const olderAgeKeys = AGE_GROUP_KEYS.slice(5);
+    for (const ageKey of olderAgeKeys) {
+      const ageItems = CONTENT_SEED.filter((item) => item.ageGroupKey === ageKey);
+      expect(ageItems.some((item) => item.type === 'milestone'), `${ageKey} milestone`).toBe(true);
+      expect(ageItems.some((item) => item.type === 'activity'), `${ageKey} activity`).toBe(true);
+      for (const item of ageItems) {
+        expect(item.clinicalStatus, `${item.slug} status`).toBe('clinical_review');
+      }
+    }
+  });
+
+  it('keeps the newly added older-child activity evidence notes explicitly non-approved', () => {
+    for (const slug of ['act_copy_everyday_actions', 'act_follow_the_pattern', 'act_draw_and_tell']) {
+      const item = CONTENT_SEED.find((candidate) => candidate.slug === slug);
+      expect(item, slug).toBeDefined();
+      const summary = (item?.data as Record<string, unknown>).evidenceSummary;
+      expect(typeof summary, `${slug} evidence summary`).toBe('string');
+      expect(summary, `${slug} evidence summary`).toContain('No clinical approval has been recorded');
+      expect(item?.clinicalStatus, `${slug} status`).toBe('clinical_review');
+    }
+  });
+
+  it('never offers small caps or small parts in the 3-year color-sorting activity', () => {
+    const item = CONTENT_SEED.find((candidate) => candidate.slug === 'act_color_sort');
+    const data = item?.data as Record<string, { en?: string }> | undefined;
+    expect(data?.materials?.en).toContain('Large, age-rated, non-swallowable');
+    expect(data?.safety?.en).toContain('Do not use small objects or detachable small parts');
+  });
+
   it('every lesson category is represented, and lessons carry quiz + objectives', () => {
     const lessons = byType('lesson');
     const cats = new Set(lessons.map((l) => l.category));

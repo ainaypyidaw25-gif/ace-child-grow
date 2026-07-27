@@ -67,11 +67,17 @@ export function AdminReviewQueue() {
                 : 'You may inspect and edit drafts. A qualified assigned reviewer is required to publish.'}
           </p>
           <div className="mt-3 flex flex-wrap gap-2 text-sm">
+            <Link to="/admin?tour=staff" className="rounded-pill border border-line px-4 py-2 text-sky-deep">
+              {locale === 'mm' ? 'စီမံခန့်ခွဲမှု အသုံးပြုနည်း' : 'Replay staff tour'}
+            </Link>
             <Link to="/library" className="rounded-pill bg-sky px-4 py-2 font-semibold text-white">
               {locale === 'mm' ? 'အကြောင်းအရာစာကြည့်တိုက် ကြည့်ရန်' : 'View content library'}
             </Link>
             <Link to="/admin/library" className="rounded-pill border border-line px-4 py-2 text-sky-deep">
               {locale === 'mm' ? 'အကြောင်းအရာ စီမံခန့်ခွဲမှု' : 'Content CMS'}
+            </Link>
+            <Link to="/admin/reviews" className="rounded-pill border border-line px-4 py-2 text-sky-deep">
+              {locale === 'mm' ? 'သုံးသပ်ရေးနေရာ' : 'Review workspace'}
             </Link>
             <Link to="/admin/evidence" className="rounded-pill border border-line px-4 py-2 text-sky-deep">
               {locale === 'mm' ? 'ကိုးကားချက်များ ကြည့်ရန်' : 'View evidence'}

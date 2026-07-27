@@ -3,6 +3,7 @@ import { useLocale } from '../app/LocaleContext';
 import { useOnlineStatus } from '../app/useOnlineStatus';
 import { buildOfflineManifest, formatBytes, type OfflineItem } from '../domain/offline/manifest';
 import { SAMPLE_LESSONS, SAMPLE_AWARENESS, isApprovedForParents } from '../data/seed/content';
+import { PremiumGate } from '../components/PremiumGate';
 
 export function OfflineDownloads() {
   const { t, locale } = useLocale();
@@ -30,6 +31,7 @@ export function OfflineDownloads() {
   const manifest = useMemo(() => buildOfflineManifest(candidates), [candidates]);
 
   return (
+    <PremiumGate feature="offline_downloads">
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-bold text-sky-deep">
@@ -68,5 +70,6 @@ export function OfflineDownloads() {
         </ul>
       )}
     </div>
+    </PremiumGate>
   );
 }

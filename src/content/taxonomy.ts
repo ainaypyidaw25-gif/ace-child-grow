@@ -110,3 +110,22 @@ export type ClinicalStatus = (typeof CLINICAL_STATUSES)[number];
 
 export const ageGroup = (key: string) => AGE_GROUPS.find((a) => a.key === key);
 export const domain = (key: string) => DOMAINS.find((d) => d.key === key);
+
+/**
+ * Resolve a chronological age to one library band.
+ *
+ * Some authored ranges share a boundary (for example 19–24 months and
+ * 2 years/24–30 months). At a shared boundary the newer band wins. Keeping
+ * that policy here prevents screen-specific Array.find ordering from silently
+ * assigning an exact birthday to the younger band.
+ */
+export function resolveAgeGroup(ageMonths: number): AgeGroup | undefined {
+  if (!Number.isFinite(ageMonths) || ageMonths < 0) return undefined;
+  let resolved: AgeGroup | undefined;
+  for (const group of AGE_GROUPS) {
+    if (ageMonths >= group.minMonths && ageMonths <= group.maxMonths) {
+      if (!resolved || group.minMonths > resolved.minMonths) resolved = group;
+    }
+  }
+  return resolved;
+}

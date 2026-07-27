@@ -1,0 +1,89 @@
+# Myan Myan Pay integration
+
+ACE Child Grow uses a server-only Myan Myan Pay integration. The Vite client
+talks to authenticated Convex actions; it never receives the merchant key or
+secret. Payment success is accepted only after a signed callback or a
+server-to-server status check validates the order ID, amount, and currency.
+
+## Required merchant details
+
+- Merchant KYC status: the `Child-grow-1` console profile is currently
+  `PENDING`; no API application has been created yet.
+- Choose the legal merchant type before submitting. A company profile requires
+  the registered company name, registration number, tax ID (when applicable),
+  DICA registration, and company extract in addition to the identity files.
+- Business category, service description, website, and full physical address.
+- Authorized person's NRC/ID front and back, selfie with ID, bank book or bank
+  statement, and e-commerce/business licence. Each upload must be 3 MB or less.
+- Settlement bank details. The console currently offers KBZ Bank, AYA Bank, and
+  CB Bank, with account name and account number.
+- App ID
+- Sandbox publishable key and secret key
+- Production publishable key and secret key
+- Merchant-specific API base URL for each environment
+- Production merchant/key activation confirmation
+- Myan Myan Pay instructions for server IP allowlisting, if enabled
+- Access to register the callback URL in the merchant dashboard
+
+The production callback URL is:
+
+`https://graceful-possum-566.convex.site/mmpay/webhook`
+
+The sandbox callback URL is:
+
+`https://uncommon-orca-603.convex.site/mmpay/webhook`
+
+Use `Server to Server (SDK)` for the application, `ACE Child Grow` as the app
+name, and `https://child.acegroup.com.mm` as the website under review. The
+provider requires the sandbox flow to be completed before requesting LIVE
+approval through its Discord support channel.
+
+## Display compliance
+
+- Show the official MMQR logo beside the generated QR without altering,
+  stretching, or overlaying it.
+- Show `PAYMENT POWERED BY MYANMYANPAY` in uppercase directly beneath the QR.
+
+## Convex environment variables
+
+Set these on the Convex deployment, never as `VITE_*` or Vercel frontend
+variables:
+
+```text
+MMPAY_ENV=sandbox|production
+MMPAY_WEBHOOK_URL=https://<deployment>.convex.site/mmpay/webhook
+MMPAY_SANDBOX_APP_ID=...
+MMPAY_SANDBOX_PUBLISHABLE_KEY=...
+MMPAY_SANDBOX_SECRET_KEY=...
+MMPAY_SANDBOX_API_BASE_URL=...
+MMPAY_PRODUCTION_APP_ID=...
+MMPAY_PRODUCTION_PUBLISHABLE_KEY=...
+MMPAY_PRODUCTION_SECRET_KEY=...
+MMPAY_PRODUCTION_API_BASE_URL=...
+```
+
+Use sandbox credentials on the development deployment first. After a complete
+test payment (create → scan → signed callback → automatic subscription
+activation), set the production variables on the production deployment, deploy
+Convex, switch `MMPAY_ENV` to `production`, and perform a small live payment
+before promoting the verified Vercel preview.
+
+## Security and reconciliation behavior
+
+- The pinned `mmpay-node-sdk` 1.1.4 source documents
+  `X-Mmpay-Signature` / `X-Mmpay-Nonce` and verifies
+  HMAC-SHA256 over `<nonce>.<exact raw body>`. ACE mirrors that contract and
+  keeps an automated regression test for invalid signatures. Merchant sandbox
+  callback verification remains required before LIVE approval.
+- Provider calls run only in Convex Node actions.
+- The webhook verifies HMAC-SHA256 over the exact raw body and nonce using a
+  timing-safe comparison.
+- Callback nonces are hashed and persisted so retries are idempotent.
+- Order ownership is checked on every parent query/action.
+- Amount and currency must match the server-created order.
+- Terminal statuses cannot regress to pending; a successful transaction can
+  only advance to refunded.
+- Success activates the selected plan atomically with the payment record.
+- Refund downgrades only the subscription activated by that same order.
+- Owner/admin records show provider references, vendor, method, environment,
+  status, and update time without exposing secrets.

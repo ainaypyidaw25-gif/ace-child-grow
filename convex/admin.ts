@@ -6,6 +6,8 @@ import { logAudit } from './audit';
 const roleValidator = v.union(
   v.literal('owner'),
   v.literal('content_editor'),
+  v.literal('language_reviewer'),
+  v.literal('evidence_reviewer'),
   v.literal('clinical_reviewer'),
   v.literal('support'),
 );
@@ -13,6 +15,8 @@ const roleValidator = v.union(
 const roleLabels: Record<StaffRole, string> = {
   owner: 'Owner',
   content_editor: 'Content editor',
+  language_reviewer: 'Native-language reviewer',
+  evidence_reviewer: 'Evidence reviewer',
   clinical_reviewer: 'Clinical reviewer',
   support: 'Support',
 };
@@ -141,10 +145,9 @@ export const createInvite = mutation({
       .query('users')
       .withIndex('email', (q) => q.eq('email', email))
       .unique();
-    if (!targetUser) throw new Error('The team member must create an account before being invited');
     const qualification = args.reviewerQualification?.trim();
-    if (args.role === 'clinical_reviewer' && !qualification) {
-      throw new Error('Clinical reviewer qualification is required');
+    if (['clinical_reviewer', 'evidence_reviewer'].includes(args.role) && !qualification) {
+      throw new Error('A professional qualification is required for this reviewer role');
     }
     const prior = await ctx.db
       .query('staffInvites')
@@ -163,7 +166,7 @@ export const createInvite = mutation({
       role: args.role,
       reviewerQualification: qualification,
       codeHash: await hashCode(inviteCode),
-      targetUserId: targetUser._id,
+      ...(targetUser ? { targetUserId: targetUser._id } : {}),
       status: 'pending',
       invitedBy: ownerId,
       invitedAt: now,
@@ -195,7 +198,7 @@ export const claimInvite = mutation({
       await logAudit(ctx, userId, 'staff.invite.claim_rejected', 'staffInvites', invite._id, 'expired', { result: 'rejected' });
       return { ok: false, role: null, message: 'Invitation has expired.' };
     }
-    if (!email || email !== invite.email || userId !== invite.targetUserId) {
+    if (!email || email !== invite.email || (invite.targetUserId !== undefined && userId !== invite.targetUserId)) {
       await logAudit(ctx, userId, 'staff.invite.claim_rejected', 'staffInvites', invite._id, 'wrong account', { result: 'rejected' });
       return { ok: false, role: null, message: 'Sign in with the exact account that was invited.' };
     }
@@ -244,8 +247,8 @@ export const changeRole = mutation({
     if (ownerId === args.userId) throw new Error('Owners cannot change their own role');
     const qualification = args.reviewerQualification?.trim();
     const displayName = args.displayName?.trim();
-    if (args.role === 'clinical_reviewer' && (!qualification || !displayName)) {
-      throw new Error('Clinical reviewer name and qualification are required');
+    if (['clinical_reviewer', 'evidence_reviewer'].includes(args.role) && (!qualification || !displayName)) {
+      throw new Error('Reviewer name and qualification are required');
     }
     const profile = await ctx.db
       .query('parentProfiles')

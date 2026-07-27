@@ -1,7 +1,7 @@
 import { query, mutation } from './_generated/server';
 import { v } from 'convex/values';
 import { getAuthUserId } from '@convex-dev/auth/server';
-import { hasStaffRole, requireContentEditor, requireProfessionalPublisher } from './lib/auth';
+import { hasStaffRole, requireClinicalPublisher, requireContentEditor } from './lib/auth';
 import { logAudit } from './audit';
 
 // Mirror of src/domain/content/workflow.ts (convex functions can't import src/).
@@ -25,7 +25,7 @@ export const list = query({
     // found this to be the one read a stranger could reach, and an exception to
     // a rule is how the rule stops being checked. Signed out is signed out.
     if (!userId) return { staff: false, items: [] };
-    const staff = await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'clinical_reviewer']);
+    const staff = await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'language_reviewer', 'evidence_reviewer', 'clinical_reviewer']);
     const all = await ctx.db.query('contentItems').collect();
     // Non-staff see only published items; staff see everything.
     return { staff, items: staff ? all : all.filter((i) => i.reviewStatus === 'published') };
@@ -56,7 +56,7 @@ export const transition = mutation({
   },
   handler: async (ctx, { id, to, reviewerQualification }) => {
     const approval = ['approved', 'published'].includes(to)
-      ? await requireProfessionalPublisher(ctx)
+      ? await requireClinicalPublisher(ctx)
       : null;
     const userId = approval?.userId ?? await requireContentEditor(ctx);
     const item = await ctx.db.get(id);

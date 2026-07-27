@@ -7,6 +7,7 @@ import { decideRoute } from './bootstrap';
 import { SignIn } from '../screens/SignIn';
 import { api } from '../../convex/_generated/api';
 import { getPortalMode, setPortalMode } from './portalMode';
+import { decideStaffRoute } from './staffRoute';
 
 const Welcome = lazy(() => import('../screens/Welcome').then((module) => ({ default: module.Welcome })));
 const Consent = lazy(() => import('../screens/Consent').then((module) => ({ default: module.Consent })));
@@ -36,7 +37,10 @@ const AdminTeam = lazy(() => import('../screens/AdminTeam').then((module) => ({ 
 const AcceptAdminInvite = lazy(() => import('../screens/AcceptAdminInvite').then((module) => ({ default: module.AcceptAdminInvite })));
 const AdminDirectory = lazy(() => import('../screens/AdminDirectory').then((module) => ({ default: module.AdminDirectory })));
 const AdminBilling = lazy(() => import('../screens/AdminBilling').then((module) => ({ default: module.AdminBilling })));
+const ContentReviewWorkspace = lazy(() => import('../screens/ContentReviewWorkspace').then((module) => ({ default: module.ContentReviewWorkspace })));
 const SubscriptionPlans = lazy(() => import('../screens/SubscriptionPlans').then((module) => ({ default: module.SubscriptionPlans })));
+const PaymentStatus = lazy(() => import('../screens/PaymentStatus').then((module) => ({ default: module.PaymentStatus })));
+const Appointments = lazy(() => import('../screens/Appointments').then((module) => ({ default: module.Appointments })));
 
 // Authentication gate: unauthenticated visitors see sign-in; the app (and all
 // child data) is only reachable once signed in.
@@ -119,6 +123,21 @@ function ResetStaffPortalMode({ children }: { children: ReactNode }) {
   return children;
 }
 
+function StaffOnlyRoute({ children }: { children: ReactNode }) {
+  const access = useQuery(api.admin.myAccess);
+  const decision = decideStaffRoute(access);
+
+  if (decision === 'loading') {
+    return (
+      <div className="flex min-h-[50vh] items-center justify-center text-ink-soft" role="status" aria-live="polite">
+        <span className="animate-pulse">…</span>
+      </div>
+    );
+  }
+
+  return decision === 'allow' ? children : <Navigate to="/home" replace />;
+}
+
 function AppRoutes() {
   return (
     <Suspense fallback={<div className="flex min-h-[50vh] items-center justify-center text-ink-soft" role="status" aria-live="polite">…</div>}>
@@ -135,8 +154,12 @@ function AppRoutes() {
       <Route path="/growth" element={<Layout><Growth /></Layout>} />
       <Route path="/sleep" element={<Layout><Sleep /></Layout>} />
       <Route path="/report" element={<Layout><Report /></Layout>} />
+      <Route path="/appointments" element={<Layout><Appointments /></Layout>} />
       <Route path="/profile" element={<Layout><Profile /></Layout>} />
       <Route path="/subscription" element={<Layout><SubscriptionPlans /></Layout>} />
+      <Route path="/payment/success/:orderId" element={<Layout><PaymentStatus view="success" /></Layout>} />
+      <Route path="/payment/cancel/:orderId" element={<Layout><PaymentStatus view="cancel" /></Layout>} />
+      <Route path="/payment/:orderId" element={<Layout><PaymentStatus /></Layout>} />
       <Route path="/offline" element={<Layout><OfflineDownloads /></Layout>} />
       <Route path="/favorites" element={<Layout><Favorites /></Layout>} />
       <Route path="/notifications" element={<Layout><Notifications /></Layout>} />
@@ -144,14 +167,16 @@ function AppRoutes() {
       <Route path="/child-profile" element={<Layout><ChildProfile /></Layout>} />
       <Route path="/library" element={<Layout><ContentLibrary /></Layout>} />
       <Route path="/content/:slug" element={<Layout><ContentDetail /></Layout>} />
-      <Route path="/admin" element={<Layout><AdminReviewQueue /></Layout>} />
-      <Route path="/admin/library" element={<Layout><LibraryAdmin /></Layout>} />
-      <Route path="/admin/evidence" element={<Layout><EvidenceAdmin /></Layout>} />
-      <Route path="/admin/team" element={<Layout><AdminTeam /></Layout>} />
-      <Route path="/admin/directory" element={<Layout><AdminDirectory /></Layout>} />
-      <Route path="/admin/billing" element={<Layout><AdminBilling /></Layout>} />
-      <Route path="/admin/accept-invite" element={<Layout><AcceptAdminInvite /></Layout>} />
-      <Route path="/audit" element={<Layout><AuditLog /></Layout>} />
+      <Route path="/admin" element={<StaffOnlyRoute><Layout><AdminReviewQueue /></Layout></StaffOnlyRoute>} />
+      <Route path="/admin/library" element={<StaffOnlyRoute><Layout><LibraryAdmin /></Layout></StaffOnlyRoute>} />
+      <Route path="/admin/reviews" element={<StaffOnlyRoute><Layout><ContentReviewWorkspace /></Layout></StaffOnlyRoute>} />
+      <Route path="/admin/evidence" element={<StaffOnlyRoute><Layout><EvidenceAdmin /></Layout></StaffOnlyRoute>} />
+      <Route path="/admin/team" element={<StaffOnlyRoute><Layout><AdminTeam /></Layout></StaffOnlyRoute>} />
+      <Route path="/admin/directory" element={<StaffOnlyRoute><Layout><AdminDirectory /></Layout></StaffOnlyRoute>} />
+      <Route path="/admin/billing" element={<StaffOnlyRoute><Layout><AdminBilling /></Layout></StaffOnlyRoute>} />
+      <Route path="/admin/accept-invite" element={<Layout showNav={false}><AcceptAdminInvite /></Layout>} />
+      <Route path="/admin/accept-invite/:inviteCode" element={<Layout showNav={false}><AcceptAdminInvite /></Layout>} />
+      <Route path="/audit" element={<StaffOnlyRoute><Layout><AuditLog /></Layout></StaffOnlyRoute>} />
       <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Suspense>
