@@ -7,6 +7,7 @@ import { decideRoute } from './bootstrap';
 import { SignIn } from '../screens/SignIn';
 import { api } from '../../convex/_generated/api';
 import { getPortalMode, setPortalMode } from './portalMode';
+import { decideStaffRoute } from './staffRoute';
 
 const Welcome = lazy(() => import('../screens/Welcome').then((module) => ({ default: module.Welcome })));
 const Consent = lazy(() => import('../screens/Consent').then((module) => ({ default: module.Consent })));
@@ -121,6 +122,21 @@ function ResetStaffPortalMode({ children }: { children: ReactNode }) {
   return children;
 }
 
+function StaffOnlyRoute({ children }: { children: ReactNode }) {
+  const access = useQuery(api.admin.myAccess);
+  const decision = decideStaffRoute(access);
+
+  if (decision === 'loading') {
+    return (
+      <div className="flex min-h-[50vh] items-center justify-center text-ink-soft" role="status" aria-live="polite">
+        <span className="animate-pulse">…</span>
+      </div>
+    );
+  }
+
+  return decision === 'allow' ? children : <Navigate to="/home" replace />;
+}
+
 function AppRoutes() {
   return (
     <Suspense fallback={<div className="flex min-h-[50vh] items-center justify-center text-ink-soft" role="status" aria-live="polite">…</div>}>
@@ -150,14 +166,14 @@ function AppRoutes() {
       <Route path="/child-profile" element={<Layout><ChildProfile /></Layout>} />
       <Route path="/library" element={<Layout><ContentLibrary /></Layout>} />
       <Route path="/content/:slug" element={<Layout><ContentDetail /></Layout>} />
-      <Route path="/admin" element={<Layout><AdminReviewQueue /></Layout>} />
-      <Route path="/admin/library" element={<Layout><LibraryAdmin /></Layout>} />
-      <Route path="/admin/evidence" element={<Layout><EvidenceAdmin /></Layout>} />
-      <Route path="/admin/team" element={<Layout><AdminTeam /></Layout>} />
-      <Route path="/admin/directory" element={<Layout><AdminDirectory /></Layout>} />
-      <Route path="/admin/billing" element={<Layout><AdminBilling /></Layout>} />
+      <Route path="/admin" element={<StaffOnlyRoute><Layout><AdminReviewQueue /></Layout></StaffOnlyRoute>} />
+      <Route path="/admin/library" element={<StaffOnlyRoute><Layout><LibraryAdmin /></Layout></StaffOnlyRoute>} />
+      <Route path="/admin/evidence" element={<StaffOnlyRoute><Layout><EvidenceAdmin /></Layout></StaffOnlyRoute>} />
+      <Route path="/admin/team" element={<StaffOnlyRoute><Layout><AdminTeam /></Layout></StaffOnlyRoute>} />
+      <Route path="/admin/directory" element={<StaffOnlyRoute><Layout><AdminDirectory /></Layout></StaffOnlyRoute>} />
+      <Route path="/admin/billing" element={<StaffOnlyRoute><Layout><AdminBilling /></Layout></StaffOnlyRoute>} />
       <Route path="/admin/accept-invite" element={<Layout><AcceptAdminInvite /></Layout>} />
-      <Route path="/audit" element={<Layout><AuditLog /></Layout>} />
+      <Route path="/audit" element={<StaffOnlyRoute><Layout><AuditLog /></Layout></StaffOnlyRoute>} />
       <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Suspense>
