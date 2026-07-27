@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2732 2732">
+  <rect width="2732" height="2732" fill="#F5FAFD"/>
+  <g transform="translate(854 710)">
+    <rect width="1024" height="1024" rx="230" fill="#163F35"/>
+    <circle cx="512" cy="512" r="315" fill="#F8FCFA"/>
+    <path d="M512 746c0-150-4-244-104-352" fill="none" stroke="#287964" stroke-width="58" stroke-linecap="round"/>
+    <path d="M515 746c0-132 18-226 118-309" fill="none" stroke="#4DA8FF" stroke-width="58" stroke-linecap="round"/>
+    <path d="M405 390c-85-11-145-72-151-157 87-12 159 45 173 129 2 13-8 25-22 28Z" fill="#78D9B5"/>
+    <path d="M638 433c83-27 158 17 185 98-80 32-159-5-191-82-5-12 1-25 6-16Z" fill="#4DA8FF"/>
+    <circle cx="512" cy="746" r="36" fill="#E6B85C"/>
+  </g>
+  <text x="1366" y="1940" text-anchor="middle" font-family="Arial,sans-serif" font-size="132" font-weight="700" fill="#163F35">ACE Child Grow</text>
+</svg>

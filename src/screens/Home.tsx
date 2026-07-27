@@ -4,6 +4,7 @@ import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
 import { useAppState } from '../app/AppState';
 import { ageLabels } from '../domain/age/ageLabel';
+import { isGooglePlayBuild } from '../app/platform';
 
 export function Home() {
   const { t, locale } = useLocale();
@@ -136,7 +137,7 @@ export function Home() {
             </Link>
           </section>
 
-          {!premium && (
+          {!premium && !isGooglePlayBuild() && (
             <section className="rounded-3xl bg-pastel-yellow/55 p-5">
               <span className="text-xs font-bold uppercase tracking-[0.15em] text-ink-soft">ACE Premium</span>
               <h2 className="mt-2 font-bold text-ink">
