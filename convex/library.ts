@@ -1,7 +1,8 @@
 // Content Library Convex functions.
 //
-// Read access: published items are visible to any authenticated user; staff see
-// everything (all review statuses). Write access (import, review transitions,
+// Read access: active items are visible to any authenticated user, including
+// clearly labelled review-pending items; archived items remain staff-only.
+// Write access (import, review transitions,
 // media) is staff-only and audited. The library carries NO per-parent private
 // data, so reads are shared catalogue — but still behind authentication.
 import { query, mutation } from './_generated/server';
@@ -14,7 +15,11 @@ import { STARTER_ANIMATION_SLUGS } from './animationPlan';
 import { seedAuditSummary, seedMayUpdateExisting, seedMediaIsProtected } from './lib/seedPolicy';
 
 // List content by type, optionally filtered by age/domain/category and a query.
-// Non-staff receive only 'published'; staff receive all statuses.
+// Non-staff receive all active statuses; staff also receive archived rows.
+export function isPubliclyReadableStatus(status: string): boolean {
+  return status !== 'archived';
+}
+
 export const listByType = query({
   args: {
     type: v.string(),
@@ -51,7 +56,7 @@ export const listByType = query({
     if (args.ageGroupKey) rows = rows.filter((r) => r.ageGroupKey === args.ageGroupKey);
     if (args.domainKey) rows = rows.filter((r) => r.domainKey === args.domainKey);
     if (args.category) rows = rows.filter((r) => r.category === args.category);
-    if (!staff) rows = rows.filter((r) => r.clinicalStatus === 'published');
+    if (!staff) rows = rows.filter((r) => isPubliclyReadableStatus(r.clinicalStatus));
     if (args.q) {
       const needle = args.q.toLowerCase();
       rows = rows.filter((r) => r.searchText.includes(needle));
@@ -62,7 +67,7 @@ export const listByType = query({
   },
 });
 
-// Fetch one item by slug (with its media). Non-staff cannot read unpublished.
+// Fetch one item by slug (with its media). Non-staff cannot read archived items.
 export const getBySlug = query({
   args: { slug: v.string() },
   handler: async (ctx, args) => {
@@ -74,7 +79,7 @@ export const getBySlug = query({
       .withIndex('by_slug', (qq) => qq.eq('slug', args.slug))
       .unique();
     if (!item) return null;
-    if (!staff && item.clinicalStatus !== 'published') return { restricted: true };
+    if (!staff && !isPubliclyReadableStatus(item.clinicalStatus)) return { restricted: true };
     let mediaRows = await ctx.db
       .query('libraryMedia')
       .withIndex('by_content', (qq) => qq.eq('contentSlug', args.slug))
@@ -278,7 +283,7 @@ export const search = query({
     let rows = args.type
       ? await ctx.db.query('libraryContent').withIndex('by_type', (qq) => qq.eq('type', args.type as string)).collect()
       : await ctx.db.query('libraryContent').collect();
-    if (!staff) rows = rows.filter((r) => r.clinicalStatus === 'published');
+    if (!staff) rows = rows.filter((r) => isPubliclyReadableStatus(r.clinicalStatus));
     return rows
       .filter((r) => r.searchText.includes(needle))
       .slice(0, 50)

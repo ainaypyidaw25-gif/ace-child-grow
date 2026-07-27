@@ -95,7 +95,7 @@ describe('Convex registered handlers enforce authorization', () => {
     expect(context.db.patch).not.toHaveBeenCalled();
   });
 
-  it('non-staff catalogue response excludes drafts and contains no child/private fields', async () => {
+  it('non-staff catalogue includes active review-pending rows, excludes archived rows, and contains no private fields', async () => {
     authState.userId = 'user-1';
     const published = {
       _id: 'content-1',
@@ -105,20 +105,28 @@ describe('Convex registered handlers enforce authorization', () => {
       titleMm: 'အများသုံး',
       titleEn: 'Public',
     };
-    const draft = {
+    const reviewPending = {
       _id: 'content-2',
-      slug: 'private-draft',
+      slug: 'review-pending',
       type: 'activity',
       clinicalStatus: 'clinical_review',
-      titleMm: 'မူကြမ်း',
-      titleEn: 'Draft',
+      titleMm: 'စိစစ်ဆဲ',
+      titleEn: 'Review pending',
+    };
+    const archived = {
+      _id: 'content-3',
+      slug: 'archived-item',
+      type: 'activity',
+      clinicalStatus: 'archived',
+      titleMm: 'သိမ်းဆည်းထား',
+      titleEn: 'Archived',
     };
     const context = ctx({
       profile: { userId: 'user-1', isStaff: false },
-      rows: { libraryContent: [published, draft] },
+      rows: { libraryContent: [published, reviewPending, archived] },
     });
     const result = await handler(listByType)(context, { type: 'activity' });
-    expect(result).toEqual({ staff: false, items: [published] });
+    expect(result).toEqual({ staff: false, items: [reviewPending, published] });
     expect(JSON.stringify(result)).not.toMatch(/childId|birthDate|nickname|userId/);
   });
 

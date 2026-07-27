@@ -15,7 +15,7 @@ describe('clinically scoped publication gate', () => {
     expect(workflowSource).toContain('await requireClinicalPublisher(ctx)');
   });
 
-  it('keeps unreviewed frontend samples behind the staff preview gate or reads only server-published library content', () => {
+  it('shows review-pending educational samples with an honest ongoing-review notice', () => {
     for (const file of ['MilestoneDemo', 'Activities']) {
       const source = readFileSync(`src/screens/${file}.tsx`, 'utf8');
       expect(source, file).toContain('api.library.listByType');
@@ -23,13 +23,14 @@ describe('clinically scoped publication gate', () => {
     }
     for (const file of ['Learn', 'HopeCenter', 'Favorites']) {
       const source = readFileSync(`src/screens/${file}.tsx`, 'utf8');
-      expect(source, file).toContain('useStaffPreviewAccess');
-      expect(source, file).toContain('UnreviewedContentNotice');
+      expect(source, file).toContain('ReviewOngoingNotice');
+      expect(source, file).not.toContain('UnreviewedContentNotice');
     }
   });
 
-  it('filters clinical-review library rows from both non-staff list and detail queries', () => {
-    expect(librarySource).toContain("if (!staff) rows = rows.filter((r) => r.clinicalStatus === 'published')");
-    expect(librarySource).toContain("if (!staff && item.clinicalStatus !== 'published') return { restricted: true }");
+  it('shows active review-pending library rows while keeping archived rows private', () => {
+    expect(librarySource).toContain("return status !== 'archived'");
+    expect(librarySource).toContain('isPubliclyReadableStatus(r.clinicalStatus)');
+    expect(librarySource).toContain('!isPubliclyReadableStatus(item.clinicalStatus)');
   });
 });

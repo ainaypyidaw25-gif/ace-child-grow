@@ -1,9 +1,9 @@
 // Sample development content (Phase 24).
 //
-// EVERY item here is marked reviewStatus: 'clinical_review' — it is illustrative,
-// concisely original wording, and MUST NOT be presented to parents as approved
-// guidance until a qualified clinical reviewer approves it. The UI renders a
-// "Clinical Review Required" badge for any non-'published' content.
+// EVERY item here is marked reviewStatus: 'clinical_review'. It may be shown as
+// clearly labelled, general educational content while professional review
+// continues, but MUST NOT be described as clinically approved. Reviewers can
+// revise it through the editorial workflow; it must never be used to diagnose.
 //
 // This file is a representative sample across age groups. The full catalogue
 // (8 milestones / 5 activities / 2 lessons / 1 safety tip / 1 awareness tip per

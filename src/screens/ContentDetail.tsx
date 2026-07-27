@@ -22,7 +22,7 @@ export function ContentDetail() {
       <div className="rounded-card border border-line bg-mint-soft/40 p-5 text-center">
         <div aria-hidden className="text-3xl">🔎</div>
         <p className="mt-2 font-medium text-ink">
-          {locale === 'mm' ? 'ဤအကြောင်းအရာ ပြန်လည်သုံးသပ်ဆဲဖြစ်သည်။' : 'This content is still under review.'}
+          {locale === 'mm' ? 'ဤအကြောင်းအရာကို လက်ရှိ မဖော်ပြနိုင်ပါ။' : 'This content is currently unavailable.'}
         </p>
         <Link to="/library" className="mt-3 inline-block text-sm text-sky-deep underline">
           {locale === 'mm' ? '← စာကြည့်တိုက်သို့' : '← Back to library'}
@@ -31,7 +31,7 @@ export function ContentDetail() {
     );
   }
 
-  const { item, media, staff } = res;
+  const { item, media } = res;
   const d = (item.data ?? {}) as Record<string, unknown>;
   const list = (k: string): BL[] => (Array.isArray(d[k]) ? (d[k] as BL[]) : []);
   const bl = (k: string): BL | undefined => (d[k] && typeof d[k] === 'object' ? (d[k] as BL) : undefined);
@@ -56,7 +56,7 @@ export function ContentDetail() {
           <Link to="/library" className="text-sm text-sky-deep underline">
             {L('← စာကြည့်တိုက်', '← Library')}
           </Link>
-          {staff && <ReviewBadge published={item.clinicalStatus === 'published'} />}
+          <ReviewBadge published={item.clinicalStatus === 'published'} />
         </div>
         <h1 className="mt-1 text-xl font-bold text-sky-deep">{locale === 'mm' ? item.titleMm : item.titleEn}</h1>
         {(item.summaryMm || item.summaryEn) && (
@@ -261,10 +261,14 @@ export function ContentDetail() {
 
       <p className="rounded-lg bg-pastel-yellow/50 px-3 py-2 text-[11px] leading-relaxed text-ink-soft">
         {locale === 'mm'
-          ? item.reviewScope === 'education'
+          ? item.clinicalStatus !== 'published'
+            ? 'စိစစ်ဆဲ — ဤအကြောင်းအရာကို ယခု ဖတ်ရှုအသုံးပြုနိုင်သော်လည်း ပညာရှင်များက ဆက်လက်စိစစ်ပြင်ဆင်နိုင်ပါသည်။ ရောဂါသတ်မှတ်ချက် သို့မဟုတ် တစ်ဦးချင်းဆေးဘက်ဆိုင်ရာ အကြံဉာဏ် မဟုတ်ပါ။'
+            : item.reviewScope === 'education'
             ? 'သုံးသပ်မှုမှတ်တမ်း — ဤအကြောင်းအရာကို ပညာရေးနှင့် အထူးပညာရေးဆိုင်ရာ ပညာရှင်က သုံးသပ်အတည်ပြုထားပါသည်။ ဆေးဘက်ဆိုင်ရာ အကြောင်းအရာများသည် ယုံကြည်ရသော ကိုးကားချက်များအပေါ် အခြေခံထားသည့် အထွေထွေ လမ်းညွှန်သာဖြစ်ပြီး ဆေးဘက်ဆိုင်ရာ အတည်ပြုချက် သို့မဟုတ် ဆရာဝန်၏ အကြံဉာဏ် မဟုတ်ပါ။ စိုးရိမ်စရာရှိပါက သက်ဆိုင်ရာ ကျန်းမာရေးပညာရှင်နှင့် တိုင်ပင်ပါ။'
             : 'မှတ်ချက် — ဤအကြောင်းအရာသည် ယုံကြည်ရသော ကိုးကားချက်များအပေါ် အခြေခံထားသည့် အထွေထွေ မိဘလမ်းညွှန် ဖြစ်ပါသည်။ ဆေးဘက်ဆိုင်ရာ အကြံဉာဏ်အဖြစ် မယူဆသင့်ပါ။'
-          : item.reviewScope === 'education'
+          : item.clinicalStatus !== 'published'
+            ? 'Review ongoing — this content is available now, but professional reviewers may revise it. It is not a diagnosis or personal medical advice.'
+            : item.reviewScope === 'education'
             ? 'Review record: approved by an education and special-education professional. Medical information is general evidence-based guidance, not clinical approval or medical advice. Consult an appropriate health professional if concerned.'
             : `General evidence-based parent guidance, not medical advice. Source: ${item.source}`}
       </p>

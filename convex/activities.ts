@@ -30,7 +30,7 @@ export const complete = mutation({
       .query('libraryContent')
       .withIndex('by_slug', (q) => q.eq('slug', args.contentSlug))
       .unique();
-    if (!content || content.type !== 'activity' || content.clinicalStatus !== 'published') {
+    if (!content || content.type !== 'activity' || content.clinicalStatus === 'archived') {
       throw new Error('Activity not found');
     }
     return await ctx.db.insert('activityCompletions', {

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useLocale } from '../app/LocaleContext';
 import { SAMPLE_AWARENESS, isApprovedForParents, type SeedAwarenessTopic } from '../data/seed/content';
 import { ReviewBadge } from '../components/ReviewBadge';
-import { StaffPreviewBanner, UnreviewedContentNotice, useStaffPreviewAccess } from '../components/StaffPreviewGate';
+import { ReviewOngoingNotice } from '../components/StaffPreviewGate';
 
 const TOPIC_SYMBOLS: Record<string, string> = {
   'autism-spectrum': '◇',
@@ -15,15 +15,10 @@ const TOPIC_SYMBOLS: Record<string, string> = {
 export function HopeCenter() {
   const { t, locale } = useLocale();
   const [open, setOpen] = useState<SeedAwarenessTopic | null>(null);
-  const staffPreview = useStaffPreviewAccess();
-
-  if (staffPreview === undefined) return <p className="text-ink-soft" role="status">…</p>;
-  if (!staffPreview) return <UnreviewedContentNotice />;
-
   if (open) {
     return (
       <div className="mx-auto max-w-4xl space-y-5">
-        <StaffPreviewBanner />
+        <ReviewOngoingNotice />
         <button
           type="button"
           onClick={() => setOpen(null)}
@@ -80,7 +75,7 @@ export function HopeCenter() {
 
   return (
     <div className="mx-auto max-w-5xl space-y-7">
-      <StaffPreviewBanner />
+      <ReviewOngoingNotice />
       <header className="max-w-3xl">
         <p className="text-xs font-semibold uppercase tracking-[0.16em] text-sky-deep">
           {locale === 'mm' ? 'စောစီးစွာ နားလည်၊ သင့်တော်စွာ ကူညီ' : 'Understand early, support well'}

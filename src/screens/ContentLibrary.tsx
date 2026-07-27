@@ -99,12 +99,12 @@ export function ContentLibrary() {
         <div className="rounded-card border border-line bg-mint-soft/40 p-5 text-center">
           <div aria-hidden className="text-3xl">🌱</div>
           <p className="mt-2 font-medium text-ink">
-            {locale === 'mm' ? 'ဤကဏ္ဍ၏ အကြောင်းအရာများ ပြင်ဆင်ဆဲဖြစ်သည်။' : 'Content for this section is being prepared.'}
+            {locale === 'mm' ? 'ရှာဖွေမှုနှင့် ကိုက်ညီသော အကြောင်းအရာ မတွေ့ပါ။' : 'No matching content found.'}
           </p>
           <p className="mt-1 text-sm text-ink-soft">
             {locale === 'mm'
-              ? 'အကြောင်းအရာအားလုံးကို သတ်မှတ်ထားသော အရည်အချင်းရှိ ပညာရှင်က သုံးသပ်ပြီးမှသာ ဖော်ပြပါမည်။'
-              : 'All content is shown only after review by an assigned qualified professional.'}
+              ? 'ရှာဖွေသည့် စကားလုံး သို့မဟုတ် စစ်ထုတ်ထားသော အမျိုးအစားကို ပြောင်းကြည့်ပါ။'
+              : 'Try changing the search term or filters.'}
           </p>
         </div>
       ) : (
@@ -119,7 +119,7 @@ export function ContentLibrary() {
                       it.domainKey && (locale === 'mm' ? domain(it.domainKey)?.labelMm : domain(it.domainKey)?.labelEn)]
                       .filter(Boolean).join(' · ')}
                   </span>
-                  {data.staff && <ReviewBadge published={it.clinicalStatus === 'published'} />}
+                  <ReviewBadge published={it.clinicalStatus === 'published'} />
                 </div>
                 <h2 className="mt-1 font-semibold text-ink">{locale === 'mm' ? it.titleMm : it.titleEn}</h2>
                 {(it.summaryMm || it.summaryEn) && (
