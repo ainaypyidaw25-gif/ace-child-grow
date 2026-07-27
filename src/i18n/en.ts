@@ -55,7 +55,7 @@ export const en: Record<TranslationKey, string> = {
   'directory.empty':
     'Verified local health-service information is not available yet.',
 
-  'review.required': 'Clinical Review Required',
+  'review.required': 'Available while professional review continues. Not diagnostic.',
   'common.offline': 'Offline',
   'common.online': 'Online',
   'common.cancel': 'Cancel',
@@ -108,7 +108,7 @@ export const en: Record<TranslationKey, string> = {
   'notifications.markRead': 'Mark all as read',
   'admin.seed': 'Add sample content',
   'admin.staffOnly': 'Only staff can advance content.',
-  'review.short': 'In review',
+  'review.short': 'Review ongoing',
   'activities.today': 'For today',
   'learn.category.speech': 'Speech and Communication',
   'learn.category.play': 'Play and Learning',

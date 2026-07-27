@@ -5,6 +5,7 @@ import { useLocale } from '../app/LocaleContext';
 import { useAppState } from '../app/AppState';
 import { chronologicalAge } from '../domain/age/age';
 import { resolveAgeGroup } from '../content/taxonomy';
+import { ReviewBadge } from '../components/ReviewBadge';
 import { NoChild } from './Growth';
 
 export function Activities() {
@@ -74,8 +75,8 @@ export function Activities() {
       {activities.length === 0 ? (
         <section className="rounded-[28px] border border-line bg-white p-6 text-center">
           <div className="text-4xl" aria-hidden>🌱</div>
-          <h2 className="mt-3 font-bold text-ink">{L('ဤအသက်အရွယ်အတွက် လှုပ်ရှားမှုများ ပြင်ဆင်ဆဲဖြစ်သည်', 'Activities for this age are being prepared')}</h2>
-          <p className="mt-2 text-sm text-ink-soft">{L('ဤအသက်အရွယ်အတွက် လမ်းညွှန်ထားသော အကြောင်းအရာကို ဆေးဘက်ဆိုင်ရာနှင့် ဘာသာစကား ပြန်လည်သုံးသပ်မှု ပြီးစီးမှသာ ဖော်ပြပါမည်။', 'Guidance for this age will appear only after its clinical and language review is complete.')}</p>
+          <h2 className="mt-3 font-bold text-ink">{L('ဤအသက်အရွယ်နှင့် ကိုက်ညီသော လှုပ်ရှားမှု မတွေ့ပါ', 'No matching activities found')}</h2>
+          <p className="mt-2 text-sm text-ink-soft">{L('ကလေး၏ မွေးသက္ကရာဇ်နှင့် အသက်အုပ်စုကို ပြန်စစ်ကြည့်ပါ။', 'Check the child’s birth date and age group.')}</p>
         </section>
       ) : (
         <section>
@@ -84,6 +85,7 @@ export function Activities() {
             {activities.map((activity) => (
               <li key={activity._id} className="flex items-center gap-3 p-4">
                 <Link to={`/content/${activity.slug}`} className="min-w-0 flex-1">
+                  <ReviewBadge published={activity.clinicalStatus === 'published'} />
                   <h3 className="font-semibold text-ink">{locale === 'mm' ? activity.titleMm : activity.titleEn}</h3>
                   <p className="mt-1 line-clamp-2 text-sm leading-6 text-ink-soft">{locale === 'mm' ? activity.summaryMm : activity.summaryEn}</p>
                   {activity.durationMinutes && <span className="mt-2 inline-block text-xs text-ink-soft">⏱ {activity.durationMinutes} {L('မိနစ်', 'min')}</span>}
