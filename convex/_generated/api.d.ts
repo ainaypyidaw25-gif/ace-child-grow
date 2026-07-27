@@ -8,10 +8,10 @@
  * @module
  */
 
-import type * as admin from "../admin.js";
 import type * as activities from "../activities.js";
-import type * as appointments from "../appointments.js";
+import type * as admin from "../admin.js";
 import type * as animationPlan from "../animationPlan.js";
+import type * as appointments from "../appointments.js";
 import type * as audit from "../audit.js";
 import type * as auth from "../auth.js";
 import type * as billing from "../billing.js";
@@ -20,14 +20,16 @@ import type * as content from "../content.js";
 import type * as crons from "../crons.js";
 import type * as directory from "../directory.js";
 import type * as evidence from "../evidence.js";
-import type * as favorites from "../favorites.js";
 import type * as family from "../family.js";
+import type * as favorites from "../favorites.js";
 import type * as growth from "../growth.js";
 import type * as http from "../http.js";
 import type * as lib_auth from "../lib/auth.js";
+import type * as lib_entitlements from "../lib/entitlements.js";
+import type * as lib_seedPolicy from "../lib/seedPolicy.js";
 import type * as library from "../library.js";
-import type * as milestones from "../milestones.js";
 import type * as media from "../media.js";
+import type * as milestones from "../milestones.js";
 import type * as mmpay from "../mmpay.js";
 import type * as mmpayData from "../mmpayData.js";
 import type * as notifications from "../notifications.js";
@@ -45,10 +47,10 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
-  admin: typeof admin;
   activities: typeof activities;
-  appointments: typeof appointments;
+  admin: typeof admin;
   animationPlan: typeof animationPlan;
+  appointments: typeof appointments;
   audit: typeof audit;
   auth: typeof auth;
   billing: typeof billing;
@@ -57,14 +59,16 @@ declare const fullApi: ApiFromModules<{
   crons: typeof crons;
   directory: typeof directory;
   evidence: typeof evidence;
-  favorites: typeof favorites;
   family: typeof family;
+  favorites: typeof favorites;
   growth: typeof growth;
   http: typeof http;
   "lib/auth": typeof lib_auth;
+  "lib/entitlements": typeof lib_entitlements;
+  "lib/seedPolicy": typeof lib_seedPolicy;
   library: typeof library;
-  milestones: typeof milestones;
   media: typeof media;
+  milestones: typeof milestones;
   mmpay: typeof mmpay;
   mmpayData: typeof mmpayData;
   notifications: typeof notifications;
