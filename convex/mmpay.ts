@@ -93,6 +93,22 @@ function sdk(config: Config) {
   });
 }
 
+export function webhookSignatureIsValid(
+  secretKey: string,
+  rawBody: string,
+  nonce: string,
+  signature: string,
+): boolean {
+  const expected = createHmac('sha256', secretKey)
+    .update(`${nonce}.${rawBody}`)
+    .digest('hex');
+  const supplied = signature.trim().toLowerCase();
+  const expectedBuffer = Buffer.from(expected, 'hex');
+  const suppliedBuffer = /^[a-f0-9]+$/i.test(supplied) ? Buffer.from(supplied, 'hex') : Buffer.alloc(0);
+  return expectedBuffer.length === suppliedBuffer.length
+    && timingSafeEqual(expectedBuffer, suppliedBuffer);
+}
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null;
 }
@@ -247,13 +263,7 @@ export const verifyWebhook = internalAction({
   }),
   handler: async (_ctx, args) => {
     const config = getConfig();
-    const expected = createHmac('sha256', config.secretKey)
-      .update(`${args.nonce}.${args.rawBody}`)
-      .digest('hex');
-    const supplied = args.signature.trim().toLowerCase();
-    const expectedBuffer = Buffer.from(expected, 'hex');
-    const suppliedBuffer = /^[a-f0-9]+$/i.test(supplied) ? Buffer.from(supplied, 'hex') : Buffer.alloc(0);
-    if (expectedBuffer.length !== suppliedBuffer.length || !timingSafeEqual(expectedBuffer, suppliedBuffer)) {
+    if (!webhookSignatureIsValid(config.secretKey, args.rawBody, args.nonce, args.signature)) {
       throw new Error('Invalid Myan Myan Pay webhook signature');
     }
     let payload: unknown;

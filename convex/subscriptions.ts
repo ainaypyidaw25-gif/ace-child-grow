@@ -13,6 +13,24 @@ const statusValidator = v.union(
   v.literal('paused'),
 );
 
+type TrialState = {
+  trialUsedAt?: number;
+  providerSubscriptionId?: string;
+  provider?: string;
+  planKey: 'free' | 'premium' | 'family';
+  status: 'active' | 'trialing' | 'past_due' | 'canceled' | 'paused';
+};
+
+export function trialIsAvailable(existing: TrialState | null | undefined): boolean {
+  return !(
+    existing?.trialUsedAt
+    || existing?.providerSubscriptionId
+    || existing?.provider === 'manual'
+    || existing?.planKey === 'family'
+    || (existing?.planKey === 'premium' && existing.status === 'active')
+  );
+}
+
 export const mine = query({
   args: {},
   returns: v.object({
@@ -61,13 +79,7 @@ export const startTrial = mutation({
       .query('subscriptions')
       .withIndex('by_user', (q) => q.eq('userId', userId))
       .unique();
-    if (
-      existing?.trialUsedAt
-      || existing?.providerSubscriptionId
-      || existing?.provider === 'manual'
-      || existing?.planKey === 'family'
-      || (existing?.planKey === 'premium' && existing.status === 'active')
-    ) {
+    if (!trialIsAvailable(existing)) {
       throw new Error('Free trial is not available for this account');
     }
     const now = Date.now();

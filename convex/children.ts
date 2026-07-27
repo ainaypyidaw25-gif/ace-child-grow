@@ -2,7 +2,7 @@ import { query, mutation } from './_generated/server';
 import { v } from 'convex/values';
 import { getAuthUserId } from '@convex-dev/auth/server';
 import { requireUser } from './lib/auth';
-import { childLimit } from './lib/entitlements';
+import { activeFamilyOwnerIds, childLimit } from './lib/entitlements';
 
 const childValidator = v.object({
   _id: v.id('children'),
@@ -29,16 +29,12 @@ export const list = query({
       .query('children')
       .withIndex('by_user', (q) => q.eq('userId', userId))
       .take(10);
-    const memberships = await ctx.db
-      .query('familyCaregivers')
-      .withIndex('by_caregiver_user', (q) => q.eq('caregiverUserId', userId))
-      .take(5);
+    const familyOwnerIds = await activeFamilyOwnerIds(ctx, userId);
     const sharedGroups = await Promise.all(
-      memberships
-        .filter((membership) => membership.status === 'active')
-        .map((membership) => ctx.db
+      familyOwnerIds
+        .map((ownerId) => ctx.db
           .query('children')
-          .withIndex('by_user', (q) => q.eq('userId', membership.ownerId))
+          .withIndex('by_user', (q) => q.eq('userId', ownerId))
           .take(3)),
     );
     return [...owned, ...sharedGroups.flat()].filter((child) => !child.deletedAt);

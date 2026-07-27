@@ -70,6 +70,11 @@ before promoting the verified Vercel preview.
 
 ## Security and reconciliation behavior
 
+- The pinned `mmpay-node-sdk` 1.1.4 source documents
+  `X-Mmpay-Signature` / `X-Mmpay-Nonce` and verifies
+  HMAC-SHA256 over `<nonce>.<exact raw body>`. ACE mirrors that contract and
+  keeps an automated regression test for invalid signatures. Merchant sandbox
+  callback verification remains required before LIVE approval.
 - Provider calls run only in Convex Node actions.
 - The webhook verifies HMAC-SHA256 over the exact raw body and nonce using a
   timing-safe comparison.

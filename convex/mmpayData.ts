@@ -207,16 +207,59 @@ type Update = {
   vendorQrRefId?: string;
   transactionRefId?: string;
 };
+type PaymentInvariantRow = {
+  userId: Id<'users'>;
+  orderId: string;
+  amount: number;
+  currency: 'MMK';
+  status: 'INITIATING' | Update['status'];
+};
+type RefundSubscription = {
+  provider?: string;
+  providerSubscriptionId?: string;
+};
 
 const terminalStatuses = new Set(['SUCCESS', 'FAILED', 'REFUNDED', 'CANCELLED', 'EXPIRED']);
+
+export function paymentBelongsToUser(
+  row: PaymentInvariantRow | null,
+  userId: Id<'users'>,
+): row is PaymentInvariantRow {
+  return row?.userId === userId;
+}
+
+export function assertPaymentMatches(
+  row: PaymentInvariantRow | null,
+  update: Update,
+): asserts row is PaymentInvariantRow {
+  if (!row || row.orderId !== update.orderId) throw new Error('Unknown payment order');
+  if (row.amount !== update.amount || row.currency !== update.currency) {
+    throw new Error('Payment amount or currency mismatch');
+  }
+}
+
+export function providerTransitionIsAllowed(
+  currentStatus: PaymentInvariantRow['status'],
+  nextStatus: Update['status'],
+): boolean {
+  return !terminalStatuses.has(currentStatus)
+    || (currentStatus === 'SUCCESS' && nextStatus === 'REFUNDED');
+}
+
+export function refundMatchesSubscription(
+  subscription: RefundSubscription | null,
+  orderId: string,
+): subscription is RefundSubscription {
+  return subscription?.provider === 'myanmyanpay'
+    && subscription.providerSubscriptionId === orderId;
+}
 
 async function applyUpdate(ctx: MutationCtx, update: Update, source: 'api' | 'webhook') {
   const row = await ctx.db
     .query('mmpayTransactions')
     .withIndex('by_order_id', (q) => q.eq('orderId', update.orderId))
     .unique();
-  if (!row) throw new Error('Unknown payment order');
-  if (row.amount !== update.amount || row.currency !== update.currency) throw new Error('Payment amount or currency mismatch');
+  assertPaymentMatches(row, update);
   if (update.transactionRefId) {
     const duplicateReference = await ctx.db
       .query('mmpayTransactions')
@@ -227,7 +270,7 @@ async function applyUpdate(ctx: MutationCtx, update: Update, source: 'api' | 'we
 
   // Never let polling or a delayed PENDING callback regress a terminal state.
   // REFUNDED is the one valid transition after SUCCESS.
-  if (terminalStatuses.has(row.status) && !(row.status === 'SUCCESS' && update.status === 'REFUNDED')) {
+  if (!providerTransitionIsAllowed(row.status, update.status)) {
     return { status: row.status, changed: false };
   }
 
@@ -282,7 +325,7 @@ async function applyUpdate(ctx: MutationCtx, update: Update, source: 'api' | 'we
       .query('subscriptions')
       .withIndex('by_user', (q) => q.eq('userId', row.userId))
       .unique();
-    if (subscription?.provider === 'myanmyanpay' && subscription.providerSubscriptionId === row.orderId) {
+    if (refundMatchesSubscription(subscription, row.orderId)) {
       await ctx.db.patch(subscription._id, {
         planKey: 'free',
         status: 'active',
@@ -361,7 +404,7 @@ export const ownedOrder = internalQuery({
       .query('mmpayTransactions')
       .withIndex('by_order_id', (q) => q.eq('orderId', orderId))
       .unique();
-    if (!row || row.userId !== userId) throw new Error('Payment order not found');
+    if (!paymentBelongsToUser(row, userId)) throw new Error('Payment order not found');
     return { userId, orderId: row.orderId, amount: row.amount, status: row.status };
   },
 });
