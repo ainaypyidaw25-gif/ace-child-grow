@@ -7,6 +7,7 @@ import { useLocale } from '../app/LocaleContext';
 import { useOnlineStatus } from '../app/useOnlineStatus';
 import { setPortalMode } from '../app/portalMode';
 import { DesktopNav } from './DesktopNav';
+import { InAppTour } from './InAppTour';
 
 export function Layout({ children, showNav = true }: { children: ReactNode; showNav?: boolean }) {
   const { locale, setLocale } = useLocale();
@@ -73,6 +74,7 @@ export function Layout({ children, showNav = true }: { children: ReactNode; show
         {showNav && <DesktopNav />}
         <main className={`min-w-0 flex-1 py-5 sm:py-7 ${showNav ? 'pb-28 lg:pb-12' : 'pb-8'}`}>{children}</main>
       </div>
+      {showNav && <InAppTour inStaffWorkspace={inStaffWorkspace} />}
       {showNav && <BottomNav />}
     </div>
   );

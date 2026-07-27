@@ -174,7 +174,8 @@ function AppRoutes() {
       <Route path="/admin/team" element={<StaffOnlyRoute><Layout><AdminTeam /></Layout></StaffOnlyRoute>} />
       <Route path="/admin/directory" element={<StaffOnlyRoute><Layout><AdminDirectory /></Layout></StaffOnlyRoute>} />
       <Route path="/admin/billing" element={<StaffOnlyRoute><Layout><AdminBilling /></Layout></StaffOnlyRoute>} />
-      <Route path="/admin/accept-invite" element={<Layout><AcceptAdminInvite /></Layout>} />
+      <Route path="/admin/accept-invite" element={<Layout showNav={false}><AcceptAdminInvite /></Layout>} />
+      <Route path="/admin/accept-invite/:inviteCode" element={<Layout showNav={false}><AcceptAdminInvite /></Layout>} />
       <Route path="/audit" element={<StaffOnlyRoute><Layout><AuditLog /></Layout></StaffOnlyRoute>} />
       <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

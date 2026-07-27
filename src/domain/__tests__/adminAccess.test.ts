@@ -30,8 +30,11 @@ describe('admin team and subscription security', () => {
   it('stores only the invitation digest and requires email plus code to claim', () => {
     expect(admin).toContain("crypto.subtle.digest('SHA-256'");
     expect(admin).toContain("email !== invite.email");
-    expect(admin).toContain('userId !== invite.targetUserId');
+    expect(admin).toContain('invite.targetUserId !== undefined && userId !== invite.targetUserId');
     expect(admin).toContain(".withIndex('email'");
+    expect(schema).toContain("targetUserId: v.optional(v.id('users'))");
+    expect(admin).toContain('targetUser ? { targetUserId: targetUser._id } : {}');
+    expect(admin).not.toContain('must create an account before being invited');
     expect(admin).toContain("invite.status !== 'pending'");
     expect(admin).toContain('invite.expiresAt < Date.now()');
   });

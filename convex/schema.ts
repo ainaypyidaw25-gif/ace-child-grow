@@ -31,6 +31,8 @@ export default defineSchema({
       ),
     ),
     staffQualification: v.optional(v.string()),
+    parentTourCompletedVersion: v.optional(v.number()),
+    staffTourCompletedVersion: v.optional(v.number()),
   })
     .index('by_user', ['userId'])
     .index('by_is_staff', ['isStaff'])
@@ -51,7 +53,9 @@ export default defineSchema({
     ),
     reviewerQualification: v.optional(v.string()),
     codeHash: v.string(),
-    targetUserId: v.id('users'),
+    // Existing accounts are bound immediately. Pre-signup invitations remain
+    // email-bound until the invited person creates an account and claims them.
+    targetUserId: v.optional(v.id('users')),
     status: v.union(v.literal('pending'), v.literal('accepted'), v.literal('revoked'), v.literal('expired')),
     invitedBy: v.id('users'),
     invitedAt: v.number(),

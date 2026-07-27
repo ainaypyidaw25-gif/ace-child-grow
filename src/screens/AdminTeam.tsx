@@ -134,8 +134,8 @@ export function AdminTeam() {
         <h1 className="text-xl font-bold text-sky-deep">{locale === 'mm' ? 'စီမံခန့်ခွဲရေးအဖွဲ့' : 'Admin team'}</h1>
         <p className="text-sm text-ink-soft">
           {locale === 'mm'
-            ? 'အဖွဲ့ဝင်သည် မိမိအီးမေးလ်ဖြင့် အကောင့်အရင်ဖွင့်ရမည်။ ထို့နောက် ထိုအကောင့်အတွက် လျှို့ဝှက်ဖိတ်ကြားလင့်ခ် ဖန်တီးပေးပါ။'
-            : 'The team member must create an account first. Then create a private invitation link for that exact account.'}
+            ? 'အကောင့်မရှိသေးသူကိုလည်း အီးမေးလ်ဖြင့် ဖိတ်ကြားနိုင်သည်။ လင့်ခ်ကို သက်ဆိုင်သူထံ သီးသန့်ပို့ပြီး ဖိတ်ထားသော အီးမေးလ်အတိအကျဖြင့် အကောင့်ဖွင့်ရန် သို့မဟုတ် ဝင်ရန် ပြောပေးပါ။'
+            : 'You can invite someone before they create an account. Send the private link only to them; they must sign up or sign in with the exact invited email.'}
         </p>
       </div>
 
@@ -152,17 +152,14 @@ export function AdminTeam() {
               role,
               reviewerQualification: ['clinical_reviewer', 'evidence_reviewer'].includes(role) ? qualification.trim() : undefined,
             });
-            setInviteLink(`${window.location.origin}/admin/accept-invite?code=${encodeURIComponent(result.inviteCode)}`);
+            setInviteLink(`${window.location.origin}/admin/accept-invite/${encodeURIComponent(result.inviteCode)}`);
             setEmail('');
             setDisplayName('');
           } catch (caught) {
-            const message = caught instanceof Error ? caught.message : '';
             setError(
               locale === 'mm'
-                ? message.includes('must create an account')
-                  ? 'ဖိတ်ခေါ်မည့်အဖွဲ့ဝင်သည် ဤအီးမေးလ်ဖြင့် ACE Child Grow အကောင့်အရင်ဖွင့်ရန် လိုသည်။'
-                  : 'ဖိတ်ကြားလင့်ခ် ဖန်တီး၍ မရပါ။ ထည့်ထားသော အချက်အလက်များကို ပြန်စစ်ပါ။'
-                : message || 'Unable to create invitation.',
+                ? 'ဖိတ်ကြားလင့်ခ် ဖန်တီး၍ မရပါ။ အီးမေးလ်၊ အမည်နှင့် ပညာအရည်အချင်းကို ပြန်စစ်ပါ။'
+                : caught instanceof Error ? caught.message : 'Unable to create invitation.',
             );
           } finally {
             setBusy(false);

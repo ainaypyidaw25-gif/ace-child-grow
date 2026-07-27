@@ -17,6 +17,7 @@ import { forContent as evidenceForContent, setReview as setEvidenceReview } from
 import { transition as transitionContent } from '../../../convex/content';
 import { listSessions, recordSession } from '../../../convex/milestones';
 import { complete as completeActivity, list as listActivities } from '../../../convex/activities';
+import { claimInvite, createInvite } from '../../../convex/admin';
 
 type Row = Record<string, unknown> & { _id?: string };
 
@@ -125,6 +126,44 @@ describe('Convex registered handlers enforce authorization', () => {
     authState.userId = 'user-1';
     const context = ctx({ profile: { userId: 'user-1', isStaff: false } });
     await expect(handler(importSeed)(context, { items: [] })).rejects.toThrow('Insufficient staff permission');
+  });
+
+  it('an owner can create an email-bound invite before the recipient has an account', async () => {
+    authState.userId = 'owner-1';
+    const context = ctx({
+      profile: { userId: 'owner-1', isStaff: true, staffRole: 'owner', displayName: 'Owner' },
+      rows: { users: [], staffInvites: [] },
+    });
+    await expect(handler(createInvite)(context, {
+      email: 'new.reviewer@example.com', displayName: 'New Reviewer', role: 'language_reviewer',
+    })).resolves.toMatchObject({ email: 'new.reviewer@example.com' });
+    expect(context.db.insert).toHaveBeenCalledWith('staffInvites', expect.objectContaining({
+      email: 'new.reviewer@example.com', role: 'language_reviewer', status: 'pending',
+    }));
+    expect(context.db.insert).not.toHaveBeenCalledWith('staffInvites', expect.objectContaining({
+      targetUserId: expect.anything(),
+    }));
+  });
+
+  it('a newly-created exact-email account can claim a pre-signup invite', async () => {
+    authState.userId = 'reviewer-1';
+    const subtle = crypto.subtle;
+    const code = 'test-invite-code';
+    const digest = await subtle.digest('SHA-256', new TextEncoder().encode(code));
+    const codeHash = Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, '0')).join('');
+    const context = ctx({
+      get: { _id: 'reviewer-1', email: 'new.reviewer@example.com' },
+      rows: { staffInvites: [{
+        _id: 'invite-1', email: 'new.reviewer@example.com', displayName: 'New Reviewer',
+        role: 'language_reviewer', codeHash, status: 'pending', expiresAt: Date.now() + 60_000,
+      }] },
+    });
+    await expect(handler(claimInvite)(context, { inviteCode: code })).resolves.toMatchObject({
+      ok: true, role: 'language_reviewer',
+    });
+    expect(context.db.insert).toHaveBeenCalledWith('parentProfiles', expect.objectContaining({
+      userId: 'reviewer-1', isStaff: true, staffRole: 'language_reviewer',
+    }));
   });
 
   it('a seed refresh cannot reuse review metadata from the prior content revision', async () => {

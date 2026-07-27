@@ -145,7 +145,6 @@ export const createInvite = mutation({
       .query('users')
       .withIndex('email', (q) => q.eq('email', email))
       .unique();
-    if (!targetUser) throw new Error('The team member must create an account before being invited');
     const qualification = args.reviewerQualification?.trim();
     if (['clinical_reviewer', 'evidence_reviewer'].includes(args.role) && !qualification) {
       throw new Error('A professional qualification is required for this reviewer role');
@@ -167,7 +166,7 @@ export const createInvite = mutation({
       role: args.role,
       reviewerQualification: qualification,
       codeHash: await hashCode(inviteCode),
-      targetUserId: targetUser._id,
+      ...(targetUser ? { targetUserId: targetUser._id } : {}),
       status: 'pending',
       invitedBy: ownerId,
       invitedAt: now,
@@ -199,7 +198,7 @@ export const claimInvite = mutation({
       await logAudit(ctx, userId, 'staff.invite.claim_rejected', 'staffInvites', invite._id, 'expired', { result: 'rejected' });
       return { ok: false, role: null, message: 'Invitation has expired.' };
     }
-    if (!email || email !== invite.email || userId !== invite.targetUserId) {
+    if (!email || email !== invite.email || (invite.targetUserId !== undefined && userId !== invite.targetUserId)) {
       await logAudit(ctx, userId, 'staff.invite.claim_rejected', 'staffInvites', invite._id, 'wrong account', { result: 'rejected' });
       return { ok: false, role: null, message: 'Sign in with the exact account that was invited.' };
     }

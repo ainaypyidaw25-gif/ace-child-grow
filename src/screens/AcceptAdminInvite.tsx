@@ -1,16 +1,18 @@
 import { useState } from 'react';
 import { useMutation } from 'convex/react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
+import { setPortalMode } from '../app/portalMode';
 
 export function AcceptAdminInvite() {
   const { locale } = useLocale();
+  const { inviteCode } = useParams<{ inviteCode: string }>();
   const [params] = useSearchParams();
   const claim = useMutation(api.admin.claimInvite);
   const [result, setResult] = useState<{ ok: boolean; message: string } | null>(null);
   const [busy, setBusy] = useState(false);
-  const code = params.get('code') ?? '';
+  const code = inviteCode ?? params.get('invite') ?? '';
 
   return (
     <div className="space-y-4 rounded-card border border-line bg-white p-5 shadow-card">
@@ -26,7 +28,11 @@ export function AcceptAdminInvite() {
           disabled={busy || !code}
           onClick={async () => {
             setBusy(true);
-            try { setResult(await claim({ inviteCode: code })); } finally { setBusy(false); }
+            try {
+              const next = await claim({ inviteCode: code });
+              if (next.ok) setPortalMode('staff');
+              setResult(next);
+            } finally { setBusy(false); }
           }}
           className="rounded-pill bg-sky px-5 py-2 font-semibold text-white disabled:opacity-50"
         >
@@ -42,7 +48,7 @@ export function AcceptAdminInvite() {
             : result.message}
         </p>
       )}
-      {result?.ok && <Link to="/admin" className="inline-block text-sky-deep underline">{locale === 'mm' ? 'စီမံခန့်ခွဲရေးစာမျက်နှာသို့ သွားမည်' : 'Go to admin'}</Link>}
+      {result?.ok && <Link to="/admin?tour=staff" className="inline-block text-sky-deep underline">{locale === 'mm' ? 'စီမံခန့်ခွဲရေးစာမျက်နှာသို့ သွားမည်' : 'Go to admin'}</Link>}
     </div>
   );
 }

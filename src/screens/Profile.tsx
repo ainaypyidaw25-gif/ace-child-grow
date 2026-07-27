@@ -180,6 +180,10 @@ export function Profile() {
           <span>{locale === 'mm' ? 'အင်တာနက်မရှိချိန် ဖတ်ရန် သိမ်းထားမှု' : 'Offline downloads'}</span>
           <span aria-hidden>→</span>
         </Link>
+        <Link to="/home?tour=parent" className="flex items-center justify-between py-2 text-sky-deep">
+          <span>{locale === 'mm' ? 'အသုံးပြုနည်း ပြန်ကြည့်ရန်' : 'Replay app tour'}</span>
+          <span aria-hidden>→</span>
+        </Link>
         <button type="button" onClick={() => { clearPortalMode(); void signOut(); }}
           className="mt-1 w-full rounded-pill border border-line px-4 py-2 text-left">
           🚪 {locale === 'mm' ? 'ထွက်မည်' : 'Sign out'}
