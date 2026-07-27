@@ -9,7 +9,7 @@ Baseline commit: `f32b21b` (`origin/agent/paid-parent-mvp`)
 | Finding | Disposition | Resolution |
 |---|---|---|
 | A-REV-001 — re-seed could alter approved content | Accepted | Both seed paths now skip approved/published rows in full, including media. Regression tests require byte-stability. |
-| A-REV-002 — mobile visual QA incomplete | Partially resolved / authenticated flow blocked | Public MM/EN sign-in passed three measured viewports; authenticated content screens remain blocked without a proven disposable backend. |
+| A-REV-002 — mobile visual QA incomplete | Resolved for the parent preview flow | A temporary isolated Convex deployment was seeded, a synthetic parent completed onboarding with a 13-month child, and authenticated empty/loading states were measured at three viewports. Staff draft preview still requires a real invited staff account. |
 | A-REV-003 — authorization tests were mostly helper/static level | Accepted | Registered Convex handlers are now invoked with controlled contexts for child reads/writes, catalogue filtering, seed import, evidence review, and clinical-content transition denial. |
 | A-REV-C01 — committed seed JSON was malformed | Accepted | Regenerated the canonical UTF-8 artifact (269 items), then required deterministic equality to `seedPayload()` in tests. |
 | A-REV-H01 — tracker regeneration erased decisions | Accepted | Generator now merges by content ID, defaults only new rows, and retains removed rows unchanged as audit history. |
@@ -38,7 +38,18 @@ Local runtime-equivalent tests verify:
 - a seeded `published` value is clamped to `clinical_review` on insert;
 - unrelated private child data is untouched.
 
-No Convex deployment was used. This workspace does not contain a proven disposable, isolated deployment authorization, so live seed execution was intentionally skipped. Production was not contacted.
+The final preview verification used the temporary isolated Convex development
+deployment `fortunate-iguana-575`. The Vercel branch-only Preview environment
+points to that deployment; Production environment variables were not changed.
+The first isolated seed run created 269 records. The second run created 0,
+updated 269 unapproved records, produced 0 duplicates, and retained the same
+total. No production seed or production data mutation was run.
+
+Operational note: while discovering the correct Convex team/project, the CLI
+did push this branch's function and schema definitions once to the existing
+`uncommon-orca-603` development deployment that the public frontend currently
+references. It did not run a seed or write application data there. All later
+runtime and seed QA used only `fortunate-iguana-575`.
 
 ## Runtime authorization
 
@@ -52,15 +63,16 @@ The centralized resolver and both `Activities` and `MilestoneDemo` consumers are
 
 ## Mobile preview QA
 
-Chrome extension browser tooling was used against the arena Vercel preview. No
-new account was created because the preview's backend was not proven isolated
-from production data.
+Chrome and a clean in-app browser session were used against the arena Vercel
+preview backed by `fortunate-iguana-575`. A synthetic parent account accepted
+consent and created a test child born 2025-06-20. On 2026-07-27 the application
+correctly rendered the child as `1 နှစ် 1 လ` and selected the 13–18 month band.
 
-| Viewport | Size | Public sign-in result |
+| Viewport | Size | Authenticated result |
 |---|---:|---|
-| iPhone | 390 × 844 | MM/EN switch works; parent/staff tabs render; no horizontal overflow or off-screen controls |
-| Small Android | 360 × 740 | MM/EN and staff explanatory text wrap without overflow; no console warnings/errors |
-| Tablet | 768 × 1024 | Centered layout; no horizontal overflow or off-screen controls |
+| iPhone | 390 × 844 | Myanmar and English Journey empty states rendered; `scrollWidth === innerWidth === 390`; header/bottom-nav controls remained on-screen and primary touch targets measured at least 44 px. |
+| Small Android | 360 × 740 | Myanmar Journey empty state rendered without clipping; `scrollWidth === innerWidth === 360`; bottom navigation remained visible. |
+| Tablet | 768 × 1024 | Centered 720 px main region; `scrollWidth === innerWidth === 768`; no off-screen controls or horizontal overflow. |
 
 The first preview run measured both sign-in inputs at 38 px high. After the
 fix, the current local build measured every public sign-in control at least
@@ -68,19 +80,36 @@ fix, the current local build measured every public sign-in control at least
 off-screen controls. The final Milestone skill-loss buttons and Activity
 completion button also declare the same minimum explicitly.
 
+Authenticated preview checks completed:
+
+- sign-up/sign-in, consent, child creation, returning-user Home routing, and
+  server-persisted child profile;
+- 13-month age resolution and parent-safe Journey/Activities empty states;
+- Myanmar/English switching on the Journey state;
+- real network loading transitions;
+- a direct parent visit to `/admin` now redirects to `/home`; the invite route
+  remains separate, and Convex authorization still enforces all staff writes;
+- no older-child draft reached the parent account.
+
+During sign-up, a previously cached application shell requested a removed lazy
+chunk and left a blank screen until reload. `src/app/chunkRecovery.ts` now
+handles Vite/WebKit lazy-chunk failures, reloads once, and uses a cooldown to
+prevent loops. Regression tests cover detection, recovery, cooldown, later
+deployments, and denied session storage.
+
 Component-level viewport-independent checks completed:
 
 - both parent screens render and request the correct age band at every boundary;
 - loading and empty-state branches remain covered by component tests;
 - clinical-review wording remains non-diagnostic and does not claim approval.
 
-Still requiring an authenticated preview backed by a proven disposable test deployment:
+Remaining manual review is deliberately limited to staff-only draft content:
+evidence summaries, review labels, and milestone interactions cannot be shown
+to the synthetic parent because all 13m–5y records are correctly held at
+`clinical_review`. Those screens require a real invited staff/reviewer account;
+their publication and authorization rules remain covered by component,
+integrity, and runtime authorization tests. This is not a clinical or
+native-Myanmar approval.
 
-- long Myanmar text wrapping and horizontal overflow;
-- Activities and Milestone navigation;
-- evidence summaries and clinical-review labels with real preview data;
-- loading transitions over the network.
-
-This is an explicit authenticated-flow blocker, not a PASS for those screens.
-The public responsive checks above are a measured PASS; authenticated screens
-remain covered by component and authorization tests only.
+Final gates after the QA fixes: typecheck PASS, lint PASS, production build
+PASS, deterministic 269-item seed PASS, and 37 test files / 472 tests PASS.
