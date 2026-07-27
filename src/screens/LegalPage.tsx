@@ -2,13 +2,14 @@ import { Link } from 'react-router-dom';
 
 type LegalPageProps = { kind: 'privacy' | 'account-deletion' };
 
-const supportEmail = 'lapyaewun2690@gmail.com';
+const supportEmail = 'admin-ace@acegroup.com.mm';
 
 export function LegalPage({ kind }: LegalPageProps) {
   if (kind === 'account-deletion') {
     return (
       <PublicLegalShell title="ACE Child Grow အကောင့် ဖျက်ရန်" titleEn="Delete your ACE Child Grow account">
         <p>အကောင့်ဝင်ပြီး <strong>ကိုယ်ပိုင်အကောင့် → ကိုယ်ရေးလုံခြုံမှု → အကောင့် ဖျက်ရန်</strong> ကို ရွေးပါ။ အတည်ပြုပြီးသည်နှင့် မိဘအကောင့်၊ ကလေးမှတ်တမ်း၊ ဖွံ့ဖြိုးမှုမှတ်တမ်း၊ အိပ်စက်မှုမှတ်တမ်း၊ အကြိုက်ဆုံးများနှင့် ငွေပေးချေမှုဆိုင်ရာ ကိုယ်ပိုင်မှတ်တမ်းများကို ဖျက်ပေးပါမည်။</p>
+        <p>မိဘအကောင့်ကို ဆက်လက်ထားရှိပြီး ကလေးတစ်ဦး၏ အချက်အလက်များကိုသာ ဖျက်လိုပါက <strong>ကိုယ်ပိုင်အကောင့် → ကလေးများ</strong> သို့ ဝင်ပါ။ ဖျက်လိုသော ကလေးကို ရွေးပြီး <strong>ဤကလေးကို ဖျက်ရန်</strong> ကို နှိပ်ပါ။ အတည်ပြုပြီးသည်နှင့် ထိုကလေး၏ ကြီးထွားမှု၊ အိပ်စက်မှု၊ ဖွံ့ဖြိုးမှုနှင့် ဆက်စပ်မှတ်တမ်းများကို အပြီးတိုင် ဖျက်ပေးပါမည်။</p>
         <p>App ကို မဝင်နိုင်ပါက <a href={`mailto:${supportEmail}?subject=ACE%20Child%20Grow%20account%20deletion`} className="font-semibold text-sky-deep underline">{supportEmail}</a> သို့ အကောင့်သုံးထားသော အီးမေးလ်ဖြင့် ဖျက်ပေးရန် တောင်းဆိုနိုင်ပါသည်။ လုံခြုံရေးအတွက် အကောင့်ပိုင်ရှင်ဖြစ်ကြောင်း အတည်ပြုရန် ဆက်သွယ်နိုင်ပါသည်။</p>
         <p className="text-sm text-ink-soft">Review နှင့် ငွေစာရင်းကဲ့သို့ ဥပဒေ၊ လုံခြုံရေး သို့မဟုတ် စာရင်းစစ်အတွက် ထိန်းသိမ်းရန်လိုသော မှတ်တမ်းအနည်းငယ်ကို ကိုယ်ရေးအချက်အလက် လျှော့ချပြီး သတ်မှတ်ကာလအထိ ထိန်းသိမ်းနိုင်ပါသည်။</p>
         <Link to="/" className="inline-flex rounded-pill bg-sky-deep px-5 py-3 font-semibold text-white">အကောင့်ဝင်ရန်</Link>
