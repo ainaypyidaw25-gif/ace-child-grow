@@ -105,6 +105,26 @@ export function SignIn() {
     }
   }
 
+  async function continueWithGoogle() {
+    setError('');
+    setMessage('');
+    setBusy(true);
+    setPortalMode(portal);
+    try {
+      await signIn('google', {
+        redirectTo: isStaffInvite ? window.location.href : window.location.origin,
+      });
+    } catch {
+      clearPortalMode();
+      setError(
+        locale === 'mm'
+          ? 'Google အကောင့်ဖြင့် ဝင်၍မရပါ။ ထပ်မံကြိုးစားပါ။'
+          : 'Could not continue with Google. Please try again.',
+      );
+      setBusy(false);
+    }
+  }
+
   return (
     <div className="mx-auto flex min-h-screen max-w-md flex-col justify-center gap-6 px-5 py-8">
       <div className="text-center">
@@ -152,6 +172,25 @@ export function SignIn() {
                 ? 'Use the exact invited email and a staff password of at least eight characters.'
                 : 'For staff and reviewers invited by the owner.'}
           </p>
+        )}
+
+        {(flow === 'signIn' || flow === 'signUp') && (
+          <>
+            <button
+              type="button"
+              onClick={() => void continueWithGoogle()}
+              disabled={busy}
+              className="flex min-h-touch w-full items-center justify-center gap-3 rounded-pill border border-line bg-white px-5 py-3 font-semibold text-ink shadow-sm disabled:opacity-50"
+            >
+              <span aria-hidden className="grid size-6 place-items-center rounded-full bg-white text-base font-bold text-[#4285F4]">G</span>
+              {locale === 'mm' ? 'Google အကောင့်ဖြင့် ဆက်လုပ်မည်' : 'Continue with Google'}
+            </button>
+            <div className="flex items-center gap-3 text-xs text-ink-soft" aria-hidden>
+              <span className="h-px flex-1 bg-line" />
+              <span>{locale === 'mm' ? 'သို့မဟုတ်' : 'or'}</span>
+              <span className="h-px flex-1 bg-line" />
+            </div>
+          </>
         )}
 
         <label className="block text-sm">
