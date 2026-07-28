@@ -5,6 +5,7 @@ import { AGE_GROUP_KEYS, DOMAIN_KEYS } from '../taxonomy';
 import { EVIDENCE_LINKS } from '../../evidence/links';
 import { EVIDENCE_SOURCES } from '../../evidence/sources';
 import {
+  publishedErrataSlugs,
   seedAuditSummary,
   seedMayUpdateExisting,
   seedMediaIsProtected,
@@ -36,6 +37,15 @@ const IMPORTER_FIELDS = new Set([
 ]);
 
 describe('seed generation', () => {
+  it('keeps published errata narrow and code-versioned', () => {
+    const slugs = publishedErrataSlugs('2026-07-28-content-remediation');
+    expect(slugs).not.toBeNull();
+    expect(slugs).toHaveLength(11);
+    expect(new Set(slugs).size).toBe(slugs?.length);
+    expect(slugs?.every((slug) => seedPayload().some((item) => item.slug === slug))).toBe(true);
+    expect(publishedErrataSlugs('unknown-release')).toBeNull();
+  });
+
   it('has unique slugs across the whole payload', () => {
     const slugs = seedPayload().map((i) => i.slug);
     expect(new Set(slugs).size).toBe(slugs.length);

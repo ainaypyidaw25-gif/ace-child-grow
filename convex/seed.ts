@@ -7,7 +7,12 @@ import { internalMutation } from './_generated/server';
 import { v } from 'convex/values';
 import { logAudit } from './audit';
 import seedData from './seedData.json';
-import { seedAuditSummary, seedMayUpdateExisting, seedMediaIsProtected } from './lib/seedPolicy';
+import {
+  publishedErrataSlugs,
+  seedAuditSummary,
+  seedMayUpdateExisting,
+  seedMediaIsProtected,
+} from './lib/seedPolicy';
 
 // Grant staff (CMS access) to an account by email. INTERNAL — CLI/admin only,
 // never callable from the app. Used to bootstrap the first reviewer account.
@@ -45,6 +50,82 @@ type Item = {
   difficulty?: string; durationMinutes?: number; offline?: boolean; source: string;
   version: number; clinicalStatus: string; data: unknown; media: Media[]; searchText: string;
 };
+
+/**
+ * Applies one code-reviewed correction release to rows already published.
+ * The content comes exclusively from the bundled seed snapshot; callers can
+ * neither submit content nor choose slugs. Review state and media are retained.
+ */
+export const applyPublishedErrata = internalMutation({
+  args: { releaseId: v.literal('2026-07-28-content-remediation') },
+  returns: v.object({
+    updated: v.number(),
+    unchanged: v.number(),
+    missing: v.number(),
+    notPublished: v.number(),
+    total: v.number(),
+  }),
+  handler: async (ctx, { releaseId }) => {
+    const slugs = publishedErrataSlugs(releaseId) ?? [];
+    const items = seedData as unknown as Item[];
+    const desiredBySlug = new Map(items.map((item) => [item.slug, item]));
+    const now = Date.now();
+    let updated = 0;
+    let unchanged = 0;
+    let missing = 0;
+    let notPublished = 0;
+
+    for (const slug of slugs) {
+      const desired = desiredBySlug.get(slug);
+      const existing = await ctx.db
+        .query('libraryContent')
+        .withIndex('by_slug', (q) => q.eq('slug', slug))
+        .unique();
+      if (!desired || !existing) {
+        missing += 1;
+        continue;
+      }
+      if (existing.clinicalStatus !== 'published') {
+        notPublished += 1;
+        continue;
+      }
+
+      const { media: _media, clinicalStatus: _clinicalStatus, ...content } = desired;
+      void _media;
+      void _clinicalStatus;
+      const current = Object.fromEntries(
+        Object.keys(content).map((key) => [key, existing[key as keyof typeof existing]]),
+      );
+      if (JSON.stringify(current) === JSON.stringify(content)) {
+        unchanged += 1;
+        continue;
+      }
+
+      await ctx.db.patch(existing._id, { ...content, updatedAt: now });
+      await logAudit(
+        ctx,
+        null,
+        'library.published_errata',
+        'libraryContent',
+        existing._id,
+        `${releaseId} · ${slug}`,
+        {
+          before: JSON.stringify({
+            titleMm: existing.titleMm,
+            reviewRevision: existing.reviewRevision ?? 1,
+          }),
+          after: JSON.stringify({
+            titleMm: desired.titleMm,
+            reviewRevision: existing.reviewRevision ?? 1,
+          }),
+        },
+      );
+      updated += 1;
+    }
+
+    return { updated, unchanged, missing, notPublished, total: slugs.length };
+  },
+});
 
 export const run = internalMutation({
   args: {},
