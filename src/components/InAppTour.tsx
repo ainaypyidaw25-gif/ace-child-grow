@@ -40,7 +40,9 @@ export function InAppTour({ inStaffWorkspace }: { inStaffWorkspace: boolean }) {
       completedVersion,
     }) ? kind : null;
   }, [inStaffWorkspace, location.pathname, me]);
-  const kind = requestedKind ?? automaticKind;
+  const candidateKind = requestedKind ?? automaticKind;
+  const [dismissedKind, setDismissedKind] = useState<TourKind | null>(null);
+  const kind = candidateKind === dismissedKind ? null : candidateKind;
   const [step, setStep] = useState(0);
 
   useEffect(() => setStep(0), [kind]);
@@ -51,11 +53,18 @@ export function InAppTour({ inStaffWorkspace }: { inStaffWorkspace: boolean }) {
   const isLast = step === steps.length - 1;
 
   async function closeAndRemember() {
-    await completeTour({ kind: activeKind, version: TOUR_VERSION });
+    // Close immediately. A slow mobile connection must never trap the member
+    // behind onboarding while the completion mutation is in flight.
+    setDismissedKind(activeKind);
     if (requestedKind) {
       const params = new URLSearchParams(location.search);
       params.delete('tour');
       navigate(`${location.pathname}${params.size ? `?${params.toString()}` : ''}`, { replace: true });
+    }
+    try {
+      await completeTour({ kind: activeKind, version: TOUR_VERSION });
+    } catch {
+      // The tour may appear again next session if completion could not sync.
     }
   }
 
@@ -63,13 +72,13 @@ export function InAppTour({ inStaffWorkspace }: { inStaffWorkspace: boolean }) {
     <div
       className="fixed inset-0 z-[80] flex items-end justify-center overflow-y-auto bg-ink/45 px-3 pt-3 backdrop-blur-sm sm:items-center sm:p-6"
       role="presentation"
-      style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 4.75rem)' }}
+      style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 6rem)' }}
     >
       <section
         role="dialog"
         aria-modal="true"
         aria-labelledby="tour-title"
-        className="max-h-[calc(100dvh-6rem)] w-full max-w-lg overflow-y-auto overscroll-contain rounded-[28px] border border-white/80 bg-white p-5 shadow-2xl sm:max-h-[calc(100dvh-3rem)] sm:p-7"
+        className="max-h-[calc(100dvh-7.5rem)] w-full max-w-lg overflow-y-auto overscroll-contain rounded-[28px] border border-white/80 bg-white p-5 shadow-2xl sm:max-h-[calc(100dvh-3rem)] sm:p-7"
       >
         <div className="flex items-start justify-between gap-4">
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-mint-soft text-2xl" aria-hidden>{current.icon}</div>
@@ -79,7 +88,7 @@ export function InAppTour({ inStaffWorkspace }: { inStaffWorkspace: boolean }) {
         </div>
         <h2 id="tour-title" className="mt-4 text-xl font-bold text-sky-deep">{current[locale][0]}</h2>
         <p className="mt-2 min-h-20 text-sm leading-7 text-ink-soft">{current[locale][1]}</p>
-        <div className="mt-5 flex items-center justify-between gap-4">
+        <div className="sticky bottom-0 -mx-2 mt-5 flex items-center justify-between gap-3 rounded-2xl bg-white/95 px-2 pb-1 pt-2 backdrop-blur-sm">
           <div className="flex gap-1.5" aria-label={`${step + 1} / ${steps.length}`}>
             {steps.map((_, index) => <span key={index} className={`h-2 rounded-full transition-all ${index === step ? 'w-7 bg-sky' : 'w-2 bg-line'}`} />)}
           </div>
