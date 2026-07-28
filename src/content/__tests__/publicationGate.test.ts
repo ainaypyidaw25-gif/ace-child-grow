@@ -15,7 +15,7 @@ describe('clinically scoped publication gate', () => {
     expect(workflowSource).toContain('await requireClinicalPublisher(ctx)');
   });
 
-  it('shows review-pending educational samples with an honest ongoing-review notice', () => {
+  it('keeps review-pending static samples out of parent screens', () => {
     for (const file of ['MilestoneDemo', 'Activities']) {
       const source = readFileSync(`src/screens/${file}.tsx`, 'utf8');
       expect(source, file).toContain('api.library.listByType');
@@ -23,14 +23,19 @@ describe('clinically scoped publication gate', () => {
     }
     for (const file of ['Learn', 'HopeCenter', 'Favorites']) {
       const source = readFileSync(`src/screens/${file}.tsx`, 'utf8');
-      expect(source, file).toContain('ReviewOngoingNotice');
-      expect(source, file).not.toContain('UnreviewedContentNotice');
+      expect(source, file).toContain('isApprovedForParents');
+      expect(source, file).not.toContain('ReviewOngoingNotice');
     }
   });
 
-  it('shows active review-pending library rows while keeping archived rows private', () => {
-    expect(librarySource).toContain("return status !== 'archived'");
+  it('shows only published library rows to parents while staff can inspect review states', () => {
+    expect(librarySource).toContain("return status === 'published'");
     expect(librarySource).toContain('isPubliclyReadableStatus(r.clinicalStatus)');
     expect(librarySource).toContain('!isPubliclyReadableStatus(item.clinicalStatus)');
+  });
+
+  it('does not allow parents to complete an unpublished activity', () => {
+    const activitiesSource = readFileSync('convex/activities.ts', 'utf8');
+    expect(activitiesSource).toContain("content.clinicalStatus !== 'published'");
   });
 });

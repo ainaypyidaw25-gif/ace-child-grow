@@ -1,7 +1,7 @@
 // Content Library Convex functions.
 //
-// Read access: active items are visible to any authenticated user, including
-// clearly labelled review-pending items; archived items remain staff-only.
+// Read access: parents can read only content that a qualified reviewer has
+// published. Staff can inspect every workflow status, including archived rows.
 // Write access (import, review transitions,
 // media) is staff-only and audited. The library carries NO per-parent private
 // data, so reads are shared catalogue — but still behind authentication.
@@ -15,9 +15,9 @@ import { STARTER_ANIMATION_SLUGS } from './animationPlan';
 import { seedAuditSummary, seedMayUpdateExisting, seedMediaIsProtected } from './lib/seedPolicy';
 
 // List content by type, optionally filtered by age/domain/category and a query.
-// Non-staff receive all active statuses; staff also receive archived rows.
+// Non-staff receive published rows only; staff receive every workflow status.
 export function isPubliclyReadableStatus(status: string): boolean {
-  return status !== 'archived';
+  return status === 'published';
 }
 
 export const listByType = query({
@@ -67,7 +67,7 @@ export const listByType = query({
   },
 });
 
-// Fetch one item by slug (with its media). Non-staff cannot read archived items.
+// Fetch one item by slug (with its media). Non-staff can read published items only.
 export const getBySlug = query({
   args: { slug: v.string() },
   handler: async (ctx, args) => {

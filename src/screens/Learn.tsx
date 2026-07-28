@@ -2,19 +2,19 @@ import { useState } from 'react';
 import { useLocale } from '../app/LocaleContext';
 import { SAMPLE_LESSONS, isApprovedForParents } from '../data/seed/content';
 import { ReviewBadge } from '../components/ReviewBadge';
-import { ReviewOngoingNotice } from '../components/StaffPreviewGate';
 
 export function Learn() {
   const { t, locale } = useLocale();
   const [query, setQuery] = useState('');
-  const lessons = SAMPLE_LESSONS.filter((l) =>
-    (locale === 'mm' ? l.titleMm : l.titleEn).toLowerCase().includes(query.toLowerCase()) ||
-    l.category.toLowerCase().includes(query.toLowerCase()),
-  );
+  const lessons = SAMPLE_LESSONS
+    .filter((lesson) => isApprovedForParents(lesson.reviewStatus))
+    .filter((l) =>
+      (locale === 'mm' ? l.titleMm : l.titleEn).toLowerCase().includes(query.toLowerCase()) ||
+      l.category.toLowerCase().includes(query.toLowerCase()),
+    );
 
   return (
     <div className="space-y-4">
-      <ReviewOngoingNotice />
       <h1 className="text-xl font-bold text-sky-deep">{t('learn.title')}</h1>
       <input
         value={query}

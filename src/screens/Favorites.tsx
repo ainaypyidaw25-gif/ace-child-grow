@@ -1,19 +1,18 @@
 import { useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
-import { SAMPLE_ACTIVITIES } from '../data/seed/content';
-import { ReviewOngoingNotice } from '../components/StaffPreviewGate';
+import { SAMPLE_ACTIVITIES, isApprovedForParents } from '../data/seed/content';
 
 export function Favorites() {
   const { t, locale } = useLocale();
   const favKeys = useQuery(api.favorites.list); // undefined === loading
-  const saved = SAMPLE_ACTIVITIES.map((a, i) => ({ a, key: `act-${i}` })).filter((x) =>
-    (favKeys ?? []).includes(x.key),
-  );
+  const saved = SAMPLE_ACTIVITIES
+    .filter((activity) => isApprovedForParents(activity.reviewStatus))
+    .map((a, i) => ({ a, key: `act-${i}` }))
+    .filter((x) => (favKeys ?? []).includes(x.key));
 
   return (
     <div className="space-y-4">
-      <ReviewOngoingNotice />
       <h1 className="text-xl font-bold text-sky-deep">{t('favorites.title')}</h1>
       {favKeys === undefined ? (
         <p className="text-ink-soft" role="status">…</p>

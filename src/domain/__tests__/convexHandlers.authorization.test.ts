@@ -95,7 +95,7 @@ describe('Convex registered handlers enforce authorization', () => {
     expect(context.db.patch).not.toHaveBeenCalled();
   });
 
-  it('non-staff catalogue includes active review-pending rows, excludes archived rows, and contains no private fields', async () => {
+  it('non-staff catalogue includes published rows only and contains no private fields', async () => {
     authState.userId = 'user-1';
     const published = {
       _id: 'content-1',
@@ -126,7 +126,7 @@ describe('Convex registered handlers enforce authorization', () => {
       rows: { libraryContent: [published, reviewPending, archived] },
     });
     const result = await handler(listByType)(context, { type: 'activity' });
-    expect(result).toEqual({ staff: false, items: [reviewPending, published] });
+    expect(result).toEqual({ staff: false, items: [published] });
     expect(JSON.stringify(result)).not.toMatch(/childId|birthDate|nickname|userId/);
   });
 

@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useLocale } from '../app/LocaleContext';
 import { SAMPLE_AWARENESS, isApprovedForParents, type SeedAwarenessTopic } from '../data/seed/content';
 import { ReviewBadge } from '../components/ReviewBadge';
-import { ReviewOngoingNotice } from '../components/StaffPreviewGate';
 
 const TOPIC_SYMBOLS: Record<string, string> = {
   'autism-spectrum': '◇',
@@ -15,10 +14,10 @@ const TOPIC_SYMBOLS: Record<string, string> = {
 export function HopeCenter() {
   const { t, locale } = useLocale();
   const [open, setOpen] = useState<SeedAwarenessTopic | null>(null);
+  const publishedTopics = SAMPLE_AWARENESS.filter((topic) => isApprovedForParents(topic.reviewStatus));
   if (open) {
     return (
       <div className="mx-auto max-w-4xl space-y-5">
-        <ReviewOngoingNotice />
         <button
           type="button"
           onClick={() => setOpen(null)}
@@ -75,7 +74,6 @@ export function HopeCenter() {
 
   return (
     <div className="mx-auto max-w-5xl space-y-7">
-      <ReviewOngoingNotice />
       <header className="max-w-3xl">
         <p className="text-xs font-semibold uppercase tracking-[0.16em] text-sky-deep">
           {locale === 'mm' ? 'စောစီးစွာ နားလည်၊ သင့်တော်စွာ ကူညီ' : 'Understand early, support well'}
@@ -94,7 +92,7 @@ export function HopeCenter() {
       </div>
 
       <ul className="grid overflow-hidden rounded-[30px] border border-line bg-white shadow-card sm:grid-cols-2">
-        {SAMPLE_AWARENESS.map((topic, index) => (
+        {publishedTopics.map((topic, index) => (
           <li
             key={topic.slug}
             className={`${index > 0 ? 'border-t border-line' : ''} sm:[&:nth-child(2)]:border-t-0 sm:[&:nth-child(even)]:border-l`}
