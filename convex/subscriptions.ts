@@ -1,4 +1,5 @@
 import { v } from 'convex/values';
+import { getAuthUserId } from '@convex-dev/auth/server';
 import { internalMutation, mutation, query } from './_generated/server';
 import { requireOwner, requireUser } from './lib/auth';
 import { logAudit } from './audit';
@@ -140,6 +141,93 @@ export const grantPlan = mutation({
     if (existing) await ctx.db.patch(existing._id, { planKey: args.planKey, status: 'active', provider: 'manual', updatedAt: now });
     await logAudit(ctx, ownerId, 'subscription.grant', 'subscriptions', subscriptionId, `${args.userId} · ${args.planKey}`);
     return { ok: true };
+  },
+});
+
+export const ownerSummary = query({
+  args: {},
+  returns: v.object({
+    allowed: v.boolean(),
+    memberCount: v.number(),
+    staffCount: v.number(),
+    countCapped: v.boolean(),
+    plans: v.object({ free: v.number(), premium: v.number(), family: v.number() }),
+    statuses: v.object({
+      active: v.number(), trialing: v.number(), pastDue: v.number(), canceled: v.number(), paused: v.number(),
+    }),
+    recentMembers: v.array(v.object({
+      userId: v.id('users'),
+      email: v.union(v.string(), v.null()),
+      name: v.union(v.string(), v.null()),
+      planKey: planValidator,
+      status: statusValidator,
+      joinedAt: v.number(),
+    })),
+  }),
+  handler: async (ctx) => {
+    const signedIn = await getAuthUserId(ctx);
+    const empty = {
+      allowed: false,
+      memberCount: 0,
+      staffCount: 0,
+      countCapped: false,
+      plans: { free: 0, premium: 0, family: 0 },
+      statuses: { active: 0, trialing: 0, pastDue: 0, canceled: 0, paused: 0 },
+      recentMembers: [],
+    };
+    if (!signedIn) return empty;
+    try {
+      await requireOwner(ctx);
+    } catch {
+      return empty;
+    }
+
+    const [users, staffProfiles, subscriptions] = await Promise.all([
+      ctx.db.query('users').order('desc').take(5001),
+      ctx.db.query('parentProfiles').withIndex('by_is_staff', (q) => q.eq('isStaff', true)).take(5001),
+      ctx.db.query('subscriptions').take(5001),
+    ]);
+    const countCapped = users.length > 5000 || staffProfiles.length > 5000 || subscriptions.length > 5000;
+    const visibleUsers = users.slice(0, 5000);
+    const visibleSubscriptions = subscriptions.slice(0, 5000);
+    const staffIds = new Set(staffProfiles.slice(0, 5000).map((profile) => String(profile.userId)));
+    const memberUsers = visibleUsers.filter((user) => !staffIds.has(String(user._id)));
+    const subscriptionsByUser = new Map(visibleSubscriptions.map((row) => [String(row.userId), row]));
+    const plans = { free: 0, premium: 0, family: 0 };
+    const statuses = { active: 0, trialing: 0, pastDue: 0, canceled: 0, paused: 0 };
+    for (const user of memberUsers) {
+      const subscription = subscriptionsByUser.get(String(user._id));
+      const plan = subscription?.planKey ?? 'free';
+      const status = subscription?.status ?? 'active';
+      plans[plan] += 1;
+      if (status === 'past_due') statuses.pastDue += 1;
+      else statuses[status] += 1;
+    }
+
+    const recentMembers = await Promise.all(memberUsers.slice(0, 100).map(async (user) => {
+      const [profile, subscription] = await Promise.all([
+        ctx.db.query('parentProfiles').withIndex('by_user', (q) => q.eq('userId', user._id)).unique(),
+        ctx.db.query('subscriptions').withIndex('by_user', (q) => q.eq('userId', user._id)).unique(),
+      ]);
+      return {
+        userId: user._id,
+        email: user.email ?? null,
+        name: profile?.displayName?.trim() || user.name?.trim() || null,
+        planKey: subscription?.planKey ?? 'free' as const,
+        status: subscription?.status ?? 'active' as const,
+        joinedAt: user._creationTime,
+      };
+    }));
+
+    return {
+      allowed: true,
+      memberCount: memberUsers.length,
+      staffCount: staffProfiles.slice(0, 5000).length,
+      countCapped,
+      plans,
+      statuses,
+      recentMembers,
+    };
   },
 });
 

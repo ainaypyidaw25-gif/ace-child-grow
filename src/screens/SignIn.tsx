@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuthActions } from '@convex-dev/auth/react';
 import { useLocale } from '../app/LocaleContext';
 import { clearPortalMode, setPortalMode } from '../app/portalMode';
@@ -7,6 +7,7 @@ import {
   validateAccountPassword,
   type AccountPasswordKind,
 } from '../domain/auth/passwordPolicy';
+import { captureReferralFromSearch } from '../domain/referrals/referralCapture';
 
 type AuthFlow = 'signIn' | 'signUp' | 'reset' | 'resetVerification';
 
@@ -28,6 +29,14 @@ export function SignIn() {
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
   const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    try {
+      captureReferralFromSearch(window.location.search, window.localStorage);
+    } catch {
+      // Members can still enter a referral code later from their Profile.
+    }
+  }, []);
 
   const accountType: AccountPasswordKind = portal === 'staff' ? 'staff' : 'parent';
   const requiresNewCredential = flow === 'signUp' || flow === 'resetVerification';

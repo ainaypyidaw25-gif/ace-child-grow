@@ -44,5 +44,14 @@ describe('InAppTour mobile controls', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'ကျော်မည်' }));
     expect(completeTour).toHaveBeenCalledOnce();
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  it('closes immediately even when completion sync is slow', () => {
+    completeTour.mockImplementationOnce(() => new Promise(() => undefined));
+    render(<InAppTour inStaffWorkspace={false} />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'ကျော်မည်' }));
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 });

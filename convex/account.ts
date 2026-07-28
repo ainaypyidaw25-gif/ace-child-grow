@@ -11,6 +11,7 @@ export const deleteMine = mutation({
 
     const byUserTables = [
       'parentProfiles', 'subscriptions', 'mmpayTransactions',
+      'referralCodes',
       'favorites', 'notifications', 'children', 'growthRecords', 'sleepRecords',
       'milestoneSessions',
     ] as const;
@@ -46,6 +47,11 @@ export const deleteMine = mutation({
     const ownedCaregivers = await ctx.db.query('familyCaregivers').withIndex('by_owner', (q) => q.eq('ownerId', userId)).take(20);
     const caregiverLinks = await ctx.db.query('familyCaregivers').withIndex('by_caregiver_user', (q) => q.eq('caregiverUserId', userId)).take(20);
     for (const row of [...ownedCaregivers, ...caregiverLinks]) await ctx.db.delete(row._id);
+
+    const sentReferrals = await ctx.db.query('referrals').withIndex('by_referrer_user', (q) => q.eq('referrerUserId', userId)).take(500);
+    const receivedReferral = await ctx.db.query('referrals').withIndex('by_referred_user', (q) => q.eq('referredUserId', userId)).unique();
+    const referralIds = new Set([...sentReferrals.map((row) => row._id), ...(receivedReferral ? [receivedReferral._id] : [])]);
+    for (const id of referralIds) await ctx.db.delete(id);
 
     const accounts = await ctx.db.query('authAccounts').withIndex('userIdAndProvider', (q) => q.eq('userId', userId)).take(20);
     for (const account of accounts) {

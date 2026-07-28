@@ -8,12 +8,15 @@ export function AdminBilling() {
   const { locale } = useLocale();
   const data = useQuery(api.billing.adminDashboard);
   const mmpay = useQuery(api.mmpayData.adminPayments);
+  const memberSummary = useQuery(api.subscriptions.ownerSummary);
+  const referrals = useQuery(api.referrals.ownerDashboard);
   const upsertPlan = useMutation(api.billing.upsertPlan);
   const upsertMethod = useMutation(api.billing.upsertMethod);
   const review = useMutation(api.billing.reviewPaymentRequest);
   const setPlanActive = useMutation(api.billing.setPlanActive);
   const setMethodActive = useMutation(api.billing.setMethodActive);
   const installRecommendedPlans = useMutation(api.billing.installRecommendedPlans);
+  const setReferralStatus = useMutation(api.referrals.ownerSetStatus);
   const [editingPlan, setEditingPlan] = useState<Id<'subscriptionPlans'> | undefined>();
   const [editingMethod, setEditingMethod] = useState<Id<'paymentMethods'> | undefined>();
   const [planKey, setPlanKey] = useState<'premium' | 'family'>('premium');
@@ -27,11 +30,65 @@ export function AdminBilling() {
   const L = (mm: string, en: string) => locale === 'mm' ? mm : en;
   const input = 'w-full rounded-lg border border-line px-3 py-2 text-sm';
 
-  if (data === undefined || mmpay === undefined) return <p className="text-ink-soft">…</p>;
-  if (!data.allowed || !mmpay.allowed) return <p className="rounded-card bg-white p-4">{L('Owner သာ အသုံးပြုနိုင်ပါသည်။', 'Owner access only.')}</p>;
+  if (data === undefined || mmpay === undefined || memberSummary === undefined || referrals === undefined) return <p className="text-ink-soft">…</p>;
+  if (!data.allowed || !mmpay.allowed || !memberSummary.allowed || !referrals.allowed) return <p className="rounded-card bg-white p-4">{L('Owner သာ အသုံးပြုနိုင်ပါသည်။', 'Owner access only.')}</p>;
 
   return <div className="space-y-5">
     <div><h1 className="text-xl font-bold text-sky-deep">{L('Subscription နှင့် ငွေပေးချေမှု', 'Subscriptions and payments')}</h1><p className="text-sm text-ink-soft">{L('ဈေးနှုန်းနှင့် ငွေလက်ခံအကောင့်များကို ဤနေရာမှ ပြင်ဆင်နိုင်သည်။ ငွေလက်ခံအကောင့်ကို frontend ကုဒ်ထဲတွင် မထားပါ။', 'Configure prices and payment destinations here. Payment account details are never stored in frontend code.')}</p><button type="button" onClick={async () => { const result = await installRecommendedPlans({}); setMessage(L(`အကြံပြုဈေးနှုန်း — အသစ် ${result.created}၊ ပြင် ${result.updated}`, `Recommended prices — ${result.created} created, ${result.updated} updated`)); }} className="mt-3 rounded-pill border border-sky px-4 py-2 text-sm font-semibold text-sky-deep">{L('အကြံပြုဈေးနှုန်း ၄ မျိုး ထည့်မည်', 'Install 4 recommended prices')}</button></div>
+
+    <section className="rounded-card border border-line bg-white p-4 shadow-card">
+      <div className="flex flex-wrap items-end justify-between gap-2">
+        <div>
+          <h2 className="font-semibold text-ink">{L('Member အခြေအနေ', 'Member overview')}</h2>
+          <p className="text-sm text-ink-soft">{L('မိဘ member၊ အစီအစဉ်နှင့် account အခြေအနေ', 'Parents, plans, and account status')}</p>
+        </div>
+        <strong className="text-3xl text-sky-deep">{memberSummary.memberCount.toLocaleString()}</strong>
+      </div>
+      <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
+        {[
+          [L('အခမဲ့', 'Free'), memberSummary.plans.free],
+          ['Premium', memberSummary.plans.premium],
+          ['Family', memberSummary.plans.family],
+          [L('အဖွဲ့ဝင်/ပညာရှင်', 'Staff/reviewers'), memberSummary.staffCount],
+        ].map(([label, value]) => <div key={String(label)} className="rounded-2xl bg-canvas px-3 py-3"><p className="text-xs text-ink-soft">{label}</p><p className="mt-1 text-xl font-bold text-ink">{value}</p></div>)}
+      </div>
+      <p className="mt-3 text-xs text-ink-soft">
+        {L(`အသုံးပြုနေသူ ${memberSummary.statuses.active} · စမ်းသုံးနေသူ ${memberSummary.statuses.trialing} · ငွေပေးချေရန်ကျန် ${memberSummary.statuses.pastDue}`, `Active ${memberSummary.statuses.active} · Trial ${memberSummary.statuses.trialing} · Past due ${memberSummary.statuses.pastDue}`)}
+        {memberSummary.countCapped ? L(' · စာရင်း ၅,၀၀၀ အထိသာ ရေတွက်ထားသည်။', ' · Count is capped at 5,000 records.') : ''}
+      </p>
+      {memberSummary.recentMembers.length > 0 && (
+        <details className="mt-4">
+          <summary className="cursor-pointer text-sm font-semibold text-sky-deep">{L('နောက်ဆုံးဝင်ထားသော member များ', 'Recent members')}</summary>
+          <div className="mt-2 overflow-x-auto">
+            <table className="min-w-full text-left text-sm">
+              <thead className="text-xs text-ink-soft"><tr><th className="px-2 py-2">Member</th><th className="px-2 py-2">Plan</th><th className="px-2 py-2">Status</th><th className="px-2 py-2">{L('ဝင်ရောက်သည့်ရက်', 'Joined')}</th></tr></thead>
+              <tbody className="divide-y divide-line">{memberSummary.recentMembers.map((member) => <tr key={member.userId}><td className="px-2 py-2">{member.name ?? member.email ?? '—'}{member.name && member.email && <span className="block text-xs text-ink-soft">{member.email}</span>}</td><td className="px-2 py-2 capitalize">{member.planKey}</td><td className="px-2 py-2 capitalize">{member.status.replace('_', ' ')}</td><td className="whitespace-nowrap px-2 py-2 text-xs text-ink-soft">{new Date(member.joinedAt).toLocaleDateString(locale === 'mm' ? 'my-MM' : 'en-US')}</td></tr>)}</tbody>
+            </table>
+          </div>
+        </details>
+      )}
+    </section>
+
+    <section className="rounded-card border border-line bg-white p-4 shadow-card">
+      <div className="flex flex-wrap items-end justify-between gap-2">
+        <div><h2 className="font-semibold text-ink">{L('မိတ်ဆက်သူ စာရင်း', 'Referral tracking')}</h2><p className="text-sm text-ink-soft">{L('ဘယ် member က ဘယ်သူ၏ကုဒ်ဖြင့် ဝင်လာသည်ကို စီမံနိုင်ပါသည်။', 'Track which member joined through each referral code.')}</p></div>
+        <strong className="text-2xl text-sky-deep">{referrals.totals.all}</strong>
+      </div>
+      <div className="mt-3 flex flex-wrap gap-2 text-xs">
+        <span className="rounded-pill bg-canvas px-3 py-1">{L('စာရင်းသွင်း', 'Registered')} {referrals.totals.registered}</span>
+        <span className="rounded-pill bg-mint-soft px-3 py-1">{L('အတည်ပြုပြီး', 'Qualified')} {referrals.totals.qualified}</span>
+        <span className="rounded-pill bg-mint-soft px-3 py-1">{L('အကျိုးခံစားခွင့်ပေးပြီး', 'Rewarded')} {referrals.totals.rewarded}</span>
+        <span className="rounded-pill bg-canvas px-3 py-1">{L('ပယ်ထား', 'Rejected')} {referrals.totals.rejected}</span>
+      </div>
+      {referrals.rows.length === 0 ? <p className="mt-3 text-sm text-ink-soft">{L('မိတ်ဆက်စာရင်း မရှိသေးပါ။', 'No referrals yet.')}</p> : (
+        <div className="mt-3 overflow-x-auto">
+          <table className="min-w-full text-left text-sm">
+            <thead className="text-xs text-ink-soft"><tr><th className="px-2 py-2">{L('ဖိတ်ခေါ်သူ', 'Referrer')}</th><th className="px-2 py-2">{L('ဝင်လာသူ', 'New member')}</th><th className="px-2 py-2">Code</th><th className="px-2 py-2">Status</th></tr></thead>
+            <tbody className="divide-y divide-line">{referrals.rows.map((row) => <tr key={row.id}><td className="px-2 py-2">{row.referrerEmail ?? '—'}</td><td className="px-2 py-2">{row.referredEmail ?? '—'}<span className="block text-xs text-ink-soft">{new Date(row.createdAt).toLocaleDateString(locale === 'mm' ? 'my-MM' : 'en-US')}</span></td><td className="px-2 py-2 font-mono text-xs">{row.code}</td><td className="px-2 py-2"><select value={row.status} onChange={(event) => void setReferralStatus({ id: row.id, status: event.target.value as 'registered' | 'qualified' | 'rewarded' | 'rejected' })} className="rounded-lg border border-line px-2 py-1 text-xs"><option value="registered">registered</option><option value="qualified">qualified</option><option value="rewarded">rewarded</option><option value="rejected">rejected</option></select></td></tr>)}</tbody>
+          </table>
+        </div>
+      )}
+    </section>
 
     <form className="space-y-2 rounded-card border border-line bg-white p-4" onSubmit={async (event) => {
       event.preventDefault(); setMessage('');

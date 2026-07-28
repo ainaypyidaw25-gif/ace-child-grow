@@ -10,6 +10,7 @@ import { useMutation, useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { clearPortalMode } from '../app/portalMode';
 import { isGooglePlayBuild } from '../app/platform';
+import { ReferralSection } from '../components/ReferralSection';
 
 const PLAN_LABELS = {
   free: { mm: 'အခမဲ့အစီအစဉ်', en: 'Free plan' },
@@ -128,6 +129,8 @@ export function Profile() {
           </>
         )}
       </section>
+
+      <ReferralSection />
 
       {familyEnabled && !subscription?.inheritedFamilyAccess && (
         <section className="rounded-card border border-line bg-white p-4 shadow-card">

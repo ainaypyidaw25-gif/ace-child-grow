@@ -1,8 +1,9 @@
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useQuery, useMutation } from 'convex/react';
 import { useAuthActions } from '@convex-dev/auth/react';
 import { api } from '../../convex/_generated/api';
 import type { AppState, Action, Child } from './childStore';
+import { captureReferralFromSearch, clearPendingReferralCode, pendingReferralCode } from '../domain/referrals/referralCapture';
 
 interface AppStateContextValue {
   state: AppState;
@@ -34,16 +35,34 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const acceptConsent = useMutation(api.parent.acceptConsent);
   const ensureFreeSubscription = useMutation(api.subscriptions.ensureFree);
   const acceptFamilyInvites = useMutation(api.family.acceptPendingInvites);
+  const claimReferral = useMutation(api.referrals.claim);
   const { signOut } = useAuthActions();
 
   const [activeChildId, setActiveChildId] = useState<string | null>(null);
+  const referralCaptureAttempted = useRef(false);
 
   useEffect(() => {
     if (me) {
       void ensureFreeSubscription({});
       if (me.email) void acceptFamilyInvites({});
+      try {
+        if (!referralCaptureAttempted.current) {
+          captureReferralFromSearch(window.location.search, window.localStorage);
+          referralCaptureAttempted.current = true;
+        }
+        const code = pendingReferralCode(window.localStorage);
+        if (code) {
+          void claimReferral({ code }).then(() => {
+            clearPendingReferralCode(window.localStorage);
+          }).catch(() => {
+            // Keep the code so a temporary network error can be retried later.
+          });
+        }
+      } catch {
+        // Referral attribution remains available from the Profile screen.
+      }
     }
-  }, [acceptFamilyInvites, ensureFreeSubscription, me]);
+  }, [acceptFamilyInvites, claimReferral, ensureFreeSubscription, me]);
 
   // Loading discipline: `rows`/`me` are `undefined` while their queries are in
   // flight. We must NOT collapse "loading" into "empty" — the route guard keys
