@@ -610,9 +610,9 @@ const GUIDES_D: SeedItem[] = [
       indoor: [b('တိတ်ဆိတ်၍ သက်တောင့်သက်သာရှိသော နေရာတွင် တိုက်ကျွေးပါ။', 'Feed in a quiet, comfortable spot.')],
       outdoor: [b('အပြင်ရောက်နေချိန်တွင်လည်း လိုအပ်လျှင် တိုက်ကျွေးပါ — အချိန်ဇယား မလိုက်ပါနှင့်။', 'Feed on cue when out too — do not hold to a clock.')],
       lowCost: [b('မိခင်နို့သည် အခမဲ့ဖြစ်ပြီး ဘေးကင်းသည်။', 'Breast milk is free and safe.')],
-      materials: b('မလိုအပ်ပါ — ဘော်တလီသုံးပါက ကျန်းမာရေးဝန်ထမ်း၏ လမ်းညွှန်ဖြင့် သန့်ရှင်းစွာ ပြင်ဆင်ပါ။', 'None — if bottles are used, prepare them hygienically following health-worker guidance.'),
+      materials: b('မလိုအပ်ပါ — နို့ပုလင်းသုံးပါက ကျန်းမာရေးဝန်ထမ်း၏ လမ်းညွှန်ဖြင့် သန့်ရှင်းစွာ ပြင်ဆင်ပါ။', 'None — if bottles are used, prepare them hygienically following health-worker guidance.'),
       safety: b(
-        'ကလေးကို တစ်ယောက်တည်း ဘော်တလီ ထောက်၍ မထားပါနှင့် — ရေမျိုတတ်သည်။ အသက် ၆ လအောက် ကလေးအား ပျားရည် မကျွေးပါနှင့်။ နွားနို့အစစ်ကို ပင်မ အစားအစာအဖြစ် ၁၂ လအောက်တွင် မကျွေးပါနှင့်။',
+        'နို့ပုလင်းကို ထောက်ထားပြီး ကလေးကို တစ်ယောက်တည်း မထားပါနှင့် — နို့တစ်ဆို့နိုင်သည်။ အသက် ၆ လအောက် ကလေးအား ပျားရည် မကျွေးပါနှင့်။ နွားနို့အစစ်ကို ပင်မ အစားအစာအဖြစ် ၁၂ လအောက်တွင် မကျွေးပါနှင့်။',
         'Never prop a bottle and leave your baby — it is a choking risk. Do not give honey under 12 months. Do not use fresh cow’s milk as the main drink under 12 months.',
       ),
       commonMistakes: [
