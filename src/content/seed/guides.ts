@@ -264,7 +264,7 @@ export const GUIDES: SeedItem[] = [
     lowCost: [b('ဒေသထွက် အသီးအနှံ/အသီးအရွက်များကို ချက်၍ ချေပါ။', 'Use local, affordable fruits/vegetables mashed.')],
     materials: b('နူးညံ့ဇွန်း၊ ခွက်၊ ဒေသထွက် အစားအစာ။', 'Soft spoon, bowl, local foods.'),
     safety: b('အသက် ၁ နှစ်မပြည့်သေးသော ကလေးကို ပျားရည် မပေးပါနှင့်။ အသက်ရှူလမ်းကြောင်း ပိတ်ဆို့စေနိုင်သည့် အရွယ်အစားနှင့် ပုံသဏ္ဌာန်ရှိသော အစားအစာများကို ရှောင်ပြီး စားနေစဉ် အမြဲ အနီးကပ်ကြီးကြပ်ပါ။', 'No honey under 1 year; avoid choking shapes; always supervise eating.'),
-    commonMistakes: [b('ဆား/သကြား ထည့်ခြင်း သို့မဟုတ် ဆီးပုလင်းဖြင့် အာဟာရ အစားထိုးခြင်း။', 'Adding salt/sugar, or replacing meals with bottles.')],
+    commonMistakes: [b('ဆား/သကြား ထည့်ခြင်း သို့မဟုတ် နို့ပုလင်းဖြင့် ဖြည့်စွက်အစားအစာကို အစားထိုးခြင်း။', 'Adding salt/sugar, or replacing complementary foods with bottles.')],
     parentTips: [b('မိခင်နို့/နို့ကို ဆက်တိုက်ပေးရင်း အစိုင်အခဲကို ဖြည့်ပါ။', 'Continue breast/formula milk alongside solids.')],
     faq: [
       { q: b('အစားအစာ ငြင်းရင် ဘယ်လိုလုပ်မလဲ။', 'What if baby refuses food?'), a: b('ထပ်ခါ တင်ပြပါ — အသစ်တစ်ခုကို လက်ခံဖို့ အကြိမ်များစွာ လိုနိုင်သည်။', 'Keep offering — new foods often take many tries.') },
@@ -290,7 +290,7 @@ export const GUIDES: SeedItem[] = [
     ],
     dailyActivities: [b('နေ့/ည ကွာခြားမှုကို အလင်း/အမှောင်ဖြင့် သိစေပါ။', 'Help day/night difference with light and dark.')],
     indoor: [b('တိတ်ဆိတ်၍ အေးမြသော အိပ်ခန်း ဖန်တီးပါ။', 'Keep a calm, cool sleep space.')],
-    lowCost: [b('သီးသန့် အိပ်ရာ မလို — ခိုင်ခံ့ပြီး ပြားသော မွေ့ရာ လုံလောက်သည်။', 'No special crib needed — a firm flat surface is enough.')],
+    lowCost: [b('ကလေးအတွက် လူကြီးအိပ်ရာနှင့် သီးခြားဖြစ်သော ဘေးကင်းသည့် အိပ်စက်နေရာထားပါ။ မွေ့ရာသည် ခိုင်ခံ့၊ ပြားညီပြီး မစောင်းရပါ။', 'Give the baby a safe sleep space separate from the adult bed, with a firm, flat, non-inclined mattress.')],
     materials: b('ခိုင်ခံ့သော ပြားသော မွေ့ရာ။', 'Firm flat sleep surface.'),
     safety: b('ကျောပေါ်လှန်အိပ်ပါ။ မွေ့ရာပေါ်တွင် ခေါင်းအုံး၊ စောင်ပျော့၊ အရုပ် မထားပါနှင့်။ ဆေးလိပ်ငွေ့ ရှောင်ပါ။ ဤဘေးကင်းရေးအချက်များသည် ရုတ်တရက်သေဆုံးမှု (SIDS) အန္တရာယ်ကို လျှော့ချသည်။', 'Back to sleep; no pillows, soft bedding, or toys in the sleep space; avoid smoke. These reduce SIDS risk.'),
     commonMistakes: [b('ကလေးအား ဗိုက်လှန်/ဘေးစောင်း အိပ်စေခြင်း သို့မဟုတ် နူးညံ့ပစ္စည်းများ ထားခြင်း။', 'Placing baby on tummy/side or with soft items.')],

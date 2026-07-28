@@ -87,4 +87,24 @@ describe('knowledge base — 0–12 months', () => {
       }
     }
   });
+
+  it('keeps reviewed Burmese safety wording free of known corrupt or misleading phrases', () => {
+    const forbidden = [
+      'သီးသန့် အိပ်ရာ မလို',
+      'မှောက်အိပ်စဉ်',
+      'အကြားအာရုံ ကောင်းမွန်ကြောင်း ညွှန်ပြသည်',
+      'တစ္ဆေကာလ',
+      'ဆီးပုလင်း',
+      'ကြီးမောက်',
+      'တက်ခြင်နိုင်သော',
+      'နို့သီးပြီး',
+      'ဘော်တလီ',
+      'ထောင်ချီထားစဉ်',
+      'ဘော်လီယံ',
+    ];
+    for (const item of CONTENT_SEED) {
+      const text = JSON.stringify(item);
+      for (const phrase of forbidden) expect(text, item.slug).not.toContain(phrase);
+    }
+  });
 });

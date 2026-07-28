@@ -6,6 +6,15 @@ type Skill = [domain: string, title: Bilingual, observe: Bilingual];
 type GuideFocus = [domain: string, focus: Bilingual, daily: Bilingual];
 type Play = [slug: string, title: Bilingual, goal: Bilingual, materials: Bilingual, step: Bilingual, safety: Bilingual, domains: string[]];
 type Band = { key: string; mm: string; en: string; skills: Skill[]; guides: GuideFocus[]; play: Play[] };
+type GuideEditorial = {
+  observation: Bilingual;
+  weekly: Bilingual;
+  tip: Bilingual;
+  faq: { q: Bilingual; a: Bilingual };
+  redFlag: Bilingual;
+  referral: Bilingual;
+  encouragement: Bilingual;
+};
 
 const WHY: Record<string, Bilingual> = {
   gross_motor: b('ခန္ဓာကိုယ် ဟန်ချက်နှင့် ရွေ့လျားမှုကို အားပေးသည်။', 'Supports balance and whole-body movement.'),
@@ -37,6 +46,96 @@ const GUIDE_SOURCES: Record<string, string[]> = {
 };
 
 const ACTIVITY_SOURCES = ['aap-power-of-play-2018', 'who-care-for-child-development-2012', 'cdc-milestones-2026'];
+
+const GUIDE_EDITORIAL: Record<string, GuideEditorial> = {
+  nutrition: {
+    observation: b('သုံးရက်ခန့် စားချိန်၊ စားသည့်အမျိုးအစားနှင့် ကလေး၏ ဆာလောင်/ဝပြီ အချက်ပြမှုကို မှတ်သားပါ။', 'For about three days, note meal timing, variety, and the child’s hunger and fullness cues.'),
+    weekly: b('ဒီတစ်ပတ်တွင် အစားအစာအုပ်စုတစ်ခုစီမှ အမျိုးအစားအသစ် သို့မဟုတ် မကြာခဏမစားသည့်အရာတစ်မျိုးကို ဖိအားမပေးဘဲ ပေးကြည့်ပါ။', 'This week, calmly offer one new or less-familiar food from a food group without pressure.'),
+    tip: b('မိဘက ဘာစားမည်၊ ဘယ်အချိန်စားမည်ကို စီစဉ်ပေးပြီး ကလေးက မည်မျှစားမည်ကို ဆုံးဖြတ်ခွင့်ပေးပါ။', 'The caregiver decides what and when to serve; let the child decide how much to eat.'),
+    faq: { q: b('အစားအစာအသစ်ကို မစားလျှင် ဘာလုပ်ရမလဲ။', 'What if my child refuses a new food?'), a: b('အတင်းမကျွေးဘဲ ပမာဏအနည်းငယ်ကို နောက်တစ်ကြိမ် ပြန်ပေးပါ။ အစားအစာအသစ်ကို လက်ခံရန် အကြိမ်များစွာ လိုနိုင်သည်။', 'Do not force it. Offer a small amount again another time; acceptance may take many exposures.') },
+    redFlag: b('အစာ သို့မဟုတ် ရေမျိုတိုင်း မကြာခဏ ချောင်းဆိုးခြင်း၊ တစ်ဆို့ခြင်း၊ ကိုယ်အလေးချိန် မတိုးခြင်း သို့မဟုတ် အစားအစာအမျိုးအစား အလွန်နည်းသွားခြင်း။', 'Frequent coughing or choking with food or drink, poor weight gain, or an extremely restricted food range.'),
+    referral: b('စားသောက်ခြင်း၊ မျိုချခြင်း သို့မဟုတ် ကြီးထွားမှု စိုးရိမ်ပါက ကလေးဆရာဝန် သို့မဟုတ် သင့်လျော်သော ကျန်းမာရေးပညာရှင်နှင့် ဆွေးနွေးပါ။', 'Discuss feeding, swallowing, or growth concerns with a paediatrician or appropriate health professional.'),
+    encouragement: b('ပမာဏထက် အစားအစာမျိုးစုံကို အေးဆေးစွာ ထပ်ခါပေးနိုင်ခြင်းကို ဦးစားပေးပါ။', 'Focus on calm, repeated exposure to varied foods rather than the amount eaten.'),
+  },
+  sleep: {
+    observation: b('တစ်ပတ်ခန့် အိပ်ချိန်၊ နိုးချိန်၊ နေ့ခင်းအိပ်ချိန်နှင့် ညနိုးမှုကို မှတ်သားပြီး တူညီသည့်ပုံစံ ရှိမရှိ ကြည့်ပါ။', 'For about a week, note bedtime, waking, naps, and night waking to look for a pattern.'),
+    weekly: b('ဒီတစ်ပတ် အိပ်မီလုပ်ရိုးလုပ်စဉ်ကို တူညီသည့်အချိန်တွင် အဆင့်တိုတိုဖြင့် ဆက်လုပ်ပါ။', 'This week, repeat the same short bedtime sequence at a consistent time.'),
+    tip: b('အိပ်မီအချိန်တွင် ဖန်သားပြင်ပိတ်ပြီး အလင်းလျှော့ကာ စာဖတ်ခြင်း သို့မဟုတ် သီချင်းဆိုခြင်းကို ရွေးပါ။', 'Before bed, turn off screens, dim the light, and choose a book or quiet song.'),
+    faq: { q: b('ညအိပ်ချိန် တည်ငြိမ်ရန် ဘယ်လောက်ကြာနိုင်သလဲ။', 'How long can a bedtime routine take to settle?'), a: b('ကလေးတစ်ဦးနှင့်တစ်ဦး ကွာနိုင်သည်။ တူညီသည့်အဆင့်များကို တဖြည်းဖြည်း ပြန်လုပ်ပြီး နေ့စဉ်အိပ်ချိန်ကို အလွန်မကွာစေပါနှင့်။', 'Children vary. Repeat the same steps gradually and keep daily bedtime reasonably consistent.') },
+    redFlag: b('အိပ်နေစဉ် အသက်ရှူခက်ခြင်း၊ အသက်ရှူရပ်သလိုဖြစ်ခြင်း၊ နေ့ဘက် အလွန်အမင်း ငိုက်မျဉ်းခြင်း သို့မဟုတ် အိပ်ရေးပြဿနာက နေ့စဉ်ဘဝကို ဆက်တိုက်ထိခိုက်ခြင်း။', 'Breathing difficulty or pauses during sleep, extreme daytime sleepiness, or persistent sleep problems disrupting daily life.'),
+    referral: b('အသက်ရှူမှု သို့မဟုတ် ဆက်တိုက်အိပ်ရေးပြဿနာ စိုးရိမ်ပါက ကလေးဆရာဝန်နှင့် ဆွေးနွေးပါ။ အသက်ရှူမဝပါက အရေးပေါ်အကူအညီယူပါ။', 'Discuss breathing or persistent sleep concerns with a paediatrician; seek emergency help for severe breathing difficulty.'),
+    encouragement: b('တည်ငြိမ်သော အိပ်မီအလေ့အထကို ပြီးပြည့်စုံအောင်မဟုတ်ဘဲ နေ့တိုင်း ပြန်လုပ်နိုင်အောင် ရည်ရွယ်ပါ။', 'Aim for a bedtime routine you can repeat, not a perfect routine.'),
+  },
+  safety: {
+    observation: b('ကလေးအမြင့်မှ အိမ်နှင့် အပြင်ကစားနေရာကို လိုက်ကြည့်ပြီး ရေ၊ မီး၊ လမ်းမ၊ ပြတင်းပေါက်၊ ကြိုးနှင့် ဆေးဝါးအန္တရာယ်ကို စစ်ပါ။', 'Inspect home and play areas from the child’s height for water, burn, traffic, window, cord, and medicine hazards.'),
+    weekly: b('ဒီတစ်ပတ် အခန်းတစ်ခန်း သို့မဟုတ် အပြင်ကစားနေရာတစ်ခုကို ဘေးကင်းရေးစာရင်းဖြင့် ပြန်စစ်ပါ။', 'This week, recheck one room or outdoor play area with a safety list.'),
+    tip: b('“မလုပ်နဲ့” ဟုသာ မပြောဘဲ အန္တရာယ်ကို လူကြီးက ဖယ်ရှားပြီး ဘေးကင်းသည့် အစားထိုးလုပ်ဆောင်ချက် ပြပါ။', 'Do not rely only on “no”; remove the hazard and show a safe alternative.'),
+    faq: { q: b('ကလေးက စည်းကမ်းနားလည်ရင် အနီးကပ်ကြီးကြပ်ဖို့ လိုသေးလား။', 'Does a child who understands rules still need close supervision?'), a: b('လိုပါသည်။ ဤအရွယ်ကလေးများသည် အန္တရာယ်ကို အမြဲမခန့်မှန်းနိုင်သေးသဖြင့် ရေ၊ လမ်းမ၊ မီးနှင့် အမြင့်နေရာအနီး လူကြီးက အနီးကပ်ကြီးကြပ်ရပါမည်။', 'Yes. Young children cannot reliably judge danger, so adults must stay close near water, traffic, heat, and heights.') },
+    redFlag: b('ခလုတ်ဘက်ထရီ၊ ဆေးဝါး သို့မဟုတ် အဆိပ်ဖြစ်နိုင်သောပစ္စည်း မျိုမိခြင်း၊ ရေနစ်လုဖြစ်ခြင်း၊ မီးလောင်ဒဏ်ရာ သို့မဟုတ် ပြင်းထန်သော ထိခိုက်ဒဏ်ရာ။', 'Swallowing a button battery, medicine, or poison; a drowning incident; a burn; or a serious injury.'),
+    referral: b('အရေးပေါ်အန္တရာယ် သို့မဟုတ် ပြင်းထန်ဒဏ်ရာရှိပါက ချက်ချင်း အရေးပေါ်ဆေးကုသမှု ရယူပါ။', 'Seek emergency medical care immediately for a serious hazard exposure or injury.'),
+    encouragement: b('အန္တရာယ်ကို ကြိုဖယ်ရှားခြင်းက ကလေးကို လွတ်လပ်စွာ စူးစမ်းခွင့်ပေးနိုင်သည့် အကောင်းဆုံးနည်းဖြစ်သည်။', 'Removing hazards in advance creates safer freedom to explore.'),
+  },
+  daily_routine: {
+    observation: b('နံနက်၊ အစားစားပြီးနောက်နှင့် ညအိပ်မီ လုပ်ရိုးလုပ်စဉ်ထဲမှ ကလေးကိုယ်တိုင်လုပ်နိုင်သည့် အဆင့်ကို မှတ်သားပါ။', 'Notice which steps the child can do in morning, after-meal, and bedtime routines.'),
+    weekly: b('ဒီတစ်ပတ် သွားတိုက်၊ အဝတ်ဝတ် သို့မဟုတ် ပစ္စည်းသိမ်းခြင်းထဲမှ အဆင့်တစ်ခုကို ပုံမှန်လေ့ကျင့်ပါ။', 'This week, practise one consistent step in brushing, dressing, or tidying.'),
+    tip: b('လုပ်ရမည့်အဆင့်ကို တစ်ခုပြီးတစ်ခု တိုတိုပြောပြီး ကလေးကြိုးစားရန် အချိန်ပေးပါ။', 'Give one short step at a time and allow time for the child to try.'),
+    faq: { q: b('ကိုယ်တိုင်လုပ်တာ နှေးနေလျှင် လူကြီးက အကုန်လုပ်ပေးသင့်လား။', 'Should an adult take over when self-care is slow?'), a: b('အချိန်ရသည့်အခါ ကလေးလုပ်နိုင်သည့်အပိုင်းကို စောင့်ပေးပြီး လိုသည့်အဆင့်ကိုသာ ကူညီပါ။', 'When time allows, wait for the part the child can do and help only with the step that is needed.') },
+    redFlag: b('ယခင်က ကိုယ်တိုင်လုပ်နိုင်သော နေ့စဉ်အရည်အချင်းများ ပျောက်ဆုံးခြင်း သို့မဟုတ် လှုပ်ရှားမှု၊ မျိုချမှုကြောင့် နေ့စဉ်အလုပ်များ မလုပ်နိုင်ခြင်း။', 'Loss of previously acquired self-care skills or movement/swallowing difficulty that prevents daily activities.'),
+    referral: b('နေ့စဉ်အရည်အချင်း ပျောက်ဆုံးခြင်း သို့မဟုတ် လုပ်ဆောင်နိုင်မှုကို ဆက်တိုက်ထိခိုက်သည့်အခက်အခဲရှိပါက ကလေးဆရာဝန် သို့မဟုတ် သင့်လျော်သောပညာရှင်နှင့် ဆွေးနွေးပါ။', 'Discuss lost skills or persistent functional difficulty with a paediatrician or appropriate professional.'),
+    encouragement: b('ပြီးမြောက်မှုထက် ကိုယ်တိုင်ပါဝင်ကြိုးစားမှုကို ချီးကျူးပါ။', 'Praise participation and effort rather than perfect completion.'),
+  },
+  play: {
+    observation: b('ကလေးက ဘယ်ကစားနည်းကို ရွေးသည်၊ ဘယ်လောက်ကြာ ပါဝင်သည်နှင့် လူကြီး/ကလေးနှင့် ဘယ်လို အပြန်အလှန်ကစားသည်ကို ကြည့်ပါ။', 'Notice what play the child chooses, how long they engage, and how they interact with adults or children.'),
+    weekly: b('ဒီတစ်ပတ် ကလေးဦးဆောင်သည့် ကစားချိန်တိုတစ်ခုနှင့် အပြင်လှုပ်ရှားကစားချိန်တစ်ခု စီစဉ်ပါ။', 'This week, plan one short child-led play time and one active outdoor play time.'),
+    tip: b('ကလေးကစားပုံကို ချက်ချင်းပြင်မပေးဘဲ ကြည့်၊ အတုယူ၊ စကားဖြည့်ပြီး အလှည့်ကျကစားပါ။', 'Instead of correcting play immediately, watch, imitate, add language, and take turns.'),
+    faq: { q: b('ကလေးက တစ်မျိုးတည်းကို ထပ်ခါကစားလျှင် အဆင်ပြေလား။', 'Is repeated play with the same thing okay?'), a: b('ထပ်ခါကစားခြင်းက သင်ယူမှုကို အားပေးနိုင်သည်။ ကလေးစိတ်ဝင်စားမှုနောက်လိုက်ပြီး အဆင့်သေးသေးတစ်ခု သို့မဟုတ် စကားအသစ်တစ်လုံး ထည့်ပေးပါ။', 'Repetition can support learning. Follow the child’s interest and add one small step or new word.') },
+    redFlag: b('လူများ သို့မဟုတ် ကစားစရာများကို ဆက်တိုက် စိတ်မဝင်စားခြင်း၊ ယခင်ကရှိသည့် ကစား/ဆက်သွယ်အရည်အချင်း ပျောက်ဆုံးခြင်း။', 'Persistent lack of interest in people or play, or loss of previously acquired play or communication skills.'),
+    referral: b('ကစားခြင်း၊ ဆက်သွယ်ခြင်း သို့မဟုတ် အရည်အချင်းပျောက်ဆုံးမှု စိုးရိမ်ပါက ကလေးဆရာဝန် သို့မဟုတ် ဖွံ့ဖြိုးမှုဆိုင်ရာပညာရှင်နှင့် ဆွေးနွေးပါ။', 'Discuss concerns about play, communication, or lost skills with a paediatrician or developmental professional.'),
+    encouragement: b('နေ့စဉ် မိနစ်အနည်းငယ် အာရုံစိုက်ပြီး အတူကစားခြင်းက အဈေးကြီးကစားစရာထက် ပိုအရေးကြီးသည်။', 'A few focused minutes of shared play each day matter more than expensive toys.'),
+  },
+};
+
+const PRESCHOOL_SOCIAL: Record<string, [Bilingual, Bilingual]> = {
+  '2_5y': [b('အခြားကလေးအနားတွင် ကစားပြီး တစ်ခါတစ်ရံ အတူကစားခြင်း', 'Plays beside and sometimes with other children'), b('အခြားကလေးအနားတွင် ကစားပြီး အချိန်တိုအတွင်း အတူကစားရန် စတင်ပါသလား။', 'Plays beside other children and sometimes joins them briefly?')],
+  '3y': [b('အခြားကလေးကို သတိပြု၍ အတူကစားခြင်း', 'Notices other children and joins play'), b('အခြားကလေးများကို သတိပြုမိပြီး သူတို့နှင့် အတူကစားရန် ဝင်ပါသလား။', 'Notices other children and joins them in play?')],
+  '3_5y': [b('အကူအညီဖြင့် အလှည့်တို စောင့်ခြင်း', 'Waits briefly for a turn with support'), b('လူကြီးသတိပေးမှုဖြင့် ကစားစရာတစ်ခုအတွက် အလှည့်တို စောင့်နိုင်ပါသလား။', 'With an adult reminder, waits briefly for a turn with a toy?')],
+  '4y': [b('အတူကစားရန် မေးပြီး အခန်းကဏ္ဍ မျှဝေခြင်း', 'Asks to join and shares pretend-play roles'), b('အခြားကလေးနှင့် အတူကစားရန် မေးပြီး အတုယူကစားရာတွင် အခန်းကဏ္ဍ မျှဝေပါသလား။', 'Asks to play and shares roles during pretend play?')],
+  '4_5y': [b('ဘုံရည်မှန်းချက်တစ်ခုအတွက် ပူးပေါင်းကစားခြင်း', 'Cooperates toward a shared play goal'), b('အခြားကလေးနှင့် အတူ တည်ဆောက်ခြင်း သို့မဟုတ် ဇာတ်လမ်းကစားခြင်းကို စီစဉ်ပါသလား။', 'Plans a building or pretend-play idea with another child?')],
+  '5y': [b('ကစားပွဲစည်းမျဉ်းကို လိုက်နာပြီး အလှည့်ကျကစားခြင်း', 'Follows game rules and takes turns'), b('ရိုးရှင်းသော ကစားပွဲတွင် စည်းမျဉ်းကို လိုက်နာပြီး အလှည့်စောင့်နိုင်ပါသလား။', 'Follows simple game rules and waits for a turn?')],
+};
+
+const PRESCHOOL_PLAY: Record<string, Play[]> = {
+  '2_5y': [
+    ['move_path_2_5y', b('မျဉ်းကျော် လှမ်းကစားခြင်း', 'Step-over path'), b('ခြေလှမ်းထိန်းချုပ်မှုနှင့် ဟန်ချက်', 'Step control and balance'), b('စက္ကူတိပ်မျဉ်း နှစ်ကြောင်း', 'Two paper-tape lines'), b('မျဉ်းတစ်ကြောင်းမှ တစ်ကြောင်းသို့ လှမ်းကာ “ရပ်”၊ “သွား” ဟု တစ်ဆင့်စီ ပြောပါ။', 'Step from one line to the next using one cue at a time: “stop” and “go.”'), b('ချော်မလဲနိုင်သော ကြမ်းပြင်တွင် လက်လှမ်းမီအနီးမှ ကြီးကြပ်ပါ။', 'Supervise within reach on a non-slip floor.'), ['gross_motor', 'play']],
+    ['picture_story_2_5y', b('ပုံနှစ်ပုံကို အမည်ပေးခြင်း', 'Name two pictures'), b('စကားလုံးနှင့် ပုံချိတ်ဆက်မှု', 'Connecting words and pictures'), b('ရင်းနှီးသော ပုံနှစ်ပုံ', 'Two familiar pictures'), b('ပုံတစ်ပုံစီကို ရွေးခိုင်းပြီး အရာဝတ္ထုနှင့် လုပ်ဆောင်ချက်ကို စကားတိုဖြင့် ပြောပါ။', 'Let the child choose each picture and name the object or action in a short phrase.'), b('အဖြေမှားသည်ဟု မပြောဘဲ ကလေးပြောသည့်စကားကို တိုးချဲ့ပေးပါ။', 'Do not label answers wrong; expand the child’s words.'), ['language', 'cognitive']],
+    ['helper_sort_2_5y', b('ခြေအိတ်တွဲရှာခြင်း', 'Find matching socks'), b('တူရာရှာခြင်းနှင့် အိမ်မှုပါဝင်မှု', 'Matching and helping at home'), b('သန့်ရှင်းသော ခြေအိတ် ၃ တွဲ', 'Three pairs of clean socks'), b('တူသောခြေအိတ်နှစ်စုံကို ရှာပြီး ဘေးချင်းကပ်ထားခိုင်းပါ။', 'Find matching socks and place each pair together.'), b('ကလေးပါးစပ်ထဲဝင်နိုင်သော ပစ္စည်းငယ် မသုံးပါနှင့်။', 'Do not use small items that can fit in the child’s mouth.'), ['cognitive', 'self_help']],
+  ],
+  '3y': [
+    ['move_path_3y', b('နှစ်ဆင့် လှုပ်ရှားကစားခြင်း', 'Two-step movement game'), b('နှစ်ဆင့်ညွှန်ကြားချက်နှင့် ကိုယ်လက်ညှိနှိုင်းမှု', 'Two-step directions and coordination'), b('စက္ကူတိပ်မျဉ်း', 'A paper-tape line'), b('“မျဉ်းပေါ်လျှောက်ပြီး လက်ခုပ်တီး” ကဲ့သို့ နှစ်ဆင့်ကို အတူစမ်းပါ။', 'Try two linked steps such as “walk on the line, then clap.”'), b('နေရာလွတ်နှင့် ချော်မလဲသောကြမ်းပြင်ကို သုံးပါ။', 'Use a clear, non-slip floor.'), ['gross_motor', 'communication']],
+    ['picture_story_3y', b('ဖြစ်ရပ်သုံးပုံ ပြောခြင်း', 'Tell a three-picture event'), b('အစ၊ အလယ်၊ အဆုံး စကားပြောမှု', 'Beginning-middle-end language'), b('နေ့စဉ်ဖြစ်ရပ် ပုံသုံးပုံ', 'Three pictures of a daily event'), b('ပုံများကိုကြည့်ပြီး “အရင်ဘာဖြစ်လဲ၊ ပြီးတော့ဘာလဲ” ဟု မေးပါ။', 'Ask, “What happened first, and what happened next?”'), b('ကလေး၏ စကားအဆင့်နှင့် ကိုက်ညီအောင် မေးခွန်းတိုသုံးပါ။', 'Use short questions suited to the child’s language level.'), ['language', 'cognitive']],
+    ['helper_sort_3y', b('အရောင်တစ်မျိုးစီ ခွဲခြင်း', 'Sort by one color'), b('အရောင်ခွဲခြားမှုနှင့် အိမ်မှုပါဝင်မှု', 'Color sorting and helping'), b('အရောင်ကွဲ ပလတ်စတစ်ခွက် သို့မဟုတ် အဝတ်များ', 'Colored plastic cups or clothes'), b('အရောင်တစ်မျိုးကို စံပြပြီး ကျန်ပစ္စည်းများကို အရောင်အလိုက် ခွဲခိုင်းပါ။', 'Model one color group, then sort the rest by color.'), b('ဖန်၊ ချွန်ထက်သည့်ပစ္စည်း သို့မဟုတ် ဆေးဗူး မသုံးပါနှင့်။', 'Do not use glass, sharp items, or medicine containers.'), ['cognitive', 'self_help']],
+  ],
+  '3_5y': [
+    ['move_path_3_5y', b('ခုန်–လှည့်–ရပ် လမ်းကြောင်း', 'Jump-turn-stop path'), b('ဟန်ချက်ပြန်ထိန်းမှုနှင့် နားထောင်မှု', 'Balance recovery and listening'), b('စက္ကူတိပ် အမှတ်သုံးခု', 'Three paper-tape markers'), b('အမှတ်များတွင် ခုန်၊ လှည့်၊ ရပ် လုပ်ဆောင်ချက်ကို အစီအစဉ်ပြောင်း၍ ပြောပါ။', 'Call out jump, turn, and stop at the markers in changing order.'), b('ပရိဘောဂနှင့် ဝေးသော ချော်မလဲသည့်နေရာတွင် ကစားပါ။', 'Play on a non-slip surface away from furniture.'), ['gross_motor', 'play']],
+    ['picture_story_3_5y', b('နေ့စဉ်လုပ်ရိုးလုပ်စဉ် ပုံစီခြင်း', 'Sequence a daily routine'), b('ဖြစ်ရပ်အစီအစဉ်နှင့် စကားပြောမှု', 'Event sequence and language'), b('သွားတိုက်ခြင်းကဲ့သို့ လုပ်ရိုးလုပ်စဉ်ပုံသုံးပုံ', 'Three pictures of a routine such as brushing'), b('ပုံများကို ရောပြီး ကလေးကို အစီအစဉ်ပြန်စီကာ ပြောပြခိုင်းပါ။', 'Mix the pictures, then invite the child to order and describe them.'), b('အမှားပြင်ပေးမည့်အစား “နောက်ဘာဖြစ်မလဲ” ဟု မေးပါ။', 'Instead of correcting, ask, “What happens next?”'), ['language', 'cognitive']],
+    ['helper_sort_3_5y', b('အသုံးအလိုက် နှစ်စုခွဲခြင်း', 'Sort into two uses'), b('အမျိုးအစားခွဲခြင်းနှင့် ရှင်းပြမှု', 'Categorizing and explaining'), b('သန့်ရှင်းသော မီးဖိုချောင်နှင့် အဝတ်အစားပစ္စည်းကြီးများ', 'Large safe kitchen and clothing items'), b('ပစ္စည်းများကို “မီးဖိုချောင်သုံး” နှင့် “အဝတ်ဝတ်ရာသုံး” ဟု နှစ်စုခွဲပြီး ဘာကြောင့်လဲ မေးပါ။', 'Sort into “kitchen” and “clothing” groups and ask why.'), b('ချွန်ထက်၊ ကွဲလွယ် သို့မဟုတ် မျိုချနိုင်သောပစ္စည်း မသုံးပါနှင့်။', 'Avoid sharp, breakable, or swallowable items.'), ['cognitive', 'self_help']],
+  ],
+  '4y': [
+    ['move_path_4y', b('ဘောလုံးယူ အတားအဆီးလမ်းကြောင်း', 'Ball-carry obstacle path'), b('ဟန်ချက်၊ လမ်းကြောင်းစီစဉ်မှုနှင့် လက်ထိန်းချုပ်မှု', 'Balance, motor planning, and hand control'), b('ဘောလုံးပျော့နှင့် စက္ကူတိပ်', 'A soft ball and paper tape'), b('ဘောလုံးကိုကိုင်၍ မျဉ်းကွေ့အတိုင်း လျှောက်ပြီး အဆုံးတွင် အဖော်ထံ လှိမ့်ပေးပါ။', 'Carry the ball along a curved line, then roll it to a partner.'), b('ပျော့သောဘောလုံးသုံးပြီး လမ်းကြောင်းကို ပရိဘောဂမှ ရှင်းထားပါ။', 'Use a soft ball and clear the path of furniture.'), ['gross_motor', 'problem_solving']],
+    ['picture_story_4y', b('အစနှင့်အဆုံးပါ ဇာတ်လမ်း', 'Story with a beginning and ending'), b('ဇာတ်လမ်းဖွဲ့မှုနှင့် စကားပြောမှု', 'Narrative and language'), b('လူနှင့်နေရာပါ ပုံသုံးပုံ', 'Three pictures showing people and places'), b('ဇာတ်ကောင်၊ ဖြစ်ရပ်နှင့် အဆုံးသတ်ကို ကလေးစိတ်ကူးဖြင့် ပြောခိုင်းပါ။', 'Invite the child to describe a character, an event, and an ending.'), b('စိတ်ကူးကို လက်ခံပြီး လိုအပ်မှ စကားလုံးတစ်လုံးစီ ဖြည့်ပေးပါ။', 'Accept the child’s ideas and add only an occasional helpful word.'), ['language', 'play']],
+    ['helper_sort_4y', b('အခန်းကဏ္ဍပါ အိမ်မှုကစားခြင်း', 'Pretend household roles'), b('စီစဉ်မှုနှင့် ပူးပေါင်းလုပ်ဆောင်မှု', 'Planning and cooperation'), b('သန့်ရှင်းသော အဝတ်နှင့် ပလတ်စတစ်ခွက်', 'Clean clothes and plastic cups'), b('“အဝတ်ခေါက်သူ”၊ “ခွက်စီသူ” အခန်းကဏ္ဍရွေးပြီး အလုပ်အစီအစဉ်ကို အတူပြောပါ။', 'Choose roles such as clothes folder and cup arranger, then plan the steps together.'), b('ကွဲလွယ်၊ ချွန်ထက် သို့မဟုတ် ဓာတုပစ္စည်းပါသောအရာ မသုံးပါနှင့်။', 'Avoid breakable, sharp, or chemical-containing items.'), ['social', 'self_help']],
+  ],
+  '4_5y': [
+    ['move_path_4_5y', b('ခြေတစ်ဖက်ဟန်ချက် လမ်းကြောင်း', 'One-foot balance path'), b('ဟန်ချက်နှင့် လှုပ်ရှားမှုအစီအစဉ်', 'Balance and movement sequencing'), b('စက္ကူတိပ်အမှတ်များ', 'Paper-tape markers'), b('အမှတ်တစ်ခုစီတွင် ခြေတစ်ဖက်ပေါ် ခဏရပ်ပြီး နောက်အမှတ်သို့ လျှောက်ပါ။', 'Pause briefly on one foot at each marker, then walk to the next.'), b('လူကြီးအနီးတွင် ပြားညီ၊ ချော်မလဲသည့်နေရာ၌ ကစားပါ။', 'Play near an adult on a flat, non-slip surface.'), ['gross_motor', 'play']],
+    ['picture_story_4_5y', b('ပုံလေးပုံ အစီအစဉ်ဇာတ်လမ်း', 'Four-picture sequence story'), b('အစီအစဉ်မှတ်ဉာဏ်နှင့် စကားပြောမှု', 'Sequence memory and language'), b('ဖြစ်ရပ်ဆက်စပ်သည့် ပုံလေးပုံ', 'Four pictures from one event'), b('ပုံလေးပုံကို စီပြီး “အရင်၊ ပြီးတော့၊ နောက်ဆုံး” စကားလုံးဖြင့် ပြောခိုင်းပါ။', 'Order four pictures and retell using “first,” “then,” and “last.”'), b('ကလေးမသေချာလျှင် ရွေးချယ်စရာနှစ်ခုသာ ပေးပါ။', 'If the child is unsure, offer only two choices.'), ['language', 'cognitive']],
+    ['helper_sort_4_5y', b('ခွဲပြီး ရေတွက်ကူညီခြင်း', 'Sort and count to help'), b('အမျိုးအစားခွဲခြင်း၊ ရေတွက်ခြင်းနှင့် ကိုယ်တိုင်လုပ်နိုင်မှု', 'Sorting, counting, and independence'), b('သန့်ရှင်းသော ဇွန်းကြီး သို့မဟုတ် ခြေအိတ်များ', 'Clean large spoons or socks'), b('အမျိုးအစားခွဲပြီး အစုတစ်စုလျှင် ၁ မှ ၅ အထိ ရေတွက်ပါ။', 'Sort into groups and count one to five in each group.'), b('အသုံးမပြုမီ ပစ္စည်းအရွယ်နှင့် သန့်ရှင်းမှုကို လူကြီးစစ်ပါ။', 'An adult should check item size and cleanliness first.'), ['cognitive', 'self_help']],
+  ],
+  '5y': [
+    ['move_path_5y', b('ခုန်ပုံစံ မှတ်သားကစားခြင်း', 'Remember-the-hop pattern'), b('ဟန်ချက်၊ မှတ်ဉာဏ်နှင့် စည်းမျဉ်းလိုက်နာမှု', 'Balance, memory, and rule-following'), b('စက္ကူတိပ်အမှတ် လေးခု', 'Four paper-tape markers'), b('“ညာ–ဘယ်–နှစ်ခါ” ကဲ့သို့ ခုန်ပုံစံတိုတစ်ခု ပြပြီး ကလေးကို ပြန်လုပ်ခိုင်းပါ။', 'Model a short hop pattern such as “right-left-twice,” then invite the child to repeat it.'), b('အပြိုင်မလုပ်ဘဲ ကလေးပင်ပန်းလျှင် ရပ်နားပါ။', 'Do not make it a race; stop when the child is tired.'), ['gross_motor', 'cognitive']],
+    ['picture_story_5y', b('ပြဿနာနှင့် ဖြေရှင်းချက်ပါ ဇာတ်လမ်း', 'Problem-and-solution story'), b('အကြောင်းအကျိုးနှင့် ဇာတ်လမ်းဖွဲ့မှု', 'Cause-and-effect and narrative'), b('စိတ်ကူးပုံသုံးပုံ သို့မဟုတ် လေးပုံ', 'Three or four imaginary-scene pictures'), b('ဇာတ်ကောင်မှာ ဘာပြဿနာရှိသလဲ၊ ဘယ်လိုဖြေရှင်းမလဲ၊ နောက်ဆုံးဘာဖြစ်လဲ မေးပါ။', 'Ask what problem the character has, how it could be solved, and what happens at the end.'), b('အဖြေတစ်မျိုးတည်း မတောင်းဘဲ ဘေးကင်းသော စိတ်ကူးများကို လက်ခံပါ။', 'Do not require one correct answer; accept safe, imaginative solutions.'), ['language', 'problem_solving']],
+    ['helper_sort_5y', b('စည်းမျဉ်းရွေး ခွဲခြားကစားခြင်း', 'Choose-a-rule sorting'), b('အကြောင်းပြချက်၊ စီစဉ်မှုနှင့် တာဝန်ယူမှု', 'Reasoning, planning, and responsibility'), b('သန့်ရှင်းသော အိမ်သုံးပစ္စည်းကြီးများ', 'Large, clean household items'), b('ကလေးကို ခွဲမည့်စည်းမျဉ်းရွေးခိုင်းပြီး အုပ်စုတစ်စုစီကို ဘာကြောင့် အဲဒီလိုထားသလဲ ရှင်းပြခိုင်းပါ။', 'Let the child choose the sorting rule and explain why each item belongs in its group.'), b('ဖန်၊ ဆေးဝါး၊ ဓာတုပစ္စည်းနှင့် ချွန်ထက်သည့်ပစ္စည်း မသုံးပါနှင့်။', 'Do not use glass, medicines, chemicals, or sharp items.'), ['cognitive', 'self_help']],
+  ],
+};
 export const OLDER_CONTENT_SOURCES: Record<string, string[]> = {};
 const linked = (item: SeedItem, summary: string, sourceIds?: string[]): SeedItem => {
   if (sourceIds) OLDER_CONTENT_SOURCES[item.slug] = sourceIds;
@@ -106,7 +205,7 @@ const preschool: Band[] = [
     ['communication', b(m2, e2), b(`${m2}ကို နေ့စဉ်အခြေအနေတွင် ပြုလုပ်ပါသလား။`, `Does this in everyday situations: ${e2.toLowerCase()}?`)],
     ['cognitive', b(m3, e3), b(`${m3}ကို အကူအညီအနည်းငယ်ဖြင့် လုပ်ပါသလား။`, `Does this with little help: ${e3.toLowerCase()}?`)],
     ['self_help', b(m4, e4), b(`${m4}ကို ကိုယ်တိုင် ကြိုးစားပါသလား။`, `Tries this independently: ${e4.toLowerCase()}?`)],
-    ['social', b('အခြားကလေးနှင့် အလှည့်ကျကစားခြင်း', 'Takes turns with another child'), b('လူကြီးအကူအညီဖြင့် အလှည့်ကျ ကစားနိုင်ပါသလား။', 'Can take turns with adult support?')],
+    ['social', PRESCHOOL_SOCIAL[key][0], PRESCHOOL_SOCIAL[key][1]],
   ],
   guides: [
     ['nutrition', b(`${mm}အရွယ်တွင် မိသားစုစားပွဲ၌ အုပ်စုစုံ အစားအစာနှင့် ရေကို ပုံမှန်ပေးပါ။`, `At ${en}, offer varied family foods and water at regular meals.`), b('အစားပြင်ခြင်း သို့မဟုတ် စားပွဲခင်းခြင်းတွင် လွယ်ကူသောအလုပ်တစ်ခု ပါဝင်ခွင့်ပေးပါ။', 'Include the child in one simple food-preparation or table task.')],
@@ -114,11 +213,7 @@ const preschool: Band[] = [
     ['safety', b(`${mm}အရွယ်တွင် လမ်းမ၊ ရေ၊ မီး၊ ပြတင်းပေါက်နှင့် ဆေးဝါးအန္တရာယ်များကို လူကြီးက ဆက်လက်ကာကွယ်ရပါမည်။`, `At ${en}, adults still need to prevent traffic, water, burn, window, and medicine hazards.`), b('အရေးပေါ်အခြေအနေတွင် ယုံကြည်ရသော လူကြီးကို ခေါ်ရန် လေ့ကျင့်ပါ။', 'Practise calling a trusted adult when something feels unsafe.')],
     ['daily_routine', b(`${mm}အရွယ်တွင် သွားတိုက်ခြင်း၊ အဝတ်ဝတ်ခြင်းနှင့် ပစ္စည်းသိမ်းခြင်းကို ပုံမှန်အစီအစဉ်ဖြင့် လေ့ကျင့်ပါ။`, `At ${en}, practise brushing, dressing, and tidying in a predictable order.`), b('ပုံနှစ်ပုံ သို့မဟုတ် သုံးပုံပါ လုပ်ရိုးလုပ်စဉ်ဇယား သုံးပါ။', 'Use a two- or three-picture routine chart.')],
   ],
-  play: [
-    [`move_path_${key}`, b('လှုပ်ရှားလမ်းကြောင်း ကစားခြင်း', 'Movement path'), b('ဟန်ချက်နှင့် ညွှန်ကြားချက်လိုက်နာမှု', 'Balance and following directions'), b('ကြိုး သို့မဟုတ် စက္ကူတိပ်', 'Rope or paper tape'), b('မျဉ်းပေါ် လျှောက်၊ ခုန်၊ ရပ် စသည့် အဆင့်များ ပြောပေးပါ။', 'Call out walk, jump, and stop along the path.'), b('ချော်မလဲနိုင်သော နေရာတွင် လူကြီးကြီးကြပ်ပါ။', 'Use a non-slip area with adult supervision.'), ['gross_motor','play']],
-    [`picture_story_${key}`, b('ပုံသုံးပုံ ဇာတ်လမ်းဆင်ခြင်း', 'Three-picture story'), b('အစီအစဉ်နှင့် စကားပြောမှု', 'Sequencing and language'), b('ကိုယ်တိုင်ဆွဲထားသော ပုံသုံးပုံ', 'Three simple hand-drawn pictures'), b('ပုံများကို အစီအစဉ်တကျထားပြီး ကလေးကို ပြောပြခိုင်းပါ။', 'Arrange the pictures and invite the child to tell the story.'), b('မှားသည်ဟု မပြောဘဲ ကလေး၏စိတ်ကူးကို နားထောင်ပါ။', 'Listen without labelling the child’s idea wrong.'), ['language','cognitive']],
-    [`helper_sort_${key}`, b('အိမ်မှုကူညီ ခွဲခြားကစားခြင်း', 'Helper sorting game'), b('အမျိုးအစားခွဲခြင်းနှင့် ကိုယ်တိုင်လုပ်နိုင်မှု', 'Sorting and independence'), b('သန့်ရှင်းသော ခြေအိတ် သို့မဟုတ် ပလတ်စတစ်ခွက်များ', 'Clean socks or plastic cups'), b('အရောင် သို့မဟုတ် ပိုင်ရှင်အလိုက် ခွဲစေပါ။', 'Sort by color or owner.'), b('ဖန်၊ ချွန်ထက်သော သို့မဟုတ် ဆေးဝါးပစ္စည်း မသုံးပါနှင့်။', 'Do not use glass, sharp items, or medicine containers.'), ['cognitive','self_help']],
-  ],
+  play: PRESCHOOL_PLAY[key],
 }));
 
 bands.push(...preschool);
@@ -131,19 +226,20 @@ for (const band of bands) {
       'CDC and AAP developmental milestone guidance supports age-based observation while allowing normal individual variation.'));
   }
   for (const [domain, focus, daily] of band.guides) {
+    const editorial = GUIDE_EDITORIAL[domain] ?? GUIDE_EDITORIAL.daily_routine;
     authored.push(linked(guide(band.key, domain, {
       title: b(`${band.mm} — ${domain === 'nutrition' ? 'အာဟာရ' : domain === 'sleep' ? 'အိပ်စက်ခြင်း' : domain === 'safety' ? 'ဘေးကင်းလုံခြုံရေး' : domain === 'play' ? 'ကစားခြင်း' : 'နေ့စဉ်လုပ်ရိုးလုပ်စဉ်'} လမ်းညွှန်`, `${band.en} — ${domain.replace('_', ' ')} guide`),
       why: focus,
-      observationQuestions: [b('သုံးရက်ခန့် လက်ရှိအလေ့အထကို မှတ်သားကြည့်ပါ။ ဘယ်အချိန်တွင် အဆင်ပြေဆုံးလဲ။', 'Observe the current pattern for about three days. When does it work best?')],
+      observationQuestions: [editorial.observation],
       dailyActivities: [daily],
-      weeklyActivities: [b('တစ်ပတ်ကုန်တွင် အဆင်ပြေခဲ့သော အချက်တစ်ခုကို ဆက်ထားပါ။', 'At the end of the week, keep one change that worked well.')],
+      weeklyActivities: [editorial.weekly],
       indoor: [daily], outdoor: domain === 'safety' || domain === 'play' ? [daily] : [],
       safety: GUIDE_SAFETY[domain] ?? GUIDE_SAFETY.daily_routine,
-      parentTips: [b('အမိန့်ပေးသလို မပြောဘဲ ရွေးချယ်စရာနှစ်ခု ပေးပါ။', 'Offer two choices instead of turning the routine into a struggle.')],
-      faq: [{ q: b('အခြားကလေးနှင့် မတူလျှင် စိုးရိမ်ရမလား။', 'What if my child is different from another child?'), a: b('ကလေးတစ်ဦးနှင့်တစ်ဦး အချိန်ကွာနိုင်သည်။ အရည်အချင်းပျောက်ဆုံးခြင်း သို့မဟုတ် ဆက်တိုက်စိုးရိမ်မှုရှိလျှင် ပညာရှင်နှင့် ဆွေးနွေးပါ။', 'Children vary. Seek professional advice for lost skills or persistent concerns.') }],
-      redFlags: [b('ယခင်က ရရှိပြီးသား အရည်အချင်း ပျောက်ဆုံးခြင်း သို့မဟုတ် စား၊ အိပ်၊ အသက်ရှူရာတွင် ပြင်းထန်သော အခက်အခဲရှိခြင်း။', 'Loss of an acquired skill or serious difficulty eating, sleeping, or breathing.')],
-      referral: b('စိုးရိမ်မှု ဆက်ရှိပါက ကလေးဆရာဝန် သို့မဟုတ် သင့်လျော်သော ကျန်းမာရေးပညာရှင်နှင့် ဆွေးနွေးပါ။', 'If concern continues, discuss it with a paediatrician or appropriate health professional.'),
-      encouragement: b('သေးငယ်သော တိုးတက်မှုကို မှတ်သားပြီး ဖိအားမပေးဘဲ ဆက်လေ့ကျင့်ပါ။', 'Notice small gains and keep practising without pressure.'),
+      parentTips: [editorial.tip],
+      faq: [editorial.faq],
+      redFlags: [editorial.redFlag],
+      referral: editorial.referral,
+      encouragement: editorial.encouragement,
     }), `Registered ${domain.replace('_', ' ')} references support this conservative parent guide for ${band.en}.`, GUIDE_SOURCES[domain]));
   }
   for (const [slug, title, goal, materials, step, safety, domains] of band.play) {

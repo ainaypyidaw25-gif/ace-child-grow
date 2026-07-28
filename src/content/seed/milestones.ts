@@ -9,10 +9,10 @@ const m = milestone;
 export const MILESTONES: SeedItem[] = [
   // ---- Birth–2 months ----
   m('birth_2m', 'gross_motor', 1, {
-    title: { mm: 'မှောက်အိပ်စဉ် ခေါင်းမော့ခြင်း', en: 'Lifts head during tummy time' },
-    observe: { mm: 'မှောက်ချထားစဉ် ခေါင်းကို ခဏတာ မော့နိုင်ပါသလား။', en: 'Briefly lifts head when on tummy?' },
+    title: { mm: 'နိုးနေချိန် မှောက်လျက်ထားစဉ် ခေါင်းမော့ခြင်း', en: 'Lifts head during awake tummy time' },
+    observe: { mm: 'နိုးနေချိန် လူကြီးကြီးကြပ်၍ မှောက်လျက်ထားစဉ် ခေါင်းကို ခဏတာ မော့နိုင်ပါသလား။', en: 'Briefly lifts the head during awake, supervised tummy time?' },
     why: { mm: 'လည်ပင်းကြွက်သား ခိုင်မာမှုသည် နောင်ထိုင်ခြင်း၊ တွားခြင်းအတွက် အခြေခံဖြစ်သည်။', en: 'Neck strength is the base for later sitting and crawling.' },
-    encouragement: { mm: 'နေ့စဉ် မှောက်လျက် ကစားချိန် အနည်းငယ်စီ ပေးပါ။', en: 'Offer short tummy-time moments each day.' },
+    encouragement: { mm: 'ကလေးနိုးနေချိန် လူကြီးက အနီးကပ်ကြီးကြပ်၍ နေ့စဉ် မှောက်လျက်ကစားချိန် အနည်းငယ်စီ ပေးပါ။ အိပ်ချိန်တွင် ကျောပေါ်လှန်အိပ်စေပါ။', en: 'Offer short tummy-time moments each day only while the baby is awake and closely supervised. Place the baby on the back for sleep.' },
   }),
   m('birth_2m', 'social', 1, {
     title: { mm: 'မျက်လုံးချင်းဆုံ ကြည့်ခြင်း', en: 'Makes eye contact' },
@@ -22,7 +22,7 @@ export const MILESTONES: SeedItem[] = [
   m('birth_2m', 'communication', 1, {
     title: { mm: 'အသံကြားလျှင် တုံ့ပြန်ခြင်း', en: 'Responds to sound' },
     observe: { mm: 'ကျယ်သောအသံကြားပါက လှုပ်ရှား သို့မဟုတ် ငြိမ်သွားပါသလား။', en: 'Startles or quiets to a loud sound?' },
-    why: { mm: 'အသံကို တုံ့ပြန်ခြင်းသည် အကြားအာရုံ ကောင်းမွန်ကြောင်း ညွှန်ပြသည်။', en: 'Reacting to sound shows hearing is working.' },
+    why: { mm: 'အသံကြားရာသို့ တုံ့ပြန်ခြင်းသည် ကလေးက အသံကို သတိပြုမိနိုင်သည့် လက္ခဏာတစ်ခုဖြစ်သော်လည်း အကြားအာရုံကို အတည်ပြုစစ်ဆေးခြင်း မဟုတ်ပါ။', en: 'Responding to sound is one sign that a baby notices sound, but it does not confirm normal hearing.' },
     red: { mm: 'အသံကျယ်များကို လုံးဝ မတုံ့ပြန်ပါက ကျန်းမာရေးဝန်ထမ်းနှင့် တိုင်ပင်ပါ။', en: 'If never reacts to loud sounds, talk to a health worker.' },
   }),
   m('birth_2m', 'social', 2, {
@@ -34,7 +34,7 @@ export const MILESTONES: SeedItem[] = [
   // ---- 3–4 months ----
   m('3_4m', 'gross_motor', 1, {
     title: { mm: 'ခေါင်းကို တည်ငြိမ်စွာ ထိန်းခြင်း', en: 'Holds head steady' },
-    observe: { mm: 'ထောင်ချီထားစဉ် ခေါင်းကို တည်ငြိမ်စွာ ထိန်းနိုင်ပါသလား။', en: 'Holds head steady when held upright?' },
+    observe: { mm: 'မတ်မတ်ချီထားစဉ် ခေါင်းကို တည်ငြိမ်စွာ ထိန်းနိုင်ပါသလား။', en: 'Holds head steady when held upright?' },
     why: { mm: 'ခေါင်းထိန်းနိုင်ခြင်းသည် ထိုင်ခြင်းဆီသို့ ဦးတည်စေသည်။', en: 'Head control leads toward sitting.' },
   }),
   m('3_4m', 'fine_motor', 1, {
