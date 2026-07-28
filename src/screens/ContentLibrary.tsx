@@ -7,7 +7,7 @@ import { AGE_GROUPS, DOMAINS, CONTENT_TYPES, ageGroup, domain } from '../content
 import { ReviewBadge } from '../components/ReviewBadge';
 
 const TYPE_LABEL: Record<string, { mm: string; en: string; emoji: string }> = {
-  milestone: { mm: 'အမှတ်တိုင်', en: 'Milestones', emoji: '🎯' },
+  milestone: { mm: 'မှတ်တိုင်', en: 'Milestones', emoji: '🎯' },
   guide: { mm: 'လမ်းညွှန်', en: 'Guides', emoji: '📚' },
   activity: { mm: 'လှုပ်ရှားမှု', en: 'Activities', emoji: '🧩' },
   lesson: { mm: 'သင်ခန်းစာ', en: 'Lessons', emoji: '🎓' },

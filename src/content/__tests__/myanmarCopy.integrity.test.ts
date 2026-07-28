@@ -27,6 +27,14 @@ const BANNED_MYANMAR_FRAGMENTS = [
   '(walker)',
   '(cruising)',
   '(attachment)',
+  'အမှတ်တိုင်',
+  'တစ်ခြားသူ',
+  'လှန်ချ၍',
+  'သင်ယူရမည့် ရည်မှန်းချက်',
+  'အသံကို ပိုတိုးပါ',
+  'ပက်လက်နှင့်',
+  'ကလေးသိပ် သီချင်း',
+  'ဖြည်းညှင်း ယိမ်း',
 ] as const;
 
 function collectMyanmar(value: unknown, key = ''): string[] {
@@ -53,5 +61,11 @@ describe('Myanmar copy quality', () => {
       expect(source).not.toContain('ချစ်စနာမည်');
       expect(source).not.toContain('ချစ်စနိုးအမည်');
     }
+  });
+
+  it('uses the correct Burmese term for developmental milestones in the library UI', () => {
+    const source = readFileSync(resolve(process.cwd(), 'src/screens/ContentLibrary.tsx'), 'utf8');
+    expect(source).toContain("milestone: { mm: 'မှတ်တိုင်'");
+    expect(source).not.toContain('အမှတ်တိုင်');
   });
 });

@@ -732,7 +732,7 @@ const GUIDES_D: SeedItem[] = [
       lowCost: [b('လုပ်ရိုးလုပ်စဉ်သည် အခမဲ့ ဖြစ်သည်။', 'Routine costs nothing.')],
       materials: b('မလိုအပ်ပါ', 'None'),
       safety: b(
-        'ကလေးအိပ်ပျော်သွားလျှင် အမြဲ ပက်လက်နှင့် ဘေးကင်းသော အိပ်ရာသို့ ရွှေ့ပေးပါ — ကားထိုင်ခုံ၊ ကလေးထိုင်ခုံတွင် ကြာရှည် အိပ်ခြင်းကို ရှောင်ပါ။',
+        'ကလေး အိပ်ပျော်သွားပါက ဘေးကင်းသော ကလေးအိပ်ရာပေါ်တွင် ပက်လက်အနေအထားဖြင့် အိပ်စေပါ။ ကားထိုင်ခုံ သို့မဟုတ် ကလေးထိုင်ခုံတွင် ကြာရှည်အိပ်စေခြင်းကို ရှောင်ပါ။',
         'If your baby falls asleep, move her onto her back in a safe sleep space — avoid long sleeps in a car seat or bouncer.',
       ),
       commonMistakes: [
@@ -786,7 +786,7 @@ const ACTIVITIES: SeedItem[] = [
       safety: b('ကလေး၏ မောပန်းသည့် လက္ခဏာကို လေးစားပါ။ ကျယ်လောင်သော အသံ မသုံးပါနှင့်။', 'Respect tired cues. Do not use loud sounds.'),
       indoor: true, outdoor: true, oneChild: true, group: false, parentChild: true,
       outcomes: [
-        b('သင်ယူရမည့် ရည်မှန်းချက် — အလှည့်ကျ ဆက်သွယ်ခြင်းကို စတင် ခံစားစေရန်။', 'Learning objective — to experience early turn-taking in communication.'),
+        b('အလှည့်ကျ ဆက်သွယ်ခြင်းကို စတင် ခံစားစေရန်။', 'Learning objective — to experience early turn-taking in communication.'),
         b('မျက်လုံးချင်းဆိုင်မှုနှင့် အာရုံစိုက်မှု တိုးတက်ခြင်း။', 'More eye contact and shared attention.'),
       ],
       variations: [b('နို့တိုက်ပြီးချိန်၊ အဝတ်လဲပြီးချိန်တွင် လုပ်ပါ။', 'Do it after a feed or a nappy change.')],
@@ -814,7 +814,7 @@ const ACTIVITIES: SeedItem[] = [
       safety: b('အတင်းအကျပ် မဆွဲပါနှင့်။ ကလေး မကြိုက်လျှင် ချက်ချင်း ရပ်ပါ။ ခြေဆစ်ကို မလိမ်ပါနှင့်။', 'Never force or pull. Stop immediately if your baby dislikes it. Do not twist the joints.'),
       indoor: true, outdoor: false, oneChild: true, group: false, parentChild: true,
       outcomes: [
-        b('သင်ယူရမည့် ရည်မှန်းချက် — ခြေလက် လှုပ်ရှားမှုကို သတိပြုမိစေရန်။', 'Learning objective — awareness of leg movement and body.'),
+        b('ခြေလက် လှုပ်ရှားမှုကို သတိပြုမိစေရန်။', 'Learning objective — awareness of leg movement and body.'),
         b('မိဘနှင့် ကလေး ထိတွေ့ဆက်ဆံမှု တိုးမြှင့်ခြင်း။', 'More warm parent–baby contact.'),
       ],
       tags: ['motor_activity', 'daily'],
@@ -844,7 +844,7 @@ const ACTIVITIES: SeedItem[] = [
       ),
       indoor: true, outdoor: false, oneChild: true, group: false, parentChild: true,
       outcomes: [
-        b('သင်ယူရမည့် ရည်မှန်းချက် — လုံခြုံမှုနှင့် စိတ်ငြိမ်သက်မှုကို တည်ဆောက်ရန်။', 'Learning objective — build security and help your baby settle.'),
+        b('လုံခြုံမှုနှင့် စိတ်ငြိမ်သက်မှုကို တည်ဆောက်ရန်။', 'Learning objective — build security and help your baby settle.'),
         b('နို့တိုက်ကျွေးမှုကို ပိုမိုလွယ်ကူစေခြင်း။', 'Feeding often becomes easier.'),
       ],
       tags: ['social_activity', 'bonding'],
@@ -870,7 +870,7 @@ const ACTIVITIES: SeedItem[] = [
       safety: b('စာအုပ်ကို ကလေး ပါးစပ်ထဲ မထည့်ပါစေနှင့်။ စာရွက်ဖြင့် အရေပြား ရှသွားနိုင်သည် — သတိထားပါ။', 'Keep the book out of the mouth, and watch for paper cuts.'),
       indoor: true, outdoor: false, oneChild: true, group: true, parentChild: true,
       outcomes: [
-        b('သင်ယူရမည့် ရည်မှန်းချက် — စကားလုံး ကြားနာမှုနှင့် အတူတကွ အာရုံစိုက်မှု တည်ဆောက်ရန်။', 'Learning objective — exposure to words and shared attention.'),
+        b('စကားလုံး ကြားနာမှုနှင့် အတူတကွ အာရုံစိုက်မှု တည်ဆောက်ရန်။', 'Learning objective — exposure to words and shared attention.'),
         b('စာအုပ်နှင့် ဖော်ရွေမှု စတင် တည်ဆောက်ခြင်း။', 'A first positive association with books.'),
       ],
       variations: [b('စာအုပ် မရှိလျှင် အိမ်တွင်း ပစ္စည်းများကို ပြော၍ ပြပါ။', 'No book? Name and show household objects instead.')],
@@ -881,28 +881,28 @@ const ACTIVITIES: SeedItem[] = [
   kb(
     activity({
       slug: 'lullaby_and_rock',
-      title: b('ကလေးသိပ် သီချင်းနှင့် ဖြည်းညှင်း ယိမ်းခြင်း', 'Lullaby and gentle rocking'),
-      summary: b('တူညီသော သီချင်းတစ်ပုဒ်ကို နေ့စဉ် ဆိုပြီး ဖြည်းညှင်းစွာ ယိမ်းပေးခြင်း။', 'Sing the same song each day while rocking slowly.'),
+      title: b('ကလေးချော့သိပ်သီချင်းဆို၍ ညင်သာစွာ ယိမ်းပေးခြင်း', 'Lullaby and gentle rocking'),
+      summary: b('ကလေးချော့သိပ်သီချင်းတစ်ပုဒ်ကို တိုးတိုးဆိုပြီး ကလေးကို ညင်သာစွာ ယိမ်းပေးပါ။', 'Sing the same song each day while rocking slowly.'),
       ageGroupKey: 'birth_2m',
       domains: ['play', 'emotional', 'communication'],
       difficulty: 'easy',
       durationMinutes: 5,
-      materials: b('မလိုအပ်ပါ — သင့်အသံသာ။', 'None — your voice is enough.'),
-      setup: b('ကလေးကို လုံခြုံစွာ ချီပါ။ အလင်းကို မှိန်ပါ။', 'Hold your baby securely and dim the light.'),
+      materials: b('ပစ္စည်းမလိုပါ။ မိဘ၏အသံပဲ လိုပါသည်။', 'None — your voice is enough.'),
+      setup: b('ကလေး၏ ခေါင်းနှင့်လည်ပင်းကို သေချာထိန်း၍ ပွေ့ချီပါ။ အခန်းမီးကို မှိန်ထားပါ။', 'Hold your baby securely and dim the light.'),
       instructions: [
-        b('တူညီသော ကလေးသိပ် သီချင်းတစ်ပုဒ်ကို ရွေးပါ။', 'Choose one lullaby and keep using it.'),
-        b('နှေးနှေး၊ တိုးတိုး ဆိုပါ။', 'Sing slowly and softly.'),
-        b('ဖြည်းညှင်းစွာ ယိမ်းပါ — ပြင်းထန်စွာ မယိမ်းပါနှင့်။', 'Rock gently — never vigorously.'),
-        b('ကလေး ငြိမ်လာလျှင် အသံကို ပိုတိုးပါ။', 'As your baby settles, sing even more quietly.'),
+        b('နေ့တိုင်း ဆိုပေးနိုင်မည့် ကလေးချော့သိပ်သီချင်းတစ်ပုဒ်ကို ရွေးပါ။', 'Choose one lullaby and keep using it.'),
+        b('သီချင်းကို နှေးနှေးနှင့် တိုးတိုး ဆိုပေးပါ။', 'Sing slowly and softly.'),
+        b('ကလေးကို ခန္ဓာကိုယ်နှင့်ကပ်၍ ကိုင်ထားပြီး ညင်သာစွာ ယိမ်းပေးပါ။', 'Rock gently — never vigorously.'),
+        b('ကလေး ငြိမ်သက်လာသည်နှင့်အမျှ သီချင်းသံကို တဖြည်းဖြည်း လျှော့ပါ။', 'As your baby settles, sing even more quietly.'),
       ],
       safety: b(
-        'ဘယ်တော့မှ ပြင်းထန်စွာ မလှုပ်ခါပါနှင့် — ဦးနှောက် ထိခိုက်နိုင်သည်။ အိပ်ပျော်သွားလျှင် ပက်လက်နှင့် ဘေးကင်းသော အိပ်ရာသို့ ရွှေ့ပါ။',
+        'ကလေးကို မည်သည့်အခါမျှ ပြင်းထန်စွာ မလှုပ်ခါပါနှင့်။ ဦးနှောက်ကို ပြင်းထန်စွာ ထိခိုက်စေနိုင်သည်။ ကလေး အိပ်ပျော်သွားပါက ဘေးကင်းသော ကလေးအိပ်ရာပေါ်တွင် ပက်လက်အနေအထားဖြင့် အိပ်စေပါ။',
         'Never shake — it can injure the brain. If your baby falls asleep, move her onto her back in a safe sleep space.',
       ),
       indoor: true, outdoor: false, oneChild: true, group: false, parentChild: true,
       outcomes: [
-        b('သင်ယူရမည့် ရည်မှန်းချက် — အသံစည်းချက်ကို ခံစားပြီး ငြိမ်သက်ရန် သင်ယူစေရန်။', 'Learning objective — experience rhythm and learn to settle.'),
-        b('အိပ်ရာဝင်ချိန် လုပ်ရိုးလုပ်စဉ် တည်ဆောက်ခြင်း။', 'Builds a bedtime routine.'),
+        b('သီချင်း၏ စည်းချက်ကို ခံစားရင်း ငြိမ်သက်လာစေခြင်း။', 'Learning objective — experience rhythm and learn to settle.'),
+        b('မှန်မှန်လုပ်ပေးပါက အိပ်ရာဝင်ချိန် အလေ့အထကောင်းတစ်ခု ဖြစ်လာစေခြင်း။', 'Builds a bedtime routine.'),
       ],
       tags: ['music_activity', 'bedtime'],
     }),
@@ -931,7 +931,7 @@ const ACTIVITIES: SeedItem[] = [
       ),
       indoor: true, outdoor: false, oneChild: true, group: false, parentChild: true,
       outcomes: [
-        b('သင်ယူရမည့် ရည်မှန်းချက် — ထိတွေ့ခံစားမှု အမျိုးမျိုးကို သိရှိစေရန်။', 'Learning objective — experience different touch sensations.'),
+        b('ထိတွေ့ခံစားမှု အမျိုးမျိုးကို သိရှိစေရန်။', 'Learning objective — experience different touch sensations.'),
         b('လက်ဖြန့်ခြင်းနှင့် ထိတွေ့မှုကို သတိပြုမိခြင်း တိုးတက်ခြင်း။', 'More hand opening and touch awareness.'),
       ],
       tags: ['sensory_activity'],

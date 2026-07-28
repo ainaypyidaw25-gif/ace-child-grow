@@ -18,7 +18,7 @@ export const LESSONS: SeedItem[] = [
     objectives: [b('ဖွံ့ဖြိုးမှု နယ်ပယ်များကို သိရှိရန်။', 'Know the areas of development.'), b('“ပုံမှန်” အကွာအဝေး ကျယ်ပြန့်ကြောင်း နားလည်ရန်။', 'Understand the wide normal range.')],
     readingMinutes: 3,
     body: b('ကလေးဖွံ့ဖြိုးမှုဆိုသည်မှာ ကိုယ်လက်လှုပ်ရှားမှု၊ ဘာသာစကား၊ စဉ်းစားတွေးခေါ်မှု၊ စိတ်ခံစားမှုနှင့် လူမှုဆက်ဆံရေးတို့ တဖြည်းဖြည်း တိုးတက်လာခြင်း ဖြစ်သည်။ ကလေးတစ်ဦးနှင့်တစ်ဦး ဖွံ့ဖြိုးသည့်အချိန်နှင့် အရှိန် ကွာခြားနိုင်သည်။ ဖွံ့ဖြိုးမှုအဆင့်များသည် ယေဘုယျလမ်းညွှန်ချက်များသာဖြစ်ပြီး အောင်မြင်၊ မအောင်မြင် ဆုံးဖြတ်သည့် စာမေးပွဲ မဟုတ်ပါ။', 'Child development is steady growth in movement, language, thinking, feelings, and social skills. Every child grows at their own pace. Milestones are guides, not a strict test.'),
-    quiz: [q('အမှတ်တိုင်များသည် —', 'Milestones are —', [['တင်းကျပ်သော စာမေးပွဲ', 'a strict test'], ['လမ်းညွှန်များ', 'general guides']], 1)],
+    quiz: [q('မှတ်တိုင်များသည် —', 'Milestones are —', [['တင်းကျပ်သော စာမေးပွဲ', 'a strict test'], ['လမ်းညွှန်များ', 'general guides']], 1)],
     takeaway: b('ကလေး၏ ကိုယ်ပိုင်အရှိန်ကို လေးစားပါ။', 'Respect your child’s own pace.'),
     actionToday: b('ယနေ့ ကလေးနှင့် ၁၀ မိနစ် အာရုံစိုက်၍ ကစားပါ။', 'Spend 10 focused minutes playing today.'),
   }),

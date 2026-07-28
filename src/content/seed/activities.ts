@@ -23,7 +23,7 @@ export const ACTIVITIES: SeedItem[] = [
     summary: b('ကွဲပြားသော အသံများဆီ လှည့်ကြည့်ရန် အားပေးခြင်း။', 'Encourage turning toward different sounds.'),
     ageGroupKey: '3_4m', domains: ['communication', 'cognitive'], difficulty: 'easy', durationMinutes: 5,
     materials: b('နူးညံ့ အသံထွက်ကစားစရာ။', 'Soft rattle or bell.'),
-    setup: b('ကလေးကို လှန်ချ၍ ဘေးတစ်ဖက်တွင် အသံပြုပါ။', 'Lay baby down and make a soft sound to one side.'),
+    setup: b('ကလေးကို ပက်လက်အနေအထားဖြင့်ထားပြီး ဘေးတစ်ဖက်မှ အသံတိုးတိုး ပြုပါ။', 'Lay baby down and make a soft sound to one side.'),
     instructions: [b('အသံဆီ လှည့်ကြည့်ပါက ပြုံး၍ ချီးမွမ်းပါ။', 'Praise with a smile when baby turns to the sound.')],
     safety: b('အသံ ကျယ်လွန်းခြင်း ရှောင်ပါ။', 'Avoid loud sounds.'),
     indoor: true, outdoor: false, oneChild: true, group: false, parentChild: true,

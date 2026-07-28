@@ -513,7 +513,7 @@ const GUIDES_C: SeedItem[] = [
       ],
       parentTips: [
         b('ကလေး ကြောက်လျှင် သင်၏ ငြိမ်သက်သော အသံနှင့် ပွေ့ဖက်မှုသည် အကောင်းဆုံး ဆေး ဖြစ်သည်။', 'When she is afraid, your calm voice and arms are the best medicine.'),
-        b('တစ်ခြားသူထံ ပေးမည်ဆိုလျှင် ဖြည်းညှင်းစွာ၊ သင် အနီးတွင် ရှိနေစဉ် ပေးပါ။', 'When handing her to someone else, do it slowly and stay nearby.'),
+        b('အခြားသူတစ်ဦးအား ချီခွင့်ပေးမည်ဆိုပါက ဖြည်းဖြည်းချင်း လုပ်ပြီး မိဘက အနီးတွင် ရှိနေပါ။', 'When handing her to someone else, do it slowly and stay nearby.'),
       ],
       faq: [
         {
@@ -943,7 +943,7 @@ const ACTIVITIES: SeedItem[] = [
       safety: b('အသံ ကျယ်လောင်စွာ မထွက်ပါနှင့်။ ကလေး၏ မောပန်း လက္ခဏာကို လေးစားပါ။', 'Keep your voice soft, never loud, and respect her tired cues.'),
       indoor: true, outdoor: true, oneChild: true, group: false, parentChild: true,
       outcomes: [
-        b('သင်ယူရမည့် ရည်မှန်းချက် — ဗျည်းသံ ထွက်ဆိုမှုနှင့် အလှည့်ကျ ဆက်သွယ်မှုကို အားပေးရန်။', 'Learning objective — to encourage consonant babble and conversational turn-taking.'),
+        b('ဗျည်းသံ ထွက်ဆိုမှုနှင့် အလှည့်ကျ ဆက်သွယ်မှုကို အားပေးရန်။', 'Learning objective — to encourage consonant babble and conversational turn-taking.'),
         b('မျက်လုံးချင်းဆိုင်မှုနှင့် ပူးတွဲ အာရုံစိုက်မှု တိုးလာခြင်း။', 'More eye contact and shared attention.'),
       ],
       variations: [b('မိသားစုဝင် အသီးသီးက အလှည့်ကျ လုပ်ပေးပါ — အသံ အမျိုးမျိုး ကြားစေပါ။', 'Let different family members take a turn so she hears different voices.')],
@@ -975,7 +975,7 @@ const ACTIVITIES: SeedItem[] = [
       safety: b('ကြမ်းပြင်ပေါ်တွင်သာ လုပ်ပါ — အိပ်ရာ၊ စားပွဲပေါ်တွင် လုံးဝ မလုပ်ပါနှင့်၊ လိမ့်ကျနိုင်သည်။ ကလေးအနီးတွင် အမြဲ ရှိနေပါ။ ကစားစရာသည် ကလေးပါးစပ်ထက် ကြီးရမည်။ ကလေး ငိုလျှင် ရပ်ပါ။', 'Do this on the floor only — never on a bed or table, where she could fall. Stay beside her. The toy must be larger than her mouth. Stop if she cries.'),
       indoor: true, outdoor: false, oneChild: true, group: false, parentChild: true,
       outcomes: [
-        b('သင်ယူရမည့် ရည်မှန်းချက် — လှိမ့်ခြင်းနှင့် ရည်ရွယ်ချက်ရှိ လှမ်းယူခြင်းကို အားပေးရန်။', 'Learning objective — to encourage rolling and purposeful reaching.'),
+        b('လှိမ့်ခြင်းနှင့် ရည်ရွယ်ချက်ရှိ လှမ်းယူခြင်းကို အားပေးရန်။', 'Learning objective — to encourage rolling and purposeful reaching.'),
         b('ပခုံး၊ ခါးနှင့် ကိုယ်လုံး ကြွက်သားများ အားကောင်းလာခြင်း။', 'Stronger shoulder, hip and trunk muscles.'),
       ],
       variations: [b('ကလေး မလှိမ့်နိုင်သေးလျှင် ခါးကို ဖြေးညှင်းစွာ လမ်းညွှန်ပေးပါ — အတင်း မလှည့်ပါနှင့်။', 'If she cannot roll yet, guide her hip gently — never force the turn.')],
@@ -1006,7 +1006,7 @@ const ACTIVITIES: SeedItem[] = [
       safety: b('မှန်ကို နံရံတွင် ခိုင်ခံ့စွာ တပ်ဆင်ထားပါ — လဲကျပါက ကွဲပြီး ထိခိုက်နိုင်သည်။ ကွဲအက်နေသော မှန်ကို လုံးဝ မသုံးပါနှင့်။ ကလေးကို မှန်ရှေ့တွင် တစ်ယောက်တည်း မထားပါနှင့်။', 'Fix the mirror firmly to the wall — a falling mirror can break and injure. Never use a cracked mirror. Never leave her alone at the mirror.'),
       indoor: true, outdoor: false, oneChild: true, group: true, parentChild: true,
       outcomes: [
-        b('သင်ယူရမည့် ရည်မှန်းချက် — မျက်နှာများကို စိတ်ဝင်စားမှုနှင့် လူမှုဆက်ဆံမှုကို အားပေးရန်။', 'Learning objective — to encourage interest in faces and social interaction.'),
+        b('မျက်နှာများကို စိတ်ဝင်စားမှုနှင့် လူမှုဆက်ဆံမှုကို အားပေးရန်။', 'Learning objective — to encourage interest in faces and social interaction.'),
         b('ပူးတွဲ အာရုံစိုက်မှုနှင့် ခံစားချက် ဖလှယ်မှု တိုးလာခြင်း။', 'More shared attention and shared feeling.'),
       ],
       variations: [b('မိသားစုဝင် တစ်ဦး ထပ်ဝင်၍ မှန်ထဲတွင် သုံးယောက် အတူကြည့်ပါ။', 'Have another family member join so three faces appear in the mirror.')],
@@ -1037,7 +1037,7 @@ const ACTIVITIES: SeedItem[] = [
       safety: b('စာမျက်နှာထူပြီး ခိုင်ခံ့သော စာအုပ်ကိုသာ သုံးပါ။ စက္ကူပါးကို ဆုတ်ဖြဲပြီး မျိုချမိနိုင်သည်။ စာအုပ်အနားများ ချွန်ထက်ခြင်းရှိမရှိ စစ်ဆေးပြီး သန့်ရှင်းစွာ ထားပါ။ ဤအရွယ်တွင် ပုံစာအုပ်အစား ဖုန်း သို့မဟုတ် တက်ဘလက်ကို အသုံးမပြုရန် အကြံပြုထားသည်။', 'Use thick board books only — thin paper can be torn and swallowed. Check for sharp edges and keep the book clean. A screen book is not recommended at this age.'),
       indoor: true, outdoor: true, oneChild: true, group: true, parentChild: true,
       outcomes: [
-        b('သင်ယူရမည့် ရည်မှန်းချက် — ဝေါဟာရ နားလည်မှုနှင့် ပူးတွဲ အာရုံစိုက်မှုကို အားပေးရန်။', 'Learning objective — to build early vocabulary understanding and shared attention.'),
+        b('ဝေါဟာရ နားလည်မှုနှင့် ပူးတွဲ အာရုံစိုက်မှုကို အားပေးရန်။', 'Learning objective — to build early vocabulary understanding and shared attention.'),
         b('စာအုပ်နှင့် ရင်းနှီးမှု၊ နေ့စဉ် ဖတ်ရှုသည့် အလေ့အထ စတင်ခြင်း။', 'Familiarity with books and the start of a daily reading habit.'),
       ],
       variations: [b('စာအုပ် မရှိလျှင် မဂ္ဂဇင်းပုံများကို ဖြတ်၍ ထူထပ်သော စက္ကူပေါ် ကပ်ပါ။', 'With no book, cut magazine pictures and paste them on thick card.')],
@@ -1068,7 +1068,7 @@ const ACTIVITIES: SeedItem[] = [
       safety: b('အသံ ကျယ်လောင်စွာ မဆိုပါနှင့်။ ကလေး၏ လက်၊ လက်မောင်းကို အတင်း မဆွဲပါနှင့်။ ကလေးကို လေထဲ မပစ်တင်ပါနှင့်၊ ဘယ်တော့မျှ မလှုပ်ခါပါနှင့်။ ကလေး မောပုံရလျှင် ရပ်ပါ။', 'Keep your voice soft. Never pull her hands or arms. Never toss her in the air, and never shake a baby. Stop when she looks tired.'),
       indoor: true, outdoor: true, oneChild: true, group: true, parentChild: true,
       outcomes: [
-        b('သင်ယူရမည့် ရည်မှန်းချက် — အသံ၊ စည်းချက်နှင့် ဘာသာစကား ရင်းနှီးမှုကို တိုးပွားစေရန်။', 'Learning objective — to build familiarity with sound, rhythm and language.'),
+        b('အသံ၊ စည်းချက်နှင့် ဘာသာစကား ရင်းနှီးမှုကို တိုးပွားစေရန်။', 'Learning objective — to build familiarity with sound, rhythm and language.'),
         b('မိဘနှင့် ကလေးကြား ဆက်နွယ်မှု ခိုင်မာလာခြင်း၊ အနားယူရန် ကူညီခြင်း။', 'A stronger parent–child bond and an aid to settling.'),
       ],
       variations: [b('ညနေပိုင်းတွင် ဖြည်းညှင်းစွာ ဆို၍ အိပ်ရာဝင် အစီအစဉ်၏ တစ်စိတ်တစ်ပိုင်း ဖြစ်စေပါ။', 'Sing it slowly in the evening as part of the bedtime routine.')],
@@ -1099,7 +1099,7 @@ const ACTIVITIES: SeedItem[] = [
       safety: b('ပစ္စည်းတိုင်းသည် ကလေးပါးစပ်ထက် ကြီးရမည် — အသေးစား ပစ္စည်း၊ အကြွေစေ့၊ ခလုတ်၊ အစေ့၊ ဘက်ထရီ လုံးဝ မထည့်ပါနှင့်။ ကြိုးရှည်၊ ပလတ်စတစ်အိတ် မထည့်ပါနှင့်။ အနား ချွန်ထက်ခြင်း၊ အက်ကွဲခြင်း ရှိ/မရှိ တစ်ခုချင်း စစ်ပါ။ ကလေး ကစားနေစဉ် တစ်စက္ကန့်မျှ မခွာပါနှင့်။', 'Every object must be larger than her mouth — no small items, coins, buttons, seeds or batteries. No long cords or plastic bags. Check each item for sharp edges or cracks. Never step away while she plays.'),
       indoor: true, outdoor: false, oneChild: true, group: false, parentChild: true,
       outcomes: [
-        b('သင်ယူရမည့် ရည်မှန်းချက် — အထိအတွေ့ ကွဲပြားမှုကို လေ့လာစေပြီး ကိုင်တွယ်မှု စွမ်းရည် တိုးစေရန်။', 'Learning objective — to explore different textures and build grasp and handling skills.'),
+        b('အထိအတွေ့ ကွဲပြားမှုကို လေ့လာစေပြီး ကိုင်တွယ်မှု စွမ်းရည် တိုးစေရန်။', 'Learning objective — to explore different textures and build grasp and handling skills.'),
         b('အာရုံစိုက်နိုင်စွမ်းနှင့် ဝေါဟာရ တိုးပွားလာခြင်း။', 'Longer concentration and growing vocabulary.'),
       ],
       variations: [b('တစ်ပတ်လျှင် ပစ္စည်း တစ်ခု လဲပေးပါ — အသစ်က စိတ်ဝင်စားမှုကို ပြန်နှိုးသည်။', 'Swap one object each week — novelty renews her interest.')],

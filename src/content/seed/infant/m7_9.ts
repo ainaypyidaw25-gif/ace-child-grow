@@ -1005,7 +1005,7 @@ const ACTIVITIES: SeedItem[] = [
       safety: b('ပါးစပ်ထဲ ဝင်နိုင်သော ပစ္စည်း (ဒင်္ဂါး၊ ကြယ်သီး၊ ခလုတ်ဘက်ထရီ) မသုံးပါနှင့်။ ကလေးအနီးတွင် အမြဲ ရှိနေပါ။', 'Never use anything small enough to fit in her mouth — coins, buttons, button batteries. Stay beside her.'),
       indoor: true, outdoor: true, oneChild: true, group: false, parentChild: true,
       outcomes: [
-        b('သင်ယူရမည့် ရည်မှန်းချက် — စကားလုံး နားလည်မှုနှင့် အလှည့်ကျ ဆက်သွယ်မှုကို အားပေးရန်။', 'Learning objective — to build word understanding and conversational turn-taking.'),
+        b('စကားလုံး နားလည်မှုနှင့် အလှည့်ကျ ဆက်သွယ်မှုကို အားပေးရန်။', 'Learning objective — to build word understanding and conversational turn-taking.'),
         b('ပူးတွဲ အာရုံစိုက်မှု ပိုမို ကြာရှည်လာခြင်း။', 'Longer periods of shared attention.'),
       ],
       variations: [b('အပြင်ထွက်လျှင် မြင်ရသည့်အရာများကို အမည်ခေါ်ပါ — ခေါင်းလောင်း၊ ခွေး၊ ကား။', 'Outdoors, name what you both see — a bell, a dog, a car.')],
@@ -1037,7 +1037,7 @@ const ACTIVITIES: SeedItem[] = [
       safety: b('ကြမ်းပြင်ပေါ်တွင်သာ လုပ်ပါ။ ကလေးကို အိပ်ရာ၊ စားပွဲ သို့မဟုတ် ဆိုဖာပေါ်တွင် တစ်ယောက်တည်း လုံးဝ မထားပါနှင့်။ ကလေးအနီးတွင် အမြဲ ရှိနေပြီး ကလေးလမ်းလျှောက်စက်ကို မသုံးပါနှင့်။', 'Do this on the floor only — never leave her alone on a bed, table or sofa. Stay beside her. Baby walkers are not recommended.'),
       indoor: true, outdoor: false, oneChild: true, group: false, parentChild: true,
       outcomes: [
-        b('သင်ယူရမည့် ရည်မှန်းချက် — ထိုင်ဟန်ချက်နှင့် လက်လှမ်းယူမှုကို အားပေးရန်။', 'Learning objective — to strengthen sitting balance and reaching.'),
+        b('ထိုင်ဟန်ချက်နှင့် လက်လှမ်းယူမှုကို အားပေးရန်။', 'Learning objective — to strengthen sitting balance and reaching.'),
         b('ကိုယ်လုံးနှင့် ပခုံး ကြွက်သားများ အားကောင်းလာခြင်း။', 'Stronger trunk and shoulder muscles.'),
       ],
       variations: [b('ကလေး ထိုင်နိုင်ပြီဆိုလျှင် ကွင်းကို အနည်းငယ် မြင့်ရာတွင် ကိုင်ပြပါ။', 'Once she sits steadily, hold the ring a little higher.')],
@@ -1069,7 +1069,7 @@ const ACTIVITIES: SeedItem[] = [
       safety: b('ခွဲခွာချိန်တွင် ကလေး ငိုလျှင် ချီပွေ့ နှစ်သိမ့်ပေးပါ — ဤသည် ကျန်းမာသော တွယ်တာမှု ဖြစ်သည်။ ကလေးကို လုံးဝ မလှုပ်ခါပါနှင့်။', 'If she cries at separation, hold and comfort her — this is healthy attachment. Never shake a baby.'),
       indoor: true, outdoor: true, oneChild: true, group: true, parentChild: true,
       outcomes: [
-        b('သင်ယူရမည့် ရည်မှန်းချက် — ပထမဆုံး ဆက်သွယ်ရေး အမူအရာကို အားပေးရန်။', 'Learning objective — to encourage a first communication gesture.'),
+        b('ပထမဆုံး ဆက်သွယ်ရေး အမူအရာကို အားပေးရန်။', 'Learning objective — to encourage a first communication gesture.'),
         b('ခွဲခွာချိန်ကို ပိုမို လွယ်ကူစွာ ကျော်ဖြတ်နိုင်ခြင်း။', 'Easier goodbyes over time.'),
       ],
       variations: [b('ဖုန်းဖြင့် မိသားစုဝင်များနှင့် ပြောဆိုစဉ် လက်ပြပါ။', 'Wave during family video calls too.')],
@@ -1104,7 +1104,7 @@ const ACTIVITIES_B: SeedItem[] = [
       safety: b('စာအုပ် စာရွက် ပြဲနေလျှင် မသုံးပါနှင့် — မျိုချနိုင်သည်။ ပလတ်စတစ်အိတ်ဖြင့် မထုပ်ပါနှင့်။ ဤအရွယ်တွင် မိသားစု ဗီဒီယိုခေါ်ဆိုမှုမှလွဲ၍ ဖန်သားပြင် မကြည့်ရန် အကြံပြုသည်။', 'Do not use a torn book — pieces can be swallowed. Never wrap it in a plastic bag. At this age screens are not recommended apart from family video calls.'),
       indoor: true, outdoor: true, oneChild: true, group: true, parentChild: true,
       outcomes: [
-        b('သင်ယူရမည့် ရည်မှန်းချက် — စကားလုံး ကြားနာမှုနှင့် စာအုပ်နှင့် ရင်းနှီးမှုကို အားပေးရန်။', 'Learning objective — to build word exposure and early comfort with books.'),
+        b('စကားလုံး ကြားနာမှုနှင့် စာအုပ်နှင့် ရင်းနှီးမှုကို အားပေးရန်။', 'Learning objective — to build word exposure and early comfort with books.'),
         b('ပူးတွဲ အာရုံစိုက်မှုနှင့် လက်ချောင်း ထိန်းချုပ်မှု တိုးတက်ခြင်း။', 'Growing shared attention and finger control.'),
       ],
       variations: [b('စာအုပ် မရှိလျှင် မိသားစု ဓာတ်ပုံများကို ကြည့်၍ လူများ၏ အမည်ကို ခေါ်ပါ။', 'With no book, look at family photos and name the people.')],
@@ -1136,7 +1136,7 @@ const ACTIVITIES_B: SeedItem[] = [
       safety: b('အသံ ကျယ်လောင်စွာ မရိုက်ပါနှင့် — ကလေး၏ နားကို ထိခိုက်နိုင်သည်။ ပါးစပ်ထဲ ဝင်နိုင်သော ပစ္စည်း မထားပါနှင့်။ ကြိုးရှည်၊ ပလတ်စတစ်အိတ် ဝေးအောင် ထားပါ။ ကလေးအနီးတွင် အမြဲ ရှိနေပါ။', 'Keep the sound soft — loud banging can hurt her ears. Nothing small enough to fit in her mouth. Keep long cords and plastic bags away. Stay beside her.'),
       indoor: true, outdoor: true, oneChild: true, group: true, parentChild: true,
       outcomes: [
-        b('သင်ယူရမည့် ရည်မှန်းချက် — အကြောင်းနှင့် အကျိုး နားလည်မှုနှင့် အလှည့်ကျမှုကို အားပေးရန်။', 'Learning objective — to build cause-and-effect understanding and turn-taking.'),
+        b('အကြောင်းနှင့် အကျိုး နားလည်မှုနှင့် အလှည့်ကျမှုကို အားပေးရန်။', 'Learning objective — to build cause-and-effect understanding and turn-taking.'),
         b('အသံနှင့် စည်းချက်ကို အာရုံစိုက်နိုင်မှု တိုးတက်ခြင်း။', 'Better attention to sound and rhythm.'),
       ],
       variations: [b('မိသားစုဝင် အသီးသီးက အလှည့်ကျ ရိုက်ပြပါ။', 'Let each family member take a turn with the beat.')],
@@ -1168,7 +1168,7 @@ const ACTIVITIES_B: SeedItem[] = [
       safety: b('စားနေစဉ် ကလေးအား တစ်ယောက်တည်း လုံးဝ မထားပါနှင့် — အမြဲ စောင့်ကြည့်ပါ။ မတ်မတ် ထိုင်စေပါ။ အခွံမာသီး အလုံးလိုက်၊ စပျစ်သီး အလုံးလိုက်၊ မာသော အတုံးများ မပေးပါနှင့် — လည်ချောင်း ပိတ်နိုင်သည်။ ၁၂ လ မပြည့်မီ ပျားရည် လုံးဝ မကျွေးပါနှင့်။ ဆား၊ သကြား မထည့်ပါနှင့်။ နွားနို့ကို ၁၂ လ မပြည့်မီ အဓိက သောက်စရာအဖြစ် မပေးပါနှင့်။ နို့ဗူးကို မထောင်ထားပါနှင့်။ ပူသော အရည်များကို ဝေးအောင် ထားပါ။', 'Never leave her alone while eating — always supervise. Keep her seated upright. No whole nuts, whole grapes or hard chunks, which can block the airway. No honey before 12 months. No added salt or sugar. Cow’s milk should not be her main drink before 12 months. Never prop a bottle. Keep hot liquids out of reach.'),
       indoor: true, outdoor: false, oneChild: true, group: false, parentChild: true,
       outcomes: [
-        b('သင်ယူရမည့် ရည်မှန်းချက် — ကိုယ်တိုင် စားခြင်းနှင့် အထိအတွေ့ အမျိုးမျိုးကို လက်ခံနိုင်မှုကို အားပေးရန်။', 'Learning objective — to encourage self-feeding and acceptance of varied textures.'),
+        b('ကိုယ်တိုင် စားခြင်းနှင့် အထိအတွေ့ အမျိုးမျိုးကို လက်ခံနိုင်မှုကို အားပေးရန်။', 'Learning objective — to encourage self-feeding and acceptance of varied textures.'),
         b('လက်ချောင်း ကိုင်တွယ်မှုနှင့် ပါးစပ် လှုပ်ရှားမှု တိုးတက်ခြင်း။', 'Improving hand grasp and mouth control.'),
       ],
       variations: [b('မိသားစု၏ ချက်ပြုတ်ပြီး အစားအစာကို ဆား မထည့်ဘဲ ချေ၍ ပေးနိုင်သည်။', 'Mash a portion of the family meal before any salt is added.')],
