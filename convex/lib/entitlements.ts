@@ -56,7 +56,12 @@ export type Entitlements = {
   trialEligible: boolean;
   daysRemaining: number | null;
   inheritedFamilyAccess: boolean;
+  testingAccess: boolean;
 };
+
+export function testingAccessIsEnabled(): boolean {
+  return process.env.APP_ACCESS_MODE?.trim().toLowerCase() === 'testing';
+}
 
 export function subscriptionIsEnabled(
   row: SubscriptionRow | null | undefined,
@@ -122,22 +127,25 @@ export async function resolveEntitlements(ctx: Ctx, userId: Id<'users'>): Promis
       }
     }
   }
+  const testingAccess = testingAccessIsEnabled();
   const enabled = subscriptionIsEnabled(row, now);
   const planKey: PlanKey = enabled ? row!.planKey : 'free';
   const end = row?.currentPeriodEnd ?? null;
   return {
     planKey,
     status: row && !enabled ? 'canceled' : (row?.status ?? 'active'),
-    features: FEATURES[planKey],
+    features: testingAccess ? FEATURES.family : FEATURES[planKey],
     currentPeriodEnd: end,
     cancelAtPeriodEnd: row?.cancelAtPeriodEnd ?? false,
     isTrial: enabled && row?.status === 'trialing',
-    trialEligible:
+    trialEligible: !testingAccess
+      &&
       !directRow?.trialUsedAt
       && directRow?.providerSubscriptionId === undefined
       && directRow?.provider !== 'manual',
     daysRemaining: enabled && end !== null ? Math.max(0, Math.ceil((end - now) / 86_400_000)) : null,
     inheritedFamilyAccess,
+    testingAccess,
   };
 }
 
@@ -151,5 +159,5 @@ export async function requireFeature(ctx: Ctx, userId: Id<'users'>, feature: Fea
 
 export async function childLimit(ctx: Ctx, userId: Id<'users'>): Promise<number> {
   const entitlements = await resolveEntitlements(ctx, userId);
-  return entitlements.planKey === 'family' && !entitlements.inheritedFamilyAccess ? 3 : 1;
+  return (entitlements.testingAccess || (entitlements.planKey === 'family' && !entitlements.inheritedFamilyAccess)) ? 3 : 1;
 }

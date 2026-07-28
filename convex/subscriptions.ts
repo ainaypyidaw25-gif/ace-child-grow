@@ -43,6 +43,7 @@ export const mine = query({
     trialEligible: v.boolean(),
     daysRemaining: v.union(v.number(), v.null()),
     inheritedFamilyAccess: v.boolean(),
+    testingAccess: v.boolean(),
   }),
   handler: async (ctx) => {
     const userId = await requireUser(ctx);

@@ -60,11 +60,20 @@ export function InAppTour({ inStaffWorkspace }: { inStaffWorkspace: boolean }) {
   }
 
   return (
-    <div className="fixed inset-0 z-[80] flex items-end justify-center bg-ink/45 p-3 backdrop-blur-sm sm:items-center" role="presentation">
-      <section role="dialog" aria-modal="true" aria-labelledby="tour-title" className="w-full max-w-lg rounded-[28px] border border-white/80 bg-white p-5 shadow-2xl sm:p-7">
+    <div
+      className="fixed inset-0 z-[80] flex items-end justify-center overflow-y-auto bg-ink/45 px-3 pt-3 backdrop-blur-sm sm:items-center sm:p-6"
+      role="presentation"
+      style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 4.75rem)' }}
+    >
+      <section
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="tour-title"
+        className="max-h-[calc(100dvh-6rem)] w-full max-w-lg overflow-y-auto overscroll-contain rounded-[28px] border border-white/80 bg-white p-5 shadow-2xl sm:max-h-[calc(100dvh-3rem)] sm:p-7"
+      >
         <div className="flex items-start justify-between gap-4">
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-mint-soft text-2xl" aria-hidden>{current.icon}</div>
-          <button type="button" onClick={() => void closeAndRemember()} className="min-h-touch rounded-pill px-3 text-sm text-ink-soft">
+          <button type="button" onClick={() => void closeAndRemember()} className="min-h-touch touch-manipulation rounded-pill px-3 text-sm text-ink-soft">
             {locale === 'mm' ? 'ကျော်မည်' : 'Skip'}
           </button>
         </div>
@@ -75,8 +84,8 @@ export function InAppTour({ inStaffWorkspace }: { inStaffWorkspace: boolean }) {
             {steps.map((_, index) => <span key={index} className={`h-2 rounded-full transition-all ${index === step ? 'w-7 bg-sky' : 'w-2 bg-line'}`} />)}
           </div>
           <div className="flex gap-2">
-            {step > 0 && <button type="button" onClick={() => setStep((value) => value - 1)} className="min-h-touch rounded-pill border border-line px-4 text-sm font-semibold text-ink-soft">{locale === 'mm' ? 'နောက်သို့' : 'Back'}</button>}
-            <button type="button" onClick={() => isLast ? void closeAndRemember() : setStep((value) => value + 1)} className="min-h-touch rounded-pill bg-sky px-5 text-sm font-semibold text-white">
+            {step > 0 && <button type="button" onClick={() => setStep((value) => value - 1)} className="min-h-touch touch-manipulation rounded-pill border border-line px-4 text-sm font-semibold text-ink-soft">{locale === 'mm' ? 'နောက်သို့' : 'Back'}</button>}
+            <button type="button" onClick={() => isLast ? void closeAndRemember() : setStep((value) => value + 1)} className="min-h-touch touch-manipulation rounded-pill bg-sky px-5 text-sm font-semibold text-white">
               {isLast ? locale === 'mm' ? 'စတင်အသုံးပြုမည်' : 'Get started' : locale === 'mm' ? 'ဆက်မည်' : 'Next'}
             </button>
           </div>

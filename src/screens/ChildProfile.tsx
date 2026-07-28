@@ -21,6 +21,7 @@ export function ChildProfile() {
   const growth = useQuery(api.growth.list, childId ? { childId: childId as never } : 'skip');
   const sleep = useQuery(api.sleep.list, childId ? { childId: childId as never } : 'skip');
   const sessions = useQuery(api.milestones.listSessions, childId ? { childId: childId as never } : 'skip');
+  const healthRecords = useQuery(api.healthRecords.listForChild, childId ? { childId: childId as never } : 'skip');
 
   if (!activeChild) return <NoChild />;
 
@@ -58,6 +59,8 @@ export function ChildProfile() {
         <h2 className="mb-1 font-semibold text-ink">{locale === 'mm' ? 'အနှစ်ချုပ်' : 'Summary'}</h2>
         <Row label={t('growth.title')} value={growth ? `${growth.length} ${locale === 'mm' ? 'ခု' : 'records'}` : '…'} />
         <Row label={t('sleep.title')} value={sleep ? `${sleep.length} ${locale === 'mm' ? 'ခု' : 'records'}` : '…'} />
+        <Row label={locale === 'mm' ? 'ကာကွယ်ဆေးမှတ်တမ်း' : 'Vaccinations'} value={healthRecords ? `${healthRecords.vaccinations.length} ${locale === 'mm' ? 'ခု' : 'records'}` : '…'} />
+        <Row label={locale === 'mm' ? 'ဆေးမှတ်တမ်း' : 'Medicines'} value={healthRecords ? `${healthRecords.medications.length} ${locale === 'mm' ? 'ခု' : 'records'}` : '…'} />
         <Row
           label={locale === 'mm' ? 'နောက်ဆုံး ပြန်လည်သုံးသပ်မှု' : 'Latest review'}
           value={latest ? (latest.resultState ?? '—') : (locale === 'mm' ? 'မရှိသေး' : 'None')}
@@ -74,6 +77,11 @@ export function ChildProfile() {
           {t('report.title')}
         </Link>
       </div>
+
+      <Link to="/health" role="button" className="flex min-h-touch w-full items-center justify-between rounded-2xl border border-sky/25 bg-mint-soft/45 px-5 py-3 font-semibold text-sky-deep">
+        <span>✚ {locale === 'mm' ? 'ကျန်းမာရေးနှင့် ကာကွယ်ဆေးမှတ်တမ်း' : 'Health & vaccination records'}</span>
+        <span aria-hidden>→</span>
+      </Link>
 
       <button type="button" onClick={() => setConfirm(true)}
         className="w-full rounded-pill border border-state-red px-4 py-2 text-left text-state-red">

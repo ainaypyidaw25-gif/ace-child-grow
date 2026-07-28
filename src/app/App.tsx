@@ -42,6 +42,7 @@ const ContentReviewWorkspace = lazy(() => import('../screens/ContentReviewWorksp
 const SubscriptionPlans = lazy(() => import('../screens/SubscriptionPlans').then((module) => ({ default: module.SubscriptionPlans })));
 const PaymentStatus = lazy(() => import('../screens/PaymentStatus').then((module) => ({ default: module.PaymentStatus })));
 const Appointments = lazy(() => import('../screens/Appointments').then((module) => ({ default: module.Appointments })));
+const HealthRecords = lazy(() => import('../screens/HealthRecords').then((module) => ({ default: module.HealthRecords })));
 const LegalPage = lazy(() => import('../screens/LegalPage').then((module) => ({ default: module.LegalPage })));
 
 // Authentication gate: unauthenticated visitors see sign-in; the app (and all
@@ -163,6 +164,7 @@ function AppRoutes() {
       <Route path="/sleep" element={<Layout><Sleep /></Layout>} />
       <Route path="/report" element={<Layout><Report /></Layout>} />
       <Route path="/appointments" element={<Layout><Appointments /></Layout>} />
+      <Route path="/health" element={<Layout><HealthRecords /></Layout>} />
       <Route path="/profile" element={<Layout><Profile /></Layout>} />
       <Route path="/subscription" element={<Layout><SubscriptionPlans /></Layout>} />
       <Route path="/payment/success/:orderId" element={googlePlayBuild ? <Navigate to="/home" replace /> : <Layout><PaymentStatus view="success" /></Layout>} />

@@ -38,6 +38,10 @@ export function DesktopNav() {
             {locale === 'mm' ? 'မှတ်တမ်းကိရိယာများ' : 'Tools'}
           </p>
           <div className="mt-2 space-y-1">
+            <Link to="/health" className="flex min-h-touch items-center gap-3 rounded-2xl px-3 py-2 text-sm font-medium text-ink-soft hover:bg-white">
+              <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-mint-soft">✚</span>
+              {locale === 'mm' ? 'ကျန်းမာရေးမှတ်တမ်း' : 'Health records'}
+            </Link>
             <Link to="/appointments" className="flex min-h-touch items-center gap-3 rounded-2xl px-3 py-2 text-sm font-medium text-ink-soft hover:bg-white">
               <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-pastel-yellow/50">⌁</span>
               {locale === 'mm' ? 'ချိန်းဆိုမှုများ' : 'Appointments'}

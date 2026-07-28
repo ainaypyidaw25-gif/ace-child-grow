@@ -492,6 +492,69 @@ export default defineSchema({
     .index('by_user', ['userId'])
     .index('by_child', ['childId']),
 
+  // Parent-entered health history. These private records are for keeping and
+  // sharing factual notes; the app never derives a diagnosis from them.
+  healthRecords: defineTable({
+    userId: v.id('users'),
+    childId: v.id('children'),
+    recordDate: v.string(),
+    category: v.union(
+      v.literal('visit'),
+      v.literal('illness'),
+      v.literal('test'),
+      v.literal('allergy'),
+      v.literal('note'),
+    ),
+    title: v.string(),
+    providerName: v.optional(v.string()),
+    details: v.optional(v.string()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+    deletedAt: v.optional(v.number()),
+  })
+    .index('by_child_and_record_date', ['childId', 'recordDate'])
+    .index('by_user_and_child', ['userId', 'childId']),
+
+  vaccinationRecords: defineTable({
+    userId: v.id('users'),
+    childId: v.id('children'),
+    vaccineName: v.string(),
+    doseLabel: v.optional(v.string()),
+    scheduledOn: v.optional(v.string()),
+    administeredOn: v.optional(v.string()),
+    status: v.union(v.literal('scheduled'), v.literal('completed'), v.literal('missed')),
+    providerName: v.optional(v.string()),
+    facilityName: v.optional(v.string()),
+    lotNumber: v.optional(v.string()),
+    notes: v.optional(v.string()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+    deletedAt: v.optional(v.number()),
+  })
+    .index('by_child_and_scheduled_on', ['childId', 'scheduledOn'])
+    .index('by_user_and_child', ['userId', 'childId']),
+
+  medicationRecords: defineTable({
+    userId: v.id('users'),
+    childId: v.id('children'),
+    medicineName: v.string(),
+    purpose: v.optional(v.string()),
+    dose: v.optional(v.string()),
+    frequency: v.optional(v.string()),
+    route: v.optional(v.string()),
+    startedOn: v.string(),
+    endedOn: v.optional(v.string()),
+    lastGivenAt: v.optional(v.number()),
+    prescribedBy: v.optional(v.string()),
+    notes: v.optional(v.string()),
+    isActive: v.boolean(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+    deletedAt: v.optional(v.number()),
+  })
+    .index('by_child_and_started_on', ['childId', 'startedOn'])
+    .index('by_user_and_child', ['userId', 'childId']),
+
   milestoneSessions: defineTable({
     userId: v.id('users'),
     childId: v.id('children'),
