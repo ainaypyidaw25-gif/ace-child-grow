@@ -1,5 +1,6 @@
 import { convexAuth } from '@convex-dev/auth/server';
 import { Password } from '@convex-dev/auth/providers/Password';
+import Google from '@auth/core/providers/google';
 import type { EmailConfig } from '@auth/core/providers';
 import { validateAccountPassword } from '../src/domain/auth/passwordPolicy';
 
@@ -38,7 +39,7 @@ const passwordResetEmail: EmailConfig = {
 // tables (see authTables in schema.ts). Every data function derives the owner
 // from the authenticated identity — never from client input.
 export const { auth, signIn, signOut, store, isAuthenticated } = convexAuth({
-  providers: [Password({
+  providers: [Google, Password({
     reset: passwordResetEmail,
     validatePasswordRequirements(password) {
       const valid = /^\d{6}$/.test(password) || password.length >= 8;
