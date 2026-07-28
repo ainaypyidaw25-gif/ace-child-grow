@@ -12,6 +12,7 @@
 
 import { CONTENT_SEED } from '../content/seed';
 import { SOURCE_BY_ID } from './sources';
+import { OLDER_CONTENT_SOURCES } from '../content/seed/older';
 
 export const EVIDENCE_LINK_KINDS = [
   'milestone',
@@ -70,6 +71,7 @@ export const MILESTONE_DOMAIN_SOURCES: Record<string, string[]> = {
  * the claim the item makes.
  */
 export const EXPLICIT_CONTENT_SOURCES: Record<string, string[]> = {
+  ...OLDER_CONTENT_SOURCES,
   // --- Guides (age + domain specific) ---------------------------------------
   gd_7_9m_gross_motor: ['jr-who-motor-windows-2006', 'cdc-milestone-checklists-2025', 'tb-campbell-pt-6e-2022'],
   gd_13_18m_fine_motor: ['tb-case-smith-9e-2025', 'aap-milestones-2022'],
