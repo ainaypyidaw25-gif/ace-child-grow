@@ -3,6 +3,8 @@ import { describe, expect, it } from 'vitest';
 
 const librarySource = readFileSync('convex/library.ts', 'utf8');
 const workflowSource = readFileSync('convex/content.ts', 'utf8');
+const libraryAdminSource = readFileSync('src/screens/LibraryAdmin.tsx', 'utf8');
+const contentDetailSource = readFileSync('src/screens/ContentDetail.tsx', 'utf8');
 
 describe('clinically scoped publication gate', () => {
   it('requires a named qualified clinical reviewer before library content can be published', () => {
@@ -16,12 +18,12 @@ describe('clinically scoped publication gate', () => {
   });
 
   it('keeps review-pending static samples out of parent screens', () => {
-    for (const file of ['MilestoneDemo', 'Activities']) {
+    for (const file of ['MilestoneDemo', 'Activities', 'Learn']) {
       const source = readFileSync(`src/screens/${file}.tsx`, 'utf8');
       expect(source, file).toContain('api.library.listByType');
       expect(source, file).not.toContain('SAMPLE_');
     }
-    for (const file of ['Learn', 'HopeCenter', 'Favorites']) {
+    for (const file of ['HopeCenter', 'Favorites']) {
       const source = readFileSync(`src/screens/${file}.tsx`, 'utf8');
       expect(source, file).toContain('isApprovedForParents');
       expect(source, file).not.toContain('ReviewOngoingNotice');
@@ -37,5 +39,12 @@ describe('clinically scoped publication gate', () => {
   it('does not allow parents to complete an unpublished activity', () => {
     const activitiesSource = readFileSync('convex/activities.ts', 'utf8');
     expect(activitiesSource).toContain("content.clinicalStatus !== 'published'");
+  });
+
+  it('supports professionally reviewed original animations without requiring filmed video', () => {
+    expect(librarySource).toContain("v.literal('animation')");
+    expect(libraryAdminSource).toContain('Original 2D animation');
+    expect(libraryAdminSource).toContain("kind !== 'illustration'");
+    expect(contentDetailSource).toContain("asset.kind === 'video' || asset.kind === 'animation'");
   });
 });

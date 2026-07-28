@@ -79,7 +79,7 @@ export function ContentDetail() {
                   loading="lazy"
                   className="aspect-video w-full bg-canvas object-cover"
                 />
-              ) : asset.kind === 'video' ? (
+              ) : asset.kind === 'video' || asset.kind === 'animation' ? (
                 <video
                   src={asset.url ?? ''}
                   controls

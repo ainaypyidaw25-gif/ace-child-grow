@@ -99,7 +99,11 @@ export const getBySlug = query({
   },
 });
 
-const uploadedMediaKind = v.union(v.literal('illustration'), v.literal('video'));
+const uploadedMediaKind = v.union(
+  v.literal('illustration'),
+  v.literal('animation'),
+  v.literal('video'),
+);
 
 export const generateMediaUploadUrl = mutation({
   args: {},
@@ -118,17 +122,17 @@ export const attachUploadedMedia = mutation({
     altMm: v.string(),
     altEn: v.string(),
     captionMm: v.optional(v.string()),
-      captionEn: v.optional(v.string()),
-      durationSeconds: v.optional(v.number()),
-      transcriptMm: v.optional(v.string()),
-      transcriptEn: v.optional(v.string()),
-      rightsOwner: v.string(),
-      rightsSourceUrl: v.optional(v.string()),
-      licenseType: v.string(),
-      attributionMm: v.optional(v.string()),
-      attributionEn: v.optional(v.string()),
-      accessLevel: v.union(v.literal('free_sample'), v.literal('premium')),
-      sortOrder: v.optional(v.number()),
+    captionEn: v.optional(v.string()),
+    durationSeconds: v.optional(v.number()),
+    transcriptMm: v.optional(v.string()),
+    transcriptEn: v.optional(v.string()),
+    rightsOwner: v.string(),
+    rightsSourceUrl: v.optional(v.string()),
+    licenseType: v.string(),
+    attributionMm: v.optional(v.string()),
+    attributionEn: v.optional(v.string()),
+    accessLevel: v.union(v.literal('free_sample'), v.literal('premium')),
+    sortOrder: v.optional(v.number()),
     },
   returns: v.object({ ok: v.literal(true) }),
   handler: async (ctx, args) => {
