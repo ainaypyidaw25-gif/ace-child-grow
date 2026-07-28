@@ -12,7 +12,7 @@ function MediaUploader({ slug }: { slug: string }) {
   const L = (mm: string, en: string) => (locale === 'mm' ? mm : en);
   const generateUploadUrl = useMutation(api.library.generateMediaUploadUrl);
   const attachMedia = useMutation(api.library.attachUploadedMedia);
-  const [kind, setKind] = useState<'illustration' | 'video'>('illustration');
+  const [kind, setKind] = useState<'illustration' | 'animation' | 'video'>('illustration');
   const [file, setFile] = useState<File | null>(null);
   const [altMm, setAltMm] = useState('');
   const [altEn, setAltEn] = useState('');
@@ -35,7 +35,7 @@ function MediaUploader({ slug }: { slug: string }) {
     }
     const maxBytes = kind === 'illustration' ? 5 * 1024 * 1024 : 100 * 1024 * 1024;
     if (file.size > maxBytes) {
-      setMessage(L(kind === 'illustration' ? 'ပုံသည် 5MB အောက် ဖြစ်ရပါမည်။' : 'ဗီဒီယိုသည် 100MB အောက် ဖြစ်ရပါမည်။', kind === 'illustration' ? 'Image must be under 5 MB.' : 'Video must be under 100 MB.'));
+      setMessage(L(kind === 'illustration' ? 'ပုံသည် 5MB အောက် ဖြစ်ရပါမည်။' : 'လှုပ်ရှားရုပ်ပုံ သို့မဟုတ် ဗီဒီယိုသည် 100MB အောက် ဖြစ်ရပါမည်။', kind === 'illustration' ? 'Image must be under 5 MB.' : 'Animation or video must be under 100 MB.'));
       return;
     }
     setBusy(true); setMessage('');
@@ -72,10 +72,11 @@ function MediaUploader({ slug }: { slug: string }) {
 
   return (
     <details className="mt-2 rounded-lg bg-canvas px-3 py-2">
-      <summary className="cursor-pointer text-xs font-semibold text-sky-deep">{L('ပုံ / ဗီဒီယို ထည့်ရန်', 'Add image / video')}</summary>
+      <summary className="cursor-pointer text-xs font-semibold text-sky-deep">{L('ပုံ / လှုပ်ရှားရုပ်ပုံ / ဗီဒီယို ထည့်ရန်', 'Add image / animation / video')}</summary>
       <form onSubmit={submit} className="mt-3 space-y-2">
-        <select value={kind} onChange={(event) => { setKind(event.target.value as 'illustration' | 'video'); setFile(null); }} className="w-full rounded-lg border border-line bg-white px-3 py-2 text-sm">
+        <select value={kind} onChange={(event) => { setKind(event.target.value as 'illustration' | 'animation' | 'video'); setFile(null); }} className="w-full rounded-lg border border-line bg-white px-3 py-2 text-sm">
           <option value="illustration">{L('သင်ကြားရေးပုံ', 'Learning image')}</option>
+          <option value="animation">{L('မူရင်း 2D လှုပ်ရှားရုပ်ပုံ', 'Original 2D animation')}</option>
           <option value="video">{L('သင်ကြားရေးဗီဒီယို', 'Learning video')}</option>
         </select>
         <input type="file" accept={kind === 'illustration' ? 'image/jpeg,image/png,image/webp' : 'video/mp4,video/webm'} onChange={(event) => setFile(event.target.files?.[0] ?? null)} className="block w-full text-xs text-ink-soft" />
@@ -83,7 +84,7 @@ function MediaUploader({ slug }: { slug: string }) {
         <input value={altEn} onChange={(event) => setAltEn(event.target.value)} placeholder="English description *" className="w-full rounded-lg border border-line px-3 py-2 text-sm" />
         <textarea value={captionMm} onChange={(event) => setCaptionMm(event.target.value)} placeholder="မြန်မာ caption (optional)" className="w-full rounded-lg border border-line px-3 py-2 text-sm" />
         <textarea value={captionEn} onChange={(event) => setCaptionEn(event.target.value)} placeholder="English caption (optional)" className="w-full rounded-lg border border-line px-3 py-2 text-sm" />
-        {kind === 'video' && (
+        {kind !== 'illustration' && (
           <>
             <textarea value={transcriptMm} onChange={(event) => setTranscriptMm(event.target.value)} placeholder="မြန်မာ transcript (optional)" className="w-full rounded-lg border border-line px-3 py-2 text-sm" />
             <textarea value={transcriptEn} onChange={(event) => setTranscriptEn(event.target.value)} placeholder="English transcript (optional)" className="w-full rounded-lg border border-line px-3 py-2 text-sm" />
