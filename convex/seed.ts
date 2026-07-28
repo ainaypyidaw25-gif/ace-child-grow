@@ -69,6 +69,11 @@ export const applyPublishedErrata = internalMutation({
     const slugs = publishedErrataSlugs(releaseId) ?? [];
     const items = seedData as unknown as Item[];
     const desiredBySlug = new Map(items.map((item) => [item.slug, item]));
+    const priorErrata = await ctx.db
+      .query('auditLogs')
+      .withIndex('by_action', (q) => q.eq('action', 'library.published_errata'))
+      .collect();
+    const appliedSummaries = new Set(priorErrata.map((row) => row.summary).filter(Boolean));
     const now = Date.now();
     let updated = 0;
     let unchanged = 0;
@@ -76,6 +81,11 @@ export const applyPublishedErrata = internalMutation({
     let notPublished = 0;
 
     for (const slug of slugs) {
+      const auditSummary = `${releaseId} · ${slug}`;
+      if (appliedSummaries.has(auditSummary)) {
+        unchanged += 1;
+        continue;
+      }
       const desired = desiredBySlug.get(slug);
       const existing = await ctx.db
         .query('libraryContent')
@@ -108,7 +118,7 @@ export const applyPublishedErrata = internalMutation({
         'library.published_errata',
         'libraryContent',
         existing._id,
-        `${releaseId} · ${slug}`,
+        auditSummary,
         {
           before: JSON.stringify({
             titleMm: existing.titleMm,
