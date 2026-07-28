@@ -25,6 +25,7 @@ import type * as evidence from "../evidence.js";
 import type * as family from "../family.js";
 import type * as favorites from "../favorites.js";
 import type * as growth from "../growth.js";
+import type * as healthRecords from "../healthRecords.js";
 import type * as http from "../http.js";
 import type * as lib_auth from "../lib/auth.js";
 import type * as lib_entitlements from "../lib/entitlements.js";
@@ -66,6 +67,7 @@ declare const fullApi: ApiFromModules<{
   family: typeof family;
   favorites: typeof favorites;
   growth: typeof growth;
+  healthRecords: typeof healthRecords;
   http: typeof http;
   "lib/auth": typeof lib_auth;
   "lib/entitlements": typeof lib_entitlements;

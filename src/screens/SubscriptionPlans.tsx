@@ -49,6 +49,34 @@ export function SubscriptionPlans() {
 
   if (!options || !requests || !mmpayPayments || !subscription) return <p className="text-ink-soft" role="status">…</p>;
 
+  if (subscription.testingAccess) {
+    return (
+      <div className="mx-auto max-w-2xl space-y-5">
+        <header className="rounded-[30px] bg-ink px-6 py-8 text-white shadow-card">
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-mint">ACE Child Grow Testing</p>
+          <h1 className="mt-3 text-2xl font-bold">{L('စမ်းသပ်အသုံးပြုနေသောကာလ', 'Testing access')}</h1>
+          <p className="mt-3 leading-7 text-white/80">
+            {L('စမ်းသပ်ကာလအတွင်း ဝန်ဆောင်မှုအားလုံးကို အခမဲ့ အသုံးပြုနိုင်ပါသည်။ Subscription ငွေပေးချေမှုကို နောက်ပိုင်းတွင် စတင်ပါမည်။', 'All features are available free during testing. Subscription payments will be introduced later.')}
+          </p>
+        </header>
+        <section className="rounded-card border border-line bg-white p-6 shadow-card">
+          <h2 className="font-bold text-ink">{L('ယခုစမ်းသုံးနိုင်သည့် ဝန်ဆောင်မှုများ', 'Features available now')}</h2>
+          <ul className="mt-4 grid gap-3 text-sm text-ink-soft sm:grid-cols-2">
+            {[
+              L('ဖွံ့ဖြိုးမှုနှင့် လှုပ်ရှားမှုမှတ်တမ်း', 'Development and activity tracking'),
+              L('လစဉ်အစီရင်ခံစာ', 'Monthly reports'),
+              L('ချိန်းဆိုမှုနှင့် သတိပေးချက်များ', 'Appointments and reminders'),
+              L('အင်တာနက်မရှိချိန် ဖတ်ရှုနိုင်မှု', 'Offline reading'),
+            ].map((feature) => <li key={feature} className="rounded-2xl bg-mint-soft/45 px-4 py-3">✓ {feature}</li>)}
+          </ul>
+          <Link to="/home" className="mt-5 inline-flex min-h-touch items-center rounded-pill bg-sky-deep px-5 py-3 font-semibold text-white">
+            {L('ပင်မစာမျက်နှာသို့ ပြန်မည်', 'Return home')}
+          </Link>
+        </section>
+      </div>
+    );
+  }
+
   if (isGooglePlayBuild()) {
     return (
       <div className="mx-auto max-w-2xl space-y-5">
