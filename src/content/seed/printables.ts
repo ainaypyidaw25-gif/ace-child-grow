@@ -37,6 +37,6 @@ export const PRINTABLES: SeedItem[] = [
     title: b('အိပ်စက်မှု မှတ်တမ်း', 'Sleep Diary'),
     description: b('အိပ်ချိန်/နိုးချိန်ကို မှတ်သားရန် ဇယား။', 'A sheet to note sleep and wake times.') }),
   printable({ key: 'milestone_checklist', format: 'A4 PDF',
-    title: b('ဖွံ့ဖြိုးမှု အမှတ်တိုင် စစ်ဆေးစာရင်း', 'Milestone Checklist'),
-    description: b('အသက်အလိုက် အမှတ်တိုင်များ (လမ်းညွှန်သာ) စစ်ဆေးစာရင်း — ရောဂါ မဖော်ထုတ်ပါ။', 'Age-based milestone guide checklist — not a diagnostic test.') }),
+    title: b('ဖွံ့ဖြိုးမှု မှတ်တိုင် စစ်ဆေးစာရင်း', 'Milestone Checklist'),
+    description: b('အသက်အလိုက် မှတ်တိုင်များ (လမ်းညွှန်သာ) စစ်ဆေးစာရင်း — ရောဂါ မဖော်ထုတ်ပါ။', 'Age-based milestone guide checklist — not a diagnostic test.') }),
 ];

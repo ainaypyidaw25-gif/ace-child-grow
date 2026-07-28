@@ -38,11 +38,17 @@ const IMPORTER_FIELDS = new Set([
 
 describe('seed generation', () => {
   it('keeps published errata narrow and code-versioned', () => {
-    const slugs = publishedErrataSlugs('2026-07-28-content-remediation');
-    expect(slugs).not.toBeNull();
-    expect(slugs).toHaveLength(11);
-    expect(new Set(slugs).size).toBe(slugs?.length);
-    expect(slugs?.every((slug) => seedPayload().some((item) => item.slug === slug))).toBe(true);
+    const releases = [
+      ['2026-07-28-content-remediation', 11],
+      ['2026-07-28-myanmar-copy-clarity', 31],
+    ] as const;
+    for (const [releaseId, count] of releases) {
+      const slugs = publishedErrataSlugs(releaseId);
+      expect(slugs).not.toBeNull();
+      expect(slugs).toHaveLength(count);
+      expect(new Set(slugs).size).toBe(slugs?.length);
+      expect(slugs?.every((slug) => seedPayload().some((item) => item.slug === slug))).toBe(true);
+    }
     expect(publishedErrataSlugs('unknown-release')).toBeNull();
   });
 

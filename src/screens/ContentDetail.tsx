@@ -48,6 +48,10 @@ export function ContentDetail() {
     </ul>
   );
   const L = (mm: string, en: string) => (locale === 'mm' ? mm : en);
+  const difficultyLabel = (value: string) => {
+    if (locale !== 'mm') return value;
+    return ({ easy: 'လွယ်ကူ', medium: 'အလယ်အလတ်', hard: 'အနည်းငယ်ခက်' } as Record<string, string>)[value] ?? value;
+  };
 
   return (
     <div className="space-y-4">
@@ -171,24 +175,24 @@ export function ContentDetail() {
       {item.type === 'activity' && (
         <>
           <div className="flex flex-wrap gap-2 text-xs">
-            {item.difficulty && <span className="rounded-pill bg-lavender/50 px-3 py-0.5">{item.difficulty}</span>}
+            {item.difficulty && <span className="rounded-pill bg-lavender/50 px-3 py-0.5">{difficultyLabel(item.difficulty)}</span>}
             {typeof item.durationMinutes === 'number' && <span className="rounded-pill bg-lavender/50 px-3 py-0.5">⏱ {item.durationMinutes} {L('မိနစ်', 'min')}</span>}
             {d.indoor === true && <span className="rounded-pill bg-lavender/50 px-3 py-0.5">{L('အိမ်တွင်း', 'Indoor')}</span>}
             {d.outdoor === true && <span className="rounded-pill bg-lavender/50 px-3 py-0.5">{L('အိမ်ပြင်', 'Outdoor')}</span>}
             {d.lowCost === true && <span className="rounded-pill bg-lavender/50 px-3 py-0.5">{L('ကုန်ကျနည်း', 'Low-cost')}</span>}
           </div>
-          {bl('materials') && <Section title={L('ပစ္စည်းများ', 'Materials')}><p className="text-sm text-ink-soft">{T(bl('materials'))}</p></Section>}
-          {bl('setup') && <Section title={L('ပြင်ဆင်ခြင်း', 'Setup')}><p className="text-sm text-ink-soft">{T(bl('setup'))}</p></Section>}
+          {bl('materials') && <Section title={L('လိုအပ်သောပစ္စည်းများ', 'Materials')}><p className="text-sm text-ink-soft">{T(bl('materials'))}</p></Section>}
+          {bl('setup') && <Section title={L('ကြိုတင်ပြင်ဆင်ရန်', 'Setup')}><p className="text-sm text-ink-soft">{T(bl('setup'))}</p></Section>}
           {list('instructions').length > 0 && (
-            <Section title={L('လုပ်နည်း', 'Instructions')}>
+            <Section title={L('အဆင့်လိုက်လုပ်နည်း', 'Instructions')}>
               <ol className="ml-4 list-decimal space-y-1 text-sm text-ink-soft">
                 {list('instructions').map((x, i) => <li key={i}>{T(x)}</li>)}
               </ol>
             </Section>
           )}
-          {bl('safety') && <Section title={L('ဘေးကင်းရေး', 'Safety')}><p className="text-sm text-ink-soft">{T(bl('safety'))}</p></Section>}
-          {list('outcomes').length > 0 && <Section title={L('လေ့ကျင့်ပေးနိုင်သည့် စွမ်းရည်များ', 'Development outcomes')}><Bullets items={list('outcomes')} /></Section>}
-          {list('variations').length > 0 && <Section title={L('အခြားနည်းဖြင့် လုပ်နိုင်ပုံများ', 'Variations')}><Bullets items={list('variations')} /></Section>}
+          {bl('safety') && <Section title={L('ဘေးကင်းရေး သတိပြုရန်', 'Safety')}><p className="text-sm text-ink-soft">{T(bl('safety'))}</p></Section>}
+          {list('outcomes').length > 0 && <Section title={L('ရည်ရွယ်ချက်နှင့် အကျိုးကျေးဇူးများ', 'Development outcomes')}><Bullets items={list('outcomes')} /></Section>}
+          {list('variations').length > 0 && <Section title={L('အခြားလုပ်နည်းများ', 'Variations')}><Bullets items={list('variations')} /></Section>}
         </>
       )}
 

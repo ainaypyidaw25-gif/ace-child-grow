@@ -57,7 +57,12 @@ type Item = {
  * neither submit content nor choose slugs. Review state and media are retained.
  */
 export const applyPublishedErrata = internalMutation({
-  args: { releaseId: v.literal('2026-07-28-content-remediation') },
+  args: {
+    releaseId: v.union(
+      v.literal('2026-07-28-content-remediation'),
+      v.literal('2026-07-28-myanmar-copy-clarity'),
+    ),
+  },
   returns: v.object({
     updated: v.number(),
     unchanged: v.number(),
