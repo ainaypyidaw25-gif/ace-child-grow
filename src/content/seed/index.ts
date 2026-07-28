@@ -10,6 +10,7 @@ import { SPECIAL_NEEDS } from './specialNeeds';
 import { STORIES } from './stories';
 import { PRINTABLES } from './printables';
 import { INFANT_CONTENT } from './infant';
+import { OLDER_AUTHORED_CONTENT } from './older';
 
 export const RAW_SEED: SeedItem[] = [
   ...MILESTONES,
@@ -20,6 +21,7 @@ export const RAW_SEED: SeedItem[] = [
   ...STORIES,
   ...PRINTABLES,
   ...INFANT_CONTENT,
+  ...OLDER_AUTHORED_CONTENT,
 ];
 
 export const CONTENT_SEED: NormalizedItem[] = RAW_SEED.map(normalize);

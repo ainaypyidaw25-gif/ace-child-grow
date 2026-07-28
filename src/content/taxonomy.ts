@@ -97,6 +97,8 @@ export const PRINTABLE_TYPES = [
   // sheets, never screening or diagnostic instruments.
   'checklist_birth_2m', 'checklist_3_4m', 'checklist_5_6m', 'checklist_7_9m',
   'checklist_10_12m',
+  'checklist_13_18m', 'checklist_19_24m', 'checklist_2y', 'checklist_2_5y',
+  'checklist_3y', 'checklist_3_5y', 'checklist_4y', 'checklist_4_5y', 'checklist_5y',
 ] as const;
 
 export const CONTENT_TYPES = [
