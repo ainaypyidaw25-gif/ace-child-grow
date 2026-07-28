@@ -4,6 +4,12 @@ import type { Id } from '../../convex/_generated/dataModel';
 import { api } from '../../convex/_generated/api';
 import { useAppState } from '../app/AppState';
 import { useLocale } from '../app/LocaleContext';
+import {
+  MYANMAR_EPI_SOURCE,
+  MYANMAR_VACCINATION_GROUPS,
+  isMatchingVaccinationRecord,
+  vaccinationDueDate,
+} from '../domain/health/myanmarVaccinationSchedule';
 import { NoChild } from './Growth';
 
 type Tab = 'vaccinations' | 'health' | 'medications';
@@ -103,8 +109,64 @@ export function HealthRecords() {
       {message && <p className="rounded-2xl bg-mint-soft px-4 py-3 text-sm text-sky-deep" role="status">{message}</p>}
 
       {tab === 'vaccinations' && (
-        <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+        <div className="space-y-6">
+          <section className="overflow-hidden rounded-[26px] border border-line bg-white shadow-card" aria-labelledby="myanmar-epi-heading">
+            <div className="border-b border-line bg-mint-soft/35 px-5 py-5 sm:px-6">
+              <p className="text-xs font-bold uppercase tracking-[0.14em] text-sky-deep">{L('မြန်မာနိုင်ငံ EPI အစီအစဉ်', 'Myanmar national EPI schedule')}</p>
+              <h2 id="myanmar-epi-heading" className="mt-1 text-xl font-bold text-ink">{L('မွေးစမှ အသက် ၅ နှစ်အထိ ကာကွယ်ဆေးမှတ်တမ်း', 'Vaccination record from birth to age 5')}</h2>
+              <p className="mt-2 text-sm leading-6 text-ink-soft">{L('အောက်ပါရက်များကို ကလေး၏မွေးနေ့အပေါ်မူတည်၍ တွက်ထားပါသည်။ ထိုးပြီးသားကို မှတ်တမ်းဖြည့်နိုင်ပြီး၊ နောက်ကျနေပါက မည်သို့ဆက်ထိုးရမည်ကို ကျန်းမာရေးဝန်ထမ်းနှင့် တိုင်ပင်ပါ။', 'Dates below are calculated from the child’s date of birth. Record completed doses here; if a dose is delayed, ask a health worker for a catch-up plan.')}</p>
+            </div>
+            <div className="divide-y divide-line/75">
+              {MYANMAR_VACCINATION_GROUPS.map((group) => (
+                <div key={group.ageMonths} className="grid gap-3 px-5 py-4 sm:grid-cols-[9rem_1fr] sm:px-6">
+                  <div>
+                    <p className="font-bold text-ink">{L(group.labelMm, group.labelEn)}</p>
+                    <p className="mt-1 text-xs text-ink-soft">{vaccinationDueDate(activeChild.birthDate, group.ageMonths)}</p>
+                  </div>
+                  <ul className="divide-y divide-line/60">
+                    {group.items.map((item) => {
+                      const saved = records?.vaccinations.find((record) => isMatchingVaccinationRecord(item, record));
+                      return (
+                        <li key={item.id} className="flex flex-col gap-2 py-2 first:pt-0 last:pb-0 sm:flex-row sm:items-center sm:justify-between">
+                          <div>
+                            <p className="text-sm font-semibold text-ink">{L(item.nameMm, item.nameEn)} · {L(item.doseMm, item.doseEn)}</p>
+                            {(item.noteMm || item.noteEn) && <p className="mt-0.5 text-xs leading-5 text-ink-soft">{L(item.noteMm ?? '', item.noteEn ?? '')}</p>}
+                          </div>
+                          {saved ? (
+                            <StatusPill value={saved.status} locale={locale} />
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setVaccineName(item.vaccineName);
+                                setDoseLabel(item.doseLabel);
+                                setScheduledOn(vaccinationDueDate(activeChild.birthDate, item.ageMonths));
+                                setAdministeredOn('');
+                                setVaccineStatus('scheduled');
+                                setMessage(L(`${L(item.nameMm, item.nameEn)} မှတ်တမ်းကို အောက်တွင် ဖြည့်နိုင်ပါပြီ။`, `${item.nameEn} is ready to complete below.`));
+                                requestAnimationFrame(() => document.getElementById('vaccination-record-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+                              }}
+                              className="min-h-10 shrink-0 self-start rounded-pill border border-sky-deep/25 px-3 py-1.5 text-xs font-semibold text-sky-deep hover:bg-mint-soft/55"
+                            >
+                              {L('မှတ်တမ်းဖြည့်မည်', 'Add record')}
+                            </button>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              ))}
+            </div>
+            <div className="border-t border-line bg-canvas/55 px-5 py-4 text-xs leading-6 text-ink-soft sm:px-6">
+              <p>{L('အသက် ၁၈ လနောက်ပိုင်းမှ ၅ နှစ်အထိ ပုံမှန် EPI အကြိမ်အသစ် မပါသော်လည်း လွတ်သွားသောအကြိမ်များနှင့် အထူးကာကွယ်ဆေးထိုးလှုပ်ရှားမှုများ ရှိနိုင်ပါသည်။ ရိုတာဗိုင်းရပ်စ်ကာကွယ်ဆေး နောက်ကျနေပါက အသက်ကန့်သတ်ချက်ရှိသဖြင့် ကိုယ်တိုင်မဆုံးဖြတ်ဘဲ ကျန်းမာရေးဝန်ထမ်းနှင့် တိုင်ပင်ပါ။', 'The routine EPI schedule lists no additional dose from 18 months through age 5, but catch-up doses and special campaigns may apply. If rotavirus vaccination is delayed, ask a health worker because age limits apply.')}</p>
+              <a href={MYANMAR_EPI_SOURCE.url} target="_blank" rel="noreferrer" className="mt-2 inline-block font-semibold text-sky-deep underline">{L('ကိုးကားချက် — WHO မြန်မာနိုင်ငံ EPI အချက်အလက်စာတမ်း ၂၀၂၄ (အစီအစဉ် ၂၀၂၃)', 'Source — WHO Myanmar EPI factsheet 2024 (schedule 2023)')}</a>
+            </div>
+          </section>
+
+          <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
           <form
+            id="vaccination-record-form"
             onSubmit={(event) => {
               event.preventDefault();
               void runSave(async () => {
@@ -147,6 +209,7 @@ export function HealthRecords() {
               </li>
             ))}
           </RecordList>
+          </div>
         </div>
       )}
 
