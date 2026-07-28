@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useMutation, useQuery } from 'convex/react';
+import { Link } from 'react-router-dom';
 import type { Id } from '../../convex/_generated/dataModel';
 import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
@@ -29,6 +30,18 @@ export function AdminBilling() {
   const [message, setMessage] = useState('');
   const L = (mm: string, en: string) => locale === 'mm' ? mm : en;
   const input = 'w-full rounded-lg border border-line px-3 py-2 text-sm';
+  const memberPlanLabel = (plan: 'free' | 'premium' | 'family') => ({
+    free: L('အခမဲ့', 'Free'),
+    premium: 'Premium',
+    family: 'Family',
+  })[plan];
+  const memberStatusLabel = (status: 'active' | 'trialing' | 'past_due' | 'canceled' | 'paused') => ({
+    active: L('အသုံးပြုနေသည်', 'Active'),
+    trialing: L('စမ်းသုံးနေသည်', 'Trial'),
+    past_due: L('ငွေပေးချေရန် ကျန်နေသည်', 'Past due'),
+    canceled: L('ပယ်ဖျက်ထားသည်', 'Canceled'),
+    paused: L('ခေတ္တရပ်ထားသည်', 'Paused'),
+  })[status];
 
   if (data === undefined || mmpay === undefined || memberSummary === undefined || referrals === undefined) return <p className="text-ink-soft">…</p>;
   if (!data.allowed || !mmpay.allowed || !memberSummary.allowed || !referrals.allowed) return <p className="rounded-card bg-white p-4">{L('Owner သာ အသုံးပြုနိုင်ပါသည်။', 'Owner access only.')}</p>;
@@ -56,17 +69,40 @@ export function AdminBilling() {
         {L(`အသုံးပြုနေသူ ${memberSummary.statuses.active} · စမ်းသုံးနေသူ ${memberSummary.statuses.trialing} · ငွေပေးချေရန်ကျန် ${memberSummary.statuses.pastDue}`, `Active ${memberSummary.statuses.active} · Trial ${memberSummary.statuses.trialing} · Past due ${memberSummary.statuses.pastDue}`)}
         {memberSummary.countCapped ? L(' · စာရင်း ၅,၀၀၀ အထိသာ ရေတွက်ထားသည်။', ' · Count is capped at 5,000 records.') : ''}
       </p>
-      {memberSummary.recentMembers.length > 0 && (
-        <details className="mt-4">
-          <summary className="cursor-pointer text-sm font-semibold text-sky-deep">{L('နောက်ဆုံးဝင်ထားသော member များ', 'Recent members')}</summary>
-          <div className="mt-2 overflow-x-auto">
-            <table className="min-w-full text-left text-sm">
-              <thead className="text-xs text-ink-soft"><tr><th className="px-2 py-2">Member</th><th className="px-2 py-2">Plan</th><th className="px-2 py-2">Status</th><th className="px-2 py-2">{L('ဝင်ရောက်သည့်ရက်', 'Joined')}</th></tr></thead>
-              <tbody className="divide-y divide-line">{memberSummary.recentMembers.map((member) => <tr key={member.userId}><td className="px-2 py-2">{member.name ?? member.email ?? '—'}{member.name && member.email && <span className="block text-xs text-ink-soft">{member.email}</span>}</td><td className="px-2 py-2 capitalize">{member.planKey}</td><td className="px-2 py-2 capitalize">{member.status.replace('_', ' ')}</td><td className="whitespace-nowrap px-2 py-2 text-xs text-ink-soft">{new Date(member.joinedAt).toLocaleDateString(locale === 'mm' ? 'my-MM' : 'en-US')}</td></tr>)}</tbody>
-            </table>
+      <div className="mt-5 border-t border-line pt-4">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div>
+            <h3 className="font-semibold text-ink">{L('မိဘ Member အကောင့်စာရင်း', 'Parent member accounts')}</h3>
+            <p className="text-xs text-ink-soft">{L('လက်ရှိစာရင်းဝင်ထားသော မိဘအကောင့်များကို အောက်တွင် တစ်ခုချင်းကြည့်နိုင်ပါသည်။', 'See every currently registered parent account below.')}</p>
           </div>
-        </details>
-      )}
+          <span className="rounded-pill bg-mint-soft px-3 py-1 text-sm font-semibold text-sky-deep">{memberSummary.recentMembers.length}</span>
+        </div>
+        {memberSummary.recentMembers.length === 0 ? (
+          <p className="mt-3 text-sm text-ink-soft">{L('မိဘ Member အကောင့် မရှိသေးပါ။', 'No parent member accounts yet.')}</p>
+        ) : (
+          <ul className="mt-3 grid gap-3 sm:grid-cols-2">
+            {memberSummary.recentMembers.map((member) => (
+              <li key={member.userId} className="rounded-2xl border border-line bg-canvas/60 p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="truncate font-semibold text-ink">{member.name ?? member.email ?? L('အမည်မဖြည့်ထားပါ', 'Name not provided')}</p>
+                    <p className="mt-1 break-all text-sm text-ink-soft">{member.email ?? L('Email မရှိပါ', 'No email')}</p>
+                  </div>
+                  <span className="shrink-0 rounded-pill bg-white px-2.5 py-1 text-xs font-semibold text-sky-deep">{memberPlanLabel(member.planKey)}</span>
+                </div>
+                <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-line pt-3 text-xs">
+                  <span className="font-semibold text-sky-deep">{memberStatusLabel(member.status)}</span>
+                  <span className="text-ink-soft">{L('စာရင်းဝင်ရက်', 'Joined')} · {new Date(member.joinedAt).toLocaleDateString(locale === 'mm' ? 'my-MM' : 'en-US')}</span>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-2 rounded-2xl bg-canvas px-4 py-3 text-sm">
+          <span className="text-ink-soft">{L(`Owner/Reviewer အကောင့် ${memberSummary.staffCount} ခုကို အဖွဲ့စီမံခန့်ခွဲမှုတွင် ကြည့်နိုင်ပါသည်။`, `${memberSummary.staffCount} owner/reviewer account(s) can be viewed in team management.`)}</span>
+          <Link to="/admin/team" className="font-semibold text-sky-deep underline underline-offset-4">{L('အဖွဲ့အကောင့်များ ကြည့်မည်', 'View team accounts')}</Link>
+        </div>
+      </div>
     </section>
 
     <section className="rounded-card border border-line bg-white p-4 shadow-card">
