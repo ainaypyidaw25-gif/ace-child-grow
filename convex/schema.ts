@@ -352,10 +352,10 @@ export default defineSchema({
     .index('by_type_category', ['type', 'category'])
     .index('by_status', ['clinicalStatus']),
 
-  // Human review decisions are separate from the content document so the
-  // audit history survives later edits. A decision applies only to the exact
-  // contentVersion it reviewed; editing an item increments its review revision and
-  // makes older approvals visibly stale instead of silently reusing them.
+  // Human review decisions are append-only and separate from the content document,
+  // so every intermediate decision survives later decisions and edits. A decision
+  // applies only to the exact contentVersion it reviewed. Editing an item increments
+  // its review revision and makes older approvals visibly stale instead of silently reusing them.
   contentReviews: defineTable({
     contentSlug: v.string(),
     contentVersion: v.number(),

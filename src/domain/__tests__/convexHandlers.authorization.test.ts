@@ -12,7 +12,7 @@ vi.mock('@convex-dev/auth/server', async (importOriginal) => {
 
 import { list as listChildren, update as updateChild } from '../../../convex/children';
 import { importSeed, listByType, setReview as setLibraryReview, updateDraft } from '../../../convex/library';
-import { saveDecision } from '../../../convex/contentReviews';
+import { listForContent as listContentReviews, saveDecision } from '../../../convex/contentReviews';
 import { forContent as evidenceForContent, setReview as setEvidenceReview } from '../../../convex/evidence';
 import { transition as transitionContent } from '../../../convex/content';
 import { listSessions, recordSession } from '../../../convex/milestones';
@@ -282,6 +282,49 @@ describe('Convex registered handlers enforce authorization', () => {
       contentSlug: 'item-1', contentVersion: 3, dimension: 'safety', decision: 'approved',
       reviewerDisplayName: 'Dr Reviewer', reviewerQualification: 'MBBS',
     }));
+  });
+
+  it('appends repeated review decisions and reports only the latest decision per dimension as current', async () => {
+    authState.userId = 'clinical-1';
+    const existingRows = [
+      { _id: 'review-3', contentSlug: 'item-1', contentVersion: 2, dimension: 'clinical', decision: 'changes_requested' },
+      { _id: 'review-2', contentSlug: 'item-1', contentVersion: 2, dimension: 'native_myanmar', decision: 'approved' },
+      { _id: 'review-1', contentSlug: 'item-1', contentVersion: 2, dimension: 'clinical', decision: 'approved' },
+    ];
+    const listContext = ctx({
+      profile: {
+        userId: 'clinical-1', isStaff: true, staffRole: 'clinical_reviewer',
+        displayName: 'Dr Reviewer', staffQualification: 'MBBS',
+      },
+      rows: {
+        libraryContent: [{ _id: 'content-1', slug: 'item-1', reviewRevision: 2 }],
+        contentReviews: existingRows,
+      },
+    });
+    await expect(handler(listContentReviews)(listContext, { contentSlug: 'item-1' })).resolves.toEqual({
+      allowed: true,
+      contentVersion: 2,
+      current: [existingRows[0], existingRows[1]],
+      history: existingRows,
+    });
+
+    const saveContext = ctx({
+      profile: {
+        userId: 'clinical-1', isStaff: true, staffRole: 'clinical_reviewer',
+        displayName: 'Dr Reviewer', staffQualification: 'MBBS',
+      },
+      rows: {
+        libraryContent: [{ _id: 'content-1', slug: 'item-1', reviewRevision: 2 }],
+        contentReviews: existingRows,
+      },
+    });
+    await expect(handler(saveDecision)(saveContext, {
+      contentSlug: 'item-1', dimension: 'clinical', decision: 'approved', note: 'Re-approved after changes',
+    })).resolves.toEqual({ ok: true, contentVersion: 2 });
+    expect(saveContext.db.insert).toHaveBeenCalledWith('contentReviews', expect.objectContaining({
+      contentSlug: 'item-1', contentVersion: 2, dimension: 'clinical', decision: 'approved',
+    }));
+    expect(saveContext.db.patch).not.toHaveBeenCalled();
   });
 
   it('editing content increments the review revision and clears active publication metadata', async () => {

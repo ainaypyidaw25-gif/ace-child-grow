@@ -81,10 +81,18 @@ export const listForContent = query({
       .withIndex('by_content', (q) => q.eq('contentSlug', args.contentSlug))
       .order('desc')
       .take(100);
+    const contentVersion = content.reviewRevision ?? 1;
+    const current: typeof history = [];
+    const seenDimensions = new Set<ReviewDimension>();
+    for (const row of history) {
+      if (row.contentVersion !== contentVersion || seenDimensions.has(row.dimension)) continue;
+      current.push(row);
+      seenDimensions.add(row.dimension);
+    }
     return {
       allowed: true,
-      contentVersion: content.reviewRevision ?? 1,
-      current: history.filter((row) => row.contentVersion === (content.reviewRevision ?? 1)),
+      contentVersion,
+      current,
       history,
     };
   },
@@ -122,15 +130,10 @@ export const saveDecision = mutation({
       .unique();
     if (!content) throw new Error('Content not found');
     const now = Date.now();
-    const existing = await ctx.db
-      .query('contentReviews')
-      .withIndex('by_content_dimension_version', (q) =>
-        q.eq('contentSlug', args.contentSlug)
-          .eq('dimension', args.dimension)
-          .eq('contentVersion', content.reviewRevision ?? 1),
-      )
-      .unique();
-    const values = {
+    await ctx.db.insert('contentReviews', {
+      contentSlug: args.contentSlug,
+      contentVersion: content.reviewRevision ?? 1,
+      dimension: args.dimension,
       decision: args.decision,
       note: note || undefined,
       reviewerId: userId,
@@ -138,19 +141,9 @@ export const saveDecision = mutation({
       reviewerQualification: access.qualification?.trim() || undefined,
       reviewerRole: access.role,
       reviewedAt: now,
+      createdAt: now,
       updatedAt: now,
-    };
-    if (existing) {
-      await ctx.db.patch(existing._id, values);
-    } else {
-      await ctx.db.insert('contentReviews', {
-        contentSlug: args.contentSlug,
-        contentVersion: content.reviewRevision ?? 1,
-        dimension: args.dimension,
-        ...values,
-        createdAt: now,
-      });
-    }
+    });
     await logAudit(
       ctx,
       userId,
