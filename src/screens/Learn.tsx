@@ -4,7 +4,7 @@ import { useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
 import { useAppState } from '../app/AppState';
-import { chronologicalAge } from '../domain/age/age';
+import { developmentalAgeMonths } from '../domain/age/age';
 import { ageGroup, resolveAgeGroup } from '../content/taxonomy';
 
 type LearnView = 'recommended' | 'lesson' | 'guide' | 'story';
@@ -63,7 +63,10 @@ export function Learn() {
   const L = (mm: string, en: string) => locale === 'mm' ? mm : en;
 
   const ageMonths = activeChild
-    ? chronologicalAge(new Date(activeChild.birthDate), new Date()).totalMonths
+    ? developmentalAgeMonths(new Date(activeChild.birthDate), new Date(), {
+        useCorrectedAge: activeChild.useCorrectedAge,
+        gestationalWeeks: activeChild.gestationalWeeks,
+      })
     : null;
   const currentAgeGroup = ageMonths === null ? undefined : resolveAgeGroup(ageMonths);
 
@@ -72,7 +75,10 @@ export function Learn() {
     type: 'guide',
     ageGroupKey: currentAgeGroup?.key,
   });
-  const stories = useQuery(api.library.listByType, { type: 'story' });
+  const stories = useQuery(api.library.listByType, {
+    type: 'story',
+    ageGroupKey: currentAgeGroup?.key,
+  });
 
   const loading = lessons === undefined || guides === undefined || stories === undefined;
   const recommended = useMemo(

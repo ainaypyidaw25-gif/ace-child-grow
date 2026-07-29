@@ -7,7 +7,7 @@ import { computeResult, type MilestoneResponseInput } from '../domain/rules/resu
 import { SafetyBanner } from '../components/SafetyBanner';
 import type { DevelopmentDomain, MilestoneAnswer } from '../domain/types';
 import type { TranslationKey } from '../i18n';
-import { chronologicalAge } from '../domain/age/age';
+import { developmentalAgeMonths } from '../domain/age/age';
 import { resolveAgeGroup } from '../content/taxonomy';
 import { NoChild } from './Growth';
 
@@ -45,7 +45,10 @@ export function MilestoneDemo() {
   const { t, locale } = useLocale();
   const { activeChild } = useAppState();
   const ageMonths = activeChild
-    ? chronologicalAge(new Date(activeChild.birthDate), new Date()).totalMonths
+    ? developmentalAgeMonths(new Date(activeChild.birthDate), new Date(), {
+        useCorrectedAge: activeChild.useCorrectedAge,
+        gestationalWeeks: activeChild.gestationalWeeks,
+      })
     : 0;
   const ageGroupKey = resolveAgeGroup(ageMonths)?.key;
   const data = useQuery(api.library.listByType, {
