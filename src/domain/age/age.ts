@@ -162,3 +162,19 @@ export function correctedAge(
     correctionWeeks,
   };
 }
+
+/**
+ * Age used to select developmental content. Chronological age remains the
+ * default, while a parent's corrected-age preference is honored for a
+ * premature child within the supported correction window.
+ */
+export function developmentalAgeMonths(
+  birthDate: Date,
+  reference: Date,
+  options: { useCorrectedAge: boolean; gestationalWeeks?: number },
+): number {
+  if (!options.useCorrectedAge || options.gestationalWeeks === undefined) {
+    return chronologicalAge(birthDate, reference).totalMonths;
+  }
+  return correctedAge(birthDate, reference, options.gestationalWeeks).totalMonths;
+}

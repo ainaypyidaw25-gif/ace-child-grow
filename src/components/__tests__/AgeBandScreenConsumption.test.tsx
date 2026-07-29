@@ -9,6 +9,8 @@ const state = vi.hoisted(() => ({
   birthDate: '2025-07-01',
   requestedAgeGroups: [] as Array<{ type: string; ageGroupKey?: string }>,
   auxiliaryQuery: 0,
+  useCorrectedAge: false,
+  gestationalWeeks: undefined as number | undefined,
 }));
 
 vi.mock('convex/react', () => ({
@@ -29,7 +31,8 @@ vi.mock('../../app/AppState', () => ({
       id: 'child-1',
       nickname: 'ကလေး',
       birthDate: state.birthDate,
-      useCorrectedAge: false,
+      useCorrectedAge: state.useCorrectedAge,
+      gestationalWeeks: state.gestationalWeeks,
     },
   }),
 }));
@@ -64,6 +67,8 @@ describe('age-band screen consumption', () => {
     vi.setSystemTime(new Date('2026-07-01T12:00:00Z'));
     state.requestedAgeGroups = [];
     state.auxiliaryQuery = 0;
+    state.useCorrectedAge = false;
+    state.gestationalWeeks = undefined;
   });
 
   afterEach(() => {
@@ -81,5 +86,16 @@ describe('age-band screen consumption', () => {
     state.birthDate = birthDateForAge(months);
     renderScreen('milestone');
     expect(state.requestedAgeGroups).toEqual([{ type: 'milestone', ageGroupKey: expected }]);
+  });
+
+  it.each(['activity', 'milestone'] as const)('%s honors corrected age for premature children', (screen) => {
+    state.birthDate = '2026-01-01';
+    state.useCorrectedAge = true;
+    state.gestationalWeeks = 28;
+    renderScreen(screen);
+    expect(state.requestedAgeGroups).toEqual([{
+      type: screen === 'activity' ? 'activity' : 'milestone',
+      ageGroupKey: '3_4m',
+    }]);
   });
 });

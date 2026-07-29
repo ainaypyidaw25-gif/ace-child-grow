@@ -3,7 +3,7 @@ import { useMutation, useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
 import { useAppState } from '../app/AppState';
-import { chronologicalAge } from '../domain/age/age';
+import { developmentalAgeMonths } from '../domain/age/age';
 import { resolveAgeGroup } from '../content/taxonomy';
 import { ReviewBadge } from '../components/ReviewBadge';
 import { NoChild } from './Growth';
@@ -13,7 +13,10 @@ export function Activities() {
   const { locale } = useLocale();
   const { activeChild } = useAppState();
   const ageMonths = activeChild
-    ? chronologicalAge(new Date(activeChild.birthDate), new Date()).totalMonths
+    ? developmentalAgeMonths(new Date(activeChild.birthDate), new Date(), {
+        useCorrectedAge: activeChild.useCorrectedAge,
+        gestationalWeeks: activeChild.gestationalWeeks,
+      })
     : 0;
   const ageGroupKey = resolveAgeGroup(ageMonths)?.key;
   const data = useQuery(api.library.listByType, { type: 'activity', ageGroupKey });

@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import { ScreenErrorBoundary } from '../ScreenErrorBoundary';
 
@@ -19,6 +19,21 @@ describe('ScreenErrorBoundary', () => {
     expect(screen.getByRole('alert')).toHaveTextContent('ဤစာမျက်နှာကို ခဏဖွင့်၍ မရသေးပါ');
     expect(screen.getByRole('button', { name: 'ထပ်မံကြိုးစားမည်' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'ပင်မစာမျက်နှာသို့' })).toHaveAttribute('href', '/home');
+    consoleError.mockRestore();
+  });
+
+  it('starts a fresh recovery attempt when retry is selected', () => {
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    const retry = vi.fn();
+
+    render(
+      <ScreenErrorBoundary locale="en" onRetry={retry}>
+        <BrokenScreen />
+      </ScreenErrorBoundary>,
+    );
+
+    fireEvent.click(screen.getByRole('button', { name: 'Try again' }));
+    expect(retry).toHaveBeenCalledOnce();
     consoleError.mockRestore();
   });
 });

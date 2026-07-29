@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { useMutation, useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
+import { useUnsavedChangesGuard } from '../app/useUnsavedChangesGuard';
 import { CONTENT_TYPES } from '../content/taxonomy';
 
 const DIMENSIONS = ['english', 'native_myanmar', 'evidence', 'safety', 'clinical'] as const;
@@ -269,15 +270,10 @@ function ContentEditor({ item, role, onDirtyChange }: { item: {
     return () => onDirtyChange(false);
   }, [dirty, onDirtyChange]);
 
-  useEffect(() => {
-    if (!dirty) return undefined;
-    const warnBeforeLeaving = (event: BeforeUnloadEvent) => {
-      event.preventDefault();
-      event.returnValue = '';
-    };
-    window.addEventListener('beforeunload', warnBeforeLeaving);
-    return () => window.removeEventListener('beforeunload', warnBeforeLeaving);
-  }, [dirty]);
+  useUnsavedChangesGuard(dirty, L(
+    'မသိမ်းရသေးသော ပြင်ဆင်ချက်များ ပျောက်သွားမည်။ ဤစာမျက်နှာမှ ထွက်မလား။',
+    'Unsaved edits will be lost. Leave this page?',
+  ));
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
