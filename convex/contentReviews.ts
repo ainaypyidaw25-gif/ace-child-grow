@@ -1,7 +1,7 @@
 import { v } from 'convex/values';
 import { mutation, query } from './_generated/server';
 import { logAudit } from './audit';
-import { getStaffAccess, requireReviewEditor, requireUser, type StaffRole } from './lib/auth';
+import { getStaffAccess, requireReviewEditor, requireUser, reviewerAuditName, type StaffRole } from './lib/auth';
 import {
   mayActAsReviewerType,
   reviewerTypeMayReviewDimension,
@@ -127,8 +127,10 @@ export const saveDecision = mutation({
     if (!roleMayReview(access.roles, args.dimension)) {
       throw new Error('This reviewer role cannot decide this review area');
     }
-    const displayName = access.displayName?.trim();
-    if (!displayName) throw new Error('Reviewer display name is required');
+    if ((args.dimension === 'clinical' || args.dimension === 'safety') && !access.displayName?.trim()) {
+      throw new Error('Clinical reviewer display name is required');
+    }
+    const displayName = await reviewerAuditName(ctx, userId, access);
     if (
       args.decision === 'approved' &&
       approvalNeedsQualification(args.dimension) &&

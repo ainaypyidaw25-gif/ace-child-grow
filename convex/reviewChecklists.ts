@@ -1,6 +1,6 @@
 import { v } from 'convex/values';
 import { mutation, query } from './_generated/server';
-import { getStaffAccess, requireUser } from './lib/auth';
+import { getStaffAccess, requireUser, reviewerAuditName } from './lib/auth';
 import { requiredChecklistKeys } from './lib/reviewChecklists';
 import { logAudit } from './audit';
 import type { QueryCtx, MutationCtx } from './_generated/server';
@@ -88,7 +88,10 @@ export const saveMine = mutation({
       .order('desc')
       .take(1);
     if (!complete && reviewHistory[0]?.decision === 'approved') {
-      if (!access.displayName) throw new Error('Reviewer display name is required');
+      if ((args.dimension === 'clinical' || args.dimension === 'safety') && !access.displayName) {
+        throw new Error('Clinical reviewer display name is required');
+      }
+      const displayName = await reviewerAuditName(ctx, userId, access);
       await ctx.db.insert('contentReviews', {
         contentSlug: assignment.contentSlug,
         contentVersion: assignment.contentVersion,
@@ -96,7 +99,7 @@ export const saveMine = mutation({
         decision: 'in_review',
         note: 'Approval reopened because the required checklist changed.',
         reviewerId: userId,
-        reviewerDisplayName: access.displayName,
+        reviewerDisplayName: displayName,
         reviewerQualification: access.qualification ?? undefined,
         reviewerRole: access.role,
         reviewedAt: now,

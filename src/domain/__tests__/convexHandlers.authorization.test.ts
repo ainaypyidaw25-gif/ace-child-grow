@@ -313,6 +313,50 @@ describe('Convex registered handlers enforce authorization', () => {
     }));
   });
 
+  it('uses the authenticated email as the audit label when a non-clinical reviewer has not set a display name', async () => {
+    authState.userId = 'owner-1';
+    const context = ctx({
+      profile: { userId: 'owner-1', isStaff: true, staffRole: 'owner' },
+      gets: { 'owner-1': { _id: 'owner-1', email: 'owner@example.com' } },
+      rows: {
+        libraryContent: [{ _id: 'content-1', slug: 'item-1', version: 1, reviewRevision: 2 }],
+        reviewAssignments: [{
+          _id: 'assignment-1', contentSlug: 'item-1', contentVersion: 2, reviewerId: 'owner-1',
+          reviewerType: 'myanmar_language_reviewer', assignedBy: 'owner-1', assignedAt: 1,
+          priority: 'normal', reviewRound: 1, reviewScope: 'Myanmar wording', status: 'assigned', updatedAt: 1,
+        }],
+        reviewChecklists: [{
+          assignmentId: 'assignment-1', contentSlug: 'item-1', contentVersion: 2, dimension: 'native_myanmar',
+          responses: requiredChecklistKeys('native_myanmar').map((key) => ({ key, checked: true })),
+          updatedBy: 'owner-1', updatedAt: 2,
+        }],
+      },
+    });
+    await expect(handler(saveDecision)(context, {
+      contentSlug: 'item-1', dimension: 'native_myanmar', decision: 'approved',
+    })).resolves.toEqual({ ok: true, contentVersion: 2 });
+    expect(context.db.insert).toHaveBeenCalledWith('contentReviews', expect.objectContaining({
+      reviewerDisplayName: 'owner@example.com',
+      reviewerRole: 'owner',
+      decision: 'approved',
+    }));
+  });
+
+  it('still requires an explicit reviewer name for clinical and safety decisions', async () => {
+    authState.userId = 'clinical-1';
+    const context = ctx({
+      profile: {
+        userId: 'clinical-1', isStaff: true, staffRole: 'clinical_reviewer',
+        staffQualification: 'MBBS',
+      },
+      gets: { 'clinical-1': { _id: 'clinical-1', email: 'doctor@example.com' } },
+    });
+    await expect(handler(saveDecision)(context, {
+      contentSlug: 'item-1', dimension: 'safety', decision: 'in_review',
+    })).rejects.toThrow('Clinical reviewer display name is required');
+    expect(context.db.insert).not.toHaveBeenCalled();
+  });
+
   it('an unrelated reviewer cannot read another reviewer assignment collaboration', async () => {
     authState.userId = 'reviewer-2';
     const context = ctx({

@@ -29,6 +29,24 @@ export type ProfessionalApproval = {
   scope: ReviewScope;
 };
 
+/**
+ * Human-readable audit label for non-clinical review activity.
+ *
+ * A newly-created staff account may not have completed its profile yet. The
+ * authenticated user's name/email is a safe fallback because the immutable
+ * userId is still stored alongside every review event. Clinical sign-off keeps
+ * its stricter explicit-name requirement in the clinical authorization path.
+ */
+export async function reviewerAuditName(
+  ctx: Ctx,
+  userId: Id<'users'>,
+  access: StaffAccess,
+): Promise<string> {
+  if (access.displayName) return access.displayName;
+  const user = await ctx.db.get(userId);
+  return user?.name?.trim() || user?.email?.trim() || 'ACE Child Grow Reviewer';
+}
+
 /** The authenticated user id, or throw. Use in mutations that require a caller. */
 export async function requireUser(ctx: Ctx): Promise<Id<'users'>> {
   const userId = await getAuthUserId(ctx);
