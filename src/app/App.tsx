@@ -9,6 +9,8 @@ import { api } from '../../convex/_generated/api';
 import { getPortalMode, setPortalMode } from './portalMode';
 import { decideStaffRoute } from './staffRoute';
 import { isGooglePlayBuild, useNativeDeepLinks } from './platform';
+import { ScreenErrorBoundary } from '../components/ScreenErrorBoundary';
+import { useLocale } from './LocaleContext';
 
 const Welcome = lazy(() => import('../screens/Welcome').then((module) => ({ default: module.Welcome })));
 const Consent = lazy(() => import('../screens/Consent').then((module) => ({ default: module.Consent })));
@@ -148,6 +150,7 @@ function StaffOnlyRoute({ children }: { children: ReactNode }) {
 
 function AppRoutes() {
   const googlePlayBuild = isGooglePlayBuild();
+  const { locale } = useLocale();
   return (
     <Suspense fallback={<div className="flex min-h-[50vh] items-center justify-center text-ink-soft" role="status" aria-live="polite">…</div>}>
       <Routes>
@@ -165,7 +168,7 @@ function AppRoutes() {
       <Route path="/report" element={<Layout><Report /></Layout>} />
       <Route path="/appointments" element={<Layout><Appointments /></Layout>} />
       <Route path="/health" element={<Layout><HealthRecords /></Layout>} />
-      <Route path="/profile" element={<Layout><Profile /></Layout>} />
+      <Route path="/profile" element={<Layout><ScreenErrorBoundary locale={locale}><Profile /></ScreenErrorBoundary></Layout>} />
       <Route path="/subscription" element={<Layout><SubscriptionPlans /></Layout>} />
       <Route path="/payment/success/:orderId" element={googlePlayBuild ? <Navigate to="/home" replace /> : <Layout><PaymentStatus view="success" /></Layout>} />
       <Route path="/payment/cancel/:orderId" element={googlePlayBuild ? <Navigate to="/home" replace /> : <Layout><PaymentStatus view="cancel" /></Layout>} />

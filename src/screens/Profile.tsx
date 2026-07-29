@@ -18,13 +18,24 @@ const PLAN_LABELS = {
   family: { mm: 'မိသားစုအစီအစဉ်', en: 'Family plan' },
 } as const;
 
+type PlanKey = keyof typeof PLAN_LABELS;
+
+export function safePlanKey(value: unknown): PlanKey {
+  return value === 'premium' || value === 'family' ? value : 'free';
+}
+
+export function hasFamilyProfiles(features: unknown): boolean {
+  return Array.isArray(features) && features.includes('family_profiles');
+}
+
 export function Profile() {
   const { t, locale, setLocale } = useLocale();
   const { state, dispatch } = useAppState();
   const { signOut } = useAuthActions();
   const navigate = useNavigate();
   const subscription = useQuery(api.subscriptions.mine);
-  const familyEnabled = subscription?.features.includes('family_profiles') ?? false;
+  const familyEnabled = hasFamilyProfiles(subscription?.features);
+  const planKey = safePlanKey(subscription?.planKey);
   const caregivers = useQuery(api.family.listCaregivers, familyEnabled ? {} : 'skip');
   const inviteCaregiver = useMutation(api.family.inviteCaregiver);
   const revokeCaregiver = useMutation(api.family.revokeCaregiver);
@@ -111,13 +122,13 @@ export function Profile() {
         <h2 className="font-semibold text-ink">{locale === 'mm' ? 'အသုံးပြုမှုအစီအစဉ်' : 'Membership plan'}</h2>
         {subscription === undefined ? <p className="text-ink-soft">…</p> : (
           <>
-            <p className="mt-1 text-lg font-semibold text-sky-deep">{PLAN_LABELS[subscription.planKey][locale]}</p>
+            <p className="mt-1 text-lg font-semibold text-sky-deep">{PLAN_LABELS[planKey][locale]}</p>
             <p className="mt-1 text-sm text-ink-soft">
               {locale === 'mm'
-                ? subscription.planKey === 'free'
+                ? planKey === 'free'
                   ? 'လက်ရှိအခြေခံလုပ်ဆောင်ချက်များကို အခမဲ့ အသုံးပြုနိုင်ပါသည်။'
                   : 'ဤအကောင့်တွင် အထူးလုပ်ဆောင်ချက်များ အသုံးပြုနိုင်ပါသည်။'
-                : subscription.planKey === 'free'
+                : planKey === 'free'
                   ? 'Core features are available free.'
                   : 'Premium features are enabled for this account.'}
             </p>
