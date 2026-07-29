@@ -43,7 +43,9 @@ Each branch is based on the previous branch so the changes can be reviewed in sm
 - Seed refresh tests protecting review revision state and tests covering direct Convex authorization.
 - Owner operational control for reviewer management, assignments, content editing, non-clinical review, reports and publishing content that has already completed every required gate.
 - A plain field-by-field content editor for Myanmar and English wording. Reviewers and editors are never asked to edit raw JSON.
+- The plain editor now uses parent-friendly Myanmar labels for every bilingual field in the current 383-item seed library. Raw `mm`/`en` keys and internal taxonomy, relationship and evidence metadata are not shown as editable wording fields. The update mutation also preserves these server-owned fields, so a direct client call cannot overwrite or inject them.
 - Owner self-assignment for language, development and evidence review with the same checklist, revision and audit requirements as any reviewer. Clinical sign-off remains a separately qualified role.
+- Handler-level permission tests now cover the restricted-role combinations: language and child-development reviewers cannot grant clinical approval or publish; publishers can read but cannot alter sign-offs; auditors remain read-only; and scoped reviewers cannot browse unrelated review history.
 - Development Preview Google sign-in now receives its dedicated OAuth client ID and secret explicitly from Convex environment configuration. Production OAuth configuration was not changed.
 - A dedicated Development owner account completed the reviewer workspace checks at 360×800 and 820×1180. Myanmar text wrapped correctly, the field editor stayed non-technical, and no control was hidden behind the bottom navigation.
 - The temporary QA owner's staff access was revoked after testing; the existing session immediately lost `/admin/reviews` access and returned to the parent home screen.
@@ -63,7 +65,7 @@ Each branch is based on the previous branch so the changes can be reviewed in sm
 - Real reviewer invitations and production role grants.
 - Production classification/backfill and reviewer assignments.
 - Production migration, merge or deployment.
-- Supervised QA with each restricted reviewer-role combination.
+- Supervised browser QA with real restricted reviewer accounts. The equivalent server-side permission combinations are now covered by automated handler tests.
 - Final Google OAuth callback confirmation after the new Development OAuth client finishes propagating through Google's consent service.
 - Clinical reviewer identity, qualification, scope and re-review-date governance.
 
@@ -97,8 +99,9 @@ Commands executed from the clean reviewer worktree:
 
 - `npm run typecheck` — PASS
 - `npm run lint` — PASS
-- `npm test -- --run` — PASS, 47 files / 577 tests
+- `npm test -- --run` — PASS, 48 files / 586 tests
 - `npm run build` — PASS; only the existing Vite large-chunk advisory remains
+- `npx convex dev --once` — PASS against the Development deployment; functions compiled and became ready without touching Production
 - `npx playwright test tests/e2e/staff-invite.spec.ts` — PASS, 1/1
 - Full Playwright run — app boot passed, three credential-dependent flows skipped, and the invitation test initially exposed stale expected Myanmar copy; the expectation was updated and the focused flow then passed
 - `git diff --check` — PASS before final commit
@@ -108,8 +111,7 @@ Development Convex code generation was used to validate schema/functions. No pro
 ## Remaining P0 launch blockers
 
 - Approve the 383-row classification dry run and expected parent-catalogue impact.
-- Verify every restricted reviewer-role combination with dedicated test accounts; revoked-access enforcement is verified.
-- Complete restricted-role and revoked-access QA; owner mobile/iPad responsive QA is complete.
+- Complete supervised browser acceptance with dedicated restricted-role accounts; the server-side role combinations and revoked-access enforcement are already covered by automated tests.
 - Confirm the final Development Google OAuth callback after Google-side client propagation. The consent screen already loads without `invalid_client`.
 - Identify and authorise actual clinical reviewers before any item requiring clinical review can become publishable.
 - Review and approve the rollback export and production verification queries.

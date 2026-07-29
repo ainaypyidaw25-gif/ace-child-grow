@@ -93,7 +93,7 @@ function assignmentMayReview(reviewerType: ReviewerRole | undefined, dimension: 
   return dimension === 'english' || dimension === 'native_myanmar';
 }
 
-type EditableField = {
+export type EditableField = {
   key: string;
   path: string[];
   value: string;
@@ -105,6 +105,10 @@ type EditableField = {
 const LANGUAGE_ORDER: Record<EditableField['language'], number> = { mm: 0, neutral: 1, en: 2 };
 
 const FIELD_LABELS: Record<string, { mm: string; en: string }> = {
+  encouragementMm: { mm: 'အားပေးစကား', en: 'Encouragement (Myanmar)' },
+  encouragementEn: { mm: 'အားပေးစကား (English)', en: 'Encouragement' },
+  redMm: { mm: 'သတိပြုရမည့်အချက်', en: 'Warning sign (Myanmar)' },
+  redEn: { mm: 'သတိပြုရမည့်အချက် (English)', en: 'Warning sign' },
   observeMm: { mm: 'မိဘက စောင့်ကြည့်နိုင်သည့်အချက်', en: 'What a parent may observe' },
   observeEn: { mm: 'စောင့်ကြည့်နိုင်သည့်အချက် (English)', en: 'What a parent may observe' },
   whyMm: { mm: 'ဘာကြောင့် အရေးကြီးသနည်း', en: 'Why it matters (Myanmar)' },
@@ -123,6 +127,51 @@ const FIELD_LABELS: Record<string, { mm: string; en: string }> = {
   bodyEn: { mm: 'အင်္ဂလိပ်အကြောင်းအရာ', en: 'English content' },
 };
 
+const BILINGUAL_FIELD_LABELS: Record<string, { mm: string; en: string }> = {
+  q: { mm: 'မေးခွန်း', en: 'Question' },
+  a: { mm: 'အဖြေ', en: 'Answer' },
+  title: { mm: 'ခေါင်းစဉ်', en: 'Title' },
+  overview: { mm: 'အကျဉ်းချုပ်', en: 'Overview' },
+  body: { mm: 'အကြောင်းအရာ', en: 'Content' },
+  observe: { mm: 'မိဘက စောင့်ကြည့်နိုင်သည့်အချက်', en: 'What a parent may observe' },
+  why: { mm: 'ဘာကြောင့် အရေးကြီးသနည်း', en: 'Why it matters' },
+  objective: { mm: 'ရည်ရွယ်ချက်', en: 'Objective' },
+  materials: { mm: 'လိုအပ်သည့်ပစ္စည်းများ', en: 'Materials' },
+  setup: { mm: 'ကြိုတင်ပြင်ဆင်ရန်', en: 'Preparation' },
+  steps: { mm: 'လုပ်ဆောင်ရမည့်အဆင့်များ', en: 'Steps' },
+  safety: { mm: 'ဘေးကင်းရေး သတိပြုရန်', en: 'Safety' },
+  tips: { mm: 'အကြံပြုချက်များ', en: 'Tips' },
+  referral: { mm: 'ကျွမ်းကျင်သူနှင့် တိုင်ပင်ရန်', en: 'When to seek professional support' },
+  encouragement: { mm: 'အားပေးစကား', en: 'Encouragement' },
+  takeaway: { mm: 'အဓိက မှတ်သားရန်', en: 'Key takeaway' },
+  actionToday: { mm: 'ယနေ့ စတင်လုပ်ဆောင်ရန်', en: 'Action today' },
+  myth: { mm: 'အယူအဆမှား', en: 'Myth' },
+  fact: { mm: 'မှန်ကန်သောအချက်', en: 'Fact' },
+  red: { mm: 'သတိပြုရမည့်အချက်', en: 'Warning sign' },
+  observationQuestions: { mm: 'စောင့်ကြည့်ရန် မေးခွန်း', en: 'Observation question' },
+  dailyActivities: { mm: 'နေ့စဉ် လုပ်ဆောင်ချက်', en: 'Daily activity' },
+  redFlags: { mm: 'သတိပြုရမည့် လက္ခဏာ', en: 'Warning sign' },
+  instructions: { mm: 'လုပ်ဆောင်နည်း', en: 'Instruction' },
+  parentTips: { mm: 'မိဘအတွက် အကြံပြုချက်', en: 'Parent tip' },
+  indoor: { mm: 'အိမ်တွင်း လုပ်ဆောင်ချက်', en: 'Indoor activity' },
+  weeklyActivities: { mm: 'အပတ်စဉ် လုပ်ဆောင်ချက်', en: 'Weekly activity' },
+  commonMistakes: { mm: 'ရှောင်သင့်သည့် အမှား', en: 'Common mistake to avoid' },
+  lowCost: { mm: 'ကုန်ကျစရိတ်နည်း လုပ်ဆောင်ချက်', en: 'Low-cost activity' },
+  outcomes: { mm: 'စောင့်ကြည့်နိုင်သည့် ရလဒ်', en: 'What a caregiver may observe' },
+  outdoor: { mm: 'အိမ်ပြင် လုပ်ဆောင်ချက်', en: 'Outdoor activity' },
+  variations: { mm: 'ပြောင်းလဲလုပ်ဆောင်နိုင်သည့် နည်းလမ်း', en: 'Variation' },
+  options: { mm: 'ရွေးချယ်နိုင်သည့် နည်းလမ်း', en: 'Option' },
+  possibleSigns: { mm: 'ဖြစ်နိုင်သည့် လက္ခဏာ', en: 'Possible sign' },
+  vocabulary: { mm: 'သင်ယူမည့် စကားလုံး', en: 'Vocabulary' },
+  activities: { mm: 'လှုပ်ရှားမှု', en: 'Activity' },
+  objectives: { mm: 'ရည်ရွယ်ချက်', en: 'Objective' },
+  strengths: { mm: 'အားသာချက်', en: 'Strength' },
+  homeSupport: { mm: 'အိမ်တွင် ပံ့ပိုးနိုင်သည့်နည်း', en: 'Support at home' },
+  schoolSupport: { mm: 'ကျောင်းတွင် ပံ့ပိုးနိုင်သည့်နည်း', en: 'Support at school' },
+  professionalSupport: { mm: 'ပညာရှင်ထံမှ ပံ့ပိုးမှု', en: 'Professional support' },
+  questions: { mm: 'မေးခွန်း', en: 'Question' },
+};
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
@@ -133,13 +182,25 @@ function fieldLanguage(key: string, value: string): EditableField['language'] {
   return 'neutral';
 }
 
-function collectEditableFields(value: unknown, path: string[] = []): EditableField[] {
+export const HIDDEN_SYSTEM_FIELDS = new Set([
+  'editorialStatus',
+  'evidenceSummary',
+  'format',
+  'readingLevel',
+  'domains',
+  'references',
+  'relatedMilestones',
+  'relatedLessons',
+  'relatedActivities',
+]);
+
+export function collectEditableFields(value: unknown, path: string[] = []): EditableField[] {
   if (typeof value === 'string') {
     const key = path.at(-1) ?? 'text';
     return [{ key, path, value, multiline: value.length > 70 || value.includes('\n'), list: false, language: fieldLanguage(key, value) }];
   }
   if (Array.isArray(value)) {
-    if (value.every((entry) => typeof entry === 'string')) {
+    if (value.length > 0 && value.every((entry) => typeof entry === 'string')) {
       const key = path.at(-1) ?? 'items';
       const text = value.join('\n');
       return [{ key, path, value: text, multiline: true, list: true, language: fieldLanguage(key, text) }];
@@ -147,7 +208,9 @@ function collectEditableFields(value: unknown, path: string[] = []): EditableFie
     return value.flatMap((entry, index) => collectEditableFields(entry, [...path, String(index)]));
   }
   if (isRecord(value)) {
-    return Object.entries(value).flatMap(([key, entry]) => collectEditableFields(entry, [...path, key]));
+    return Object.entries(value).flatMap(([key, entry]) => (
+      HIDDEN_SYSTEM_FIELDS.has(key) ? [] : collectEditableFields(entry, [...path, key])
+    ));
   }
   return [];
 }
@@ -177,17 +240,30 @@ function updateStructuredField(root: unknown, field: EditableField, nextText: st
   return clone;
 }
 
-function humanizeField(field: EditableField, locale: 'mm' | 'en'): string {
+export function humanizeField(field: EditableField, locale: 'mm' | 'en'): string {
   const known = FIELD_LABELS[field.key];
   if (known) return known[locale];
+  const section = field.path.some((segment) => /^\d+$/.test(segment))
+    ? ` ${Number(field.path.find((segment) => /^\d+$/.test(segment))) + 1}`
+    : '';
+  const direct = BILINGUAL_FIELD_LABELS[field.key];
+  if (direct) return `${direct[locale]}${section}`;
+  const isBilingualLeaf = field.key === 'mm' || field.key === 'en';
+  const conceptKey = isBilingualLeaf
+    ? [...field.path.slice(0, -1)].reverse().find((segment) => !/^\d+$/.test(segment))
+    : undefined;
+  const bilingual = conceptKey ? BILINGUAL_FIELD_LABELS[conceptKey] : undefined;
+  if (bilingual) {
+    const language = field.key === 'mm'
+      ? (locale === 'mm' ? 'မြန်မာ' : 'Myanmar')
+      : 'English';
+    return `${bilingual[locale]}${section} (${language})`;
+  }
   const base = field.key
     .replace(/(Mm|En)$/i, '')
     .replace(/([a-z])([A-Z])/g, '$1 $2')
     .replace(/[_-]+/g, ' ')
     .trim();
-  const section = field.path.some((segment) => /^\d+$/.test(segment))
-    ? ` ${Number(field.path.find((segment) => /^\d+$/.test(segment))) + 1}`
-    : '';
   return `${base || (locale === 'mm' ? 'အကြောင်းအရာ' : 'Content')}${section}`;
 }
 

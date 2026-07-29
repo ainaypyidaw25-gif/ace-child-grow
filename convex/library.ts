@@ -16,6 +16,54 @@ import { seedAuditSummary, seedMayUpdateExisting, seedMediaIsProtected } from '.
 import type { Doc, Id } from './_generated/dataModel';
 import type { StaffRole } from './lib/reviewRoles';
 
+const protectedContentDataFields = new Set([
+  'editorialStatus',
+  'evidenceSummary',
+  'format',
+  'readingLevel',
+  'domains',
+  'references',
+  'relatedMilestones',
+  'relatedLessons',
+  'relatedActivities',
+]);
+
+function isContentDataRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function mergeEditableContentValue(current: unknown, proposed: unknown): unknown {
+  if (typeof current === 'string') return typeof proposed === 'string' ? proposed : current;
+  if (Array.isArray(current)) {
+    if (!Array.isArray(proposed)) return current;
+    return current.map((entry, index) => mergeEditableContentValue(entry, proposed[index]));
+  }
+  if (isContentDataRecord(current)) {
+    if (!isContentDataRecord(proposed)) return current;
+    const next: Record<string, unknown> = { ...current };
+    for (const [key, value] of Object.entries(current)) {
+      if (protectedContentDataFields.has(key)) continue;
+      if (Object.prototype.hasOwnProperty.call(proposed, key)) {
+        next[key] = mergeEditableContentValue(value, proposed[key]);
+      }
+    }
+    return next;
+  }
+  return current;
+}
+
+/**
+ * The wording editor may change existing text leaves only. Object structure,
+ * numeric/boolean configuration, taxonomy, evidence and relationship metadata
+ * remain server-owned even when a client calls this mutation directly.
+ */
+function mergeEditableContentData(current: unknown, proposed: unknown): Record<string, unknown> {
+  if (!isContentDataRecord(current) || !isContentDataRecord(proposed)) {
+    throw new Error('Content data must be an object');
+  }
+  return mergeEditableContentValue(current, proposed) as Record<string, unknown>;
+}
+
 // List content by type, optionally filtered by age/domain/category and a query.
 // Non-staff receive published rows only; staff receive every workflow status.
 export function isPubliclyReadableContent(content: {
@@ -553,6 +601,7 @@ export const updateDraft = mutation({
     if (!titleMm || !titleEn) throw new Error('Myanmar and English titles are required');
     const summaryMm = args.summaryMm?.trim() || undefined;
     const summaryEn = args.summaryEn?.trim() || undefined;
+    const data = mergeEditableContentData(item.data, args.data);
     const reviewRevision = (item.reviewRevision ?? 1) + 1;
     const now = Date.now();
     const searchText = [
@@ -561,14 +610,14 @@ export const updateDraft = mutation({
       summaryMm ?? '',
       summaryEn ?? '',
       item.tags.join(' '),
-      JSON.stringify(args.data),
+      JSON.stringify(data),
     ].join(' ').toLowerCase();
     await ctx.db.patch(item._id, {
       titleMm,
       titleEn,
       summaryMm,
       summaryEn,
-      data: args.data,
+      data,
       searchText,
       reviewRevision,
       clinicalStatus: 'clinical_review',
