@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { hasCapability } from '../../../convex/lib/reviewRoles';
+import { hasCapability, mayActAsReviewerType } from '../../../convex/lib/reviewRoles';
 
 const schema = readFileSync('convex/schema.ts', 'utf8');
 const auth = readFileSync('convex/lib/auth.ts', 'utf8');
@@ -14,6 +14,7 @@ const reports = readFileSync('convex/reviewReports.ts', 'utf8');
 const library = readFileSync('convex/library.ts', 'utf8');
 const release = readFileSync('convex/release.ts', 'utf8');
 const app = readFileSync('src/app/App.tsx', 'utf8');
+const workspace = readFileSync('src/screens/ContentReviewWorkspace.tsx', 'utf8');
 
 describe('review workspace security foundation', () => {
   it('keeps clinical approval and publication as separate capabilities', () => {
@@ -21,6 +22,15 @@ describe('review workspace security foundation', () => {
     expect(hasCapability(['clinical_reviewer'], 'publish_content')).toBe(false);
     expect(hasCapability(['publisher'], 'publish_content')).toBe(true);
     expect(hasCapability(['publisher'], 'review_clinical')).toBe(false);
+    expect(hasCapability(['owner'], 'publish_content')).toBe(true);
+    expect(hasCapability(['owner'], 'review_clinical')).toBe(false);
+  });
+
+  it('lets an owner perform auditable non-clinical reviews without impersonating a clinician', () => {
+    expect(mayActAsReviewerType(['owner'], 'myanmar_language_reviewer')).toBe(true);
+    expect(mayActAsReviewerType(['owner'], 'child_development_reviewer')).toBe(true);
+    expect(mayActAsReviewerType(['owner'], 'evidence_reviewer')).toBe(true);
+    expect(mayActAsReviewerType(['owner'], 'clinical_reviewer')).toBe(false);
   });
 
   it('does not let language or development reviewers grant clinical approval', () => {
@@ -73,6 +83,13 @@ describe('review workspace security foundation', () => {
     expect(app).toContain('function StaffRoleRoute');
     expect(app).toContain("allowedRoles={['owner', 'system_admin', 'review_manager']}");
     expect(auth).toContain('requirePublisher');
+  });
+
+  it('uses a plain field editor instead of asking reviewers to edit JSON', () => {
+    expect(workspace).toContain('No technical format is required');
+    expect(workspace).toContain('collectEditableFields');
+    expect(workspace).not.toContain('Advanced structured content');
+    expect(workspace).not.toContain('setDataText');
   });
 
   it('requires a complete role-specific checklist before approval', () => {

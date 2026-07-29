@@ -101,7 +101,7 @@ export async function requireReviewManager(ctx: Ctx): Promise<{ userId: Id<'user
 }
 
 export async function requirePublisher(ctx: Ctx): Promise<{ userId: Id<'users'>; access: StaffAccess }> {
-  return await requireOneOf(ctx, ['publisher']);
+  return await requireOneOf(ctx, ['owner', 'publisher']);
 }
 
 export async function requireContentEditor(ctx: Ctx): Promise<Id<'users'>> {

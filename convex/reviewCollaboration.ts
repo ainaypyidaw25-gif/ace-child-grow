@@ -3,6 +3,7 @@ import { mutation, query, type QueryCtx, type MutationCtx } from './_generated/s
 import type { Id } from './_generated/dataModel';
 import { getStaffAccess, requireContentEditor, requireUser } from './lib/auth';
 import { logAudit } from './audit';
+import { mayActAsReviewerType } from './lib/reviewRoles';
 
 const commentValidator = v.object({
   _id: v.id('reviewComments'), _creationTime: v.number(), assignmentId: v.id('reviewAssignments'),
@@ -25,7 +26,7 @@ async function assignmentAccess(ctx: QueryCtx | MutationCtx, assignmentId: Id<'r
   const assignment = await ctx.db.get(assignmentId);
   if (!access || !assignment) throw new Error('Assignment access denied');
   const manager = access.roles.some((role) => ['owner', 'system_admin', 'review_manager', 'content_editor', 'auditor'].includes(role));
-  const reviewer = assignment.reviewerId === userId && access.roles.includes(assignment.reviewerType);
+  const reviewer = assignment.reviewerId === userId && mayActAsReviewerType(access.roles, assignment.reviewerType);
   if (!manager && !reviewer) throw new Error('Assignment access denied');
   return { userId, access, assignment, manager, reviewer };
 }

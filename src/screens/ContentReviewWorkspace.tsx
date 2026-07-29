@@ -12,6 +12,14 @@ type StaffRole = 'owner' | 'content_editor' | 'language_reviewer' | 'evidence_re
   'system_admin' | 'review_manager' | 'myanmar_language_reviewer' | 'child_development_reviewer' | 'publisher' | 'auditor';
 type ReviewerRole = Extract<StaffRole, 'language_reviewer' | 'myanmar_language_reviewer' | 'child_development_reviewer' | 'evidence_reviewer' | 'clinical_reviewer'>;
 
+const REVIEWER_ROLE_LABELS: Record<ReviewerRole, { mm: string; en: string }> = {
+  language_reviewer: { mm: 'ဘာသာစကား သုံးသပ်သူ', en: 'Language reviewer' },
+  myanmar_language_reviewer: { mm: 'မြန်မာစာ သုံးသပ်သူ', en: 'Myanmar language reviewer' },
+  child_development_reviewer: { mm: 'ကလေးဖွံ့ဖြိုးမှု သုံးသပ်သူ', en: 'Child development reviewer' },
+  evidence_reviewer: { mm: 'ကိုးကားအထောက်အထား သုံးသပ်သူ', en: 'Evidence reviewer' },
+  clinical_reviewer: { mm: 'ဆေးဘက်ဆိုင်ရာ သုံးသပ်သူ', en: 'Clinical reviewer' },
+};
+
 const DIMENSION_LABELS: Record<Dimension, { mm: string; en: string }> = {
   english: { mm: 'အင်္ဂလိပ်စာနှင့် အကြောင်းအရာ', en: 'English copy and content' },
   native_myanmar: { mm: 'သဘာဝကျသော မြန်မာအသုံးအနှုန်း', en: 'Native Myanmar language' },
@@ -71,9 +79,116 @@ const CHECKLIST_LABELS: Record<string, { mm: string; en: string }> = {
 function mayReview(roles: StaffRole[] | null | undefined, dimension: Dimension): boolean {
   if (!roles?.length) return false;
   if (dimension === 'clinical' || dimension === 'safety') return roles.includes('clinical_reviewer');
+  if (roles.includes('owner')) return true;
   if (dimension === 'development') return roles.includes('child_development_reviewer');
   if (dimension === 'evidence') return roles.some((role) => ['evidence_reviewer', 'clinical_reviewer'].includes(role));
   return roles.some((role) => ['language_reviewer', 'myanmar_language_reviewer'].includes(role));
+}
+
+function assignmentMayReview(reviewerType: ReviewerRole | undefined, dimension: Dimension): boolean {
+  if (!reviewerType) return false;
+  if (reviewerType === 'clinical_reviewer') return ['clinical', 'safety', 'evidence'].includes(dimension);
+  if (reviewerType === 'evidence_reviewer') return dimension === 'evidence';
+  if (reviewerType === 'child_development_reviewer') return dimension === 'development';
+  return dimension === 'english' || dimension === 'native_myanmar';
+}
+
+type EditableField = {
+  key: string;
+  path: string[];
+  value: string;
+  multiline: boolean;
+  list: boolean;
+  language: 'mm' | 'en' | 'neutral';
+};
+
+const LANGUAGE_ORDER: Record<EditableField['language'], number> = { mm: 0, neutral: 1, en: 2 };
+
+const FIELD_LABELS: Record<string, { mm: string; en: string }> = {
+  observeMm: { mm: 'မိဘက စောင့်ကြည့်နိုင်သည့်အချက်', en: 'What a parent may observe' },
+  observeEn: { mm: 'စောင့်ကြည့်နိုင်သည့်အချက် (English)', en: 'What a parent may observe' },
+  whyMm: { mm: 'ဘာကြောင့် အရေးကြီးသနည်း', en: 'Why it matters (Myanmar)' },
+  whyEn: { mm: 'ဘာကြောင့် အရေးကြီးသနည်း (English)', en: 'Why it matters' },
+  objectiveMm: { mm: 'ရည်ရွယ်ချက်', en: 'Objective (Myanmar)' },
+  objectiveEn: { mm: 'ရည်ရွယ်ချက် (English)', en: 'Objective' },
+  materialsMm: { mm: 'လိုအပ်သည့်ပစ္စည်းများ', en: 'Materials (Myanmar)' },
+  materialsEn: { mm: 'လိုအပ်သည့်ပစ္စည်းများ (English)', en: 'Materials' },
+  stepsMm: { mm: 'လုပ်ဆောင်ရမည့်အဆင့်များ', en: 'Steps (Myanmar)' },
+  stepsEn: { mm: 'လုပ်ဆောင်ရမည့်အဆင့်များ (English)', en: 'Steps' },
+  safetyMm: { mm: 'ဘေးကင်းရေး သတိပြုရန်', en: 'Safety (Myanmar)' },
+  safetyEn: { mm: 'ဘေးကင်းရေး သတိပြုရန် (English)', en: 'Safety' },
+  tipsMm: { mm: 'အကြံပြုချက်များ', en: 'Tips (Myanmar)' },
+  tipsEn: { mm: 'အကြံပြုချက်များ (English)', en: 'Tips' },
+  bodyMm: { mm: 'မြန်မာအကြောင်းအရာ', en: 'Myanmar content' },
+  bodyEn: { mm: 'အင်္ဂလိပ်အကြောင်းအရာ', en: 'English content' },
+};
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function fieldLanguage(key: string, value: string): EditableField['language'] {
+  if (/mm$/i.test(key) || /[\u1000-\u109f]/u.test(value)) return 'mm';
+  if (/en$/i.test(key)) return 'en';
+  return 'neutral';
+}
+
+function collectEditableFields(value: unknown, path: string[] = []): EditableField[] {
+  if (typeof value === 'string') {
+    const key = path.at(-1) ?? 'text';
+    return [{ key, path, value, multiline: value.length > 70 || value.includes('\n'), list: false, language: fieldLanguage(key, value) }];
+  }
+  if (Array.isArray(value)) {
+    if (value.every((entry) => typeof entry === 'string')) {
+      const key = path.at(-1) ?? 'items';
+      const text = value.join('\n');
+      return [{ key, path, value: text, multiline: true, list: true, language: fieldLanguage(key, text) }];
+    }
+    return value.flatMap((entry, index) => collectEditableFields(entry, [...path, String(index)]));
+  }
+  if (isRecord(value)) {
+    return Object.entries(value).flatMap(([key, entry]) => collectEditableFields(entry, [...path, key]));
+  }
+  return [];
+}
+
+function cloneStructuredValue(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(cloneStructuredValue);
+  if (isRecord(value)) return Object.fromEntries(Object.entries(value).map(([key, entry]) => [key, cloneStructuredValue(entry)]));
+  return value;
+}
+
+function updateStructuredField(root: unknown, field: EditableField, nextText: string): unknown {
+  const clone = cloneStructuredValue(root);
+  if (field.path.length === 0) return nextText;
+  let cursor: unknown = clone;
+  for (let index = 0; index < field.path.length - 1; index += 1) {
+    const segment = field.path[index];
+    if (Array.isArray(cursor)) cursor = cursor[Number(segment)];
+    else if (isRecord(cursor)) cursor = cursor[segment];
+  }
+  const final = field.path.at(-1)!;
+  const previous = Array.isArray(cursor) ? cursor[Number(final)] : isRecord(cursor) ? cursor[final] : undefined;
+  const nextValue = Array.isArray(previous)
+    ? nextText.split('\n').map((line) => line.trim()).filter(Boolean)
+    : nextText;
+  if (Array.isArray(cursor)) cursor[Number(final)] = nextValue;
+  else if (isRecord(cursor)) cursor[final] = nextValue;
+  return clone;
+}
+
+function humanizeField(field: EditableField, locale: 'mm' | 'en'): string {
+  const known = FIELD_LABELS[field.key];
+  if (known) return known[locale];
+  const base = field.key
+    .replace(/(Mm|En)$/i, '')
+    .replace(/([a-z])([A-Z])/g, '$1 $2')
+    .replace(/[_-]+/g, ' ')
+    .trim();
+  const section = field.path.some((segment) => /^\d+$/.test(segment))
+    ? ` ${Number(field.path.find((segment) => /^\d+$/.test(segment))) + 1}`
+    : '';
+  return `${base || (locale === 'mm' ? 'အကြောင်းအရာ' : 'Content')}${section}`;
 }
 
 function ContentEditor({ item }: { item: {
@@ -92,20 +207,17 @@ function ContentEditor({ item }: { item: {
   const [titleEn, setTitleEn] = useState(item.titleEn);
   const [summaryMm, setSummaryMm] = useState(item.summaryMm ?? '');
   const [summaryEn, setSummaryEn] = useState(item.summaryEn ?? '');
-  const [dataText, setDataText] = useState(() => JSON.stringify(item.data, null, 2));
+  const [data, setData] = useState<unknown>(item.data);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState('');
+  const editableFields = useMemo(
+    () => collectEditableFields(data).sort((left, right) => LANGUAGE_ORDER[left.language] - LANGUAGE_ORDER[right.language]),
+    [data],
+  );
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
     setMessage('');
-    let data: unknown;
-    try {
-      data = JSON.parse(dataText);
-    } catch {
-      setMessage(L('အဆင့်မြင့်အကြောင်းအရာ JSON ပုံစံ မမှန်ပါ။', 'Advanced content JSON is invalid.'));
-      return;
-    }
     setBusy(true);
     try {
       const result = await updateDraft({
@@ -156,15 +268,39 @@ function ContentEditor({ item }: { item: {
           <textarea value={summaryEn} onChange={(event) => setSummaryEn(event.target.value)} rows={4} className="w-full rounded-xl border border-line px-3 py-2" />
         </label>
       </div>
-      <details className="rounded-xl border border-line bg-canvas p-3">
-        <summary className="cursor-pointer text-sm font-semibold text-sky-deep">
-          {L('အဆင့်မြင့် အကြောင်းအရာဖွဲ့စည်းပုံ', 'Advanced structured content')}
-        </summary>
-        <p className="mt-2 text-xs text-ink-soft">
-          {L('အစီအစဉ်၊ အဆင့်များနှင့် လုံခြုံရေးစာသားများကို JSON ပုံစံဖြင့် ပြင်နိုင်ပါသည်။', 'Edit steps, sections, and safety copy as structured JSON.')}
+      <section className="rounded-xl border border-line bg-canvas p-4">
+        <h3 className="text-sm font-bold text-sky-deep">{L('အကြောင်းအရာ အသေးစိတ်', 'Content details')}</h3>
+        <p className="mt-1 text-xs text-ink-soft">
+          {L('ပြင်လိုသည့်စာသားကို သက်ဆိုင်ရာအကွက်တွင် တိုက်ရိုက်ပြင်ပါ။ နည်းပညာပုံစံဖြင့် ရေးရန် မလိုပါ။', 'Edit each field directly. No technical format is required.')}
         </p>
-        <textarea value={dataText} onChange={(event) => setDataText(event.target.value)} rows={18} spellCheck={false} className="mt-2 w-full rounded-xl border border-line bg-white p-3 font-mono text-xs leading-5 text-ink" />
-      </details>
+        <div className="mt-4 grid gap-3 lg:grid-cols-2">
+          {editableFields.map((field) => (
+            <label key={field.path.join('.')} className="space-y-1 text-sm font-medium text-ink">
+              <span>{humanizeField(field, locale)}</span>
+              {field.multiline ? (
+                <textarea
+                  value={field.value}
+                  onChange={(event) => setData((current: unknown) => updateStructuredField(current, field, event.target.value))}
+                  rows={Math.min(8, Math.max(3, field.value.split('\n').length + 1))}
+                  className="w-full rounded-xl border border-line bg-white px-3 py-2 leading-7"
+                />
+              ) : (
+                <input
+                  value={field.value}
+                  onChange={(event) => setData((current: unknown) => updateStructuredField(current, field, event.target.value))}
+                  className="w-full rounded-xl border border-line bg-white px-3 py-2"
+                />
+              )}
+              {field.list && (
+                <span className="block text-xs font-normal text-ink-soft">{L('တစ်ကြောင်းလျှင် အချက်တစ်ခု ရေးပါ။', 'Write one item per line.')}</span>
+              )}
+            </label>
+          ))}
+        </div>
+        {editableFields.length === 0 && (
+          <p className="mt-3 rounded-lg bg-white p-3 text-sm text-ink-soft">{L('ဤအပိုင်းတွင် ပြင်ဆင်နိုင်သည့် စာသားမရှိပါ။', 'This section has no editable text fields.')}</p>
+        )}
+      </section>
       <div className="flex flex-wrap items-center gap-3">
         <button type="submit" disabled={busy} className="rounded-pill bg-sky px-5 py-2 text-sm font-semibold text-white disabled:opacity-50">
           {busy ? L('သိမ်းနေသည်…', 'Saving…') : L('ပြင်ဆင်ချက် သိမ်းမည်', 'Save revision')}
@@ -182,12 +318,15 @@ export function ContentReviewWorkspace() {
   const [selectedSlug, setSelectedSlug] = useState('');
   const managerView = Boolean(access?.roles.some((role) => ['owner', 'system_admin', 'review_manager'].includes(role)));
   const allAssignmentsView = Boolean(access?.roles.some((role) => ['owner', 'system_admin', 'review_manager', 'auditor'].includes(role)));
-  const publisherView = Boolean(access?.roles.includes('publisher'));
+  const canPublish = Boolean(access?.roles.some((role) => ['owner', 'publisher'].includes(role)));
+  const publisherOnly = Boolean(access?.roles.includes('publisher') && !managerView && !access.roles.some((role) => [
+    'language_reviewer', 'myanmar_language_reviewer', 'child_development_reviewer', 'evidence_reviewer', 'clinical_reviewer',
+  ].includes(role)));
   const reportView = Boolean(access?.roles.some((role) => ['owner', 'system_admin', 'review_manager', 'auditor'].includes(role)));
-  const myAssignments = useQuery(api.reviewAssignments.listMine, allAssignmentsView ? 'skip' : {});
+  const myAssignments = useQuery(api.reviewAssignments.listMine, {});
   const managedAssignments = useQuery(api.reviewAssignments.listManaged, allAssignmentsView ? {} : 'skip');
   const assignments = allAssignmentsView ? managedAssignments : myAssignments;
-  const publishable = useQuery(api.library.listPublishable, publisherView ? {} : 'skip');
+  const publishable = useQuery(api.library.listPublishable, canPublish ? {} : 'skip');
   const summary = useQuery(api.reviewAssignments.summary, {});
   const completionReport = useQuery(api.reviewReports.completion, reportView ? {} : 'skip');
   const team = useQuery(api.admin.listTeam, managerView ? {} : 'skip');
@@ -199,14 +338,15 @@ export function ContentReviewWorkspace() {
   const evidence = useQuery(api.evidence.forContent, selectedSlug ? { slug: selectedSlug } : 'skip');
   const saveDecision = useMutation(api.contentReviews.saveDecision);
   const publishContent = useMutation(api.library.setReview);
-  const selectedAssignment = assignments?.find((row) => row.assignment.contentSlug === selectedSlug)?.assignment;
+  const selectedMineAssignment = myAssignments?.find((row) => row.assignment.contentSlug === selectedSlug)?.assignment;
+  const selectedAssignment = selectedMineAssignment ?? assignments?.find((row) => row.assignment.contentSlug === selectedSlug)?.assignment;
   const collaboration = useQuery(api.reviewCollaboration.list, selectedAssignment ? { assignmentId: selectedAssignment._id } : 'skip');
   const timeline = useQuery(api.reviewAssignments.history, selectedAssignment ? { assignmentId: selectedAssignment._id } : 'skip');
   const addComment = useMutation(api.reviewCollaboration.addComment);
   const saveProposal = useMutation(api.reviewCollaboration.saveProposal);
   const checklist = useQuery(api.reviewChecklists.getMine,
-    selectedAssignment && !allAssignmentsView
-      ? { assignmentId: selectedAssignment._id, dimension }
+    selectedMineAssignment
+      ? { assignmentId: selectedMineAssignment._id, dimension }
       : 'skip');
   const saveChecklist = useMutation(api.reviewChecklists.saveMine);
   const [checklistState, setChecklistState] = useState<Record<string, boolean>>({});
@@ -223,19 +363,22 @@ export function ContentReviewWorkspace() {
   const [proposalText, setProposalText] = useState('');
 
   useEffect(() => {
-    if (publisherView && publishable?.length && !publishable.some((row) => row.slug === selectedSlug)) {
-      setSelectedSlug(publishable[0].slug);
-    } else if (!publisherView && assignments?.length && !assignments.some((row) => row.assignment.contentSlug === selectedSlug)) {
+    if (assignments?.length && !assignments.some((row) => row.assignment.contentSlug === selectedSlug) && !publishable?.some((row) => row.slug === selectedSlug)) {
       setSelectedSlug(assignments[0].assignment.contentSlug);
+    } else if (!assignments?.length && publishable?.length && !publishable.some((row) => row.slug === selectedSlug)) {
+      setSelectedSlug(publishable[0].slug);
     }
-  }, [assignments, publishable, publisherView, selectedSlug]);
+  }, [assignments, publishable, selectedSlug]);
 
   useEffect(() => {
-    if (!mayReview(access?.roles as StaffRole[] | undefined, dimension)) {
-      const firstAllowed = DIMENSIONS.find((value) => mayReview(access?.roles as StaffRole[] | undefined, value));
+    if (!mayReview(access?.roles as StaffRole[] | undefined, dimension) || (selectedMineAssignment && !assignmentMayReview(selectedMineAssignment.reviewerType, dimension))) {
+      const firstAllowed = DIMENSIONS.find((value) =>
+        mayReview(access?.roles as StaffRole[] | undefined, value) &&
+        (!selectedMineAssignment || assignmentMayReview(selectedMineAssignment.reviewerType, value)),
+      );
       if (firstAllowed) setDimension(firstAllowed);
     }
-  }, [access?.roles, dimension]);
+  }, [access?.roles, dimension, selectedMineAssignment]);
 
   useEffect(() => {
     if (!checklist) return;
@@ -265,11 +408,11 @@ export function ContentReviewWorkspace() {
   };
 
   const persistChecklist = async () => {
-    if (!selectedAssignment) return;
+    if (!selectedMineAssignment) return;
     setBusy(true); setMessage('');
     try {
       await saveChecklist({
-        assignmentId: selectedAssignment._id,
+        assignmentId: selectedMineAssignment._id,
         dimension,
         responses: (checklist?.requiredKeys ?? []).map((key) => ({ key, checked: checklistState[key] === true })),
       });
@@ -323,10 +466,10 @@ export function ContentReviewWorkspace() {
   };
 
   const submitProposal = async (submit: boolean) => {
-    if (!selectedAssignment || !proposalText.trim()) return;
+    if (!selectedMineAssignment || !proposalText.trim()) return;
     setBusy(true); setMessage('');
     try {
-      await saveProposal({ assignmentId: selectedAssignment._id, field: proposalField, proposedText: proposalText, submit });
+      await saveProposal({ assignmentId: selectedMineAssignment._id, field: proposalField, proposedText: proposalText, submit });
       setProposalText('');
       setMessage(L(submit ? 'စာသားအဆိုပြုချက် တင်ပြီးပါပြီ။' : 'အကြမ်းသိမ်းပြီးပါပြီ။', submit ? 'Wording proposal submitted.' : 'Draft saved.'));
     } catch (error) {
@@ -392,17 +535,33 @@ export function ContentReviewWorkspace() {
             </label>
             <label className="space-y-1 text-sm font-medium text-ink">
               <span>{L('သုံးသပ်သူ', 'Reviewer')}</span>
-              <select value={assignReviewerId} onChange={(event) => setAssignReviewerId(event.target.value)} required className="w-full rounded-xl border border-line bg-white px-3 py-2">
+              <select value={assignReviewerId} onChange={(event) => {
+                const reviewerId = event.target.value;
+                setAssignReviewerId(reviewerId);
+                const reviewer = team.members.find((member) => member.userId === reviewerId);
+                if (reviewer?.roles.includes('owner') && assignRole === 'clinical_reviewer') {
+                  setAssignRole('myanmar_language_reviewer');
+                }
+              }} required className="w-full rounded-xl border border-line bg-white px-3 py-2">
                 <option value="">{L('သုံးသပ်သူ ရွေးပါ', 'Select reviewer')}</option>
-                {team.members.filter((member) => ['language_reviewer', 'myanmar_language_reviewer', 'child_development_reviewer', 'evidence_reviewer', 'clinical_reviewer'].includes(member.role)).map((member) => (
-                  <option key={member.userId} value={member.userId}>{member.displayName || member.email || member.userId} · {member.role}</option>
+                {team.members.filter((member) => member.roles.some((role) => ['owner', 'language_reviewer', 'myanmar_language_reviewer', 'child_development_reviewer', 'evidence_reviewer', 'clinical_reviewer'].includes(role))).map((member) => (
+                  <option key={member.userId} value={member.userId}>{member.displayName || member.email || member.userId}{member.roles.includes('owner') ? ` · ${L('Owner', 'Owner')}` : ''}</option>
                 ))}
               </select>
+              <span className="block text-xs font-normal text-ink-soft">{L('Owner ကိုယ်တိုင်လည်း ဆေးဘက်ဆိုင်ရာမဟုတ်သည့် သုံးသပ်မှုများကို တာဝန်ယူနိုင်သည်။', 'The owner may take non-clinical review assignments personally.')}</span>
             </label>
             <label className="space-y-1 text-sm font-medium text-ink">
               <span>{L('သုံးသပ်မှုအမျိုးအစား', 'Reviewer type')}</span>
               <select value={assignRole} onChange={(event) => setAssignRole(event.target.value as ReviewerRole)} className="w-full rounded-xl border border-line bg-white px-3 py-2">
-                {(['myanmar_language_reviewer', 'language_reviewer', 'child_development_reviewer', 'evidence_reviewer', 'clinical_reviewer'] as ReviewerRole[]).map((role) => <option key={role} value={role}>{role}</option>)}
+                {(['myanmar_language_reviewer', 'language_reviewer', 'child_development_reviewer', 'evidence_reviewer', 'clinical_reviewer'] as ReviewerRole[]).map((role) => (
+                  <option
+                    key={role}
+                    value={role}
+                    disabled={role === 'clinical_reviewer' && team.members.find((member) => member.userId === assignReviewerId)?.roles.includes('owner')}
+                  >
+                    {REVIEWER_ROLE_LABELS[role][locale]}
+                  </option>
+                ))}
               </select>
             </label>
             <label className="space-y-1 text-sm font-medium text-ink">
@@ -420,19 +579,18 @@ export function ContentReviewWorkspace() {
 
       <section className="rounded-card border border-line bg-white p-4 shadow-card">
         <label className="space-y-1 text-sm font-medium text-ink">
-          <span>{L('မိမိအား တာဝန်ပေးထားသော အကြောင်းအရာ', 'Assigned to me')}</span>
+          <span>{allAssignmentsView ? L('အဖွဲ့၏ သုံးသပ်တာဝန်များ', 'Team review assignments') : L('မိမိအား တာဝန်ပေးထားသော အကြောင်းအရာ', 'Assigned to me')}</span>
           <select value={selectedSlug} onChange={(event) => setSelectedSlug(event.target.value)} className="w-full rounded-xl border border-line bg-white px-3 py-2">
             <option value="">{L('တာဝန်တစ်ခု ရွေးပါ', 'Select an assignment')}</option>
-            {publisherView && publishable?.map((row) => (
-              <option key={row.slug} value={row.slug}>{locale === 'mm' ? row.titleMm : row.titleEn} · {L('ထုတ်ဝေရန် အသင့်', 'Ready to publish')}</option>
-            ))}
-            {!publisherView && assignments?.map((row) => (
+            {assignments?.map((row) => (
               <option key={row.assignment._id} value={row.assignment.contentSlug}>{locale === 'mm' ? row.titleMm : row.titleEn} · {row.assignment.status}</option>
+            ))}
+            {canPublish && publishable?.filter((row) => !assignments?.some((assignment) => assignment.assignment.contentSlug === row.slug)).map((row) => (
+              <option key={`publish-${row.slug}`} value={row.slug}>{locale === 'mm' ? row.titleMm : row.titleEn} · {L('ထုတ်ဝေရန် အသင့်', 'Ready to publish')}</option>
             ))}
           </select>
         </label>
-        {!publisherView && assignments?.length === 0 && <p className="mt-3 text-sm text-ink-soft">{L('မိမိအား တာဝန်ပေးထားသော အကြောင်းအရာ မရှိသေးပါ။', 'No review assignments have been assigned to you.')}</p>}
-        {publisherView && publishable?.length === 0 && <p className="mt-3 text-sm text-ink-soft">{L('သုံးသပ်မှုအဆင့်အားလုံး ပြီးစီးထားသည့် အကြောင်းအရာ မရှိသေးပါ။', 'No content has completed every required review gate.')}</p>}
+        {assignments?.length === 0 && (!canPublish || publishable?.length === 0) && <p className="mt-3 text-sm text-ink-soft">{L('သုံးသပ်တာဝန် မရှိသေးပါ။', 'No review assignments are available yet.')}</p>}
       </section>
 
       {item && access.roles.some((role) => ['owner', 'content_editor'].includes(role)) && <ContentEditor key={`${item.slug}-${item.updatedAt}`} item={item} />}
@@ -469,7 +627,7 @@ export function ContentReviewWorkspace() {
             <h2 className="font-bold text-ink">{L('လက်ရှိမူကွဲ၏ သုံးသပ်မှုအခြေအနေ', 'Current revision review status')}</h2>
             <p className="text-sm text-ink-soft">{L('သုံးသပ်မူကွဲ', 'Review revision')} {reviews.contentVersion ?? 1}</p>
           </div>
-          {publisherView && (
+          {canPublish && publishable?.some((row) => row.slug === selectedSlug) && (
             <div className="rounded-xl border border-mint bg-mint-soft p-4">
               <p className="text-sm text-ink">{L('ဤလုပ်ဆောင်ချက်သည် သုံးသပ်အတည်ပြုချက်များကို မပြင်ဘဲ သီးခြားထုတ်ဝေမှုမှတ်တမ်း ဖန်တီးပါမည်။', 'This action creates a separate publication record without altering reviewer sign-offs.')}</p>
               <button type="button" onClick={publishSelected} disabled={busy} className="mt-3 rounded-pill bg-sky px-5 py-2 text-sm font-semibold text-white disabled:opacity-50">{L('မိဘများအတွက် ထုတ်ဝေမည်', 'Publish for parents')}</button>
@@ -477,15 +635,15 @@ export function ContentReviewWorkspace() {
           )}
           {selectedAssignment && (
             <section className="grid gap-4 lg:grid-cols-2">
-              {!allAssignmentsView && (
+              {selectedMineAssignment && (
                 <div className="rounded-xl border border-line bg-canvas p-4">
                   <h2 className="font-bold text-ink">{L('မြန်မာစာသား အဆိုပြုမည်', 'Propose Myanmar wording')}</h2>
                   <select value={proposalField} onChange={(event) => setProposalField(event.target.value as typeof proposalField)} className="mt-3 w-full rounded-xl border border-line bg-white px-3 py-2 text-sm">
                     <option value="titleMm">{L('မြန်မာခေါင်းစဉ်', 'Myanmar title')}</option>
                     <option value="summaryMm">{L('မြန်မာအနှစ်ချုပ်', 'Myanmar summary')}</option>
-                    <option value="structuredMyanmar">{L('မြန်မာအကြောင်းအရာ', 'Structured Myanmar content')}</option>
+                    <option value="structuredMyanmar">{L('အကြောင်းအရာထဲမှ မြန်မာစာသား', 'Myanmar content section')}</option>
                   </select>
-                  <textarea value={proposalText} onChange={(event) => setProposalText(event.target.value)} rows={6} className="mt-2 w-full rounded-xl border border-line bg-white px-3 py-2 text-sm" />
+                  <textarea value={proposalText} onChange={(event) => setProposalText(event.target.value)} rows={6} placeholder={L('ပြင်ဆင်လိုသည့် စာသားကို ရိုးရိုးရေးပါ။ နည်းပညာပုံစံ မလိုပါ။', 'Write the suggested wording normally. No technical format is required.')} className="mt-2 w-full rounded-xl border border-line bg-white px-3 py-2 text-sm" />
                   <div className="mt-2 flex gap-2">
                     <button type="button" onClick={() => submitProposal(false)} disabled={busy} className="rounded-pill border border-sky px-4 py-2 text-sm font-semibold text-sky-deep">{L('အကြမ်းသိမ်းမည်', 'Save draft')}</button>
                     <button type="button" onClick={() => submitProposal(true)} disabled={busy} className="rounded-pill bg-sky px-4 py-2 text-sm font-semibold text-white">{L('အဆိုပြုချက် တင်မည်', 'Submit proposal')}</button>
@@ -521,7 +679,7 @@ export function ContentReviewWorkspace() {
             })}
           </div>
 
-          {!publisherView && <form onSubmit={submitDecision} className="grid gap-3 rounded-xl bg-mint-soft p-4 lg:grid-cols-2">
+          {!publisherOnly && selectedMineAssignment && <form onSubmit={submitDecision} className="grid gap-3 rounded-xl bg-mint-soft p-4 lg:grid-cols-2">
             {checklist && (
               <fieldset className="space-y-2 rounded-xl border border-line bg-white p-4 lg:col-span-2">
                 <legend className="px-2 text-sm font-bold text-ink">{L('မဖြစ်မနေ စစ်ဆေးရမည့်စာရင်း', 'Required reviewer checklist')}</legend>
@@ -540,7 +698,7 @@ export function ContentReviewWorkspace() {
               <span>{L('သုံးသပ်မှုအမျိုးအစား', 'Review area')}</span>
               <select value={dimension} onChange={(event) => setDimension(event.target.value as Dimension)} className="w-full rounded-xl border border-line bg-white px-3 py-2">
                 {DIMENSIONS.map((value) => (
-                  <option key={value} value={value} disabled={!mayReview(access.roles as StaffRole[], value)}>{DIMENSION_LABELS[value][locale]}</option>
+                  <option key={value} value={value} disabled={!mayReview(access.roles as StaffRole[], value) || !assignmentMayReview(selectedMineAssignment.reviewerType, value)}>{DIMENSION_LABELS[value][locale]}</option>
                 ))}
               </select>
             </label>
@@ -555,7 +713,7 @@ export function ContentReviewWorkspace() {
               <textarea value={note} onChange={(event) => setNote(event.target.value)} rows={4} placeholder={decision === 'changes_requested' ? L('ပြင်ဆင်ရမည့်အချက်ကို ရှင်းလင်းစွာ ရေးပါ။', 'Describe the required change clearly.') : undefined} className="w-full rounded-xl border border-line bg-white px-3 py-2" />
             </label>
             <div className="flex flex-wrap items-center gap-3 lg:col-span-2">
-              <button type="submit" disabled={busy || !mayReview(access.roles as StaffRole[], dimension) || (decision === 'approved' && checklist?.complete !== true)} className="rounded-pill bg-sky px-5 py-2 text-sm font-semibold text-white disabled:opacity-50">
+              <button type="submit" disabled={busy || !mayReview(access.roles as StaffRole[], dimension) || !assignmentMayReview(selectedMineAssignment.reviewerType, dimension) || (decision === 'approved' && checklist?.complete !== true)} className="rounded-pill bg-sky px-5 py-2 text-sm font-semibold text-white disabled:opacity-50">
                 {busy ? L('မှတ်တမ်းတင်နေသည်…', 'Recording…') : L('ဆုံးဖြတ်ချက် မှတ်တမ်းတင်မည်', 'Record decision')}
               </button>
               {message && <p role="status" className="text-sm text-ink-soft">{message}</p>}

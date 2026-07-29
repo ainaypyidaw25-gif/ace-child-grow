@@ -4,6 +4,7 @@ import { logAudit } from './audit';
 import { getStaffAccess, requireReviewManager, requireUser } from './lib/auth';
 import type { MutationCtx } from './_generated/server';
 import type { Id } from './_generated/dataModel';
+import { mayActAsReviewerType } from './lib/reviewRoles';
 
 const reviewerTypeValidator = v.union(
   v.literal('language_reviewer'),
@@ -90,7 +91,7 @@ export const listMine = query({
         .order('desc').take(limit);
     const result = [];
     for (const assignment of rows) {
-      if (!access.roles.includes(assignment.reviewerType)) continue;
+      if (!mayActAsReviewerType(access.roles, assignment.reviewerType)) continue;
       const content = await ctx.db.query('libraryContent')
         .withIndex('by_slug', (q) => q.eq('slug', assignment.contentSlug)).unique();
       if (!content) continue;
@@ -195,7 +196,7 @@ export const history = query({
     const assignment = await ctx.db.get(args.assignmentId);
     if (!access || !assignment) throw new Error('Assignment access denied');
     const manager = access.roles.some((role) => ['owner', 'system_admin', 'review_manager', 'content_editor', 'auditor'].includes(role));
-    const reviewer = assignment.reviewerId === userId && access.roles.includes(assignment.reviewerType);
+    const reviewer = assignment.reviewerId === userId && mayActAsReviewerType(access.roles, assignment.reviewerType);
     if (!manager && !reviewer) throw new Error('Assignment access denied');
     return await ctx.db.query('reviewEvents').withIndex('by_assignment', (q) => q.eq('assignmentId', args.assignmentId)).order('desc').take(200);
   },
@@ -215,7 +216,7 @@ export const create = mutation({
   handler: async (ctx, args) => {
     const { userId: managerId } = await requireReviewManager(ctx);
     const reviewer = await getStaffAccess(ctx, args.reviewerId);
-    if (!reviewer?.roles.includes(args.reviewerType)) {
+    if (!reviewer || !mayActAsReviewerType(reviewer.roles, args.reviewerType)) {
       throw new Error('Reviewer does not hold the assigned reviewer role');
     }
     const content = await ctx.db.query('libraryContent')
@@ -272,7 +273,7 @@ export const transition = mutation({
     if (!assignment) throw new Error('Assignment not found');
     const access = await getStaffAccess(ctx, userId);
     const manager = access?.roles.some((role) => ['owner', 'system_admin', 'review_manager'].includes(role)) ?? false;
-    const assignedReviewer = assignment.reviewerId === userId && access?.roles.includes(assignment.reviewerType);
+    const assignedReviewer = assignment.reviewerId === userId && access !== null && mayActAsReviewerType(access.roles, assignment.reviewerType);
     if (!manager && !assignedReviewer) throw new Error('Assignment access denied');
     if (!manager && ['cancelled', 'revised', 're_review_required', 'approved'].includes(args.status)) {
       throw new Error('Only a review manager may perform this transition');

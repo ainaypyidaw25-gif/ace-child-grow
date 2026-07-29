@@ -72,6 +72,7 @@ export const listTeam = query({
         email: v.union(v.string(), v.null()),
         displayName: v.union(v.string(), v.null()),
         role: roleValidator,
+        roles: v.array(roleValidator),
         qualification: v.union(v.string(), v.null()),
       }),
     ),
@@ -107,6 +108,7 @@ export const listTeam = query({
         email: user?.email ?? null,
         displayName: memberAccess.displayName,
         role: memberAccess.role,
+        roles: memberAccess.roles,
         qualification: memberAccess.qualification,
       });
     }

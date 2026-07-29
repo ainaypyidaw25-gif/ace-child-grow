@@ -231,7 +231,7 @@ describe('Convex registered handlers enforce authorization', () => {
     expect(context.db.patch).not.toHaveBeenCalled();
   });
 
-  it('a qualified education owner cannot publish parent-facing library content', async () => {
+  it('an owner cannot publish parent-facing content until every required review gate is complete', async () => {
     authState.userId = 'owner-1';
     const context = ctx({
       profile: {
@@ -242,7 +242,7 @@ describe('Convex registered handlers enforce authorization', () => {
     });
     await expect(handler(setLibraryReview)(context, {
       slug: 'clinical-guidance', clinicalStatus: 'published',
-    })).rejects.toThrow('Insufficient staff permission');
+    })).rejects.toThrow('Current revision is missing review approvals');
     expect(context.db.patch).not.toHaveBeenCalled();
   });
 
@@ -283,6 +283,34 @@ describe('Convex registered handlers enforce authorization', () => {
       contentSlug: 'item-1', dimension: 'clinical', decision: 'approved',
     })).rejects.toThrow('cannot decide this review area');
     expect(context.db.patch).not.toHaveBeenCalled();
+  });
+
+  it('an owner can complete an assigned Myanmar-language review with the normal checklist and audit trail', async () => {
+    authState.userId = 'owner-1';
+    const context = ctx({
+      profile: {
+        userId: 'owner-1', isStaff: true, staffRole: 'owner', displayName: 'Owner Reviewer',
+      },
+      rows: {
+        libraryContent: [{ _id: 'content-1', slug: 'item-1', version: 1, reviewRevision: 2 }],
+        reviewAssignments: [{
+          _id: 'assignment-1', contentSlug: 'item-1', contentVersion: 2, reviewerId: 'owner-1',
+          reviewerType: 'myanmar_language_reviewer', assignedBy: 'owner-1', assignedAt: 1,
+          priority: 'normal', reviewRound: 1, reviewScope: 'Myanmar wording', status: 'assigned', updatedAt: 1,
+        }],
+        reviewChecklists: [{
+          assignmentId: 'assignment-1', contentSlug: 'item-1', contentVersion: 2, dimension: 'native_myanmar',
+          responses: requiredChecklistKeys('native_myanmar').map((key) => ({ key, checked: true })),
+          updatedBy: 'owner-1', updatedAt: 2,
+        }],
+      },
+    });
+    await expect(handler(saveDecision)(context, {
+      contentSlug: 'item-1', dimension: 'native_myanmar', decision: 'approved', note: 'စာသားကို စစ်ဆေးပြီးပါပြီ',
+    })).resolves.toEqual({ ok: true, contentVersion: 2 });
+    expect(context.db.insert).toHaveBeenCalledWith('contentReviews', expect.objectContaining({
+      contentSlug: 'item-1', dimension: 'native_myanmar', reviewerRole: 'owner', decision: 'approved',
+    }));
   });
 
   it('an unrelated reviewer cannot read another reviewer assignment collaboration', async () => {

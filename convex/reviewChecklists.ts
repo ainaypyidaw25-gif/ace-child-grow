@@ -5,6 +5,7 @@ import { requiredChecklistKeys } from './lib/reviewChecklists';
 import { logAudit } from './audit';
 import type { QueryCtx, MutationCtx } from './_generated/server';
 import type { Id } from './_generated/dataModel';
+import { mayActAsReviewerType, reviewerTypeMayReviewDimension } from './lib/reviewRoles';
 
 const dimensionValidator = v.union(
   v.literal('english'), v.literal('native_myanmar'), v.literal('development'),
@@ -13,14 +14,15 @@ const dimensionValidator = v.union(
 
 const responseValidator = v.object({ key: v.string(), checked: v.boolean() });
 
-async function assignedReview(ctx: QueryCtx | MutationCtx, assignmentId: Id<'reviewAssignments'>) {
+async function assignedReview(ctx: QueryCtx | MutationCtx, assignmentId: Id<'reviewAssignments'>, dimension: string) {
   const userId = await requireUser(ctx);
   const assignment = await ctx.db.get(assignmentId);
   if (!assignment || !('reviewerId' in assignment) || assignment.reviewerId !== userId) {
     throw new Error('Assignment access denied');
   }
   const access = await getStaffAccess(ctx, userId);
-  if (!access || !access.roles.includes(assignment.reviewerType)) throw new Error('Assignment access denied');
+  if (!access || !mayActAsReviewerType(access.roles, assignment.reviewerType)) throw new Error('Assignment access denied');
+  if (!reviewerTypeMayReviewDimension(assignment.reviewerType, dimension)) throw new Error('This checklist is outside the assigned review area');
   if (assignment.status === 'cancelled') throw new Error('Assignment is no longer active');
   return { userId, assignment, access };
 }
@@ -34,7 +36,7 @@ export const getMine = query({
   }),
   handler: async (ctx, args) => {
     await requireUser(ctx);
-    const { assignment } = await assignedReview(ctx, args.assignmentId);
+    const { assignment } = await assignedReview(ctx, args.assignmentId, args.dimension);
     const row = await ctx.db.query('reviewChecklists')
       .withIndex('by_assignment_dimension', (q) => q.eq('assignmentId', assignment._id).eq('dimension', args.dimension))
       .unique();
@@ -53,7 +55,7 @@ export const saveMine = mutation({
   returns: v.object({ ok: v.literal(true), complete: v.boolean() }),
   handler: async (ctx, args) => {
     await requireUser(ctx);
-    const { userId, assignment, access } = await assignedReview(ctx, args.assignmentId);
+    const { userId, assignment, access } = await assignedReview(ctx, args.assignmentId, args.dimension);
     const requiredKeys = requiredChecklistKeys(args.dimension);
     const allowed = new Set(requiredKeys);
     if (args.responses.some((response) => !allowed.has(response.key as never))) {

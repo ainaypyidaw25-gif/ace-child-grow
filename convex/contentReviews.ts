@@ -2,7 +2,11 @@ import { v } from 'convex/values';
 import { mutation, query } from './_generated/server';
 import { logAudit } from './audit';
 import { getStaffAccess, requireReviewEditor, requireUser, type StaffRole } from './lib/auth';
-import { staffRoleValidator as roleValidator } from './lib/reviewRoles';
+import {
+  mayActAsReviewerType,
+  reviewerTypeMayReviewDimension,
+  staffRoleValidator as roleValidator,
+} from './lib/reviewRoles';
 import { requiredChecklistKeys } from './lib/reviewChecklists';
 
 const dimensionValidator = v.union(
@@ -44,11 +48,11 @@ const reviewValidator = v.object({
 type ReviewDimension = 'english' | 'native_myanmar' | 'development' | 'evidence' | 'safety' | 'clinical';
 function roleMayReview(roles: readonly StaffRole[], dimension: ReviewDimension): boolean {
   if (dimension === 'clinical' || dimension === 'safety') return roles.includes('clinical_reviewer');
-  if (dimension === 'development') return roles.includes('child_development_reviewer');
+  if (dimension === 'development') return mayActAsReviewerType(roles, 'child_development_reviewer');
   if (dimension === 'evidence') {
-    return roles.some((role) => ['evidence_reviewer', 'clinical_reviewer'].includes(role));
+    return roles.includes('clinical_reviewer') || mayActAsReviewerType(roles, 'evidence_reviewer');
   }
-  return roles.some((role) => ['language_reviewer', 'myanmar_language_reviewer'].includes(role));
+  return mayActAsReviewerType(roles, 'language_reviewer') || mayActAsReviewerType(roles, 'myanmar_language_reviewer');
 }
 
 function approvalNeedsQualification(dimension: ReviewDimension): boolean {
@@ -85,7 +89,7 @@ export const listForContent = query({
       const assigned = assignments.some((row) =>
         row.status !== 'cancelled' &&
         row.contentVersion === (content.reviewRevision ?? 1) &&
-        access.roles.includes(row.reviewerType),
+        mayActAsReviewerType(access.roles, row.reviewerType),
       );
       if (!assigned) return { allowed: false, contentVersion: null, current: [], history: [] };
     }
@@ -147,7 +151,8 @@ export const saveDecision = mutation({
     const assignment = assignments.find((row) =>
       row.contentVersion === (content.reviewRevision ?? 1) &&
       !['cancelled', 'approved'].includes(row.status) &&
-      access.roles.includes(row.reviewerType),
+      mayActAsReviewerType(access.roles, row.reviewerType) &&
+      reviewerTypeMayReviewDimension(row.reviewerType, args.dimension),
     );
     if (!assignment) throw new Error('An active assignment is required to review this content revision');
     if (args.decision === 'approved') {

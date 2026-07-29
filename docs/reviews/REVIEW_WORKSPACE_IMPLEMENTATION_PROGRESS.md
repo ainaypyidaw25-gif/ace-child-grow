@@ -20,7 +20,7 @@ This is not a production launch approval. Production still needs the reviewed mi
 | 2 | `agent/reviewer-workspace-pr2` | `0f3784a` | Server permissions, secure invitations, assignments, audit events and fail-closed publication |
 | 3 | `agent/reviewer-workspace-pr3` | `5007a66` | Reviewer queue, checklists, decisions, history and separate publisher handoff |
 | 4 | `agent/reviewer-workspace-pr4` | `54850b0` | Reviewer comments, wording proposals, completion/payment reports and timeline UI |
-| 5 | `agent/reviewer-workspace-pr5` | pending final commit | Permission edge cases, audit-round correction, E2E update and launch-gate record |
+| 5 | `agent/reviewer-workspace-pr5` | pending final commit | Permission edge cases, owner workflow, non-technical content editor, E2E update and launch-gate record |
 
 Each branch is based on the previous branch so the changes can be reviewed in small units. Do not merge a later branch without its predecessors.
 
@@ -41,6 +41,9 @@ Each branch is based on the previous branch so the changes can be reviewed in sm
 - Server audit events for invitations, assignments, comments, proposals, decisions and publication actions.
 - New-assignment and review-state in-app notification records.
 - Seed refresh tests protecting review revision state and tests covering direct Convex authorization.
+- Owner operational control for reviewer management, assignments, content editing, non-clinical review, reports and publishing content that has already completed every required gate.
+- A plain field-by-field content editor for Myanmar and English wording. Reviewers and editors are never asked to edit raw JSON.
+- Owner self-assignment for language, development and evidence review with the same checklist, revision and audit requirements as any reviewer. Clinical sign-off remains a separately qualified role.
 
 ### Partly complete
 
@@ -68,7 +71,7 @@ Each branch is based on the previous branch so the changes can be reviewed in sm
 4. Reviewer wording proposals are stored separately. Accepting a proposal records a decision but does not silently change canonical content.
 5. Proposal decisions now record the actual assignment review round, not a hard-coded first round.
 6. Reviewer comments marked manager-only cannot be created by ordinary reviewers or disclosed to unrelated reviewers.
-7. Publication requires exact-current-revision review approvals and a separately authorised publisher.
+7. Publication requires exact-current-revision review approvals. An owner or publisher may perform the separate publication action, but neither can create a clinical sign-off without the qualified clinical-review role.
 
 ## Migration dry-run
 
@@ -90,7 +93,7 @@ Commands executed from the clean reviewer worktree:
 
 - `npm run typecheck` — PASS
 - `npm run lint` — PASS
-- `npm test -- --run` — PASS, 47 files / 571 tests
+- `npm test -- --run` — PASS, 47 files / 574 tests
 - `npm run build` — PASS; only the existing Vite large-chunk advisory remains
 - `npx playwright test tests/e2e/staff-invite.spec.ts` — PASS, 1/1
 - Full Playwright run — app boot passed, three credential-dependent flows skipped, and the invitation test initially exposed stale expected Myanmar copy; the expectation was updated and the focused flow then passed

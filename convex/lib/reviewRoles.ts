@@ -47,7 +47,19 @@ export type StaffCapability =
   | 'export_reviews';
 
 const CAPABILITIES: Record<StaffRole, readonly StaffCapability[]> = {
-  owner: ['manage_system', 'manage_reviewers', 'manage_assignments', 'view_all_reviews', 'edit_content', 'view_audit', 'export_reviews'],
+  owner: [
+    'manage_system',
+    'manage_reviewers',
+    'manage_assignments',
+    'view_all_reviews',
+    'review_language',
+    'review_development',
+    'review_evidence',
+    'edit_content',
+    'publish_content',
+    'view_audit',
+    'export_reviews',
+  ],
   system_admin: ['manage_system', 'manage_reviewers', 'view_all_reviews', 'view_audit'],
   content_editor: ['edit_content', 'view_all_reviews'],
   review_manager: ['manage_reviewers', 'manage_assignments', 'view_all_reviews', 'export_reviews'],
@@ -69,3 +81,28 @@ export function distinctRoles(primary: StaffRole, additional: readonly StaffRole
   return [...new Set([primary, ...(additional ?? [])])];
 }
 
+export type ReviewerType = Extract<
+  StaffRole,
+  | 'language_reviewer'
+  | 'myanmar_language_reviewer'
+  | 'child_development_reviewer'
+  | 'evidence_reviewer'
+  | 'clinical_reviewer'
+>;
+
+/**
+ * The owner may personally complete non-clinical editorial reviews while
+ * keeping the normal assignment, checklist, decision, and audit trail.
+ * Clinical review remains restricted to a separately qualified clinical role.
+ */
+export function mayActAsReviewerType(roles: readonly StaffRole[], reviewerType: ReviewerType): boolean {
+  if (roles.includes(reviewerType)) return true;
+  return roles.includes('owner') && reviewerType !== 'clinical_reviewer';
+}
+
+export function reviewerTypeMayReviewDimension(reviewerType: ReviewerType, dimension: string): boolean {
+  if (reviewerType === 'clinical_reviewer') return ['clinical', 'safety', 'evidence'].includes(dimension);
+  if (reviewerType === 'evidence_reviewer') return dimension === 'evidence';
+  if (reviewerType === 'child_development_reviewer') return dimension === 'development';
+  return dimension === 'english' || dimension === 'native_myanmar';
+}
