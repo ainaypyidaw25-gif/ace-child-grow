@@ -492,6 +492,21 @@ export default defineSchema({
     .index('by_content', ['contentSlug'])
     .index('by_actor', ['actorId']),
 
+  reviewChecklists: defineTable({
+    assignmentId: v.id('reviewAssignments'),
+    contentSlug: v.string(),
+    contentVersion: v.number(),
+    dimension: v.union(
+      v.literal('english'), v.literal('native_myanmar'), v.literal('development'),
+      v.literal('evidence'), v.literal('safety'), v.literal('clinical'),
+    ),
+    responses: v.array(v.object({ key: v.string(), checked: v.boolean() })),
+    updatedBy: v.id('users'),
+    updatedAt: v.number(),
+  })
+    .index('by_assignment_dimension', ['assignmentId', 'dimension'])
+    .index('by_content_version', ['contentSlug', 'contentVersion']),
+
   // Media architecture for library content. Only architecture + placeholders are
   // seeded; real assets are attached later via the CMS media system.
   libraryMedia: defineTable({

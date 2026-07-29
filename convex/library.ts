@@ -352,6 +352,43 @@ export const search = query({
   },
 });
 
+export const listPublishable = query({
+  args: { limit: v.optional(v.number()) },
+  returns: v.array(v.object({
+    slug: v.string(), titleMm: v.string(), titleEn: v.string(), type: v.string(),
+    reviewRevision: v.number(), publicationStatus: v.string(),
+  })),
+  handler: async (ctx, args) => {
+    await requirePublisher(ctx);
+    const limit = Math.max(1, Math.min(100, Math.floor(args.limit ?? 50)));
+    const rows = await ctx.db.query('libraryContent').collect();
+    const result = [];
+    const required = ['english', 'native_myanmar', 'evidence', 'safety', 'clinical'] as const;
+    for (const item of rows) {
+      if (isPubliclyReadableContent(item) || item.publicationStatus === 'archived') continue;
+      const revision = item.reviewRevision ?? 1;
+      const history = await ctx.db.query('contentReviews')
+        .withIndex('by_content', (q) => q.eq('contentSlug', item.slug))
+        .order('desc').take(100);
+      const current = new Map<string, string>();
+      for (const review of history) {
+        if (review.contentVersion === revision && !current.has(review.dimension)) current.set(review.dimension, review.decision);
+      }
+      if (!required.every((dimension) => current.get(dimension) === 'approved')) continue;
+      result.push({
+        slug: item.slug,
+        titleMm: item.titleMm,
+        titleEn: item.titleEn,
+        type: item.type,
+        reviewRevision: revision,
+        publicationStatus: item.publicationStatus ?? 'draft',
+      });
+      if (result.length >= limit) break;
+    }
+    return result;
+  },
+});
+
 // Coverage/stats — powers the admin dashboard and integrity checks.
 export const stats = query({
   args: {},

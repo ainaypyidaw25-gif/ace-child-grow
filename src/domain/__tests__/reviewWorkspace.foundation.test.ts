@@ -7,6 +7,8 @@ const auth = readFileSync('convex/lib/auth.ts', 'utf8');
 const invites = readFileSync('convex/admin.ts', 'utf8');
 const assignments = readFileSync('convex/reviewAssignments.ts', 'utf8');
 const reviews = readFileSync('convex/contentReviews.ts', 'utf8');
+const checklists = readFileSync('convex/reviewChecklists.ts', 'utf8');
+const checklistRules = readFileSync('convex/lib/reviewChecklists.ts', 'utf8');
 const library = readFileSync('convex/library.ts', 'utf8');
 const release = readFileSync('convex/release.ts', 'utf8');
 const app = readFileSync('src/app/App.tsx', 'utf8');
@@ -70,5 +72,21 @@ describe('review workspace security foundation', () => {
     expect(app).toContain("allowedRoles={['owner', 'system_admin', 'review_manager']}");
     expect(auth).toContain('requirePublisher');
   });
-});
 
+  it('requires a complete role-specific checklist before approval', () => {
+    expect(schema).toContain('reviewChecklists: defineTable');
+    expect(checklistRules).toContain('native_myanmar');
+    expect(checklistRules).toContain('clinical');
+    expect(reviews).toContain('Complete every required checklist item before approval');
+  });
+
+  it('allows reviewers to edit only their own active assignment checklist', () => {
+    expect(checklists).toContain("assignment.reviewerId !== userId");
+    expect(checklists).toContain("assignment.status === 'cancelled'");
+    expect(checklists).toContain("action: 'review.checklist.saved'");
+  });
+
+  it('does not let reviewers bypass a decision by transitioning an assignment to approved', () => {
+    expect(assignments).toContain("'re_review_required', 'approved'");
+  });
+});

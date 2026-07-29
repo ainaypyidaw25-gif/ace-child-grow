@@ -106,6 +106,81 @@ export const listMine = query({
   },
 });
 
+export const listManaged = query({
+  args: { status: v.optional(statusValidator), limit: v.optional(v.number()) },
+  returns: v.array(v.object({
+    assignment: assignmentValidator,
+    titleMm: v.string(),
+    titleEn: v.string(),
+    ageGroupKey: v.union(v.string(), v.null()),
+    contentType: v.string(),
+  })),
+  handler: async (ctx, args) => {
+    const userId = await requireUser(ctx);
+    const access = await getStaffAccess(ctx, userId);
+    if (!access?.roles.some((role) => ['owner', 'system_admin', 'review_manager', 'auditor'].includes(role))) {
+      throw new Error('Review overview access denied');
+    }
+    const limit = Math.max(1, Math.min(200, Math.floor(args.limit ?? 100)));
+    const rows = args.status
+      ? await ctx.db.query('reviewAssignments')
+        .withIndex('by_status_due', (q) => q.eq('status', args.status!))
+        .order('desc').take(limit)
+      : await ctx.db.query('reviewAssignments').order('desc').take(limit);
+    const result = [];
+    for (const assignment of rows) {
+      const content = await ctx.db.query('libraryContent')
+        .withIndex('by_slug', (q) => q.eq('slug', assignment.contentSlug)).unique();
+      if (!content) continue;
+      result.push({
+        assignment,
+        titleMm: content.titleMm,
+        titleEn: content.titleEn,
+        ageGroupKey: content.ageGroupKey ?? null,
+        contentType: content.type,
+      });
+    }
+    return result;
+  },
+});
+
+export const summary = query({
+  args: {},
+  returns: v.object({
+    total: v.number(), assigned: v.number(), inReview: v.number(), changesRequested: v.number(),
+    revisedWaiting: v.number(), approved: v.number(), blocked: v.number(), overdue: v.number(),
+    dueThisWeek: v.number(), completionPercent: v.number(), managerView: v.boolean(),
+  }),
+  handler: async (ctx) => {
+    const userId = await requireUser(ctx);
+    const access = await getStaffAccess(ctx, userId);
+    if (!access) throw new Error('Staff only');
+    const managerView = access.roles.some((role) => ['owner', 'system_admin', 'review_manager', 'auditor'].includes(role));
+    const rows = managerView
+      ? await ctx.db.query('reviewAssignments').collect()
+      : await ctx.db.query('reviewAssignments').withIndex('by_reviewer', (q) => q.eq('reviewerId', userId)).collect();
+    const visible = managerView ? rows : rows.filter((row) => access.roles.includes(row.reviewerType));
+    const now = Date.now();
+    const week = now + 7 * 24 * 60 * 60 * 1000;
+    const active = visible.filter((row) => row.status !== 'cancelled');
+    const count = (statuses: string[]) => active.filter((row) => statuses.includes(row.status)).length;
+    const approved = count(['approved']);
+    return {
+      total: active.length,
+      assigned: count(['assigned']),
+      inReview: count(['in_review']),
+      changesRequested: count(['changes_requested']),
+      revisedWaiting: count(['revised', 're_review_required']),
+      approved,
+      blocked: count(['blocked']),
+      overdue: active.filter((row) => row.dueAt !== undefined && row.dueAt < now && row.status !== 'approved').length,
+      dueThisWeek: active.filter((row) => row.dueAt !== undefined && row.dueAt >= now && row.dueAt <= week && row.status !== 'approved').length,
+      completionPercent: active.length === 0 ? 0 : Math.round((approved / active.length) * 100),
+      managerView,
+    };
+  },
+});
+
 export const create = mutation({
   args: {
     contentSlug: v.string(),
@@ -151,6 +226,13 @@ export const create = mutation({
     await recordEvent(ctx, {
       assignmentId, contentSlug: args.contentSlug, contentVersion: content.reviewRevision ?? 1,
       reviewRound: 1, actorId: managerId, action: 'assignment.created', after: 'assigned',
+    });
+    await ctx.db.insert('notifications', {
+      userId: args.reviewerId,
+      titleMm: 'သုံးသပ်ရန် အကြောင်းအရာအသစ် ရရှိပါသည်',
+      titleEn: 'New review assignment',
+      bodyMm: `${content.titleMm} ကို သတ်မှတ်ရက်အတွင်း စစ်ဆေးပေးပါ။`,
+      bodyEn: `Please review ${content.titleEn} within the assigned due date.`,
     });
     await logAudit(ctx, managerId, 'review.assignment.create', 'reviewAssignments', assignmentId, args.contentSlug);
     return { ok: true as const, assignmentId };
@@ -198,6 +280,15 @@ export const transition = mutation({
       after: args.status,
       reason,
     });
+    if (manager && assignment.reviewerId !== userId && ['changes_requested', 're_review_required', 'blocked'].includes(args.status)) {
+      await ctx.db.insert('notifications', {
+        userId: assignment.reviewerId,
+        titleMm: args.status === 'changes_requested' ? 'သုံးသပ်ချက် ပြင်ဆင်ရန် လိုအပ်ပါသည်' : 'သုံးသပ်မှုအခြေအနေ ပြောင်းလဲထားပါသည်',
+        titleEn: args.status === 'changes_requested' ? 'Review changes requested' : 'Review status updated',
+        bodyMm: reason,
+        bodyEn: reason,
+      });
+    }
     await logAudit(ctx, userId, 'review.assignment.transition', 'reviewAssignments', assignment._id, `${assignment.status} → ${args.status}`);
     return { ok: true as const };
   },

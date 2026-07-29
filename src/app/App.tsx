@@ -171,7 +171,7 @@ function AppRoutes() {
       <Route path="/content/:slug" element={<Layout><ContentDetail /></Layout>} />
       <Route path="/admin" element={<StaffRoleRoute allowedRoles={['owner', 'system_admin', 'review_manager', 'content_editor', 'auditor']}><Layout><AdminReviewQueue /></Layout></StaffRoleRoute>} />
       <Route path="/admin/library" element={<StaffRoleRoute allowedRoles={['owner', 'content_editor']}><Layout><LibraryAdmin /></Layout></StaffRoleRoute>} />
-      <Route path="/admin/reviews" element={<StaffRoleRoute allowedRoles={['owner', 'system_admin', 'review_manager', 'language_reviewer', 'myanmar_language_reviewer', 'child_development_reviewer', 'evidence_reviewer', 'clinical_reviewer', 'auditor']}><Layout><ContentReviewWorkspace /></Layout></StaffRoleRoute>} />
+      <Route path="/admin/reviews" element={<StaffRoleRoute allowedRoles={['owner', 'system_admin', 'review_manager', 'language_reviewer', 'myanmar_language_reviewer', 'child_development_reviewer', 'evidence_reviewer', 'clinical_reviewer', 'publisher', 'auditor']}><Layout><ContentReviewWorkspace /></Layout></StaffRoleRoute>} />
       <Route path="/admin/evidence" element={<StaffRoleRoute allowedRoles={['owner', 'content_editor', 'evidence_reviewer', 'clinical_reviewer', 'auditor']}><Layout><EvidenceAdmin /></Layout></StaffRoleRoute>} />
       <Route path="/admin/team" element={<StaffRoleRoute allowedRoles={['owner', 'system_admin', 'review_manager']}><Layout><AdminTeam /></Layout></StaffRoleRoute>} />
       <Route path="/admin/directory" element={<StaffRoleRoute allowedRoles={['owner', 'system_admin', 'support']}><Layout><AdminDirectory /></Layout></StaffRoleRoute>} />

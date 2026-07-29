@@ -18,6 +18,7 @@ import { transition as transitionContent } from '../../../convex/content';
 import { listSessions, recordSession } from '../../../convex/milestones';
 import { complete as completeActivity, list as listActivities } from '../../../convex/activities';
 import { claimInvite, createInvite } from '../../../convex/admin';
+import { requiredChecklistKeys } from '../../../convex/lib/reviewChecklists';
 
 type Row = Record<string, unknown> & { _id?: string };
 
@@ -289,6 +290,11 @@ describe('Convex registered handlers enforce authorization', () => {
           _id: 'assignment-1', contentSlug: 'item-1', contentVersion: 3, reviewerId: 'clinical-1',
           reviewerType: 'clinical_reviewer', assignedBy: 'manager-1', assignedAt: 1,
           priority: 'normal', reviewRound: 1, reviewScope: 'safety', status: 'assigned', updatedAt: 1,
+        }],
+        reviewChecklists: [{
+          assignmentId: 'assignment-1', contentSlug: 'item-1', contentVersion: 3, dimension: 'safety',
+          responses: requiredChecklistKeys('safety').map((key) => ({ key, checked: true })),
+          updatedBy: 'clinical-1', updatedAt: 2,
         }],
       },
     });

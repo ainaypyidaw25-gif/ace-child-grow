@@ -3,6 +3,7 @@ import { mutation, query } from './_generated/server';
 import { logAudit } from './audit';
 import { getStaffAccess, requireReviewEditor, requireUser, type StaffRole } from './lib/auth';
 import { staffRoleValidator as roleValidator } from './lib/reviewRoles';
+import { requiredChecklistKeys } from './lib/reviewChecklists';
 
 const dimensionValidator = v.union(
   v.literal('english'),
@@ -65,7 +66,7 @@ export const listForContent = query({
   handler: async (ctx, args) => {
     const userId = await requireUser(ctx);
     const access = await getStaffAccess(ctx, userId);
-    if (!access || access.roles.every((role) => ['support', 'publisher'].includes(role))) {
+    if (!access || access.roles.every((role) => role === 'support')) {
       return { allowed: false, contentVersion: null, current: [], history: [] };
     }
     const content = await ctx.db
@@ -74,7 +75,7 @@ export const listForContent = query({
       .unique();
     if (!content) return { allowed: true, contentVersion: null, current: [], history: [] };
     const mayBrowseAll = access.roles.some((role) =>
-      ['owner', 'system_admin', 'review_manager', 'content_editor', 'auditor'].includes(role),
+      ['owner', 'system_admin', 'review_manager', 'content_editor', 'publisher', 'auditor'].includes(role),
     );
     if (!mayBrowseAll) {
       const assignments = await ctx.db.query('reviewAssignments')
@@ -149,6 +150,14 @@ export const saveDecision = mutation({
       access.roles.includes(row.reviewerType),
     );
     if (!assignment) throw new Error('An active assignment is required to review this content revision');
+    if (args.decision === 'approved') {
+      const checklist = await ctx.db.query('reviewChecklists')
+        .withIndex('by_assignment_dimension', (q) => q.eq('assignmentId', assignment._id).eq('dimension', args.dimension))
+        .unique();
+      const checked = new Set(checklist?.responses.filter((response) => response.checked).map((response) => response.key) ?? []);
+      const missing = requiredChecklistKeys(args.dimension).filter((key) => !checked.has(key));
+      if (missing.length > 0) throw new Error('Complete every required checklist item before approval');
+    }
     const now = Date.now();
     const values = {
       decision: args.decision,
