@@ -291,14 +291,64 @@ describe('Convex registered handlers enforce authorization', () => {
       rows: { libraryContent: [{
         _id: 'content-1', slug: 'item-1', titleMm: 'ဟောင်း', titleEn: 'Old', tags: [],
         reviewRevision: 4, clinicalStatus: 'published', reviewerDisplayName: 'Prior reviewer',
+        data: {
+          body: 'Old body', editorialStatus: 'reference_verified', evidenceSummary: 'Trusted evidence',
+          domains: ['play'], parentChild: true, quiz: [{ q: 'Old question', answerIndex: 1 }],
+          steps: ['Old step one', 'Old step two'], notes: ['Keep this', 'Remove this'],
+        },
+      }] },
+    });
+    await expect(handler(updateDraft)(context, {
+      slug: 'item-1', titleMm: 'အသစ်', titleEn: 'New',
+      data: {
+        body: 'Revised', editorialStatus: 'client_override', evidenceSummary: 'Changed in browser',
+        domains: ['clinical'], references: ['injected'], relatedLessons: ['injected-lesson'], parentChild: false,
+        quiz: [{ q: 'Revised question', answerIndex: 0 }],
+        steps: ['New step one', 'New step two', 'New step three'], notes: ['Keep this'],
+      },
+      expectedReviewRevision: 4,
+    })).resolves.toEqual({ ok: true, reviewRevision: 5 });
+    expect(context.db.patch).toHaveBeenCalledWith('content-1', expect.objectContaining({
+      reviewRevision: 5, clinicalStatus: 'clinical_review', reviewerDisplayName: undefined,
+      data: {
+        body: 'Revised', editorialStatus: 'reference_verified', evidenceSummary: 'Trusted evidence',
+        domains: ['play'], parentChild: true, quiz: [{ q: 'Revised question', answerIndex: 1 }],
+        steps: ['New step one', 'New step two', 'New step three'], notes: ['Keep this'],
+      },
+    }));
+  });
+
+  it('a language reviewer cannot directly edit the server-owned content draft', async () => {
+    authState.userId = 'language-1';
+    const context = ctx({
+      profile: {
+        userId: 'language-1', isStaff: true, staffRole: 'language_reviewer', displayName: 'Native Reviewer',
+      },
+      rows: { libraryContent: [{
+        _id: 'content-1', slug: 'item-1', titleMm: 'ဟောင်း', titleEn: 'Old', tags: [], data: { body: 'Old' },
       }] },
     });
     await expect(handler(updateDraft)(context, {
       slug: 'item-1', titleMm: 'အသစ်', titleEn: 'New', data: { body: 'Revised' },
-    })).resolves.toEqual({ ok: true, reviewRevision: 5 });
-    expect(context.db.patch).toHaveBeenCalledWith('content-1', expect.objectContaining({
-      reviewRevision: 5, clinicalStatus: 'clinical_review', reviewerDisplayName: undefined,
-    }));
+      expectedReviewRevision: 1,
+    })).rejects.toThrow('Insufficient staff permission');
+    expect(context.db.patch).not.toHaveBeenCalled();
+  });
+
+  it('rejects a stale editor snapshot instead of overwriting newer text', async () => {
+    authState.userId = 'editor-1';
+    const context = ctx({
+      profile: { userId: 'editor-1', isStaff: true, staffRole: 'content_editor', displayName: 'Editor' },
+      rows: { libraryContent: [{
+        _id: 'content-1', slug: 'item-1', titleMm: 'အသစ်ဆုံး', titleEn: 'Latest', tags: [],
+        reviewRevision: 5, data: { body: 'Newer saved wording' },
+      }] },
+    });
+    await expect(handler(updateDraft)(context, {
+      slug: 'item-1', titleMm: 'ဟောင်းသောပြင်ဆင်ချက်', titleEn: 'Stale edit',
+      data: { body: 'Stale wording' }, expectedReviewRevision: 4,
+    })).rejects.toThrow('newer changes');
+    expect(context.db.patch).not.toHaveBeenCalled();
   });
 
   it('blocks publication when any current-revision review area is missing', async () => {

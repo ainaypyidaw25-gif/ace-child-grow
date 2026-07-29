@@ -19,18 +19,18 @@ export function Layout({ children, showNav = true }: { children: ReactNode; show
   return (
     <div className="app-ambient min-h-screen bg-canvas">
       <header className="sticky top-0 z-30 border-b border-line/80 bg-cream/90 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-3 sm:h-16 sm:px-6 lg:px-8">
           <Link to="/home" className="flex min-h-touch items-center gap-3" aria-label="ACE Child Grow">
             <span aria-hidden className="brand-sprout"><span /><i /></span>
             <span>
-              <span className="block text-sm font-bold tracking-tight text-ink">ACE Child Grow</span>
+              <span className="block whitespace-nowrap text-[13px] font-bold tracking-tight text-ink sm:text-sm">ACE Child Grow</span>
               <span className="hidden text-[11px] leading-none text-ink-soft sm:block">
                 {locale === 'mm' ? 'ကလေးတိုင်း ကြီးထွားနိုင်တယ်' : 'Every child can grow'}
               </span>
             </span>
           </Link>
 
-          <div className="flex items-center gap-1.5 sm:gap-2">
+          <div className="flex shrink-0 items-center gap-1 sm:gap-2">
             {!online && (
               <span className="hidden rounded-pill bg-pastel-orange px-3 py-1 text-xs text-ink sm:inline">
                 {locale === 'mm' ? 'အင်တာနက်မရှိ' : 'Offline'}
@@ -40,7 +40,7 @@ export function Layout({ children, showNav = true }: { children: ReactNode; show
               <Link
                 to={inStaffWorkspace ? '/home' : '/admin'}
                 onClick={() => setPortalMode(inStaffWorkspace ? 'parent' : 'staff')}
-                className="rounded-pill border border-sky/30 bg-white px-3 py-1 text-xs font-semibold text-sky-deep"
+                className="rounded-pill border border-sky/30 bg-white px-2.5 py-1 text-xs font-semibold text-sky-deep sm:px-3"
               >
                 {inStaffWorkspace
                   ? locale === 'mm' ? 'မိဘမြင်ကွင်း' : 'Parent view'
@@ -62,7 +62,7 @@ export function Layout({ children, showNav = true }: { children: ReactNode; show
             <button
               type="button"
               onClick={() => setLocale(locale === 'mm' ? 'en' : 'mm')}
-              className="rounded-pill border border-line bg-white px-3 py-1 text-xs font-medium text-ink-soft"
+              className="rounded-pill border border-line bg-white px-2.5 py-1 text-xs font-medium text-ink-soft sm:px-3"
               aria-label="Switch language"
             >
               {locale === 'mm' ? 'EN' : 'မြန်မာ'}
