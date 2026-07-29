@@ -20,7 +20,7 @@ This is not a production launch approval. Production still needs the reviewed mi
 | 2 | `agent/reviewer-workspace-pr2` | `0f3784a` | Server permissions, secure invitations, assignments, audit events and fail-closed publication |
 | 3 | `agent/reviewer-workspace-pr3` | `5007a66` | Reviewer queue, checklists, decisions, history and separate publisher handoff |
 | 4 | `agent/reviewer-workspace-pr4` | `54850b0` | Reviewer comments, wording proposals, completion/payment reports and timeline UI |
-| 5 | `agent/reviewer-workspace-pr5` | pending final commit | Permission edge cases, owner workflow, non-technical content editor, E2E update and launch-gate record |
+| 5 | `agent/reviewer-workspace-pr5` | `2c01ddb` | Permission edge cases, owner workflow, non-technical content editor, E2E update and launch-gate record |
 
 Each branch is based on the previous branch so the changes can be reviewed in small units. Do not merge a later branch without its predecessors.
 
