@@ -20,7 +20,7 @@ This is not a production launch approval. Production still needs the reviewed mi
 | 2 | `agent/reviewer-workspace-pr2` | `0f3784a` | Server permissions, secure invitations, assignments, audit events and fail-closed publication |
 | 3 | `agent/reviewer-workspace-pr3` | `5007a66` | Reviewer queue, checklists, decisions, history and separate publisher handoff |
 | 4 | `agent/reviewer-workspace-pr4` | `54850b0` | Reviewer comments, wording proposals, completion/payment reports and timeline UI |
-| 5 | `agent/reviewer-workspace-pr5` | `2c01ddb` | Permission edge cases, owner workflow, non-technical content editor, E2E update and launch-gate record |
+| 5 | `agent/reviewer-workspace-pr5` | current branch tip | Permission edge cases, owner workflow, non-technical content editor, Preview Google sign-in configuration, responsive QA and launch-gate record |
 
 Each branch is based on the previous branch so the changes can be reviewed in small units. Do not merge a later branch without its predecessors.
 
@@ -44,6 +44,8 @@ Each branch is based on the previous branch so the changes can be reviewed in sm
 - Owner operational control for reviewer management, assignments, content editing, non-clinical review, reports and publishing content that has already completed every required gate.
 - A plain field-by-field content editor for Myanmar and English wording. Reviewers and editors are never asked to edit raw JSON.
 - Owner self-assignment for language, development and evidence review with the same checklist, revision and audit requirements as any reviewer. Clinical sign-off remains a separately qualified role.
+- Development Preview Google sign-in now receives its dedicated OAuth client ID and secret explicitly from Convex environment configuration. Production OAuth configuration was not changed.
+- A dedicated Development owner account completed the reviewer workspace checks at 360×800 and 820×1180. Myanmar text wrapped correctly, the field editor stayed non-technical, and no control was hidden behind the bottom navigation.
 
 ### Partly complete
 
@@ -60,7 +62,8 @@ Each branch is based on the previous branch so the changes can be reviewed in sm
 - Real reviewer invitations and production role grants.
 - Production classification/backfill and reviewer assignments.
 - Production migration, merge or deployment.
-- Supervised desktop/iPad/360px reviewer QA with real scoped accounts.
+- Supervised QA with each restricted reviewer-role combination and revoked-access cases.
+- Final Google OAuth callback confirmation after the new Development OAuth client finishes propagating through Google's consent service.
 - Clinical reviewer identity, qualification, scope and re-review-date governance.
 
 ## Security findings and controls
@@ -93,7 +96,7 @@ Commands executed from the clean reviewer worktree:
 
 - `npm run typecheck` — PASS
 - `npm run lint` — PASS
-- `npm test -- --run` — PASS, 47 files / 574 tests
+- `npm test -- --run` — PASS, 47 files / 577 tests
 - `npm run build` — PASS; only the existing Vite large-chunk advisory remains
 - `npx playwright test tests/e2e/staff-invite.spec.ts` — PASS, 1/1
 - Full Playwright run — app boot passed, three credential-dependent flows skipped, and the invitation test initially exposed stale expected Myanmar copy; the expectation was updated and the focused flow then passed
@@ -105,7 +108,8 @@ Development Convex code generation was used to validate schema/functions. No pro
 
 - Approve the 383-row classification dry run and expected parent-catalogue impact.
 - Verify real role combinations with dedicated test accounts, including revoked access.
-- Complete supervised mobile/iPad/desktop QA and correct any overflow or Myanmar rendering issue found.
+- Complete restricted-role and revoked-access QA; owner mobile/iPad responsive QA is complete.
+- Confirm the final Development Google OAuth callback after Google-side client propagation. The consent screen already loads without `invalid_client`.
 - Identify and authorise actual clinical reviewers before any item requiring clinical review can become publishable.
 - Review and approve the rollback export and production verification queries.
 

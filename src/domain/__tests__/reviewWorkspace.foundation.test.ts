@@ -4,6 +4,7 @@ import { hasCapability, mayActAsReviewerType } from '../../../convex/lib/reviewR
 
 const schema = readFileSync('convex/schema.ts', 'utf8');
 const auth = readFileSync('convex/lib/auth.ts', 'utf8');
+const authProviders = readFileSync('convex/auth.ts', 'utf8');
 const invites = readFileSync('convex/admin.ts', 'utf8');
 const assignments = readFileSync('convex/reviewAssignments.ts', 'utf8');
 const reviews = readFileSync('convex/contentReviews.ts', 'utf8');
@@ -17,6 +18,12 @@ const app = readFileSync('src/app/App.tsx', 'utf8');
 const workspace = readFileSync('src/screens/ContentReviewWorkspace.tsx', 'utf8');
 
 describe('review workspace security foundation', () => {
+  it('passes configured Google OAuth credentials to the provider', () => {
+    expect(authProviders).toContain('clientId: process.env.GOOGLE_ID');
+    expect(authProviders).toContain('clientSecret: process.env.GOOGLE_SECRET');
+    expect(authProviders).not.toContain('providers: [Google,');
+  });
+
   it('keeps clinical approval and publication as separate capabilities', () => {
     expect(hasCapability(['clinical_reviewer'], 'review_clinical')).toBe(true);
     expect(hasCapability(['clinical_reviewer'], 'publish_content')).toBe(false);
