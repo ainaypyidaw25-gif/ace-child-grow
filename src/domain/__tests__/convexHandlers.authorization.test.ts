@@ -318,12 +318,39 @@ describe('Convex registered handlers enforce authorization', () => {
     }));
   });
 
-  it('a language reviewer cannot directly edit the server-owned content draft', async () => {
-    authState.userId = 'language-1';
+  it.each(['language_reviewer', 'evidence_reviewer', 'clinical_reviewer'] as const)(
+    'lets a %s correct wording while resetting the item for fresh review',
+    async (staffRole) => {
+      authState.userId = 'reviewer-1';
+      const context = ctx({
+        profile: {
+          userId: 'reviewer-1', isStaff: true, staffRole, displayName: 'Assigned Reviewer',
+        },
+        rows: { libraryContent: [{
+          _id: 'content-1', slug: 'item-1', titleMm: 'ဟောင်း', titleEn: 'Old', tags: [], data: { body: 'Old' },
+        }] },
+      });
+      await expect(handler(updateDraft)(context, {
+        slug: 'item-1', titleMm: 'အသစ်', titleEn: 'New', data: { body: 'Revised' },
+        expectedReviewRevision: 1,
+      })).resolves.toEqual({ ok: true, reviewRevision: 2 });
+      expect(context.db.patch).toHaveBeenCalledWith('content-1', expect.objectContaining({
+        titleMm: 'အသစ်',
+        titleEn: 'New',
+        data: { body: 'Revised' },
+        reviewRevision: 2,
+        clinicalStatus: 'clinical_review',
+        reviewerId: undefined,
+        reviewerQualification: undefined,
+        reviewerDisplayName: undefined,
+      }));
+    },
+  );
+
+  it('does not let support staff edit review content', async () => {
+    authState.userId = 'support-1';
     const context = ctx({
-      profile: {
-        userId: 'language-1', isStaff: true, staffRole: 'language_reviewer', displayName: 'Native Reviewer',
-      },
+      profile: { userId: 'support-1', isStaff: true, staffRole: 'support', displayName: 'Support' },
       rows: { libraryContent: [{
         _id: 'content-1', slug: 'item-1', titleMm: 'ဟောင်း', titleEn: 'Old', tags: [], data: { body: 'Old' },
       }] },

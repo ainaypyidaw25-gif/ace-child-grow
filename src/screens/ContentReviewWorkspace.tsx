@@ -32,6 +32,10 @@ function mayReview(role: StaffRole | null | undefined, dimension: Dimension): bo
   return ['owner', 'content_editor', 'language_reviewer'].includes(role);
 }
 
+function mayEditContent(role: StaffRole | null | undefined): boolean {
+  return !!role && role !== 'support';
+}
+
 export type EditableField = {
   key: string;
   path: string[];
@@ -226,7 +230,7 @@ function contentEditorSnapshot(item: ContentEditorItem): string {
   });
 }
 
-function ContentEditor({ item, onDirtyChange }: { item: {
+function ContentEditor({ item, role, onDirtyChange }: { item: {
   slug: string;
   titleMm: string;
   titleEn: string;
@@ -234,7 +238,7 @@ function ContentEditor({ item, onDirtyChange }: { item: {
   summaryEn?: string;
   data: unknown;
   reviewRevision?: number;
-}; onDirtyChange: (dirty: boolean) => void }) {
+}; role: Exclude<StaffRole, 'support'>; onDirtyChange: (dirty: boolean) => void }) {
   const { locale } = useLocale();
   const L = (mm: string, en: string) => locale === 'mm' ? mm : en;
   const updateDraft = useMutation(api.library.updateDraft);
@@ -312,6 +316,17 @@ function ContentEditor({ item, onDirtyChange }: { item: {
           {L('ပြင်လျှင် ပြန်လည်သုံးသပ်ရမည်', 'Edits reset active review')}
         </span>
       </div>
+      <p className="rounded-xl bg-mint-soft px-3 py-2 text-sm text-ink">
+        {role === 'content_editor' || role === 'owner'
+          ? L(
+            'ဤအကောင့်ဖြင့် အကြောင်းအရာစာသားအားလုံးကို တည်းဖြတ်နိုင်သည်။ အဖွဲ့ဝင်၊ ငွေပေးချေမှုနှင့် ဆေးဘက်ဆိုင်ရာ အတည်ပြုချက်တို့ကို သီးခြားခွင့်ပြုချက်ဖြင့်သာ စီမံနိုင်သည်။',
+            'This account may edit all content wording. Team, billing and clinical approval remain separately permissioned.',
+          )
+          : L(
+            'သုံးသပ်နေစဉ် တွေ့ရှိသည့် စာသားအမှားကို ဤနေရာတွင် တိုက်ရိုက်ပြင်နိုင်သည်။ သိမ်းပြီးနောက် အတည်ပြုချက်များကို မူကွဲအသစ်အတွက် ပြန်လည်စစ်ဆေးရမည်။',
+            'You may correct wording directly while reviewing. Saving creates a new revision that requires fresh approvals.',
+          )}
+      </p>
       <div className="grid gap-3 lg:grid-cols-2">
         <label className="space-y-1 text-sm font-medium text-ink">
           <span>မြန်မာခေါင်းစဉ်</span>
@@ -475,8 +490,13 @@ export function ContentReviewWorkspace() {
         </label>
       </section>
 
-      {item && ['owner', 'content_editor'].includes(access.role ?? '') && (
-        <ContentEditor key={`${item.slug}-${item.updatedAt}`} item={item} onDirtyChange={setEditorDirty} />
+      {item && mayEditContent(access.role) && (
+        <ContentEditor
+          key={`${item.slug}-${item.updatedAt}`}
+          item={item}
+          role={access.role as Exclude<StaffRole, 'support'>}
+          onDirtyChange={setEditorDirty}
+        />
       )}
 
       {item && reviews?.allowed && (
