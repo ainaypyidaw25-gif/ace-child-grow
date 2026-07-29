@@ -15,7 +15,10 @@ Server-side capabilities are authoritative. Hidden buttons are not security cont
 | Approve clinical review | No | No | No | No | Yes | No | No |
 | Publish after all gates | No | No | No | No | No | Yes | No |
 | Alter another reviewer sign-off | No | No | No | No | No | No | No |
-| View reviewer payment report | Yes | Yes | Own summary only | Own summary only | Own summary only | No | Yes if granted |
+| View reviewer completion summary | Yes | Yes | Own counts only | Own counts only | Own counts only | No | Yes |
+| View reviewer rates/payment amounts | Yes | Yes | No | No | No | No | No |
+| Prepare or dispute a payment batch | Yes | Yes | No | No | No | No | No |
+| Approve payment / record externally paid | Yes | No | No | No | No | No | No |
 | Export management reports | Yes | Yes | No | No | No | No | Yes |
 | View parent/child private data | No | No | No | No | No | No | No |
 
@@ -35,6 +38,9 @@ Server-side capabilities are authoritative. Hidden buttons are not security cont
 - A role may have one or more explicit capabilities, but clinical approval and publication must always be separate capabilities.
 - Assignments restrict content access in addition to role capability.
 - Managers may view assignments but cannot approve a review dimension unless they also hold that reviewer capability.
+- Reviewer rates, adjustments and proposed payment amounts are manager-only financial information. Reviewers may see only their own non-financial completion counts.
+- Monetary access requires an active profile with an explicitly persisted `owner`, `system_admin` or `review_manager` role; the legacy boolean-only staff fallback is never sufficient.
+- A Review Manager may prepare a payment batch or mark it disputed. Only an `owner` or `system_admin` may approve it or record that an external payment was completed.
+- A recorded `paid` status is an audit record of a manual/external payment. ACE Child Grow does not automatically send reviewer payments.
 - Revocation immediately invalidates reviewer queries and mutations.
 - Auditors receive read-only access to review data and never parent or child records.
-

@@ -12,7 +12,13 @@ import { getStaffAccess, requireContentEditor, requireProfessionalPublisher, req
 import { logAudit } from './audit';
 import { resolveEntitlements } from './lib/entitlements';
 import { STARTER_ANIMATION_SLUGS } from './animationPlan';
-import { seedAuditSummary, seedMayUpdateExisting, seedMediaIsProtected } from './lib/seedPolicy';
+import {
+  seedAuditSummary,
+  seedContentNeedsUpdate,
+  seedMayUpdateExisting,
+  seedMediaIsProtected,
+  seedReviewInvalidationPatch,
+} from './lib/seedPolicy';
 import type { Doc, Id } from './_generated/dataModel';
 import type { StaffRole } from './lib/reviewRoles';
 
@@ -520,24 +526,17 @@ export const importSeed = mutation({
           skippedApproved += 1;
           continue;
         }
-        await ctx.db.patch(existing._id, {
-          ...content,
-          // Preserve the workflow state; review decisions remain in the
-          // append-only review history rather than on this changed revision.
-          clinicalStatus: existing.clinicalStatus,
-          // The seed may contain new wording. Preserve old decisions as audit
-          // history, but never let them authorize content they did not review.
-          reviewRevision: (existing.reviewRevision ?? 1) + 1,
-          reviewerId: undefined,
-          reviewerQualification: undefined,
-          reviewerDisplayName: undefined,
-          reviewScope: undefined,
-          reviewedAt: undefined,
-          nextReviewAt: undefined,
-          reviewNote: undefined,
-          updatedAt: now,
-        });
-        updated++;
+        if (seedContentNeedsUpdate(existing, content)) {
+          await ctx.db.patch(existing._id, {
+            ...content,
+            // Preserve old decisions as append-only history, but make them
+            // stale for changed wording by advancing the review revision.
+            clinicalStatus: existing.clinicalStatus,
+            ...seedReviewInvalidationPatch(existing),
+            updatedAt: now,
+          });
+          updated++;
+        }
       } else {
         // Import can NEVER create published content — reaching 'published' is only
         // possible through setReview (the clinical-review workflow). Clamp on insert.

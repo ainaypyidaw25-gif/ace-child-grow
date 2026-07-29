@@ -1,5 +1,7 @@
 # ACE Child Grow reviewer workspace — current-state audit
 
+> **Historical baseline — do not use this file as the current implementation status.** This audit records the state of `main` at `1d94ac4` before reviewer-workspace PRs #20–#24 were opened. Findings such as “NOT STARTED” and “UNSAFE” below describe that audited baseline, not the later stacked branches. Current development status and remaining work are tracked in `REVIEW_WORKSPACE_IMPLEMENTATION_PROGRESS.md`. This file is intentionally preserved as the original audit record.
+
 Audit date: 2026-07-29  
 Audited branch/commit: `main` / `1d94ac42ad290f8c7187c31516f27db924b3870f`  
 Working branch: `agent/reviewer-workspace-pr1`
@@ -132,4 +134,3 @@ Reviewers who can enter the workspace receive the same full bilingual/JSON edito
 5. Review detail/checklists/decisions/history.
 6. Manager progress, exports, payment completion report and notifications.
 7. Migration dry run, security tests and supervised mobile QA.
-

@@ -41,13 +41,38 @@
 - [ ] No production mutation, invitation email, merge or deployment occurred without its separate approval.
 - [ ] Parent catalogue shows only content satisfying the final publication policy.
 
-## Automated run — 2026-07-29
+## PR6 notifications, payment report and export
+
+- [x] Automated tests confirm a reviewer can read only notifications addressed to their own account.
+- [x] Automated tests confirm due-soon and overdue reminders are not duplicated when the scheduled job runs again.
+- [x] Cursor-paginated reminder tests cover assignments and manager recipients beyond the first page and verify complete digest totals.
+- [x] Notification action paths are allowlisted; assignment access remains enforced by the destination query.
+- [x] Reviewers, publishers and auditors cannot read rates, adjustments, notes or proposed payment amounts.
+- [x] Legacy `isStaff` rows without an explicit persisted role cannot call any monetary report or payment mutation.
+- [x] Review Manager can prepare or dispute a batch but cannot approve it or mark it paid.
+- [x] Only Owner/System Admin can set `approved_for_payment` or record an external payment as `paid`.
+- [x] Invalid payment status jumps, empty batches and negative proposed totals are rejected by the server.
+- [x] CSV and print exports contain only authorised report fields and export actions are audited.
+- [x] Truncated summary/completion reads surface partial-result metadata and disable CSV/print exports.
+- [x] No automatic reviewer payment, production email, real invitation, production migration or deployment occurred.
+- [x] Unchanged seed/import runs do not open a new review revision; changed unapproved wording cannot reuse the prior active approvals.
+- [x] The plain content editor warns before unsaved wording is discarded.
+
+## Current automated run — PR6, 2026-07-29
+
+The checked results below verify the PR6 development branch and make it ready for a draft PR. They do not approve production deployment.
 
 - [x] Typecheck passed.
 - [x] Lint passed.
-- [x] Unit/integration/permission suite passed: 47 files, 571 tests.
+- [x] Unit/integration/permission/UI suite passed: 54 files, 624 tests.
 - [x] Production build passed; existing large-chunk advisory only.
-- [x] Signed-out staff invitation create-account/sign-in E2E passed.
-- [x] Direct-handler tests cover unrelated-assignment denial, manager-only notes, proposal isolation, manager-report denial and actual-round audit events.
-- [ ] Credential-dependent parent and login-persistence E2E flows were skipped by their existing environment guards.
-- [ ] Desktop/iPad/360px supervised reviewer QA remains required.
+- [x] Development Convex validation passed; schema and functions compiled without touching Production.
+
+## Remaining manual acceptance
+
+- [ ] Sign in with dedicated Myanmar, development, clinical, publisher, auditor and Review Manager accounts and confirm each role sees only its permitted controls and records.
+- [ ] Verify notification action links with an assigned reviewer and confirm an unrelated reviewer cannot open the target assignment.
+- [ ] Verify the payment workspace is hidden from reviewer, publisher and auditor accounts while remaining available to authorised managers.
+- [ ] Verify Review Manager cannot approve/mark paid and Owner/System Admin can do so only through valid transitions.
+- [ ] Check the reviewer queue, notification history, payment workspace, CSV text and print layout on desktop, iPad and 360px mobile.
+- [ ] Confirm Myanmar text wraps correctly and bottom navigation does not cover actions on a physical Android test device.

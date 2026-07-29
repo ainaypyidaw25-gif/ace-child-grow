@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
+  canExportReviewerCompletion,
   collectEditableFields,
   HIDDEN_SYSTEM_FIELDS,
   humanizeField,
@@ -13,6 +14,12 @@ function field(key: string, path: string[], language: EditableField['language'])
 }
 
 describe('reviewer content field labels', () => {
+  it('allows complete completion reports to export but blocks partial results', () => {
+    expect(canExportReviewerCompletion({ hasMore: false })).toBe(true);
+    expect(canExportReviewerCompletion({ hasMore: true })).toBe(false);
+    expect(canExportReviewerCompletion(undefined)).toBe(false);
+  });
+
   it('gives direct bilingual milestone fields clear Myanmar labels', () => {
     expect(humanizeField(field('encouragementMm', ['encouragementMm'], 'mm'), 'mm')).toBe('အားပေးစကား');
     expect(humanizeField(field('encouragementEn', ['encouragementEn'], 'en'), 'mm')).toBe('အားပေးစကား (English)');

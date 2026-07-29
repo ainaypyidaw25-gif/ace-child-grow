@@ -41,3 +41,21 @@ Clinical approval is required only when a risk classifier or Review Manager mark
 
 Every sensitive transition stores actor, timestamp, action, previous value, new value and reason. Normal reviewers cannot update or delete audit rows. Seeds must not overwrite reviewer profiles, assignments, decisions, comments, approvals or audit events.
 
+## Notifications
+
+- Reviewer notifications are private to the signed-in recipient.
+- New assignment, changes requested, revision ready, due-soon and overdue events may create in-app notifications.
+- Scheduled reminders must use a stable duplicate key so the same reminder is not sent repeatedly.
+- Scheduled reminder workers paginate every matching assignment and manager recipient; a fixed first page must not starve later records, and manager digests are sent only after complete totals are known.
+- A notification may link to the assigned review item but must not contain a raw invitation token or unrelated parent/child information.
+- Invitation email and other real email delivery remain disabled until a separate approved rollout. PR6 uses in-app notifications only.
+
+## Reviewer completion and payment record
+
+- Completion counts are calculated by the server from assignments and review events.
+- Reviewer rates, adjustments, notes and proposed payment amounts are manager-only.
+- A Review Manager may prepare a batch or mark it disputed.
+- Only an Owner or System Admin may approve a batch or record that an external payment has been completed.
+- The recorded `paid` status does not transfer money. Reviewer payment remains a manual process outside this app.
+- CSV and print-friendly manager exports are allowed. They must use the same server-authorised data and must not expose payment data to reviewers or publishers.
+- If a bounded report indicates additional rows exist, it is labelled partial and its complete-report export actions are disabled.

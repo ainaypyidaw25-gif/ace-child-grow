@@ -73,6 +73,31 @@ export async function getStaffAccess(ctx: Ctx, userId: Id<'users'>): Promise<Sta
     : null;
 }
 
+/**
+ * Resolve only an active, explicitly persisted staff role.
+ *
+ * `getStaffAccess` intentionally retains the legacy `isStaff -> owner`
+ * bootstrap fallback for existing non-monetary admin workflows. Money-related
+ * APIs must use this stricter path so a legacy boolean can never become payment
+ * preparation or payment-approval authority.
+ */
+export async function getExplicitStaffAccess(
+  ctx: Ctx,
+  userId: Id<'users'>,
+): Promise<StaffAccess | null> {
+  const profile = await ctx.db
+    .query('parentProfiles')
+    .withIndex('by_user', (q) => q.eq('userId', userId))
+    .unique();
+  if (profile?.isStaff !== true || !profile.staffRole) return null;
+  return {
+    role: profile.staffRole,
+    roles: distinctRoles(profile.staffRole, profile.additionalStaffRoles),
+    qualification: profile.staffQualification?.trim() || null,
+    displayName: profile.displayName?.trim() || null,
+  };
+}
+
 /** Whether the given user is staff (Admin workspace access). */
 export async function isStaff(ctx: Ctx, userId: Id<'users'>): Promise<boolean> {
   return (await getStaffAccess(ctx, userId)) !== null;
@@ -107,6 +132,25 @@ async function requireOneOf(ctx: Ctx, roles: StaffRole[]): Promise<{ userId: Id<
   const userId = await requireUser(ctx);
   const access = await getStaffAccess(ctx, userId);
   if (!access || !access.roles.some((role) => roles.includes(role))) throw new Error('Insufficient staff permission');
+  return { userId, access };
+}
+
+/**
+ * Require an active staff profile with an explicit persisted role.
+ *
+ * Use this for monetary or similarly high-impact workflows. It deliberately
+ * does not inherit `getStaffAccess`'s legacy `isStaff -> owner` fallback.
+ * Additional roles are accepted only after an explicit primary role exists.
+ */
+export async function requireExplicitStaffRole(
+  ctx: Ctx,
+  roles: readonly StaffRole[],
+): Promise<{ userId: Id<'users'>; access: StaffAccess }> {
+  const userId = await requireUser(ctx);
+  const access = await getExplicitStaffAccess(ctx, userId);
+  if (!access || !access.roles.some((role) => roles.includes(role))) {
+    throw new Error('Insufficient explicit staff permission');
+  }
   return { userId, access };
 }
 

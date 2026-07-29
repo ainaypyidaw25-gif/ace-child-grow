@@ -29,6 +29,9 @@ const statusValidator = v.union(
   v.literal('cancelled'),
 );
 
+const MANAGER_SUMMARY_ASSIGNMENT_LIMIT = 5_000;
+const REVIEWER_SUMMARY_ASSIGNMENT_LIMIT = 1_000;
+
 const assignmentValidator = v.object({
   _id: v.id('reviewAssignments'),
   _creationTime: v.number(),
@@ -146,22 +149,32 @@ export const listManaged = query({
 });
 
 export const summary = query({
-  args: {},
+  args: { asOf: v.number() },
   returns: v.object({
     total: v.number(), assigned: v.number(), inReview: v.number(), changesRequested: v.number(),
     revisedWaiting: v.number(), approved: v.number(), blocked: v.number(), overdue: v.number(),
     dueThisWeek: v.number(), completionPercent: v.number(), managerView: v.boolean(),
+    hasMore: v.boolean(), assignmentLimit: v.number(),
   }),
-  handler: async (ctx) => {
+  handler: async (ctx, args) => {
     const userId = await requireUser(ctx);
     const access = await getStaffAccess(ctx, userId);
     if (!access) throw new Error('Staff only');
     const managerView = access.roles.some((role) => ['owner', 'system_admin', 'review_manager', 'auditor'].includes(role));
-    const rows = managerView
-      ? await ctx.db.query('reviewAssignments').collect()
-      : await ctx.db.query('reviewAssignments').withIndex('by_reviewer', (q) => q.eq('reviewerId', userId)).collect();
+    const assignmentLimit = managerView
+      ? MANAGER_SUMMARY_ASSIGNMENT_LIMIT
+      : REVIEWER_SUMMARY_ASSIGNMENT_LIMIT;
+    const boundedRows = managerView
+      ? await ctx.db.query('reviewAssignments').order('desc').take(assignmentLimit + 1)
+      : await ctx.db.query('reviewAssignments')
+        .withIndex('by_reviewer', (q) => q.eq('reviewerId', userId))
+        .order('desc')
+        .take(assignmentLimit + 1);
+    const hasMore = boundedRows.length > assignmentLimit;
+    const rows = boundedRows.slice(0, assignmentLimit);
     const visible = managerView ? rows : rows.filter((row) => access.roles.includes(row.reviewerType));
-    const now = Date.now();
+    const now = args.asOf;
+    if (!Number.isSafeInteger(now) || now < 0) throw new Error('Valid summary time is required');
     const week = now + 7 * 24 * 60 * 60 * 1000;
     const active = visible.filter((row) => row.status !== 'cancelled');
     const count = (statuses: string[]) => active.filter((row) => statuses.includes(row.status)).length;
@@ -178,6 +191,8 @@ export const summary = query({
       dueThisWeek: active.filter((row) => row.dueAt !== undefined && row.dueAt >= now && row.dueAt <= week && row.status !== 'approved').length,
       completionPercent: active.length === 0 ? 0 : Math.round((approved / active.length) * 100),
       managerView,
+      hasMore,
+      assignmentLimit,
     };
   },
 });
@@ -254,6 +269,12 @@ export const create = mutation({
       titleEn: 'New review assignment',
       bodyMm: `${content.titleMm} ကို သတ်မှတ်ရက်အတွင်း စစ်ဆေးပေးပါ။`,
       bodyEn: `Please review ${content.titleEn} within the assigned due date.`,
+      kind: 'review_assignment',
+      assignmentId,
+      contentSlug: args.contentSlug,
+      targetPath: `/admin/reviews?content=${encodeURIComponent(args.contentSlug)}`,
+      sourceKey: `review_assignment:${assignmentId}`,
+      createdAt: now,
     });
     await logAudit(ctx, managerId, 'review.assignment.create', 'reviewAssignments', assignmentId, args.contentSlug);
     return { ok: true as const, assignmentId };
@@ -301,13 +322,22 @@ export const transition = mutation({
       after: args.status,
       reason,
     });
-    if (manager && assignment.reviewerId !== userId && ['changes_requested', 're_review_required', 'blocked'].includes(args.status)) {
+    if (manager && assignment.reviewerId !== userId && ['changes_requested', 'revised', 're_review_required', 'blocked'].includes(args.status)) {
+      const kind = args.status === 'changes_requested'
+        ? 'review_changes_requested' as const
+        : 'review_re_review' as const;
       await ctx.db.insert('notifications', {
         userId: assignment.reviewerId,
         titleMm: args.status === 'changes_requested' ? 'သုံးသပ်ချက် ပြင်ဆင်ရန် လိုအပ်ပါသည်' : 'သုံးသပ်မှုအခြေအနေ ပြောင်းလဲထားပါသည်',
         titleEn: args.status === 'changes_requested' ? 'Review changes requested' : 'Review status updated',
         bodyMm: reason,
         bodyEn: reason,
+        kind,
+        assignmentId: assignment._id,
+        contentSlug: assignment.contentSlug,
+        targetPath: `/admin/reviews?content=${encodeURIComponent(assignment.contentSlug)}`,
+        sourceKey: `review_state:${assignment._id}:${args.status}:${now}`,
+        createdAt: now,
       });
     }
     await logAudit(ctx, userId, 'review.assignment.transition', 'reviewAssignments', assignment._id, `${assignment.status} → ${args.status}`);

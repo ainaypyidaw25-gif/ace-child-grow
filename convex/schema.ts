@@ -267,15 +267,35 @@ export default defineSchema({
     .index('by_user', ['userId'])
     .index('by_user_activity', ['userId', 'activityKey']),
 
-  // Per-parent notifications (e.g. review reminders). Private.
+  // Private per-user notifications. Parent, reviewer and manager notifications
+  // share this table, but every public query is scoped to the authenticated
+  // user. Optional workflow metadata keeps existing rows schema-compatible.
   notifications: defineTable({
     userId: v.id('users'),
     titleMm: v.string(),
     titleEn: v.string(),
     bodyMm: v.optional(v.string()),
     bodyEn: v.optional(v.string()),
+    kind: v.optional(v.union(
+      v.literal('general'),
+      v.literal('review_assignment'),
+      v.literal('review_due'),
+      v.literal('review_overdue'),
+      v.literal('review_changes_requested'),
+      v.literal('review_re_review'),
+      v.literal('review_manager_digest'),
+    )),
+    assignmentId: v.optional(v.id('reviewAssignments')),
+    contentSlug: v.optional(v.string()),
+    targetPath: v.optional(v.string()),
+    sourceKey: v.optional(v.string()),
+    createdAt: v.optional(v.number()),
     readAt: v.optional(v.number()),
-  }).index('by_user', ['userId']),
+  })
+    .index('by_user', ['userId'])
+    .index('by_user_and_read_at', ['userId', 'readAt'])
+    .index('by_source_key', ['sourceKey'])
+    .index('by_assignment', ['assignmentId']),
 
   // Admin CMS content items carrying review-workflow state. Readable by any
   // authenticated user only when 'published'; staff see all and can transition.
@@ -542,14 +562,30 @@ export default defineSchema({
     reviewerId: v.id('users'),
     assignmentIds: v.array(v.id('reviewAssignments')),
     agreedRateMmk: v.number(),
+    rateBasis: v.optional(v.union(v.literal('per_item'), v.literal('package'))),
     manualAdjustmentMmk: v.number(),
+    manualAdjustmentReason: v.optional(v.string()),
     proposedPayableMmk: v.number(),
+    assignedItemCount: v.optional(v.number()),
+    firstReviewsCompleted: v.optional(v.number()),
+    revisionReviewsCompleted: v.optional(v.number()),
+    finalApprovalsCompleted: v.optional(v.number()),
+    blockedItems: v.optional(v.number()),
+    rejectedItems: v.optional(v.number()),
+    overdueItems: v.optional(v.number()),
+    totalCompletedItems: v.optional(v.number()),
     status: v.union(
       v.literal('not_calculated'), v.literal('ready_for_review'), v.literal('approved_for_payment'),
       v.literal('paid'), v.literal('disputed'),
     ),
     note: v.optional(v.string()),
+    paymentReference: v.optional(v.string()),
     createdBy: v.id('users'),
+    calculatedAt: v.optional(v.number()),
+    approvedBy: v.optional(v.id('users')),
+    approvedAt: v.optional(v.number()),
+    paidBy: v.optional(v.id('users')),
+    paidAt: v.optional(v.number()),
     createdAt: v.number(),
     updatedAt: v.number(),
   })

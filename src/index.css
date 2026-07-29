@@ -14,6 +14,42 @@
 @tailwind components;
 @tailwind utilities;
 
+@media print {
+  body.print-reviewer-completion * {
+    visibility: hidden;
+  }
+
+  body.print-reviewer-completion #reviewer-completion-report,
+  body.print-reviewer-completion #reviewer-completion-report * {
+    visibility: visible;
+  }
+
+  body.print-reviewer-completion #reviewer-completion-report {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    border: 0;
+    box-shadow: none;
+  }
+
+  body.print-reviewer-payments * {
+    visibility: hidden;
+  }
+
+  body.print-reviewer-payments #reviewer-payment-report,
+  body.print-reviewer-payments #reviewer-payment-report * {
+    visibility: visible;
+  }
+
+  body.print-reviewer-payments #reviewer-payment-report {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    border: 0;
+    box-shadow: none;
+  }
+}
+
 /* Myanmar-first typography. Body >= 16px, generous line-height, no clipped glyphs. */
 :root {
   color-scheme: light; /* light theme default; avoid accidental dark mode */

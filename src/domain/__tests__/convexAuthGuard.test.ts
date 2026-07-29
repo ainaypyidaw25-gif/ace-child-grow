@@ -25,6 +25,7 @@ const KNOWN_AUTH_CALLS = [
   'requireStaff',
   'requireOwner',
   'requireReviewManager',
+  'requireExplicitStaffRole',
   'requirePublisher',
   'requireContentEditor',
   'requireEvidenceEditor',

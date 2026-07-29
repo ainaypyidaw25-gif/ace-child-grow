@@ -1,6 +1,13 @@
 import { v } from 'convex/values';
 import { mutation, query } from './_generated/server';
-import { getStaffAccess, requireOwner, requireReviewManager, requireUser, type StaffRole } from './lib/auth';
+import {
+  getExplicitStaffAccess,
+  getStaffAccess,
+  requireOwner,
+  requireReviewManager,
+  requireUser,
+  type StaffRole,
+} from './lib/auth';
 import { logAudit } from './audit';
 import { staffRoleValidator as roleValidator } from './lib/reviewRoles';
 
@@ -42,6 +49,7 @@ export const myAccess = query({
     v.null(),
     v.object({
       isStaff: v.boolean(),
+      isExplicitRole: v.boolean(),
       role: v.union(roleValidator, v.null()),
       roles: v.array(roleValidator),
       qualification: v.union(v.string(), v.null()),
@@ -51,8 +59,10 @@ export const myAccess = query({
   handler: async (ctx) => {
     const userId = await requireUser(ctx);
     const access = await getStaffAccess(ctx, userId);
+    const explicitAccess = await getExplicitStaffAccess(ctx, userId);
     return {
       isStaff: access !== null,
+      isExplicitRole: explicitAccess !== null,
       role: access?.role ?? null,
       roles: access?.roles ?? [],
       qualification: access?.qualification ?? null,
