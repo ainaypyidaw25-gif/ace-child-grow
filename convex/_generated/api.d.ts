@@ -44,6 +44,8 @@ import type * as release from "../release.js";
 import type * as reports from "../reports.js";
 import type * as reviewAssignments from "../reviewAssignments.js";
 import type * as reviewChecklists from "../reviewChecklists.js";
+import type * as reviewCollaboration from "../reviewCollaboration.js";
+import type * as reviewReports from "../reviewReports.js";
 import type * as seed from "../seed.js";
 import type * as sleep from "../sleep.js";
 import type * as subscriptions from "../subscriptions.js";
@@ -91,6 +93,8 @@ declare const fullApi: ApiFromModules<{
   reports: typeof reports;
   reviewAssignments: typeof reviewAssignments;
   reviewChecklists: typeof reviewChecklists;
+  reviewCollaboration: typeof reviewCollaboration;
+  reviewReports: typeof reviewReports;
   seed: typeof seed;
   sleep: typeof sleep;
   subscriptions: typeof subscriptions;

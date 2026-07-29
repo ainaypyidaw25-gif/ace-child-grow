@@ -9,6 +9,8 @@ const assignments = readFileSync('convex/reviewAssignments.ts', 'utf8');
 const reviews = readFileSync('convex/contentReviews.ts', 'utf8');
 const checklists = readFileSync('convex/reviewChecklists.ts', 'utf8');
 const checklistRules = readFileSync('convex/lib/reviewChecklists.ts', 'utf8');
+const collaboration = readFileSync('convex/reviewCollaboration.ts', 'utf8');
+const reports = readFileSync('convex/reviewReports.ts', 'utf8');
 const library = readFileSync('convex/library.ts', 'utf8');
 const release = readFileSync('convex/release.ts', 'utf8');
 const app = readFileSync('src/app/App.tsx', 'utf8');
@@ -88,5 +90,23 @@ describe('review workspace security foundation', () => {
 
   it('does not let reviewers bypass a decision by transitioning an assignment to approved', () => {
     expect(assignments).toContain("'re_review_required', 'approved'");
+  });
+
+  it('stores proposals separately instead of overwriting canonical content', () => {
+    expect(schema).toContain('reviewProposals: defineTable');
+    expect(collaboration).toContain("ctx.db.insert('reviewProposals'");
+    expect(collaboration).not.toContain("ctx.db.patch('libraryContent'");
+  });
+
+  it('keeps comments and proposal actions in the immutable review timeline', () => {
+    expect(schema).toContain('reviewComments: defineTable');
+    expect(collaboration).toContain("action: 'review.comment.added'");
+    expect(collaboration).toContain("'review.proposal.submitted'");
+  });
+
+  it('provides manual payment reporting without payment processing', () => {
+    expect(schema).toContain('reviewPaymentBatches: defineTable');
+    expect(reports).toContain('proposedPayableMmk');
+    expect(reports).not.toMatch(/checkout|charge|paymentIntent/i);
   });
 });

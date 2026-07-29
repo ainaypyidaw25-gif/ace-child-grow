@@ -181,6 +181,26 @@ export const summary = query({
   },
 });
 
+export const history = query({
+  args: { assignmentId: v.id('reviewAssignments') },
+  returns: v.array(v.object({
+    _id: v.id('reviewEvents'), _creationTime: v.number(), assignmentId: v.optional(v.id('reviewAssignments')),
+    contentSlug: v.string(), contentVersion: v.number(), reviewRound: v.number(), actorId: v.id('users'),
+    action: v.string(), before: v.optional(v.string()), after: v.optional(v.string()), reason: v.optional(v.string()), createdAt: v.number(),
+  })),
+  handler: async (ctx, args) => {
+    await requireUser(ctx);
+    const userId = await requireUser(ctx);
+    const access = await getStaffAccess(ctx, userId);
+    const assignment = await ctx.db.get(args.assignmentId);
+    if (!access || !assignment) throw new Error('Assignment access denied');
+    const manager = access.roles.some((role) => ['owner', 'system_admin', 'review_manager', 'content_editor', 'auditor'].includes(role));
+    const reviewer = assignment.reviewerId === userId && access.roles.includes(assignment.reviewerType);
+    if (!manager && !reviewer) throw new Error('Assignment access denied');
+    return await ctx.db.query('reviewEvents').withIndex('by_assignment', (q) => q.eq('assignmentId', args.assignmentId)).order('desc').take(200);
+  },
+});
+
 export const create = mutation({
   args: {
     contentSlug: v.string(),

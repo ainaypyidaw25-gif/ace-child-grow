@@ -507,6 +507,56 @@ export default defineSchema({
     .index('by_assignment_dimension', ['assignmentId', 'dimension'])
     .index('by_content_version', ['contentSlug', 'contentVersion']),
 
+  reviewComments: defineTable({
+    assignmentId: v.id('reviewAssignments'),
+    contentSlug: v.string(),
+    contentVersion: v.number(),
+    authorId: v.id('users'),
+    authorDisplayName: v.string(),
+    body: v.string(),
+    visibility: v.union(v.literal('reviewer_and_manager'), v.literal('managers_only')),
+    createdAt: v.number(),
+  })
+    .index('by_assignment', ['assignmentId'])
+    .index('by_author', ['authorId']),
+
+  reviewProposals: defineTable({
+    assignmentId: v.id('reviewAssignments'),
+    contentSlug: v.string(),
+    contentVersion: v.number(),
+    field: v.union(v.literal('titleMm'), v.literal('summaryMm'), v.literal('structuredMyanmar')),
+    proposedText: v.string(),
+    reviewerId: v.id('users'),
+    status: v.union(v.literal('draft'), v.literal('submitted'), v.literal('accepted'), v.literal('rejected')),
+    decisionReason: v.optional(v.string()),
+    decidedBy: v.optional(v.id('users')),
+    decidedAt: v.optional(v.number()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index('by_assignment', ['assignmentId'])
+    .index('by_content_version', ['contentSlug', 'contentVersion']),
+
+  reviewPaymentBatches: defineTable({
+    batchKey: v.string(),
+    reviewerId: v.id('users'),
+    assignmentIds: v.array(v.id('reviewAssignments')),
+    agreedRateMmk: v.number(),
+    manualAdjustmentMmk: v.number(),
+    proposedPayableMmk: v.number(),
+    status: v.union(
+      v.literal('not_calculated'), v.literal('ready_for_review'), v.literal('approved_for_payment'),
+      v.literal('paid'), v.literal('disputed'),
+    ),
+    note: v.optional(v.string()),
+    createdBy: v.id('users'),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index('by_batch_key', ['batchKey'])
+    .index('by_reviewer', ['reviewerId'])
+    .index('by_status', ['status']),
+
   // Media architecture for library content. Only architecture + placeholders are
   // seeded; real assets are attached later via the CMS media system.
   libraryMedia: defineTable({
