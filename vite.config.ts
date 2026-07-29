@@ -15,6 +15,10 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
+      // Registration is controlled at runtime. The web app registers normally,
+      // while the packaged Capacitor app removes legacy PWA caches so an older
+      // shell can never be mixed with the current Android bundle.
+      injectRegister: null,
       // Activate a new application shell as soon as a deployment is available.
       // `prompt` was previously used without rendering an update prompt, which
       // could leave Safari displaying an old sign-in screen indefinitely.

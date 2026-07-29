@@ -22,7 +22,7 @@ export class ScreenErrorBoundary extends Component<Props, State> {
     if (!this.state.failed) return this.props.children;
     const mm = this.props.locale === 'mm';
     return (
-      <section className="mx-auto max-w-lg rounded-card border border-line bg-white p-5 text-center shadow-card" role="alert">
+      <section className="mx-auto flex min-h-[50vh] max-w-lg flex-col justify-center rounded-card border border-line bg-white p-5 text-center shadow-card" role="alert">
         <h1 className="text-lg font-bold text-ink">
           {mm ? 'ဤစာမျက်နှာကို ခဏဖွင့်၍ မရသေးပါ' : 'This page could not open'}
         </h1>
