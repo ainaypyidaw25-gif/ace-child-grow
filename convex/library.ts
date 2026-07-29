@@ -8,7 +8,13 @@
 import { query, mutation } from './_generated/server';
 import { v } from 'convex/values';
 import { getAuthUserId } from '@convex-dev/auth/server';
-import { hasStaffRole, requireClinicalPublisher, requireContentEditor, requireProfessionalPublisher } from './lib/auth';
+import {
+  hasStaffRole,
+  requireClinicalPublisher,
+  requireContentEditor,
+  requireProfessionalPublisher,
+  requireReviewEditor,
+} from './lib/auth';
 import { logAudit } from './audit';
 import { resolveEntitlements } from './lib/entitlements';
 import { STARTER_ANIMATION_SLUGS } from './animationPlan';
@@ -498,7 +504,12 @@ export const updateDraft = mutation({
   },
   returns: v.object({ ok: v.literal(true), reviewRevision: v.number() }),
   handler: async (ctx, args) => {
-    const userId = await requireContentEditor(ctx);
+    // All reviewer roles may correct parent-facing wording directly from the
+    // review workspace. This deliberately does not grant publishing, team,
+    // billing, evidence-registry or other owner-only permissions. Every save
+    // creates a fresh review revision below, so the editor cannot reuse a
+    // previous reviewer sign-off for changed text.
+    const { userId, access } = await requireReviewEditor(ctx);
     const item = await ctx.db
       .query('libraryContent')
       .withIndex('by_slug', (q) => q.eq('slug', args.slug))
@@ -548,7 +559,7 @@ export const updateDraft = mutation({
       'library.content.edit',
       'libraryContent',
       item._id,
-      `${args.slug} · review revision ${reviewRevision}`,
+      `${args.slug} · ${access.role} · review revision ${reviewRevision}`,
       {
         before: JSON.stringify({ titleMm: item.titleMm, titleEn: item.titleEn, reviewRevision: item.reviewRevision ?? 1 }),
         after: JSON.stringify({ titleMm, titleEn, reviewRevision }),
