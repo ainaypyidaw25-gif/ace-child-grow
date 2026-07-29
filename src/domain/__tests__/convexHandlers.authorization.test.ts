@@ -19,12 +19,20 @@ import { listSessions, recordSession } from '../../../convex/milestones';
 import { complete as completeActivity, list as listActivities } from '../../../convex/activities';
 import { claimInvite, createInvite } from '../../../convex/admin';
 import { requiredChecklistKeys } from '../../../convex/lib/reviewChecklists';
+import {
+  addComment as addReviewComment,
+  decideProposal,
+  list as listReviewCollaboration,
+  saveProposal,
+} from '../../../convex/reviewCollaboration';
+import { completion as reviewerCompletion } from '../../../convex/reviewReports';
 
 type Row = Record<string, unknown> & { _id?: string };
 
 function ctx(options: {
   rows?: Record<string, Row[]>;
   get?: Row | null;
+  gets?: Record<string, Row | null>;
   profile?: Row | null;
 } = {}) {
   const patch = vi.fn();
@@ -61,7 +69,7 @@ function ctx(options: {
     auth: {},
     db: {
       query,
-      get: vi.fn(async () => options.get ?? null),
+      get: vi.fn(async (id: string) => options.gets?.[id] ?? options.get ?? null),
       patch,
       insert,
     },
@@ -275,6 +283,108 @@ describe('Convex registered handlers enforce authorization', () => {
       contentSlug: 'item-1', dimension: 'clinical', decision: 'approved',
     })).rejects.toThrow('cannot decide this review area');
     expect(context.db.patch).not.toHaveBeenCalled();
+  });
+
+  it('an unrelated reviewer cannot read another reviewer assignment collaboration', async () => {
+    authState.userId = 'reviewer-2';
+    const context = ctx({
+      profile: {
+        userId: 'reviewer-2', isStaff: true, staffRole: 'language_reviewer', displayName: 'Other Reviewer',
+      },
+      get: {
+        _id: 'assignment-1', contentSlug: 'item-1', contentVersion: 2, reviewerId: 'reviewer-1',
+        reviewerType: 'language_reviewer', reviewRound: 3, status: 'in_review',
+      },
+      rows: { reviewComments: [], reviewProposals: [] },
+    });
+    await expect(handler(listReviewCollaboration)(context, {
+      assignmentId: 'assignment-1' as never,
+    })).rejects.toThrow('Assignment access denied');
+    expect(context.db.query).toHaveBeenCalledWith('parentProfiles');
+    expect(context.db.query).not.toHaveBeenCalledWith('reviewComments');
+  });
+
+  it('an assigned reviewer cannot create a manager-only note', async () => {
+    authState.userId = 'reviewer-1';
+    const context = ctx({
+      profile: {
+        userId: 'reviewer-1', isStaff: true, staffRole: 'language_reviewer', displayName: 'Language Reviewer',
+      },
+      get: {
+        _id: 'assignment-1', contentSlug: 'item-1', contentVersion: 2, reviewerId: 'reviewer-1',
+        reviewerType: 'language_reviewer', reviewRound: 3, status: 'in_review',
+      },
+    });
+    await expect(handler(addReviewComment)(context, {
+      assignmentId: 'assignment-1' as never,
+      body: 'Private manager note',
+      visibility: 'managers_only',
+    })).rejects.toThrow('Only managers may create a manager-only note');
+    expect(context.db.insert).not.toHaveBeenCalled();
+  });
+
+  it('a reviewer wording proposal is version-bound and never overwrites canonical content', async () => {
+    authState.userId = 'reviewer-1';
+    const context = ctx({
+      profile: {
+        userId: 'reviewer-1', isStaff: true, staffRole: 'language_reviewer', displayName: 'Language Reviewer',
+      },
+      get: {
+        _id: 'assignment-1', contentSlug: 'item-1', contentVersion: 4, reviewerId: 'reviewer-1',
+        reviewerType: 'language_reviewer', reviewRound: 2, status: 'in_review',
+      },
+    });
+    await expect(handler(saveProposal)(context, {
+      assignmentId: 'assignment-1' as never,
+      field: 'summaryMm',
+      proposedText: 'မိဘများ နားလည်လွယ်သော စာသား',
+      submit: true,
+    })).resolves.toMatchObject({ ok: true });
+    expect(context.db.insert).toHaveBeenCalledWith('reviewProposals', expect.objectContaining({
+      contentSlug: 'item-1', contentVersion: 4, reviewerId: 'reviewer-1', status: 'submitted',
+    }));
+    expect(context.db.patch).not.toHaveBeenCalled();
+  });
+
+  it('a normal reviewer cannot open the manager completion report', async () => {
+    authState.userId = 'reviewer-1';
+    const context = ctx({
+      profile: {
+        userId: 'reviewer-1', isStaff: true, staffRole: 'language_reviewer', displayName: 'Language Reviewer',
+      },
+      rows: { reviewAssignments: [] },
+    });
+    await expect(handler(reviewerCompletion)(context, {})).rejects.toThrow('Review report access denied');
+    expect(context.db.query).not.toHaveBeenCalledWith('reviewAssignments');
+  });
+
+  it('a content editor proposal decision records the actual review round without editing content', async () => {
+    authState.userId = 'editor-1';
+    const context = ctx({
+      profile: {
+        userId: 'editor-1', isStaff: true, staffRole: 'content_editor', displayName: 'Content Editor',
+      },
+      gets: {
+        'proposal-1': {
+          _id: 'proposal-1', assignmentId: 'assignment-1', contentSlug: 'item-1', contentVersion: 4,
+          reviewerId: 'reviewer-1', field: 'summaryMm', proposedText: 'စာသားအသစ်', status: 'submitted',
+        },
+        'assignment-1': {
+          _id: 'assignment-1', contentSlug: 'item-1', contentVersion: 4, reviewerId: 'reviewer-1',
+          reviewerType: 'language_reviewer', reviewRound: 5, status: 'in_review',
+        },
+      },
+    });
+    await expect(handler(decideProposal)(context, {
+      proposalId: 'proposal-1' as never,
+      decision: 'accepted',
+      reason: 'အသုံးအနှုန်း ပိုသဘာဝကျသည်',
+    })).resolves.toEqual({ ok: true });
+    expect(context.db.insert).toHaveBeenCalledWith('reviewEvents', expect.objectContaining({
+      assignmentId: 'assignment-1', reviewRound: 5, action: 'review.proposal.accepted',
+    }));
+    expect(context.db.patch).toHaveBeenCalledTimes(1);
+    expect(context.db.patch).toHaveBeenCalledWith('proposal-1', expect.objectContaining({ status: 'accepted' }));
   });
 
   it('a qualified clinical reviewer can record a version-bound safety decision', async () => {

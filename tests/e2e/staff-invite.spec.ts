@@ -8,7 +8,7 @@ test('a signed-out invite recipient can create an account or sign in', async ({ 
   await expect(page.getByText('ဖိတ်ကြားထားသော အီးမေးလ်အတိအကျဖြင့်')).toBeVisible();
   await expect(page.getByRole('button', { name: 'မိဘဝင်ရန်' })).toBeDisabled();
 
-  await page.getByRole('button', { name: 'အကောင့်ရှိပြီးသားလား? ဝင်ရန်' }).click();
-  await expect(page.getByRole('heading', { name: 'စီမံခန့်ခွဲသူ သို့မဟုတ် ပညာရှင်အကောင့်ဝင်ရန်' })).toBeVisible();
+  await page.getByRole('button', { name: 'အကောင့်ရှိပြီးသားဆိုလျှင် ဝင်ရန်' }).click();
+  await expect(page.getByRole('heading', { name: 'အဖွဲ့ဝင် သို့မဟုတ် ပညာရှင်အကောင့်ဝင်ရန်' })).toBeVisible();
   await expect(page.locator('vite-error-overlay')).toHaveCount(0);
 });

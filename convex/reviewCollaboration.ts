@@ -110,13 +110,15 @@ export const decideProposal = mutation({
     const userId = await requireContentEditor(ctx);
     const proposal = await ctx.db.get(args.proposalId);
     if (!proposal) throw new Error('Proposal not found');
+    const assignment = await ctx.db.get(proposal.assignmentId);
+    if (!assignment) throw new Error('Assignment not found');
     const reason = args.reason.trim();
     if (!reason) throw new Error('A decision reason is required');
     const now = Date.now();
     await ctx.db.patch(proposal._id, { status: args.decision, decisionReason: reason, decidedBy: userId, decidedAt: now, updatedAt: now });
     await ctx.db.insert('reviewEvents', {
       assignmentId: proposal.assignmentId, contentSlug: proposal.contentSlug, contentVersion: proposal.contentVersion,
-      reviewRound: 1, actorId: userId, action: `review.proposal.${args.decision}`,
+      reviewRound: assignment.reviewRound, actorId: userId, action: `review.proposal.${args.decision}`,
       before: proposal.status, after: args.decision, reason, createdAt: now,
     });
     await logAudit(ctx, userId, `review.proposal.${args.decision}`, 'reviewProposals', proposal._id, reason);

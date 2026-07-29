@@ -41,3 +41,13 @@
 - [ ] No production mutation, invitation email, merge or deployment occurred without its separate approval.
 - [ ] Parent catalogue shows only content satisfying the final publication policy.
 
+## Automated run — 2026-07-29
+
+- [x] Typecheck passed.
+- [x] Lint passed.
+- [x] Unit/integration/permission suite passed: 47 files, 571 tests.
+- [x] Production build passed; existing large-chunk advisory only.
+- [x] Signed-out staff invitation create-account/sign-in E2E passed.
+- [x] Direct-handler tests cover unrelated-assignment denial, manager-only notes, proposal isolation, manager-report denial and actual-round audit events.
+- [ ] Credential-dependent parent and login-persistence E2E flows were skipped by their existing environment guards.
+- [ ] Desktop/iPad/360px supervised reviewer QA remains required.
