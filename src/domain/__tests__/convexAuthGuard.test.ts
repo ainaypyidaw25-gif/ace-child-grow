@@ -24,12 +24,15 @@ const KNOWN_AUTH_CALLS = [
   'requireUser',
   'requireStaff',
   'requireOwner',
+  'requireReviewManager',
+  'requirePublisher',
   'requireContentEditor',
   'requireEvidenceEditor',
   'requireClinicalReviewer',
   'requireProfessionalPublisher',
   'requireReviewEditor',
   'hasStaffRole',
+  'isStaff',
 ];
 
 // Functions that are INTENTIONALLY public. Each must only expose data that is

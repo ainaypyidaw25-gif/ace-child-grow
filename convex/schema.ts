@@ -28,8 +28,20 @@ export default defineSchema({
         v.literal('evidence_reviewer'),
         v.literal('clinical_reviewer'),
         v.literal('support'),
+        v.literal('system_admin'),
+        v.literal('review_manager'),
+        v.literal('myanmar_language_reviewer'),
+        v.literal('child_development_reviewer'),
+        v.literal('publisher'),
+        v.literal('auditor'),
       ),
     ),
+    additionalStaffRoles: v.optional(v.array(v.union(
+      v.literal('owner'), v.literal('content_editor'), v.literal('language_reviewer'),
+      v.literal('evidence_reviewer'), v.literal('clinical_reviewer'), v.literal('support'),
+      v.literal('system_admin'), v.literal('review_manager'), v.literal('myanmar_language_reviewer'),
+      v.literal('child_development_reviewer'), v.literal('publisher'), v.literal('auditor'),
+    ))),
     staffQualification: v.optional(v.string()),
     parentTourCompletedVersion: v.optional(v.number()),
     staffTourCompletedVersion: v.optional(v.number()),
@@ -50,8 +62,20 @@ export default defineSchema({
       v.literal('evidence_reviewer'),
       v.literal('clinical_reviewer'),
       v.literal('support'),
+      v.literal('system_admin'),
+      v.literal('review_manager'),
+      v.literal('myanmar_language_reviewer'),
+      v.literal('child_development_reviewer'),
+      v.literal('publisher'),
+      v.literal('auditor'),
     ),
     reviewerQualification: v.optional(v.string()),
+    organization: v.optional(v.string()),
+    reviewScope: v.optional(v.string()),
+    ageGroups: v.optional(v.array(v.string())),
+    contentTypes: v.optional(v.array(v.string())),
+    note: v.optional(v.string()),
+    termsVersion: v.optional(v.string()),
     codeHash: v.string(),
     // Existing accounts are bound immediately. Pre-signup invitations remain
     // email-bound until the invited person creates an account and claims them.
@@ -62,6 +86,7 @@ export default defineSchema({
     expiresAt: v.number(),
     acceptedBy: v.optional(v.id('users')),
     acceptedAt: v.optional(v.number()),
+    termsAcceptedAt: v.optional(v.number()),
   })
     .index('by_email', ['email'])
     .index('by_code_hash', ['codeHash'])
@@ -333,6 +358,15 @@ export default defineSchema({
     source: v.string(),
     version: v.number(),
     reviewRevision: v.optional(v.number()),
+    publicationStatus: v.optional(v.union(
+      v.literal('draft'),
+      v.literal('internal_review'),
+      v.literal('pilot_review'),
+      v.literal('ready_to_publish'),
+      v.literal('published'),
+      v.literal('archived'),
+    )),
+    publicationRevision: v.optional(v.number()),
     clinicalStatus: v.string(), // draft | clinical_review | published
     reviewerId: v.optional(v.id('users')),
     reviewerQualification: v.optional(v.string()),
@@ -362,6 +396,7 @@ export default defineSchema({
     dimension: v.union(
       v.literal('english'),
       v.literal('native_myanmar'),
+      v.literal('development'),
       v.literal('evidence'),
       v.literal('safety'),
       v.literal('clinical'),
@@ -371,6 +406,9 @@ export default defineSchema({
       v.literal('approved'),
       v.literal('changes_requested'),
       v.literal('not_applicable'),
+      v.literal('evidence_required'),
+      v.literal('blocked'),
+      v.literal('rejected'),
     ),
     note: v.optional(v.string()),
     reviewerId: v.id('users'),
@@ -383,6 +421,12 @@ export default defineSchema({
       v.literal('evidence_reviewer'),
       v.literal('clinical_reviewer'),
       v.literal('support'),
+      v.literal('system_admin'),
+      v.literal('review_manager'),
+      v.literal('myanmar_language_reviewer'),
+      v.literal('child_development_reviewer'),
+      v.literal('publisher'),
+      v.literal('auditor'),
     ),
     reviewedAt: v.number(),
     createdAt: v.number(),
@@ -391,6 +435,62 @@ export default defineSchema({
     .index('by_content_dimension_version', ['contentSlug', 'dimension', 'contentVersion'])
     .index('by_content', ['contentSlug'])
     .index('by_reviewer', ['reviewerId']),
+
+  reviewAssignments: defineTable({
+    contentSlug: v.string(),
+    contentVersion: v.number(),
+    reviewerId: v.id('users'),
+    reviewerType: v.union(
+      v.literal('language_reviewer'),
+      v.literal('myanmar_language_reviewer'),
+      v.literal('child_development_reviewer'),
+      v.literal('evidence_reviewer'),
+      v.literal('clinical_reviewer'),
+    ),
+    assignedBy: v.id('users'),
+    assignedAt: v.number(),
+    dueAt: v.optional(v.number()),
+    priority: v.union(v.literal('low'), v.literal('normal'), v.literal('high'), v.literal('urgent')),
+    reviewRound: v.number(),
+    reviewScope: v.string(),
+    status: v.union(
+      v.literal('assigned'),
+      v.literal('in_review'),
+      v.literal('changes_requested'),
+      v.literal('revised'),
+      v.literal('re_review_required'),
+      v.literal('approved'),
+      v.literal('blocked'),
+      v.literal('cancelled'),
+    ),
+    completionDate: v.optional(v.number()),
+    reopenedDate: v.optional(v.number()),
+    paymentBatchId: v.optional(v.string()),
+    internalNotes: v.optional(v.string()),
+    cancellationReason: v.optional(v.string()),
+    updatedAt: v.number(),
+  })
+    .index('by_reviewer', ['reviewerId'])
+    .index('by_reviewer_status', ['reviewerId', 'status'])
+    .index('by_content', ['contentSlug'])
+    .index('by_content_reviewer', ['contentSlug', 'reviewerId'])
+    .index('by_status_due', ['status', 'dueAt']),
+
+  reviewEvents: defineTable({
+    assignmentId: v.optional(v.id('reviewAssignments')),
+    contentSlug: v.string(),
+    contentVersion: v.number(),
+    reviewRound: v.number(),
+    actorId: v.id('users'),
+    action: v.string(),
+    before: v.optional(v.string()),
+    after: v.optional(v.string()),
+    reason: v.optional(v.string()),
+    createdAt: v.number(),
+  })
+    .index('by_assignment', ['assignmentId'])
+    .index('by_content', ['contentSlug'])
+    .index('by_actor', ['actorId']),
 
   // Media architecture for library content. Only architecture + placeholders are
   // seeded; real assets are attached later via the CMS media system.

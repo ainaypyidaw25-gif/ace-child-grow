@@ -12,6 +12,7 @@ export function AcceptAdminInvite() {
   const claim = useMutation(api.admin.claimInvite);
   const [result, setResult] = useState<{ ok: boolean; message: string } | null>(null);
   const [busy, setBusy] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
   const code = inviteCode ?? params.get('invite') ?? '';
 
   return (
@@ -23,13 +24,18 @@ export function AcceptAdminInvite() {
           : 'Make sure you are signed in with the invited email address before accepting.'}
       </p>
       {!result?.ok && (
+        <>
+        <label className="flex items-start gap-3 rounded-xl bg-mint-soft p-3 text-sm text-ink">
+          <input type="checkbox" checked={termsAccepted} onChange={(event) => setTermsAccepted(event.target.checked)} className="mt-1" />
+          <span>{locale === 'mm' ? 'အတွင်းသုံးအကြောင်းအရာကို လျှို့ဝှက်ထားမည်၊ မိမိအခန်းကဏ္ဍကန့်သတ်ချက်ကို လိုက်နာမည်၊ လုပ်ဆောင်ချက်များကို audit မှတ်တမ်းတင်မည်ကို သိရှိလက်ခံပါသည်။' : 'I accept the reviewer confidentiality, role boundaries, and audit-log notice.'}</span>
+        </label>
         <button
           type="button"
-          disabled={busy || !code}
+          disabled={busy || !code || !termsAccepted}
           onClick={async () => {
             setBusy(true);
             try {
-              const next = await claim({ inviteCode: code });
+              const next = await claim({ inviteCode: code, termsAccepted, termsVersion: 'reviewer-terms-2026-07-29' });
               if (next.ok) setPortalMode('staff');
               setResult(next);
             } finally { setBusy(false); }
@@ -38,6 +44,7 @@ export function AcceptAdminInvite() {
         >
           {busy ? '…' : locale === 'mm' ? 'ဖိတ်ကြားချက် လက်ခံမည်' : 'Accept invitation'}
         </button>
+        </>
       )}
       {result && (
         <p className={result.ok ? 'text-mint' : 'text-state-red'}>

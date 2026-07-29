@@ -2,17 +2,18 @@ import { useEffect, useMemo, useState, type FormEvent } from 'react';
 import { useMutation, useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
-import { CONTENT_TYPES } from '../content/taxonomy';
 
-const DIMENSIONS = ['english', 'native_myanmar', 'evidence', 'safety', 'clinical'] as const;
-const DECISIONS = ['in_review', 'approved', 'changes_requested', 'not_applicable'] as const;
+const DIMENSIONS = ['english', 'native_myanmar', 'development', 'evidence', 'safety', 'clinical'] as const;
+const DECISIONS = ['in_review', 'approved', 'changes_requested', 'not_applicable', 'evidence_required', 'blocked', 'rejected'] as const;
 type Dimension = (typeof DIMENSIONS)[number];
 type Decision = (typeof DECISIONS)[number];
-type StaffRole = 'owner' | 'content_editor' | 'language_reviewer' | 'evidence_reviewer' | 'clinical_reviewer' | 'support';
+type StaffRole = 'owner' | 'content_editor' | 'language_reviewer' | 'evidence_reviewer' | 'clinical_reviewer' | 'support' |
+  'system_admin' | 'review_manager' | 'myanmar_language_reviewer' | 'child_development_reviewer' | 'publisher' | 'auditor';
 
 const DIMENSION_LABELS: Record<Dimension, { mm: string; en: string }> = {
   english: { mm: 'အင်္ဂလိပ်စာနှင့် အကြောင်းအရာ', en: 'English copy and content' },
   native_myanmar: { mm: 'သဘာဝကျသော မြန်မာအသုံးအနှုန်း', en: 'Native Myanmar language' },
+  development: { mm: 'ကလေးဖွံ့ဖြိုးမှုနှင့် အသက်အရွယ်ကိုက်ညီမှု', en: 'Child development and age appropriateness' },
   evidence: { mm: 'ကိုးကားအထောက်အထား', en: 'Evidence' },
   safety: { mm: 'ဘေးကင်းရေး', en: 'Safety' },
   clinical: { mm: 'ဆေးဘက်ဆိုင်ရာ သုံးသပ်မှု', en: 'Clinical review' },
@@ -23,13 +24,17 @@ const DECISION_LABELS: Record<Decision, { mm: string; en: string }> = {
   approved: { mm: 'ဤမူကွဲကို အတည်ပြုသည်', en: 'Approve this revision' },
   changes_requested: { mm: 'ပြင်ဆင်ရန် လိုအပ်သည်', en: 'Changes requested' },
   not_applicable: { mm: 'မသက်ဆိုင်ပါ', en: 'Not applicable' },
+  evidence_required: { mm: 'အထောက်အထား ထပ်မံလိုအပ်သည်', en: 'Evidence required' },
+  blocked: { mm: 'ဆက်လက်လုပ်ဆောင်၍ မရသေးပါ', en: 'Blocked' },
+  rejected: { mm: 'ပယ်ချသည်', en: 'Reject' },
 };
 
-function mayReview(role: StaffRole | null | undefined, dimension: Dimension): boolean {
-  if (!role || role === 'support') return false;
-  if (dimension === 'clinical' || dimension === 'safety') return role === 'clinical_reviewer';
-  if (dimension === 'evidence') return ['owner', 'content_editor', 'evidence_reviewer', 'clinical_reviewer'].includes(role);
-  return ['owner', 'content_editor', 'language_reviewer'].includes(role);
+function mayReview(roles: StaffRole[] | null | undefined, dimension: Dimension): boolean {
+  if (!roles?.length) return false;
+  if (dimension === 'clinical' || dimension === 'safety') return roles.includes('clinical_reviewer');
+  if (dimension === 'development') return roles.includes('child_development_reviewer');
+  if (dimension === 'evidence') return roles.some((role) => ['evidence_reviewer', 'clinical_reviewer'].includes(role));
+  return roles.some((role) => ['language_reviewer', 'myanmar_language_reviewer'].includes(role));
 }
 
 function ContentEditor({ item }: { item: {
@@ -135,9 +140,8 @@ export function ContentReviewWorkspace() {
   const { locale } = useLocale();
   const L = (mm: string, en: string) => locale === 'mm' ? mm : en;
   const access = useQuery(api.admin.myAccess);
-  const [type, setType] = useState('milestone');
   const [selectedSlug, setSelectedSlug] = useState('');
-  const list = useQuery(api.library.listByType, { type });
+  const assignments = useQuery(api.reviewAssignments.listMine, {});
   const detail = useQuery(api.library.getBySlug, selectedSlug ? { slug: selectedSlug } : 'skip');
   const reviews = useQuery(api.contentReviews.listForContent, selectedSlug ? { contentSlug: selectedSlug } : 'skip');
   const saveDecision = useMutation(api.contentReviews.saveDecision);
@@ -148,17 +152,17 @@ export function ContentReviewWorkspace() {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    if (list?.items.length && !list.items.some((item) => item.slug === selectedSlug)) {
-      setSelectedSlug(list.items[0].slug);
+    if (assignments?.length && !assignments.some((row) => row.assignment.contentSlug === selectedSlug)) {
+      setSelectedSlug(assignments[0].assignment.contentSlug);
     }
-  }, [list, selectedSlug]);
+  }, [assignments, selectedSlug]);
 
   useEffect(() => {
-    if (!mayReview(access?.role, dimension)) {
-      const firstAllowed = DIMENSIONS.find((value) => mayReview(access?.role, value));
+    if (!mayReview(access?.roles as StaffRole[] | undefined, dimension)) {
+      const firstAllowed = DIMENSIONS.find((value) => mayReview(access?.roles as StaffRole[] | undefined, value));
       if (firstAllowed) setDimension(firstAllowed);
     }
-  }, [access?.role, dimension]);
+  }, [access?.roles, dimension]);
 
   const currentByDimension = useMemo(() => new Map(
     reviews?.current.map((review) => [review.dimension, review]) ?? [],
@@ -180,7 +184,7 @@ export function ContentReviewWorkspace() {
   };
 
   if (access === undefined) return <p className="text-ink-soft">…</p>;
-  if (!access?.isStaff || access.role === 'support') {
+  if (!access?.isStaff || !access.roles.some((role) => ['language_reviewer', 'myanmar_language_reviewer', 'child_development_reviewer', 'evidence_reviewer', 'clinical_reviewer', 'review_manager', 'owner', 'system_admin', 'auditor'].includes(role))) {
     return <p className="rounded-card border border-line bg-white p-5 text-ink">{L('ဤသုံးသပ်ရေးနေရာသို့ ဝင်ခွင့် မရှိပါ။', 'You do not have access to this review workspace.')}</p>;
   }
 
@@ -198,24 +202,20 @@ export function ContentReviewWorkspace() {
         </p>
       </header>
 
-      <section className="grid gap-3 rounded-card border border-line bg-white p-4 shadow-card sm:grid-cols-[180px_1fr]">
+      <section className="rounded-card border border-line bg-white p-4 shadow-card">
         <label className="space-y-1 text-sm font-medium text-ink">
-          <span>{L('အမျိုးအစား', 'Content type')}</span>
-          <select value={type} onChange={(event) => { setType(event.target.value); setSelectedSlug(''); }} className="w-full rounded-xl border border-line bg-white px-3 py-2">
-            {CONTENT_TYPES.map((value) => <option key={value} value={value}>{value}</option>)}
-          </select>
-        </label>
-        <label className="space-y-1 text-sm font-medium text-ink">
-          <span>{L('သုံးသပ်မည့် အကြောင်းအရာ', 'Item to review')}</span>
+          <span>{L('မိမိအား တာဝန်ပေးထားသော အကြောင်းအရာ', 'Assigned to me')}</span>
           <select value={selectedSlug} onChange={(event) => setSelectedSlug(event.target.value)} className="w-full rounded-xl border border-line bg-white px-3 py-2">
-            {list?.items.map((candidate) => (
-              <option key={candidate.slug} value={candidate.slug}>{locale === 'mm' ? candidate.titleMm : candidate.titleEn}</option>
+            <option value="">{L('တာဝန်တစ်ခု ရွေးပါ', 'Select an assignment')}</option>
+            {assignments?.map((row) => (
+              <option key={row.assignment._id} value={row.assignment.contentSlug}>{locale === 'mm' ? row.titleMm : row.titleEn} · {row.assignment.status}</option>
             ))}
           </select>
         </label>
+        {assignments?.length === 0 && <p className="mt-3 text-sm text-ink-soft">{L('မိမိအား တာဝန်ပေးထားသော အကြောင်းအရာ မရှိသေးပါ။', 'No review assignments have been assigned to you.')}</p>}
       </section>
 
-      {item && <ContentEditor key={`${item.slug}-${item.updatedAt}`} item={item} />}
+      {item && access.roles.some((role) => ['owner', 'content_editor'].includes(role)) && <ContentEditor key={`${item.slug}-${item.updatedAt}`} item={item} />}
 
       {item && reviews?.allowed && (
         <section className="space-y-4 rounded-card border border-line bg-white p-4 shadow-card">
@@ -241,7 +241,7 @@ export function ContentReviewWorkspace() {
               <span>{L('သုံးသပ်မှုအမျိုးအစား', 'Review area')}</span>
               <select value={dimension} onChange={(event) => setDimension(event.target.value as Dimension)} className="w-full rounded-xl border border-line bg-white px-3 py-2">
                 {DIMENSIONS.map((value) => (
-                  <option key={value} value={value} disabled={!mayReview(access.role, value)}>{DIMENSION_LABELS[value][locale]}</option>
+                  <option key={value} value={value} disabled={!mayReview(access.roles as StaffRole[], value)}>{DIMENSION_LABELS[value][locale]}</option>
                 ))}
               </select>
             </label>
@@ -256,7 +256,7 @@ export function ContentReviewWorkspace() {
               <textarea value={note} onChange={(event) => setNote(event.target.value)} rows={4} placeholder={decision === 'changes_requested' ? L('ပြင်ဆင်ရမည့်အချက်ကို ရှင်းလင်းစွာ ရေးပါ။', 'Describe the required change clearly.') : undefined} className="w-full rounded-xl border border-line bg-white px-3 py-2" />
             </label>
             <div className="flex flex-wrap items-center gap-3 lg:col-span-2">
-              <button type="submit" disabled={busy || !mayReview(access.role, dimension)} className="rounded-pill bg-sky px-5 py-2 text-sm font-semibold text-white disabled:opacity-50">
+              <button type="submit" disabled={busy || !mayReview(access.roles as StaffRole[], dimension)} className="rounded-pill bg-sky px-5 py-2 text-sm font-semibold text-white disabled:opacity-50">
                 {busy ? L('မှတ်တမ်းတင်နေသည်…', 'Recording…') : L('ဆုံးဖြတ်ချက် မှတ်တမ်းတင်မည်', 'Record decision')}
               </button>
               {message && <p role="status" className="text-sm text-ink-soft">{message}</p>}

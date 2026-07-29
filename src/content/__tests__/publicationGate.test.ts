@@ -7,9 +7,10 @@ const libraryAdminSource = readFileSync('src/screens/LibraryAdmin.tsx', 'utf8');
 const contentDetailSource = readFileSync('src/screens/ContentDetail.tsx', 'utf8');
 
 describe('clinically scoped publication gate', () => {
-  it('requires a named qualified clinical reviewer before library content can be published', () => {
+  it('requires a separate publisher and named qualified clinical decision before publication', () => {
     expect(librarySource).toContain("args.clinicalStatus === 'published'");
-    expect(librarySource).toContain('await requireClinicalPublisher(ctx)');
+    expect(librarySource).toContain('await requirePublisher(ctx)');
+    expect(librarySource).toContain('A named, qualified clinical approval is required');
   });
 
   it('requires a named qualified clinical reviewer before workflow approval or publishing', () => {
@@ -31,14 +32,15 @@ describe('clinically scoped publication gate', () => {
   });
 
   it('shows only published library rows to parents while staff can inspect review states', () => {
-    expect(librarySource).toContain("return status === 'published'");
-    expect(librarySource).toContain('isPubliclyReadableStatus(r.clinicalStatus)');
-    expect(librarySource).toContain('!isPubliclyReadableStatus(item.clinicalStatus)');
+    expect(librarySource).toContain("content.reviewScope === 'clinical'");
+    expect(librarySource).toContain("content.publicationStatus === 'published'");
+    expect(librarySource).toContain('rows.filter(isPubliclyReadableContent)');
+    expect(librarySource).toContain('!isPubliclyReadableContent(item)');
   });
 
   it('does not allow parents to complete an unpublished activity', () => {
     const activitiesSource = readFileSync('convex/activities.ts', 'utf8');
-    expect(activitiesSource).toContain("content.clinicalStatus !== 'published'");
+    expect(activitiesSource).toContain('!isPubliclyReadableContent(content)');
   });
 
   it('supports professionally reviewed original animations without requiring filmed video', () => {

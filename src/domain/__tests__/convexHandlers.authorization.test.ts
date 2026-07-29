@@ -102,6 +102,10 @@ describe('Convex registered handlers enforce authorization', () => {
       slug: 'safe-public',
       type: 'activity',
       clinicalStatus: 'published',
+      reviewScope: 'clinical',
+      publicationStatus: 'published',
+      reviewRevision: 1,
+      publicationRevision: 1,
       titleMm: 'အများသုံး',
       titleEn: 'Public',
     };
@@ -144,6 +148,7 @@ describe('Convex registered handlers enforce authorization', () => {
     });
     await expect(handler(createInvite)(context, {
       email: 'new.reviewer@example.com', displayName: 'New Reviewer', role: 'language_reviewer',
+      reviewScope: 'native_myanmar', ageGroups: [], contentTypes: [],
     })).resolves.toMatchObject({ email: 'new.reviewer@example.com' });
     expect(context.db.insert).toHaveBeenCalledWith('staffInvites', expect.objectContaining({
       email: 'new.reviewer@example.com', role: 'language_reviewer', status: 'pending',
@@ -166,7 +171,9 @@ describe('Convex registered handlers enforce authorization', () => {
         role: 'language_reviewer', codeHash, status: 'pending', expiresAt: Date.now() + 60_000,
       }] },
     });
-    await expect(handler(claimInvite)(context, { inviteCode: code })).resolves.toMatchObject({
+    await expect(handler(claimInvite)(context, {
+      inviteCode: code, termsAccepted: true, termsVersion: 'reviewer-terms-2026-07-29',
+    })).resolves.toMatchObject({
       ok: true, role: 'language_reviewer',
     });
     expect(context.db.insert).toHaveBeenCalledWith('parentProfiles', expect.objectContaining({
@@ -230,17 +237,20 @@ describe('Convex registered handlers enforce authorization', () => {
     expect(context.db.patch).not.toHaveBeenCalled();
   });
 
-  it('a named qualified clinical reviewer can publish and records clinical scope', async () => {
+  it('a separately-authorised publisher can publish a clinically approved revision', async () => {
     authState.userId = 'reviewer-1';
     const context = ctx({
       profile: {
         userId: 'reviewer-1', isStaff: true, staffRole: 'clinical_reviewer',
+        additionalStaffRoles: ['publisher'],
         staffQualification: 'MBBS, MMedSc (Paediatrics)', displayName: 'Clinical Reviewer',
       },
       rows: {
         libraryContent: [{ _id: 'content-1', slug: 'clinical-guidance', titleEn: 'Clinical guidance', reviewRevision: 1 }],
         contentReviews: ['english', 'native_myanmar', 'evidence', 'safety', 'clinical'].map((dimension) => ({
           contentSlug: 'clinical-guidance', contentVersion: 1, dimension, decision: 'approved',
+          reviewerDisplayName: dimension === 'clinical' ? 'Clinical Reviewer' : 'Other Reviewer',
+          reviewerQualification: dimension === 'clinical' ? 'MBBS, MMedSc (Paediatrics)' : undefined,
         })),
       },
     });
@@ -273,7 +283,14 @@ describe('Convex registered handlers enforce authorization', () => {
         userId: 'clinical-1', isStaff: true, staffRole: 'clinical_reviewer',
         displayName: 'Dr Reviewer', staffQualification: 'MBBS',
       },
-      rows: { libraryContent: [{ _id: 'content-1', slug: 'item-1', version: 1, reviewRevision: 3 }] },
+      rows: {
+        libraryContent: [{ _id: 'content-1', slug: 'item-1', version: 1, reviewRevision: 3 }],
+        reviewAssignments: [{
+          _id: 'assignment-1', contentSlug: 'item-1', contentVersion: 3, reviewerId: 'clinical-1',
+          reviewerType: 'clinical_reviewer', assignedBy: 'manager-1', assignedAt: 1,
+          priority: 'normal', reviewRound: 1, reviewScope: 'safety', status: 'assigned', updatedAt: 1,
+        }],
+      },
     });
     await expect(handler(saveDecision)(context, {
       contentSlug: 'item-1', dimension: 'safety', decision: 'approved', note: 'Checked',
@@ -305,7 +322,7 @@ describe('Convex registered handlers enforce authorization', () => {
     authState.userId = 'reviewer-1';
     const context = ctx({
       profile: {
-        userId: 'reviewer-1', isStaff: true, staffRole: 'clinical_reviewer',
+        userId: 'reviewer-1', isStaff: true, staffRole: 'clinical_reviewer', additionalStaffRoles: ['publisher'],
         staffQualification: 'MBBS', displayName: 'Clinical Reviewer',
       },
       rows: {

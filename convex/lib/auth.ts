@@ -8,18 +8,14 @@ import { getAuthUserId } from '@convex-dev/auth/server';
 import type { QueryCtx, MutationCtx } from '../_generated/server';
 import type { Doc, Id } from '../_generated/dataModel';
 import { activeFamilyOwnerIds } from './entitlements';
+import { distinctRoles, hasCapability, type StaffCapability, type StaffRole } from './reviewRoles';
+
+export type { StaffRole } from './reviewRoles';
 
 export type Ctx = QueryCtx | MutationCtx;
-export type StaffRole =
-  | 'owner'
-  | 'content_editor'
-  | 'language_reviewer'
-  | 'evidence_reviewer'
-  | 'clinical_reviewer'
-  | 'support';
-
 export type StaffAccess = {
   role: StaffRole;
+  roles: StaffRole[];
   qualification: string | null;
   displayName: string | null;
 };
@@ -49,12 +45,13 @@ export async function getStaffAccess(ctx: Ctx, userId: Id<'users'>): Promise<Sta
   if (profile?.staffRole) {
     return {
       role: profile.staffRole,
+      roles: distinctRoles(profile.staffRole, profile.additionalStaffRoles),
       qualification: profile.staffQualification?.trim() || null,
       displayName: profile.displayName?.trim() || null,
     };
   }
   return profile?.isStaff === true
-    ? { role: 'owner', qualification: null, displayName: profile.displayName?.trim() || null }
+    ? { role: 'owner', roles: ['owner'], qualification: null, displayName: profile.displayName?.trim() || null }
     : null;
 }
 
@@ -69,7 +66,16 @@ export async function hasStaffRole(
   roles: StaffRole[],
 ): Promise<boolean> {
   const access = await getStaffAccess(ctx, userId);
-  return access !== null && roles.includes(access.role);
+  return access !== null && access.roles.some((role) => roles.includes(role));
+}
+
+export async function hasStaffCapability(
+  ctx: Ctx,
+  userId: Id<'users'>,
+  capability: StaffCapability,
+): Promise<boolean> {
+  const access = await getStaffAccess(ctx, userId);
+  return access !== null && hasCapability(access.roles, capability);
 }
 
 /** The authenticated user id if they are staff, or throw. */
@@ -82,12 +88,20 @@ export async function requireStaff(ctx: Ctx): Promise<Id<'users'>> {
 async function requireOneOf(ctx: Ctx, roles: StaffRole[]): Promise<{ userId: Id<'users'>; access: StaffAccess }> {
   const userId = await requireUser(ctx);
   const access = await getStaffAccess(ctx, userId);
-  if (!access || !roles.includes(access.role)) throw new Error('Insufficient staff permission');
+  if (!access || !access.roles.some((role) => roles.includes(role))) throw new Error('Insufficient staff permission');
   return { userId, access };
 }
 
 export async function requireOwner(ctx: Ctx): Promise<Id<'users'>> {
-  return (await requireOneOf(ctx, ['owner'])).userId;
+  return (await requireOneOf(ctx, ['owner', 'system_admin'])).userId;
+}
+
+export async function requireReviewManager(ctx: Ctx): Promise<{ userId: Id<'users'>; access: StaffAccess }> {
+  return await requireOneOf(ctx, ['owner', 'system_admin', 'review_manager']);
+}
+
+export async function requirePublisher(ctx: Ctx): Promise<{ userId: Id<'users'>; access: StaffAccess }> {
+  return await requireOneOf(ctx, ['publisher']);
 }
 
 export async function requireContentEditor(ctx: Ctx): Promise<Id<'users'>> {
@@ -106,6 +120,8 @@ export async function requireReviewEditor(
     'owner',
     'content_editor',
     'language_reviewer',
+    'myanmar_language_reviewer',
+    'child_development_reviewer',
     'evidence_reviewer',
     'clinical_reviewer',
   ]);

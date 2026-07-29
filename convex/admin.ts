@@ -1,16 +1,10 @@
 import { v } from 'convex/values';
 import { mutation, query } from './_generated/server';
-import { getStaffAccess, requireOwner, requireUser, type StaffRole } from './lib/auth';
+import { getStaffAccess, requireOwner, requireReviewManager, requireUser, type StaffRole } from './lib/auth';
 import { logAudit } from './audit';
+import { staffRoleValidator as roleValidator } from './lib/reviewRoles';
 
-const roleValidator = v.union(
-  v.literal('owner'),
-  v.literal('content_editor'),
-  v.literal('language_reviewer'),
-  v.literal('evidence_reviewer'),
-  v.literal('clinical_reviewer'),
-  v.literal('support'),
-);
+const REVIEWER_TERMS_VERSION = 'reviewer-terms-2026-07-29';
 
 const roleLabels: Record<StaffRole, string> = {
   owner: 'Owner',
@@ -19,6 +13,12 @@ const roleLabels: Record<StaffRole, string> = {
   evidence_reviewer: 'Evidence reviewer',
   clinical_reviewer: 'Clinical reviewer',
   support: 'Support',
+  system_admin: 'System admin',
+  review_manager: 'Review manager',
+  myanmar_language_reviewer: 'Myanmar language reviewer',
+  child_development_reviewer: 'Child development reviewer',
+  publisher: 'Publisher',
+  auditor: 'Auditor',
 };
 
 function normalizeEmail(email: string): string {
@@ -43,6 +43,7 @@ export const myAccess = query({
     v.object({
       isStaff: v.boolean(),
       role: v.union(roleValidator, v.null()),
+      roles: v.array(roleValidator),
       qualification: v.union(v.string(), v.null()),
       displayName: v.union(v.string(), v.null()),
     }),
@@ -53,6 +54,7 @@ export const myAccess = query({
     return {
       isStaff: access !== null,
       role: access?.role ?? null,
+      roles: access?.roles ?? [],
       qualification: access?.qualification ?? null,
       displayName: access?.displayName ?? null,
     };
@@ -87,7 +89,9 @@ export const listTeam = query({
   handler: async (ctx) => {
     const userId = await requireUser(ctx);
     const access = await getStaffAccess(ctx, userId);
-    if (access?.role !== 'owner') return { allowed: false, currentUserId: userId, members: [], invites: [] };
+    if (!access?.roles.some((role) => ['owner', 'system_admin', 'review_manager'].includes(role))) {
+      return { allowed: false, currentUserId: userId, members: [], invites: [] };
+    }
 
     const profiles = await ctx.db
       .query('parentProfiles')
@@ -133,10 +137,16 @@ export const createInvite = mutation({
     displayName: v.string(),
     role: roleValidator,
     reviewerQualification: v.optional(v.string()),
+    organization: v.optional(v.string()),
+    reviewScope: v.string(),
+    ageGroups: v.array(v.string()),
+    contentTypes: v.array(v.string()),
+    expiresInDays: v.optional(v.number()),
+    note: v.optional(v.string()),
   },
   returns: v.object({ inviteCode: v.string(), email: v.string(), expiresAt: v.number() }),
   handler: async (ctx, args) => {
-    const ownerId = await requireOwner(ctx);
+    const { userId: managerId, access } = await requireReviewManager(ctx);
     const email = normalizeEmail(args.email);
     const displayName = args.displayName.trim();
     if (!email.includes('@')) throw new Error('A valid email address is required');
@@ -145,6 +155,11 @@ export const createInvite = mutation({
       .query('users')
       .withIndex('email', (q) => q.eq('email', email))
       .unique();
+    if (args.role === 'owner' || args.role === 'system_admin' || args.role === 'publisher') {
+      if (!access.roles.includes('owner') && !access.roles.includes('system_admin')) {
+        throw new Error('Only a system administrator may invite this role');
+      }
+    }
     const qualification = args.reviewerQualification?.trim();
     if (['clinical_reviewer', 'evidence_reviewer'].includes(args.role) && !qualification) {
       throw new Error('A professional qualification is required for this reviewer role');
@@ -159,29 +174,39 @@ export const createInvite = mutation({
     }
     const inviteCode = createInviteCode();
     const now = Date.now();
-    const expiresAt = now + 7 * 24 * 60 * 60 * 1000;
+    const expiresInDays = Math.max(1, Math.min(30, Math.floor(args.expiresInDays ?? 7)));
+    const expiresAt = now + expiresInDays * 24 * 60 * 60 * 1000;
     const inviteId = await ctx.db.insert('staffInvites', {
       email,
       displayName,
       role: args.role,
       reviewerQualification: qualification,
+      organization: args.organization?.trim() || undefined,
+      reviewScope: args.reviewScope.trim(),
+      ageGroups: [...new Set(args.ageGroups.map((value) => value.trim()).filter(Boolean))],
+      contentTypes: [...new Set(args.contentTypes.map((value) => value.trim()).filter(Boolean))],
+      note: args.note?.trim() || undefined,
+      termsVersion: REVIEWER_TERMS_VERSION,
       codeHash: await hashCode(inviteCode),
       ...(targetUser ? { targetUserId: targetUser._id } : {}),
       status: 'pending',
-      invitedBy: ownerId,
+      invitedBy: managerId,
       invitedAt: now,
       expiresAt,
     });
-    await logAudit(ctx, ownerId, 'staff.invite', 'staffInvites', inviteId, `${email} · ${roleLabels[args.role]}`);
+    await logAudit(ctx, managerId, 'staff.invite', 'staffInvites', inviteId, `${email} · ${roleLabels[args.role]}`);
     return { inviteCode, email, expiresAt };
   },
 });
 
 export const claimInvite = mutation({
-  args: { inviteCode: v.string() },
+  args: { inviteCode: v.string(), termsAccepted: v.boolean(), termsVersion: v.string() },
   returns: v.object({ ok: v.boolean(), role: v.union(roleValidator, v.null()), message: v.string() }),
   handler: async (ctx, args) => {
     const userId = await requireUser(ctx);
+    if (!args.termsAccepted || args.termsVersion !== REVIEWER_TERMS_VERSION) {
+      throw new Error('Current reviewer terms must be accepted');
+    }
     const user = await ctx.db.get(userId);
     const email = normalizeEmail(user?.email ?? '');
     const codeHash = await hashCode(args.inviteCode.trim());
@@ -215,7 +240,8 @@ export const claimInvite = mutation({
     };
     if (profile) await ctx.db.patch(profile._id, staffPatch);
     else await ctx.db.insert('parentProfiles', { userId, preferredLocale: 'mm', ...staffPatch });
-    await ctx.db.patch(invite._id, { status: 'accepted', acceptedBy: userId, acceptedAt: Date.now() });
+    const acceptedAt = Date.now();
+    await ctx.db.patch(invite._id, { status: 'accepted', acceptedBy: userId, acceptedAt, termsAcceptedAt: acceptedAt });
     await logAudit(ctx, userId, 'staff.invite.accept', 'staffInvites', invite._id, `${email} · ${roleLabels[invite.role]}`);
     return { ok: true, role: invite.role, message: 'Invitation accepted.' };
   },

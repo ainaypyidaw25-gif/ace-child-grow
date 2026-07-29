@@ -4,7 +4,8 @@ import type { Id } from '../../convex/_generated/dataModel';
 import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
 
-type StaffRole = 'owner' | 'content_editor' | 'language_reviewer' | 'evidence_reviewer' | 'clinical_reviewer' | 'support';
+type StaffRole = 'owner' | 'content_editor' | 'language_reviewer' | 'evidence_reviewer' | 'clinical_reviewer' | 'support' |
+  'system_admin' | 'review_manager' | 'myanmar_language_reviewer' | 'child_development_reviewer' | 'publisher' | 'auditor';
 
 const ROLE_LABELS: Record<StaffRole, { mm: string; en: string }> = {
   owner: { mm: 'ပိုင်ရှင်', en: 'Owner' },
@@ -13,6 +14,12 @@ const ROLE_LABELS: Record<StaffRole, { mm: string; en: string }> = {
   evidence_reviewer: { mm: 'ကိုးကားအထောက်အထား သုံးသပ်သူ', en: 'Evidence reviewer' },
   clinical_reviewer: { mm: 'ဆေးဘက်ဆိုင်ရာ သုံးသပ်သူ', en: 'Clinical reviewer' },
   support: { mm: 'အသုံးပြုသူအကူအညီပေးသူ', en: 'Support' },
+  system_admin: { mm: 'စနစ်စီမံခန့်ခွဲသူ', en: 'System admin' },
+  review_manager: { mm: 'သုံးသပ်မှုမန်နေဂျာ', en: 'Review manager' },
+  myanmar_language_reviewer: { mm: 'မြန်မာဘာသာစကားသုံးသပ်သူ', en: 'Myanmar language reviewer' },
+  child_development_reviewer: { mm: 'ကလေးဖွံ့ဖြိုးမှုသုံးသပ်သူ', en: 'Child development reviewer' },
+  publisher: { mm: 'ထုတ်ဝေခွင့်ရှိသူ', en: 'Publisher' },
+  auditor: { mm: 'မှတ်တမ်းစစ်ဆေးသူ', en: 'Auditor' },
 };
 
 function MemberRow({
@@ -117,6 +124,12 @@ export function AdminTeam() {
   const [displayName, setDisplayName] = useState('');
   const [role, setRole] = useState<StaffRole>('content_editor');
   const [qualification, setQualification] = useState('');
+  const [organization, setOrganization] = useState('');
+  const [reviewScope, setReviewScope] = useState('assigned_content');
+  const [ageGroups, setAgeGroups] = useState('');
+  const [contentTypes, setContentTypes] = useState('');
+  const [expiresInDays, setExpiresInDays] = useState(7);
+  const [note, setNote] = useState('');
   const [inviteLink, setInviteLink] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
@@ -151,6 +164,12 @@ export function AdminTeam() {
               displayName,
               role,
               reviewerQualification: ['clinical_reviewer', 'evidence_reviewer'].includes(role) ? qualification.trim() : undefined,
+              organization: organization.trim() || undefined,
+              reviewScope,
+              ageGroups: ageGroups.split(',').map((value) => value.trim()).filter(Boolean),
+              contentTypes: contentTypes.split(',').map((value) => value.trim()).filter(Boolean),
+              expiresInDays,
+              note: note.trim() || undefined,
             });
             setInviteLink(`${window.location.origin}/admin/accept-invite/${encodeURIComponent(result.inviteCode)}`);
             setEmail('');
@@ -196,6 +215,17 @@ export function AdminTeam() {
             className="w-full rounded-lg border border-line px-3 py-2"
           />
         )}
+        <input value={organization} onChange={(event) => setOrganization(event.target.value)} placeholder={locale === 'mm' ? 'အဖွဲ့အစည်း (မဖြစ်မနေမဟုတ်)' : 'Organisation (optional)'} className="w-full rounded-lg border border-line px-3 py-2" />
+        <input required value={reviewScope} onChange={(event) => setReviewScope(event.target.value)} placeholder={locale === 'mm' ? 'သုံးသပ်ရမည့်နယ်ပယ်' : 'Review scope'} className="w-full rounded-lg border border-line px-3 py-2" />
+        <div className="grid gap-3 sm:grid-cols-2">
+          <input value={ageGroups} onChange={(event) => setAgeGroups(event.target.value)} placeholder={locale === 'mm' ? 'အသက်အုပ်စုများ (ကော်မာခြား)' : 'Age groups (comma separated)'} className="rounded-lg border border-line px-3 py-2" />
+          <input value={contentTypes} onChange={(event) => setContentTypes(event.target.value)} placeholder={locale === 'mm' ? 'အကြောင်းအရာအမျိုးအစားများ (ကော်မာခြား)' : 'Content types (comma separated)'} className="rounded-lg border border-line px-3 py-2" />
+        </div>
+        <label className="space-y-1 text-sm text-ink">
+          <span>{locale === 'mm' ? 'ဖိတ်ကြားချက်သက်တမ်း (ရက်)' : 'Invitation expiry (days)'}</span>
+          <input type="number" min={1} max={30} value={expiresInDays} onChange={(event) => setExpiresInDays(Number(event.target.value))} className="w-full rounded-lg border border-line px-3 py-2" />
+        </label>
+        <textarea value={note} onChange={(event) => setNote(event.target.value)} rows={3} placeholder={locale === 'mm' ? 'အတွင်းသုံးမှတ်ချက် (မဖြစ်မနေမဟုတ်)' : 'Internal note (optional)'} className="w-full rounded-lg border border-line px-3 py-2" />
         {error && <p className="text-sm text-state-red">⚠️ {error}</p>}
         <button disabled={busy} className="rounded-pill bg-sky px-5 py-2 font-semibold text-white disabled:opacity-50">
           {busy ? '…' : locale === 'mm' ? 'ဖိတ်ကြားလင့်ခ် ဖန်တီးမည်' : 'Create invitation link'}

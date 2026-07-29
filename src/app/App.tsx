@@ -7,7 +7,6 @@ import { decideRoute } from './bootstrap';
 import { SignIn } from '../screens/SignIn';
 import { api } from '../../convex/_generated/api';
 import { getPortalMode, setPortalMode } from './portalMode';
-import { decideStaffRoute } from './staffRoute';
 import { isGooglePlayBuild, useNativeDeepLinks } from './platform';
 
 const Welcome = lazy(() => import('../screens/Welcome').then((module) => ({ default: module.Welcome })));
@@ -131,19 +130,12 @@ function ResetStaffPortalMode({ children }: { children: ReactNode }) {
   return children;
 }
 
-function StaffOnlyRoute({ children }: { children: ReactNode }) {
+function StaffRoleRoute({ children, allowedRoles }: { children: ReactNode; allowedRoles: string[] }) {
   const access = useQuery(api.admin.myAccess);
-  const decision = decideStaffRoute(access);
-
-  if (decision === 'loading') {
-    return (
-      <div className="flex min-h-[50vh] items-center justify-center text-ink-soft" role="status" aria-live="polite">
-        <span className="animate-pulse">…</span>
-      </div>
-    );
+  if (access === undefined) {
+    return <div className="flex min-h-[50vh] items-center justify-center text-ink-soft" role="status"><span className="animate-pulse">…</span></div>;
   }
-
-  return decision === 'allow' ? children : <Navigate to="/home" replace />;
+  return access?.roles.some((role) => allowedRoles.includes(role)) ? children : <Navigate to="/home" replace />;
 }
 
 function AppRoutes() {
@@ -177,16 +169,16 @@ function AppRoutes() {
       <Route path="/child-profile" element={<Layout><ChildProfile /></Layout>} />
       <Route path="/library" element={<Layout><ContentLibrary /></Layout>} />
       <Route path="/content/:slug" element={<Layout><ContentDetail /></Layout>} />
-      <Route path="/admin" element={<StaffOnlyRoute><Layout><AdminReviewQueue /></Layout></StaffOnlyRoute>} />
-      <Route path="/admin/library" element={<StaffOnlyRoute><Layout><LibraryAdmin /></Layout></StaffOnlyRoute>} />
-      <Route path="/admin/reviews" element={<StaffOnlyRoute><Layout><ContentReviewWorkspace /></Layout></StaffOnlyRoute>} />
-      <Route path="/admin/evidence" element={<StaffOnlyRoute><Layout><EvidenceAdmin /></Layout></StaffOnlyRoute>} />
-      <Route path="/admin/team" element={<StaffOnlyRoute><Layout><AdminTeam /></Layout></StaffOnlyRoute>} />
-      <Route path="/admin/directory" element={<StaffOnlyRoute><Layout><AdminDirectory /></Layout></StaffOnlyRoute>} />
-      <Route path="/admin/billing" element={<StaffOnlyRoute><Layout><AdminBilling /></Layout></StaffOnlyRoute>} />
+      <Route path="/admin" element={<StaffRoleRoute allowedRoles={['owner', 'system_admin', 'review_manager', 'content_editor', 'auditor']}><Layout><AdminReviewQueue /></Layout></StaffRoleRoute>} />
+      <Route path="/admin/library" element={<StaffRoleRoute allowedRoles={['owner', 'content_editor']}><Layout><LibraryAdmin /></Layout></StaffRoleRoute>} />
+      <Route path="/admin/reviews" element={<StaffRoleRoute allowedRoles={['owner', 'system_admin', 'review_manager', 'language_reviewer', 'myanmar_language_reviewer', 'child_development_reviewer', 'evidence_reviewer', 'clinical_reviewer', 'auditor']}><Layout><ContentReviewWorkspace /></Layout></StaffRoleRoute>} />
+      <Route path="/admin/evidence" element={<StaffRoleRoute allowedRoles={['owner', 'content_editor', 'evidence_reviewer', 'clinical_reviewer', 'auditor']}><Layout><EvidenceAdmin /></Layout></StaffRoleRoute>} />
+      <Route path="/admin/team" element={<StaffRoleRoute allowedRoles={['owner', 'system_admin', 'review_manager']}><Layout><AdminTeam /></Layout></StaffRoleRoute>} />
+      <Route path="/admin/directory" element={<StaffRoleRoute allowedRoles={['owner', 'system_admin', 'support']}><Layout><AdminDirectory /></Layout></StaffRoleRoute>} />
+      <Route path="/admin/billing" element={<StaffRoleRoute allowedRoles={['owner', 'system_admin']}><Layout><AdminBilling /></Layout></StaffRoleRoute>} />
       <Route path="/admin/accept-invite" element={<Layout showNav={false}><AcceptAdminInvite /></Layout>} />
       <Route path="/admin/accept-invite/:inviteCode" element={<Layout showNav={false}><AcceptAdminInvite /></Layout>} />
-      <Route path="/audit" element={<StaffOnlyRoute><Layout><AuditLog /></Layout></StaffOnlyRoute>} />
+      <Route path="/audit" element={<StaffRoleRoute allowedRoles={['owner', 'system_admin', 'auditor']}><Layout><AuditLog /></Layout></StaffRoleRoute>} />
       <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Suspense>
