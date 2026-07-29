@@ -46,6 +46,7 @@ Each branch is based on the previous branch so the changes can be reviewed in sm
 - Owner self-assignment for language, development and evidence review with the same checklist, revision and audit requirements as any reviewer. Clinical sign-off remains a separately qualified role.
 - Development Preview Google sign-in now receives its dedicated OAuth client ID and secret explicitly from Convex environment configuration. Production OAuth configuration was not changed.
 - A dedicated Development owner account completed the reviewer workspace checks at 360×800 and 820×1180. Myanmar text wrapped correctly, the field editor stayed non-technical, and no control was hidden behind the bottom navigation.
+- The temporary QA owner's staff access was revoked after testing; the existing session immediately lost `/admin/reviews` access and returned to the parent home screen.
 
 ### Partly complete
 
@@ -62,7 +63,7 @@ Each branch is based on the previous branch so the changes can be reviewed in sm
 - Real reviewer invitations and production role grants.
 - Production classification/backfill and reviewer assignments.
 - Production migration, merge or deployment.
-- Supervised QA with each restricted reviewer-role combination and revoked-access cases.
+- Supervised QA with each restricted reviewer-role combination.
 - Final Google OAuth callback confirmation after the new Development OAuth client finishes propagating through Google's consent service.
 - Clinical reviewer identity, qualification, scope and re-review-date governance.
 
@@ -107,7 +108,7 @@ Development Convex code generation was used to validate schema/functions. No pro
 ## Remaining P0 launch blockers
 
 - Approve the 383-row classification dry run and expected parent-catalogue impact.
-- Verify real role combinations with dedicated test accounts, including revoked access.
+- Verify every restricted reviewer-role combination with dedicated test accounts; revoked-access enforcement is verified.
 - Complete restricted-role and revoked-access QA; owner mobile/iPad responsive QA is complete.
 - Confirm the final Development Google OAuth callback after Google-side client propagation. The consent screen already loads without `invalid_client`.
 - Identify and authorise actual clinical reviewers before any item requiring clinical review can become publishable.
