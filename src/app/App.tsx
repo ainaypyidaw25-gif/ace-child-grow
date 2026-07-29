@@ -53,8 +53,8 @@ export function App() {
   useNativeDeepLinks();
   return (
     <Routes>
-      <Route path="/privacy" element={<Suspense fallback={<div className="min-h-screen bg-surface" />}><LegalPage kind="privacy" /></Suspense>} />
-      <Route path="/account-deletion" element={<Suspense fallback={<div className="min-h-screen bg-surface" />}><LegalPage kind="account-deletion" /></Suspense>} />
+      <Route path="/privacy" element={<StandaloneScreen><LegalPage kind="privacy" /></StandaloneScreen>} />
+      <Route path="/account-deletion" element={<StandaloneScreen><LegalPage kind="account-deletion" /></StandaloneScreen>} />
       <Route path="*" element={<>
       <AuthLoading>
         <div className="flex min-h-screen items-center justify-center text-ink-soft">…</div>
@@ -122,7 +122,7 @@ function Bootstrap() {
       return <Navigate to="/add-child" replace />;
     case 'welcome':
     default:
-      return <Layout showNav={false}><Welcome /></Layout>;
+      return <AppScreen showNav={false}><Welcome /></AppScreen>;
   }
 }
 
@@ -148,50 +148,81 @@ function StaffOnlyRoute({ children }: { children: ReactNode }) {
   return decision === 'allow' ? children : <Navigate to="/home" replace />;
 }
 
-function AppRoutes() {
-  const googlePlayBuild = isGooglePlayBuild();
+function PageLoading({ locale }: { locale: 'mm' | 'en' }) {
+  return (
+    <div className="flex min-h-[50vh] items-center justify-center px-5 text-center text-ink-soft" role="status" aria-live="polite">
+      <span className="animate-pulse">
+        {locale === 'mm' ? 'စာမျက်နှာ ဖွင့်နေပါသည်…' : 'Opening page…'}
+      </span>
+    </div>
+  );
+}
+
+function AppScreen({ children, showNav = true }: { children: ReactNode; showNav?: boolean }) {
   const { locale } = useLocale();
   return (
-    <Suspense fallback={<div className="flex min-h-[50vh] items-center justify-center text-ink-soft" role="status" aria-live="polite">…</div>}>
-      <Routes>
+    <Layout showNav={showNav}>
+      <ScreenErrorBoundary locale={locale}>
+        <Suspense fallback={<PageLoading locale={locale} />}>
+          {children}
+        </Suspense>
+      </ScreenErrorBoundary>
+    </Layout>
+  );
+}
+
+function StandaloneScreen({ children }: { children: ReactNode }) {
+  const { locale } = useLocale();
+  return (
+    <ScreenErrorBoundary locale={locale}>
+      <Suspense fallback={<PageLoading locale={locale} />}>
+        {children}
+      </Suspense>
+    </ScreenErrorBoundary>
+  );
+}
+
+function AppRoutes() {
+  const googlePlayBuild = isGooglePlayBuild();
+  return (
+    <Routes>
       <Route path="/" element={<Bootstrap />} />
-      <Route path="/consent" element={<Layout showNav={false}><Consent /></Layout>} />
-      <Route path="/add-child" element={<Layout showNav={false}><AddChild /></Layout>} />
-      <Route path="/edit-child" element={<Layout showNav={false}><EditChild /></Layout>} />
-      <Route path="/home" element={<Layout><Home /></Layout>} />
-      <Route path="/journey" element={<Layout><MilestoneDemo /></Layout>} />
-      <Route path="/activities" element={<Layout><Activities /></Layout>} />
-      <Route path="/learn" element={<Layout><Learn /></Layout>} />
-      <Route path="/hope" element={<Layout><HopeCenter /></Layout>} />
-      <Route path="/growth" element={<Layout><Growth /></Layout>} />
-      <Route path="/sleep" element={<Layout><Sleep /></Layout>} />
-      <Route path="/report" element={<Layout><Report /></Layout>} />
-      <Route path="/appointments" element={<Layout><Appointments /></Layout>} />
-      <Route path="/health" element={<Layout><HealthRecords /></Layout>} />
-      <Route path="/profile" element={<Layout><ScreenErrorBoundary locale={locale}><Profile /></ScreenErrorBoundary></Layout>} />
-      <Route path="/subscription" element={<Layout><SubscriptionPlans /></Layout>} />
-      <Route path="/payment/success/:orderId" element={googlePlayBuild ? <Navigate to="/home" replace /> : <Layout><PaymentStatus view="success" /></Layout>} />
-      <Route path="/payment/cancel/:orderId" element={googlePlayBuild ? <Navigate to="/home" replace /> : <Layout><PaymentStatus view="cancel" /></Layout>} />
-      <Route path="/payment/:orderId" element={googlePlayBuild ? <Navigate to="/home" replace /> : <Layout><PaymentStatus /></Layout>} />
-      <Route path="/offline" element={<Layout><OfflineDownloads /></Layout>} />
-      <Route path="/favorites" element={<Layout><Favorites /></Layout>} />
-      <Route path="/notifications" element={<Layout><Notifications /></Layout>} />
-      <Route path="/directory" element={<Layout><HealthcareDirectory /></Layout>} />
-      <Route path="/child-profile" element={<Layout><ChildProfile /></Layout>} />
-      <Route path="/library" element={<Layout><ContentLibrary /></Layout>} />
-      <Route path="/content/:slug" element={<Layout><ContentDetail /></Layout>} />
-      <Route path="/admin" element={<StaffOnlyRoute><Layout><AdminReviewQueue /></Layout></StaffOnlyRoute>} />
-      <Route path="/admin/library" element={<StaffOnlyRoute><Layout><LibraryAdmin /></Layout></StaffOnlyRoute>} />
-      <Route path="/admin/reviews" element={<StaffOnlyRoute><Layout><ContentReviewWorkspace /></Layout></StaffOnlyRoute>} />
-      <Route path="/admin/evidence" element={<StaffOnlyRoute><Layout><EvidenceAdmin /></Layout></StaffOnlyRoute>} />
-      <Route path="/admin/team" element={<StaffOnlyRoute><Layout><AdminTeam /></Layout></StaffOnlyRoute>} />
-      <Route path="/admin/directory" element={<StaffOnlyRoute><Layout><AdminDirectory /></Layout></StaffOnlyRoute>} />
-      <Route path="/admin/billing" element={<StaffOnlyRoute><Layout><AdminBilling /></Layout></StaffOnlyRoute>} />
-      <Route path="/admin/accept-invite" element={<Layout showNav={false}><AcceptAdminInvite /></Layout>} />
-      <Route path="/admin/accept-invite/:inviteCode" element={<Layout showNav={false}><AcceptAdminInvite /></Layout>} />
-      <Route path="/audit" element={<StaffOnlyRoute><Layout><AuditLog /></Layout></StaffOnlyRoute>} />
+      <Route path="/consent" element={<AppScreen showNav={false}><Consent /></AppScreen>} />
+      <Route path="/add-child" element={<AppScreen showNav={false}><AddChild /></AppScreen>} />
+      <Route path="/edit-child" element={<AppScreen showNav={false}><EditChild /></AppScreen>} />
+      <Route path="/home" element={<AppScreen><Home /></AppScreen>} />
+      <Route path="/journey" element={<AppScreen><MilestoneDemo /></AppScreen>} />
+      <Route path="/activities" element={<AppScreen><Activities /></AppScreen>} />
+      <Route path="/learn" element={<AppScreen><Learn /></AppScreen>} />
+      <Route path="/hope" element={<AppScreen><HopeCenter /></AppScreen>} />
+      <Route path="/growth" element={<AppScreen><Growth /></AppScreen>} />
+      <Route path="/sleep" element={<AppScreen><Sleep /></AppScreen>} />
+      <Route path="/report" element={<AppScreen><Report /></AppScreen>} />
+      <Route path="/appointments" element={<AppScreen><Appointments /></AppScreen>} />
+      <Route path="/health" element={<AppScreen><HealthRecords /></AppScreen>} />
+      <Route path="/profile" element={<AppScreen><Profile /></AppScreen>} />
+      <Route path="/subscription" element={<AppScreen><SubscriptionPlans /></AppScreen>} />
+      <Route path="/payment/success/:orderId" element={googlePlayBuild ? <Navigate to="/home" replace /> : <AppScreen><PaymentStatus view="success" /></AppScreen>} />
+      <Route path="/payment/cancel/:orderId" element={googlePlayBuild ? <Navigate to="/home" replace /> : <AppScreen><PaymentStatus view="cancel" /></AppScreen>} />
+      <Route path="/payment/:orderId" element={googlePlayBuild ? <Navigate to="/home" replace /> : <AppScreen><PaymentStatus /></AppScreen>} />
+      <Route path="/offline" element={<AppScreen><OfflineDownloads /></AppScreen>} />
+      <Route path="/favorites" element={<AppScreen><Favorites /></AppScreen>} />
+      <Route path="/notifications" element={<AppScreen><Notifications /></AppScreen>} />
+      <Route path="/directory" element={<AppScreen><HealthcareDirectory /></AppScreen>} />
+      <Route path="/child-profile" element={<AppScreen><ChildProfile /></AppScreen>} />
+      <Route path="/library" element={<AppScreen><ContentLibrary /></AppScreen>} />
+      <Route path="/content/:slug" element={<AppScreen><ContentDetail /></AppScreen>} />
+      <Route path="/admin" element={<StaffOnlyRoute><AppScreen><AdminReviewQueue /></AppScreen></StaffOnlyRoute>} />
+      <Route path="/admin/library" element={<StaffOnlyRoute><AppScreen><LibraryAdmin /></AppScreen></StaffOnlyRoute>} />
+      <Route path="/admin/reviews" element={<StaffOnlyRoute><AppScreen><ContentReviewWorkspace /></AppScreen></StaffOnlyRoute>} />
+      <Route path="/admin/evidence" element={<StaffOnlyRoute><AppScreen><EvidenceAdmin /></AppScreen></StaffOnlyRoute>} />
+      <Route path="/admin/team" element={<StaffOnlyRoute><AppScreen><AdminTeam /></AppScreen></StaffOnlyRoute>} />
+      <Route path="/admin/directory" element={<StaffOnlyRoute><AppScreen><AdminDirectory /></AppScreen></StaffOnlyRoute>} />
+      <Route path="/admin/billing" element={<StaffOnlyRoute><AppScreen><AdminBilling /></AppScreen></StaffOnlyRoute>} />
+      <Route path="/admin/accept-invite" element={<AppScreen showNav={false}><AcceptAdminInvite /></AppScreen>} />
+      <Route path="/admin/accept-invite/:inviteCode" element={<AppScreen showNav={false}><AcceptAdminInvite /></AppScreen>} />
+      <Route path="/audit" element={<StaffOnlyRoute><AppScreen><AuditLog /></AppScreen></StaffOnlyRoute>} />
       <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </Suspense>
+    </Routes>
   );
 }
