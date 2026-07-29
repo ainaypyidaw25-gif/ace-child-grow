@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 const librarySource = readFileSync('convex/library.ts', 'utf8');
 const workflowSource = readFileSync('convex/content.ts', 'utf8');
+const releaseSource = readFileSync('convex/release.ts', 'utf8');
 const libraryAdminSource = readFileSync('src/screens/LibraryAdmin.tsx', 'utf8');
 const contentDetailSource = readFileSync('src/screens/ContentDetail.tsx', 'utf8');
 
@@ -39,6 +40,13 @@ describe('clinically scoped publication gate', () => {
   it('does not allow parents to complete an unpublished activity', () => {
     const activitiesSource = readFileSync('convex/activities.ts', 'utf8');
     expect(activitiesSource).toContain("content.clinicalStatus !== 'published'");
+  });
+
+  it('retires unsafe education-scoped bulk publication endpoints', () => {
+    expect(releaseSource).toContain('Bulk education-scoped publication has been retired');
+    expect(releaseSource).toContain('Bulk legacy publication has been retired');
+    expect(releaseSource).not.toContain("'library.education.publishAll'");
+    expect(releaseSource).not.toContain("'content.education.publishAll'");
   });
 
   it('supports professionally reviewed original animations without requiring filmed video', () => {

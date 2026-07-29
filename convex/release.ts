@@ -74,44 +74,13 @@ export const configureOwnerEducationReviewer = internalMutation({
   },
 });
 
-/** Publish every library row with an education-scoped professional decision. */
+/** Retained as a hard-failing compatibility endpoint. Bulk publication is unsafe. */
 export const publishLibraryEducationReviewed = internalMutation({
   args: {},
   returns: v.object({ published: v.number(), alreadyPublished: v.number(), total: v.number() }),
   handler: async (ctx) => {
-    const owner = await qualifiedOwner(ctx);
-    const rows = await ctx.db.query('libraryContent').take(1000);
-    const now = Date.now();
-    const nextReviewAt = Date.UTC(2027, 6, 26);
-    let published = 0;
-    let alreadyPublished = 0;
-    for (const row of rows) {
-      if (row.clinicalStatus === 'published' && row.reviewScope === 'education') {
-        alreadyPublished += 1;
-        continue;
-      }
-      await ctx.db.patch(row._id, {
-        clinicalStatus: 'published',
-        reviewerId: owner.userId,
-        reviewerDisplayName: owner.reviewerName,
-        reviewerQualification: OWNER_QUALIFICATION,
-        reviewScope: 'education',
-        reviewedAt: now,
-        nextReviewAt,
-        reviewNote: REVIEW_NOTE,
-        updatedAt: now,
-      });
-      published += 1;
-    }
-    await logAudit(
-      ctx,
-      owner.userId,
-      'library.education.publishAll',
-      'libraryContent',
-      undefined,
-      `${published} published; ${alreadyPublished} already published; ${rows.length} total. ${REVIEW_NOTE}`,
-    );
-    return { published, alreadyPublished, total: rows.length };
+    void ctx;
+    throw new Error('Bulk education-scoped publication has been retired; use individual review gates and qualified publication approval');
   },
 });
 
@@ -163,26 +132,13 @@ export const approveEvidenceEducationReviewed = internalMutation({
   },
 });
 
-/** Publish the small legacy CMS queue under the same explicit scope. */
+/** Retained as a hard-failing compatibility endpoint. Bulk publication is unsafe. */
 export const publishLegacyContentEducationReviewed = internalMutation({
   args: {},
   returns: v.object({ published: v.number(), total: v.number() }),
   handler: async (ctx) => {
-    const owner = await qualifiedOwner(ctx);
-    const rows = await ctx.db.query('contentItems').take(500);
-    let published = 0;
-    for (const row of rows) {
-      if (row.reviewStatus === 'published' && row.reviewScope === 'education') continue;
-      await ctx.db.patch(row._id, {
-        reviewStatus: 'published',
-        reviewerId: owner.userId,
-        reviewerQualification: OWNER_QUALIFICATION,
-        reviewScope: 'education',
-      });
-      published += 1;
-    }
-    await logAudit(ctx, owner.userId, 'content.education.publishAll', 'contentItems', undefined, `${published} published`);
-    return { published, total: rows.length };
+    void ctx;
+    throw new Error('Bulk legacy publication has been retired; publish only records that satisfy current review gates');
   },
 });
 
