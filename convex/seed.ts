@@ -19,10 +19,18 @@ import {
 export const grantStaffByEmail = internalMutation({
   args: { email: v.string() },
   handler: async (ctx, { email }) => {
-    const user = await ctx.db
+    // NOT .unique(): an email can have more than one user row when the person has
+    // signed in through several providers. Granting owner to a silently-picked
+    // one of them would put staff access on an account they may never sign in
+    // with — so refuse and make the ambiguity visible instead.
+    const users = await ctx.db
       .query('users')
       .withIndex('email', (q) => q.eq('email', email.trim().toLowerCase()))
-      .unique();
+      .take(2);
+    if (users.length > 1) {
+      return { ok: false, reason: 'more than one account uses this email; resolve the duplicate first' };
+    }
+    const user = users[0];
     if (!user) return { ok: false, reason: 'no such user' };
     const profile = await ctx.db
       .query('parentProfiles')

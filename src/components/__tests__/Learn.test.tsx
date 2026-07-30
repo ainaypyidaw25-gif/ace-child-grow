@@ -5,6 +5,11 @@ import { LocaleProvider } from '../../app/LocaleContext';
 import { Learn } from '../../screens/Learn';
 
 const requests = vi.hoisted(() => [] as Array<{ type?: string; ageGroupKey?: string }>);
+const child = vi.hoisted(() => ({
+  birthDate: '2025-08-01',
+  useCorrectedAge: false,
+  gestationalWeeks: undefined as number | undefined,
+}));
 
 vi.mock('convex/react', () => ({
   useQuery: (_api: unknown, args?: { type?: string; ageGroupKey?: string }) => {
@@ -35,8 +40,9 @@ vi.mock('../../app/AppState', () => ({
     activeChild: {
       id: 'child-1',
       nickname: 'မေမေ့သားလေး',
-      birthDate: '2025-08-01',
-      useCorrectedAge: false,
+      birthDate: child.birthDate,
+      useCorrectedAge: child.useCorrectedAge,
+      gestationalWeeks: child.gestationalWeeks,
     },
   }),
 }));
@@ -45,6 +51,9 @@ describe('Learn', () => {
   afterEach(() => {
     cleanup();
     requests.length = 0;
+    child.birthDate = '2025-08-01';
+    child.useCorrectedAge = false;
+    child.gestationalWeeks = undefined;
     vi.useRealTimers();
   });
 
@@ -63,6 +72,26 @@ describe('Learn', () => {
     expect(screen.getByRole('heading', { name: 'မေမေ့သားလေး အတွက် သင်ယူရန်' })).toBeVisible();
     expect(screen.getByRole('heading', { name: 'ကစားရင်း အတူသင်ယူမယ်' })).toBeVisible();
     expect(requests).toContainEqual({ type: 'guide', ageGroupKey: '10_12m' });
+    expect(requests).toContainEqual({ type: 'story', ageGroupKey: '10_12m' });
     expect(screen.getByRole('link', { name: /ကစားရင်း အတူသင်ယူမယ်/ })).toHaveAttribute('href', '/content/guide-toddler-play');
+  });
+
+  it('selects guides and stories using corrected age when the parent opted in', () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-07-01T12:00:00Z'));
+    child.birthDate = '2026-01-01';
+    child.useCorrectedAge = true;
+    child.gestationalWeeks = 28;
+
+    render(
+      <MemoryRouter>
+        <LocaleProvider>
+          <Learn />
+        </LocaleProvider>
+      </MemoryRouter>,
+    );
+
+    expect(requests).toContainEqual({ type: 'guide', ageGroupKey: '3_4m' });
+    expect(requests).toContainEqual({ type: 'story', ageGroupKey: '3_4m' });
   });
 });

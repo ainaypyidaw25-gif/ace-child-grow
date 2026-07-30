@@ -82,6 +82,11 @@ export function AdminReviewQueue() {
             <Link to="/admin/evidence" className="rounded-pill border border-line px-4 py-2 text-sky-deep">
               {locale === 'mm' ? 'ကိုးကားချက်များ ကြည့်ရန်' : 'View evidence'}
             </Link>
+            {(access?.role === 'owner' || access?.role === 'content_editor') && (
+              <Link to="/admin/review-activity" className="rounded-pill border border-line px-4 py-2 text-sky-deep">
+                {locale === 'mm' ? 'သုံးသပ်သူများ၏ မှတ်တမ်း' : 'Reviewer activity'}
+              </Link>
+            )}
             {access?.role === 'owner' && (
               <>
                 <Link to="/admin/team" className="rounded-pill border border-line px-4 py-2 text-sky-deep">

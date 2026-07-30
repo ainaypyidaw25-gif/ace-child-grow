@@ -4,6 +4,7 @@ import {
   ageInMonths,
   chronologicalAge,
   correctedAge,
+  developmentalAgeMonths,
   AgeInputError,
 } from '../age/age';
 
@@ -80,5 +81,21 @@ describe('correctedAge (premature)', () => {
   it('rejects impossible gestational ages', () => {
     expect(() => correctedAge(d('2025-01-01'), d('2025-07-01'), 10)).toThrowError(AgeInputError);
     expect(() => correctedAge(d('2025-01-01'), d('2025-07-01'), 60)).toThrowError(AgeInputError);
+  });
+});
+
+describe('developmentalAgeMonths', () => {
+  it('honors the corrected-age preference within the supported window', () => {
+    expect(developmentalAgeMonths(d('2026-01-01'), d('2026-07-01'), {
+      useCorrectedAge: true,
+      gestationalWeeks: 28,
+    })).toBe(3);
+  });
+
+  it('uses chronological age when correction is not selected', () => {
+    expect(developmentalAgeMonths(d('2026-01-01'), d('2026-07-01'), {
+      useCorrectedAge: false,
+      gestationalWeeks: 28,
+    })).toBe(6);
   });
 });

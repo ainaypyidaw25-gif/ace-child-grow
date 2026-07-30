@@ -3,6 +3,7 @@ import { Component, type ErrorInfo, type ReactNode } from 'react';
 type Props = {
   children: ReactNode;
   locale: 'mm' | 'en';
+  onRetry?: () => void;
 };
 
 type State = { failed: boolean };
@@ -32,7 +33,10 @@ export class ScreenErrorBoundary extends Component<Props, State> {
         <div className="mt-4 flex flex-col justify-center gap-2 sm:flex-row">
           <button
             type="button"
-            onClick={() => this.setState({ failed: false })}
+            onClick={() => {
+              if (this.props.onRetry) this.props.onRetry();
+              else window.location.reload();
+            }}
             className="rounded-pill bg-sky-deep px-5 py-2 text-sm font-semibold text-white"
           >
             {mm ? 'ထပ်မံကြိုးစားမည်' : 'Try again'}

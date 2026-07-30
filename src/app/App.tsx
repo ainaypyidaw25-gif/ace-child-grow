@@ -41,6 +41,7 @@ const AcceptAdminInvite = lazy(() => import('../screens/AcceptAdminInvite').then
 const AdminDirectory = lazy(() => import('../screens/AdminDirectory').then((module) => ({ default: module.AdminDirectory })));
 const AdminBilling = lazy(() => import('../screens/AdminBilling').then((module) => ({ default: module.AdminBilling })));
 const ContentReviewWorkspace = lazy(() => import('../screens/ContentReviewWorkspace').then((module) => ({ default: module.ContentReviewWorkspace })));
+const AdminReviewActivity = lazy(() => import('../screens/AdminReviewActivity').then((module) => ({ default: module.AdminReviewActivity })));
 const SubscriptionPlans = lazy(() => import('../screens/SubscriptionPlans').then((module) => ({ default: module.SubscriptionPlans })));
 const PaymentStatus = lazy(() => import('../screens/PaymentStatus').then((module) => ({ default: module.PaymentStatus })));
 const Appointments = lazy(() => import('../screens/Appointments').then((module) => ({ default: module.Appointments })));
@@ -215,6 +216,7 @@ function AppRoutes() {
       <Route path="/admin" element={<StaffOnlyRoute><AppScreen><AdminReviewQueue /></AppScreen></StaffOnlyRoute>} />
       <Route path="/admin/library" element={<StaffOnlyRoute><AppScreen><LibraryAdmin /></AppScreen></StaffOnlyRoute>} />
       <Route path="/admin/reviews" element={<StaffOnlyRoute><AppScreen><ContentReviewWorkspace /></AppScreen></StaffOnlyRoute>} />
+      <Route path="/admin/review-activity" element={<StaffOnlyRoute><AppScreen><AdminReviewActivity /></AppScreen></StaffOnlyRoute>} />
       <Route path="/admin/evidence" element={<StaffOnlyRoute><AppScreen><EvidenceAdmin /></AppScreen></StaffOnlyRoute>} />
       <Route path="/admin/team" element={<StaffOnlyRoute><AppScreen><AdminTeam /></AppScreen></StaffOnlyRoute>} />
       <Route path="/admin/directory" element={<StaffOnlyRoute><AppScreen><AdminDirectory /></AppScreen></StaffOnlyRoute>} />
