@@ -260,10 +260,79 @@ describe('Convex registered handlers enforce authorization', () => {
       },
       rows: { libraryContent: [{ _id: 'content-1', slug: 'item-1', version: 1 }] },
     });
+    // Refused in-band, not thrown: a thrown mutation reaches the reviewer as an
+    // opaque "Server Error" on a production deployment and rolls back the audit
+    // row that records the refusal.
     await expect(handler(saveDecision)(context, {
       contentSlug: 'item-1', dimension: 'clinical', decision: 'approved',
-    })).rejects.toThrow('cannot decide this review area');
+    })).resolves.toEqual({
+      ok: false,
+      code: 'role_may_not_review_area',
+      message: 'Your reviewer role cannot decide this review area.',
+    });
     expect(context.db.patch).not.toHaveBeenCalled();
+    // No decision recorded, but the refusal is audited.
+    expect(context.db.insert).not.toHaveBeenCalledWith('contentReviews', expect.anything());
+    expect(context.db.insert).toHaveBeenCalledWith('auditLogs', expect.objectContaining({
+      result: 'rejected',
+      summary: 'item-1 \u00b7 refused: role_may_not_review_area',
+    }));
+  });
+
+  it('every review refusal reaches the reviewer as a code instead of an opaque server error', async () => {
+    const cases = [
+      {
+        name: 'missing display name',
+        profile: { userId: 'u-1', isStaff: true, staffRole: 'language_reviewer' },
+        args: { contentSlug: 'item-1', dimension: 'native_myanmar', decision: 'approved' },
+        code: 'display_name_required',
+      },
+      {
+        name: 'approval without a stated qualification',
+        profile: { userId: 'u-1', isStaff: true, staffRole: 'clinical_reviewer', displayName: 'Dr Someone' },
+        args: { contentSlug: 'item-1', dimension: 'clinical', decision: 'approved' },
+        code: 'qualification_required',
+      },
+      {
+        name: 'changes requested with no note',
+        profile: { userId: 'u-1', isStaff: true, staffRole: 'language_reviewer', displayName: 'Reviewer' },
+        args: { contentSlug: 'item-1', dimension: 'native_myanmar', decision: 'changes_requested' },
+        code: 'note_required',
+      },
+      {
+        name: 'support role',
+        profile: { userId: 'u-1', isStaff: true, staffRole: 'support', displayName: 'Helper' },
+        args: { contentSlug: 'item-1', dimension: 'native_myanmar', decision: 'in_review' },
+        code: 'not_staff',
+      },
+    ];
+
+    for (const testCase of cases) {
+      authState.userId = 'u-1';
+      const context = ctx({
+        profile: testCase.profile,
+        rows: { libraryContent: [{ _id: 'content-1', slug: 'item-1', reviewRevision: 1 }] },
+      });
+      const result = await handler(saveDecision)(context, testCase.args) as { ok: boolean; code: string };
+      expect(result.ok, testCase.name).toBe(false);
+      expect(result.code, testCase.name).toBe(testCase.code);
+      expect(context.db.insert, testCase.name).not.toHaveBeenCalledWith('contentReviews', expect.anything());
+    }
+  });
+
+  it('a missing content item is refused in-band rather than thrown', async () => {
+    authState.userId = 'owner-1';
+    const context = ctx({
+      profile: { userId: 'owner-1', isStaff: true, staffRole: 'owner', displayName: 'Owner' },
+      rows: { libraryContent: [] },
+    });
+    await expect(handler(saveDecision)(context, {
+      contentSlug: 'gone', dimension: 'native_myanmar', decision: 'in_review',
+    })).resolves.toEqual({
+      ok: false,
+      code: 'content_not_found',
+      message: 'This content item no longer exists.',
+    });
   });
 
   it('a qualified clinical reviewer can record a version-bound safety decision', async () => {

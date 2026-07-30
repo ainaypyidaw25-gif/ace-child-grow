@@ -2,7 +2,8 @@ import { v } from 'convex/values';
 import { mutation, query } from './_generated/server';
 import type { Id } from './_generated/dataModel';
 import { logAudit } from './audit';
-import { getStaffAccess, requireReviewEditor, requireUser, type StaffRole } from './lib/auth';
+import { getStaffAccess, requireUser, type StaffRole } from './lib/auth';
+import { reviewRefusal, type ReviewDimension } from './lib/reviewPolicy';
 
 const dimensionValidator = v.union(
   v.literal('english'),
@@ -44,19 +45,6 @@ const reviewValidator = v.object({
   createdAt: v.number(),
   updatedAt: v.number(),
 });
-
-type ReviewDimension = 'english' | 'native_myanmar' | 'evidence' | 'safety' | 'clinical';
-function roleMayReview(role: StaffRole, dimension: ReviewDimension): boolean {
-  if (dimension === 'clinical' || dimension === 'safety') return role === 'clinical_reviewer';
-  if (dimension === 'evidence') {
-    return ['owner', 'content_editor', 'evidence_reviewer', 'clinical_reviewer'].includes(role);
-  }
-  return ['owner', 'content_editor', 'language_reviewer'].includes(role);
-}
-
-function approvalNeedsQualification(dimension: ReviewDimension): boolean {
-  return dimension === 'clinical' || dimension === 'safety' || dimension === 'evidence';
-}
 
 export const listForContent = query({
   args: { contentSlug: v.string() },
@@ -248,30 +236,50 @@ export const saveDecision = mutation({
     decision: decisionValidator,
     note: v.optional(v.string()),
   },
-  returns: v.object({ ok: v.literal(true), contentVersion: v.number() }),
+  returns: v.union(
+    v.object({ ok: v.literal(true), contentVersion: v.number() }),
+    v.object({ ok: v.literal(false), code: v.string(), message: v.string() }),
+  ),
   handler: async (ctx, args) => {
-    const { userId, access } = await requireReviewEditor(ctx);
-    if (!roleMayReview(access.role, args.dimension)) {
-      throw new Error('This reviewer role cannot decide this review area');
-    }
-    const displayName = access.displayName?.trim();
-    if (!displayName) throw new Error('Reviewer display name is required');
-    if (
-      args.decision === 'approved' &&
-      approvalNeedsQualification(args.dimension) &&
-      !access.qualification?.trim()
-    ) {
-      throw new Error('Professional qualification is required for this approval');
-    }
-    const note = args.note?.trim();
-    if (args.decision === 'changes_requested' && !note) {
-      throw new Error('A note is required when requesting changes');
-    }
+    const userId = await requireUser(ctx);
+    const access = await getStaffAccess(ctx, userId);
+
     const content = await ctx.db
       .query('libraryContent')
       .withIndex('by_slug', (q) => q.eq('slug', args.contentSlug))
       .unique();
-    if (!content) throw new Error('Content not found');
+
+    // Every refusal is returned in-band and audited. Throwing would reach the
+    // reviewer as an opaque "Server Error" on a production deployment (Convex
+    // redacts thrown messages) and would roll back the audit row recording it.
+    const refusal = reviewRefusal({
+      role: access?.role,
+      dimension: args.dimension,
+      decision: args.decision,
+      displayName: access?.displayName,
+      qualification: access?.qualification,
+      note: args.note,
+      contentExists: content !== null,
+    });
+    if (refusal) {
+      await logAudit(
+        ctx,
+        userId,
+        `contentReview.${args.dimension}.${args.decision}`,
+        'libraryContent',
+        content?._id,
+        `${args.contentSlug} · refused: ${refusal.code}`,
+        { result: 'rejected' },
+      );
+      return { ok: false as const, code: refusal.code, message: refusal.message };
+    }
+
+    // reviewRefusal has already established these.
+    const displayName = (access?.displayName ?? '').trim();
+    const note = args.note?.trim();
+    if (!content || !access) {
+      return { ok: false as const, code: 'content_not_found', message: 'This content item no longer exists.' };
+    }
     const now = Date.now();
     await ctx.db.insert('contentReviews', {
       contentSlug: args.contentSlug,
@@ -294,6 +302,7 @@ export const saveDecision = mutation({
       'libraryContent',
       content._id,
       `${args.contentSlug} · review revision ${content.reviewRevision ?? 1}`,
+      { result: 'ok' },
     );
     return { ok: true as const, contentVersion: content.reviewRevision ?? 1 };
   },
