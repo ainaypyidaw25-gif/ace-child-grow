@@ -213,7 +213,7 @@ const manifest = {
   destination: {
     platform: 'facebook',
     pageId: '111009258047115',
-    pageUrl: 'https://www.facebook.com/acechildgrow',
+    pageUrl: 'https://www.facebook.com/scienceeducationcenter',
     graphApiVersion: 'v25.0',
   },
   cadence: { timezone: 'Asia/Yangon', weeklyPosts: 3, note: 'Mon/Wed 20:00 and Sat 10:00' },

@@ -1,12 +1,12 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-30T14:10:46.764Z",
+  "generatedAt": "2026-07-30T14:39:22.565Z",
   "automationMode": "production",
   "killSwitch": false,
   "destination": {
     "platform": "facebook",
     "pageId": "111009258047115",
-    "pageUrl": "https://www.facebook.com/acechildgrow",
+    "pageUrl": "https://www.facebook.com/scienceeducationcenter",
     "graphApiVersion": "v25.0"
   },
   "cadence": {
@@ -35,7 +35,7 @@
     },
     {
       "id": "ACE-AUTO-01",
-      "status": "scheduled",
+      "status": "published",
       "scheduledAt": "2026-07-30T13:30:00.000Z",
       "approvalStatus": "approved",
       "reviewerId": "ACE_CONTENT_OWNER_2026_07_29",
@@ -48,9 +48,11 @@
       "mediaUrl": "https://child.acegroup.com.mm/social/ace-child-grow/posts/continuous-launch-v1/ACE-AUTO-01.png",
       "mediaSha256": "ff9680d38fce76db3b535621b8db94eca7e8c9b865415d1040619ab2c76d4632",
       "captionMyanmar": "ဒီနေ့ ကလေးနဲ့ ဘာလုပ်ရမလဲ စဉ်းစားနေသလား? 💛\n\nACE Child Grow မှာ ကလေးအသက်အလိုက် နေ့စဉ်လှုပ်ရှားမှုတွေကို တစ်နေရာတည်းမှာ ကြည့်နိုင်ပါတယ်။\n\nလုပ်ကြည့်ချင်တဲ့ အစီအစဉ်ကို ရွေးလိုက်ရုံနဲ့ လိုအပ်တာတွေ၊ အဆင့်လိုက်လုပ်နည်းနဲ့ သတိထားရမယ့်အချက်တွေကို ဖတ်နိုင်ပါတယ်။\n\nမိဘတို့အတွက် နေ့တိုင်းရွေးချယ်ရတာ ပိုလွယ်သွားစေဖို့ပါ။\n\n#ACEChildGrow #မိဘနဲ့ကလေး",
-      "alreadyPublished": false,
-      "platformPostId": null,
-      "platformPermalink": null
+      "alreadyPublished": true,
+      "platformPostId": "111009258047115_1065680105982770",
+      "platformPhotoId": "1065679992649448",
+      "publishedAt": "2026-07-30T14:35:40.486Z",
+      "platformPermalink": "https://www.facebook.com/scienceeducationcenter/posts/pfbid02mmQYUddftNXvLF76dvXfd1oNJ1qM47HyeNoZ49SnryKG1pkTQWzYK7yZLnR9rr31l"
     },
     {
       "id": "ACE-AUTO-02",
