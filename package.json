@@ -5,6 +5,8 @@
   "description": "ACE Child Grow — bilingual Myanmar–English early-childhood development support platform (educational & screening-support only; never diagnostic).",
   "type": "module",
   "scripts": {
+    "prebuild": "npm run social:generate",
+    "social:generate": "node scripts/generate-social-calendar.mjs",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
