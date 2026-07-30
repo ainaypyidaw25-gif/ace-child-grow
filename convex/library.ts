@@ -18,6 +18,7 @@ import {
 import { logAudit } from './audit';
 import { resolveEntitlements } from './lib/entitlements';
 import { STARTER_ANIMATION_SLUGS } from './animationPlan';
+import { diffEditableContent } from './lib/contentEditDiff';
 import { seedAuditSummary, seedMayUpdateExisting, seedMediaIsProtected } from './lib/seedPolicy';
 
 const protectedContentDataFields = new Set([
@@ -535,6 +536,16 @@ export const updateDraft = mutation({
       item.tags.join(' '),
       JSON.stringify(data),
     ].join(' ').toLowerCase();
+    const editDiff = diffEditableContent(
+      {
+        titleMm: item.titleMm,
+        titleEn: item.titleEn,
+        summaryMm: item.summaryMm,
+        summaryEn: item.summaryEn,
+        data: item.data,
+      },
+      { titleMm, titleEn, summaryMm, summaryEn, data },
+    );
     await ctx.db.patch(item._id, {
       titleMm,
       titleEn,
@@ -552,6 +563,19 @@ export const updateDraft = mutation({
       nextReviewAt: undefined,
       reviewNote: undefined,
       updatedAt: now,
+    });
+    await ctx.db.insert('contentEditLogs', {
+      contentId: item._id,
+      contentSlug: item.slug,
+      fromVersion: currentReviewRevision,
+      toVersion: reviewRevision,
+      editorId: userId,
+      editorDisplayName: access.displayName ?? 'Unnamed staff',
+      editorRole: access.role,
+      editedAt: now,
+      totalChanges: editDiff.totalChanges,
+      logTruncated: editDiff.logTruncated,
+      changes: editDiff.changes,
     });
     await logAudit(
       ctx,

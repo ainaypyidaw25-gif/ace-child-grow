@@ -1,4 +1,6 @@
-import { query, mutation } from './_generated/server';
+import { internal } from './_generated/api';
+import type { Id, TableNames } from './_generated/dataModel';
+import { internalMutation, query, mutation, type MutationCtx } from './_generated/server';
 import { v } from 'convex/values';
 import { getAuthUserId } from '@convex-dev/auth/server';
 import { requireUser } from './lib/auth';
@@ -15,6 +17,27 @@ const childValidator = v.object({
   useCorrectedAge: v.boolean(),
   deletedAt: v.optional(v.number()),
 });
+
+const DELETION_BATCH_SIZE = 64;
+type DeletableRow = { _id: Id<TableNames> };
+
+function distinctRows(...groups: ReadonlyArray<ReadonlyArray<DeletableRow>>): DeletableRow[] {
+  const seen = new Set<string>();
+  const rows: DeletableRow[] = [];
+  for (const group of groups) {
+    for (const row of group) {
+      const id = String(row._id);
+      if (seen.has(id)) continue;
+      seen.add(id);
+      rows.push(row);
+    }
+  }
+  return rows;
+}
+
+async function deleteRows(ctx: MutationCtx, rows: ReadonlyArray<DeletableRow>): Promise<void> {
+  for (const row of rows) await ctx.db.delete(row._id);
+}
 
 // Ownership is ALWAYS derived from the authenticated identity, never from client
 // input. A parent can only ever read/write their own children (P0 guarantee).
@@ -91,7 +114,55 @@ export const remove = mutation({
     const userId = await requireUser(ctx);
     const existing = await ctx.db.get(args.id);
     if (!existing || existing.userId !== userId) throw new Error('Not found');
-    await ctx.db.patch(args.id, { deletedAt: Date.now() });
+    // Caregivers may read a shared child, but only its owner can initiate this
+    // destructive cascade. Mark it hidden immediately, then hard-delete all
+    // associated records in bounded internal batches.
+    if (existing.deletedAt === undefined) {
+      await ctx.db.patch(args.id, { deletedAt: Date.now() });
+    }
+    await ctx.scheduler.runAfter(0, internal.children.deleteChildBatch, {
+      childId: args.id,
+      ownerId: userId,
+    });
+    return null;
+  },
+});
+
+/**
+ * Repeatedly removes every record linked to a child, then deletes the child in
+ * a final no-record transaction. The indexed range reads participate in Convex
+ * OCC, so a record racing the final delete forces a retry instead of becoming
+ * an orphan.
+ */
+export const deleteChildBatch = internalMutation({
+  args: {
+    childId: v.id('children'),
+    ownerId: v.id('users'),
+  },
+  returns: v.null(),
+  handler: async (ctx, args) => {
+    const child = await ctx.db.get(args.childId);
+    if (!child || child.userId !== args.ownerId || child.deletedAt === undefined) return null;
+
+    const groups = await Promise.all([
+      ctx.db.query('growthRecords').withIndex('by_child', (q) => q.eq('childId', args.childId)).take(DELETION_BATCH_SIZE),
+      ctx.db.query('sleepRecords').withIndex('by_child', (q) => q.eq('childId', args.childId)).take(DELETION_BATCH_SIZE),
+      ctx.db.query('healthRecords').withIndex('by_child_and_record_date', (q) => q.eq('childId', args.childId)).take(DELETION_BATCH_SIZE),
+      ctx.db.query('vaccinationRecords').withIndex('by_child_and_scheduled_on', (q) => q.eq('childId', args.childId)).take(DELETION_BATCH_SIZE),
+      ctx.db.query('medicationRecords').withIndex('by_child_and_started_on', (q) => q.eq('childId', args.childId)).take(DELETION_BATCH_SIZE),
+      ctx.db.query('milestoneSessions').withIndex('by_child', (q) => q.eq('childId', args.childId)).take(DELETION_BATCH_SIZE),
+      ctx.db.query('milestoneResponses').withIndex('by_child', (q) => q.eq('childId', args.childId)).take(DELETION_BATCH_SIZE),
+      ctx.db.query('activityCompletions').withIndex('by_child_and_completed_at', (q) => q.eq('childId', args.childId)).take(DELETION_BATCH_SIZE),
+      ctx.db.query('appointments').withIndex('by_child_and_appointment_at', (q) => q.eq('childId', args.childId)).take(DELETION_BATCH_SIZE),
+    ]);
+    const rows = distinctRows(...groups);
+    if (rows.length > 0) {
+      await deleteRows(ctx, rows);
+      await ctx.scheduler.runAfter(0, internal.children.deleteChildBatch, args);
+      return null;
+    }
+
+    await ctx.db.delete(args.childId);
     return null;
   },
 });

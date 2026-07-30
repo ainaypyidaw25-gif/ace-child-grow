@@ -53,6 +53,7 @@ export function AdminReviewActivity() {
   const { locale } = useLocale();
   const L = (mm: string, en: string) => (locale === 'mm' ? mm : en);
   const [reviewerId, setReviewerId] = useState('');
+  const [editorId, setEditorId] = useState('');
   const [dimension, setDimension] = useState('');
   const [decision, setDecision] = useState('');
 
@@ -62,16 +63,27 @@ export function AdminReviewActivity() {
     ...(decision ? { decision: decision as Decision } : {}),
     limit: 200,
   });
+  const editData = useQuery(api.contentEdits.activity, {
+    ...(editorId ? { editorId: editorId as never } : {}),
+    limit: 100,
+  });
 
   // Built from every row scanned, so the picker does not shrink as you filter.
   const reviewerOptions = useMemo(
     () => data?.reviewers.map((r) => ({ id: r.reviewerId as string, name: r.displayName })) ?? [],
     [data],
   );
+  const editorOptions = useMemo(
+    () => editData?.editors.map((editor) => ({
+      id: editor.editorId as string,
+      name: editor.displayName,
+    })) ?? [],
+    [editData],
+  );
 
-  if (data === undefined) return <p className="text-ink-soft">…</p>;
+  if (data === undefined || editData === undefined) return <p className="text-ink-soft">…</p>;
 
-  if (!data.allowed) {
+  if (!data.allowed || !editData.allowed) {
     return (
       <div className="flex min-h-[50vh] flex-col items-center justify-center gap-3 text-center">
         <div aria-hidden className="text-4xl">🔒</div>
@@ -96,8 +108,8 @@ export function AdminReviewActivity() {
         </h1>
         <p className="text-sm text-ink-soft">
           {L(
-            'သုံးသပ်သူတိုင်း၊ အကြောင်းအရာတိုင်းအတွက် ဆုံးဖြတ်ချက် အားလုံးကို တစ်နေရာတွင် ကြည့်ရန်။ ဤမှတ်တမ်းသည် ဖျက်လို့မရသော မှတ်တမ်းဖြစ်သည်။',
-            'Every review decision across every item, in one place. These records are append-only.',
+            'သုံးသပ်သူတိုင်း၊ အကြောင်းအရာတိုင်းအတွက် ဆုံးဖြတ်ချက်နှင့် ဘာပြင်ခဲ့သည်ကို တစ်နေရာတွင် ကြည့်ရန်။ ပုံမှန်တည်းဖြတ်မှုများက ယခင်မှတ်တမ်းကို မပြောင်းလဲပါ။',
+            'Every review decision and recorded content edit across every item, in one place. Normal edits never rewrite earlier records.',
           )}
         </p>
       </header>
@@ -150,6 +162,134 @@ export function AdminReviewActivity() {
                     <dd className="inline font-semibold text-ink">{r.distinctItems}</dd>
                   </div>
                 </dl>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      <section className="space-y-3">
+        <h2 className="text-sm font-semibold text-ink">
+          {L('အကြောင်းအရာ ပြင်ဆင်မှု မှတ်တမ်း', 'Content edit history')}
+        </h2>
+        <p className="text-xs text-ink-soft">
+          {L(
+            'ဤစနစ်ကို တင်ပြီးနောက် ပြင်ဆင်မှုများကို field အလိုက် before/after ဖြင့် မှတ်တမ်းတင်သည်။ ယခင်ပြင်ဆင်မှုများကို အတိအကျ ပြန်မတည်ဆောက်နိုင်ပါ။',
+            'Field-level before/after history is recorded from this release onward. Earlier edits cannot be reconstructed exactly.',
+          )}
+        </p>
+
+        {editData.editors.length > 0 && (
+          <ul className="grid gap-2 md:grid-cols-2">
+            {editData.editors.map((editor) => (
+              <li key={editor.editorId as string} className="rounded-xl border border-line bg-white p-3 text-sm">
+                <div className="flex flex-wrap items-baseline justify-between gap-2">
+                  <span className="font-semibold text-ink">{editor.displayName}</span>
+                  <span className="text-[11px] text-ink-soft">
+                    {formatDateTime(editor.lastEditedAt)}
+                  </span>
+                </div>
+                <p className="mt-1 text-xs text-ink-soft">
+                  {ROLE_LABELS[editor.role]?.[locale] ?? editor.role}
+                  {' · '}
+                  {L('ပြင်ဆင်မှု', 'edits')} {editor.total}
+                  {' · '}
+                  {L('အကြောင်းအရာ', 'items')} {editor.distinctItems}
+                </p>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        <select
+          value={editorId}
+          onChange={(event) => setEditorId(event.target.value)}
+          aria-label={L('ပြင်ဆင်သူဖြင့် စစ်ထုတ်ရန်', 'Filter by editor')}
+          className="rounded-pill border border-line bg-white px-4 py-2 text-sm"
+        >
+          <option value="">{L('ပြင်ဆင်သူ အားလုံး', 'All editors')}</option>
+          {editorOptions.map((option) => (
+            <option key={option.id} value={option.id}>{option.name}</option>
+          ))}
+        </select>
+
+        {editData.truncated && (
+          <p role="status" className="rounded-lg bg-pastel-yellow px-3 py-2 text-xs text-ink">
+            {L(
+              'နောက်ဆုံးပြင်ဆင်မှု မှတ်တမ်းများကိုသာ အကျဉ်းချုပ်တွက်ထားသည်။ ပြင်ဆင်သူဖြင့် စစ်ထုတ်ပါ။',
+              'The summary covers recent edit records only. Filter by editor to narrow.',
+            )}
+          </p>
+        )}
+
+        {editData.edits.length === 0 ? (
+          <p className="text-sm text-ink-soft">
+            {L('ပြင်ဆင်မှု မှတ်တမ်း မရှိသေးပါ။', 'No content edits recorded yet.')}
+          </p>
+        ) : (
+          <ul className="space-y-2">
+            {editData.edits.map((edit) => (
+              <li key={edit._id as string} className="rounded-xl border border-line bg-white p-3">
+                <div className="flex flex-wrap items-start justify-between gap-2">
+                  <div>
+                    <p className="text-sm font-semibold text-ink">
+                      {edit.editorDisplayName}
+                      <span className="ml-2 text-xs font-normal text-ink-soft">
+                        {ROLE_LABELS[edit.editorRole]?.[locale] ?? edit.editorRole}
+                      </span>
+                    </p>
+                    <p className="mt-1 text-xs text-ink-soft">
+                      <Link
+                        to={'/content/' + edit.contentSlug}
+                        className="text-sky-deep underline underline-offset-2"
+                      >
+                        {edit.contentSlug}
+                      </Link>
+                      {' · '}
+                      {L('မူကွဲ', 'revision')} {edit.fromVersion} → {edit.toVersion}
+                      {' · '}
+                      {L('ပြောင်းလဲမှု', 'changes')} {edit.totalChanges}
+                    </p>
+                  </div>
+                  <span className="text-[11px] text-ink-soft">{formatDateTime(edit.editedAt)}</span>
+                </div>
+
+                <details className="mt-2">
+                  <summary className="cursor-pointer text-xs font-semibold text-sky-deep">
+                    {L('ဘာပြင်ခဲ့သည်ကို ကြည့်ရန်', 'View changed fields')}
+                  </summary>
+                  <ul className="mt-2 space-y-2">
+                    {edit.changes.map((change) => (
+                      <li key={change.path} className="rounded-lg bg-canvas p-2 text-xs">
+                        <p className="font-semibold text-ink">{change.path}</p>
+                        <div className="mt-1 grid gap-2 md:grid-cols-2">
+                          <div>
+                            <span className="text-[11px] font-semibold text-ink-soft">
+                              {L('မပြင်မီ', 'Before')}
+                            </span>
+                            <p className="mt-0.5 whitespace-pre-wrap break-words text-ink">{change.before}</p>
+                          </div>
+                          <div>
+                            <span className="text-[11px] font-semibold text-ink-soft">
+                              {L('ပြင်ပြီး', 'After')}
+                            </span>
+                            <p className="mt-0.5 whitespace-pre-wrap break-words text-ink">{change.after}</p>
+                          </div>
+                        </div>
+                        {change.truncated && (
+                          <p className="mt-1 text-[11px] text-ink-soft">
+                            {L('တန်ဖိုးရှည်လွန်း၍ အစိတ်အပိုင်းသာ ပြထားသည်။', 'Long value; preview truncated.')}
+                          </p>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                  {edit.logTruncated && (
+                    <p className="mt-2 text-[11px] text-ink-soft">
+                      {L('ပြောင်းလဲမှုများလွန်း၍ အချို့ field များ မပြထားပါ။', 'Some fields are omitted because this edit was very large.')}
+                    </p>
+                  )}
+                </details>
               </li>
             ))}
           </ul>
