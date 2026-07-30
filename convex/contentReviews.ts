@@ -1,5 +1,6 @@
 import { v } from 'convex/values';
 import { mutation, query } from './_generated/server';
+import type { Id } from './_generated/dataModel';
 import { logAudit } from './audit';
 import { getStaffAccess, requireReviewEditor, requireUser, type StaffRole } from './lib/auth';
 
@@ -94,6 +95,148 @@ export const listForContent = query({
       contentVersion,
       current,
       history,
+    };
+  },
+});
+
+/**
+ * Cross-content reviewer activity, for the owner.
+ *
+ * `listForContent` above answers "what happened to this item", which is the
+ * reviewer's question. It cannot answer the owner's question — "what have my
+ * reviewers actually done" — because it is scoped to one slug, so auditing the
+ * team meant opening each library item in turn. The audit log is no substitute:
+ * it is a capped, mixed stream of every action in the system, so review
+ * decisions age out of it and carry no reviewer name, dimension or note.
+ *
+ * Restricted to owner and content_editor. Reviewer notes and professional
+ * qualifications are personnel-adjacent records, so reviewer roles cannot read
+ * each other's decisions here; they still see full history for any item they
+ * open, via listForContent.
+ *
+ * `truncated` is returned rather than silently capping: a partial window that
+ * looks complete would misreport a reviewer's workload.
+ */
+const SCAN_LIMIT = 2000;
+
+export const activity = query({
+  args: {
+    reviewerId: v.optional(v.id('users')),
+    dimension: v.optional(dimensionValidator),
+    decision: v.optional(decisionValidator),
+    limit: v.optional(v.number()),
+  },
+  returns: v.object({
+    allowed: v.boolean(),
+    truncated: v.boolean(),
+    totalScanned: v.number(),
+    decisions: v.array(reviewValidator),
+    reviewers: v.array(
+      v.object({
+        reviewerId: v.id('users'),
+        displayName: v.string(),
+        role: roleValidator,
+        qualification: v.union(v.string(), v.null()),
+        total: v.number(),
+        approved: v.number(),
+        changesRequested: v.number(),
+        inReview: v.number(),
+        notApplicable: v.number(),
+        distinctItems: v.number(),
+        lastReviewedAt: v.union(v.number(), v.null()),
+      }),
+    ),
+  }),
+  handler: async (ctx, args) => {
+    const userId = await requireUser(ctx);
+    const access = await getStaffAccess(ctx, userId);
+    const empty = {
+      allowed: false,
+      truncated: false,
+      totalScanned: 0,
+      decisions: [],
+      reviewers: [],
+    };
+    if (!access || !['owner', 'content_editor'].includes(access.role)) return empty;
+
+    // A reviewer filter can use the by_reviewer index; otherwise walk newest-first.
+    const scanned = args.reviewerId
+      ? await ctx.db
+          .query('contentReviews')
+          .withIndex('by_reviewer', (q) => q.eq('reviewerId', args.reviewerId!))
+          .order('desc')
+          .take(SCAN_LIMIT)
+      : await ctx.db.query('contentReviews').order('desc').take(SCAN_LIMIT);
+
+    // The summary is built from everything scanned, so counts do not shift when
+    // the caller narrows the visible list.
+    const byReviewer = new Map<
+      string,
+      {
+        reviewerId: Id<'users'>;
+        displayName: string;
+        role: StaffRole;
+        qualification: string | null;
+        total: number;
+        approved: number;
+        changesRequested: number;
+        inReview: number;
+        notApplicable: number;
+        slugs: Set<string>;
+        lastReviewedAt: number | null;
+      }
+    >();
+    for (const row of scanned) {
+      const key = row.reviewerId as string;
+      let entry = byReviewer.get(key);
+      if (!entry) {
+        entry = {
+          reviewerId: row.reviewerId,
+          displayName: row.reviewerDisplayName,
+          role: row.reviewerRole,
+          qualification: row.reviewerQualification ?? null,
+          total: 0,
+          approved: 0,
+          changesRequested: 0,
+          inReview: 0,
+          notApplicable: 0,
+          slugs: new Set<string>(),
+          lastReviewedAt: null,
+        };
+        byReviewer.set(key, entry);
+      }
+      entry.total += 1;
+      entry.slugs.add(row.contentSlug);
+      if (row.decision === 'approved') entry.approved += 1;
+      else if (row.decision === 'changes_requested') entry.changesRequested += 1;
+      else if (row.decision === 'in_review') entry.inReview += 1;
+      else entry.notApplicable += 1;
+      if (entry.lastReviewedAt === null || row.reviewedAt > entry.lastReviewedAt) {
+        entry.lastReviewedAt = row.reviewedAt;
+      }
+      // Keep the most recent name/qualification a reviewer signed under.
+      if (entry.lastReviewedAt === row.reviewedAt) {
+        entry.displayName = row.reviewerDisplayName;
+        entry.qualification = row.reviewerQualification ?? null;
+        entry.role = row.reviewerRole;
+      }
+    }
+
+    const filtered = scanned.filter(
+      (row) =>
+        (!args.dimension || row.dimension === args.dimension) &&
+        (!args.decision || row.decision === args.decision),
+    );
+    const limit = Math.min(Math.max(args.limit ?? 100, 1), 500);
+
+    return {
+      allowed: true,
+      truncated: scanned.length === SCAN_LIMIT,
+      totalScanned: scanned.length,
+      decisions: filtered.slice(0, limit),
+      reviewers: [...byReviewer.values()]
+        .map(({ slugs, ...rest }) => ({ ...rest, distinctItems: slugs.size }))
+        .sort((a, b) => (b.lastReviewedAt ?? 0) - (a.lastReviewedAt ?? 0)),
     };
   },
 });

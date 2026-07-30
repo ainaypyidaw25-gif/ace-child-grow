@@ -12,7 +12,7 @@ vi.mock('@convex-dev/auth/server', async (importOriginal) => {
 
 import { list as listChildren, update as updateChild } from '../../../convex/children';
 import { importSeed, listByType, setReview as setLibraryReview, updateDraft } from '../../../convex/library';
-import { listForContent as listContentReviews, saveDecision } from '../../../convex/contentReviews';
+import { activity as reviewerActivity, listForContent as listContentReviews, saveDecision } from '../../../convex/contentReviews';
 import { forContent as evidenceForContent, setReview as setEvidenceReview } from '../../../convex/evidence';
 import { transition as transitionContent } from '../../../convex/content';
 import { listSessions, recordSession } from '../../../convex/milestones';
@@ -493,5 +493,89 @@ describe('Convex registered handlers enforce authorization', () => {
     })).rejects.toThrow('Not found');
     await expect(handler(listActivities)(context, { childId: 'child-1' })).rejects.toThrow('Not found');
     expect(context.db.insert).not.toHaveBeenCalled();
+  });
+  // --- reviewer activity (owner-visible cross-content review history) ---------
+
+  const activityRows = [
+    {
+      _id: 'r-3', contentSlug: 'item-2', contentVersion: 1, dimension: 'clinical',
+      decision: 'approved', reviewerId: 'clinical-1', reviewerDisplayName: 'Dr Reviewer',
+      reviewerQualification: 'MBBS', reviewerRole: 'clinical_reviewer', reviewedAt: 300, note: 'ok',
+    },
+    {
+      _id: 'r-2', contentSlug: 'item-1', contentVersion: 1, dimension: 'clinical',
+      decision: 'changes_requested', reviewerId: 'clinical-1', reviewerDisplayName: 'Dr Reviewer',
+      reviewerQualification: 'MBBS', reviewerRole: 'clinical_reviewer', reviewedAt: 200, note: 'fix wording',
+    },
+    {
+      _id: 'r-1', contentSlug: 'item-1', contentVersion: 1, dimension: 'native_myanmar',
+      decision: 'approved', reviewerId: 'lang-1', reviewerDisplayName: 'Language Reviewer',
+      reviewerRole: 'language_reviewer', reviewedAt: 100,
+    },
+  ];
+
+  const activityCtx = (profile: Row | null) => ctx({
+    profile,
+    rows: { contentReviews: activityRows },
+  });
+
+  it('reviewer activity is refused to parents, support and reviewer roles, and returns no rows', async () => {
+    authState.userId = 'user-1';
+    const refused = { allowed: false, truncated: false, totalScanned: 0, decisions: [], reviewers: [] };
+
+    // A parent with no staff profile.
+    await expect(handler(reviewerActivity)(activityCtx(null), {})).resolves.toEqual(refused);
+
+    for (const role of ['support', 'language_reviewer', 'evidence_reviewer', 'clinical_reviewer']) {
+      const context = activityCtx({ userId: 'user-1', isStaff: true, staffRole: role, displayName: 'Someone' });
+      await expect(handler(reviewerActivity)(context, {})).resolves.toEqual(refused);
+    }
+  });
+
+  it('reviewer activity aggregates every reviewer for the owner without losing decisions', async () => {
+    authState.userId = 'owner-1';
+    const context = activityCtx({ userId: 'owner-1', isStaff: true, staffRole: 'owner', displayName: 'Owner' });
+    const result = await handler(reviewerActivity)(context, {}) as {
+      allowed: boolean;
+      truncated: boolean;
+      decisions: { _id: string }[];
+      reviewers: {
+        displayName: string; total: number; approved: number; changesRequested: number;
+        distinctItems: number; lastReviewedAt: number | null; qualification: string | null;
+      }[];
+    };
+
+    expect(result.allowed).toBe(true);
+    expect(result.truncated).toBe(false);
+    // Every decision is listed, newest first — nothing is collapsed away.
+    expect(result.decisions.map((d) => d._id)).toEqual(['r-3', 'r-2', 'r-1']);
+
+    // Sorted by most recent activity.
+    expect(result.reviewers.map((r) => r.displayName)).toEqual(['Dr Reviewer', 'Language Reviewer']);
+    const [clinical, language] = result.reviewers;
+    expect(clinical).toMatchObject({
+      total: 2, approved: 1, changesRequested: 1, distinctItems: 2,
+      lastReviewedAt: 300, qualification: 'MBBS',
+    });
+    expect(language).toMatchObject({
+      total: 1, approved: 1, changesRequested: 0, distinctItems: 1,
+      lastReviewedAt: 100, qualification: null,
+    });
+  });
+
+  it('reviewer activity filters the log but keeps the summary whole, and content editors may read it', async () => {
+    authState.userId = 'editor-1';
+    const context = activityCtx({ userId: 'editor-1', isStaff: true, staffRole: 'content_editor', displayName: 'Editor' });
+    const result = await handler(reviewerActivity)(context, { decision: 'approved' }) as {
+      allowed: boolean;
+      decisions: { _id: string }[];
+      reviewers: { total: number }[];
+    };
+
+    expect(result.allowed).toBe(true);
+    expect(result.decisions.map((d) => d._id)).toEqual(['r-3', 'r-1']);
+    // The summary still counts all three decisions, so filtering the view cannot
+    // silently understate a reviewer's workload.
+    expect(result.reviewers.reduce((sum, r) => sum + r.total, 0)).toBe(3);
   });
 });
