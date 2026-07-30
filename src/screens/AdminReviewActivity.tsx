@@ -45,8 +45,17 @@ const DECISION_TONE: Record<Decision, string> = {
   not_applicable: 'bg-canvas text-ink-soft',
 };
 
-function formatDateTime(ms: number): string {
-  return new Date(ms).toISOString().slice(0, 16).replace('T', ' ');
+function formatDateTime(ms: number, locale: 'mm' | 'en'): string {
+  const formatted = new Intl.DateTimeFormat(locale === 'mm' ? 'my-MM-u-nu-latn' : 'en-GB', {
+    timeZone: 'Asia/Yangon',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).format(new Date(ms));
+  return `${formatted} Yangon`;
 }
 
 export function AdminReviewActivity() {
@@ -137,7 +146,7 @@ export function AdminReviewActivity() {
                   <span className="text-[11px] text-ink-soft">
                     {r.lastReviewedAt === null
                       ? '—'
-                      : `${L('နောက်ဆုံး', 'last')} ${formatDateTime(r.lastReviewedAt)}`}
+                      : `${L('နောက်ဆုံး', 'last')} ${formatDateTime(r.lastReviewedAt, locale)}`}
                   </span>
                 </div>
                 <dl className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-ink-soft">
@@ -186,7 +195,7 @@ export function AdminReviewActivity() {
                 <div className="flex flex-wrap items-baseline justify-between gap-2">
                   <span className="font-semibold text-ink">{editor.displayName}</span>
                   <span className="text-[11px] text-ink-soft">
-                    {formatDateTime(editor.lastEditedAt)}
+                    {formatDateTime(editor.lastEditedAt, locale)}
                   </span>
                 </div>
                 <p className="mt-1 text-xs text-ink-soft">
@@ -251,7 +260,7 @@ export function AdminReviewActivity() {
                       {L('ပြောင်းလဲမှု', 'changes')} {edit.totalChanges}
                     </p>
                   </div>
-                  <span className="text-[11px] text-ink-soft">{formatDateTime(edit.editedAt)}</span>
+                  <span className="text-[11px] text-ink-soft">{formatDateTime(edit.editedAt, locale)}</span>
                 </div>
 
                 <details className="mt-2">
@@ -364,7 +373,7 @@ export function AdminReviewActivity() {
                       {row.contentSlug}
                     </Link>
                   </span>
-                  <span className="text-[11px] text-ink-soft">{formatDateTime(row.reviewedAt)}</span>
+                  <span className="text-[11px] text-ink-soft">{formatDateTime(row.reviewedAt, locale)}</span>
                 </div>
                 <p className="mt-1 text-xs text-ink-soft">
                   {row.reviewerDisplayName}
