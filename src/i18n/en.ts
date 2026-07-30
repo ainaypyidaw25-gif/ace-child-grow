@@ -49,7 +49,8 @@ export const en: Record<TranslationKey, string> = {
 
   'hope.title': 'Hope & Understanding Center',
   'growth.title': 'Growth Tracker',
-  'growth.who.pending': 'Validated WHO growth-standard integration is pending.',
+  'growth.recordOnly':
+    'This tracker records measurements you enter. It does not calculate growth percentiles or assess whether a measurement is typical. Discuss growth concerns with a qualified health professional.',
   'sleep.title': 'Sleep Tracker',
   'report.title': 'Monthly Report',
   'directory.empty':

@@ -42,8 +42,9 @@ continue to receive only published items.
 ## WHO growth standards
 Percentiles/z-scores are shown **only** after: official WHO datasets are
 integrated, dataset version documented, sex + exact age handled, logic tested
-against reference cases, and a clinical review recorded. Until then the UI shows
-"Validated WHO growth-standard integration is pending."
+against reference cases, and a clinical review recorded. Until then the tracker
+stores caregiver-entered measurements only and explicitly says that it does not
+calculate percentiles or classify measurements as typical or atypical.
 
 ## Language
 Respectful, strengths-based, non-stigmatizing. Show what a child *can* do and

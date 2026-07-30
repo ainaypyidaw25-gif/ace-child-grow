@@ -1,7 +1,7 @@
 import { NavLink, Link } from 'react-router-dom';
 import { useLocale } from '../app/LocaleContext';
 import { PRIMARY_NAV_ITEMS } from './navigationItems';
-import { isGooglePlayBuild } from '../app/platform';
+import { isNativeStoreBuild } from '../app/platform';
 
 export function DesktopNav() {
   const { t, locale } = useLocale();
@@ -42,18 +42,18 @@ export function DesktopNav() {
               <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-mint-soft">✚</span>
               {locale === 'mm' ? 'ကျန်းမာရေးမှတ်တမ်း' : 'Health records'}
             </Link>
-            <Link to="/appointments" className="flex min-h-touch items-center gap-3 rounded-2xl px-3 py-2 text-sm font-medium text-ink-soft hover:bg-white">
+            {!isNativeStoreBuild() && <Link to="/appointments" className="flex min-h-touch items-center gap-3 rounded-2xl px-3 py-2 text-sm font-medium text-ink-soft hover:bg-white">
               <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-pastel-yellow/50">⌁</span>
               {locale === 'mm' ? 'ချိန်းဆိုမှုများ' : 'Appointments'}
-            </Link>
-            <Link to="/report" className="flex min-h-touch items-center gap-3 rounded-2xl px-3 py-2 text-sm font-medium text-ink-soft hover:bg-white">
+            </Link>}
+            {!isNativeStoreBuild() && <Link to="/report" className="flex min-h-touch items-center gap-3 rounded-2xl px-3 py-2 text-sm font-medium text-ink-soft hover:bg-white">
               <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-mint-soft">▤</span>
               {locale === 'mm' ? 'တိုးတက်မှုအစီရင်ခံစာ' : 'Progress report'}
-            </Link>
+            </Link>}
           </div>
         </nav>
 
-        {!isGooglePlayBuild() && <div className="overflow-hidden rounded-3xl bg-ink p-4 text-white shadow-card">
+        {!isNativeStoreBuild() && <div className="overflow-hidden rounded-3xl bg-ink p-4 text-white shadow-card">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-mint">
             ACE Premium
           </p>

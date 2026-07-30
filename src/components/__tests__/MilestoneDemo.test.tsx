@@ -1,8 +1,13 @@
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { afterEach, describe, it, expect, vi } from 'vitest';
+import { cleanup, render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { LocaleProvider } from '../../app/LocaleContext';
 import { MilestoneDemo } from '../../screens/MilestoneDemo';
+
+const state = vi.hoisted(() => ({
+  apple: false,
+  birthDate: '2025-09-26',
+}));
 
 const milestoneItems = [
   {
@@ -28,8 +33,14 @@ const milestoneItems = [
 ];
 
 vi.mock('convex/react', () => ({
-  useQuery: () => ({ staff: false, items: milestoneItems }),
+  useQuery: (_api: unknown, args?: unknown) => (
+    args === 'skip' ? undefined : { staff: false, items: milestoneItems }
+  ),
   useMutation: () => vi.fn(),
+}));
+
+vi.mock('../../app/platform', () => ({
+  isAppleAppStoreBuild: () => state.apple,
 }));
 
 vi.mock('../../app/AppState', () => ({
@@ -37,7 +48,7 @@ vi.mock('../../app/AppState', () => ({
     activeChild: {
       id: 'child-1',
       nickname: 'သမီးလေး',
-      birthDate: '2025-09-26',
+      birthDate: state.birthDate,
       useCorrectedAge: false,
     },
   }),
@@ -54,6 +65,13 @@ function renderWithProviders() {
 }
 
 describe('MilestoneDemo (component)', () => {
+  afterEach(() => {
+    cleanup();
+    state.apple = false;
+    state.birthDate = '2025-09-26';
+    vi.useRealTimers();
+  });
+
   it('renders the published age-based checklist from the server', () => {
     renderWithProviders();
     expect(screen.getByText('ပရိဘောဂကို ကိုင်၍ မတ်တပ်ရပ်နိုင်ပါသလား။')).toBeInTheDocument();
@@ -71,5 +89,18 @@ describe('MilestoneDemo (component)', () => {
     fireEvent.click(screen.getByText('လုပ်နိုင်ပြီ'));
     fireEvent.click(screen.getByText('ရှေ့သို့'));
     expect(screen.getByText('စိတ်ဝင်စားသည့်အရာကို လက်ညှိုးထိုးပြပါသလား။')).toBeInTheDocument();
+  });
+
+  it('does not expose unfinished post-infancy milestone bands in the App Store build', () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-07-30T12:00:00Z'));
+    state.apple = true;
+    state.birthDate = '2024-07-01';
+
+    renderWithProviders();
+
+    expect(screen.getByRole('heading', { name: /မွေးကင်းမှ ၁၂ လအထိ/ })).toBeVisible();
+    expect(screen.queryByText('1 / 2')).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'ဗဟုသုတစာမျက်နှာ ဖွင့်ရန်' })).toHaveAttribute('href', '/learn');
   });
 });

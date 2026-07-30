@@ -1,8 +1,8 @@
 // Unit conversion for the Growth Tracker (Phase 13).
 // Validated, exact-factor conversions. No WHO percentiles/z-scores are computed
 // here — that requires integrating official WHO datasets and clinical review
-// (see docs/content/clinical-review-policy.md). Until then the UI shows:
-// "Validated WHO growth-standard integration is pending."
+// (see docs/content/clinical-review-policy.md). The UI therefore describes the
+// tracker as record-only and does not classify measurements as typical/atypical.
 
 export const LB_PER_KG = 2.2046226218;
 export const IN_PER_CM = 0.3937007874;

@@ -8,9 +8,13 @@ import { SignIn } from '../screens/SignIn';
 import { api } from '../../convex/_generated/api';
 import { getPortalMode, setPortalMode } from './portalMode';
 import { decideStaffRoute } from './staffRoute';
-import { isGooglePlayBuild, useNativeDeepLinks } from './platform';
+import { isAppleAppStoreBuild, isNativeStoreBuild, useNativeDeepLinks } from './platform';
 import { ScreenErrorBoundary } from '../components/ScreenErrorBoundary';
 import { useLocale } from './LocaleContext';
+
+const STORE_DISTRIBUTION = import.meta.env.VITE_DISTRIBUTION === 'app-store'
+  || import.meta.env.VITE_DISTRIBUTION === 'play-store';
+const APP_STORE_DISTRIBUTION = import.meta.env.VITE_DISTRIBUTION === 'app-store';
 
 const Welcome = lazy(() => import('../screens/Welcome').then((module) => ({ default: module.Welcome })));
 const Consent = lazy(() => import('../screens/Consent').then((module) => ({ default: module.Consent })));
@@ -23,27 +27,27 @@ const Growth = lazy(() => import('../screens/Growth').then((module) => ({ defaul
 const Sleep = lazy(() => import('../screens/Sleep').then((module) => ({ default: module.Sleep })));
 const Learn = lazy(() => import('../screens/Learn').then((module) => ({ default: module.Learn })));
 const HopeCenter = lazy(() => import('../screens/HopeCenter').then((module) => ({ default: module.HopeCenter })));
-const Report = lazy(() => import('../screens/Report').then((module) => ({ default: module.Report })));
+const Report = STORE_DISTRIBUTION ? null : lazy(() => import('../screens/Report').then((module) => ({ default: module.Report })));
 const Profile = lazy(() => import('../screens/Profile').then((module) => ({ default: module.Profile })));
-const OfflineDownloads = lazy(() => import('../screens/OfflineDownloads').then((module) => ({ default: module.OfflineDownloads })));
+const OfflineDownloads = STORE_DISTRIBUTION ? null : lazy(() => import('../screens/OfflineDownloads').then((module) => ({ default: module.OfflineDownloads })));
 const Favorites = lazy(() => import('../screens/Favorites').then((module) => ({ default: module.Favorites })));
 const Notifications = lazy(() => import('../screens/Notifications').then((module) => ({ default: module.Notifications })));
 const HealthcareDirectory = lazy(() => import('../screens/HealthcareDirectory').then((module) => ({ default: module.HealthcareDirectory })));
 const ChildProfile = lazy(() => import('../screens/ChildProfile').then((module) => ({ default: module.ChildProfile })));
-const AuditLog = lazy(() => import('../screens/AuditLog').then((module) => ({ default: module.AuditLog })));
-const AdminReviewQueue = lazy(() => import('../screens/AdminReviewQueue').then((module) => ({ default: module.AdminReviewQueue })));
+const AuditLog = APP_STORE_DISTRIBUTION ? null : lazy(() => import('../screens/AuditLog').then((module) => ({ default: module.AuditLog })));
+const AdminReviewQueue = APP_STORE_DISTRIBUTION ? null : lazy(() => import('../screens/AdminReviewQueue').then((module) => ({ default: module.AdminReviewQueue })));
 const ContentLibrary = lazy(() => import('../screens/ContentLibrary').then((module) => ({ default: module.ContentLibrary })));
 const ContentDetail = lazy(() => import('../screens/ContentDetail').then((module) => ({ default: module.ContentDetail })));
-const LibraryAdmin = lazy(() => import('../screens/LibraryAdmin').then((module) => ({ default: module.LibraryAdmin })));
-const EvidenceAdmin = lazy(() => import('../screens/EvidenceAdmin').then((module) => ({ default: module.EvidenceAdmin })));
-const AdminTeam = lazy(() => import('../screens/AdminTeam').then((module) => ({ default: module.AdminTeam })));
-const AcceptAdminInvite = lazy(() => import('../screens/AcceptAdminInvite').then((module) => ({ default: module.AcceptAdminInvite })));
-const AdminDirectory = lazy(() => import('../screens/AdminDirectory').then((module) => ({ default: module.AdminDirectory })));
-const AdminBilling = lazy(() => import('../screens/AdminBilling').then((module) => ({ default: module.AdminBilling })));
-const ContentReviewWorkspace = lazy(() => import('../screens/ContentReviewWorkspace').then((module) => ({ default: module.ContentReviewWorkspace })));
-const SubscriptionPlans = lazy(() => import('../screens/SubscriptionPlans').then((module) => ({ default: module.SubscriptionPlans })));
-const PaymentStatus = lazy(() => import('../screens/PaymentStatus').then((module) => ({ default: module.PaymentStatus })));
-const Appointments = lazy(() => import('../screens/Appointments').then((module) => ({ default: module.Appointments })));
+const LibraryAdmin = APP_STORE_DISTRIBUTION ? null : lazy(() => import('../screens/LibraryAdmin').then((module) => ({ default: module.LibraryAdmin })));
+const EvidenceAdmin = APP_STORE_DISTRIBUTION ? null : lazy(() => import('../screens/EvidenceAdmin').then((module) => ({ default: module.EvidenceAdmin })));
+const AdminTeam = APP_STORE_DISTRIBUTION ? null : lazy(() => import('../screens/AdminTeam').then((module) => ({ default: module.AdminTeam })));
+const AcceptAdminInvite = APP_STORE_DISTRIBUTION ? null : lazy(() => import('../screens/AcceptAdminInvite').then((module) => ({ default: module.AcceptAdminInvite })));
+const AdminDirectory = APP_STORE_DISTRIBUTION ? null : lazy(() => import('../screens/AdminDirectory').then((module) => ({ default: module.AdminDirectory })));
+const AdminBilling = APP_STORE_DISTRIBUTION ? null : lazy(() => import('../screens/AdminBilling').then((module) => ({ default: module.AdminBilling })));
+const ContentReviewWorkspace = APP_STORE_DISTRIBUTION ? null : lazy(() => import('../screens/ContentReviewWorkspace').then((module) => ({ default: module.ContentReviewWorkspace })));
+const SubscriptionPlans = STORE_DISTRIBUTION ? null : lazy(() => import('../screens/SubscriptionPlans').then((module) => ({ default: module.SubscriptionPlans })));
+const PaymentStatus = STORE_DISTRIBUTION ? null : lazy(() => import('../screens/PaymentStatus').then((module) => ({ default: module.PaymentStatus })));
+const Appointments = STORE_DISTRIBUTION ? null : lazy(() => import('../screens/Appointments').then((module) => ({ default: module.Appointments })));
 const HealthRecords = lazy(() => import('../screens/HealthRecords').then((module) => ({ default: module.HealthRecords })));
 const LegalPage = lazy(() => import('../screens/LegalPage').then((module) => ({ default: module.LegalPage })));
 
@@ -55,6 +59,8 @@ export function App() {
     <Routes>
       <Route path="/privacy" element={<StandaloneScreen><LegalPage kind="privacy" /></StandaloneScreen>} />
       <Route path="/account-deletion" element={<StandaloneScreen><LegalPage kind="account-deletion" /></StandaloneScreen>} />
+      <Route path="/support" element={<StandaloneScreen><LegalPage kind="support" /></StandaloneScreen>} />
+      <Route path="/methodology" element={<StandaloneScreen><LegalPage kind="methodology" /></StandaloneScreen>} />
       <Route path="*" element={<>
       <AuthLoading>
         <div className="flex min-h-screen items-center justify-center text-ink-soft">…</div>
@@ -76,7 +82,7 @@ export function App() {
 // add a child again on every login.
 function Bootstrap() {
   const { ready, hasChild, state } = useAppState();
-  const wantsStaffPortal = getPortalMode() === 'staff';
+  const wantsStaffPortal = !isAppleAppStoreBuild() && getPortalMode() === 'staff';
   const staffAccess = useQuery(api.admin.myAccess, wantsStaffPortal ? {} : 'skip');
   if (wantsStaffPortal && staffAccess === undefined) {
     return (
@@ -183,7 +189,8 @@ function StandaloneScreen({ children }: { children: ReactNode }) {
 }
 
 function AppRoutes() {
-  const googlePlayBuild = isGooglePlayBuild();
+  const nativeStoreBuild = isNativeStoreBuild();
+  const appleAppStoreBuild = isAppleAppStoreBuild();
   return (
     <Routes>
       <Route path="/" element={<Bootstrap />} />
@@ -197,31 +204,31 @@ function AppRoutes() {
       <Route path="/hope" element={<AppScreen><HopeCenter /></AppScreen>} />
       <Route path="/growth" element={<AppScreen><Growth /></AppScreen>} />
       <Route path="/sleep" element={<AppScreen><Sleep /></AppScreen>} />
-      <Route path="/report" element={<AppScreen><Report /></AppScreen>} />
-      <Route path="/appointments" element={<AppScreen><Appointments /></AppScreen>} />
+      <Route path="/report" element={Report ? <AppScreen><Report /></AppScreen> : <Navigate to="/home" replace />} />
+      <Route path="/appointments" element={Appointments ? <AppScreen><Appointments /></AppScreen> : <Navigate to="/home" replace />} />
       <Route path="/health" element={<AppScreen><HealthRecords /></AppScreen>} />
       <Route path="/profile" element={<AppScreen><Profile /></AppScreen>} />
-      <Route path="/subscription" element={<AppScreen><SubscriptionPlans /></AppScreen>} />
-      <Route path="/payment/success/:orderId" element={googlePlayBuild ? <Navigate to="/home" replace /> : <AppScreen><PaymentStatus view="success" /></AppScreen>} />
-      <Route path="/payment/cancel/:orderId" element={googlePlayBuild ? <Navigate to="/home" replace /> : <AppScreen><PaymentStatus view="cancel" /></AppScreen>} />
-      <Route path="/payment/:orderId" element={googlePlayBuild ? <Navigate to="/home" replace /> : <AppScreen><PaymentStatus /></AppScreen>} />
-      <Route path="/offline" element={<AppScreen><OfflineDownloads /></AppScreen>} />
+      <Route path="/subscription" element={SubscriptionPlans ? <AppScreen><SubscriptionPlans /></AppScreen> : <Navigate to="/home" replace />} />
+      <Route path="/payment/success/:orderId" element={nativeStoreBuild || !PaymentStatus ? <Navigate to="/home" replace /> : <AppScreen><PaymentStatus view="success" /></AppScreen>} />
+      <Route path="/payment/cancel/:orderId" element={nativeStoreBuild || !PaymentStatus ? <Navigate to="/home" replace /> : <AppScreen><PaymentStatus view="cancel" /></AppScreen>} />
+      <Route path="/payment/:orderId" element={nativeStoreBuild || !PaymentStatus ? <Navigate to="/home" replace /> : <AppScreen><PaymentStatus /></AppScreen>} />
+      <Route path="/offline" element={OfflineDownloads ? <AppScreen><OfflineDownloads /></AppScreen> : <Navigate to="/home" replace />} />
       <Route path="/favorites" element={<AppScreen><Favorites /></AppScreen>} />
       <Route path="/notifications" element={<AppScreen><Notifications /></AppScreen>} />
       <Route path="/directory" element={<AppScreen><HealthcareDirectory /></AppScreen>} />
       <Route path="/child-profile" element={<AppScreen><ChildProfile /></AppScreen>} />
       <Route path="/library" element={<AppScreen><ContentLibrary /></AppScreen>} />
       <Route path="/content/:slug" element={<AppScreen><ContentDetail /></AppScreen>} />
-      <Route path="/admin" element={<StaffOnlyRoute><AppScreen><AdminReviewQueue /></AppScreen></StaffOnlyRoute>} />
-      <Route path="/admin/library" element={<StaffOnlyRoute><AppScreen><LibraryAdmin /></AppScreen></StaffOnlyRoute>} />
-      <Route path="/admin/reviews" element={<StaffOnlyRoute><AppScreen><ContentReviewWorkspace /></AppScreen></StaffOnlyRoute>} />
-      <Route path="/admin/evidence" element={<StaffOnlyRoute><AppScreen><EvidenceAdmin /></AppScreen></StaffOnlyRoute>} />
-      <Route path="/admin/team" element={<StaffOnlyRoute><AppScreen><AdminTeam /></AppScreen></StaffOnlyRoute>} />
-      <Route path="/admin/directory" element={<StaffOnlyRoute><AppScreen><AdminDirectory /></AppScreen></StaffOnlyRoute>} />
-      <Route path="/admin/billing" element={<StaffOnlyRoute><AppScreen><AdminBilling /></AppScreen></StaffOnlyRoute>} />
-      <Route path="/admin/accept-invite" element={<AppScreen showNav={false}><AcceptAdminInvite /></AppScreen>} />
-      <Route path="/admin/accept-invite/:inviteCode" element={<AppScreen showNav={false}><AcceptAdminInvite /></AppScreen>} />
-      <Route path="/audit" element={<StaffOnlyRoute><AppScreen><AuditLog /></AppScreen></StaffOnlyRoute>} />
+      <Route path="/admin" element={appleAppStoreBuild || !AdminReviewQueue ? <Navigate to="/home" replace /> : <StaffOnlyRoute><AppScreen><AdminReviewQueue /></AppScreen></StaffOnlyRoute>} />
+      <Route path="/admin/library" element={appleAppStoreBuild || !LibraryAdmin ? <Navigate to="/home" replace /> : <StaffOnlyRoute><AppScreen><LibraryAdmin /></AppScreen></StaffOnlyRoute>} />
+      <Route path="/admin/reviews" element={appleAppStoreBuild || !ContentReviewWorkspace ? <Navigate to="/home" replace /> : <StaffOnlyRoute><AppScreen><ContentReviewWorkspace /></AppScreen></StaffOnlyRoute>} />
+      <Route path="/admin/evidence" element={appleAppStoreBuild || !EvidenceAdmin ? <Navigate to="/home" replace /> : <StaffOnlyRoute><AppScreen><EvidenceAdmin /></AppScreen></StaffOnlyRoute>} />
+      <Route path="/admin/team" element={appleAppStoreBuild || !AdminTeam ? <Navigate to="/home" replace /> : <StaffOnlyRoute><AppScreen><AdminTeam /></AppScreen></StaffOnlyRoute>} />
+      <Route path="/admin/directory" element={appleAppStoreBuild || !AdminDirectory ? <Navigate to="/home" replace /> : <StaffOnlyRoute><AppScreen><AdminDirectory /></AppScreen></StaffOnlyRoute>} />
+      <Route path="/admin/billing" element={appleAppStoreBuild || !AdminBilling ? <Navigate to="/home" replace /> : <StaffOnlyRoute><AppScreen><AdminBilling /></AppScreen></StaffOnlyRoute>} />
+      <Route path="/admin/accept-invite" element={appleAppStoreBuild || !AcceptAdminInvite ? <Navigate to="/home" replace /> : <AppScreen showNav={false}><AcceptAdminInvite /></AppScreen>} />
+      <Route path="/admin/accept-invite/:inviteCode" element={appleAppStoreBuild || !AcceptAdminInvite ? <Navigate to="/home" replace /> : <AppScreen showNav={false}><AcceptAdminInvite /></AppScreen>} />
+      <Route path="/audit" element={appleAppStoreBuild || !AuditLog ? <Navigate to="/home" replace /> : <StaffOnlyRoute><AppScreen><AuditLog /></AppScreen></StaffOnlyRoute>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

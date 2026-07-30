@@ -7,8 +7,8 @@
 // State meaning (from spec):
 //  GREEN  — skills broadly align with the review set; no urgent rule triggered.
 //  YELLOW — some skills still emerging; suggest activities + repeat review.
-//  ORANGE — multiple/repeated concerns; suggest professional consultation.
-//  RED    — urgent symptoms / regression / skill loss; prompt action.
+//  ORANGE — multiple/repeated concerns or skill loss; suggest professional assessment.
+//  RED    — confirmed acute emergency signs; prompt emergency action.
 
 import type { MilestoneAnswer, ResultState, DevelopmentDomain } from '../types';
 import { evaluateSafety, type SafetyInput, type SafetyOutcome } from '../safety/safety';
@@ -21,13 +21,17 @@ export interface MilestoneResponseInput {
   repeatedConcern?: boolean;
 }
 
-/** Tunable thresholds. Stored here as validated config (could be DB-backed). */
+/**
+ * Tunable presentation bands for supportive UI copy only. These ratios are not
+ * validated clinical cutoffs, diagnostic criteria, disease risk, or a measure
+ * of a child's development. They must never be displayed as a score or percent.
+ */
 export interface ResultThresholds {
-  /** Ratio of concern answers (of answered, non "not_sure") to enter YELLOW. */
+  /** UI grouping ratio (of answered, non "not_sure") to enter YELLOW. */
   yellowConcernRatio: number;
-  /** Ratio to enter ORANGE. */
+  /** UI grouping ratio to enter ORANGE. */
   orangeConcernRatio: number;
-  /** Number of repeated concerns that forces at least ORANGE. */
+  /** Repeated concern count that selects at least the ORANGE support copy. */
   repeatedConcernsForOrange: number;
 }
 
@@ -44,8 +48,6 @@ export interface ResultBreakdown {
   notYet: number;
   notSure: number;
   repeatedConcerns: number;
-  /** concern weight = notYet*1 + sometimes*0.5, over answered-excluding-notSure. */
-  concernRatio: number;
 }
 
 export interface MilestoneResult {
@@ -110,6 +112,8 @@ export function computeResult(
   const answered = responses.length;
   const denom = answered - notSure; // "not sure" is neutral, excluded from ratio
   const concernWeight = notYet * 1 + sometimes * 0.5;
+  // Internal presentation grouping only; never expose this as a user-facing
+  // score, percentage, probability, developmental measure, or clinical cutoff.
   const concernRatio = denom > 0 ? concernWeight / denom : 0;
 
   const breakdown: ResultBreakdown = {
@@ -119,13 +123,16 @@ export function computeResult(
     notYet,
     notSure,
     repeatedConcerns,
-    concernRatio,
   };
 
-  // RED takes absolute precedence and comes ONLY from the deterministic safety engine.
+  // RED takes absolute precedence and comes ONLY from confirmed acute emergency
+  // signs. Skill loss without an acute sign selects ORANGE so the result prompts
+  // professional assessment without telling the parent to use emergency care.
   let state: ResultState;
   if (safety.urgent) {
     state = 'red';
+  } else if (safety.professionalAssessmentRecommended) {
+    state = 'orange';
   } else if (
     concernRatio >= thresholds.orangeConcernRatio ||
     repeatedConcerns >= thresholds.repeatedConcernsForOrange

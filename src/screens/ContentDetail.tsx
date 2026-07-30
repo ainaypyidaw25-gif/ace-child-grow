@@ -3,8 +3,10 @@ import { useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
 import { ReviewBadge } from '../components/ReviewBadge';
+import { isAppleAppStoreBuild, isNativeStoreBuild } from '../app/platform';
 
 type BL = { mm: string; en: string };
+const APP_STORE_DISTRIBUTION = import.meta.env.VITE_DISTRIBUTION === 'app-store';
 
 export function ContentDetail() {
   const { slug = '' } = useParams();
@@ -32,6 +34,14 @@ export function ContentDetail() {
   }
 
   const { item, media } = res;
+  const appleAppStoreBuild = isAppleAppStoreBuild();
+  if (appleAppStoreBuild
+    && (item.clinicalStatus !== 'published' || item.type === 'printable')) {
+    return <p className="text-ink-soft">{locale === 'mm' ? 'မတွေ့ပါ။' : 'Not found.'}</p>;
+  }
+  const visibleMedia = isNativeStoreBuild()
+    ? media.filter((asset) => (asset.accessLevel ?? 'free_sample') === 'free_sample')
+    : media;
   const d = (item.data ?? {}) as Record<string, unknown>;
   const list = (k: string): BL[] => (Array.isArray(d[k]) ? (d[k] as BL[]) : []);
   const bl = (k: string): BL | undefined => (d[k] && typeof d[k] === 'object' ? (d[k] as BL) : undefined);
@@ -68,9 +78,9 @@ export function ContentDetail() {
         )}
       </div>
 
-      {media.some((asset) => !asset.placeholder && asset.url) && (
+      {visibleMedia.some((asset) => !asset.placeholder && asset.url) && (
         <section className="space-y-4" aria-label={L('သင်ကြားရေး မီဒီယာ', 'Learning media')}>
-          {media.filter((asset) => !asset.placeholder && asset.url).map((asset) => (
+          {visibleMedia.filter((asset) => !asset.placeholder && asset.url).map((asset) => (
             <figure key={asset._id} className="overflow-hidden rounded-card border border-line bg-white shadow-card">
               {asset.kind === 'illustration' ? (
                 <img
@@ -254,7 +264,7 @@ export function ContentDetail() {
       )}
 
       {/* Printable */}
-      {item.type === 'printable' && (
+      {!APP_STORE_DISTRIBUTION && item.type === 'printable' && (
         <Section title={L('ပုံနှိပ်အသုံးပြုနိုင်သော စာရွက်', 'Printable resource')}>
           <p className="text-sm text-ink-soft">{locale === 'mm' ? item.summaryMm : item.summaryEn}</p>
           <p className="mt-2 text-xs text-ink-soft">

@@ -7,6 +7,7 @@ import { buildReport, type ReportType } from '../domain/reports/report';
 import { ageLabels } from '../domain/age/ageLabel';
 import { NoChild } from './Growth';
 import { PremiumGate } from '../components/PremiumGate';
+import { isFeatureAvailableOnCurrentPlatform } from '../app/platform';
 
 export function Report() {
   const { t, locale } = useLocale();
@@ -14,7 +15,7 @@ export function Report() {
   const [type, setType] = useState<ReportType>('parent_monthly');
   const [asOf] = useState(() => Date.now());
   const subscription = useQuery(api.subscriptions.mine);
-  const canView = subscription?.features.includes('advanced_reports') ?? false;
+  const canView = isFeatureAvailableOnCurrentPlatform(subscription?.features ?? [], 'advanced_reports');
   const data = useQuery(
     api.reports.childSummary,
     activeChild && canView ? { childId: activeChild.id as never, asOf } : 'skip',

@@ -4,6 +4,7 @@ import { useAuthActions } from '@convex-dev/auth/react';
 import { api } from '../../convex/_generated/api';
 import type { AppState, Action, Child } from './childStore';
 import { captureReferralFromSearch, clearPendingReferralCode, pendingReferralCode } from '../domain/referrals/referralCapture';
+import { isNativeStoreBuild } from './platform';
 
 interface AppStateContextValue {
   state: AppState;
@@ -72,8 +73,8 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const ready = childrenLoaded && profileLoaded;
 
   const list: Child[] = useMemo(
-    () =>
-      (rows ?? []).map((c) => ({
+    () => {
+      const mapped = (rows ?? []).map((c) => ({
         id: c._id,
         nickname: c.nickname,
         birthDate: c.birthDate,
@@ -81,7 +82,9 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
         gestationalWeeks: c.gestationalWeeks ?? undefined,
         useCorrectedAge: c.useCorrectedAge,
         isShared: Boolean(me?.userId && c.userId !== me.userId),
-      })),
+      }));
+      return isNativeStoreBuild() ? mapped.slice(0, 1) : mapped;
+    },
     [me?.userId, rows],
   );
 

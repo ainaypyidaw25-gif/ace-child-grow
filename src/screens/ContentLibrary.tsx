@@ -5,6 +5,7 @@ import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
 import { AGE_GROUPS, DOMAINS, CONTENT_TYPES, ageGroup, domain } from '../content/taxonomy';
 import { ReviewBadge } from '../components/ReviewBadge';
+import { isAppleAppStoreBuild } from '../app/platform';
 
 const TYPE_LABEL: Record<string, { mm: string; en: string; emoji: string }> = {
   milestone: { mm: 'မှတ်တိုင်', en: 'Milestones', emoji: '🎯' },
@@ -22,6 +23,7 @@ export function ContentLibrary() {
   const [ageKey, setAgeKey] = useState<string>('');
   const [domainKey, setDomainKey] = useState<string>('');
   const [q, setQ] = useState('');
+  const appleAppStoreBuild = isAppleAppStoreBuild();
 
   const usesAge = type === 'milestone' || type === 'guide' || type === 'activity';
   const usesDomain = type === 'milestone' || type === 'guide';
@@ -34,6 +36,11 @@ export function ContentLibrary() {
   });
 
   const tt = (o: { mm: string; en: string }) => (locale === 'mm' ? o.mm : o.en);
+  const availableContentTypes = appleAppStoreBuild
+    ? CONTENT_TYPES.filter((contentType) => contentType !== 'printable')
+    : CONTENT_TYPES;
+  const items = data?.items.filter((item) => !appleAppStoreBuild
+    || (item.clinicalStatus === 'published' && item.type !== 'printable')) ?? [];
 
   return (
     <div className="space-y-4">
@@ -49,7 +56,7 @@ export function ContentLibrary() {
       </div>
 
       <div className="flex gap-2 overflow-x-auto pb-1">
-        {CONTENT_TYPES.map((tk) => (
+        {availableContentTypes.map((tk) => (
           <button
             key={tk} type="button" onClick={() => setType(tk)}
             className={`whitespace-nowrap rounded-pill px-3 py-1.5 text-sm ${
@@ -95,7 +102,7 @@ export function ContentLibrary() {
 
       {data === undefined ? (
         <p className="text-ink-soft">…</p>
-      ) : data.items.length === 0 ? (
+      ) : items.length === 0 ? (
         <div className="rounded-card border border-line bg-mint-soft/40 p-5 text-center">
           <div aria-hidden className="text-3xl">🌱</div>
           <p className="mt-2 font-medium text-ink">
@@ -109,7 +116,7 @@ export function ContentLibrary() {
         </div>
       ) : (
         <ul className="grid grid-cols-1 gap-3">
-          {data.items.map((it) => (
+          {items.map((it) => (
             <li key={it._id}>
               <Link to={`/content/${it.slug}`}
                 className="block rounded-card border border-line bg-white p-4 shadow-card">

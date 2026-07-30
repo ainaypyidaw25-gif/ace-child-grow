@@ -53,7 +53,7 @@ export function Growth() {
   return (
     <div className="space-y-4">
       <h1 className="text-xl font-bold text-sky-deep">{t('growth.title')} · {activeChild.nickname}</h1>
-      <p className="rounded-lg bg-pastel-yellow/60 px-3 py-2 text-xs text-ink">{t('growth.who.pending')}</p>
+      <p className="rounded-lg bg-pastel-yellow/60 px-3 py-2 text-xs text-ink">{t('growth.recordOnly')}</p>
 
       <section className="space-y-3 rounded-card border border-line bg-white p-4 shadow-card">
         <label className="block text-sm">

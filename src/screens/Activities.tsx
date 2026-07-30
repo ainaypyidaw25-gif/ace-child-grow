@@ -7,7 +7,7 @@ import { developmentalAgeMonths } from '../domain/age/age';
 import { resolveAgeGroup } from '../content/taxonomy';
 import { ReviewBadge } from '../components/ReviewBadge';
 import { NoChild } from './Growth';
-import { isGooglePlayBuild } from '../app/platform';
+import { isFeatureAvailableOnCurrentPlatform, isNativeStoreBuild } from '../app/platform';
 
 export function Activities() {
   const { locale } = useLocale();
@@ -29,7 +29,7 @@ export function Activities() {
   if (!activeChild) return <NoChild />;
   if (data === undefined || subscription === undefined) return <p className="text-ink-soft" role="status">…</p>;
 
-  const premium = subscription.features.includes('personalized_plan');
+  const premium = isFeatureAvailableOnCurrentPlatform(subscription.features, 'personalized_plan');
   const activities = data.items;
   const daily = activities.slice(0, 3);
 
@@ -43,7 +43,9 @@ export function Activities() {
         <p className="mt-2 text-sm leading-7 text-ink-soft">
           {premium
             ? L('ကလေး၏ အသက်အရွယ်နှင့် မှတ်တမ်းများအလိုက် ယနေ့လုပ်နိုင်သည့် လှုပ်ရှားမှုများကို ရွေးပေးထားပါသည်။', 'A calm daily plan selected for your child’s age and records.')
-            : L('အခြေခံလှုပ်ရှားမှုများကို အခမဲ့ အသုံးပြုနိုင်ပါသည်။ အလိုအလျောက်နေ့စဉ်အစီအစဉ်နှင့် ပြီးစီးမှုမှတ်တမ်းအတွက် Premium စမ်းသုံးနိုင်ပါသည်။', 'Core activities are free. Try Premium for a personalized plan and completion history.')}
+            : isNativeStoreBuild()
+              ? L('အသက်အရွယ်နှင့် ကိုက်ညီသော အခြေခံလှုပ်ရှားမှုများကို အခမဲ့ အသုံးပြုနိုင်ပါသည်။', 'Age-appropriate core activities are available free.')
+              : L('အခြေခံလှုပ်ရှားမှုများကို အခမဲ့ အသုံးပြုနိုင်ပါသည်။ အလိုအလျောက်နေ့စဉ်အစီအစဉ်နှင့် ပြီးစီးမှုမှတ်တမ်းအတွက် Premium စမ်းသုံးနိုင်ပါသည်။', 'Core activities are free. Try Premium for a personalized plan and completion history.')}
         </p>
       </header>
 
@@ -103,7 +105,7 @@ export function Activities() {
         </section>
       )}
 
-      {!premium && !isGooglePlayBuild() && (
+      {!premium && !isNativeStoreBuild() && (
         <Link to="/subscription" className="block rounded-[28px] bg-ink p-6 text-white shadow-card">
           <p className="text-xs font-bold uppercase tracking-[0.16em] text-mint">ACE Premium</p>
           <h2 className="mt-2 text-xl font-bold">{L('နေ့စဉ်အစီအစဉ်နှင့် တိုးတက်မှုမှတ်တမ်း', 'Daily plan & progress history')}</h2>

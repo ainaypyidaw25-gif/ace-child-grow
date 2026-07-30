@@ -5,6 +5,7 @@ import { useAppState } from '../app/AppState';
 import { useLocale } from '../app/LocaleContext';
 import { PremiumGate } from '../components/PremiumGate';
 import { NoChild } from './Growth';
+import { isFeatureAvailableOnCurrentPlatform } from '../app/platform';
 
 function toLocalInput(timestamp: number): string {
   const date = new Date(timestamp);
@@ -16,7 +17,7 @@ export function Appointments() {
   const { locale } = useLocale();
   const { activeChild } = useAppState();
   const subscription = useQuery(api.subscriptions.mine);
-  const enabled = subscription?.features.includes('appointments') ?? false;
+  const enabled = isFeatureAvailableOnCurrentPlatform(subscription?.features ?? [], 'appointments');
   const rows = useQuery(
     api.appointments.listMine,
     activeChild && enabled ? { childId: activeChild.id as never } : 'skip',

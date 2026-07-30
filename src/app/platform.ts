@@ -3,7 +3,49 @@ import { App as CapacitorApp } from '@capacitor/app';
 import { useEffect } from 'react';
 
 export function isGooglePlayBuild(): boolean {
-  return Capacitor.getPlatform() === 'android';
+  return import.meta.env.VITE_DISTRIBUTION === 'play-store'
+    || Capacitor.getPlatform() === 'android';
+}
+
+export function isAppleAppStoreBuild(): boolean {
+  return import.meta.env.VITE_DISTRIBUTION === 'app-store'
+    || Capacitor.getPlatform() === 'ios';
+}
+
+export function isNativeStoreBuild(): boolean {
+  const distribution = import.meta.env.VITE_DISTRIBUTION;
+  const platform = Capacitor.getPlatform();
+  return distribution === 'app-store'
+    || distribution === 'play-store'
+    || platform === 'android'
+    || platform === 'ios';
+}
+
+const NATIVE_STORE_FREE_FEATURES = new Set([
+  'child_profile',
+  'milestones',
+  'activities',
+  'growth',
+  'sleep',
+  'learning_library',
+]);
+
+export function isFeatureAvailableOnCurrentPlatform(
+  features: readonly string[],
+  feature: string,
+): boolean {
+  return features.includes(feature)
+    && (!isNativeStoreBuild() || NATIVE_STORE_FREE_FEATURES.has(feature));
+}
+
+export function effectivePlanKeyForCurrentPlatform<T extends string>(planKey: T): T | 'free' {
+  return isNativeStoreBuild() ? 'free' : planKey;
+}
+
+export function nativeAuthRedirectUrl(): string {
+  return Capacitor.isNativePlatform()
+    ? 'https://child.acegroup.com.mm'
+    : window.location.origin;
 }
 
 export function useNativeDeepLinks(): void {

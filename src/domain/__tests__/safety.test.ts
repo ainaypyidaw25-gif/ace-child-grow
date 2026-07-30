@@ -1,5 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import { evaluateSafety, EMERGENCY_MESSAGE } from '../safety/safety';
+import {
+  evaluateSafety,
+  EMERGENCY_MESSAGE,
+  SKILL_LOSS_ASSESSMENT_MESSAGE,
+} from '../safety/safety';
 
 describe('urgent safety engine', () => {
   it('is not urgent with no symptoms and no skill loss', () => {
@@ -7,6 +11,9 @@ describe('urgent safety engine', () => {
     expect(r.urgent).toBe(false);
     expect(r.message).toBeUndefined();
     expect(r.triggers).toEqual([]);
+    expect(r.professionalAssessmentRecommended).toBe(false);
+    expect(r.professionalAssessmentMessage).toBeUndefined();
+    expect(r.developmentalConcerns).toEqual([]);
   });
 
   it('fires on a single fixed urgent symptom and returns the fixed message', () => {
@@ -16,11 +23,24 @@ describe('urgent safety engine', () => {
     expect(r.triggers).toContain('seizure');
   });
 
-  it('treats skill loss as an urgent trigger and saves the concern', () => {
+  it('routes skill loss alone to prompt professional assessment, not emergency care', () => {
     const r = evaluateSafety({ confirmedSymptoms: [], lostSkill: true });
-    expect(r.urgent).toBe(true);
-    expect(r.triggers).toContain('loss_of_acquired_skills');
+    expect(r.urgent).toBe(false);
+    expect(r.message).toBeUndefined();
+    expect(r.triggers).toEqual([]);
+    expect(r.professionalAssessmentRecommended).toBe(true);
+    expect(r.professionalAssessmentMessage).toEqual(SKILL_LOSS_ASSESSMENT_MESSAGE);
+    expect(r.developmentalConcerns).toContain('loss_of_acquired_skills');
     expect(r.saveSkillLossConcern).toBe(true);
+  });
+
+  it('keeps acute emergency care and regression assessment as separate actions', () => {
+    const r = evaluateSafety({ confirmedSymptoms: ['seizure'], lostSkill: true });
+    expect(r.urgent).toBe(true);
+    expect(r.message).toEqual(EMERGENCY_MESSAGE);
+    expect(r.triggers).toEqual(['seizure']);
+    expect(r.professionalAssessmentRecommended).toBe(true);
+    expect(r.developmentalConcerns).toEqual(['loss_of_acquired_skills']);
   });
 
   it('ignores unknown symptom strings (defensive)', () => {

@@ -9,6 +9,10 @@ import { authTables } from '@convex-dev/auth/server';
 // equivalent of the P0 "no child data across accounts" guarantee.
 export default defineSchema({
   ...authTables,
+  // Convex Auth indexes verifiers by signature for the sign-in flow. Account
+  // erasure also needs to remove every verifier belonging to a session without
+  // scanning the whole auth table.
+  authVerifiers: authTables.authVerifiers.index('sessionId', ['sessionId']),
 
   // Parent consent + preferences (one row per user).
   parentProfiles: defineTable({
@@ -65,7 +69,10 @@ export default defineSchema({
   })
     .index('by_email', ['email'])
     .index('by_code_hash', ['codeHash'])
-    .index('by_status', ['status']),
+    .index('by_status', ['status'])
+    .index('by_target_user', ['targetUserId'])
+    .index('by_invited_by', ['invitedBy'])
+    .index('by_accepted_by', ['acceptedBy']),
 
   // Billing-provider-neutral subscription state. Stripe (or another provider)
   // can be connected later without changing parent or child records.
@@ -126,6 +133,7 @@ export default defineSchema({
   })
     .index('by_referred_user', ['referredUserId'])
     .index('by_referrer_user', ['referrerUserId'])
+    .index('by_reviewed_by', ['reviewedBy'])
     .index('by_status', ['status']),
 
   // Owner-configured prices. No amount or payment destination is shipped in
@@ -181,6 +189,7 @@ export default defineSchema({
     updatedAt: v.number(),
   })
     .index('by_user', ['userId'])
+    .index('by_reviewed_by', ['reviewedBy'])
     .index('by_status', ['status']),
 
   // Myan Myan Pay transactions are kept separate from the legacy/manual
@@ -267,7 +276,9 @@ export default defineSchema({
     reviewerQualification: v.optional(v.string()),
     reviewerId: v.optional(v.id('users')),
     reviewScope: v.optional(v.union(v.literal('education'), v.literal('clinical'))),
-  }).index('by_status', ['reviewStatus']),
+  })
+    .index('by_status', ['reviewStatus'])
+    .index('by_reviewer', ['reviewerId']),
 
   // Verified healthcare facilities. NEVER seeded with invented data. Only
   // active + verified rows are shown to parents (directory.listPublic).
@@ -287,7 +298,8 @@ export default defineSchema({
     isActive: v.boolean(), // inactive until verified
   })
     .index('by_active', ['isActive'])
-    .index('by_name', ['name']),
+    .index('by_name', ['name'])
+    .index('by_verified_by', ['verifiedBy']),
 
   // Immutable audit trail. Insert-only; readable by staff/super-admin. Listed via
   // the implicit _creationTime order (newest first), so no extra index is needed.
@@ -350,7 +362,8 @@ export default defineSchema({
     .index('by_type_age', ['type', 'ageGroupKey'])
     .index('by_type_domain', ['type', 'domainKey'])
     .index('by_type_category', ['type', 'category'])
-    .index('by_status', ['clinicalStatus']),
+    .index('by_status', ['clinicalStatus'])
+    .index('by_reviewer', ['reviewerId']),
 
   // Human review decisions are append-only and separate from the content document,
   // so every intermediate decision survives later decisions and edits. A decision
@@ -426,7 +439,8 @@ export default defineSchema({
     sortOrder: v.optional(v.number()),
   })
     .index('by_content', ['contentSlug'])
-    .index('by_kind', ['kind']),
+    .index('by_kind', ['kind'])
+    .index('by_reviewed_by', ['reviewedBy']),
 
   // ------------------------------------------------------------------
   // Evidence Base. Every knowledge item in the library must be traceable to a
@@ -473,7 +487,8 @@ export default defineSchema({
     .index('by_source_id', ['sourceId'])
     .index('by_org', ['orgKey'])
     .index('by_review_status', ['reviewStatus'])
-    .index('by_level', ['evidenceLevel']),
+    .index('by_level', ['evidenceLevel'])
+    .index('by_reviewer', ['reviewerId']),
 
   // Content-to-reference edges. NO ORPHAN CONTENT: every content slug, urgent
   // safety rule and Hope Center topic must appear here with >= 1 sourceId.

@@ -9,16 +9,38 @@ import { ConfirmDialog } from '../components/ConfirmDialog';
 import { useMutation, useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { clearPortalMode } from '../app/portalMode';
-import { isGooglePlayBuild } from '../app/platform';
+import {
+  effectivePlanKeyForCurrentPlatform,
+  isFeatureAvailableOnCurrentPlatform,
+  isNativeStoreBuild,
+} from '../app/platform';
 import { ReferralSection } from '../components/ReferralSection';
 
-const PLAN_LABELS = {
-  free: { mm: 'အခမဲ့အစီအစဉ်', en: 'Free plan' },
-  premium: { mm: 'အထူးအစီအစဉ်', en: 'Premium plan' },
-  family: { mm: 'မိသားစုအစီအစဉ်', en: 'Family plan' },
-} as const;
+const APP_STORE_DISTRIBUTION = import.meta.env.VITE_DISTRIBUTION === 'app-store';
+type PlanKey = 'free' | 'premium' | 'family';
 
-type PlanKey = keyof typeof PLAN_LABELS;
+function planLabel(planKey: PlanKey, locale: 'mm' | 'en'): string {
+  if (APP_STORE_DISTRIBUTION) {
+    return locale === 'mm' ? 'အခမဲ့အစီအစဉ်' : 'Free plan';
+  }
+  const labels = {
+    free: { mm: 'အခမဲ့အစီအစဉ်', en: 'Free plan' },
+    premium: { mm: 'အထူးအစီအစဉ်', en: 'Premium plan' },
+    family: { mm: 'မိသားစုအစီအစဉ်', en: 'Family plan' },
+  } as const;
+  return labels[planKey][locale];
+}
+
+function planDescription(planKey: PlanKey, locale: 'mm' | 'en'): string {
+  if (APP_STORE_DISTRIBUTION || planKey === 'free') {
+    return locale === 'mm'
+      ? 'လက်ရှိအခြေခံလုပ်ဆောင်ချက်များကို အခမဲ့ အသုံးပြုနိုင်ပါသည်။'
+      : 'Core features are available free.';
+  }
+  return locale === 'mm'
+    ? 'ဤအကောင့်တွင် အထူးလုပ်ဆောင်ချက်များ အသုံးပြုနိုင်ပါသည်။'
+    : 'Premium features are enabled for this account.';
+}
 
 export function safePlanKey(value: unknown): PlanKey {
   return value === 'premium' || value === 'family' ? value : 'free';
@@ -34,8 +56,9 @@ export function Profile() {
   const { signOut } = useAuthActions();
   const navigate = useNavigate();
   const subscription = useQuery(api.subscriptions.mine);
-  const familyEnabled = hasFamilyProfiles(subscription?.features);
-  const planKey = safePlanKey(subscription?.planKey);
+  const familyEnabled = hasFamilyProfiles(subscription?.features)
+    && isFeatureAvailableOnCurrentPlatform(subscription?.features ?? [], 'family_profiles');
+  const planKey = safePlanKey(effectivePlanKeyForCurrentPlatform(subscription?.planKey ?? 'free'));
   const caregivers = useQuery(api.family.listCaregivers, familyEnabled ? {} : 'skip');
   const inviteCaregiver = useMutation(api.family.inviteCaregiver);
   const revokeCaregiver = useMutation(api.family.revokeCaregiver);
@@ -110,7 +133,7 @@ export function Profile() {
             + {locale === 'mm' ? 'ကလေး ထပ်ထည့်ရန်' : 'Add another child'}
           </Link>
         )}
-        {state.children.length > 0 && !familyEnabled && !isGooglePlayBuild() && (
+        {state.children.length > 0 && !familyEnabled && !isNativeStoreBuild() && (
           <Link to="/subscription" className="mt-3 inline-block text-sm font-semibold text-sky-deep">
             {locale === 'mm' ? 'ကလေးတစ်ဦးထက်ပို ထည့်ရန် Family အစီအစဉ် ကြည့်မည် →' : 'View Family to add more children →'}
           </Link>
@@ -122,17 +145,9 @@ export function Profile() {
         <h2 className="font-semibold text-ink">{locale === 'mm' ? 'အသုံးပြုမှုအစီအစဉ်' : 'Membership plan'}</h2>
         {subscription === undefined ? <p className="text-ink-soft">…</p> : (
           <>
-            <p className="mt-1 text-lg font-semibold text-sky-deep">{PLAN_LABELS[planKey][locale]}</p>
-            <p className="mt-1 text-sm text-ink-soft">
-              {locale === 'mm'
-                ? planKey === 'free'
-                  ? 'လက်ရှိအခြေခံလုပ်ဆောင်ချက်များကို အခမဲ့ အသုံးပြုနိုင်ပါသည်။'
-                  : 'ဤအကောင့်တွင် အထူးလုပ်ဆောင်ချက်များ အသုံးပြုနိုင်ပါသည်။'
-                : planKey === 'free'
-                  ? 'Core features are available free.'
-                  : 'Premium features are enabled for this account.'}
-            </p>
-            {!isGooglePlayBuild() && (
+            <p className="mt-1 text-lg font-semibold text-sky-deep">{planLabel(planKey, locale)}</p>
+            <p className="mt-1 text-sm text-ink-soft">{planDescription(planKey, locale)}</p>
+            {!isNativeStoreBuild() && (
               <Link to="/subscription" className="mt-3 inline-block rounded-pill bg-sky px-4 py-2 text-sm font-semibold text-white">
                 {locale === 'mm' ? 'အစီအစဉ်နှင့် ငွေပေးချေမှု ကြည့်ရန်' : 'View plans and payment'}
               </Link>
@@ -194,10 +209,10 @@ export function Profile() {
             {locale === 'mm' ? 'မြန်မာ' : 'English'}
           </button>
         </div>
-        <Link to="/offline" className="flex items-center justify-between py-2 text-sky-deep">
+        {!isNativeStoreBuild() && <Link to="/offline" className="flex items-center justify-between py-2 text-sky-deep">
           <span>{locale === 'mm' ? 'အင်တာနက်မရှိချိန် ဖတ်ရန် သိမ်းထားမှု' : 'Offline downloads'}</span>
           <span aria-hidden>→</span>
-        </Link>
+        </Link>}
         <Link to="/home?tour=parent" className="flex items-center justify-between py-2 text-sky-deep">
           <span>{locale === 'mm' ? 'အသုံးပြုနည်း ပြန်ကြည့်ရန်' : 'Replay app tour'}</span>
           <span aria-hidden>→</span>
@@ -211,6 +226,18 @@ export function Profile() {
       {/* Privacy controls */}
       <section className="rounded-card border border-line bg-white p-4 shadow-card">
         <h2 className="mb-2 font-semibold text-ink">{locale === 'mm' ? 'ကိုယ်ရေးလုံခြုံမှု' : 'Privacy'}</h2>
+        <Link to="/privacy" className="mb-2 flex items-center justify-between rounded-pill border border-line px-4 py-2 text-sky-deep">
+          <span>🔒 {locale === 'mm' ? 'ကိုယ်ရေးအချက်အလက် မူဝါဒ' : 'Privacy policy'}</span>
+          <span aria-hidden>→</span>
+        </Link>
+        <Link to="/account-deletion" className="mb-2 flex items-center justify-between rounded-pill border border-line px-4 py-2 text-sky-deep">
+          <span>ⓘ {locale === 'mm' ? 'အကောင့်ဖျက်နည်း' : 'Account deletion information'}</span>
+          <span aria-hidden>→</span>
+        </Link>
+        <Link to="/methodology" className="mb-2 flex items-center justify-between rounded-pill border border-line px-4 py-2 text-sky-deep">
+          <span>🧭 {locale === 'mm' ? 'စစ်ဆေးစာရင်း အသုံးပြုပုံ' : 'How milestone guidance works'}</span>
+          <span aria-hidden>→</span>
+        </Link>
         <button type="button" onClick={download}
           className="mb-2 w-full rounded-pill border border-line px-4 py-2 text-left">
           ⬇️ {locale === 'mm' ? 'ကျွန်ုပ်၏ အချက်အလက် ထုတ်ယူရန်' : 'Export my data'}

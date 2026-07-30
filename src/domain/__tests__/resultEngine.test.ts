@@ -60,12 +60,25 @@ describe('rule-based result engine', () => {
     expect(r.safety.urgent).toBe(true);
   });
 
-  it('skill loss forces RED even with all-yes answers', () => {
+  it('skill loss alone prompts professional assessment without an emergency result', () => {
     const r = computeResult([resp('yes'), resp('yes')], {
       confirmedSymptoms: [],
       lostSkill: true,
     });
+    expect(r.state).toBe('orange');
+    expect(r.safety.urgent).toBe(false);
+    expect(r.safety.message).toBeUndefined();
+    expect(r.safety.professionalAssessmentRecommended).toBe(true);
+  });
+
+  it('acute emergency signs remain RED when skill loss is also reported', () => {
+    const r = computeResult([resp('yes'), resp('yes')], {
+      confirmedSymptoms: ['seizure'],
+      lostSkill: true,
+    });
     expect(r.state).toBe('red');
+    expect(r.safety.urgent).toBe(true);
+    expect(r.safety.professionalAssessmentRecommended).toBe(true);
   });
 
   it('treats "not_sure" as neutral (excluded from ratio)', () => {
@@ -82,5 +95,18 @@ describe('rule-based result engine', () => {
     expect(Object.keys(r)).not.toContain('score');
     expect(Object.keys(r)).not.toContain('probability');
     expect(Object.keys(r)).not.toContain('percentage');
+    expect(Object.keys(r.breakdown)).not.toContain('concernRatio');
+    expect(r.isDiagnostic).toBe(false);
+  });
+
+  it('treats custom ratios as non-diagnostic presentation grouping only', () => {
+    const r = computeResult(
+      [resp('yes'), resp('not_yet')],
+      noSafety,
+      { yellowConcernRatio: 0.9, orangeConcernRatio: 1, repeatedConcernsForOrange: 3 },
+    );
+    expect(r.state).toBe('green');
+    expect(r.isDiagnostic).toBe(false);
+    expect(Object.keys(r.breakdown)).not.toContain('concernRatio');
   });
 });

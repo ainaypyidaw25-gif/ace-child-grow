@@ -4,7 +4,7 @@ import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
 import { useAppState } from '../app/AppState';
 import { ageLabels } from '../domain/age/ageLabel';
-import { isGooglePlayBuild } from '../app/platform';
+import { isFeatureAvailableOnCurrentPlatform, isNativeStoreBuild } from '../app/platform';
 
 export function Home() {
   const { t, locale } = useLocale();
@@ -46,9 +46,9 @@ export function Home() {
     { to: '/sleep', label: t('sleep.title'), note: locale === 'mm' ? 'အိပ်ချိန် မှတ်တမ်း' : 'Sleep tracking', symbol: '◒', tone: 'bg-lavender/30 text-ink' },
     { to: '/report', label: t('report.title'), note: locale === 'mm' ? 'တစ်လစာ အနှစ်ချုပ်' : 'Monthly summary', symbol: '▤', tone: 'bg-pastel-yellow/40 text-ink' },
     { to: '/directory', label: locale === 'mm' ? 'ဝန်ဆောင်မှုများ' : 'Support services', note: locale === 'mm' ? 'ကျောင်းနှင့် ပညာရှင်များ' : 'Schools and specialists', symbol: '⌖', tone: 'bg-pink/40 text-ink' },
-  ] as const;
+  ].filter((item) => !isNativeStoreBuild() || item.to !== '/report');
 
-  const premium = subscription?.planKey === 'premium' || subscription?.planKey === 'family';
+  const premium = isFeatureAvailableOnCurrentPlatform(subscription?.features ?? [], 'personalized_plan');
 
   return (
     <div className="space-y-7">
@@ -137,7 +137,7 @@ export function Home() {
             </Link>
           </section>
 
-          {!premium && !isGooglePlayBuild() && (
+          {!premium && !isNativeStoreBuild() && (
             <section className="rounded-3xl bg-pastel-yellow/55 p-5">
               <span className="text-xs font-bold uppercase tracking-[0.15em] text-ink-soft">ACE Premium</span>
               <h2 className="mt-2 font-bold text-ink">
