@@ -141,10 +141,21 @@ export const createInvite = mutation({
     const displayName = args.displayName.trim();
     if (!email.includes('@')) throw new Error('A valid email address is required');
     if (!displayName) throw new Error('A team member name is required');
-    const targetUser = await ctx.db
+    // NOT .unique(): one email can legitimately have more than one user row when
+    // an account exists under several sign-in providers (e.g. Google and
+    // email+PIN). .unique() throws on that, and a thrown Convex error reaches the
+    // caller as an opaque "Server Error", so inviting such an address failed with
+    // no usable explanation. Refuse explicitly instead, naming what to fix.
+    const targetUsers = await ctx.db
       .query('users')
       .withIndex('email', (q) => q.eq('email', email))
-      .unique();
+      .take(2);
+    if (targetUsers.length > 1) {
+      throw new Error(
+        'More than one account already uses this email address. Resolve the duplicate before inviting it.',
+      );
+    }
+    const targetUser = targetUsers[0] ?? null;
     const qualification = args.reviewerQualification?.trim();
     if (['clinical_reviewer', 'evidence_reviewer'].includes(args.role) && !qualification) {
       throw new Error('A professional qualification is required for this reviewer role');

@@ -698,4 +698,40 @@ describe('Convex registered handlers enforce authorization', () => {
     const patched = (context.db.patch as unknown as { mock: { calls: unknown[][] } }).mock.calls[0][1] as Record<string, unknown>;
     expect(Object.keys(patched)).toEqual(['displayName']);
   });
+  // --- duplicate email accounts ---------------------------------------------
+  // One person can hold several user rows when they have signed in through more
+  // than one provider (e.g. Google and email+PIN). `.unique()` threw on that,
+  // which reached the caller as an opaque "Server Error".
+
+  it('inviting an email that already has two accounts refuses with a usable reason', async () => {
+    authState.userId = 'owner-1';
+    const context = ctx({
+      profile: { userId: 'owner-1', isStaff: true, staffRole: 'owner' },
+      rows: {
+        users: [
+          { _id: 'user-google', email: 'dupe@example.com' },
+          { _id: 'user-pin', email: 'dupe@example.com' },
+        ],
+      },
+    });
+    await expect(handler(createInvite)(context, {
+      email: 'dupe@example.com', displayName: 'Someone', role: 'content_editor',
+    })).rejects.toThrow('More than one account already uses this email');
+    // Nothing is written when the address is ambiguous.
+    expect(context.db.insert).not.toHaveBeenCalledWith('staffInvites', expect.anything());
+  });
+
+  it('inviting an email with a single account still resolves that account', async () => {
+    authState.userId = 'owner-1';
+    const context = ctx({
+      profile: { userId: 'owner-1', isStaff: true, staffRole: 'owner' },
+      rows: { users: [{ _id: 'user-pin', email: 'solo@example.com' }] },
+    });
+    await handler(createInvite)(context, {
+      email: 'solo@example.com', displayName: 'Someone', role: 'content_editor',
+    });
+    expect(context.db.insert).toHaveBeenCalledWith('staffInvites', expect.objectContaining({
+      email: 'solo@example.com', targetUserId: 'user-pin',
+    }));
+  });
 });
