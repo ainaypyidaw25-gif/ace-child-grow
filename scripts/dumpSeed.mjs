@@ -12,8 +12,12 @@
  * across many modules, so it has to be bundled before Node can import it. Doing
  * that inline in package.json required nested shell quoting that broke on every
  * platform. This mirrors the esbuild-in-memory pattern already used by the
- * scripts/evidence-*.mjs tooling — no new dependency, no shell quoting, and it
- * exits non-zero on any failure so a broken seed can never pass silently.
+ * scripts/evidence-*.mjs tooling — no shell quoting, and it exits non-zero on
+ * any failure so a broken seed can never pass silently.
+ *
+ * The write is atomic (temp file + rename): a crash or a full disk mid-write
+ * would otherwise leave a truncated multi-megabyte artifact that no longer
+ * parses, and the CLI seed path imports this file directly.
  *
  * Determinism: array order follows the registry concatenation order and object
  * key order follows the builders in src/content/types.ts, both stable across
@@ -22,7 +26,7 @@
  * cleanly. Nothing environment-specific or secret enters the file: the payload
  * is pure authored content plus a derived `searchText`.
  */
-import { mkdtempSync, rmSync, writeFileSync, statSync } from 'node:fs';
+import { mkdtempSync, rmSync, writeFileSync, renameSync, statSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -78,14 +82,32 @@ function assertValid(items) {
     if (typeof it.type !== 'string' || typeof it.searchText !== 'string') {
       throw new Error(`seed item ${it.slug} missing required fields`);
     }
+    // convex/library.ts:seedItemValidator requires `media` as an array. Catching
+    // it here fails the dump instead of failing later inside Convex, where the
+    // error surfaces far from its cause.
+    if (!Array.isArray(it.media)) {
+      throw new Error(`seed item ${it.slug} has no media array`);
+    }
   }
+}
+
+/**
+ * The exact serialisation the committed artifact must hold. Kept local — this
+ * module runs `main()` on import, so the test pins the same format literally
+ * rather than importing from here.
+ */
+function serialiseSeed(items) {
+  return `${JSON.stringify(items, null, 2)}\n`;
 }
 
 async function main() {
   const items = await loadSeedPayload();
   assertValid(items);
 
-  writeFileSync(OUT_PATH, `${JSON.stringify(items, null, 2)}\n`, 'utf8');
+  // Atomic swap: a partial write can never replace a valid artifact.
+  const tmpPath = `${OUT_PATH}.tmp`;
+  writeFileSync(tmpPath, serialiseSeed(items), 'utf8');
+  renameSync(tmpPath, OUT_PATH);
 
   const byType = {};
   for (const it of items) byType[it.type] = (byType[it.type] ?? 0) + 1;

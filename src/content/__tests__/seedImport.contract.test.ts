@@ -83,11 +83,18 @@ describe('seed generation', () => {
   });
 
   it('committed convex/seedData.json matches a fresh dump (guards against staleness)', () => {
-    const onDisk = JSON.parse(readFileSync(SEED_JSON, 'utf8'));
+    const raw = readFileSync(SEED_JSON, 'utf8');
+    const onDisk = JSON.parse(raw);
     expect(onDisk).toEqual(JSON.parse(JSON.stringify(seedPayload())));
     // The count is derived, not asserted as a magic number: the artifact must
     // hold exactly what the registry produces.
     expect(onDisk.length).toBe(CONTENT_SEED.length);
+    // Byte-exact, not just content-equal. Comparing parsed JSON alone is blind
+    // to serialisation drift: re-writing the same items minified keeps a
+    // content check green while producing a whole-file git diff. This pins the
+    // format to what scripts/dumpSeed.mjs writes (2-space indent, trailing
+    // newline), so the artifact and the generator cannot diverge silently.
+    expect(raw).toBe(`${JSON.stringify(seedPayload(), null, 2)}\n`);
   });
 
   it('all taxonomy references resolve and every 13m–5y band is importable', () => {
