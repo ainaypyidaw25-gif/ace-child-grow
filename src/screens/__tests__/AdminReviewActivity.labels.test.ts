@@ -39,7 +39,9 @@ describe('reviewer activity screen', () => {
     expect(source).toContain('reviewerQualification');
     expect(source).toContain('row.note');
     expect(source).toContain('contentVersion');
-    expect(source).toContain('formatDateTime(row.reviewedAt)');
+    expect(source).toContain('formatDateTime(row.reviewedAt, locale)');
+    expect(source).toContain("timeZone: 'Asia/Yangon'");
+    expect(source).toContain('Yangon');
   });
 
   it('reports a truncated window instead of silently capping the history', () => {
