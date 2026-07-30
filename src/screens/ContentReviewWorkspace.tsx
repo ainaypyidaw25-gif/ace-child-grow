@@ -3,6 +3,7 @@ import { useMutation, useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
 import { useUnsavedChangesGuard } from '../app/useUnsavedChangesGuard';
+import { OwnDisplayName } from '../components/OwnDisplayName';
 import { CONTENT_TYPES } from '../content/taxonomy';
 // One source for who may review what, shared with the mutation. Two copies of
 // this rule drifted apart once already; the UI must not offer an action the
@@ -404,6 +405,7 @@ export function ContentReviewWorkspace() {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState('');
   const [editorDirty, setEditorDirty] = useState(false);
+  const [needsName, setNeedsName] = useState(false);
 
   const confirmSelectionChange = () => !editorDirty || window.confirm(L(
     'မသိမ်းရသေးသော ပြင်ဆင်ချက်များ ရှိပါသည်။ မသိမ်းဘဲ အခြားအကြောင်းအရာသို့ ပြောင်းမည်လား။',
@@ -438,8 +440,12 @@ export function ContentReviewWorkspace() {
         // reason instead of an opaque "Server Error" from a thrown exception.
         const label = REVIEW_REFUSAL_LABELS[result.code as ReviewRefusalCode];
         setMessage(label ? label[locale] : result.message);
+        // A missing name is the one refusal the reviewer can fix on the spot, so
+        // offer the field here rather than sending them to an owner-only screen.
+        setNeedsName(result.code === 'display_name_required');
         return;
       }
+      setNeedsName(false);
       setNote('');
       setMessage(L('သုံးသပ်ဆုံးဖြတ်ချက်ကို မှတ်တမ်းတင်ပြီးပါပြီ။', 'Review decision recorded.'));
     } catch (error) {
@@ -548,6 +554,20 @@ export function ContentReviewWorkspace() {
               {message && <p role="status" className="text-sm text-ink-soft">{message}</p>}
             </div>
           </form>
+
+          {needsName && (
+            <OwnDisplayName
+              currentName={null}
+              variant="inline"
+              onSaved={() => {
+                setNeedsName(false);
+                setMessage(L(
+                  'အမည် သိမ်းပြီးပါပြီ — ဆုံးဖြတ်ချက်ကို ပြန်တင်ပါ။',
+                  'Name saved — record the decision again.',
+                ));
+              }}
+            />
+          )}
 
           {reviews.history.length > 0 && (
             <details className="rounded-xl border border-line p-3">

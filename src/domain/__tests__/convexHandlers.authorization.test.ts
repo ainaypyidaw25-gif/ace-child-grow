@@ -17,7 +17,7 @@ import { forContent as evidenceForContent, setReview as setEvidenceReview } from
 import { transition as transitionContent } from '../../../convex/content';
 import { listSessions, recordSession } from '../../../convex/milestones';
 import { complete as completeActivity, list as listActivities } from '../../../convex/activities';
-import { claimInvite, createInvite } from '../../../convex/admin';
+import { claimInvite, createInvite, setOwnDisplayName } from '../../../convex/admin';
 
 type Row = Record<string, unknown> & { _id?: string };
 
@@ -646,5 +646,56 @@ describe('Convex registered handlers enforce authorization', () => {
     // The summary still counts all three decisions, so filtering the view cannot
     // silently understate a reviewer's workload.
     expect(result.reviewers.reduce((sum, r) => sum + r.total, 0)).toBe(3);
+  });
+  // --- self-service reviewer display name -----------------------------------
+  // saveDecision refuses a reviewer with no display name, and changeRole refuses
+  // your own account, so without this a bootstrapped staff member was locked out
+  // of reviewing permanently.
+
+  it('a staff member can set their own display name, and the change is audited', async () => {
+    authState.userId = 'owner-1';
+    const context = ctx({
+      profile: { _id: 'profile-1', userId: 'owner-1', isStaff: true, staffRole: 'owner', displayName: undefined },
+    });
+    await expect(handler(setOwnDisplayName)(context, { displayName: '  La Pyae Wun  ' }))
+      .resolves.toEqual({ ok: true });
+    expect(context.db.patch).toHaveBeenCalledWith('profile-1', { displayName: 'La Pyae Wun' });
+    expect(context.db.insert).toHaveBeenCalledWith('auditLogs', expect.objectContaining({
+      action: 'staff.displayName.setOwn',
+      after: 'La Pyae Wun',
+    }));
+  });
+
+  it('setting a display name refuses a non-staff account and writes nothing', async () => {
+    authState.userId = 'parent-1';
+    const context = ctx({ profile: { _id: 'profile-9', userId: 'parent-1' } });
+    await expect(handler(setOwnDisplayName)(context, { displayName: 'Someone' }))
+      .rejects.toThrow('Staff access is required');
+    expect(context.db.patch).not.toHaveBeenCalled();
+  });
+
+  it('setting a display name rejects blank and over-long names', async () => {
+    authState.userId = 'owner-1';
+    const profile = { _id: 'profile-1', userId: 'owner-1', isStaff: true, staffRole: 'owner' };
+    const blank = ctx({ profile });
+    await expect(handler(setOwnDisplayName)(blank, { displayName: '   ' }))
+      .rejects.toThrow('A name is required');
+    const long = ctx({ profile });
+    await expect(handler(setOwnDisplayName)(long, { displayName: 'x'.repeat(121) }))
+      .rejects.toThrow('too long');
+    expect(blank.db.patch).not.toHaveBeenCalled();
+    expect(long.db.patch).not.toHaveBeenCalled();
+  });
+
+  it('setting your own name cannot grant a professional qualification', async () => {
+    authState.userId = 'owner-1';
+    const context = ctx({
+      profile: { _id: 'profile-1', userId: 'owner-1', isStaff: true, staffRole: 'owner' },
+    });
+    await handler(setOwnDisplayName)(context, { displayName: 'Reviewer' });
+    // Only displayName is written — a reviewer must never self-assert credentials.
+    expect(context.db.patch).toHaveBeenCalledWith('profile-1', { displayName: 'Reviewer' });
+    const patched = (context.db.patch as unknown as { mock: { calls: unknown[][] } }).mock.calls[0][1] as Record<string, unknown>;
+    expect(Object.keys(patched)).toEqual(['displayName']);
   });
 });

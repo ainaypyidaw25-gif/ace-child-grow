@@ -132,3 +132,44 @@ describe('the rule is not duplicated', () => {
     expect(server).not.toContain('throw new Error');
   });
 });
+
+describe('a reviewer can always obtain a display name', () => {
+  it('the team screen offers the name field for every staff role, not just reviewers', () => {
+    const screen = readFileSync(resolve(REPO_ROOT, 'src/screens/AdminTeam.tsx'), 'utf8');
+    // The qualification field stays gated to professional roles; the NAME must not
+    // be, because saveDecision refuses any reviewer without one. Assert by order:
+    // the member-row name input appears BEFORE the first role gate, so it is
+    // outside it.
+    const nameInput = screen.indexOf('onChange={(event) => setDisplayName(event.target.value)}');
+    const firstRoleGate = screen.indexOf("].includes(role) && (");
+    expect(nameInput).toBeGreaterThan(-1);
+    expect(firstRoleGate).toBeGreaterThan(-1);
+    expect(nameInput).toBeLessThan(firstRoleGate);
+    // …and what the gate still wraps is the qualification, not the name.
+    const gatedBlock = screen.slice(firstRoleGate, firstRoleGate + 400);
+    expect(gatedBlock).toContain('qualification');
+    expect(gatedBlock).not.toContain('setDisplayName');
+  });
+
+  it('staff can set their own name, and the control is offered where the refusal happens', () => {
+    const component = readFileSync(resolve(REPO_ROOT, 'src/components/OwnDisplayName.tsx'), 'utf8');
+    expect(component).toContain('api.admin.setOwnDisplayName');
+    // Name only — never a self-asserted qualification.
+    expect(component).not.toMatch(/setOwnDisplayName\(\{[^}]*qualification/);
+
+    const workspace = readFileSync(resolve(REPO_ROOT, 'src/screens/ContentReviewWorkspace.tsx'), 'utf8');
+    expect(workspace).toContain('OwnDisplayName');
+    expect(workspace).toContain("result.code === 'display_name_required'");
+  });
+
+  it('the mutation writes only the name and audits the change', () => {
+    const admin = readFileSync(resolve(REPO_ROOT, 'convex/admin.ts'), 'utf8');
+    const start = admin.indexOf('export const setOwnDisplayName');
+    expect(start).toBeGreaterThan(-1);
+    const body = admin.slice(start, admin.indexOf('export const changeRole'));
+    expect(body).toContain('staff.displayName.setOwn');
+    expect(body).toContain('{ displayName }');
+    expect(body).not.toContain('staffQualification');
+    expect(body).not.toContain('staffRole:');
+  });
+});
