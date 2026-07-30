@@ -56,7 +56,7 @@ describe('reviewer activity screen', () => {
   it('gives every filter control an accessible label', () => {
     const selects = source.match(/<select/g) ?? [];
     const ariaLabels = source.match(/aria-label=\{L\(/g) ?? [];
-    expect(selects.length).toBe(3);
+    expect(selects.length).toBe(4);
     expect(ariaLabels.length).toBeGreaterThanOrEqual(selects.length);
   });
 });
