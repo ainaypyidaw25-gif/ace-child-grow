@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'node:fs';
+import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { CONTENT_SEED, seedPayload } from '../seed';
 import { AGE_GROUP_KEYS, DOMAIN_KEYS } from '../taxonomy';
 import { EVIDENCE_LINKS } from '../../evidence/links';
@@ -12,6 +14,13 @@ import {
 } from '../../../convex/lib/seedPolicy';
 import { importSeed } from '../../../convex/library';
 import { run as seedRun } from '../../../convex/seed';
+
+// Resolved from this file, not the runner's cwd, so the guard cannot silently
+// pass (or fail) because of where vitest was invoked from.
+const SEED_JSON = join(
+  resolve(dirname(fileURLToPath(import.meta.url)), '../../..'),
+  'convex/seedData.json',
+);
 
 // Seed generation + import-safety contract.
 //
@@ -74,7 +83,7 @@ describe('seed generation', () => {
   });
 
   it('committed convex/seedData.json matches a fresh dump (guards against staleness)', () => {
-    const onDisk = JSON.parse(readFileSync('convex/seedData.json', 'utf8'));
+    const onDisk = JSON.parse(readFileSync(SEED_JSON, 'utf8'));
     expect(onDisk).toEqual(JSON.parse(JSON.stringify(seedPayload())));
     // The count is derived, not asserted as a magic number: the artifact must
     // hold exactly what the registry produces.

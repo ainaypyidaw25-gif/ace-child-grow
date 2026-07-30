@@ -24,10 +24,15 @@
  */
 import { mkdtempSync, rmSync, writeFileSync, statSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join, resolve } from 'node:path';
+import { join, resolve, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
 
-const OUT_PATH = resolve(process.cwd(), 'convex/seedData.json');
+// Resolve everything from this file's location, not the caller's cwd, so the
+// script behaves identically whether run via `npm run seed:dump` (cwd = package
+// root) or directly from another directory.
+const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const OUT_PATH = join(REPO_ROOT, 'convex/seedData.json');
 
 /** Bundle the TS seed registry in-memory and return the normalised payload. */
 async function loadSeedPayload() {
@@ -37,7 +42,7 @@ async function loadSeedPayload() {
     await build({
       stdin: {
         contents: `export { seedPayload } from './src/content/seed/index';`,
-        resolveDir: process.cwd(),
+        resolveDir: REPO_ROOT,
         loader: 'ts',
       },
       bundle: true,
@@ -90,7 +95,7 @@ async function main() {
     .sort()
     .map((t) => `${t}=${byType[t]}`)
     .join(' ');
-  console.log(`seed:dump — wrote convex/seedData.json`);
+  console.log('seed:dump — wrote convex/seedData.json');
   console.log(`  items: ${items.length}  (${byTypeStr})`);
   console.log(`  size:  ${(bytes / 1024).toFixed(1)} KiB`);
 }
