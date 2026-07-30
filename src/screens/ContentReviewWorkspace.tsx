@@ -3,7 +3,16 @@ import { useMutation, useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
 import { useUnsavedChangesGuard } from '../app/useUnsavedChangesGuard';
+import { OwnDisplayName } from '../components/OwnDisplayName';
 import { CONTENT_TYPES } from '../content/taxonomy';
+// One source for who may review what, shared with the mutation. Two copies of
+// this rule drifted apart once already; the UI must not offer an action the
+// server will refuse.
+import {
+  REVIEW_REFUSAL_LABELS,
+  roleMayReview as mayReview,
+  type ReviewRefusalCode,
+} from '../../convex/lib/reviewPolicy';
 
 const DIMENSIONS = ['english', 'native_myanmar', 'evidence', 'safety', 'clinical'] as const;
 const DECISIONS = ['in_review', 'approved', 'changes_requested', 'not_applicable'] as const;
@@ -25,13 +34,6 @@ const DECISION_LABELS: Record<Decision, { mm: string; en: string }> = {
   changes_requested: { mm: 'ပြင်ဆင်ရန် လိုအပ်သည်', en: 'Changes requested' },
   not_applicable: { mm: 'မသက်ဆိုင်ပါ', en: 'Not applicable' },
 };
-
-function mayReview(role: StaffRole | null | undefined, dimension: Dimension): boolean {
-  if (!role || role === 'support') return false;
-  if (dimension === 'clinical' || dimension === 'safety') return role === 'clinical_reviewer';
-  if (dimension === 'evidence') return ['owner', 'content_editor', 'evidence_reviewer', 'clinical_reviewer'].includes(role);
-  return ['owner', 'content_editor', 'language_reviewer'].includes(role);
-}
 
 function mayEditContent(role: StaffRole | null | undefined): boolean {
   return !!role && role !== 'support';
@@ -403,6 +405,7 @@ export function ContentReviewWorkspace() {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState('');
   const [editorDirty, setEditorDirty] = useState(false);
+  const [needsName, setNeedsName] = useState(false);
 
   const confirmSelectionChange = () => !editorDirty || window.confirm(L(
     'မသိမ်းရသေးသော ပြင်ဆင်ချက်များ ရှိပါသည်။ မသိမ်းဘဲ အခြားအကြောင်းအရာသို့ ပြောင်းမည်လား။',
@@ -431,7 +434,18 @@ export function ContentReviewWorkspace() {
     if (!selectedSlug) return;
     setBusy(true); setMessage('');
     try {
-      await saveDecision({ contentSlug: selectedSlug, dimension, decision, note: note || undefined });
+      const result = await saveDecision({ contentSlug: selectedSlug, dimension, decision, note: note || undefined });
+      if (!result.ok) {
+        // The server refuses in-band with a code, so the reviewer gets the actual
+        // reason instead of an opaque "Server Error" from a thrown exception.
+        const label = REVIEW_REFUSAL_LABELS[result.code as ReviewRefusalCode];
+        setMessage(label ? label[locale] : result.message);
+        // A missing name is the one refusal the reviewer can fix on the spot, so
+        // offer the field here rather than sending them to an owner-only screen.
+        setNeedsName(result.code === 'display_name_required');
+        return;
+      }
+      setNeedsName(false);
       setNote('');
       setMessage(L('သုံးသပ်ဆုံးဖြတ်ချက်ကို မှတ်တမ်းတင်ပြီးပါပြီ။', 'Review decision recorded.'));
     } catch (error) {
@@ -540,6 +554,20 @@ export function ContentReviewWorkspace() {
               {message && <p role="status" className="text-sm text-ink-soft">{message}</p>}
             </div>
           </form>
+
+          {needsName && (
+            <OwnDisplayName
+              currentName={null}
+              variant="inline"
+              onSaved={() => {
+                setNeedsName(false);
+                setMessage(L(
+                  'အမည် သိမ်းပြီးပါပြီ — ဆုံးဖြတ်ချက်ကို ပြန်တင်ပါ။',
+                  'Name saved — record the decision again.',
+                ));
+              }}
+            />
+          )}
 
           {reviews.history.length > 0 && (
             <details className="rounded-xl border border-line p-3">

@@ -3,6 +3,7 @@ import { useMutation, useQuery } from 'convex/react';
 import type { Id } from '../../convex/_generated/dataModel';
 import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
+import { OwnDisplayName } from '../components/OwnDisplayName';
 
 type StaffRole = 'owner' | 'content_editor' | 'language_reviewer' | 'evidence_reviewer' | 'clinical_reviewer' | 'support';
 
@@ -58,23 +59,26 @@ function MemberRow({
             <option key={key} value={key}>{ROLE_LABELS[key][locale]}</option>
           ))}
         </select>
+        {/* Every staff role needs a name: saveDecision refuses a decision from a
+            reviewer without one, so gating this field to clinical/evidence
+            reviewers left other roles unable to review at all. */}
+        <input
+          value={displayName}
+          disabled={mine || busy}
+          onChange={(event) => setDisplayName(event.target.value)}
+          placeholder={locale === 'mm' ? 'သုံးသပ်သူအမည်' : 'Reviewer name'}
+          aria-label={locale === 'mm' ? 'သုံးသပ်သူအမည်' : 'Reviewer name'}
+          className="rounded-lg border border-line px-3 py-2 text-sm disabled:bg-canvas"
+        />
         {['clinical_reviewer', 'evidence_reviewer'].includes(role) && (
-          <>
-            <input
-              value={displayName}
-              disabled={mine || busy}
-              onChange={(event) => setDisplayName(event.target.value)}
-              placeholder={locale === 'mm' ? 'သုံးသပ်သူအမည်' : 'Reviewer name'}
-              className="rounded-lg border border-line px-3 py-2 text-sm"
-            />
-            <input
-              value={qualification}
-              disabled={mine || busy}
-              onChange={(event) => setQualification(event.target.value)}
-              placeholder={locale === 'mm' ? 'ပညာအရည်အချင်း' : 'Professional qualification'}
-              className="rounded-lg border border-line px-3 py-2 text-sm"
-            />
-          </>
+          <input
+            value={qualification}
+            disabled={mine || busy}
+            onChange={(event) => setQualification(event.target.value)}
+            placeholder={locale === 'mm' ? 'ပညာအရည်အချင်း' : 'Professional qualification'}
+            aria-label={locale === 'mm' ? 'ပညာအရည်အချင်း' : 'Professional qualification'}
+            className="rounded-lg border border-line px-3 py-2 text-sm"
+          />
         )}
       </div>
       <p className="rounded-lg bg-canvas px-3 py-2 text-xs text-ink-soft">{ROLE_DESCRIPTIONS[role][locale]}</p>
@@ -148,6 +152,8 @@ export function AdminTeam() {
             : 'You can invite someone before they create an account. Send the private link only to them; they must sign up or sign in with the exact invited email.'}
         </p>
       </div>
+
+      <OwnDisplayName currentName={team.members.find((member) => member.userId === team.currentUserId)?.displayName ?? null} />
 
       <form
         className="space-y-3 rounded-card border border-line bg-white p-4 shadow-card"

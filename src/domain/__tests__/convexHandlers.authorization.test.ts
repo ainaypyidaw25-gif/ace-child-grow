@@ -12,12 +12,12 @@ vi.mock('@convex-dev/auth/server', async (importOriginal) => {
 
 import { list as listChildren, update as updateChild } from '../../../convex/children';
 import { importSeed, listByType, setReview as setLibraryReview, updateDraft } from '../../../convex/library';
-import { listForContent as listContentReviews, saveDecision } from '../../../convex/contentReviews';
+import { activity as reviewerActivity, listForContent as listContentReviews, saveDecision } from '../../../convex/contentReviews';
 import { forContent as evidenceForContent, setReview as setEvidenceReview } from '../../../convex/evidence';
 import { transition as transitionContent } from '../../../convex/content';
 import { listSessions, recordSession } from '../../../convex/milestones';
 import { complete as completeActivity, list as listActivities } from '../../../convex/activities';
-import { claimInvite, createInvite } from '../../../convex/admin';
+import { claimInvite, createInvite, setOwnDisplayName } from '../../../convex/admin';
 
 type Row = Record<string, unknown> & { _id?: string };
 
@@ -260,10 +260,79 @@ describe('Convex registered handlers enforce authorization', () => {
       },
       rows: { libraryContent: [{ _id: 'content-1', slug: 'item-1', version: 1 }] },
     });
+    // Refused in-band, not thrown: a thrown mutation reaches the reviewer as an
+    // opaque "Server Error" on a production deployment and rolls back the audit
+    // row that records the refusal.
     await expect(handler(saveDecision)(context, {
       contentSlug: 'item-1', dimension: 'clinical', decision: 'approved',
-    })).rejects.toThrow('cannot decide this review area');
+    })).resolves.toEqual({
+      ok: false,
+      code: 'role_may_not_review_area',
+      message: 'Your reviewer role cannot decide this review area.',
+    });
     expect(context.db.patch).not.toHaveBeenCalled();
+    // No decision recorded, but the refusal is audited.
+    expect(context.db.insert).not.toHaveBeenCalledWith('contentReviews', expect.anything());
+    expect(context.db.insert).toHaveBeenCalledWith('auditLogs', expect.objectContaining({
+      result: 'rejected',
+      summary: 'item-1 \u00b7 refused: role_may_not_review_area',
+    }));
+  });
+
+  it('every review refusal reaches the reviewer as a code instead of an opaque server error', async () => {
+    const cases = [
+      {
+        name: 'missing display name',
+        profile: { userId: 'u-1', isStaff: true, staffRole: 'language_reviewer' },
+        args: { contentSlug: 'item-1', dimension: 'native_myanmar', decision: 'approved' },
+        code: 'display_name_required',
+      },
+      {
+        name: 'approval without a stated qualification',
+        profile: { userId: 'u-1', isStaff: true, staffRole: 'clinical_reviewer', displayName: 'Dr Someone' },
+        args: { contentSlug: 'item-1', dimension: 'clinical', decision: 'approved' },
+        code: 'qualification_required',
+      },
+      {
+        name: 'changes requested with no note',
+        profile: { userId: 'u-1', isStaff: true, staffRole: 'language_reviewer', displayName: 'Reviewer' },
+        args: { contentSlug: 'item-1', dimension: 'native_myanmar', decision: 'changes_requested' },
+        code: 'note_required',
+      },
+      {
+        name: 'support role',
+        profile: { userId: 'u-1', isStaff: true, staffRole: 'support', displayName: 'Helper' },
+        args: { contentSlug: 'item-1', dimension: 'native_myanmar', decision: 'in_review' },
+        code: 'not_staff',
+      },
+    ];
+
+    for (const testCase of cases) {
+      authState.userId = 'u-1';
+      const context = ctx({
+        profile: testCase.profile,
+        rows: { libraryContent: [{ _id: 'content-1', slug: 'item-1', reviewRevision: 1 }] },
+      });
+      const result = await handler(saveDecision)(context, testCase.args) as { ok: boolean; code: string };
+      expect(result.ok, testCase.name).toBe(false);
+      expect(result.code, testCase.name).toBe(testCase.code);
+      expect(context.db.insert, testCase.name).not.toHaveBeenCalledWith('contentReviews', expect.anything());
+    }
+  });
+
+  it('a missing content item is refused in-band rather than thrown', async () => {
+    authState.userId = 'owner-1';
+    const context = ctx({
+      profile: { userId: 'owner-1', isStaff: true, staffRole: 'owner', displayName: 'Owner' },
+      rows: { libraryContent: [] },
+    });
+    await expect(handler(saveDecision)(context, {
+      contentSlug: 'gone', dimension: 'native_myanmar', decision: 'in_review',
+    })).resolves.toEqual({
+      ok: false,
+      code: 'content_not_found',
+      message: 'This content item no longer exists.',
+    });
   });
 
   it('a qualified clinical reviewer can record a version-bound safety decision', async () => {
@@ -493,5 +562,176 @@ describe('Convex registered handlers enforce authorization', () => {
     })).rejects.toThrow('Not found');
     await expect(handler(listActivities)(context, { childId: 'child-1' })).rejects.toThrow('Not found');
     expect(context.db.insert).not.toHaveBeenCalled();
+  });
+  // --- reviewer activity (owner-visible cross-content review history) ---------
+
+  const activityRows = [
+    {
+      _id: 'r-3', contentSlug: 'item-2', contentVersion: 1, dimension: 'clinical',
+      decision: 'approved', reviewerId: 'clinical-1', reviewerDisplayName: 'Dr Reviewer',
+      reviewerQualification: 'MBBS', reviewerRole: 'clinical_reviewer', reviewedAt: 300, note: 'ok',
+    },
+    {
+      _id: 'r-2', contentSlug: 'item-1', contentVersion: 1, dimension: 'clinical',
+      decision: 'changes_requested', reviewerId: 'clinical-1', reviewerDisplayName: 'Dr Reviewer',
+      reviewerQualification: 'MBBS', reviewerRole: 'clinical_reviewer', reviewedAt: 200, note: 'fix wording',
+    },
+    {
+      _id: 'r-1', contentSlug: 'item-1', contentVersion: 1, dimension: 'native_myanmar',
+      decision: 'approved', reviewerId: 'lang-1', reviewerDisplayName: 'Language Reviewer',
+      reviewerRole: 'language_reviewer', reviewedAt: 100,
+    },
+  ];
+
+  const activityCtx = (profile: Row | null) => ctx({
+    profile,
+    rows: { contentReviews: activityRows },
+  });
+
+  it('reviewer activity is refused to parents, support and reviewer roles, and returns no rows', async () => {
+    authState.userId = 'user-1';
+    const refused = { allowed: false, truncated: false, totalScanned: 0, decisions: [], reviewers: [] };
+
+    // A parent with no staff profile.
+    await expect(handler(reviewerActivity)(activityCtx(null), {})).resolves.toEqual(refused);
+
+    for (const role of ['support', 'language_reviewer', 'evidence_reviewer', 'clinical_reviewer']) {
+      const context = activityCtx({ userId: 'user-1', isStaff: true, staffRole: role, displayName: 'Someone' });
+      await expect(handler(reviewerActivity)(context, {})).resolves.toEqual(refused);
+    }
+  });
+
+  it('reviewer activity aggregates every reviewer for the owner without losing decisions', async () => {
+    authState.userId = 'owner-1';
+    const context = activityCtx({ userId: 'owner-1', isStaff: true, staffRole: 'owner', displayName: 'Owner' });
+    const result = await handler(reviewerActivity)(context, {}) as {
+      allowed: boolean;
+      truncated: boolean;
+      decisions: { _id: string }[];
+      reviewers: {
+        displayName: string; total: number; approved: number; changesRequested: number;
+        distinctItems: number; lastReviewedAt: number | null; qualification: string | null;
+      }[];
+    };
+
+    expect(result.allowed).toBe(true);
+    expect(result.truncated).toBe(false);
+    // Every decision is listed, newest first — nothing is collapsed away.
+    expect(result.decisions.map((d) => d._id)).toEqual(['r-3', 'r-2', 'r-1']);
+
+    // Sorted by most recent activity.
+    expect(result.reviewers.map((r) => r.displayName)).toEqual(['Dr Reviewer', 'Language Reviewer']);
+    const [clinical, language] = result.reviewers;
+    expect(clinical).toMatchObject({
+      total: 2, approved: 1, changesRequested: 1, distinctItems: 2,
+      lastReviewedAt: 300, qualification: 'MBBS',
+    });
+    expect(language).toMatchObject({
+      total: 1, approved: 1, changesRequested: 0, distinctItems: 1,
+      lastReviewedAt: 100, qualification: null,
+    });
+  });
+
+  it('reviewer activity filters the log but keeps the summary whole, and content editors may read it', async () => {
+    authState.userId = 'editor-1';
+    const context = activityCtx({ userId: 'editor-1', isStaff: true, staffRole: 'content_editor', displayName: 'Editor' });
+    const result = await handler(reviewerActivity)(context, { decision: 'approved' }) as {
+      allowed: boolean;
+      decisions: { _id: string }[];
+      reviewers: { total: number }[];
+    };
+
+    expect(result.allowed).toBe(true);
+    expect(result.decisions.map((d) => d._id)).toEqual(['r-3', 'r-1']);
+    // The summary still counts all three decisions, so filtering the view cannot
+    // silently understate a reviewer's workload.
+    expect(result.reviewers.reduce((sum, r) => sum + r.total, 0)).toBe(3);
+  });
+  // --- self-service reviewer display name -----------------------------------
+  // saveDecision refuses a reviewer with no display name, and changeRole refuses
+  // your own account, so without this a bootstrapped staff member was locked out
+  // of reviewing permanently.
+
+  it('a staff member can set their own display name, and the change is audited', async () => {
+    authState.userId = 'owner-1';
+    const context = ctx({
+      profile: { _id: 'profile-1', userId: 'owner-1', isStaff: true, staffRole: 'owner', displayName: undefined },
+    });
+    await expect(handler(setOwnDisplayName)(context, { displayName: '  La Pyae Wun  ' }))
+      .resolves.toEqual({ ok: true });
+    expect(context.db.patch).toHaveBeenCalledWith('profile-1', { displayName: 'La Pyae Wun' });
+    expect(context.db.insert).toHaveBeenCalledWith('auditLogs', expect.objectContaining({
+      action: 'staff.displayName.setOwn',
+      after: 'La Pyae Wun',
+    }));
+  });
+
+  it('setting a display name refuses a non-staff account and writes nothing', async () => {
+    authState.userId = 'parent-1';
+    const context = ctx({ profile: { _id: 'profile-9', userId: 'parent-1' } });
+    await expect(handler(setOwnDisplayName)(context, { displayName: 'Someone' }))
+      .rejects.toThrow('Staff access is required');
+    expect(context.db.patch).not.toHaveBeenCalled();
+  });
+
+  it('setting a display name rejects blank and over-long names', async () => {
+    authState.userId = 'owner-1';
+    const profile = { _id: 'profile-1', userId: 'owner-1', isStaff: true, staffRole: 'owner' };
+    const blank = ctx({ profile });
+    await expect(handler(setOwnDisplayName)(blank, { displayName: '   ' }))
+      .rejects.toThrow('A name is required');
+    const long = ctx({ profile });
+    await expect(handler(setOwnDisplayName)(long, { displayName: 'x'.repeat(121) }))
+      .rejects.toThrow('too long');
+    expect(blank.db.patch).not.toHaveBeenCalled();
+    expect(long.db.patch).not.toHaveBeenCalled();
+  });
+
+  it('setting your own name cannot grant a professional qualification', async () => {
+    authState.userId = 'owner-1';
+    const context = ctx({
+      profile: { _id: 'profile-1', userId: 'owner-1', isStaff: true, staffRole: 'owner' },
+    });
+    await handler(setOwnDisplayName)(context, { displayName: 'Reviewer' });
+    // Only displayName is written — a reviewer must never self-assert credentials.
+    expect(context.db.patch).toHaveBeenCalledWith('profile-1', { displayName: 'Reviewer' });
+    const patched = (context.db.patch as unknown as { mock: { calls: unknown[][] } }).mock.calls[0][1] as Record<string, unknown>;
+    expect(Object.keys(patched)).toEqual(['displayName']);
+  });
+  // --- duplicate email accounts ---------------------------------------------
+  // One person can hold several user rows when they have signed in through more
+  // than one provider (e.g. Google and email+PIN). `.unique()` threw on that,
+  // which reached the caller as an opaque "Server Error".
+
+  it('inviting an email that already has two accounts refuses with a usable reason', async () => {
+    authState.userId = 'owner-1';
+    const context = ctx({
+      profile: { userId: 'owner-1', isStaff: true, staffRole: 'owner' },
+      rows: {
+        users: [
+          { _id: 'user-google', email: 'dupe@example.com' },
+          { _id: 'user-pin', email: 'dupe@example.com' },
+        ],
+      },
+    });
+    await expect(handler(createInvite)(context, {
+      email: 'dupe@example.com', displayName: 'Someone', role: 'content_editor',
+    })).rejects.toThrow('More than one account already uses this email');
+    // Nothing is written when the address is ambiguous.
+    expect(context.db.insert).not.toHaveBeenCalledWith('staffInvites', expect.anything());
+  });
+
+  it('inviting an email with a single account still resolves that account', async () => {
+    authState.userId = 'owner-1';
+    const context = ctx({
+      profile: { userId: 'owner-1', isStaff: true, staffRole: 'owner' },
+      rows: { users: [{ _id: 'user-pin', email: 'solo@example.com' }] },
+    });
+    await handler(createInvite)(context, {
+      email: 'solo@example.com', displayName: 'Someone', role: 'content_editor',
+    });
+    expect(context.db.insert).toHaveBeenCalledWith('staffInvites', expect.objectContaining({
+      email: 'solo@example.com', targetUserId: 'user-pin',
+    }));
   });
 });

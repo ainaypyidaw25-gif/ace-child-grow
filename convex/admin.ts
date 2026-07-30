@@ -141,10 +141,21 @@ export const createInvite = mutation({
     const displayName = args.displayName.trim();
     if (!email.includes('@')) throw new Error('A valid email address is required');
     if (!displayName) throw new Error('A team member name is required');
-    const targetUser = await ctx.db
+    // NOT .unique(): one email can legitimately have more than one user row when
+    // an account exists under several sign-in providers (e.g. Google and
+    // email+PIN). .unique() throws on that, and a thrown Convex error reaches the
+    // caller as an opaque "Server Error", so inviting such an address failed with
+    // no usable explanation. Refuse explicitly instead, naming what to fix.
+    const targetUsers = await ctx.db
       .query('users')
       .withIndex('email', (q) => q.eq('email', email))
-      .unique();
+      .take(2);
+    if (targetUsers.length > 1) {
+      throw new Error(
+        'More than one account already uses this email address. Resolve the duplicate before inviting it.',
+      );
+    }
+    const targetUser = targetUsers[0] ?? null;
     const qualification = args.reviewerQualification?.trim();
     if (['clinical_reviewer', 'evidence_reviewer'].includes(args.role) && !qualification) {
       throw new Error('A professional qualification is required for this reviewer role');
@@ -230,6 +241,53 @@ export const revokeInvite = mutation({
     if (!invite || invite.status !== 'pending') return { ok: false };
     await ctx.db.patch(invite._id, { status: 'revoked' });
     await logAudit(ctx, ownerId, 'staff.invite.revoke', 'staffInvites', invite._id, invite.email);
+    return { ok: true };
+  },
+});
+
+/**
+ * A staff member sets their OWN reviewer display name.
+ *
+ * Without this there was no route at all: `changeRole` refuses
+ * `ownerId === args.userId`, and the team screen only offered a name field for
+ * clinical/evidence reviewers. A staff account created by bootstrap rather than
+ * by invite therefore had no display name and no way to acquire one — and
+ * `contentReviews.saveDecision` refuses any decision from a reviewer without
+ * one, so that account could never record a review. This closes that lockout.
+ *
+ * Name only. The professional qualification stays owner-assigned on purpose: it
+ * is the claim that lets a clinical or evidence approval count as a sign-off,
+ * and a reviewer self-asserting their own credentials would hollow out that
+ * gate. Recording who you are is not the same as certifying what you are.
+ */
+export const setOwnDisplayName = mutation({
+  args: { displayName: v.string() },
+  returns: v.object({ ok: v.boolean() }),
+  handler: async (ctx, args) => {
+    const userId = await requireUser(ctx);
+    const access = await getStaffAccess(ctx, userId);
+    if (!access) throw new Error('Staff access is required');
+    const displayName = args.displayName.trim();
+    if (!displayName) throw new Error('A name is required');
+    if (displayName.length > 120) throw new Error('That name is too long');
+    const profile = await ctx.db
+      .query('parentProfiles')
+      .withIndex('by_user', (q) => q.eq('userId', userId))
+      .unique();
+    if (!profile?.isStaff) return { ok: false };
+    const before = profile.displayName?.trim() || '(none)';
+    await ctx.db.patch(profile._id, { displayName });
+    // The reviewer name appears in the clinical audit trail, so a change to it
+    // is itself auditable.
+    await logAudit(
+      ctx,
+      userId,
+      'staff.displayName.setOwn',
+      'parentProfiles',
+      profile._id,
+      `${before} → ${displayName}`,
+      { result: 'ok', before, after: displayName },
+    );
     return { ok: true };
   },
 });
