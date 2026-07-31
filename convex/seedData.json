@@ -5406,8 +5406,8 @@
   },
   {
     "category": "autism",
-    "summaryMm": "အော်တစ်ဇင်သည် ကလေးက ကမ္ဘာကို ကွဲပြားစွာ ခံစား၊ ဆက်သွယ်ပုံဖြစ်သည်။ ရောဂါတစ်ခု မဟုတ်ဘဲ ဖွံ့ဖြိုးမှု ကွဲပြားမှုဖြစ်၍ ကလေးတိုင်း မတူပါ။",
-    "summaryEn": "Autism is a different way of experiencing and communicating with the world. It is a developmental difference, not an illness, and every child is unique.",
+    "summaryMm": "အော်တစ်ဇင်သည် ကလေးက ကမ္ဘာကို ကွဲပြားစွာ ခံစား၊ ဆက်သွယ်ပုံဖြစ်သည်။ ရောဂါတစ်ခု မဟုတ်ဘဲ ဖွံ့ဖြိုးမှု ကွဲပြားမှု ဖြစ်ပါသည်။ လိုအပ်သော ပံ့ပိုးမှုမှာ ကလေးအလိုက် အလွန်ကွာခြားပါသည် — အနည်းငယ်သာ လိုအပ်သူရှိသလို၊ နေ့စဉ်ဘဝတွင် များစွာ လိုအပ်သူလည်း ရှိပါသည်။ ကလေးတိုင်း မတူပါ။",
+    "summaryEn": "Autism is a different way of experiencing and communicating with the world. It is a developmental difference, not an illness. Support needs vary widely: some children need a little help, others need a great deal of daily support. Every child is unique.",
     "tags": [
       "autism",
       "hope_center",
@@ -5415,8 +5415,8 @@
     ],
     "data": {
       "overview": {
-        "mm": "အော်တစ်ဇင်သည် ကလေးက ကမ္ဘာကို ကွဲပြားစွာ ခံစား၊ ဆက်သွယ်ပုံဖြစ်သည်။ ရောဂါတစ်ခု မဟုတ်ဘဲ ဖွံ့ဖြိုးမှု ကွဲပြားမှုဖြစ်၍ ကလေးတိုင်း မတူပါ။",
-        "en": "Autism is a different way of experiencing and communicating with the world. It is a developmental difference, not an illness, and every child is unique."
+        "mm": "အော်တစ်ဇင်သည် ကလေးက ကမ္ဘာကို ကွဲပြားစွာ ခံစား၊ ဆက်သွယ်ပုံဖြစ်သည်။ ရောဂါတစ်ခု မဟုတ်ဘဲ ဖွံ့ဖြိုးမှု ကွဲပြားမှု ဖြစ်ပါသည်။ လိုအပ်သော ပံ့ပိုးမှုမှာ ကလေးအလိုက် အလွန်ကွာခြားပါသည် — အနည်းငယ်သာ လိုအပ်သူရှိသလို၊ နေ့စဉ်ဘဝတွင် များစွာ လိုအပ်သူလည်း ရှိပါသည်။ ကလေးတိုင်း မတူပါ။",
+        "en": "Autism is a different way of experiencing and communicating with the world. It is a developmental difference, not an illness. Support needs vary widely: some children need a little help, others need a great deal of daily support. Every child is unique."
       },
       "strengths": [
         {
@@ -5434,16 +5434,28 @@
       ],
       "possibleSigns": [
         {
-          "mm": "မျက်လုံးချင်းဆုံမှု/လက်ညွှန်ခြင်း အလွန်နည်းခြင်း",
-          "en": "Very limited eye contact or pointing"
+          "mm": "၉ လအရွယ်တွင် — ကိုယ့်နာမည်ခေါ်လျှင် မတုံ့ပြန်ခြင်း",
+          "en": "By 9 months: does not respond to their own name"
         },
         {
-          "mm": "ထပ်ခါလုပ်သော လှုပ်ရှားမှုများ",
-          "en": "Repeated movements or routines"
+          "mm": "၁၂ လအရွယ်တွင် — လက်ဟန်ခြေဟန် အလွန်နည်းခြင်း (ဥပမာ — နှုတ်ဆက်ရာတွင် လက်မပြခြင်း)",
+          "en": "By 12 months: uses few or no gestures, for example does not wave goodbye"
         },
         {
-          "mm": "အသံ/အလင်း/ထိတွေ့မှုကို ခံစားမှု ကွဲပြားခြင်း",
-          "en": "Strong reactions to sounds, light, or textures"
+          "mm": "၁၈ လအရွယ်တွင် — စိတ်ဝင်စားစရာကို ပြရန် လက်မညွှန်ခြင်း",
+          "en": "By 18 months: does not point to show you something interesting"
+        },
+        {
+          "mm": "၂၄ လအရွယ်တွင် — သူတစ်ပါး နာကျင်/စိတ်မကောင်းဖြစ်နေသည်ကို မသတိထားခြင်း",
+          "en": "By 24 months: does not notice when others are hurt or upset"
+        },
+        {
+          "mm": "အသက်မရွေး — ယခင်တတ်ခဲ့သော စကား၊ အသံ သို့မဟုတ် လူမှုဆက်ဆံရေး ကျွမ်းကျင်မှုများ ပျောက်သွားပါက စောင့်မနေဘဲ ကျန်းမာရေးဝန်ထမ်းနှင့် အမြန်ပြသပါ။",
+          "en": "At any age: loses speech, babbling or social skills they previously had — see a health professional promptly, do not wait"
+        },
+        {
+          "mm": "အသံ၊ အနံ့၊ အရသာ၊ အမြင်၊ ထိတွေ့မှုတို့ကို ထူးခြားစွာ တုံ့ပြန်ခြင်း",
+          "en": "Unusual reactions to how things sound, smell, taste, look or feel"
         },
         {
           "mm": "ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။",
@@ -5457,8 +5469,8 @@
             "en": "Vaccines cause autism"
           },
           "fact": {
-            "mm": "မဟုတ်ပါ — သိပ္ပံနည်းကျ သက်သေမပြနိုင်ပါ။",
-            "en": "No — this is not supported by science."
+            "mm": "မဟုတ်ပါ။ ကမ္ဘာ့ကျန်းမာရေးအဖွဲ့ (WHO) ၏ ကာကွယ်ဆေး ဘေးကင်းရေး ကော်မတီသည် ၂၀၁၀ မှ ၂၀၂၅ အတွင်း ထုတ်ဝေခဲ့သော လေ့လာမှု ၃၁ ခုကို ပြန်လည်သုံးသပ်ပြီး ဆက်စပ်မှု မရှိကြောင်း အတည်ပြုခဲ့ပါသည်။ ကလေး ၆၅၇,၄၆၁ ဦးအပေါ် လေ့လာမှုတစ်ခုကလည်း MMR ကာကွယ်ဆေးနှင့် အော်တစ်ဇင် ဆက်စပ်မှု မတွေ့ရှိခဲ့ပါ။",
+            "en": "No. The World Health Organization’s vaccine-safety committee reviewed 31 studies published between 2010 and 2025 and confirmed there is no causal link. A study of 657,461 children found no link between the MMR vaccine and autism."
           }
         },
         {
@@ -5520,7 +5532,11 @@
       ],
       "relatedMilestones": [],
       "references": [
-        "Pending clinical reviewer: attach verified national/child-health references before publication."
+        "CDC. Signs and Symptoms of Autism Spectrum Disorder. https://www.cdc.gov/autism/signs-symptoms/index.html (accessed 2026-07-31)",
+        "WHO Global Advisory Committee on Vaccine Safety. Statement on vaccines and autism, 11 December 2025. https://www.who.int/news/item/11-12-2025-statement-gacvs-vaccines-autism",
+        "Hviid A, Hansen JV, Frisch M, Melbye M. Measles, Mumps, Rubella Vaccination and Autism: A Nationwide Cohort Study. Ann Intern Med. 2019;170(8):513–520.",
+        "Lipkin PH, Macias MM. Promoting Optimal Development… Developmental Surveillance and Screening. Pediatrics. 2020;145(1):e20193449.",
+        "Clinical review still outstanding: sources verified against public guidance and the wording accepted by the product owner, but no qualified clinical reviewer has signed off this page."
       ]
     },
     "media": [
@@ -5537,7 +5553,7 @@
     "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
     "version": 1,
     "clinicalStatus": "clinical_review",
-    "searchText": "အော်တစ်ဇင် (autism) သိရှိနားလည်မှု understanding autism အော်တစ်ဇင်သည် ကလေးက ကမ္ဘာကို ကွဲပြားစွာ ခံစား၊ ဆက်သွယ်ပုံဖြစ်သည်။ ရောဂါတစ်ခု မဟုတ်ဘဲ ဖွံ့ဖြိုးမှု ကွဲပြားမှုဖြစ်၍ ကလေးတိုင်း မတူပါ။ autism is a different way of experiencing and communicating with the world. it is a developmental difference, not an illness, and every child is unique. autism hope_center special_needs အော်တစ်ဇင်သည် ကလေးက ကမ္ဘာကို ကွဲပြားစွာ ခံစား၊ ဆက်သွယ်ပုံဖြစ်သည်။ ရောဂါတစ်ခု မဟုတ်ဘဲ ဖွံ့ဖြိုးမှု ကွဲပြားမှုဖြစ်၍ ကလေးတိုင်း မတူပါ။ autism is a different way of experiencing and communicating with the world. it is a developmental difference, not an illness, and every child is unique. အသေးစိတ် သတိပြုနိုင်မှု strong attention to detail စိတ်ဝင်စားရာတွင် နက်နဲသော အာရုံစိုက်မှု deep focus on interests ရိုးသားမှုနှင့် ပုံစံကျ တွေးခေါ်မှု honesty and pattern thinking မျက်လုံးချင်းဆုံမှု/လက်ညွှန်ခြင်း အလွန်နည်းခြင်း very limited eye contact or pointing ထပ်ခါလုပ်သော လှုပ်ရှားမှုများ repeated movements or routines အသံ/အလင်း/ထိတွေ့မှုကို ခံစားမှု ကွဲပြားခြင်း strong reactions to sounds, light, or textures ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။ these are awareness points, not a diagnosis — if concerned, consult a professional. အော်တစ်ဇင်ကို ကာကွယ်ဆေးက ဖြစ်စေသည် vaccines cause autism မဟုတ်ပါ — သိပ္ပံနည်းကျ သက်သေမပြနိုင်ပါ။ no — this is not supported by science. အော်တစ်ဇင်ကလေးများ ချစ်ခြင်းမေတ္တာ မခံစားနိုင် autistic children can’t feel love မှားပါသည် — သူတို့ ကွဲပြားစွာ ဖော်ပြတတ်ကြသည်။ false — they express affection in their own ways. ရှင်းလင်းသော လုပ်ရိုးလုပ်စဉ်နှင့် ပုံရိပ် အစီအစဉ်ဇယား သုံးပါ။ use clear routines and visual schedules. စိတ်ဝင်စားရာကို အသုံးပြု၍ ဆက်သွယ်ပါ။ connect through their interests. တည်ငြိမ်သော ပတ်ဝန်းကျင်နှင့် ကြိုတင် သတိပေးမှုများ ပေးပါ။ provide a calm setting and advance warnings for changes. ကလေးဖွံ့ဖြိုးမှုဆိုင်ရာ ဆရာဝန်၊ စကားပြောနှင့် ဘာသာစကားဆိုင်ရာ ပညာရှင်၊ နေ့စဉ်လုပ်ဆောင်မှုစွမ်းရည် ပြန်လည်လေ့ကျင့်ပေးသည့် ပညာရှင်တို့နှင့် တိုင်ပင်ပါ။ work with a developmental pediatrician, speech and occupational therapists. စိတ်ဝင်စားရာ အကြောင်းအရာဖြင့် အလှည့်ကျ ကစားပါ။ turn-taking games around a favorite topic. စောစီးစွာ ပံ့ပိုးမှုက အကျိုးရှိပါသလား။ does early support help? ရှိပါသည် — စောစီးစွာ ပံ့ပိုးမှုက ဆက်သွယ်မှုနှင့် ကျွမ်းကျင်မှုကို အထောက်အကူပြုနိုင်သည်။ yes — early support can help communication and skills. lsn_special_needs_awareness act_feeling_faces pending clinical reviewer: attach verified national/child-health references before publication."
+    "searchText": "အော်တစ်ဇင် (autism) သိရှိနားလည်မှု understanding autism အော်တစ်ဇင်သည် ကလေးက ကမ္ဘာကို ကွဲပြားစွာ ခံစား၊ ဆက်သွယ်ပုံဖြစ်သည်။ ရောဂါတစ်ခု မဟုတ်ဘဲ ဖွံ့ဖြိုးမှု ကွဲပြားမှု ဖြစ်ပါသည်။ လိုအပ်သော ပံ့ပိုးမှုမှာ ကလေးအလိုက် အလွန်ကွာခြားပါသည် — အနည်းငယ်သာ လိုအပ်သူရှိသလို၊ နေ့စဉ်ဘဝတွင် များစွာ လိုအပ်သူလည်း ရှိပါသည်။ ကလေးတိုင်း မတူပါ။ autism is a different way of experiencing and communicating with the world. it is a developmental difference, not an illness. support needs vary widely: some children need a little help, others need a great deal of daily support. every child is unique. autism hope_center special_needs အော်တစ်ဇင်သည် ကလေးက ကမ္ဘာကို ကွဲပြားစွာ ခံစား၊ ဆက်သွယ်ပုံဖြစ်သည်။ ရောဂါတစ်ခု မဟုတ်ဘဲ ဖွံ့ဖြိုးမှု ကွဲပြားမှု ဖြစ်ပါသည်။ လိုအပ်သော ပံ့ပိုးမှုမှာ ကလေးအလိုက် အလွန်ကွာခြားပါသည် — အနည်းငယ်သာ လိုအပ်သူရှိသလို၊ နေ့စဉ်ဘဝတွင် များစွာ လိုအပ်သူလည်း ရှိပါသည်။ ကလေးတိုင်း မတူပါ။ autism is a different way of experiencing and communicating with the world. it is a developmental difference, not an illness. support needs vary widely: some children need a little help, others need a great deal of daily support. every child is unique. အသေးစိတ် သတိပြုနိုင်မှု strong attention to detail စိတ်ဝင်စားရာတွင် နက်နဲသော အာရုံစိုက်မှု deep focus on interests ရိုးသားမှုနှင့် ပုံစံကျ တွေးခေါ်မှု honesty and pattern thinking ၉ လအရွယ်တွင် — ကိုယ့်နာမည်ခေါ်လျှင် မတုံ့ပြန်ခြင်း by 9 months: does not respond to their own name ၁၂ လအရွယ်တွင် — လက်ဟန်ခြေဟန် အလွန်နည်းခြင်း (ဥပမာ — နှုတ်ဆက်ရာတွင် လက်မပြခြင်း) by 12 months: uses few or no gestures, for example does not wave goodbye ၁၈ လအရွယ်တွင် — စိတ်ဝင်စားစရာကို ပြရန် လက်မညွှန်ခြင်း by 18 months: does not point to show you something interesting ၂၄ လအရွယ်တွင် — သူတစ်ပါး နာကျင်/စိတ်မကောင်းဖြစ်နေသည်ကို မသတိထားခြင်း by 24 months: does not notice when others are hurt or upset အသက်မရွေး — ယခင်တတ်ခဲ့သော စကား၊ အသံ သို့မဟုတ် လူမှုဆက်ဆံရေး ကျွမ်းကျင်မှုများ ပျောက်သွားပါက စောင့်မနေဘဲ ကျန်းမာရေးဝန်ထမ်းနှင့် အမြန်ပြသပါ။ at any age: loses speech, babbling or social skills they previously had — see a health professional promptly, do not wait အသံ၊ အနံ့၊ အရသာ၊ အမြင်၊ ထိတွေ့မှုတို့ကို ထူးခြားစွာ တုံ့ပြန်ခြင်း unusual reactions to how things sound, smell, taste, look or feel ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။ these are awareness points, not a diagnosis — if concerned, consult a professional. အော်တစ်ဇင်ကို ကာကွယ်ဆေးက ဖြစ်စေသည် vaccines cause autism မဟုတ်ပါ။ ကမ္ဘာ့ကျန်းမာရေးအဖွဲ့ (who) ၏ ကာကွယ်ဆေး ဘေးကင်းရေး ကော်မတီသည် ၂၀၁၀ မှ ၂၀၂၅ အတွင်း ထုတ်ဝေခဲ့သော လေ့လာမှု ၃၁ ခုကို ပြန်လည်သုံးသပ်ပြီး ဆက်စပ်မှု မရှိကြောင်း အတည်ပြုခဲ့ပါသည်။ ကလေး ၆၅၇,၄၆၁ ဦးအပေါ် လေ့လာမှုတစ်ခုကလည်း mmr ကာကွယ်ဆေးနှင့် အော်တစ်ဇင် ဆက်စပ်မှု မတွေ့ရှိခဲ့ပါ။ no. the world health organization’s vaccine-safety committee reviewed 31 studies published between 2010 and 2025 and confirmed there is no causal link. a study of 657,461 children found no link between the mmr vaccine and autism. အော်တစ်ဇင်ကလေးများ ချစ်ခြင်းမေတ္တာ မခံစားနိုင် autistic children can’t feel love မှားပါသည် — သူတို့ ကွဲပြားစွာ ဖော်ပြတတ်ကြသည်။ false — they express affection in their own ways. ရှင်းလင်းသော လုပ်ရိုးလုပ်စဉ်နှင့် ပုံရိပ် အစီအစဉ်ဇယား သုံးပါ။ use clear routines and visual schedules. စိတ်ဝင်စားရာကို အသုံးပြု၍ ဆက်သွယ်ပါ။ connect through their interests. တည်ငြိမ်သော ပတ်ဝန်းကျင်နှင့် ကြိုတင် သတိပေးမှုများ ပေးပါ။ provide a calm setting and advance warnings for changes. ကလေးဖွံ့ဖြိုးမှုဆိုင်ရာ ဆရာဝန်၊ စကားပြောနှင့် ဘာသာစကားဆိုင်ရာ ပညာရှင်၊ နေ့စဉ်လုပ်ဆောင်မှုစွမ်းရည် ပြန်လည်လေ့ကျင့်ပေးသည့် ပညာရှင်တို့နှင့် တိုင်ပင်ပါ။ work with a developmental pediatrician, speech and occupational therapists. စိတ်ဝင်စားရာ အကြောင်းအရာဖြင့် အလှည့်ကျ ကစားပါ။ turn-taking games around a favorite topic. စောစီးစွာ ပံ့ပိုးမှုက အကျိုးရှိပါသလား။ does early support help? ရှိပါသည် — စောစီးစွာ ပံ့ပိုးမှုက ဆက်သွယ်မှုနှင့် ကျွမ်းကျင်မှုကို အထောက်အကူပြုနိုင်သည်။ yes — early support can help communication and skills. lsn_special_needs_awareness act_feeling_faces cdc. signs and symptoms of autism spectrum disorder. https://www.cdc.gov/autism/signs-symptoms/index.html (accessed 2026-07-31) who global advisory committee on vaccine safety. statement on vaccines and autism, 11 december 2025. https://www.who.int/news/item/11-12-2025-statement-gacvs-vaccines-autism hviid a, hansen jv, frisch m, melbye m. measles, mumps, rubella vaccination and autism: a nationwide cohort study. ann intern med. 2019;170(8):513–520. lipkin ph, macias mm. promoting optimal development… developmental surveillance and screening. pediatrics. 2020;145(1):e20193449. clinical review still outstanding: sources verified against public guidance and the wording accepted by the product owner, but no qualified clinical reviewer has signed off this page."
   },
   {
     "category": "speech_delay",
@@ -5565,12 +5581,24 @@
       ],
       "possibleSigns": [
         {
-          "mm": "၂ နှစ်တွင် စကားလုံး အလွန်နည်းခြင်း",
-          "en": "Very few words by age 2"
+          "mm": "၁၂ လတွင် — အသံမထွက်ခြင်း၊ လက်ညွှန်ခြင်း/လက်ပြခြင်း စသည့် လက်ဟန်များ မသုံးခြင်း",
+          "en": "By 12 months: not babbling, not using gestures such as pointing or waving"
         },
         {
-          "mm": "ညွှန်ကြားချက် နားလည်ရ ခက်ခြင်း",
-          "en": "Difficulty understanding directions"
+          "mm": "၁၈ လတွင် — စကားပြောထက် လက်ဟန်ကို ပိုသုံးခြင်း၊ အသံလိုက်ဆိုရန် ခက်ခဲခြင်း",
+          "en": "By 18 months: prefers gestures over speaking, has difficulty copying sounds"
+        },
+        {
+          "mm": "၂၄ လတွင် — စကားလုံး ၅၀ ခန့်ထက် နည်းခြင်းနှင့် စကားလုံး နှစ်လုံးတွဲ၍ မပြောခြင်း (ဥပမာ — “နို့ ထပ်”)",
+          "en": "By 24 months: uses fewer than about 50 words, and does not put two words together (such as “more milk”)"
+        },
+        {
+          "mm": "ရိုးရှင်းသော ညွှန်ကြားချက်များ နားလည်ရန် ခက်ခဲခြင်း",
+          "en": "Difficulty understanding simple directions"
+        },
+        {
+          "mm": "အသက်မရွေး — ယခင်သုံးခဲ့သော စကားလုံး သို့မဟုတ် အသံများ ပျောက်သွားပါက အမြန် ပြသပါ",
+          "en": "At any age: loses words or babbling they previously used — see someone promptly"
         },
         {
           "mm": "ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။",
@@ -5624,8 +5652,8 @@
             "en": "Does bilingualism cause delay?"
           },
           "a": {
-            "mm": "မဟုတ်ပါ — ဘာသာစကား ၂ မျိုးသည် နှောင့်နှေးမှု မဖြစ်စေပါ။",
-            "en": "No — two languages does not cause delay."
+            "mm": "မဟုတ်ပါ။ ဘာသာစကား နှစ်မျိုး သင်ယူခြင်းသည် ကလေးကို ရှုပ်ထွေးမှု မဖြစ်စေသလို စကားပြော နှောင့်နှေးမှုကိုလည်း မဖြစ်စေပါ။ ဘာသာစကားနှစ်မျိုး သုံးသော ကလေးများသည် ပထမဆုံး စကားလုံးနှင့် နှစ်လုံးတွဲ စကားစုကို အခြားကလေးများနှင့် အလားတူ အရွယ်တွင် ရောက်ရှိပါသည်။ အိမ်တွင်း ဘာသာစကားကို ဆက်လက် ပြောဆိုပါ — ပထမဘာသာစကား ခိုင်မာမှုက ဒုတိယဘာသာစကား သင်ယူရာတွင် အထောက်အကူ ဖြစ်ပါသည်။ ကလေး စကားပြော နောက်ကျနေပါက ဘာသာစကားတစ်ခုကို ဖြတ်ချရန် အကြောင်းမဟုတ်ဘဲ — စစ်ဆေးမှု ခံယူရန် အကြောင်း ဖြစ်ပါသည်။",
+            "en": "No. Learning two languages does not confuse children and does not cause speech or language delay. Bilingual children reach their first words and two-word phrases at around the same age as other children. Keep speaking your home language with your child — a strong first language helps them learn the second one. If your child is a late talker, that is a reason to have them checked, not a reason to drop one language."
           }
         }
       ],
@@ -5637,7 +5665,10 @@
       ],
       "relatedMilestones": [],
       "references": [
-        "Pending clinical reviewer: attach verified national/child-health references before publication."
+        "ASHA. Learning More Than One Language. https://www.asha.org/public/speech/development/learning-more-than-one-language/ (accessed 2026-07-31)",
+        "ASHA. Late Language Emergence — practice portal. https://www.asha.org/practice-portal/clinical-topics/late-language-emergence/",
+        "CDC. About Hearing Loss in Children. https://www.cdc.gov/hearing-loss-children/about/index.html (accessed 2026-07-31)",
+        "Clinical review still outstanding: sources verified against public guidance and the wording accepted by the product owner, but no qualified clinical reviewer has signed off this page."
       ]
     },
     "media": [
@@ -5654,12 +5685,12 @@
     "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
     "version": 1,
     "clinicalStatus": "clinical_review",
-    "searchText": "စကားပြော နှောင့်နှေးမှု understanding speech delay စကားပြောဖွံ့ဖြိုးမှု နှောင့်နှေးခြင်းဆိုသည်မှာ ကလေး၏ စကားသံနှင့် ဘာသာစကားဖွံ့ဖြိုးမှုသည် မျှော်မှန်းထားသည်ထက် နှေးနေခြင်း ဖြစ်သည်။ အကြောင်းရင်းအမျိုးမျိုး ရှိနိုင်ပြီး သင့်လျော်သော ပံ့ပိုးမှုဖြင့် တိုးတက်နိုင်ပါသည်။ speech delay means a child’s speech/language is developing slower than expected. there are many causes and much room for progress. speech_delay hope_center special_needs စကားပြောဖွံ့ဖြိုးမှု နှောင့်နှေးခြင်းဆိုသည်မှာ ကလေး၏ စကားသံနှင့် ဘာသာစကားဖွံ့ဖြိုးမှုသည် မျှော်မှန်းထားသည်ထက် နှေးနေခြင်း ဖြစ်သည်။ အကြောင်းရင်းအမျိုးမျိုး ရှိနိုင်ပြီး သင့်လျော်သော ပံ့ပိုးမှုဖြင့် တိုးတက်နိုင်ပါသည်။ speech delay means a child’s speech/language is developing slower than expected. there are many causes and much room for progress. လက်ဟန်/ပုံဖြင့် ဆက်သွယ်နိုင်မှု communicates well with gestures/pictures နားလည်မှု ကောင်းခြင်း often good understanding ၂ နှစ်တွင် စကားလုံး အလွန်နည်းခြင်း very few words by age 2 ညွှန်ကြားချက် နားလည်ရ ခက်ခြင်း difficulty understanding directions ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။ these are awareness points, not a diagnosis — if concerned, consult a professional. ယောက်ျားလေးတွေ နောက်ကျတာ ပုံမှန်ပဲ၊ စောင့်ရုံပဲ “boys just talk late — only wait” အချို့ နှေးနိုင်သော်လည်း အမြဲ “စောင့်” ခြင်းက အန္တရာယ်ရှိနိုင်သည် — အကြားအာရုံ စစ်ဆေးမှုက အရေးကြီးသည်။ some are later, but simply “waiting” can miss a hearing issue — checking hearing matters. နေ့စဉ်လုပ်ဆောင်ချက်များကို စကားဖြင့် ရှင်းပြပြီး ကလေးနှင့် မကြာခဏ စကားပြောပါ။ talk a lot and narrate daily actions. ကလေးပြောသည့် စကားတိုကို စကားလုံးအနည်းငယ် ထပ်ဖြည့်ပြီး ပြန်ပြောပေးပါ။ expand on what your child says. ပုံရိပ်များ သုံး၍ ဆက်သွယ်မှုကို အားပေးပါ။ support communication with pictures. စကားပြောနှင့် ဘာသာစကားဆိုင်ရာ ပညာရှင်နှင့် တိုင်ပင်ပြီး အကြားအာရုံ စစ်ဆေးမှုလည်း ခံယူပါ။ see a speech therapist; get a hearing check. ရုပ်ပုံစာအုပ်ကို အတူကြည့်ပြီး ပုံများ၏ အမည်ကို ပြောကစားပါ။ name-and-point book play. ဘာသာစကား ၂ မျိုးက စကားပြောကို နှေးစေသလား။ does bilingualism cause delay? မဟုတ်ပါ — ဘာသာစကား ၂ မျိုးသည် နှောင့်နှေးမှု မဖြစ်စေပါ။ no — two languages does not cause delay. lsn_talk_more act_name_and_point pending clinical reviewer: attach verified national/child-health references before publication."
+    "searchText": "စကားပြော နှောင့်နှေးမှု understanding speech delay စကားပြောဖွံ့ဖြိုးမှု နှောင့်နှေးခြင်းဆိုသည်မှာ ကလေး၏ စကားသံနှင့် ဘာသာစကားဖွံ့ဖြိုးမှုသည် မျှော်မှန်းထားသည်ထက် နှေးနေခြင်း ဖြစ်သည်။ အကြောင်းရင်းအမျိုးမျိုး ရှိနိုင်ပြီး သင့်လျော်သော ပံ့ပိုးမှုဖြင့် တိုးတက်နိုင်ပါသည်။ speech delay means a child’s speech/language is developing slower than expected. there are many causes and much room for progress. speech_delay hope_center special_needs စကားပြောဖွံ့ဖြိုးမှု နှောင့်နှေးခြင်းဆိုသည်မှာ ကလေး၏ စကားသံနှင့် ဘာသာစကားဖွံ့ဖြိုးမှုသည် မျှော်မှန်းထားသည်ထက် နှေးနေခြင်း ဖြစ်သည်။ အကြောင်းရင်းအမျိုးမျိုး ရှိနိုင်ပြီး သင့်လျော်သော ပံ့ပိုးမှုဖြင့် တိုးတက်နိုင်ပါသည်။ speech delay means a child’s speech/language is developing slower than expected. there are many causes and much room for progress. လက်ဟန်/ပုံဖြင့် ဆက်သွယ်နိုင်မှု communicates well with gestures/pictures နားလည်မှု ကောင်းခြင်း often good understanding ၁၂ လတွင် — အသံမထွက်ခြင်း၊ လက်ညွှန်ခြင်း/လက်ပြခြင်း စသည့် လက်ဟန်များ မသုံးခြင်း by 12 months: not babbling, not using gestures such as pointing or waving ၁၈ လတွင် — စကားပြောထက် လက်ဟန်ကို ပိုသုံးခြင်း၊ အသံလိုက်ဆိုရန် ခက်ခဲခြင်း by 18 months: prefers gestures over speaking, has difficulty copying sounds ၂၄ လတွင် — စကားလုံး ၅၀ ခန့်ထက် နည်းခြင်းနှင့် စကားလုံး နှစ်လုံးတွဲ၍ မပြောခြင်း (ဥပမာ — “နို့ ထပ်”) by 24 months: uses fewer than about 50 words, and does not put two words together (such as “more milk”) ရိုးရှင်းသော ညွှန်ကြားချက်များ နားလည်ရန် ခက်ခဲခြင်း difficulty understanding simple directions အသက်မရွေး — ယခင်သုံးခဲ့သော စကားလုံး သို့မဟုတ် အသံများ ပျောက်သွားပါက အမြန် ပြသပါ at any age: loses words or babbling they previously used — see someone promptly ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။ these are awareness points, not a diagnosis — if concerned, consult a professional. ယောက်ျားလေးတွေ နောက်ကျတာ ပုံမှန်ပဲ၊ စောင့်ရုံပဲ “boys just talk late — only wait” အချို့ နှေးနိုင်သော်လည်း အမြဲ “စောင့်” ခြင်းက အန္တရာယ်ရှိနိုင်သည် — အကြားအာရုံ စစ်ဆေးမှုက အရေးကြီးသည်။ some are later, but simply “waiting” can miss a hearing issue — checking hearing matters. နေ့စဉ်လုပ်ဆောင်ချက်များကို စကားဖြင့် ရှင်းပြပြီး ကလေးနှင့် မကြာခဏ စကားပြောပါ။ talk a lot and narrate daily actions. ကလေးပြောသည့် စကားတိုကို စကားလုံးအနည်းငယ် ထပ်ဖြည့်ပြီး ပြန်ပြောပေးပါ။ expand on what your child says. ပုံရိပ်များ သုံး၍ ဆက်သွယ်မှုကို အားပေးပါ။ support communication with pictures. စကားပြောနှင့် ဘာသာစကားဆိုင်ရာ ပညာရှင်နှင့် တိုင်ပင်ပြီး အကြားအာရုံ စစ်ဆေးမှုလည်း ခံယူပါ။ see a speech therapist; get a hearing check. ရုပ်ပုံစာအုပ်ကို အတူကြည့်ပြီး ပုံများ၏ အမည်ကို ပြောကစားပါ။ name-and-point book play. ဘာသာစကား ၂ မျိုးက စကားပြောကို နှေးစေသလား။ does bilingualism cause delay? မဟုတ်ပါ။ ဘာသာစကား နှစ်မျိုး သင်ယူခြင်းသည် ကလေးကို ရှုပ်ထွေးမှု မဖြစ်စေသလို စကားပြော နှောင့်နှေးမှုကိုလည်း မဖြစ်စေပါ။ ဘာသာစကားနှစ်မျိုး သုံးသော ကလေးများသည် ပထမဆုံး စကားလုံးနှင့် နှစ်လုံးတွဲ စကားစုကို အခြားကလေးများနှင့် အလားတူ အရွယ်တွင် ရောက်ရှိပါသည်။ အိမ်တွင်း ဘာသာစကားကို ဆက်လက် ပြောဆိုပါ — ပထမဘာသာစကား ခိုင်မာမှုက ဒုတိယဘာသာစကား သင်ယူရာတွင် အထောက်အကူ ဖြစ်ပါသည်။ ကလေး စကားပြော နောက်ကျနေပါက ဘာသာစကားတစ်ခုကို ဖြတ်ချရန် အကြောင်းမဟုတ်ဘဲ — စစ်ဆေးမှု ခံယူရန် အကြောင်း ဖြစ်ပါသည်။ no. learning two languages does not confuse children and does not cause speech or language delay. bilingual children reach their first words and two-word phrases at around the same age as other children. keep speaking your home language with your child — a strong first language helps them learn the second one. if your child is a late talker, that is a reason to have them checked, not a reason to drop one language. lsn_talk_more act_name_and_point asha. learning more than one language. https://www.asha.org/public/speech/development/learning-more-than-one-language/ (accessed 2026-07-31) asha. late language emergence — practice portal. https://www.asha.org/practice-portal/clinical-topics/late-language-emergence/ cdc. about hearing loss in children. https://www.cdc.gov/hearing-loss-children/about/index.html (accessed 2026-07-31) clinical review still outstanding: sources verified against public guidance and the wording accepted by the product owner, but no qualified clinical reviewer has signed off this page."
   },
   {
     "category": "adhd",
-    "summaryMm": "အာရုံစိုက်မှုနှင့် တက်ကြွလှုပ်ရှားမှုဆိုင်ရာ ကွဲပြားမှုသည် အာရုံစိုက်ခြင်း၊ လှုပ်ရှားမှုနှင့် ရုတ်တရက် တုံ့ပြန်လုပ်ဆောင်မှုကို ထိန်းညှိရန် ခက်ခဲစေနိုင်သည်။ ငယ်ရွယ်သော ကလေးများတွင် သေချာအကဲဖြတ်ရန် ခက်ခဲသဖြင့် ကျွမ်းကျင်သူက ဂရုတစိုက် စစ်ဆေးရန် လိုသည်။",
-    "summaryEn": "ADHD is a developmental difference affecting attention, activity level, and impulse control. It is hard to confirm in very young children and needs a careful approach.",
+    "summaryMm": "ADHD သည် အာရုံစိုက်မှု၊ လှုပ်ရှားမှုအဆင့်နှင့် စိတ်ထိန်းချုပ်မှုတို့ကို သက်ရောက်သည့် ဖွံ့ဖြိုးမှု ကွဲပြားမှု ဖြစ်ပါသည်။ ADHD ကို အများအားဖြင့် အသက် ၄ နှစ်မပြည့်မီ အတည်မပြုပါ။ ၄ နှစ်အောက် ကလေးများတွင် လှုပ်ရှားမှုများခြင်း၊ အာရုံစိုက်ချိန် တိုတောင်းခြင်းသည် ပုံမှန် ဖွံ့ဖြိုးမှု၏ အစိတ်အပိုင်း ဖြစ်တတ်ပါသည် — သို့သော် စိုးရိမ်ပါက ကျန်းမာရေးဝန်ထမ်းနှင့် တိုင်ပင်သင့်ပါသည်။",
+    "summaryEn": "ADHD is a developmental difference affecting attention, activity level, and impulse control. ADHD is not usually diagnosed before age 4. In children under 4, high activity and short attention are very often part of normal development — but if you are worried, it is still right to talk to a health professional.",
     "tags": [
       "adhd",
       "hope_center",
@@ -5667,8 +5698,8 @@
     ],
     "data": {
       "overview": {
-        "mm": "အာရုံစိုက်မှုနှင့် တက်ကြွလှုပ်ရှားမှုဆိုင်ရာ ကွဲပြားမှုသည် အာရုံစိုက်ခြင်း၊ လှုပ်ရှားမှုနှင့် ရုတ်တရက် တုံ့ပြန်လုပ်ဆောင်မှုကို ထိန်းညှိရန် ခက်ခဲစေနိုင်သည်။ ငယ်ရွယ်သော ကလေးများတွင် သေချာအကဲဖြတ်ရန် ခက်ခဲသဖြင့် ကျွမ်းကျင်သူက ဂရုတစိုက် စစ်ဆေးရန် လိုသည်။",
-        "en": "ADHD is a developmental difference affecting attention, activity level, and impulse control. It is hard to confirm in very young children and needs a careful approach."
+        "mm": "ADHD သည် အာရုံစိုက်မှု၊ လှုပ်ရှားမှုအဆင့်နှင့် စိတ်ထိန်းချုပ်မှုတို့ကို သက်ရောက်သည့် ဖွံ့ဖြိုးမှု ကွဲပြားမှု ဖြစ်ပါသည်။ ADHD ကို အများအားဖြင့် အသက် ၄ နှစ်မပြည့်မီ အတည်မပြုပါ။ ၄ နှစ်အောက် ကလေးများတွင် လှုပ်ရှားမှုများခြင်း၊ အာရုံစိုက်ချိန် တိုတောင်းခြင်းသည် ပုံမှန် ဖွံ့ဖြိုးမှု၏ အစိတ်အပိုင်း ဖြစ်တတ်ပါသည် — သို့သော် စိုးရိမ်ပါက ကျန်းမာရေးဝန်ထမ်းနှင့် တိုင်ပင်သင့်ပါသည်။",
+        "en": "ADHD is a developmental difference affecting attention, activity level, and impulse control. ADHD is not usually diagnosed before age 4. In children under 4, high activity and short attention are very often part of normal development — but if you are worried, it is still right to talk to a health professional."
       },
       "strengths": [
         {
@@ -5682,12 +5713,16 @@
       ],
       "possibleSigns": [
         {
-          "mm": "အသက်အရွယ်ထက် ပို၍ လှုပ်ရှား/စောင့်ဆိုင်းရ ခက်ခြင်း",
-          "en": "More movement or difficulty waiting than peers"
+          "mm": "အသက်တူ ကလေးများထက် လှုပ်ရှားမှု များခြင်း/စောင့်ဆိုင်းရန် ခက်ခဲခြင်း",
+          "en": "More movement or difficulty waiting than other children of the same age"
         },
         {
-          "mm": "အာရုံ လွယ်ကူစွာ ပြောင်းသွားခြင်း",
+          "mm": "အာရုံလွယ်လွယ် ပျံ့လွင့်ခြင်း",
           "en": "Easily distracted"
+        },
+        {
+          "mm": "အရေးကြီးသည် — ဤလက္ခဏာများသည် နေရာတစ်ခုတည်းတွင်သာ မဟုတ်ဘဲ နေရာနှစ်ခုအထက် (ဥပမာ — အိမ်တွင်ရော ကျောင်း/ကလေးထိန်းစင်တာတွင်ပါ) ပေါ်နေရပါမည်။",
+          "en": "Important: these must be present in more than one setting — for example both at home and at school or childcare — not in one place only."
         },
         {
           "mm": "ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။",
@@ -5701,8 +5736,8 @@
             "en": "ADHD is caused by bad parenting"
           },
           "fact": {
-            "mm": "မဟုတ်ပါ။ ယင်းသည် ဦးနှောက်ဖွံ့ဖြိုးမှုဆိုင်ရာ ကွဲပြားမှုဖြစ်ပြီး မိဘ၏ အပြစ်မဟုတ်ပါ။",
-            "en": "No — it is a difference in brain development."
+            "mm": "မဟုတ်ပါ။ မိဘပြုစုပုံက ADHD ကို မဖြစ်စေပါ။ အကြောင်းရင်း အတိအကျကို မသိရသေးသော်လည်း မျိုးရိုးဗီဇက အရေးကြီးသော အခန်းကဏ္ဍမှ ပါဝင်ပါသည်။",
+            "en": "No. Parenting does not cause ADHD. The exact cause is not known, but genes play an important role."
           }
         }
       ],
@@ -5722,6 +5757,10 @@
         {
           "mm": "ကလေးဖွံ့ဖြိုးမှုဆရာဝန်/ကလေးစိတ်ပညာရှင်နှင့် တိုင်ပင်ပါ။",
           "en": "Consult a developmental pediatrician or child psychologist."
+        },
+        {
+          "mm": "အသက် ၄ မှ ၆ နှစ်ကြား ကလေးများအတွက် ပထမဆုံး အကြံပြုသည့် ကုသမှုမှာ ဆေးဝါး မဟုတ်ဘဲ — မိဘများအား အပြုအမူ စီမံနည်း လေ့ကျင့်ပေးခြင်းနှင့် စာသင်ခန်းအတွင်း ပံ့ပိုးမှု ဖြစ်ပါသည်။ ဆေးဝါးမသုံးမီ ဤလေ့ကျင့်မှုအကြောင်း မေးမြန်းပါ။",
+          "en": "For children aged 4–6, the recommended first treatment is parent training in behaviour management and support in the classroom — not medication. Ask about parent training before medication is considered."
         }
       ],
       "activities": [
@@ -5750,7 +5789,10 @@
       ],
       "relatedMilestones": [],
       "references": [
-        "Pending clinical reviewer: attach verified national/child-health references before publication."
+        "Wolraich ML et al. Clinical Practice Guideline for the Diagnosis, Evaluation, and Treatment of ADHD in Children and Adolescents. Pediatrics. 2019;144(4):e20192528.",
+        "CDC. About ADHD — causes and risk factors. https://www.cdc.gov/adhd/about/index.html (accessed 2026-07-31)",
+        "CDC. ADHD — Signs and Symptoms. https://www.cdc.gov/adhd/signs-symptoms/index.html (accessed 2026-07-31)",
+        "Clinical review still outstanding: sources verified against public guidance and the wording accepted by the product owner, but no qualified clinical reviewer has signed off this page."
       ]
     },
     "media": [
@@ -5767,12 +5809,12 @@
     "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
     "version": 1,
     "clinicalStatus": "clinical_review",
-    "searchText": "အာရုံစိုက်မှု/တက်ကြွမှု ကွဲပြားမှု (adhd) understanding adhd အာရုံစိုက်မှုနှင့် တက်ကြွလှုပ်ရှားမှုဆိုင်ရာ ကွဲပြားမှုသည် အာရုံစိုက်ခြင်း၊ လှုပ်ရှားမှုနှင့် ရုတ်တရက် တုံ့ပြန်လုပ်ဆောင်မှုကို ထိန်းညှိရန် ခက်ခဲစေနိုင်သည်။ ငယ်ရွယ်သော ကလေးများတွင် သေချာအကဲဖြတ်ရန် ခက်ခဲသဖြင့် ကျွမ်းကျင်သူက ဂရုတစိုက် စစ်ဆေးရန် လိုသည်။ adhd is a developmental difference affecting attention, activity level, and impulse control. it is hard to confirm in very young children and needs a careful approach. adhd hope_center special_needs အာရုံစိုက်မှုနှင့် တက်ကြွလှုပ်ရှားမှုဆိုင်ရာ ကွဲပြားမှုသည် အာရုံစိုက်ခြင်း၊ လှုပ်ရှားမှုနှင့် ရုတ်တရက် တုံ့ပြန်လုပ်ဆောင်မှုကို ထိန်းညှိရန် ခက်ခဲစေနိုင်သည်။ ငယ်ရွယ်သော ကလေးများတွင် သေချာအကဲဖြတ်ရန် ခက်ခဲသဖြင့် ကျွမ်းကျင်သူက ဂရုတစိုက် စစ်ဆေးရန် လိုသည်။ adhd is a developmental difference affecting attention, activity level, and impulse control. it is hard to confirm in very young children and needs a careful approach. စွမ်းအင်နှင့် စိတ်အားထက်သန်မှု high energy and enthusiasm တီထွင်ဖန်တီးမှုနှင့် စိတ်ဝင်စားရာတွင် အာရုံစိုက်နိုင်မှု creativity and hyperfocus on interests အသက်အရွယ်ထက် ပို၍ လှုပ်ရှား/စောင့်ဆိုင်းရ ခက်ခြင်း more movement or difficulty waiting than peers အာရုံ လွယ်ကူစွာ ပြောင်းသွားခြင်း easily distracted ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။ these are awareness points, not a diagnosis — if concerned, consult a professional. မိဘက ကောင်းကောင်း မပြုစုလို့ ဖြစ်တာပါ adhd is caused by bad parenting မဟုတ်ပါ။ ယင်းသည် ဦးနှောက်ဖွံ့ဖြိုးမှုဆိုင်ရာ ကွဲပြားမှုဖြစ်ပြီး မိဘ၏ အပြစ်မဟုတ်ပါ။ no — it is a difference in brain development. ရှင်းလင်း၍ တိုတောင်းသော ညွှန်ကြားချက်၊ တသမတ်တည်း လုပ်ရိုးလုပ်စဉ်၊ လှုပ်ရှားချိန် ပေးပါ။ give short clear instructions, steady routines, and movement breaks. ကောင်းသောအပြုအမူကို ချီးမွမ်း၍ လုပ်ငန်းများ အပိုင်းလိုက် ခွဲပါ။ praise good behavior; break tasks into small steps. ကလေးဖွံ့ဖြိုးမှုဆရာဝန်/ကလေးစိတ်ပညာရှင်နှင့် တိုင်ပင်ပါ။ consult a developmental pediatrician or child psychologist. ရုပ်ပိုင်း လှုပ်ရှားမှုများနှင့် အလှည့်ကျ ကစားနည်းများ။ active games and turn-taking play. ငယ်ရွယ်စဉ် အတည်ပြုနိုင်သလား။ can it be confirmed early? ငယ်ရွယ်စဉ် အတည်ပြုရ ခက်ခဲသည် — ကျွမ်းကျင်သူ၏ အကဲဖြတ်မှု လိုအပ်သည်။ it is hard to confirm early; a professional assessment is needed. lsn_gentle_discipline act_obstacle_course pending clinical reviewer: attach verified national/child-health references before publication."
+    "searchText": "အာရုံစိုက်မှု/တက်ကြွမှု ကွဲပြားမှု (adhd) understanding adhd adhd သည် အာရုံစိုက်မှု၊ လှုပ်ရှားမှုအဆင့်နှင့် စိတ်ထိန်းချုပ်မှုတို့ကို သက်ရောက်သည့် ဖွံ့ဖြိုးမှု ကွဲပြားမှု ဖြစ်ပါသည်။ adhd ကို အများအားဖြင့် အသက် ၄ နှစ်မပြည့်မီ အတည်မပြုပါ။ ၄ နှစ်အောက် ကလေးများတွင် လှုပ်ရှားမှုများခြင်း၊ အာရုံစိုက်ချိန် တိုတောင်းခြင်းသည် ပုံမှန် ဖွံ့ဖြိုးမှု၏ အစိတ်အပိုင်း ဖြစ်တတ်ပါသည် — သို့သော် စိုးရိမ်ပါက ကျန်းမာရေးဝန်ထမ်းနှင့် တိုင်ပင်သင့်ပါသည်။ adhd is a developmental difference affecting attention, activity level, and impulse control. adhd is not usually diagnosed before age 4. in children under 4, high activity and short attention are very often part of normal development — but if you are worried, it is still right to talk to a health professional. adhd hope_center special_needs adhd သည် အာရုံစိုက်မှု၊ လှုပ်ရှားမှုအဆင့်နှင့် စိတ်ထိန်းချုပ်မှုတို့ကို သက်ရောက်သည့် ဖွံ့ဖြိုးမှု ကွဲပြားမှု ဖြစ်ပါသည်။ adhd ကို အများအားဖြင့် အသက် ၄ နှစ်မပြည့်မီ အတည်မပြုပါ။ ၄ နှစ်အောက် ကလေးများတွင် လှုပ်ရှားမှုများခြင်း၊ အာရုံစိုက်ချိန် တိုတောင်းခြင်းသည် ပုံမှန် ဖွံ့ဖြိုးမှု၏ အစိတ်အပိုင်း ဖြစ်တတ်ပါသည် — သို့သော် စိုးရိမ်ပါက ကျန်းမာရေးဝန်ထမ်းနှင့် တိုင်ပင်သင့်ပါသည်။ adhd is a developmental difference affecting attention, activity level, and impulse control. adhd is not usually diagnosed before age 4. in children under 4, high activity and short attention are very often part of normal development — but if you are worried, it is still right to talk to a health professional. စွမ်းအင်နှင့် စိတ်အားထက်သန်မှု high energy and enthusiasm တီထွင်ဖန်တီးမှုနှင့် စိတ်ဝင်စားရာတွင် အာရုံစိုက်နိုင်မှု creativity and hyperfocus on interests အသက်တူ ကလေးများထက် လှုပ်ရှားမှု များခြင်း/စောင့်ဆိုင်းရန် ခက်ခဲခြင်း more movement or difficulty waiting than other children of the same age အာရုံလွယ်လွယ် ပျံ့လွင့်ခြင်း easily distracted အရေးကြီးသည် — ဤလက္ခဏာများသည် နေရာတစ်ခုတည်းတွင်သာ မဟုတ်ဘဲ နေရာနှစ်ခုအထက် (ဥပမာ — အိမ်တွင်ရော ကျောင်း/ကလေးထိန်းစင်တာတွင်ပါ) ပေါ်နေရပါမည်။ important: these must be present in more than one setting — for example both at home and at school or childcare — not in one place only. ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။ these are awareness points, not a diagnosis — if concerned, consult a professional. မိဘက ကောင်းကောင်း မပြုစုလို့ ဖြစ်တာပါ adhd is caused by bad parenting မဟုတ်ပါ။ မိဘပြုစုပုံက adhd ကို မဖြစ်စေပါ။ အကြောင်းရင်း အတိအကျကို မသိရသေးသော်လည်း မျိုးရိုးဗီဇက အရေးကြီးသော အခန်းကဏ္ဍမှ ပါဝင်ပါသည်။ no. parenting does not cause adhd. the exact cause is not known, but genes play an important role. ရှင်းလင်း၍ တိုတောင်းသော ညွှန်ကြားချက်၊ တသမတ်တည်း လုပ်ရိုးလုပ်စဉ်၊ လှုပ်ရှားချိန် ပေးပါ။ give short clear instructions, steady routines, and movement breaks. ကောင်းသောအပြုအမူကို ချီးမွမ်း၍ လုပ်ငန်းများ အပိုင်းလိုက် ခွဲပါ။ praise good behavior; break tasks into small steps. ကလေးဖွံ့ဖြိုးမှုဆရာဝန်/ကလေးစိတ်ပညာရှင်နှင့် တိုင်ပင်ပါ။ consult a developmental pediatrician or child psychologist. အသက် ၄ မှ ၆ နှစ်ကြား ကလေးများအတွက် ပထမဆုံး အကြံပြုသည့် ကုသမှုမှာ ဆေးဝါး မဟုတ်ဘဲ — မိဘများအား အပြုအမူ စီမံနည်း လေ့ကျင့်ပေးခြင်းနှင့် စာသင်ခန်းအတွင်း ပံ့ပိုးမှု ဖြစ်ပါသည်။ ဆေးဝါးမသုံးမီ ဤလေ့ကျင့်မှုအကြောင်း မေးမြန်းပါ။ for children aged 4–6, the recommended first treatment is parent training in behaviour management and support in the classroom — not medication. ask about parent training before medication is considered. ရုပ်ပိုင်း လှုပ်ရှားမှုများနှင့် အလှည့်ကျ ကစားနည်းများ။ active games and turn-taking play. ငယ်ရွယ်စဉ် အတည်ပြုနိုင်သလား။ can it be confirmed early? ငယ်ရွယ်စဉ် အတည်ပြုရ ခက်ခဲသည် — ကျွမ်းကျင်သူ၏ အကဲဖြတ်မှု လိုအပ်သည်။ it is hard to confirm early; a professional assessment is needed. lsn_gentle_discipline act_obstacle_course wolraich ml et al. clinical practice guideline for the diagnosis, evaluation, and treatment of adhd in children and adolescents. pediatrics. 2019;144(4):e20192528. cdc. about adhd — causes and risk factors. https://www.cdc.gov/adhd/about/index.html (accessed 2026-07-31) cdc. adhd — signs and symptoms. https://www.cdc.gov/adhd/signs-symptoms/index.html (accessed 2026-07-31) clinical review still outstanding: sources verified against public guidance and the wording accepted by the product owner, but no qualified clinical reviewer has signed off this page."
   },
   {
     "category": "down_syndrome",
-    "summaryMm": "ဒေါင်းစင်ဒရုမ်းသည် မွေးရာပါ မျိုးရိုးဗီဇ အခြေအနေတစ်ခုဖြစ်သည်။ ကလေးများသည် မိမိအရှိန်ဖြင့် သင်ယူ၊ ကြီးထွား၍ ပျော်ရွှင်သော ဘဝများ ရရှိနိုင်သည်။",
-    "summaryEn": "Down syndrome is a genetic condition present from birth. Children learn and grow at their own pace and can live happy, full lives.",
+    "summaryMm": "ဒေါင်းစင်ဒရုမ်းသည် မွေးရာပါ မျိုးရိုးဗီဇ အခြေအနေဖြစ်ပြီး — ခရိုမိုဆုမ်း ၂၁ တွင် အပိုတစ်ခု ပါလာခြင်းကြောင့် ဖြစ်ပါသည် (trisomy 21 ဟုလည်း ခေါ်သည်)။ ကလေးများသည် မိမိအရှိန်ဖြင့် သင်ယူကြီးထွားပြီး ပျော်ရွှင်သော ဘဝကို ရှင်သန်နိုင်ပါသည်။",
+    "summaryEn": "Down syndrome is a genetic condition present from birth, caused by an extra copy of chromosome 21 (sometimes called trisomy 21). Children learn and grow at their own pace and can live happy, full lives.",
     "tags": [
       "down_syndrome",
       "hope_center",
@@ -5780,8 +5822,8 @@
     ],
     "data": {
       "overview": {
-        "mm": "ဒေါင်းစင်ဒရုမ်းသည် မွေးရာပါ မျိုးရိုးဗီဇ အခြေအနေတစ်ခုဖြစ်သည်။ ကလေးများသည် မိမိအရှိန်ဖြင့် သင်ယူ၊ ကြီးထွား၍ ပျော်ရွှင်သော ဘဝများ ရရှိနိုင်သည်။",
-        "en": "Down syndrome is a genetic condition present from birth. Children learn and grow at their own pace and can live happy, full lives."
+        "mm": "ဒေါင်းစင်ဒရုမ်းသည် မွေးရာပါ မျိုးရိုးဗီဇ အခြေအနေဖြစ်ပြီး — ခရိုမိုဆုမ်း ၂၁ တွင် အပိုတစ်ခု ပါလာခြင်းကြောင့် ဖြစ်ပါသည် (trisomy 21 ဟုလည်း ခေါ်သည်)။ ကလေးများသည် မိမိအရှိန်ဖြင့် သင်ယူကြီးထွားပြီး ပျော်ရွှင်သော ဘဝကို ရှင်သန်နိုင်ပါသည်။",
+        "en": "Down syndrome is a genetic condition present from birth, caused by an extra copy of chromosome 21 (sometimes called trisomy 21). Children learn and grow at their own pace and can live happy, full lives."
       },
       "strengths": [
         {
@@ -5817,8 +5859,32 @@
       ],
       "homeSupport": [
         {
-          "mm": "စောစီးစွာ ဖွံ့ဖြိုးမှုပံ့ပိုးပေးသည့် ဝန်ဆောင်မှုများနှင့် ပုံမှန် ကျန်းမာရေးစစ်ဆေးမှုများကို ခံယူပါ။",
-          "en": "Access early intervention and regular health checks."
+          "mm": "ဤစစ်ဆေးမှုများအကြောင်း ကလေး၏ ဆရာဝန်ကို မေးမြန်းပါ — ဒေါင်းစင်ဒရုမ်း ရှိသော ကလေးတိုင်းအတွက် အကြံပြုထားပြီး၊ တစ်ခုချင်းစီသည် အပြင်မှ မမြင်ရသော ပြဿနာများကို ရှာဖွေပေးပါသည်။",
+          "en": "Ask your child’s doctor about these specific checks — they are recommended for every child with Down syndrome, and each one finds a problem that has no obvious outward signs."
+        },
+        {
+          "mm": "နှလုံး — မွေးကင်းစကာလတွင် နှလုံး အာထရာဆောင်း (echocardiogram) ကို ကလေးနှလုံး အထူးကုက ဖတ်ရှုရန်။ ကိုယ်ဝန်ဆောင်စဉ်က စစ်ပြီးဖြစ်လျှင်လည်း ပြန်စစ်သင့်ပါသည်။",
+          "en": "Heart: an echocardiogram in the newborn period, read by a paediatric cardiologist — even if a scan was done during pregnancy."
+        },
+        {
+          "mm": "အကြားအာရုံ — မွေးကင်းစတွင် အကြားစစ်ဆေးမှု ပြုလုပ်ပြီး၊ ထို့နောက် နှစ်စဉ် နားတစ်ဖက်ချင်းစီ စစ်ဆေးရန်။",
+          "en": "Hearing: a hearing test at birth, then an ear-specific hearing test every year."
+        },
+        {
+          "mm": "သိုင်းရွိုက် — ၆ လ၊ ၁၂ လနှင့် ထို့နောက် နှစ်စဉ် TSH သွေးစစ်ဆေးမှု ပြုလုပ်ရန်။",
+          "en": "Thyroid: a TSH blood test at 6 months, at 12 months, and then every year."
+        },
+        {
+          "mm": "မျက်စိ — မျက်စိအထူးကုနှင့် ပုံမှန် စစ်ဆေးရန်။",
+          "en": "Eyes: regular eye checks with an eye specialist."
+        },
+        {
+          "mm": "အိပ်စက်ခြင်း — ကလေး ဟောက်ခြင်း၊ အသက်ရှူရပ်သွားခြင်း၊ နေ့ဘက်တွင် အလွန်အိပ်ငိုက်ခြင်း ရှိပါက ဆရာဝန်အား ပြောပြပါ — အိပ်စက်စဉ် အသက်ရှူရပ်ခြင်းသည် တွေ့ရများပြီး ကုသနိုင်ပါသည်။",
+          "en": "Sleep: tell the doctor if your child snores, pauses in breathing, or is very sleepy in the day — sleep apnoea is common and treatable."
+        },
+        {
+          "mm": "စောစီးစွာ ကြားဝင်ပံ့ပိုးမှု ဝန်ဆောင်မှုကို အမြန်ဆုံး တောင်းခံပါ။",
+          "en": "Ask for early intervention services as soon as possible."
         }
       ],
       "schoolSupport": [
@@ -5859,7 +5925,9 @@
       ],
       "relatedMilestones": [],
       "references": [
-        "Pending clinical reviewer: attach verified national/child-health references before publication."
+        "Bull MJ et al. Health Supervision for Children and Adolescents With Down Syndrome. Pediatrics. 2022;149(5):e2022057010.",
+        "CDC. About Down Syndrome. https://www.cdc.gov/birth-defects/about/down-syndrome.html (accessed 2026-07-31)",
+        "Clinical review still outstanding: sources verified against public guidance and the wording accepted by the product owner, but no qualified clinical reviewer has signed off this page."
       ]
     },
     "media": [
@@ -5876,7 +5944,7 @@
     "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
     "version": 1,
     "clinicalStatus": "clinical_review",
-    "searchText": "ဒေါင်းစင်ဒရုမ်း (down syndrome) understanding down syndrome ဒေါင်းစင်ဒရုမ်းသည် မွေးရာပါ မျိုးရိုးဗီဇ အခြေအနေတစ်ခုဖြစ်သည်။ ကလေးများသည် မိမိအရှိန်ဖြင့် သင်ယူ၊ ကြီးထွား၍ ပျော်ရွှင်သော ဘဝများ ရရှိနိုင်သည်။ down syndrome is a genetic condition present from birth. children learn and grow at their own pace and can live happy, full lives. down_syndrome hope_center special_needs ဒေါင်းစင်ဒရုမ်းသည် မွေးရာပါ မျိုးရိုးဗီဇ အခြေအနေတစ်ခုဖြစ်သည်။ ကလေးများသည် မိမိအရှိန်ဖြင့် သင်ယူ၊ ကြီးထွား၍ ပျော်ရွှင်သော ဘဝများ ရရှိနိုင်သည်။ down syndrome is a genetic condition present from birth. children learn and grow at their own pace and can live happy, full lives. လူမှုဆက်ဆံရေး နွေးထွေးမှု warm social connection ကြိုးစားမှုနှင့် အတုယူ သင်ယူနိုင်မှု persistence and learning by imitation ကြွက်သား နူးညံ့မှုနှင့် ဖွံ့ဖြိုးမှု မှတ်တိုင်များ နှေးခြင်း low muscle tone and slower milestones ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။ these are awareness points, not a diagnosis — if concerned, consult a professional. ဒေါင်းစင်ဒရုမ်းကလေးတွေ သင်ယူလို့မရ children with down syndrome can’t learn မှားပါသည် — သင့်လျော်သော ပံ့ပိုးမှုဖြင့် များစွာ သင်ယူနိုင်ကြသည်။ false — with support they learn a great deal. စောစီးစွာ ဖွံ့ဖြိုးမှုပံ့ပိုးပေးသည့် ဝန်ဆောင်မှုများနှင့် ပုံမှန် ကျန်းမာရေးစစ်ဆေးမှုများကို ခံယူပါ။ access early intervention and regular health checks. ကလေးအားလုံး အတူပါဝင်နိုင်သော ပညာရေးပတ်ဝန်းကျင်နှင့် တစ်ဦးချင်းလိုအပ်ချက်အလိုက် ပံ့ပိုးမှုကို ရှာဖွေပါ။ seek inclusive education and individual support. ကလေးဖွံ့ဖြိုးမှုဆိုင်ရာ ဆရာဝန်၊ ကိုယ်လက်လှုပ်ရှားမှု ပြန်လည်သန်စွမ်းရေးပညာရှင်နှင့် စကားပြောနှင့် ဘာသာစကားဆိုင်ရာ ပညာရှင်တို့နှင့် တိုင်ပင်ပါ။ work with a pediatrician, physio and speech therapists. ကြွက်သားခိုင်မာမှုအတွက် ကစားနည်းများ (ကြီးကြပ်၍)။ muscle-strengthening play (supervised). ပြန်လည်သန်စွမ်းရေး လေ့ကျင့်မှုများက အကျိုးရှိပါသလား။ does therapy help? ရှိပါသည်။ ကိုယ်လက်လှုပ်ရှားမှုနှင့် စကားပြောဘာသာစကားဆိုင်ရာ လေ့ကျင့်ပေးမှုများက ကလေး၏ စွမ်းရည်တိုးတက်လာစေရန် ကူညီနိုင်သည်။ yes — physio and speech therapy help build skills. lsn_what_is_development act_cup_stacking pending clinical reviewer: attach verified national/child-health references before publication."
+    "searchText": "ဒေါင်းစင်ဒရုမ်း (down syndrome) understanding down syndrome ဒေါင်းစင်ဒရုမ်းသည် မွေးရာပါ မျိုးရိုးဗီဇ အခြေအနေဖြစ်ပြီး — ခရိုမိုဆုမ်း ၂၁ တွင် အပိုတစ်ခု ပါလာခြင်းကြောင့် ဖြစ်ပါသည် (trisomy 21 ဟုလည်း ခေါ်သည်)။ ကလေးများသည် မိမိအရှိန်ဖြင့် သင်ယူကြီးထွားပြီး ပျော်ရွှင်သော ဘဝကို ရှင်သန်နိုင်ပါသည်။ down syndrome is a genetic condition present from birth, caused by an extra copy of chromosome 21 (sometimes called trisomy 21). children learn and grow at their own pace and can live happy, full lives. down_syndrome hope_center special_needs ဒေါင်းစင်ဒရုမ်းသည် မွေးရာပါ မျိုးရိုးဗီဇ အခြေအနေဖြစ်ပြီး — ခရိုမိုဆုမ်း ၂၁ တွင် အပိုတစ်ခု ပါလာခြင်းကြောင့် ဖြစ်ပါသည် (trisomy 21 ဟုလည်း ခေါ်သည်)။ ကလေးများသည် မိမိအရှိန်ဖြင့် သင်ယူကြီးထွားပြီး ပျော်ရွှင်သော ဘဝကို ရှင်သန်နိုင်ပါသည်။ down syndrome is a genetic condition present from birth, caused by an extra copy of chromosome 21 (sometimes called trisomy 21). children learn and grow at their own pace and can live happy, full lives. လူမှုဆက်ဆံရေး နွေးထွေးမှု warm social connection ကြိုးစားမှုနှင့် အတုယူ သင်ယူနိုင်မှု persistence and learning by imitation ကြွက်သား နူးညံ့မှုနှင့် ဖွံ့ဖြိုးမှု မှတ်တိုင်များ နှေးခြင်း low muscle tone and slower milestones ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။ these are awareness points, not a diagnosis — if concerned, consult a professional. ဒေါင်းစင်ဒရုမ်းကလေးတွေ သင်ယူလို့မရ children with down syndrome can’t learn မှားပါသည် — သင့်လျော်သော ပံ့ပိုးမှုဖြင့် များစွာ သင်ယူနိုင်ကြသည်။ false — with support they learn a great deal. ဤစစ်ဆေးမှုများအကြောင်း ကလေး၏ ဆရာဝန်ကို မေးမြန်းပါ — ဒေါင်းစင်ဒရုမ်း ရှိသော ကလေးတိုင်းအတွက် အကြံပြုထားပြီး၊ တစ်ခုချင်းစီသည် အပြင်မှ မမြင်ရသော ပြဿနာများကို ရှာဖွေပေးပါသည်။ ask your child’s doctor about these specific checks — they are recommended for every child with down syndrome, and each one finds a problem that has no obvious outward signs. နှလုံး — မွေးကင်းစကာလတွင် နှလုံး အာထရာဆောင်း (echocardiogram) ကို ကလေးနှလုံး အထူးကုက ဖတ်ရှုရန်။ ကိုယ်ဝန်ဆောင်စဉ်က စစ်ပြီးဖြစ်လျှင်လည်း ပြန်စစ်သင့်ပါသည်။ heart: an echocardiogram in the newborn period, read by a paediatric cardiologist — even if a scan was done during pregnancy. အကြားအာရုံ — မွေးကင်းစတွင် အကြားစစ်ဆေးမှု ပြုလုပ်ပြီး၊ ထို့နောက် နှစ်စဉ် နားတစ်ဖက်ချင်းစီ စစ်ဆေးရန်။ hearing: a hearing test at birth, then an ear-specific hearing test every year. သိုင်းရွိုက် — ၆ လ၊ ၁၂ လနှင့် ထို့နောက် နှစ်စဉ် tsh သွေးစစ်ဆေးမှု ပြုလုပ်ရန်။ thyroid: a tsh blood test at 6 months, at 12 months, and then every year. မျက်စိ — မျက်စိအထူးကုနှင့် ပုံမှန် စစ်ဆေးရန်။ eyes: regular eye checks with an eye specialist. အိပ်စက်ခြင်း — ကလေး ဟောက်ခြင်း၊ အသက်ရှူရပ်သွားခြင်း၊ နေ့ဘက်တွင် အလွန်အိပ်ငိုက်ခြင်း ရှိပါက ဆရာဝန်အား ပြောပြပါ — အိပ်စက်စဉ် အသက်ရှူရပ်ခြင်းသည် တွေ့ရများပြီး ကုသနိုင်ပါသည်။ sleep: tell the doctor if your child snores, pauses in breathing, or is very sleepy in the day — sleep apnoea is common and treatable. စောစီးစွာ ကြားဝင်ပံ့ပိုးမှု ဝန်ဆောင်မှုကို အမြန်ဆုံး တောင်းခံပါ။ ask for early intervention services as soon as possible. ကလေးအားလုံး အတူပါဝင်နိုင်သော ပညာရေးပတ်ဝန်းကျင်နှင့် တစ်ဦးချင်းလိုအပ်ချက်အလိုက် ပံ့ပိုးမှုကို ရှာဖွေပါ။ seek inclusive education and individual support. ကလေးဖွံ့ဖြိုးမှုဆိုင်ရာ ဆရာဝန်၊ ကိုယ်လက်လှုပ်ရှားမှု ပြန်လည်သန်စွမ်းရေးပညာရှင်နှင့် စကားပြောနှင့် ဘာသာစကားဆိုင်ရာ ပညာရှင်တို့နှင့် တိုင်ပင်ပါ။ work with a pediatrician, physio and speech therapists. ကြွက်သားခိုင်မာမှုအတွက် ကစားနည်းများ (ကြီးကြပ်၍)။ muscle-strengthening play (supervised). ပြန်လည်သန်စွမ်းရေး လေ့ကျင့်မှုများက အကျိုးရှိပါသလား။ does therapy help? ရှိပါသည်။ ကိုယ်လက်လှုပ်ရှားမှုနှင့် စကားပြောဘာသာစကားဆိုင်ရာ လေ့ကျင့်ပေးမှုများက ကလေး၏ စွမ်းရည်တိုးတက်လာစေရန် ကူညီနိုင်သည်။ yes — physio and speech therapy help build skills. lsn_what_is_development act_cup_stacking bull mj et al. health supervision for children and adolescents with down syndrome. pediatrics. 2022;149(5):e2022057010. cdc. about down syndrome. https://www.cdc.gov/birth-defects/about/down-syndrome.html (accessed 2026-07-31) clinical review still outstanding: sources verified against public guidance and the wording accepted by the product owner, but no qualified clinical reviewer has signed off this page."
   },
   {
     "category": "cerebral_palsy",
@@ -5904,8 +5972,24 @@
       ],
       "possibleSigns": [
         {
-          "mm": "ကြွက်သား တောင့်တင်း/နူးညံ့ခြင်း၊ လှုပ်ရှားမှု မှတ်တိုင်များ နှေးခြင်း",
-          "en": "Stiff or floppy muscles; delayed motor milestones"
+          "mm": "ကြွက်သားများ ထူးခြားစွာ တင်းနေခြင်း သို့မဟုတ် ထူးခြားစွာ ပျော့နေခြင်း",
+          "en": "Muscles that feel unusually stiff or unusually floppy"
+        },
+        {
+          "mm": "လှုပ်ရှားမှုများ ညှိနှိုင်းမှု မရှိဘဲ တုန်ခါနေခြင်း",
+          "en": "Movements that look uncoordinated or jerky"
+        },
+        {
+          "mm": "၈ လတွင် ထိုင်၍ မရသေးခြင်း",
+          "en": "Not sitting by 8 months"
+        },
+        {
+          "mm": "၁၈ လတွင် လမ်း၍ မရသေးခြင်း",
+          "en": "Not walking by 18 months"
+        },
+        {
+          "mm": "၁၂ လမပြည့်မီ လက်တစ်ဖက်တည်းကိုသာ အားကိုးသုံးစွဲခြင်း",
+          "en": "Strongly preferring one hand before 12 months of age"
         },
         {
           "mm": "ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။",
@@ -5926,8 +6010,16 @@
       ],
       "homeSupport": [
         {
-          "mm": "ကုသရေးအဖွဲ့၏ လမ်းညွှန်အတိုင်း နေ့စဉ်လေ့ကျင့်ခန်းများ လုပ်ပါ။",
-          "en": "Do daily exercises guided by the care team."
+          "mm": "ကာယကုထုံး ပညာရှင်က သင့်ကလေးအတွက် သတ်မှတ်ပေးထားသော လေ့ကျင့်ခန်းများကိုသာ နေ့စဉ် လုပ်ပါ။",
+          "en": "Do only the exercises that a physiotherapist has prescribed for your child, and do them daily."
+        },
+        {
+          "mm": "ဗီဒီယိုများမှ သို့မဟုတ် အခြားကလေးတစ်ဦးထံမှ လေ့ကျင့်ခန်း/ဆန့်ထုတ်နည်းများကို ကူးယူ၍ မလုပ်ပါနှင့် — CP သည် ကလေးတစ်ဦးချင်းစီအပေါ် မတူညီစွာ သက်ရောက်ပြီး၊ ကလေးတစ်ဦးအတွက် အကျိုးရှိသော ဆန့်ထုတ်နည်းသည် အခြားတစ်ဦးကို ထိခိုက်စေနိုင်ပါသည်။",
+          "en": "Do not copy exercise or stretching routines from videos or from another child — cerebral palsy affects each child differently, and a stretch that helps one child can injure another."
+        },
+        {
+          "mm": "ကာယကုထုံး ပညာရှင် မရှိသေးပါက လေ့ကျင့်ခန်း မစတင်မီ ဆရာဝန်ထံ ညွှန်းပို့ပေးရန် တောင်းခံပါ။",
+          "en": "If you do not yet have a physiotherapist, ask your doctor for a referral before starting any exercise programme."
         }
       ],
       "schoolSupport": [
@@ -5938,8 +6030,12 @@
       ],
       "professionalSupport": [
         {
-          "mm": "ကိုယ်လက်လှုပ်ရှားမှု ပြန်လည်သန်စွမ်းရေးပညာရှင်၊ နေ့စဉ်လုပ်ဆောင်မှုစွမ်းရည် ပြန်လည်လေ့ကျင့်ပေးသည့် ပညာရှင်နှင့် ကလေးဖွံ့ဖြိုးမှုဆိုင်ရာ ဆရာဝန်တို့နှင့် တိုင်ပင်ပါ။",
-          "en": "Work with physio, occupational therapy, and a pediatrician."
+          "mm": "ကာယကုထုံး ပညာရှင်၊ နေ့စဉ်လုပ်ဆောင်မှုစွမ်းရည် ကုထုံး ပညာရှင်၊ စကားပြောနှင့် ဘာသာစကား ကုထုံး ပညာရှင်နှင့် ကလေးအထူးကု ဆရာဝန်တို့နှင့် လက်တွဲပါ။",
+          "en": "Work with a physiotherapist, an occupational therapist, a speech and language therapist and a paediatrician."
+        },
+        {
+          "mm": "ကလေးသည် အစာကျွေးစဉ် ချောင်းဆိုးခြင်း၊ အစာတစ်ဆို့ခြင်း၊ ဒုက္ခရောက်ပုံရခြင်း သို့မဟုတ် အစာစားရန် အလွန်ကြာခြင်း ရှိပါက အဖွဲ့အား အသိပေးပါ — စကားပြောနှင့် ဘာသာစကား ကုထုံး ပညာရှင်သည် အစာမျိုချမှုကိုပါ စစ်ဆေးပေးပါသည်။",
+          "en": "Tell the team if your child coughs, chokes or seems distressed during feeding, or takes a very long time to finish a meal — a speech and language therapist also assesses swallowing."
         }
       ],
       "activities": [
@@ -5968,7 +6064,8 @@
       ],
       "relatedMilestones": [],
       "references": [
-        "Pending clinical reviewer: attach verified national/child-health references before publication."
+        "NHS. Cerebral palsy. https://www.nhs.uk/conditions/cerebral-palsy/ (accessed 2026-07-31)",
+        "Clinical review still outstanding: sources verified against public guidance and the wording accepted by the product owner, but no qualified clinical reviewer has signed off this page."
       ]
     },
     "media": [
@@ -5985,7 +6082,7 @@
     "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
     "version": 1,
     "clinicalStatus": "clinical_review",
-    "searchText": "ဦးနှောက်ဆိုင်ရာ လှုပ်ရှားမှု ကွဲပြားမှု (cerebral palsy) understanding cerebral palsy ဦးနှောက်ဆိုင်ရာ လှုပ်ရှားမှုကွဲပြားခြင်းသည် ကိုယ်လက်လှုပ်ရှားမှုနှင့် ခန္ဓာကိုယ်အနေအထား ထိန်းချုပ်မှုကို သက်ရောက်စေသော အခြေအနေတစ်ခု ဖြစ်သည်။ သက်ရောက်မှုပုံစံနှင့် အတိုင်းအတာသည် ကလေးတစ်ဦးနှင့်တစ်ဦး ကွာခြားပြီး သင့်လျော်သော ပံ့ပိုးမှုဖြင့် တိုးတက်နိုင်ပါသည်။ cerebral palsy affects movement and posture. it varies widely, and many children make progress with support. cerebral_palsy hope_center special_needs ဦးနှောက်ဆိုင်ရာ လှုပ်ရှားမှုကွဲပြားခြင်းသည် ကိုယ်လက်လှုပ်ရှားမှုနှင့် ခန္ဓာကိုယ်အနေအထား ထိန်းချုပ်မှုကို သက်ရောက်စေသော အခြေအနေတစ်ခု ဖြစ်သည်။ သက်ရောက်မှုပုံစံနှင့် အတိုင်းအတာသည် ကလေးတစ်ဦးနှင့်တစ်ဦး ကွာခြားပြီး သင့်လျော်သော ပံ့ပိုးမှုဖြင့် တိုးတက်နိုင်ပါသည်။ cerebral palsy affects movement and posture. it varies widely, and many children make progress with support. ဇွဲ၊ လိုက်လျောညီထွေ ဖြေရှင်းနိုင်မှု determination and adaptability စိတ်ခံစားမှုနှင့် ဆက်ဆံရေး ကောင်းမွန်မှု (မကြာခဏ) often strong communication and connection ကြွက်သား တောင့်တင်း/နူးညံ့ခြင်း၊ လှုပ်ရှားမှု မှတ်တိုင်များ နှေးခြင်း stiff or floppy muscles; delayed motor milestones ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။ these are awareness points, not a diagnosis — if concerned, consult a professional. cp က တိုးမြင့်လာ/ကူးစက်တတ်တယ် cp is contagious or gets worse over time မဟုတ်ပါ — ကူးစက်ခြင်း မရှိ၍ တိုးမြင့်ခြင်းလည်း မဟုတ်ပါ။ no — it is not contagious and not progressive. ကုသရေးအဖွဲ့၏ လမ်းညွှန်အတိုင်း နေ့စဉ်လေ့ကျင့်ခန်းများ လုပ်ပါ။ do daily exercises guided by the care team. ဝင်ရောက်လွယ်ကူသော ပတ်ဝန်းကျင်နှင့် ကိရိယာ ပံ့ပိုးမှု ရှာဖွေပါ။ seek accessible settings and assistive equipment. ကိုယ်လက်လှုပ်ရှားမှု ပြန်လည်သန်စွမ်းရေးပညာရှင်၊ နေ့စဉ်လုပ်ဆောင်မှုစွမ်းရည် ပြန်လည်လေ့ကျင့်ပေးသည့် ပညာရှင်နှင့် ကလေးဖွံ့ဖြိုးမှုဆိုင်ရာ ဆရာဝန်တို့နှင့် တိုင်ပင်ပါ။ work with physio, occupational therapy, and a pediatrician. ကုသရေးအဖွဲ့ ညွှန်ကြားသော ဟန်ချက်/လှုပ်ရှားမှု ကစားနည်းများ။ balance/movement play as advised by the care team. စောစီးစွာ ကုသမှုက အရေးကြီးသလား။ is early therapy important? အရေးကြီးသည် — စောစီးစွာ ကုသမှုက လှုပ်ရှားမှုနှင့် လွတ်လပ်မှုကို အထောက်အကူပြုသည်။ yes — early therapy supports movement and independence. lsn_what_is_development act_obstacle_crawl pending clinical reviewer: attach verified national/child-health references before publication."
+    "searchText": "ဦးနှောက်ဆိုင်ရာ လှုပ်ရှားမှု ကွဲပြားမှု (cerebral palsy) understanding cerebral palsy ဦးနှောက်ဆိုင်ရာ လှုပ်ရှားမှုကွဲပြားခြင်းသည် ကိုယ်လက်လှုပ်ရှားမှုနှင့် ခန္ဓာကိုယ်အနေအထား ထိန်းချုပ်မှုကို သက်ရောက်စေသော အခြေအနေတစ်ခု ဖြစ်သည်။ သက်ရောက်မှုပုံစံနှင့် အတိုင်းအတာသည် ကလေးတစ်ဦးနှင့်တစ်ဦး ကွာခြားပြီး သင့်လျော်သော ပံ့ပိုးမှုဖြင့် တိုးတက်နိုင်ပါသည်။ cerebral palsy affects movement and posture. it varies widely, and many children make progress with support. cerebral_palsy hope_center special_needs ဦးနှောက်ဆိုင်ရာ လှုပ်ရှားမှုကွဲပြားခြင်းသည် ကိုယ်လက်လှုပ်ရှားမှုနှင့် ခန္ဓာကိုယ်အနေအထား ထိန်းချုပ်မှုကို သက်ရောက်စေသော အခြေအနေတစ်ခု ဖြစ်သည်။ သက်ရောက်မှုပုံစံနှင့် အတိုင်းအတာသည် ကလေးတစ်ဦးနှင့်တစ်ဦး ကွာခြားပြီး သင့်လျော်သော ပံ့ပိုးမှုဖြင့် တိုးတက်နိုင်ပါသည်။ cerebral palsy affects movement and posture. it varies widely, and many children make progress with support. ဇွဲ၊ လိုက်လျောညီထွေ ဖြေရှင်းနိုင်မှု determination and adaptability စိတ်ခံစားမှုနှင့် ဆက်ဆံရေး ကောင်းမွန်မှု (မကြာခဏ) often strong communication and connection ကြွက်သားများ ထူးခြားစွာ တင်းနေခြင်း သို့မဟုတ် ထူးခြားစွာ ပျော့နေခြင်း muscles that feel unusually stiff or unusually floppy လှုပ်ရှားမှုများ ညှိနှိုင်းမှု မရှိဘဲ တုန်ခါနေခြင်း movements that look uncoordinated or jerky ၈ လတွင် ထိုင်၍ မရသေးခြင်း not sitting by 8 months ၁၈ လတွင် လမ်း၍ မရသေးခြင်း not walking by 18 months ၁၂ လမပြည့်မီ လက်တစ်ဖက်တည်းကိုသာ အားကိုးသုံးစွဲခြင်း strongly preferring one hand before 12 months of age ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။ these are awareness points, not a diagnosis — if concerned, consult a professional. cp က တိုးမြင့်လာ/ကူးစက်တတ်တယ် cp is contagious or gets worse over time မဟုတ်ပါ — ကူးစက်ခြင်း မရှိ၍ တိုးမြင့်ခြင်းလည်း မဟုတ်ပါ။ no — it is not contagious and not progressive. ကာယကုထုံး ပညာရှင်က သင့်ကလေးအတွက် သတ်မှတ်ပေးထားသော လေ့ကျင့်ခန်းများကိုသာ နေ့စဉ် လုပ်ပါ။ do only the exercises that a physiotherapist has prescribed for your child, and do them daily. ဗီဒီယိုများမှ သို့မဟုတ် အခြားကလေးတစ်ဦးထံမှ လေ့ကျင့်ခန်း/ဆန့်ထုတ်နည်းများကို ကူးယူ၍ မလုပ်ပါနှင့် — cp သည် ကလေးတစ်ဦးချင်းစီအပေါ် မတူညီစွာ သက်ရောက်ပြီး၊ ကလေးတစ်ဦးအတွက် အကျိုးရှိသော ဆန့်ထုတ်နည်းသည် အခြားတစ်ဦးကို ထိခိုက်စေနိုင်ပါသည်။ do not copy exercise or stretching routines from videos or from another child — cerebral palsy affects each child differently, and a stretch that helps one child can injure another. ကာယကုထုံး ပညာရှင် မရှိသေးပါက လေ့ကျင့်ခန်း မစတင်မီ ဆရာဝန်ထံ ညွှန်းပို့ပေးရန် တောင်းခံပါ။ if you do not yet have a physiotherapist, ask your doctor for a referral before starting any exercise programme. ဝင်ရောက်လွယ်ကူသော ပတ်ဝန်းကျင်နှင့် ကိရိယာ ပံ့ပိုးမှု ရှာဖွေပါ။ seek accessible settings and assistive equipment. ကာယကုထုံး ပညာရှင်၊ နေ့စဉ်လုပ်ဆောင်မှုစွမ်းရည် ကုထုံး ပညာရှင်၊ စကားပြောနှင့် ဘာသာစကား ကုထုံး ပညာရှင်နှင့် ကလေးအထူးကု ဆရာဝန်တို့နှင့် လက်တွဲပါ။ work with a physiotherapist, an occupational therapist, a speech and language therapist and a paediatrician. ကလေးသည် အစာကျွေးစဉ် ချောင်းဆိုးခြင်း၊ အစာတစ်ဆို့ခြင်း၊ ဒုက္ခရောက်ပုံရခြင်း သို့မဟုတ် အစာစားရန် အလွန်ကြာခြင်း ရှိပါက အဖွဲ့အား အသိပေးပါ — စကားပြောနှင့် ဘာသာစကား ကုထုံး ပညာရှင်သည် အစာမျိုချမှုကိုပါ စစ်ဆေးပေးပါသည်။ tell the team if your child coughs, chokes or seems distressed during feeding, or takes a very long time to finish a meal — a speech and language therapist also assesses swallowing. ကုသရေးအဖွဲ့ ညွှန်ကြားသော ဟန်ချက်/လှုပ်ရှားမှု ကစားနည်းများ။ balance/movement play as advised by the care team. စောစီးစွာ ကုသမှုက အရေးကြီးသလား။ is early therapy important? အရေးကြီးသည် — စောစီးစွာ ကုသမှုက လှုပ်ရှားမှုနှင့် လွတ်လပ်မှုကို အထောက်အကူပြုသည်။ yes — early therapy supports movement and independence. lsn_what_is_development act_obstacle_crawl nhs. cerebral palsy. https://www.nhs.uk/conditions/cerebral-palsy/ (accessed 2026-07-31) clinical review still outstanding: sources verified against public guidance and the wording accepted by the product owner, but no qualified clinical reviewer has signed off this page."
   },
   {
     "category": "hearing_loss",
@@ -6009,8 +6106,24 @@
       ],
       "possibleSigns": [
         {
-          "mm": "ကျယ်သောအသံ/နာမည်ကို မတုံ့ပြန်ခြင်း၊ စကားပြော နှေးခြင်း",
-          "en": "Not responding to loud sounds/name; delayed speech"
+          "mm": "ကျယ်လောင်သံကြားလျှင် မလန့်ခြင်း",
+          "en": "Does not startle at loud sounds"
+        },
+        {
+          "mm": "၆ လကျော်ပြီးနောက် အသံလာရာဘက်သို့ လှည့်မကြည့်ခြင်း",
+          "en": "Does not turn toward where a sound comes from after 6 months"
+        },
+        {
+          "mm": "၁ နှစ်တွင် “ဖေဖေ”၊ “မေမေ” ကဲ့သို့ စကားလုံးတစ်လုံးချင်း မပြောခြင်း",
+          "en": "Does not say single words such as “dada” or “mama” by 1 year"
+        },
+        {
+          "mm": "သင့်ကို မြင်လျှင် ခေါင်းလှည့်သော်လည်း နောက်ကွယ်မှ နာမည်ခေါ်လျှင် မလှည့်ခြင်း",
+          "en": "Turns their head when they see you, but not when you call their name from behind"
+        },
+        {
+          "mm": "စကားပြော ဖွံ့ဖြိုးမှု နှေးခြင်း",
+          "en": "Speech is developing slowly"
         },
         {
           "mm": "ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။",
@@ -6043,8 +6156,16 @@
       ],
       "professionalSupport": [
         {
-          "mm": "အကြားအာရုံဆိုင်ရာ ပညာရှင်ထံတွင် အကြားအာရုံ စစ်ဆေးမှုကို အမြန်ဆုံး ခံယူပါ။",
+          "mm": "အကြားအာရုံ စစ်ဆေးမှုကို အကြားအာရုံ ကျွမ်းကျင်သူ (audiologist) နှင့် အမြန် ပြုလုပ်ပါ။",
           "en": "Get a hearing test with an audiologist promptly."
+        },
+        {
+          "mm": "အကြံပြု အချိန်ဇယားမှာ — အသက် ၁ လမပြည့်မီ အကြား စစ်ဆေးမှု၊ မအောင်မြင်ပါက ၃ လအတွင်း ပြည့်စုံသော အကြားစစ်ဆေးမှု၊ ၆ လအတွင်း ပံ့ပိုးမှု စတင်ရန် ဖြစ်ပါသည်။",
+          "en": "The recommended timetable is: hearing screening by 1 month of age; if not passed, a full hearing test by 3 months; and support started by 6 months."
+        },
+        {
+          "mm": "သင့်ကလေး မွေးကင်းစတွင် အကြားစစ်ဆေးမှု မပြုလုပ်ရသေးပါက ယခုပင် တောင်းခံပါ — နောက်ကျပြီဟု မဆိုနိုင်သေးပါ။ ဤစစ်ဆေးမှုကို သင့်အနီးတွင် ဘယ်နေရာ၌ ရနိုင်သည်ကို ဆရာဝန်အား မေးမြန်းပါ။",
+          "en": "If your child did not have a newborn hearing screening, ask for one now — it is not too late. Ask your doctor where this test is available near you."
         }
       ],
       "activities": [
@@ -6073,7 +6194,8 @@
       ],
       "relatedMilestones": [],
       "references": [
-        "Pending clinical reviewer: attach verified national/child-health references before publication."
+        "CDC. About Hearing Loss in Children. https://www.cdc.gov/hearing-loss-children/about/index.html (accessed 2026-07-31)",
+        "Clinical review still outstanding: sources verified against public guidance and the wording accepted by the product owner, but no qualified clinical reviewer has signed off this page."
       ]
     },
     "media": [
@@ -6090,7 +6212,7 @@
     "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
     "version": 1,
     "clinicalStatus": "clinical_review",
-    "searchText": "အကြားအာရုံ ချို့တဲ့မှု understanding hearing loss အကြားအာရုံ ချို့တဲ့မှုသည် ပြင်းအား အမျိုးမျိုး ရှိနိုင်သည်။ စောစီးစွာ ရှာဖွေတွေ့ရှိ၍ ပံ့ပိုးခြင်းက ဘာသာစကား ဖွံ့ဖြိုးမှုအတွက် အလွန်အရေးကြီးသည်။ hearing loss ranges in degree. early detection and support are very important for language development. hearing_loss hope_center special_needs အကြားအာရုံ ချို့တဲ့မှုသည် ပြင်းအား အမျိုးမျိုး ရှိနိုင်သည်။ စောစီးစွာ ရှာဖွေတွေ့ရှိ၍ ပံ့ပိုးခြင်းက ဘာသာစကား ဖွံ့ဖြိုးမှုအတွက် အလွန်အရေးကြီးသည်။ hearing loss ranges in degree. early detection and support are very important for language development. မျက်စိဖြင့် သတိပြု/လက်ဟန်ဖြင့် ဆက်သွယ်နိုင်မှု strong visual attention and gesture use ကျယ်သောအသံ/နာမည်ကို မတုံ့ပြန်ခြင်း၊ စကားပြော နှေးခြင်း not responding to loud sounds/name; delayed speech ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။ these are awareness points, not a diagnosis — if concerned, consult a professional. ကလေး တစ်ခါတစ်ရံ တုံ့ပြန်ရင် အကြားအာရုံ ကောင်းတယ်လို့ ဆိုနိုင်တယ် if a child sometimes responds, hearing is fine မဟုတ်ပါ — တစ်စိတ်တစ်ပိုင်း အကြားအာရုံ ချို့တဲ့မှုလည်း ရှိနိုင်၍ စစ်ဆေးမှု လိုအပ်သည်။ no — partial hearing loss exists; a proper test is needed. မျက်နှာချင်းဆိုင်၍ ရှင်းလင်းစွာ ပြောပါ။ လက်ဟန်/ပုံများ သုံးပါ။ face the child, speak clearly, use gestures/pictures. ရှေ့တန်း ထိုင်ခုံနှင့် မျက်စိဖြင့် ပံ့ပိုးမှုများ ပေးပါ။ front seating and visual supports. အကြားအာရုံဆိုင်ရာ ပညာရှင်ထံတွင် အကြားအာရုံ စစ်ဆေးမှုကို အမြန်ဆုံး ခံယူပါ။ get a hearing test with an audiologist promptly. မျက်စိဖြင့် သတိပြုစေသော ကစားနည်းများ။ games that use visual attention. စောစီးစွာ စစ်ဆေးမှုက အရေးကြီးသလား။ is early testing important? အလွန်အရေးကြီးသည် — စောစီးစွာ ပံ့ပိုးမှုက ဘာသာစကားကို ကာကွယ်ပေးသည်။ very — early support protects language development. lsn_language_rich_home act_sound_tracking pending clinical reviewer: attach verified national/child-health references before publication."
+    "searchText": "အကြားအာရုံ ချို့တဲ့မှု understanding hearing loss အကြားအာရုံ ချို့တဲ့မှုသည် ပြင်းအား အမျိုးမျိုး ရှိနိုင်သည်။ စောစီးစွာ ရှာဖွေတွေ့ရှိ၍ ပံ့ပိုးခြင်းက ဘာသာစကား ဖွံ့ဖြိုးမှုအတွက် အလွန်အရေးကြီးသည်။ hearing loss ranges in degree. early detection and support are very important for language development. hearing_loss hope_center special_needs အကြားအာရုံ ချို့တဲ့မှုသည် ပြင်းအား အမျိုးမျိုး ရှိနိုင်သည်။ စောစီးစွာ ရှာဖွေတွေ့ရှိ၍ ပံ့ပိုးခြင်းက ဘာသာစကား ဖွံ့ဖြိုးမှုအတွက် အလွန်အရေးကြီးသည်။ hearing loss ranges in degree. early detection and support are very important for language development. မျက်စိဖြင့် သတိပြု/လက်ဟန်ဖြင့် ဆက်သွယ်နိုင်မှု strong visual attention and gesture use ကျယ်လောင်သံကြားလျှင် မလန့်ခြင်း does not startle at loud sounds ၆ လကျော်ပြီးနောက် အသံလာရာဘက်သို့ လှည့်မကြည့်ခြင်း does not turn toward where a sound comes from after 6 months ၁ နှစ်တွင် “ဖေဖေ”၊ “မေမေ” ကဲ့သို့ စကားလုံးတစ်လုံးချင်း မပြောခြင်း does not say single words such as “dada” or “mama” by 1 year သင့်ကို မြင်လျှင် ခေါင်းလှည့်သော်လည်း နောက်ကွယ်မှ နာမည်ခေါ်လျှင် မလှည့်ခြင်း turns their head when they see you, but not when you call their name from behind စကားပြော ဖွံ့ဖြိုးမှု နှေးခြင်း speech is developing slowly ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။ these are awareness points, not a diagnosis — if concerned, consult a professional. ကလေး တစ်ခါတစ်ရံ တုံ့ပြန်ရင် အကြားအာရုံ ကောင်းတယ်လို့ ဆိုနိုင်တယ် if a child sometimes responds, hearing is fine မဟုတ်ပါ — တစ်စိတ်တစ်ပိုင်း အကြားအာရုံ ချို့တဲ့မှုလည်း ရှိနိုင်၍ စစ်ဆေးမှု လိုအပ်သည်။ no — partial hearing loss exists; a proper test is needed. မျက်နှာချင်းဆိုင်၍ ရှင်းလင်းစွာ ပြောပါ။ လက်ဟန်/ပုံများ သုံးပါ။ face the child, speak clearly, use gestures/pictures. ရှေ့တန်း ထိုင်ခုံနှင့် မျက်စိဖြင့် ပံ့ပိုးမှုများ ပေးပါ။ front seating and visual supports. အကြားအာရုံ စစ်ဆေးမှုကို အကြားအာရုံ ကျွမ်းကျင်သူ (audiologist) နှင့် အမြန် ပြုလုပ်ပါ။ get a hearing test with an audiologist promptly. အကြံပြု အချိန်ဇယားမှာ — အသက် ၁ လမပြည့်မီ အကြား စစ်ဆေးမှု၊ မအောင်မြင်ပါက ၃ လအတွင်း ပြည့်စုံသော အကြားစစ်ဆေးမှု၊ ၆ လအတွင်း ပံ့ပိုးမှု စတင်ရန် ဖြစ်ပါသည်။ the recommended timetable is: hearing screening by 1 month of age; if not passed, a full hearing test by 3 months; and support started by 6 months. သင့်ကလေး မွေးကင်းစတွင် အကြားစစ်ဆေးမှု မပြုလုပ်ရသေးပါက ယခုပင် တောင်းခံပါ — နောက်ကျပြီဟု မဆိုနိုင်သေးပါ။ ဤစစ်ဆေးမှုကို သင့်အနီးတွင် ဘယ်နေရာ၌ ရနိုင်သည်ကို ဆရာဝန်အား မေးမြန်းပါ။ if your child did not have a newborn hearing screening, ask for one now — it is not too late. ask your doctor where this test is available near you. မျက်စိဖြင့် သတိပြုစေသော ကစားနည်းများ။ games that use visual attention. စောစီးစွာ စစ်ဆေးမှုက အရေးကြီးသလား။ is early testing important? အလွန်အရေးကြီးသည် — စောစီးစွာ ပံ့ပိုးမှုက ဘာသာစကားကို ကာကွယ်ပေးသည်။ very — early support protects language development. lsn_language_rich_home act_sound_tracking cdc. about hearing loss in children. https://www.cdc.gov/hearing-loss-children/about/index.html (accessed 2026-07-31) clinical review still outstanding: sources verified against public guidance and the wording accepted by the product owner, but no qualified clinical reviewer has signed off this page."
   },
   {
     "category": "visual_impairment",
@@ -6114,8 +6236,16 @@
       ],
       "possibleSigns": [
         {
-          "mm": "အရာဝတ္ထုများကို လိုက်မကြည့်ခြင်း၊ မျက်လုံး ပုံမှန်မဟုတ်ခြင်း",
-          "en": "Not following objects; unusual eye movements"
+          "mm": "မျက်လုံးဖြင့် အရာဝတ္ထု သို့မဟုတ် မျက်နှာကို မလိုက်ကြည့်ခြင်း",
+          "en": "Not following objects or faces with their eyes"
+        },
+        {
+          "mm": "မျက်လုံး လှုပ်ရှားမှု ထူးခြားခြင်း",
+          "en": "Unusual eye movements"
+        },
+        {
+          "mm": "အောက်ပါတို့ တွေ့ပါက ဆရာဝန်ထံ အမြန်ဆုံး ပြသပါ — မျက်သူငယ်အဝိုင်း ဖြူဖျော့ဖျော့/မီးခိုးရောင်/မှုန်ဝါးနေခြင်း (ဓာတ်ပုံ မီးလျှပ်ရိုက်ထားသည့် ပုံတွင် တွေ့ရသည်လည်း အပါအဝင်)၊ အသက် ၄ လကျော်ပြီးနောက် မျက်လုံးတစ်ဖက် အမြဲ အတွင်း/အပြင်သို့ စောင်းနေခြင်း၊ သို့မဟုတ် မျက်လုံးများ အလင်းကို အလွန်ခံနိုင်ရည်မရှိခြင်း/မျက်ရည် အမြဲယိုစီးခြင်း။ ဤအချက်များကို နောက်ထပ် ပုံမှန်ချိန်းဆိုမှုအထိ မစောင့်ဘဲ အမြန် စစ်ဆေးရန် လိုပါသည်။",
+          "en": "See a doctor urgently if you notice: a white, grey or cloudy pupil (including in flash photographs), an eye that constantly turns in or out after 4 months of age, or eyes that are very sensitive to light or watering constantly. These need to be checked quickly, not at the next routine visit."
         },
         {
           "mm": "ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။",
@@ -6148,8 +6278,12 @@
       ],
       "professionalSupport": [
         {
-          "mm": "မျက်စိအထူးကုနှင့် စောစီးစွာ ပံ့ပိုးရေးဝန်ဆောင်မှုနှင့် တိုင်ပင်ပါ။",
+          "mm": "မျက်စိအထူးကုနှင့် စောစီးစွာ ပံ့ပိုးရေး ဝန်ဆောင်မှုများနှင့် တိုင်ပင်ပါ။",
           "en": "Consult an eye specialist and early-support services."
+        },
+        {
+          "mm": "ကလေး ပုံမှန်ဟု ထင်ရသော်လည်း ပုံမှန် အမြင်အာရုံ စစ်ဆေးမှုကို တောင်းခံပါ — မွေးကင်းစတွင် red reflex စစ်ဆေးမှု အပါအဝင် မျက်စိစစ်ဆေးမှု၊ ၁၂ လမှ ၃ နှစ်အတွင်း ပုံမှန်ပြသချိန်များတွင် စစ်ဆေးမှု။ မျက်လုံးတစ်ဖက် ကောင်းပြီး တစ်ဖက် အားနည်းနေသော ကလေးသည် ပုံမှန်အတိုင်းပင် နေတတ်ပါသည် — ကုသချိန်မီ တွေ့ရှိရန် စစ်ဆေးမှုသာ နည်းလမ်း ဖြစ်ပါသည်။",
+          "en": "Ask for routine vision screening even if your child seems fine: a newborn eye check including the red reflex test, and from 12 months to 3 years a screening check at routine visits. A child who sees well with one eye and poorly with the other usually behaves completely normally — screening is how this is found in time to treat it."
         }
       ],
       "activities": [
@@ -6178,7 +6312,9 @@
       ],
       "relatedMilestones": [],
       "references": [
-        "Pending clinical reviewer: attach verified national/child-health references before publication."
+        "Donahue SP, Nixon CN, et al. Visual System Assessment in Infants, Children, and Young Adults by Pediatricians. Pediatrics. 2016;137(1):e20153596.",
+        "American Academy of Ophthalmology. Common Eye and Vision Myths. https://www.aao.org/eye-health/tips-prevention/common-eye-vision-myths-facts (accessed 2026-07-31)",
+        "Clinical review still outstanding: sources verified against public guidance and the wording accepted by the product owner, but no qualified clinical reviewer has signed off this page."
       ]
     },
     "media": [
@@ -6195,7 +6331,7 @@
     "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
     "version": 1,
     "clinicalStatus": "clinical_review",
-    "searchText": "မျက်စိအမြင် ချို့တဲ့မှု understanding visual impairment အမြင်အာရုံ အားနည်းမှုသည် ကလေးတစ်ဦးနှင့်တစ်ဦး အတိုင်းအတာ ကွာခြားနိုင်သည်။ စောစီးစွာ သိရှိပြီး သင့်လျော်သော ပံ့ပိုးမှုရရှိပါက ကလေးများ ကောင်းစွာ ဖွံ့ဖြိုးတိုးတက်နိုင်သည်။ visual impairment varies in degree. with early detection and support, children thrive. visual_impairment hope_center special_needs အမြင်အာရုံ အားနည်းမှုသည် ကလေးတစ်ဦးနှင့်တစ်ဦး အတိုင်းအတာ ကွာခြားနိုင်သည်။ စောစီးစွာ သိရှိပြီး သင့်လျော်သော ပံ့ပိုးမှုရရှိပါက ကလေးများ ကောင်းစွာ ဖွံ့ဖြိုးတိုးတက်နိုင်သည်။ visual impairment varies in degree. with early detection and support, children thrive. အကြားအာရုံနှင့် ထိတွေ့ခံစားမှု ကောင်းမွန်မှု strong hearing and touch senses အရာဝတ္ထုများကို လိုက်မကြည့်ခြင်း၊ မျက်လုံး ပုံမှန်မဟုတ်ခြင်း not following objects; unusual eye movements ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။ these are awareness points, not a diagnosis — if concerned, consult a professional. မျက်မှန်တပ်ရင် မျက်စိ ပိုဆိုးတယ် glasses make eyes weaker မဟုတ်ပါ — သင့်လျော်သော မျက်မှန်က အမြင်ကို ကူညီသည်။ no — the right glasses help vision. အသံ/ထိတွေ့မှုဖြင့် ဆက်သွယ်၍ ဘေးကင်းသော ပတ်ဝန်းကျင် ဖန်တီးပါ။ connect through sound/touch; keep a safe, predictable space. အလင်းရောင် ကောင်း၊ ကြီးမားသော စာလုံး/ထိတွေ့ပစ္စည်းများ ပေးပါ။ good lighting, large print or tactile materials. မျက်စိအထူးကုနှင့် စောစီးစွာ ပံ့ပိုးရေးဝန်ဆောင်မှုနှင့် တိုင်ပင်ပါ။ consult an eye specialist and early-support services. ထိတွေ့ခံစားမှုနှင့် အသံဖြင့် ကစားနည်းများ။ touch-and-sound play. စောစီးစွာ ရှာဖွေတွေ့ရှိမှုက ကူညီသလား။ does early detection help? ကူညီသည် — စောစီးစွာ ပံ့ပိုးမှုက ဖွံ့ဖြိုးမှုကို အထောက်အကူပြုသည်။ yes — early support aids development. lsn_power_of_play act_sound_tracking pending clinical reviewer: attach verified national/child-health references before publication."
+    "searchText": "မျက်စိအမြင် ချို့တဲ့မှု understanding visual impairment အမြင်အာရုံ အားနည်းမှုသည် ကလေးတစ်ဦးနှင့်တစ်ဦး အတိုင်းအတာ ကွာခြားနိုင်သည်။ စောစီးစွာ သိရှိပြီး သင့်လျော်သော ပံ့ပိုးမှုရရှိပါက ကလေးများ ကောင်းစွာ ဖွံ့ဖြိုးတိုးတက်နိုင်သည်။ visual impairment varies in degree. with early detection and support, children thrive. visual_impairment hope_center special_needs အမြင်အာရုံ အားနည်းမှုသည် ကလေးတစ်ဦးနှင့်တစ်ဦး အတိုင်းအတာ ကွာခြားနိုင်သည်။ စောစီးစွာ သိရှိပြီး သင့်လျော်သော ပံ့ပိုးမှုရရှိပါက ကလေးများ ကောင်းစွာ ဖွံ့ဖြိုးတိုးတက်နိုင်သည်။ visual impairment varies in degree. with early detection and support, children thrive. အကြားအာရုံနှင့် ထိတွေ့ခံစားမှု ကောင်းမွန်မှု strong hearing and touch senses မျက်လုံးဖြင့် အရာဝတ္ထု သို့မဟုတ် မျက်နှာကို မလိုက်ကြည့်ခြင်း not following objects or faces with their eyes မျက်လုံး လှုပ်ရှားမှု ထူးခြားခြင်း unusual eye movements အောက်ပါတို့ တွေ့ပါက ဆရာဝန်ထံ အမြန်ဆုံး ပြသပါ — မျက်သူငယ်အဝိုင်း ဖြူဖျော့ဖျော့/မီးခိုးရောင်/မှုန်ဝါးနေခြင်း (ဓာတ်ပုံ မီးလျှပ်ရိုက်ထားသည့် ပုံတွင် တွေ့ရသည်လည်း အပါအဝင်)၊ အသက် ၄ လကျော်ပြီးနောက် မျက်လုံးတစ်ဖက် အမြဲ အတွင်း/အပြင်သို့ စောင်းနေခြင်း၊ သို့မဟုတ် မျက်လုံးများ အလင်းကို အလွန်ခံနိုင်ရည်မရှိခြင်း/မျက်ရည် အမြဲယိုစီးခြင်း။ ဤအချက်များကို နောက်ထပ် ပုံမှန်ချိန်းဆိုမှုအထိ မစောင့်ဘဲ အမြန် စစ်ဆေးရန် လိုပါသည်။ see a doctor urgently if you notice: a white, grey or cloudy pupil (including in flash photographs), an eye that constantly turns in or out after 4 months of age, or eyes that are very sensitive to light or watering constantly. these need to be checked quickly, not at the next routine visit. ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။ these are awareness points, not a diagnosis — if concerned, consult a professional. မျက်မှန်တပ်ရင် မျက်စိ ပိုဆိုးတယ် glasses make eyes weaker မဟုတ်ပါ — သင့်လျော်သော မျက်မှန်က အမြင်ကို ကူညီသည်။ no — the right glasses help vision. အသံ/ထိတွေ့မှုဖြင့် ဆက်သွယ်၍ ဘေးကင်းသော ပတ်ဝန်းကျင် ဖန်တီးပါ။ connect through sound/touch; keep a safe, predictable space. အလင်းရောင် ကောင်း၊ ကြီးမားသော စာလုံး/ထိတွေ့ပစ္စည်းများ ပေးပါ။ good lighting, large print or tactile materials. မျက်စိအထူးကုနှင့် စောစီးစွာ ပံ့ပိုးရေး ဝန်ဆောင်မှုများနှင့် တိုင်ပင်ပါ။ consult an eye specialist and early-support services. ကလေး ပုံမှန်ဟု ထင်ရသော်လည်း ပုံမှန် အမြင်အာရုံ စစ်ဆေးမှုကို တောင်းခံပါ — မွေးကင်းစတွင် red reflex စစ်ဆေးမှု အပါအဝင် မျက်စိစစ်ဆေးမှု၊ ၁၂ လမှ ၃ နှစ်အတွင်း ပုံမှန်ပြသချိန်များတွင် စစ်ဆေးမှု။ မျက်လုံးတစ်ဖက် ကောင်းပြီး တစ်ဖက် အားနည်းနေသော ကလေးသည် ပုံမှန်အတိုင်းပင် နေတတ်ပါသည် — ကုသချိန်မီ တွေ့ရှိရန် စစ်ဆေးမှုသာ နည်းလမ်း ဖြစ်ပါသည်။ ask for routine vision screening even if your child seems fine: a newborn eye check including the red reflex test, and from 12 months to 3 years a screening check at routine visits. a child who sees well with one eye and poorly with the other usually behaves completely normally — screening is how this is found in time to treat it. ထိတွေ့ခံစားမှုနှင့် အသံဖြင့် ကစားနည်းများ။ touch-and-sound play. စောစီးစွာ ရှာဖွေတွေ့ရှိမှုက ကူညီသလား။ does early detection help? ကူညီသည် — စောစီးစွာ ပံ့ပိုးမှုက ဖွံ့ဖြိုးမှုကို အထောက်အကူပြုသည်။ yes — early support aids development. lsn_power_of_play act_sound_tracking donahue sp, nixon cn, et al. visual system assessment in infants, children, and young adults by pediatricians. pediatrics. 2016;137(1):e20153596. american academy of ophthalmology. common eye and vision myths. https://www.aao.org/eye-health/tips-prevention/common-eye-vision-myths-facts (accessed 2026-07-31) clinical review still outstanding: sources verified against public guidance and the wording accepted by the product owner, but no qualified clinical reviewer has signed off this page."
   },
   {
     "category": "global_developmental_delay",
@@ -6253,8 +6389,12 @@
       ],
       "professionalSupport": [
         {
-          "mm": "ကလေးဖွံ့ဖြိုးမှုဆိုင်ရာ ဆရာဝန်၏ အကဲဖြတ်မှုကို ခံယူပါ။",
-          "en": "Get an assessment from a developmental pediatrician."
+          "mm": "ပုံမှန် ပြသချိန်များတွင် ဖွံ့ဖြိုးမှု စစ်ဆေးမှုကို တောင်းခံပါ — မည်သူမျှ စိုးရိမ်စရာ မတွေ့ရသေးသည့်အခါတွင်ပင် ၉ လ၊ ၁၈ လနှင့် ၃၀ လအရွယ်ခန့်တွင် စံသတ်မှတ် စစ်ဆေးမှု ပြုလုပ်ရန် အကြံပြုထားပါသည်။",
+          "en": "Ask for a developmental check at your child’s routine visits — a standard screening is recommended at around 9 months, 18 months and 30 months, even when nobody has raised a concern."
+        },
+        {
+          "mm": "စိုးရိမ်ပါက ထိုအချိန်များကို မစောင့်ဘဲ မည်သည့်အချိန်တွင်မဆို စစ်ဆေးမှု တောင်းခံနိုင်ပါသည်။ နှောင့်နှေးမှု တွေ့ရှိပါက ကလေးဖွံ့ဖြိုးမှုဆိုင်ရာ ဆရာဝန်ထံ ညွှန်းပို့ပေးရန်နှင့် စောစီးစွာ ကြားဝင်ပံ့ပိုးမှု ဝန်ဆောင်မှုများကို တောင်းခံပါ။",
+          "en": "You can also ask for a screening at any time if you are worried. If a delay is found, ask for a referral to a developmental paediatrician and for early intervention services."
         }
       ],
       "activities": [
@@ -6266,12 +6406,12 @@
       "faq": [
         {
           "q": {
-            "mm": "အကြောင်းရင်း ရှာဖွေသင့်သလား။",
+            "mm": "အကြောင်းရင်း ရှာသင့်ပါသလား။",
             "en": "Should we look for a cause?"
           },
           "a": {
-            "mm": "သင့်သည် — ကျွမ်းကျင်သူ၏ အကဲဖြတ်မှုက ပံ့ပိုးမှု လမ်းကြောင်းကို ရှင်းလင်းစေသည်။",
-            "en": "Yes — a professional assessment clarifies the support path."
+            "mm": "သင့်ပါသည် — စစ်ဆေးမှုသည် အချို့ကလေးများတွင် အကြောင်းရင်းကို တွေ့ရှိစေပြီး သင့်လျော်သော ပံ့ပိုးမှုကို စီစဉ်ရာတွင် အထောက်အကူ ဖြစ်ပါသည်။ သို့သော် အဖြေရမှ ပံ့ပိုးမှု စတင်ရန် မစောင့်ပါနှင့်။ နှောင့်နှေးမှု တွေ့ရှိသည်နှင့် စစ်ဆေးမှုများနှင့် တစ်ပြိုင်နက် စောစီးစွာ ကြားဝင်ပံ့ပိုးမှုကို စတင်သင့်ပါသည်။ ကလေးများစွာတွင် အကြောင်းရင်း တစ်ခုတည်းကို ဘယ်တော့မှ မတွေ့ရှိရဘဲ ရှိတတ်ပြီး — ထိုအချက်က အထောက်အကူပြုသည့် အရာများကို မပြောင်းလဲစေပါ။",
+            "en": "Yes, an assessment is worth having — it can find a cause in some children and helps plan the right support. But do not wait for an answer before starting support. Early intervention should begin as soon as a delay is identified, at the same time as any tests. In many children no single cause is ever found, and that does not change what helps."
           }
         }
       ],
@@ -6283,7 +6423,8 @@
       ],
       "relatedMilestones": [],
       "references": [
-        "Pending clinical reviewer: attach verified national/child-health references before publication."
+        "Lipkin PH, Macias MM. Promoting Optimal Development: Identifying Infants and Young Children With Developmental Disorders Through Developmental Surveillance and Screening. Pediatrics. 2020;145(1):e20193449.",
+        "Clinical review still outstanding: sources verified against public guidance and the wording accepted by the product owner, but no qualified clinical reviewer has signed off this page."
       ]
     },
     "media": [
@@ -6300,12 +6441,12 @@
     "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
     "version": 1,
     "clinicalStatus": "clinical_review",
-    "searchText": "ဘက်စုံ ဖွံ့ဖြိုးမှု နှောင့်နှေးမှု understanding global developmental delay ဤသည်မှာ ဖွံ့ဖြိုးမှု နယ်ပယ် အများအပြားတွင် မျှော်မှန်းထားသည်ထက် နှေးနေခြင်းဖြစ်သည်။ အကြောင်းရင်း ရှာဖွေ၍ စောစီးစွာ ပံ့ပိုးခြင်းက အရေးကြီးသည်။ this is slower-than-expected development across several areas. finding the cause and starting early support matter. global_developmental_delay hope_center special_needs ဤသည်မှာ ဖွံ့ဖြိုးမှု နယ်ပယ် အများအပြားတွင် မျှော်မှန်းထားသည်ထက် နှေးနေခြင်းဖြစ်သည်။ အကြောင်းရင်း ရှာဖွေ၍ စောစီးစွာ ပံ့ပိုးခြင်းက အရေးကြီးသည်။ this is slower-than-expected development across several areas. finding the cause and starting early support matter. ကိုယ်ပိုင်အရှိန်ဖြင့် တိုးတက်နိုင်မှု progress at their own pace လှုပ်ရှားမှု၊ ဘာသာစကား၊ တွေးခေါ်မှု အများအပြားတွင် နှေးခြင်း delays in movement, language, and thinking together ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။ these are awareness points, not a diagnosis — if concerned, consult a professional. ကြီးလာရင် အလိုလို ကောင်းသွားမယ်၊ ဘာမှ မလုပ်ဘဲ စောင့်ရုံပဲ “they’ll grow out of it — just wait” အမြဲ “စောင့်” ခြင်းက စောစီးစွာ ပံ့ပိုးမှု အခွင့်အလမ်းကို လွတ်စေနိုင်သည်။ simply waiting can miss the window for helpful early support. နေ့စဉ်လုပ်ဆောင်ချက်များထဲ သင်ခန်းစာနှင့် ကစားခြင်း ထည့်ပါ။ weave learning and play into daily routines. တစ်ဦးချင်း ပံ့ပိုးမှုနှင့် ပါဝင်စေသော ပတ်ဝန်းကျင် ရှာဖွေပါ။ seek individual support and inclusive settings. ကလေးဖွံ့ဖြိုးမှုဆိုင်ရာ ဆရာဝန်၏ အကဲဖြတ်မှုကို ခံယူပါ။ get an assessment from a developmental pediatrician. အသက်အရွယ်နှင့်လိုက်လျော၍ ရိုးရှင်းသော ကစားနည်းများ။ simple, developmentally-matched play. အကြောင်းရင်း ရှာဖွေသင့်သလား။ should we look for a cause? သင့်သည် — ကျွမ်းကျင်သူ၏ အကဲဖြတ်မှုက ပံ့ပိုးမှု လမ်းကြောင်းကို ရှင်းလင်းစေသည်။ yes — a professional assessment clarifies the support path. lsn_what_is_development act_cup_stacking pending clinical reviewer: attach verified national/child-health references before publication."
+    "searchText": "ဘက်စုံ ဖွံ့ဖြိုးမှု နှောင့်နှေးမှု understanding global developmental delay ဤသည်မှာ ဖွံ့ဖြိုးမှု နယ်ပယ် အများအပြားတွင် မျှော်မှန်းထားသည်ထက် နှေးနေခြင်းဖြစ်သည်။ အကြောင်းရင်း ရှာဖွေ၍ စောစီးစွာ ပံ့ပိုးခြင်းက အရေးကြီးသည်။ this is slower-than-expected development across several areas. finding the cause and starting early support matter. global_developmental_delay hope_center special_needs ဤသည်မှာ ဖွံ့ဖြိုးမှု နယ်ပယ် အများအပြားတွင် မျှော်မှန်းထားသည်ထက် နှေးနေခြင်းဖြစ်သည်။ အကြောင်းရင်း ရှာဖွေ၍ စောစီးစွာ ပံ့ပိုးခြင်းက အရေးကြီးသည်။ this is slower-than-expected development across several areas. finding the cause and starting early support matter. ကိုယ်ပိုင်အရှိန်ဖြင့် တိုးတက်နိုင်မှု progress at their own pace လှုပ်ရှားမှု၊ ဘာသာစကား၊ တွေးခေါ်မှု အများအပြားတွင် နှေးခြင်း delays in movement, language, and thinking together ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။ these are awareness points, not a diagnosis — if concerned, consult a professional. ကြီးလာရင် အလိုလို ကောင်းသွားမယ်၊ ဘာမှ မလုပ်ဘဲ စောင့်ရုံပဲ “they’ll grow out of it — just wait” အမြဲ “စောင့်” ခြင်းက စောစီးစွာ ပံ့ပိုးမှု အခွင့်အလမ်းကို လွတ်စေနိုင်သည်။ simply waiting can miss the window for helpful early support. နေ့စဉ်လုပ်ဆောင်ချက်များထဲ သင်ခန်းစာနှင့် ကစားခြင်း ထည့်ပါ။ weave learning and play into daily routines. တစ်ဦးချင်း ပံ့ပိုးမှုနှင့် ပါဝင်စေသော ပတ်ဝန်းကျင် ရှာဖွေပါ။ seek individual support and inclusive settings. ပုံမှန် ပြသချိန်များတွင် ဖွံ့ဖြိုးမှု စစ်ဆေးမှုကို တောင်းခံပါ — မည်သူမျှ စိုးရိမ်စရာ မတွေ့ရသေးသည့်အခါတွင်ပင် ၉ လ၊ ၁၈ လနှင့် ၃၀ လအရွယ်ခန့်တွင် စံသတ်မှတ် စစ်ဆေးမှု ပြုလုပ်ရန် အကြံပြုထားပါသည်။ ask for a developmental check at your child’s routine visits — a standard screening is recommended at around 9 months, 18 months and 30 months, even when nobody has raised a concern. စိုးရိမ်ပါက ထိုအချိန်များကို မစောင့်ဘဲ မည်သည့်အချိန်တွင်မဆို စစ်ဆေးမှု တောင်းခံနိုင်ပါသည်။ နှောင့်နှေးမှု တွေ့ရှိပါက ကလေးဖွံ့ဖြိုးမှုဆိုင်ရာ ဆရာဝန်ထံ ညွှန်းပို့ပေးရန်နှင့် စောစီးစွာ ကြားဝင်ပံ့ပိုးမှု ဝန်ဆောင်မှုများကို တောင်းခံပါ။ you can also ask for a screening at any time if you are worried. if a delay is found, ask for a referral to a developmental paediatrician and for early intervention services. အသက်အရွယ်နှင့်လိုက်လျော၍ ရိုးရှင်းသော ကစားနည်းများ။ simple, developmentally-matched play. အကြောင်းရင်း ရှာသင့်ပါသလား။ should we look for a cause? သင့်ပါသည် — စစ်ဆေးမှုသည် အချို့ကလေးများတွင် အကြောင်းရင်းကို တွေ့ရှိစေပြီး သင့်လျော်သော ပံ့ပိုးမှုကို စီစဉ်ရာတွင် အထောက်အကူ ဖြစ်ပါသည်။ သို့သော် အဖြေရမှ ပံ့ပိုးမှု စတင်ရန် မစောင့်ပါနှင့်။ နှောင့်နှေးမှု တွေ့ရှိသည်နှင့် စစ်ဆေးမှုများနှင့် တစ်ပြိုင်နက် စောစီးစွာ ကြားဝင်ပံ့ပိုးမှုကို စတင်သင့်ပါသည်။ ကလေးများစွာတွင် အကြောင်းရင်း တစ်ခုတည်းကို ဘယ်တော့မှ မတွေ့ရှိရဘဲ ရှိတတ်ပြီး — ထိုအချက်က အထောက်အကူပြုသည့် အရာများကို မပြောင်းလဲစေပါ။ yes, an assessment is worth having — it can find a cause in some children and helps plan the right support. but do not wait for an answer before starting support. early intervention should begin as soon as a delay is identified, at the same time as any tests. in many children no single cause is ever found, and that does not change what helps. lsn_what_is_development act_cup_stacking lipkin ph, macias mm. promoting optimal development: identifying infants and young children with developmental disorders through developmental surveillance and screening. pediatrics. 2020;145(1):e20193449. clinical review still outstanding: sources verified against public guidance and the wording accepted by the product owner, but no qualified clinical reviewer has signed off this page."
   },
   {
     "category": "learning_disability",
-    "summaryMm": "သင်ယူမှု အခက်အခဲသည် ဉာဏ်ရည် နိမ့်ခြင်း မဟုတ်ဘဲ — အချို့ ကျွမ်းကျင်မှုများ (ဖတ်/ရေး/တွက်) ကို သင်ယူပုံ ကွဲပြားခြင်းဖြစ်သည်။ ငယ်ရွယ်စဉ် အတည်ပြုရ ခက်ခဲသည်။",
-    "summaryEn": "A learning disability is not low intelligence — it is a different way of learning certain skills (reading/writing/math). It is hard to confirm at very young ages.",
+    "summaryMm": "dyslexia၊ dyscalculia ကဲ့သို့ သင်ယူမှု အခက်အခဲသည် စာဖတ်ခြင်း၊ စာရေးခြင်း၊ သင်္ချာ စသည့် သီးသန့် ကျွမ်းကျင်မှုများကို သက်ရောက်ပါသည်။ ယေဘုယျ ဉာဏ်ရည်ကို မထိခိုက်ပါ။ ငယ်ရွယ်စဉ် အတည်ပြုရန် ခက်ခဲပြီး ကျောင်းနေအရွယ်တွင် ပိုရှင်းလာတတ်ပါသည်။ မှတ်ချက် — ၎င်းသည် ဉာဏ်ရည် ဖွံ့ဖြိုးမှု ချို့တဲ့ခြင်း (intellectual disability) နှင့် မတူပါ။ ထိုအခြေအနေမှာမူ ဉာဏ်ရည်ကို သက်ရောက်ပြီး၊ များသောအားဖြင့် မွေးဖွားပြီးမကြာမီ သို့မဟုတ် ငယ်ရွယ်စဉ်ကတည်းက တွေ့ရှိလေ့ရှိပါသည်။",
+    "summaryEn": "A learning difficulty such as dyslexia or dyscalculia affects specific skills like reading, writing or maths. It does not affect general intelligence. It is hard to confirm at very young ages and usually becomes clearer at school age. Note: this is different from a learning disability (intellectual disability), which does affect intellectual ability and is usually identified soon after birth or in the early years.",
     "tags": [
       "learning_disability",
       "hope_center",
@@ -6313,8 +6454,8 @@
     ],
     "data": {
       "overview": {
-        "mm": "သင်ယူမှု အခက်အခဲသည် ဉာဏ်ရည် နိမ့်ခြင်း မဟုတ်ဘဲ — အချို့ ကျွမ်းကျင်မှုများ (ဖတ်/ရေး/တွက်) ကို သင်ယူပုံ ကွဲပြားခြင်းဖြစ်သည်။ ငယ်ရွယ်စဉ် အတည်ပြုရ ခက်ခဲသည်။",
-        "en": "A learning disability is not low intelligence — it is a different way of learning certain skills (reading/writing/math). It is hard to confirm at very young ages."
+        "mm": "dyslexia၊ dyscalculia ကဲ့သို့ သင်ယူမှု အခက်အခဲသည် စာဖတ်ခြင်း၊ စာရေးခြင်း၊ သင်္ချာ စသည့် သီးသန့် ကျွမ်းကျင်မှုများကို သက်ရောက်ပါသည်။ ယေဘုယျ ဉာဏ်ရည်ကို မထိခိုက်ပါ။ ငယ်ရွယ်စဉ် အတည်ပြုရန် ခက်ခဲပြီး ကျောင်းနေအရွယ်တွင် ပိုရှင်းလာတတ်ပါသည်။ မှတ်ချက် — ၎င်းသည် ဉာဏ်ရည် ဖွံ့ဖြိုးမှု ချို့တဲ့ခြင်း (intellectual disability) နှင့် မတူပါ။ ထိုအခြေအနေမှာမူ ဉာဏ်ရည်ကို သက်ရောက်ပြီး၊ များသောအားဖြင့် မွေးဖွားပြီးမကြာမီ သို့မဟုတ် ငယ်ရွယ်စဉ်ကတည်းက တွေ့ရှိလေ့ရှိပါသည်။",
+        "en": "A learning difficulty such as dyslexia or dyscalculia affects specific skills like reading, writing or maths. It does not affect general intelligence. It is hard to confirm at very young ages and usually becomes clearer at school age. Note: this is different from a learning disability (intellectual disability), which does affect intellectual ability and is usually identified soon after birth or in the early years."
       },
       "strengths": [
         {
@@ -6336,7 +6477,7 @@
         {
           "myth": {
             "mm": "သင်ယူမှု အခက်အခဲ ရှိရင် ဉာဏ်နည်းတယ်",
-            "en": "Learning disability means low intelligence"
+            "en": "A learning difficulty means low intelligence"
           },
           "fact": {
             "mm": "မဟုတ်ပါ — ဉာဏ်ရည်နှင့် မသက်ဆိုင်ဘဲ သင်ယူပုံ ကွဲပြားခြင်းဖြစ်သည်။",
@@ -6388,7 +6529,9 @@
       ],
       "relatedMilestones": [],
       "references": [
-        "Pending clinical reviewer: attach verified national/child-health references before publication."
+        "NHS. Learning disabilities. https://www.nhs.uk/conditions/learning-disabilities/ (accessed 2026-07-31)",
+        "Mencap. What is a learning disability? https://www.mencap.org.uk/learning-disability-explained/what-learning-disability (accessed 2026-07-31)",
+        "Clinical review still outstanding: sources verified against public guidance and the wording accepted by the product owner, but no qualified clinical reviewer has signed off this page."
       ]
     },
     "media": [
@@ -6400,17 +6543,17 @@
     ],
     "type": "special_need",
     "slug": "sn_learning_disability",
-    "titleMm": "သင်ယူမှု အခက်အခဲ",
-    "titleEn": "Understanding Learning Disability",
+    "titleMm": "သင်ယူမှု အခက်အခဲ (Specific Learning Difficulty)",
+    "titleEn": "Understanding Learning Difficulty (Specific Learning Disorder)",
     "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
     "version": 1,
     "clinicalStatus": "clinical_review",
-    "searchText": "သင်ယူမှု အခက်အခဲ understanding learning disability သင်ယူမှု အခက်အခဲသည် ဉာဏ်ရည် နိမ့်ခြင်း မဟုတ်ဘဲ — အချို့ ကျွမ်းကျင်မှုများ (ဖတ်/ရေး/တွက်) ကို သင်ယူပုံ ကွဲပြားခြင်းဖြစ်သည်။ ငယ်ရွယ်စဉ် အတည်ပြုရ ခက်ခဲသည်။ a learning disability is not low intelligence — it is a different way of learning certain skills (reading/writing/math). it is hard to confirm at very young ages. learning_disability hope_center special_needs သင်ယူမှု အခက်အခဲသည် ဉာဏ်ရည် နိမ့်ခြင်း မဟုတ်ဘဲ — အချို့ ကျွမ်းကျင်မှုများ (ဖတ်/ရေး/တွက်) ကို သင်ယူပုံ ကွဲပြားခြင်းဖြစ်သည်။ ငယ်ရွယ်စဉ် အတည်ပြုရ ခက်ခဲသည်။ a learning disability is not low intelligence — it is a different way of learning certain skills (reading/writing/math). it is hard to confirm at very young ages. တီထွင်ဖန်တီးမှုနှင့် ပြဿနာ ဖြေရှင်းနိုင်မှု creativity and problem-solving ကျောင်းအရွယ်တွင် သီးခြား ကျွမ်းကျင်မှုတစ်ခု သင်ယူရ ဆက်တိုက် ခက်ခဲခြင်း ongoing difficulty with one specific skill at school age ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။ these are awareness points, not a diagnosis — if concerned, consult a professional. သင်ယူမှု အခက်အခဲ ရှိရင် ဉာဏ်နည်းတယ် learning disability means low intelligence မဟုတ်ပါ — ဉာဏ်ရည်နှင့် မသက်ဆိုင်ဘဲ သင်ယူပုံ ကွဲပြားခြင်းဖြစ်သည်။ no — it is unrelated to intelligence; just a different way of learning. အားသာချက်ကို အသုံးပြု၍ သင်ကြားပါ။ ကြိုးစားမှုကို ချီးမွမ်းပါ။ teach through strengths; praise effort. သင်ကြားမှု ပုံစံ ချိန်ညှိမှုနှင့် အချိန်ပို ပေးပါ။ provide teaching adjustments and extra time. ကျောင်းအရွယ်တွင် ပညာရေးစိတ်ပညာရှင်နှင့် တိုင်ပင်ပါ။ at school age, consult an educational psychologist. ကစားရင်း သင်ယူသော အက္ခရာ/သင်္ချာ ကစားနည်းများ။ playful letter/number games. ငယ်ရွယ်စဉ် သိနိုင်သလား။ can it be known early? ငယ်ရွယ်စဉ် အတည်ပြုရ ခက်ခဲ၍ ကျောင်းအရွယ်တွင် ပို၍ ရှင်းလင်းလာတတ်သည်။ it is hard to confirm early; it usually becomes clearer at school age. lsn_early_math act_name_writing pending clinical reviewer: attach verified national/child-health references before publication."
+    "searchText": "သင်ယူမှု အခက်အခဲ (specific learning difficulty) understanding learning difficulty (specific learning disorder) dyslexia၊ dyscalculia ကဲ့သို့ သင်ယူမှု အခက်အခဲသည် စာဖတ်ခြင်း၊ စာရေးခြင်း၊ သင်္ချာ စသည့် သီးသန့် ကျွမ်းကျင်မှုများကို သက်ရောက်ပါသည်။ ယေဘုယျ ဉာဏ်ရည်ကို မထိခိုက်ပါ။ ငယ်ရွယ်စဉ် အတည်ပြုရန် ခက်ခဲပြီး ကျောင်းနေအရွယ်တွင် ပိုရှင်းလာတတ်ပါသည်။ မှတ်ချက် — ၎င်းသည် ဉာဏ်ရည် ဖွံ့ဖြိုးမှု ချို့တဲ့ခြင်း (intellectual disability) နှင့် မတူပါ။ ထိုအခြေအနေမှာမူ ဉာဏ်ရည်ကို သက်ရောက်ပြီး၊ များသောအားဖြင့် မွေးဖွားပြီးမကြာမီ သို့မဟုတ် ငယ်ရွယ်စဉ်ကတည်းက တွေ့ရှိလေ့ရှိပါသည်။ a learning difficulty such as dyslexia or dyscalculia affects specific skills like reading, writing or maths. it does not affect general intelligence. it is hard to confirm at very young ages and usually becomes clearer at school age. note: this is different from a learning disability (intellectual disability), which does affect intellectual ability and is usually identified soon after birth or in the early years. learning_disability hope_center special_needs dyslexia၊ dyscalculia ကဲ့သို့ သင်ယူမှု အခက်အခဲသည် စာဖတ်ခြင်း၊ စာရေးခြင်း၊ သင်္ချာ စသည့် သီးသန့် ကျွမ်းကျင်မှုများကို သက်ရောက်ပါသည်။ ယေဘုယျ ဉာဏ်ရည်ကို မထိခိုက်ပါ။ ငယ်ရွယ်စဉ် အတည်ပြုရန် ခက်ခဲပြီး ကျောင်းနေအရွယ်တွင် ပိုရှင်းလာတတ်ပါသည်။ မှတ်ချက် — ၎င်းသည် ဉာဏ်ရည် ဖွံ့ဖြိုးမှု ချို့တဲ့ခြင်း (intellectual disability) နှင့် မတူပါ။ ထိုအခြေအနေမှာမူ ဉာဏ်ရည်ကို သက်ရောက်ပြီး၊ များသောအားဖြင့် မွေးဖွားပြီးမကြာမီ သို့မဟုတ် ငယ်ရွယ်စဉ်ကတည်းက တွေ့ရှိလေ့ရှိပါသည်။ a learning difficulty such as dyslexia or dyscalculia affects specific skills like reading, writing or maths. it does not affect general intelligence. it is hard to confirm at very young ages and usually becomes clearer at school age. note: this is different from a learning disability (intellectual disability), which does affect intellectual ability and is usually identified soon after birth or in the early years. တီထွင်ဖန်တီးမှုနှင့် ပြဿနာ ဖြေရှင်းနိုင်မှု creativity and problem-solving ကျောင်းအရွယ်တွင် သီးခြား ကျွမ်းကျင်မှုတစ်ခု သင်ယူရ ဆက်တိုက် ခက်ခဲခြင်း ongoing difficulty with one specific skill at school age ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။ these are awareness points, not a diagnosis — if concerned, consult a professional. သင်ယူမှု အခက်အခဲ ရှိရင် ဉာဏ်နည်းတယ် a learning difficulty means low intelligence မဟုတ်ပါ — ဉာဏ်ရည်နှင့် မသက်ဆိုင်ဘဲ သင်ယူပုံ ကွဲပြားခြင်းဖြစ်သည်။ no — it is unrelated to intelligence; just a different way of learning. အားသာချက်ကို အသုံးပြု၍ သင်ကြားပါ။ ကြိုးစားမှုကို ချီးမွမ်းပါ။ teach through strengths; praise effort. သင်ကြားမှု ပုံစံ ချိန်ညှိမှုနှင့် အချိန်ပို ပေးပါ။ provide teaching adjustments and extra time. ကျောင်းအရွယ်တွင် ပညာရေးစိတ်ပညာရှင်နှင့် တိုင်ပင်ပါ။ at school age, consult an educational psychologist. ကစားရင်း သင်ယူသော အက္ခရာ/သင်္ချာ ကစားနည်းများ။ playful letter/number games. ငယ်ရွယ်စဉ် သိနိုင်သလား။ can it be known early? ငယ်ရွယ်စဉ် အတည်ပြုရ ခက်ခဲ၍ ကျောင်းအရွယ်တွင် ပို၍ ရှင်းလင်းလာတတ်သည်။ it is hard to confirm early; it usually becomes clearer at school age. lsn_early_math act_name_writing nhs. learning disabilities. https://www.nhs.uk/conditions/learning-disabilities/ (accessed 2026-07-31) mencap. what is a learning disability? https://www.mencap.org.uk/learning-disability-explained/what-learning-disability (accessed 2026-07-31) clinical review still outstanding: sources verified against public guidance and the wording accepted by the product owner, but no qualified clinical reviewer has signed off this page."
   },
   {
     "category": "sensory_processing",
-    "summaryMm": "အချို့ကလေးများသည် အသံ၊ အလင်း၊ ထိတွေ့မှုနှင့် လှုပ်ရှားမှုတို့ကို အခြားကလေးများထက် ပိုမိုပြင်းထန်စွာ သို့မဟုတ် ပိုမိုလျော့နည်းစွာ ခံစားတတ်ကြသည်။ ယင်းက နေ့စဉ်ဘဝကို သက်ရောက်နိုင်သည်။",
-    "summaryEn": "Some children feel sounds, light, touch, or movement more or less intensely. This can affect daily life.",
+    "summaryMm": "အချို့ကလေးများသည် အသံ၊ အလင်း၊ ထိတွေ့မှု၊ လှုပ်ရှားမှုတို့ကို ပိုမို သို့မဟုတ် နည်းပါးစွာ ခံစားတတ်ပြီး နေ့စဉ်ဘဝကို သက်ရောက်နိုင်ပါသည်။ အရေးကြီးသည် — အာရုံခံစားမှု ကွဲပြားချက်သည် သီးသန့် အခြေအနေတစ်ခုအဖြစ်ထက် ပိုကြီးသော ပုံရိပ်တစ်ခု၏ အစိတ်အပိုင်း ဖြစ်လေ့ရှိပါသည် — အော်တစ်ဇင်၊ ADHD၊ လှုပ်ရှားမှု ညှိနှိုင်းမှု အခက်အခဲ သို့မဟုတ် စိုးရိမ်စိတ်တို့နှင့် အတူတွေ့ရလေ့ ရှိပါသည်။ ကလေး၏ နေ့စဉ်ဘဝကို သက်ရောက်နေပါက အာရုံခံစားမှု ကုထုံး တစ်ခုတည်းထက် ဘက်စုံ ဖွံ့ဖြိုးမှု စစ်ဆေးမှုကို ဦးစွာ တောင်းခံပါ။",
+    "summaryEn": "Some children feel sounds, light, touch, or movement more or less intensely, and this can affect daily life. Important: sensory differences are usually part of a wider picture rather than a condition on their own — they are often seen alongside autism, ADHD, coordination difficulties or anxiety. If sensory difficulties are affecting your child’s daily life, ask for a full developmental assessment first, rather than sensory therapy alone.",
     "tags": [
       "sensory_processing",
       "hope_center",
@@ -6418,8 +6561,8 @@
     ],
     "data": {
       "overview": {
-        "mm": "အချို့ကလေးများသည် အသံ၊ အလင်း၊ ထိတွေ့မှုနှင့် လှုပ်ရှားမှုတို့ကို အခြားကလေးများထက် ပိုမိုပြင်းထန်စွာ သို့မဟုတ် ပိုမိုလျော့နည်းစွာ ခံစားတတ်ကြသည်။ ယင်းက နေ့စဉ်ဘဝကို သက်ရောက်နိုင်သည်။",
-        "en": "Some children feel sounds, light, touch, or movement more or less intensely. This can affect daily life."
+        "mm": "အချို့ကလေးများသည် အသံ၊ အလင်း၊ ထိတွေ့မှု၊ လှုပ်ရှားမှုတို့ကို ပိုမို သို့မဟုတ် နည်းပါးစွာ ခံစားတတ်ပြီး နေ့စဉ်ဘဝကို သက်ရောက်နိုင်ပါသည်။ အရေးကြီးသည် — အာရုံခံစားမှု ကွဲပြားချက်သည် သီးသန့် အခြေအနေတစ်ခုအဖြစ်ထက် ပိုကြီးသော ပုံရိပ်တစ်ခု၏ အစိတ်အပိုင်း ဖြစ်လေ့ရှိပါသည် — အော်တစ်ဇင်၊ ADHD၊ လှုပ်ရှားမှု ညှိနှိုင်းမှု အခက်အခဲ သို့မဟုတ် စိုးရိမ်စိတ်တို့နှင့် အတူတွေ့ရလေ့ ရှိပါသည်။ ကလေး၏ နေ့စဉ်ဘဝကို သက်ရောက်နေပါက အာရုံခံစားမှု ကုထုံး တစ်ခုတည်းထက် ဘက်စုံ ဖွံ့ဖြိုးမှု စစ်ဆေးမှုကို ဦးစွာ တောင်းခံပါ။",
+        "en": "Some children feel sounds, light, touch, or movement more or less intensely, and this can affect daily life. Important: sensory differences are usually part of a wider picture rather than a condition on their own — they are often seen alongside autism, ADHD, coordination difficulties or anxiety. If sensory difficulties are affecting your child’s daily life, ask for a full developmental assessment first, rather than sensory therapy alone."
       },
       "strengths": [
         {
@@ -6463,8 +6606,12 @@
       ],
       "professionalSupport": [
         {
-          "mm": "နေ့စဉ်လုပ်ဆောင်မှုစွမ်းရည် ပြန်လည်လေ့ကျင့်ပေးသည့် ပညာရှင်နှင့် တိုင်ပင်ပါ။",
-          "en": "Consult an occupational therapist."
+          "mm": "နေ့စဉ်လုပ်ဆောင်မှုစွမ်းရည် ပြန်လည်လေ့ကျင့်ပေးသည့် ပညာရှင်သည် ပိုကျယ်ပြန့်သော ပံ့ပိုးမှု အစီအစဉ်၏ အစိတ်အပိုင်းတစ်ခုအဖြစ် ကူညီနိုင်ပါသည်။",
+          "en": "An occupational therapist can help as one part of a wider support plan."
+        },
+        {
+          "mm": "သိထားသင့်သည်မှာ — အာရုံခံစားမှု ပေါင်းစပ်ကုထုံး၏ ထိရောက်မှုအပေါ် သုတေသနမှာ အကန့်အသတ်ရှိပြီး တိကျသော ကောက်ချက် မချနိုင်သေးပါ။ ထို့ကြောင့် ကုထုံးပညာရှင်နှင့် ရည်မှန်းချက်နှင့် ပြန်လည်သုံးသပ်မည့် ရက်ကို ရှင်းလင်းစွာ သတ်မှတ်ပြီး — မည်သည့် ပြောင်းလဲမှုကို မည်မျှအချိန်အတွင်း မျှော်လင့်ရမည်ကို မေးမြန်းပါ။",
+          "en": "You should know that research on the effectiveness of sensory integration therapy is still limited and not conclusive — so agree clear goals and a review date with the therapist, and ask what change you should expect to see and by when."
         }
       ],
       "activities": [
@@ -6476,12 +6623,12 @@
       "faq": [
         {
           "q": {
-            "mm": "ဤသည် အမြဲတမ်းလား။",
+            "mm": "ဤအခြေအနေ အမြဲတမ်း ဖြစ်နေမလား။",
             "en": "Is this permanent?"
           },
           "a": {
-            "mm": "ပံ့ပိုးမှုနှင့် အချိန်ကြာလာသည်နှင့်အမျှ ခံစားမှု စီမံနိုင်စွမ်း တိုးတက်တတ်သည်။",
-            "en": "With support and time, coping often improves."
+            "mm": "အကြောင်းရင်းပေါ် မူတည်ပါသည်။ ကလေးများစွာသည် အချိန်နှင့် ပံ့ပိုးမှုနှင့်အမျှ ပိုကောင်းစွာ ရင်ဆိုင်နိုင်လာပါသည်။ အာရုံခံစားမှု အခက်အခဲသည် အခြားအခြေအနေတစ်ခု၏ အစိတ်အပိုင်း ဖြစ်တတ်သောကြောင့် — သင့်ကလေးအတွက် အဖြေကို စစ်ဆေးမှုက ပိုရှင်းစေပါသည်။",
+            "en": "It depends on what is causing it. Many children learn to cope better with time and support. Because sensory difficulties are often part of another condition, an assessment helps answer this question for your child specifically."
           }
         }
       ],
@@ -6493,7 +6640,8 @@
       ],
       "relatedMilestones": [],
       "references": [
-        "Pending clinical reviewer: attach verified national/child-health references before publication."
+        "AAP Section on Complementary and Integrative Medicine; Council on Children with Disabilities. Sensory Integration Therapies for Children With Developmental and Behavioral Disorders. Pediatrics. 2012;129(6):1186–1189.",
+        "Clinical review still outstanding: sources verified against public guidance and the wording accepted by the product owner, but no qualified clinical reviewer has signed off this page."
       ]
     },
     "media": [
@@ -6510,7 +6658,7 @@
     "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
     "version": 1,
     "clinicalStatus": "clinical_review",
-    "searchText": "အာရုံခံစားမှု စီမံဆောင်ရွက်မှု ကွဲပြားမှု understanding sensory processing differences အချို့ကလေးများသည် အသံ၊ အလင်း၊ ထိတွေ့မှုနှင့် လှုပ်ရှားမှုတို့ကို အခြားကလေးများထက် ပိုမိုပြင်းထန်စွာ သို့မဟုတ် ပိုမိုလျော့နည်းစွာ ခံစားတတ်ကြသည်။ ယင်းက နေ့စဉ်ဘဝကို သက်ရောက်နိုင်သည်။ some children feel sounds, light, touch, or movement more or less intensely. this can affect daily life. sensory_processing hope_center special_needs အချို့ကလေးများသည် အသံ၊ အလင်း၊ ထိတွေ့မှုနှင့် လှုပ်ရှားမှုတို့ကို အခြားကလေးများထက် ပိုမိုပြင်းထန်စွာ သို့မဟုတ် ပိုမိုလျော့နည်းစွာ ခံစားတတ်ကြသည်။ ယင်းက နေ့စဉ်ဘဝကို သက်ရောက်နိုင်သည်။ some children feel sounds, light, touch, or movement more or less intensely. this can affect daily life. အသေးစိတ် သတိပြုနိုင်မှုနှင့် ခံစားမှု ကြွယ်ဝမှု rich awareness and attention to detail အဝတ်အထည်/အသံ/အစားအစာ ဖွဲ့စည်းပုံကို ပြင်းထန်စွာ တုံ့ပြန်ခြင်း strong reactions to textures, sounds, or food ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။ these are awareness points, not a diagnosis — if concerned, consult a professional. ကလေး အနိုင်ကျင့်နေတာ/ပျက်ပျက်လုပ်နေတာ the child is just being difficult မကြာခဏ ၎င်းသည် ခံစားမှု ကွဲပြားမှုကြောင့်ဖြစ်၍ အပြစ်တင်ခြင်းက အထောက်အကူ မဖြစ်ပါ။ often it is a genuine sensory difference; blame does not help. ခံစားမှု ပြင်းအားကို ချိန်ညှိပါ (တိတ်ဆိတ်နေရာ၊ နူးညံ့အဝတ်)။ adjust the sensory load (quiet space, soft clothing). အနားယူ/ငြိမ်သက်နိုင်သော နေရာ ပေးပါ။ offer a calm-down/break space. နေ့စဉ်လုပ်ဆောင်မှုစွမ်းရည် ပြန်လည်လေ့ကျင့်ပေးသည့် ပညာရှင်နှင့် တိုင်ပင်ပါ။ consult an occupational therapist. ကလေး အဆင်ပြေသည့်အတိုင်း မျက်နှာပြင်အထိအတွေ့ မတူညီသော ပစ္စည်းများဖြင့် ဖြည်းဖြည်းချင်း ကစားပါ။ gentle textured play at the child’s comfort level. ဤသည် အမြဲတမ်းလား။ is this permanent? ပံ့ပိုးမှုနှင့် အချိန်ကြာလာသည်နှင့်အမျှ ခံစားမှု စီမံနိုင်စွမ်း တိုးတက်တတ်သည်။ with support and time, coping often improves. lsn_big_feelings act_water_pouring pending clinical reviewer: attach verified national/child-health references before publication."
+    "searchText": "အာရုံခံစားမှု စီမံဆောင်ရွက်မှု ကွဲပြားမှု understanding sensory processing differences အချို့ကလေးများသည် အသံ၊ အလင်း၊ ထိတွေ့မှု၊ လှုပ်ရှားမှုတို့ကို ပိုမို သို့မဟုတ် နည်းပါးစွာ ခံစားတတ်ပြီး နေ့စဉ်ဘဝကို သက်ရောက်နိုင်ပါသည်။ အရေးကြီးသည် — အာရုံခံစားမှု ကွဲပြားချက်သည် သီးသန့် အခြေအနေတစ်ခုအဖြစ်ထက် ပိုကြီးသော ပုံရိပ်တစ်ခု၏ အစိတ်အပိုင်း ဖြစ်လေ့ရှိပါသည် — အော်တစ်ဇင်၊ adhd၊ လှုပ်ရှားမှု ညှိနှိုင်းမှု အခက်အခဲ သို့မဟုတ် စိုးရိမ်စိတ်တို့နှင့် အတူတွေ့ရလေ့ ရှိပါသည်။ ကလေး၏ နေ့စဉ်ဘဝကို သက်ရောက်နေပါက အာရုံခံစားမှု ကုထုံး တစ်ခုတည်းထက် ဘက်စုံ ဖွံ့ဖြိုးမှု စစ်ဆေးမှုကို ဦးစွာ တောင်းခံပါ။ some children feel sounds, light, touch, or movement more or less intensely, and this can affect daily life. important: sensory differences are usually part of a wider picture rather than a condition on their own — they are often seen alongside autism, adhd, coordination difficulties or anxiety. if sensory difficulties are affecting your child’s daily life, ask for a full developmental assessment first, rather than sensory therapy alone. sensory_processing hope_center special_needs အချို့ကလေးများသည် အသံ၊ အလင်း၊ ထိတွေ့မှု၊ လှုပ်ရှားမှုတို့ကို ပိုမို သို့မဟုတ် နည်းပါးစွာ ခံစားတတ်ပြီး နေ့စဉ်ဘဝကို သက်ရောက်နိုင်ပါသည်။ အရေးကြီးသည် — အာရုံခံစားမှု ကွဲပြားချက်သည် သီးသန့် အခြေအနေတစ်ခုအဖြစ်ထက် ပိုကြီးသော ပုံရိပ်တစ်ခု၏ အစိတ်အပိုင်း ဖြစ်လေ့ရှိပါသည် — အော်တစ်ဇင်၊ adhd၊ လှုပ်ရှားမှု ညှိနှိုင်းမှု အခက်အခဲ သို့မဟုတ် စိုးရိမ်စိတ်တို့နှင့် အတူတွေ့ရလေ့ ရှိပါသည်။ ကလေး၏ နေ့စဉ်ဘဝကို သက်ရောက်နေပါက အာရုံခံစားမှု ကုထုံး တစ်ခုတည်းထက် ဘက်စုံ ဖွံ့ဖြိုးမှု စစ်ဆေးမှုကို ဦးစွာ တောင်းခံပါ။ some children feel sounds, light, touch, or movement more or less intensely, and this can affect daily life. important: sensory differences are usually part of a wider picture rather than a condition on their own — they are often seen alongside autism, adhd, coordination difficulties or anxiety. if sensory difficulties are affecting your child’s daily life, ask for a full developmental assessment first, rather than sensory therapy alone. အသေးစိတ် သတိပြုနိုင်မှုနှင့် ခံစားမှု ကြွယ်ဝမှု rich awareness and attention to detail အဝတ်အထည်/အသံ/အစားအစာ ဖွဲ့စည်းပုံကို ပြင်းထန်စွာ တုံ့ပြန်ခြင်း strong reactions to textures, sounds, or food ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။ these are awareness points, not a diagnosis — if concerned, consult a professional. ကလေး အနိုင်ကျင့်နေတာ/ပျက်ပျက်လုပ်နေတာ the child is just being difficult မကြာခဏ ၎င်းသည် ခံစားမှု ကွဲပြားမှုကြောင့်ဖြစ်၍ အပြစ်တင်ခြင်းက အထောက်အကူ မဖြစ်ပါ။ often it is a genuine sensory difference; blame does not help. ခံစားမှု ပြင်းအားကို ချိန်ညှိပါ (တိတ်ဆိတ်နေရာ၊ နူးညံ့အဝတ်)။ adjust the sensory load (quiet space, soft clothing). အနားယူ/ငြိမ်သက်နိုင်သော နေရာ ပေးပါ။ offer a calm-down/break space. နေ့စဉ်လုပ်ဆောင်မှုစွမ်းရည် ပြန်လည်လေ့ကျင့်ပေးသည့် ပညာရှင်သည် ပိုကျယ်ပြန့်သော ပံ့ပိုးမှု အစီအစဉ်၏ အစိတ်အပိုင်းတစ်ခုအဖြစ် ကူညီနိုင်ပါသည်။ an occupational therapist can help as one part of a wider support plan. သိထားသင့်သည်မှာ — အာရုံခံစားမှု ပေါင်းစပ်ကုထုံး၏ ထိရောက်မှုအပေါ် သုတေသနမှာ အကန့်အသတ်ရှိပြီး တိကျသော ကောက်ချက် မချနိုင်သေးပါ။ ထို့ကြောင့် ကုထုံးပညာရှင်နှင့် ရည်မှန်းချက်နှင့် ပြန်လည်သုံးသပ်မည့် ရက်ကို ရှင်းလင်းစွာ သတ်မှတ်ပြီး — မည်သည့် ပြောင်းလဲမှုကို မည်မျှအချိန်အတွင်း မျှော်လင့်ရမည်ကို မေးမြန်းပါ။ you should know that research on the effectiveness of sensory integration therapy is still limited and not conclusive — so agree clear goals and a review date with the therapist, and ask what change you should expect to see and by when. ကလေး အဆင်ပြေသည့်အတိုင်း မျက်နှာပြင်အထိအတွေ့ မတူညီသော ပစ္စည်းများဖြင့် ဖြည်းဖြည်းချင်း ကစားပါ။ gentle textured play at the child’s comfort level. ဤအခြေအနေ အမြဲတမ်း ဖြစ်နေမလား။ is this permanent? အကြောင်းရင်းပေါ် မူတည်ပါသည်။ ကလေးများစွာသည် အချိန်နှင့် ပံ့ပိုးမှုနှင့်အမျှ ပိုကောင်းစွာ ရင်ဆိုင်နိုင်လာပါသည်။ အာရုံခံစားမှု အခက်အခဲသည် အခြားအခြေအနေတစ်ခု၏ အစိတ်အပိုင်း ဖြစ်တတ်သောကြောင့် — သင့်ကလေးအတွက် အဖြေကို စစ်ဆေးမှုက ပိုရှင်းစေပါသည်။ it depends on what is causing it. many children learn to cope better with time and support. because sensory difficulties are often part of another condition, an assessment helps answer this question for your child specifically. lsn_big_feelings act_water_pouring aap section on complementary and integrative medicine; council on children with disabilities. sensory integration therapies for children with developmental and behavioral disorders. pediatrics. 2012;129(6):1186–1189. clinical review still outstanding: sources verified against public guidance and the wording accepted by the product owner, but no qualified clinical reviewer has signed off this page."
   },
   {
     "category": "dyslexia",
@@ -6534,8 +6682,16 @@
       ],
       "possibleSigns": [
         {
-          "mm": "ကျောင်းအရွယ်တွင် အက္ခရာ/အသံ ဆက်စပ်ရ ခက်ခြင်း",
-          "en": "At school age, difficulty linking letters and sounds"
+          "mm": "ကျောင်းမတက်မီ အရွယ်တွင် — အခြားကလေးများထက် စကားပြော နောက်ကျခြင်း၊ ကာရန်ခံ စကားများ/သီချင်းများ/အက္ခရာ ကစားနည်းများကို စိတ်မဝင်စားခြင်း၊ စကားလုံးနှစ်လုံး ကာရန်ညီသည်ကို နားမခွဲခြားနိုင်ခြင်း",
+          "en": "Before school age: talking later than other children, not enjoying rhymes, songs or letter games, difficulty hearing that two words rhyme"
+        },
+        {
+          "mm": "ကျောင်းနေအရွယ်တွင် — စာလုံးနှင့် အသံ ချိတ်ဆက်ရန် ခက်ခဲခြင်း၊ အသက်အရွယ်နှင့် လိုက်ဖက်သည့် အဆင့်ထက် စာဖတ် နိမ့်ခြင်း၊ အသံထွက်ဖတ်ရာတွင် နှေးခြင်း",
+          "en": "At school age: difficulty linking letters and sounds, reading below the level expected for their age, slow reading aloud"
+        },
+        {
+          "mm": "မှတ်ချက် — Dyslexia ကို အများအားဖြင့် ကျောင်းနေအရွယ် မရောက်မီ အတည်မပြုပါ။ ငယ်စဉ်အရွယ်တွင် အထောက်အကူ ဖြစ်စေသည်မှာ စာဖတ် လေ့ကျင့်ခန်း မဟုတ်ဘဲ — ကာရန်ခံ စကားများ၊ သီချင်းများ၊ ဝဏ္ဏလိုက် လက်ခုပ်တီးခြင်း စသည့် အသံနှင့် ကစားခြင်း ဖြစ်ပါသည်။",
+          "en": "Note: dyslexia is not usually diagnosed before school age. What helps in the early years is playing with sounds — rhymes, songs, clapping out syllables — not formal reading practice."
         },
         {
           "mm": "ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။",
@@ -6545,12 +6701,12 @@
       "myths": [
         {
           "myth": {
-            "mm": "စာလုံးတွေကို ပြောင်းပြန်မြင်တာတစ်ခုတည်းပါ",
+            "mm": "Dyslexia ဆိုတာ စာလုံးတွေ ပြောင်းပြန်မြင်တာပဲ",
             "en": "Dyslexia is just seeing letters backwards"
           },
           "fact": {
-            "mm": "မဟုတ်ပါ။ အဓိကအားဖြင့် စကားသံနှင့် စာလုံးတို့ကို ဆက်စပ်နားလည်ရာတွင် အခက်အခဲရှိခြင်း ဖြစ်သည်။",
-            "en": "That is a myth; it mainly involves sound–letter processing."
+            "mm": "အယူအဆ လွဲမှားချက် ဖြစ်ပါသည်။ စာလုံးများ ပြောင်းပြန်ရေးမိခြင်းသည် စာရေးစ သင်ယူနေသော ကလေးငယ်တိုင်းတွင် တွေ့ရလေ့ရှိပါသည်။ Dyslexia ၏ အဓိက အခက်အခဲမှာ စကားသံများနှင့် ရေးထားသော စာလုံးများကို ချိတ်ဆက်ရာတွင် ဖြစ်ပြီး — ထို့ကြောင့် အသံအခြေပြု သင်ကြားနည်းများက အထောက်အကူ ဖြစ်ပါသည်။",
+            "en": "That is a myth. Reversing letters is common in all young children learning to write. Dyslexia mainly involves difficulty connecting the sounds of speech to written letters, which is why sound-based teaching methods help."
           }
         }
       ],
@@ -6598,7 +6754,9 @@
       ],
       "relatedMilestones": [],
       "references": [
-        "Pending clinical reviewer: attach verified national/child-health references before publication."
+        "NHS. Dyslexia. https://www.nhs.uk/conditions/dyslexia/ (accessed 2026-07-31)",
+        "International Dyslexia Association. Definition of dyslexia. https://dyslexiaida.org/definition-of-dyslexia/",
+        "Clinical review still outstanding: sources verified against public guidance and the wording accepted by the product owner, but no qualified clinical reviewer has signed off this page."
       ]
     },
     "media": [
@@ -6615,7 +6773,7 @@
     "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
     "version": 1,
     "clinicalStatus": "clinical_review",
-    "searchText": "စာဖတ်ခြင်း အခက်အခဲ (dyslexia) understanding dyslexia စာဖတ်ခြင်းဆိုင်ရာ သင်ယူမှုကွဲပြားခြင်းသည် စာဖတ်ခြင်းနှင့် စာလုံးပေါင်းခြင်းကို ခက်ခဲစေနိုင်သည်။ ယင်းသည် ဉာဏ်ရည်နှင့် မသက်ဆိုင်ဘဲ ကျောင်းအရွယ်တွင် ပိုမို ထင်ရှားလာတတ်သည်။ dyslexia is a learning difference affecting reading/spelling. it is unrelated to intelligence and usually becomes clearer at school age. dyslexia hope_center special_needs စာဖတ်ခြင်းဆိုင်ရာ သင်ယူမှုကွဲပြားခြင်းသည် စာဖတ်ခြင်းနှင့် စာလုံးပေါင်းခြင်းကို ခက်ခဲစေနိုင်သည်။ ယင်းသည် ဉာဏ်ရည်နှင့် မသက်ဆိုင်ဘဲ ကျောင်းအရွယ်တွင် ပိုမို ထင်ရှားလာတတ်သည်။ dyslexia is a learning difference affecting reading/spelling. it is unrelated to intelligence and usually becomes clearer at school age. ဖန်တီးမှု၊ ပုံရိပ်ဖြင့် တွေးခေါ်နိုင်မှု creativity and big-picture thinking ကျောင်းအရွယ်တွင် အက္ခရာ/အသံ ဆက်စပ်ရ ခက်ခြင်း at school age, difficulty linking letters and sounds ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။ these are awareness points, not a diagnosis — if concerned, consult a professional. စာလုံးတွေကို ပြောင်းပြန်မြင်တာတစ်ခုတည်းပါ dyslexia is just seeing letters backwards မဟုတ်ပါ။ အဓိကအားဖြင့် စကားသံနှင့် စာလုံးတို့ကို ဆက်စပ်နားလည်ရာတွင် အခက်အခဲရှိခြင်း ဖြစ်သည်။ that is a myth; it mainly involves sound–letter processing. အသံ-စာလုံး ကစားနည်းများ၊ ကြားနာစာဖတ်ခြင်း လုပ်ပါ။ play sound–letter games; read aloud together. အချိန်ပို၊ ကြားနာ/ပုံ ပံ့ပိုးမှုများ ပေးပါ။ provide extra time and audio/visual supports. ပညာရေးစိတ်ပညာရှင်/စာဖတ်အထူးကုဆရာမနှင့် တိုင်ပင်ပါ။ consult an educational psychologist or reading specialist. စကားလုံး ကာရန်/အသံ ကစားနည်းများ။ rhyming and sound games. စောစီးစွာ ပံ့ပိုးမှုက ကူညီသလား။ does early support help? ကူညီသည် — သင့်လျော်သော နည်းလမ်းများက စာဖတ်ခြင်းကို အထောက်အကူပြုသည်။ yes — the right methods support reading. lsn_reading_together act_name_writing pending clinical reviewer: attach verified national/child-health references before publication."
+    "searchText": "စာဖတ်ခြင်း အခက်အခဲ (dyslexia) understanding dyslexia စာဖတ်ခြင်းဆိုင်ရာ သင်ယူမှုကွဲပြားခြင်းသည် စာဖတ်ခြင်းနှင့် စာလုံးပေါင်းခြင်းကို ခက်ခဲစေနိုင်သည်။ ယင်းသည် ဉာဏ်ရည်နှင့် မသက်ဆိုင်ဘဲ ကျောင်းအရွယ်တွင် ပိုမို ထင်ရှားလာတတ်သည်။ dyslexia is a learning difference affecting reading/spelling. it is unrelated to intelligence and usually becomes clearer at school age. dyslexia hope_center special_needs စာဖတ်ခြင်းဆိုင်ရာ သင်ယူမှုကွဲပြားခြင်းသည် စာဖတ်ခြင်းနှင့် စာလုံးပေါင်းခြင်းကို ခက်ခဲစေနိုင်သည်။ ယင်းသည် ဉာဏ်ရည်နှင့် မသက်ဆိုင်ဘဲ ကျောင်းအရွယ်တွင် ပိုမို ထင်ရှားလာတတ်သည်။ dyslexia is a learning difference affecting reading/spelling. it is unrelated to intelligence and usually becomes clearer at school age. ဖန်တီးမှု၊ ပုံရိပ်ဖြင့် တွေးခေါ်နိုင်မှု creativity and big-picture thinking ကျောင်းမတက်မီ အရွယ်တွင် — အခြားကလေးများထက် စကားပြော နောက်ကျခြင်း၊ ကာရန်ခံ စကားများ/သီချင်းများ/အက္ခရာ ကစားနည်းများကို စိတ်မဝင်စားခြင်း၊ စကားလုံးနှစ်လုံး ကာရန်ညီသည်ကို နားမခွဲခြားနိုင်ခြင်း before school age: talking later than other children, not enjoying rhymes, songs or letter games, difficulty hearing that two words rhyme ကျောင်းနေအရွယ်တွင် — စာလုံးနှင့် အသံ ချိတ်ဆက်ရန် ခက်ခဲခြင်း၊ အသက်အရွယ်နှင့် လိုက်ဖက်သည့် အဆင့်ထက် စာဖတ် နိမ့်ခြင်း၊ အသံထွက်ဖတ်ရာတွင် နှေးခြင်း at school age: difficulty linking letters and sounds, reading below the level expected for their age, slow reading aloud မှတ်ချက် — dyslexia ကို အများအားဖြင့် ကျောင်းနေအရွယ် မရောက်မီ အတည်မပြုပါ။ ငယ်စဉ်အရွယ်တွင် အထောက်အကူ ဖြစ်စေသည်မှာ စာဖတ် လေ့ကျင့်ခန်း မဟုတ်ဘဲ — ကာရန်ခံ စကားများ၊ သီချင်းများ၊ ဝဏ္ဏလိုက် လက်ခုပ်တီးခြင်း စသည့် အသံနှင့် ကစားခြင်း ဖြစ်ပါသည်။ note: dyslexia is not usually diagnosed before school age. what helps in the early years is playing with sounds — rhymes, songs, clapping out syllables — not formal reading practice. ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။ these are awareness points, not a diagnosis — if concerned, consult a professional. dyslexia ဆိုတာ စာလုံးတွေ ပြောင်းပြန်မြင်တာပဲ dyslexia is just seeing letters backwards အယူအဆ လွဲမှားချက် ဖြစ်ပါသည်။ စာလုံးများ ပြောင်းပြန်ရေးမိခြင်းသည် စာရေးစ သင်ယူနေသော ကလေးငယ်တိုင်းတွင် တွေ့ရလေ့ရှိပါသည်။ dyslexia ၏ အဓိက အခက်အခဲမှာ စကားသံများနှင့် ရေးထားသော စာလုံးများကို ချိတ်ဆက်ရာတွင် ဖြစ်ပြီး — ထို့ကြောင့် အသံအခြေပြု သင်ကြားနည်းများက အထောက်အကူ ဖြစ်ပါသည်။ that is a myth. reversing letters is common in all young children learning to write. dyslexia mainly involves difficulty connecting the sounds of speech to written letters, which is why sound-based teaching methods help. အသံ-စာလုံး ကစားနည်းများ၊ ကြားနာစာဖတ်ခြင်း လုပ်ပါ။ play sound–letter games; read aloud together. အချိန်ပို၊ ကြားနာ/ပုံ ပံ့ပိုးမှုများ ပေးပါ။ provide extra time and audio/visual supports. ပညာရေးစိတ်ပညာရှင်/စာဖတ်အထူးကုဆရာမနှင့် တိုင်ပင်ပါ။ consult an educational psychologist or reading specialist. စကားလုံး ကာရန်/အသံ ကစားနည်းများ။ rhyming and sound games. စောစီးစွာ ပံ့ပိုးမှုက ကူညီသလား။ does early support help? ကူညီသည် — သင့်လျော်သော နည်းလမ်းများက စာဖတ်ခြင်းကို အထောက်အကူပြုသည်။ yes — the right methods support reading. lsn_reading_together act_name_writing nhs. dyslexia. https://www.nhs.uk/conditions/dyslexia/ (accessed 2026-07-31) international dyslexia association. definition of dyslexia. https://dyslexiaida.org/definition-of-dyslexia/ clinical review still outstanding: sources verified against public guidance and the wording accepted by the product owner, but no qualified clinical reviewer has signed off this page."
   },
   {
     "category": "developmental_coordination_disorder",
@@ -6703,7 +6861,8 @@
       ],
       "relatedMilestones": [],
       "references": [
-        "Pending clinical reviewer: attach verified national/child-health references before publication."
+        "NHS. Developmental co-ordination disorder (dyspraxia) in children. https://www.nhs.uk/conditions/developmental-coordination-disorder-dyspraxia/ (accessed 2026-07-31)",
+        "Clinical review still outstanding: sources verified against public guidance and the wording accepted by the product owner, but no qualified clinical reviewer has signed off this page."
       ]
     },
     "media": [
@@ -6720,7 +6879,7 @@
     "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
     "version": 1,
     "clinicalStatus": "clinical_review",
-    "searchText": "လှုပ်ရှားမှု ညှိနှိုင်းမှု အခက်အခဲ (dcd) understanding developmental coordination difference (dcd) လှုပ်ရှားမှု ညှိနှိုင်းရေးဆိုင်ရာ ကွဲပြားမှုသည် အဝတ်ခလုတ်တပ်ခြင်း၊ ကတ်ကြေးဖြင့် ဖြတ်ခြင်းနှင့် ဘောလုံးဖမ်းခြင်းကဲ့သို့ ကိုယ်လက်လှုပ်ရှားမှုများကို ခက်ခဲစေနိုင်သည်။ ယင်းသည် ဉာဏ်ရည်နှင့် မသက်ဆိုင်ပါ။ dcd is a difference affecting movement coordination (e.g., buttoning, cutting, catching). it is unrelated to intelligence. developmental_coordination_disorder hope_center special_needs လှုပ်ရှားမှု ညှိနှိုင်းရေးဆိုင်ရာ ကွဲပြားမှုသည် အဝတ်ခလုတ်တပ်ခြင်း၊ ကတ်ကြေးဖြင့် ဖြတ်ခြင်းနှင့် ဘောလုံးဖမ်းခြင်းကဲ့သို့ ကိုယ်လက်လှုပ်ရှားမှုများကို ခက်ခဲစေနိုင်သည်။ ယင်းသည် ဉာဏ်ရည်နှင့် မသက်ဆိုင်ပါ။ dcd is a difference affecting movement coordination (e.g., buttoning, cutting, catching). it is unrelated to intelligence. ဇွဲနှင့် ကြိုးစားမှု persistence and effort အသက်အရွယ်ထက် လှုပ်ရှားမှု ကျွမ်းကျင်မှုများ နှေးခြင်း/မတိကျခြင်း motor skills slower or clumsier than peers ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။ these are awareness points, not a diagnosis — if concerned, consult a professional. ကလေးက ပျင်းလို့ သို့မဟုတ် ဂရုမစိုက်လို့ ဖြစ်တာပါ the child is just lazy or careless မဟုတ်ပါ။ ယင်းသည် ကိုယ်လက်လှုပ်ရှားမှုများကို ညှိနှိုင်းရာတွင် အခက်အခဲရှိခြင်း ဖြစ်သည်။ no — it is a real coordination difference. လှုပ်ရှားမှု ကျွမ်းကျင်မှုများကို အပိုင်းလိုက် ခွဲ၍ လေ့ကျင့်ပေးပါ။ break motor skills into small steps to practice. ရေးသားမှု/ကိုယ်လက်လှုပ်ရှားမှုတွင် အချိန်ပိုနှင့် ချိန်ညှိမှုများ ပေးပါ။ allow extra time and adjustments for writing/pe. နေ့စဉ်လုပ်ဆောင်မှုစွမ်းရည် ပြန်လည်လေ့ကျင့်ပေးသည့် ပညာရှင် သို့မဟုတ် ကိုယ်လက်လှုပ်ရှားမှု ပြန်လည်သန်စွမ်းရေးပညာရှင်နှင့် တိုင်ပင်ပါ။ consult an occupational therapist or physiotherapist. ဟန်ချက်နှင့် လက်-မျက်စိ ညှိနှိုင်းမှု ကစားနည်းများ။ balance and hand–eye coordination play. လေ့ကျင့်မှုက တိုးတက်စေသလား။ does practice help? ကူညီသည် — အပိုင်းလိုက် လေ့ကျင့်ခြင်းနှင့် ပံ့ပိုးမှုက ကျွမ်းကျင်မှုကို တိုးတက်စေသည်။ yes — step-by-step practice and support build skills. lsn_power_of_play act_obstacle_course pending clinical reviewer: attach verified national/child-health references before publication."
+    "searchText": "လှုပ်ရှားမှု ညှိနှိုင်းမှု အခက်အခဲ (dcd) understanding developmental coordination difference (dcd) လှုပ်ရှားမှု ညှိနှိုင်းရေးဆိုင်ရာ ကွဲပြားမှုသည် အဝတ်ခလုတ်တပ်ခြင်း၊ ကတ်ကြေးဖြင့် ဖြတ်ခြင်းနှင့် ဘောလုံးဖမ်းခြင်းကဲ့သို့ ကိုယ်လက်လှုပ်ရှားမှုများကို ခက်ခဲစေနိုင်သည်။ ယင်းသည် ဉာဏ်ရည်နှင့် မသက်ဆိုင်ပါ။ dcd is a difference affecting movement coordination (e.g., buttoning, cutting, catching). it is unrelated to intelligence. developmental_coordination_disorder hope_center special_needs လှုပ်ရှားမှု ညှိနှိုင်းရေးဆိုင်ရာ ကွဲပြားမှုသည် အဝတ်ခလုတ်တပ်ခြင်း၊ ကတ်ကြေးဖြင့် ဖြတ်ခြင်းနှင့် ဘောလုံးဖမ်းခြင်းကဲ့သို့ ကိုယ်လက်လှုပ်ရှားမှုများကို ခက်ခဲစေနိုင်သည်။ ယင်းသည် ဉာဏ်ရည်နှင့် မသက်ဆိုင်ပါ။ dcd is a difference affecting movement coordination (e.g., buttoning, cutting, catching). it is unrelated to intelligence. ဇွဲနှင့် ကြိုးစားမှု persistence and effort အသက်အရွယ်ထက် လှုပ်ရှားမှု ကျွမ်းကျင်မှုများ နှေးခြင်း/မတိကျခြင်း motor skills slower or clumsier than peers ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။ these are awareness points, not a diagnosis — if concerned, consult a professional. ကလေးက ပျင်းလို့ သို့မဟုတ် ဂရုမစိုက်လို့ ဖြစ်တာပါ the child is just lazy or careless မဟုတ်ပါ။ ယင်းသည် ကိုယ်လက်လှုပ်ရှားမှုများကို ညှိနှိုင်းရာတွင် အခက်အခဲရှိခြင်း ဖြစ်သည်။ no — it is a real coordination difference. လှုပ်ရှားမှု ကျွမ်းကျင်မှုများကို အပိုင်းလိုက် ခွဲ၍ လေ့ကျင့်ပေးပါ။ break motor skills into small steps to practice. ရေးသားမှု/ကိုယ်လက်လှုပ်ရှားမှုတွင် အချိန်ပိုနှင့် ချိန်ညှိမှုများ ပေးပါ။ allow extra time and adjustments for writing/pe. နေ့စဉ်လုပ်ဆောင်မှုစွမ်းရည် ပြန်လည်လေ့ကျင့်ပေးသည့် ပညာရှင် သို့မဟုတ် ကိုယ်လက်လှုပ်ရှားမှု ပြန်လည်သန်စွမ်းရေးပညာရှင်နှင့် တိုင်ပင်ပါ။ consult an occupational therapist or physiotherapist. ဟန်ချက်နှင့် လက်-မျက်စိ ညှိနှိုင်းမှု ကစားနည်းများ။ balance and hand–eye coordination play. လေ့ကျင့်မှုက တိုးတက်စေသလား။ does practice help? ကူညီသည် — အပိုင်းလိုက် လေ့ကျင့်ခြင်းနှင့် ပံ့ပိုးမှုက ကျွမ်းကျင်မှုကို တိုးတက်စေသည်။ yes — step-by-step practice and support build skills. lsn_power_of_play act_obstacle_course nhs. developmental co-ordination disorder (dyspraxia) in children. https://www.nhs.uk/conditions/developmental-coordination-disorder-dyspraxia/ (accessed 2026-07-31) clinical review still outstanding: sources verified against public guidance and the wording accepted by the product owner, but no qualified clinical reviewer has signed off this page."
   },
   {
     "category": "selective_mutism",
@@ -6744,8 +6903,16 @@
       ],
       "possibleSigns": [
         {
-          "mm": "အိမ်တွင် ပုံမှန်ပြော၍ ကျောင်း/အများနေရာတွင် ဆက်တိုက် စကားမပြောခြင်း",
-          "en": "Speaks at home but consistently silent at school/in public"
+          "mm": "အိမ်တွင် စကားပြောသော်လည်း ကျောင်း သို့မဟုတ် အများရှေ့တွင် အမြဲ တိတ်ဆိတ်နေခြင်း",
+          "en": "Speaks at home but is consistently silent at school or in public"
+        },
+        {
+          "mm": "များသောအားဖြင့် အသက် ၂ နှစ်မှ ၄ နှစ်ကြားတွင် စတင်တတ်သည်",
+          "en": "Most often starts between the ages of 2 and 4"
+        },
+        {
+          "mm": "အရေးကြီးသည် — သင့်ကလေးသည် အိမ်တွင် မိသားစုနှင့်ပါ အပါအဝင် မည်သည့်နေရာတွင်မှ စကား အလွန်နည်းပါက ၎င်းသည် ရွေးချယ် အသံတိတ်ခြင်း မဟုတ်ပါ။ ထိုအစား အကြားအာရုံ စစ်ဆေးမှုနှင့် စကားပြော/ဘာသာစကား စစ်ဆေးမှုကို တောင်းခံပါ။",
+          "en": "Important: if your child speaks very little anywhere, including at home with family, this is not selective mutism. Ask for a hearing test and a speech and language assessment instead."
         },
         {
           "mm": "ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။",
@@ -6766,8 +6933,12 @@
       ],
       "homeSupport": [
         {
-          "mm": "စကားပြောရန် ဖိအားမပေးဘဲ လုံခြုံစိတ်ချရသော အခြေအနေများ တဖြည်းဖြည်း ဖန်တီးပါ။",
-          "en": "Don’t pressure speech; build safe situations gradually."
+          "mm": "ကလေးအား စကားပြောရန် ဖိအားမပေးပါနှင့် — စကားပြောလျှင် ဆုပေးမည်၊ ချော့မြှူမည် ဆိုသည်လည်း မလုပ်ပါနှင့်။ ၎င်းသည်လည်း ဖိအား ထပ်တိုးစေပါသည်။",
+          "en": "Do not pressure your child to speak — and do not offer rewards or bribes for speaking either, as this adds to the pressure."
+        },
+        {
+          "mm": "သက်တောင့်သက်သာ ရှိသော အခြေအနေများကို တဖြည်းဖြည်း တည်ဆောက်ပေးပြီး — ကြားကာလတွင် အခြားနည်းလမ်းများဖြင့် ဆက်သွယ်ခွင့် ပေးပါ။",
+          "en": "Build up comfortable situations gradually, and let them communicate in other ways in the meantime."
         }
       ],
       "schoolSupport": [
@@ -6778,8 +6949,8 @@
       ],
       "professionalSupport": [
         {
-          "mm": "ကလေးစိတ်ပညာရှင်နှင့် တိုင်ပင်ပါ။",
-          "en": "Consult a child psychologist."
+          "mm": "ဆရာဝန်နှင့် တိုင်ပင်ပါ — စကားပြောနှင့် ဘာသာစကား ကုထုံး ဝန်ဆောင်မှု သို့မဟုတ် ကလေးစိတ်ပညာရှင်ထံ ညွှန်းပို့ပေးနိုင်ပါသည်။ နှစ်မျိုးလုံး ကူညီနိုင်ပါသည် — ရွေးချယ် အသံတိတ်ခြင်းကို စကားပြော လေ့ကျင့်ခန်းဖြင့် မဟုတ်ဘဲ စကားပြောခြင်းနှင့် ဆက်စပ်သော စိုးရိမ်စိတ်ကို လျှော့ချခြင်းဖြင့် ကုသပါသည်။",
+          "en": "Speak to your doctor, who can refer you to a speech and language therapy service or a child psychologist. Either can help — selective mutism is treated by reducing anxiety around speaking, not by speech exercises."
         }
       ],
       "activities": [
@@ -6808,7 +6979,8 @@
       ],
       "relatedMilestones": [],
       "references": [
-        "Pending clinical reviewer: attach verified national/child-health references before publication."
+        "NHS. Selective mutism. https://www.nhs.uk/mental-health/conditions/selective-mutism/ (accessed 2026-07-31)",
+        "Clinical review still outstanding: sources verified against public guidance and the wording accepted by the product owner, but no qualified clinical reviewer has signed off this page."
       ]
     },
     "media": [
@@ -6825,7 +6997,7 @@
     "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
     "version": 1,
     "clinicalStatus": "clinical_review",
-    "searchText": "ရွေးချယ် အသံတိတ်ခြင်း (selective mutism) understanding selective mutism အခြေအနေအလိုက် စကားမပြောနိုင်ခြင်းဆိုသည်မှာ ကလေးက အိမ်တွင် စကားပြောနိုင်သော်လည်း ကျောင်းကဲ့သို့ အချို့နေရာများတွင် စကားမပြောနိုင်ခြင်း ဖြစ်သည်။ ယင်းသည် ခေါင်းမာခြင်း မဟုတ်ဘဲ စိုးရိမ်ပူပန်မှုနှင့် ဆက်စပ်နိုင်သည်။ selective mutism is when a child can speak at home but not in certain settings (e.g., school). it is not defiance — it is linked to anxiety. selective_mutism hope_center special_needs အခြေအနေအလိုက် စကားမပြောနိုင်ခြင်းဆိုသည်မှာ ကလေးက အိမ်တွင် စကားပြောနိုင်သော်လည်း ကျောင်းကဲ့သို့ အချို့နေရာများတွင် စကားမပြောနိုင်ခြင်း ဖြစ်သည်။ ယင်းသည် ခေါင်းမာခြင်း မဟုတ်ဘဲ စိုးရိမ်ပူပန်မှုနှင့် ဆက်စပ်နိုင်သည်။ selective mutism is when a child can speak at home but not in certain settings (e.g., school). it is not defiance — it is linked to anxiety. ရင်းနှီးသော နေရာတွင် ဆက်သွယ်နိုင်မှု communicates well in comfortable settings အိမ်တွင် ပုံမှန်ပြော၍ ကျောင်း/အများနေရာတွင် ဆက်တိုက် စကားမပြောခြင်း speaks at home but consistently silent at school/in public ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။ these are awareness points, not a diagnosis — if concerned, consult a professional. ကလေးက ရည်ရွယ်ချက်ရှိရှိ စကားမပြောတာပါ the child is refusing to talk on purpose မဟုတ်ပါ။ စိုးရိမ်ပူပန်မှုကြောင့် ဖြစ်နိုင်ပြီး စကားပြောရန် ဖိအားပေးခြင်းက ပိုမိုခက်ခဲစေနိုင်သည်။ no — it is anxiety-driven; pressure makes it worse. စကားပြောရန် ဖိအားမပေးဘဲ လုံခြုံစိတ်ချရသော အခြေအနေများ တဖြည်းဖြည်း ဖန်တီးပါ။ don’t pressure speech; build safe situations gradually. ဆရာမနှင့် ပူးပေါင်း၍ ဖိအားနည်းသော ဆက်သွယ်နည်းများ (ခေါင်းညိတ်/ရေး) ခွင့်ပြုပါ။ work with the teacher; allow low-pressure communication (nod/write). ကလေးစိတ်ပညာရှင်နှင့် တိုင်ပင်ပါ။ consult a child psychologist. ရင်းနှီးသူ အနည်းငယ်ဖြင့် ဖိအားနည်းသော ကစားနည်းများ။ low-pressure play with a few familiar people. စကားပြောဖို့ တွန်းအားပေးသင့်သလား။ should we push them to talk? မသင့်ပါ — ဖိအားက စိုးရိမ်စိတ်ကို ပိုစေသည်။ တဖြည်းဖြည်း ယုံကြည်မှု တည်ဆောက်ပါ။ no — pressure increases anxiety. build confidence gradually. lsn_big_feelings act_feeling_faces pending clinical reviewer: attach verified national/child-health references before publication."
+    "searchText": "ရွေးချယ် အသံတိတ်ခြင်း (selective mutism) understanding selective mutism အခြေအနေအလိုက် စကားမပြောနိုင်ခြင်းဆိုသည်မှာ ကလေးက အိမ်တွင် စကားပြောနိုင်သော်လည်း ကျောင်းကဲ့သို့ အချို့နေရာများတွင် စကားမပြောနိုင်ခြင်း ဖြစ်သည်။ ယင်းသည် ခေါင်းမာခြင်း မဟုတ်ဘဲ စိုးရိမ်ပူပန်မှုနှင့် ဆက်စပ်နိုင်သည်။ selective mutism is when a child can speak at home but not in certain settings (e.g., school). it is not defiance — it is linked to anxiety. selective_mutism hope_center special_needs အခြေအနေအလိုက် စကားမပြောနိုင်ခြင်းဆိုသည်မှာ ကလေးက အိမ်တွင် စကားပြောနိုင်သော်လည်း ကျောင်းကဲ့သို့ အချို့နေရာများတွင် စကားမပြောနိုင်ခြင်း ဖြစ်သည်။ ယင်းသည် ခေါင်းမာခြင်း မဟုတ်ဘဲ စိုးရိမ်ပူပန်မှုနှင့် ဆက်စပ်နိုင်သည်။ selective mutism is when a child can speak at home but not in certain settings (e.g., school). it is not defiance — it is linked to anxiety. ရင်းနှီးသော နေရာတွင် ဆက်သွယ်နိုင်မှု communicates well in comfortable settings အိမ်တွင် စကားပြောသော်လည်း ကျောင်း သို့မဟုတ် အများရှေ့တွင် အမြဲ တိတ်ဆိတ်နေခြင်း speaks at home but is consistently silent at school or in public များသောအားဖြင့် အသက် ၂ နှစ်မှ ၄ နှစ်ကြားတွင် စတင်တတ်သည် most often starts between the ages of 2 and 4 အရေးကြီးသည် — သင့်ကလေးသည် အိမ်တွင် မိသားစုနှင့်ပါ အပါအဝင် မည်သည့်နေရာတွင်မှ စကား အလွန်နည်းပါက ၎င်းသည် ရွေးချယ် အသံတိတ်ခြင်း မဟုတ်ပါ။ ထိုအစား အကြားအာရုံ စစ်ဆေးမှုနှင့် စကားပြော/ဘာသာစကား စစ်ဆေးမှုကို တောင်းခံပါ။ important: if your child speaks very little anywhere, including at home with family, this is not selective mutism. ask for a hearing test and a speech and language assessment instead. ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။ these are awareness points, not a diagnosis — if concerned, consult a professional. ကလေးက ရည်ရွယ်ချက်ရှိရှိ စကားမပြောတာပါ the child is refusing to talk on purpose မဟုတ်ပါ။ စိုးရိမ်ပူပန်မှုကြောင့် ဖြစ်နိုင်ပြီး စကားပြောရန် ဖိအားပေးခြင်းက ပိုမိုခက်ခဲစေနိုင်သည်။ no — it is anxiety-driven; pressure makes it worse. ကလေးအား စကားပြောရန် ဖိအားမပေးပါနှင့် — စကားပြောလျှင် ဆုပေးမည်၊ ချော့မြှူမည် ဆိုသည်လည်း မလုပ်ပါနှင့်။ ၎င်းသည်လည်း ဖိအား ထပ်တိုးစေပါသည်။ do not pressure your child to speak — and do not offer rewards or bribes for speaking either, as this adds to the pressure. သက်တောင့်သက်သာ ရှိသော အခြေအနေများကို တဖြည်းဖြည်း တည်ဆောက်ပေးပြီး — ကြားကာလတွင် အခြားနည်းလမ်းများဖြင့် ဆက်သွယ်ခွင့် ပေးပါ။ build up comfortable situations gradually, and let them communicate in other ways in the meantime. ဆရာမနှင့် ပူးပေါင်း၍ ဖိအားနည်းသော ဆက်သွယ်နည်းများ (ခေါင်းညိတ်/ရေး) ခွင့်ပြုပါ။ work with the teacher; allow low-pressure communication (nod/write). ဆရာဝန်နှင့် တိုင်ပင်ပါ — စကားပြောနှင့် ဘာသာစကား ကုထုံး ဝန်ဆောင်မှု သို့မဟုတ် ကလေးစိတ်ပညာရှင်ထံ ညွှန်းပို့ပေးနိုင်ပါသည်။ နှစ်မျိုးလုံး ကူညီနိုင်ပါသည် — ရွေးချယ် အသံတိတ်ခြင်းကို စကားပြော လေ့ကျင့်ခန်းဖြင့် မဟုတ်ဘဲ စကားပြောခြင်းနှင့် ဆက်စပ်သော စိုးရိမ်စိတ်ကို လျှော့ချခြင်းဖြင့် ကုသပါသည်။ speak to your doctor, who can refer you to a speech and language therapy service or a child psychologist. either can help — selective mutism is treated by reducing anxiety around speaking, not by speech exercises. ရင်းနှီးသူ အနည်းငယ်ဖြင့် ဖိအားနည်းသော ကစားနည်းများ။ low-pressure play with a few familiar people. စကားပြောဖို့ တွန်းအားပေးသင့်သလား။ should we push them to talk? မသင့်ပါ — ဖိအားက စိုးရိမ်စိတ်ကို ပိုစေသည်။ တဖြည်းဖြည်း ယုံကြည်မှု တည်ဆောက်ပါ။ no — pressure increases anxiety. build confidence gradually. lsn_big_feelings act_feeling_faces nhs. selective mutism. https://www.nhs.uk/mental-health/conditions/selective-mutism/ (accessed 2026-07-31) clinical review still outstanding: sources verified against public guidance and the wording accepted by the product owner, but no qualified clinical reviewer has signed off this page."
   },
   {
     "category": "picture",
