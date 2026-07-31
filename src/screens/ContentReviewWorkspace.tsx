@@ -13,12 +13,16 @@ import {
   roleMayReview as mayReview,
   type ReviewRefusalCode,
 } from '../../convex/lib/reviewPolicy';
+import { AGE_GROUPS } from '../content/taxonomy';
+import { OwnerPriorityView, type QueueRowView } from './ownerPriority/OwnerPriorityView';
+import { ClassificationImportPreview } from './ownerPriority/ClassificationImportPreview';
+import { OwnerActionsPanel, SecuritySummaryPanel } from './ownerPriority/OwnerActionsPanel';
 
 const DIMENSIONS = ['english', 'native_myanmar', 'evidence', 'safety', 'clinical'] as const;
 const DECISIONS = ['in_review', 'approved', 'changes_requested', 'not_applicable'] as const;
 type Dimension = (typeof DIMENSIONS)[number];
 type Decision = (typeof DECISIONS)[number];
-type StaffRole = 'owner' | 'content_editor' | 'language_reviewer' | 'evidence_reviewer' | 'clinical_reviewer' | 'support';
+type StaffRole = 'owner' | 'content_editor' | 'language_reviewer' | 'evidence_reviewer' | 'clinical_reviewer' | 'review_manager' | 'support';
 
 const DIMENSION_LABELS: Record<Dimension, { mm: string; en: string }> = {
   english: { mm: 'အင်္ဂလိပ်စာနှင့် အကြောင်းအရာ', en: 'English copy and content' },
@@ -389,10 +393,34 @@ function ContentEditor({ item, role, onDirtyChange }: { item: {
   );
 }
 
+type WorkspaceTab = 'priority' | 'item' | 'import' | 'security';
+
+/** Live Owner Priority tab: server queues + the shared presentational view. */
+function OwnerPriorityContainer({ onOpenItem }: { onOpenItem: (row: QueueRowView) => void }) {
+  const { locale } = useLocale();
+  const queues = useQuery(api.ownerPriority.queues);
+  if (queues === undefined) return <p className="text-ink-soft">…</p>;
+  if (!queues.allowed) return null;
+  return (
+    <OwnerPriorityView
+      locale={locale}
+      rows={queues.rows as QueueRowView[]}
+      counts={queues.counts}
+      ageGroups={AGE_GROUPS}
+      contentTypes={[...CONTENT_TYPES]}
+      onOpenItem={onOpenItem}
+      accessLevel={queues.accessLevel as 'full' | 'correction_scoped' | 'assignment_scoped'}
+      dataComplete={queues.dataComplete}
+      countsAuthoritative={queues.countsAuthoritative}
+    />
+  );
+}
+
 export function ContentReviewWorkspace() {
   const { locale } = useLocale();
   const L = (mm: string, en: string) => locale === 'mm' ? mm : en;
   const access = useQuery(api.admin.myAccess);
+  const [tab, setTab] = useState<WorkspaceTab>('priority');
   const [type, setType] = useState('milestone');
   const [selectedSlug, setSelectedSlug] = useState('');
   const list = useQuery(api.library.listByType, { type });
@@ -406,6 +434,10 @@ export function ContentReviewWorkspace() {
   const [message, setMessage] = useState('');
   const [editorDirty, setEditorDirty] = useState(false);
   const [needsName, setNeedsName] = useState(false);
+  // The queue is the single source of what remains outstanding for this row,
+  // so the item screen and the queue can never disagree about completion.
+  const queueState = useQuery(api.ownerPriority.queues);
+  const queueRow = queueState?.rows.find((row) => row.slug === selectedSlug);
 
   const confirmSelectionChange = () => !editorDirty || window.confirm(L(
     'မသိမ်းရသေးသော ပြင်ဆင်ချက်များ ရှိပါသည်။ မသိမ်းဘဲ အခြားအကြောင်းအရာသို့ ပြောင်းမည်လား။',
@@ -431,10 +463,24 @@ export function ContentReviewWorkspace() {
 
   const submitDecision = async (event: FormEvent) => {
     event.preventDefault();
-    if (!selectedSlug) return;
+    // Guard against double submission: the button is disabled while busy, but a
+    // queued second click (or Enter) must also be ignored — the server has its
+    // own idempotency guard, and the client should not rely on it.
+    // A decision must bind to a known revision, so do not submit before the
+    // review state has loaded.
+    if (!selectedSlug || busy || !reviews) return;
     setBusy(true); setMessage('');
     try {
-      const result = await saveDecision({ contentSlug: selectedSlug, dimension, decision, note: note || undefined });
+      const result = await saveDecision({
+        contentSlug: selectedSlug,
+        dimension,
+        decision,
+        note: note || undefined,
+        // Bind the decision to the revision on screen; the server refuses if
+        // the content changed since this screen loaded. Required by the
+        // mutation, so the button stays disabled until it is known.
+        expectedReviewRevision: reviews.contentVersion ?? 1,
+      });
       if (!result.ok) {
         // The server refuses in-band with a code, so the reviewer gets the actual
         // reason instead of an opaque "Server Error" from a thrown exception.
@@ -461,8 +507,22 @@ export function ContentReviewWorkspace() {
   }
 
   const item = detail && 'item' in detail ? detail.item : null;
+  const isOwner = access.role === 'owner';
+  const openItemFromQueue = (row: QueueRowView) => {
+    if (!confirmSelectionChange()) return;
+    setEditorDirty(false);
+    setType(row.type);
+    setSelectedSlug(row.slug);
+    setTab('item');
+  };
+  const tabs: Array<{ key: WorkspaceTab; label: string; visible: boolean }> = [
+    { key: 'priority', label: L('ဦးစားပေးစစ်ဆေးရန်', 'Owner Priority'), visible: true },
+    { key: 'item', label: L('အကြောင်းအရာ စစ်ဆေးရန်', 'Review item'), visible: true },
+    { key: 'import', label: L('Classification Import Preview', 'Classification Import Preview'), visible: isOwner },
+    { key: 'security', label: L('လုံခြုံရေး', 'Security'), visible: isOwner },
+  ];
   return (
-    <div className="space-y-5">
+    <div className="space-y-5 pb-24">
       <header className="space-y-2">
         <p className="text-xs font-bold uppercase tracking-[0.18em] text-mint">ACE Review Workspace</p>
         <h1 className="text-2xl font-bold text-sky-deep">{L('အကြောင်းအရာ သုံးသပ်ရေးနေရာ', 'Content review workspace')}</h1>
@@ -474,6 +534,32 @@ export function ContentReviewWorkspace() {
         </p>
       </header>
 
+      <nav aria-label={L('အပိုင်းများ', 'Workspace sections')} className="flex flex-wrap gap-2">
+        {tabs.filter((entry) => entry.visible).map((entry) => (
+          <button
+            key={entry.key}
+            type="button"
+            data-testid={`tab-${entry.key}`}
+            onClick={() => {
+              if (entry.key !== tab && !confirmSelectionChange()) return;
+              if (entry.key !== 'item') setEditorDirty(false);
+              setTab(entry.key);
+            }}
+            aria-current={tab === entry.key ? 'page' : undefined}
+            className={`rounded-pill px-4 py-2 text-sm font-semibold transition ${
+              tab === entry.key ? 'bg-sky text-white' : 'border border-line bg-white text-ink hover:border-sky'
+            }`}
+          >
+            {entry.label}
+          </button>
+        ))}
+      </nav>
+
+      {tab === 'priority' && <OwnerPriorityContainer onOpenItem={openItemFromQueue} />}
+      {tab === 'import' && isOwner && <ClassificationImportPreview />}
+      {tab === 'security' && isOwner && <SecuritySummaryPanel />}
+
+      {tab === 'item' && (<>
       <section className="grid gap-3 rounded-card border border-line bg-white p-4 shadow-card sm:grid-cols-[180px_1fr]">
         <label className="space-y-1 text-sm font-medium text-ink">
           <span>{L('အမျိုးအစား', 'Content type')}</span>
@@ -548,7 +634,7 @@ export function ContentReviewWorkspace() {
               <textarea value={note} onChange={(event) => setNote(event.target.value)} rows={4} placeholder={decision === 'changes_requested' ? L('ပြင်ဆင်ရမည့်အချက်ကို ရှင်းလင်းစွာ ရေးပါ။', 'Describe the required change clearly.') : undefined} className="w-full rounded-xl border border-line bg-white px-3 py-2" />
             </label>
             <div className="flex flex-wrap items-center gap-3 lg:col-span-2">
-              <button type="submit" disabled={busy || !mayReview(access.role, dimension)} className="rounded-pill bg-sky px-5 py-2 text-sm font-semibold text-white disabled:opacity-50">
+              <button type="submit" disabled={busy || !reviews || !mayReview(access.role, dimension)} className="rounded-pill bg-sky px-5 py-2 text-sm font-semibold text-white disabled:opacity-50">
                 {busy ? L('မှတ်တမ်းတင်နေသည်…', 'Recording…') : L('ဆုံးဖြတ်ချက် မှတ်တမ်းတင်မည်', 'Record decision')}
               </button>
               {message && <p role="status" className="text-sm text-ink-soft">{message}</p>}
@@ -585,6 +671,17 @@ export function ContentReviewWorkspace() {
           )}
         </section>
       )}
+
+      {item && access.role !== null && ['owner', 'content_editor'].includes(access.role) && (
+        <OwnerActionsPanel
+          slug={item.slug}
+          reviewRevision={item.reviewRevision ?? 1}
+          role={access.role}
+          dataComplete={queueState?.dataComplete ?? true}
+          outstandingDimensions={queueRow?.outstandingDimensions ?? []}
+        />
+      )}
+      </>)}
     </div>
   );
 }

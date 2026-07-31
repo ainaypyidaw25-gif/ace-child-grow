@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 const librarySource = readFileSync('convex/library.ts', 'utf8');
@@ -40,6 +40,19 @@ describe('clinically scoped publication gate', () => {
   it('does not allow parents to complete an unpublished activity', () => {
     const activitiesSource = readFileSync('convex/activities.ts', 'utf8');
     expect(activitiesSource).toContain("content.clinicalStatus !== 'published'");
+  });
+
+  it('keeps the retired bulk-publication endpoints retired across every convex module', () => {
+    // PR #31 regression guard: no server module may reintroduce a bulk
+    // education-scoped publication path or its audit signatures.
+    const files = readdirSync('convex').filter((name) => name.endsWith('.ts'));
+    for (const name of files) {
+      const source = readFileSync(`convex/${name}`, 'utf8');
+      expect(source, `convex/${name} must not reference publishAll audit actions`).not.toContain("'library.education.publishAll'");
+      expect(source, `convex/${name} must not reference publishAll audit actions`).not.toContain("'content.education.publishAll'");
+    }
+    expect(releaseSource).toContain('Bulk education-scoped publication has been retired');
+    expect(releaseSource).toContain('Bulk legacy publication has been retired');
   });
 
   it('retires unsafe education-scoped bulk publication endpoints', () => {

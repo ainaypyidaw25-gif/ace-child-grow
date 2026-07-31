@@ -264,7 +264,7 @@ describe('Convex registered handlers enforce authorization', () => {
     // opaque "Server Error" on a production deployment and rolls back the audit
     // row that records the refusal.
     await expect(handler(saveDecision)(context, {
-      contentSlug: 'item-1', dimension: 'clinical', decision: 'approved',
+      contentSlug: 'item-1', dimension: 'clinical', decision: 'approved', expectedReviewRevision: 1,
     })).resolves.toEqual({
       ok: false,
       code: 'role_may_not_review_area',
@@ -284,25 +284,25 @@ describe('Convex registered handlers enforce authorization', () => {
       {
         name: 'missing display name',
         profile: { userId: 'u-1', isStaff: true, staffRole: 'language_reviewer' },
-        args: { contentSlug: 'item-1', dimension: 'native_myanmar', decision: 'approved' },
+        args: { contentSlug: 'item-1', dimension: 'native_myanmar', decision: 'approved', expectedReviewRevision: 1 },
         code: 'display_name_required',
       },
       {
         name: 'approval without a stated qualification',
         profile: { userId: 'u-1', isStaff: true, staffRole: 'clinical_reviewer', displayName: 'Dr Someone' },
-        args: { contentSlug: 'item-1', dimension: 'clinical', decision: 'approved' },
+        args: { contentSlug: 'item-1', dimension: 'clinical', decision: 'approved', expectedReviewRevision: 1 },
         code: 'qualification_required',
       },
       {
         name: 'changes requested with no note',
         profile: { userId: 'u-1', isStaff: true, staffRole: 'language_reviewer', displayName: 'Reviewer' },
-        args: { contentSlug: 'item-1', dimension: 'native_myanmar', decision: 'changes_requested' },
+        args: { contentSlug: 'item-1', dimension: 'native_myanmar', decision: 'changes_requested', expectedReviewRevision: 1 },
         code: 'note_required',
       },
       {
         name: 'support role',
         profile: { userId: 'u-1', isStaff: true, staffRole: 'support', displayName: 'Helper' },
-        args: { contentSlug: 'item-1', dimension: 'native_myanmar', decision: 'in_review' },
+        args: { contentSlug: 'item-1', dimension: 'native_myanmar', decision: 'in_review', expectedReviewRevision: 1 },
         code: 'not_staff',
       },
     ];
@@ -327,7 +327,7 @@ describe('Convex registered handlers enforce authorization', () => {
       rows: { libraryContent: [] },
     });
     await expect(handler(saveDecision)(context, {
-      contentSlug: 'gone', dimension: 'native_myanmar', decision: 'in_review',
+      contentSlug: 'gone', dimension: 'native_myanmar', decision: 'in_review', expectedReviewRevision: 1,
     })).resolves.toEqual({
       ok: false,
       code: 'content_not_found',
@@ -345,7 +345,7 @@ describe('Convex registered handlers enforce authorization', () => {
       rows: { libraryContent: [{ _id: 'content-1', slug: 'item-1', version: 1, reviewRevision: 3 }] },
     });
     await expect(handler(saveDecision)(context, {
-      contentSlug: 'item-1', dimension: 'safety', decision: 'approved', note: 'Checked',
+      contentSlug: 'item-1', dimension: 'safety', decision: 'approved', note: 'Checked', expectedReviewRevision: 3,
     })).resolves.toEqual({ ok: true, contentVersion: 3 });
     expect(context.db.insert).toHaveBeenCalledWith('contentReviews', expect.objectContaining({
       contentSlug: 'item-1', contentVersion: 3, dimension: 'safety', decision: 'approved',
@@ -388,7 +388,7 @@ describe('Convex registered handlers enforce authorization', () => {
       },
     });
     await expect(handler(saveDecision)(saveContext, {
-      contentSlug: 'item-1', dimension: 'clinical', decision: 'approved', note: 'Re-approved after changes',
+      contentSlug: 'item-1', dimension: 'clinical', decision: 'approved', note: 'Re-approved after changes', expectedReviewRevision: 2,
     })).resolves.toEqual({ ok: true, contentVersion: 2 });
     expect(saveContext.db.insert).toHaveBeenCalledWith('contentReviews', expect.objectContaining({
       contentSlug: 'item-1', contentVersion: 2, dimension: 'clinical', decision: 'approved',

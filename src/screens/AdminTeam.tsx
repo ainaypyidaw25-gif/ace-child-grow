@@ -5,7 +5,7 @@ import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
 import { OwnDisplayName } from '../components/OwnDisplayName';
 
-type StaffRole = 'owner' | 'content_editor' | 'language_reviewer' | 'evidence_reviewer' | 'clinical_reviewer' | 'support';
+type StaffRole = 'owner' | 'content_editor' | 'language_reviewer' | 'evidence_reviewer' | 'clinical_reviewer' | 'review_manager' | 'support';
 
 const ROLE_LABELS: Record<StaffRole, { mm: string; en: string }> = {
   owner: { mm: 'ပိုင်ရှင်', en: 'Owner' },
@@ -13,6 +13,7 @@ const ROLE_LABELS: Record<StaffRole, { mm: string; en: string }> = {
   language_reviewer: { mm: 'မြန်မာဘာသာစကား သုံးသပ်သူ', en: 'Native-language reviewer' },
   evidence_reviewer: { mm: 'ကိုးကားအထောက်အထား သုံးသပ်သူ', en: 'Evidence reviewer' },
   clinical_reviewer: { mm: 'ဆေးဘက်ဆိုင်ရာ သုံးသပ်သူ', en: 'Clinical reviewer' },
+  review_manager: { mm: 'စစ်ဆေးရေး မန်နေဂျာ', en: 'Review manager' },
   support: { mm: 'အသုံးပြုသူအကူအညီပေးသူ', en: 'Support' },
 };
 
@@ -22,6 +23,7 @@ const ROLE_DESCRIPTIONS: Record<StaffRole, { mm: string; en: string }> = {
   language_reviewer: { mm: 'မြန်မာနှင့် အင်္ဂလိပ်စာသားကို တိုက်ရိုက်ပြင်ပြီး ဘာသာစကားသုံးသပ်ချက် မှတ်တမ်းတင်နိုင်သည်။', en: 'Can correct wording directly and record language-review decisions.' },
   evidence_reviewer: { mm: 'စာသားကို ပြင်နိုင်ပြီး ကိုးကားအထောက်အထား သုံးသပ်ချက်ကို ပညာအရည်အချင်းနှင့်အတူ မှတ်တမ်းတင်နိုင်သည်။', en: 'Can correct wording and record qualified evidence-review decisions.' },
   clinical_reviewer: { mm: 'စာသားကို ပြင်နိုင်ပြီး သက်ဆိုင်ရာ ဘေးကင်းရေးနှင့် ဆေးဘက်ဆိုင်ရာ သုံးသပ်ချက်ကို မှတ်တမ်းတင်နိုင်သည်။', en: 'Can correct wording and record qualified safety and clinical decisions.' },
+  review_manager: { mm: 'ဦးစားပေးတန်းအားလုံးကို ကြည့်နိုင်ပြီး စိစစ်ခြင်း၊ လိုအပ်သည့် စစ်ဆေးမှုများ အတည်ပြုခြင်း၊ တောင်းဆိုခြင်း လုပ်နိုင်သည်။ သုံးသပ်ဆုံးဖြတ်ချက် မှတ်တမ်းတင်ခွင့်နှင့် ထုတ်ဝေခွင့် မရှိပါ။', en: 'Sees the whole priority queue; triages, confirms required reviews and requests them. Records no review decision and cannot publish.' },
   support: { mm: 'အသုံးပြုသူအကူအညီပေးနိုင်သော်လည်း အကြောင်းအရာကို တည်းဖြတ်၍ မရပါ။', en: 'Can support users but cannot edit content.' },
 };
 

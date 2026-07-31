@@ -11,6 +11,7 @@ const roleValidator = v.union(
   v.literal('language_reviewer'),
   v.literal('evidence_reviewer'),
   v.literal('clinical_reviewer'),
+  v.literal('review_manager'),
   v.literal('support'),
 );
 

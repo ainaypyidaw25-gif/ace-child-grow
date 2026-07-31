@@ -16,6 +16,7 @@ export type StaffRole =
   | 'language_reviewer'
   | 'evidence_reviewer'
   | 'clinical_reviewer'
+  | 'review_manager'
   | 'support';
 
 export type StaffAccess = {
@@ -108,6 +109,9 @@ export async function requireReviewEditor(
     'language_reviewer',
     'evidence_reviewer',
     'clinical_reviewer',
+    // A review manager may correct wording as part of running corrections.
+    // This grants no publishing authority and no review decision.
+    'review_manager',
   ]);
 }
 

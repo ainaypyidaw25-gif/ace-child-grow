@@ -8,6 +8,8 @@ dist/
 dist-ssr/
 build/
 *.local
+# Layout-test harness bundle (built by vite.harness.config.ts, never shipped)
+dist-harness/
 
 # Environment & secrets — NEVER commit real values
 .env
@@ -50,3 +52,4 @@ sample-report-*.pdf
 test-results/
 playwright-report/
 .playwright/
+

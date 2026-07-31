@@ -23,10 +23,18 @@ export type ReviewerRole =
   | 'language_reviewer'
   | 'evidence_reviewer'
   | 'clinical_reviewer'
+  | 'review_manager'
   | 'support';
 
 export function roleMayReview(role: string | null | undefined, dimension: ReviewDimension): boolean {
   if (!role || role === 'support') return false;
+  // A review manager runs the queue: triages, confirms what a record needs,
+  // and requests reviews. It signs off on NOTHING. Separating "decides what
+  // must be reviewed" from "declares it reviewed" is the whole point of the
+  // role — otherwise the person under pressure to clear a backlog is also the
+  // person who can clear it by approving. Someone who is both a manager and a
+  // qualified reviewer holds the reviewer role as well, and signs under that.
+  if (role === 'review_manager') return false;
   if (dimension === 'clinical' || dimension === 'safety') return role === 'clinical_reviewer';
   if (dimension === 'evidence') {
     return ['owner', 'content_editor', 'evidence_reviewer', 'clinical_reviewer'].includes(role);
@@ -49,7 +57,8 @@ export type ReviewRefusalCode =
   | 'display_name_required'
   | 'qualification_required'
   | 'note_required'
-  | 'content_not_found';
+  | 'content_not_found'
+  | 'stale_revision';
 
 export type ReviewRefusal = { code: ReviewRefusalCode; message: string };
 
@@ -136,5 +145,9 @@ export const REVIEW_REFUSAL_LABELS: Record<ReviewRefusalCode, { mm: string; en: 
   content_not_found: {
     mm: 'ဤအကြောင်းအရာ မတွေ့ရပါ။',
     en: 'This content item no longer exists.',
+  },
+  stale_revision: {
+    mm: 'သင်ဖတ်ပြီးနောက် ဤအကြောင်းအရာ ပြောင်းလဲသွားပါပြီ။ မူကွဲအသစ်ကို ပြန်ဖတ်ပြီးမှ ဆုံးဖြတ်ပါ။',
+    en: 'This content changed after you loaded it. Review the new revision before deciding.',
   },
 };
