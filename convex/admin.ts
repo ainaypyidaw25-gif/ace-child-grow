@@ -9,6 +9,7 @@ const roleValidator = v.union(
   v.literal('language_reviewer'),
   v.literal('evidence_reviewer'),
   v.literal('clinical_reviewer'),
+  v.literal('review_manager'),
   v.literal('support'),
 );
 
@@ -18,6 +19,7 @@ const roleLabels: Record<StaffRole, string> = {
   language_reviewer: 'Native-language reviewer',
   evidence_reviewer: 'Evidence reviewer',
   clinical_reviewer: 'Clinical reviewer',
+  review_manager: 'Review manager',
   support: 'Support',
 };
 
