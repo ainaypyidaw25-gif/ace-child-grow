@@ -14,6 +14,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
+    "video:reviewer-guide": "RECORD_GUIDE_VIDEO=1 playwright test tests/e2e/reviewer-guide.video.spec.ts",
     "report:pdf": "node scripts/generate-report-pdf.mjs",
     "evidence:live": "node scripts/evidence-live-check.mjs",
     "evidence:activate": "node scripts/evidence-activate.mjs",

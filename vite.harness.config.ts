@@ -24,5 +24,12 @@ export default defineConfig({
   build: {
     outDir: path.resolve(__dirname, 'dist-harness'),
     emptyOutDir: true,
+    rollupOptions: {
+      input: {
+        // Layout checks, and the silent reviewer-training recording.
+        index: path.resolve(__dirname, 'tests/harness/index.html'),
+        guide: path.resolve(__dirname, 'tests/harness/guide.html'),
+      },
+    },
   },
 });
