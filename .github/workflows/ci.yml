@@ -1,0 +1,113 @@
+name: CI
+
+# Runs the checks that were previously only run by hand, so a pull request
+# carries its own evidence instead of a claim in a description.
+#
+# Deliberately NOT in this workflow: anything that touches a deployment.
+# No Convex deploy, no Vercel deploy, no seeding, no migration, no publication.
+# CI here proves the code is sound; releasing stays a human action.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# A new push supersedes an in-flight run for the same ref. Saves runner time
+# and stops a stale red/green from landing after a newer commit.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  # The repo pins Chromium separately for E2E; nothing else should pull browsers.
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '1'
+
+jobs:
+  # Static checks and unit tests. Fast, and the first thing a reviewer wants.
+  verify:
+    name: Typecheck, lint, unit tests, build
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      # Runs before the build on purpose: some suites read the built bundle
+      # when it exists (noDevRoutes asserts no harness marker in dist/), and a
+      # stale dist/ from a previous step would make that check meaningless.
+      - name: Unit tests
+        run: npm test
+
+      - name: Production build
+        run: npm run build
+
+      # The layout harness is a separate bundle that must never reach the app.
+      # Building it here proves it still compiles on its own config.
+      - name: Layout harness build
+        run: npm run build:harness
+
+      # Re-run the bundle assertions against a real dist/: no dev route and no
+      # harness marker in anything shipped.
+      - name: Assert no dev route in the built bundle
+        run: npx vitest run src/domain/__tests__/noDevRoutes.test.ts
+
+      - name: Whitespace and conflict markers
+        run: git diff --check
+
+  # Browser checks. The whole Playwright suite runs; specs that need a live
+  # Convex connection gate themselves behind E2E_LIVE and skip here, so CI
+  # never depends on production data or credentials.
+  e2e:
+    name: Playwright
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Chromium for Playwright
+        run: npx playwright install --with-deps chromium
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '0'
+
+      # The WHOLE suite runs. Specs needing Convex egress gate themselves behind
+      # E2E_LIVE and report as skipped, which is honest: an omitted spec is
+      # invisible, a skipped one is on the record with its reason. Set
+      # E2E_LIVE=1 (with a reachable deployment) to run them for real.
+      - name: Run Playwright suite (live specs skip without E2E_LIVE)
+        run: npx playwright test
+
+      - name: Upload screenshots and traces
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-artifacts
+          path: |
+            test-results/
+            playwright-report/
+          retention-days: 14
+          if-no-files-found: ignore

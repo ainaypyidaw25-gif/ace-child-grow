@@ -6,9 +6,16 @@ import { existsSync } from 'node:fs';
 // installed browser instead.
 const CHROMIUM = '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
 const PORT = 4173;
+// The layout harness is a SEPARATE bundle on its own port; it is never part of
+// the application build served on PORT.
+const HARNESS_PORT = 4174;
 
 export default defineConfig({
   testDir: './tests/e2e',
+  // The training-video spec is the camera, not a check: it holds each step long
+  // enough to read, which would be dead time in CI. It is excluded unless
+  // RECORD_GUIDE_VIDEO is set — see `npm run video:reviewer-guide`.
+  grepInvert: process.env.RECORD_GUIDE_VIDEO ? undefined : /reviewer guide/,
   timeout: 30_000,
   fullyParallel: true,
   retries: 0,
@@ -20,10 +27,18 @@ export default defineConfig({
       args: ['--no-sandbox'],
     },
   },
-  webServer: {
-    command: `npm run build && npm run preview -- --port ${PORT} --strictPort`,
-    url: `http://localhost:${PORT}`,
-    timeout: 120_000,
-    reuseExistingServer: true,
-  },
+  webServer: [
+    {
+      command: `npm run build && npm run preview -- --port ${PORT} --strictPort`,
+      url: `http://localhost:${PORT}`,
+      timeout: 120_000,
+      reuseExistingServer: true,
+    },
+    {
+      command: `npm run build:harness && npx vite preview --config vite.harness.config.ts --port ${HARNESS_PORT} --strictPort`,
+      url: `http://localhost:${HARNESS_PORT}`,
+      timeout: 120_000,
+      reuseExistingServer: true,
+    },
+  ],
 });
