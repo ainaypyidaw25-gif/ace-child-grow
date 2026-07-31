@@ -3,7 +3,7 @@
 // by the Convex CLI/admin (`npx convex run seed:run`), never by app clients, so
 // it safely skips the staff auth gate that guards the public importSeed. It is
 // idempotent (upsert by slug) and never overrides an existing review decision.
-import { internalMutation } from './_generated/server';
+import { internalMutation, internalQuery } from './_generated/server';
 import { v } from 'convex/values';
 import { logAudit } from './audit';
 import seedData from './seedData.json';
@@ -14,40 +14,126 @@ import {
   seedMediaIsProtected,
 } from './lib/seedPolicy';
 
-// Grant staff (CMS access) to an account by email. INTERNAL — CLI/admin only,
-// never callable from the app. Used to bootstrap the first reviewer account.
+const GRANTABLE_ROLES = [
+  'owner',
+  'content_editor',
+  'language_reviewer',
+  'evidence_reviewer',
+  'clinical_reviewer',
+  'review_manager',
+  'support',
+] as const;
+
+// Grant staff access to an account by email. INTERNAL — CLI/admin only
+// (`npx convex run seed:grantStaffByEmail '{"email":"you@example.com"}'`), never
+// callable from the app. Bootstraps the first owner and recovers a locked-out one.
+//
+// Convex Auth mints a SEPARATE `users` row per sign-in method, so one person who
+// has used both Google and email+password has two user ids under the same email.
+// The previous version REFUSED when it saw more than one — which left the owner
+// permanently locked out, because there was then no path to grant either row.
+// This is exactly the "even the owner can't get in" failure. So every user row
+// for the email is granted, not a silently-picked one: whichever way the owner
+// signs in, that identity is staff. Email-scoped and owner-run, so this cannot
+// escalate anyone else.
 export const grantStaffByEmail = internalMutation({
-  args: { email: v.string() },
-  handler: async (ctx, { email }) => {
-    // NOT .unique(): an email can have more than one user row when the person has
-    // signed in through several providers. Granting owner to a silently-picked
-    // one of them would put staff access on an account they may never sign in
-    // with — so refuse and make the ambiguity visible instead.
+  args: {
+    email: v.string(),
+    role: v.optional(v.union(...GRANTABLE_ROLES.map((r) => v.literal(r)))),
+  },
+  handler: async (ctx, { email, role }) => {
+    const norm = email.trim().toLowerCase();
+    const grantRole = role ?? 'owner';
     const users = await ctx.db
       .query('users')
-      .withIndex('email', (q) => q.eq('email', email.trim().toLowerCase()))
-      .take(2);
-    if (users.length > 1) {
-      return { ok: false, reason: 'more than one account uses this email; resolve the duplicate first' };
+      .withIndex('email', (q) => q.eq('email', norm))
+      .take(20);
+    if (users.length === 0) return { ok: false, reason: 'no account has that email', granted: 0, accounts: [] };
+
+    const accounts: { userId: string; action: 'patched' | 'created' }[] = [];
+    for (const user of users) {
+      const profile = await ctx.db
+        .query('parentProfiles')
+        .withIndex('by_user', (q) => q.eq('userId', user._id))
+        .unique();
+      if (profile) {
+        await ctx.db.patch(profile._id, { isStaff: true, staffRole: grantRole });
+        accounts.push({ userId: user._id, action: 'patched' });
+      } else {
+        await ctx.db.insert('parentProfiles', {
+          userId: user._id,
+          preferredLocale: 'mm',
+          isStaff: true,
+          staffRole: grantRole,
+        });
+        accounts.push({ userId: user._id, action: 'created' });
+      }
+      await logAudit(ctx, user._id, 'staff.grant', 'parentProfiles', user._id, `${norm} -> ${grantRole}`);
     }
-    const user = users[0];
-    if (!user) return { ok: false, reason: 'no such user' };
-    const profile = await ctx.db
+    return { ok: true, granted: accounts.length, role: grantRole, accounts };
+  },
+});
+
+// Read-only diagnosis of staff access. INTERNAL — CLI/admin only
+// (`npx convex run seed:staffDiagnostics '{"email":"you@example.com"}'`).
+// Answers "why can't I get into /admin?" without guessing: it lists every
+// account row for the email with its staff status, and every current staff
+// account, so a split Google-vs-password identity is visible at a glance.
+export const staffDiagnostics = internalQuery({
+  args: { email: v.optional(v.string()) },
+  handler: async (ctx, { email }) => {
+    const norm = email?.trim().toLowerCase();
+
+    const accountsForEmail: Array<{
+      userId: string;
+      email: string | null;
+      hasProfile: boolean;
+      isStaff: boolean;
+      staffRole: string | null;
+    }> = [];
+    if (norm) {
+      const users = await ctx.db
+        .query('users')
+        .withIndex('email', (q) => q.eq('email', norm))
+        .take(20);
+      for (const user of users) {
+        const profile = await ctx.db
+          .query('parentProfiles')
+          .withIndex('by_user', (q) => q.eq('userId', user._id))
+          .unique();
+        accountsForEmail.push({
+          userId: user._id,
+          email: (user as { email?: string }).email ?? null,
+          hasProfile: profile !== null,
+          isStaff: profile?.isStaff === true,
+          staffRole: profile?.staffRole ?? null,
+        });
+      }
+    }
+
+    const staffProfiles = await ctx.db
       .query('parentProfiles')
-      .withIndex('by_user', (q) => q.eq('userId', user._id))
-      .unique();
-    if (profile) {
-      await ctx.db.patch(profile._id, { isStaff: true, staffRole: 'owner' });
-    } else {
-      await ctx.db.insert('parentProfiles', {
-        userId: user._id,
-        preferredLocale: 'mm',
-        isStaff: true,
-        staffRole: 'owner',
-      });
-    }
-    await logAudit(ctx, user._id, 'staff.grant', 'parentProfiles', user._id, email);
-    return { ok: true, userId: user._id };
+      .withIndex('by_is_staff', (q) => q.eq('isStaff', true))
+      .take(100);
+    const allStaff = await Promise.all(
+      staffProfiles.map(async (profile) => {
+        const user = await ctx.db.get(profile.userId);
+        return {
+          userId: profile.userId,
+          email: (user as { email?: string } | null)?.email ?? null,
+          staffRole: profile.staffRole ?? '(legacy isStaff → owner)',
+          displayName: profile.displayName?.trim() || null,
+        };
+      }),
+    );
+
+    return {
+      queriedEmail: norm ?? null,
+      accountsForEmail,
+      accountsForEmailCount: accountsForEmail.length,
+      staffCount: allStaff.length,
+      allStaff,
+    };
   },
 });
 
