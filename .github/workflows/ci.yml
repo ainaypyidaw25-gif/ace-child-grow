@@ -71,11 +71,11 @@ jobs:
       - name: Whitespace and conflict markers
         run: git diff --check
 
-  # Backend-independent browser checks. Specs that need a live Convex
-  # connection gate themselves behind E2E_LIVE and skip here, so CI never
-  # depends on production data or credentials.
+  # Browser checks. The whole Playwright suite runs; specs that need a live
+  # Convex connection gate themselves behind E2E_LIVE and skip here, so CI
+  # never depends on production data or credentials.
   e2e:
-    name: Playwright (offline specs)
+    name: Playwright
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
