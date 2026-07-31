@@ -478,6 +478,7 @@ const GUIDES_C: SeedItem[] = [
           q: b('ညနေတိုင်း ငိုတယ်။ ပုံမှန်လား။', 'She cries every evening. Is that normal?'),
           a: b('ပထမလများတွင် ငိုချိန် များခြင်းသည် တွေ့ရလေ့ရှိသည်။ သို့သော် ငိုသံနှင့်အတူ ဖျားခြင်း၊ အန်ခြင်း၊ နို့မစို့ခြင်း၊ ပျော့ခွေခြင်း ပါလျှင် ချက်ချင်း ဆေးကုသမှု ခံယူပါ။', 'Increased crying in the early months is common. But if crying comes with fever, vomiting, refusing feeds or floppiness, seek care immediately.'),
         },
+        { q: b("ဘယ်အပူချိန် ရောက်ရင် ဆေးရုံ သွားရမလဲ။", "What temperature means we should seek care?"), a: b("အပူချိန် တိုင်းပါ။ အသက် ၃ လအောက် ကလေး ၃၈°C (၁၀၀.၄°F) နှင့်အထက် ဖျားပါက — ကလေး ပုံမှန်လို ထင်ရလျှင်ပင် ချက်ချင်း ပြသပါ။ အသက် ၃ လမှ ၆ လကြား ၃၉°C (၁၀၂.၂°F) နှင့်အထက် ဖျားပါက အမြန် ပြသပါ။ အသက်မရွေး — ဖျားခြင်းနှင့်အတူ အသက်ရှူခက်ခြင်း၊ နှိပ်လျှင် မပျောက်သော အနီစက်၊ လည်ပင်း တောင့်တင်းခြင်း သို့မဟုတ် နိုးရခက်ခြင်း ပါလာပါက ချက်ချင်း ပြသပါ။ အပူချိန်တိုင်းကိရိယာ မရှိပါက — ကလေး ပူနေပြီး အထက်ပါ လက္ခဏာများ ပါလျှင် မစောင့်ဘဲ ပြသပါ။", "Take the temperature. Under 3 months, 38°C (100.4°F) or above: seek care straight away, even if the baby otherwise seems well. Between 3 and 6 months, 39°C (102.2°F) or above: seek care promptly. At any age, fever together with difficulty breathing, a rash that does not fade under pressure, a stiff neck, or being hard to wake: seek care immediately. If you have no thermometer, and the child feels hot and has any of those signs, do not wait.") },
       ],
       redFlags: [
         b('ငိုသံ ပုံမှန်မဟုတ်ဘဲ အသံတိုးလာခြင်း သို့မဟုတ် အော်ဟစ်သံ ဖြစ်လာခြင်း။', 'A cry that becomes weak, or unusually high-pitched.'),
@@ -680,6 +681,8 @@ const GUIDES_D: SeedItem[] = [
         b('ဆိုဖာ သို့မဟုတ် ကုလားထိုင်ပေါ်တွင် ကလေးနှင့်အတူ အိပ်ပျော်သွားခြင်း။', 'Falling asleep with the baby on a sofa or armchair.'),
         b('အိပ်ရာထဲ ခေါင်းအုံး၊ အနူထောင်း၊ စောင်ထူ ထည့်ထားခြင်း။', 'Putting pillows, soft toys or thick blankets in the cot.'),
         b('အဝတ် အလွန်ထူထပ်စွာ ခြုံပေးခြင်း — အပူလွန်ခြင်း အန္တရာယ် ရှိသည်။', 'Over-wrapping — overheating is a risk.'),
+        b("အလေးချိန်ပါသော စောင်၊ အိပ်ဝတ်စုံ သို့မဟုတ် ပတ်ရစ်ပိတ်စများ သုံးခြင်း။", "Using weighted blankets, weighted sleepers or weighted swaddles."),
+        b("အိမ်သုံး အသက်ရှူ/နှလုံးခုန် စောင့်ကြည့်စက်ကို ဘေးကင်းစွာ အိပ်စေခြင်း၏ အစား အားကိုးခြင်း — အန္တရာယ် လျှော့ချပေးသည်ဟု သက်သေ မရှိပါ။", "Relying on a home breathing or heart-rate monitor instead of a safe sleep space — these have not been shown to reduce the risk of SIDS."),
       ],
       parentTips: [
         b('ကလေးကို ပြုစုပေးသူ တိုင်းကို ဤစည်းမျဉ်းများ ပြောပြထားပါ — အဖွား၊ အိမ်နီးချင်း အပါအဝင်။', 'Tell every carer these rules — grandparents and neighbours included.'),
@@ -694,12 +697,14 @@ const GUIDES_D: SeedItem[] = [
           q: b('တစ်အိပ်ရာတည်း အိပ်တာ ဘယ်လိုလဲ။', 'What about sharing a bed?'),
           a: b('အခန်းတူ အိပ်ရာမတူ ဖြစ်ရန် အကြံပြုသည်။ ကလေးအတွက် သီးသန့် ပြားပြီး မာသော အိပ်ရာကို မိဘအခန်းထဲတွင် ထားပါ။', 'Room-sharing without bed-sharing is advised: a separate firm flat sleep space for the baby, in the parents’ room.'),
         },
+        { q: b("ဘယ်အပူချိန် ရောက်ရင် ဆေးရုံ သွားရမလဲ။", "What temperature means we should seek care?"), a: b("အပူချိန် တိုင်းပါ။ အသက် ၃ လအောက် ကလေး ၃၈°C (၁၀၀.၄°F) နှင့်အထက် ဖျားပါက — ကလေး ပုံမှန်လို ထင်ရလျှင်ပင် ချက်ချင်း ပြသပါ။ အသက် ၃ လမှ ၆ လကြား ၃၉°C (၁၀၂.၂°F) နှင့်အထက် ဖျားပါက အမြန် ပြသပါ။ အသက်မရွေး — ဖျားခြင်းနှင့်အတူ အသက်ရှူခက်ခြင်း၊ နှိပ်လျှင် မပျောက်သော အနီစက်၊ လည်ပင်း တောင့်တင်းခြင်း သို့မဟုတ် နိုးရခက်ခြင်း ပါလာပါက ချက်ချင်း ပြသပါ။ အပူချိန်တိုင်းကိရိယာ မရှိပါက — ကလေး ပူနေပြီး အထက်ပါ လက္ခဏာများ ပါလျှင် မစောင့်ဘဲ ပြသပါ။", "Take the temperature. Under 3 months, 38°C (100.4°F) or above: seek care straight away, even if the baby otherwise seems well. Between 3 and 6 months, 39°C (102.2°F) or above: seek care promptly. At any age, fever together with difficulty breathing, a rash that does not fade under pressure, a stiff neck, or being hard to wake: seek care immediately. If you have no thermometer, and the child feels hot and has any of those signs, do not wait.") },
       ],
       redFlags: [
         b('အသက် ၃ လအောက် ကလေးတွင် ဖျားခြင်း — အရေးပေါ် စစ်ဆေးရန် လိုသည်။', 'Fever in a baby under 3 months — needs urgent assessment.'),
         b('အသက်ရှူ ခက်ခဲခြင်း၊ နှုတ်ခမ်း/အရေပြား ညိုမည်းလာခြင်း။', 'Difficulty breathing, or lips/skin turning blue or grey.'),
         b('တုံ့ပြန်မှု မရှိခြင်း၊ နိုးရန် အလွန်ခက်ခဲခြင်း၊ ကိုယ်ခန္ဓာ ပျော့ခွေခြင်း။', 'Unresponsive, very hard to wake, or floppy.'),
         b('တက်ခြင်း။', 'A fit or seizure.'),
+        b("နှိပ်လျှင် မပျောက်သော အနီစက်များ — ဖန်ခွက်ဖြင့် ဖိကြည့်ပါ။ ဖိထားစဉ် အနီရောင် မပျောက်ပါက ချက်ချင်း ဆေးရုံသို့ သွားပါ။", "A rash that does not fade when you press on it — press a clear glass against the skin. If the red marks stay visible while you press, go to hospital immediately."),
       ],
       referral: b(
         'ဤလက္ခဏာများသည် အရေးပေါ် ဖြစ်သည် — အနီးဆုံး ဆေးရုံ သို့မဟုတ် ကျန်းမာရေးဌာနသို့ ချက်ချင်း သွားပါ။ ဤအက်ပ်သည် အရေးပေါ် ဝန်ဆောင်မှု မဟုတ်ပါ။',
