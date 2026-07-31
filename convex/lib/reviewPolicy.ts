@@ -23,10 +23,18 @@ export type ReviewerRole =
   | 'language_reviewer'
   | 'evidence_reviewer'
   | 'clinical_reviewer'
+  | 'review_manager'
   | 'support';
 
 export function roleMayReview(role: string | null | undefined, dimension: ReviewDimension): boolean {
   if (!role || role === 'support') return false;
+  // A review manager runs the queue: triages, confirms what a record needs,
+  // and requests reviews. It signs off on NOTHING. Separating "decides what
+  // must be reviewed" from "declares it reviewed" is the whole point of the
+  // role — otherwise the person under pressure to clear a backlog is also the
+  // person who can clear it by approving. Someone who is both a manager and a
+  // qualified reviewer holds the reviewer role as well, and signs under that.
+  if (role === 'review_manager') return false;
   if (dimension === 'clinical' || dimension === 'safety') return role === 'clinical_reviewer';
   if (dimension === 'evidence') {
     return ['owner', 'content_editor', 'evidence_reviewer', 'clinical_reviewer'].includes(role);

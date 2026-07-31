@@ -35,6 +35,7 @@ const ROLE_LABELS: Record<string, { mm: string; en: string }> = {
   language_reviewer: { mm: 'ဘာသာစကား သုံးသပ်သူ', en: 'Language reviewer' },
   evidence_reviewer: { mm: 'ကိုးကားချက် သုံးသပ်သူ', en: 'Evidence reviewer' },
   clinical_reviewer: { mm: 'ဆေးဘက်ဆိုင်ရာ သုံးသပ်သူ', en: 'Clinical reviewer' },
+  review_manager: { mm: 'စစ်ဆေးရေး မန်နေဂျာ', en: 'Review manager' },
   support: { mm: 'ပံ့ပိုးကူညီရေး', en: 'Support' },
 };
 

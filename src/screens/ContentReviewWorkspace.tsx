@@ -22,7 +22,7 @@ const DIMENSIONS = ['english', 'native_myanmar', 'evidence', 'safety', 'clinical
 const DECISIONS = ['in_review', 'approved', 'changes_requested', 'not_applicable'] as const;
 type Dimension = (typeof DIMENSIONS)[number];
 type Decision = (typeof DECISIONS)[number];
-type StaffRole = 'owner' | 'content_editor' | 'language_reviewer' | 'evidence_reviewer' | 'clinical_reviewer' | 'support';
+type StaffRole = 'owner' | 'content_editor' | 'language_reviewer' | 'evidence_reviewer' | 'clinical_reviewer' | 'review_manager' | 'support';
 
 const DIMENSION_LABELS: Record<Dimension, { mm: string; en: string }> = {
   english: { mm: 'အင်္ဂလိပ်စာနှင့် အကြောင်းအရာ', en: 'English copy and content' },

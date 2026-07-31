@@ -316,3 +316,73 @@ describe('direct-handler authorization — governance mutations', () => {
     expect(patched).toEqual([]);
   });
 });
+
+/**
+ * review_manager is a real, invitable role. It runs the queue and must never
+ * be able to sign anything off — the separation between "decides what must be
+ * reviewed" and "declares it reviewed" is the reason the role exists.
+ */
+describe('review_manager powers and limits', () => {
+  it('gets the full queue, roster and governance', () => {
+    expect(queueAccessLevel('review_manager')).toBe('full');
+    expect(maySeeReviewerActivity('review_manager')).toBe(true);
+    expect(mayManageGovernance('review_manager')).toBe(true);
+    expect(mayRequestReviews('review_manager')).toBe(true);
+  });
+
+  it('CANNOT record a decision in any review dimension', async () => {
+    const { roleMayReview } = await import('../../../convex/lib/reviewPolicy');
+    for (const dimension of ['english', 'native_myanmar', 'evidence', 'safety', 'clinical'] as const) {
+      expect(roleMayReview('review_manager', dimension), `must not review ${dimension}`).toBe(false);
+    }
+  });
+
+  it('is refused in-band by the decision gate, so nothing is written', async () => {
+    const { reviewRefusal } = await import('../../../convex/lib/reviewPolicy');
+    const refusal = reviewRefusal({
+      role: 'review_manager',
+      dimension: 'native_myanmar',
+      decision: 'approved',
+      displayName: 'Queue Manager',
+      qualification: 'MEd',
+      note: 'looks fine',
+      contentExists: true,
+    });
+    expect(refusal?.code).toBe('role_may_not_review_area');
+  });
+
+  it('is NOT a publishing authority', async () => {
+    const authSource = (await import('node:fs')).readFileSync('convex/lib/auth.ts', 'utf8');
+    // requireProfessionalPublisher decides who may publish; review_manager
+    // must not appear in its allow-list.
+    const block = authSource.slice(
+      authSource.indexOf('export async function requireProfessionalPublisher'),
+      authSource.indexOf('export async function requireProfessionalPublisher') + 400,
+    );
+    expect(block).toContain("requireOneOf(ctx, ['owner', 'clinical_reviewer'])");
+    expect(block).not.toContain('review_manager');
+  });
+
+  it('needs no professional qualification to be invited', async () => {
+    const adminSource = (await import('node:fs')).readFileSync('convex/admin.ts', 'utf8');
+    // Qualification is demanded only of roles that sign professional
+    // decisions. A review manager signs none, so requiring one would imply an
+    // authority it does not have.
+    for (const match of adminSource.matchAll(/\['clinical_reviewer', 'evidence_reviewer'\]\.includes/g)) {
+      expect(match[0]).not.toContain('review_manager');
+    }
+    expect(adminSource).toContain("review_manager: 'Review manager'");
+  });
+
+  it('appears in every stored role union, so its decisions and edits are readable', async () => {
+    const fs = await import('node:fs');
+    for (const file of ['convex/schema.ts', 'convex/contentReviews.ts', 'convex/contentEdits.ts', 'convex/admin.ts']) {
+      expect(fs.readFileSync(file, 'utf8'), `${file} omits review_manager`).toContain('review_manager');
+    }
+  });
+
+  it('system_admin remains undefined as a role — no account can hold it', async () => {
+    const schema = (await import('node:fs')).readFileSync('convex/schema.ts', 'utf8');
+    expect(schema).not.toContain('system_admin');
+  });
+});

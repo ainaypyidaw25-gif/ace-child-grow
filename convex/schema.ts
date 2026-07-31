@@ -31,6 +31,11 @@ export default defineSchema({
         v.literal('language_reviewer'),
         v.literal('evidence_reviewer'),
         v.literal('clinical_reviewer'),
+        // Runs the review workflow: sees the whole priority queue, triages
+        // Class D/E, confirms required dimensions and requests reviews. It
+        // records NO review decision and cannot publish — managing the queue
+        // and signing off on content are deliberately different powers.
+        v.literal('review_manager'),
         v.literal('support'),
       ),
     ),
@@ -53,6 +58,7 @@ export default defineSchema({
       v.literal('language_reviewer'),
       v.literal('evidence_reviewer'),
       v.literal('clinical_reviewer'),
+      v.literal('review_manager'),
       v.literal('support'),
     ),
     reviewerQualification: v.optional(v.string()),
@@ -442,6 +448,7 @@ export default defineSchema({
       v.literal('language_reviewer'),
       v.literal('evidence_reviewer'),
       v.literal('clinical_reviewer'),
+      v.literal('review_manager'),
       v.literal('support'),
     ),
     reviewedAt: v.number(),
@@ -474,6 +481,7 @@ export default defineSchema({
       v.literal('language_reviewer'),
       v.literal('evidence_reviewer'),
       v.literal('clinical_reviewer'),
+      v.literal('review_manager'),
       v.literal('support'),
     ),
     editedAt: v.number(),

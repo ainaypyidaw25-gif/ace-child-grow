@@ -21,12 +21,15 @@
  *                      activity stripped.
  *   none               support and non-staff.
  *
- * NOTE ON ROLE SUPPORT. `system_admin` and `review_manager` are named here
- * deliberately, but the deployed `parentProfiles.staffRole` union does NOT
- * define them today (owner | content_editor | language_reviewer |
- * evidence_reviewer | clinical_reviewer | support). Naming them costs nothing
- * and means the rule is already correct if those roles are added later — it
- * does not grant anything now, because no account can hold them.
+ * NOTE ON ROLE SUPPORT. `review_manager` IS a real role: it is defined in the
+ * staffRole union and can be invited from the admin team screen. It sees the
+ * whole queue and manages governance, but records no review decision and
+ * cannot publish — see roleMayReview in ./reviewPolicy, which refuses it every
+ * dimension, and requireProfessionalPublisher in ./auth, which does not list
+ * it. `system_admin` is named here but deliberately NOT defined as a role:
+ * its powers are undefined, and inventing them would be this module deciding
+ * a governance question that belongs to the owner. It grants nothing today
+ * because no account can hold it.
  *
  * Pure by design — no Convex imports.
  */
