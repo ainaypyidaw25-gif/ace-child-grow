@@ -12,10 +12,11 @@ const HARNESS_PORT = 4174;
 
 export default defineConfig({
   testDir: './tests/e2e',
-  // The training-video spec is the camera, not a check: it holds each step long
-  // enough to read, which would be dead time in CI. It is excluded unless
-  // RECORD_GUIDE_VIDEO is set — see `npm run video:reviewer-guide`.
-  grepInvert: process.env.RECORD_GUIDE_VIDEO ? undefined : /reviewer guide/,
+  // The training-video specs are the camera, not a check: they hold each step
+  // long enough to read, which would be dead time in CI. They are excluded
+  // unless RECORD_GUIDE_VIDEO is set — see `npm run video:reviewer-guide` and
+  // `npm run video:parent-guide`.
+  grepInvert: process.env.RECORD_GUIDE_VIDEO ? undefined : /reviewer guide|parent guide/,
   timeout: 30_000,
   fullyParallel: true,
   retries: 0,
