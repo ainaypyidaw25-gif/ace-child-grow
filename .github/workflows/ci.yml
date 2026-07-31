@@ -94,18 +94,12 @@ jobs:
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '0'
 
-      # staff-invite.spec.ts is excluded: it renders an invite-acceptance route
-      # that needs a live Convex connection to finish loading, but it does not
-      # gate itself behind E2E_LIVE the way the other live specs do. It fails
-      # on main for the same reason, so running it here would report a
-      # pre-existing environment limitation as a regression. Track it
-      # separately rather than hiding it — the fix is to add the same
-      # test.skip(!process.env.E2E_LIVE) guard the other live specs use.
-      - name: Run offline Playwright specs
-        run: >-
-          npx playwright test
-          tests/e2e/boot.spec.ts
-          tests/e2e/owner-priority-layout.spec.ts
+      # The WHOLE suite runs. Specs needing Convex egress gate themselves behind
+      # E2E_LIVE and report as skipped, which is honest: an omitted spec is
+      # invisible, a skipped one is on the record with its reason. Set
+      # E2E_LIVE=1 (with a reachable deployment) to run them for real.
+      - name: Run Playwright suite (live specs skip without E2E_LIVE)
+        run: npx playwright test
 
       - name: Upload screenshots and traces
         if: always()
