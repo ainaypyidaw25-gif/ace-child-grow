@@ -42,6 +42,7 @@ const reviewValidator = v.object({
   reviewerQualification: v.optional(v.string()),
   reviewerRole: roleValidator,
   reviewedAt: v.number(),
+  reviewRevision: v.optional(v.number()),
   createdAt: v.number(),
   updatedAt: v.number(),
 });
@@ -235,9 +236,14 @@ export const saveDecision = mutation({
     dimension: dimensionValidator,
     decision: decisionValidator,
     note: v.optional(v.string()),
+    // The revision the reviewer was looking at. When provided, a decision can
+    // never land on content the reviewer has not seen: an edit that happened
+    // after the screen loaded is refused as stale, not silently attached to
+    // the new revision.
+    expectedReviewRevision: v.optional(v.number()),
   },
   returns: v.union(
-    v.object({ ok: v.literal(true), contentVersion: v.number() }),
+    v.object({ ok: v.literal(true), contentVersion: v.number(), duplicate: v.optional(v.boolean()) }),
     v.object({ ok: v.literal(false), code: v.string(), message: v.string() }),
   ),
   handler: async (ctx, args) => {
@@ -280,10 +286,54 @@ export const saveDecision = mutation({
     if (!content || !access) {
       return { ok: false as const, code: 'content_not_found', message: 'This content item no longer exists.' };
     }
+    const reviewRevision = content.reviewRevision ?? 1;
+    if (args.expectedReviewRevision !== undefined && args.expectedReviewRevision !== reviewRevision) {
+      await logAudit(
+        ctx,
+        userId,
+        `contentReview.${args.dimension}.${args.decision}`,
+        'libraryContent',
+        content._id,
+        `${args.contentSlug} · refused: stale_revision (saw ${args.expectedReviewRevision}, now ${reviewRevision})`,
+        { result: 'rejected' },
+      );
+      return {
+        ok: false as const,
+        code: 'stale_revision',
+        message: 'This content changed after you loaded it. Review the new revision before deciding.',
+      };
+    }
+
+    // Idempotency guard: an identical decision by the same reviewer for the
+    // same dimension and revision is acknowledged, not duplicated. This is the
+    // server-side fix for the triple-submitted lsn_balanced_meals decision —
+    // a retry (double-tap, flaky network, replayed request) can no longer
+    // create a second history row or a second audit event.
+    const existing = await ctx.db
+      .query('contentReviews')
+      .withIndex('by_content_dimension_version', (q) =>
+        q.eq('contentSlug', args.contentSlug).eq('dimension', args.dimension).eq('contentVersion', reviewRevision),
+      )
+      .order('desc')
+      .take(20);
+    const identical = existing.find(
+      (row) =>
+        row.reviewerId === userId &&
+        row.decision === args.decision &&
+        (row.note ?? '') === (note || ''),
+    );
+    if (identical) {
+      return { ok: true as const, contentVersion: reviewRevision, duplicate: true };
+    }
+
     const now = Date.now();
     await ctx.db.insert('contentReviews', {
       contentSlug: args.contentSlug,
-      contentVersion: content.reviewRevision ?? 1,
+      contentVersion: reviewRevision,
+      // Explicit, unambiguous binding: decisions apply to exactly this
+      // reviewRevision (contentVersion above carries the same value for
+      // backwards compatibility with existing rows and readers).
+      reviewRevision,
       dimension: args.dimension,
       decision: args.decision,
       note: note || undefined,

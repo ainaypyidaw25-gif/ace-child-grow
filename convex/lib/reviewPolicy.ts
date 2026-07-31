@@ -49,7 +49,8 @@ export type ReviewRefusalCode =
   | 'display_name_required'
   | 'qualification_required'
   | 'note_required'
-  | 'content_not_found';
+  | 'content_not_found'
+  | 'stale_revision';
 
 export type ReviewRefusal = { code: ReviewRefusalCode; message: string };
 
@@ -136,5 +137,9 @@ export const REVIEW_REFUSAL_LABELS: Record<ReviewRefusalCode, { mm: string; en: 
   content_not_found: {
     mm: 'ဤအကြောင်းအရာ မတွေ့ရပါ။',
     en: 'This content item no longer exists.',
+  },
+  stale_revision: {
+    mm: 'သင်ဖတ်ပြီးနောက် ဤအကြောင်းအရာ ပြောင်းလဲသွားပါပြီ။ မူကွဲအသစ်ကို ပြန်ဖတ်ပြီးမှ ဆုံးဖြတ်ပါ။',
+    en: 'This content changed after you loaded it. Review the new revision before deciding.',
   },
 };

@@ -47,6 +47,10 @@ const PaymentStatus = lazy(() => import('../screens/PaymentStatus').then((module
 const Appointments = lazy(() => import('../screens/Appointments').then((module) => ({ default: module.Appointments })));
 const HealthRecords = lazy(() => import('../screens/HealthRecords').then((module) => ({ default: module.HealthRecords })));
 const LegalPage = lazy(() => import('../screens/LegalPage').then((module) => ({ default: module.LegalPage })));
+// Layout-test fixture (demo data only, no backend calls) — lets Playwright
+// verify and photograph the owner-priority layouts against the production
+// bundle without authentication or a live deployment.
+const OwnerPriorityPreview = lazy(() => import('../screens/ownerPriority/OwnerPriorityPreview').then((module) => ({ default: module.OwnerPriorityPreview })));
 
 // Authentication gate: unauthenticated visitors see sign-in; the app (and all
 // child data) is only reachable once signed in.
@@ -56,6 +60,7 @@ export function App() {
     <Routes>
       <Route path="/privacy" element={<StandaloneScreen><LegalPage kind="privacy" /></StandaloneScreen>} />
       <Route path="/account-deletion" element={<StandaloneScreen><LegalPage kind="account-deletion" /></StandaloneScreen>} />
+      <Route path="/dev/owner-priority-preview" element={<StandaloneScreen><OwnerPriorityPreview /></StandaloneScreen>} />
       <Route path="*" element={<>
       <AuthLoading>
         <div className="flex min-h-screen items-center justify-center text-ink-soft">…</div>

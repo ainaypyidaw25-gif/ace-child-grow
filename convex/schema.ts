@@ -353,6 +353,44 @@ export default defineSchema({
     reviewedAt: v.optional(v.number()),
     nextReviewAt: v.optional(v.number()),
     reviewNote: v.optional(v.string()),
+    // ------------------------------------------------------------------
+    // Owner-priority governance (all OPTIONAL and additive — existing rows,
+    // including every Production row, remain valid without them). These fields
+    // are advisory workflow metadata: none of them publishes, unpublishes,
+    // archives, approves, or changes reviewScope. They are written only by the
+    // owner-priority workspace mutations and (in a future, separately
+    // confirmed task) the classification importer.
+    // ------------------------------------------------------------------
+    riskClassification: v.optional(
+      v.union(v.literal('A'), v.literal('B'), v.literal('C'), v.literal('D'), v.literal('E')),
+    ),
+    ownerPriority: v.optional(
+      v.union(v.literal('P0'), v.literal('P1'), v.literal('P2'), v.literal('P3')),
+    ),
+    riskReasons: v.optional(v.array(v.string())),
+    requiredReviewDimensions: v.optional(v.array(v.string())),
+    classificationSource: v.optional(v.string()),
+    classificationRunId: v.optional(v.string()),
+    classifiedAt: v.optional(v.number()),
+    classifiedBy: v.optional(v.string()),
+    classificationConfirmedAt: v.optional(v.number()),
+    classificationConfirmedBy: v.optional(v.id('users')),
+    // A recommendation flag only. Acting on it (actually hiding content) is a
+    // separate, explicitly human publication decision — never automated here.
+    temporarilyHideRecommended: v.optional(v.boolean()),
+    priorityStatus: v.optional(
+      v.union(
+        v.literal('unreviewed'),
+        v.literal('confirmed'),
+        v.literal('correction_needed'),
+        v.literal('assigned'),
+        v.literal('in_review'),
+        v.literal('corrected'),
+        v.literal('ready_for_recheck'),
+        v.literal('completed'),
+      ),
+    ),
+    ownerNote: v.optional(v.string()),
     searchText: v.string(),
     createdAt: v.number(),
     updatedAt: v.number(),
@@ -398,6 +436,12 @@ export default defineSchema({
       v.literal('support'),
     ),
     reviewedAt: v.number(),
+    // Explicit binding to the libraryContent.reviewRevision the decision was
+    // recorded against. Historically `contentVersion` carried this value while
+    // libraryContent.version stayed at its imported value, which read as a
+    // mismatch in audits. New rows record both, identically; old rows stay
+    // valid without it. A decision NEVER applies to any other revision.
+    reviewRevision: v.optional(v.number()),
     createdAt: v.number(),
     updatedAt: v.number(),
   })
