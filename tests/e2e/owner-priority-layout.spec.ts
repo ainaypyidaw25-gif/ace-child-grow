@@ -1,10 +1,12 @@
 import { test, expect, type Page } from '@playwright/test';
 
 // Layout checks for the owner-priority workspace at the two device sizes the
-// owner uses, against the production bundle via the fixture preview page
-// (demo data, no backend). Screenshots land in test-results/ for the PR.
+// owner uses, driven through the test-only harness bundle (fixture data, no
+// backend). Screenshots land in test-results/ for the PR.
 
-const PREVIEW = '/dev/owner-priority-preview';
+// The harness is a separate bundle on its own port — deliberately NOT a route
+// in the application, so nothing like it can ship to Production.
+const HARNESS = 'http://localhost:4174/';
 
 async function assertNoHorizontalOverflow(page: Page) {
   const overflow = await page.evaluate(() => {
@@ -41,7 +43,7 @@ for (const [label, viewport] of [
 ] as const) {
   test(`owner priority layout fits ${label}`, async ({ page }) => {
     await page.setViewportSize(viewport);
-    await page.goto(PREVIEW);
+    await page.goto(HARNESS);
     await expect(page.getByTestId('owner-priority-view')).toBeVisible();
 
     // Dashboard counts render and are clickable filters.
@@ -71,16 +73,26 @@ for (const [label, viewport] of [
 
 test('queue rows open the item workspace callback', async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 800 });
-  await page.goto(PREVIEW);
+  await page.goto(HARNESS);
   await page.getByTestId('queue-row-demo_sn_autism').getByRole('button').click();
   await expect(page.getByTestId('opened-slug')).toContainText('demo_sn_autism');
 });
 
 test('import preview shows the disabled import and refusal design', async ({ page }) => {
   await page.setViewportSize({ width: 820, height: 1180 });
-  await page.goto(PREVIEW);
+  await page.goto(HARNESS);
   const importButton = page.getByTestId('import-disabled');
   await importButton.scrollIntoViewIfNeeded();
   await expect(importButton).toBeDisabled();
   await expect(page.getByTestId('import-plan')).toContainText('383');
+});
+
+test('the application bundle exposes no dev/preview route', async ({ page }) => {
+  // Belt and braces alongside noDevRoutes.test.ts: ask the PRODUCTION preview
+  // server for the old path and confirm the harness does not render.
+  await page.setViewportSize({ width: 820, height: 1180 });
+  const response = await page.goto('http://localhost:4173/dev/owner-priority-preview');
+  expect(response?.status()).toBeLessThan(400);
+  await expect(page.getByTestId('owner-priority-view')).toHaveCount(0);
+  await expect(page.getByText('LAYOUT PREVIEW')).toHaveCount(0);
 });

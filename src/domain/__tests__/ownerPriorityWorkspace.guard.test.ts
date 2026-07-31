@@ -86,8 +86,15 @@ describe('duplicate decision prevention and exact revision binding', () => {
   });
 
   it('the workspace sends the revision it is looking at and blocks double submits', () => {
-    expect(workspaceSource).toContain('expectedReviewRevision: reviews?.contentVersion');
-    expect(workspaceSource).toMatch(/!selectedSlug \|\| busy/);
+    expect(workspaceSource).toContain('expectedReviewRevision: reviews.contentVersion');
+    expect(workspaceSource).toMatch(/!selectedSlug \|\| busy \|\| !reviews/);
+  });
+
+  it('expectedReviewRevision is REQUIRED by the mutation, not optional', () => {
+    // v.optional here would silently re-admit unbound decisions from an old
+    // client — the exact defect this guard exists to close.
+    expect(contentReviewsSource).toMatch(/expectedReviewRevision:\s*v\.number\(\)/);
+    expect(contentReviewsSource).not.toMatch(/expectedReviewRevision:\s*v\.optional/);
   });
 });
 
@@ -135,8 +142,12 @@ describe('parent-visible Class C filtering and queue filters', () => {
     riskReasons: [],
     provisionalClassification: true,
     requiredReviewDimensions: [],
+    suggestedReviewDimensions: [],
+    manualTriageRequired: false,
     outstandingDimensions: [],
+    approvedDimensions: [],
     activeReviewers: [],
+    hasActiveAssignment: false,
     evidenceStatus: 'linked',
     priorityStatus: 'unreviewed',
     temporarilyHideRecommended: false,

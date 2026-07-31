@@ -236,11 +236,12 @@ export const saveDecision = mutation({
     dimension: dimensionValidator,
     decision: decisionValidator,
     note: v.optional(v.string()),
-    // The revision the reviewer was looking at. When provided, a decision can
-    // never land on content the reviewer has not seen: an edit that happened
-    // after the screen loaded is refused as stale, not silently attached to
-    // the new revision.
-    expectedReviewRevision: v.optional(v.number()),
+    // The revision the reviewer was looking at. REQUIRED: a decision must never
+    // land on content the reviewer has not seen. An old client or a direct call
+    // that omits it is rejected by the validator before the handler runs —
+    // "accept it if absent" would silently reintroduce the exact defect this
+    // guards against.
+    expectedReviewRevision: v.number(),
   },
   returns: v.union(
     v.object({ ok: v.literal(true), contentVersion: v.number(), duplicate: v.optional(v.boolean()) }),
@@ -287,7 +288,7 @@ export const saveDecision = mutation({
       return { ok: false as const, code: 'content_not_found', message: 'This content item no longer exists.' };
     }
     const reviewRevision = content.reviewRevision ?? 1;
-    if (args.expectedReviewRevision !== undefined && args.expectedReviewRevision !== reviewRevision) {
+    if (args.expectedReviewRevision !== reviewRevision) {
       await logAudit(
         ctx,
         userId,

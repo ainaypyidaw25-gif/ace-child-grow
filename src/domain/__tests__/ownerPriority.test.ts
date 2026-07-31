@@ -3,10 +3,13 @@ import {
   classifyRecord,
   compareQueueRows,
   computePriority,
+  completionRefusal,
   dashboardCounts,
   findBilingualConflicts,
   isParentVisible,
+  needsManualTriage,
   requiredDimensionsFor,
+  suggestedDimensionsFor,
   type ClassifiableRecord,
 } from '../../../convex/lib/ownerPriority';
 
@@ -63,9 +66,25 @@ describe('required review dimensions policy', () => {
     expect(requiredDimensionsFor('B')).not.toContain('clinical');
     expect(requiredDimensionsFor('C')).toContain('clinical');
   });
-  it('never marks a dimension not_required for D/E — full set instead', () => {
-    expect(requiredDimensionsFor('D')).toContain('clinical');
-    expect(requiredDimensionsFor('E')).toContain('safety');
+  it('persists NO confirmed requirements for D/E — a manager must decide', () => {
+    expect(requiredDimensionsFor('D')).toEqual([]);
+    expect(requiredDimensionsFor('E')).toEqual([]);
+    expect(needsManualTriage('D')).toBe(true);
+    expect(needsManualTriage('E')).toBe(true);
+  });
+
+  it('shows the conservative full set as a SUGGESTION for D/E', () => {
+    expect(suggestedDimensionsFor('D')).toEqual(['native_myanmar', 'english', 'child_development', 'evidence', 'safety', 'clinical']);
+    expect(suggestedDimensionsFor('E')).toEqual(suggestedDimensionsFor('D'));
+    // A suggestion is never a requirement.
+    expect(requiredDimensionsFor('D')).not.toEqual(suggestedDimensionsFor('D'));
+  });
+
+  it('suggests exactly the required set for A/B/C', () => {
+    for (const riskClass of ['A', 'B', 'C'] as const) {
+      expect(suggestedDimensionsFor(riskClass)).toEqual(requiredDimensionsFor(riskClass));
+    }
+    expect(needsManualTriage('C')).toBe(false);
   });
 });
 
@@ -163,11 +182,11 @@ describe('default queue sorting', () => {
 
 describe('dashboard counts', () => {
   const rows = [
-    { priority: 'P0' as const, riskClass: 'C' as const, clinicalStatus: 'published', priorityStatus: 'unreviewed' as const, outstandingDimensions: ['clinical', 'safety', 'native_myanmar'] },
-    { priority: 'P1' as const, riskClass: 'C' as const, clinicalStatus: 'published', priorityStatus: 'completed' as const, outstandingDimensions: [] },
-    { priority: 'P2' as const, riskClass: 'C' as const, clinicalStatus: 'clinical_review', priorityStatus: 'assigned' as const, outstandingDimensions: ['clinical'] },
-    { priority: 'P3' as const, riskClass: 'A' as const, clinicalStatus: 'clinical_review', priorityStatus: 'ready_for_recheck' as const, outstandingDimensions: ['native_myanmar'] },
-    { priority: 'P3' as const, riskClass: 'B' as const, clinicalStatus: 'published', priorityStatus: 'correction_needed' as const, outstandingDimensions: ['safety'] },
+    { priority: 'P0' as const, riskClass: 'C' as const, clinicalStatus: 'published', priorityStatus: 'unreviewed' as const, outstandingDimensions: ['clinical', 'safety', 'native_myanmar'], hasActiveAssignment: false },
+    { priority: 'P1' as const, riskClass: 'C' as const, clinicalStatus: 'published', priorityStatus: 'completed' as const, outstandingDimensions: [], hasActiveAssignment: false },
+    { priority: 'P2' as const, riskClass: 'C' as const, clinicalStatus: 'clinical_review', priorityStatus: 'review_requested' as const, outstandingDimensions: ['clinical'], hasActiveAssignment: false },
+    { priority: 'P3' as const, riskClass: 'A' as const, clinicalStatus: 'clinical_review', priorityStatus: 'ready_for_recheck' as const, outstandingDimensions: ['native_myanmar'], hasActiveAssignment: false },
+    { priority: 'P3' as const, riskClass: 'B' as const, clinicalStatus: 'published', priorityStatus: 'correction_needed' as const, outstandingDimensions: ['safety'], hasActiveAssignment: false },
   ];
 
   it('counts remaining per priority excluding completed', () => {
@@ -185,7 +204,9 @@ describe('dashboard counts', () => {
     expect(counts.safetyReviewsRequired).toBe(2);
     expect(counts.myanmarReviewsRequired).toBe(2);
     expect(counts.correctionNeeded).toBe(1);
-    expect(counts.currentlyAssigned).toBe(1);
+    // A review REQUEST is not an assignment: nothing here is actually staffed.
+    expect(counts.reviewRequested).toBe(1);
+    expect(counts.currentlyAssigned).toBe(0);
     expect(counts.readyForRecheck).toBe(1);
     expect(counts.completed).toBe(1);
   });
@@ -210,5 +231,61 @@ describe('parent visibility rule', () => {
     expect(isParentVisible('published')).toBe(true);
     expect(isParentVisible('clinical_review')).toBe(false);
     expect(isParentVisible('draft')).toBe(false);
+  });
+});
+
+
+describe('server-side completion guard', () => {
+  it('refuses completion while a confirmed required dimension is unapproved', () => {
+    const refusal = completionRefusal({
+      confirmedRequiredDimensions: ['native_myanmar', 'clinical'],
+      approvedDimensionsAtCurrentRevision: ['native_myanmar'],
+      needsManualTriage: false,
+      dataComplete: true,
+    });
+    expect(refusal?.code).toBe('outstanding_dimensions');
+    expect(refusal?.outstanding).toEqual(['clinical']);
+    expect(refusal?.message.en).toContain('clinical');
+    expect(refusal?.message.mm).toContain('clinical');
+  });
+
+  it('allows completion when every confirmed dimension is approved', () => {
+    expect(completionRefusal({
+      confirmedRequiredDimensions: ['native_myanmar'],
+      approvedDimensionsAtCurrentRevision: ['native_myanmar', 'evidence'],
+      needsManualTriage: false,
+      dataComplete: true,
+    })).toBeNull();
+  });
+
+  it('refuses completion for an untriaged D/E record', () => {
+    const refusal = completionRefusal({
+      confirmedRequiredDimensions: [],
+      approvedDimensionsAtCurrentRevision: [],
+      needsManualTriage: true,
+      dataComplete: true,
+    });
+    expect(refusal?.code).toBe('manual_triage_required');
+  });
+
+  it('refuses completion when review history could not be loaded in full', () => {
+    const refusal = completionRefusal({
+      confirmedRequiredDimensions: [],
+      approvedDimensionsAtCurrentRevision: [],
+      needsManualTriage: false,
+      dataComplete: false,
+    });
+    expect(refusal?.code).toBe('incomplete_data');
+  });
+
+  it('an empty confirmed set on a triaged record does not fabricate completion', () => {
+    // A manager who confirms "no dimensions required" has made a decision;
+    // that is allowed. The guard only blocks the UNTRIAGED case above.
+    expect(completionRefusal({
+      confirmedRequiredDimensions: [],
+      approvedDimensionsAtCurrentRevision: [],
+      needsManualTriage: false,
+      dataComplete: true,
+    })).toBeNull();
   });
 });

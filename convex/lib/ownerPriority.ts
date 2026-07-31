@@ -23,12 +23,42 @@ export type OwnerPriority = 'P0' | 'P1' | 'P2' | 'P3';
 export type PriorityStatus =
   | 'unreviewed'
   | 'confirmed'
+  // Class D/E: a human manager must decide the actual required dimensions
+  // before any review work is treated as scoped. Never set automatically to
+  // anything else, and never resolved by the classifier.
+  | 'manual_triage_required'
   | 'correction_needed'
+  // A review has been ASKED FOR. This is not an assignment: no reviewer has
+  // been named, invited or committed. Kept distinct from 'assigned' precisely
+  // so a dashboard can never imply staffing that does not exist.
+  | 'review_requested'
+  // Reserved for a genuine active reviewAssignment record. Nothing in this
+  // build sets it, because no assignment table is deployed yet.
   | 'assigned'
   | 'in_review'
   | 'corrected'
   | 'ready_for_recheck'
+  // Priority triage is finished. Deliberately NOT the same as 'completed':
+  // it says the owner has decided what this record needs, not that the reviews
+  // are done.
+  | 'triage_complete'
+  // Every confirmed required dimension is approved at the current revision.
+  // Server-enforced; see completionRefusal below.
   | 'completed';
+
+export const PRIORITY_STATUSES: PriorityStatus[] = [
+  'unreviewed',
+  'confirmed',
+  'manual_triage_required',
+  'correction_needed',
+  'review_requested',
+  'assigned',
+  'in_review',
+  'corrected',
+  'ready_for_recheck',
+  'triage_complete',
+  'completed',
+];
 
 export const PRIORITY_ORDER: Record<OwnerPriority, number> = { P0: 0, P1: 1, P2: 2, P3: 3 };
 
@@ -213,16 +243,40 @@ export function classifyRecord(record: ClassifiableRecord): ProvisionalClassific
   return { riskClass, riskReasons: reasons, clinicalTriggers: [...new Set(clinicalTriggers)], bilingualConflicts, pendingClinicalReferences };
 }
 
-/** Required review dimensions per class (task Part 3 policy). */
+const BASE_DIMENSIONS: RequiredDimension[] = ['native_myanmar', 'english', 'child_development', 'evidence'];
+const ALL_DIMENSIONS: RequiredDimension[] = [...BASE_DIMENSIONS, 'safety', 'clinical'];
+
+/** Class D and E are never auto-decided — a human manager must triage them. */
+export function needsManualTriage(riskClass: RiskClass): boolean {
+  return riskClass === 'D' || riskClass === 'E';
+}
+
+/**
+ * Dimensions the policy REQUIRES for a class, i.e. what may be persisted as a
+ * confirmed requirement without a human decision.
+ *
+ * D and E return NOTHING. Their risk is that the record is unclear or should be
+ * retired — writing six confirmed requirements would be the system deciding a
+ * question only a Review Manager or Owner may answer, and would make the record
+ * look correctly scoped when it has not been triaged at all. Use
+ * `suggestedDimensionsFor` to show the conservative set instead, and require an
+ * explicit confirmation to turn any of it into a requirement.
+ */
 export function requiredDimensionsFor(riskClass: RiskClass): RequiredDimension[] {
-  const base: RequiredDimension[] = ['native_myanmar', 'english', 'child_development', 'evidence'];
-  if (riskClass === 'B') return [...base, 'safety'];
-  if (riskClass === 'C') return [...base, 'safety', 'clinical'];
-  // D and E do not auto-decide dimensions: D goes to manual manager triage,
-  // E to a manager decision. Returning the full set errs on the safe side and
-  // never marks anything not_required.
-  if (riskClass === 'D' || riskClass === 'E') return [...base, 'safety', 'clinical'];
-  return base;
+  if (needsManualTriage(riskClass)) return [];
+  if (riskClass === 'B') return [...BASE_DIMENSIONS, 'safety'];
+  if (riskClass === 'C') return ALL_DIMENSIONS;
+  return BASE_DIMENSIONS;
+}
+
+/**
+ * Dimensions to SHOW as a conservative recommendation. For D/E this is the full
+ * set — the safe reading of an unclear record — but it is advisory text on a
+ * screen, never a stored requirement, and it never marks anything not_required.
+ */
+export function suggestedDimensionsFor(riskClass: RiskClass): RequiredDimension[] {
+  if (needsManualTriage(riskClass)) return ALL_DIMENSIONS;
+  return requiredDimensionsFor(riskClass);
 }
 
 export interface PriorityResult {
@@ -313,6 +367,64 @@ export function compareQueueRows(a: SortableQueueRow, b: SortableQueueRow): numb
   return a.slug.localeCompare(b.slug);
 }
 
+/**
+ * Server-side guard for `priorityStatus = completed`.
+ *
+ * 'completed' asserts that every CONFIRMED required dimension is approved at
+ * the CURRENT reviewRevision. A disabled button cannot enforce that — a direct
+ * mutation call bypasses the UI entirely — so this is checked in the handler
+ * and the refusal names the dimensions still outstanding.
+ *
+ * Records awaiting manual triage can never be 'completed': there is no
+ * confirmed requirement set to satisfy, so "all requirements met" is not a
+ * statement anyone has earned the right to make. Use 'triage_complete' for
+ * "the owner has finished deciding what this needs".
+ */
+export interface CompletionRefusal {
+  code: 'outstanding_dimensions' | 'manual_triage_required' | 'incomplete_data';
+  outstanding: string[];
+  message: { mm: string; en: string };
+}
+
+export function completionRefusal(input: {
+  confirmedRequiredDimensions: string[];
+  approvedDimensionsAtCurrentRevision: string[];
+  needsManualTriage: boolean;
+  dataComplete: boolean;
+}): CompletionRefusal | null {
+  if (!input.dataComplete) {
+    return {
+      code: 'incomplete_data',
+      outstanding: [],
+      message: {
+        mm: 'သုံးသပ်မှတ်တမ်း အပြည့်အစုံ မဖတ်နိုင်သဖြင့် “ပြီးဆုံး” ဟု မမှတ်နိုင်ပါ။',
+        en: 'Cannot mark completed: the full review history could not be loaded, so completion cannot be verified.',
+      },
+    };
+  }
+  if (input.needsManualTriage && input.confirmedRequiredDimensions.length === 0) {
+    return {
+      code: 'manual_triage_required',
+      outstanding: [],
+      message: {
+        mm: 'ဤအကြောင်းအရာသည် လူကိုယ်တိုင် စိစစ်ရန် ကျန်နေသည်။ လိုအပ်သည့် စစ်ဆေးမှုများကို မန်နေဂျာက အတည်ပြုပြီးမှသာ “ပြီးဆုံး” ဟု မှတ်နိုင်သည်။',
+        en: 'This record still needs manual triage. A manager must confirm its required review dimensions before it can be marked completed.',
+      },
+    };
+  }
+  const approved = new Set(input.approvedDimensionsAtCurrentRevision);
+  const outstanding = input.confirmedRequiredDimensions.filter((dimension) => !approved.has(dimension));
+  if (outstanding.length === 0) return null;
+  return {
+    code: 'outstanding_dimensions',
+    outstanding,
+    message: {
+      mm: `“ပြီးဆုံး” ဟု မမှတ်နိုင်ပါ — လက်ရှိမူကွဲအတွက် စစ်ဆေးရန် ကျန်နေသေးသည်: ${outstanding.join(', ')}`,
+      en: `Cannot mark completed — these required reviews are still outstanding for the current revision: ${outstanding.join(', ')}`,
+    },
+  };
+}
+
 export interface DashboardCounts {
   p0Remaining: number;
   p1Remaining: number;
@@ -323,6 +435,9 @@ export interface DashboardCounts {
   safetyReviewsRequired: number;
   myanmarReviewsRequired: number;
   correctionNeeded: number;
+  manualTriageRequired: number;
+  reviewRequested: number;
+  /** ONLY genuine active assignments — never review requests. */
   currentlyAssigned: number;
   readyForRecheck: number;
   completed: number;
@@ -334,6 +449,8 @@ export interface CountableRow {
   clinicalStatus: string;
   priorityStatus: PriorityStatus;
   outstandingDimensions: string[];
+  /** True only when a real reviewAssignment exists for this revision. */
+  hasActiveAssignment: boolean;
 }
 
 export function dashboardCounts(rows: CountableRow[]): DashboardCounts {
@@ -351,7 +468,11 @@ export function dashboardCounts(rows: CountableRow[]): DashboardCounts {
     safetyReviewsRequired: outstanding('safety'),
     myanmarReviewsRequired: outstanding('native_myanmar'),
     correctionNeeded: rows.filter((row) => row.priorityStatus === 'correction_needed').length,
-    currentlyAssigned: rows.filter((row) => row.priorityStatus === 'assigned' || row.priorityStatus === 'in_review').length,
+    manualTriageRequired: rows.filter((row) => row.priorityStatus === 'manual_triage_required').length,
+    reviewRequested: rows.filter((row) => row.priorityStatus === 'review_requested').length,
+    // An assignment must be a real record, not a request. Counting requests
+    // here would tell the owner reviewers are staffed when nobody is.
+    currentlyAssigned: rows.filter((row) => row.hasActiveAssignment).length,
     readyForRecheck: rows.filter((row) => row.priorityStatus === 'ready_for_recheck').length,
     completed: rows.filter((row) => row.priorityStatus === 'completed').length,
   };

@@ -24,8 +24,12 @@ export interface QueueRowView {
   riskReasons: string[];
   provisionalClassification: boolean;
   requiredReviewDimensions: string[];
+  suggestedReviewDimensions: string[];
+  manualTriageRequired: boolean;
   outstandingDimensions: string[];
+  approvedDimensions: string[];
   activeReviewers: string[];
+  hasActiveAssignment: boolean;
   evidenceStatus: string;
   priorityStatus: PriorityStatus;
   temporarilyHideRecommended: boolean;
@@ -43,7 +47,7 @@ export interface QueueFilters {
   ageGroup: string;
   clinicalRequired: boolean;
   safetyRequired: boolean;
-  assignmentStatus: 'all' | 'assigned' | 'unassigned';
+  assignmentStatus: 'all' | 'assigned' | 'requested' | 'unassigned';
   correctionStatus: 'all' | PriorityStatus;
 }
 
@@ -69,8 +73,10 @@ export function applyQueueFilters(rows: QueueRowView[], filters: QueueFilters): 
     if (filters.ageGroup !== 'all' && row.ageGroupKey !== filters.ageGroup) return false;
     if (filters.clinicalRequired && !row.outstandingDimensions.includes('clinical')) return false;
     if (filters.safetyRequired && !row.outstandingDimensions.includes('safety')) return false;
-    if (filters.assignmentStatus === 'assigned' && !['assigned', 'in_review'].includes(row.priorityStatus)) return false;
-    if (filters.assignmentStatus === 'unassigned' && ['assigned', 'in_review'].includes(row.priorityStatus)) return false;
+    // "Assigned" means a real assignment exists — a review REQUEST is not one.
+    if (filters.assignmentStatus === 'assigned' && !row.hasActiveAssignment) return false;
+    if (filters.assignmentStatus === 'requested' && row.priorityStatus !== 'review_requested') return false;
+    if (filters.assignmentStatus === 'unassigned' && row.hasActiveAssignment) return false;
     if (filters.correctionStatus !== 'all' && row.priorityStatus !== filters.correctionStatus) return false;
     return true;
   });
@@ -92,13 +98,16 @@ const PRIORITY_LABELS: Record<OwnerPriority, { mm: string; en: string }> = {
 
 const STATUS_LABELS: Record<PriorityStatus, { mm: string; en: string }> = {
   unreviewed: { mm: 'မစစ်ရသေး', en: 'Unreviewed' },
-  confirmed: { mm: 'အတည်ပြုပြီး', en: 'Confirmed' },
+  confirmed: { mm: 'အဆင့် အတည်ပြုပြီး', en: 'Class confirmed' },
+  manual_triage_required: { mm: 'လူကိုယ်တိုင် စိစစ်ရန် လို', en: 'Manual triage required' },
   correction_needed: { mm: 'ပြင်ဆင်ရန် လို', en: 'Correction needed' },
-  assigned: { mm: 'တာဝန်ပေးပြီး', en: 'Assigned' },
+  review_requested: { mm: 'စစ်ဆေးမှု တောင်းဆိုထား', en: 'Review requested' },
+  assigned: { mm: 'တာဝန်ပေးထား', en: 'Assigned' },
   in_review: { mm: 'စစ်ဆေးဆဲ', en: 'In review' },
   corrected: { mm: 'ပြင်ဆင်ပြီး', en: 'Corrected' },
   ready_for_recheck: { mm: 'ပြန်စစ်ရန် အသင့်', en: 'Ready for recheck' },
-  completed: { mm: 'ပြီးဆုံး', en: 'Completed' },
+  triage_complete: { mm: 'ဦးစားပေး စိစစ်မှု ပြီးဆုံး', en: 'Priority triage complete' },
+  completed: { mm: 'စစ်ဆေးမှု အားလုံး ပြီးဆုံး', en: 'All reviews completed' },
 };
 
 const DIMENSION_SHORT: Record<string, { mm: string; en: string }> = {
@@ -127,9 +136,18 @@ export interface OwnerPriorityViewProps {
   contentTypes: string[];
   initialFilters?: Partial<QueueFilters>;
   onOpenItem?: (row: QueueRowView) => void;
+  /** 'full' sees the catalogue and roster; scoped callers see less. */
+  accessLevel?: 'full' | 'correction_scoped' | 'assignment_scoped';
+  /** False when review/edit history could not be read in full. */
+  dataComplete?: boolean;
+  /** False when counts must not be presented as authoritative. */
+  countsAuthoritative?: boolean;
 }
 
-export function OwnerPriorityView({ locale, rows, counts, ageGroups, contentTypes, initialFilters, onOpenItem }: OwnerPriorityViewProps) {
+export function OwnerPriorityView({
+  locale, rows, counts, ageGroups, contentTypes, initialFilters, onOpenItem,
+  accessLevel = 'full', dataComplete = true, countsAuthoritative = true,
+}: OwnerPriorityViewProps) {
   const L = (mm: string, en: string) => (locale === 'mm' ? mm : en);
   const [filters, setFilters] = useState<QueueFilters>({ ...DEFAULT_FILTERS, ...initialFilters });
   const filtered = useMemo(() => applyQueueFilters(rows, filters), [rows, filters]);
@@ -145,7 +163,9 @@ export function OwnerPriorityView({ locale, rows, counts, ageGroups, contentType
     { key: 'safe', label: L('ဘေးကင်းရေး စစ်ရန်', 'Safety reviews required'), value: counts.safetyReviewsRequired, apply: { safetyRequired: true } },
     { key: 'mm', label: L('မြန်မာ စစ်ရန်', 'Myanmar reviews required'), value: counts.myanmarReviewsRequired, apply: {} },
     { key: 'corr', label: L('ပြင်ဆင်ရန် လို', 'Correction needed'), value: counts.correctionNeeded, apply: { correctionStatus: 'correction_needed' } },
-    { key: 'asgn', label: L('တာဝန်ပေးပြီး', 'Currently assigned'), value: counts.currentlyAssigned, apply: { assignmentStatus: 'assigned' } },
+    { key: 'triage', label: L('လူကိုယ်တိုင် စိစစ်ရန်', 'Manual triage required'), value: counts.manualTriageRequired, apply: { correctionStatus: 'manual_triage_required' } },
+    { key: 'req', label: L('စစ်ဆေးမှု တောင်းဆိုထား', 'Review requested'), value: counts.reviewRequested, apply: { assignmentStatus: 'requested' } },
+    { key: 'asgn', label: L('တာဝန်ပေးထား (အမှန်တကယ်)', 'Currently assigned (real assignments)'), value: counts.currentlyAssigned, apply: { assignmentStatus: 'assigned' } },
     { key: 'rechk', label: L('ပြန်စစ်ရန် အသင့်', 'Ready for recheck'), value: counts.readyForRecheck, apply: { correctionStatus: 'ready_for_recheck' } },
     { key: 'done', label: L('ပြီးဆုံး', 'Completed'), value: counts.completed, apply: { correctionStatus: 'completed' } },
   ];
@@ -161,6 +181,31 @@ export function OwnerPriorityView({ locale, rows, counts, ageGroups, contentType
           )}
         </p>
       </header>
+
+      {!dataComplete && (
+        <p role="alert" data-testid="incomplete-data-warning" className="rounded-card border-2 border-red-400 bg-red-50 p-3 text-sm font-semibold leading-6 text-red-800">
+          {L(
+            '⚠ သုံးသပ်မှတ်တမ်း အပြည့်အစုံ မဖတ်နိုင်ပါ။ ကျန်ရှိနေသော စစ်ဆေးမှု အရေအတွက်များသည် တိကျမှု အာမမခံပါ။ “ပြီးဆုံး” ဟု မှတ်ခြင်းကို ပိတ်ထားသည်။',
+            '⚠ The full review history could not be loaded. Outstanding counts below are NOT authoritative and completion actions are disabled.',
+          )}
+        </p>
+      )}
+      {dataComplete && !countsAuthoritative && (
+        <p data-testid="scoped-counts-notice" className="rounded-card border border-line bg-pastel-yellow p-3 text-sm leading-6 text-ink">
+          {L(
+            'ဤကိန်းဂဏန်းများသည် သင့်တာဝန်နှင့် သက်ဆိုင်သော အကြောင်းအရာများအတွက်သာ ဖြစ်သည် — စာကြည့်တိုက် တစ်ခုလုံးအတွက် မဟုတ်ပါ။',
+            'These counts cover only the records in your scope — they are not catalogue-wide totals.',
+          )}
+        </p>
+      )}
+      {accessLevel !== 'full' && (
+        <p data-testid="scoped-access-notice" className="rounded-card border border-line bg-canvas p-3 text-xs leading-5 text-ink-soft">
+          {L(
+            'သင့်အခန်းကဏ္ဍအရ စစ်ဆေးသူအမည်များ၊ ဆုံးဖြတ်ချက်အချိန်များနှင့် တည်းဖြတ်မှုမှတ်တမ်းများကို ဖျောက်ထားသည်။',
+            'Reviewer names, decision timings and edit activity are hidden for your role.',
+          )}
+        </p>
+      )}
 
       <section aria-label={L('အနှစ်ချုပ် ကိန်းဂဏန်းများ', 'Dashboard counts')} className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
         {countTiles.map((tile) => (
@@ -218,8 +263,9 @@ export function OwnerPriorityView({ locale, rows, counts, ageGroups, contentType
           <span>{L('တာဝန်အခြေအနေ', 'Assignment')}</span>
           <select value={filters.assignmentStatus} onChange={(event) => set('assignmentStatus', event.target.value as QueueFilters['assignmentStatus'])} className="w-full rounded-xl border border-line bg-white px-2 py-2">
             <option value="all">{L('အားလုံး', 'All')}</option>
-            <option value="assigned">{L('တာဝန်ပေးပြီး', 'Assigned')}</option>
-            <option value="unassigned">{L('မပေးရသေး', 'Unassigned')}</option>
+            <option value="assigned">{L('တာဝန်ပေးထား (အမှန်တကယ်)', 'Assigned (real assignment)')}</option>
+            <option value="requested">{L('စစ်ဆေးမှု တောင်းဆိုထား', 'Review requested')}</option>
+            <option value="unassigned">{L('မပေးရသေး', 'Not assigned')}</option>
           </select>
         </label>
         <label className="space-y-1 text-xs font-medium text-ink">
@@ -263,6 +309,11 @@ export function OwnerPriorityView({ locale, rows, counts, ageGroups, contentType
                   <span className="rounded-pill bg-pastel-yellow px-2 py-1 text-xs text-ink">{L('ယာယီဖျောက်ရန် အကြံပြု', 'Hide recommended')}</span>
                 )}
                 <span className="rounded-pill bg-canvas px-2 py-1 text-xs text-ink-soft">{STATUS_LABELS[row.priorityStatus][locale]}</span>
+                {row.manualTriageRequired && (
+                  <span data-testid={`triage-${row.slug}`} className="rounded-pill bg-orange-100 px-2 py-1 text-xs font-semibold text-orange-800">
+                    {L('လူကိုယ်တိုင် စိစစ်ရန် လိုသည်', 'Manual triage required')}
+                  </span>
+                )}
               </div>
               <div className="mt-2 grid gap-1 sm:grid-cols-2">
                 <p className="break-words font-semibold leading-7 text-ink">{row.titleMm}</p>
@@ -274,11 +325,19 @@ export function OwnerPriorityView({ locale, rows, counts, ageGroups, contentType
                 <div><dt className="inline font-medium">{L('အခြေအနေ', 'Status')}: </dt><dd className="inline">{row.clinicalStatus} · {L('မူကွဲ', 'rev')} {row.reviewRevision}</dd></div>
                 <div><dt className="inline font-medium">{L('စစ်ဆေးမှုနယ်ပယ်', 'Scope')}: </dt><dd className="inline">{row.reviewScope ?? '—'}</dd></div>
                 <div><dt className="inline font-medium">{L('အထောက်အထား', 'Evidence')}: </dt><dd className="inline">{row.evidenceStatus}</dd></div>
-                <div><dt className="inline font-medium">{L('စစ်ရန်ကျန်', 'Outstanding')}: </dt><dd className="inline">{row.outstandingDimensions.map((dimension) => DIMENSION_SHORT[dimension]?.[locale] ?? dimension).join(', ') || L('မရှိ', 'none')}</dd></div>
+                <div><dt className="inline font-medium">{L('စစ်ရန်ကျန်', 'Outstanding')}: </dt><dd className="inline">{row.manualTriageRequired ? L('စိစစ်ပြီးမှ သတ်မှတ်မည်', 'set after triage') : (row.outstandingDimensions.map((dimension) => DIMENSION_SHORT[dimension]?.[locale] ?? dimension).join(', ') || L('မရှိ', 'none'))}</dd></div>
                 <div><dt className="inline font-medium">{L('စစ်ဆေးသူ', 'Reviewers')}: </dt><dd className="inline">{row.activeReviewers.join(', ') || '—'}</dd></div>
                 <div><dt className="inline font-medium">{L('နောက်ဆုံးပြင်', 'Last edit')}: </dt><dd className="inline">{formatTime(row.latestEditAt, locale)}</dd></div>
                 <div><dt className="inline font-medium">{L('နောက်ဆုံးဆုံးဖြတ်', 'Last decision')}: </dt><dd className="inline">{formatTime(row.latestDecisionAt, locale)}</dd></div>
               </dl>
+              {row.manualTriageRequired && row.suggestedReviewDimensions.length > 0 && (
+                <p className="mt-2 break-words rounded-lg bg-orange-50 px-2 py-1 text-xs leading-5 text-ink">
+                  <b>{L('အကြံပြု (အတည်မပြုရသေး)', 'Suggested (not yet confirmed)')}:</b>{' '}
+                  {row.suggestedReviewDimensions.map((dimension) => DIMENSION_SHORT[dimension]?.[locale] ?? dimension).join(', ')}
+                  {' — '}
+                  {L('မန်နေဂျာက အတည်ပြုမှသာ လိုအပ်ချက် ဖြစ်လာမည်။', 'a manager must confirm these before they become requirements.')}
+                </p>
+              )}
               {row.riskReasons.length > 0 && (
                 <p className="mt-2 break-words text-xs leading-5 text-ink-soft"><b>{L('အကြောင်းရင်း', 'Risk reasons')}:</b> {row.riskReasons.join('; ')}</p>
               )}

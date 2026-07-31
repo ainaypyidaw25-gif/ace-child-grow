@@ -4,6 +4,7 @@ import { useMutation, useQuery } from 'convex/react';
 import { api } from '../../../convex/_generated/api';
 import { useLocale } from '../../app/LocaleContext';
 import { REVIEW_DIMENSION_IDS, type PriorityStatus } from '../../../convex/lib/ownerPriority';
+import { mayManageGovernance, mayRequestReviews } from '../../../convex/lib/ownerPriorityAccess';
 
 // Owner correction actions for one item: note, review requests, workflow
 // status, parent-facing view link and the before/after edit history. All the
@@ -19,10 +20,13 @@ const DIMENSION_LABELS: Record<string, { mm: string; en: string }> = {
   clinical: { mm: 'ဆေးဘက် စစ်ဆေးရန်', en: 'Request clinical review' },
 };
 
-export function OwnerActionsPanel({ slug, reviewRevision, role }: {
+export function OwnerActionsPanel({ slug, reviewRevision, role, dataComplete = true, outstandingDimensions = [] }: {
   slug: string;
   reviewRevision: number;
   role: string;
+  /** False when review history could not be read in full. */
+  dataComplete?: boolean;
+  outstandingDimensions?: string[];
 }) {
   const { locale } = useLocale();
   const L = (mm: string, en: string) => (locale === 'mm' ? mm : en);
@@ -54,8 +58,12 @@ export function OwnerActionsPanel({ slug, reviewRevision, role }: {
   const setStatus = (priorityStatus: PriorityStatus, done: string) =>
     run(() => setGovernance({ slug, expectedReviewRevision: reviewRevision, priorityStatus }), done);
 
-  const isOwner = role === 'owner';
-  const mayRequest = role === 'owner' || role === 'content_editor';
+  const isOwner = mayManageGovernance(role);
+  const mayRequest = mayRequestReviews(role);
+  // Completion is refused server-side while anything is outstanding or the
+  // history is incomplete; the button reflects that instead of inviting a
+  // refusal the owner has to read.
+  const completionBlocked = !dataComplete || outstandingDimensions.length > 0;
 
   return (
     <section className="space-y-4 rounded-card border border-line bg-white p-4 shadow-card" data-testid="owner-actions">
@@ -98,8 +106,22 @@ export function OwnerActionsPanel({ slug, reviewRevision, role }: {
             <button type="button" disabled={busy} onClick={() => setStatus('ready_for_recheck', L('ပြန်စစ်ရန် အသင့် ဟုမှတ်ပြီးပါပြီ။', 'Marked ready for recheck.'))} className="rounded-pill border border-line px-3 py-1.5 text-xs font-medium text-ink hover:border-sky disabled:opacity-50">
               {L('ပြင်ပြီး — ပြန်စစ်ရန် အသင့်', 'Mark correction ready for recheck')}
             </button>
-            <button type="button" disabled={busy} onClick={() => setStatus('completed', L('ပြီးဆုံး ဟုမှတ်ပြီးပါပြီ။', 'Marked completed.'))} className="rounded-pill border border-line px-3 py-1.5 text-xs font-medium text-ink hover:border-sky disabled:opacity-50">
-              {L('ပြီးဆုံး ဟုမှတ်မည်', 'Mark completed')}
+            <button
+              type="button"
+              disabled={busy}
+              onClick={() => setStatus('triage_complete', L('ဦးစားပေး စိစစ်မှု ပြီးဆုံး ဟုမှတ်ပြီးပါပြီ။', 'Marked priority triage complete.'))}
+              className="rounded-pill border border-line px-3 py-1.5 text-xs font-medium text-ink hover:border-sky disabled:opacity-50"
+            >
+              {L('ဦးစားပေး စိစစ်မှု ပြီးဆုံး', 'Mark priority triage complete')}
+            </button>
+            <button
+              type="button"
+              disabled={busy || completionBlocked}
+              data-testid="mark-completed"
+              onClick={() => setStatus('completed', L('စစ်ဆေးမှု အားလုံး ပြီးဆုံး ဟုမှတ်ပြီးပါပြီ။', 'Marked all reviews completed.'))}
+              className="rounded-pill border border-line px-3 py-1.5 text-xs font-medium text-ink hover:border-sky disabled:opacity-50"
+            >
+              {L('စစ်ဆေးမှု အားလုံး ပြီးဆုံး', 'Mark all reviews completed')}
             </button>
           </div>
         </div>
@@ -126,6 +148,13 @@ export function OwnerActionsPanel({ slug, reviewRevision, role }: {
         </form>
       )}
 
+      {completionBlocked && isOwner && (
+        <p className="rounded-xl bg-pastel-yellow px-3 py-2 text-xs leading-5 text-ink">
+          {!dataComplete
+            ? L('သုံးသပ်မှတ်တမ်း အပြည့်အစုံ မဖတ်နိုင်သဖြင့် “ပြီးဆုံး” ကို ပိတ်ထားသည်။', 'Completion is disabled: the full review history could not be loaded.')
+            : L(`“ပြီးဆုံး” မမှတ်နိုင်သေးပါ — စစ်ဆေးရန် ကျန်: ${outstandingDimensions.join(', ')}`, `Cannot complete yet — outstanding: ${outstandingDimensions.join(', ')}`)}
+        </p>
+      )}
       {message && <p role="status" className="text-sm text-ink-soft">{message}</p>}
 
       {slugEdits.length > 0 && (

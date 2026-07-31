@@ -409,6 +409,9 @@ function OwnerPriorityContainer({ onOpenItem }: { onOpenItem: (row: QueueRowView
       ageGroups={AGE_GROUPS}
       contentTypes={[...CONTENT_TYPES]}
       onOpenItem={onOpenItem}
+      accessLevel={queues.accessLevel as 'full' | 'correction_scoped' | 'assignment_scoped'}
+      dataComplete={queues.dataComplete}
+      countsAuthoritative={queues.countsAuthoritative}
     />
   );
 }
@@ -431,6 +434,10 @@ export function ContentReviewWorkspace() {
   const [message, setMessage] = useState('');
   const [editorDirty, setEditorDirty] = useState(false);
   const [needsName, setNeedsName] = useState(false);
+  // The queue is the single source of what remains outstanding for this row,
+  // so the item screen and the queue can never disagree about completion.
+  const queueState = useQuery(api.ownerPriority.queues);
+  const queueRow = queueState?.rows.find((row) => row.slug === selectedSlug);
 
   const confirmSelectionChange = () => !editorDirty || window.confirm(L(
     'မသိမ်းရသေးသော ပြင်ဆင်ချက်များ ရှိပါသည်။ မသိမ်းဘဲ အခြားအကြောင်းအရာသို့ ပြောင်းမည်လား။',
@@ -459,7 +466,9 @@ export function ContentReviewWorkspace() {
     // Guard against double submission: the button is disabled while busy, but a
     // queued second click (or Enter) must also be ignored — the server has its
     // own idempotency guard, and the client should not rely on it.
-    if (!selectedSlug || busy) return;
+    // A decision must bind to a known revision, so do not submit before the
+    // review state has loaded.
+    if (!selectedSlug || busy || !reviews) return;
     setBusy(true); setMessage('');
     try {
       const result = await saveDecision({
@@ -468,8 +477,9 @@ export function ContentReviewWorkspace() {
         decision,
         note: note || undefined,
         // Bind the decision to the revision on screen; the server refuses if
-        // the content changed since this screen loaded.
-        expectedReviewRevision: reviews?.contentVersion ?? undefined,
+        // the content changed since this screen loaded. Required by the
+        // mutation, so the button stays disabled until it is known.
+        expectedReviewRevision: reviews.contentVersion ?? 1,
       });
       if (!result.ok) {
         // The server refuses in-band with a code, so the reviewer gets the actual
@@ -624,7 +634,7 @@ export function ContentReviewWorkspace() {
               <textarea value={note} onChange={(event) => setNote(event.target.value)} rows={4} placeholder={decision === 'changes_requested' ? L('ပြင်ဆင်ရမည့်အချက်ကို ရှင်းလင်းစွာ ရေးပါ။', 'Describe the required change clearly.') : undefined} className="w-full rounded-xl border border-line bg-white px-3 py-2" />
             </label>
             <div className="flex flex-wrap items-center gap-3 lg:col-span-2">
-              <button type="submit" disabled={busy || !mayReview(access.role, dimension)} className="rounded-pill bg-sky px-5 py-2 text-sm font-semibold text-white disabled:opacity-50">
+              <button type="submit" disabled={busy || !reviews || !mayReview(access.role, dimension)} className="rounded-pill bg-sky px-5 py-2 text-sm font-semibold text-white disabled:opacity-50">
                 {busy ? L('မှတ်တမ်းတင်နေသည်…', 'Recording…') : L('ဆုံးဖြတ်ချက် မှတ်တမ်းတင်မည်', 'Record decision')}
               </button>
               {message && <p role="status" className="text-sm text-ink-soft">{message}</p>}
@@ -663,7 +673,13 @@ export function ContentReviewWorkspace() {
       )}
 
       {item && access.role !== null && ['owner', 'content_editor'].includes(access.role) && (
-        <OwnerActionsPanel slug={item.slug} reviewRevision={item.reviewRevision ?? 1} role={access.role} />
+        <OwnerActionsPanel
+          slug={item.slug}
+          reviewRevision={item.reviewRevision ?? 1}
+          role={access.role}
+          dataComplete={queueState?.dataComplete ?? true}
+          outstandingDimensions={queueRow?.outstandingDimensions ?? []}
+        />
       )}
       </>)}
     </div>

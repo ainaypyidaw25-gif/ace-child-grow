@@ -368,7 +368,13 @@ export default defineSchema({
       v.union(v.literal('P0'), v.literal('P1'), v.literal('P2'), v.literal('P3')),
     ),
     riskReasons: v.optional(v.array(v.string())),
+    // CONFIRMED requirements only — written by an explicit manager decision.
+    // Class D/E rows carry none until triaged, so nothing can look scoped.
     requiredReviewDimensions: v.optional(v.array(v.string())),
+    // Dimensions that have merely been ASKED FOR. Not an assignment and not a
+    // confirmed requirement; kept separate so neither can be mistaken for the
+    // other in a count or a label.
+    requestedReviewDimensions: v.optional(v.array(v.string())),
     classificationSource: v.optional(v.string()),
     classificationRunId: v.optional(v.string()),
     classifiedAt: v.optional(v.number()),
@@ -382,11 +388,14 @@ export default defineSchema({
       v.union(
         v.literal('unreviewed'),
         v.literal('confirmed'),
+        v.literal('manual_triage_required'),
         v.literal('correction_needed'),
+        v.literal('review_requested'),
         v.literal('assigned'),
         v.literal('in_review'),
         v.literal('corrected'),
         v.literal('ready_for_recheck'),
+        v.literal('triage_complete'),
         v.literal('completed'),
       ),
     ),

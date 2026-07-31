@@ -1,12 +1,17 @@
 import { useState } from 'react';
-import { OwnerPriorityView, type QueueRowView } from './OwnerPriorityView';
-import { ImportPlanView } from './ClassificationImportPreview';
-import type { ImportPlan } from '../../../convex/lib/classificationImport';
+import { OwnerPriorityView, type QueueRowView } from '../../src/screens/ownerPriority/OwnerPriorityView';
+import { ImportPlanView } from '../../src/screens/ownerPriority/ClassificationImportPreview';
+import type { ImportPlan } from '../../convex/lib/classificationImport';
 
-// Layout-test fixture page. Renders the owner-priority workspace with FAKE,
-// clearly labelled demo rows and no backend calls at all, so Playwright can
-// verify the 360×800 and 820×1180 layouts (and photograph them) against the
-// production bundle. It exposes no data and performs no reads or writes.
+// Layout-test harness. Renders the owner-priority workspace with FAKE, clearly
+// labelled demo rows and no backend calls, so Playwright can verify the
+// 360x800 and 820x1180 layouts (and photograph them) using the same components
+// and the same production build pipeline as the app.
+//
+// It lives under tests/ and is built by vite.harness.config.ts into a SEPARATE
+// bundle. It is NOT reachable from the application: src/ never imports it, and
+// no route serves it, so it cannot ship to Production. See
+// src/domain/__tests__/noDevRoutes.test.ts, which asserts exactly that.
 
 const FIXTURE_ROWS: QueueRowView[] = [
   {
@@ -27,8 +32,12 @@ const FIXTURE_ROWS: QueueRowView[] = [
     riskReasons: ['type=special_need (developmental condition guidance)'],
     provisionalClassification: true,
     requiredReviewDimensions: ['native_myanmar', 'english', 'child_development', 'evidence', 'safety', 'clinical'],
+    suggestedReviewDimensions: ['native_myanmar', 'english', 'child_development', 'evidence', 'safety', 'clinical'],
+    manualTriageRequired: false,
     outstandingDimensions: ['clinical', 'safety', 'native_myanmar'],
+    approvedDimensions: [],
     activeReviewers: [],
+    hasActiveAssignment: false,
     evidenceStatus: 'linked',
     priorityStatus: 'unreviewed',
     temporarilyHideRecommended: false,
@@ -57,11 +66,15 @@ const FIXTURE_ROWS: QueueRowView[] = [
     riskClass: 'D',
     riskReasons: ['Myanmar/English integrity conflict: data.safety — one side empty'],
     provisionalClassification: true,
-    requiredReviewDimensions: ['native_myanmar', 'english', 'child_development', 'evidence', 'safety', 'clinical'],
-    outstandingDimensions: ['native_myanmar', 'safety'],
+    requiredReviewDimensions: [],
+    suggestedReviewDimensions: ['native_myanmar', 'english', 'child_development', 'evidence', 'safety', 'clinical'],
+    manualTriageRequired: true,
+    outstandingDimensions: [],
+    approvedDimensions: [],
     activeReviewers: ['Demo Reviewer'],
+    hasActiveAssignment: false,
     evidenceStatus: 'linked',
-    priorityStatus: 'correction_needed',
+    priorityStatus: 'manual_triage_required',
     temporarilyHideRecommended: true,
     ownerNote: 'Fix the Myanmar safety wording before recheck.',
     latestEditAt: 1785490000000,
@@ -86,10 +99,14 @@ const FIXTURE_ROWS: QueueRowView[] = [
     riskReasons: ['guide carries an explicit redFlags block', 'feeding/nutrition'],
     provisionalClassification: true,
     requiredReviewDimensions: ['native_myanmar', 'english', 'child_development', 'evidence', 'safety', 'clinical'],
+    suggestedReviewDimensions: ['native_myanmar', 'english', 'child_development', 'evidence', 'safety', 'clinical'],
+    manualTriageRequired: false,
     outstandingDimensions: ['clinical'],
+    approvedDimensions: ['native_myanmar', 'english', 'child_development', 'evidence', 'safety'],
     activeReviewers: ['Demo Language Reviewer'],
+    hasActiveAssignment: false,
     evidenceStatus: 'linked',
-    priorityStatus: 'assigned',
+    priorityStatus: 'review_requested',
     temporarilyHideRecommended: false,
     ownerNote: null,
     latestEditAt: null,
@@ -114,8 +131,12 @@ const FIXTURE_ROWS: QueueRowView[] = [
     riskReasons: ['parent-scored milestone checklist (delay interpretation)'],
     provisionalClassification: true,
     requiredReviewDimensions: ['native_myanmar', 'english', 'child_development', 'evidence', 'safety', 'clinical'],
+    suggestedReviewDimensions: ['native_myanmar', 'english', 'child_development', 'evidence', 'safety', 'clinical'],
+    manualTriageRequired: false,
     outstandingDimensions: ['clinical', 'safety', 'evidence'],
+    approvedDimensions: [],
     activeReviewers: [],
+    hasActiveAssignment: false,
     evidenceStatus: 'linked',
     priorityStatus: 'unreviewed',
     temporarilyHideRecommended: false,
@@ -142,8 +163,12 @@ const FIXTURE_ROWS: QueueRowView[] = [
     riskReasons: ['no clinical, safety, referral or delay-interpretation wording detected in either language'],
     provisionalClassification: true,
     requiredReviewDimensions: ['native_myanmar', 'english', 'child_development', 'evidence'],
-    outstandingDimensions: ['native_myanmar', 'child_development'],
+    suggestedReviewDimensions: ['native_myanmar', 'english', 'child_development', 'evidence'],
+    manualTriageRequired: false,
+    outstandingDimensions: [],
+    approvedDimensions: ['native_myanmar', 'english', 'child_development', 'evidence'],
     activeReviewers: [],
+    hasActiveAssignment: false,
     evidenceStatus: 'linked',
     priorityStatus: 'completed',
     temporarilyHideRecommended: false,
@@ -195,7 +220,9 @@ const FIXTURE_COUNTS = {
   safetyReviewsRequired: 2,
   myanmarReviewsRequired: 2,
   correctionNeeded: 1,
-  currentlyAssigned: 1,
+  manualTriageRequired: 1,
+  reviewRequested: 1,
+  currentlyAssigned: 0,
   readyForRecheck: 0,
   completed: 1,
 };
@@ -205,7 +232,7 @@ const AGE_GROUP_FIXTURE = [
   { key: '2y', labelMm: '၂ နှစ်', labelEn: '2 years' },
 ];
 
-export function OwnerPriorityPreview() {
+export function OwnerPriorityHarness() {
   const [locale, setLocale] = useState<'mm' | 'en'>('mm');
   const [opened, setOpened] = useState('');
   return (
