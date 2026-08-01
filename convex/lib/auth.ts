@@ -160,14 +160,23 @@ export async function requireClinicalPublisher(ctx: Ctx): Promise<ProfessionalAp
   return { ...reviewer, scope: 'clinical' };
 }
 
-/** Assert the child belongs to the caller (ownership guard for child sub-records). */
+/**
+ * Assert the child belongs to the caller (ownership guard for child sub-records).
+ *
+ * A child marked `deletedAt` reads as already gone. Deletion soft-marks the row
+ * and then purges the sub-records across several scheduled transactions; without
+ * this check a client holding the id could keep reading growth, sleep, health
+ * and appointment rows for the whole of that window. The purge itself does not
+ * come through here — it fetches the row directly, and requires `deletedAt` to
+ * be set.
+ */
 export async function ownChild(
   ctx: Ctx,
   childId: Id<'children'>,
   userId: Id<'users'>,
 ): Promise<Doc<'children'>> {
   const child = await ctx.db.get(childId);
-  if (!child) throw new Error('Not found');
+  if (!child || child.deletedAt !== undefined) throw new Error('Not found');
   if (child.userId !== userId) {
     const allowedOwners = await activeFamilyOwnerIds(ctx, userId);
     const allowed = allowedOwners.includes(child.userId);
