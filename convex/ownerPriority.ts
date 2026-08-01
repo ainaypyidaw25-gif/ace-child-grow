@@ -35,15 +35,17 @@ import {
 // unpublishes, archives, approves, invites, or changes reviewScope. Publication
 // remains exclusively with the existing, separately gated setReview flow.
 
-// Hard ceilings. Reaching one means the deployment has outgrown a single-query
-// projection; the queue then reports dataComplete:false and REFUSES to state
-// authoritative completion, rather than quietly computing counts from a
-// truncated tail (which reads as "nothing outstanding" — the most dangerous
-// possible wrong answer for a safety queue).
-const REVIEW_PAGE = 1000;
-const MAX_REVIEW_PAGES = 20;
-const EDIT_PAGE = 1000;
-const MAX_EDIT_PAGES = 20;
+// COMBINED hard ceiling for the two history reads (reviews + edits). Convex
+// enforces its document/byte read limit across the WHOLE function — reviews,
+// edits, libraryContent AND evidenceLinks together — so the two history reads
+// must share one budget kept well below that limit, with headroom for the
+// catalogue and links. Reaching it means the deployment has outgrown a
+// single-query projection; the queue then reports dataComplete:false and
+// REFUSES to state authoritative completion, rather than quietly computing
+// counts from a truncated tail (which reads as "nothing outstanding" — the most
+// dangerous possible wrong answer for a safety queue) OR throwing a
+// too-many-documents error that would crash the workspace outright.
+const QUEUE_HISTORY_BUDGET = 12000;
 
 const priorityStatusValidator = v.union(
   v.literal('unreviewed'),
@@ -125,18 +127,16 @@ type ReviewRow = { contentSlug: string; dimension: string; decision: string; rev
  * `.take()` is a plain bounded read, so both loads can coexist. Reading cap + 1
  * lets us report `complete: false` when the cap is exceeded.
  */
-async function loadAllReviews(ctx: QueryCtx): Promise<{ rows: ReviewRow[]; complete: boolean }> {
-  const cap = MAX_REVIEW_PAGES * REVIEW_PAGE;
-  const page = await ctx.db.query('contentReviews').order('desc').take(cap + 1);
-  return { rows: page.slice(0, cap) as unknown as ReviewRow[], complete: page.length <= cap };
+async function loadAllReviews(ctx: QueryCtx, budget: number): Promise<{ rows: ReviewRow[]; complete: boolean }> {
+  const page = await ctx.db.query('contentReviews').order('desc').take(budget + 1);
+  return { rows: page.slice(0, budget) as unknown as ReviewRow[], complete: page.length <= budget };
 }
 
 type EditRow = { contentSlug: string; editedAt: number };
 
-async function loadAllEdits(ctx: QueryCtx): Promise<{ rows: EditRow[]; complete: boolean }> {
-  const cap = MAX_EDIT_PAGES * EDIT_PAGE;
-  const page = await ctx.db.query('contentEditLogs').order('desc').take(cap + 1);
-  return { rows: page.slice(0, cap) as unknown as EditRow[], complete: page.length <= cap };
+async function loadAllEdits(ctx: QueryCtx, budget: number): Promise<{ rows: EditRow[]; complete: boolean }> {
+  const page = await ctx.db.query('contentEditLogs').order('desc').take(budget + 1);
+  return { rows: page.slice(0, budget) as unknown as EditRow[], complete: page.length <= budget };
 }
 
 /**
@@ -236,8 +236,12 @@ export const queues = query({
 async function buildQueueResult(ctx: QueryCtx, level: string, role: string | undefined) {
     const seesActivity = maySeeReviewerActivity(role);
     const content = await ctx.db.query('libraryContent').collect();
-    const reviewsResult = await loadAllReviews(ctx);
-    const editsResult = await loadAllEdits(ctx);
+    // Reviews and edits share one budget: whatever reviews don't consume is left
+    // for edits, so the combined document read stays under Convex's per-function
+    // limit no matter how the two tables are sized. Exhausting it degrades to
+    // dataComplete:false (below) — never a too-many-documents throw.
+    const reviewsResult = await loadAllReviews(ctx, QUEUE_HISTORY_BUDGET);
+    const editsResult = await loadAllEdits(ctx, Math.max(0, QUEUE_HISTORY_BUDGET - reviewsResult.rows.length));
     const dataComplete = reviewsResult.complete && editsResult.complete;
     const links = await ctx.db.query('evidenceLinks').collect();
     const linkedSlugs = new Set(links.map((link) => link.slug));
@@ -554,7 +558,7 @@ export const setGovernance = mutation({
       if (args.priorityStatus === 'completed') {
         // Server-side completion guard. A disabled button is not enforcement:
         // this check runs for direct calls too.
-        const reviewsResult = await loadAllReviews(ctx);
+        const reviewsResult = await loadAllReviews(ctx, QUEUE_HISTORY_BUDGET);
         const revision = item.reviewRevision ?? 1;
         const approvedDimensions = [...new Set(
           reviewsResult.rows
