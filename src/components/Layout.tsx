@@ -16,6 +16,10 @@ export function Layout({ children, showNav = true }: { children: ReactNode; show
   const staffAccess = useQuery(api.admin.myAccess);
   const location = useLocation();
   const inStaffWorkspace = location.pathname.startsWith('/admin') || location.pathname === '/audit';
+  // Staff screens have their own task navigation inside the workspace. Keeping
+  // the parent app's side/bottom navigation visible here crowds small screens
+  // and makes the five parent destinations look like reviewer actions.
+  const showPrimaryNav = showNav && !inStaffWorkspace;
   return (
     <div className="app-ambient min-h-screen bg-canvas">
       {/* index.html sets viewport-fit=cover, so the header must clear the status
@@ -75,12 +79,17 @@ export function Layout({ children, showNav = true }: { children: ReactNode; show
           </div>
         </div>
       </header>
-      <div className={`mx-auto w-full px-4 sm:px-6 lg:px-8 ${showNav ? 'max-w-7xl lg:flex lg:gap-8' : 'max-w-3xl'}`}>
-        {showNav && <DesktopNav />}
-        <main className={`min-w-0 flex-1 py-5 sm:py-7 ${showNav ? 'pb-28 lg:pb-12' : 'pb-8'}`}>{children}</main>
+      <div className={`mx-auto w-full px-4 sm:px-6 lg:px-8 ${showNav ? 'max-w-7xl' : 'max-w-3xl'} ${showPrimaryNav ? 'lg:flex lg:gap-8' : ''}`}>
+        {showPrimaryNav && <DesktopNav />}
+        <main
+          className={`min-w-0 flex-1 py-5 sm:py-7 ${showPrimaryNav ? 'pb-28 lg:pb-12' : 'pb-8'}`}
+          style={!showPrimaryNav ? { paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 2rem)' } : undefined}
+        >
+          {children}
+        </main>
       </div>
       {showNav && <InAppTour inStaffWorkspace={inStaffWorkspace} />}
-      {showNav && <BottomNav />}
+      {showPrimaryNav && <BottomNav />}
     </div>
   );
 }

@@ -36,6 +36,16 @@ describe('mobile safe-area contract', () => {
     expect(bottomNav).toContain('pb-[env(safe-area-inset-bottom)]');
   });
 
+  it('does not show parent navigation inside the staff workspace', () => {
+    expect(layout).toContain('const showPrimaryNav = showNav && !inStaffWorkspace');
+    expect(layout).toContain('{showPrimaryNav && <DesktopNav />}');
+    expect(layout).toContain('{showPrimaryNav && <BottomNav />}');
+  });
+
+  it('keeps staff content clear of the bottom safe area without a fixed nav', () => {
+    expect(layout).toContain("paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 2rem)'");
+  });
+
   it('reserves every Android system-bar and display-cutout edge natively', () => {
     expect(androidMainActivity).toContain('WindowInsetsCompat.Type.systemBars()');
     expect(androidMainActivity).toContain('WindowInsetsCompat.Type.displayCutout()');
