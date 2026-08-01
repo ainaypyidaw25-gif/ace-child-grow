@@ -1,9 +1,11 @@
-import { useEffect, useId, useRef } from 'react';
+import { useId, useRef } from 'react';
+import { useFocusTrap } from './useFocusTrap';
 
 // Small, accessible confirm dialog for destructive actions. Labelled via
 // aria-labelledby, moves focus to the (non-destructive) Cancel button on open,
-// and closes on Escape. Shared so the delete-child / delete-account / delete-record
-// prompts stay consistent instead of being copy-pasted per screen.
+// keeps focus inside while open, closes on Escape and hands focus back to
+// whatever opened it. Shared so the delete-child / delete-account /
+// delete-record prompts stay consistent instead of being copy-pasted per screen.
 export function ConfirmDialog({
   message,
   confirmLabel,
@@ -18,19 +20,15 @@ export function ConfirmDialog({
   onCancel: () => void;
 }) {
   const titleId = useId();
-  const cancelRef = useRef<HTMLButtonElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    cancelRef.current?.focus();
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onCancel();
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [onCancel]);
+  // Cancel is rendered first, so it takes initial focus: a destructive prompt
+  // must never open with the destructive button under the keyboard.
+  useFocusTrap(dialogRef, { onEscape: onCancel });
 
   return (
     <div
+      ref={dialogRef}
       role="dialog"
       aria-modal="true"
       aria-labelledby={titleId}
@@ -38,7 +36,7 @@ export function ConfirmDialog({
     >
       <p id={titleId} className="font-semibold text-ink">{message}</p>
       <div className="mt-3 flex gap-2">
-        <button ref={cancelRef} type="button" onClick={onCancel}
+        <button type="button" onClick={onCancel}
           className="min-h-touch rounded-pill border border-line px-4 py-2">
           {cancelLabel}
         </button>

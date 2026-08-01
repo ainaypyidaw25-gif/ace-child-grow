@@ -82,7 +82,7 @@ export function AdminDirectory() {
           <li key={row._id} className="rounded-card border border-line bg-white p-4 shadow-card">
             <div className="flex items-start justify-between gap-3">
               <div><p className="font-semibold">{row.name}</p><p className="text-xs text-ink-soft">{row.phone || L('ဖုန်းမရှိ', 'No phone')} · {row.isActive ? L('ဖော်ပြထား', 'Visible') : L('မဖော်ပြထား', 'Hidden')}</p></div>
-              <span className={`rounded-pill px-2 py-1 text-xs ${row.isActive ? 'bg-mint-soft text-mint' : 'bg-pastel-yellow text-ink'}`}>{row.isActive ? '✓' : '—'}</span>
+              <span className={`rounded-pill px-2 py-1 text-xs ${row.isActive ? 'bg-mint-soft text-mint-deep' : 'bg-pastel-yellow text-ink'}`}>{row.isActive ? '✓' : '—'}</span>
             </div>
             {row.nextVerificationAt && <p className="mt-1 text-xs text-ink-soft">{L('နောက်ဆုံးပြန်စစ်ရန်', 'Reverify by')}: {new Date(row.nextVerificationAt).toISOString().slice(0, 10)}</p>}
             <div className="mt-3 flex flex-wrap gap-2">

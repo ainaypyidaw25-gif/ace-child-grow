@@ -122,7 +122,7 @@ export function Report() {
           {t('result.disclaimer.nonDiagnostic')}
         </p>
         {type === 'share_safe' && (
-          <p className="text-xs text-mint">🔒 {t('report.shareSafe')}</p>
+          <p className="text-xs text-mint-deep">🔒 {t('report.shareSafe')}</p>
         )}
       </article>
 

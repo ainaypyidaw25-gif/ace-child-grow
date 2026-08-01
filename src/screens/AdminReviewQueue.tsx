@@ -133,7 +133,7 @@ export function AdminReviewQueue() {
               </div>
               <div className="flex shrink-0 items-center gap-2">
                 <span className={`rounded-pill px-3 py-1 text-xs ${
-                  isParentVisible(it.reviewStatus as ReviewState) ? 'bg-mint-soft text-mint' : 'bg-pastel-yellow text-ink'
+                  isParentVisible(it.reviewStatus as ReviewState) ? 'bg-mint-soft text-mint-deep' : 'bg-pastel-yellow text-ink'
                 }`}>
                   {it.reviewStatus}
                 </span>

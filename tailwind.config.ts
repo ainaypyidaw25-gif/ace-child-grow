@@ -8,7 +8,12 @@ export default {
     extend: {
       colors: {
         sky: { DEFAULT: '#4B8F83', deep: '#1E5A52' },
-        mint: { DEFAULT: '#73C7A5', soft: '#E7F5EF' },
+        // `mint` is a BACKGROUND and dark-surface colour: as text on white it is
+        // only 2.0:1, far below the WCAG AA 4.5:1 needed for body copy. Use
+        // `mint-deep` for mint-coloured text on any light surface — it clears
+        // 5.0:1 on white, cream, canvas and mint-soft alike. Plain `mint` text
+        // stays correct on the dark bg-ink hero cards (6.98:1).
+        mint: { DEFAULT: '#73C7A5', soft: '#E7F5EF', deep: '#2A7355' },
         cream: '#FBFAF5',
         pastel: { yellow: '#FBE8A6', orange: '#FFD28A' },
         lavender: '#D8CCFF',

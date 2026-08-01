@@ -37,7 +37,7 @@ export function OfflineDownloads() {
         <h1 className="text-xl font-bold text-sky-deep">
           {locale === 'mm' ? 'အင်တာနက်မရှိချိန် ဖတ်ရန် သိမ်းထားမှု' : 'Offline downloads'}
         </h1>
-        <span className={`rounded-pill px-3 py-1 text-xs ${online ? 'bg-mint-soft text-mint' : 'bg-pastel-orange text-ink'}`}>
+        <span className={`rounded-pill px-3 py-1 text-xs ${online ? 'bg-mint-soft text-mint-deep' : 'bg-pastel-orange text-ink'}`}>
           {online ? `🟢 ${t('common.online')}` : `⚪ ${t('common.offline')}`}
         </span>
       </div>
