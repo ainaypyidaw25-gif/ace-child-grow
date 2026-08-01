@@ -187,7 +187,7 @@ test('parent guide — how to use the app (silent)', async ({ page }) => {
   // turns into a payment prompt is a how-to step that lies. Activities keeps
   // its basics free, and the caption says only that.
   await next();
-  await stage(page).getByRole('link', { name: /လှုပ်ရှားမှုများ$/ }).first().click();
+  await stage(page).getByRole('link', { name: /လှုပ်ရှားမှု$/ }).first().click();
   await page.waitForTimeout(HOLD.short);
   await scrollStage(260);
 

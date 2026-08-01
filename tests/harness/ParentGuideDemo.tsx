@@ -90,7 +90,7 @@ export const PARENT_STEPS: ParentStep[] = [
   },
   {
     id: 'activities',
-    captionMm: '၁၁။ “လှုပ်ရှားမှုများ” တွင် အသက်အလိုက် ကစားနည်းများ ရှိသည်။ အခြေခံလှုပ်ရှားမှုများကို အခမဲ့ အသုံးပြုနိုင်ပါသည်။',
+    captionMm: '၁၁။ “လှုပ်ရှားမှု” တွင် အသက်အလိုက် ကစားနည်းများ ရှိသည်။ အခြေခံလှုပ်ရှားမှုများကို အခမဲ့ အသုံးပြုနိုင်ပါသည်။',
     captionEn: '11. “Activities” has age-based play ideas. The basic activities are free to use.',
   },
   {

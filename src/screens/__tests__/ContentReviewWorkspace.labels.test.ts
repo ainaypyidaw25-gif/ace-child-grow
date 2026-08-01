@@ -3,6 +3,7 @@ import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
   collectEditableFields,
+  contentTypeLabel,
   decisionLabel,
   dimensionLabel,
   HIDDEN_SYSTEM_FIELDS,
@@ -15,6 +16,12 @@ function field(key: string, path: string[], language: EditableField['language'])
 }
 
 describe('reviewer content field labels', () => {
+  it('localises content types instead of exposing storage keys', () => {
+    expect(contentTypeLabel('special_need', 'mm')).toBe('အထူးလိုအပ်ချက်');
+    expect(contentTypeLabel('special_need', 'en')).toBe('Special needs');
+    expect(contentTypeLabel('unknown_legacy_type', 'mm')).toBe('unknown_legacy_type');
+  });
+
   it('gives direct bilingual milestone fields clear Myanmar labels', () => {
     expect(humanizeField(field('encouragementMm', ['encouragementMm'], 'mm'), 'mm')).toBe('အားပေးစကား');
     expect(humanizeField(field('encouragementEn', ['encouragementEn'], 'en'), 'mm')).toBe('အားပေးစကား (English)');
@@ -87,6 +94,8 @@ describe('reviewer content field labels', () => {
     expect(source).toContain('mayEditContent(access.role)');
     expect(source).toContain('You may correct wording directly while reviewing.');
     expect(source).toContain('disabled={busy}');
+    expect(source).toContain('overflow-x-auto');
+    expect(source).toContain("L('ခွဲခြားမှု အကြိုစစ်ဆေးရန်', 'Import preview')");
   });
 
   it('never exposes raw mm/en data keys for the current content library', () => {

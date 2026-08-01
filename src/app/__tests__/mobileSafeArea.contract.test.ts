@@ -13,6 +13,7 @@ const read = (path: string) => readFileSync(resolve(process.cwd(), path), 'utf8'
 
 const layout = read('src/components/Layout.tsx');
 const bottomNav = read('src/components/BottomNav.tsx');
+const indexCss = read('src/index.css');
 const indexHtml = read('index.html');
 const androidMainActivity = read('android/app/src/main/java/mm/com/acegroup/acechildgrow/MainActivity.java');
 const addChild = read('src/screens/AddChild.tsx');
@@ -34,6 +35,30 @@ describe('mobile safe-area contract', () => {
 
   it('still keeps the bottom nav above the home indicator', () => {
     expect(bottomNav).toContain('pb-[env(safe-area-inset-bottom)]');
+    expect(bottomNav).toContain('pl-[env(safe-area-inset-left)]');
+    expect(bottomNav).toContain('pr-[env(safe-area-inset-right)]');
+  });
+
+  it('does not show parent navigation inside the staff workspace', () => {
+    expect(layout).toContain('const showPrimaryNav = showNav && !inStaffWorkspace');
+    expect(layout).toContain('{showPrimaryNav && <DesktopNav />}');
+    expect(layout).toContain('{showPrimaryNav && <BottomNav />}');
+  });
+
+  it('keeps staff content clear of the bottom safe area without a fixed nav', () => {
+    expect(layout).toContain("paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 2rem)'");
+  });
+
+  it('keeps narrow headers and bottom labels from overflowing', () => {
+    expect(layout).toContain("inStaffWorkspace ? 'hidden sm:block' : 'hidden min-[350px]:block'");
+    expect(bottomNav).toContain('MOBILE_NAV_LABELS');
+    expect(bottomNav).toContain('whitespace-nowrap text-center leading-7');
+    expect(bottomNav).toContain('touch-manipulation');
+  });
+
+  it('keeps mobile form controls readable without focus zoom', () => {
+    expect(indexCss).toContain('@media (max-width: 767px)');
+    expect(indexCss).toMatch(/input,\s*\n\s*select,\s*\n\s*textarea\s*\{\s*font-size:\s*16px/);
   });
 
   it('reserves every Android system-bar and display-cutout edge natively', () => {

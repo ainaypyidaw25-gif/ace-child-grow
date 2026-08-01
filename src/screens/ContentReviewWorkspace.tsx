@@ -4,7 +4,7 @@ import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
 import { useUnsavedChangesGuard } from '../app/useUnsavedChangesGuard';
 import { OwnDisplayName } from '../components/OwnDisplayName';
-import { CONTENT_TYPES } from '../content/taxonomy';
+import { AGE_GROUPS, CONTENT_TYPES, type ContentType } from '../content/taxonomy';
 // One source for who may review what, shared with the mutation. Two copies of
 // this rule drifted apart once already; the UI must not offer an action the
 // server will refuse.
@@ -13,7 +13,6 @@ import {
   roleMayReview as mayReview,
   type ReviewRefusalCode,
 } from '../../convex/lib/reviewPolicy';
-import { AGE_GROUPS } from '../content/taxonomy';
 import { OwnerPriorityView, type QueueRowView } from './ownerPriority/OwnerPriorityView';
 import { ClassificationImportPreview } from './ownerPriority/ClassificationImportPreview';
 import { OwnerActionsPanel, SecuritySummaryPanel } from './ownerPriority/OwnerActionsPanel';
@@ -38,6 +37,20 @@ const DECISION_LABELS: Record<Decision, { mm: string; en: string }> = {
   changes_requested: { mm: 'ပြင်ဆင်ရန် လိုအပ်သည်', en: 'Changes requested' },
   not_applicable: { mm: 'မသက်ဆိုင်ပါ', en: 'Not applicable' },
 };
+
+const CONTENT_TYPE_LABELS: Record<ContentType, { mm: string; en: string }> = {
+  milestone: { mm: 'ဖွံ့ဖြိုးမှုမှတ်တိုင်', en: 'Milestone' },
+  guide: { mm: 'မိဘလမ်းညွှန်', en: 'Guide' },
+  activity: { mm: 'လှုပ်ရှားမှု', en: 'Activity' },
+  lesson: { mm: 'သင်ခန်းစာ', en: 'Lesson' },
+  special_need: { mm: 'အထူးလိုအပ်ချက်', en: 'Special needs' },
+  story: { mm: 'ပုံပြင်', en: 'Story' },
+  printable: { mm: 'ပုံနှိပ်အသုံးပြုရန်', en: 'Printable' },
+};
+
+export function contentTypeLabel(type: string, locale: 'mm' | 'en'): string {
+  return CONTENT_TYPE_LABELS[type as ContentType]?.[locale] ?? type;
+}
 
 // Reviews and their history come from the database, where a legacy or
 // otherwise-unrecognised dimension/decision string can exist (renamed enum, an
@@ -532,15 +545,15 @@ export function ContentReviewWorkspace() {
   const tabs: Array<{ key: WorkspaceTab; label: string; visible: boolean }> = [
     { key: 'priority', label: L('ဦးစားပေးစစ်ဆေးရန်', 'Owner Priority'), visible: true },
     { key: 'item', label: L('အကြောင်းအရာ စစ်ဆေးရန်', 'Review item'), visible: true },
-    { key: 'import', label: L('Classification Import Preview', 'Classification Import Preview'), visible: isOwner },
+    { key: 'import', label: L('ခွဲခြားမှု အကြိုစစ်ဆေးရန်', 'Import preview'), visible: isOwner },
     { key: 'security', label: L('လုံခြုံရေး', 'Security'), visible: isOwner },
   ];
   return (
-    <div className="space-y-5 pb-24">
+    <div className="space-y-4 pb-4 sm:space-y-5 sm:pb-8">
       <header className="space-y-2">
         <p className="text-xs font-bold uppercase tracking-[0.18em] text-mint-deep">ACE Review Workspace</p>
-        <h1 className="text-2xl font-bold text-sky-deep">{L('အကြောင်းအရာ သုံးသပ်ရေးနေရာ', 'Content review workspace')}</h1>
-        <p className="max-w-3xl text-sm text-ink-soft">
+        <h1 className="text-xl font-bold leading-[1.65] text-sky-deep sm:text-2xl sm:leading-[1.5]">{L('အကြောင်းအရာ သုံးသပ်ရေးနေရာ', 'Content review workspace')}</h1>
+        <p className="max-w-3xl text-sm leading-7 text-ink-soft">
           {L(
             'အကြောင်းအရာကို ပြင်ဆင်ပြီး ဘာသာစကား၊ ကိုးကားချက်၊ ဘေးကင်းရေးနှင့် ဆေးဘက်ဆိုင်ရာ သုံးသပ်ချက်များကို သီးခြားမှတ်တမ်းတင်နိုင်ပါသည်။ မည်သည့်ဆုံးဖြတ်ချက်ကိုမျှ အလိုအလျောက် မဖြည့်ပါ။',
             'Edit content and record language, evidence, safety, and clinical decisions separately. No decision is filled automatically.',
@@ -548,7 +561,10 @@ export function ContentReviewWorkspace() {
         </p>
       </header>
 
-      <nav aria-label={L('အပိုင်းများ', 'Workspace sections')} className="flex flex-wrap gap-2">
+      <nav
+        aria-label={L('အပိုင်းများ', 'Workspace sections')}
+        className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0"
+      >
         {tabs.filter((entry) => entry.visible).map((entry) => (
           <button
             key={entry.key}
@@ -560,7 +576,7 @@ export function ContentReviewWorkspace() {
               setTab(entry.key);
             }}
             aria-current={tab === entry.key ? 'page' : undefined}
-            className={`rounded-pill px-4 py-2 text-sm font-semibold transition ${
+            className={`shrink-0 rounded-pill px-3 py-2.5 text-xs font-semibold leading-6 transition sm:px-4 sm:py-2 sm:text-sm ${
               tab === entry.key ? 'bg-sky text-white' : 'border border-line bg-white text-ink hover:border-sky'
             }`}
           >
@@ -574,25 +590,25 @@ export function ContentReviewWorkspace() {
       {tab === 'security' && isOwner && <SecuritySummaryPanel />}
 
       {tab === 'item' && (<>
-      <section className="grid gap-3 rounded-card border border-line bg-white p-4 shadow-card sm:grid-cols-[180px_1fr]">
-        <label className="space-y-1 text-sm font-medium text-ink">
+      <section className="grid gap-3 rounded-card border border-line bg-white p-3 shadow-card sm:grid-cols-[180px_1fr] sm:p-4">
+        <label className="space-y-1.5 text-sm font-medium leading-6 text-ink">
           <span>{L('အမျိုးအစား', 'Content type')}</span>
           <select value={type} onChange={(event) => {
             if (!confirmSelectionChange()) return;
             setEditorDirty(false);
             setType(event.target.value);
             setSelectedSlug('');
-          }} className="w-full rounded-xl border border-line bg-white px-3 py-2">
-            {CONTENT_TYPES.map((value) => <option key={value} value={value}>{value}</option>)}
+          }} className="min-h-touch w-full rounded-xl border border-line bg-white px-3 py-2 text-base">
+            {CONTENT_TYPES.map((value) => <option key={value} value={value}>{contentTypeLabel(value, locale)}</option>)}
           </select>
         </label>
-        <label className="space-y-1 text-sm font-medium text-ink">
+        <label className="space-y-1.5 text-sm font-medium leading-6 text-ink">
           <span>{L('သုံးသပ်မည့် အကြောင်းအရာ', 'Item to review')}</span>
           <select value={selectedSlug} onChange={(event) => {
             if (!confirmSelectionChange()) return;
             setEditorDirty(false);
             setSelectedSlug(event.target.value);
-          }} disabled={!list?.items.length} className="w-full rounded-xl border border-line bg-white px-3 py-2 disabled:opacity-60">
+          }} disabled={!list?.items.length} className="min-h-touch w-full rounded-xl border border-line bg-white px-3 py-2 text-base disabled:opacity-60">
             {list && list.items.length === 0 && (
               <option value="">{L('ဤအမျိုးအစားတွင် အကြောင်းအရာ မရှိသေးပါ', 'No content of this type yet')}</option>
             )}
