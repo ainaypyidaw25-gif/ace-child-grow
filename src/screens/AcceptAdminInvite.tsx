@@ -40,7 +40,7 @@ export function AcceptAdminInvite() {
         </button>
       )}
       {result && (
-        <p className={result.ok ? 'text-mint' : 'text-state-red'}>
+        <p className={result.ok ? 'text-mint-deep' : 'text-state-red'}>
           {locale === 'mm'
             ? result.ok
               ? 'ဖိတ်ကြားချက်ကို လက်ခံပြီး စီမံခန့်ခွဲရေးဝင်ခွင့် ရရှိပါပြီ။'

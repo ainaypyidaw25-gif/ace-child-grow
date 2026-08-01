@@ -538,7 +538,7 @@ export function ContentReviewWorkspace() {
   return (
     <div className="space-y-5 pb-24">
       <header className="space-y-2">
-        <p className="text-xs font-bold uppercase tracking-[0.18em] text-mint">ACE Review Workspace</p>
+        <p className="text-xs font-bold uppercase tracking-[0.18em] text-mint-deep">ACE Review Workspace</p>
         <h1 className="text-2xl font-bold text-sky-deep">{L('အကြောင်းအရာ သုံးသပ်ရေးနေရာ', 'Content review workspace')}</h1>
         <p className="max-w-3xl text-sm text-ink-soft">
           {L(

@@ -67,7 +67,7 @@ export function Consent() {
       </button>
       {error && <p role="alert" className="text-sm text-state-red">⚠️ {error}</p>}
       {state.consentAcceptedAt && (
-        <p className="text-center text-xs text-mint">✓ {t('common.confirm')}</p>
+        <p className="text-center text-xs text-mint-deep">✓ {t('common.confirm')}</p>
       )}
     </div>
   );

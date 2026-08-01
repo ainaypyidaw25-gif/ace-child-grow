@@ -9,7 +9,7 @@ export function DesktopNav() {
   return (
     <aside className="hidden w-60 shrink-0 lg:block">
       <div className="sticky top-24 space-y-6">
-        <nav aria-label={locale === 'mm' ? 'အဓိကစာမျက်နှာများ' : 'Primary navigation'}>
+        <nav aria-label={t('nav.primary')}>
           <ul className="space-y-1.5">
             {PRIMARY_NAV_ITEMS.map((item) => (
               <li key={item.to}>

@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useMutation, useQuery } from 'convex/react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
+import { useFocusTrap } from './useFocusTrap';
 import { shouldAutoShowTour, TOUR_VERSION, type TourKind } from '../domain/tour';
 
 const TOUR_COPY = {
@@ -46,7 +47,16 @@ export function InAppTour({ inStaffWorkspace }: { inStaffWorkspace: boolean }) {
   const [step, setStep] = useState(0);
 
   useEffect(() => setStep(0), [kind]);
-  if (!kind || !me || (kind === 'staff' && !me.isStaff)) return null;
+
+  // A full-screen overlay that declares aria-modal: focus must stay inside it,
+  // and it must be dismissable from the keyboard — previously the only way out
+  // was clicking Skip. Set up before the early return so hook order is stable
+  // every render, and told via `active` when the dialog is really on screen.
+  const dialogRef = useRef<HTMLElement>(null);
+  const open = Boolean(kind && me && !(kind === 'staff' && !me.isStaff));
+  useFocusTrap(dialogRef, { active: open, onEscape: () => void closeAndRemember() });
+
+  if (!open || !kind || !me) return null;
   const activeKind = kind;
   const steps = TOUR_COPY[activeKind];
   const current = steps[step];
@@ -75,6 +85,7 @@ export function InAppTour({ inStaffWorkspace }: { inStaffWorkspace: boolean }) {
       style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 6rem)' }}
     >
       <section
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="tour-title"
