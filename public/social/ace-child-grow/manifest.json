@@ -56,7 +56,7 @@
     },
     {
       "id": "ACE-AUTO-02",
-      "status": "scheduled",
+      "status": "published",
       "scheduledAt": "2026-08-01T03:30:00.000Z",
       "approvalStatus": "approved",
       "reviewerId": "ACE_CONTENT_OWNER_2026_07_29",
@@ -69,9 +69,11 @@
       "mediaUrl": "https://child.acegroup.com.mm/social/ace-child-grow/posts/continuous-launch-v1/ACE-AUTO-02.png",
       "mediaSha256": "cee011ba27827869aa39c27413713ca9b3d56bb93e4c627dc7b2d1d9dea7c1c8",
       "captionMyanmar": "နေ့တိုင်းအတူရှိနေရင် ကလေးရဲ့ ပြောင်းလဲမှုလေးတွေကို သတိမထားမိဘဲ ကျော်သွားတတ်ပါတယ်။\n\nACE Child Grow ထဲက မေးခွန်းလေးတွေကို ဖြေရင်း ကလေးရဲ့ နေ့စဉ်အပြုအမူတွေကို ပိုပြီးသတိထားကြည့်နိုင်ပါတယ်။\n\nဒါဟာ ရောဂါရှာဖွေတဲ့ စစ်ဆေးမှုမဟုတ်ပါဘူး။ မိဘနဲ့ကလေးအကြား နေ့စဉ်သတိထားမှု ပိုကောင်းလာစေဖို့ ကူညီပေးတဲ့ လမ်းညွှန်တစ်ခုပါ။\n\n#ACEChildGrow #ကလေးဖွံ့ဖြိုးမှု",
-      "alreadyPublished": false,
-      "platformPostId": null,
-      "platformPermalink": null
+      "alreadyPublished": true,
+      "platformPostId": "111009258047115_1067301065820674",
+      "platformPhotoId": "1067301032487344",
+      "publishedAt": "2026-08-01T12:23:47.816Z",
+      "platformPermalink": "https://www.facebook.com/111009258047115/posts/1067301065820674"
     },
     {
       "id": "ACE-AUTO-03",
