@@ -207,11 +207,27 @@ export function findBilingualConflicts(data: unknown, path = 'data'): BilingualC
   return out;
 }
 
+/**
+ * JSON.stringify that never throws. Convex stores can hold an int64 (BigInt),
+ * which the built-in JSON.stringify refuses ("Do not know how to serialize a
+ * BigInt"); a value like that anywhere in a record's free-form `data` would make
+ * classifyRecord — and therefore the whole `ownerPriority.queues` query — throw
+ * a server error and crash the review workspace. BigInts are stringified and any
+ * other failure degrades to an empty string.
+ */
+export function safeStringify(value: unknown): string {
+  try {
+    return JSON.stringify(value, (_key, val) => (typeof val === 'bigint' ? val.toString() : val)) ?? '';
+  } catch {
+    return '';
+  }
+}
+
 function searchableText(record: ClassifiableRecord): string {
   return [
     record.slug, record.titleEn, record.titleMm, record.summaryEn ?? '', record.summaryMm ?? '',
     (record.tags ?? []).join(' '), record.category ?? '', record.domainKey ?? '',
-    JSON.stringify(record.data ?? {}),
+    safeStringify(record.data ?? {}),
   ].join(' \n ');
 }
 
@@ -243,7 +259,7 @@ export function classifyRecord(record: ClassifiableRecord): ProvisionalClassific
   for (const [name, pattern] of C_TRIGGERS) if (pattern.test(text)) clinicalTriggers.push(name);
 
   const bilingualConflicts = findBilingualConflicts(record.data);
-  const pendingClinicalReferences = /pending clinical reviewer/i.test(JSON.stringify((record.data as Record<string, unknown> | null)?.references ?? ''));
+  const pendingClinicalReferences = /pending clinical reviewer/i.test(safeStringify((record.data as Record<string, unknown> | null)?.references ?? ''));
 
   let riskClass: RiskClass;
   if (bilingualConflicts.length > 0) {

@@ -1,6 +1,7 @@
 import { v } from 'convex/values';
 import { internalQuery, mutation, query } from './_generated/server';
 import type { QueryCtx } from './_generated/server';
+import type { Doc } from './_generated/dataModel';
 import { logAudit } from './audit';
 import { getStaffAccess, requireUser, type StaffAccess } from './lib/auth';
 import {
@@ -162,6 +163,49 @@ function hasActiveAssignmentFor(slug: string, reviewRevision: number): boolean {
   return false;
 }
 
+/**
+ * A minimal, valid queue row for a record whose full classification threw. It
+ * keeps the review workspace alive when a single record's data is malformed:
+ * the record still appears — flagged P0 for manual triage with the failure in
+ * its warnings — instead of the entire query throwing a server error and
+ * crashing `/admin/reviews` for every staff user.
+ */
+function fallbackQueueRow(item: Doc<'libraryContent'>, error: unknown) {
+  const message = error instanceof Error ? error.message : String(error);
+  return {
+    slug: item.slug,
+    titleMm: item.titleMm ?? item.slug,
+    titleEn: item.titleEn ?? item.slug,
+    type: item.type ?? 'unknown',
+    category: item.category ?? null,
+    ageGroupKey: item.ageGroupKey ?? null,
+    domainKey: item.domainKey ?? null,
+    clinicalStatus: item.clinicalStatus ?? 'draft',
+    reviewScope: item.reviewScope ?? null,
+    reviewRevision: item.reviewRevision ?? 1,
+    parentVisibleNow: item.clinicalStatus === 'published',
+    priority: 'P0' as const,
+    priorityReasons: ['could not classify this record — see warnings'],
+    riskClass: 'C' as const,
+    riskReasons: [],
+    provisionalClassification: true,
+    requiredReviewDimensions: [] as string[],
+    suggestedReviewDimensions: [] as string[],
+    manualTriageRequired: true,
+    outstandingDimensions: [] as string[],
+    approvedDimensions: [] as string[],
+    activeReviewers: [] as string[],
+    hasActiveAssignment: false,
+    evidenceStatus: 'missing',
+    priorityStatus: 'manual_triage_required' as const,
+    temporarilyHideRecommended: false,
+    ownerNote: null,
+    latestEditAt: null,
+    latestDecisionAt: null,
+    warnings: [`classification failed and was skipped: ${message}`],
+  };
+}
+
 export const queues = query({
   args: {},
   returns: v.object({
@@ -209,6 +253,7 @@ export const queues = query({
     }
 
     const rows = content.map((item) => {
+      try {
       const revision = item.reviewRevision ?? 1;
       const slugDecisions = decisionsBySlug.get(item.slug) ?? [];
       const currentByDimension = new Map<string, ReviewRow>();
@@ -283,8 +328,8 @@ export const queues = query({
 
       return {
         slug: item.slug,
-        titleMm: item.titleMm,
-        titleEn: item.titleEn,
+        titleMm: item.titleMm ?? item.slug,
+        titleEn: item.titleEn ?? item.slug,
         type: item.type,
         category: item.category ?? null,
         ageGroupKey: item.ageGroupKey ?? null,
@@ -319,6 +364,9 @@ export const queues = query({
         latestDecisionAt: seesActivity ? latestDecisionAt : null,
         warnings,
       };
+      } catch (error) {
+        return fallbackQueueRow(item, error);
+      }
     });
 
     // Scope the catalogue itself, not just the fields: an assignment-scoped
@@ -362,6 +410,10 @@ export const queueDataHealth = internalQuery({
     const badPriorityStatus: Array<{ slug: string; value: string }> = [];
     const badRiskClassification: Array<{ slug: string; value: string }> = [];
     const badOwnerPriority: Array<{ slug: string; value: string }> = [];
+    // Records whose classification throws — the actual cause of a `queues`
+    // server error. Runs the same computePriority the query runs, per record.
+    const classifyFailures: Array<{ slug: string; error: string }> = [];
+    const nonStringTitles: Array<{ slug: string; field: string }> = [];
     const distinctPriorityStatus = new Set<string>();
     const distinctClinicalStatus = new Set<string>();
     for (const item of content) {
@@ -375,9 +427,35 @@ export const queueDataHealth = internalQuery({
       const op = item.ownerPriority ?? null;
       if (op !== null && !(OWNER_PRIORITIES as string[]).includes(op)) badOwnerPriority.push({ slug: item.slug, value: op });
       distinctClinicalStatus.add(item.clinicalStatus);
+      if (typeof item.titleMm !== 'string') nonStringTitles.push({ slug: item.slug, field: 'titleMm' });
+      if (typeof item.titleEn !== 'string') nonStringTitles.push({ slug: item.slug, field: 'titleEn' });
+      try {
+        computePriority({
+          slug: item.slug,
+          type: item.type,
+          category: item.category ?? null,
+          ageGroupKey: item.ageGroupKey ?? null,
+          domainKey: item.domainKey ?? null,
+          titleMm: item.titleMm,
+          titleEn: item.titleEn,
+          summaryMm: item.summaryMm ?? null,
+          summaryEn: item.summaryEn ?? null,
+          tags: item.tags,
+          data: item.data,
+          clinicalStatus: item.clinicalStatus,
+          riskClassification: coerceRiskClass(item.riskClassification),
+          ownerPriority: coerceOwnerPriority(item.ownerPriority),
+          riskReasons: item.riskReasons ?? null,
+          priorityStatus: item.priorityStatus ?? null,
+        });
+      } catch (error) {
+        classifyFailures.push({ slug: item.slug, error: error instanceof Error ? error.message : String(error) });
+      }
     }
     return {
       total: content.length,
+      classifyFailures,
+      nonStringTitles,
       distinctPriorityStatus: [...distinctPriorityStatus],
       distinctClinicalStatus: [...distinctClinicalStatus],
       badPriorityStatus,
