@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import {
   isAcceptedExistingParentCredential,
+  hasLikelyWebPrefixInEmail,
   isSixDigitPin,
   isStrongStaffPassword,
+  isValidEmailInput,
   validateAccountPassword,
 } from '../auth/passwordPolicy';
 
@@ -24,5 +26,12 @@ describe('account credential policy', () => {
     expect(isAcceptedExistingParentCredential('123456')).toBe(true);
     expect(isAcceptedExistingParentCredential('old-pass')).toBe(true);
     expect(isAcceptedExistingParentCredential('12345')).toBe(false);
+  });
+
+  it('validates email readiness and warns without rewriting a likely web prefix', () => {
+    expect(isValidEmailInput(' parent@example.com ')).toBe(true);
+    expect(isValidEmailInput('parent@example')).toBe(false);
+    expect(hasLikelyWebPrefixInEmail('www.parent@example.com')).toBe(true);
+    expect(hasLikelyWebPrefixInEmail('parent@example.com')).toBe(false);
   });
 });
