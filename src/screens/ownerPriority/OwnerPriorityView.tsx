@@ -300,7 +300,7 @@ export function OwnerPriorityView({
               className="w-full rounded-card border border-line bg-white p-4 text-left shadow-card transition hover:border-sky"
             >
               <div className="flex flex-wrap items-center gap-2">
-                <span className={`rounded-pill px-3 py-1 text-xs font-bold ${PRIORITY_STYLES[row.priority]}`}>{PRIORITY_LABELS[row.priority][locale]}</span>
+                <span className={`rounded-pill px-3 py-1 text-xs font-bold ${PRIORITY_STYLES[row.priority] ?? 'bg-canvas text-ink'}`}>{PRIORITY_LABELS[row.priority]?.[locale] ?? row.priority}</span>
                 <span className="rounded-pill bg-canvas px-2 py-1 text-xs font-semibold text-ink">Class {row.riskClass}{row.provisionalClassification ? L(' (ယာယီ)', ' (provisional)') : ''}</span>
                 {row.parentVisibleNow && (
                   <span className="rounded-pill bg-red-100 px-2 py-1 text-xs font-semibold text-red-700">{L('မိဘမြင်နေရ', 'Parent-visible now')}</span>
@@ -308,7 +308,7 @@ export function OwnerPriorityView({
                 {row.temporarilyHideRecommended && (
                   <span className="rounded-pill bg-pastel-yellow px-2 py-1 text-xs text-ink">{L('ယာယီဖျောက်ရန် အကြံပြု', 'Hide recommended')}</span>
                 )}
-                <span className="rounded-pill bg-canvas px-2 py-1 text-xs text-ink-soft">{STATUS_LABELS[row.priorityStatus][locale]}</span>
+                <span className="rounded-pill bg-canvas px-2 py-1 text-xs text-ink-soft">{STATUS_LABELS[row.priorityStatus]?.[locale] ?? row.priorityStatus}</span>
                 {row.manualTriageRequired && (
                   <span data-testid={`triage-${row.slug}`} className="rounded-pill bg-orange-100 px-2 py-1 text-xs font-semibold text-orange-800">
                     {L('လူကိုယ်တိုင် စိစစ်ရန် လိုသည်', 'Manual triage required')}

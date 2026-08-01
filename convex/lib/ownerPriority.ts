@@ -60,6 +60,26 @@ export const PRIORITY_STATUSES: PriorityStatus[] = [
   'completed',
 ];
 
+export const RISK_CLASSES: RiskClass[] = ['A', 'B', 'C', 'D', 'E'];
+export const OWNER_PRIORITIES: OwnerPriority[] = ['P0', 'P1', 'P2', 'P3'];
+
+/**
+ * Coerce stored governance strings to a known enum member, or a safe default.
+ * Production rows can carry a value from an earlier schema/migration that is no
+ * longer in the enum; passed through unchecked it fails the queue query's return
+ * validator and throws, crashing the whole review workspace. These keep the
+ * queue resilient to such legacy data instead.
+ */
+export function coercePriorityStatus(value: string | null | undefined, fallback: PriorityStatus): PriorityStatus {
+  return value != null && (PRIORITY_STATUSES as string[]).includes(value) ? (value as PriorityStatus) : fallback;
+}
+export function coerceRiskClass(value: string | null | undefined): RiskClass | null {
+  return value != null && (RISK_CLASSES as string[]).includes(value) ? (value as RiskClass) : null;
+}
+export function coerceOwnerPriority(value: string | null | undefined): OwnerPriority | null {
+  return value != null && (OWNER_PRIORITIES as string[]).includes(value) ? (value as OwnerPriority) : null;
+}
+
 export const PRIORITY_ORDER: Record<OwnerPriority, number> = { P0: 0, P1: 1, P2: 2, P3: 3 };
 
 /** Default queue ordering of content types (task Part 3, items 3–9). */
