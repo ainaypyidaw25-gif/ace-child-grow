@@ -206,39 +206,52 @@ function fallbackQueueRow(item: Doc<'libraryContent'>, error: unknown) {
   };
 }
 
+const queueResultValidator = v.object({
+  allowed: v.boolean(),
+  accessLevel: v.string(),
+  /** False when review/edit history could not be read in full. */
+  dataComplete: v.boolean(),
+  /** Authoritative counts are withheld when data is incomplete. */
+  countsAuthoritative: v.boolean(),
+  rows: v.array(queueRowValidator),
+  counts: countsValidator,
+});
+
 export const queues = query({
   args: {},
-  returns: v.object({
-    allowed: v.boolean(),
-    accessLevel: v.string(),
-    /** False when review/edit history could not be read in full. */
-    dataComplete: v.boolean(),
-    /** Authoritative counts are withheld when data is incomplete. */
-    countsAuthoritative: v.boolean(),
-    rows: v.array(queueRowValidator),
-    counts: countsValidator,
-  }),
+  returns: queueResultValidator,
   handler: async (ctx) => {
     const userId = await requireUser(ctx);
     const access = await getStaffAccess(ctx, userId);
     const level = queueAccessLevel(access?.role);
-    const empty = {
-      allowed: false,
-      accessLevel: level,
-      dataComplete: true,
-      countsAuthoritative: false,
-      rows: [],
-      counts: dashboardCounts([]),
-    };
-    if (level === 'none') return empty;
+    if (level === 'none') {
+      return {
+        allowed: false,
+        accessLevel: level,
+        dataComplete: true,
+        countsAuthoritative: false,
+        rows: [],
+        counts: dashboardCounts([]),
+      };
+    }
+    return buildQueueResult(ctx, level, access?.role);
+  },
+});
 
+/**
+ * The full queue computation, shared by the public `queues` query and the
+ * internal `queuesSelfTest` probe. Auth-free so the probe can exercise the
+ * ENTIRE query — including Convex return-validation — via `convex run`, without
+ * a signed-in staff session.
+ */
+async function buildQueueResult(ctx: QueryCtx, level: string, role: string | undefined) {
+    const seesActivity = maySeeReviewerActivity(role);
     const content = await ctx.db.query('libraryContent').collect();
     const reviewsResult = await loadAllReviews(ctx);
     const editsResult = await loadAllEdits(ctx);
     const dataComplete = reviewsResult.complete && editsResult.complete;
     const links = await ctx.db.query('evidenceLinks').collect();
     const linkedSlugs = new Set(links.map((link) => link.slug));
-    const seesActivity = maySeeReviewerActivity(access?.role);
 
     const latestEditBySlug = new Map<string, number>();
     for (const edit of editsResult.rows) {
@@ -353,7 +366,8 @@ export const queues = query({
         activeReviewers: seesActivity
           ? [...new Set(slugDecisions
               .filter((decision) => (decision.reviewRevision ?? decision.contentVersion) === revision)
-              .map((decision) => decision.reviewerDisplayName))]
+              .map((decision) => decision.reviewerDisplayName)
+              .filter((name): name is string => typeof name === 'string'))]
           : [],
         hasActiveAssignment,
         evidenceStatus: linkedSlugs.has(item.slug) ? 'linked' : 'missing',
@@ -372,7 +386,7 @@ export const queues = query({
     // Scope the catalogue itself, not just the fields: an assignment-scoped
     // reviewer must not learn what else exists.
     const visibleRows = level === 'assignment_scoped'
-      ? rows.filter((row) => rowInReviewerScope(access?.role, row))
+      ? rows.filter((row) => rowInReviewerScope(role, row))
       : rows;
     visibleRows.sort(compareQueueRows);
 
@@ -393,7 +407,19 @@ export const queues = query({
         hasActiveAssignment: row.hasActiveAssignment,
       }))),
     };
-  },
+}
+
+/**
+ * INTERNAL end-to-end probe (`npx convex run ownerPriority:queuesSelfTest`).
+ * Runs the ENTIRE queue computation with the same return validator as the
+ * public query, as a full-access owner, WITHOUT auth — so a single CLI call
+ * proves whether `queues` succeeds (including return-validation) on production
+ * data, no signed-in session required.
+ */
+export const queuesSelfTest = internalQuery({
+  args: {},
+  returns: queueResultValidator,
+  handler: async (ctx) => buildQueueResult(ctx, 'full', 'owner'),
 });
 
 /**
