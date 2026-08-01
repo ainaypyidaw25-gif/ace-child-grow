@@ -14,6 +14,7 @@ const read = (path: string) => readFileSync(resolve(process.cwd(), path), 'utf8'
 const layout = read('src/components/Layout.tsx');
 const bottomNav = read('src/components/BottomNav.tsx');
 const indexHtml = read('index.html');
+const androidMainActivity = read('android/app/src/main/java/mm/com/acegroup/acechildgrow/MainActivity.java');
 const addChild = read('src/screens/AddChild.tsx');
 const consent = read('src/screens/Consent.tsx');
 
@@ -33,6 +34,15 @@ describe('mobile safe-area contract', () => {
 
   it('still keeps the bottom nav above the home indicator', () => {
     expect(bottomNav).toContain('pb-[env(safe-area-inset-bottom)]');
+  });
+
+  it('reserves every Android system-bar and display-cutout edge natively', () => {
+    expect(androidMainActivity).toContain('WindowInsetsCompat.Type.systemBars()');
+    expect(androidMainActivity).toContain('WindowInsetsCompat.Type.displayCutout()');
+    expect(androidMainActivity).toMatch(
+      /view\.setPadding\(\s*safeDrawing\.left,\s*safeDrawing\.top,\s*safeDrawing\.right,\s*safeDrawing\.bottom\s*\)/,
+    );
+    expect(androidMainActivity).toContain('return WindowInsetsCompat.CONSUMED;');
   });
 });
 
