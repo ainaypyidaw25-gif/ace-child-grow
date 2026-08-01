@@ -5,6 +5,28 @@ import { v } from 'convex/values';
 import { getAuthUserId } from '@convex-dev/auth/server';
 import { requireUser } from './lib/auth';
 import { activeFamilyOwnerIds, childLimit } from './lib/entitlements';
+import { MAX_GESTATIONAL_WEEKS, MIN_GESTATIONAL_WEEKS } from '../src/domain/age/age';
+
+/**
+ * The server is the source of truth for what may be stored. The Add/Edit screens
+ * already check this range, but a value persisted outside it — by a buggy build
+ * or a direct call — makes correctedAge() throw on every render of the milestone
+ * screen, locking the parent out of their own child's screening with no way to
+ * correct it from the UI.
+ *
+ * Only the RANGE is enforced. `useCorrectedAge` without a gestational age is
+ * deliberately left alone: developmentalAgeMonths falls back to chronological
+ * age for that combination, so it is valid data, and rejecting it here would
+ * block edits to children that already carry it.
+ */
+function assertGestationalWeeks(weeks: number | undefined): void {
+  if (weeks === undefined) return;
+  if (!Number.isInteger(weeks) || weeks < MIN_GESTATIONAL_WEEKS || weeks > MAX_GESTATIONAL_WEEKS) {
+    throw new Error(
+      `Gestational age must be a whole number between ${MIN_GESTATIONAL_WEEKS} and ${MAX_GESTATIONAL_WEEKS} weeks`,
+    );
+  }
+}
 
 const childValidator = v.object({
   _id: v.id('children'),
@@ -75,6 +97,7 @@ export const add = mutation({
   returns: v.id('children'),
   handler: async (ctx, args) => {
     const userId = await requireUser(ctx);
+    assertGestationalWeeks(args.gestationalWeeks);
     const children = await ctx.db
       .query('children')
       .withIndex('by_user', (q) => q.eq('userId', userId))
@@ -99,6 +122,7 @@ export const update = mutation({
   returns: v.null(),
   handler: async (ctx, args) => {
     const userId = await requireUser(ctx);
+    assertGestationalWeeks(args.gestationalWeeks);
     const existing = await ctx.db.get(args.id);
     if (!existing || existing.userId !== userId) throw new Error('Not found');
     const { id, ...patch } = args;

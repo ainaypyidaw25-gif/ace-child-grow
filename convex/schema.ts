@@ -416,7 +416,11 @@ export default defineSchema({
     .index('by_type_domain', ['type', 'domainKey'])
     .index('by_type_category', ['type', 'category'])
     .index('by_status', ['clinicalStatus'])
-    .index('by_reviewer', ['reviewerId']),
+    .index('by_reviewer', ['reviewerId'])
+    // Account erasure must be able to find every row a staff member confirmed a
+    // classification on, not just the ones they reviewed, without scanning the
+    // whole catalogue.
+    .index('by_classification_confirmed_by', ['classificationConfirmedBy']),
 
   // Human review decisions are append-only and separate from the content document,
   // so every intermediate decision survives later decisions and edits. A decision
