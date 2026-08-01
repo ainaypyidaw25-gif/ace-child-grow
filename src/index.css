@@ -33,6 +33,17 @@ body {
   min-width: 320px;
 }
 
+/* Keep form text readable and prevent mobile browsers from zooming the whole
+   interface when a parent or reviewer focuses a small inherited text field. */
+@media (max-width: 767px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+    line-height: 1.75;
+  }
+}
+
 ::selection {
   background: #ccebe0;
   color: #18302b;
