@@ -1,7 +1,14 @@
 # Data Model
 
-Backend: Supabase / Postgres. Full DDL in `supabase/migrations/0001_core_schema.sql`;
-authorization in `0002_rls_policies.sql`.
+Backend: Convex. The authoritative schema — tables, fields and indexes — is
+`convex/schema.ts`. Authorization is enforced per function in `convex/` (see
+`convex/lib/auth.ts`), not by database policies.
+
+> Historical note: this document originally described a Supabase/Postgres schema
+> with Row Level Security. That backend was retired in ADR 0002 and its SQL
+> migrations have been removed from the repository. The entities and fields
+> below still describe the domain, but the storage and authorization mechanisms
+> are Convex's — `convex/schema.ts` is the source of truth.
 
 ## Conventions
 - UUID primary keys (`gen_random_uuid()`).
