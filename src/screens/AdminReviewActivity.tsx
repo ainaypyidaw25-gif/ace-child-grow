@@ -363,10 +363,10 @@ export function AdminReviewActivity() {
               <li key={row._id as string} className="rounded-lg border border-line bg-white px-3 py-2 text-sm">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <span className="flex flex-wrap items-center gap-2">
-                    <span className={`rounded-pill px-2 py-0.5 text-[11px] font-semibold ${DECISION_TONE[row.decision]}`}>
-                      {DECISION_LABELS[row.decision][locale]}
+                    <span className={`rounded-pill px-2 py-0.5 text-[11px] font-semibold ${DECISION_TONE[row.decision] ?? 'bg-canvas text-ink-soft'}`}>
+                      {DECISION_LABELS[row.decision]?.[locale] ?? row.decision}
                     </span>
-                    <span className="font-medium text-ink">{DIMENSION_LABELS[row.dimension][locale]}</span>
+                    <span className="font-medium text-ink">{DIMENSION_LABELS[row.dimension]?.[locale] ?? row.dimension}</span>
                     <Link
                       to={`/content/${row.contentSlug}`}
                       className="text-xs text-sky-deep underline underline-offset-2"

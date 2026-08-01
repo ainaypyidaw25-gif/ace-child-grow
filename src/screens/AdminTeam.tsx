@@ -83,7 +83,7 @@ function MemberRow({
           />
         )}
       </div>
-      <p className="rounded-lg bg-canvas px-3 py-2 text-xs text-ink-soft">{ROLE_DESCRIPTIONS[role][locale]}</p>
+      <p className="rounded-lg bg-canvas px-3 py-2 text-xs text-ink-soft">{ROLE_DESCRIPTIONS[role]?.[locale] ?? ''}</p>
       {!mine && (
         <div className="flex flex-wrap gap-2">
           <button
@@ -205,7 +205,7 @@ export function AdminTeam() {
             <option key={key} value={key}>{ROLE_LABELS[key][locale]}</option>
           ))}
         </select>
-        <p className="rounded-lg bg-canvas px-3 py-2 text-sm text-ink-soft">{ROLE_DESCRIPTIONS[role][locale]}</p>
+        <p className="rounded-lg bg-canvas px-3 py-2 text-sm text-ink-soft">{ROLE_DESCRIPTIONS[role]?.[locale] ?? ''}</p>
         {['clinical_reviewer', 'evidence_reviewer'].includes(role) && (
           <input
             required
@@ -245,7 +245,7 @@ export function AdminTeam() {
                 <div>
                   <p className="font-medium">{invite.displayName}</p>
                   <p className="text-xs text-ink-soft">{invite.email}</p>
-                  <p className="text-xs text-ink-soft">{ROLE_LABELS[invite.role][locale]} · {new Date(invite.expiresAt).toLocaleDateString()}</p>
+                  <p className="text-xs text-ink-soft">{ROLE_LABELS[invite.role]?.[locale] ?? invite.role} · {new Date(invite.expiresAt).toLocaleDateString()}</p>
                 </div>
                 <button type="button" onClick={() => void revokeInvite({ id: invite.id })} className="text-sm text-state-red">
                   {locale === 'mm' ? 'ပယ်ဖျက်မည်' : 'Revoke'}
