@@ -121,6 +121,18 @@ export const submitPaymentRequest = mutation({
     if (!plan?.isActive || !method?.isActive) throw new Error('Plan or payment method is unavailable');
     const reference = args.paymentReference.trim();
     if (reference.length < 3 || reference.length > 100) throw new Error('Payment reference is required');
+    // A payment proof is a screenshot an owner will open in the admin dashboard.
+    // Validate what was actually uploaded rather than trusting the storage id the
+    // client passed, the same way library media is checked before it is attached.
+    if (args.proofStorageId) {
+      const metadata = await ctx.db.system.get(args.proofStorageId);
+      if (!metadata) throw new Error('Uploaded payment proof not found');
+      const allowed = ['image/jpeg', 'image/png', 'image/webp'];
+      if (!allowed.includes(metadata.contentType ?? '') || metadata.size > 5 * 1024 * 1024) {
+        await ctx.storage.delete(args.proofStorageId);
+        throw new Error('Use a JPG, PNG, or WebP screenshot up to 5 MB');
+      }
+    }
     const previous = await ctx.db
       .query('paymentRequests')
       .withIndex('by_user', (q) => q.eq('userId', userId))

@@ -1,6 +1,6 @@
-// Demo state for the foundation build (no backend yet).
-// A single in-memory demo child so screens are interactive. Replaced by real
-// Supabase-backed child data once auth/integration lands.
+// Demo state for the foundation build.
+// A single in-memory demo child so screens are interactive. Real child data is
+// served from Convex (see convex/children.ts) for signed-in parents.
 import { SAMPLE_ACTIVITIES } from './seed/content';
 import type { RecommendableActivity } from '../domain/activities/recommend';
 

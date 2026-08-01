@@ -369,7 +369,7 @@ export function EvidenceAdmin() {
                         <span
                           className={`rounded-pill px-2 py-0.5 ${
                             r.reviewStatus === 'approved'
-                              ? 'bg-mint-soft text-mint'
+                              ? 'bg-mint-soft text-mint-deep'
                               : r.reviewStatus === 'evidence_required'
                                 ? 'bg-pastel-orange text-ink'
                                 : 'bg-pastel-yellow text-ink'
@@ -501,7 +501,7 @@ function ReportBlock({ title, rows, empty }: { title: string; rows: string[]; em
         {title}
         <span
           className={`rounded-pill px-2 py-0.5 text-xs ${
-            rows.length === 0 ? 'bg-mint-soft text-mint' : 'bg-pastel-yellow text-ink'
+            rows.length === 0 ? 'bg-mint-soft text-mint-deep' : 'bg-pastel-yellow text-ink'
           }`}
         >
           {rows.length}

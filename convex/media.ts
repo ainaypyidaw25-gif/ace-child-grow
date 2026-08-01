@@ -1,7 +1,8 @@
 import { v } from 'convex/values';
 import { query } from './_generated/server';
-import { requireUser } from './lib/auth';
+import { requireUser, hasStaffRole } from './lib/auth';
 import { resolveEntitlements } from './lib/entitlements';
+import { isPubliclyReadableStatus } from './library';
 
 export const listForContent = query({
   args: { contentSlug: v.string() },
@@ -24,6 +25,19 @@ export const listForContent = query({
   })),
   handler: async (ctx, { contentSlug }) => {
     const userId = await requireUser(ctx);
+    // Content gate: media attached to unpublished content must never reach a
+    // non-staff caller, even when the media row itself is 'approved'. Media
+    // approval and content publication are SEPARATE gates — an approved asset on
+    // a draft/clinical_review item is still pre-publication. Mirrors the gate in
+    // library.getBySlug so this parallel endpoint cannot bypass it.
+    const staff = await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'language_reviewer', 'evidence_reviewer', 'clinical_reviewer']);
+    if (!staff) {
+      const content = await ctx.db
+        .query('libraryContent')
+        .withIndex('by_slug', (q) => q.eq('slug', contentSlug))
+        .unique();
+      if (!content || !isPubliclyReadableStatus(content.clinicalStatus)) return [];
+    }
     const entitlements = await resolveEntitlements(ctx, userId);
     const canViewPremium = entitlements.features.includes('premium_media');
     const rows = await ctx.db

@@ -8,6 +8,8 @@ dist/
 dist-ssr/
 build/
 *.local
+# Layout-test harness bundle (built by vite.harness.config.ts, never shipped)
+dist-harness/
 
 # Environment & secrets — NEVER commit real values
 .env
@@ -35,10 +37,6 @@ test-results/
 *.log
 npm-debug.log*
 
-# Supabase local
-supabase/.branches
-supabase/.temp
-
 # TS build info
 *.tsbuildinfo
 
@@ -50,3 +48,4 @@ sample-report-*.pdf
 test-results/
 playwright-report/
 .playwright/
+

@@ -1,5 +1,13 @@
 # Connecting the Backend (Supabase) & Deploying
 
+> **OBSOLETE — do not follow these steps.** Supabase was retired in ADR 0002;
+> the backend is **Convex**, the `src/lib` Supabase layer and the
+> `supabase/migrations` SQL have both been removed, and none of the
+> `VITE_SUPABASE_*` / `SUPABASE_*` variables below are read by the app.
+> For current instructions see `docs/deployment/deployment-guide.md`; the backend
+> is deployed with `npx convex deploy` and configured with `npx convex env set`.
+> This file is kept only as a record of the original integration plan.
+
 The app ships a complete Supabase integration layer (`src/lib/`) that activates
 automatically once credentials are present. Until then it runs in **demo mode**
 (in-memory, clearly labelled in Profile). No fake backend is ever fabricated.

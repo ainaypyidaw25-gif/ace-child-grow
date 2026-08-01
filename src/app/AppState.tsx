@@ -4,6 +4,10 @@ import { useAuthActions } from '@convex-dev/auth/react';
 import { api } from '../../convex/_generated/api';
 import type { AppState, Action, Child } from './childStore';
 import { captureReferralFromSearch, clearPendingReferralCode, pendingReferralCode } from '../domain/referrals/referralCapture';
+import { decideLocaleSync } from '../domain/locale/localeSync';
+import { getStoredLocale } from './localePreference';
+import { useLocale } from './LocaleContext';
+import type { Locale } from '../domain/types';
 
 interface AppStateContextValue {
   state: AppState;
@@ -36,10 +40,16 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const ensureFreeSubscription = useMutation(api.subscriptions.ensureFree);
   const acceptFamilyInvites = useMutation(api.family.acceptPendingInvites);
   const claimReferral = useMutation(api.referrals.claim);
+  const setPreferredLocale = useMutation(api.parent.setPreferredLocale);
   const { signOut } = useAuthActions();
+  const { locale, setLocale } = useLocale();
 
   const [activeChildId, setActiveChildId] = useState<string | null>(null);
   const referralCaptureAttempted = useRef(false);
+  /** The one-time language reconciliation pass has run for this session. */
+  const localeReconciled = useRef(false);
+  /** The last language this device recorded on the account. */
+  const lastSyncedLocale = useRef<Locale | null>(null);
 
   useEffect(() => {
     if (me) {
@@ -70,6 +80,35 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
   const childrenLoaded = rows !== undefined;
   const profileLoaded = me !== undefined;
   const ready = childrenLoaded && profileLoaded;
+
+  // Reconcile the language between this device and the account. The device
+  // choice already survives reloads on its own (localePreference); this is what
+  // carries it to a second signed-in device. Decision logic is pure and tested
+  // in src/domain/locale/localeSync.ts.
+  useEffect(() => {
+    const decision = decideLocaleSync({
+      profileLoaded: me != null,
+      serverLocale: me?.preferredLocale ?? null,
+      storedLocale: getStoredLocale(),
+      activeLocale: locale,
+      reconciled: localeReconciled.current,
+      lastSyncedLocale: lastSyncedLocale.current,
+    });
+    if (me != null) localeReconciled.current = true;
+    if (decision.type === 'idle') {
+      if (me != null) lastSyncedLocale.current = lastSyncedLocale.current ?? locale;
+      return;
+    }
+    lastSyncedLocale.current = decision.locale;
+    if (decision.type === 'adopt') {
+      setLocale(decision.locale);
+      return;
+    }
+    void setPreferredLocale({ locale: decision.locale }).catch(() => {
+      // Offline or a transient failure: the choice still stands on this device
+      // and is retried the next time the parent changes it.
+    });
+  }, [me, locale, setLocale, setPreferredLocale]);
 
   const list: Child[] = useMemo(
     () =>

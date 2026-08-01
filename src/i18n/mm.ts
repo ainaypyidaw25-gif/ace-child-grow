@@ -4,6 +4,8 @@ export const mm = {
   'app.name': 'ACE Child Grow',
   'app.tagline': 'ကလေးတိုင်း ဖွံ့ဖြိုးတိုးတက်နိုင်ပါတယ်',
 
+  // Names the navigation landmark itself (screen-reader only), not a destination.
+  'nav.primary': 'အဓိကစာမျက်နှာများ',
   'nav.home': 'ပင်မ',
   'nav.journey': 'ဖွံ့ဖြိုးမှု',
   'nav.activities': 'လှုပ်ရှားမှုများ',

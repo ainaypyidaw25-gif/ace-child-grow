@@ -1,6 +1,11 @@
 # ADR 0001 — Stack & Backend Selection
 
-**Status:** Accepted · **Date:** 2026-07-24 · **Owner:** Engineering
+**Status:** Accepted; **the backend decision below is superseded by ADR 0002**
+(Convex — see the end of this file) · **Date:** 2026-07-24 · **Owner:** Engineering
+
+> The Supabase reasoning that follows is kept as the original record. The SQL
+> migrations it refers to have been removed from the repository; the live schema
+> is `convex/schema.ts`.
 
 ## Context
 

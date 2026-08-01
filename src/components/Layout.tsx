@@ -18,7 +18,12 @@ export function Layout({ children, showNav = true }: { children: ReactNode; show
   const inStaffWorkspace = location.pathname.startsWith('/admin') || location.pathname === '/audit';
   return (
     <div className="app-ambient min-h-screen bg-canvas">
-      <header className="sticky top-0 z-30 border-b border-line/80 bg-cream/90 backdrop-blur-xl">
+      {/* index.html sets viewport-fit=cover, so the header must clear the status
+          bar itself: without these insets it renders under the iOS notch /
+          Dynamic Island and Android display cutouts in installed (standalone)
+          mode, losing tap area on the language and notification controls. The
+          side insets do the same for landscape. */}
+      <header className="sticky top-0 z-30 border-b border-line/80 bg-cream/90 backdrop-blur-xl pt-[env(safe-area-inset-top)] pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]">
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-3 sm:h-16 sm:px-6 lg:px-8">
           <Link to="/home" className="flex min-h-touch items-center gap-3" aria-label="ACE Child Grow">
             <span aria-hidden className="brand-sprout"><span /><i /></span>

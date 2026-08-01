@@ -724,14 +724,13 @@ const GUIDES_D: SeedItem[] = [
         b('အဝတ်ပါးဖြင့် အလင်းကာ၍ အခန်းကို မှောင်စေခြင်း။', 'A thin cloth over the window to darken the room.'),
       ],
       materials: b('မာကျောသော အိပ်ရာ၊ ပါးလွှာသော စောင်', 'A firm sleep surface and a light cover'),
-      safety: b(
-        'အိပ်ချိန်တိုင်း ပက်လက် အနေအထားဖြင့် ချထားပါ။ ကလေး ကိုယ်တိုင် လှိမ့်သွားပါက ပြန်လှည့်ပေးရန် မလိုပါ — သို့သော် စတင် ချထားချိန်တွင် အမြဲ ပက်လက် ဖြစ်ရမည်။ အိပ်ရာသည် မာကျောပြီး ပြားညီရမည်၊ အပေါ်တွင် ခေါင်းအုံး၊ အနူးအညံ့ ကစားစရာ၊ စောင်ပုံ၊ ကြိုး မရှိစေရ။ အခန်းတူ အိပ်ပါ၊ အိပ်ရာတူ မအိပ်ပါနှင့်။ ဆေးလိပ် သောက်ပြီးလျှင်၊ အရက် သောက်ပြီးလျှင်၊ အိပ်ဆေး/ငိုက်စေသော ဆေး သောက်ပြီးလျှင် ကလေးနှင့် အိပ်ရာတူ လုံးဝ မအိပ်ပါနှင့်။ ဆိုဖာ၊ အနားထိုင်ကုလားထိုင်ပေါ်တွင် ကလေးနှင့် အတူ လုံးဝ မအိပ်ပါနှင့်။ ကလေးမျက်နှာကို မဖုံးပါနှင့်။ အခန်းအပူချိန်ကို သင့်တင့်စွာ ထားပြီး အဝတ် အလွန်အကျွံ မထူပါစေနှင့်။ ကလေးအနီးတွင် ဆေးလိပ် လုံးဝ မသောက်ပါနှင့်။ ကလေးကို ဘယ်တော့မျှ မလှုပ်ခါပါနှင့်။',
-        'Back to sleep for every sleep. If she rolls herself over in sleep there is no need to turn her back, but always start her on her back. The surface must be firm and flat, with no pillows, soft toys, loose bedding or cords. Share a room, not a bed. Never bed-share after smoking, alcohol or any sedating medicine. Never sleep with her on a sofa or armchair. Never cover her face. Keep the room a comfortable temperature and do not over-wrap her. No tobacco smoke anywhere near her. Never shake a baby.',
-      ),
+      safety: b("အိပ်ချိန်တိုင်း ပက်လက် အနေအထားဖြင့် ချထားပါ။ ကလေး ကိုယ်တိုင် လှိမ့်သွားပါက ပြန်လှည့်ပေးရန် မလိုပါ — သို့သော် စတင် ချထားချိန်တွင် အမြဲ ပက်လက် ဖြစ်ရမည်။ အိပ်ရာသည် မာကျောပြီး ပြားညီရမည်၊ အပေါ်တွင် ခေါင်းအုံး၊ အနူးအညံ့ ကစားစရာ၊ စောင်ပုံ၊ ကြိုး မရှိစေရ။ အခန်းတူ အိပ်ပါ၊ အိပ်ရာတူ မအိပ်ပါနှင့်။ ဆေးလိပ် သောက်ပြီးလျှင်၊ အရက် သောက်ပြီးလျှင်၊ အိပ်ဆေး/ငိုက်စေသော ဆေး သောက်ပြီးလျှင် ကလေးနှင့် အိပ်ရာတူ လုံးဝ မအိပ်ပါနှင့်။ ဆိုဖာ၊ အနားထိုင်ကုလားထိုင်ပေါ်တွင် ကလေးနှင့် အတူ လုံးဝ မအိပ်ပါနှင့်။ ကလေးမျက်နှာကို မဖုံးပါနှင့်။ အခန်းအပူချိန်ကို သင့်တင့်စွာ ထားပြီး အဝတ် အလွန်အကျွံ မထူပါစေနှင့်။ ကလေးအနီးတွင် ဆေးလိပ် လုံးဝ မသောက်ပါနှင့်။ ကလေးကို ဘယ်တော့မျှ မလှုပ်ခါပါနှင့်။ အိပ်ချိန်နှင့် ညအိပ်ချိန်တွင် နို့သီးခေါင်း ပေးကြည့်နိုင်ပါသည် — ရုတ်တရက် သေဆုံးမှု အန္တရာယ် လျော့ကျစေကြောင်း တွေ့ရှိထားပါသည်။ နို့တိုက်နေပါက နို့တိုက်ခြင်း အသားကျပြီးမှ စတင်ပေးပါ။", "Back to sleep for every sleep. If she rolls herself over in sleep there is no need to turn her back, but always start her on her back. The surface must be firm and flat, with no pillows, soft toys, loose bedding or cords. Share a room, not a bed. Never bed-share after smoking, alcohol or any sedating medicine. Never sleep with her on a sofa or armchair. Never cover her face. Keep the room a comfortable temperature and do not over-wrap her. No tobacco smoke anywhere near her. Never shake a baby. You can try offering a pacifier at nap time and bedtime — it is associated with a lower risk of SIDS. If you are breastfeeding, wait until feeding is well established before offering one."),
       commonMistakes: [
         b('အိပ်ရာပေါ်တွင် အနူးအညံ့ ကစားစရာ၊ ခေါင်းအုံး ထားခြင်း။', 'Leaving soft toys or pillows in the sleep space.'),
         b('ကလေး လှိမ့်သွားမည်ကို စိုးရိမ်၍ အဝတ်လိပ်ဖြင့် ကာထားခြင်း — ဤသည် အန္တရာယ် ရှိသည်။', 'Wedging her in with rolled cloth to stop her rolling — this is dangerous.'),
         b('ညဘက် နိုးတိုင်း ချက်ချင်း မီးဖွင့်၍ ကစားပေးခြင်း။', 'Turning on the light and playing at every night waking.'),
+        b("အလေးချိန်ပါသော စောင်၊ အိပ်ဝတ်စုံ သို့မဟုတ် ပတ်ရစ်ပိတ်စများ သုံးခြင်း။", "Using weighted blankets, weighted sleepers or weighted swaddles."),
+        b("အိမ်သုံး အသက်ရှူ/နှလုံးခုန် စောင့်ကြည့်စက်ကို ဘေးကင်းစွာ အိပ်စေခြင်း၏ အစား အားကိုးခြင်း — အန္တရာယ် လျှော့ချပေးသည်ဟု သက်သေ မရှိပါ။", "Relying on a home breathing or heart-rate monitor instead of a safe sleep space — these have not been shown to reduce the risk of SIDS."),
       ],
       parentTips: [
         b('ညဘက် နိုးလျှင် အလင်းမှိန်မှိန်ဖြင့် တိတ်ဆိတ်စွာ ကိုင်တွယ်ပါ။', 'Handle night wakings quietly and in dim light.'),
@@ -755,6 +754,7 @@ const GUIDES_D: SeedItem[] = [
         b('နိုးရန် အလွန် ခက်ခဲခြင်း သို့မဟုတ် လုံးဝ မနိုးခြင်း။', 'Very hard to wake, or not waking at all.'),
         b('အသက်ရှူရာတွင် ရပ်တန့်ခြင်း၊ အရေပြားညိုမှဲခြင်း၊ အသံမြည်၍ ခက်ခဲစွာ ရှူခြင်း။', 'Pauses in breathing, blue or dusky colour, or noisy laboured breathing.'),
         b('အစာစားမှု သိသိသာသာ ကျဆင်းခြင်းနှင့် အားနည်းလာခြင်း။', 'A marked drop in feeding with growing weakness.'),
+        b("နှိပ်လျှင် မပျောက်သော အနီစက်များ — ဖန်ခွက်ဖြင့် ဖိကြည့်ပါ။ ဖိထားစဉ် အနီရောင် မပျောက်ပါက ချက်ချင်း ဆေးရုံသို့ သွားပါ။", "A rash that does not fade when you press on it — press a clear glass against the skin. If the red marks stay visible while you press, go to hospital immediately."),
       ],
       referral: b(
         'ဤလက္ခဏာများသည် ချက်ချင်း ဆေးကုသမှု လိုအပ်သည် — အနီးဆုံး ကျန်းမာရေးဌာနသို့ ချက်ချင်း သွားပါ။ ဤသည် ရောဂါ ဖော်ထုတ်ချက် မဟုတ်ပါ။',
@@ -827,12 +827,14 @@ const GUIDES_E: SeedItem[] = [
           q: b('ကလေးက ဘာမဆို ပါးစပ်ထဲ ထည့်တယ်။ လည်ချောင်းပိတ်မှာ စိုးရိမ်တယ်။', 'She puts everything in her mouth and I worry about choking.'),
           a: b('ပါးစပ်ထဲ ထည့်ခြင်းသည် ပုံမှန် ဖြစ်သည် — ဖြေရှင်းနည်းမှာ ပတ်ဝန်းကျင်ကို စစ်ဆေးခြင်း ဖြစ်သည်။ ကလေးပါးစပ်ထက် သေးသော ပစ္စည်း အားလုံးကို ဖယ်ရှားပါ။ ကလေး ကစားနေစဉ် အနီးတွင် ရှိနေပါ။', 'Mouthing is normal — the answer is to check the environment. Remove everything smaller than her mouth and stay close while she plays.'),
         },
+        { q: b("ဘယ်အပူချိန် ရောက်ရင် ဆေးရုံ သွားရမလဲ။", "What temperature means we should seek care?"), a: b("အပူချိန် တိုင်းပါ။ အသက် ၃ လအောက် ကလေး ၃၈°C (၁၀၀.၄°F) နှင့်အထက် ဖျားပါက — ကလေး ပုံမှန်လို ထင်ရလျှင်ပင် ချက်ချင်း ပြသပါ။ အသက် ၃ လမှ ၆ လကြား ၃၉°C (၁၀၂.၂°F) နှင့်အထက် ဖျားပါက အမြန် ပြသပါ။ အသက်မရွေး — ဖျားခြင်းနှင့်အတူ အသက်ရှူခက်ခြင်း၊ နှိပ်လျှင် မပျောက်သော အနီစက်၊ လည်ပင်း တောင့်တင်းခြင်း သို့မဟုတ် နိုးရခက်ခြင်း ပါလာပါက ချက်ချင်း ပြသပါ။ အပူချိန်တိုင်းကိရိယာ မရှိပါက — ကလေး ပူနေပြီး အထက်ပါ လက္ခဏာများ ပါလျှင် မစောင့်ဘဲ ပြသပါ။", "Take the temperature. Under 3 months, 38°C (100.4°F) or above: seek care straight away, even if the baby otherwise seems well. Between 3 and 6 months, 39°C (102.2°F) or above: seek care promptly. At any age, fever together with difficulty breathing, a rash that does not fade under pressure, a stiff neck, or being hard to wake: seek care immediately. If you have no thermometer, and the child feels hot and has any of those signs, do not wait.") },
       ],
       redFlags: [
         b('ခေါင်းထိခိုက်ပြီးနောက် သတိလစ်ခြင်း၊ အန်ခြင်း အကြိမ်ကြိမ်၊ ငြိမ်ကျသွားခြင်း။', 'After a head injury: loss of consciousness, repeated vomiting, or becoming unusually quiet.'),
         b('အသက်ရှူ ခက်ခဲခြင်း၊ အရေပြား ညိုမှဲခြင်း၊ အသံ ပျောက်သွားခြင်း။', 'Difficulty breathing, blue or dusky colour, or a silent baby who cannot make a sound.'),
         b('ဖြစ်နိုင်ခြေရှိသော အဆိပ်သင့်မှု၊ ဆေးဝါး/ဓာတုပစ္စည်း မျိုချမိခြင်း။', 'Suspected poisoning or swallowing of medicine or chemicals.'),
         b('တက်ခြင်း၊ နိုးရန် ခက်ခဲခြင်း၊ အစာ လုံးဝ မစားနိုင်ခြင်း၊ အသက် ၃ လကျော် ကလေးတွင် အဖျားနှင့်အတူ အလွန် ပျော့ခွေခြင်း။', 'A seizure, being hard to rouse, not feeding at all, or fever with marked floppiness.'),
+        b("နှိပ်လျှင် မပျောက်သော အနီစက်များ — ဖန်ခွက်ဖြင့် ဖိကြည့်ပါ။ ဖိထားစဉ် အနီရောင် မပျောက်ပါက ချက်ချင်း ဆေးရုံသို့ သွားပါ။", "A rash that does not fade when you press on it — press a clear glass against the skin. If the red marks stay visible while you press, go to hospital immediately."),
       ],
       referral: b(
         'ဤလက္ခဏာများသည် ချက်ချင်း ဆေးကုသမှု လိုအပ်သည် — အနီးဆုံး ကျန်းမာရေးဌာနသို့ ချက်ချင်း သွားပါ။ ဤအက်ပ်သည် ရောဂါ ဖော်ထုတ်ခြင်း မပြုပါ။',
@@ -901,6 +903,7 @@ const GUIDES_E: SeedItem[] = [
           q: b('အလုပ်ပြန်ဆင်းရင် အစီအစဉ် ထိန်းလို့ ရပါ့မလား။', 'Can I keep a routine if I go back to work?'),
           a: b('ရပါသည်။ ကလေးကို စောင့်ရှောက်သူနှင့် တူညီသော အစဉ်လိုက်ကို သဘောတူထားပါ။ သင် အိမ်ရှိချိန်တွင် နို့တိုက်ချိန်၊ အိပ်ရာဝင်ချိန်တို့ကို ဆက်ထိန်းပါ။', 'Yes. Agree the same order with whoever cares for her, and keep the feeds and bedtime you are there for.'),
         },
+        { q: b("ဘယ်အပူချိန် ရောက်ရင် ဆေးရုံ သွားရမလဲ။", "What temperature means we should seek care?"), a: b("အပူချိန် တိုင်းပါ။ အသက် ၃ လအောက် ကလေး ၃၈°C (၁၀၀.၄°F) နှင့်အထက် ဖျားပါက — ကလေး ပုံမှန်လို ထင်ရလျှင်ပင် ချက်ချင်း ပြသပါ။ အသက် ၃ လမှ ၆ လကြား ၃၉°C (၁၀၂.၂°F) နှင့်အထက် ဖျားပါက အမြန် ပြသပါ။ အသက်မရွေး — ဖျားခြင်းနှင့်အတူ အသက်ရှူခက်ခြင်း၊ နှိပ်လျှင် မပျောက်သော အနီစက်၊ လည်ပင်း တောင့်တင်းခြင်း သို့မဟုတ် နိုးရခက်ခြင်း ပါလာပါက ချက်ချင်း ပြသပါ။ အပူချိန်တိုင်းကိရိယာ မရှိပါက — ကလေး ပူနေပြီး အထက်ပါ လက္ခဏာများ ပါလျှင် မစောင့်ဘဲ ပြသပါ။", "Take the temperature. Under 3 months, 38°C (100.4°F) or above: seek care straight away, even if the baby otherwise seems well. Between 3 and 6 months, 39°C (102.2°F) or above: seek care promptly. At any age, fever together with difficulty breathing, a rash that does not fade under pressure, a stiff neck, or being hard to wake: seek care immediately. If you have no thermometer, and the child feels hot and has any of those signs, do not wait.") },
       ],
       redFlags: [
         b('အစာစားမှု သိသိသာသာ ကျဆင်းခြင်း၊ ကိုယ်အလေးချိန် မတက်ခြင်း။', 'A marked drop in feeding or weight not rising.'),

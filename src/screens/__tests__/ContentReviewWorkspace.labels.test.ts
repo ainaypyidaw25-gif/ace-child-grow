@@ -3,6 +3,8 @@ import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
   collectEditableFields,
+  decisionLabel,
+  dimensionLabel,
   HIDDEN_SYSTEM_FIELDS,
   humanizeField,
   type EditableField,
@@ -61,6 +63,17 @@ describe('reviewer content field labels', () => {
         list: true,
       }),
     ]);
+  });
+
+  it('falls back to the raw value instead of crashing on an unknown decision or dimension', () => {
+    // Known values still resolve to their localized label.
+    expect(decisionLabel('approved', 'en')).toBe('Approve this revision');
+    expect(dimensionLabel('clinical', 'mm')).toBe('ဆေးဘက်ဆိုင်ရာ သုံးသပ်မှု');
+    // A legacy/unrecognized string from the database must not throw — it is
+    // shown verbatim so the "Review item" tab keeps rendering.
+    expect(decisionLabel('legacy_rejected', 'en')).toBe('legacy_rejected');
+    expect(decisionLabel('', 'mm')).toBe('');
+    expect(dimensionLabel('translation', 'en')).toBe('translation');
   });
 
   it('does not render or parse raw JSON in the reviewer editor', () => {

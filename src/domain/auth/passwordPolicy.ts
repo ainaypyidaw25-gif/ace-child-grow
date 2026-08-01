@@ -20,3 +20,11 @@ export function validateAccountPassword(value: string, kind: AccountPasswordKind
 export function isAcceptedExistingParentCredential(value: string): boolean {
   return isSixDigitPin(value) || value.length >= 8;
 }
+
+export function isValidEmailInput(value: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
+}
+
+export function hasLikelyWebPrefixInEmail(value: string): boolean {
+  return /^www\./i.test(value.trim());
+}

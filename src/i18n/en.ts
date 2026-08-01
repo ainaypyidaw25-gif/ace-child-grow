@@ -5,6 +5,7 @@ export const en: Record<TranslationKey, string> = {
   'app.name': 'ACE Child Grow',
   'app.tagline': 'Every Child Can Grow',
 
+  'nav.primary': 'Primary navigation',
   'nav.home': 'Home',
   'nav.journey': 'Journey',
   'nav.activities': 'Activities',

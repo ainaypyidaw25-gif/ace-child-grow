@@ -9,9 +9,11 @@ import { installChunkRecovery } from './app/chunkRecovery';
 import { configureServiceWorker } from './app/serviceWorker';
 import { ScreenErrorBoundary } from './components/ScreenErrorBoundary';
 import { convex } from './lib/convexClient';
+import { startNativeDeepLinkCapture } from './app/platform';
 import './index.css';
 
 installChunkRecovery();
+startNativeDeepLinkCapture();
 void configureServiceWorker().catch((error: unknown) => {
   console.warn('ACE Child Grow service worker setup failed', error);
 });

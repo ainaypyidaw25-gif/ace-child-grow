@@ -13,12 +13,16 @@ import {
   roleMayReview as mayReview,
   type ReviewRefusalCode,
 } from '../../convex/lib/reviewPolicy';
+import { AGE_GROUPS } from '../content/taxonomy';
+import { OwnerPriorityView, type QueueRowView } from './ownerPriority/OwnerPriorityView';
+import { ClassificationImportPreview } from './ownerPriority/ClassificationImportPreview';
+import { OwnerActionsPanel, SecuritySummaryPanel } from './ownerPriority/OwnerActionsPanel';
 
 const DIMENSIONS = ['english', 'native_myanmar', 'evidence', 'safety', 'clinical'] as const;
 const DECISIONS = ['in_review', 'approved', 'changes_requested', 'not_applicable'] as const;
 type Dimension = (typeof DIMENSIONS)[number];
 type Decision = (typeof DECISIONS)[number];
-type StaffRole = 'owner' | 'content_editor' | 'language_reviewer' | 'evidence_reviewer' | 'clinical_reviewer' | 'support';
+type StaffRole = 'owner' | 'content_editor' | 'language_reviewer' | 'evidence_reviewer' | 'clinical_reviewer' | 'review_manager' | 'support';
 
 const DIMENSION_LABELS: Record<Dimension, { mm: string; en: string }> = {
   english: { mm: 'အင်္ဂလိပ်စာနှင့် အကြောင်းအရာ', en: 'English copy and content' },
@@ -34,6 +38,20 @@ const DECISION_LABELS: Record<Decision, { mm: string; en: string }> = {
   changes_requested: { mm: 'ပြင်ဆင်ရန် လိုအပ်သည်', en: 'Changes requested' },
   not_applicable: { mm: 'မသက်ဆိုင်ပါ', en: 'Not applicable' },
 };
+
+// Reviews and their history come from the database, where a legacy or
+// otherwise-unrecognised dimension/decision string can exist (renamed enum, an
+// older deployment, a hand-inserted row). A bare `LABELS[value][locale]` throws
+// on the undefined lookup and, because this screen renders inside the screen
+// error boundary, that turns the whole "Review item" tab into the recovery
+// screen — the reviewer taps it and cannot continue. These fall back to the raw
+// value so an unexpected string is shown, never crashed on.
+export function decisionLabel(decision: string, locale: 'mm' | 'en'): string {
+  return DECISION_LABELS[decision as Decision]?.[locale] ?? decision;
+}
+export function dimensionLabel(dimension: string, locale: 'mm' | 'en'): string {
+  return DIMENSION_LABELS[dimension as Dimension]?.[locale] ?? dimension;
+}
 
 function mayEditContent(role: StaffRole | null | undefined): boolean {
   return !!role && role !== 'support';
@@ -389,10 +407,34 @@ function ContentEditor({ item, role, onDirtyChange }: { item: {
   );
 }
 
+type WorkspaceTab = 'priority' | 'item' | 'import' | 'security';
+
+/** Live Owner Priority tab: server queues + the shared presentational view. */
+function OwnerPriorityContainer({ onOpenItem }: { onOpenItem: (row: QueueRowView) => void }) {
+  const { locale } = useLocale();
+  const queues = useQuery(api.ownerPriority.queues);
+  if (queues === undefined) return <p className="text-ink-soft">…</p>;
+  if (!queues.allowed) return null;
+  return (
+    <OwnerPriorityView
+      locale={locale}
+      rows={queues.rows as QueueRowView[]}
+      counts={queues.counts}
+      ageGroups={AGE_GROUPS}
+      contentTypes={[...CONTENT_TYPES]}
+      onOpenItem={onOpenItem}
+      accessLevel={queues.accessLevel as 'full' | 'correction_scoped' | 'assignment_scoped'}
+      dataComplete={queues.dataComplete}
+      countsAuthoritative={queues.countsAuthoritative}
+    />
+  );
+}
+
 export function ContentReviewWorkspace() {
   const { locale } = useLocale();
   const L = (mm: string, en: string) => locale === 'mm' ? mm : en;
   const access = useQuery(api.admin.myAccess);
+  const [tab, setTab] = useState<WorkspaceTab>('priority');
   const [type, setType] = useState('milestone');
   const [selectedSlug, setSelectedSlug] = useState('');
   const list = useQuery(api.library.listByType, { type });
@@ -406,6 +448,10 @@ export function ContentReviewWorkspace() {
   const [message, setMessage] = useState('');
   const [editorDirty, setEditorDirty] = useState(false);
   const [needsName, setNeedsName] = useState(false);
+  // The queue is the single source of what remains outstanding for this row,
+  // so the item screen and the queue can never disagree about completion.
+  const queueState = useQuery(api.ownerPriority.queues);
+  const queueRow = queueState?.rows.find((row) => row.slug === selectedSlug);
 
   const confirmSelectionChange = () => !editorDirty || window.confirm(L(
     'မသိမ်းရသေးသော ပြင်ဆင်ချက်များ ရှိပါသည်။ မသိမ်းဘဲ အခြားအကြောင်းအရာသို့ ပြောင်းမည်လား။',
@@ -431,10 +477,24 @@ export function ContentReviewWorkspace() {
 
   const submitDecision = async (event: FormEvent) => {
     event.preventDefault();
-    if (!selectedSlug) return;
+    // Guard against double submission: the button is disabled while busy, but a
+    // queued second click (or Enter) must also be ignored — the server has its
+    // own idempotency guard, and the client should not rely on it.
+    // A decision must bind to a known revision, so do not submit before the
+    // review state has loaded.
+    if (!selectedSlug || busy || !reviews) return;
     setBusy(true); setMessage('');
     try {
-      const result = await saveDecision({ contentSlug: selectedSlug, dimension, decision, note: note || undefined });
+      const result = await saveDecision({
+        contentSlug: selectedSlug,
+        dimension,
+        decision,
+        note: note || undefined,
+        // Bind the decision to the revision on screen; the server refuses if
+        // the content changed since this screen loaded. Required by the
+        // mutation, so the button stays disabled until it is known.
+        expectedReviewRevision: reviews.contentVersion ?? 1,
+      });
       if (!result.ok) {
         // The server refuses in-band with a code, so the reviewer gets the actual
         // reason instead of an opaque "Server Error" from a thrown exception.
@@ -461,10 +521,24 @@ export function ContentReviewWorkspace() {
   }
 
   const item = detail && 'item' in detail ? detail.item : null;
+  const isOwner = access.role === 'owner';
+  const openItemFromQueue = (row: QueueRowView) => {
+    if (!confirmSelectionChange()) return;
+    setEditorDirty(false);
+    setType(row.type);
+    setSelectedSlug(row.slug);
+    setTab('item');
+  };
+  const tabs: Array<{ key: WorkspaceTab; label: string; visible: boolean }> = [
+    { key: 'priority', label: L('ဦးစားပေးစစ်ဆေးရန်', 'Owner Priority'), visible: true },
+    { key: 'item', label: L('အကြောင်းအရာ စစ်ဆေးရန်', 'Review item'), visible: true },
+    { key: 'import', label: L('Classification Import Preview', 'Classification Import Preview'), visible: isOwner },
+    { key: 'security', label: L('လုံခြုံရေး', 'Security'), visible: isOwner },
+  ];
   return (
-    <div className="space-y-5">
+    <div className="space-y-5 pb-24">
       <header className="space-y-2">
-        <p className="text-xs font-bold uppercase tracking-[0.18em] text-mint">ACE Review Workspace</p>
+        <p className="text-xs font-bold uppercase tracking-[0.18em] text-mint-deep">ACE Review Workspace</p>
         <h1 className="text-2xl font-bold text-sky-deep">{L('အကြောင်းအရာ သုံးသပ်ရေးနေရာ', 'Content review workspace')}</h1>
         <p className="max-w-3xl text-sm text-ink-soft">
           {L(
@@ -474,6 +548,32 @@ export function ContentReviewWorkspace() {
         </p>
       </header>
 
+      <nav aria-label={L('အပိုင်းများ', 'Workspace sections')} className="flex flex-wrap gap-2">
+        {tabs.filter((entry) => entry.visible).map((entry) => (
+          <button
+            key={entry.key}
+            type="button"
+            data-testid={`tab-${entry.key}`}
+            onClick={() => {
+              if (entry.key !== tab && !confirmSelectionChange()) return;
+              if (entry.key !== 'item') setEditorDirty(false);
+              setTab(entry.key);
+            }}
+            aria-current={tab === entry.key ? 'page' : undefined}
+            className={`rounded-pill px-4 py-2 text-sm font-semibold transition ${
+              tab === entry.key ? 'bg-sky text-white' : 'border border-line bg-white text-ink hover:border-sky'
+            }`}
+          >
+            {entry.label}
+          </button>
+        ))}
+      </nav>
+
+      {tab === 'priority' && <OwnerPriorityContainer onOpenItem={openItemFromQueue} />}
+      {tab === 'import' && isOwner && <ClassificationImportPreview />}
+      {tab === 'security' && isOwner && <SecuritySummaryPanel />}
+
+      {tab === 'item' && (<>
       <section className="grid gap-3 rounded-card border border-line bg-white p-4 shadow-card sm:grid-cols-[180px_1fr]">
         <label className="space-y-1 text-sm font-medium text-ink">
           <span>{L('အမျိုးအစား', 'Content type')}</span>
@@ -492,13 +592,29 @@ export function ContentReviewWorkspace() {
             if (!confirmSelectionChange()) return;
             setEditorDirty(false);
             setSelectedSlug(event.target.value);
-          }} className="w-full rounded-xl border border-line bg-white px-3 py-2">
+          }} disabled={!list?.items.length} className="w-full rounded-xl border border-line bg-white px-3 py-2 disabled:opacity-60">
+            {list && list.items.length === 0 && (
+              <option value="">{L('ဤအမျိုးအစားတွင် အကြောင်းအရာ မရှိသေးပါ', 'No content of this type yet')}</option>
+            )}
             {list?.items.map((candidate) => (
               <option key={candidate.slug} value={candidate.slug}>{locale === 'mm' ? candidate.titleMm : candidate.titleEn}</option>
             ))}
           </select>
         </label>
       </section>
+
+      {list === undefined && <p className="rounded-card border border-line bg-white p-5 text-ink-soft">…</p>}
+      {list && list.items.length === 0 && (
+        <div className="rounded-card border border-line bg-white p-5 text-sm text-ink">
+          <p className="font-semibold text-ink">{L('ဤနေရာတွင် စစ်ဆေးစရာ အကြောင်းအရာ မရှိသေးပါ။', 'There is no content to review here yet.')}</p>
+          <p className="mt-2 text-ink-soft">
+            {L(
+              'အထက်က “အမျိုးအစား” ကို ပြောင်း၍ အခြားအကြောင်းအရာများ ရှိမရှိ ကြည့်ပါ။ အားလုံး ဗလာဖြစ်နေပါက အကြောင်းအရာစာကြည့်တိုက်ကို ဤ deployment သို့ တင်ရန် ကျန်နေသေးသည် (seed import) — ဆရာဝန်စစ်ဆေးရန်အတွက်တော့ offline HTML စာရွက်ကို သုံးနိုင်ပါသည်။',
+              'Change the “Content type” above to see whether other types have items. If every type is empty, the content library has not been imported into this deployment yet (seed import) — for the clinician’s review you can use the offline HTML sheet instead.',
+            )}
+          </p>
+        </div>
+      )}
 
       {item && mayEditContent(access.role) && (
         <ContentEditor
@@ -521,7 +637,7 @@ export function ContentReviewWorkspace() {
               return (
                 <div key={value} className="rounded-xl border border-line bg-canvas p-3">
                   <p className="text-sm font-semibold text-ink">{DIMENSION_LABELS[value][locale]}</p>
-                  <p className="mt-1 text-xs text-ink-soft">{review ? DECISION_LABELS[review.decision][locale] : L('မစစ်ဆေးရသေး', 'Not reviewed')}</p>
+                  <p className="mt-1 text-xs text-ink-soft">{review ? decisionLabel(review.decision, locale) : L('မစစ်ဆေးရသေး', 'Not reviewed')}</p>
                   {review && <p className="mt-2 text-[11px] text-ink-soft">{review.reviewerDisplayName}</p>}
                 </div>
               );
@@ -548,7 +664,7 @@ export function ContentReviewWorkspace() {
               <textarea value={note} onChange={(event) => setNote(event.target.value)} rows={4} placeholder={decision === 'changes_requested' ? L('ပြင်ဆင်ရမည့်အချက်ကို ရှင်းလင်းစွာ ရေးပါ။', 'Describe the required change clearly.') : undefined} className="w-full rounded-xl border border-line bg-white px-3 py-2" />
             </label>
             <div className="flex flex-wrap items-center gap-3 lg:col-span-2">
-              <button type="submit" disabled={busy || !mayReview(access.role, dimension)} className="rounded-pill bg-sky px-5 py-2 text-sm font-semibold text-white disabled:opacity-50">
+              <button type="submit" disabled={busy || !reviews || !mayReview(access.role, dimension)} className="rounded-pill bg-sky px-5 py-2 text-sm font-semibold text-white disabled:opacity-50">
                 {busy ? L('မှတ်တမ်းတင်နေသည်…', 'Recording…') : L('ဆုံးဖြတ်ချက် မှတ်တမ်းတင်မည်', 'Record decision')}
               </button>
               {message && <p role="status" className="text-sm text-ink-soft">{message}</p>}
@@ -575,7 +691,7 @@ export function ContentReviewWorkspace() {
               <ul className="mt-3 space-y-2">
                 {reviews.history.map((review) => (
                   <li key={review._id} className="rounded-lg bg-canvas px-3 py-2 text-xs text-ink-soft">
-                    <b className="text-ink">{DIMENSION_LABELS[review.dimension][locale]}</b> · {DECISION_LABELS[review.decision][locale]} · {review.reviewerDisplayName} · {new Date(review.reviewedAt).toLocaleDateString()}
+                    <b className="text-ink">{dimensionLabel(review.dimension, locale)}</b> · {decisionLabel(review.decision, locale)} · {review.reviewerDisplayName} · {new Date(review.reviewedAt).toLocaleDateString()}
                     <span className="ml-2">({L('မူကွဲ', 'revision')} {review.contentVersion})</span>
                     {review.note && <p className="mt-1">{review.note}</p>}
                   </li>
@@ -585,6 +701,17 @@ export function ContentReviewWorkspace() {
           )}
         </section>
       )}
+
+      {item && access.role !== null && ['owner', 'content_editor'].includes(access.role) && (
+        <OwnerActionsPanel
+          slug={item.slug}
+          reviewRevision={item.reviewRevision ?? 1}
+          role={access.role}
+          dataComplete={queueState?.dataComplete ?? true}
+          outstandingDimensions={queueRow?.outstandingDimensions ?? []}
+        />
+      )}
+      </>)}
     </div>
   );
 }

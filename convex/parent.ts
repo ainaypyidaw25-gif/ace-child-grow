@@ -19,6 +19,7 @@ export const me = query({
       userId,
       email: user?.email ?? null,
       consentAcceptedAt: profile?.consentAcceptedAt ?? null,
+      preferredLocale: profile?.preferredLocale ?? null,
       isStaff: profile?.isStaff === true,
       staffRole: staffAccess?.role ?? null,
       parentTourCompletedVersion: profile?.parentTourCompletedVersion ?? 0,
@@ -50,6 +51,26 @@ export const completeTour = mutation({
       : { parentTourCompletedVersion: args.version };
     if (existing) await ctx.db.patch(existing._id, patch);
     else await ctx.db.insert('parentProfiles', { userId, preferredLocale: 'mm', ...patch });
+    return { ok: true };
+  },
+});
+
+/**
+ * Record the parent's language choice on their account, so a second signed-in
+ * device shows the language they picked. Carries no other authority: it can only
+ * write preferredLocale, and only for the calling parent's own profile.
+ */
+export const setPreferredLocale = mutation({
+  args: { locale: v.union(v.literal('mm'), v.literal('en')) },
+  returns: v.object({ ok: v.boolean() }),
+  handler: async (ctx, args) => {
+    const userId = await requireUser(ctx);
+    const existing = await ctx.db
+      .query('parentProfiles')
+      .withIndex('by_user', (q) => q.eq('userId', userId))
+      .unique();
+    if (existing) await ctx.db.patch(existing._id, { preferredLocale: args.locale });
+    else await ctx.db.insert('parentProfiles', { userId, preferredLocale: args.locale });
     return { ok: true };
   },
 });

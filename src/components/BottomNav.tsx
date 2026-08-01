@@ -5,8 +5,11 @@ import { PRIMARY_NAV_ITEMS } from './navigationItems';
 export function BottomNav() {
   const { t } = useLocale();
   return (
+    // The landmark is labelled for what it is, not for its first item: calling
+    // it "Home" made landmark navigation announce the whole nav as a single
+    // destination, and disagreed with DesktopNav's "Primary navigation".
     <nav
-      aria-label={t('nav.home')}
+      aria-label={t('nav.primary')}
       className="fixed inset-x-0 bottom-0 z-20 border-t border-line bg-white/95 backdrop-blur
                  pb-[env(safe-area-inset-bottom)] lg:hidden"
     >

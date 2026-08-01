@@ -236,10 +236,13 @@ export const deleteMineBatch = internalMutation({
 
     // Global editorial/reconciliation rows remain useful, but their reviewer
     // link and known display-name metadata must not survive account erasure.
-    const [contentItems, facilities, libraryItems, contentReviews, contentEdits, media, evidenceSources] = await Promise.all([
+    const [contentItems, facilities, libraryItems, classificationConfirmed, contentReviews, contentEdits, media, evidenceSources] = await Promise.all([
       ctx.db.query('contentItems').withIndex('by_reviewer', (q) => q.eq('reviewerId', userId)).take(ROOT_BATCH_SIZE),
       ctx.db.query('healthcareFacilities').withIndex('by_verified_by', (q) => q.eq('verifiedBy', userId)).take(ROOT_BATCH_SIZE),
       ctx.db.query('libraryContent').withIndex('by_reviewer', (q) => q.eq('reviewerId', userId)).take(ROOT_BATCH_SIZE),
+      ctx.db.query('libraryContent')
+        .withIndex('by_classification_confirmed_by', (q) => q.eq('classificationConfirmedBy', userId))
+        .take(ROOT_BATCH_SIZE),
       ctx.db.query('contentReviews').withIndex('by_reviewer', (q) => q.eq('reviewerId', userId)).take(ROOT_BATCH_SIZE),
       ctx.db.query('contentEditLogs').withIndex('by_editor', (q) => q.eq('editorId', userId)).take(ROOT_BATCH_SIZE),
       ctx.db.query('libraryMedia').withIndex('by_reviewed_by', (q) => q.eq('reviewedBy', userId)).take(ROOT_BATCH_SIZE),
@@ -265,6 +268,16 @@ export const deleteMineBatch = internalMutation({
         reviewerQualification: undefined,
         reviewScope: undefined,
         reviewNote: scrubText(row.reviewNote, args.scrubTokens),
+      });
+      hadWork = true;
+    }
+    // A governance confirmation points back at the staff member who made it, on
+    // rows they may never have reviewed. Erasure has to clear those too, or the
+    // deleted account's id survives on every row they ever confirmed.
+    for (const row of classificationConfirmed) {
+      await ctx.db.patch(row._id, {
+        classificationConfirmedBy: undefined,
+        classificationConfirmedAt: undefined,
       });
       hadWork = true;
     }
