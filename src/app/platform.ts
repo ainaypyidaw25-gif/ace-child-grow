@@ -2,8 +2,27 @@ import { Capacitor } from '@capacitor/core';
 import { App as CapacitorApp } from '@capacitor/app';
 import { useEffect } from 'react';
 
+const PRODUCTION_APP_ORIGIN = 'https://child.acegroup.com.mm';
+
 export function isGooglePlayBuild(): boolean {
   return Capacitor.getPlatform() === 'android';
+}
+
+export function resolveAuthRedirectUrl(
+  isNative: boolean,
+  currentOrigin: string,
+  currentPath = '',
+): string {
+  const origin = isNative ? PRODUCTION_APP_ORIGIN : currentOrigin;
+  return currentPath ? new URL(currentPath, `${origin}/`).toString() : origin;
+}
+
+export function getAuthRedirectUrl(currentPath = ''): string {
+  return resolveAuthRedirectUrl(
+    Capacitor.isNativePlatform(),
+    window.location.origin,
+    currentPath,
+  );
 }
 
 export function useNativeDeepLinks(): void {
