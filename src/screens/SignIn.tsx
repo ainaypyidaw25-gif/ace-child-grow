@@ -8,6 +8,7 @@ import {
   type AccountPasswordKind,
 } from '../domain/auth/passwordPolicy';
 import { captureReferralFromSearch } from '../domain/referrals/referralCapture';
+import { getAuthRedirectUrl } from '../app/platform';
 
 type AuthFlow = 'signIn' | 'signUp' | 'reset' | 'resetVerification';
 
@@ -61,7 +62,7 @@ export function SignIn() {
         await signIn('password', {
           email: email.trim().toLowerCase(),
           flow: 'reset',
-          redirectTo: window.location.origin,
+          redirectTo: getAuthRedirectUrl(),
           accountType,
         });
         setFlow('resetVerification');
@@ -120,8 +121,11 @@ export function SignIn() {
     setBusy(true);
     setPortalMode(portal);
     try {
+      const redirectPath = isStaffInvite
+        ? `${window.location.pathname}${window.location.search}${window.location.hash}`
+        : '';
       await signIn('google', {
-        redirectTo: isStaffInvite ? window.location.href : window.location.origin,
+        redirectTo: getAuthRedirectUrl(redirectPath),
       });
     } catch {
       clearPortalMode();
