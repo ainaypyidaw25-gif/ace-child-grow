@@ -1,4 +1,5 @@
 import { v } from 'convex/values';
+import { getAuthUserId } from '@convex-dev/auth/server';
 import { mutation, query } from './_generated/server';
 import { getStaffAccess, requireOwner, requireUser, type StaffRole } from './lib/auth';
 import { logAudit } from './audit';
@@ -50,7 +51,14 @@ export const myAccess = query({
     }),
   ),
   handler: async (ctx) => {
-    const userId = await requireUser(ctx);
+    // Returns null rather than throwing when the caller is not (yet) authenticated.
+    // This query drives the Layout shell and StaffOnlyRoute, both of which render
+    // OUTSIDE the per-screen error boundary — so a thrown "Not authenticated"
+    // during a token-refresh/expiry race would crash the whole app instead of a
+    // single screen. Null is a valid result (the union allows it) and the client
+    // already treats it as "not staff".
+    const userId = await getAuthUserId(ctx);
+    if (!userId) return null;
     const access = await getStaffAccess(ctx, userId);
     return {
       isStaff: access !== null,

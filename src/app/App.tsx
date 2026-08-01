@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Authenticated, Unauthenticated, AuthLoading, useQuery } from 'convex/react';
-import { lazy, Suspense, useEffect, type ReactNode } from 'react';
+import { useAuthActions } from '@convex-dev/auth/react';
+import { lazy, Suspense, useEffect, useState, type ReactNode } from 'react';
 import { Layout } from '../components/Layout';
 import { useAppState } from './AppState';
 import { decideRoute } from './bootstrap';
@@ -58,7 +59,7 @@ export function App() {
       <Route path="/account-deletion" element={<StandaloneScreen><LegalPage kind="account-deletion" /></StandaloneScreen>} />
       <Route path="*" element={<>
       <AuthLoading>
-        <div className="flex min-h-screen items-center justify-center text-ink-soft">…</div>
+        <AuthSplash />
       </AuthLoading>
       <Unauthenticated>
         <SignIn />
@@ -71,11 +72,63 @@ export function App() {
   );
 }
 
+// The splash shown while Convex confirms a stored session. It normally lasts a
+// moment, but a failed token refresh (deployment / auth-key rotation, an expired
+// or already-consumed refresh token) or an offline launch can leave Convex
+// unable to confirm the session — with no error and no timeout, the "…" would
+// spin forever and the user could never even reach sign-in. After a short wait
+// we surface an escape: reload, or sign out (clearing the stale token) and start
+// over. This is the fix for the "opens but loads forever / can't get in" report.
+function AuthSplash() {
+  const { locale } = useLocale();
+  const { signOut } = useAuthActions();
+  const [stuck, setStuck] = useState(false);
+  useEffect(() => {
+    const timer = setTimeout(() => setStuck(true), 8000);
+    return () => clearTimeout(timer);
+  }, []);
+  if (!stuck) {
+    return (
+      <div className="flex min-h-screen items-center justify-center text-ink-soft" role="status" aria-live="polite">
+        <span className="animate-pulse">…</span>
+      </div>
+    );
+  }
+  return (
+    <div className="mx-auto flex min-h-screen max-w-md flex-col items-center justify-center gap-4 px-5 text-center">
+      <div aria-hidden className="text-4xl">🌱</div>
+      <p className="text-sm text-ink-soft">
+        {locale === 'mm'
+          ? 'အချိန်အနည်းငယ် ကြာနေပါသည် — အင်တာနက် နှေးနေခြင်း သို့မဟုတ် အကောင့်ဝင်ချိန် သက်တမ်းကုန်နေခြင်း ဖြစ်နိုင်ပါသည်။'
+          : 'This is taking longer than usual — your connection may be slow, or your session may have expired.'}
+      </p>
+      <div className="flex w-full flex-col gap-2">
+        <button
+          type="button"
+          onClick={() => window.location.reload()}
+          className="min-h-touch w-full rounded-pill bg-sky px-6 py-3 font-semibold text-white"
+        >
+          {locale === 'mm' ? 'ပြန်လည်စတင်မည်' : 'Reload'}
+        </button>
+        <button
+          type="button"
+          onClick={() => { void signOut().finally(() => window.location.assign('/')); }}
+          className="min-h-touch w-full rounded-pill border border-line bg-white px-6 py-3 font-semibold text-ink"
+        >
+          {locale === 'mm' ? 'ထွက်ပြီး ပြန်ဝင်မည်' : 'Sign out and sign in again'}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 // Bootstrap gate for the index route. Decides where an authenticated user lands
 // based on SERVER state (consent + children), and never redirects while those
 // queries are still loading. This is the fix for returning users being asked to
 // add a child again on every login.
 function Bootstrap() {
+  const { locale } = useLocale();
+  const { signOut } = useAuthActions();
   const { ready, hasChild, state } = useAppState();
   const wantsStaffPortal = getPortalMode() === 'staff';
   const staffAccess = useQuery(api.admin.myAccess, wantsStaffPortal ? {} : 'skip');
@@ -87,23 +140,35 @@ function Bootstrap() {
     );
   }
   if (wantsStaffPortal) {
-    return staffAccess?.isStaff
-      ? <Navigate to="/admin" replace />
-      : (
-        <ResetStaffPortalMode>
-          <Layout showNav={false}>
-            <div className="rounded-card border border-line bg-white p-5 shadow-card">
-              <h1 className="font-bold text-ink">စီမံခန့်ခွဲရေးဝင်ခွင့် မရှိသေးပါ</h1>
-              <p className="mt-2 text-sm text-ink-soft">
-                ပိုင်ရှင်ထံမှ ဖိတ်ကြားလင့်ခ်ကို လက်ခံပြီးမှ အဖွဲ့ဝင် သို့မဟုတ် ပညာရှင်စာမျက်နှာသို့ ဝင်နိုင်ပါသည်။
-              </p>
-              <a href="/" className="mt-4 inline-block rounded-pill bg-sky px-5 py-2 text-sm font-semibold text-white">
-                မိဘစာမျက်နှာသို့ သွားမည်
+    if (staffAccess?.isStaff) return <Navigate to="/admin" replace />;
+    return (
+      <ResetStaffPortalMode>
+        <Layout showNav={false}>
+          <div className="rounded-card border border-line bg-white p-5 shadow-card">
+            <h1 className="font-bold text-ink">
+              {locale === 'mm' ? 'ဤအကောင့်ဖြင့် စီမံခန့်ခွဲရေးဝင်ခွင့် မရှိပါ' : 'This sign-in has no staff access'}
+            </h1>
+            <p className="mt-2 text-sm text-ink-soft">
+              {locale === 'mm'
+                ? 'သင်သည် ပိုင်ရှင် သို့မဟုတ် သုံးသပ်သူဆိုပါက — ခွင့်ပြုထားသည့် နည်းလမ်းနှင့် မတူဘဲ ဝင်မိနိုင်ပါသည် (ဥပမာ — Google နှင့် အီးမေးလ်/PIN မတူ)။ ထွက်ပြီး အခြားနည်းဖြင့် ပြန်ဝင်ကြည့်ပါ။ မဟုတ်ပါက ပိုင်ရှင်ထံ ဤအီးမေးလ်ကို staff အဖြစ် သတ်မှတ်ပေးရန် အကြောင်းကြားပါ။'
+                : 'If you are the owner or a reviewer, you may have signed in a different way than the one that was granted access (for example Google vs email/PIN). Sign out and try the other method. Otherwise, ask the owner to grant staff access to this email.'}
+            </p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <a href="/" className="inline-block rounded-pill bg-sky px-5 py-2 text-sm font-semibold text-white">
+                {locale === 'mm' ? 'မိဘစာမျက်နှာသို့ သွားမည်' : 'Go to the parent app'}
               </a>
+              <button
+                type="button"
+                onClick={() => { void signOut().finally(() => window.location.assign('/')); }}
+                className="inline-block rounded-pill border border-line bg-white px-5 py-2 text-sm font-semibold text-ink"
+              >
+                {locale === 'mm' ? 'ထွက်ပြီး အခြားနည်းဖြင့် ဝင်မည်' : 'Sign out and try another sign-in'}
+              </button>
             </div>
-          </Layout>
-        </ResetStaffPortalMode>
-      );
+          </div>
+        </Layout>
+      </ResetStaffPortalMode>
+    );
   }
   const route = decideRoute({
     ready,

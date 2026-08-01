@@ -190,7 +190,7 @@ export function SubscriptionPlans() {
           {options.plans.map((plan) => {
             const current = subscription.planKey === plan.planKey;
             const selected = planId === plan._id;
-            const features = PLAN_FEATURES[plan.planKey][locale === 'mm' ? 'mm' : 'en'];
+            const features = PLAN_FEATURES[plan.planKey]?.[locale === 'mm' ? 'mm' : 'en'] ?? [];
             return (
               <button
                 key={plan._id}
