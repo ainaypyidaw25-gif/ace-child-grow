@@ -12,9 +12,28 @@ import {
   isParentVisible,
   needsManualTriage,
   requiredDimensionsFor,
+  safeStringify,
   suggestedDimensionsFor,
   type ClassifiableRecord,
 } from '../../../convex/lib/ownerPriority';
+
+describe('classification is resilient to non-JSON-serialisable data (the queues server-error fix)', () => {
+  it('safeStringify serialises BigInt instead of throwing', () => {
+    expect(() => safeStringify({ n: 9007199254740993n })).not.toThrow();
+    expect(safeStringify({ n: 5n })).toContain('5');
+    expect(safeStringify({ ok: true })).toBe('{"ok":true}');
+  });
+
+  it('computePriority does not throw when a record\'s data contains a BigInt', () => {
+    const record: ClassifiableRecord = {
+      slug: 'guide_bigint', type: 'guide', titleMm: 'လမ်းညွှန်', titleEn: 'Guide',
+      data: { count: 42n, faq: [{ q: { mm: 'က', en: 'a' }, a: { mm: 'ခ', en: 'b' } }] },
+      clinicalStatus: 'published',
+    };
+    expect(() => computePriority(record)).not.toThrow();
+    expect(['A', 'B', 'C', 'D', 'E']).toContain(computePriority(record).riskClass);
+  });
+});
 
 describe('governance value coercion (keeps the review queue from throwing on legacy data)', () => {
   it('keeps known enum members and defaults unknown/empty ones', () => {

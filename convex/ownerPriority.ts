@@ -1,6 +1,7 @@
 import { v } from 'convex/values';
 import { internalQuery, mutation, query } from './_generated/server';
 import type { QueryCtx } from './_generated/server';
+import type { Doc } from './_generated/dataModel';
 import { logAudit } from './audit';
 import { getStaffAccess, requireUser, type StaffAccess } from './lib/auth';
 import {
@@ -34,15 +35,17 @@ import {
 // unpublishes, archives, approves, invites, or changes reviewScope. Publication
 // remains exclusively with the existing, separately gated setReview flow.
 
-// Hard ceilings. Reaching one means the deployment has outgrown a single-query
-// projection; the queue then reports dataComplete:false and REFUSES to state
-// authoritative completion, rather than quietly computing counts from a
-// truncated tail (which reads as "nothing outstanding" — the most dangerous
-// possible wrong answer for a safety queue).
-const REVIEW_PAGE = 1000;
-const MAX_REVIEW_PAGES = 20;
-const EDIT_PAGE = 1000;
-const MAX_EDIT_PAGES = 20;
+// COMBINED hard ceiling for the two history reads (reviews + edits). Convex
+// enforces its document/byte read limit across the WHOLE function — reviews,
+// edits, libraryContent AND evidenceLinks together — so the two history reads
+// must share one budget kept well below that limit, with headroom for the
+// catalogue and links. Reaching it means the deployment has outgrown a
+// single-query projection; the queue then reports dataComplete:false and
+// REFUSES to state authoritative completion, rather than quietly computing
+// counts from a truncated tail (which reads as "nothing outstanding" — the most
+// dangerous possible wrong answer for a safety queue) OR throwing a
+// too-many-documents error that would crash the workspace outright.
+const QUEUE_HISTORY_BUDGET = 12000;
 
 const priorityStatusValidator = v.union(
   v.literal('unreviewed'),
@@ -114,39 +117,26 @@ const countsValidator = v.object({
 type ReviewRow = { contentSlug: string; dimension: string; decision: string; reviewerId: unknown; contentVersion: number; reviewRevision?: number; note?: string; reviewedAt: number; reviewerDisplayName: string };
 
 /**
- * Load every review decision by paging the table, or report that it could not
- * be loaded in full. Never returns a silently truncated set.
+ * Load every review decision, or report that it could not be loaded in full.
+ * Never returns a silently truncated set.
+ *
+ * Uses a bounded `.take()` rather than `.paginate()` ON PURPOSE: the queues
+ * query must read BOTH the reviews and the edit log, and Convex allows only ONE
+ * paginated query per function call — a second `.paginate()` throws
+ * "ran multiple paginated queries", which crashed the whole review workspace.
+ * `.take()` is a plain bounded read, so both loads can coexist. Reading cap + 1
+ * lets us report `complete: false` when the cap is exceeded.
  */
-async function loadAllReviews(ctx: QueryCtx): Promise<{ rows: ReviewRow[]; complete: boolean }> {
-  const rows: ReviewRow[] = [];
-  let cursor: string | null = null;
-  for (let page = 0; page < MAX_REVIEW_PAGES; page += 1) {
-    const result = await ctx.db
-      .query('contentReviews')
-      .order('desc')
-      .paginate({ numItems: REVIEW_PAGE, cursor });
-    rows.push(...(result.page as unknown as ReviewRow[]));
-    if (result.isDone) return { rows, complete: true };
-    cursor = result.continueCursor;
-  }
-  return { rows, complete: false };
+async function loadAllReviews(ctx: QueryCtx, budget: number): Promise<{ rows: ReviewRow[]; complete: boolean }> {
+  const page = await ctx.db.query('contentReviews').order('desc').take(budget + 1);
+  return { rows: page.slice(0, budget) as unknown as ReviewRow[], complete: page.length <= budget };
 }
 
 type EditRow = { contentSlug: string; editedAt: number };
 
-async function loadAllEdits(ctx: QueryCtx): Promise<{ rows: EditRow[]; complete: boolean }> {
-  const rows: EditRow[] = [];
-  let cursor: string | null = null;
-  for (let page = 0; page < MAX_EDIT_PAGES; page += 1) {
-    const result = await ctx.db
-      .query('contentEditLogs')
-      .order('desc')
-      .paginate({ numItems: EDIT_PAGE, cursor });
-    rows.push(...(result.page as unknown as EditRow[]));
-    if (result.isDone) return { rows, complete: true };
-    cursor = result.continueCursor;
-  }
-  return { rows, complete: false };
+async function loadAllEdits(ctx: QueryCtx, budget: number): Promise<{ rows: EditRow[]; complete: boolean }> {
+  const page = await ctx.db.query('contentEditLogs').order('desc').take(budget + 1);
+  return { rows: page.slice(0, budget) as unknown as EditRow[], complete: page.length <= budget };
 }
 
 /**
@@ -162,39 +152,99 @@ function hasActiveAssignmentFor(slug: string, reviewRevision: number): boolean {
   return false;
 }
 
+/**
+ * A minimal, valid queue row for a record whose full classification threw. It
+ * keeps the review workspace alive when a single record's data is malformed:
+ * the record still appears — flagged P0 for manual triage with the failure in
+ * its warnings — instead of the entire query throwing a server error and
+ * crashing `/admin/reviews` for every staff user.
+ */
+function fallbackQueueRow(item: Doc<'libraryContent'>, error: unknown) {
+  const message = error instanceof Error ? error.message : String(error);
+  return {
+    slug: item.slug,
+    titleMm: item.titleMm ?? item.slug,
+    titleEn: item.titleEn ?? item.slug,
+    type: item.type ?? 'unknown',
+    category: item.category ?? null,
+    ageGroupKey: item.ageGroupKey ?? null,
+    domainKey: item.domainKey ?? null,
+    clinicalStatus: item.clinicalStatus ?? 'draft',
+    reviewScope: item.reviewScope ?? null,
+    reviewRevision: item.reviewRevision ?? 1,
+    parentVisibleNow: item.clinicalStatus === 'published',
+    priority: 'P0' as const,
+    priorityReasons: ['could not classify this record — see warnings'],
+    riskClass: 'C' as const,
+    riskReasons: [],
+    provisionalClassification: true,
+    requiredReviewDimensions: [] as string[],
+    suggestedReviewDimensions: [] as string[],
+    manualTriageRequired: true,
+    outstandingDimensions: [] as string[],
+    approvedDimensions: [] as string[],
+    activeReviewers: [] as string[],
+    hasActiveAssignment: false,
+    evidenceStatus: 'missing',
+    priorityStatus: 'manual_triage_required' as const,
+    temporarilyHideRecommended: false,
+    ownerNote: null,
+    latestEditAt: null,
+    latestDecisionAt: null,
+    warnings: [`classification failed and was skipped: ${message}`],
+  };
+}
+
+const queueResultValidator = v.object({
+  allowed: v.boolean(),
+  accessLevel: v.string(),
+  /** False when review/edit history could not be read in full. */
+  dataComplete: v.boolean(),
+  /** Authoritative counts are withheld when data is incomplete. */
+  countsAuthoritative: v.boolean(),
+  rows: v.array(queueRowValidator),
+  counts: countsValidator,
+});
+
 export const queues = query({
   args: {},
-  returns: v.object({
-    allowed: v.boolean(),
-    accessLevel: v.string(),
-    /** False when review/edit history could not be read in full. */
-    dataComplete: v.boolean(),
-    /** Authoritative counts are withheld when data is incomplete. */
-    countsAuthoritative: v.boolean(),
-    rows: v.array(queueRowValidator),
-    counts: countsValidator,
-  }),
+  returns: queueResultValidator,
   handler: async (ctx) => {
     const userId = await requireUser(ctx);
     const access = await getStaffAccess(ctx, userId);
     const level = queueAccessLevel(access?.role);
-    const empty = {
-      allowed: false,
-      accessLevel: level,
-      dataComplete: true,
-      countsAuthoritative: false,
-      rows: [],
-      counts: dashboardCounts([]),
-    };
-    if (level === 'none') return empty;
+    if (level === 'none') {
+      return {
+        allowed: false,
+        accessLevel: level,
+        dataComplete: true,
+        countsAuthoritative: false,
+        rows: [],
+        counts: dashboardCounts([]),
+      };
+    }
+    return buildQueueResult(ctx, level, access?.role);
+  },
+});
 
+/**
+ * The full queue computation, shared by the public `queues` query and the
+ * internal `queuesSelfTest` probe. Auth-free so the probe can exercise the
+ * ENTIRE query — including Convex return-validation — via `convex run`, without
+ * a signed-in staff session.
+ */
+async function buildQueueResult(ctx: QueryCtx, level: string, role: string | undefined) {
+    const seesActivity = maySeeReviewerActivity(role);
     const content = await ctx.db.query('libraryContent').collect();
-    const reviewsResult = await loadAllReviews(ctx);
-    const editsResult = await loadAllEdits(ctx);
+    // Reviews and edits share one budget: whatever reviews don't consume is left
+    // for edits, so the combined document read stays under Convex's per-function
+    // limit no matter how the two tables are sized. Exhausting it degrades to
+    // dataComplete:false (below) — never a too-many-documents throw.
+    const reviewsResult = await loadAllReviews(ctx, QUEUE_HISTORY_BUDGET);
+    const editsResult = await loadAllEdits(ctx, Math.max(0, QUEUE_HISTORY_BUDGET - reviewsResult.rows.length));
     const dataComplete = reviewsResult.complete && editsResult.complete;
     const links = await ctx.db.query('evidenceLinks').collect();
     const linkedSlugs = new Set(links.map((link) => link.slug));
-    const seesActivity = maySeeReviewerActivity(access?.role);
 
     const latestEditBySlug = new Map<string, number>();
     for (const edit of editsResult.rows) {
@@ -209,6 +259,7 @@ export const queues = query({
     }
 
     const rows = content.map((item) => {
+      try {
       const revision = item.reviewRevision ?? 1;
       const slugDecisions = decisionsBySlug.get(item.slug) ?? [];
       const currentByDimension = new Map<string, ReviewRow>();
@@ -283,8 +334,8 @@ export const queues = query({
 
       return {
         slug: item.slug,
-        titleMm: item.titleMm,
-        titleEn: item.titleEn,
+        titleMm: item.titleMm ?? item.slug,
+        titleEn: item.titleEn ?? item.slug,
         type: item.type,
         category: item.category ?? null,
         ageGroupKey: item.ageGroupKey ?? null,
@@ -308,7 +359,8 @@ export const queues = query({
         activeReviewers: seesActivity
           ? [...new Set(slugDecisions
               .filter((decision) => (decision.reviewRevision ?? decision.contentVersion) === revision)
-              .map((decision) => decision.reviewerDisplayName))]
+              .map((decision) => decision.reviewerDisplayName)
+              .filter((name): name is string => typeof name === 'string'))]
           : [],
         hasActiveAssignment,
         evidenceStatus: linkedSlugs.has(item.slug) ? 'linked' : 'missing',
@@ -319,12 +371,15 @@ export const queues = query({
         latestDecisionAt: seesActivity ? latestDecisionAt : null,
         warnings,
       };
+      } catch (error) {
+        return fallbackQueueRow(item, error);
+      }
     });
 
     // Scope the catalogue itself, not just the fields: an assignment-scoped
     // reviewer must not learn what else exists.
     const visibleRows = level === 'assignment_scoped'
-      ? rows.filter((row) => rowInReviewerScope(access?.role, row))
+      ? rows.filter((row) => rowInReviewerScope(role, row))
       : rows;
     visibleRows.sort(compareQueueRows);
 
@@ -345,7 +400,19 @@ export const queues = query({
         hasActiveAssignment: row.hasActiveAssignment,
       }))),
     };
-  },
+}
+
+/**
+ * INTERNAL end-to-end probe (`npx convex run ownerPriority:queuesSelfTest`).
+ * Runs the ENTIRE queue computation with the same return validator as the
+ * public query, as a full-access owner, WITHOUT auth — so a single CLI call
+ * proves whether `queues` succeeds (including return-validation) on production
+ * data, no signed-in session required.
+ */
+export const queuesSelfTest = internalQuery({
+  args: {},
+  returns: queueResultValidator,
+  handler: async (ctx) => buildQueueResult(ctx, 'full', 'owner'),
 });
 
 /**
@@ -362,6 +429,10 @@ export const queueDataHealth = internalQuery({
     const badPriorityStatus: Array<{ slug: string; value: string }> = [];
     const badRiskClassification: Array<{ slug: string; value: string }> = [];
     const badOwnerPriority: Array<{ slug: string; value: string }> = [];
+    // Records whose classification throws — the actual cause of a `queues`
+    // server error. Runs the same computePriority the query runs, per record.
+    const classifyFailures: Array<{ slug: string; error: string }> = [];
+    const nonStringTitles: Array<{ slug: string; field: string }> = [];
     const distinctPriorityStatus = new Set<string>();
     const distinctClinicalStatus = new Set<string>();
     for (const item of content) {
@@ -375,9 +446,35 @@ export const queueDataHealth = internalQuery({
       const op = item.ownerPriority ?? null;
       if (op !== null && !(OWNER_PRIORITIES as string[]).includes(op)) badOwnerPriority.push({ slug: item.slug, value: op });
       distinctClinicalStatus.add(item.clinicalStatus);
+      if (typeof item.titleMm !== 'string') nonStringTitles.push({ slug: item.slug, field: 'titleMm' });
+      if (typeof item.titleEn !== 'string') nonStringTitles.push({ slug: item.slug, field: 'titleEn' });
+      try {
+        computePriority({
+          slug: item.slug,
+          type: item.type,
+          category: item.category ?? null,
+          ageGroupKey: item.ageGroupKey ?? null,
+          domainKey: item.domainKey ?? null,
+          titleMm: item.titleMm,
+          titleEn: item.titleEn,
+          summaryMm: item.summaryMm ?? null,
+          summaryEn: item.summaryEn ?? null,
+          tags: item.tags,
+          data: item.data,
+          clinicalStatus: item.clinicalStatus,
+          riskClassification: coerceRiskClass(item.riskClassification),
+          ownerPriority: coerceOwnerPriority(item.ownerPriority),
+          riskReasons: item.riskReasons ?? null,
+          priorityStatus: item.priorityStatus ?? null,
+        });
+      } catch (error) {
+        classifyFailures.push({ slug: item.slug, error: error instanceof Error ? error.message : String(error) });
+      }
     }
     return {
       total: content.length,
+      classifyFailures,
+      nonStringTitles,
       distinctPriorityStatus: [...distinctPriorityStatus],
       distinctClinicalStatus: [...distinctClinicalStatus],
       badPriorityStatus,
@@ -461,7 +558,7 @@ export const setGovernance = mutation({
       if (args.priorityStatus === 'completed') {
         // Server-side completion guard. A disabled button is not enforcement:
         // this check runs for direct calls too.
-        const reviewsResult = await loadAllReviews(ctx);
+        const reviewsResult = await loadAllReviews(ctx, QUEUE_HISTORY_BUDGET);
         const revision = item.reviewRevision ?? 1;
         const approvedDimensions = [...new Set(
           reviewsResult.rows
