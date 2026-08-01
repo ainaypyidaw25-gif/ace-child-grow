@@ -9,6 +9,7 @@ export function Consent() {
   const { state, acceptConsentAsync } = useAppState();
   const navigate = useNavigate();
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
 
   const points =
     locale === 'mm'
@@ -42,12 +43,21 @@ export function Consent() {
         onClick={async () => {
           if (busy) return;
           setBusy(true);
+          setError('');
           try {
             // Await persistence so the bootstrap gate reads fresh consent, then
             // route through it (a parent who already has a child lands on Home).
             await acceptConsentAsync();
             navigate('/');
           } catch {
+            // Consent is the gate to the whole app: failing silently here strands
+            // the parent on this screen with no way to tell that anything went
+            // wrong. Say so, and leave the button ready to retry.
+            setError(
+              locale === 'mm'
+                ? 'သဘောတူညီချက် သိမ်းဆည်း၍ မရပါ။ အင်တာနက်ချိတ်ဆက်မှုကို စစ်ဆေးပြီး ထပ်မံကြိုးစားပါ။'
+                : 'Could not save your consent. Check your connection and try again.',
+            );
             setBusy(false);
           }
         }}
@@ -55,6 +65,7 @@ export function Consent() {
       >
         {busy ? '…' : t('common.confirm')}
       </button>
+      {error && <p role="alert" className="text-sm text-state-red">⚠️ {error}</p>}
       {state.consentAcceptedAt && (
         <p className="text-center text-xs text-mint">✓ {t('common.confirm')}</p>
       )}

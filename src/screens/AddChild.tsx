@@ -37,7 +37,9 @@ export function AddChild() {
     }
     const g = premature ? Number(weeks) : undefined;
     if (premature && (g! < MIN_GESTATIONAL_WEEKS || g! > MAX_GESTATIONAL_WEEKS)) {
-      setError(`${MIN_GESTATIONAL_WEEKS}–${MAX_GESTATIONAL_WEEKS} weeks`);
+      setError(locale === 'mm'
+        ? `ကိုယ်ဝန်သက်တမ်းသည် ${MIN_GESTATIONAL_WEEKS}–${MAX_GESTATIONAL_WEEKS} ပတ်အတွင်း ဖြစ်ရပါမည်။`
+        : `${MIN_GESTATIONAL_WEEKS}–${MAX_GESTATIONAL_WEEKS} weeks`);
       return;
     }
     // Warn once on an accidental duplicate (same nickname + birth date). A second
@@ -106,7 +108,9 @@ export function AddChild() {
         </label>
       )}
 
-      {error && <p className={`text-sm ${confirmDup ? 'text-state-orange' : 'text-state-red'}`}>⚠️ {error}</p>}
+      {/* role="alert" so a parent using a screen reader hears why Save did not
+          go through — the message is otherwise silent. */}
+      {error && <p role="alert" className={`text-sm ${confirmDup ? 'text-state-orange' : 'text-state-red'}`}>⚠️ {error}</p>}
 
       <button type="button" onClick={save} disabled={busy}
         className="min-h-touch w-full rounded-pill bg-sky px-6 py-3 font-semibold text-white disabled:opacity-50">
