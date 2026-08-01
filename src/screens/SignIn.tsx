@@ -4,11 +4,15 @@ import { useLocale } from '../app/LocaleContext';
 import { clearPortalMode, setPortalMode } from '../app/portalMode';
 import {
   isAcceptedExistingParentCredential,
+  hasLikelyWebPrefixInEmail,
+  isStrongStaffPassword,
+  isValidEmailInput,
+  isSixDigitPin,
   validateAccountPassword,
   type AccountPasswordKind,
 } from '../domain/auth/passwordPolicy';
 import { captureReferralFromSearch } from '../domain/referrals/referralCapture';
-import { getAuthRedirectUrl } from '../app/platform';
+import { getAuthRedirectUrl, NATIVE_AUTH_CALLBACK_ERROR_EVENT } from '../app/platform';
 
 type AuthFlow = 'signIn' | 'signUp' | 'reset' | 'resetVerification';
 
@@ -39,9 +43,32 @@ export function SignIn() {
     }
   }, []);
 
+  useEffect(() => {
+    const showNativeCallbackError = () => {
+      setBusy(false);
+      clearPortalMode();
+      setError(
+        locale === 'mm'
+          ? 'Google အကောင့်ဝင်ခြင်းကို အပြီးသတ်၍ မရပါ။ ထပ်မံကြိုးစားပါ။'
+          : 'Google sign-in could not be completed. Please try again.',
+      );
+    };
+    window.addEventListener(NATIVE_AUTH_CALLBACK_ERROR_EVENT, showNativeCallbackError);
+    return () => window.removeEventListener(NATIVE_AUTH_CALLBACK_ERROR_EVENT, showNativeCallbackError);
+  }, [locale]);
+
   const accountType: AccountPasswordKind = portal === 'staff' ? 'staff' : 'parent';
   const requiresNewCredential = flow === 'signUp' || flow === 'resetVerification';
   const requiresSixDigitPin = accountType === 'parent' && requiresNewCredential;
+  const normalizedEmail = email.trim().toLowerCase();
+  const emailReady = isValidEmailInput(normalizedEmail);
+  const credentialReady = flow === 'reset'
+    || (accountType === 'parent'
+      ? (requiresNewCredential ? isSixDigitPin(password) : isAcceptedExistingParentCredential(password))
+      : isStrongStaffPassword(password));
+  const verificationCodeReady = flow !== 'resetVerification' || /^\d{6}$/.test(code);
+  const formReady = emailReady && credentialReady && verificationCodeReady;
+  const likelyWebPrefix = hasLikelyWebPrefixInEmail(email);
 
   function resetToSignIn() {
     setFlow('signIn');
@@ -134,6 +161,10 @@ export function SignIn() {
           ? 'Google အကောင့်ဖြင့် ဝင်၍မရပါ။ ထပ်မံကြိုးစားပါ။'
           : 'Could not continue with Google. Please try again.',
       );
+    } finally {
+      // Android keeps the WebView alive while OAuth runs in the browser. If
+      // control returns without a completed callback, the form must not stay
+      // permanently disabled.
       setBusy(false);
     }
   }
@@ -217,6 +248,13 @@ export function SignIn() {
             disabled={flow === 'resetVerification'}
             className="mt-1 block min-h-touch w-full rounded-lg border border-line px-3 py-2 disabled:bg-canvas"
           />
+          {likelyWebPrefix && (
+            <span className="mt-1 block text-xs text-state-red" role="alert">
+              {locale === 'mm'
+                ? 'အီးမေးလ်အစတွင် “www.” ပါနေသည်။ မိမိအကောင့်လိပ်စာမှန်ကြောင်း စစ်ပါ။'
+                : 'This email starts with “www.” Check that it is really part of your account address.'}
+            </span>
+          )}
         </label>
 
         {flow === 'resetVerification' && (
@@ -264,7 +302,19 @@ export function SignIn() {
         {message && <p className="rounded-xl bg-mint-soft p-3 text-sm text-sky-deep" role="status">{message}</p>}
         {error && <p className="text-sm text-state-red" role="alert">⚠️ {error}</p>}
 
-        <button type="submit" disabled={busy} className="min-h-touch w-full rounded-pill bg-sky px-6 py-3 font-semibold text-white disabled:opacity-50">
+        {!busy && !formReady && (
+          <p className="text-xs text-ink-soft" role="status">
+            {!emailReady
+              ? (locale === 'mm' ? 'မှန်ကန်သော အီးမေးလ်လိပ်စာကို ဖြည့်ပါ။' : 'Enter a valid email address.')
+              : !verificationCodeReady
+                ? (locale === 'mm' ? 'အီးမေးလ်မှ ၆ လုံးကုဒ်ကို ဖြည့်ပါ။' : 'Enter the six-digit email code.')
+                : accountType === 'parent'
+                  ? (locale === 'mm' ? 'ဂဏန်း ၆ လုံး PIN သို့မဟုတ် ယခင်စကားဝှက် အနည်းဆုံး ၈ လုံးကို ဖြည့်ပါ။' : 'Enter a six-digit PIN or an existing password of at least eight characters.')
+                  : (locale === 'mm' ? 'စကားဝှက် အနည်းဆုံး ၈ လုံးကို ဖြည့်ပါ။' : 'Enter a password of at least eight characters.')}
+          </p>
+        )}
+
+        <button type="submit" disabled={busy || !formReady} aria-busy={busy} className="min-h-touch w-full rounded-pill bg-sky px-6 py-3 font-semibold text-white disabled:opacity-50">
           {busy ? '…'
             : flow === 'reset' ? (locale === 'mm' ? 'အတည်ပြုကုဒ် ပို့မည်' : 'Send recovery code')
               : flow === 'resetVerification' ? (locale === 'mm' ? 'PIN/စကားဝှက် ပြောင်းမည်' : 'Change credential')
