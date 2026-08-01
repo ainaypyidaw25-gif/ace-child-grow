@@ -115,39 +115,28 @@ const countsValidator = v.object({
 type ReviewRow = { contentSlug: string; dimension: string; decision: string; reviewerId: unknown; contentVersion: number; reviewRevision?: number; note?: string; reviewedAt: number; reviewerDisplayName: string };
 
 /**
- * Load every review decision by paging the table, or report that it could not
- * be loaded in full. Never returns a silently truncated set.
+ * Load every review decision, or report that it could not be loaded in full.
+ * Never returns a silently truncated set.
+ *
+ * Uses a bounded `.take()` rather than `.paginate()` ON PURPOSE: the queues
+ * query must read BOTH the reviews and the edit log, and Convex allows only ONE
+ * paginated query per function call — a second `.paginate()` throws
+ * "ran multiple paginated queries", which crashed the whole review workspace.
+ * `.take()` is a plain bounded read, so both loads can coexist. Reading cap + 1
+ * lets us report `complete: false` when the cap is exceeded.
  */
 async function loadAllReviews(ctx: QueryCtx): Promise<{ rows: ReviewRow[]; complete: boolean }> {
-  const rows: ReviewRow[] = [];
-  let cursor: string | null = null;
-  for (let page = 0; page < MAX_REVIEW_PAGES; page += 1) {
-    const result = await ctx.db
-      .query('contentReviews')
-      .order('desc')
-      .paginate({ numItems: REVIEW_PAGE, cursor });
-    rows.push(...(result.page as unknown as ReviewRow[]));
-    if (result.isDone) return { rows, complete: true };
-    cursor = result.continueCursor;
-  }
-  return { rows, complete: false };
+  const cap = MAX_REVIEW_PAGES * REVIEW_PAGE;
+  const page = await ctx.db.query('contentReviews').order('desc').take(cap + 1);
+  return { rows: page.slice(0, cap) as unknown as ReviewRow[], complete: page.length <= cap };
 }
 
 type EditRow = { contentSlug: string; editedAt: number };
 
 async function loadAllEdits(ctx: QueryCtx): Promise<{ rows: EditRow[]; complete: boolean }> {
-  const rows: EditRow[] = [];
-  let cursor: string | null = null;
-  for (let page = 0; page < MAX_EDIT_PAGES; page += 1) {
-    const result = await ctx.db
-      .query('contentEditLogs')
-      .order('desc')
-      .paginate({ numItems: EDIT_PAGE, cursor });
-    rows.push(...(result.page as unknown as EditRow[]));
-    if (result.isDone) return { rows, complete: true };
-    cursor = result.continueCursor;
-  }
-  return { rows, complete: false };
+  const cap = MAX_EDIT_PAGES * EDIT_PAGE;
+  const page = await ctx.db.query('contentEditLogs').order('desc').take(cap + 1);
+  return { rows: page.slice(0, cap) as unknown as EditRow[], complete: page.length <= cap };
 }
 
 /**
