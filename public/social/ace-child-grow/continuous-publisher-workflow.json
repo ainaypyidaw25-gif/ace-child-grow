@@ -1,0 +1,163 @@
+{
+  "name": "ACE Child Grow - Facebook Continuous Publisher",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 15
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Check Queue Every 15 Minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, -120]
+    },
+    {
+      "parameters": {},
+      "id": "manual-trigger",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "url": "https://child.acegroup.com.mm/social/ace-child-grow/manifest.json",
+        "options": {}
+      },
+      "id": "load-manifest",
+      "name": "Load Public Approved Manifest",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [220, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "const manifest = $json; const now = Date.now(); const state = $getWorkflowStaticData('global'); state.publishedIds ??= {}; for (const prior of (manifest.items || [])) { if (prior.alreadyPublished || prior.status === 'published' || prior.platformPostId) state.publishedIds[prior.id] ??= { platformPostId: prior.platformPostId || null, publishedAt: prior.publishedAt || null }; } const due = (Array.isArray(manifest.items) ? manifest.items : []).filter((candidate) => candidate.status === 'scheduled' && candidate.approvalStatus === 'approved' && Date.parse(candidate.scheduledAt || 0) <= now && !candidate.alreadyPublished && !candidate.platformPostId && !candidate.platformPermalink && !state.publishedIds[candidate.id]).sort((a, b) => Date.parse(a.scheduledAt) - Date.parse(b.scheduledAt)); const item = due[0] || null; const blockers = []; if (manifest.killSwitch !== false) blockers.push('GLOBAL_KILL_SWITCH_ON'); if (manifest.automationMode !== 'production') blockers.push('NOT_PRODUCTION_MODE'); if (manifest.destination?.platform !== 'facebook') blockers.push('WRONG_PLATFORM'); if (manifest.destination?.pageId !== '111009258047115') blockers.push('PAGE_NOT_ALLOWLISTED'); if (!item) blockers.push('NO_DUE_APPROVED_ITEM'); if (item) { if (!item.reviewerId || !item.approvalTimestamp) blockers.push('MISSING_APPROVAL_AUDIT'); if (!item.captionMyanmar?.trim()) blockers.push('EMPTY_CAPTION'); if (!item.mediaUrl?.startsWith('https://child.acegroup.com.mm/')) blockers.push('MEDIA_NOT_ON_APPROVED_HOST'); if (!item.mediaSha256) blockers.push('MISSING_MEDIA_HASH'); if (!item.approvedContentHash) blockers.push('MISSING_APPROVED_HASH'); if (item.mediaType !== 'image') blockers.push('UNSUPPORTED_MEDIA_TYPE'); if (item.riskLevel === 'high' && !item.clinicalApprovalId) blockers.push('MISSING_CLINICAL_APPROVAL'); } return [{json: {...(item || {}), destinationPageId: manifest.destination?.pageId, graphApiVersion: manifest.destination?.graphApiVersion, automationMode: manifest.automationMode, killSwitch: manifest.killSwitch, eligible: blockers.length === 0, blockers}}];"
+      },
+      "id": "validate-gates",
+      "name": "Validate Kill Switch Approval and Duplicate Gates",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "eligible",
+              "leftValue": "={{ $json.eligible }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "if-eligible",
+      "name": "Eligible for Facebook Publish?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [700, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v25.0/111009258047115/photos",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "url",
+              "value": "={{ $json.mediaUrl }}"
+            },
+            {
+              "name": "message",
+              "value": "={{ $json.captionMyanmar }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "facebook-publish",
+      "name": "Publish Photo to ACE Child Grow - CREDENTIAL REQUIRED",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [960, -120]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $('Validate Kill Switch Approval and Duplicate Gates').item.json; const response = $json; const platformPostId = response.post_id || response.id; if (!platformPostId) throw new Error('META_RESPONSE_MISSING_POST_ID'); const state = $getWorkflowStaticData('global'); state.publishedIds ??= {}; state.publishedIds[item.id] = { platformPostId, publishedAt: new Date().toISOString(), approvedContentHash: item.approvedContentHash }; return [{json: {result: 'PUBLISHED', postId: item.id, platformPostId, publishedAt: state.publishedIds[item.id].publishedAt}}];"
+      },
+      "id": "mark-published",
+      "name": "Remember Published Post",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1200, -120]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{json: {...$json, result: 'BLOCKED', platformPostId: null, publishedAt: null, alertOwner: true}}];"
+      },
+      "id": "blocked",
+      "name": "Block and Flag Owner",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [960, 120]
+    }
+  ],
+  "connections": {
+    "Check Queue Every 15 Minutes": {
+      "main": [[{"node": "Load Public Approved Manifest", "type": "main", "index": 0}]]
+    },
+    "Manual Trigger": {
+      "main": [[{"node": "Load Public Approved Manifest", "type": "main", "index": 0}]]
+    },
+    "Load Public Approved Manifest": {
+      "main": [[{"node": "Validate Kill Switch Approval and Duplicate Gates", "type": "main", "index": 0}]]
+    },
+    "Validate Kill Switch Approval and Duplicate Gates": {
+      "main": [[{"node": "Eligible for Facebook Publish?", "type": "main", "index": 0}]]
+    },
+    "Eligible for Facebook Publish?": {
+      "main": [
+        [{"node": "Publish Photo to ACE Child Grow - CREDENTIAL REQUIRED", "type": "main", "index": 0}],
+        [{"node": "Block and Flag Owner", "type": "main", "index": 0}]
+      ]
+    },
+    "Publish Photo to ACE Child Grow - CREDENTIAL REQUIRED": {
+      "main": [[{"node": "Remember Published Post", "type": "main", "index": 0}]]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "saveManualExecutions": true,
+    "timezone": "Asia/Yangon"
+  },
+  "versionId": "00000000-0000-4000-8000-000000000002",
+  "meta": {
+    "templateCredsSetupCompleted": false,
+    "aceMode": "continuous_low_risk",
+    "killSwitchExpected": true,
+    "credentialAttachmentRequired": true
+  },
+  "tags": []
+}
