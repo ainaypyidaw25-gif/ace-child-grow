@@ -1,17 +1,22 @@
 import { v } from 'convex/values';
-import { mutation, query } from './_generated/server';
+import { internalQuery, mutation, query } from './_generated/server';
 import type { QueryCtx } from './_generated/server';
 import { logAudit } from './audit';
 import { getStaffAccess, requireUser, type StaffAccess } from './lib/auth';
 import {
+  coerceOwnerPriority,
+  coercePriorityStatus,
+  coerceRiskClass,
   compareQueueRows,
   completionRefusal,
   computePriority,
   dashboardCounts,
   needsManualTriage,
+  OWNER_PRIORITIES,
   PRIORITY_STATUSES,
   requiredDimensionsFor,
   REVIEW_DIMENSION_IDS,
+  RISK_CLASSES,
   suggestedDimensionsFor,
   type PriorityStatus,
   type RiskClass,
@@ -232,8 +237,12 @@ export const queues = query({
         tags: item.tags,
         data: item.data,
         clinicalStatus: item.clinicalStatus,
-        riskClassification: item.riskClassification ?? null,
-        ownerPriority: item.ownerPriority ?? null,
+        // Coerce stored governance strings to known enum members. A legacy value
+        // from an earlier schema would otherwise flow into the return-validated
+        // riskClass/priority fields and make this whole query throw, crashing
+        // the review workspace for every staff user.
+        riskClassification: coerceRiskClass(item.riskClassification),
+        ownerPriority: coerceOwnerPriority(item.ownerPriority),
         riskReasons: item.riskReasons ?? null,
         priorityStatus: item.priorityStatus ?? null,
         workflowBlocker,
@@ -255,7 +264,7 @@ export const queues = query({
       const approvedSet = new Set(approvedDimensions);
       const outstanding = confirmed.filter((dimension) => !approvedSet.has(dimension));
 
-      const storedStatus = (item.priorityStatus ?? (triageRequired ? 'manual_triage_required' : 'unreviewed')) as PriorityStatus;
+      const storedStatus = coercePriorityStatus(item.priorityStatus, triageRequired ? 'manual_triage_required' : 'unreviewed');
       const hasActiveAssignment = hasActiveAssignmentFor(item.slug, revision);
       // Never display 'assigned' without a real assignment record behind it.
       const priorityStatus: PriorityStatus =
@@ -335,6 +344,45 @@ export const queues = query({
         outstandingDimensions: row.outstandingDimensions,
         hasActiveAssignment: row.hasActiveAssignment,
       }))),
+    };
+  },
+});
+
+/**
+ * Read-only data-health probe for the review queue. INTERNAL — CLI/admin only
+ * (`npx convex run ownerPriority:queueDataHealth`). Lists libraryContent rows
+ * whose stored governance fields fall outside the current enums — exactly the
+ * values that made the `queues` query throw (and crash the review workspace)
+ * before the coercion above. A clean report means the queue is healthy.
+ */
+export const queueDataHealth = internalQuery({
+  args: {},
+  handler: async (ctx) => {
+    const content = await ctx.db.query('libraryContent').collect();
+    const badPriorityStatus: Array<{ slug: string; value: string }> = [];
+    const badRiskClassification: Array<{ slug: string; value: string }> = [];
+    const badOwnerPriority: Array<{ slug: string; value: string }> = [];
+    const distinctPriorityStatus = new Set<string>();
+    const distinctClinicalStatus = new Set<string>();
+    for (const item of content) {
+      const ps = item.priorityStatus ?? null;
+      if (ps !== null) {
+        distinctPriorityStatus.add(ps);
+        if (!(PRIORITY_STATUSES as string[]).includes(ps)) badPriorityStatus.push({ slug: item.slug, value: ps });
+      }
+      const rc = item.riskClassification ?? null;
+      if (rc !== null && !(RISK_CLASSES as string[]).includes(rc)) badRiskClassification.push({ slug: item.slug, value: rc });
+      const op = item.ownerPriority ?? null;
+      if (op !== null && !(OWNER_PRIORITIES as string[]).includes(op)) badOwnerPriority.push({ slug: item.slug, value: op });
+      distinctClinicalStatus.add(item.clinicalStatus);
+    }
+    return {
+      total: content.length,
+      distinctPriorityStatus: [...distinctPriorityStatus],
+      distinctClinicalStatus: [...distinctClinicalStatus],
+      badPriorityStatus,
+      badRiskClassification,
+      badOwnerPriority,
     };
   },
 });

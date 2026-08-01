@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import {
   classifyRecord,
+  coerceOwnerPriority,
+  coercePriorityStatus,
+  coerceRiskClass,
   compareQueueRows,
   computePriority,
   completionRefusal,
@@ -12,6 +15,23 @@ import {
   suggestedDimensionsFor,
   type ClassifiableRecord,
 } from '../../../convex/lib/ownerPriority';
+
+describe('governance value coercion (keeps the review queue from throwing on legacy data)', () => {
+  it('keeps known enum members and defaults unknown/empty ones', () => {
+    expect(coercePriorityStatus('in_review', 'unreviewed')).toBe('in_review');
+    expect(coercePriorityStatus('legacy_status', 'unreviewed')).toBe('unreviewed');
+    expect(coercePriorityStatus(null, 'manual_triage_required')).toBe('manual_triage_required');
+    expect(coercePriorityStatus(undefined, 'unreviewed')).toBe('unreviewed');
+
+    expect(coerceRiskClass('C')).toBe('C');
+    expect(coerceRiskClass('Z')).toBeNull();
+    expect(coerceRiskClass(null)).toBeNull();
+
+    expect(coerceOwnerPriority('P0')).toBe('P0');
+    expect(coerceOwnerPriority('P9')).toBeNull();
+    expect(coerceOwnerPriority(undefined)).toBeNull();
+  });
+});
 
 const base = (overrides: Partial<ClassifiableRecord>): ClassifiableRecord => ({
   slug: 'act_example',
