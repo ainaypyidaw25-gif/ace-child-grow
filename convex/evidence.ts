@@ -22,6 +22,7 @@ import { v, type Infer } from 'convex/values';
 import type { Id } from './_generated/dataModel';
 import { getAuthUserId } from '@convex-dev/auth/server';
 import { hasStaffRole, requireEvidenceEditor, requireProfessionalPublisher } from './lib/auth';
+import { isPubliclyReadableStatus } from './library';
 import { logAudit } from './audit';
 
 const REVIEW_STATUSES = [
@@ -247,6 +248,21 @@ export const forContent = query({
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) return { allowed: false as const, sources: [] };
+    // Content gate: if this slug is a library content item that is not yet
+    // published, a non-staff caller must not see its citations — that would
+    // disclose the existence and evidence base of unreleased content. Slugs with
+    // no libraryContent row (safety_rule, hope_topic) are inherently public
+    // safety references and remain visible. Mirrors library.getBySlug.
+    const staff = await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'language_reviewer', 'evidence_reviewer', 'clinical_reviewer']);
+    if (!staff) {
+      const content = await ctx.db
+        .query('libraryContent')
+        .withIndex('by_slug', (qq) => qq.eq('slug', args.slug))
+        .unique();
+      if (content && !isPubliclyReadableStatus(content.clinicalStatus)) {
+        return { allowed: true as const, sources: [] };
+      }
+    }
     const links = await ctx.db
       .query('evidenceLinks')
       .withIndex('by_slug', (qq) => qq.eq('slug', args.slug))
