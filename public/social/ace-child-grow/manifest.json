@@ -77,7 +77,7 @@
     },
     {
       "id": "ACE-INTRO-01",
-      "status": "scheduled",
+      "status": "published",
       "scheduledAt": "2026-08-01T12:50:00.000Z",
       "approvalStatus": "approved",
       "reviewerId": "OWNER_APP_INTRO_APPROVAL_2026_08_01",
@@ -90,9 +90,11 @@
       "mediaUrl": "https://child.acegroup.com.mm/social/ace-child-grow/posts/app-intro-v1/ACE-INTRO-01.jpg",
       "mediaSha256": "3ab0f29c4b7824f66f34618f723c2857c12735024ae13e69a659a7b3c8e4a3c6",
       "captionMyanmar": "မိဘတို့ရေ—ACE Child Grow ကို ပထမဆုံးမြင်တဲ့အခါ “ဒါက ဘာ app လဲ?” လို့ မေးမိမှာပါ 💛\n\nACE Child Grow က မွေးကင်းစကနေ အသက် ၅ နှစ်အထိ ကလေးရဲ့ နေ့စဉ်ဖွံ့ဖြိုးမှုကို မိဘတို့ ပိုနားလည်နိုင်အောင် ကူညီပေးတဲ့ မိဘလမ်းညွှန် app ပါ။\n\nApp ထဲမှာ—\n✓ ကလေးအသက်အလိုက် အိမ်မှာအတူလုပ်နိုင်တဲ့ လှုပ်ရှားမှု\n✓ ပြောင်းလဲမှုလေးတွေကို သတိထားမှတ်သားနိုင်တဲ့ ဖွံ့ဖြိုးမှုစာရင်း\n✓ မိဘတွေအတွက် ဖတ်ရှုစရာနဲ့ နေ့စဉ်အသုံးဝင်တဲ့ မှတ်တမ်းတွေ ပါဝင်ပါတယ်။\n\nဒါဟာ ကလေးကို ရောဂါရှာဖွေပေးတဲ့ app မဟုတ်ပါဘူး။ နေ့စဉ်အတူရှိတဲ့အချိန်မှာ ကလေးကို ပိုသတိထားနားလည်ဖို့ ကူညီပေးတဲ့ အဖော်လေးပါ။\n\nနောက် post မှာ စသုံးနည်း ၃ ဆင့်ကို ပြပေးပါမယ်။\n\n#ACEChildGrow #မိဘနဲ့ကလေး #ကလေးဖွံ့ဖြိုးမှု",
-      "alreadyPublished": false,
-      "platformPostId": null,
-      "platformPermalink": null
+      "alreadyPublished": true,
+      "platformPostId": "111009258047115_1067366379147476",
+      "platformPhotoId": "1067366352480812",
+      "publishedAt": "2026-08-01T13:52:32.612Z",
+      "platformPermalink": "https://www.facebook.com/111009258047115/posts/1067366379147476"
     },
     {
       "id": "ACE-HOWTO-01",
