@@ -39,6 +39,20 @@ const DECISION_LABELS: Record<Decision, { mm: string; en: string }> = {
   not_applicable: { mm: 'မသက်ဆိုင်ပါ', en: 'Not applicable' },
 };
 
+// Reviews and their history come from the database, where a legacy or
+// otherwise-unrecognised dimension/decision string can exist (renamed enum, an
+// older deployment, a hand-inserted row). A bare `LABELS[value][locale]` throws
+// on the undefined lookup and, because this screen renders inside the screen
+// error boundary, that turns the whole "Review item" tab into the recovery
+// screen — the reviewer taps it and cannot continue. These fall back to the raw
+// value so an unexpected string is shown, never crashed on.
+export function decisionLabel(decision: string, locale: 'mm' | 'en'): string {
+  return DECISION_LABELS[decision as Decision]?.[locale] ?? decision;
+}
+export function dimensionLabel(dimension: string, locale: 'mm' | 'en'): string {
+  return DIMENSION_LABELS[dimension as Dimension]?.[locale] ?? dimension;
+}
+
 function mayEditContent(role: StaffRole | null | undefined): boolean {
   return !!role && role !== 'support';
 }
@@ -578,13 +592,29 @@ export function ContentReviewWorkspace() {
             if (!confirmSelectionChange()) return;
             setEditorDirty(false);
             setSelectedSlug(event.target.value);
-          }} className="w-full rounded-xl border border-line bg-white px-3 py-2">
+          }} disabled={!list?.items.length} className="w-full rounded-xl border border-line bg-white px-3 py-2 disabled:opacity-60">
+            {list && list.items.length === 0 && (
+              <option value="">{L('ဤအမျိုးအစားတွင် အကြောင်းအရာ မရှိသေးပါ', 'No content of this type yet')}</option>
+            )}
             {list?.items.map((candidate) => (
               <option key={candidate.slug} value={candidate.slug}>{locale === 'mm' ? candidate.titleMm : candidate.titleEn}</option>
             ))}
           </select>
         </label>
       </section>
+
+      {list === undefined && <p className="rounded-card border border-line bg-white p-5 text-ink-soft">…</p>}
+      {list && list.items.length === 0 && (
+        <div className="rounded-card border border-line bg-white p-5 text-sm text-ink">
+          <p className="font-semibold text-ink">{L('ဤနေရာတွင် စစ်ဆေးစရာ အကြောင်းအရာ မရှိသေးပါ။', 'There is no content to review here yet.')}</p>
+          <p className="mt-2 text-ink-soft">
+            {L(
+              'အထက်က “အမျိုးအစား” ကို ပြောင်း၍ အခြားအကြောင်းအရာများ ရှိမရှိ ကြည့်ပါ။ အားလုံး ဗလာဖြစ်နေပါက အကြောင်းအရာစာကြည့်တိုက်ကို ဤ deployment သို့ တင်ရန် ကျန်နေသေးသည် (seed import) — ဆရာဝန်စစ်ဆေးရန်အတွက်တော့ offline HTML စာရွက်ကို သုံးနိုင်ပါသည်။',
+              'Change the “Content type” above to see whether other types have items. If every type is empty, the content library has not been imported into this deployment yet (seed import) — for the clinician’s review you can use the offline HTML sheet instead.',
+            )}
+          </p>
+        </div>
+      )}
 
       {item && mayEditContent(access.role) && (
         <ContentEditor
@@ -607,7 +637,7 @@ export function ContentReviewWorkspace() {
               return (
                 <div key={value} className="rounded-xl border border-line bg-canvas p-3">
                   <p className="text-sm font-semibold text-ink">{DIMENSION_LABELS[value][locale]}</p>
-                  <p className="mt-1 text-xs text-ink-soft">{review ? DECISION_LABELS[review.decision][locale] : L('မစစ်ဆေးရသေး', 'Not reviewed')}</p>
+                  <p className="mt-1 text-xs text-ink-soft">{review ? decisionLabel(review.decision, locale) : L('မစစ်ဆေးရသေး', 'Not reviewed')}</p>
                   {review && <p className="mt-2 text-[11px] text-ink-soft">{review.reviewerDisplayName}</p>}
                 </div>
               );
@@ -661,7 +691,7 @@ export function ContentReviewWorkspace() {
               <ul className="mt-3 space-y-2">
                 {reviews.history.map((review) => (
                   <li key={review._id} className="rounded-lg bg-canvas px-3 py-2 text-xs text-ink-soft">
-                    <b className="text-ink">{DIMENSION_LABELS[review.dimension][locale]}</b> · {DECISION_LABELS[review.decision][locale]} · {review.reviewerDisplayName} · {new Date(review.reviewedAt).toLocaleDateString()}
+                    <b className="text-ink">{dimensionLabel(review.dimension, locale)}</b> · {decisionLabel(review.decision, locale)} · {review.reviewerDisplayName} · {new Date(review.reviewedAt).toLocaleDateString()}
                     <span className="ml-2">({L('မူကွဲ', 'revision')} {review.contentVersion})</span>
                     {review.note && <p className="mt-1">{review.note}</p>}
                   </li>
