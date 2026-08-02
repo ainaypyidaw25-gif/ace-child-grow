@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useQuery } from 'convex/react';
-import { api } from '../../convex/_generated/api';
+import { useLibraryContent } from '../app/useOfflineLibrary';
 import { useLocale } from '../app/LocaleContext';
 import { AGE_GROUPS, DOMAINS, CONTENT_TYPES, ageGroup, domain } from '../content/taxonomy';
 import { ReviewBadge } from '../components/ReviewBadge';
@@ -26,7 +25,7 @@ export function ContentLibrary() {
   const usesAge = type === 'milestone' || type === 'guide' || type === 'activity';
   const usesDomain = type === 'milestone' || type === 'guide';
 
-  const data = useQuery(api.library.listByType, {
+  const data = useLibraryContent({
     type,
     ageGroupKey: usesAge && ageKey ? ageKey : undefined,
     domainKey: usesDomain && domainKey ? domainKey : undefined,

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useMutation, useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
+import { useLibraryContent } from '../app/useOfflineLibrary';
 import { useLocale } from '../app/LocaleContext';
 import { useAppState } from '../app/AppState';
 import { developmentalAgeMonths } from '../domain/age/age';
@@ -19,7 +20,7 @@ export function Activities() {
       })
     : 0;
   const ageGroupKey = resolveAgeGroup(ageMonths)?.key;
-  const data = useQuery(api.library.listByType, { type: 'activity', ageGroupKey });
+  const data = useLibraryContent({ type: 'activity', ageGroupKey });
   const subscription = useQuery(api.subscriptions.mine);
   const favKeys = useQuery(api.favorites.list) ?? [];
   const toggleFav = useMutation(api.favorites.toggle);
