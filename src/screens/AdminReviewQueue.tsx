@@ -10,6 +10,7 @@ import {
   SAMPLE_LESSONS,
 } from '../data/seed/content';
 import { REVIEW_STATES, nextStep, isParentVisible, type ReviewState } from '../domain/content/workflow';
+import { matchesSearchQuery } from '../domain/search';
 
 // Admin clinical-review queue backed by Convex. Content transitions persist and
 // are STAFF-ONLY (enforced in convex/content.ts). Non-staff see a read-only view.
@@ -21,6 +22,10 @@ export function AdminReviewQueue() {
   const transition = useMutation(api.content.transition);
   const [seeding, setSeeding] = useState(false);
   const [busyId, setBusyId] = useState<string | null>(null);
+  const [query, setQuery] = useState('');
+  const filteredItems = useMemo(() => (data?.items ?? []).filter((item) => matchesSearchQuery(query, [
+    item.titleMm, item.titleEn, item.kind, item.reviewStatus,
+  ])), [data?.items, query]);
 
   const seedItems = useMemo(
     () => [
@@ -50,6 +55,21 @@ export function AdminReviewQueue() {
           : `${pending} awaiting review. Nothing reaches parents until published.`}
         {!staff && ` · ${t('admin.staffOnly')}`}
       </p>
+
+      <label className="block space-y-1.5 text-sm font-medium text-ink">
+        <span>{locale === 'mm' ? 'သုံးသပ်ရန် အကြောင်းအရာ ရှာဖွေရန်' : 'Search the review queue'}</span>
+        <span className="flex items-center gap-2 rounded-xl border border-line bg-white px-3 shadow-card focus-within:border-sky">
+          <span aria-hidden="true">🔎</span>
+          <input
+            type="search"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder={locale === 'mm' ? 'ခေါင်းစဉ်၊ အမျိုးအစား သို့မဟုတ် အခြေအနေ' : 'Title, type or review status'}
+            className="min-h-touch min-w-0 flex-1 bg-transparent py-2 text-base font-normal outline-none placeholder:text-ink-soft"
+          />
+          {query && <button type="button" onClick={() => setQuery('')} className="min-h-touch px-2 text-xs text-sky-deep">{locale === 'mm' ? 'ဖျက်မည်' : 'Clear'}</button>}
+        </span>
+      </label>
 
       {staff && (
         <section className="rounded-card border border-line bg-white p-4 shadow-card">
@@ -122,8 +142,9 @@ export function AdminReviewQueue() {
         ))}
       </div>
 
+      <p className="text-xs text-ink-soft">{locale === 'mm' ? `ပြသနေသည် ${filteredItems.length} / ${items.length}` : `Showing ${filteredItems.length} of ${items.length}`}</p>
       <ul className="space-y-2">
-        {items.map((it) => {
+        {filteredItems.map((it) => {
           const to = nextStep(it.reviewStatus as ReviewState);
           return (
             <li key={it._id} className="flex items-center justify-between gap-2 rounded-xl border border-line bg-white px-3 py-2">
@@ -156,6 +177,11 @@ export function AdminReviewQueue() {
           );
         })}
       </ul>
+      {filteredItems.length === 0 && items.length > 0 && (
+        <p className="rounded-xl border border-line bg-white p-5 text-center text-sm text-ink-soft">
+          {locale === 'mm' ? 'ရှာဖွေမှုနှင့် ကိုက်ညီသော အကြောင်းအရာ မရှိပါ။' : 'No review items match this search.'}
+        </p>
+      )}
     </div>
   );
 }

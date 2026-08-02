@@ -16,6 +16,7 @@ import {
 import { OwnerPriorityView, type QueueRowView } from './ownerPriority/OwnerPriorityView';
 import { ClassificationImportPreview } from './ownerPriority/ClassificationImportPreview';
 import { OwnerActionsPanel, SecuritySummaryPanel } from './ownerPriority/OwnerActionsPanel';
+import { matchesSearchQuery } from '../domain/search';
 
 const DIMENSIONS = ['english', 'native_myanmar', 'evidence', 'safety', 'clinical'] as const;
 const DECISIONS = ['in_review', 'approved', 'changes_requested', 'not_applicable'] as const;
@@ -450,6 +451,7 @@ export function ContentReviewWorkspace() {
   const [tab, setTab] = useState<WorkspaceTab>('priority');
   const [type, setType] = useState('milestone');
   const [selectedSlug, setSelectedSlug] = useState('');
+  const [itemQuery, setItemQuery] = useState('');
   const list = useQuery(api.library.listByType, { type });
   const detail = useQuery(api.library.getBySlug, selectedSlug ? { slug: selectedSlug } : 'skip');
   const reviews = useQuery(api.contentReviews.listForContent, selectedSlug ? { contentSlug: selectedSlug } : 'skip');
@@ -487,6 +489,18 @@ export function ContentReviewWorkspace() {
   const currentByDimension = useMemo(() => new Map(
     reviews?.current.map((review) => [review.dimension, review]) ?? [],
   ), [reviews]);
+
+  const matchingItems = useMemo(() => list?.items.filter((candidate) => matchesSearchQuery(itemQuery, [
+    candidate.titleMm, candidate.titleEn, candidate.slug, candidate.category,
+    candidate.ageGroupKey, candidate.domainKey, candidate.summaryMm, candidate.summaryEn,
+  ])) ?? [], [itemQuery, list?.items]);
+  const selectableItems = useMemo(() => {
+    if (!list?.items.length || !selectedSlug || matchingItems.some((candidate) => candidate.slug === selectedSlug)) {
+      return matchingItems;
+    }
+    const selected = list.items.find((candidate) => candidate.slug === selectedSlug);
+    return selected ? [selected, ...matchingItems] : matchingItems;
+  }, [list?.items, matchingItems, selectedSlug]);
 
   const submitDecision = async (event: FormEvent) => {
     event.preventDefault();
@@ -540,6 +554,7 @@ export function ContentReviewWorkspace() {
     setEditorDirty(false);
     setType(row.type);
     setSelectedSlug(row.slug);
+    setItemQuery('');
     setTab('item');
   };
   const tabs: Array<{ key: WorkspaceTab; label: string; visible: boolean }> = [
@@ -598,11 +613,27 @@ export function ContentReviewWorkspace() {
             setEditorDirty(false);
             setType(event.target.value);
             setSelectedSlug('');
+            setItemQuery('');
           }} className="min-h-touch w-full rounded-xl border border-line bg-white px-3 py-2 text-base">
             {CONTENT_TYPES.map((value) => <option key={value} value={value}>{contentTypeLabel(value, locale)}</option>)}
           </select>
         </label>
-        <label className="space-y-1.5 text-sm font-medium leading-6 text-ink">
+        <div className="space-y-2">
+          <label className="block space-y-1.5 text-sm font-medium leading-6 text-ink">
+            <span>{L('အကြောင်းအရာ ရှာဖွေရန်', 'Search review items')}</span>
+            <span className="flex items-center gap-2 rounded-xl border border-line bg-white px-3 focus-within:border-sky">
+              <span aria-hidden="true">🔎</span>
+              <input
+                type="search"
+                value={itemQuery}
+                onChange={(event) => setItemQuery(event.target.value)}
+                placeholder={L('ခေါင်းစဉ်၊ slug၊ အမျိုးအစား သို့မဟုတ် အသက်', 'Title, slug, category or age')}
+                className="min-h-touch min-w-0 flex-1 bg-transparent py-2 text-base font-normal outline-none placeholder:text-ink-soft"
+              />
+              {itemQuery && <button type="button" onClick={() => setItemQuery('')} className="min-h-touch px-2 text-xs text-sky-deep">{L('ဖျက်မည်', 'Clear')}</button>}
+            </span>
+          </label>
+          <label className="block space-y-1.5 text-sm font-medium leading-6 text-ink">
           <span>{L('သုံးသပ်မည့် အကြောင်းအရာ', 'Item to review')}</span>
           <select value={selectedSlug} onChange={(event) => {
             if (!confirmSelectionChange()) return;
@@ -612,11 +643,15 @@ export function ContentReviewWorkspace() {
             {list && list.items.length === 0 && (
               <option value="">{L('ဤအမျိုးအစားတွင် အကြောင်းအရာ မရှိသေးပါ', 'No content of this type yet')}</option>
             )}
-            {list?.items.map((candidate) => (
-              <option key={candidate.slug} value={candidate.slug}>{locale === 'mm' ? candidate.titleMm : candidate.titleEn}</option>
+            {selectableItems.map((candidate) => (
+              <option key={candidate.slug} value={candidate.slug}>{locale === 'mm' ? candidate.titleMm : candidate.titleEn} · {candidate.slug}</option>
             ))}
           </select>
-        </label>
+          </label>
+          {list && itemQuery && (
+            <p className="text-xs text-ink-soft">{L(`ကိုက်ညီသည် ${matchingItems.length} / ${list.items.length}`, `${matchingItems.length} of ${list.items.length} match`)}</p>
+          )}
+        </div>
       </section>
 
       {list === undefined && <p className="rounded-card border border-line bg-white p-5 text-ink-soft">…</p>}

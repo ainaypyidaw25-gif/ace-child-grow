@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import type { DashboardCounts, OwnerPriority, PriorityStatus, RiskClass } from '../../../convex/lib/ownerPriority';
+import { matchesSearchQuery } from '../../domain/search';
 
 // Presentational owner-priority workspace. Everything renders from props so
 // the live container (Convex-wired) and the layout/screenshot harness share
@@ -40,6 +41,7 @@ export interface QueueRowView {
 }
 
 export interface QueueFilters {
+  query: string;
   priority: OwnerPriority | 'all';
   riskClass: RiskClass | 'all';
   visibility: 'all' | 'visible' | 'unpublished';
@@ -52,6 +54,7 @@ export interface QueueFilters {
 }
 
 export const DEFAULT_FILTERS: QueueFilters = {
+  query: '',
   priority: 'all',
   riskClass: 'all',
   visibility: 'all',
@@ -65,6 +68,13 @@ export const DEFAULT_FILTERS: QueueFilters = {
 
 export function applyQueueFilters(rows: QueueRowView[], filters: QueueFilters): QueueRowView[] {
   return rows.filter((row) => {
+    if (!matchesSearchQuery(filters.query, [
+      row.slug, row.titleMm, row.titleEn, row.type, row.category, row.ageGroupKey,
+      row.domainKey, row.clinicalStatus, row.reviewScope, row.priority, row.priorityReasons,
+      row.riskClass, row.riskReasons, row.requiredReviewDimensions,
+      row.suggestedReviewDimensions, row.outstandingDimensions, row.approvedDimensions,
+      row.activeReviewers, row.evidenceStatus, row.priorityStatus, row.ownerNote, row.warnings,
+    ])) return false;
     if (filters.priority !== 'all' && row.priority !== filters.priority) return false;
     if (filters.riskClass !== 'all' && row.riskClass !== filters.riskClass) return false;
     if (filters.visibility === 'visible' && !row.parentVisibleNow) return false;
@@ -213,7 +223,7 @@ export function OwnerPriorityView({
             key={tile.key}
             type="button"
             data-testid={`count-${tile.key}`}
-            onClick={() => setFilters({ ...DEFAULT_FILTERS, ...tile.apply })}
+            onClick={() => setFilters((current) => ({ ...DEFAULT_FILTERS, query: current.query, ...tile.apply }))}
             className="rounded-card border border-line bg-white p-3 text-left shadow-card transition hover:border-sky"
           >
             <span className="block text-2xl font-bold text-sky-deep">{tile.value}</span>
@@ -223,6 +233,24 @@ export function OwnerPriorityView({
       </section>
 
       <section aria-label={L('စစ်ထုတ်မှုများ', 'Filters')} className="grid grid-cols-2 gap-2 rounded-card border border-line bg-white p-3 shadow-card sm:grid-cols-3 lg:grid-cols-5">
+        <label className="col-span-2 space-y-1 text-xs font-medium text-ink sm:col-span-3 lg:col-span-5">
+          <span>{L('အကြောင်းအရာ ရှာဖွေရန်', 'Search review queue')}</span>
+          <span className="flex items-center gap-2 rounded-xl border border-line bg-white px-3 focus-within:border-sky">
+            <span aria-hidden="true">🔎</span>
+            <input
+              type="search"
+              value={filters.query}
+              onChange={(event) => set('query', event.target.value)}
+              placeholder={L('ခေါင်းစဉ်၊ slug၊ အမျိုးအစား၊ အသက် သို့မဟုတ် စစ်ဆေးသူ', 'Title, slug, type, age or reviewer')}
+              className="min-h-touch min-w-0 flex-1 bg-transparent py-2 text-base font-normal outline-none placeholder:text-ink-soft"
+            />
+            {filters.query && (
+              <button type="button" onClick={() => set('query', '')} className="min-h-touch px-2 text-xs text-sky-deep">
+                {L('ဖျက်မည်', 'Clear')}
+              </button>
+            )}
+          </span>
+        </label>
         <label className="space-y-1 text-xs font-medium text-ink">
           <span>{L('ဦးစားပေး', 'Priority')}</span>
           <select value={filters.priority} onChange={(event) => set('priority', event.target.value as QueueFilters['priority'])} className="w-full rounded-xl border border-line bg-white px-2 py-2">
