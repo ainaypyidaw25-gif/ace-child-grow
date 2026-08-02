@@ -50,6 +50,8 @@ export const MILESTONE_ILLUSTRATIONS: Readonly<Record<string, string>> = {
   ms_10_12m_problem_solving_2:
     '/milestones/10_12m/ms_10_12m_problem_solving_2.da7b3eb098.webp',
   ms_10_12m_self_help_1: '/milestones/10_12m/ms_10_12m_self_help_1.f2da50ecc2.webp',
+  ms_13_18m_language_1: '/milestones/13_18m/ms_13_18m_language_1.239e3d686f.webp',
+  ms_13_18m_speech_1: '/milestones/13_18m/ms_13_18m_speech_1.6bd92761f5.webp',
 };
 
 export function milestoneIllustration(slug: string): string | undefined {
