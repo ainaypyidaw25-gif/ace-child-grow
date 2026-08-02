@@ -2,6 +2,7 @@ package mm.com.acegroup.acechildgrow;
 
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -16,12 +17,14 @@ public class MainActivity extends BridgeActivity {
         super.onCreate(savedInstanceState);
 
         // Android 15+ enforces edge-to-edge for apps targeting recent SDKs.
-        // Keep the WebView edge-to-edge, then explicitly reserve every safe
-        // drawing inset so the app header and fixed bottom navigation never
-        // sit underneath status/navigation bars or a display cutout.
+        // Reserve the safe drawing area on the native container rather than
+        // padding the WebView itself. WebView padding does not move fixed web
+        // UI reliably, which can leave the header and bottom navigation under
+        // the device's status/navigation bars.
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         final View webView = getBridge().getWebView();
-        ViewCompat.setOnApplyWindowInsetsListener(webView, (view, windowInsets) -> {
+        final ViewGroup webViewContainer = (ViewGroup) webView.getParent();
+        ViewCompat.setOnApplyWindowInsetsListener(webViewContainer, (view, windowInsets) -> {
             Insets safeDrawing = windowInsets.getInsets(
                 WindowInsetsCompat.Type.systemBars()
                     | WindowInsetsCompat.Type.displayCutout()
@@ -32,8 +35,18 @@ public class MainActivity extends BridgeActivity {
                 safeDrawing.right,
                 safeDrawing.bottom
             );
-            return WindowInsetsCompat.CONSUMED;
+
+            // The native container has handled only the safe-drawing edges.
+            // Pass the remaining insets (especially IME/keyboard changes) to
+            // WebView while zeroing the dimensions already consumed here.
+            return new WindowInsetsCompat.Builder(windowInsets)
+                .setInsets(
+                    WindowInsetsCompat.Type.systemBars()
+                        | WindowInsetsCompat.Type.displayCutout(),
+                    Insets.NONE
+                )
+                .build();
         });
-        ViewCompat.requestApplyInsets(webView);
+        ViewCompat.requestApplyInsets(webViewContainer);
     }
 }

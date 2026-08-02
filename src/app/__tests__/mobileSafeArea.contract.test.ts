@@ -64,10 +64,15 @@ describe('mobile safe-area contract', () => {
   it('reserves every Android system-bar and display-cutout edge natively', () => {
     expect(androidMainActivity).toContain('WindowInsetsCompat.Type.systemBars()');
     expect(androidMainActivity).toContain('WindowInsetsCompat.Type.displayCutout()');
+    expect(androidMainActivity).toContain('final ViewGroup webViewContainer = (ViewGroup) webView.getParent();');
+    expect(androidMainActivity).toContain('ViewCompat.setOnApplyWindowInsetsListener(webViewContainer');
     expect(androidMainActivity).toMatch(
       /view\.setPadding\(\s*safeDrawing\.left,\s*safeDrawing\.top,\s*safeDrawing\.right,\s*safeDrawing\.bottom\s*\)/,
     );
-    expect(androidMainActivity).toContain('return WindowInsetsCompat.CONSUMED;');
+    expect(androidMainActivity).toContain('new WindowInsetsCompat.Builder(windowInsets)');
+    expect(androidMainActivity).toContain('Insets.NONE');
+    expect(androidMainActivity).not.toContain('return WindowInsetsCompat.CONSUMED;');
+    expect(androidMainActivity).toContain('ViewCompat.requestApplyInsets(webViewContainer);');
   });
 });
 
