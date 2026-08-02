@@ -21,9 +21,18 @@ describe('clinically scoped publication gate', () => {
   it('keeps review-pending static samples out of parent screens', () => {
     for (const file of ['MilestoneDemo', 'Activities', 'Learn']) {
       const source = readFileSync(`src/screens/${file}.tsx`, 'utf8');
-      expect(source, file).toContain('api.library.listByType');
+      // Either the gated server query directly, or useLibraryContent — the
+      // offline-aware wrapper around it. Never local sample content.
+      expect(source, file).toMatch(/api\.library\.listByType|useLibraryContent\(/);
       expect(source, file).not.toContain('SAMPLE_');
     }
+    // That wrapper must itself go through the gated query, and its offline
+    // fallback may only ever hold published rows.
+    const offlineHook = readFileSync('src/app/useOfflineLibrary.ts', 'utf8');
+    expect(offlineHook).toContain('api.library.listByType');
+    expect(offlineHook).toContain('selectDownloadable');
+    const offlineDomain = readFileSync('src/domain/offline/offlineLibrary.ts', 'utf8');
+    expect(offlineDomain).toContain("row.clinicalStatus === 'published'");
     for (const file of ['HopeCenter', 'Favorites']) {
       const source = readFileSync(`src/screens/${file}.tsx`, 'utf8');
       expect(source, file).toContain('isApprovedForParents');

@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
-import { useMutation, useQuery } from 'convex/react';
+import { useMutation } from 'convex/react';
 import { api } from '../../convex/_generated/api';
+import { useLibraryContent } from '../app/useOfflineLibrary';
 import { useLocale } from '../app/LocaleContext';
 import { useAppState } from '../app/AppState';
 import { computeResult, type MilestoneResponseInput } from '../domain/rules/resultEngine';
@@ -51,7 +52,7 @@ export function MilestoneDemo() {
       })
     : 0;
   const ageGroupKey = resolveAgeGroup(ageMonths)?.key;
-  const data = useQuery(api.library.listByType, {
+  const data = useLibraryContent({
     type: 'milestone',
     ageGroupKey,
   });

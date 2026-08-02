@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useQuery } from 'convex/react';
-import { api } from '../../convex/_generated/api';
+import { useLibraryContent } from '../app/useOfflineLibrary';
 import { useLocale } from '../app/LocaleContext';
 import { useAppState } from '../app/AppState';
 import { developmentalAgeMonths } from '../domain/age/age';
@@ -70,12 +69,12 @@ export function Learn() {
     : null;
   const currentAgeGroup = ageMonths === null ? undefined : resolveAgeGroup(ageMonths);
 
-  const lessons = useQuery(api.library.listByType, { type: 'lesson' });
-  const guides = useQuery(api.library.listByType, {
+  const lessons = useLibraryContent({ type: 'lesson' });
+  const guides = useLibraryContent({
     type: 'guide',
     ageGroupKey: currentAgeGroup?.key,
   });
-  const stories = useQuery(api.library.listByType, {
+  const stories = useLibraryContent({
     type: 'story',
     ageGroupKey: currentAgeGroup?.key,
   });
