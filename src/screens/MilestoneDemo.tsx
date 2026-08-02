@@ -10,6 +10,7 @@ import type { DevelopmentDomain, MilestoneAnswer } from '../domain/types';
 import type { TranslationKey } from '../i18n';
 import { developmentalAgeMonths } from '../domain/age/age';
 import { resolveAgeGroup } from '../content/taxonomy';
+import { milestoneIllustration } from '../content/milestoneIllustrations';
 import { NoChild } from './Growth';
 
 const ANSWER_KEYS: Record<MilestoneAnswer, TranslationKey> = {
@@ -124,6 +125,7 @@ export function MilestoneDemo() {
   const question = locale === 'mm'
     ? textFromData(current.data, 'observeMm') ?? current.summaryMm ?? current.titleMm
     : textFromData(current.data, 'observeEn') ?? current.summaryEn ?? current.titleEn;
+  const illustration = milestoneIllustration(current.slug);
 
   async function save() {
     if (!activeChild || lostSkill === null) return;
@@ -181,6 +183,19 @@ export function MilestoneDemo() {
       </div>
 
       <section className="rounded-[30px] border border-line bg-white p-6 shadow-card">
+        {illustration && (
+          <img
+            key={current.slug}
+            src={illustration}
+            alt={locale === 'mm' ? current.titleMm : current.titleEn}
+            width={1200}
+            height={900}
+            loading="eager"
+            decoding="async"
+            data-testid="milestone-illustration"
+            className="mb-5 aspect-[4/3] w-full rounded-2xl bg-canvas object-cover"
+          />
+        )}
         <p className="text-xs font-semibold text-ink-soft">{locale === 'mm' ? current.titleMm : current.titleEn}</p>
         <h2 className="mt-3 text-xl font-bold leading-9 text-ink">{question}</h2>
         <div className="mt-6 grid grid-cols-2 gap-3">
