@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLibraryContent } from '../app/useOfflineLibrary';
+import { useOnlineStatus } from '../app/useOnlineStatus';
 import { useLocale } from '../app/LocaleContext';
 import { useAppState } from '../app/AppState';
 import { developmentalAgeMonths } from '../domain/age/age';
@@ -37,20 +38,6 @@ const CATEGORY_LABELS: Record<string, { mm: string; en: string }> = {
   doctor_visits: { mm: 'ဆရာဝန်နှင့် တွေ့ဆုံခြင်း', en: 'Doctor visits' },
   parent_mental_health: { mm: 'မိဘ စိတ်ကျန်းမာရေး', en: 'Parent wellbeing' },
 };
-
-function useOnlineStatus() {
-  const [online, setOnline] = useState(() => typeof navigator === 'undefined' || navigator.onLine);
-  useEffect(() => {
-    const update = () => setOnline(navigator.onLine);
-    window.addEventListener('online', update);
-    window.addEventListener('offline', update);
-    return () => {
-      window.removeEventListener('online', update);
-      window.removeEventListener('offline', update);
-    };
-  }, []);
-  return online;
-}
 
 export function Learn() {
   const { locale } = useLocale();
