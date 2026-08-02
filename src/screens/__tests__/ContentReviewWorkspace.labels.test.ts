@@ -8,6 +8,7 @@ import {
   dimensionLabel,
   HIDDEN_SYSTEM_FIELDS,
   humanizeField,
+  updateStructuredField,
   type EditableField,
 } from '../ContentReviewWorkspace';
 
@@ -70,6 +71,42 @@ describe('reviewer content field labels', () => {
         list: true,
       }),
     ]);
+  });
+
+  it('opens and edits reviewer fields without Array.prototype.at support', () => {
+    const atDescriptor = Object.getOwnPropertyDescriptor(Array.prototype, 'at');
+    Object.defineProperty(Array.prototype, 'at', {
+      configurable: true,
+      value: undefined,
+      writable: true,
+    });
+
+    try {
+      const content = {
+        body: { mm: 'မိဘဖတ်ရန်စာ', en: 'Parent-facing copy' },
+        stepsMm: ['ပထမအဆင့်', 'ဒုတိယအဆင့်'],
+      };
+      const fields = collectEditableFields(content);
+      const bodyField = fields.find((entry) => entry.path.join('.') === 'body.en');
+      const stepsField = fields.find((entry) => entry.path.join('.') === 'stepsMm');
+
+      expect(bodyField).toBeDefined();
+      expect(stepsField).toBeDefined();
+      expect(updateStructuredField(content, bodyField!, 'Updated parent copy')).toEqual({
+        ...content,
+        body: { ...content.body, en: 'Updated parent copy' },
+      });
+      expect(updateStructuredField(content, stepsField!, 'ပထမအဆင့်\nနောက်ထပ်အဆင့်')).toEqual({
+        ...content,
+        stepsMm: ['ပထမအဆင့်', 'နောက်ထပ်အဆင့်'],
+      });
+    } finally {
+      if (atDescriptor) Object.defineProperty(Array.prototype, 'at', atDescriptor);
+      else Reflect.deleteProperty(Array.prototype, 'at');
+    }
+
+    const source = readFileSync(resolve(process.cwd(), 'src/screens/ContentReviewWorkspace.tsx'), 'utf8');
+    expect(source).not.toContain('.at(');
   });
 
   it('falls back to the raw value instead of crashing on an unknown decision or dimension', () => {
