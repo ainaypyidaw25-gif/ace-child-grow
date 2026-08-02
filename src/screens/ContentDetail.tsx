@@ -7,6 +7,7 @@ import { useDownloadedLibrary } from '../app/useOfflineLibrary';
 import { readOfflineMediaObjectUrl } from '../app/offlineMediaStore';
 import type { OfflineMediaRecord } from '../domain/offline/offlineLibrary';
 import { ReviewBadge } from '../components/ReviewBadge';
+import { DomainArt } from '../components/DomainArt';
 
 type BL = { mm: string; en: string };
 
@@ -113,6 +114,15 @@ export function ContentDetail() {
           <p className="mt-1 text-ink-soft">{locale === 'mm' ? item.summaryMm : item.summaryEn}</p>
         )}
       </div>
+
+      {/* Until an approved asset is attached through the CMS, activities show
+          their domain illustration so the page is not a wall of text. Real
+          media below always takes its place. */}
+      {item.type === 'activity' && !media.some((asset) => !asset.placeholder && asset.url) && (
+        <div className="flex justify-center rounded-card border border-line bg-white p-6 shadow-card">
+          <DomainArt domainKey={item.domainKey} className="h-36 w-36" />
+        </div>
+      )}
 
       {media.some((asset) => !asset.placeholder && asset.url) && (
         <section className="space-y-4" aria-label={L('သင်ကြားရေး မီဒီယာ', 'Learning media')}>

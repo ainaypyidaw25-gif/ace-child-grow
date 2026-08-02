@@ -7,6 +7,7 @@ import { useAppState } from '../app/AppState';
 import { developmentalAgeMonths } from '../domain/age/age';
 import { resolveAgeGroup } from '../content/taxonomy';
 import { ReviewBadge } from '../components/ReviewBadge';
+import { DomainArt } from '../components/DomainArt';
 import { NoChild } from './Growth';
 import { isGooglePlayBuild } from '../app/platform';
 
@@ -57,7 +58,10 @@ export function Activities() {
           <ol className="grid gap-3 sm:grid-cols-3">
             {daily.map((activity, index) => (
               <li key={activity._id} className="rounded-[26px] border border-line bg-white p-5 shadow-card">
-                <p className="text-xs font-bold text-sky-deep">{index === 0 ? L('မနက်', 'Morning') : index === 1 ? L('နေ့လယ်', 'Afternoon') : L('ညနေ', 'Evening')}</p>
+                <div className="flex items-start justify-between gap-2">
+                  <p className="text-xs font-bold text-sky-deep">{index === 0 ? L('မနက်', 'Morning') : index === 1 ? L('နေ့လယ်', 'Afternoon') : L('ညနေ', 'Evening')}</p>
+                  <DomainArt domainKey={activity.domainKey} className="h-12 w-12 shrink-0" />
+                </div>
                 <h3 className="mt-2 font-bold leading-7 text-ink">{locale === 'mm' ? activity.titleMm : activity.titleEn}</h3>
                 <p className="mt-2 text-sm leading-6 text-ink-soft">{locale === 'mm' ? activity.summaryMm : activity.summaryEn}</p>
                 <button
@@ -89,6 +93,7 @@ export function Activities() {
           <ul className="divide-y divide-line overflow-hidden rounded-[28px] border border-line bg-white">
             {activities.map((activity) => (
               <li key={activity._id} className="flex items-center gap-3 p-4">
+                <DomainArt domainKey={activity.domainKey} className="h-14 w-14 shrink-0 self-start" />
                 <Link to={`/content/${activity.slug}`} className="min-w-0 flex-1">
                   <ReviewBadge published={activity.clinicalStatus === 'published'} />
                   <h3 className="font-semibold text-ink">{locale === 'mm' ? activity.titleMm : activity.titleEn}</h3>
