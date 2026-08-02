@@ -358,19 +358,19 @@ function ContentEditor({ item, role, onDirtyChange }: { item: {
       </p>
       <div className="grid gap-3 lg:grid-cols-2">
         <label className="space-y-1 text-sm font-medium text-ink">
-          <span>မြန်မာခေါင်းစဉ်</span>
+          <span>{L('မြန်မာခေါင်းစဉ်', 'Myanmar title')}</span>
           <input value={titleMm} onChange={(event) => setTitleMm(event.target.value)} disabled={busy} className="w-full rounded-xl border border-line px-3 py-2 disabled:opacity-60" required />
         </label>
         <label className="space-y-1 text-sm font-medium text-ink">
-          <span>English title</span>
+          <span>{L('အင်္ဂလိပ်ခေါင်းစဉ်', 'English title')}</span>
           <input value={titleEn} onChange={(event) => setTitleEn(event.target.value)} disabled={busy} className="w-full rounded-xl border border-line px-3 py-2 disabled:opacity-60" required />
         </label>
         <label className="space-y-1 text-sm font-medium text-ink">
-          <span>မြန်မာအနှစ်ချုပ်</span>
+          <span>{L('မြန်မာအနှစ်ချုပ်', 'Myanmar summary')}</span>
           <textarea value={summaryMm} onChange={(event) => setSummaryMm(event.target.value)} disabled={busy} rows={4} className="w-full rounded-xl border border-line px-3 py-2 disabled:opacity-60" />
         </label>
         <label className="space-y-1 text-sm font-medium text-ink">
-          <span>English summary</span>
+          <span>{L('အင်္ဂလိပ်အနှစ်ချုပ်', 'English summary')}</span>
           <textarea value={summaryEn} onChange={(event) => setSummaryEn(event.target.value)} disabled={busy} rows={4} className="w-full rounded-xl border border-line px-3 py-2 disabled:opacity-60" />
         </label>
       </div>
@@ -551,7 +551,7 @@ export function ContentReviewWorkspace() {
   return (
     <div className="space-y-4 pb-4 sm:space-y-5 sm:pb-8">
       <header className="space-y-2">
-        <p className="text-xs font-bold uppercase tracking-[0.18em] text-mint-deep">ACE Review Workspace</p>
+        <p className="text-xs font-bold uppercase tracking-[0.18em] text-mint-deep">{L('ACE သုံးသပ်ရေးနေရာ', 'ACE Review Workspace')}</p>
         <h1 className="text-xl font-bold leading-[1.65] text-sky-deep sm:text-2xl sm:leading-[1.5]">{L('အကြောင်းအရာ သုံးသပ်ရေးနေရာ', 'Content review workspace')}</h1>
         <p className="max-w-3xl text-sm leading-7 text-ink-soft">
           {L(

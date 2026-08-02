@@ -301,7 +301,7 @@ export function OwnerPriorityView({
             >
               <div className="flex flex-wrap items-center gap-2">
                 <span className={`rounded-pill px-3 py-1 text-xs font-bold ${PRIORITY_STYLES[row.priority] ?? 'bg-canvas text-ink'}`}>{PRIORITY_LABELS[row.priority]?.[locale] ?? row.priority}</span>
-                <span className="rounded-pill bg-canvas px-2 py-1 text-xs font-semibold text-ink">Class {row.riskClass}{row.provisionalClassification ? L(' (ယာယီ)', ' (provisional)') : ''}</span>
+                <span className="rounded-pill bg-canvas px-2 py-1 text-xs font-semibold text-ink">{L('အန္တရာယ်အုပ်စု', 'Risk class')} {row.riskClass}{row.provisionalClassification ? L(' (ယာယီ)', ' (provisional)') : ''}</span>
                 {row.parentVisibleNow && (
                   <span className="rounded-pill bg-red-100 px-2 py-1 text-xs font-semibold text-red-700">{L('မိဘမြင်နေရ', 'Parent-visible now')}</span>
                 )}
