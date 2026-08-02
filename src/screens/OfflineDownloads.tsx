@@ -10,6 +10,8 @@ import {
   countByType,
   formatBytes,
   totalBytes,
+  totalMediaBytes,
+  totalMediaCount,
   type LibraryRowLike,
 } from '../domain/offline/offlineLibrary';
 
@@ -22,6 +24,7 @@ const TYPE_LABELS: Record<string, { mm: string; en: string }> = {
   story: { mm: 'ပုံပြင်', en: 'Stories' },
   milestone: { mm: 'မှတ်တိုင်', en: 'Milestones' },
   special_need: { mm: 'အထူးလိုအပ်ချက်', en: 'Special needs' },
+  printable: { mm: 'ပုံနှိပ်စာရွက်', en: 'Printables' },
 };
 
 export function OfflineDownloads() {
@@ -42,15 +45,18 @@ export function OfflineDownloads() {
   const stories = useQuery(api.library.listByType, { type: 'story' });
   const milestones = useQuery(api.library.listByType, { type: 'milestone' });
   const specialNeeds = useQuery(api.library.listByType, { type: 'special_need' });
+  const printables = useQuery(api.library.listByType, { type: 'printable' });
 
   const available = useMemo(() => {
-    const groups = [guides, activities, lessons, stories, milestones, specialNeeds];
+    const groups = [guides, activities, lessons, stories, milestones, specialNeeds, printables];
     if (groups.some((group) => group === undefined)) return null; // still loading
     return groups.flatMap((group) => (group?.items ?? []) as LibraryRowLike[]);
-  }, [guides, activities, lessons, stories, milestones, specialNeeds]);
+  }, [guides, activities, lessons, stories, milestones, specialNeeds, printables]);
 
   const storedBytes = useMemo(() => totalBytes(records), [records]);
   const storedCounts = useMemo(() => countByType(records), [records]);
+  const storedMediaBytes = useMemo(() => totalMediaBytes(records), [records]);
+  const storedMediaCount = useMemo(() => totalMediaCount(records), [records]);
   const storageUsable = isOfflineStorageAvailable();
 
   async function runDownload() {
@@ -68,8 +74,8 @@ export function OfflineDownloads() {
       return;
     }
     setMessage(L(
-      `${result.saved} ခု သိမ်းပြီးပါပြီ။ အင်တာနက်မရှိချိန်တွင် ဖတ်နိုင်ပါပြီ။`,
-      `Saved ${result.saved} items. They can now be read without an internet connection.`,
+      `${result.saved} ခုနှင့် ပုံ/အသံ ${result.mediaSaved} ခု သိမ်းပြီးပါပြီ။ အင်တာနက်မရှိချိန်တွင် ဖတ်နိုင်ပါပြီ။`,
+      `Saved ${result.saved} items and ${result.mediaSaved} image/audio files. They can now be read without an internet connection.`,
     ));
   }
 
@@ -106,8 +112,13 @@ export function OfflineDownloads() {
           {records.length > 0 && (
             <>
               <p className="text-sm text-ink-soft">
-                {L('နေရာယူမှု', 'Storage used')}: {formatBytes(storedBytes)}
+                {L('နေရာယူမှု', 'Storage used')}: {formatBytes(storedBytes + storedMediaBytes)}
               </p>
+              {storedMediaCount > 0 && (
+                <p className="text-sm text-ink-soft">
+                  {L('Offline ပုံ/အသံ', 'Offline image/audio')}: {storedMediaCount} · {formatBytes(storedMediaBytes)}
+                </p>
+              )}
               <ul className="flex flex-wrap gap-1.5">
                 {Object.entries(storedCounts).map(([type, count]) => (
                   <li key={type} className="rounded-pill bg-mint-soft px-2.5 py-1 text-xs text-mint-deep">
@@ -169,8 +180,8 @@ export function OfflineDownloads() {
 
         <p className="text-xs text-ink-soft">
           {L(
-            'အတည်ပြု ထုတ်ဝေပြီးသော ပညာပေးအကြောင်းအရာများကိုသာ သိမ်းပါသည်။ ကလေး၏ ကိုယ်ရေးမှတ်တမ်းများ (ကြီးထွားမှု၊ အိပ်စက်မှု၊ ကျန်းမာရေး) ကို ဤနေရာတွင် ဘယ်သောအခါမျှ မသိမ်းပါ။',
-            'Only published educational content is stored. Your child’s private records — growth, sleep and health — are never written to offline storage.',
+            'အတည်ပြု ထုတ်ဝေပြီးသော ပညာပေးအကြောင်းအရာနှင့် အတည်ပြုထားသော ပုံ/အသံများကိုသာ သိမ်းပါသည်။ ကလေး၏ ကိုယ်ရေးမှတ်တမ်းများ (ကြီးထွားမှု၊ အိပ်စက်မှု၊ ကျန်းမာရေး) ကို ဤနေရာတွင် ဘယ်သောအခါမျှ မသိမ်းပါ။',
+            'Only published educational content and its approved image/audio files are stored. Your child’s private records — growth, sleep and health — are never written to offline storage.',
           )}
         </p>
       </div>

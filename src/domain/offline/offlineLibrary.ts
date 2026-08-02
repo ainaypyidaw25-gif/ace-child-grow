@@ -28,10 +28,64 @@ export interface OfflineRecord {
   difficulty?: string;
   durationMinutes?: number;
   clinicalStatus: string;
+  reviewScope?: string;
+  source?: string;
   /** The bilingual payload the reading screens render. */
   data: unknown;
   /** When this copy was taken, so a refresh can report staleness. */
   savedAt: number;
+  /** Public educational media cached separately in Cache Storage. */
+  media?: OfflineMediaRecord[];
+}
+
+export interface OfflineMediaRecord {
+  id: string;
+  kind: 'illustration' | 'audio';
+  cacheKey: string;
+  mimeType: string;
+  sizeBytes: number;
+  savedAt: number;
+  altMm?: string;
+  altEn?: string;
+  captionMm?: string;
+  captionEn?: string;
+  transcriptMm?: string;
+  transcriptEn?: string;
+  durationSeconds?: number;
+  attributionMm?: string;
+  attributionEn?: string;
+}
+
+export interface OfflineMediaCandidate {
+  id: string;
+  kind: string;
+  url: string | null;
+  storageUrl: string | null;
+  mimeType: string | null;
+  altMm: string | null;
+  altEn: string | null;
+  captionMm: string | null;
+  captionEn: string | null;
+  transcriptMm: string | null;
+  transcriptEn: string | null;
+  durationSeconds: number | null;
+  attributionMm: string | null;
+  attributionEn: string | null;
+}
+
+export function offlineMediaSource(candidate: OfflineMediaCandidate): string | null {
+  return candidate.storageUrl ?? candidate.url;
+}
+
+/** Keep the first media release deliberately bounded to images and audio. */
+export function isDownloadableMedia(candidate: OfflineMediaCandidate): boolean {
+  const source = offlineMediaSource(candidate);
+  if (!source || !['illustration', 'audio'].includes(candidate.kind)) return false;
+  try {
+    return new URL(source).protocol === 'https:';
+  } catch {
+    return false;
+  }
 }
 
 /** A library row as the parent-facing queries return it. */
@@ -51,6 +105,8 @@ export interface LibraryRowLike {
   difficulty?: string;
   durationMinutes?: number;
   data?: unknown;
+  reviewScope?: string;
+  source?: string;
 }
 
 export function isDownloadable(row: LibraryRowLike): boolean {
@@ -73,6 +129,8 @@ export function toOfflineRecord(row: LibraryRowLike, savedAt: number): OfflineRe
     difficulty: row.difficulty,
     durationMinutes: row.durationMinutes,
     clinicalStatus: row.clinicalStatus,
+    reviewScope: row.reviewScope,
+    source: row.source,
     data: row.data ?? {},
     savedAt,
   };
@@ -99,6 +157,17 @@ export function estimateBytes(record: OfflineRecord): number {
 
 export function totalBytes(records: OfflineRecord[]): number {
   return records.reduce((sum, record) => sum + estimateBytes(record), 0);
+}
+
+export function totalMediaBytes(records: OfflineRecord[]): number {
+  return records.reduce(
+    (sum, record) => sum + (record.media ?? []).reduce((mediaSum, media) => mediaSum + media.sizeBytes, 0),
+    0,
+  );
+}
+
+export function totalMediaCount(records: OfflineRecord[]): number {
+  return records.reduce((sum, record) => sum + (record.media?.length ?? 0), 0);
 }
 
 export interface DownloadPlan {

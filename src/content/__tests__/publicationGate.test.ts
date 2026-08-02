@@ -31,6 +31,7 @@ describe('clinically scoped publication gate', () => {
     const offlineHook = readFileSync('src/app/useOfflineLibrary.ts', 'utf8');
     expect(offlineHook).toContain('api.library.listByType');
     expect(offlineHook).toContain('selectDownloadable');
+    expect(offlineHook).toContain('api.media.listForContent');
     const offlineDomain = readFileSync('src/domain/offline/offlineLibrary.ts', 'utf8');
     expect(offlineDomain).toContain("row.clinicalStatus === 'published'");
     for (const file of ['HopeCenter', 'Favorites']) {
