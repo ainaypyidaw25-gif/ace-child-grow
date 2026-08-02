@@ -31,6 +31,11 @@ body {
 
 body {
   min-width: 320px;
+  /* Myanmar text often has no spaces between words. Give narrow Android
+     screens a final Unicode-safe break opportunity instead of allowing a long
+     heading, label, or validation message to widen the whole app shell. */
+  overflow-wrap: anywhere;
+  word-break: normal;
 }
 
 /* Keep form text readable and prevent mobile browsers from zooming the whole
