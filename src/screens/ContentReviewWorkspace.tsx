@@ -173,12 +173,12 @@ export const HIDDEN_SYSTEM_FIELDS = new Set([
 
 export function collectEditableFields(value: unknown, path: string[] = []): EditableField[] {
   if (typeof value === 'string') {
-    const key = path.at(-1) ?? 'text';
+    const key = path[path.length - 1] ?? 'text';
     return [{ key, path, value, multiline: value.length > 70 || value.includes('\n'), list: false, language: fieldLanguage(key, value) }];
   }
   if (Array.isArray(value)) {
     if (value.length > 0 && value.every((entry) => typeof entry === 'string')) {
-      const key = path.at(-1) ?? 'items';
+      const key = path[path.length - 1] ?? 'items';
       const text = value.join('\n');
       return [{ key, path, value: text, multiline: true, list: true, language: fieldLanguage(key, text) }];
     }
@@ -198,7 +198,7 @@ function cloneStructuredValue(value: unknown): unknown {
   return value;
 }
 
-function updateStructuredField(root: unknown, field: EditableField, nextText: string): unknown {
+export function updateStructuredField(root: unknown, field: EditableField, nextText: string): unknown {
   const clone = cloneStructuredValue(root);
   if (field.path.length === 0) return nextText;
   let cursor: unknown = clone;
@@ -207,7 +207,7 @@ function updateStructuredField(root: unknown, field: EditableField, nextText: st
     if (Array.isArray(cursor)) cursor = cursor[Number(segment)];
     else if (isRecord(cursor)) cursor = cursor[segment];
   }
-  const final = field.path.at(-1)!;
+  const final = field.path[field.path.length - 1]!;
   const previous = Array.isArray(cursor) ? cursor[Number(final)] : isRecord(cursor) ? cursor[final] : undefined;
   const nextValue = Array.isArray(previous)
     ? nextText.split('\n').map((line) => line.trim()).filter(Boolean)
