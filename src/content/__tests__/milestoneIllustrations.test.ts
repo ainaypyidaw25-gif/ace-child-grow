@@ -70,6 +70,13 @@ const TEN_12M_SLUGS = [
 
 const THIRTEEN_18M_SLUGS = ['ms_13_18m_language_1', 'ms_13_18m_speech_1'] as const;
 
+const NINETEEN_24M_SLUGS = [
+  'ms_19_24m_play_1',
+  'ms_19_24m_emotional_1',
+  'ms_19_24m_cognitive_1',
+  'ms_19_24m_language_1',
+] as const;
+
 describe('birth–2 month milestone illustrations', () => {
   it('maps every published production slug to its own versioned WebP', () => {
     const paths = BIRTH_2M_SLUGS.map((slug) => milestoneIllustration(slug));
@@ -82,7 +89,7 @@ describe('birth–2 month milestone illustrations', () => {
   });
 
   it('does not provide a fallback for another age group or an unknown slug', () => {
-    expect(milestoneIllustration('ms_19_24m_social_1')).toBeUndefined();
+    expect(milestoneIllustration('ms_2y_social_1')).toBeUndefined();
     expect(milestoneIllustration('unknown')).toBeUndefined();
   });
 });
@@ -125,6 +132,32 @@ describe('13–18 month milestone illustrations', () => {
     });
   });
 
+  it('does not provide a domain fallback or an approximate image', () => {
+    expect(milestoneIllustration('language')).toBeUndefined();
+    expect(milestoneIllustration('ms_13_18m_unknown_1')).toBeUndefined();
+  });
+
+  it('resolves every exact slug to an existing asset file', () => {
+    THIRTEEN_18M_SLUGS.forEach((slug) => {
+      const assetPath = milestoneIllustration(slug);
+      expect(assetPath).toBeDefined();
+      expect(existsSync(resolve(process.cwd(), 'public', assetPath!.slice(1)))).toBe(true);
+    });
+  });
+});
+
+describe('19–24 month milestone illustrations', () => {
+  it('maps every published production slug to its own versioned WebP', () => {
+    const paths = NINETEEN_24M_SLUGS.map((slug) => milestoneIllustration(slug));
+    expect(paths.every((path) => path?.startsWith('/milestones/19_24m/'))).toBe(true);
+    expect(paths.every((path) => path?.endsWith('.webp'))).toBe(true);
+    expect(new Set(paths).size).toBe(NINETEEN_24M_SLUGS.length);
+
+    NINETEEN_24M_SLUGS.forEach((slug) => {
+      expect(milestoneIllustration(slug)).toMatch(new RegExp(`/${slug}\\.[a-f0-9]{10}\\.webp$`));
+    });
+  });
+
   it('adds only the target-age mappings alongside the existing age groups', () => {
     expect(Object.keys(MILESTONE_ILLUSTRATIONS).sort()).toEqual(
       [
@@ -134,17 +167,18 @@ describe('13–18 month milestone illustrations', () => {
         ...SEVEN_9M_SLUGS,
         ...TEN_12M_SLUGS,
         ...THIRTEEN_18M_SLUGS,
+        ...NINETEEN_24M_SLUGS,
       ].sort(),
     );
   });
 
   it('does not provide a domain fallback or an approximate image', () => {
-    expect(milestoneIllustration('language')).toBeUndefined();
-    expect(milestoneIllustration('ms_13_18m_unknown_1')).toBeUndefined();
+    expect(milestoneIllustration('play')).toBeUndefined();
+    expect(milestoneIllustration('ms_19_24m_unknown_1')).toBeUndefined();
   });
 
   it('resolves every exact slug to an existing asset file', () => {
-    THIRTEEN_18M_SLUGS.forEach((slug) => {
+    NINETEEN_24M_SLUGS.forEach((slug) => {
       const assetPath = milestoneIllustration(slug);
       expect(assetPath).toBeDefined();
       expect(existsSync(resolve(process.cwd(), 'public', assetPath!.slice(1)))).toBe(true);

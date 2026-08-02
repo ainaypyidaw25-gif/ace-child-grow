@@ -52,6 +52,10 @@ export const MILESTONE_ILLUSTRATIONS: Readonly<Record<string, string>> = {
   ms_10_12m_self_help_1: '/milestones/10_12m/ms_10_12m_self_help_1.f2da50ecc2.webp',
   ms_13_18m_language_1: '/milestones/13_18m/ms_13_18m_language_1.239e3d686f.webp',
   ms_13_18m_speech_1: '/milestones/13_18m/ms_13_18m_speech_1.6bd92761f5.webp',
+  ms_19_24m_play_1: '/milestones/19_24m/ms_19_24m_play_1.a15630e326.webp',
+  ms_19_24m_emotional_1: '/milestones/19_24m/ms_19_24m_emotional_1.e9b1022f05.webp',
+  ms_19_24m_cognitive_1: '/milestones/19_24m/ms_19_24m_cognitive_1.bfa90577f1.webp',
+  ms_19_24m_language_1: '/milestones/19_24m/ms_19_24m_language_1.30e68ca87a.webp',
 };
 
 export function milestoneIllustration(slug: string): string | undefined {
