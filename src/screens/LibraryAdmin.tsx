@@ -80,14 +80,14 @@ function MediaUploader({ slug }: { slug: string }) {
           <option value="video">{L('သင်ကြားရေးဗီဒီယို', 'Learning video')}</option>
         </select>
         <input type="file" accept={kind === 'illustration' ? 'image/jpeg,image/png,image/webp' : 'video/mp4,video/webm'} onChange={(event) => setFile(event.target.files?.[0] ?? null)} className="block w-full text-xs text-ink-soft" />
-        <input value={altMm} onChange={(event) => setAltMm(event.target.value)} placeholder="မြန်မာလို ပုံ/ဗီဒီယိုဖော်ပြချက် *" className="w-full rounded-lg border border-line px-3 py-2 text-sm" />
-        <input value={altEn} onChange={(event) => setAltEn(event.target.value)} placeholder="English description *" className="w-full rounded-lg border border-line px-3 py-2 text-sm" />
-        <textarea value={captionMm} onChange={(event) => setCaptionMm(event.target.value)} placeholder="မြန်မာ caption (optional)" className="w-full rounded-lg border border-line px-3 py-2 text-sm" />
-        <textarea value={captionEn} onChange={(event) => setCaptionEn(event.target.value)} placeholder="English caption (optional)" className="w-full rounded-lg border border-line px-3 py-2 text-sm" />
+        <input value={altMm} onChange={(event) => setAltMm(event.target.value)} placeholder={L('မြန်မာဖော်ပြချက် *', 'Myanmar description *')} className="w-full rounded-lg border border-line px-3 py-2 text-sm" />
+        <input value={altEn} onChange={(event) => setAltEn(event.target.value)} placeholder={L('အင်္ဂလိပ်ဖော်ပြချက် *', 'English description *')} className="w-full rounded-lg border border-line px-3 py-2 text-sm" />
+        <textarea value={captionMm} onChange={(event) => setCaptionMm(event.target.value)} placeholder={L('မြန်မာစာတန်း (မဖြည့်လည်းရ)', 'Myanmar caption (optional)')} className="w-full rounded-lg border border-line px-3 py-2 text-sm" />
+        <textarea value={captionEn} onChange={(event) => setCaptionEn(event.target.value)} placeholder={L('အင်္ဂလိပ်စာတန်း (မဖြည့်လည်းရ)', 'English caption (optional)')} className="w-full rounded-lg border border-line px-3 py-2 text-sm" />
         {kind !== 'illustration' && (
           <>
-            <textarea value={transcriptMm} onChange={(event) => setTranscriptMm(event.target.value)} placeholder="မြန်မာ transcript (optional)" className="w-full rounded-lg border border-line px-3 py-2 text-sm" />
-            <textarea value={transcriptEn} onChange={(event) => setTranscriptEn(event.target.value)} placeholder="English transcript (optional)" className="w-full rounded-lg border border-line px-3 py-2 text-sm" />
+            <textarea value={transcriptMm} onChange={(event) => setTranscriptMm(event.target.value)} placeholder={L('မြန်မာအသံစာသား (မဖြည့်လည်းရ)', 'Myanmar transcript (optional)')} className="w-full rounded-lg border border-line px-3 py-2 text-sm" />
+            <textarea value={transcriptEn} onChange={(event) => setTranscriptEn(event.target.value)} placeholder={L('အင်္ဂလိပ်အသံစာသား (မဖြည့်လည်းရ)', 'English transcript (optional)')} className="w-full rounded-lg border border-line px-3 py-2 text-sm" />
             <input inputMode="numeric" value={durationSeconds} onChange={(event) => setDurationSeconds(event.target.value)} placeholder={L('ကြာချိန် (စက္ကန့်)', 'Duration (seconds)')} className="w-full rounded-lg border border-line px-3 py-2 text-sm" />
           </>
         )}
@@ -205,7 +205,7 @@ export function LibraryAdmin() {
                 const result = await createAnimationQueue({});
                 setMsg(L(`Animation အစီအစဉ် — အသစ် ${result.created}၊ ရှိပြီး ${result.existing}`, `Animation queue — ${result.created} created, ${result.existing} existing`));
               } catch (error) {
-                setMsg(error instanceof Error ? error.message : 'Unable to create queue');
+                setMsg(error instanceof Error ? error.message : L('အစီအစဉ်စာရင်း ဖန်တီး၍ မရပါ။', 'Unable to create queue'));
               } finally {
                 setBusy(false);
               }

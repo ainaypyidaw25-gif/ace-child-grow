@@ -495,6 +495,7 @@ export function EvidenceAdmin() {
 }
 
 function ReportBlock({ title, rows, empty }: { title: string; rows: string[]; empty: string }) {
+  const { locale } = useLocale();
   return (
     <section className="rounded-card border border-line bg-white p-4 shadow-card">
       <h2 className="mb-2 flex items-center gap-2 font-semibold text-ink">
@@ -514,7 +515,7 @@ function ReportBlock({ title, rows, empty }: { title: string; rows: string[]; em
           {rows.slice(0, 60).map((r) => (
             <li key={r} className="break-words">{r}</li>
           ))}
-          {rows.length > 60 && <li>… {rows.length - 60} more</li>}
+          {rows.length > 60 && <li>… {rows.length - 60} {locale === 'mm' ? 'ခု ထပ်ရှိသည်' : 'more'}</li>}
         </ul>
       )}
     </section>

@@ -77,7 +77,7 @@ export function ImportPlanView({ plan, locale }: { plan: ImportPlan; locale: 'mm
           <ul className="mt-2 max-h-72 space-y-1 overflow-y-auto text-xs text-ink-soft">
             {plan.changes.slice(0, 400).map((change) => (
               <li key={change.slug} className="break-words rounded bg-canvas px-2 py-1">
-                <b className="text-ink">{change.slug}</b> → {change.fields.riskClassification}/{change.fields.ownerPriority} · rev {change.expectedReviewRevision} · {change.fields.requiredReviewDimensions.join('+')}
+                <b className="text-ink">{change.slug}</b> → {change.fields.riskClassification}/{change.fields.ownerPriority} · {L('မူကွဲ', 'rev')} {change.expectedReviewRevision} · {change.fields.requiredReviewDimensions.join('+')}
               </li>
             ))}
           </ul>
