@@ -47,6 +47,9 @@ export const MILESTONE_ILLUSTRATIONS: Readonly<Record<string, string>> = {
   ms_7_9m_social_1: '/milestones/7_9m/ms_7_9m_social_1.16d0f8134d.webp',
   ms_7_9m_social_2: '/milestones/7_9m/ms_7_9m_social_2.9a7056968b.webp',
   ms_7_9m_speech_1: '/milestones/7_9m/ms_7_9m_speech_1.96e17c6029.webp',
+  ms_10_12m_problem_solving_2:
+    '/milestones/10_12m/ms_10_12m_problem_solving_2.da7b3eb098.webp',
+  ms_10_12m_self_help_1: '/milestones/10_12m/ms_10_12m_self_help_1.f2da50ecc2.webp',
 };
 
 export function milestoneIllustration(slug: string): string | undefined {
