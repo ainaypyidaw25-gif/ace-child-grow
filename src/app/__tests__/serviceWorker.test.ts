@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { configureServiceWorker } from '../serviceWorker';
+import { OFFLINE_MEDIA_CACHE } from '../offlineMediaStore';
 
 function dependencies(native: boolean) {
   return {
@@ -8,7 +9,7 @@ function dependencies(native: boolean) {
       { unregister: vi.fn(async () => true) },
       { unregister: vi.fn(async () => true) },
     ]),
-    cacheKeys: vi.fn(async () => ['workbox-shell', 'public-educational-content']),
+    cacheKeys: vi.fn(async () => ['workbox-shell', 'public-educational-content', OFFLINE_MEDIA_CACHE]),
     deleteCache: vi.fn(async () => true),
     register: vi.fn(() => vi.fn()),
   };
@@ -41,5 +42,6 @@ describe('configureServiceWorker', () => {
     expect(deps.deleteCache).toHaveBeenCalledTimes(2);
     expect(deps.deleteCache).toHaveBeenCalledWith('workbox-shell');
     expect(deps.deleteCache).toHaveBeenCalledWith('public-educational-content');
+    expect(deps.deleteCache).not.toHaveBeenCalledWith(OFFLINE_MEDIA_CACHE);
   });
 });

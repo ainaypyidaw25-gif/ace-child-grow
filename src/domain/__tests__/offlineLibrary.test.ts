@@ -5,9 +5,14 @@ import {
   filterOfflineRecords,
   formatBytes,
   isDownloadable,
+  isDownloadableMedia,
+  offlineMediaSource,
   selectDownloadable,
   toOfflineRecord,
   totalBytes,
+  totalMediaBytes,
+  totalMediaCount,
+  type OfflineMediaCandidate,
   type LibraryRowLike,
 } from '../offline/offlineLibrary';
 
@@ -58,6 +63,42 @@ describe('what may be stored offline', () => {
     expect(record.tags).toEqual([]);
     expect(record.summaryMm).toBeUndefined();
     expect(record.data).toEqual({});
+  });
+});
+
+describe('what media may be stored offline', () => {
+  const media = (over: Partial<OfflineMediaCandidate> = {}): OfflineMediaCandidate => ({
+    id: 'media_1',
+    kind: 'illustration',
+    url: 'https://child.acegroup.com.mm/image.png',
+    storageUrl: null,
+    mimeType: 'image/png',
+    altMm: null,
+    altEn: null,
+    captionMm: null,
+    captionEn: null,
+    transcriptMm: null,
+    transcriptEn: null,
+    durationSeconds: null,
+    attributionMm: null,
+    attributionEn: null,
+    ...over,
+  });
+
+  it('accepts https illustrations and audio', () => {
+    expect(isDownloadableMedia(media())).toBe(true);
+    expect(isDownloadableMedia(media({ kind: 'audio', url: 'https://child.acegroup.com.mm/story.mp3' }))).toBe(true);
+  });
+
+  it('refuses video, insecure and missing URLs', () => {
+    expect(isDownloadableMedia(media({ kind: 'video' }))).toBe(false);
+    expect(isDownloadableMedia(media({ url: 'http://example.com/image.png' }))).toBe(false);
+    expect(isDownloadableMedia(media({ url: null }))).toBe(false);
+  });
+
+  it('prefers the current storage URL over the legacy URL', () => {
+    expect(offlineMediaSource(media({ storageUrl: 'https://storage.example/media' })))
+      .toBe('https://storage.example/media');
   });
 });
 
@@ -123,5 +164,15 @@ describe('storage reporting', () => {
     expect(formatBytes(512)).toBe('512 B');
     expect(formatBytes(2048)).toBe('2 KB');
     expect(formatBytes(3 * 1024 * 1024)).toBe('3.0 MB');
+  });
+
+  it('reports media count and bytes separately from text', () => {
+    const records = selectDownloadable([row()], 1);
+    records[0].media = [{
+      id: 'media_1', kind: 'audio', cacheKey: 'https://offline/media_1', mimeType: 'audio/mpeg',
+      sizeBytes: 4096, savedAt: 1,
+    }];
+    expect(totalMediaCount(records)).toBe(1);
+    expect(totalMediaBytes(records)).toBe(4096);
   });
 });

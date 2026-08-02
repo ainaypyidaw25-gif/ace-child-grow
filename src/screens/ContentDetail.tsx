@@ -1,7 +1,11 @@
+import { useEffect, useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
+import { useDownloadedLibrary } from '../app/useOfflineLibrary';
+import { readOfflineMediaObjectUrl } from '../app/offlineMediaStore';
+import type { OfflineMediaRecord } from '../domain/offline/offlineLibrary';
 import { ReviewBadge } from '../components/ReviewBadge';
 
 type BL = { mm: string; en: string };
@@ -9,7 +13,49 @@ type BL = { mm: string; en: string };
 export function ContentDetail() {
   const { slug = '' } = useParams();
   const { locale } = useLocale();
-  const res = useQuery(api.library.getBySlug, { slug });
+  const remote = useQuery(api.library.getBySlug, { slug });
+  const { records, loaded } = useDownloadedLibrary();
+  const offlineRecord = useMemo(
+    () => records.find((record) => record.slug === slug),
+    [records, slug],
+  );
+  const [offlineMedia, setOfflineMedia] = useState<Array<OfflineMediaRecord & {
+    _id: string;
+    url: string;
+    placeholder: false;
+  }>>([]);
+
+  useEffect(() => {
+    if (remote !== undefined || !offlineRecord) {
+      setOfflineMedia([]);
+      return;
+    }
+    let active = true;
+    const objectUrls: string[] = [];
+    void Promise.all((offlineRecord.media ?? []).map(async (asset) => {
+      const url = await readOfflineMediaObjectUrl(asset.cacheKey);
+      if (!url) return null;
+      if (!active) {
+        URL.revokeObjectURL(url);
+        return null;
+      }
+      objectUrls.push(url);
+      return { ...asset, _id: asset.id, url, placeholder: false as const };
+    })).then((assets) => {
+      if (active) setOfflineMedia(assets.filter((asset) => asset !== null));
+    });
+    return () => {
+      active = false;
+      for (const url of objectUrls) URL.revokeObjectURL(url);
+    };
+  }, [remote, offlineRecord]);
+
+  const offlineFallback = loaded && offlineRecord
+    ? { item: offlineRecord, media: offlineMedia, staff: false }
+    : undefined;
+  const res = remote !== undefined
+    ? remote
+    : offlineFallback as Exclude<typeof remote, undefined> | undefined;
 
   const T = (o?: BL) => (o ? (locale === 'mm' ? o.mm : o.en) : '');
 
@@ -78,6 +124,14 @@ export function ContentDetail() {
                   alt={locale === 'mm' ? (asset.altMm || asset.altEn || item.titleMm) : (asset.altEn || asset.altMm || item.titleEn)}
                   loading="lazy"
                   className="aspect-video w-full bg-canvas object-cover"
+                />
+              ) : asset.kind === 'audio' ? (
+                <audio
+                  src={asset.url ?? ''}
+                  controls
+                  preload="metadata"
+                  aria-label={locale === 'mm' ? (asset.altMm || asset.altEn || item.titleMm) : (asset.altEn || asset.altMm || item.titleEn)}
+                  className="w-full px-4 py-3"
                 />
               ) : asset.kind === 'video' || asset.kind === 'animation' ? (
                 <video

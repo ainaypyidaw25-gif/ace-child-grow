@@ -1,5 +1,6 @@
 import { Capacitor } from '@capacitor/core';
 import { registerSW } from 'virtual:pwa-register';
+import { OFFLINE_MEDIA_CACHE } from './offlineMediaStore';
 
 type ServiceWorkerRegistrationLike = { unregister: () => Promise<boolean> };
 
@@ -26,8 +27,9 @@ function browserDependencies(): ServiceWorkerDependencies {
  * worker inside the packaged Android WebView. A stale service worker can mix an
  * old application shell with newly bundled lazy chunks and leave routes blank.
  *
- * Native cleanup intentionally touches only Service Worker/CacheStorage data.
- * Authentication, child profiles, health records and IndexedDB are preserved.
+ * Native cleanup removes only Service Worker caches. The dedicated educational
+ * media download cache, authentication, child profiles, health records and
+ * IndexedDB are preserved.
  */
 export async function configureServiceWorker(
   dependencies: ServiceWorkerDependencies = browserDependencies(),
@@ -44,6 +46,8 @@ export async function configureServiceWorker(
 
   await Promise.all([
     ...registrations.map((registration) => registration.unregister()),
-    ...cacheKeys.map((key) => dependencies.deleteCache(key)),
+    ...cacheKeys
+      .filter((key) => key !== OFFLINE_MEDIA_CACHE)
+      .map((key) => dependencies.deleteCache(key)),
   ]);
 }
