@@ -35,6 +35,18 @@ export const MILESTONE_ILLUSTRATIONS: Readonly<Record<string, string>> = {
   ms_5_6m_social_1: '/milestones/5_6m/ms_5_6m_social_1.a52a346682.webp',
   ms_5_6m_speech_1: '/milestones/5_6m/ms_5_6m_speech_1.99f99149e2.webp',
   ms_5_6m_speech_2: '/milestones/5_6m/ms_5_6m_speech_2.99d7babf62.webp',
+  ms_7_9m_cognitive_1: '/milestones/7_9m/ms_7_9m_cognitive_1.179faf6080.webp',
+  ms_7_9m_fine_motor_1: '/milestones/7_9m/ms_7_9m_fine_motor_1.af2a44e004.webp',
+  ms_7_9m_fine_motor_2: '/milestones/7_9m/ms_7_9m_fine_motor_2.803dd30b9c.webp',
+  ms_7_9m_gross_motor_1: '/milestones/7_9m/ms_7_9m_gross_motor_1.d8f1df216d.webp',
+  ms_7_9m_gross_motor_2: '/milestones/7_9m/ms_7_9m_gross_motor_2.464f9e0276.webp',
+  ms_7_9m_language_1: '/milestones/7_9m/ms_7_9m_language_1.1f405c9f0f.webp',
+  ms_7_9m_language_2: '/milestones/7_9m/ms_7_9m_language_2.faf2fef331.webp',
+  ms_7_9m_nutrition_1: '/milestones/7_9m/ms_7_9m_nutrition_1.eb7d394693.webp',
+  ms_7_9m_self_help_1: '/milestones/7_9m/ms_7_9m_self_help_1.a1102d3b03.webp',
+  ms_7_9m_social_1: '/milestones/7_9m/ms_7_9m_social_1.16d0f8134d.webp',
+  ms_7_9m_social_2: '/milestones/7_9m/ms_7_9m_social_2.9a7056968b.webp',
+  ms_7_9m_speech_1: '/milestones/7_9m/ms_7_9m_speech_1.96e17c6029.webp',
 };
 
 export function milestoneIllustration(slug: string): string | undefined {
