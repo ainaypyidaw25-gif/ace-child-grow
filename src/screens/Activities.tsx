@@ -1,3 +1,4 @@
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useMutation, useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
@@ -10,6 +11,7 @@ import { ReviewBadge } from '../components/ReviewBadge';
 import { DomainArt } from '../components/DomainArt';
 import { NoChild } from './Growth';
 import { isGooglePlayBuild } from '../app/platform';
+import { matchesSearchQuery } from '../domain/search';
 
 export function Activities() {
   const { locale } = useLocale();
@@ -27,12 +29,17 @@ export function Activities() {
   const toggleFav = useMutation(api.favorites.toggle);
   const complete = useMutation(api.activities.complete);
   const L = (mm: string, en: string) => locale === 'mm' ? mm : en;
+  const [query, setQuery] = useState('');
+  const activities = useMemo(() => data?.items ?? [], [data?.items]);
+  const filteredActivities = useMemo(() => activities.filter((activity) => matchesSearchQuery(query, [
+    activity.titleMm, activity.titleEn, activity.summaryMm, activity.summaryEn,
+    activity.slug, activity.domainKey, activity.category, activity.tags,
+  ])), [activities, query]);
 
   if (!activeChild) return <NoChild />;
   if (data === undefined || subscription === undefined) return <p className="text-ink-soft" role="status">…</p>;
 
   const premium = subscription.features.includes('personalized_plan');
-  const activities = data.items;
   const daily = activities.slice(0, 3);
 
   return (
@@ -88,10 +95,25 @@ export function Activities() {
           <p className="mt-2 text-sm text-ink-soft">{L('ကလေး၏ မွေးသက္ကရာဇ်နှင့် အသက်အုပ်စုကို ပြန်စစ်ကြည့်ပါ။', 'Check the child’s birth date and age group.')}</p>
         </section>
       ) : (
-        <section>
-          <h2 className="mb-3 font-bold text-ink">{L('လှုပ်ရှားမှုအားလုံး', 'All activities')}</h2>
-          <ul className="divide-y divide-line overflow-hidden rounded-[28px] border border-line bg-white">
-            {activities.map((activity) => (
+        <section className="space-y-3">
+          <h2 className="font-bold text-ink">{L('လှုပ်ရှားမှုအားလုံး', 'All activities')}</h2>
+          <label className="block space-y-1.5 text-sm font-medium text-ink">
+            <span className="sr-only">{L('လှုပ်ရှားမှု ရှာဖွေရန်', 'Search activities')}</span>
+            <span className="flex items-center gap-2 rounded-xl border border-line bg-white px-3 shadow-card focus-within:border-sky">
+              <span aria-hidden="true">🔎</span>
+              <input
+                type="search"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder={L('လှုပ်ရှားမှု ခေါင်းစဉ် သို့မဟုတ် အကြောင်းအရာရှာရန်', 'Search activities by title or topic')}
+                className="min-h-touch min-w-0 flex-1 bg-transparent py-2 text-base font-normal outline-none placeholder:text-ink-soft"
+              />
+              {query && <button type="button" onClick={() => setQuery('')} className="min-h-touch px-2 text-xs text-sky-deep">{L('ဖျက်မည်', 'Clear')}</button>}
+            </span>
+          </label>
+          <p className="text-xs text-ink-soft">{L(`ပြသနေသည် ${filteredActivities.length} / ${activities.length}`, `Showing ${filteredActivities.length} of ${activities.length}`)}</p>
+          {filteredActivities.length > 0 ? <ul className="divide-y divide-line overflow-hidden rounded-[28px] border border-line bg-white">
+            {filteredActivities.map((activity) => (
               <li key={activity._id} className="flex items-center gap-3 p-4">
                 <DomainArt domainKey={activity.domainKey} className="h-14 w-14 shrink-0 self-start" />
                 <Link to={`/content/${activity.slug}`} className="min-w-0 flex-1">
@@ -105,7 +127,12 @@ export function Activities() {
                 </button>
               </li>
             ))}
-          </ul>
+          </ul> : (
+            <div className="rounded-[28px] border border-line bg-white p-6 text-center">
+              <p className="font-semibold text-ink">{L('ရှာဖွေမှုနှင့် ကိုက်ညီသော လှုပ်ရှားမှု မရှိပါ။', 'No activities match this search.')}</p>
+              <button type="button" onClick={() => setQuery('')} className="mt-3 min-h-touch rounded-pill border border-line px-4 py-2 text-sm font-semibold text-sky-deep">{L('ရှာဖွေမှု ဖျက်မည်', 'Clear search')}</button>
+            </div>
+          )}
         </section>
       )}
 
