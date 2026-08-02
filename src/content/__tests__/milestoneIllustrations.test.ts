@@ -90,6 +90,13 @@ const TWO_AND_HALF_YEAR_SLUGS = [
   'ms_2_5y_fine_motor_1',
 ] as const;
 
+const THREE_YEAR_SLUGS = [
+  'ms_3y_school_readiness_1',
+  'ms_3y_social_1',
+  'ms_3y_cognitive_1',
+  'ms_3y_gross_motor_1',
+] as const;
+
 describe('birth–2 month milestone illustrations', () => {
   it('maps every published production slug to its own versioned WebP', () => {
     const paths = BIRTH_2M_SLUGS.map((slug) => milestoneIllustration(slug));
@@ -102,7 +109,7 @@ describe('birth–2 month milestone illustrations', () => {
   });
 
   it('does not provide a fallback for another age group or an unknown slug', () => {
-    expect(milestoneIllustration('ms_3y_social_1')).toBeUndefined();
+    expect(milestoneIllustration('ms_3_5y_social_1')).toBeUndefined();
     expect(milestoneIllustration('unknown')).toBeUndefined();
   });
 });
@@ -223,6 +230,32 @@ describe('2.5 year milestone illustrations', () => {
     });
   });
 
+  it('does not provide a domain fallback or an approximate image', () => {
+    expect(milestoneIllustration('emotional')).toBeUndefined();
+    expect(milestoneIllustration('ms_2_5y_unknown_1')).toBeUndefined();
+  });
+
+  it('resolves every exact slug to an existing asset file', () => {
+    TWO_AND_HALF_YEAR_SLUGS.forEach((slug) => {
+      const assetPath = milestoneIllustration(slug);
+      expect(assetPath).toBeDefined();
+      expect(existsSync(resolve(process.cwd(), 'public', assetPath!.slice(1)))).toBe(true);
+    });
+  });
+});
+
+describe('3 year milestone illustrations', () => {
+  it('maps every published production slug to its own versioned WebP', () => {
+    const paths = THREE_YEAR_SLUGS.map((slug) => milestoneIllustration(slug));
+    expect(paths.every((path) => path?.startsWith('/milestones/3y/'))).toBe(true);
+    expect(paths.every((path) => path?.endsWith('.webp'))).toBe(true);
+    expect(new Set(paths).size).toBe(THREE_YEAR_SLUGS.length);
+
+    THREE_YEAR_SLUGS.forEach((slug) => {
+      expect(milestoneIllustration(slug)).toMatch(new RegExp(`/${slug}\\.[a-f0-9]{10}\\.webp$`));
+    });
+  });
+
   it('adds only the target-age mappings alongside the existing age groups', () => {
     expect(Object.keys(MILESTONE_ILLUSTRATIONS).sort()).toEqual(
       [
@@ -235,17 +268,18 @@ describe('2.5 year milestone illustrations', () => {
         ...NINETEEN_24M_SLUGS,
         ...TWO_YEAR_SLUGS,
         ...TWO_AND_HALF_YEAR_SLUGS,
+        ...THREE_YEAR_SLUGS,
       ].sort(),
     );
   });
 
   it('does not provide a domain fallback or an approximate image', () => {
-    expect(milestoneIllustration('emotional')).toBeUndefined();
-    expect(milestoneIllustration('ms_2_5y_unknown_1')).toBeUndefined();
+    expect(milestoneIllustration('school_readiness')).toBeUndefined();
+    expect(milestoneIllustration('ms_3y_unknown_1')).toBeUndefined();
   });
 
   it('resolves every exact slug to an existing asset file', () => {
-    TWO_AND_HALF_YEAR_SLUGS.forEach((slug) => {
+    THREE_YEAR_SLUGS.forEach((slug) => {
       const assetPath = milestoneIllustration(slug);
       expect(assetPath).toBeDefined();
       expect(existsSync(resolve(process.cwd(), 'public', assetPath!.slice(1)))).toBe(true);
