@@ -49,7 +49,12 @@ export default defineConfig({
         // difference. woff2 only: every browser that can install a PWA reads
         // it, and precaching the woff duplicates would double the cost for no
         // one. About 160 KB, of which the Myanmar subsets are ~145 KB.
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,webmanifest,woff2}'],
+        //
+        // webp covers the per-domain activity illustrations: they exist so a
+        // caregiver who cannot read the instructions can still understand an
+        // activity from the picture alone, which only holds offline too if
+        // they are actually on the device. All 16 together are ~170 KB.
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,webmanifest,woff2}'],
         // Only public educational routes are cached. Anything under /api/ (authenticated
         // child data) is explicitly excluded from runtime caching.
         navigateFallbackDenylist: [/^\/api\//, /^\/admin\//],

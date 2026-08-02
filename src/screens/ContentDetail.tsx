@@ -7,6 +7,7 @@ import { useDownloadedLibrary } from '../app/useOfflineLibrary';
 import { readOfflineMediaObjectUrl } from '../app/offlineMediaStore';
 import type { OfflineMediaRecord } from '../domain/offline/offlineLibrary';
 import { ReviewBadge } from '../components/ReviewBadge';
+import { ActivityScene } from '../components/ActivityScene';
 
 type BL = { mm: string; en: string };
 
@@ -113,6 +114,15 @@ export function ContentDetail() {
           <p className="mt-1 text-ink-soft">{locale === 'mm' ? item.summaryMm : item.summaryEn}</p>
         )}
       </div>
+
+      {/* Until an approved asset is attached through the CMS, activities show a
+          parent-and-child scene so a caregiver who cannot read the instructions
+          can still see what to do. Real media below always takes its place. */}
+      {item.type === 'activity' && !media.some((asset) => !asset.placeholder && asset.url) && (
+        <div className="overflow-hidden rounded-card border border-line bg-white shadow-card">
+          <ActivityScene domainKey={item.domainKey} className="aspect-video w-full" />
+        </div>
+      )}
 
       {media.some((asset) => !asset.placeholder && asset.url) && (
         <section className="space-y-4" aria-label={L('သင်ကြားရေး မီဒီယာ', 'Learning media')}>
