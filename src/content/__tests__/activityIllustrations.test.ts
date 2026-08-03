@@ -13,20 +13,50 @@ const BIRTH_2M_ACTIVITY_SLUGS = [
   'act_tummy_time_mirror',
 ] as const;
 
-describe('published birth–2 month activity illustrations', () => {
+const THREE_TO_FOUR_MONTH_ACTIVITY_SLUGS = [
+  'act_sound_tracking',
+  'act_copy_my_sound',
+  'act_reach_for_the_toy',
+  'act_peek_a_boo_cloth',
+  'act_picture_book_naming',
+  'act_rhythm_and_rock',
+  'act_texture_basket_infant',
+] as const;
+
+const TARGETED_ACTIVITY_SLUGS = [
+  ...BIRTH_2M_ACTIVITY_SLUGS,
+  ...THREE_TO_FOUR_MONTH_ACTIVITY_SLUGS,
+] as const;
+
+describe('published activity illustrations', () => {
   it('maps every targeted production slug to its own versioned WebP', () => {
     expect(Object.keys(ACTIVITY_ILLUSTRATIONS).sort()).toEqual(
-      [...BIRTH_2M_ACTIVITY_SLUGS].sort(),
+      [...TARGETED_ACTIVITY_SLUGS].sort(),
     );
 
-    const paths = BIRTH_2M_ACTIVITY_SLUGS.map((slug) => activityIllustration(slug));
-    expect(new Set(paths).size).toBe(BIRTH_2M_ACTIVITY_SLUGS.length);
+    const paths = TARGETED_ACTIVITY_SLUGS.map((slug) => activityIllustration(slug));
+    expect(new Set(paths).size).toBe(TARGETED_ACTIVITY_SLUGS.length);
 
-    BIRTH_2M_ACTIVITY_SLUGS.forEach((slug) => {
+    TARGETED_ACTIVITY_SLUGS.forEach((slug) => {
+      const ageGroup = THREE_TO_FOUR_MONTH_ACTIVITY_SLUGS.includes(
+        slug as (typeof THREE_TO_FOUR_MONTH_ACTIVITY_SLUGS)[number],
+      ) ? '3_4m' : 'birth_2m';
       expect(activityIllustration(slug)).toMatch(
-        new RegExp(`/activities/birth_2m/${slug}\\.[a-f0-9]{10}\\.webp$`),
+        new RegExp(`/activities/${ageGroup}/${slug}\\.[a-f0-9]{10}\\.webp$`),
       );
     });
+  });
+
+  it('keeps every previously approved birth–2 month mapping unchanged', () => {
+    expect(BIRTH_2M_ACTIVITY_SLUGS.map((slug) => activityIllustration(slug))).toEqual([
+      '/activities/birth_2m/act_texture_touch.8b8fd36899.webp',
+      '/activities/birth_2m/act_lullaby_and_rock.f4e2f5b20a.webp',
+      '/activities/birth_2m/act_first_book_share.0b1174986f.webp',
+      '/activities/birth_2m/act_skin_to_skin_calm.c855280097.webp',
+      '/activities/birth_2m/act_gentle_bicycle_legs.ef67d5c21e.webp',
+      '/activities/birth_2m/act_face_to_face_talk.6dcd162b62.webp',
+      '/activities/birth_2m/act_tummy_time_mirror.15e0a5568d.webp',
+    ]);
   });
 
   it('resolves every exact mapping to an optimized existing file', () => {
@@ -39,6 +69,7 @@ describe('published birth–2 month activity illustrations', () => {
 
   it('never resolves an age group, domain, category, or unknown fallback', () => {
     expect(activityIllustration('birth_2m')).toBeUndefined();
+    expect(activityIllustration('3_4m')).toBeUndefined();
     expect(activityIllustration('fine_motor')).toBeUndefined();
     expect(activityIllustration('play')).toBeUndefined();
     expect(activityIllustration('unknown')).toBeUndefined();
