@@ -628,4 +628,33 @@ for (const [ageGroupKey, domain, n, title, observe, why, encouragement] of UNICE
   ));
 }
 
+// Two last small items surfaced by a further round of reference charts, both
+// low-value but genuinely absent: "bangs two objects together" had only ever
+// appeared inside another entry's observe text, never as its own titled
+// skill, and page-turning had no entry at all in the 13_18m band.
+const FINAL_GAP_FILL: GapFill[] = [
+  ['7_9m', 'fine_motor', 3,
+    b('ပစ္စည်းနှစ်ခုကို ယှဉ်တွဲ၍ ရိုက်ခတ်ခြင်း', 'Bangs two objects together'),
+    b('ကစားစရာနှစ်ခုကို လက်နှစ်ဖက်ဖြင့် ကိုင်ပြီး အသံထွက်အောင် ယှဉ်တွဲရိုက်ခတ်ပါသလား။', 'Does your child hold a toy in each hand and bang them together to make a sound?'),
+    b('ဒီလုပ်ဆောင်ချက်သည် လက်နှစ်ဖက် ညှိနှိုင်းအသုံးပြုနိုင်မှုနှင့် အသံနှင့် လှုပ်ရှားမှု ဆက်စပ်နေကြောင်း စူးစမ်းလေ့လာခြင်း ဖြစ်သည်။', 'This action shows two-handed coordination and early exploration of cause and effect through sound.'),
+    b('အသံထွက်တတ်သော ဘေးကင်းသည့် ကစားစရာနှစ်ခုကို ပေးထားပါ။', 'Offer two safe toys that make a sound when tapped together.')],
+  ['13_18m', 'fine_motor', 2,
+    b('စာအုပ် စာမျက်နှာများကို လှန်နိုင်ခြင်း', 'Turns the pages of a book'),
+    b('ထူသော ရွက်ဖုံးစာအုပ်ကို စာမျက်နှာ တစ်ခြမ်းချင်းစီ (ရော၍ ဖြစ်စေ) လှန်ကြည့်ပါသလား။', 'Can your child turn the pages of a board book, even several at a time?'),
+    b('စာမျက်နှာလှန်ခြင်းသည် လက်ချောင်းငယ် ထိန်းချုပ်မှုနှင့် စာအုပ်ကို ကိုယ်တိုင် စူးစမ်းလိုသော စိတ်ကို ပြသည်။', 'Page-turning shows finger control and a growing interest in exploring books independently.'),
+    b('ထူထောင့်ပြီး ဆွဲမပြတ်တတ်သော ရွက်ဖုံးစာအုပ်များကို ပေးပြီး ကိုယ်တိုင် လှန်ခွင့်ပေးပါ။', 'Offer sturdy board books and let your child try turning the pages themselves.')],
+];
+
+const FINAL_GAP_FILL_EVIDENCE: Record<string, string> = {
+  '7_9m:fine_motor:3': 'Banging two objects together as an early two-handed, cause-and-effect skill is described in CDC and AAP milestone guidance in the registry.',
+  '13_18m:fine_motor:2': 'Page-turning as a fine-motor and early-literacy skill around this age is described in AAP milestone guidance and the AAP Power of Play guidance in the registry.',
+};
+
+for (const [ageGroupKey, domain, n, title, observe, why, encouragement] of FINAL_GAP_FILL) {
+  authored.push(kb(
+    milestone(ageGroupKey, domain, n, { title, observe, why, encouragement }),
+    FINAL_GAP_FILL_EVIDENCE[`${ageGroupKey}:${domain}:${n}`],
+  ));
+}
+
 export const OLDER_AUTHORED_CONTENT: SeedItem[] = authored;

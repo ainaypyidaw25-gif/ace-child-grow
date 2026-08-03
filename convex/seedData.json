@@ -30461,5 +30461,59 @@
     "clinicalStatus": "clinical_review",
     "media": [],
     "searchText": "စိတ်ပျက်သောအခါ စိတ်ဆိုးထွက်တတ်ခြင်း has temper tantrums when frustrated   emotional 13_18m လိုအပ်ချက်ကို စကားဖြင့် မပြောနိုင်သေးသောအခါ ငိုကြွေးခြင်း၊ ကြမ်းပေါ်လှဲခြင်းကဲ့သို့ ပြင်းထန်စွာ ခံစားမှုပြသပါသလား။ when unable to express a need in words, does your child show intense frustration — crying hard, or dropping to the floor? ဤအရွယ်တွင် ဆန္ဒနှင့် စကားပြောနိုင်စွမ်း မကိုက်ညီသေးသဖြင့် စိတ်ဆိုးထွက်ခြင်းသည် အလွန်ပုံမှန် ဖြစ်ပြီး ကိုယ်ကျင့်တရား ချို့ယွင်းခြင်း မဟုတ်ပါ။ a mismatch between wants and words makes tantrums very normal at this age — not a sign of poor character. ငြိမ်သက်စွာ အနီးတွင်နေပြီး ဘေးကင်းလုံခြုံအောင် ထားကာ ခံစားချက်ကို အမည်တပ်ပေးပါ (\"စိတ်ပျက်နေတာ သိတယ်\")။ stay calm and nearby, keep your child safe, and name the feeling (\"i see you're frustrated\"). reference_verified temper tantrums around this age, driven by the gap between wants and expressive language, are described in the nice social and emotional wellbeing guidance and aap positive-parenting guidance in the registry."
+  },
+  {
+    "ageGroupKey": "7_9m",
+    "domainKey": "fine_motor",
+    "tags": [
+      "fine_motor",
+      "7_9m"
+    ],
+    "data": {
+      "observeMm": "ကစားစရာနှစ်ခုကို လက်နှစ်ဖက်ဖြင့် ကိုင်ပြီး အသံထွက်အောင် ယှဉ်တွဲရိုက်ခတ်ပါသလား။",
+      "observeEn": "Does your child hold a toy in each hand and bang them together to make a sound?",
+      "whyMm": "ဒီလုပ်ဆောင်ချက်သည် လက်နှစ်ဖက် ညှိနှိုင်းအသုံးပြုနိုင်မှုနှင့် အသံနှင့် လှုပ်ရှားမှု ဆက်စပ်နေကြောင်း စူးစမ်းလေ့လာခြင်း ဖြစ်သည်။",
+      "whyEn": "This action shows two-handed coordination and early exploration of cause and effect through sound.",
+      "encouragementMm": "အသံထွက်တတ်သော ဘေးကင်းသည့် ကစားစရာနှစ်ခုကို ပေးထားပါ။",
+      "encouragementEn": "Offer two safe toys that make a sound when tapped together.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Banging two objects together as an early two-handed, cause-and-effect skill is described in CDC and AAP milestone guidance in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_7_9m_fine_motor_3",
+    "titleMm": "ပစ္စည်းနှစ်ခုကို ယှဉ်တွဲ၍ ရိုက်ခတ်ခြင်း",
+    "titleEn": "Bangs two objects together",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "ပစ္စည်းနှစ်ခုကို ယှဉ်တွဲ၍ ရိုက်ခတ်ခြင်း bangs two objects together   fine_motor 7_9m ကစားစရာနှစ်ခုကို လက်နှစ်ဖက်ဖြင့် ကိုင်ပြီး အသံထွက်အောင် ယှဉ်တွဲရိုက်ခတ်ပါသလား။ does your child hold a toy in each hand and bang them together to make a sound? ဒီလုပ်ဆောင်ချက်သည် လက်နှစ်ဖက် ညှိနှိုင်းအသုံးပြုနိုင်မှုနှင့် အသံနှင့် လှုပ်ရှားမှု ဆက်စပ်နေကြောင်း စူးစမ်းလေ့လာခြင်း ဖြစ်သည်။ this action shows two-handed coordination and early exploration of cause and effect through sound. အသံထွက်တတ်သော ဘေးကင်းသည့် ကစားစရာနှစ်ခုကို ပေးထားပါ။ offer two safe toys that make a sound when tapped together. reference_verified banging two objects together as an early two-handed, cause-and-effect skill is described in cdc and aap milestone guidance in the registry."
+  },
+  {
+    "ageGroupKey": "13_18m",
+    "domainKey": "fine_motor",
+    "tags": [
+      "fine_motor",
+      "13_18m"
+    ],
+    "data": {
+      "observeMm": "ထူသော ရွက်ဖုံးစာအုပ်ကို စာမျက်နှာ တစ်ခြမ်းချင်းစီ (ရော၍ ဖြစ်စေ) လှန်ကြည့်ပါသလား။",
+      "observeEn": "Can your child turn the pages of a board book, even several at a time?",
+      "whyMm": "စာမျက်နှာလှန်ခြင်းသည် လက်ချောင်းငယ် ထိန်းချုပ်မှုနှင့် စာအုပ်ကို ကိုယ်တိုင် စူးစမ်းလိုသော စိတ်ကို ပြသည်။",
+      "whyEn": "Page-turning shows finger control and a growing interest in exploring books independently.",
+      "encouragementMm": "ထူထောင့်ပြီး ဆွဲမပြတ်တတ်သော ရွက်ဖုံးစာအုပ်များကို ပေးပြီး ကိုယ်တိုင် လှန်ခွင့်ပေးပါ။",
+      "encouragementEn": "Offer sturdy board books and let your child try turning the pages themselves.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Page-turning as a fine-motor and early-literacy skill around this age is described in AAP milestone guidance and the AAP Power of Play guidance in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_13_18m_fine_motor_2",
+    "titleMm": "စာအုပ် စာမျက်နှာများကို လှန်နိုင်ခြင်း",
+    "titleEn": "Turns the pages of a book",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "စာအုပ် စာမျက်နှာများကို လှန်နိုင်ခြင်း turns the pages of a book   fine_motor 13_18m ထူသော ရွက်ဖုံးစာအုပ်ကို စာမျက်နှာ တစ်ခြမ်းချင်းစီ (ရော၍ ဖြစ်စေ) လှန်ကြည့်ပါသလား။ can your child turn the pages of a board book, even several at a time? စာမျက်နှာလှန်ခြင်းသည် လက်ချောင်းငယ် ထိန်းချုပ်မှုနှင့် စာအုပ်ကို ကိုယ်တိုင် စူးစမ်းလိုသော စိတ်ကို ပြသည်။ page-turning shows finger control and a growing interest in exploring books independently. ထူထောင့်ပြီး ဆွဲမပြတ်တတ်သော ရွက်ဖုံးစာအုပ်များကို ပေးပြီး ကိုယ်တိုင် လှန်ခွင့်ပေးပါ။ offer sturdy board books and let your child try turning the pages themselves. reference_verified page-turning as a fine-motor and early-literacy skill around this age is described in aap milestone guidance and the aap power of play guidance in the registry."
   }
 ]
