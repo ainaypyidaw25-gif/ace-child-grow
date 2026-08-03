@@ -16,7 +16,7 @@ import {
 import { OwnerPriorityView, type QueueRowView } from './ownerPriority/OwnerPriorityView';
 import { ClassificationImportPreview } from './ownerPriority/ClassificationImportPreview';
 import { OwnerActionsPanel, SecuritySummaryPanel } from './ownerPriority/OwnerActionsPanel';
-import { matchesSearchQuery } from '../domain/search';
+import { matchesSearchQuery, normalizeSearchText } from '../domain/search';
 
 const DIMENSIONS = ['english', 'native_myanmar', 'evidence', 'safety', 'clinical'] as const;
 const DECISIONS = ['in_review', 'approved', 'changes_requested', 'not_applicable'] as const;
@@ -51,6 +51,50 @@ const CONTENT_TYPE_LABELS: Record<ContentType, { mm: string; en: string }> = {
 
 export function contentTypeLabel(type: string, locale: 'mm' | 'en'): string {
   return CONTENT_TYPE_LABELS[type as ContentType]?.[locale] ?? type;
+}
+
+export interface ReviewSearchCandidate {
+  slug: string;
+  titleMm: string;
+  titleEn: string;
+  type: string;
+  category: string | null;
+  ageGroupKey: string | null;
+  domainKey: string | null;
+  clinicalStatus: string;
+  reviewScope: string | null;
+  reviewRevision: number;
+  priority: string;
+  riskClass: string;
+  riskReasons: string[];
+  activeReviewers: string[];
+  priorityStatus: string;
+}
+
+function reviewSearchRank(candidate: ReviewSearchCandidate, query: string): number {
+  const normalized = normalizeSearchText(query);
+  const slug = normalizeSearchText(candidate.slug);
+  const titles = [normalizeSearchText(candidate.titleMm), normalizeSearchText(candidate.titleEn)];
+  if (slug === normalized || titles.includes(normalized)) return 0;
+  if (slug.startsWith(normalized)) return 1;
+  if (titles.some((title) => title.startsWith(normalized))) return 2;
+  return 3;
+}
+
+/** Search the reviewer's entire permitted queue, not only the selected type. */
+export function findReviewSearchResults<T extends ReviewSearchCandidate>(rows: T[], query: string): T[] {
+  if (!normalizeSearchText(query)) return [];
+  return rows
+    .filter((candidate) => matchesSearchQuery(query, [
+      candidate.titleMm, candidate.titleEn, candidate.slug, candidate.type,
+      candidate.category, candidate.ageGroupKey, candidate.domainKey,
+      candidate.clinicalStatus, candidate.reviewScope, candidate.reviewRevision,
+      candidate.priority, candidate.riskClass, candidate.riskReasons,
+      candidate.activeReviewers, candidate.priorityStatus,
+    ]))
+    .map((candidate, originalIndex) => ({ candidate, originalIndex, rank: reviewSearchRank(candidate, query) }))
+    .sort((left, right) => left.rank - right.rank || left.originalIndex - right.originalIndex)
+    .map(({ candidate }) => candidate);
 }
 
 // Reviews and their history come from the database, where a legacy or
@@ -490,17 +534,10 @@ export function ContentReviewWorkspace() {
     reviews?.current.map((review) => [review.dimension, review]) ?? [],
   ), [reviews]);
 
-  const matchingItems = useMemo(() => list?.items.filter((candidate) => matchesSearchQuery(itemQuery, [
-    candidate.titleMm, candidate.titleEn, candidate.slug, candidate.category,
-    candidate.ageGroupKey, candidate.domainKey, candidate.summaryMm, candidate.summaryEn,
-  ])) ?? [], [itemQuery, list?.items]);
-  const selectableItems = useMemo(() => {
-    if (!list?.items.length || !selectedSlug || matchingItems.some((candidate) => candidate.slug === selectedSlug)) {
-      return matchingItems;
-    }
-    const selected = list.items.find((candidate) => candidate.slug === selectedSlug);
-    return selected ? [selected, ...matchingItems] : matchingItems;
-  }, [list?.items, matchingItems, selectedSlug]);
+  const reviewSearchResults = useMemo(
+    () => findReviewSearchResults((queueState?.rows ?? []) as QueueRowView[], itemQuery),
+    [itemQuery, queueState?.rows],
+  );
 
   const submitDecision = async (event: FormEvent) => {
     event.preventDefault();
@@ -627,29 +664,79 @@ export function ContentReviewWorkspace() {
                 type="search"
                 value={itemQuery}
                 onChange={(event) => setItemQuery(event.target.value)}
-                placeholder={L('ခေါင်းစဉ်၊ slug၊ အမျိုးအစား သို့မဟုတ် အသက်', 'Title, slug, category or age')}
+                placeholder={L('PDF ထဲက ခေါင်းစဉ် သို့မဟုတ် slug ကို ရိုက်ရှာပါ', 'Search the PDF title or slug')}
                 className="min-h-touch min-w-0 flex-1 bg-transparent py-2 text-base font-normal outline-none placeholder:text-ink-soft"
               />
               {itemQuery && <button type="button" onClick={() => setItemQuery('')} className="min-h-touch px-2 text-xs text-sky-deep">{L('ဖျက်မည်', 'Clear')}</button>}
             </span>
           </label>
+          {itemQuery ? (
+            <div role="region" aria-label={L('ရှာဖွေမှု ရလဒ်များ', 'Review search results')} className="space-y-2">
+              <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-ink-soft">
+                <span>{L(`ကိုက်ညီသည် ${reviewSearchResults.length} / ${queueState?.rows.length ?? 0}`, `${reviewSearchResults.length} of ${queueState?.rows.length ?? 0} match`)}</span>
+                <span>{L('အမျိုးအစားအားလုံးထဲမှ ရှာထားသည်', 'Searched across all content types')}</span>
+              </div>
+              <p className="rounded-lg bg-pastel-yellow px-3 py-2 text-xs leading-5 text-ink">
+                {L('အောက်က editor ကို ဖွင့်ရန် လိုချင်သော ရလဒ်ကို နှိပ်ပါ။ ရှာရုံဖြင့် လက်ရှိအကြောင်းအရာ မပြောင်းသေးပါ။', 'Choose a result to open it in the editor below. Searching alone does not change the current item.')}
+              </p>
+              {queueState === undefined ? (
+                <p className="py-3 text-sm text-ink-soft" role="status">…</p>
+              ) : reviewSearchResults.length > 0 ? (
+                <ul className="max-h-80 space-y-2 overflow-y-auto pr-1" data-testid="review-search-results">
+                  {reviewSearchResults.slice(0, 30).map((result) => (
+                    <li key={result.slug}>
+                      <button
+                        type="button"
+                        data-testid={`review-search-result-${result.slug}`}
+                        onClick={() => {
+                          if (result.slug === selectedSlug) {
+                            setItemQuery('');
+                            return;
+                          }
+                          if (!confirmSelectionChange()) return;
+                          setEditorDirty(false);
+                          setType(result.type);
+                          setSelectedSlug(result.slug);
+                          setItemQuery('');
+                        }}
+                        className={`w-full rounded-xl border p-3 text-left transition hover:border-sky ${result.slug === selectedSlug ? 'border-sky bg-mint-soft' : 'border-line bg-white'}`}
+                      >
+                        <span className="block font-semibold leading-7 text-ink">{result.titleMm}</span>
+                        <span className="block text-sm leading-6 text-ink-soft">{result.titleEn}</span>
+                        <span className="mt-1 block break-all text-xs text-sky-deep">{result.slug}</span>
+                        <span className="mt-1 block text-xs text-ink-soft">
+                          {contentTypeLabel(result.type, locale)}{result.category ? ` · ${result.category}` : ''}{result.ageGroupKey ? ` · ${result.ageGroupKey}` : ''} · {L('မူကွဲ', 'revision')} {result.reviewRevision}
+                        </span>
+                        {result.slug === selectedSlug && <span className="mt-2 inline-block rounded-pill bg-white px-2 py-1 text-xs font-semibold text-sky-deep">{L('လက်ရှိဖွင့်ထားသည်', 'Currently open')}</span>}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="rounded-xl border border-line bg-canvas p-4 text-sm text-ink-soft">
+                  {L('PDF ထဲက slug သို့မဟုတ် ခေါင်းစဉ်ကို ပြန်စစ်ပါ။ ကိုက်ညီသော အကြောင်းအရာ မတွေ့ပါ။', 'Check the PDF slug or title. No matching review item was found.')}
+                </p>
+              )}
+              {reviewSearchResults.length > 30 && (
+                <p className="text-xs text-ink-soft">{L('ပထမ ၃၀ ခုသာ ပြထားသည်—ပိုတိကျသော စာလုံး ထပ်ရိုက်ပါ။', 'Showing the first 30 results—add more words to narrow the search.')}</p>
+              )}
+            </div>
+          ) : (
           <label className="block space-y-1.5 text-sm font-medium leading-6 text-ink">
-          <span>{L('သုံးသပ်မည့် အကြောင်းအရာ', 'Item to review')}</span>
-          <select value={selectedSlug} onChange={(event) => {
-            if (!confirmSelectionChange()) return;
-            setEditorDirty(false);
-            setSelectedSlug(event.target.value);
-          }} disabled={!list?.items.length} className="min-h-touch w-full rounded-xl border border-line bg-white px-3 py-2 text-base disabled:opacity-60">
-            {list && list.items.length === 0 && (
-              <option value="">{L('ဤအမျိုးအစားတွင် အကြောင်းအရာ မရှိသေးပါ', 'No content of this type yet')}</option>
-            )}
-            {selectableItems.map((candidate) => (
-              <option key={candidate.slug} value={candidate.slug}>{locale === 'mm' ? candidate.titleMm : candidate.titleEn} · {candidate.slug}</option>
-            ))}
-          </select>
+            <span>{L('သုံးသပ်မည့် အကြောင်းအရာ', 'Item to review')}</span>
+            <select value={selectedSlug} onChange={(event) => {
+              if (!confirmSelectionChange()) return;
+              setEditorDirty(false);
+              setSelectedSlug(event.target.value);
+            }} disabled={!list?.items.length} className="min-h-touch w-full rounded-xl border border-line bg-white px-3 py-2 text-base disabled:opacity-60">
+              {list && list.items.length === 0 && (
+                <option value="">{L('ဤအမျိုးအစားတွင် အကြောင်းအရာ မရှိသေးပါ', 'No content of this type yet')}</option>
+              )}
+              {list?.items.map((candidate) => (
+                <option key={candidate.slug} value={candidate.slug}>{locale === 'mm' ? candidate.titleMm : candidate.titleEn} · {candidate.slug}</option>
+              ))}
+            </select>
           </label>
-          {list && itemQuery && (
-            <p className="text-xs text-ink-soft">{L(`ကိုက်ညီသည် ${matchingItems.length} / ${list.items.length}`, `${matchingItems.length} of ${list.items.length} match`)}</p>
           )}
         </div>
       </section>
