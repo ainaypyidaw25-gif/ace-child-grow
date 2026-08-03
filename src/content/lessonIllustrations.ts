@@ -5,6 +5,8 @@ export const LESSON_ILLUSTRATIONS: Readonly<Record<string, string>> = {
     '/lessons/preparing_for_preschool/lsn_prepare_preschool.47a357b858.webp',
   lsn_problem_solving_parenting:
     '/lessons/problem_solving/lsn_problem_solving_parenting.c1c10a05e0.webp',
+  lsn_screen_time:
+    '/lessons/screen_time/lsn_screen_time.e95e1e09f4.webp',
 };
 
 export function lessonIllustration(slug: string): string | undefined {

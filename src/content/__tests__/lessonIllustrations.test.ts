@@ -6,6 +6,7 @@ import { LESSON_ILLUSTRATIONS, lessonIllustration } from '../lessonIllustrations
 const LANGUAGE_DEVELOPMENT_SLUGS = ['lsn_language_rich_home'] as const;
 const PREPARING_FOR_PRESCHOOL_SLUGS = ['lsn_prepare_preschool'] as const;
 const PROBLEM_SOLVING_SLUGS = ['lsn_problem_solving_parenting'] as const;
+const SCREEN_TIME_SLUGS = ['lsn_screen_time'] as const;
 
 describe('published language-development lesson illustrations', () => {
   it('maps every targeted production slug to its own versioned WebP', () => {
@@ -88,5 +89,32 @@ describe('published problem-solving lesson illustrations', () => {
     expect(otherPaths).not.toContain(assetPath);
     expect(existsSync(resolve(process.cwd(), 'public', assetPath!.slice(1)))).toBe(true);
     expect(lessonIllustration('problem_solving')).toBeUndefined();
+  });
+});
+
+describe('published screen-time lesson illustrations', () => {
+  it('maps every targeted production slug to its own versioned WebP', () => {
+    const paths = SCREEN_TIME_SLUGS.map((slug) => lessonIllustration(slug));
+
+    expect(new Set(paths).size).toBe(SCREEN_TIME_SLUGS.length);
+    SCREEN_TIME_SLUGS.forEach((slug) => {
+      expect(lessonIllustration(slug)).toMatch(
+        new RegExp(`/lessons/screen_time/${slug}\\.[a-f0-9]{10}\\.webp$`),
+      );
+    });
+  });
+
+  it('uses a unique file that exists and never falls back by category', () => {
+    const assetPath = lessonIllustration(SCREEN_TIME_SLUGS[0]);
+    const otherPaths = [
+      ...LANGUAGE_DEVELOPMENT_SLUGS,
+      ...PREPARING_FOR_PRESCHOOL_SLUGS,
+      ...PROBLEM_SOLVING_SLUGS,
+    ].map((slug) => lessonIllustration(slug));
+
+    expect(assetPath).toBeDefined();
+    expect(otherPaths).not.toContain(assetPath);
+    expect(existsSync(resolve(process.cwd(), 'public', assetPath!.slice(1)))).toBe(true);
+    expect(lessonIllustration('screen_time')).toBeUndefined();
   });
 });
