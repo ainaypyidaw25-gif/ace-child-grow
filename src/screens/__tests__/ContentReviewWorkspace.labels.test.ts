@@ -6,6 +6,7 @@ import {
   contentTypeLabel,
   decisionLabel,
   dimensionLabel,
+  findReviewSearchResults,
   HIDDEN_SYSTEM_FIELDS,
   humanizeField,
   updateStructuredField,
@@ -17,6 +18,41 @@ function field(key: string, path: string[], language: EditableField['language'])
 }
 
 describe('reviewer content field labels', () => {
+  const searchCandidate = (overrides: Partial<Parameters<typeof findReviewSearchResults>[0][number]> = {}) => ({
+    slug: 'activity-one',
+    titleMm: 'နေ့စဉ် ကစားခြင်း',
+    titleEn: 'Daily play',
+    type: 'activity',
+    category: 'play',
+    ageGroupKey: '2y',
+    domainKey: 'motor',
+    clinicalStatus: 'clinical_review',
+    reviewScope: null,
+    reviewRevision: 5,
+    priority: 'P3',
+    riskClass: 'A',
+    riskReasons: [],
+    activeReviewers: [],
+    priorityStatus: 'unreviewed',
+    ...overrides,
+  });
+
+  it('searches the entire permitted review catalogue and ranks exact PDF identifiers first', () => {
+    const rows = [
+      searchCandidate({ slug: 'daily-routine', titleEn: 'Daily routine', type: 'guide' }),
+      searchCandidate({ slug: 'daily-song', titleEn: 'Daily song', type: 'activity' }),
+      searchCandidate({ slug: 'other', titleEn: 'Other' }),
+    ];
+    expect(findReviewSearchResults(rows, 'daily-song').map((row) => row.slug)).toEqual(['daily-song']);
+    expect(findReviewSearchResults(rows, 'daily').map((row) => row.slug)).toEqual(['daily-routine', 'daily-song']);
+  });
+
+  it('finds review rows by bilingual title and revision metadata', () => {
+    const rows = [searchCandidate(), searchCandidate({ slug: 'other', titleMm: 'အခြား', titleEn: 'Other', reviewRevision: 2 })];
+    expect(findReviewSearchResults(rows, 'နေ့စဉ်').map((row) => row.slug)).toEqual(['activity-one']);
+    expect(findReviewSearchResults(rows, 'activity 5').map((row) => row.slug)).toEqual(['activity-one']);
+  });
+
   it('localises content types instead of exposing storage keys', () => {
     expect(contentTypeLabel('special_need', 'mm')).toBe('အထူးလိုအပ်ချက်');
     expect(contentTypeLabel('special_need', 'en')).toBe('Special needs');
