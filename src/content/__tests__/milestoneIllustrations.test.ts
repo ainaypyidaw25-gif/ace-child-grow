@@ -116,6 +116,13 @@ const FOUR_AND_HALF_YEAR_SLUGS = [
   'ms_4_5y_fine_motor_1',
 ] as const;
 
+const FIVE_YEAR_SLUGS = [
+  'ms_5y_gross_motor_1',
+  'ms_5y_language_1',
+  'ms_5y_school_readiness_1',
+  'ms_5y_self_help_1',
+] as const;
+
 describe('birth–2 month milestone illustrations', () => {
   it('maps every published production slug to its own versioned WebP', () => {
     const paths = BIRTH_2M_SLUGS.map((slug) => milestoneIllustration(slug));
@@ -343,6 +350,7 @@ describe('4 year milestone illustrations', () => {
         ...THREE_AND_HALF_YEAR_SLUGS,
         ...FOUR_YEAR_SLUGS,
         ...FOUR_AND_HALF_YEAR_SLUGS,
+        ...FIVE_YEAR_SLUGS,
       ].sort(),
     );
   });
@@ -380,6 +388,32 @@ describe('4.5 year milestone illustrations', () => {
 
   it('resolves every exact slug to an existing asset file', () => {
     FOUR_AND_HALF_YEAR_SLUGS.forEach((slug) => {
+      const assetPath = milestoneIllustration(slug);
+      expect(assetPath).toBeDefined();
+      expect(existsSync(resolve(process.cwd(), 'public', assetPath!.slice(1)))).toBe(true);
+    });
+  });
+});
+
+describe('5 year milestone illustrations', () => {
+  it('maps every published production slug to its own versioned WebP', () => {
+    const paths = FIVE_YEAR_SLUGS.map((slug) => milestoneIllustration(slug));
+    expect(paths.every((path) => path?.startsWith('/milestones/5y/'))).toBe(true);
+    expect(paths.every((path) => path?.endsWith('.webp'))).toBe(true);
+    expect(new Set(paths).size).toBe(FIVE_YEAR_SLUGS.length);
+
+    FIVE_YEAR_SLUGS.forEach((slug) => {
+      expect(milestoneIllustration(slug)).toMatch(new RegExp(`/${slug}\\.[a-f0-9]{10}\\.webp$`));
+    });
+  });
+
+  it('does not provide a domain fallback or an approximate image', () => {
+    expect(milestoneIllustration('school_readiness')).toBeUndefined();
+    expect(milestoneIllustration('ms_5y_unknown_1')).toBeUndefined();
+  });
+
+  it('resolves every exact slug to an existing asset file', () => {
+    FIVE_YEAR_SLUGS.forEach((slug) => {
       const assetPath = milestoneIllustration(slug);
       expect(assetPath).toBeDefined();
       expect(existsSync(resolve(process.cwd(), 'public', assetPath!.slice(1)))).toBe(true);
