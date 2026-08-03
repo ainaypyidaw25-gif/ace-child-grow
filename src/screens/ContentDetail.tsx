@@ -8,6 +8,7 @@ import { readOfflineMediaObjectUrl } from '../app/offlineMediaStore';
 import type { OfflineMediaRecord } from '../domain/offline/offlineLibrary';
 import { ReviewBadge } from '../components/ReviewBadge';
 import { ActivityScene } from '../components/ActivityScene';
+import { lessonIllustration } from '../content/lessonIllustrations';
 
 type BL = { mm: string; en: string };
 
@@ -79,6 +80,14 @@ export function ContentDetail() {
   }
 
   const { item, media } = res;
+  const mappedLessonIllustration = item.type === 'lesson'
+    ? lessonIllustration(item.slug)
+    : undefined;
+  const visibleMedia = media.filter((asset) => (
+    !asset.placeholder
+    && asset.url
+    && !(mappedLessonIllustration && asset.kind === 'illustration')
+  ));
   const d = (item.data ?? {}) as Record<string, unknown>;
   const list = (k: string): BL[] => (Array.isArray(d[k]) ? (d[k] as BL[]) : []);
   const bl = (k: string): BL | undefined => (d[k] && typeof d[k] === 'object' ? (d[k] as BL) : undefined);
@@ -115,6 +124,21 @@ export function ContentDetail() {
         )}
       </div>
 
+      {mappedLessonIllustration && (
+        <figure className="overflow-hidden rounded-card border border-line bg-white shadow-card">
+          <img
+            src={mappedLessonIllustration}
+            alt={locale === 'mm' ? item.titleMm : item.titleEn}
+            width={1200}
+            height={900}
+            loading="eager"
+            decoding="async"
+            data-testid="lesson-illustration"
+            className="aspect-[4/3] w-full bg-canvas object-cover"
+          />
+        </figure>
+      )}
+
       {/* Until an approved asset is attached through the CMS, activities show a
           parent-and-child scene so a caregiver who cannot read the instructions
           can still see what to do. Real media below always takes its place. */}
@@ -124,9 +148,9 @@ export function ContentDetail() {
         </div>
       )}
 
-      {media.some((asset) => !asset.placeholder && asset.url) && (
+      {visibleMedia.length > 0 && (
         <section className="space-y-4" aria-label={L('သင်ကြားရေး မီဒီယာ', 'Learning media')}>
-          {media.filter((asset) => !asset.placeholder && asset.url).map((asset) => (
+          {visibleMedia.map((asset) => (
             <figure key={asset._id} className="overflow-hidden rounded-card border border-line bg-white shadow-card">
               {asset.kind === 'illustration' ? (
                 <img
