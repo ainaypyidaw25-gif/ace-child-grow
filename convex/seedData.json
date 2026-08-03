@@ -29840,5 +29840,545 @@
     "clinicalStatus": "clinical_review",
     "media": [],
     "searchText": "ကိုယ်ပိုင်အမည်ကို ပြောနိုင်ပြီး လမ်းပျောက်လျှင် ယုံကြည်ရသူထံ အကူအညီတောင်းခြင်း states own name and asks a trusted adult for help if lost   safety 5y မိမိအမည်ကို ရှင်းရှင်းလင်းလင်း ပြောနိုင်ပါသလား။ လမ်းပျောက်လျှင် ဘယ်သူ့ဆီအကူအညီ တောင်းရမည်ကို သိရှိပါသလား (ဥပမာ- စတိုးဝန်ထမ်း၊ မိဘရဲ့ရဲ)။ can your child clearly say their own name? do they know who to ask for help if lost — like a shop worker or a police officer? ကိုယ်ပိုင်အချက်အလက်ကို သိရှိပြီး ယုံကြည်ရသူကို ခွဲခြားနိုင်မှုသည် ကျောင်းအရွယ်မတိုင်မီ အရေးကြီးသော ဘေးကင်းရေး ကျွမ်းကျင်မှု ဖြစ်သည်။ knowing personal information and recognising a trustworthy adult is an important pre-school safety skill. လမ်းပျောက်လျှင် ဘယ်သူ့ဆီ အကူအညီတောင်းရမလဲ ဆိုတာကို ရိုးရှင်းသော ဇာတ်လမ်းဖြင့် လေ့ကျင့်ပြပါ။ practise \"what to do if lost\" through a simple, calm role-play, not a scary one. reference_verified teaching personal information and trusted-adult recognition as a pre-kindergarten safety skill is described in aap positive-parenting guidance in the registry."
+  },
+  {
+    "ageGroupKey": "2y",
+    "domainKey": "self_help",
+    "tags": [
+      "self_help",
+      "2y"
+    ],
+    "data": {
+      "observeMm": "ကစားပြီးရင် အရုပ်ကို ဘူးထဲပြန်ထည့်ရန် ကူညီပါသလား။ ရိုးရှင်းသော အိမ်မှုအလုပ်တစ်ခုကို ကူညီလုပ်ပါသလား။",
+      "observeEn": "Does your child help put a toy back in its box after playing, or help with one simple household task?",
+      "whyMm": "ဤအရွယ်တွင် ကလေးသည် \"ကိုယ်တိုင်လုပ်မယ်\" ဆန္ဒ ပိုကြီးလာပြီး၊ ရိုးရှင်းသော အလုပ်များတွင် ပါဝင်ကူညီလိုစိတ် ရှိလာသည်။",
+      "whyEn": "A stronger \"I can do it\" drive appears now, and children begin wanting to help with simple tasks.",
+      "encouragementMm": "ရိုးရှင်းလွယ်ကူသော အလုပ်တစ်ခုတည်းကို တောင်းဆိုပြီး ပြီးမြောက်တိုင်း ချီးကျူးပါ။",
+      "encouragementEn": "Ask for one simple task at a time and praise the effort, not just the result.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Growing task-participation and independence around age 2 follow the Bright Futures preventive-care schedule and paediatric occupational-therapy references in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_2y_self_help_1",
+    "titleMm": "ရိုးရှင်းသော အိမ်မှုအလုပ်ငယ်များကို ကူညီလုပ်ဆောင်ခြင်း",
+    "titleEn": "Shows increasing independence and helps with simple chores",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "ရိုးရှင်းသော အိမ်မှုအလုပ်ငယ်များကို ကူညီလုပ်ဆောင်ခြင်း shows increasing independence and helps with simple chores   self_help 2y ကစားပြီးရင် အရုပ်ကို ဘူးထဲပြန်ထည့်ရန် ကူညီပါသလား။ ရိုးရှင်းသော အိမ်မှုအလုပ်တစ်ခုကို ကူညီလုပ်ပါသလား။ does your child help put a toy back in its box after playing, or help with one simple household task? ဤအရွယ်တွင် ကလေးသည် \"ကိုယ်တိုင်လုပ်မယ်\" ဆန္ဒ ပိုကြီးလာပြီး၊ ရိုးရှင်းသော အလုပ်များတွင် ပါဝင်ကူညီလိုစိတ် ရှိလာသည်။ a stronger \"i can do it\" drive appears now, and children begin wanting to help with simple tasks. ရိုးရှင်းလွယ်ကူသော အလုပ်တစ်ခုတည်းကို တောင်းဆိုပြီး ပြီးမြောက်တိုင်း ချီးကျူးပါ။ ask for one simple task at a time and praise the effort, not just the result. reference_verified growing task-participation and independence around age 2 follow the bright futures preventive-care schedule and paediatric occupational-therapy references in the registry."
+  },
+  {
+    "ageGroupKey": "2y",
+    "domainKey": "self_help",
+    "tags": [
+      "self_help",
+      "2y"
+    ],
+    "data": {
+      "observeMm": "အသားစိုနေခြင်းကို ရှက်ဟန်ပြခြင်း၊ အိမ်သာသုံးသူများကို စောင့်ကြည့်ခြင်း၊ ဒါမှမဟုတ် \"စိုနေတယ်\" ဟု ကိုယ်တိုင် ပြောပြခြင်း ရှိပါသလား။",
+      "observeEn": "Does your child show discomfort with a wet nappy, watch others use the toilet, or tell you when they are wet?",
+      "whyMm": "ဤလက္ခဏာများသည် ခန္ဓာကိုယ် အသိတိုးလာကြောင်း ပြပြီး ဆီးအိမ်သာ လေ့ကျင့်ရန် အချိန်နီးလာကြောင်း အချက်ပြသည် — ကလေးတိုင်း အချိန်မတူ ပြင်ဆင်ကြသည်။",
+      "whyEn": "These signs show growing body awareness and suggest toilet training may be approaching — readiness timing varies widely between children.",
+      "encouragementMm": "ဖိအားမပေးဘဲ အိမ်သာကို ရင်းနှီးအောင် အနည်းငယ်စီ မိတ်ဆက်ပေးနိုင်ပါသည်။",
+      "encouragementEn": "You can start gently introducing the potty without any pressure.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Early signs of toilet-training readiness are described in Bright Futures guidance and AAP developmental references in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_2y_self_help_2",
+    "titleMm": "ဆီးအိမ်သာအကြောင်း စိတ်ဝင်စားမှု သို့မဟုတ် အသင့်ဖြစ်မှု လက္ခဏာများ ပြသခြင်း",
+    "titleEn": "Shows signs of interest or readiness for potty training",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "ဆီးအိမ်သာအကြောင်း စိတ်ဝင်စားမှု သို့မဟုတ် အသင့်ဖြစ်မှု လက္ခဏာများ ပြသခြင်း shows signs of interest or readiness for potty training   self_help 2y အသားစိုနေခြင်းကို ရှက်ဟန်ပြခြင်း၊ အိမ်သာသုံးသူများကို စောင့်ကြည့်ခြင်း၊ ဒါမှမဟုတ် \"စိုနေတယ်\" ဟု ကိုယ်တိုင် ပြောပြခြင်း ရှိပါသလား။ does your child show discomfort with a wet nappy, watch others use the toilet, or tell you when they are wet? ဤလက္ခဏာများသည် ခန္ဓာကိုယ် အသိတိုးလာကြောင်း ပြပြီး ဆီးအိမ်သာ လေ့ကျင့်ရန် အချိန်နီးလာကြောင်း အချက်ပြသည် — ကလေးတိုင်း အချိန်မတူ ပြင်ဆင်ကြသည်။ these signs show growing body awareness and suggest toilet training may be approaching — readiness timing varies widely between children. ဖိအားမပေးဘဲ အိမ်သာကို ရင်းနှီးအောင် အနည်းငယ်စီ မိတ်ဆက်ပေးနိုင်ပါသည်။ you can start gently introducing the potty without any pressure. reference_verified early signs of toilet-training readiness are described in bright futures guidance and aap developmental references in the registry."
+  },
+  {
+    "ageGroupKey": "2y",
+    "domainKey": "cognitive",
+    "tags": [
+      "cognitive",
+      "2y"
+    ],
+    "data": {
+      "observeMm": "\"ကစားတုံးကို ယူပြီး ဘူးထဲထည့်ပါ\" ကဲ့သို့ ဆက်တိုက်ညွှန်ကြားချက်နှစ်ခုကို လိုက်နာနိုင်ပါသလား။",
+      "observeEn": "Can your child follow a linked two-step instruction, like \"pick up the block and put it in the box\"?",
+      "whyMm": "အဆင့်နှစ်ဆင့်ကို မှတ်ဉာဏ်ထဲထားပြီး လိုက်နာနိုင်ခြင်းသည် ဘာသာစကားနားလည်မှုနှင့် မှတ်ဉာဏ် တိုးတက်လာကြောင်း ပြသည်။",
+      "whyEn": "Holding and following two linked steps shows growing language understanding and memory.",
+      "encouragementMm": "ရိုးရှင်းသော နေ့စဉ်လုပ်ငန်းများတွင် နှစ်ဆင့်ညွှန်ကြားချက်ကို လေ့ကျင့်ပေးပါ။",
+      "encouragementEn": "Practise two-step instructions during everyday routines.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Following two-step directions around age 2 is described in CDC milestone checklists and developmental-behavioral paediatrics references in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_2y_cognitive_1",
+    "titleMm": "အဆင့်နှစ်ဆင့်ပါ ညွှန်ကြားချက်ကို လိုက်နာနိုင်ခြင်း",
+    "titleEn": "Follows a two-step direction",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "အဆင့်နှစ်ဆင့်ပါ ညွှန်ကြားချက်ကို လိုက်နာနိုင်ခြင်း follows a two-step direction   cognitive 2y \"ကစားတုံးကို ယူပြီး ဘူးထဲထည့်ပါ\" ကဲ့သို့ ဆက်တိုက်ညွှန်ကြားချက်နှစ်ခုကို လိုက်နာနိုင်ပါသလား။ can your child follow a linked two-step instruction, like \"pick up the block and put it in the box\"? အဆင့်နှစ်ဆင့်ကို မှတ်ဉာဏ်ထဲထားပြီး လိုက်နာနိုင်ခြင်းသည် ဘာသာစကားနားလည်မှုနှင့် မှတ်ဉာဏ် တိုးတက်လာကြောင်း ပြသည်။ holding and following two linked steps shows growing language understanding and memory. ရိုးရှင်းသော နေ့စဉ်လုပ်ငန်းများတွင် နှစ်ဆင့်ညွှန်ကြားချက်ကို လေ့ကျင့်ပေးပါ။ practise two-step instructions during everyday routines. reference_verified following two-step directions around age 2 is described in cdc milestone checklists and developmental-behavioral paediatrics references in the registry."
+  },
+  {
+    "ageGroupKey": "19_24m",
+    "domainKey": "social",
+    "tags": [
+      "social",
+      "19_24m"
+    ],
+    "data": {
+      "observeMm": "အခြားကလေးများကို တွေ့လျှင် ရွှင်ပျဖန် ပြပါသလား။ သူတို့ကစားရာအနီးသို့ ဝင်ရောက်လာပါသလား (ဝေမျှစားရန် မမျှော်လင့်ရသေးပါ)။",
+      "observeEn": "Does your child get excited seeing other children, and move closer to join their play — even if sharing is not yet expected?",
+      "whyMm": "ဤအရွယ်တွင် အခြားကလေးများကို စိတ်ဝင်စားမှု ပိုကြီးလာသော်လည်း ဝေမျှခြင်းနှင့် အလှည့်ကျခြင်းကို နားလည်ရန် အချိန် ကျန်ပါသေးသည်။",
+      "whyEn": "Interest in other children grows now, though sharing and turn-taking are still a while off.",
+      "encouragementMm": "ကစားတုံးများစွာပါသော ကစားစရာများကို ပေးထားပါ — တစ်ခုတည်းအတွက် ငြင်းခုံမှု လျော့နည်းစေသည်။",
+      "encouragementEn": "Offer toys with plenty of pieces to go around, which reduces conflict over a single item.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Growing interest in peers and early parallel play around this age follow the NICE social and emotional wellbeing guidance and developmental-behavioral paediatrics references in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_19_24m_social_1",
+    "titleMm": "အခြားကလေးများကို တွေ့ရင် ရွှင်ပျဖြစ်ပြီး သူတို့ကစားရာသို့ ဝင်ရောက်လာခြင်း",
+    "titleEn": "Gets excited by other children and starts joining their play",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "အခြားကလေးများကို တွေ့ရင် ရွှင်ပျဖြစ်ပြီး သူတို့ကစားရာသို့ ဝင်ရောက်လာခြင်း gets excited by other children and starts joining their play   social 19_24m အခြားကလေးများကို တွေ့လျှင် ရွှင်ပျဖန် ပြပါသလား။ သူတို့ကစားရာအနီးသို့ ဝင်ရောက်လာပါသလား (ဝေမျှစားရန် မမျှော်လင့်ရသေးပါ)။ does your child get excited seeing other children, and move closer to join their play — even if sharing is not yet expected? ဤအရွယ်တွင် အခြားကလေးများကို စိတ်ဝင်စားမှု ပိုကြီးလာသော်လည်း ဝေမျှခြင်းနှင့် အလှည့်ကျခြင်းကို နားလည်ရန် အချိန် ကျန်ပါသေးသည်။ interest in other children grows now, though sharing and turn-taking are still a while off. ကစားတုံးများစွာပါသော ကစားစရာများကို ပေးထားပါ — တစ်ခုတည်းအတွက် ငြင်းခုံမှု လျော့နည်းစေသည်။ offer toys with plenty of pieces to go around, which reduces conflict over a single item. reference_verified growing interest in peers and early parallel play around this age follow the nice social and emotional wellbeing guidance and developmental-behavioral paediatrics references in the registry."
+  },
+  {
+    "ageGroupKey": "2_5y",
+    "domainKey": "self_help",
+    "tags": [
+      "self_help",
+      "2_5y"
+    ],
+    "data": {
+      "observeMm": "ဆီးအိမ်သာ သွားရန် ကြိုးစားနေပါသလား — တစ်ခါတစ်ရံ အောင်မြင်ပြီး တစ်ခါတစ်ရံ ချွတ်ချော်နိုင်ပါသည်။",
+      "observeEn": "Is your child actively trying to use the potty — succeeding sometimes and having accidents other times?",
+      "whyMm": "ဆီးအိမ်သာ လေ့ကျင့်ခြင်းသည် ရေရှည်ကြာနိုင်ပြီး ချွတ်ချော်မှုများသည် အလွန်ပုံမှန် ဖြစ်သည် — အပြစ်တင်စရာ မဟုတ်ပါ။",
+      "whyEn": "Toilet training can take a while, and accidents along the way are very normal — never something to blame a child for.",
+      "encouragementMm": "အောင်မြင်တိုင်း အေးဆေးစွာ ချီးကျူးပြီး ချွတ်ချော်လျှင် တည်ငြိမ်စွာ ပြန်စကြည့်ပါ။",
+      "encouragementEn": "Praise calmly each success and stay relaxed and matter-of-fact about accidents.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Typical toilet-training progress and the normalcy of accidents follow Bright Futures guidance in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_2_5y_self_help_3",
+    "titleMm": "ဆီးအိမ်သာ လေ့ကျင့်မှု စတင်နေခြင်း",
+    "titleEn": "Potty training is in progress",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "ဆီးအိမ်သာ လေ့ကျင့်မှု စတင်နေခြင်း potty training is in progress   self_help 2_5y ဆီးအိမ်သာ သွားရန် ကြိုးစားနေပါသလား — တစ်ခါတစ်ရံ အောင်မြင်ပြီး တစ်ခါတစ်ရံ ချွတ်ချော်နိုင်ပါသည်။ is your child actively trying to use the potty — succeeding sometimes and having accidents other times? ဆီးအိမ်သာ လေ့ကျင့်ခြင်းသည် ရေရှည်ကြာနိုင်ပြီး ချွတ်ချော်မှုများသည် အလွန်ပုံမှန် ဖြစ်သည် — အပြစ်တင်စရာ မဟုတ်ပါ။ toilet training can take a while, and accidents along the way are very normal — never something to blame a child for. အောင်မြင်တိုင်း အေးဆေးစွာ ချီးကျူးပြီး ချွတ်ချော်လျှင် တည်ငြိမ်စွာ ပြန်စကြည့်ပါ။ praise calmly each success and stay relaxed and matter-of-fact about accidents. reference_verified typical toilet-training progress and the normalcy of accidents follow bright futures guidance in the registry."
+  },
+  {
+    "ageGroupKey": "2_5y",
+    "domainKey": "self_help",
+    "tags": [
+      "self_help",
+      "2_5y"
+    ],
+    "data": {
+      "observeMm": "သွားတိုက်တံကို ကိုင်ပြီး ကိုယ်တိုင် တိုက်ကြည့်ပါသလား (လူကြီးက ပြီးပြည့်စုံအောင် ထပ်တိုက်ပေးရသည်)။",
+      "observeEn": "Does your child hold the toothbrush and try brushing, even though you still need to finish the job?",
+      "whyMm": "ဤအရွယ်တွင် ကလေးလက်ကျွမ်းကျင်မှု လုံလောက်စွာ မရှိသေးသဖြင့် လူကြီးအကူအညီ ဆက်လိုအပ်ပါသည်။",
+      "whyEn": "Hand skill is not yet precise enough at this age, so adult finishing is still needed.",
+      "encouragementMm": "ကလေးဦးစွာ တိုက်ကြည့်ခွင့်ပေးပြီး နောက်ဆုံးတွင် လူကြီးက ဂရုတစိုက် ထပ်တိုက်ပေးပါ။",
+      "encouragementEn": "Let your child brush first, then finish carefully yourself.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Emerging, adult-assisted toothbrushing around this age is described in AAP oral-health guidance in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_2_5y_self_help_4",
+    "titleMm": "လူကြီးအကူအညီဖြင့် သွားတိုက်ခြင်း",
+    "titleEn": "Brushes teeth with help",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "လူကြီးအကူအညီဖြင့် သွားတိုက်ခြင်း brushes teeth with help   self_help 2_5y သွားတိုက်တံကို ကိုင်ပြီး ကိုယ်တိုင် တိုက်ကြည့်ပါသလား (လူကြီးက ပြီးပြည့်စုံအောင် ထပ်တိုက်ပေးရသည်)။ does your child hold the toothbrush and try brushing, even though you still need to finish the job? ဤအရွယ်တွင် ကလေးလက်ကျွမ်းကျင်မှု လုံလောက်စွာ မရှိသေးသဖြင့် လူကြီးအကူအညီ ဆက်လိုအပ်ပါသည်။ hand skill is not yet precise enough at this age, so adult finishing is still needed. ကလေးဦးစွာ တိုက်ကြည့်ခွင့်ပေးပြီး နောက်ဆုံးတွင် လူကြီးက ဂရုတစိုက် ထပ်တိုက်ပေးပါ။ let your child brush first, then finish carefully yourself. reference_verified emerging, adult-assisted toothbrushing around this age is described in aap oral-health guidance in the registry."
+  },
+  {
+    "ageGroupKey": "2_5y",
+    "domainKey": "self_help",
+    "tags": [
+      "self_help",
+      "2_5y"
+    ],
+    "data": {
+      "observeMm": "ရေချိုးအိမ်တွင် လူကြီးအကူအညီအနည်းငယ်ဖြင့် လက်ကို ဆေးပြီး သုတ်ကြည့်ပါသလား။",
+      "observeEn": "With a little help, does your child wash and dry their own hands at the sink?",
+      "whyMm": "လက်ဆေးခြင်း လုပ်ငန်းစဉ်ကို ကိုယ်တိုင် လုပ်နိုင်ခြင်းက ကျန်းမာရေး အလေ့အထ အစောပိုင်းကို တည်ဆောက်ပေးသည်။",
+      "whyEn": "Managing the hand-washing sequence themselves builds an early health habit.",
+      "encouragementMm": "ခြေတင်ခုံလေး ပေးထားပြီး အဆင့်များကို ရိုးရှင်းသော အစီအစဉ်ဖြင့် ပြပေးပါ။",
+      "encouragementEn": "Provide a step stool and show the steps in a simple, repeatable order.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Independent hand-washing as an early self-care habit is described in the Bright Futures preventive-care schedule in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_2_5y_self_help_5",
+    "titleMm": "ကိုယ်တိုင် လက်ဆေးပြီး သုတ်ခြင်း",
+    "titleEn": "Washes and dries own hands",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "ကိုယ်တိုင် လက်ဆေးပြီး သုတ်ခြင်း washes and dries own hands   self_help 2_5y ရေချိုးအိမ်တွင် လူကြီးအကူအညီအနည်းငယ်ဖြင့် လက်ကို ဆေးပြီး သုတ်ကြည့်ပါသလား။ with a little help, does your child wash and dry their own hands at the sink? လက်ဆေးခြင်း လုပ်ငန်းစဉ်ကို ကိုယ်တိုင် လုပ်နိုင်ခြင်းက ကျန်းမာရေး အလေ့အထ အစောပိုင်းကို တည်ဆောက်ပေးသည်။ managing the hand-washing sequence themselves builds an early health habit. ခြေတင်ခုံလေး ပေးထားပြီး အဆင့်များကို ရိုးရှင်းသော အစီအစဉ်ဖြင့် ပြပေးပါ။ provide a step stool and show the steps in a simple, repeatable order. reference_verified independent hand-washing as an early self-care habit is described in the bright futures preventive-care schedule in the registry."
+  },
+  {
+    "ageGroupKey": "2_5y",
+    "domainKey": "social",
+    "tags": [
+      "social",
+      "2_5y"
+    ],
+    "data": {
+      "observeMm": "အခြားကလေးများနှင့် ကစားတုံးဝေမျှခြင်း သို့မဟုတ် အတူတူ လုပ်ဆောင်ခြင်းကဲ့သို့ တကယ်ပါဝင်ကစားပါသလား (ဘေးမှာသီးခြား ကစားရုံ မဟုတ်ဘဲ)။",
+      "observeEn": "Does your child actually take part with other children — sharing a toy or building together — rather than just playing near them?",
+      "whyMm": "ဘေးမှာသီးခြားကစားခြင်းမှ အတူတကွ ကစားခြင်းသို့ ကူးပြောင်းခြင်းသည် လူမှုကျွမ်းကျင်မှု အရေးကြီးသော တိုးတက်မှုတစ်ခု ဖြစ်သည်။",
+      "whyEn": "Moving from parallel play to cooperative play is an important social development step.",
+      "encouragementMm": "ကလေးနှစ်ဦးလိုအပ်သော ရိုးရှင်းသောကစားနည်းများ (ဘောလုံးလှိမ့်ပေးခြင်း) ကို အားပေးပါ။",
+      "encouragementEn": "Encourage simple two-child games, like rolling a ball back and forth.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "The shift from parallel to cooperative play is described in the NICE social and emotional wellbeing guidance and developmental-behavioral paediatrics references in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_2_5y_social_3",
+    "titleMm": "အခြားကလေးများနှင့် ဘေးမှာမကစားတော့ဘဲ အတူတကွ ကစားလာနိုင်ခြင်း",
+    "titleEn": "Plays cooperatively with other children, not just alongside them",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "အခြားကလေးများနှင့် ဘေးမှာမကစားတော့ဘဲ အတူတကွ ကစားလာနိုင်ခြင်း plays cooperatively with other children, not just alongside them   social 2_5y အခြားကလေးများနှင့် ကစားတုံးဝေမျှခြင်း သို့မဟုတ် အတူတူ လုပ်ဆောင်ခြင်းကဲ့သို့ တကယ်ပါဝင်ကစားပါသလား (ဘေးမှာသီးခြား ကစားရုံ မဟုတ်ဘဲ)။ does your child actually take part with other children — sharing a toy or building together — rather than just playing near them? ဘေးမှာသီးခြားကစားခြင်းမှ အတူတကွ ကစားခြင်းသို့ ကူးပြောင်းခြင်းသည် လူမှုကျွမ်းကျင်မှု အရေးကြီးသော တိုးတက်မှုတစ်ခု ဖြစ်သည်။ moving from parallel play to cooperative play is an important social development step. ကလေးနှစ်ဦးလိုအပ်သော ရိုးရှင်းသောကစားနည်းများ (ဘောလုံးလှိမ့်ပေးခြင်း) ကို အားပေးပါ။ encourage simple two-child games, like rolling a ball back and forth. reference_verified the shift from parallel to cooperative play is described in the nice social and emotional wellbeing guidance and developmental-behavioral paediatrics references in the registry."
+  },
+  {
+    "ageGroupKey": "2_5y",
+    "domainKey": "play",
+    "tags": [
+      "play",
+      "2_5y"
+    ],
+    "data": {
+      "observeMm": "ကစားတုံးကို ဖုန်းအဖြစ် ဒါမှမဟုတ် ဇွန်းကို ဘီးအဖြစ် အတုယူသုံးကစားပါသလား။",
+      "observeEn": "Does your child pretend a block is a phone, or a spoon is a steering wheel?",
+      "whyMm": "ပစ္စည်းတစ်ခုကို အခြားအရာအဖြစ် စိတ်ကူးဖြင့် အစားထိုးနိုင်ခြင်းသည် သင်္ကေတဆိုင်ရာ တွေးခေါ်မှု (symbolic thinking) ၏ အရေးကြီးသော အဆင့်ဖြစ်သည်။",
+      "whyEn": "Letting one object represent another in the imagination is an important step in symbolic thinking.",
+      "encouragementMm": "ကလေးရဲ့ စိတ်ကူးကို လက်ခံပြီး အတူ ဆက်ကစားပါ။",
+      "encouragementEn": "Accept your child’s imaginative idea and build on it together.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Symbolic (object-substitution) pretend play as a cognitive milestone is described in the AAP Power of Play guidance in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_2_5y_play_1",
+    "titleMm": "အတုယူကစားစဉ် ပစ္စည်းတစ်ခုကို အခြားအရာအဖြစ် ဆောင်ရွက်ခြင်း",
+    "titleEn": "Uses one object to stand for another in pretend play",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "အတုယူကစားစဉ် ပစ္စည်းတစ်ခုကို အခြားအရာအဖြစ် ဆောင်ရွက်ခြင်း uses one object to stand for another in pretend play   play 2_5y ကစားတုံးကို ဖုန်းအဖြစ် ဒါမှမဟုတ် ဇွန်းကို ဘီးအဖြစ် အတုယူသုံးကစားပါသလား။ does your child pretend a block is a phone, or a spoon is a steering wheel? ပစ္စည်းတစ်ခုကို အခြားအရာအဖြစ် စိတ်ကူးဖြင့် အစားထိုးနိုင်ခြင်းသည် သင်္ကေတဆိုင်ရာ တွေးခေါ်မှု (symbolic thinking) ၏ အရေးကြီးသော အဆင့်ဖြစ်သည်။ letting one object represent another in the imagination is an important step in symbolic thinking. ကလေးရဲ့ စိတ်ကူးကို လက်ခံပြီး အတူ ဆက်ကစားပါ။ accept your child’s imaginative idea and build on it together. reference_verified symbolic (object-substitution) pretend play as a cognitive milestone is described in the aap power of play guidance in the registry."
+  },
+  {
+    "ageGroupKey": "3y",
+    "domainKey": "self_help",
+    "tags": [
+      "self_help",
+      "3y"
+    ],
+    "data": {
+      "observeMm": "ကစားပြီးရင် ကစားစရာများကို လူကြီးအကူအညီဖြင့် ပြန်သိမ်းပါသလား။ အညစ်အကြေးအဝတ်ကို ဘူးထဲ ထည့်ပါသလား။",
+      "observeEn": "After play, does your child help put toys away? Do they put dirty clothes in the laundry basket?",
+      "whyMm": "ရိုးရှင်းသော သိမ်းဆည်းခြင်း အလေ့အထများက တာဝန်ယူမှုနှင့် အိမ်မှုပါဝင်ခြင်းကို စတင် တည်ဆောက်ပေးသည်။",
+      "whyEn": "Simple tidying habits begin to build responsibility and household participation.",
+      "encouragementMm": "ရိုးရှင်းသော ညွှန်ကြားချက်တစ်ခုတည်းပေးပြီး ပြီးသည့်အခါ ချီးကျူးပါ။",
+      "encouragementEn": "Give one simple instruction at a time and praise when it is done.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Early tidying and household participation are described in the Bright Futures preventive-care schedule in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_3y_self_help_3",
+    "titleMm": "ကစားစရာများကို ပြန်သိမ်းခြင်းနှင့် အညစ်အကြေးအဝတ်များကို ဘူးထဲထည့်ခြင်း",
+    "titleEn": "Puts toys away and dirty clothes in the laundry basket",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "ကစားစရာများကို ပြန်သိမ်းခြင်းနှင့် အညစ်အကြေးအဝတ်များကို ဘူးထဲထည့်ခြင်း puts toys away and dirty clothes in the laundry basket   self_help 3y ကစားပြီးရင် ကစားစရာများကို လူကြီးအကူအညီဖြင့် ပြန်သိမ်းပါသလား။ အညစ်အကြေးအဝတ်ကို ဘူးထဲ ထည့်ပါသလား။ after play, does your child help put toys away? do they put dirty clothes in the laundry basket? ရိုးရှင်းသော သိမ်းဆည်းခြင်း အလေ့အထများက တာဝန်ယူမှုနှင့် အိမ်မှုပါဝင်ခြင်းကို စတင် တည်ဆောက်ပေးသည်။ simple tidying habits begin to build responsibility and household participation. ရိုးရှင်းသော ညွှန်ကြားချက်တစ်ခုတည်းပေးပြီး ပြီးသည့်အခါ ချီးကျူးပါ။ give one simple instruction at a time and praise when it is done. reference_verified early tidying and household participation are described in the bright futures preventive-care schedule in the registry."
+  },
+  {
+    "ageGroupKey": "3y",
+    "domainKey": "self_help",
+    "tags": [
+      "self_help",
+      "3y"
+    ],
+    "data": {
+      "observeMm": "ခွက်၊ ဇွန်းများကို စားပွဲပေါ်တင်ရန် ကူညီပါသလား။ စားပြီးလျှင် ပန်းကန်ကို ဆေးကန်သို့ သယ်ဆောင်ပါသလား။",
+      "observeEn": "Does your child help place cups or spoons on the table, and carry a plate to the sink after eating?",
+      "whyMm": "ဒီလိုအလုပ်ငယ်များသည် လက်ထိန်းချုပ်မှုနှင့် မိသားစုလုပ်ငန်းများတွင် ပါဝင်နိုင်စွမ်းကို တည်ဆောက်ပေးသည်။",
+      "whyEn": "These small jobs build hand control and a sense of contributing to the family.",
+      "encouragementMm": "မကွဲသောပန်းကန်ခွက်များကိုသာ သယ်စေပြီး အောင်မြင်တိုင်း ကျေးဇူးတင်ကြောင်း ပြောပါ။",
+      "encouragementEn": "Have your child carry only unbreakable items, and thank them each time.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Simple table-help tasks as self-help and fine-motor skills are described in paediatric occupational-therapy references in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_3y_self_help_4",
+    "titleMm": "စားပွဲပြင်ရာတွင် ကူညီပြီး ပန်းကန်များကို ဆေးကန်သို့ သယ်ဆောင်ခြင်း",
+    "titleEn": "Helps set the table and carries dishes to the sink",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "စားပွဲပြင်ရာတွင် ကူညီပြီး ပန်းကန်များကို ဆေးကန်သို့ သယ်ဆောင်ခြင်း helps set the table and carries dishes to the sink   self_help 3y ခွက်၊ ဇွန်းများကို စားပွဲပေါ်တင်ရန် ကူညီပါသလား။ စားပြီးလျှင် ပန်းကန်ကို ဆေးကန်သို့ သယ်ဆောင်ပါသလား။ does your child help place cups or spoons on the table, and carry a plate to the sink after eating? ဒီလိုအလုပ်ငယ်များသည် လက်ထိန်းချုပ်မှုနှင့် မိသားစုလုပ်ငန်းများတွင် ပါဝင်နိုင်စွမ်းကို တည်ဆောက်ပေးသည်။ these small jobs build hand control and a sense of contributing to the family. မကွဲသောပန်းကန်ခွက်များကိုသာ သယ်စေပြီး အောင်မြင်တိုင်း ကျေးဇူးတင်ကြောင်း ပြောပါ။ have your child carry only unbreakable items, and thank them each time. reference_verified simple table-help tasks as self-help and fine-motor skills are described in paediatric occupational-therapy references in the registry."
+  },
+  {
+    "ageGroupKey": "3y",
+    "domainKey": "emotional",
+    "tags": [
+      "emotional",
+      "3y"
+    ],
+    "data": {
+      "observeMm": "ပျော်ရွှင်ခြင်း၊ စိတ်ဆိုးခြင်း၊ ကြောက်ခြင်း၊ ဝမ်းနည်းခြင်း စသော ခံစားချက်များစွာကို မျက်နှာနှင့် အပြုအမူဖြင့် ဖော်ပြပါသလား။",
+      "observeEn": "Does your child express a range of emotions — happy, angry, scared, sad — through face and behavior?",
+      "whyMm": "ခံစားချက်အမျိုးမျိုးကို ဖော်ပြနိုင်ခြင်းသည် ကိုယ်ပိုင်ခံစားမှုကို သိရှိလာခြင်း၏ ပုံမှန် အစိတ်အပိုင်းဖြစ်သည် — ထိန်းချုပ်မှုကတော့ တဖြည်းဖြည်း လိုက်လာမည်။",
+      "whyEn": "Expressing a range of feelings is a normal part of growing emotional awareness — self-regulation follows gradually.",
+      "encouragementMm": "ခံစားချက်ကို အမည်တပ်ပေးပါ (\"စိတ်ဆိုးနေတာ သိတယ်\") — ထိန်းချုပ်ရန် ကူညီပေးသည်။",
+      "encouragementEn": "Name the feeling out loud (\"I can see you’re angry\") — it helps with self-regulation.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "A widening emotional vocabulary and expression around age 3 follow the NICE social and emotional wellbeing guidance in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_3y_emotional_1",
+    "titleMm": "ခံစားချက် အမျိုးမျိုးကို ဖော်ပြနိုင်ခြင်း",
+    "titleEn": "Shows a wide range of emotions",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "ခံစားချက် အမျိုးမျိုးကို ဖော်ပြနိုင်ခြင်း shows a wide range of emotions   emotional 3y ပျော်ရွှင်ခြင်း၊ စိတ်ဆိုးခြင်း၊ ကြောက်ခြင်း၊ ဝမ်းနည်းခြင်း စသော ခံစားချက်များစွာကို မျက်နှာနှင့် အပြုအမူဖြင့် ဖော်ပြပါသလား။ does your child express a range of emotions — happy, angry, scared, sad — through face and behavior? ခံစားချက်အမျိုးမျိုးကို ဖော်ပြနိုင်ခြင်းသည် ကိုယ်ပိုင်ခံစားမှုကို သိရှိလာခြင်း၏ ပုံမှန် အစိတ်အပိုင်းဖြစ်သည် — ထိန်းချုပ်မှုကတော့ တဖြည်းဖြည်း လိုက်လာမည်။ expressing a range of feelings is a normal part of growing emotional awareness — self-regulation follows gradually. ခံစားချက်ကို အမည်တပ်ပေးပါ (\"စိတ်ဆိုးနေတာ သိတယ်\") — ထိန်းချုပ်ရန် ကူညီပေးသည်။ name the feeling out loud (\"i can see you’re angry\") — it helps with self-regulation. reference_verified a widening emotional vocabulary and expression around age 3 follow the nice social and emotional wellbeing guidance in the registry."
+  },
+  {
+    "ageGroupKey": "3y",
+    "domainKey": "play",
+    "tags": [
+      "play",
+      "3y"
+    ],
+    "data": {
+      "observeMm": "မမြင်ရသော \"သူငယ်ချင်း\" တစ်ဦးနှင့် စကားပြော၊ ကစားနေတတ်ပါသလား။",
+      "observeEn": "Does your child sometimes talk to or play with an imaginary friend?",
+      "whyMm": "စိတ်ကူးဖော်သူငယ်ချင်းရှိခြင်းသည် ကျန်းမာသော စိတ်ကူးဉာဏ်ဖွံ့ဖြိုးမှု၏ ပုံမှန် အစိတ်အပိုင်း ဖြစ်ပြီး စိုးရိမ်စရာ မဟုတ်ပါ။",
+      "whyEn": "Having an imaginary friend is a normal part of healthy imaginative development, not a cause for concern.",
+      "encouragementMm": "ကလေး၏ စိတ်ကူးကို လေးစားစွာ လက်ခံပြီး စိတ်ကူးဇာတ်လမ်းထဲ ပါဝင်ကစားနိုင်ပါသည်။",
+      "encouragementEn": "Respect your child’s imagination, and feel free to join their imaginative story.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Imaginary friends as a normal feature of preschool imaginative play are described in developmental-behavioral paediatrics references in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_3y_play_1",
+    "titleMm": "စိတ်ကူးထဲက သူငယ်ချင်း (အတုယူကစားဖော်) ရှိနိုင်ခြင်း",
+    "titleEn": "May have an imaginary friend",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "စိတ်ကူးထဲက သူငယ်ချင်း (အတုယူကစားဖော်) ရှိနိုင်ခြင်း may have an imaginary friend   play 3y မမြင်ရသော \"သူငယ်ချင်း\" တစ်ဦးနှင့် စကားပြော၊ ကစားနေတတ်ပါသလား။ does your child sometimes talk to or play with an imaginary friend? စိတ်ကူးဖော်သူငယ်ချင်းရှိခြင်းသည် ကျန်းမာသော စိတ်ကူးဉာဏ်ဖွံ့ဖြိုးမှု၏ ပုံမှန် အစိတ်အပိုင်း ဖြစ်ပြီး စိုးရိမ်စရာ မဟုတ်ပါ။ having an imaginary friend is a normal part of healthy imaginative development, not a cause for concern. ကလေး၏ စိတ်ကူးကို လေးစားစွာ လက်ခံပြီး စိတ်ကူးဇာတ်လမ်းထဲ ပါဝင်ကစားနိုင်ပါသည်။ respect your child’s imagination, and feel free to join their imaginative story. reference_verified imaginary friends as a normal feature of preschool imaginative play are described in developmental-behavioral paediatrics references in the registry."
+  },
+  {
+    "ageGroupKey": "4y",
+    "domainKey": "self_help",
+    "tags": [
+      "self_help",
+      "4y"
+    ],
+    "data": {
+      "observeMm": "သွားတိုက်တံကို ကိုင်ပြီး သွားများကို အားလုံး ကိုယ်တိုင် တိုက်ကြည့်ပါသလား (လူကြီးက စစ်ဆေးပေးရန် လိုသေးသည်)။",
+      "observeEn": "Can your child hold the brush and clean their teeth mostly independently, even though you still check afterward?",
+      "whyMm": "လက်ကျွမ်းကျင်မှု တိုးတက်လာသဖြင့် ဒီအရွယ်တွင် သွားတိုက်ခြင်းကို ပိုမိုကိုယ်တိုင် လုပ်နိုင်လာသည်။",
+      "whyEn": "Growing hand skill lets most 4-year-olds manage more of toothbrushing themselves.",
+      "encouragementMm": "ကလေးတိုက်ပြီးနောက် လူကြီးက အနည်းငယ် ထပ်စစ်ပေးပါ — အထူးသဖြင့် နောက်ဖက်သွားများ။",
+      "encouragementEn": "After your child brushes, do a quick adult check, especially the back teeth.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Increasingly independent toothbrushing around age 4 is described in AAP oral-health guidance in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_4y_self_help_3",
+    "titleMm": "ကိုယ်တိုင် သွားတိုက်ခြင်း",
+    "titleEn": "Brushes own teeth",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "ကိုယ်တိုင် သွားတိုက်ခြင်း brushes own teeth   self_help 4y သွားတိုက်တံကို ကိုင်ပြီး သွားများကို အားလုံး ကိုယ်တိုင် တိုက်ကြည့်ပါသလား (လူကြီးက စစ်ဆေးပေးရန် လိုသေးသည်)။ can your child hold the brush and clean their teeth mostly independently, even though you still check afterward? လက်ကျွမ်းကျင်မှု တိုးတက်လာသဖြင့် ဒီအရွယ်တွင် သွားတိုက်ခြင်းကို ပိုမိုကိုယ်တိုင် လုပ်နိုင်လာသည်။ growing hand skill lets most 4-year-olds manage more of toothbrushing themselves. ကလေးတိုက်ပြီးနောက် လူကြီးက အနည်းငယ် ထပ်စစ်ပေးပါ — အထူးသဖြင့် နောက်ဖက်သွားများ။ after your child brushes, do a quick adult check, especially the back teeth. reference_verified increasingly independent toothbrushing around age 4 is described in aap oral-health guidance in the registry."
+  },
+  {
+    "ageGroupKey": "4y",
+    "domainKey": "self_help",
+    "tags": [
+      "self_help",
+      "4y"
+    ],
+    "data": {
+      "observeMm": "အင်္ကျီ၊ ဘောင်းဘီများကို ကိုယ်တိုင် ဝတ်၊ချွတ်နိုင်ပါသလား (ဖိနပ်ကြိုးချည်ရုံသာ အကူအညီလိုသေးသည်)။",
+      "observeEn": "Can your child put on and take off shirts and trousers mostly alone, needing help mainly with shoelaces?",
+      "whyMm": "ဤအရွယ်တွင် အဝတ်အစားနှင့် ပတ်သက်သော လုပ်ဆောင်ချက်များ ပိုမိုလွတ်လပ်လာပြီး ကြိုးချည်ခြင်းကဲ့သို့ အသေးစိတ်လုပ်ငန်းသာ ကျန်ရှိသည်။",
+      "whyEn": "Dressing becomes largely independent now, with only fine tasks like tying laces still needing help.",
+      "encouragementMm": "အချိန်ဖိအားမပေးဘဲ ကိုယ်တိုင်ဝတ်ရန် အချိန်အနည်းငယ် ထပ်ပေးပါ။",
+      "encouragementEn": "Allow a little extra time and avoid rushing while your child dresses themselves.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Largely independent dressing except fine tasks like fasteners and laces is described in paediatric occupational-therapy references and Bright Futures guidance in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_4y_self_help_4",
+    "titleMm": "ခလုတ်ချုပ်ကြိုးထက် အခြားအဝတ်အစားများကို ကိုယ်တိုင် ဝတ်၊ချွတ်နိုင်ခြင်း",
+    "titleEn": "Dresses and undresses with little help, except shoelaces",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "ခလုတ်ချုပ်ကြိုးထက် အခြားအဝတ်အစားများကို ကိုယ်တိုင် ဝတ်၊ချွတ်နိုင်ခြင်း dresses and undresses with little help, except shoelaces   self_help 4y အင်္ကျီ၊ ဘောင်းဘီများကို ကိုယ်တိုင် ဝတ်၊ချွတ်နိုင်ပါသလား (ဖိနပ်ကြိုးချည်ရုံသာ အကူအညီလိုသေးသည်)။ can your child put on and take off shirts and trousers mostly alone, needing help mainly with shoelaces? ဤအရွယ်တွင် အဝတ်အစားနှင့် ပတ်သက်သော လုပ်ဆောင်ချက်များ ပိုမိုလွတ်လပ်လာပြီး ကြိုးချည်ခြင်းကဲ့သို့ အသေးစိတ်လုပ်ငန်းသာ ကျန်ရှိသည်။ dressing becomes largely independent now, with only fine tasks like tying laces still needing help. အချိန်ဖိအားမပေးဘဲ ကိုယ်တိုင်ဝတ်ရန် အချိန်အနည်းငယ် ထပ်ပေးပါ။ allow a little extra time and avoid rushing while your child dresses themselves. reference_verified largely independent dressing except fine tasks like fasteners and laces is described in paediatric occupational-therapy references and bright futures guidance in the registry."
+  },
+  {
+    "ageGroupKey": "4y",
+    "domainKey": "emotional",
+    "tags": [
+      "emotional",
+      "4y"
+    ],
+    "data": {
+      "observeMm": "တစ်စုံတစ်ယောက် ငိုနေလျှင် သို့မဟုတ် ဒုက္ခရောက်နေလျှင် သတိပြုမိပြီး တုံ့ပြန်ပါသလား (နှစ်သိမ့်ရန် ကြိုးစားခြင်း၊ မေးခြင်း)။",
+      "observeEn": "When someone is upset or crying, does your child notice and respond — trying to comfort them or asking what is wrong?",
+      "whyMm": "ဒီလိုတုံ့ပြန်မှုသည် အခြားသူ၏ ခံစားမှုကို စတင် နားလည်စာနာနိုင်ခြင်း (empathy) ၏ အစောပိုင်း လက္ခဏာ ဖြစ်သည်။",
+      "whyEn": "This response is an early sign of empathy — beginning to understand how someone else feels.",
+      "encouragementMm": "\"သူငယ်ချင်းက ဘယ်လိုခံစားနေမလဲ\" ဟု မေးပြီး တွေးခေါ်ခိုင်းပါ။",
+      "encouragementEn": "Ask \"how do you think your friend feels?\" to encourage this thinking.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Emerging empathy and concern for others around age 4 follow the NICE social and emotional wellbeing guidance in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_4y_emotional_1",
+    "titleMm": "အခြားသူများ၏ ခံစားချက်ကို စိတ်ဝင်စားမှု ပြခြင်း",
+    "titleEn": "Shows concern for others’ feelings",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "အခြားသူများ၏ ခံစားချက်ကို စိတ်ဝင်စားမှု ပြခြင်း shows concern for others’ feelings   emotional 4y တစ်စုံတစ်ယောက် ငိုနေလျှင် သို့မဟုတ် ဒုက္ခရောက်နေလျှင် သတိပြုမိပြီး တုံ့ပြန်ပါသလား (နှစ်သိမ့်ရန် ကြိုးစားခြင်း၊ မေးခြင်း)။ when someone is upset or crying, does your child notice and respond — trying to comfort them or asking what is wrong? ဒီလိုတုံ့ပြန်မှုသည် အခြားသူ၏ ခံစားမှုကို စတင် နားလည်စာနာနိုင်ခြင်း (empathy) ၏ အစောပိုင်း လက္ခဏာ ဖြစ်သည်။ this response is an early sign of empathy — beginning to understand how someone else feels. \"သူငယ်ချင်းက ဘယ်လိုခံစားနေမလဲ\" ဟု မေးပြီး တွေးခေါ်ခိုင်းပါ။ ask \"how do you think your friend feels?\" to encourage this thinking. reference_verified emerging empathy and concern for others around age 4 follow the nice social and emotional wellbeing guidance in the registry."
+  },
+  {
+    "ageGroupKey": "4_5y",
+    "domainKey": "self_help",
+    "tags": [
+      "self_help",
+      "4_5y"
+    ],
+    "data": {
+      "observeMm": "အိမ်မွေးတိရစ္ဆာန်ကို အစာကျွေးခြင်း ဒါမှမဟုတ် အဝတ်လျှော်ရာတွင် ရိုးရှင်းသော အလုပ်တစ်ခုကို ပုံမှန် ကူညီပါသလား။",
+      "observeEn": "Does your child regularly help with something like feeding a pet or a simple laundry task?",
+      "whyMm": "ပုံမှန် အိမ်မှုတာဝန် တစ်ခုတွင် ပါဝင်ခြင်းသည် တာဝန်ယူမှုနှင့် မိသားစု၏ တစ်စိတ်တစ်ပိုင်း ဖြစ်ကြောင်း ခံစားမှုကို တည်ဆောက်ပေးသည်။",
+      "whyEn": "Taking part in a regular household task builds responsibility and a sense of belonging to the family.",
+      "encouragementMm": "အသက်အရွယ်နှင့် ကိုက်ညီသော တာဝန်တစ်ခုတည်းကို ပုံမှန် ပေးထားပြီး ကလေးကိုယ်တိုင် တာဝန်ယူသည်ဟု ခံစားစေပါ။",
+      "encouragementEn": "Give one consistent, age-appropriate job so your child feels real ownership of it.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Regular participation in a household task as a self-help and responsibility skill is described in the Bright Futures preventive-care schedule in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_4_5y_self_help_3",
+    "titleMm": "ရိုးရှင်းသော အိမ်မှုအလုပ်တစ်ခုကို ကူညီလုပ်ဆောင်ခြင်း",
+    "titleEn": "Helps with a simple household chore",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "ရိုးရှင်းသော အိမ်မှုအလုပ်တစ်ခုကို ကူညီလုပ်ဆောင်ခြင်း helps with a simple household chore   self_help 4_5y အိမ်မွေးတိရစ္ဆာန်ကို အစာကျွေးခြင်း ဒါမှမဟုတ် အဝတ်လျှော်ရာတွင် ရိုးရှင်းသော အလုပ်တစ်ခုကို ပုံမှန် ကူညီပါသလား။ does your child regularly help with something like feeding a pet or a simple laundry task? ပုံမှန် အိမ်မှုတာဝန် တစ်ခုတွင် ပါဝင်ခြင်းသည် တာဝန်ယူမှုနှင့် မိသားစု၏ တစ်စိတ်တစ်ပိုင်း ဖြစ်ကြောင်း ခံစားမှုကို တည်ဆောက်ပေးသည်။ taking part in a regular household task builds responsibility and a sense of belonging to the family. အသက်အရွယ်နှင့် ကိုက်ညီသော တာဝန်တစ်ခုတည်းကို ပုံမှန် ပေးထားပြီး ကလေးကိုယ်တိုင် တာဝန်ယူသည်ဟု ခံစားစေပါ။ give one consistent, age-appropriate job so your child feels real ownership of it. reference_verified regular participation in a household task as a self-help and responsibility skill is described in the bright futures preventive-care schedule in the registry."
+  },
+  {
+    "ageGroupKey": "5y",
+    "domainKey": "emotional",
+    "tags": [
+      "emotional",
+      "5y"
+    ],
+    "data": {
+      "observeMm": "အခြားသူတစ်ဦး ထိခိုက်နာကျင်ရင် ဝမ်းနည်းဟန်ပြပါသလား။ လုပ်ရပ်တစ်ခုက ဘာကြောင့် \"မှား\" သည်ကို ရှင်းပြနိုင်ပါသလား။",
+      "observeEn": "Does your child show sadness when another person is hurt? Can they explain why an action is \"wrong\"?",
+      "whyMm": "နားလည်စာနာမှုနှင့် မှန်/မှား ခွဲခြားနိုင်မှုသည် ကျောင်းအရွယ်မတိုင်မီ လူမှု/ခံစားမှု ဖွံ့ဖြိုးမှု၏ အရေးကြီးသော အဆင့်ဖြစ်သည်။",
+      "whyEn": "Empathy and a sense of right and wrong are important pre-school social-emotional milestones.",
+      "encouragementMm": "ဇာတ်လမ်းများကို အတူဖတ်ပြီး \"ဒီဇာတ်ကောင်က ဘာကြောင့် ဒီလိုလုပ်တာလဲ\" ဟု ဆွေးနွေးပါ။",
+      "encouragementEn": "Read stories together and discuss why a character acted the way they did.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Empathy and an emerging sense of right and wrong as pre-kindergarten social-emotional skills follow the NICE social and emotional wellbeing guidance in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_5y_emotional_1",
+    "titleMm": "အခြားသူများကို နားလည်စာနာပြီး မှန်/မှား ကွဲပြားမှုကို နားလည်ခြင်း",
+    "titleEn": "Shows empathy and understands right from wrong",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "အခြားသူများကို နားလည်စာနာပြီး မှန်/မှား ကွဲပြားမှုကို နားလည်ခြင်း shows empathy and understands right from wrong   emotional 5y အခြားသူတစ်ဦး ထိခိုက်နာကျင်ရင် ဝမ်းနည်းဟန်ပြပါသလား။ လုပ်ရပ်တစ်ခုက ဘာကြောင့် \"မှား\" သည်ကို ရှင်းပြနိုင်ပါသလား။ does your child show sadness when another person is hurt? can they explain why an action is \"wrong\"? နားလည်စာနာမှုနှင့် မှန်/မှား ခွဲခြားနိုင်မှုသည် ကျောင်းအရွယ်မတိုင်မီ လူမှု/ခံစားမှု ဖွံ့ဖြိုးမှု၏ အရေးကြီးသော အဆင့်ဖြစ်သည်။ empathy and a sense of right and wrong are important pre-school social-emotional milestones. ဇာတ်လမ်းများကို အတူဖတ်ပြီး \"ဒီဇာတ်ကောင်က ဘာကြောင့် ဒီလိုလုပ်တာလဲ\" ဟု ဆွေးနွေးပါ။ read stories together and discuss why a character acted the way they did. reference_verified empathy and an emerging sense of right and wrong as pre-kindergarten social-emotional skills follow the nice social and emotional wellbeing guidance in the registry."
+  },
+  {
+    "ageGroupKey": "5y",
+    "domainKey": "safety",
+    "tags": [
+      "safety",
+      "5y"
+    ],
+    "data": {
+      "observeMm": "နေရပ်လိပ်စာ သို့မဟုတ် မိဘဖုန်းနံပါတ်ကို (အကြမ်းဖျင်းသော်လည်း) ပြောနိုင်ပါသလား။",
+      "observeEn": "Can your child say their home address or a parent’s phone number, even roughly?",
+      "whyMm": "ကိုယ်ပိုင်အချက်အလက်များကို သိရှိခြင်းသည် ကျောင်းသွားရန် အသင့်ဖြစ်ချိန်တွင် အရေးကြီးသော ဘေးကင်းရေး ကျွမ်းကျင်မှုတစ်ခု ဖြစ်သည်။",
+      "whyEn": "Knowing this personal information is an important safety skill going into school.",
+      "encouragementMm": "သီချင်း သို့မဟုတ် ထပ်ခါထပ်ခါ ရွတ်ဆိုပြီး လိပ်စာ/ဖုန်းနံပါတ်ကို ကစားရင်း လေ့ကျင့်ပေးနိုင်ပါသည်။",
+      "encouragementEn": "Turn the address or phone number into a simple song or repeated game to help it stick.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Knowing personal safety information (address, phone number) as a pre-kindergarten skill is described in AAP positive-parenting guidance in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_5y_safety_2",
+    "titleMm": "ကိုယ်ပိုင်နေရပ်လိပ်စာနှင့် ဖုန်းနံပါတ်ကို သိရှိခြင်း",
+    "titleEn": "Knows own address and phone number",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "ကိုယ်ပိုင်နေရပ်လိပ်စာနှင့် ဖုန်းနံပါတ်ကို သိရှိခြင်း knows own address and phone number   safety 5y နေရပ်လိပ်စာ သို့မဟုတ် မိဘဖုန်းနံပါတ်ကို (အကြမ်းဖျင်းသော်လည်း) ပြောနိုင်ပါသလား။ can your child say their home address or a parent’s phone number, even roughly? ကိုယ်ပိုင်အချက်အလက်များကို သိရှိခြင်းသည် ကျောင်းသွားရန် အသင့်ဖြစ်ချိန်တွင် အရေးကြီးသော ဘေးကင်းရေး ကျွမ်းကျင်မှုတစ်ခု ဖြစ်သည်။ knowing this personal information is an important safety skill going into school. သီချင်း သို့မဟုတ် ထပ်ခါထပ်ခါ ရွတ်ဆိုပြီး လိပ်စာ/ဖုန်းနံပါတ်ကို ကစားရင်း လေ့ကျင့်ပေးနိုင်ပါသည်။ turn the address or phone number into a simple song or repeated game to help it stick. reference_verified knowing personal safety information (address, phone number) as a pre-kindergarten skill is described in aap positive-parenting guidance in the registry."
+  },
+  {
+    "ageGroupKey": "5y",
+    "domainKey": "safety",
+    "tags": [
+      "safety",
+      "5y"
+    ],
+    "data": {
+      "observeMm": "အန္တရာယ်ဖြစ်လျှင် ဘယ်သူ့ဆီ ဆက်သွယ်ရမည်၊ ဘာပြောရမည်ကို ရိုးရှင်းစွာ သိရှိပါသလား (ဥပမာ- \"အကူအညီလိုတယ်\" ဟု ကျယ်လောင်စွာ ပြောခြင်း)။",
+      "observeEn": "In an emergency, does your child have a simple sense of who to go to and what to say — like calling out \"I need help\"?",
+      "whyMm": "အရေးပေါ်တွင် အကူအညီ ရှာဖွေနိုင်စွမ်းသည် ကိုယ်ပိုင်ဘေးကင်းရေး ကျွမ်းကျင်မှု၏ အရေးကြီးဆုံး အစိတ်အပိုင်းတစ်ခု ဖြစ်သည်။",
+      "whyEn": "Being able to seek help in an emergency is one of the most important self-protective safety skills.",
+      "encouragementMm": "ရိုးရှင်းသော အခြေအနေဇာတ်လမ်းဖြင့် \"ဒီလိုဖြစ်ရင် ဘယ်သူ့ဆီသွားမလဲ\" ဟု ငြိမ်ငြိမ်သက်သက် လေ့ကျင့်ပြပါ။",
+      "encouragementEn": "Practise calmly with simple scenarios: \"if this happens, who would you go to?\"",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Knowing how to seek help in an emergency as a pre-kindergarten safety skill is described in AAP positive-parenting guidance in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_5y_safety_3",
+    "titleMm": "အရေးပေါ်အခြေအနေတွင် အကူအညီ ဘယ်လိုတောင်းရမည်ကို သိရှိခြင်း",
+    "titleEn": "Knows how to ask for help in an emergency",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "အရေးပေါ်အခြေအနေတွင် အကူအညီ ဘယ်လိုတောင်းရမည်ကို သိရှိခြင်း knows how to ask for help in an emergency   safety 5y အန္တရာယ်ဖြစ်လျှင် ဘယ်သူ့ဆီ ဆက်သွယ်ရမည်၊ ဘာပြောရမည်ကို ရိုးရှင်းစွာ သိရှိပါသလား (ဥပမာ- \"အကူအညီလိုတယ်\" ဟု ကျယ်လောင်စွာ ပြောခြင်း)။ in an emergency, does your child have a simple sense of who to go to and what to say — like calling out \"i need help\"? အရေးပေါ်တွင် အကူအညီ ရှာဖွေနိုင်စွမ်းသည် ကိုယ်ပိုင်ဘေးကင်းရေး ကျွမ်းကျင်မှု၏ အရေးကြီးဆုံး အစိတ်အပိုင်းတစ်ခု ဖြစ်သည်။ being able to seek help in an emergency is one of the most important self-protective safety skills. ရိုးရှင်းသော အခြေအနေဇာတ်လမ်းဖြင့် \"ဒီလိုဖြစ်ရင် ဘယ်သူ့ဆီသွားမလဲ\" ဟု ငြိမ်ငြိမ်သက်သက် လေ့ကျင့်ပြပါ။ practise calmly with simple scenarios: \"if this happens, who would you go to?\" reference_verified knowing how to seek help in an emergency as a pre-kindergarten safety skill is described in aap positive-parenting guidance in the registry."
   }
 ]
