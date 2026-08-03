@@ -4,6 +4,7 @@ import { resolve } from 'node:path';
 import { LESSON_ILLUSTRATIONS, lessonIllustration } from '../lessonIllustrations';
 
 const LANGUAGE_DEVELOPMENT_SLUGS = ['lsn_language_rich_home'] as const;
+const PREPARING_FOR_PRESCHOOL_SLUGS = ['lsn_prepare_preschool'] as const;
 
 describe('published language-development lesson illustrations', () => {
   it('maps every targeted production slug to its own versioned WebP', () => {
@@ -37,5 +38,28 @@ describe('published language-development lesson illustrations', () => {
     expect(detailSource).toContain("lessonIllustration(item.slug)");
     expect(detailSource).toContain('data-testid="lesson-illustration"');
     expect(detailSource).toContain('className="aspect-[4/3]');
+  });
+});
+
+describe('published preparing-for-preschool lesson illustrations', () => {
+  it('maps every targeted production slug to its own versioned WebP', () => {
+    const paths = PREPARING_FOR_PRESCHOOL_SLUGS.map((slug) => lessonIllustration(slug));
+
+    expect(new Set(paths).size).toBe(PREPARING_FOR_PRESCHOOL_SLUGS.length);
+    PREPARING_FOR_PRESCHOOL_SLUGS.forEach((slug) => {
+      expect(lessonIllustration(slug)).toMatch(
+        new RegExp(`/lessons/preparing_for_preschool/${slug}\\.[a-f0-9]{10}\\.webp$`),
+      );
+    });
+  });
+
+  it('uses a unique file that exists and never falls back by category', () => {
+    const assetPath = lessonIllustration(PREPARING_FOR_PRESCHOOL_SLUGS[0]);
+    const otherPaths = LANGUAGE_DEVELOPMENT_SLUGS.map((slug) => lessonIllustration(slug));
+
+    expect(assetPath).toBeDefined();
+    expect(otherPaths).not.toContain(assetPath);
+    expect(existsSync(resolve(process.cwd(), 'public', assetPath!.slice(1)))).toBe(true);
+    expect(lessonIllustration('preparing_for_preschool')).toBeUndefined();
   });
 });
