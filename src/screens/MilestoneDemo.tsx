@@ -66,7 +66,15 @@ export function MilestoneDemo() {
   const [busy, setBusy] = useState(false);
   const [saveError, setSaveError] = useState('');
 
-  const items = useMemo(() => data?.items ?? [], [data]);
+  const items = useMemo(() => {
+    const rows = data?.items ?? [];
+    // Staff library queries intentionally include every workflow status, but
+    // the parent journey must remain a published-only experience even when a
+    // staff member previews it with their own child profile.
+    return data?.staff
+      ? rows.filter((item) => item.clinicalStatus === 'published')
+      : rows;
+  }, [data]);
   const current = items[step];
   const answered = Object.keys(answers).length;
   const result = useMemo(() => {
