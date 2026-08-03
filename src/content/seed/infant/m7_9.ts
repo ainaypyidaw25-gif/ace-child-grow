@@ -92,6 +92,46 @@ const MILESTONES: SeedItem[] = [
     }),
     'Self-feeding with soft finger foods around 8 months follows CDC and AAP milestone guidance, the paediatric occupational-therapy references in the registry and the Bright Futures preventive-care schedule.',
   ),
+  kb(
+    milestone('7_9m', 'gross_motor', 3, {
+      title: b('တွားခြင်း သို့မဟုတ် ကိုယ်ကိုရွှေ့ပြီး ပစ္စည်းယူဖို့ ကြိုးစားခြင်း', 'Crawls or moves around to reach something'),
+      observe: b(
+        'ဗိုက်နှင့်လျှောခြင်း၊ လေးဖက်ထောက်တွားခြင်း၊ တစ်ဖက်ကို လိမ့်ရွှေ့ခြင်း စသည့် နည်းလမ်းတစ်ခုခုနှင့် အလိုရှိရာ ရွေ့သွားပါသလား။',
+        'Does your baby move toward something they want — by belly-scooting, crawling on hands and knees, or rolling — using any method at all?',
+      ),
+      why: b(
+        'ရွေ့လျားနည်းက ကလေးအလိုက် အများကြီး ကွဲပြားသည်။ အချို့က ပုံမှန် လေးဖက်ထောက်တွားပြီး အချို့က ဗိုက်နှင့်လျှောခြင်း၊ တင်ပါးထိုင်၍ ရွှေ့ခြင်းစသည် ကွဲပြားနည်းများ သုံးတတ်ကြသည် — အားလုံးသည် ပုံမှန်ဖြစ်နိုင်သည်။ အရေးကြီးသည်မှာ လေးဖက်ထောက်တွားခြင်း အတိအကျ မဟုတ်ဘဲ ကိုယ့်ဘာသာ ရွေ့နိုင်စွမ်းဖြစ်သည်။',
+        'How babies move varies widely — classic hands-and-knees crawling, belly-scooting, bottom-shuffling, or rolling across a room are all normal. What matters is that some form of self-directed movement is emerging, not the exact style.',
+      ),
+      red: b(
+        'လ ၉ လသို့ရောက်လျှင် ရွေ့လျားရန် လုံးဝ ကြိုးစားမှု မရှိပါက ကျန်းမာရေးဝန်ထမ်းအား ပြပါ။',
+        'If there is no attempt at self-directed movement at all by 9 months, mention it at a health visit.',
+      ),
+      encouragement: b(
+        'ကြိုက်နှစ်သက်သော အရာများကို လှမ်းမီအောင်ထားပြီး လုံခြုံသော ကြမ်းပြင်တွင် အားပေးကစားပါ။',
+        'Place favorite toys just out of reach and encourage play on a safe, open floor.',
+      ),
+    }),
+    'Wide normal variation in how infants achieve mobility (crawling, scooting, shuffling) is documented in the WHO motor development windows study and paediatric physical-therapy references in the registry.',
+  ),
+  kb(
+    milestone('7_9m', 'social', 3, {
+      title: b('Peekaboo ကစားခြင်းကို နှစ်သက်ပြီး မျှော်လင့်တတ်ခြင်း', 'Enjoys and anticipates peekaboo'),
+      observe: b(
+        'မျက်နှာဖုံးထားပြီး "ဘူး" ဟု ပြသောအခါ ရယ်မောပါသလား။ နောက်တစ်ကြိမ် ဖုံးမည်ကို မျှော်လင့်၍ စောင့်ကြည့်ပါသလား။',
+        'When you cover your face and say "peekaboo," does your baby laugh? Do they start anticipating it before you reveal your face again?',
+      ),
+      why: b(
+        'Peekaboo ကို နှစ်သက်ခြင်းသည် "မမြင်ရလည်း ရှိနေဆဲ" ဆိုသော အသိစတင်ခြင်းနှင့် အလှည့်ကျ ကစားနည်း၏ အစောပိုင်း လက္ခဏာဖြစ်သည်။',
+        'Enjoying peekaboo shows early object permanence and the beginnings of turn-taking play.',
+      ),
+      encouragement: b(
+        'နေ့စဉ် ဝတ်ပြောင်းချိန်၊ ကစားချိန်များတွင် peekaboo လေးများ ထည့်ကစားပါ။',
+        'Work short peekaboo moments into everyday routines like dressing and playtime.',
+      ),
+    }),
+    'Peekaboo as an early marker of object permanence and turn-taking is described in the AAP Power of Play guidance and WHO Care for Child Development materials in the registry.',
+  ),
 ];
 
 // --- Guides ----------------------------------------------------------------
