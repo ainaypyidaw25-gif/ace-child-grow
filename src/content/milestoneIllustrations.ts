@@ -73,6 +73,11 @@ export const MILESTONE_ILLUSTRATIONS: Readonly<Record<string, string>> = {
   ms_3_5y_communication_1:
     '/milestones/3_5y/ms_3_5y_communication_1.cb1cef8e04.webp',
   ms_3_5y_fine_motor_1: '/milestones/3_5y/ms_3_5y_fine_motor_1.7c683683f6.webp',
+  ms_4y_school_readiness_1:
+    '/milestones/4y/ms_4y_school_readiness_1.34ee42a1bf.webp',
+  ms_4y_problem_solving_1: '/milestones/4y/ms_4y_problem_solving_1.a99eba4cf2.webp',
+  ms_4y_language_1: '/milestones/4y/ms_4y_language_1.abb490091e.webp',
+  ms_4y_gross_motor_1: '/milestones/4y/ms_4y_gross_motor_1.5deffabec6.webp',
 };
 
 export function milestoneIllustration(slug: string): string | undefined {
