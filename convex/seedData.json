@@ -30380,5 +30380,86 @@
     "clinicalStatus": "clinical_review",
     "media": [],
     "searchText": "အရေးပေါ်အခြေအနေတွင် အကူအညီ ဘယ်လိုတောင်းရမည်ကို သိရှိခြင်း knows how to ask for help in an emergency   safety 5y အန္တရာယ်ဖြစ်လျှင် ဘယ်သူ့ဆီ ဆက်သွယ်ရမည်၊ ဘာပြောရမည်ကို ရိုးရှင်းစွာ သိရှိပါသလား (ဥပမာ- \"အကူအညီလိုတယ်\" ဟု ကျယ်လောင်စွာ ပြောခြင်း)။ in an emergency, does your child have a simple sense of who to go to and what to say — like calling out \"i need help\"? အရေးပေါ်တွင် အကူအညီ ရှာဖွေနိုင်စွမ်းသည် ကိုယ်ပိုင်ဘေးကင်းရေး ကျွမ်းကျင်မှု၏ အရေးကြီးဆုံး အစိတ်အပိုင်းတစ်ခု ဖြစ်သည်။ being able to seek help in an emergency is one of the most important self-protective safety skills. ရိုးရှင်းသော အခြေအနေဇာတ်လမ်းဖြင့် \"ဒီလိုဖြစ်ရင် ဘယ်သူ့ဆီသွားမလဲ\" ဟု ငြိမ်ငြိမ်သက်သက် လေ့ကျင့်ပြပါ။ practise calmly with simple scenarios: \"if this happens, who would you go to?\" reference_verified knowing how to seek help in an emergency as a pre-kindergarten safety skill is described in aap positive-parenting guidance in the registry."
+  },
+  {
+    "ageGroupKey": "13_18m",
+    "domainKey": "cognitive",
+    "tags": [
+      "cognitive",
+      "13_18m"
+    ],
+    "data": {
+      "observeMm": "\"နှာခေါင်း ဘယ်မှာလဲ\" ဟုမေးလျှင် မိမိကိုယ်ပေါ်ရှိ နှာခေါင်း၊ မျက်လုံး ကဲ့သို့ အစိတ်အပိုင်းတစ်ခုကို ညွှန်ပြနိုင်ပါသလား။",
+      "observeEn": "If asked \"where's your nose?\", can your child point to their own nose, eyes, or another familiar body part?",
+      "whyMm": "ခန္ဓာကိုယ်အစိတ်အပိုင်းများကို အမည်နှင့် ချိတ်ဆက်နိုင်ခြင်းသည် စကားလုံးနားလည်မှုနှင့် ကိုယ်ပိုင်ခန္ဓာကိုယ် အသိတို့ ပေါင်းစပ်ပြီး တိုးတက်လာကြောင်း ပြသည်။",
+      "whyEn": "Connecting a body part to its name shows growing language understanding paired with body awareness.",
+      "encouragementMm": "ရေချိုးချိန်၊ အဝတ်ဝတ်ချိန်တွင် \"မျက်လုံးဘယ်မှာလဲ\" ကဲ့သို့ ကစားရင်း မေးကြည့်ပါ။",
+      "encouragementEn": "Ask playfully during bath time or dressing — \"where are your eyes?\"",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Naming/pointing to body parts as a receptive-language and body-awareness milestone around this age is described in CDC and AAP milestone guidance in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_13_18m_cognitive_2",
+    "titleMm": "ခန္ဓာကိုယ်အစိတ်အပိုင်းကို လက်ညှိုးထိုးပြနိုင်ခြင်း",
+    "titleEn": "Points to a body part when asked",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "ခန္ဓာကိုယ်အစိတ်အပိုင်းကို လက်ညှိုးထိုးပြနိုင်ခြင်း points to a body part when asked   cognitive 13_18m \"နှာခေါင်း ဘယ်မှာလဲ\" ဟုမေးလျှင် မိမိကိုယ်ပေါ်ရှိ နှာခေါင်း၊ မျက်လုံး ကဲ့သို့ အစိတ်အပိုင်းတစ်ခုကို ညွှန်ပြနိုင်ပါသလား။ if asked \"where's your nose?\", can your child point to their own nose, eyes, or another familiar body part? ခန္ဓာကိုယ်အစိတ်အပိုင်းများကို အမည်နှင့် ချိတ်ဆက်နိုင်ခြင်းသည် စကားလုံးနားလည်မှုနှင့် ကိုယ်ပိုင်ခန္ဓာကိုယ် အသိတို့ ပေါင်းစပ်ပြီး တိုးတက်လာကြောင်း ပြသည်။ connecting a body part to its name shows growing language understanding paired with body awareness. ရေချိုးချိန်၊ အဝတ်ဝတ်ချိန်တွင် \"မျက်လုံးဘယ်မှာလဲ\" ကဲ့သို့ ကစားရင်း မေးကြည့်ပါ။ ask playfully during bath time or dressing — \"where are your eyes?\" reference_verified naming/pointing to body parts as a receptive-language and body-awareness milestone around this age is described in cdc and aap milestone guidance in the registry."
+  },
+  {
+    "ageGroupKey": "13_18m",
+    "domainKey": "cognitive",
+    "tags": [
+      "cognitive",
+      "13_18m"
+    ],
+    "data": {
+      "observeMm": "\"လာပါ\" ဒါမှမဟုတ် \"ထိုင်ပါ\" ကဲ့သို့ စကားလုံးသက်သက်ကို (လက်ညွှန်ပြခြင်း မပါဘဲ) လိုက်နာနိုင်ပါသလား။",
+      "observeEn": "Can your child follow a simple word-only instruction like \"come here\" or \"sit down,\" without you pointing or gesturing?",
+      "whyMm": "လက်ဟန်ပြမပါဘဲ စကားလုံးကိုသာ နားလည်ခြင်းသည် ဘာသာစကား နားလည်မှု ပိုမိုစစ်မှန်စွာ ဖွံ့ဖြိုးလာကြောင်း ပြသည်။",
+      "whyEn": "Understanding words alone, without a gesture as a hint, shows more genuine language comprehension.",
+      "encouragementMm": "ရိုးရှင်းသော ညွှန်ကြားချက်ကို လက်ဟန်မပြဘဲ ပထမဆုံး စမ်းကြည့်ပါ။",
+      "encouragementEn": "Try giving a simple instruction with words alone first, before adding a gesture.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Following a one-step instruction without an accompanying gesture is described in CDC and AAP milestone guidance in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_13_18m_cognitive_3",
+    "titleMm": "လက်ဟန်ပြမပါဘဲ အဆင့်တစ်ခုတည်း ညွှန်ကြားချက်ကို လိုက်နာနိုင်ခြင်း",
+    "titleEn": "Follows a one-step instruction without a gesture",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "လက်ဟန်ပြမပါဘဲ အဆင့်တစ်ခုတည်း ညွှန်ကြားချက်ကို လိုက်နာနိုင်ခြင်း follows a one-step instruction without a gesture   cognitive 13_18m \"လာပါ\" ဒါမှမဟုတ် \"ထိုင်ပါ\" ကဲ့သို့ စကားလုံးသက်သက်ကို (လက်ညွှန်ပြခြင်း မပါဘဲ) လိုက်နာနိုင်ပါသလား။ can your child follow a simple word-only instruction like \"come here\" or \"sit down,\" without you pointing or gesturing? လက်ဟန်ပြမပါဘဲ စကားလုံးကိုသာ နားလည်ခြင်းသည် ဘာသာစကား နားလည်မှု ပိုမိုစစ်မှန်စွာ ဖွံ့ဖြိုးလာကြောင်း ပြသည်။ understanding words alone, without a gesture as a hint, shows more genuine language comprehension. ရိုးရှင်းသော ညွှန်ကြားချက်ကို လက်ဟန်မပြဘဲ ပထမဆုံး စမ်းကြည့်ပါ။ try giving a simple instruction with words alone first, before adding a gesture. reference_verified following a one-step instruction without an accompanying gesture is described in cdc and aap milestone guidance in the registry."
+  },
+  {
+    "ageGroupKey": "13_18m",
+    "domainKey": "emotional",
+    "tags": [
+      "emotional",
+      "13_18m"
+    ],
+    "data": {
+      "observeMm": "လိုအပ်ချက်ကို စကားဖြင့် မပြောနိုင်သေးသောအခါ ငိုကြွေးခြင်း၊ ကြမ်းပေါ်လှဲခြင်းကဲ့သို့ ပြင်းထန်စွာ ခံစားမှုပြသပါသလား။",
+      "observeEn": "When unable to express a need in words, does your child show intense frustration — crying hard, or dropping to the floor?",
+      "whyMm": "ဤအရွယ်တွင် ဆန္ဒနှင့် စကားပြောနိုင်စွမ်း မကိုက်ညီသေးသဖြင့် စိတ်ဆိုးထွက်ခြင်းသည် အလွန်ပုံမှန် ဖြစ်ပြီး ကိုယ်ကျင့်တရား ချို့ယွင်းခြင်း မဟုတ်ပါ။",
+      "whyEn": "A mismatch between wants and words makes tantrums very normal at this age — not a sign of poor character.",
+      "encouragementMm": "ငြိမ်သက်စွာ အနီးတွင်နေပြီး ဘေးကင်းလုံခြုံအောင် ထားကာ ခံစားချက်ကို အမည်တပ်ပေးပါ (\"စိတ်ပျက်နေတာ သိတယ်\")။",
+      "encouragementEn": "Stay calm and nearby, keep your child safe, and name the feeling (\"I see you're frustrated\").",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Temper tantrums around this age, driven by the gap between wants and expressive language, are described in the NICE social and emotional wellbeing guidance and AAP positive-parenting guidance in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_13_18m_emotional_1",
+    "titleMm": "စိတ်ပျက်သောအခါ စိတ်ဆိုးထွက်တတ်ခြင်း",
+    "titleEn": "Has temper tantrums when frustrated",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "စိတ်ပျက်သောအခါ စိတ်ဆိုးထွက်တတ်ခြင်း has temper tantrums when frustrated   emotional 13_18m လိုအပ်ချက်ကို စကားဖြင့် မပြောနိုင်သေးသောအခါ ငိုကြွေးခြင်း၊ ကြမ်းပေါ်လှဲခြင်းကဲ့သို့ ပြင်းထန်စွာ ခံစားမှုပြသပါသလား။ when unable to express a need in words, does your child show intense frustration — crying hard, or dropping to the floor? ဤအရွယ်တွင် ဆန္ဒနှင့် စကားပြောနိုင်စွမ်း မကိုက်ညီသေးသဖြင့် စိတ်ဆိုးထွက်ခြင်းသည် အလွန်ပုံမှန် ဖြစ်ပြီး ကိုယ်ကျင့်တရား ချို့ယွင်းခြင်း မဟုတ်ပါ။ a mismatch between wants and words makes tantrums very normal at this age — not a sign of poor character. ငြိမ်သက်စွာ အနီးတွင်နေပြီး ဘေးကင်းလုံခြုံအောင် ထားကာ ခံစားချက်ကို အမည်တပ်ပေးပါ (\"စိတ်ပျက်နေတာ သိတယ်\")။ stay calm and nearby, keep your child safe, and name the feeling (\"i see you're frustrated\"). reference_verified temper tantrums around this age, driven by the gap between wants and expressive language, are described in the nice social and emotional wellbeing guidance and aap positive-parenting guidance in the registry."
   }
 ]

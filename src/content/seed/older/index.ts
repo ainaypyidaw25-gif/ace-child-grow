@@ -592,4 +592,40 @@ for (const [ageGroupKey, domain, n, title, observe, why, encouragement] of GAP_F
   ));
 }
 
+// Cross-checked against UNICEF's own published parenting milestone pages
+// (unicef.org/parenting/child-development) — most of what UNICEF covers was
+// already closed by the two rounds above (crawling, peekaboo, waving,
+// dressing help, standing alone, potty readiness, stranger anxiety all match).
+// A few small, genuinely absent items remained, all at 13_18m.
+const UNICEF_GAP_FILL: GapFill[] = [
+  ['13_18m', 'cognitive', 2,
+    b('ခန္ဓာကိုယ်အစိတ်အပိုင်းကို လက်ညှိုးထိုးပြနိုင်ခြင်း', 'Points to a body part when asked'),
+    b('"နှာခေါင်း ဘယ်မှာလဲ" ဟုမေးလျှင် မိမိကိုယ်ပေါ်ရှိ နှာခေါင်း၊ မျက်လုံး ကဲ့သို့ အစိတ်အပိုင်းတစ်ခုကို ညွှန်ပြနိုင်ပါသလား။', 'If asked "where\'s your nose?", can your child point to their own nose, eyes, or another familiar body part?'),
+    b('ခန္ဓာကိုယ်အစိတ်အပိုင်းများကို အမည်နှင့် ချိတ်ဆက်နိုင်ခြင်းသည် စကားလုံးနားလည်မှုနှင့် ကိုယ်ပိုင်ခန္ဓာကိုယ် အသိတို့ ပေါင်းစပ်ပြီး တိုးတက်လာကြောင်း ပြသည်။', 'Connecting a body part to its name shows growing language understanding paired with body awareness.'),
+    b('ရေချိုးချိန်၊ အဝတ်ဝတ်ချိန်တွင် "မျက်လုံးဘယ်မှာလဲ" ကဲ့သို့ ကစားရင်း မေးကြည့်ပါ။', 'Ask playfully during bath time or dressing — "where are your eyes?"')],
+  ['13_18m', 'cognitive', 3,
+    b('လက်ဟန်ပြမပါဘဲ အဆင့်တစ်ခုတည်း ညွှန်ကြားချက်ကို လိုက်နာနိုင်ခြင်း', 'Follows a one-step instruction without a gesture'),
+    b('"လာပါ" ဒါမှမဟုတ် "ထိုင်ပါ" ကဲ့သို့ စကားလုံးသက်သက်ကို (လက်ညွှန်ပြခြင်း မပါဘဲ) လိုက်နာနိုင်ပါသလား။', 'Can your child follow a simple word-only instruction like "come here" or "sit down," without you pointing or gesturing?'),
+    b('လက်ဟန်ပြမပါဘဲ စကားလုံးကိုသာ နားလည်ခြင်းသည် ဘာသာစကား နားလည်မှု ပိုမိုစစ်မှန်စွာ ဖွံ့ဖြိုးလာကြောင်း ပြသည်။', 'Understanding words alone, without a gesture as a hint, shows more genuine language comprehension.'),
+    b('ရိုးရှင်းသော ညွှန်ကြားချက်ကို လက်ဟန်မပြဘဲ ပထမဆုံး စမ်းကြည့်ပါ။', 'Try giving a simple instruction with words alone first, before adding a gesture.')],
+  ['13_18m', 'emotional', 1,
+    b('စိတ်ပျက်သောအခါ စိတ်ဆိုးထွက်တတ်ခြင်း', 'Has temper tantrums when frustrated'),
+    b('လိုအပ်ချက်ကို စကားဖြင့် မပြောနိုင်သေးသောအခါ ငိုကြွေးခြင်း၊ ကြမ်းပေါ်လှဲခြင်းကဲ့သို့ ပြင်းထန်စွာ ခံစားမှုပြသပါသလား။', 'When unable to express a need in words, does your child show intense frustration — crying hard, or dropping to the floor?'),
+    b('ဤအရွယ်တွင် ဆန္ဒနှင့် စကားပြောနိုင်စွမ်း မကိုက်ညီသေးသဖြင့် စိတ်ဆိုးထွက်ခြင်းသည် အလွန်ပုံမှန် ဖြစ်ပြီး ကိုယ်ကျင့်တရား ချို့ယွင်းခြင်း မဟုတ်ပါ။', 'A mismatch between wants and words makes tantrums very normal at this age — not a sign of poor character.'),
+    b('ငြိမ်သက်စွာ အနီးတွင်နေပြီး ဘေးကင်းလုံခြုံအောင် ထားကာ ခံစားချက်ကို အမည်တပ်ပေးပါ ("စိတ်ပျက်နေတာ သိတယ်")။', 'Stay calm and nearby, keep your child safe, and name the feeling ("I see you\'re frustrated").')],
+];
+
+const UNICEF_GAP_FILL_EVIDENCE: Record<string, string> = {
+  '13_18m:cognitive:2': 'Naming/pointing to body parts as a receptive-language and body-awareness milestone around this age is described in CDC and AAP milestone guidance in the registry.',
+  '13_18m:cognitive:3': 'Following a one-step instruction without an accompanying gesture is described in CDC and AAP milestone guidance in the registry.',
+  '13_18m:emotional:1': 'Temper tantrums around this age, driven by the gap between wants and expressive language, are described in the NICE social and emotional wellbeing guidance and AAP positive-parenting guidance in the registry.',
+};
+
+for (const [ageGroupKey, domain, n, title, observe, why, encouragement] of UNICEF_GAP_FILL) {
+  authored.push(kb(
+    milestone(ageGroupKey, domain, n, { title, observe, why, encouragement }),
+    UNICEF_GAP_FILL_EVIDENCE[`${ageGroupKey}:${domain}:${n}`],
+  ));
+}
+
 export const OLDER_AUTHORED_CONTENT: SeedItem[] = authored;
