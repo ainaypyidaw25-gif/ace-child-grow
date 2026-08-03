@@ -186,6 +186,28 @@ const MILESTONES: SeedItem[] = [
     }),
     'Sleep amounts at 0–3 months follow WHO physical activity and sleep guidance for under-5s; the safe sleep positioning advice follows AAP safe sleep guidance and NHS SIDS advice.',
   ),
+  kb(
+    milestone('birth_2m', 'gross_motor', 3, {
+      title: b('နိုးနေချိန် လက်ခြေများကို တက်ကြွစွာ လှုပ်ရှားခြင်း', 'Moves arms and legs actively when awake'),
+      observe: b(
+        'နိုးနေချိန်တွင် လက်ခြေလေးတွေကို အားရပါးရ ကန်၊ ဆန့်၊ လှုပ်ရှားနေပါသလား။',
+        'While awake, does your baby kick, stretch and wave the arms and legs energetically?',
+      ),
+      why: b(
+        'ဒီလို လှုပ်ရှားမှုတွေက ကြွက်သားနှင့် အဆစ်များကို အားကောင်းလာစေပြီး နောင်တွင် လှိမ့်ခြင်း၊ တွားခြင်းအတွက် အခြေခံ ဖြစ်လာသည်။',
+        'This general movement builds muscle and joint strength that becomes the base for rolling and, later, crawling.',
+      ),
+      red: b(
+        'တစ်ဖက်လက် သို့မဟုတ် ခြေထောက်ကို အခြားတစ်ဖက်ထက် သိသိသာသာ နည်းနည်းသာ လှုပ်ရှားပါက ကျန်းမာရေးဝန်ထမ်းအား ပြပါ။',
+        'If one arm or leg moves noticeably less than the other, mention it at a health visit.',
+      ),
+      encouragement: b(
+        'အဝတ်လွှတ်လွှတ်ဝတ်ပေးပြီး လက်ခြေများကို လွတ်လပ်စွာ ကန်နိုင်အောင် နေရာပေးပါ။',
+        'Dress your baby in loose clothing and give room to kick freely.',
+      ),
+    }),
+    'General limb movement in early infancy is described in the WHO Care for Child Development materials and paediatric physical-therapy references in the registry, alongside the AAP milestone guidance in the corpus.',
+  ),
 ];
 
 // --- Guides ----------------------------------------------------------------

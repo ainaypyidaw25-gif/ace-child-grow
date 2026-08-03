@@ -165,6 +165,118 @@ const MILESTONES: SeedItem[] = [
     }),
     'Stranger awareness, peak separation anxiety and co-regulation with a caregiver at this age follow CDC and AAP milestone guidance, the AAP report on early relational health and toxic stress, the NICE social and emotional wellbeing guidance and the general paediatrics textbook in the registry.',
   ),
+  kb(
+    milestone('10_12m', 'gross_motor', 3, {
+      title: b('အထောက်အပံ့မပါဘဲ စက္ကန့်အနည်းငယ် မတ်တပ်ရပ်နိုင်ခြင်း', 'Stands alone for a few seconds'),
+      observe: b(
+        'ပရိဘောဂကို လွှတ်လိုက်ပြီး အထောက်အပံ့မပါဘဲ စက္ကန့်အနည်းငယ် တည်တည်ငြိမ်ငြိမ် ရပ်နေနိုင်ပါသလား။',
+        'Does your baby let go of furniture and stand steadily, without holding on, for a couple of seconds?',
+      ),
+      why: b(
+        'ခဏတာ တစ်ယောက်တည်း ရပ်နိုင်ခြင်းသည် ခြေထောက်ခွန်အားနှင့် ဟန်ချက်ညီမှု လုံလောက်လာကြောင်း ပြသည် — လမ်းလျှောက်ခြင်းမတိုင်မီ အဆင့်တစ်ခု ဖြစ်သည်။',
+        'Brief independent standing shows enough leg strength and balance are in place — a step on the way to walking.',
+      ),
+      encouragement: b(
+        'အားရပါးရ ကစားစဉ် ပရိဘောဂကို တဖြည်းဖြည်း လွှတ်ကြည့်ဖို့ အားပေးပါ၊ ပြုတ်ကျမှာစိုးရိမ်ရင် ပတ်ဝန်းကျင်ကို ပျော့ပြေအောင် ပြင်ထားပါ။',
+        'During play, encourage brief hands-off moments, and keep the surrounding area soft in case of a tumble.',
+      ),
+    }),
+    'Independent standing as a milestone preceding walking is documented in CDC/AAP milestone checklists and the WHO motor development windows study in the registry.',
+  ),
+  kb(
+    milestone('10_12m', 'fine_motor', 2, {
+      title: b('လက်ခုပ်တီးနိုင်ခြင်း', 'Claps hands together'),
+      observe: b(
+        'သီချင်း သို့မဟုတ် ကစားနည်းတစ်ခုအတွင်း လက်နှစ်ဖက်ကို ယှဉ်တွဲ၍ ခုပ်တီးနိုင်ပါသလား။',
+        'During a song or game, can your baby bring both hands together to clap?',
+      ),
+      why: b(
+        'လက်ခုပ်တီးခြင်းသည် လက်နှစ်ဖက် ညှိနှိုင်းအသုံးပြုနိုင်မှုနှင့် အကြီးလူများကို အတုယူသင်ယူနိုင်မှုကို ပြသည်။',
+        'Clapping shows two-handed coordination and the ability to copy an action from a caregiver.',
+      ),
+      encouragement: b(
+        '"ပတိုက်ပတိုက် လက်ခုပ်တီး" ကဲ့သို့ လက်ခုပ်ပါဝင်သော ကလေးသီချင်းများ အတူသီဆိုကစားပါ။',
+        'Sing simple clapping songs together and clap along so your baby can watch and copy.',
+      ),
+    }),
+    'Clapping and gesture imitation around this age are described in AAP milestone guidance and the CDC milestone checklists in the registry.',
+  ),
+  kb(
+    milestone('10_12m', 'communication', 3, {
+      title: b('"ဘိုင်ဘိုင်" ဟု လက်ပြပါးခါခြင်းနှင့် ချီပေးရန် လက်ဆန့်တောင်းခြင်း', 'Waves bye-bye and raises arms to be picked up'),
+      observe: b(
+        'တစ်စုံတစ်ယောက် ထွက်ခွာသွားလျှင် "ဘိုင်ဘိုင်" ဟု လက်ပြပါးခါပြပါသလား။ ချီပေးစေချင်သောအခါ လက်နှစ်ဖက်ကို မြှောက်၍ တောင်းပါသလား။',
+        'When someone leaves, does your baby wave bye-bye? When they want to be picked up, do they raise both arms?',
+      ),
+      why: b(
+        'ဒီလို လက်ရာနှင့် ပြသနည်းများသည် စကားမပြောတတ်မီ အရေးပါသော ရည်ရွယ်ချက်ရှိသော ဆက်သွယ်မှုများ ဖြစ်သည်။',
+        'These gestures are meaningful, intentional communication that develop before spoken words.',
+      ),
+      encouragement: b(
+        'တစ်စုံတစ်ယောက် ထွက်သွားတိုင်း "ဘိုင်ဘိုင်" ဆိုပြီး လက်ပြပါးခါ၍ ပုံစံပြပေးပါ။',
+        'Model waving and saying "bye-bye" every time someone leaves the room.',
+      ),
+    }),
+    'Early communicative gestures such as waving and reaching to be held are described in CDC/AAP milestone guidance and the WHO Care for Child Development materials in the registry.',
+  ),
+  kb(
+    milestone('10_12m', 'communication', 4, {
+      title: b('သင်လက်ညှိုးထိုးပြသည့်ဘက်ကို လှည့်ကြည့်နိုင်ခြင်း', 'Follows your point and looks at what you’re showing'),
+      observe: b(
+        'သင်ကလေးထံမှ ခပ်လှမ်းလှမ်းရှိသော အရာတစ်ခုကို လက်ညှိုးထိုးပြလျှင် ထိုဘက်သို့ လှည့်ကြည့်ပါသလား၊ ဒါမှမဟုတ် သင့်လက်ကိုပဲ ကြည့်နေပါသလား။',
+        'When you point at something a little way off, does your baby turn and look at the object — or only at your hand?',
+      ),
+      why: b(
+        'တစ်စုံတစ်ယောက် ညွှန်ပြသည့်ဘက်ကို လိုက်ကြည့်နိုင်ခြင်းသည် စိတ်ဝင်စားမှုကို အတူတကွ မျှဝေနိုင်စွမ်းကို ပြသပြီး၊ စကားလေ့လာမှုနှင့် လူမှုဆက်သွယ်မှု ဖွံ့ဖြိုးရေးအတွက် အရေးကြီးသော အခြေခံ စွမ်းရည်တစ်ခုဖြစ်သည်။',
+        'Following someone else’s point — called joint attention — is a key building block for language learning and social communication.',
+      ),
+      red: b(
+        '၁၂ လသို့ရောက်လျှင် လက်ညှိုးထိုးပြခြင်းကို လုံးဝ လိုက်မကြည့်ပါက ကျန်းမာရေးဝန်ထမ်းအား ပြပါ။',
+        'If your baby never follows a point by 12 months, mention it at a health visit.',
+      ),
+      encouragement: b(
+        'စိတ်ဝင်စားစရာအရာများကို ညွှန်ပြပြီး အမည်ခေါ်ပေးပါ — "ကြည့်၊ ခွေး"။',
+        'Point at interesting things and name them out loud — "look, a dog."',
+      ),
+    }),
+    'Joint attention (following a point) as an early social-communication milestone is described in the WHO Care for Child Development materials and the language-development research (Weisleder 2013) in the registry.',
+  ),
+  kb(
+    milestone('10_12m', 'self_help', 2, {
+      title: b('အဝတ်ဝတ်ချိန် လက်/ခြေထောက် တွန်းထည့်ကာ ကူညီခြင်း', 'Helps with dressing by pushing an arm or leg into clothing'),
+      observe: b(
+        'အင်္ကျီဝတ်ပေးနေချိန် လက်ကို လက်ရုံးထဲ တွန်းထည့်ခြင်း သို့မဟုတ် ခြေထောက်ကို ဆန့်ပေးခြင်းဖြင့် ပါဝင်ကူညီပါသလား။',
+        'While you dress your baby, do they help by pushing an arm into a sleeve or holding a leg out for you?',
+      ),
+      why: b(
+        'ဒီလို ပါဝင်ကူညီမှုသည် ကိုယ်ကာယ အသိနှင့် လုပ်ဆောင်ရန် စိတ်ပါဝင်စားမှု တိုးလာကြောင်း ပြပြီး ကိုယ်တိုင်လုပ်ဆောင်နိုင်စွမ်းရေး၏ အစဖြစ်သည်။',
+        'Cooperating this way shows growing body awareness and willingness to participate — the start of self-help skills.',
+      ),
+      encouragement: b(
+        'အဝတ်ဝတ်ပေးတိုင်း "လက်ကတွန်းထည့်ပါဦး" ကဲ့သို့ ခဏတာ စောင့်ပြီး ပါဝင်ဖို့ အခွင့်ပေးပါ။',
+        'Pause for a moment during dressing and invite your baby to help, rather than doing every step for them.',
+      ),
+    }),
+    'Early cooperative dressing as a self-help precursor is described in paediatric occupational-therapy references (Case-Smith) and Bright Futures guidance in the registry.',
+  ),
+  kb(
+    milestone('10_12m', 'play', 1, {
+      title: b('ဖုန်းကလေးနှင့် "စကားပြော" ကစားသကဲ့သို့ ရိုးရှင်းသော ဟန်ဆောင်ကစားနည်း စတင်ခြင်း', 'Plays simple pretend, like "talking" on a toy phone'),
+      observe: b(
+        'ဖုန်းကလေးကို နားနှင့်ထိစပ်ကာ "စကားပြော" ဟန်ဆောင်ခြင်း၊ ဒါမှမဟုတ် နေ့စဉ်လုပ်ဆောင်နေသည့် ရိုးရှင်းသော လှုပ်ရှားမှုတစ်ခုခုကို အတုယူခြင်း ပြသလား။',
+        'Does your baby hold a toy phone to the ear and "talk," or copy another simple everyday action like it?',
+      ),
+      why: b(
+        'ဒီလို ရိုးရှင်းသော အတုယူပြုမူများသည် စိတ်ကူးဉာဏ်နှင့် သင်္ကေတအသုံးပြုနိုင်မှု၏ အစောဆုံး လက္ခဏာများ ဖြစ်သည်။',
+        'These simple imitative actions are among the earliest signs of imagination and symbolic thinking.',
+      ),
+      encouragement: b(
+        'နေ့စဉ်လုပ်ဆောင်နေသည်များကို ကလေးရှေ့တွင် ရှင်းရှင်းလင်းလင်း ပြသပြီး ကလေးလိုက်လုပ်ခွင့်ပေးပါ။',
+        'Model everyday actions clearly in front of your baby and give them a chance to copy you.',
+      ),
+    }),
+    'Early imitative and pretend play as a marker of symbolic thinking is described in the AAP Power of Play guidance and developmental-behavioral paediatrics references in the registry.',
+  ),
 ];
 
 const GUIDES: SeedItem[] = [

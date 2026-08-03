@@ -89,6 +89,24 @@ const MILESTONES: SeedItem[] = [
     }),
     'Sleep amounts at 4–11 months follow WHO physical activity and sleep guidance for under-5s; the safe-sleep points follow AAP safe-sleep guidance and NHS guidance on reducing the risk of sudden infant death in the registry, and the urgent-symptom wording is kept conservative and directs parents to a health worker.',
   ),
+  kb(
+    milestone('3_4m', 'social', 2, {
+      title: b('ရိုးရှင်းသော မျက်နှာအမူအရာများကို အတုယူခြင်း', 'Mimics simple facial expressions'),
+      observe: b(
+        'သင်လျှာထုတ်ပြ သို့မဟုတ် ပါးစပ်ကျယ်ကျယ်ဖွင့်ပြလျှင် ကလေးက အတုလိုက်လုပ်ကြည့်ပါသလား။',
+        'If you stick out your tongue or open your mouth wide, does your baby try to copy it?',
+      ),
+      why: b(
+        'မျက်နှာအမူအရာ အတုယူခြင်းသည် မိဘနှင့် အာရုံစိုက်မျှဝေမှုနှင့် ဆက်သွယ်ပြောဆိုမှု အစောပိုင်း လက္ခဏာတစ်ခု ဖြစ်သည်။',
+        'Imitating a face is an early sign of shared attention and back-and-forth communication with a caregiver.',
+      ),
+      encouragement: b(
+        'ကလေးမျက်နှာအနီးတွင် ဖြည်းညှင်းစွာ မျက်နှာအမူအရာအမျိုးမျိုး ပြပြီး တုံ့ပြန်လာအောင် စောင့်ကြည့်ပါ။',
+        'Make slow, simple faces close to your baby and pause to see if they try to copy you.',
+      ),
+    }),
+    'Early face imitation in infants is described in the WHO Care for Child Development counselling materials and the responsive-caregiving research in the registry.',
+  ),
 ];
 
 // --- Guides ----------------------------------------------------------------
