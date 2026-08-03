@@ -7,8 +7,10 @@ import {
   decisionLabel,
   dimensionLabel,
   findReviewSearchResults,
+  formatEditorFieldReference,
   HIDDEN_SYSTEM_FIELDS,
   humanizeField,
+  reviewFieldElementId,
   updateStructuredField,
   type EditableField,
 } from '../ContentReviewWorkspace';
@@ -77,6 +79,13 @@ describe('reviewer content field labels', () => {
     expect(humanizeField(field('mm', ['actionToday', 'mm'], 'mm'), 'mm')).toBe('ယနေ့ စတင်လုပ်ဆောင်ရန် (မြန်မာ)');
     expect(humanizeField(field('mm', ['parentTips', '2', 'mm'], 'mm'), 'mm')).toBe('မိဘအတွက် အကြံပြုချက် 3 (မြန်မာ)');
     expect(humanizeField(field('en', ['redFlags', '0', 'en'], 'en'), 'en')).toBe('Warning sign 1 (English)');
+  });
+
+  it('shows the same one-based field reference printed on the PDF and creates a safe focus id', () => {
+    expect(formatEditorFieldReference(['quiz', '0', 'options', '0', 'mm']))
+      .toBe('quiz[1].options[1].mm');
+    expect(reviewFieldElementId('data.quiz.0.options.0.mm'))
+      .toBe('review-field-data-quiz-0-options-0-mm');
   });
 
   it('keeps system metadata out of the plain-language editor', () => {

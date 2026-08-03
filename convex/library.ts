@@ -20,6 +20,7 @@ import { resolveEntitlements } from './lib/entitlements';
 import { STARTER_ANIMATION_SLUGS } from './animationPlan';
 import { diffEditableContent } from './lib/contentEditDiff';
 import { seedAuditSummary, seedMayUpdateExisting, seedMediaIsProtected } from './lib/seedPolicy';
+import { findReviewContentMatches } from './lib/reviewSearch';
 
 const protectedContentDataFields = new Set([
   'editorialStatus',
@@ -350,6 +351,45 @@ export const search = query({
       .filter((r) => r.searchText.includes(needle))
       .slice(0, 50)
       .map((r) => ({ _id: r._id, slug: r.slug, type: r.type, titleMm: r.titleMm, titleEn: r.titleEn, clinicalStatus: r.clinicalStatus }));
+  },
+});
+
+const reviewFieldMatchValidator = v.object({
+  path: v.string(),
+  reference: v.string(),
+  language: v.union(v.literal('mm'), v.literal('en'), v.literal('neutral')),
+  value: v.string(),
+});
+
+const reviewSearchResultValidator = v.object({
+  slug: v.string(),
+  type: v.string(),
+  titleMm: v.string(),
+  titleEn: v.string(),
+  category: v.union(v.string(), v.null()),
+  ageGroupKey: v.union(v.string(), v.null()),
+  domainKey: v.union(v.string(), v.null()),
+  clinicalStatus: v.string(),
+  reviewRevision: v.number(),
+  matches: v.array(reviewFieldMatchValidator),
+});
+
+// Paper/PDF review lookup for staff. It searches exact slugs, bilingual copy,
+// and nested field references such as `quiz[1].options[1]`, then returns the
+// exact editor path so the owner never has to hunt through a long record.
+export const reviewSearch = query({
+  args: { q: v.string() },
+  returns: v.array(reviewSearchResultValidator),
+  handler: async (ctx, args) => {
+    await requireReviewEditor(ctx);
+    const queryText = args.q.trim();
+    if (!queryText) return [];
+    // The production catalogue is currently below 400 rows. Keep the read
+    // explicitly bounded so this helper cannot become an unbounded scan as the
+    // catalogue grows; a later catalogue above this ceiling should move to a
+    // dedicated search index and pagination.
+    const rows = await ctx.db.query('libraryContent').take(1000);
+    return findReviewContentMatches(rows, queryText);
   },
 });
 
