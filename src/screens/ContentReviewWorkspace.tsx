@@ -289,6 +289,19 @@ export function humanizeField(field: EditableField, locale: 'mm' | 'en'): string
   return `${base || (locale === 'mm' ? 'အကြောင်းအရာ' : 'Content')}${section}`;
 }
 
+export function formatEditorFieldReference(path: string[]): string {
+  let reference = '';
+  for (const segment of path) {
+    if (/^\d+$/.test(segment)) reference += `[${Number(segment) + 1}]`;
+    else reference += reference ? `.${segment}` : segment;
+  }
+  return reference;
+}
+
+export function reviewFieldElementId(path: string): string {
+  return `review-field-${path.replace(/[^a-zA-Z0-9_-]+/g, '-')}`;
+}
+
 type ContentEditorItem = {
   slug: string;
   titleMm: string;
@@ -309,7 +322,7 @@ function contentEditorSnapshot(item: ContentEditorItem): string {
   });
 }
 
-function ContentEditor({ item, role, onDirtyChange }: { item: {
+function ContentEditor({ item, role, targetFieldPath, onDirtyChange }: { item: {
   slug: string;
   titleMm: string;
   titleEn: string;
@@ -317,7 +330,7 @@ function ContentEditor({ item, role, onDirtyChange }: { item: {
   summaryEn?: string;
   data: unknown;
   reviewRevision?: number;
-}; role: Exclude<StaffRole, 'support'>; onDirtyChange: (dirty: boolean) => void }) {
+}; role: Exclude<StaffRole, 'support'>; targetFieldPath: string | null; onDirtyChange: (dirty: boolean) => void }) {
   const { locale } = useLocale();
   const L = (mm: string, en: string) => locale === 'mm' ? mm : en;
   const updateDraft = useMutation(api.library.updateDraft);
@@ -347,6 +360,14 @@ function ContentEditor({ item, role, onDirtyChange }: { item: {
     onDirtyChange(dirty);
     return () => onDirtyChange(false);
   }, [dirty, onDirtyChange]);
+
+  useEffect(() => {
+    if (!targetFieldPath) return;
+    const element = document.getElementById(reviewFieldElementId(targetFieldPath));
+    if (!element) return;
+    element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    element.focus({ preventScroll: true });
+  }, [item.slug, targetFieldPath]);
 
   useUnsavedChangesGuard(dirty, L(
     'မသိမ်းရသေးသော ပြင်ဆင်ချက်များ ပျောက်သွားမည်။ ဤစာမျက်နှာမှ ထွက်မလား။',
@@ -402,21 +423,21 @@ function ContentEditor({ item, role, onDirtyChange }: { item: {
           )}
       </p>
       <div className="grid gap-3 lg:grid-cols-2">
-        <label className="space-y-1 text-sm font-medium text-ink">
+        <label className={`space-y-1 rounded-xl text-sm font-medium text-ink ${targetFieldPath === 'meta.titleMm' ? 'ring-2 ring-sky ring-offset-2' : ''}`}>
           <span>{L('မြန်မာခေါင်းစဉ်', 'Myanmar title')}</span>
-          <input value={titleMm} onChange={(event) => setTitleMm(event.target.value)} disabled={busy} className="w-full rounded-xl border border-line px-3 py-2 disabled:opacity-60" required />
+          <input id={reviewFieldElementId('meta.titleMm')} value={titleMm} onChange={(event) => setTitleMm(event.target.value)} disabled={busy} className="w-full rounded-xl border border-line px-3 py-2 disabled:opacity-60" required />
         </label>
-        <label className="space-y-1 text-sm font-medium text-ink">
+        <label className={`space-y-1 rounded-xl text-sm font-medium text-ink ${targetFieldPath === 'meta.titleEn' ? 'ring-2 ring-sky ring-offset-2' : ''}`}>
           <span>{L('အင်္ဂလိပ်ခေါင်းစဉ်', 'English title')}</span>
-          <input value={titleEn} onChange={(event) => setTitleEn(event.target.value)} disabled={busy} className="w-full rounded-xl border border-line px-3 py-2 disabled:opacity-60" required />
+          <input id={reviewFieldElementId('meta.titleEn')} value={titleEn} onChange={(event) => setTitleEn(event.target.value)} disabled={busy} className="w-full rounded-xl border border-line px-3 py-2 disabled:opacity-60" required />
         </label>
-        <label className="space-y-1 text-sm font-medium text-ink">
+        <label className={`space-y-1 rounded-xl text-sm font-medium text-ink ${targetFieldPath === 'meta.summaryMm' ? 'ring-2 ring-sky ring-offset-2' : ''}`}>
           <span>{L('မြန်မာအနှစ်ချုပ်', 'Myanmar summary')}</span>
-          <textarea value={summaryMm} onChange={(event) => setSummaryMm(event.target.value)} disabled={busy} rows={4} className="w-full rounded-xl border border-line px-3 py-2 disabled:opacity-60" />
+          <textarea id={reviewFieldElementId('meta.summaryMm')} value={summaryMm} onChange={(event) => setSummaryMm(event.target.value)} disabled={busy} rows={4} className="w-full rounded-xl border border-line px-3 py-2 disabled:opacity-60" />
         </label>
-        <label className="space-y-1 text-sm font-medium text-ink">
+        <label className={`space-y-1 rounded-xl text-sm font-medium text-ink ${targetFieldPath === 'meta.summaryEn' ? 'ring-2 ring-sky ring-offset-2' : ''}`}>
           <span>{L('အင်္ဂလိပ်အနှစ်ချုပ်', 'English summary')}</span>
-          <textarea value={summaryEn} onChange={(event) => setSummaryEn(event.target.value)} disabled={busy} rows={4} className="w-full rounded-xl border border-line px-3 py-2 disabled:opacity-60" />
+          <textarea id={reviewFieldElementId('meta.summaryEn')} value={summaryEn} onChange={(event) => setSummaryEn(event.target.value)} disabled={busy} rows={4} className="w-full rounded-xl border border-line px-3 py-2 disabled:opacity-60" />
         </label>
       </div>
       <section className="rounded-xl border border-line bg-canvas p-4">
@@ -425,30 +446,36 @@ function ContentEditor({ item, role, onDirtyChange }: { item: {
           {L('ပြင်လိုသည့်စာသားကို သက်ဆိုင်ရာအကွက်တွင် တိုက်ရိုက်ပြင်ပါ။ နည်းပညာပုံစံဖြင့် ရေးရန် မလိုပါ။', 'Edit each field directly. No technical format is required.')}
         </p>
         <div className="mt-4 grid gap-3 lg:grid-cols-2">
-          {editableFields.map((field) => (
-            <label key={field.path.join('.')} className="space-y-1 text-sm font-medium text-ink">
-              <span>{humanizeField(field, locale)}</span>
-              {field.multiline ? (
-                <textarea
-                  value={field.value}
-                  onChange={(event) => setData((current: unknown) => updateStructuredField(current, field, event.target.value))}
-                  disabled={busy}
-                  rows={Math.min(8, Math.max(3, field.value.split('\n').length + 1))}
-                  className="w-full rounded-xl border border-line bg-white px-3 py-2 leading-7 disabled:opacity-60"
-                />
-              ) : (
-                <input
-                  value={field.value}
-                  onChange={(event) => setData((current: unknown) => updateStructuredField(current, field, event.target.value))}
-                  disabled={busy}
-                  className="w-full rounded-xl border border-line bg-white px-3 py-2 disabled:opacity-60"
-                />
-              )}
-              {field.list && (
-                <span className="block text-xs font-normal text-ink-soft">{L('တစ်ကြောင်းလျှင် အချက်တစ်ခု ရေးပါ။', 'Write one item per line.')}</span>
-              )}
-            </label>
-          ))}
+          {editableFields.map((field) => {
+            const editorPath = `data.${field.path.join('.')}`;
+            return (
+              <label key={field.path.join('.')} className={`space-y-1 rounded-xl text-sm font-medium text-ink ${targetFieldPath === editorPath ? 'ring-2 ring-sky ring-offset-2' : ''}`}>
+                <span>{humanizeField(field, locale)}</span>
+                <span className="block font-mono text-[11px] font-normal text-sky-deep">PDF: {formatEditorFieldReference(field.path)}</span>
+                {field.multiline ? (
+                  <textarea
+                    id={reviewFieldElementId(editorPath)}
+                    value={field.value}
+                    onChange={(event) => setData((current: unknown) => updateStructuredField(current, field, event.target.value))}
+                    disabled={busy}
+                    rows={Math.min(8, Math.max(3, field.value.split('\n').length + 1))}
+                    className="w-full rounded-xl border border-line bg-white px-3 py-2 leading-7 disabled:opacity-60"
+                  />
+                ) : (
+                  <input
+                    id={reviewFieldElementId(editorPath)}
+                    value={field.value}
+                    onChange={(event) => setData((current: unknown) => updateStructuredField(current, field, event.target.value))}
+                    disabled={busy}
+                    className="w-full rounded-xl border border-line bg-white px-3 py-2 disabled:opacity-60"
+                  />
+                )}
+                {field.list && (
+                  <span className="block text-xs font-normal text-ink-soft">{L('တစ်ကြောင်းလျှင် အချက်တစ်ခု ရေးပါ။', 'Write one item per line.')}</span>
+                )}
+              </label>
+            );
+          })}
         </div>
         {editableFields.length === 0 && (
           <p className="mt-3 rounded-lg bg-white p-3 text-sm text-ink-soft">{L('ဤအပိုင်းတွင် ပြင်ဆင်နိုင်သည့် စာသားမရှိပါ။', 'This section has no editable text fields.')}</p>
@@ -496,6 +523,7 @@ export function ContentReviewWorkspace() {
   const [type, setType] = useState('milestone');
   const [selectedSlug, setSelectedSlug] = useState('');
   const [itemQuery, setItemQuery] = useState('');
+  const [targetFieldPath, setTargetFieldPath] = useState<string | null>(null);
   const list = useQuery(api.library.listByType, { type });
   const detail = useQuery(api.library.getBySlug, selectedSlug ? { slug: selectedSlug } : 'skip');
   const reviews = useQuery(api.contentReviews.listForContent, selectedSlug ? { contentSlug: selectedSlug } : 'skip');
@@ -510,6 +538,7 @@ export function ContentReviewWorkspace() {
   // The queue is the single source of what remains outstanding for this row,
   // so the item screen and the queue can never disagree about completion.
   const queueState = useQuery(api.ownerPriority.queues);
+  const reviewLookupResults = useQuery(api.library.reviewSearch, itemQuery.trim() ? { q: itemQuery } : 'skip');
   const queueRow = queueState?.rows.find((row) => row.slug === selectedSlug);
 
   const confirmSelectionChange = () => !editorDirty || window.confirm(L(
@@ -534,10 +563,22 @@ export function ContentReviewWorkspace() {
     reviews?.current.map((review) => [review.dimension, review]) ?? [],
   ), [reviews]);
 
-  const reviewSearchResults = useMemo(
+  const metadataSearchResults = useMemo(
     () => findReviewSearchResults((queueState?.rows ?? []) as QueueRowView[], itemQuery),
     [itemQuery, queueState?.rows],
   );
+  const reviewSearchResults = reviewLookupResults ?? metadataSearchResults.map((result) => ({
+    slug: result.slug,
+    type: result.type,
+    titleMm: result.titleMm,
+    titleEn: result.titleEn,
+    category: result.category,
+    ageGroupKey: result.ageGroupKey,
+    domainKey: result.domainKey,
+    clinicalStatus: result.clinicalStatus,
+    reviewRevision: result.reviewRevision,
+    matches: [],
+  }));
 
   const submitDecision = async (event: FormEvent) => {
     event.preventDefault();
@@ -591,8 +632,18 @@ export function ContentReviewWorkspace() {
     setEditorDirty(false);
     setType(row.type);
     setSelectedSlug(row.slug);
+    setTargetFieldPath(null);
     setItemQuery('');
     setTab('item');
+  };
+  const openReviewSearchResult = (result: (typeof reviewSearchResults)[number], fieldPath?: string) => {
+    const changesItem = result.slug !== selectedSlug;
+    if (changesItem && !confirmSelectionChange()) return;
+    if (changesItem) setEditorDirty(false);
+    setType(result.type);
+    setSelectedSlug(result.slug);
+    setTargetFieldPath(fieldPath ?? result.matches[0]?.path ?? null);
+    setItemQuery('');
   };
   const tabs: Array<{ key: WorkspaceTab; label: string; visible: boolean }> = [
     { key: 'priority', label: L('ဦးစားပေးစစ်ဆေးရန်', 'Owner Priority'), visible: true },
@@ -650,6 +701,7 @@ export function ContentReviewWorkspace() {
             setEditorDirty(false);
             setType(event.target.value);
             setSelectedSlug('');
+            setTargetFieldPath(null);
             setItemQuery('');
           }} className="min-h-touch w-full rounded-xl border border-line bg-white px-3 py-2 text-base">
             {CONTENT_TYPES.map((value) => <option key={value} value={value}>{contentTypeLabel(value, locale)}</option>)}
@@ -664,7 +716,7 @@ export function ContentReviewWorkspace() {
                 type="search"
                 value={itemQuery}
                 onChange={(event) => setItemQuery(event.target.value)}
-                placeholder={L('PDF ထဲက ခေါင်းစဉ် သို့မဟုတ် slug ကို ရိုက်ရှာပါ', 'Search the PDF title or slug')}
+                placeholder={L('PDF ထဲက slug၊ စာသား သို့မဟုတ် quiz 1 options 1 ကို ရိုက်ပါ', 'Search a PDF slug, wording, or quiz 1 options 1')}
                 className="min-h-touch min-w-0 flex-1 bg-transparent py-2 text-base font-normal outline-none placeholder:text-ink-soft"
               />
               {itemQuery && <button type="button" onClick={() => setItemQuery('')} className="min-h-touch px-2 text-xs text-sky-deep">{L('ဖျက်မည်', 'Clear')}</button>}
@@ -679,27 +731,17 @@ export function ContentReviewWorkspace() {
               <p className="rounded-lg bg-pastel-yellow px-3 py-2 text-xs leading-5 text-ink">
                 {L('အောက်က editor ကို ဖွင့်ရန် လိုချင်သော ရလဒ်ကို နှိပ်ပါ။ ရှာရုံဖြင့် လက်ရှိအကြောင်းအရာ မပြောင်းသေးပါ။', 'Choose a result to open it in the editor below. Searching alone does not change the current item.')}
               </p>
-              {queueState === undefined ? (
+              {reviewLookupResults === undefined ? (
                 <p className="py-3 text-sm text-ink-soft" role="status">…</p>
               ) : reviewSearchResults.length > 0 ? (
                 <ul className="max-h-80 space-y-2 overflow-y-auto pr-1" data-testid="review-search-results">
                   {reviewSearchResults.slice(0, 30).map((result) => (
-                    <li key={result.slug}>
+                    <li key={result.slug} className={`rounded-xl border p-3 ${result.slug === selectedSlug ? 'border-sky bg-mint-soft' : 'border-line bg-white'}`}>
                       <button
                         type="button"
                         data-testid={`review-search-result-${result.slug}`}
-                        onClick={() => {
-                          if (result.slug === selectedSlug) {
-                            setItemQuery('');
-                            return;
-                          }
-                          if (!confirmSelectionChange()) return;
-                          setEditorDirty(false);
-                          setType(result.type);
-                          setSelectedSlug(result.slug);
-                          setItemQuery('');
-                        }}
-                        className={`w-full rounded-xl border p-3 text-left transition hover:border-sky ${result.slug === selectedSlug ? 'border-sky bg-mint-soft' : 'border-line bg-white'}`}
+                        onClick={() => openReviewSearchResult(result)}
+                        className="w-full text-left transition"
                       >
                         <span className="block font-semibold leading-7 text-ink">{result.titleMm}</span>
                         <span className="block text-sm leading-6 text-ink-soft">{result.titleEn}</span>
@@ -709,6 +751,21 @@ export function ContentReviewWorkspace() {
                         </span>
                         {result.slug === selectedSlug && <span className="mt-2 inline-block rounded-pill bg-white px-2 py-1 text-xs font-semibold text-sky-deep">{L('လက်ရှိဖွင့်ထားသည်', 'Currently open')}</span>}
                       </button>
+                      {result.matches.length > 0 && (
+                        <div className="mt-3 space-y-2 border-t border-line pt-3">
+                          {result.matches.map((match) => (
+                            <button
+                              key={`${result.slug}-${match.path}`}
+                              type="button"
+                              onClick={() => openReviewSearchResult(result, match.path)}
+                              className="block w-full rounded-lg bg-canvas px-3 py-2 text-left hover:bg-pastel-yellow"
+                            >
+                              <span className="block font-mono text-[11px] font-semibold text-sky-deep">{match.reference}</span>
+                              <span className="mt-1 line-clamp-2 block text-sm leading-6 text-ink">{match.value}</span>
+                            </button>
+                          ))}
+                        </div>
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -728,6 +785,7 @@ export function ContentReviewWorkspace() {
               if (!confirmSelectionChange()) return;
               setEditorDirty(false);
               setSelectedSlug(event.target.value);
+              setTargetFieldPath(null);
             }} disabled={!list?.items.length} className="min-h-touch w-full rounded-xl border border-line bg-white px-3 py-2 text-base disabled:opacity-60">
               {list && list.items.length === 0 && (
                 <option value="">{L('ဤအမျိုးအစားတွင် အကြောင်းအရာ မရှိသေးပါ', 'No content of this type yet')}</option>
@@ -759,6 +817,7 @@ export function ContentReviewWorkspace() {
           key={`${item.slug}-${item.updatedAt}`}
           item={item}
           role={access.role as Exclude<StaffRole, 'support'>}
+          targetFieldPath={targetFieldPath}
           onDirtyChange={setEditorDirty}
         />
       )}

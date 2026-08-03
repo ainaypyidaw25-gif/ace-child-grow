@@ -28,5 +28,8 @@ describe('high-value search surfaces', () => {
     expect(workspace).toContain('setType(result.type)');
     expect(workspace).toContain('setSelectedSlug(result.slug)');
     expect(workspace).toContain('Searching alone does not change the current item.');
+    expect(workspace).toContain('api.library.reviewSearch');
+    expect(workspace).toContain('openReviewSearchResult(result, match.path)');
+    expect(workspace).toContain('PDF: {formatEditorFieldReference(field.path)}');
   });
 });
