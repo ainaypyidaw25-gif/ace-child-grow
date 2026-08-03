@@ -450,4 +450,211 @@ for (const [ageGroupKey, domain, title, observe, why, encouragement] of NUTRITIO
   ));
 }
 
+// Second-round gap fill: self_help, emotional, social, cognitive, play, and
+// safety items identified by comparing the corpus against further external
+// milestone references. self_help was the single most under-covered domain —
+// 2y and 4y had no real self-care milestone at all (4y's only self_help-tagged
+// item is actually a pretend-play/social skill from the shared preschool
+// template above) — and emotional had zero titled entries across five
+// straight preschool bands (3y through 5y).
+type GapFill = [ageGroupKey: string, domain: string, n: number, title: Bilingual, observe: Bilingual, why: Bilingual, encouragement: Bilingual];
+
+const GAP_FILL: GapFill[] = [
+  ['2y', 'self_help', 1,
+    b('ရိုးရှင်းသော အိမ်မှုအလုပ်ငယ်များကို ကူညီလုပ်ဆောင်ခြင်း', 'Shows increasing independence and helps with simple chores'),
+    b('ကစားပြီးရင် အရုပ်ကို ဘူးထဲပြန်ထည့်ရန် ကူညီပါသလား။ ရိုးရှင်းသော အိမ်မှုအလုပ်တစ်ခုကို ကူညီလုပ်ပါသလား။', 'Does your child help put a toy back in its box after playing, or help with one simple household task?'),
+    b('ဤအရွယ်တွင် ကလေးသည် "ကိုယ်တိုင်လုပ်မယ်" ဆန္ဒ ပိုကြီးလာပြီး၊ ရိုးရှင်းသော အလုပ်များတွင် ပါဝင်ကူညီလိုစိတ် ရှိလာသည်။', 'A stronger "I can do it" drive appears now, and children begin wanting to help with simple tasks.'),
+    b('ရိုးရှင်းလွယ်ကူသော အလုပ်တစ်ခုတည်းကို တောင်းဆိုပြီး ပြီးမြောက်တိုင်း ချီးကျူးပါ။', 'Ask for one simple task at a time and praise the effort, not just the result.')],
+  ['2y', 'self_help', 2,
+    b('ဆီးအိမ်သာအကြောင်း စိတ်ဝင်စားမှု သို့မဟုတ် အသင့်ဖြစ်မှု လက္ခဏာများ ပြသခြင်း', 'Shows signs of interest or readiness for potty training'),
+    b('အသားစိုနေခြင်းကို ရှက်ဟန်ပြခြင်း၊ အိမ်သာသုံးသူများကို စောင့်ကြည့်ခြင်း၊ ဒါမှမဟုတ် "စိုနေတယ်" ဟု ကိုယ်တိုင် ပြောပြခြင်း ရှိပါသလား။', 'Does your child show discomfort with a wet nappy, watch others use the toilet, or tell you when they are wet?'),
+    b('ဤလက္ခဏာများသည် ခန္ဓာကိုယ် အသိတိုးလာကြောင်း ပြပြီး ဆီးအိမ်သာ လေ့ကျင့်ရန် အချိန်နီးလာကြောင်း အချက်ပြသည် — ကလေးတိုင်း အချိန်မတူ ပြင်ဆင်ကြသည်။', 'These signs show growing body awareness and suggest toilet training may be approaching — readiness timing varies widely between children.'),
+    b('ဖိအားမပေးဘဲ အိမ်သာကို ရင်းနှီးအောင် အနည်းငယ်စီ မိတ်ဆက်ပေးနိုင်ပါသည်။', 'You can start gently introducing the potty without any pressure.')],
+  ['2y', 'cognitive', 1,
+    b('အဆင့်နှစ်ဆင့်ပါ ညွှန်ကြားချက်ကို လိုက်နာနိုင်ခြင်း', 'Follows a two-step direction'),
+    b('"ကစားတုံးကို ယူပြီး ဘူးထဲထည့်ပါ" ကဲ့သို့ ဆက်တိုက်ညွှန်ကြားချက်နှစ်ခုကို လိုက်နာနိုင်ပါသလား။', 'Can your child follow a linked two-step instruction, like "pick up the block and put it in the box"?'),
+    b('အဆင့်နှစ်ဆင့်ကို မှတ်ဉာဏ်ထဲထားပြီး လိုက်နာနိုင်ခြင်းသည် ဘာသာစကားနားလည်မှုနှင့် မှတ်ဉာဏ် တိုးတက်လာကြောင်း ပြသည်။', 'Holding and following two linked steps shows growing language understanding and memory.'),
+    b('ရိုးရှင်းသော နေ့စဉ်လုပ်ငန်းများတွင် နှစ်ဆင့်ညွှန်ကြားချက်ကို လေ့ကျင့်ပေးပါ။', 'Practise two-step instructions during everyday routines.')],
+  ['19_24m', 'social', 1,
+    b('အခြားကလေးများကို တွေ့ရင် ရွှင်ပျဖြစ်ပြီး သူတို့ကစားရာသို့ ဝင်ရောက်လာခြင်း', 'Gets excited by other children and starts joining their play'),
+    b('အခြားကလေးများကို တွေ့လျှင် ရွှင်ပျဖန် ပြပါသလား။ သူတို့ကစားရာအနီးသို့ ဝင်ရောက်လာပါသလား (ဝေမျှစားရန် မမျှော်လင့်ရသေးပါ)။', 'Does your child get excited seeing other children, and move closer to join their play — even if sharing is not yet expected?'),
+    b('ဤအရွယ်တွင် အခြားကလေးများကို စိတ်ဝင်စားမှု ပိုကြီးလာသော်လည်း ဝေမျှခြင်းနှင့် အလှည့်ကျခြင်းကို နားလည်ရန် အချိန် ကျန်ပါသေးသည်။', 'Interest in other children grows now, though sharing and turn-taking are still a while off.'),
+    b('ကစားတုံးများစွာပါသော ကစားစရာများကို ပေးထားပါ — တစ်ခုတည်းအတွက် ငြင်းခုံမှု လျော့နည်းစေသည်။', 'Offer toys with plenty of pieces to go around, which reduces conflict over a single item.')],
+  ['2_5y', 'self_help', 3,
+    b('ဆီးအိမ်သာ လေ့ကျင့်မှု စတင်နေခြင်း', 'Potty training is in progress'),
+    b('ဆီးအိမ်သာ သွားရန် ကြိုးစားနေပါသလား — တစ်ခါတစ်ရံ အောင်မြင်ပြီး တစ်ခါတစ်ရံ ချွတ်ချော်နိုင်ပါသည်။', 'Is your child actively trying to use the potty — succeeding sometimes and having accidents other times?'),
+    b('ဆီးအိမ်သာ လေ့ကျင့်ခြင်းသည် ရေရှည်ကြာနိုင်ပြီး ချွတ်ချော်မှုများသည် အလွန်ပုံမှန် ဖြစ်သည် — အပြစ်တင်စရာ မဟုတ်ပါ။', 'Toilet training can take a while, and accidents along the way are very normal — never something to blame a child for.'),
+    b('အောင်မြင်တိုင်း အေးဆေးစွာ ချီးကျူးပြီး ချွတ်ချော်လျှင် တည်ငြိမ်စွာ ပြန်စကြည့်ပါ။', 'Praise calmly each success and stay relaxed and matter-of-fact about accidents.')],
+  ['2_5y', 'self_help', 4,
+    b('လူကြီးအကူအညီဖြင့် သွားတိုက်ခြင်း', 'Brushes teeth with help'),
+    b('သွားတိုက်တံကို ကိုင်ပြီး ကိုယ်တိုင် တိုက်ကြည့်ပါသလား (လူကြီးက ပြီးပြည့်စုံအောင် ထပ်တိုက်ပေးရသည်)။', 'Does your child hold the toothbrush and try brushing, even though you still need to finish the job?'),
+    b('ဤအရွယ်တွင် ကလေးလက်ကျွမ်းကျင်မှု လုံလောက်စွာ မရှိသေးသဖြင့် လူကြီးအကူအညီ ဆက်လိုအပ်ပါသည်။', 'Hand skill is not yet precise enough at this age, so adult finishing is still needed.'),
+    b('ကလေးဦးစွာ တိုက်ကြည့်ခွင့်ပေးပြီး နောက်ဆုံးတွင် လူကြီးက ဂရုတစိုက် ထပ်တိုက်ပေးပါ။', 'Let your child brush first, then finish carefully yourself.')],
+  ['2_5y', 'self_help', 5,
+    b('ကိုယ်တိုင် လက်ဆေးပြီး သုတ်ခြင်း', 'Washes and dries own hands'),
+    b('ရေချိုးအိမ်တွင် လူကြီးအကူအညီအနည်းငယ်ဖြင့် လက်ကို ဆေးပြီး သုတ်ကြည့်ပါသလား။', 'With a little help, does your child wash and dry their own hands at the sink?'),
+    b('လက်ဆေးခြင်း လုပ်ငန်းစဉ်ကို ကိုယ်တိုင် လုပ်နိုင်ခြင်းက ကျန်းမာရေး အလေ့အထ အစောပိုင်းကို တည်ဆောက်ပေးသည်။', 'Managing the hand-washing sequence themselves builds an early health habit.'),
+    b('ခြေတင်ခုံလေး ပေးထားပြီး အဆင့်များကို ရိုးရှင်းသော အစီအစဉ်ဖြင့် ပြပေးပါ။', 'Provide a step stool and show the steps in a simple, repeatable order.')],
+  ['2_5y', 'social', 3,
+    b('အခြားကလေးများနှင့် ဘေးမှာမကစားတော့ဘဲ အတူတကွ ကစားလာနိုင်ခြင်း', 'Plays cooperatively with other children, not just alongside them'),
+    b('အခြားကလေးများနှင့် ကစားတုံးဝေမျှခြင်း သို့မဟုတ် အတူတူ လုပ်ဆောင်ခြင်းကဲ့သို့ တကယ်ပါဝင်ကစားပါသလား (ဘေးမှာသီးခြား ကစားရုံ မဟုတ်ဘဲ)။', 'Does your child actually take part with other children — sharing a toy or building together — rather than just playing near them?'),
+    b('ဘေးမှာသီးခြားကစားခြင်းမှ အတူတကွ ကစားခြင်းသို့ ကူးပြောင်းခြင်းသည် လူမှုကျွမ်းကျင်မှု အရေးကြီးသော တိုးတက်မှုတစ်ခု ဖြစ်သည်။', 'Moving from parallel play to cooperative play is an important social development step.'),
+    b('ကလေးနှစ်ဦးလိုအပ်သော ရိုးရှင်းသောကစားနည်းများ (ဘောလုံးလှိမ့်ပေးခြင်း) ကို အားပေးပါ။', 'Encourage simple two-child games, like rolling a ball back and forth.')],
+  ['2_5y', 'play', 1,
+    b('အတုယူကစားစဉ် ပစ္စည်းတစ်ခုကို အခြားအရာအဖြစ် ဆောင်ရွက်ခြင်း', 'Uses one object to stand for another in pretend play'),
+    b('ကစားတုံးကို ဖုန်းအဖြစ် ဒါမှမဟုတ် ဇွန်းကို ဘီးအဖြစ် အတုယူသုံးကစားပါသလား။', 'Does your child pretend a block is a phone, or a spoon is a steering wheel?'),
+    b('ပစ္စည်းတစ်ခုကို အခြားအရာအဖြစ် စိတ်ကူးဖြင့် အစားထိုးနိုင်ခြင်းသည် သင်္ကေတဆိုင်ရာ တွေးခေါ်မှု (symbolic thinking) ၏ အရေးကြီးသော အဆင့်ဖြစ်သည်။', 'Letting one object represent another in the imagination is an important step in symbolic thinking.'),
+    b('ကလေးရဲ့ စိတ်ကူးကို လက်ခံပြီး အတူ ဆက်ကစားပါ။', 'Accept your child’s imaginative idea and build on it together.')],
+  ['3y', 'self_help', 3,
+    b('ကစားစရာများကို ပြန်သိမ်းခြင်းနှင့် အညစ်အကြေးအဝတ်များကို ဘူးထဲထည့်ခြင်း', 'Puts toys away and dirty clothes in the laundry basket'),
+    b('ကစားပြီးရင် ကစားစရာများကို လူကြီးအကူအညီဖြင့် ပြန်သိမ်းပါသလား။ အညစ်အကြေးအဝတ်ကို ဘူးထဲ ထည့်ပါသလား။', 'After play, does your child help put toys away? Do they put dirty clothes in the laundry basket?'),
+    b('ရိုးရှင်းသော သိမ်းဆည်းခြင်း အလေ့အထများက တာဝန်ယူမှုနှင့် အိမ်မှုပါဝင်ခြင်းကို စတင် တည်ဆောက်ပေးသည်။', 'Simple tidying habits begin to build responsibility and household participation.'),
+    b('ရိုးရှင်းသော ညွှန်ကြားချက်တစ်ခုတည်းပေးပြီး ပြီးသည့်အခါ ချီးကျူးပါ။', 'Give one simple instruction at a time and praise when it is done.')],
+  ['3y', 'self_help', 4,
+    b('စားပွဲပြင်ရာတွင် ကူညီပြီး ပန်းကန်များကို ဆေးကန်သို့ သယ်ဆောင်ခြင်း', 'Helps set the table and carries dishes to the sink'),
+    b('ခွက်၊ ဇွန်းများကို စားပွဲပေါ်တင်ရန် ကူညီပါသလား။ စားပြီးလျှင် ပန်းကန်ကို ဆေးကန်သို့ သယ်ဆောင်ပါသလား။', 'Does your child help place cups or spoons on the table, and carry a plate to the sink after eating?'),
+    b('ဒီလိုအလုပ်ငယ်များသည် လက်ထိန်းချုပ်မှုနှင့် မိသားစုလုပ်ငန်းများတွင် ပါဝင်နိုင်စွမ်းကို တည်ဆောက်ပေးသည်။', 'These small jobs build hand control and a sense of contributing to the family.'),
+    b('မကွဲသောပန်းကန်ခွက်များကိုသာ သယ်စေပြီး အောင်မြင်တိုင်း ကျေးဇူးတင်ကြောင်း ပြောပါ။', 'Have your child carry only unbreakable items, and thank them each time.')],
+  ['3y', 'emotional', 1,
+    b('ခံစားချက် အမျိုးမျိုးကို ဖော်ပြနိုင်ခြင်း', 'Shows a wide range of emotions'),
+    b('ပျော်ရွှင်ခြင်း၊ စိတ်ဆိုးခြင်း၊ ကြောက်ခြင်း၊ ဝမ်းနည်းခြင်း စသော ခံစားချက်များစွာကို မျက်နှာနှင့် အပြုအမူဖြင့် ဖော်ပြပါသလား။', 'Does your child express a range of emotions — happy, angry, scared, sad — through face and behavior?'),
+    b('ခံစားချက်အမျိုးမျိုးကို ဖော်ပြနိုင်ခြင်းသည် ကိုယ်ပိုင်ခံစားမှုကို သိရှိလာခြင်း၏ ပုံမှန် အစိတ်အပိုင်းဖြစ်သည် — ထိန်းချုပ်မှုကတော့ တဖြည်းဖြည်း လိုက်လာမည်။', 'Expressing a range of feelings is a normal part of growing emotional awareness — self-regulation follows gradually.'),
+    b('ခံစားချက်ကို အမည်တပ်ပေးပါ ("စိတ်ဆိုးနေတာ သိတယ်") — ထိန်းချုပ်ရန် ကူညီပေးသည်။', 'Name the feeling out loud ("I can see you’re angry") — it helps with self-regulation.')],
+  ['3y', 'play', 1,
+    b('စိတ်ကူးထဲက သူငယ်ချင်း (အတုယူကစားဖော်) ရှိနိုင်ခြင်း', 'May have an imaginary friend'),
+    b('မမြင်ရသော "သူငယ်ချင်း" တစ်ဦးနှင့် စကားပြော၊ ကစားနေတတ်ပါသလား။', 'Does your child sometimes talk to or play with an imaginary friend?'),
+    b('စိတ်ကူးဖော်သူငယ်ချင်းရှိခြင်းသည် ကျန်းမာသော စိတ်ကူးဉာဏ်ဖွံ့ဖြိုးမှု၏ ပုံမှန် အစိတ်အပိုင်း ဖြစ်ပြီး စိုးရိမ်စရာ မဟုတ်ပါ။', 'Having an imaginary friend is a normal part of healthy imaginative development, not a cause for concern.'),
+    b('ကလေး၏ စိတ်ကူးကို လေးစားစွာ လက်ခံပြီး စိတ်ကူးဇာတ်လမ်းထဲ ပါဝင်ကစားနိုင်ပါသည်။', 'Respect your child’s imagination, and feel free to join their imaginative story.')],
+  ['4y', 'self_help', 3,
+    b('ကိုယ်တိုင် သွားတိုက်ခြင်း', 'Brushes own teeth'),
+    b('သွားတိုက်တံကို ကိုင်ပြီး သွားများကို အားလုံး ကိုယ်တိုင် တိုက်ကြည့်ပါသလား (လူကြီးက စစ်ဆေးပေးရန် လိုသေးသည်)။', 'Can your child hold the brush and clean their teeth mostly independently, even though you still check afterward?'),
+    b('လက်ကျွမ်းကျင်မှု တိုးတက်လာသဖြင့် ဒီအရွယ်တွင် သွားတိုက်ခြင်းကို ပိုမိုကိုယ်တိုင် လုပ်နိုင်လာသည်။', 'Growing hand skill lets most 4-year-olds manage more of toothbrushing themselves.'),
+    b('ကလေးတိုက်ပြီးနောက် လူကြီးက အနည်းငယ် ထပ်စစ်ပေးပါ — အထူးသဖြင့် နောက်ဖက်သွားများ။', 'After your child brushes, do a quick adult check, especially the back teeth.')],
+  ['4y', 'self_help', 4,
+    b('ခလုတ်ချုပ်ကြိုးထက် အခြားအဝတ်အစားများကို ကိုယ်တိုင် ဝတ်၊ချွတ်နိုင်ခြင်း', 'Dresses and undresses with little help, except shoelaces'),
+    b('အင်္ကျီ၊ ဘောင်းဘီများကို ကိုယ်တိုင် ဝတ်၊ချွတ်နိုင်ပါသလား (ဖိနပ်ကြိုးချည်ရုံသာ အကူအညီလိုသေးသည်)။', 'Can your child put on and take off shirts and trousers mostly alone, needing help mainly with shoelaces?'),
+    b('ဤအရွယ်တွင် အဝတ်အစားနှင့် ပတ်သက်သော လုပ်ဆောင်ချက်များ ပိုမိုလွတ်လပ်လာပြီး ကြိုးချည်ခြင်းကဲ့သို့ အသေးစိတ်လုပ်ငန်းသာ ကျန်ရှိသည်။', 'Dressing becomes largely independent now, with only fine tasks like tying laces still needing help.'),
+    b('အချိန်ဖိအားမပေးဘဲ ကိုယ်တိုင်ဝတ်ရန် အချိန်အနည်းငယ် ထပ်ပေးပါ။', 'Allow a little extra time and avoid rushing while your child dresses themselves.')],
+  ['4y', 'emotional', 1,
+    b('အခြားသူများ၏ ခံစားချက်ကို စိတ်ဝင်စားမှု ပြခြင်း', 'Shows concern for others’ feelings'),
+    b('တစ်စုံတစ်ယောက် ငိုနေလျှင် သို့မဟုတ် ဒုက္ခရောက်နေလျှင် သတိပြုမိပြီး တုံ့ပြန်ပါသလား (နှစ်သိမ့်ရန် ကြိုးစားခြင်း၊ မေးခြင်း)။', 'When someone is upset or crying, does your child notice and respond — trying to comfort them or asking what is wrong?'),
+    b('ဒီလိုတုံ့ပြန်မှုသည် အခြားသူ၏ ခံစားမှုကို စတင် နားလည်စာနာနိုင်ခြင်း (empathy) ၏ အစောပိုင်း လက္ခဏာ ဖြစ်သည်။', 'This response is an early sign of empathy — beginning to understand how someone else feels.'),
+    b('"သူငယ်ချင်းက ဘယ်လိုခံစားနေမလဲ" ဟု မေးပြီး တွေးခေါ်ခိုင်းပါ။', 'Ask "how do you think your friend feels?" to encourage this thinking.')],
+  ['4_5y', 'self_help', 3,
+    b('ရိုးရှင်းသော အိမ်မှုအလုပ်တစ်ခုကို ကူညီလုပ်ဆောင်ခြင်း', 'Helps with a simple household chore'),
+    b('အိမ်မွေးတိရစ္ဆာန်ကို အစာကျွေးခြင်း ဒါမှမဟုတ် အဝတ်လျှော်ရာတွင် ရိုးရှင်းသော အလုပ်တစ်ခုကို ပုံမှန် ကူညီပါသလား။', 'Does your child regularly help with something like feeding a pet or a simple laundry task?'),
+    b('ပုံမှန် အိမ်မှုတာဝန် တစ်ခုတွင် ပါဝင်ခြင်းသည် တာဝန်ယူမှုနှင့် မိသားစု၏ တစ်စိတ်တစ်ပိုင်း ဖြစ်ကြောင်း ခံစားမှုကို တည်ဆောက်ပေးသည်။', 'Taking part in a regular household task builds responsibility and a sense of belonging to the family.'),
+    b('အသက်အရွယ်နှင့် ကိုက်ညီသော တာဝန်တစ်ခုတည်းကို ပုံမှန် ပေးထားပြီး ကလေးကိုယ်တိုင် တာဝန်ယူသည်ဟု ခံစားစေပါ။', 'Give one consistent, age-appropriate job so your child feels real ownership of it.')],
+  ['5y', 'emotional', 1,
+    b('အခြားသူများကို နားလည်စာနာပြီး မှန်/မှား ကွဲပြားမှုကို နားလည်ခြင်း', 'Shows empathy and understands right from wrong'),
+    b('အခြားသူတစ်ဦး ထိခိုက်နာကျင်ရင် ဝမ်းနည်းဟန်ပြပါသလား။ လုပ်ရပ်တစ်ခုက ဘာကြောင့် "မှား" သည်ကို ရှင်းပြနိုင်ပါသလား။', 'Does your child show sadness when another person is hurt? Can they explain why an action is "wrong"?'),
+    b('နားလည်စာနာမှုနှင့် မှန်/မှား ခွဲခြားနိုင်မှုသည် ကျောင်းအရွယ်မတိုင်မီ လူမှု/ခံစားမှု ဖွံ့ဖြိုးမှု၏ အရေးကြီးသော အဆင့်ဖြစ်သည်။', 'Empathy and a sense of right and wrong are important pre-school social-emotional milestones.'),
+    b('ဇာတ်လမ်းများကို အတူဖတ်ပြီး "ဒီဇာတ်ကောင်က ဘာကြောင့် ဒီလိုလုပ်တာလဲ" ဟု ဆွေးနွေးပါ။', 'Read stories together and discuss why a character acted the way they did.')],
+  ['5y', 'safety', 2,
+    b('ကိုယ်ပိုင်နေရပ်လိပ်စာနှင့် ဖုန်းနံပါတ်ကို သိရှိခြင်း', 'Knows own address and phone number'),
+    b('နေရပ်လိပ်စာ သို့မဟုတ် မိဘဖုန်းနံပါတ်ကို (အကြမ်းဖျင်းသော်လည်း) ပြောနိုင်ပါသလား။', 'Can your child say their home address or a parent’s phone number, even roughly?'),
+    b('ကိုယ်ပိုင်အချက်အလက်များကို သိရှိခြင်းသည် ကျောင်းသွားရန် အသင့်ဖြစ်ချိန်တွင် အရေးကြီးသော ဘေးကင်းရေး ကျွမ်းကျင်မှုတစ်ခု ဖြစ်သည်။', 'Knowing this personal information is an important safety skill going into school.'),
+    b('သီချင်း သို့မဟုတ် ထပ်ခါထပ်ခါ ရွတ်ဆိုပြီး လိပ်စာ/ဖုန်းနံပါတ်ကို ကစားရင်း လေ့ကျင့်ပေးနိုင်ပါသည်။', 'Turn the address or phone number into a simple song or repeated game to help it stick.')],
+  ['5y', 'safety', 3,
+    b('အရေးပေါ်အခြေအနေတွင် အကူအညီ ဘယ်လိုတောင်းရမည်ကို သိရှိခြင်း', 'Knows how to ask for help in an emergency'),
+    b('အန္တရာယ်ဖြစ်လျှင် ဘယ်သူ့ဆီ ဆက်သွယ်ရမည်၊ ဘာပြောရမည်ကို ရိုးရှင်းစွာ သိရှိပါသလား (ဥပမာ- "အကူအညီလိုတယ်" ဟု ကျယ်လောင်စွာ ပြောခြင်း)။', 'In an emergency, does your child have a simple sense of who to go to and what to say — like calling out "I need help"?'),
+    b('အရေးပေါ်တွင် အကူအညီ ရှာဖွေနိုင်စွမ်းသည် ကိုယ်ပိုင်ဘေးကင်းရေး ကျွမ်းကျင်မှု၏ အရေးကြီးဆုံး အစိတ်အပိုင်းတစ်ခု ဖြစ်သည်။', 'Being able to seek help in an emergency is one of the most important self-protective safety skills.'),
+    b('ရိုးရှင်းသော အခြေအနေဇာတ်လမ်းဖြင့် "ဒီလိုဖြစ်ရင် ဘယ်သူ့ဆီသွားမလဲ" ဟု ငြိမ်ငြိမ်သက်သက် လေ့ကျင့်ပြပါ။', 'Practise calmly with simple scenarios: "if this happens, who would you go to?"')],
+];
+
+const GAP_FILL_EVIDENCE: Record<string, string> = {
+  '2y:self_help:1': 'Growing task-participation and independence around age 2 follow the Bright Futures preventive-care schedule and paediatric occupational-therapy references in the registry.',
+  '2y:self_help:2': 'Early signs of toilet-training readiness are described in Bright Futures guidance and AAP developmental references in the registry.',
+  '2y:cognitive:1': 'Following two-step directions around age 2 is described in CDC milestone checklists and developmental-behavioral paediatrics references in the registry.',
+  '19_24m:social:1': 'Growing interest in peers and early parallel play around this age follow the NICE social and emotional wellbeing guidance and developmental-behavioral paediatrics references in the registry.',
+  '2_5y:self_help:3': 'Typical toilet-training progress and the normalcy of accidents follow Bright Futures guidance in the registry.',
+  '2_5y:self_help:4': 'Emerging, adult-assisted toothbrushing around this age is described in AAP oral-health guidance in the registry.',
+  '2_5y:self_help:5': 'Independent hand-washing as an early self-care habit is described in the Bright Futures preventive-care schedule in the registry.',
+  '2_5y:social:3': 'The shift from parallel to cooperative play is described in the NICE social and emotional wellbeing guidance and developmental-behavioral paediatrics references in the registry.',
+  '2_5y:play:1': 'Symbolic (object-substitution) pretend play as a cognitive milestone is described in the AAP Power of Play guidance in the registry.',
+  '3y:self_help:3': 'Early tidying and household participation are described in the Bright Futures preventive-care schedule in the registry.',
+  '3y:self_help:4': 'Simple table-help tasks as self-help and fine-motor skills are described in paediatric occupational-therapy references in the registry.',
+  '3y:emotional:1': 'A widening emotional vocabulary and expression around age 3 follow the NICE social and emotional wellbeing guidance in the registry.',
+  '3y:play:1': 'Imaginary friends as a normal feature of preschool imaginative play are described in developmental-behavioral paediatrics references in the registry.',
+  '4y:self_help:3': 'Increasingly independent toothbrushing around age 4 is described in AAP oral-health guidance in the registry.',
+  '4y:self_help:4': 'Largely independent dressing except fine tasks like fasteners and laces is described in paediatric occupational-therapy references and Bright Futures guidance in the registry.',
+  '4y:emotional:1': 'Emerging empathy and concern for others around age 4 follow the NICE social and emotional wellbeing guidance in the registry.',
+  '4_5y:self_help:3': 'Regular participation in a household task as a self-help and responsibility skill is described in the Bright Futures preventive-care schedule in the registry.',
+  '5y:emotional:1': 'Empathy and an emerging sense of right and wrong as pre-kindergarten social-emotional skills follow the NICE social and emotional wellbeing guidance in the registry.',
+  '5y:safety:2': 'Knowing personal safety information (address, phone number) as a pre-kindergarten skill is described in AAP positive-parenting guidance in the registry.',
+  '5y:safety:3': 'Knowing how to seek help in an emergency as a pre-kindergarten safety skill is described in AAP positive-parenting guidance in the registry.',
+};
+
+for (const [ageGroupKey, domain, n, title, observe, why, encouragement] of GAP_FILL) {
+  authored.push(kb(
+    milestone(ageGroupKey, domain, n, { title, observe, why, encouragement }),
+    GAP_FILL_EVIDENCE[`${ageGroupKey}:${domain}:${n}`],
+  ));
+}
+
+// Cross-checked against UNICEF's own published parenting milestone pages
+// (unicef.org/parenting/child-development) — most of what UNICEF covers was
+// already closed by the two rounds above (crawling, peekaboo, waving,
+// dressing help, standing alone, potty readiness, stranger anxiety all match).
+// A few small, genuinely absent items remained, all at 13_18m.
+const UNICEF_GAP_FILL: GapFill[] = [
+  ['13_18m', 'cognitive', 2,
+    b('ခန္ဓာကိုယ်အစိတ်အပိုင်းကို လက်ညှိုးထိုးပြနိုင်ခြင်း', 'Points to a body part when asked'),
+    b('"နှာခေါင်း ဘယ်မှာလဲ" ဟုမေးလျှင် မိမိကိုယ်ပေါ်ရှိ နှာခေါင်း၊ မျက်လုံး ကဲ့သို့ အစိတ်အပိုင်းတစ်ခုကို ညွှန်ပြနိုင်ပါသလား။', 'If asked "where\'s your nose?", can your child point to their own nose, eyes, or another familiar body part?'),
+    b('ခန္ဓာကိုယ်အစိတ်အပိုင်းများကို အမည်နှင့် ချိတ်ဆက်နိုင်ခြင်းသည် စကားလုံးနားလည်မှုနှင့် ကိုယ်ပိုင်ခန္ဓာကိုယ် အသိတို့ ပေါင်းစပ်ပြီး တိုးတက်လာကြောင်း ပြသည်။', 'Connecting a body part to its name shows growing language understanding paired with body awareness.'),
+    b('ရေချိုးချိန်၊ အဝတ်ဝတ်ချိန်တွင် "မျက်လုံးဘယ်မှာလဲ" ကဲ့သို့ ကစားရင်း မေးကြည့်ပါ။', 'Ask playfully during bath time or dressing — "where are your eyes?"')],
+  ['13_18m', 'cognitive', 3,
+    b('လက်ဟန်ပြမပါဘဲ အဆင့်တစ်ခုတည်း ညွှန်ကြားချက်ကို လိုက်နာနိုင်ခြင်း', 'Follows a one-step instruction without a gesture'),
+    b('"လာပါ" ဒါမှမဟုတ် "ထိုင်ပါ" ကဲ့သို့ စကားလုံးသက်သက်ကို (လက်ညွှန်ပြခြင်း မပါဘဲ) လိုက်နာနိုင်ပါသလား။', 'Can your child follow a simple word-only instruction like "come here" or "sit down," without you pointing or gesturing?'),
+    b('လက်ဟန်ပြမပါဘဲ စကားလုံးကိုသာ နားလည်ခြင်းသည် ဘာသာစကား နားလည်မှု ပိုမိုစစ်မှန်စွာ ဖွံ့ဖြိုးလာကြောင်း ပြသည်။', 'Understanding words alone, without a gesture as a hint, shows more genuine language comprehension.'),
+    b('ရိုးရှင်းသော ညွှန်ကြားချက်ကို လက်ဟန်မပြဘဲ ပထမဆုံး စမ်းကြည့်ပါ။', 'Try giving a simple instruction with words alone first, before adding a gesture.')],
+  ['13_18m', 'emotional', 1,
+    b('စိတ်ပျက်သောအခါ စိတ်ဆိုးထွက်တတ်ခြင်း', 'Has temper tantrums when frustrated'),
+    b('လိုအပ်ချက်ကို စကားဖြင့် မပြောနိုင်သေးသောအခါ ငိုကြွေးခြင်း၊ ကြမ်းပေါ်လှဲခြင်းကဲ့သို့ ပြင်းထန်စွာ ခံစားမှုပြသပါသလား။', 'When unable to express a need in words, does your child show intense frustration — crying hard, or dropping to the floor?'),
+    b('ဤအရွယ်တွင် ဆန္ဒနှင့် စကားပြောနိုင်စွမ်း မကိုက်ညီသေးသဖြင့် စိတ်ဆိုးထွက်ခြင်းသည် အလွန်ပုံမှန် ဖြစ်ပြီး ကိုယ်ကျင့်တရား ချို့ယွင်းခြင်း မဟုတ်ပါ။', 'A mismatch between wants and words makes tantrums very normal at this age — not a sign of poor character.'),
+    b('ငြိမ်သက်စွာ အနီးတွင်နေပြီး ဘေးကင်းလုံခြုံအောင် ထားကာ ခံစားချက်ကို အမည်တပ်ပေးပါ ("စိတ်ပျက်နေတာ သိတယ်")။', 'Stay calm and nearby, keep your child safe, and name the feeling ("I see you\'re frustrated").')],
+];
+
+const UNICEF_GAP_FILL_EVIDENCE: Record<string, string> = {
+  '13_18m:cognitive:2': 'Naming/pointing to body parts as a receptive-language and body-awareness milestone around this age is described in CDC and AAP milestone guidance in the registry.',
+  '13_18m:cognitive:3': 'Following a one-step instruction without an accompanying gesture is described in CDC and AAP milestone guidance in the registry.',
+  '13_18m:emotional:1': 'Temper tantrums around this age, driven by the gap between wants and expressive language, are described in the NICE social and emotional wellbeing guidance and AAP positive-parenting guidance in the registry.',
+};
+
+for (const [ageGroupKey, domain, n, title, observe, why, encouragement] of UNICEF_GAP_FILL) {
+  authored.push(kb(
+    milestone(ageGroupKey, domain, n, { title, observe, why, encouragement }),
+    UNICEF_GAP_FILL_EVIDENCE[`${ageGroupKey}:${domain}:${n}`],
+  ));
+}
+
+// Two last small items surfaced by a further round of reference charts, both
+// low-value but genuinely absent: "bangs two objects together" had only ever
+// appeared inside another entry's observe text, never as its own titled
+// skill, and page-turning had no entry at all in the 13_18m band.
+const FINAL_GAP_FILL: GapFill[] = [
+  ['7_9m', 'fine_motor', 3,
+    b('ပစ္စည်းနှစ်ခုကို ယှဉ်တွဲ၍ ရိုက်ခတ်ခြင်း', 'Bangs two objects together'),
+    b('ကစားစရာနှစ်ခုကို လက်နှစ်ဖက်ဖြင့် ကိုင်ပြီး အသံထွက်အောင် ယှဉ်တွဲရိုက်ခတ်ပါသလား။', 'Does your child hold a toy in each hand and bang them together to make a sound?'),
+    b('ဒီလုပ်ဆောင်ချက်သည် လက်နှစ်ဖက် ညှိနှိုင်းအသုံးပြုနိုင်မှုနှင့် အသံနှင့် လှုပ်ရှားမှု ဆက်စပ်နေကြောင်း စူးစမ်းလေ့လာခြင်း ဖြစ်သည်။', 'This action shows two-handed coordination and early exploration of cause and effect through sound.'),
+    b('အသံထွက်တတ်သော ဘေးကင်းသည့် ကစားစရာနှစ်ခုကို ပေးထားပါ။', 'Offer two safe toys that make a sound when tapped together.')],
+  ['13_18m', 'fine_motor', 2,
+    b('စာအုပ် စာမျက်နှာများကို လှန်နိုင်ခြင်း', 'Turns the pages of a book'),
+    b('ထူသော ရွက်ဖုံးစာအုပ်ကို စာမျက်နှာ တစ်ခြမ်းချင်းစီ (ရော၍ ဖြစ်စေ) လှန်ကြည့်ပါသလား။', 'Can your child turn the pages of a board book, even several at a time?'),
+    b('စာမျက်နှာလှန်ခြင်းသည် လက်ချောင်းငယ် ထိန်းချုပ်မှုနှင့် စာအုပ်ကို ကိုယ်တိုင် စူးစမ်းလိုသော စိတ်ကို ပြသည်။', 'Page-turning shows finger control and a growing interest in exploring books independently.'),
+    b('ထူထောင့်ပြီး ဆွဲမပြတ်တတ်သော ရွက်ဖုံးစာအုပ်များကို ပေးပြီး ကိုယ်တိုင် လှန်ခွင့်ပေးပါ။', 'Offer sturdy board books and let your child try turning the pages themselves.')],
+];
+
+const FINAL_GAP_FILL_EVIDENCE: Record<string, string> = {
+  '7_9m:fine_motor:3': 'Banging two objects together as an early two-handed, cause-and-effect skill is described in CDC and AAP milestone guidance in the registry.',
+  '13_18m:fine_motor:2': 'Page-turning as a fine-motor and early-literacy skill around this age is described in AAP milestone guidance and the AAP Power of Play guidance in the registry.',
+};
+
+for (const [ageGroupKey, domain, n, title, observe, why, encouragement] of FINAL_GAP_FILL) {
+  authored.push(kb(
+    milestone(ageGroupKey, domain, n, { title, observe, why, encouragement }),
+    FINAL_GAP_FILL_EVIDENCE[`${ageGroupKey}:${domain}:${n}`],
+  ));
+}
+
 export const OLDER_AUTHORED_CONTENT: SeedItem[] = authored;
