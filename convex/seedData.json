@@ -29111,5 +29111,734 @@
     "clinicalStatus": "clinical_review",
     "ageGroupKey": "5y",
     "searchText": "၅ နှစ် — မိဘမှတ်သားစာရင်း 5 years — parent observation sheet ဖွံ့ဖြိုးမှု၊ နေ့စဉ်အလေ့အထနှင့် မေးလိုသောအချက်များကို မှတ်သားရန်ဖြစ်ပြီး စစ်ဆေးအောင်/မအောင် သတ်မှတ်ရန် မဟုတ်ပါ။ record development, routines, and questions without pass/fail labels or diagnosis. checklist_5y printable observation a4 pdf reference_verified cdc milestone monitoring and aap surveillance guidance support this non-diagnostic observation tool for 5 years."
+  },
+  {
+    "ageGroupKey": "13_18m",
+    "domainKey": "nutrition",
+    "tags": [
+      "nutrition",
+      "13_18m"
+    ],
+    "data": {
+      "observeMm": "ပြုတ်ပြီး အသေးလှီးထားသော မိသားစုအစားအစာကို (အနယ်မဟုတ်ဘဲ) ကိုယ်တိုင် ကောက်စားပါသလား။ ဖွင့်ထားသောခွက်ကို လူကြီးကူညီမှုဖြင့် သောက်ပါသလား။",
+      "observeEn": "Does your child eat small, soft pieces of family food (not just purees), and drink from an open cup with your help?",
+      "whyMm": "ဤအရွယ်တွင် အများစုသည် အနယ်ပုံစံမှ အသေးလှီးထားသော အစားအစာများသို့ ကူးပြောင်းနေကြသည်။ ခွက်ဖြင့်သောက်ခြင်းက ပါးစပ်ကြွက်သားများကို ပိုမိုလေ့ကျင့်ပေးသည်။",
+      "whyEn": "Most toddlers this age are moving from purees to soft chopped family foods, and cup drinking builds oral-motor skill.",
+      "encouragementMm": "စားပွဲတွင် မိသားစုနှင့် အတူထိုင်ကျွေးပြီး ကိုယ်တိုင် ကောက်စားခွင့် ပေးပါ — ပက်ကျံခြင်းသည် ပုံမှန်ဖြစ်သည်။",
+      "encouragementEn": "Sit your child at the family table and let them try feeding themselves — mess is normal and expected.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "The transition from purees to chopped family foods and open-cup drinking around this age follows WHO complementary-feeding guidance and NHS first-foods guidance in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_13_18m_nutrition_1",
+    "titleMm": "မိသားစုစားသော အစားအစာအမျိုးမျိုးကို လက်ဖြင့်စား ကြိုးစားခြင်း",
+    "titleEn": "Eats a variety of family foods with some help",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "မိသားစုစားသော အစားအစာအမျိုးမျိုးကို လက်ဖြင့်စား ကြိုးစားခြင်း eats a variety of family foods with some help   nutrition 13_18m ပြုတ်ပြီး အသေးလှီးထားသော မိသားစုအစားအစာကို (အနယ်မဟုတ်ဘဲ) ကိုယ်တိုင် ကောက်စားပါသလား။ ဖွင့်ထားသောခွက်ကို လူကြီးကူညီမှုဖြင့် သောက်ပါသလား။ does your child eat small, soft pieces of family food (not just purees), and drink from an open cup with your help? ဤအရွယ်တွင် အများစုသည် အနယ်ပုံစံမှ အသေးလှီးထားသော အစားအစာများသို့ ကူးပြောင်းနေကြသည်။ ခွက်ဖြင့်သောက်ခြင်းက ပါးစပ်ကြွက်သားများကို ပိုမိုလေ့ကျင့်ပေးသည်။ most toddlers this age are moving from purees to soft chopped family foods, and cup drinking builds oral-motor skill. စားပွဲတွင် မိသားစုနှင့် အတူထိုင်ကျွေးပြီး ကိုယ်တိုင် ကောက်စားခွင့် ပေးပါ — ပက်ကျံခြင်းသည် ပုံမှန်ဖြစ်သည်။ sit your child at the family table and let them try feeding themselves — mess is normal and expected. reference_verified the transition from purees to chopped family foods and open-cup drinking around this age follows who complementary-feeding guidance and nhs first-foods guidance in the registry."
+  },
+  {
+    "ageGroupKey": "13_18m",
+    "domainKey": "sleep",
+    "tags": [
+      "sleep",
+      "13_18m"
+    ],
+    "data": {
+      "observeMm": "နေ့ခင်း နှစ်ကြိမ်အိပ်ပါသလား၊ တစ်ကြိမ်တည်းသာ အိပ်ချင်တော့ပါသလား။ ညအိပ်ချိန် တစ်ညလုံး နီးပါးရှိပါသလား။",
+      "observeEn": "Does your child still nap twice a day, or seem ready for just one longer nap? Do nights include one longer stretch of sleep?",
+      "whyMm": "ဤအရွယ်တွင် အိပ်ပုံစံ တဖြည်းဖြည်း ပြောင်းလဲလာပြီး နေ့ခင်း တစ်ကြိမ်အိပ်ချိန်ဆီသို့ ရွေ့လျားလာသည် — ကလေးအလိုက် ကွာဟမှု ကျယ်ပါသည်။",
+      "whyEn": "Sleep patterns shift now, moving toward a single nap — timing varies widely between children.",
+      "encouragementMm": "နေ့ခင်းအိပ်ချိန်နှင့် ညအိပ်ချိန်ကို တတ်နိုင်သမျှ ပုံမှန် ထားပါ။",
+      "encouragementEn": "Keep nap and bedtime as consistent as you reasonably can.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "The transition from two naps to one around 12-18 months follows WHO physical activity and sleep guidance for under-5s in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_13_18m_sleep_1",
+    "titleMm": "တစ်ရက်လျှင် နေ့ခင်းအိပ်ချိန် နှစ်ကြိမ်မှ တစ်ကြိမ်သို့ ကူးပြောင်းလာခြင်း",
+    "titleEn": "Naps twice a day, moving toward one nap",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "တစ်ရက်လျှင် နေ့ခင်းအိပ်ချိန် နှစ်ကြိမ်မှ တစ်ကြိမ်သို့ ကူးပြောင်းလာခြင်း naps twice a day, moving toward one nap   sleep 13_18m နေ့ခင်း နှစ်ကြိမ်အိပ်ပါသလား၊ တစ်ကြိမ်တည်းသာ အိပ်ချင်တော့ပါသလား။ ညအိပ်ချိန် တစ်ညလုံး နီးပါးရှိပါသလား။ does your child still nap twice a day, or seem ready for just one longer nap? do nights include one longer stretch of sleep? ဤအရွယ်တွင် အိပ်ပုံစံ တဖြည်းဖြည်း ပြောင်းလဲလာပြီး နေ့ခင်း တစ်ကြိမ်အိပ်ချိန်ဆီသို့ ရွေ့လျားလာသည် — ကလေးအလိုက် ကွာဟမှု ကျယ်ပါသည်။ sleep patterns shift now, moving toward a single nap — timing varies widely between children. နေ့ခင်းအိပ်ချိန်နှင့် ညအိပ်ချိန်ကို တတ်နိုင်သမျှ ပုံမှန် ထားပါ။ keep nap and bedtime as consistent as you reasonably can. reference_verified the transition from two naps to one around 12-18 months follows who physical activity and sleep guidance for under-5s in the registry."
+  },
+  {
+    "ageGroupKey": "13_18m",
+    "domainKey": "safety",
+    "tags": [
+      "safety",
+      "13_18m"
+    ],
+    "data": {
+      "observeMm": "\"မလုပ်နဲ့\" ဒါမှမဟုတ် \"အန္တရာယ်ရှိတယ်\" ဟု ပြောလျှင် ရပ်တန့် သို့မဟုတ် လှည့်ကြည့်ပါသလား (အမြဲတမ်း မဟုတ်သော်လည်း)။",
+      "observeEn": "When you say \"no\" or \"danger,\" does your child sometimes pause or look at you — even if not every time?",
+      "whyMm": "ဤအရွယ်တွင် အန္တရာယ်စကားလုံးကို တစ်စိတ်တစ်ပိုင်း နားလည်စတင်သော်လည်း ကိုယ်တိုင် ထိန်းချုပ်နိုင်မှု မရှိသေးပါ — အနီးကပ် ကြီးကြပ်မှု လိုအပ်ဆဲဖြစ်သည်။",
+      "whyEn": "Understanding of danger words is only beginning now and self-control is not yet reliable — close supervision is still essential.",
+      "encouragementMm": "\"မလုပ်နဲ့\" ပြောရုံထက် ဘေးကင်းသော အစားထိုးလုပ်ဆောင်ချက် ချက်ချင်းပြပါ။",
+      "encouragementEn": "Instead of just saying \"no,\" immediately show a safe alternative action.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Early, unreliable response to danger words and the ongoing need for close supervision at this age follow AAP positive-parenting guidance and Bright Futures guidance in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_13_18m_safety_1",
+    "titleMm": "\"မလုပ်နဲ့\" သို့မဟုတ် အန္တရာယ်ဆိုင်ရာ စကားလုံးကို တစ်ခါတစ်ရံ တုံ့ပြန်ခြင်း",
+    "titleEn": "Responds to \"no\" or a danger word, at least sometimes",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "\"မလုပ်နဲ့\" သို့မဟုတ် အန္တရာယ်ဆိုင်ရာ စကားလုံးကို တစ်ခါတစ်ရံ တုံ့ပြန်ခြင်း responds to \"no\" or a danger word, at least sometimes   safety 13_18m \"မလုပ်နဲ့\" ဒါမှမဟုတ် \"အန္တရာယ်ရှိတယ်\" ဟု ပြောလျှင် ရပ်တန့် သို့မဟုတ် လှည့်ကြည့်ပါသလား (အမြဲတမ်း မဟုတ်သော်လည်း)။ when you say \"no\" or \"danger,\" does your child sometimes pause or look at you — even if not every time? ဤအရွယ်တွင် အန္တရာယ်စကားလုံးကို တစ်စိတ်တစ်ပိုင်း နားလည်စတင်သော်လည်း ကိုယ်တိုင် ထိန်းချုပ်နိုင်မှု မရှိသေးပါ — အနီးကပ် ကြီးကြပ်မှု လိုအပ်ဆဲဖြစ်သည်။ understanding of danger words is only beginning now and self-control is not yet reliable — close supervision is still essential. \"မလုပ်နဲ့\" ပြောရုံထက် ဘေးကင်းသော အစားထိုးလုပ်ဆောင်ချက် ချက်ချင်းပြပါ။ instead of just saying \"no,\" immediately show a safe alternative action. reference_verified early, unreliable response to danger words and the ongoing need for close supervision at this age follow aap positive-parenting guidance and bright futures guidance in the registry."
+  },
+  {
+    "ageGroupKey": "19_24m",
+    "domainKey": "nutrition",
+    "tags": [
+      "nutrition",
+      "19_24m"
+    ],
+    "data": {
+      "observeMm": "ဇွန်းဖြင့် အစာကို ပါးစပ်ထိအောင် အများစု ယူဆောင်နိုင်ပါသလား။ ဖွင့်ထားသောခွက်ကို ကိုယ်တိုင် ကိုင်ပြီး သောက်ပါသလား။",
+      "observeEn": "Can your child get most of a spoonful to the mouth without heavy spilling? Do they hold and drink from an open cup themselves?",
+      "whyMm": "ဒီအရွယ်တွင် ဇွန်း/ခွက် အသုံးပြုနိုင်မှု ပိုမိုတိကျလာသည် — လက်နှင့်မျက်စိ ညှိနှိုင်းမှု တိုးတက်လာကြောင်း ပြသည်။",
+      "whyEn": "Spoon and cup use become noticeably more accurate now, showing growing hand–eye coordination.",
+      "encouragementMm": "ပက်ကျံမှုကို ခန့်မှန်းထားပြီး ဇွန်းကို ကိုယ်တိုင်သုံးရန် အားပေးဆက်လက်ပါ။",
+      "encouragementEn": "Expect some spilling and keep encouraging independent spoon use.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Improving spoon and open-cup competence around 18-24 months is described in the Bright Futures preventive-care schedule and paediatric occupational-therapy references in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_19_24m_nutrition_1",
+    "titleMm": "ဇွန်းကို ပိုမိုကျွမ်းကျင်စွာ သုံးခြင်းနှင့် ဖွင့်ထားသောခွက်ဖြင့် သောက်ခြင်း",
+    "titleEn": "Uses a spoon with less spilling and drinks from an open cup",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "ဇွန်းကို ပိုမိုကျွမ်းကျင်စွာ သုံးခြင်းနှင့် ဖွင့်ထားသောခွက်ဖြင့် သောက်ခြင်း uses a spoon with less spilling and drinks from an open cup   nutrition 19_24m ဇွန်းဖြင့် အစာကို ပါးစပ်ထိအောင် အများစု ယူဆောင်နိုင်ပါသလား။ ဖွင့်ထားသောခွက်ကို ကိုယ်တိုင် ကိုင်ပြီး သောက်ပါသလား။ can your child get most of a spoonful to the mouth without heavy spilling? do they hold and drink from an open cup themselves? ဒီအရွယ်တွင် ဇွန်း/ခွက် အသုံးပြုနိုင်မှု ပိုမိုတိကျလာသည် — လက်နှင့်မျက်စိ ညှိနှိုင်းမှု တိုးတက်လာကြောင်း ပြသည်။ spoon and cup use become noticeably more accurate now, showing growing hand–eye coordination. ပက်ကျံမှုကို ခန့်မှန်းထားပြီး ဇွန်းကို ကိုယ်တိုင်သုံးရန် အားပေးဆက်လက်ပါ။ expect some spilling and keep encouraging independent spoon use. reference_verified improving spoon and open-cup competence around 18-24 months is described in the bright futures preventive-care schedule and paediatric occupational-therapy references in the registry."
+  },
+  {
+    "ageGroupKey": "19_24m",
+    "domainKey": "sleep",
+    "tags": [
+      "sleep",
+      "19_24m"
+    ],
+    "data": {
+      "observeMm": "အိပ်မီ တူညီသောအဆင့်များ (ရေချိုး၊ စာဖတ်၊ အိပ်) ကို လိုက်နာပြီး ပြင်ငြိမ်စွာ အိပ်ပျော်ပါသလား။",
+      "observeEn": "Does your child settle calmly with a familiar bedtime sequence — bath, book, sleep?",
+      "whyMm": "တူညီသော အဆင့်များကို ထပ်ခါထပ်ခါ လုပ်ခြင်းက ကလေးအား အိပ်ချိန် နီးလာကြောင်း ကြိုတင်သိစေသည်။",
+      "whyEn": "A repeated sequence signals that sleep is coming, which helps a toddler settle.",
+      "encouragementMm": "မျက်နှာပြင်များကို အိပ်မီ ရှောင်ပြီး အလင်းလျှော့ကာ တူညီသောအစီအစဉ်ကို ထိန်းပါ။",
+      "encouragementEn": "Avoid screens before bed, dim the lights, and keep the sequence the same each night.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Consistent bedtime routines supporting settling around this age follow AASM behavioural sleep guidance and WHO sleep guidance for under-5s in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_19_24m_sleep_1",
+    "titleMm": "တည်ငြိမ်သော အိပ်မီအစီအစဉ်ဖြင့် ပြင်ဆင်နိုင်ခြင်း",
+    "titleEn": "Settles with a consistent bedtime routine",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "တည်ငြိမ်သော အိပ်မီအစီအစဉ်ဖြင့် ပြင်ဆင်နိုင်ခြင်း settles with a consistent bedtime routine   sleep 19_24m အိပ်မီ တူညီသောအဆင့်များ (ရေချိုး၊ စာဖတ်၊ အိပ်) ကို လိုက်နာပြီး ပြင်ငြိမ်စွာ အိပ်ပျော်ပါသလား။ does your child settle calmly with a familiar bedtime sequence — bath, book, sleep? တူညီသော အဆင့်များကို ထပ်ခါထပ်ခါ လုပ်ခြင်းက ကလေးအား အိပ်ချိန် နီးလာကြောင်း ကြိုတင်သိစေသည်။ a repeated sequence signals that sleep is coming, which helps a toddler settle. မျက်နှာပြင်များကို အိပ်မီ ရှောင်ပြီး အလင်းလျှော့ကာ တူညီသောအစီအစဉ်ကို ထိန်းပါ။ avoid screens before bed, dim the lights, and keep the sequence the same each night. reference_verified consistent bedtime routines supporting settling around this age follow aasm behavioural sleep guidance and who sleep guidance for under-5s in the registry."
+  },
+  {
+    "ageGroupKey": "19_24m",
+    "domainKey": "safety",
+    "tags": [
+      "safety",
+      "19_24m"
+    ],
+    "data": {
+      "observeMm": "\"ပူတယ်\" သို့မဟုတ် \"ထက်တယ်\" ဟု ပြောပြီးသော အရာများကို ကြာလာသည်နှင့်အမျှ ဝေးဝေးနေခြင်း သို့မဟုတ် သတိထားခြင်း ရှိလာပါသလား။",
+      "observeEn": "Over time, does your child start to hold back or show caution around things you have labelled \"hot\" or \"sharp\"?",
+      "whyMm": "ထပ်ခါထပ်ခါ တညီတညွတ်တည်း ပြောပြခြင်းက ကလေးအား ဒီစကားလုံးများကို အန္တရာယ်နှင့် ချိတ်ဆက်စေသည်။",
+      "whyEn": "Consistent, repeated labelling helps a toddler connect these words with real danger.",
+      "encouragementMm": "အန္တရာယ်ရှိသည့်အရာတွေကို တညီတညွတ်တည်း တူညီသောစကားလုံးဖြင့် အမြဲခေါ်ပါ။",
+      "encouragementEn": "Use the same word for the same hazard every time, consistently.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Repetition and consistent labelling as the basis for early hazard recognition follow AAP positive-parenting guidance in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_19_24m_safety_1",
+    "titleMm": "အသိပေးထားသော အန္တရာယ်ရှိသည့်အရာများကို သတိထားခြင်း",
+    "titleEn": "Shows caution around things labelled as dangerous",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "အသိပေးထားသော အန္တရာယ်ရှိသည့်အရာများကို သတိထားခြင်း shows caution around things labelled as dangerous   safety 19_24m \"ပူတယ်\" သို့မဟုတ် \"ထက်တယ်\" ဟု ပြောပြီးသော အရာများကို ကြာလာသည်နှင့်အမျှ ဝေးဝေးနေခြင်း သို့မဟုတ် သတိထားခြင်း ရှိလာပါသလား။ over time, does your child start to hold back or show caution around things you have labelled \"hot\" or \"sharp\"? ထပ်ခါထပ်ခါ တညီတညွတ်တည်း ပြောပြခြင်းက ကလေးအား ဒီစကားလုံးများကို အန္တရာယ်နှင့် ချိတ်ဆက်စေသည်။ consistent, repeated labelling helps a toddler connect these words with real danger. အန္တရာယ်ရှိသည့်အရာတွေကို တညီတညွတ်တည်း တူညီသောစကားလုံးဖြင့် အမြဲခေါ်ပါ။ use the same word for the same hazard every time, consistently. reference_verified repetition and consistent labelling as the basis for early hazard recognition follow aap positive-parenting guidance in the registry."
+  },
+  {
+    "ageGroupKey": "2y",
+    "domainKey": "nutrition",
+    "tags": [
+      "nutrition",
+      "2y"
+    ],
+    "data": {
+      "observeMm": "စားပွဲတွင် ကိုယ်တိုင်ထိုင်၍ စားနိုင်ပါသလား။ အစားအစာအချို့ကို ငြင်းဆန်တတ်သော်လည်း တခြားအချို့ကို နှစ်သက်စွာ စားတတ်ပါသလား။",
+      "observeEn": "Does your child sit and eat mostly independently, even if they refuse some foods while enjoying others?",
+      "whyMm": "ဤအရွယ်တွင် စားစရာ ရွေးချယ်ခြင်း (picky eating) သည် အလွန်ပုံမှန် ဖြစ်ပြီး ကိုယ်တိုင်ဆန္ဒဖော်ပြနိုင်မှု ကြီးထွားလာခြင်းကို ပြသည်။",
+      "whyEn": "Picky eating is very common and normal at this age — it reflects a growing sense of independence and preference.",
+      "encouragementMm": "အတင်းမကျွေးဘဲ အုပ်စုစုံအစားအစာကို ထပ်ခါထပ်ခါ ဖိအားမပေးဘဲ ဆက်လက်ပေးကြည့်ပါ။",
+      "encouragementEn": "Avoid forcing food; keep calmly re-offering a variety without pressure.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Normal picky eating and growing food independence at 2 years follow the Bright Futures preventive-care schedule and WHO complementary-feeding guidance in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_2y_nutrition_1",
+    "titleMm": "မိသားစုစားပွဲတွင် ကိုယ်တိုင် စားနိုင်သော်လည်း ရွေးချယ်စားတတ်ခြင်း",
+    "titleEn": "Eats independently at family meals, though may be a picky eater",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "မိသားစုစားပွဲတွင် ကိုယ်တိုင် စားနိုင်သော်လည်း ရွေးချယ်စားတတ်ခြင်း eats independently at family meals, though may be a picky eater   nutrition 2y စားပွဲတွင် ကိုယ်တိုင်ထိုင်၍ စားနိုင်ပါသလား။ အစားအစာအချို့ကို ငြင်းဆန်တတ်သော်လည်း တခြားအချို့ကို နှစ်သက်စွာ စားတတ်ပါသလား။ does your child sit and eat mostly independently, even if they refuse some foods while enjoying others? ဤအရွယ်တွင် စားစရာ ရွေးချယ်ခြင်း (picky eating) သည် အလွန်ပုံမှန် ဖြစ်ပြီး ကိုယ်တိုင်ဆန္ဒဖော်ပြနိုင်မှု ကြီးထွားလာခြင်းကို ပြသည်။ picky eating is very common and normal at this age — it reflects a growing sense of independence and preference. အတင်းမကျွေးဘဲ အုပ်စုစုံအစားအစာကို ထပ်ခါထပ်ခါ ဖိအားမပေးဘဲ ဆက်လက်ပေးကြည့်ပါ။ avoid forcing food; keep calmly re-offering a variety without pressure. reference_verified normal picky eating and growing food independence at 2 years follow the bright futures preventive-care schedule and who complementary-feeding guidance in the registry."
+  },
+  {
+    "ageGroupKey": "2y",
+    "domainKey": "sleep",
+    "tags": [
+      "sleep",
+      "2y"
+    ],
+    "data": {
+      "observeMm": "ညဘက် တစ်ရေးမျှ နိုးသော်လည်း ကိုယ်တိုင် သို့မဟုတ် အနည်းငယ် နှစ်သိမ့်မှုဖြင့် ပြန်အိပ်ပျော်ပါသလား။",
+      "observeEn": "If your child wakes briefly at night, do they settle back to sleep on their own or with only brief comforting?",
+      "whyMm": "ဤအရွယ်တွင် ညဘက် အိပ်ချိန် ရှည်လာပြီး ပြန်အိပ်ပျော်နိုင်မှု တိုးလာသည် — ကျန်းမာသော ကလေးများပင် တစ်ခါတစ်ရံ နိုးနိုင်သည်။",
+      "whyEn": "Night sleep stretches lengthen now, though even healthy children can still wake occasionally.",
+      "encouragementMm": "ညဘက်နိုးလျှင် တိတ်ဆိတ်၍ ငြိမ်သက်စွာ တုံ့ပြန်ပါ — အလင်း၊ ကစားခြင်း မလုပ်ပါနှင့်။",
+      "encouragementEn": "If your child wakes at night, respond quietly and calmly — avoid lights or play.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Lengthening night sleep with brief self-settling around 2 years follows WHO sleep guidance for under-5s and AASM behavioural sleep guidance in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_2y_sleep_1",
+    "titleMm": "ညအိပ်ချိန်များတွင် နိုးမှုနည်းလာခြင်း",
+    "titleEn": "Sleeps through most nights with fewer wakings",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "ညအိပ်ချိန်များတွင် နိုးမှုနည်းလာခြင်း sleeps through most nights with fewer wakings   sleep 2y ညဘက် တစ်ရေးမျှ နိုးသော်လည်း ကိုယ်တိုင် သို့မဟုတ် အနည်းငယ် နှစ်သိမ့်မှုဖြင့် ပြန်အိပ်ပျော်ပါသလား။ if your child wakes briefly at night, do they settle back to sleep on their own or with only brief comforting? ဤအရွယ်တွင် ညဘက် အိပ်ချိန် ရှည်လာပြီး ပြန်အိပ်ပျော်နိုင်မှု တိုးလာသည် — ကျန်းမာသော ကလေးများပင် တစ်ခါတစ်ရံ နိုးနိုင်သည်။ night sleep stretches lengthen now, though even healthy children can still wake occasionally. ညဘက်နိုးလျှင် တိတ်ဆိတ်၍ ငြိမ်သက်စွာ တုံ့ပြန်ပါ — အလင်း၊ ကစားခြင်း မလုပ်ပါနှင့်။ if your child wakes at night, respond quietly and calmly — avoid lights or play. reference_verified lengthening night sleep with brief self-settling around 2 years follows who sleep guidance for under-5s and aasm behavioural sleep guidance in the registry."
+  },
+  {
+    "ageGroupKey": "2y",
+    "domainKey": "safety",
+    "tags": [
+      "safety",
+      "2y"
+    ],
+    "data": {
+      "observeMm": "\"လမ်းမပေါ်တွင် လက်ကိုင်ထားပါ\" ကဲ့သို့ စည်းမျဉ်းကို အသိပေးထားပါက တစ်ခါတစ်ရံ လိုက်နာပါသလား။",
+      "observeEn": "When reminded, does your child sometimes follow a rule like \"hold my hand near the road\"?",
+      "whyMm": "စကားနားလည်မှု တိုးလာသောကြောင့် ရိုးရှင်းသောစည်းမျဉ်းတစ်ခုကို ခဏတာ လိုက်နာနိုင်လာသော်လည်း အမြဲတမ်း မမျှော်လင့်နိုင်ပါ။",
+      "whyEn": "Growing language lets a toddler follow one simple rule briefly, but it cannot be relied on every time yet.",
+      "encouragementMm": "စည်းမျဉ်းတစ်ခုကို အကြိမ်ကြိမ် တူညီသောစကားလုံးဖြင့် ထပ်ခါပြောပါ။",
+      "encouragementEn": "Repeat the same rule using the same words, again and again.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Early, inconsistent rule-following around 2 years and the value of simple consistent rules follow AAP positive-parenting guidance in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_2y_safety_1",
+    "titleMm": "ရိုးရှင်းသော ဘေးကင်းရေးစည်းမျဉ်းတစ်ခုကို တစ်ခါတစ်ရံ လိုက်နာခြင်း",
+    "titleEn": "Sometimes follows one simple safety rule",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "ရိုးရှင်းသော ဘေးကင်းရေးစည်းမျဉ်းတစ်ခုကို တစ်ခါတစ်ရံ လိုက်နာခြင်း sometimes follows one simple safety rule   safety 2y \"လမ်းမပေါ်တွင် လက်ကိုင်ထားပါ\" ကဲ့သို့ စည်းမျဉ်းကို အသိပေးထားပါက တစ်ခါတစ်ရံ လိုက်နာပါသလား။ when reminded, does your child sometimes follow a rule like \"hold my hand near the road\"? စကားနားလည်မှု တိုးလာသောကြောင့် ရိုးရှင်းသောစည်းမျဉ်းတစ်ခုကို ခဏတာ လိုက်နာနိုင်လာသော်လည်း အမြဲတမ်း မမျှော်လင့်နိုင်ပါ။ growing language lets a toddler follow one simple rule briefly, but it cannot be relied on every time yet. စည်းမျဉ်းတစ်ခုကို အကြိမ်ကြိမ် တူညီသောစကားလုံးဖြင့် ထပ်ခါပြောပါ။ repeat the same rule using the same words, again and again. reference_verified early, inconsistent rule-following around 2 years and the value of simple consistent rules follow aap positive-parenting guidance in the registry."
+  },
+  {
+    "ageGroupKey": "2_5y",
+    "domainKey": "nutrition",
+    "tags": [
+      "nutrition",
+      "2_5y"
+    ],
+    "data": {
+      "observeMm": "အစားအစာအသစ်တစ်ခုကို ပထမတွင် ငြင်းဆန်သော်လည်း အကြိမ်ကြိမ် ထပ်ပေးကြည့်ပါက တစ်ခါတစ်ရံ စမ်းကြည့်ပါသလား။",
+      "observeEn": "Does your child sometimes try a new food after it has been calmly offered several times, even if they refused it at first?",
+      "whyMm": "အစားအစာအသစ်တစ်ခုကို လက်ခံရန် အကြိမ်များစွာ (၈–၁၀ ကြိမ်ခန့်) ကြည့်ရှုရသည်မှာ ပုံမှန်ဖြစ်သည်။",
+      "whyEn": "It commonly takes many exposures — around 8 to 10 — before a child accepts a new food, and that is normal.",
+      "encouragementMm": "ဖိအားမပေးဘဲ ပုံမှန် ထပ်ပေးကြည့်ပါ။ မိဘကိုယ်တိုင် စားပြခြင်းက အထောက်အကူဖြစ်သည်။",
+      "encouragementEn": "Keep offering without pressure, and model eating the food yourself — it helps.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "The need for repeated, pressure-free exposure to accept new foods is described in Bright Futures guidance and WHO complementary-feeding guidance in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_2_5y_nutrition_1",
+    "titleMm": "အစားအစာအသစ်ကို ထပ်ခါစမ်းကြည့်ခြင်းဖြင့် လက်ခံလာနိုင်ခြင်း",
+    "titleEn": "Tries new foods with repeated, low-pressure offers",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "အစားအစာအသစ်ကို ထပ်ခါစမ်းကြည့်ခြင်းဖြင့် လက်ခံလာနိုင်ခြင်း tries new foods with repeated, low-pressure offers   nutrition 2_5y အစားအစာအသစ်တစ်ခုကို ပထမတွင် ငြင်းဆန်သော်လည်း အကြိမ်ကြိမ် ထပ်ပေးကြည့်ပါက တစ်ခါတစ်ရံ စမ်းကြည့်ပါသလား။ does your child sometimes try a new food after it has been calmly offered several times, even if they refused it at first? အစားအစာအသစ်တစ်ခုကို လက်ခံရန် အကြိမ်များစွာ (၈–၁၀ ကြိမ်ခန့်) ကြည့်ရှုရသည်မှာ ပုံမှန်ဖြစ်သည်။ it commonly takes many exposures — around 8 to 10 — before a child accepts a new food, and that is normal. ဖိအားမပေးဘဲ ပုံမှန် ထပ်ပေးကြည့်ပါ။ မိဘကိုယ်တိုင် စားပြခြင်းက အထောက်အကူဖြစ်သည်။ keep offering without pressure, and model eating the food yourself — it helps. reference_verified the need for repeated, pressure-free exposure to accept new foods is described in bright futures guidance and who complementary-feeding guidance in the registry."
+  },
+  {
+    "ageGroupKey": "2_5y",
+    "domainKey": "sleep",
+    "tags": [
+      "sleep",
+      "2_5y"
+    ],
+    "data": {
+      "observeMm": "နေ့ခင်းတွင် တစ်ကြိမ်တည်းသာ အိပ်ပါသလား။ အိပ်ရမည့်အချိန်ကျရင် \"မအိပ်သေးဘူး\" ဟု ခုခံတတ်ပါသလား။",
+      "observeEn": "Does your child nap only once a day now? Do they sometimes resist or delay going to bed?",
+      "whyMm": "ဤအရွယ်တွင် လွတ်လပ်မှုဆန္ဒ ပိုကြီးလာသဖြင့် အိပ်ချိန်ကို ခုခံတတ်ခြင်းသည် အလွန်ပုံမှန် ဖြစ်သည်။",
+      "whyEn": "Bedtime resistance is very common now as independence and opinions grow stronger.",
+      "encouragementMm": "ရွေးချယ်စရာ ၂ ခုပေးပါ (\"ဒီစာအုပ် ဒါမှမဟုတ် ဟိုစာအုပ်\") — ထိန်းချုပ်မှု အနည်းငယ်ခံစားစေပါ။",
+      "encouragementEn": "Offer two small choices (\"this book or that one?\") so bedtime feels a little more in their control.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Common bedtime resistance during the push for independence around this age follows AASM behavioural sleep guidance in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_2_5y_sleep_1",
+    "titleMm": "နေ့ခင်း တစ်ကြိမ်အိပ်ချိန်ဆီသို့ ကူးပြောင်းပြီး အိပ်ချိန်တွင် ခုခံတတ်ခြင်း",
+    "titleEn": "Settled into one nap, may resist bedtime",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "နေ့ခင်း တစ်ကြိမ်အိပ်ချိန်ဆီသို့ ကူးပြောင်းပြီး အိပ်ချိန်တွင် ခုခံတတ်ခြင်း settled into one nap, may resist bedtime   sleep 2_5y နေ့ခင်းတွင် တစ်ကြိမ်တည်းသာ အိပ်ပါသလား။ အိပ်ရမည့်အချိန်ကျရင် \"မအိပ်သေးဘူး\" ဟု ခုခံတတ်ပါသလား။ does your child nap only once a day now? do they sometimes resist or delay going to bed? ဤအရွယ်တွင် လွတ်လပ်မှုဆန္ဒ ပိုကြီးလာသဖြင့် အိပ်ချိန်ကို ခုခံတတ်ခြင်းသည် အလွန်ပုံမှန် ဖြစ်သည်။ bedtime resistance is very common now as independence and opinions grow stronger. ရွေးချယ်စရာ ၂ ခုပေးပါ (\"ဒီစာအုပ် ဒါမှမဟုတ် ဟိုစာအုပ်\") — ထိန်းချုပ်မှု အနည်းငယ်ခံစားစေပါ။ offer two small choices (\"this book or that one?\") so bedtime feels a little more in their control. reference_verified common bedtime resistance during the push for independence around this age follows aasm behavioural sleep guidance in the registry."
+  },
+  {
+    "ageGroupKey": "2_5y",
+    "domainKey": "safety",
+    "tags": [
+      "safety",
+      "2_5y"
+    ],
+    "data": {
+      "observeMm": "\"ဘာက အန္တရာယ်ရှိလဲ\" ဟုမေးလျှင် မီး၊ ဓားလား လမ်းမလို အရာတစ်ခုခုကို ပြောနိုင်ပါသလား။",
+      "observeEn": "If asked \"what is dangerous?\", can your child name something like fire, a knife, or the road?",
+      "whyMm": "အန္တရာယ်ရှိသောအရာများကို စကားဖြင့် သိရှိခြင်းက စည်းမျဉ်းများနောက်ကွယ်က အကြောင်းရင်းကို စတင် နားလည်လာကြောင်း ပြသည်။",
+      "whyEn": "Naming hazards in words shows the beginning of understanding why the rules exist.",
+      "encouragementMm": "အန္တရာယ်ရှိသောအရာကို တွေ့တိုင်း တိတ်တိတ်ဆိတ်ဆိတ် အမည်ခေါ်ပြပါ။",
+      "encouragementEn": "Quietly name the hazard out loud every time you encounter one together.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Growing verbal hazard-naming as a precursor to rule understanding follows AAP positive-parenting guidance and developmental-behavioral paediatrics references in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_2_5y_safety_1",
+    "titleMm": "အန္တရာယ်ရှိသည့်အရာအချို့ကို မေးလျှင် အမည်ခေါ်နိုင်ခြင်း",
+    "titleEn": "Names a few dangerous things when asked",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "အန္တရာယ်ရှိသည့်အရာအချို့ကို မေးလျှင် အမည်ခေါ်နိုင်ခြင်း names a few dangerous things when asked   safety 2_5y \"ဘာက အန္တရာယ်ရှိလဲ\" ဟုမေးလျှင် မီး၊ ဓားလား လမ်းမလို အရာတစ်ခုခုကို ပြောနိုင်ပါသလား။ if asked \"what is dangerous?\", can your child name something like fire, a knife, or the road? အန္တရာယ်ရှိသောအရာများကို စကားဖြင့် သိရှိခြင်းက စည်းမျဉ်းများနောက်ကွယ်က အကြောင်းရင်းကို စတင် နားလည်လာကြောင်း ပြသည်။ naming hazards in words shows the beginning of understanding why the rules exist. အန္တရာယ်ရှိသောအရာကို တွေ့တိုင်း တိတ်တိတ်ဆိတ်ဆိတ် အမည်ခေါ်ပြပါ။ quietly name the hazard out loud every time you encounter one together. reference_verified growing verbal hazard-naming as a precursor to rule understanding follows aap positive-parenting guidance and developmental-behavioral paediatrics references in the registry."
+  },
+  {
+    "ageGroupKey": "3y",
+    "domainKey": "nutrition",
+    "tags": [
+      "nutrition",
+      "3y"
+    ],
+    "data": {
+      "observeMm": "ဇွန်းနှင့် ခက်ရင်းကို ကိုယ်တိုင် သုံးပြီး အစားအစာအများစုကို ပက်ကျံမှု နည်းနည်းသာဖြင့် စားနိုင်ပါသလား။",
+      "observeEn": "Can your child use a spoon and fork on their own, eating most of a meal without heavy spilling?",
+      "whyMm": "လက်ကျွမ်းကျင်မှုနှင့် ခန္ဓာကိုယ်ထိန်းချုပ်မှု ပိုမိုတိုးတက်လာသဖြင့် အစားအစာ ကိရိယာများကို ပိုမိုတိကျစွာ သုံးနိုင်လာသည်။",
+      "whyEn": "Growing hand skill and body control let most 3-year-olds manage utensils more precisely.",
+      "encouragementMm": "ကလေးကိုယ်တိုင် ဇွန်း/ခက်ရင်း ရွေးချယ်ခွင့်ပေးပြီး မိသားစုစားပွဲတွင် ပါဝင်ခွင့်ပေးပါ။",
+      "encouragementEn": "Let your child choose their own utensil and take part fully at the family table.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Utensil competence by around 3 years is described in the Bright Futures preventive-care schedule and paediatric occupational-therapy references in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_3y_nutrition_1",
+    "titleMm": "ဇွန်းခက်ရင်းကို ကျွမ်းကျင်စွာ သုံးနိုင်ခြင်း",
+    "titleEn": "Uses a fork and spoon competently at meals",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "ဇွန်းခက်ရင်းကို ကျွမ်းကျင်စွာ သုံးနိုင်ခြင်း uses a fork and spoon competently at meals   nutrition 3y ဇွန်းနှင့် ခက်ရင်းကို ကိုယ်တိုင် သုံးပြီး အစားအစာအများစုကို ပက်ကျံမှု နည်းနည်းသာဖြင့် စားနိုင်ပါသလား။ can your child use a spoon and fork on their own, eating most of a meal without heavy spilling? လက်ကျွမ်းကျင်မှုနှင့် ခန္ဓာကိုယ်ထိန်းချုပ်မှု ပိုမိုတိုးတက်လာသဖြင့် အစားအစာ ကိရိယာများကို ပိုမိုတိကျစွာ သုံးနိုင်လာသည်။ growing hand skill and body control let most 3-year-olds manage utensils more precisely. ကလေးကိုယ်တိုင် ဇွန်း/ခက်ရင်း ရွေးချယ်ခွင့်ပေးပြီး မိသားစုစားပွဲတွင် ပါဝင်ခွင့်ပေးပါ။ let your child choose their own utensil and take part fully at the family table. reference_verified utensil competence by around 3 years is described in the bright futures preventive-care schedule and paediatric occupational-therapy references in the registry."
+  },
+  {
+    "ageGroupKey": "3y",
+    "domainKey": "sleep",
+    "tags": [
+      "sleep",
+      "3y"
+    ],
+    "data": {
+      "observeMm": "နေ့ခင်း အိပ်ချင်၊ မအိပ်ချင် ရော ဖြစ်လာပါသလား။ ဒါပေမယ့် ညဘက် တူညီသောအချိန်တွင် အိပ်ရာဝင်ပါသလား။",
+      "observeEn": "Does napping become inconsistent — some days yes, some no? Does bedtime stay at roughly the same time either way?",
+      "whyMm": "ကလေးအများအပြားသည် ဤအရွယ်တွင် နေ့ခင်းအိပ်ချိန်ကို စတင် လျှော့ချကြသည် — ဒါပေမယ့် ညအိပ်ချိန်တူညီစွာ ထားခြင်းက ပိုအရေးကြီးလာသည်။",
+      "whyEn": "Many children begin dropping naps around now — a consistent night bedtime becomes even more important.",
+      "encouragementMm": "နေ့ခင်း မအိပ်သည့်နေ့များတွင် ငြိမ်သက်သော \"ငြိမ်ချိန်\" တစ်ခု အစားထိုးပေးပါ။",
+      "encouragementEn": "On no-nap days, offer a calm quiet-time instead to avoid overtiredness.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "The typical transition away from napping around age 3, and the importance of a stable bedtime through it, follows WHO sleep guidance for under-5s in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_3y_sleep_1",
+    "titleMm": "နေ့ခင်းအိပ်ချိန် လျှော့လာနိုင်သော်လည်း တည်ငြိမ်သော ညအိပ်ချိန် လိုအပ်ဆဲ",
+    "titleEn": "May start dropping the nap, still needs consistent bedtime",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "နေ့ခင်းအိပ်ချိန် လျှော့လာနိုင်သော်လည်း တည်ငြိမ်သော ညအိပ်ချိန် လိုအပ်ဆဲ may start dropping the nap, still needs consistent bedtime   sleep 3y နေ့ခင်း အိပ်ချင်၊ မအိပ်ချင် ရော ဖြစ်လာပါသလား။ ဒါပေမယ့် ညဘက် တူညီသောအချိန်တွင် အိပ်ရာဝင်ပါသလား။ does napping become inconsistent — some days yes, some no? does bedtime stay at roughly the same time either way? ကလေးအများအပြားသည် ဤအရွယ်တွင် နေ့ခင်းအိပ်ချိန်ကို စတင် လျှော့ချကြသည် — ဒါပေမယ့် ညအိပ်ချိန်တူညီစွာ ထားခြင်းက ပိုအရေးကြီးလာသည်။ many children begin dropping naps around now — a consistent night bedtime becomes even more important. နေ့ခင်း မအိပ်သည့်နေ့များတွင် ငြိမ်သက်သော \"ငြိမ်ချိန်\" တစ်ခု အစားထိုးပေးပါ။ on no-nap days, offer a calm quiet-time instead to avoid overtiredness. reference_verified the typical transition away from napping around age 3, and the importance of a stable bedtime through it, follows who sleep guidance for under-5s in the registry."
+  },
+  {
+    "ageGroupKey": "3y",
+    "domainKey": "safety",
+    "tags": [
+      "safety",
+      "3y"
+    ],
+    "data": {
+      "observeMm": "\"လက်ကိုင်ထားပါ\" ကဲ့သို့ ရင်းနှီးသောစည်းမျဉ်းကို အသိပေးမှု တစ်ကြိမ်၊ နှစ်ကြိမ်ဖြင့် လိုက်နာနိုင်ပါသလား (အမြဲတမ်းတော့ မဟုတ်ပါ)။",
+      "observeEn": "Can your child follow a familiar rule like \"hold hands\" with just one or two reminders — not every single time, but often?",
+      "whyMm": "ဤအရွယ်တွင် ရင်းနှီးသောစည်းမျဉ်းများကို ပိုမိုယုံကြည်စွာ လိုက်နာနိုင်လာသော်လည်း လူကြီး ကြီးကြပ်မှု ဆက်လိုအပ်ဆဲဖြစ်သည်။",
+      "whyEn": "Familiar rules become more reliable now, but adult supervision is still needed.",
+      "encouragementMm": "ကလေးလိုက်နာနိုင်သည့်အခါ တိတိကျကျ ချီးကျူးပေးပါ (\"လမ်းမနားမှာ လက်ကိုင်ထားလို့ ကျေးဇူးပဲ\")။",
+      "encouragementEn": "Praise specifically when your child follows the rule — \"thank you for holding my hand near the road.\"",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "More reliable rule-following by age 3 while supervision remains essential follows AAP positive-parenting guidance in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_3y_safety_1",
+    "titleMm": "ရင်းနှီးသော ဘေးကင်းရေးစည်းမျဉ်းကို အသိပေးမှု လိုအပ်မှု လျော့နည်းလာခြင်း",
+    "titleEn": "Follows a familiar safety rule with fewer reminders",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "ရင်းနှီးသော ဘေးကင်းရေးစည်းမျဉ်းကို အသိပေးမှု လိုအပ်မှု လျော့နည်းလာခြင်း follows a familiar safety rule with fewer reminders   safety 3y \"လက်ကိုင်ထားပါ\" ကဲ့သို့ ရင်းနှီးသောစည်းမျဉ်းကို အသိပေးမှု တစ်ကြိမ်၊ နှစ်ကြိမ်ဖြင့် လိုက်နာနိုင်ပါသလား (အမြဲတမ်းတော့ မဟုတ်ပါ)။ can your child follow a familiar rule like \"hold hands\" with just one or two reminders — not every single time, but often? ဤအရွယ်တွင် ရင်းနှီးသောစည်းမျဉ်းများကို ပိုမိုယုံကြည်စွာ လိုက်နာနိုင်လာသော်လည်း လူကြီး ကြီးကြပ်မှု ဆက်လိုအပ်ဆဲဖြစ်သည်။ familiar rules become more reliable now, but adult supervision is still needed. ကလေးလိုက်နာနိုင်သည့်အခါ တိတိကျကျ ချီးကျူးပေးပါ (\"လမ်းမနားမှာ လက်ကိုင်ထားလို့ ကျေးဇူးပဲ\")။ praise specifically when your child follows the rule — \"thank you for holding my hand near the road.\" reference_verified more reliable rule-following by age 3 while supervision remains essential follows aap positive-parenting guidance in the registry."
+  },
+  {
+    "ageGroupKey": "3_5y",
+    "domainKey": "nutrition",
+    "tags": [
+      "nutrition",
+      "3_5y"
+    ],
+    "data": {
+      "observeMm": "မိသားစုစားပွဲအချိန်ကို အစအဆုံး (မိနစ်အနည်းငယ်ခန့်) ထိုင်ပြီး ပါဝင်နိုင်ပါသလား။",
+      "observeEn": "Can your child sit and take part through most of a family meal, for at least several minutes?",
+      "whyMm": "စားပွဲတွင် ထိုင်ခြင်းသည် ကိုယ်ထိန်းချုပ်မှုနှင့် မိသားစုပုံမှန်လုပ်ရိုးလုပ်စဉ်ကို လက်ခံနိုင်မှုကို ပြသည်။",
+      "whyEn": "Sitting through a meal shows growing self-regulation and comfort with family routines.",
+      "encouragementMm": "စားပွဲအချိန်ကို တိုတောင်း၍ စိတ်ချမ်းသာအောင် ထားပြီး စကားပြောခြင်းနှင့် ရောယှက်ပါ။",
+      "encouragementEn": "Keep mealtimes reasonably short and relaxed, with conversation woven in.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Growing ability to sit through family meals is described in Bright Futures guidance and general paediatric developmental references in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_3_5y_nutrition_1",
+    "titleMm": "စားပွဲတွင် ထိုင်ပြီး အစားအစာအချိန်ကို လိုက်နာနိုင်ခြင်း",
+    "titleEn": "Sits through a family meal at the table",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "စားပွဲတွင် ထိုင်ပြီး အစားအစာအချိန်ကို လိုက်နာနိုင်ခြင်း sits through a family meal at the table   nutrition 3_5y မိသားစုစားပွဲအချိန်ကို အစအဆုံး (မိနစ်အနည်းငယ်ခန့်) ထိုင်ပြီး ပါဝင်နိုင်ပါသလား။ can your child sit and take part through most of a family meal, for at least several minutes? စားပွဲတွင် ထိုင်ခြင်းသည် ကိုယ်ထိန်းချုပ်မှုနှင့် မိသားစုပုံမှန်လုပ်ရိုးလုပ်စဉ်ကို လက်ခံနိုင်မှုကို ပြသည်။ sitting through a meal shows growing self-regulation and comfort with family routines. စားပွဲအချိန်ကို တိုတောင်း၍ စိတ်ချမ်းသာအောင် ထားပြီး စကားပြောခြင်းနှင့် ရောယှက်ပါ။ keep mealtimes reasonably short and relaxed, with conversation woven in. reference_verified growing ability to sit through family meals is described in bright futures guidance and general paediatric developmental references in the registry."
+  },
+  {
+    "ageGroupKey": "3_5y",
+    "domainKey": "sleep",
+    "tags": [
+      "sleep",
+      "3_5y"
+    ],
+    "data": {
+      "observeMm": "အိပ်မီအစီအစဉ်တွင် နောက်လာမည့်အဆင့်ကို ကြိုပြောနိုင်ပါသလား (\"ရေချိုးပြီးရင် စာဖတ်မယ်\")။",
+      "observeEn": "Can your child tell you what comes next in the bedtime routine — \"after bath, we read a book\"?",
+      "whyMm": "အစီအစဉ်ကို သိရှိခြင်းသည် ကလေးအား ထိန်းချုပ်မှုခံစားရစေပြီး အိပ်ရာဝင်ရန် ပိုလွယ်ကူစေသည်။",
+      "whyEn": "Knowing the routine gives a child a sense of control and makes bedtime easier.",
+      "encouragementMm": "ပုံစာအနည်းငယ်ပါသော အစီအစဉ်ဇယားလေး ပြသပြီး ကလေးကိုယ်တိုင် လိုက်နာစေပါ။",
+      "encouragementEn": "Show a simple picture routine chart and let your child follow it themselves.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Predictable, child-anticipated bedtime routines are described in AASM behavioural sleep guidance in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_3_5y_sleep_1",
+    "titleMm": "အိပ်မီအစီအစဉ်ရဲ့ အဆင့်များကို သိရှိပြီး မျှော်လင့်တတ်ခြင်း",
+    "titleEn": "Names parts of the bedtime routine and anticipates them",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "အိပ်မီအစီအစဉ်ရဲ့ အဆင့်များကို သိရှိပြီး မျှော်လင့်တတ်ခြင်း names parts of the bedtime routine and anticipates them   sleep 3_5y အိပ်မီအစီအစဉ်တွင် နောက်လာမည့်အဆင့်ကို ကြိုပြောနိုင်ပါသလား (\"ရေချိုးပြီးရင် စာဖတ်မယ်\")။ can your child tell you what comes next in the bedtime routine — \"after bath, we read a book\"? အစီအစဉ်ကို သိရှိခြင်းသည် ကလေးအား ထိန်းချုပ်မှုခံစားရစေပြီး အိပ်ရာဝင်ရန် ပိုလွယ်ကူစေသည်။ knowing the routine gives a child a sense of control and makes bedtime easier. ပုံစာအနည်းငယ်ပါသော အစီအစဉ်ဇယားလေး ပြသပြီး ကလေးကိုယ်တိုင် လိုက်နာစေပါ။ show a simple picture routine chart and let your child follow it themselves. reference_verified predictable, child-anticipated bedtime routines are described in aasm behavioural sleep guidance in the registry."
+  },
+  {
+    "ageGroupKey": "3_5y",
+    "domainKey": "safety",
+    "tags": [
+      "safety",
+      "3_5y"
+    ],
+    "data": {
+      "observeMm": "ခြေထိခိုက်လျှင် သို့မဟုတ် ကြောက်စရာဖြစ်လျှင် လူကြီးကို ချက်ချင်း အသိပေးပါသလား။",
+      "observeEn": "When hurt or frightened, does your child come to tell a trusted adult right away?",
+      "whyMm": "အကူအညီတောင်းရန် သိရှိခြင်းသည် ကိုယ်ပိုင်ဘေးကင်းရေး ကျွမ်းကျင်မှု၏ အရေးကြီးသော အစိတ်အပိုင်းတစ်ခု ဖြစ်သည်။",
+      "whyEn": "Knowing to seek help is an important part of self-protective safety skill.",
+      "encouragementMm": "\"တစ်ခုခုမှားနေလို့ထင်ရင် ငါ့ဆီလာပြောပါ\" ဟု ရိုးရှင်းစွာ ပြောပြထားပါ။",
+      "encouragementEn": "Simply and clearly tell your child, \"if something feels wrong, come tell me.\"",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Teaching young children to seek a trusted adult when unsafe is described in AAP positive-parenting guidance in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_3_5y_safety_1",
+    "titleMm": "အရေးပေါ်တွင် ယုံကြည်ရသော လူကြီးတစ်ဦးကို ခေါ်ရန် သိရှိခြင်း",
+    "titleEn": "Knows to call a trusted adult when something feels wrong",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "အရေးပေါ်တွင် ယုံကြည်ရသော လူကြီးတစ်ဦးကို ခေါ်ရန် သိရှိခြင်း knows to call a trusted adult when something feels wrong   safety 3_5y ခြေထိခိုက်လျှင် သို့မဟုတ် ကြောက်စရာဖြစ်လျှင် လူကြီးကို ချက်ချင်း အသိပေးပါသလား။ when hurt or frightened, does your child come to tell a trusted adult right away? အကူအညီတောင်းရန် သိရှိခြင်းသည် ကိုယ်ပိုင်ဘေးကင်းရေး ကျွမ်းကျင်မှု၏ အရေးကြီးသော အစိတ်အပိုင်းတစ်ခု ဖြစ်သည်။ knowing to seek help is an important part of self-protective safety skill. \"တစ်ခုခုမှားနေလို့ထင်ရင် ငါ့ဆီလာပြောပါ\" ဟု ရိုးရှင်းစွာ ပြောပြထားပါ။ simply and clearly tell your child, \"if something feels wrong, come tell me.\" reference_verified teaching young children to seek a trusted adult when unsafe is described in aap positive-parenting guidance in the registry."
+  },
+  {
+    "ageGroupKey": "4y",
+    "domainKey": "nutrition",
+    "tags": [
+      "nutrition",
+      "4y"
+    ],
+    "data": {
+      "observeMm": "ခွက်ငယ်တစ်ခုမှ ရေ သို့မဟုတ် အစားအစာကို လူကြီးကြည့်ရှုမှုဖြင့် ကိုယ်တိုင် ထည့်ကြည့်ပါသလား။",
+      "observeEn": "With supervision, can your child pour from a small jug or serve themselves a small portion?",
+      "whyMm": "ဒီလို လုပ်ငန်းများသည် လက်ထိန်းချုပ်မှုနှင့် စားခြင်းကို ကိုယ်တိုင်ဆုံးဖြတ်နိုင်မှုကို တိုးပွားစေသည်။",
+      "whyEn": "These tasks build hand control and a sense of ownership over eating.",
+      "encouragementMm": "ယိုစိမ့်ရင် ပြဿနာမဟုတ်ကြောင်း ပြောပြီး ကလေးကို စားပွဲပြင်ဆင်ရာတွင် ပါဝင်ခွင့်ပေးပါ။",
+      "encouragementEn": "Let spills be no big deal, and involve your child in setting up the meal.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Supervised self-serving as a self-help and fine-motor skill around 4 years is described in paediatric occupational-therapy references and Bright Futures guidance in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_4y_nutrition_1",
+    "titleMm": "လူကြီးကြီးကြပ်မှုဖြင့် ကိုယ်တိုင် အစားအစာ အနည်းငယ် ထည့်ဝေနိုင်ခြင်း",
+    "titleEn": "Serves self small portions with supervision",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "လူကြီးကြီးကြပ်မှုဖြင့် ကိုယ်တိုင် အစားအစာ အနည်းငယ် ထည့်ဝေနိုင်ခြင်း serves self small portions with supervision   nutrition 4y ခွက်ငယ်တစ်ခုမှ ရေ သို့မဟုတ် အစားအစာကို လူကြီးကြည့်ရှုမှုဖြင့် ကိုယ်တိုင် ထည့်ကြည့်ပါသလား။ with supervision, can your child pour from a small jug or serve themselves a small portion? ဒီလို လုပ်ငန်းများသည် လက်ထိန်းချုပ်မှုနှင့် စားခြင်းကို ကိုယ်တိုင်ဆုံးဖြတ်နိုင်မှုကို တိုးပွားစေသည်။ these tasks build hand control and a sense of ownership over eating. ယိုစိမ့်ရင် ပြဿနာမဟုတ်ကြောင်း ပြောပြီး ကလေးကို စားပွဲပြင်ဆင်ရာတွင် ပါဝင်ခွင့်ပေးပါ။ let spills be no big deal, and involve your child in setting up the meal. reference_verified supervised self-serving as a self-help and fine-motor skill around 4 years is described in paediatric occupational-therapy references and bright futures guidance in the registry."
+  },
+  {
+    "ageGroupKey": "4y",
+    "domainKey": "sleep",
+    "tags": [
+      "sleep",
+      "4y"
+    ],
+    "data": {
+      "observeMm": "ကိုယ်ပိုင်အိပ်ရာတွင် တစ်ညလုံး (ကြားနိုးမှု အနည်းငယ်သာ) အိပ်ပျော်ပါသလား။",
+      "observeEn": "Does your child sleep in their own bed through most of the night, with only occasional waking?",
+      "whyMm": "ဒီအရွယ်တွင် ညဘက်တစ်ခါတစ်ရံ ကြောက်ခြင်း (dreams, dark) ဖြစ်နိုင်သော်လည်း ကိုယ်ပိုင်အိပ်ရာတွင် အိပ်နိုင်မှု ခိုင်မာလာသည်။",
+      "whyEn": "Occasional nighttime fears (dreams, the dark) are common now, but sleeping in their own bed becomes more established.",
+      "encouragementMm": "အလင်းအနည်းငယ်ပါ nightlight တစ်ခုနှင့် ရင်းနှီးသော အိပ်ချောင်းရှင် ပေးထားခြင်းက ကူညီနိုင်သည်။",
+      "encouragementEn": "A dim nightlight and a familiar comfort item can help with occasional nighttime fears.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Sleep consolidation and common nighttime fears around age 4 are described in the general paediatrics and AASM behavioural sleep references in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_4y_sleep_1",
+    "titleMm": "တည်ငြိမ်သော အစီအစဉ်ဖြင့် ကိုယ်ပိုင်အိပ်ရာတွင် တစ်ညလုံး အိပ်ပျော်ခြင်း",
+    "titleEn": "Sleeps in own bed for a full night with a consistent routine",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "တည်ငြိမ်သော အစီအစဉ်ဖြင့် ကိုယ်ပိုင်အိပ်ရာတွင် တစ်ညလုံး အိပ်ပျော်ခြင်း sleeps in own bed for a full night with a consistent routine   sleep 4y ကိုယ်ပိုင်အိပ်ရာတွင် တစ်ညလုံး (ကြားနိုးမှု အနည်းငယ်သာ) အိပ်ပျော်ပါသလား။ does your child sleep in their own bed through most of the night, with only occasional waking? ဒီအရွယ်တွင် ညဘက်တစ်ခါတစ်ရံ ကြောက်ခြင်း (dreams, dark) ဖြစ်နိုင်သော်လည်း ကိုယ်ပိုင်အိပ်ရာတွင် အိပ်နိုင်မှု ခိုင်မာလာသည်။ occasional nighttime fears (dreams, the dark) are common now, but sleeping in their own bed becomes more established. အလင်းအနည်းငယ်ပါ nightlight တစ်ခုနှင့် ရင်းနှီးသော အိပ်ချောင်းရှင် ပေးထားခြင်းက ကူညီနိုင်သည်။ a dim nightlight and a familiar comfort item can help with occasional nighttime fears. reference_verified sleep consolidation and common nighttime fears around age 4 are described in the general paediatrics and aasm behavioural sleep references in the registry."
+  },
+  {
+    "ageGroupKey": "4y",
+    "domainKey": "safety",
+    "tags": [
+      "safety",
+      "4y"
+    ],
+    "data": {
+      "observeMm": "\"ဘာကြောင့် လမ်းမနားမှာ လက်ကိုင်ထားရသလဲ\" ဟုမေးလျှင် အကြောင်းပြချက် အနည်းငယ် ပြောနိုင်ပါသလား။",
+      "observeEn": "If asked \"why do we hold hands near the road?\", can your child give a simple reason?",
+      "whyMm": "စည်းမျဉ်းနောက်ကွယ်ရှိ အကြောင်းရင်းကို နားလည်ခြင်းက စည်းမျဉ်းကို ကိုယ်တိုင် လက်ခံနိုင်မှု ပိုကောင်းစေသည်။",
+      "whyEn": "Understanding the reason behind a rule helps a child accept and internalise it.",
+      "encouragementMm": "စည်းမျဉ်းချရုံသက်သက်မဟုတ်ဘဲ \"ဘာလို့\" ဆိုတာကို အမြဲ ရှင်းပြပါ။",
+      "encouragementEn": "Always explain the \"why,\" not just the rule itself.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Understanding the reasoning behind safety rules around age 4 is described in AAP positive-parenting guidance and developmental-behavioral paediatrics references in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_4y_safety_1",
+    "titleMm": "စည်းမျဉ်းက ဘာကြောင့် ဘေးကင်းစေသည်ကို ရှင်းပြနိုင်ခြင်း",
+    "titleEn": "Explains why a rule keeps them safe",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "စည်းမျဉ်းက ဘာကြောင့် ဘေးကင်းစေသည်ကို ရှင်းပြနိုင်ခြင်း explains why a rule keeps them safe   safety 4y \"ဘာကြောင့် လမ်းမနားမှာ လက်ကိုင်ထားရသလဲ\" ဟုမေးလျှင် အကြောင်းပြချက် အနည်းငယ် ပြောနိုင်ပါသလား။ if asked \"why do we hold hands near the road?\", can your child give a simple reason? စည်းမျဉ်းနောက်ကွယ်ရှိ အကြောင်းရင်းကို နားလည်ခြင်းက စည်းမျဉ်းကို ကိုယ်တိုင် လက်ခံနိုင်မှု ပိုကောင်းစေသည်။ understanding the reason behind a rule helps a child accept and internalise it. စည်းမျဉ်းချရုံသက်သက်မဟုတ်ဘဲ \"ဘာလို့\" ဆိုတာကို အမြဲ ရှင်းပြပါ။ always explain the \"why,\" not just the rule itself. reference_verified understanding the reasoning behind safety rules around age 4 is described in aap positive-parenting guidance and developmental-behavioral paediatrics references in the registry."
+  },
+  {
+    "ageGroupKey": "4_5y",
+    "domainKey": "nutrition",
+    "tags": [
+      "nutrition",
+      "4_5y"
+    ],
+    "data": {
+      "observeMm": "အသီးအရွက်နှင့် ကျန်းမာသောအစားအစာအချို့ကို အမည်ခေါ်နိုင်ပါသလား။ ဆေးကြောခြင်း သို့မဟုတ် ရောနှော ကူညီမှုကို ပါဝင်ကြိုးစားပါသလား။",
+      "observeEn": "Can your child name a few fruits, vegetables, or healthy foods? Do they help wash or stir with supervision?",
+      "whyMm": "အစားအစာကို ကိုယ်တိုင် နားလည်ပြီး ပါဝင်ခြင်းက ကျန်းမာစားသောက်မှု အလေ့အထကို အားကောင်းစေသည်။",
+      "whyEn": "Understanding and helping with food builds healthy eating habits that carry forward.",
+      "encouragementMm": "ဈေးဝယ်ခြင်း၊ ဟင်းချက်ခြင်းတွင် ရိုးရှင်းသော အလုပ်ငယ်တစ်ခု ပေးကြည့်ပါ။",
+      "encouragementEn": "Give a simple job during shopping or cooking, like rinsing vegetables.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Early food knowledge and supervised kitchen participation are described in the Bright Futures preventive-care schedule and WHO nutrition-education guidance in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_4_5y_nutrition_1",
+    "titleMm": "ကျန်းမာသော အစားအစာအချို့ကို အမည်တပ်ပြီး ရိုးရှင်းသော ပြင်ဆင်မှုတွင် ကူညီနိုင်ခြင်း",
+    "titleEn": "Names a few healthy foods and helps with simple food prep",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "ကျန်းမာသော အစားအစာအချို့ကို အမည်တပ်ပြီး ရိုးရှင်းသော ပြင်ဆင်မှုတွင် ကူညီနိုင်ခြင်း names a few healthy foods and helps with simple food prep   nutrition 4_5y အသီးအရွက်နှင့် ကျန်းမာသောအစားအစာအချို့ကို အမည်ခေါ်နိုင်ပါသလား။ ဆေးကြောခြင်း သို့မဟုတ် ရောနှော ကူညီမှုကို ပါဝင်ကြိုးစားပါသလား။ can your child name a few fruits, vegetables, or healthy foods? do they help wash or stir with supervision? အစားအစာကို ကိုယ်တိုင် နားလည်ပြီး ပါဝင်ခြင်းက ကျန်းမာစားသောက်မှု အလေ့အထကို အားကောင်းစေသည်။ understanding and helping with food builds healthy eating habits that carry forward. ဈေးဝယ်ခြင်း၊ ဟင်းချက်ခြင်းတွင် ရိုးရှင်းသော အလုပ်ငယ်တစ်ခု ပေးကြည့်ပါ။ give a simple job during shopping or cooking, like rinsing vegetables. reference_verified early food knowledge and supervised kitchen participation are described in the bright futures preventive-care schedule and who nutrition-education guidance in the registry."
+  },
+  {
+    "ageGroupKey": "4_5y",
+    "domainKey": "sleep",
+    "tags": [
+      "sleep",
+      "4_5y"
+    ],
+    "data": {
+      "observeMm": "ညဘက်နိုးလျှင် ကိုယ်တိုင် ပြန်အိပ်ပျော်ပါသလား၊ ဒါမှမဟုတ် အနည်းငယ်စကားပြောပေးရုံဖြင့် ပြန်အိပ်ပျော်ပါသလား။",
+      "observeEn": "If your child wakes at night, do they settle back to sleep alone, or with just a few reassuring words?",
+      "whyMm": "ကိုယ်တိုင် ပြန်အိပ်ပျော်နိုင်စွမ်းသည် ကိုယ်ကိုယ်တိုင် ငြိမ်းအောင်လုပ်နိုင်မှု တိုးတက်လာကြောင်း ပြသည်။",
+      "whyEn": "Independent resettling shows growing self-soothing ability.",
+      "encouragementMm": "ညဘက်နိုးလျှင် တိုတောင်း၍ ငြိမ်သက်သော တုံ့ပြန်မှုကို ဆက်လက်ပေးပါ။",
+      "encouragementEn": "Keep any nighttime response brief and calm to support independent settling.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Growing independent nighttime self-settling around this age follows AASM behavioural sleep guidance in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_4_5y_sleep_1",
+    "titleMm": "ညဘက် နိုးလျှင် ကိုယ်တိုင် သို့မဟုတ် အနည်းငယ်ကူညီမှုဖြင့် ပြန်အိပ်ပျော်နိုင်ခြင်း",
+    "titleEn": "Settles back to sleep independently, or with minimal help, after waking",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "ညဘက် နိုးလျှင် ကိုယ်တိုင် သို့မဟုတ် အနည်းငယ်ကူညီမှုဖြင့် ပြန်အိပ်ပျော်နိုင်ခြင်း settles back to sleep independently, or with minimal help, after waking   sleep 4_5y ညဘက်နိုးလျှင် ကိုယ်တိုင် ပြန်အိပ်ပျော်ပါသလား၊ ဒါမှမဟုတ် အနည်းငယ်စကားပြောပေးရုံဖြင့် ပြန်အိပ်ပျော်ပါသလား။ if your child wakes at night, do they settle back to sleep alone, or with just a few reassuring words? ကိုယ်တိုင် ပြန်အိပ်ပျော်နိုင်စွမ်းသည် ကိုယ်ကိုယ်တိုင် ငြိမ်းအောင်လုပ်နိုင်မှု တိုးတက်လာကြောင်း ပြသည်။ independent resettling shows growing self-soothing ability. ညဘက်နိုးလျှင် တိုတောင်း၍ ငြိမ်သက်သော တုံ့ပြန်မှုကို ဆက်လက်ပေးပါ။ keep any nighttime response brief and calm to support independent settling. reference_verified growing independent nighttime self-settling around this age follows aasm behavioural sleep guidance in the registry."
+  },
+  {
+    "ageGroupKey": "4_5y",
+    "domainKey": "safety",
+    "tags": [
+      "safety",
+      "4_5y"
+    ],
+    "data": {
+      "observeMm": "လမ်းမကူးမည့်အခါ လူကြီးအသိပေးမှုဖြင့် ရပ်ပြီး ဘယ်ညာကြည့်ပါသလား။",
+      "observeEn": "When crossing a road, does your child stop and look both ways when an adult prompts them?",
+      "whyMm": "ရိုးရှင်းသော ရပ်-ကြည့်-နားထောင် အစီအစဉ်ကို လေ့ကျင့်ခြင်းက နောင် ကျောင်းသို့ တစ်ကိုယ်တည်း သွားရန် ပြင်ဆင်ပေးသည်။",
+      "whyEn": "Practising this simple sequence now prepares a child for greater independence around traffic later.",
+      "encouragementMm": "လမ်းမကူးတိုင်း \"ရပ်-ကြည့်-နားထောင်\" စကားလုံးကို တညီတညွတ်တည်း ပြောပြပါ။",
+      "encouragementEn": "Say \"stop, look, listen\" using the same words every single crossing.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Structured road-safety habit-building at this age follows AAP positive-parenting guidance and Bright Futures guidance in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_4_5y_safety_1",
+    "titleMm": "လူကြီးကြီးကြပ်မှုဖြင့် လမ်းမကူးရန် \"ရပ်-ကြည့်-နားထောင်\" ကို လိုက်နာခြင်း",
+    "titleEn": "Follows \"stop, look, listen\" at the road with adult supervision",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "လူကြီးကြီးကြပ်မှုဖြင့် လမ်းမကူးရန် \"ရပ်-ကြည့်-နားထောင်\" ကို လိုက်နာခြင်း follows \"stop, look, listen\" at the road with adult supervision   safety 4_5y လမ်းမကူးမည့်အခါ လူကြီးအသိပေးမှုဖြင့် ရပ်ပြီး ဘယ်ညာကြည့်ပါသလား။ when crossing a road, does your child stop and look both ways when an adult prompts them? ရိုးရှင်းသော ရပ်-ကြည့်-နားထောင် အစီအစဉ်ကို လေ့ကျင့်ခြင်းက နောင် ကျောင်းသို့ တစ်ကိုယ်တည်း သွားရန် ပြင်ဆင်ပေးသည်။ practising this simple sequence now prepares a child for greater independence around traffic later. လမ်းမကူးတိုင်း \"ရပ်-ကြည့်-နားထောင်\" စကားလုံးကို တညီတညွတ်တည်း ပြောပြပါ။ say \"stop, look, listen\" using the same words every single crossing. reference_verified structured road-safety habit-building at this age follows aap positive-parenting guidance and bright futures guidance in the registry."
+  },
+  {
+    "ageGroupKey": "5y",
+    "domainKey": "nutrition",
+    "tags": [
+      "nutrition",
+      "5y"
+    ],
+    "data": {
+      "observeMm": "အစားအစာအမျိုးမျိုးကို ကြိုက်နှစ်သက်စွာ စားပါသလား။ စားပွဲပြင်ခြင်း သို့မဟုတ် ပန်းကန်သိမ်းခြင်းကဲ့သို့ အလုပ်ငယ်ကို ကူညီနိုင်ပါသလား။",
+      "observeEn": "Does your child eat a fairly wide range of foods, and help set or clear the table?",
+      "whyMm": "ကျောင်းသွားရန် အသင့်ဖြစ်ချိန်တွင် အစားအစာ လွတ်လပ်စွာ စားနိုင်မှုနှင့် အိမ်မှုကိစ္စ ပါဝင်နိုင်မှုသည် အရေးကြီးသော ကိုယ်တိုင်လုပ်ဆောင်နိုင်စွမ်း ဖြစ်သည်။",
+      "whyEn": "Independent eating and helping with household tasks are important self-help skills going into school.",
+      "encouragementMm": "စားပွဲပြင်ခြင်း/သိမ်းခြင်းကို ပုံမှန်တာဝန်တစ်ခုအဖြစ် ပေးထားပါ။",
+      "encouragementEn": "Make table setting or clearing a regular small job.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Food variety and household task participation as school-readiness self-help skills are described in the Bright Futures preventive-care schedule in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_5y_nutrition_1",
+    "titleMm": "အစားအစာအမျိုးမျိုးကို စားနိုင်ပြီး စားပွဲပြင်/သိမ်းရာတွင် ကူညီနိုင်ခြင်း",
+    "titleEn": "Eats a wide variety of foods and helps set or clear the table",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "အစားအစာအမျိုးမျိုးကို စားနိုင်ပြီး စားပွဲပြင်/သိမ်းရာတွင် ကူညီနိုင်ခြင်း eats a wide variety of foods and helps set or clear the table   nutrition 5y အစားအစာအမျိုးမျိုးကို ကြိုက်နှစ်သက်စွာ စားပါသလား။ စားပွဲပြင်ခြင်း သို့မဟုတ် ပန်းကန်သိမ်းခြင်းကဲ့သို့ အလုပ်ငယ်ကို ကူညီနိုင်ပါသလား။ does your child eat a fairly wide range of foods, and help set or clear the table? ကျောင်းသွားရန် အသင့်ဖြစ်ချိန်တွင် အစားအစာ လွတ်လပ်စွာ စားနိုင်မှုနှင့် အိမ်မှုကိစ္စ ပါဝင်နိုင်မှုသည် အရေးကြီးသော ကိုယ်တိုင်လုပ်ဆောင်နိုင်စွမ်း ဖြစ်သည်။ independent eating and helping with household tasks are important self-help skills going into school. စားပွဲပြင်ခြင်း/သိမ်းခြင်းကို ပုံမှန်တာဝန်တစ်ခုအဖြစ် ပေးထားပါ။ make table setting or clearing a regular small job. reference_verified food variety and household task participation as school-readiness self-help skills are described in the bright futures preventive-care schedule in the registry."
+  },
+  {
+    "ageGroupKey": "5y",
+    "domainKey": "sleep",
+    "tags": [
+      "sleep",
+      "5y"
+    ],
+    "data": {
+      "observeMm": "ပါဝင်သောအဆင့်များ (သွားတိုက်၊ ပီဂျားမား ဝတ်၊ အိပ်ရာဝင်) ကို အသိပေးအနည်းငယ်ဖြင့် ကိုယ်တိုင် လုပ်ဆောင်ပါသလား။",
+      "observeEn": "With just a reminder or two, can your child follow the steps of a bedtime routine — brushing, pyjamas, into bed?",
+      "whyMm": "ကျောင်းသွားရန် အသင့်ဖြစ်ချိန်တွင် ညအိပ်ချိန်ကို ကိုယ်တိုင် စီမံနိုင်မှုသည် အရေးကြီးသော ကိုယ်တိုင်လုပ်ဆောင်နိုင်စွမ်း ဖြစ်သည်။",
+      "whyEn": "Managing a bedtime routine independently is an important self-help skill going into school.",
+      "encouragementMm": "ညအိပ်ချိန်ကို ကျောင်းရက်နှင့် အားလပ်ရက် နီးစပ်အောင် ထားပါ။",
+      "encouragementEn": "Keep bedtime reasonably consistent between school days and days off.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Independent bedtime-routine management as a school-readiness skill is described in the Bright Futures preventive-care schedule in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_5y_sleep_1",
+    "titleMm": "အိပ်မီအစီအစဉ်တစ်ခုလုံးကို များသောအားဖြင့် ကိုယ်တိုင် လိုက်နာနိုင်ခြင်း",
+    "titleEn": "Follows a full bedtime routine largely independently",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "အိပ်မီအစီအစဉ်တစ်ခုလုံးကို များသောအားဖြင့် ကိုယ်တိုင် လိုက်နာနိုင်ခြင်း follows a full bedtime routine largely independently   sleep 5y ပါဝင်သောအဆင့်များ (သွားတိုက်၊ ပီဂျားမား ဝတ်၊ အိပ်ရာဝင်) ကို အသိပေးအနည်းငယ်ဖြင့် ကိုယ်တိုင် လုပ်ဆောင်ပါသလား။ with just a reminder or two, can your child follow the steps of a bedtime routine — brushing, pyjamas, into bed? ကျောင်းသွားရန် အသင့်ဖြစ်ချိန်တွင် ညအိပ်ချိန်ကို ကိုယ်တိုင် စီမံနိုင်မှုသည် အရေးကြီးသော ကိုယ်တိုင်လုပ်ဆောင်နိုင်စွမ်း ဖြစ်သည်။ managing a bedtime routine independently is an important self-help skill going into school. ညအိပ်ချိန်ကို ကျောင်းရက်နှင့် အားလပ်ရက် နီးစပ်အောင် ထားပါ။ keep bedtime reasonably consistent between school days and days off. reference_verified independent bedtime-routine management as a school-readiness skill is described in the bright futures preventive-care schedule in the registry."
+  },
+  {
+    "ageGroupKey": "5y",
+    "domainKey": "safety",
+    "tags": [
+      "safety",
+      "5y"
+    ],
+    "data": {
+      "observeMm": "မိမိအမည်ကို ရှင်းရှင်းလင်းလင်း ပြောနိုင်ပါသလား။ လမ်းပျောက်လျှင် ဘယ်သူ့ဆီအကူအညီ တောင်းရမည်ကို သိရှိပါသလား (ဥပမာ- စတိုးဝန်ထမ်း၊ မိဘရဲ့ရဲ)။",
+      "observeEn": "Can your child clearly say their own name? Do they know who to ask for help if lost — like a shop worker or a police officer?",
+      "whyMm": "ကိုယ်ပိုင်အချက်အလက်ကို သိရှိပြီး ယုံကြည်ရသူကို ခွဲခြားနိုင်မှုသည် ကျောင်းအရွယ်မတိုင်မီ အရေးကြီးသော ဘေးကင်းရေး ကျွမ်းကျင်မှု ဖြစ်သည်။",
+      "whyEn": "Knowing personal information and recognising a trustworthy adult is an important pre-school safety skill.",
+      "encouragementMm": "လမ်းပျောက်လျှင် ဘယ်သူ့ဆီ အကူအညီတောင်းရမလဲ ဆိုတာကို ရိုးရှင်းသော ဇာတ်လမ်းဖြင့် လေ့ကျင့်ပြပါ။",
+      "encouragementEn": "Practise \"what to do if lost\" through a simple, calm role-play, not a scary one.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "Teaching personal information and trusted-adult recognition as a pre-kindergarten safety skill is described in AAP positive-parenting guidance in the registry."
+    },
+    "type": "milestone",
+    "slug": "ms_5y_safety_1",
+    "titleMm": "ကိုယ်ပိုင်အမည်ကို ပြောနိုင်ပြီး လမ်းပျောက်လျှင် ယုံကြည်ရသူထံ အကူအညီတောင်းခြင်း",
+    "titleEn": "States own name and asks a trusted adult for help if lost",
+    "source": "ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review",
+    "version": 1,
+    "clinicalStatus": "clinical_review",
+    "media": [],
+    "searchText": "ကိုယ်ပိုင်အမည်ကို ပြောနိုင်ပြီး လမ်းပျောက်လျှင် ယုံကြည်ရသူထံ အကူအညီတောင်းခြင်း states own name and asks a trusted adult for help if lost   safety 5y မိမိအမည်ကို ရှင်းရှင်းလင်းလင်း ပြောနိုင်ပါသလား။ လမ်းပျောက်လျှင် ဘယ်သူ့ဆီအကူအညီ တောင်းရမည်ကို သိရှိပါသလား (ဥပမာ- စတိုးဝန်ထမ်း၊ မိဘရဲ့ရဲ)။ can your child clearly say their own name? do they know who to ask for help if lost — like a shop worker or a police officer? ကိုယ်ပိုင်အချက်အလက်ကို သိရှိပြီး ယုံကြည်ရသူကို ခွဲခြားနိုင်မှုသည် ကျောင်းအရွယ်မတိုင်မီ အရေးကြီးသော ဘေးကင်းရေး ကျွမ်းကျင်မှု ဖြစ်သည်။ knowing personal information and recognising a trustworthy adult is an important pre-school safety skill. လမ်းပျောက်လျှင် ဘယ်သူ့ဆီ အကူအညီတောင်းရမလဲ ဆိုတာကို ရိုးရှင်းသော ဇာတ်လမ်းဖြင့် လေ့ကျင့်ပြပါ။ practise \"what to do if lost\" through a simple, calm role-play, not a scary one. reference_verified teaching personal information and trusted-adult recognition as a pre-kindergarten safety skill is described in aap positive-parenting guidance in the registry."
   }
 ]
