@@ -175,6 +175,24 @@ describe('parent-visible Class C filtering and queue filters', () => {
     ];
     expect(applyQueueFilters(rows, { ...DEFAULT_FILTERS, clinicalRequired: true }).map((entry) => entry.slug)).toEqual(['needs-clinical']);
   });
+
+  it('searches bilingual titles, slug and queue metadata', () => {
+    const rows = [
+      row({ slug: 'safe-sleep-3m', titleMm: 'အိပ်စက်ခြင်း', titleEn: 'Safe sleep', ageGroupKey: '3-4m', activeReviewers: ['Dr May'] }),
+      row({ slug: 'play', titleMm: 'ကစားခြင်း', titleEn: 'Play', ageGroupKey: '1-2y' }),
+    ];
+    expect(applyQueueFilters(rows, { ...DEFAULT_FILTERS, query: 'အိပ်စက်' }).map((entry) => entry.slug)).toEqual(['safe-sleep-3m']);
+    expect(applyQueueFilters(rows, { ...DEFAULT_FILTERS, query: 'safe 3m' }).map((entry) => entry.slug)).toEqual(['safe-sleep-3m']);
+    expect(applyQueueFilters(rows, { ...DEFAULT_FILTERS, query: 'dr may' }).map((entry) => entry.slug)).toEqual(['safe-sleep-3m']);
+  });
+
+  it('combines search with the existing safety filters', () => {
+    const rows = [
+      row({ slug: 'feeding', titleEn: 'Feeding', riskClass: 'C', outstandingDimensions: ['clinical'] }),
+      row({ slug: 'feeding-safe', titleEn: 'Feeding safety', riskClass: 'C', outstandingDimensions: ['safety'] }),
+    ];
+    expect(applyQueueFilters(rows, { ...DEFAULT_FILTERS, query: 'feeding', safetyRequired: true }).map((entry) => entry.slug)).toEqual(['feeding-safe']);
+  });
 });
 
 describe('edits invalidate active approvals (existing behaviour preserved)', () => {

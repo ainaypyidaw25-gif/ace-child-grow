@@ -56,6 +56,13 @@ for (const [label, viewport] of [
     const first = page.locator('[data-testid^="queue-row-"]').first();
     await expect(first).toHaveAttribute('data-priority', 'P0');
 
+    // Search works with the filters and remains easy to clear on small screens.
+    const search = page.getByRole('searchbox');
+    await search.fill('demo_sn_autism');
+    await expect(page.getByTestId('queue-count')).toContainText('1');
+    await page.getByRole('button', { name: 'ဖျက်မည်' }).click();
+    await expect(page.getByTestId('queue-count')).not.toContainText('1 /');
+
     await assertNoHorizontalOverflow(page);
     await assertMyanmarTitlesWrap(page);
     await assertLastActionReachable(page);
