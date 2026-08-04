@@ -16,13 +16,20 @@ export default defineConfig({
     rollupOptions: {
       output: {
         // src/content/seed (bulk static content data) and src/evidence (the
-        // reference registry) are each only imported by one lazy-loaded,
-        // staff-only admin screen (LibraryAdmin, EvidenceAdmin respectively),
-        // but Rollup's default heuristic was bundling both into one shared
-        // 679 KB chunk loaded by either screen. Splitting them out means each
-        // admin screen pulls in only the heavy data it actually needs.
+        // reference registry) are each only imported by lazy-loaded staff
+        // screens. Keep each authored seed module in its own chunk so the
+        // library data does not produce one oversized JavaScript asset.
         manualChunks(id) {
-          if (id.includes('/src/content/seed/')) return 'content-seed';
+          const seedMarker = '/src/content/seed/';
+          const seedStart = id.indexOf(seedMarker);
+          if (seedStart !== -1) {
+            const seedModule = id
+              .slice(seedStart + seedMarker.length)
+              .replace(/\.tsx?$/, '')
+              .replace(/\/index$/, '')
+              .replace(/[^a-zA-Z0-9_-]+/g, '-');
+            return `content-seed-${seedModule || 'index'}`;
+          }
           if (id.includes('/src/evidence/')) return 'evidence';
         },
       },
