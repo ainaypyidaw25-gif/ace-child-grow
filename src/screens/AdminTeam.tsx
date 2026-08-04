@@ -6,7 +6,8 @@ import { useLocale } from '../app/LocaleContext';
 import { OwnDisplayName } from '../components/OwnDisplayName';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 
-type StaffRole = 'owner' | 'content_editor' | 'language_reviewer' | 'evidence_reviewer' | 'clinical_reviewer' | 'review_manager' | 'support';
+type StaffRole = 'owner' | 'content_editor' | 'language_reviewer' | 'evidence_reviewer' | 'clinical_reviewer' | 'support' |
+  'system_admin' | 'review_manager' | 'myanmar_language_reviewer' | 'child_development_reviewer' | 'publisher' | 'auditor';
 
 const ROLE_LABELS: Record<StaffRole, { mm: string; en: string }> = {
   owner: { mm: 'ပိုင်ရှင်', en: 'Owner' },
@@ -16,16 +17,26 @@ const ROLE_LABELS: Record<StaffRole, { mm: string; en: string }> = {
   clinical_reviewer: { mm: 'ဆေးဘက်ဆိုင်ရာ သုံးသပ်သူ', en: 'Clinical reviewer' },
   review_manager: { mm: 'စစ်ဆေးရေး မန်နေဂျာ', en: 'Review manager' },
   support: { mm: 'အသုံးပြုသူအကူအညီပေးသူ', en: 'Support' },
+  system_admin: { mm: 'စနစ်စီမံခန့်ခွဲသူ', en: 'System admin' },
+  myanmar_language_reviewer: { mm: 'မြန်မာဘာသာစကားသုံးသပ်သူ', en: 'Myanmar language reviewer' },
+  child_development_reviewer: { mm: 'ကလေးဖွံ့ဖြိုးမှုသုံးသပ်သူ', en: 'Child development reviewer' },
+  publisher: { mm: 'ထုတ်ဝေခွင့်ရှိသူ', en: 'Publisher' },
+  auditor: { mm: 'မှတ်တမ်းစစ်ဆေးသူ', en: 'Auditor' },
 };
 
 const ROLE_DESCRIPTIONS: Record<StaffRole, { mm: string; en: string }> = {
   owner: { mm: 'အဖွဲ့၊ အကြောင်းအရာနှင့် စနစ်ဆိုင်ရာ စီမံခန့်ခွဲမှုအားလုံးကို လုပ်နိုင်သည်။ Clinical approval ကို သက်ဆိုင်ရာ clinical reviewer က သီးခြားမှတ်တမ်းတင်ရသည်။', en: 'Full team, content and system administration. Clinical approval remains a separate clinical-reviewer decision.' },
   content_editor: { mm: 'အကြောင်းအရာအားလုံးကို တည်းဖြတ်ပြီး သုံးသပ်လုပ်ငန်းကို စီမံနိုင်သည်။ ငွေပေးချေမှု၊ အဖွဲ့ဝင်အခန်းကဏ္ဍနှင့် clinical approval မပါဝင်ပါ။', en: 'Can edit all content and manage content review work. Billing, team roles and clinical approval are excluded.' },
-  language_reviewer: { mm: 'မြန်မာနှင့် အင်္ဂလိပ်စာသားကို တိုက်ရိုက်ပြင်ပြီး ဘာသာစကားသုံးသပ်ချက် မှတ်တမ်းတင်နိုင်သည်။', en: 'Can correct wording directly and record language-review decisions.' },
-  evidence_reviewer: { mm: 'စာသားကို ပြင်နိုင်ပြီး ကိုးကားအထောက်အထား သုံးသပ်ချက်ကို ပညာအရည်အချင်းနှင့်အတူ မှတ်တမ်းတင်နိုင်သည်။', en: 'Can correct wording and record qualified evidence-review decisions.' },
-  clinical_reviewer: { mm: 'စာသားကို ပြင်နိုင်ပြီး သက်ဆိုင်ရာ ဘေးကင်းရေးနှင့် ဆေးဘက်ဆိုင်ရာ သုံးသပ်ချက်ကို မှတ်တမ်းတင်နိုင်သည်။', en: 'Can correct wording and record qualified safety and clinical decisions.' },
+  language_reviewer: { mm: 'ပေးအပ်ထားသော စာသားကို သုံးသပ်ပြီး ပြင်ဆင်ချက်အဆိုပြုနိုင်သည်။', en: 'Can review assigned wording and propose corrections.' },
+  evidence_reviewer: { mm: 'ပေးအပ်ထားသော ကိုးကားအထောက်အထားကို ပညာအရည်အချင်းနှင့်အတူ သုံးသပ်နိုင်သည်။', en: 'Can review assigned evidence with a recorded qualification.' },
+  clinical_reviewer: { mm: 'ပေးအပ်ထားသော ဘေးကင်းရေးနှင့် ဆေးဘက်ဆိုင်ရာအချက်အလက်ကို သုံးသပ်နိုင်သည်။', en: 'Can review assigned safety and clinical information.' },
   review_manager: { mm: 'ဦးစားပေးတန်းအားလုံးကို ကြည့်နိုင်ပြီး စိစစ်ခြင်း၊ လိုအပ်သည့် စစ်ဆေးမှုများ အတည်ပြုခြင်း၊ တောင်းဆိုခြင်း လုပ်နိုင်သည်။ သုံးသပ်ဆုံးဖြတ်ချက် မှတ်တမ်းတင်ခွင့်နှင့် ထုတ်ဝေခွင့် မရှိပါ။', en: 'Sees the whole priority queue; triages, confirms required reviews and requests them. Records no review decision and cannot publish.' },
   support: { mm: 'အသုံးပြုသူအကူအညီပေးနိုင်သော်လည်း အကြောင်းအရာကို တည်းဖြတ်၍ မရပါ။', en: 'Can support users but cannot edit content.' },
+  system_admin: { mm: 'စနစ်နှင့် အဖွဲ့ဝင်ဝင်ခွင့်များကို စီမံနိုင်သည်။', en: 'Can manage system and team access.' },
+  myanmar_language_reviewer: { mm: 'ပေးအပ်ထားသော မြန်မာစာကို သုံးသပ်ပြီး ပြင်ဆင်ချက်အဆိုပြုနိုင်သည်။', en: 'Can review assigned Myanmar wording and propose corrections.' },
+  child_development_reviewer: { mm: 'ပေးအပ်ထားသော ကလေးဖွံ့ဖြိုးမှုဆိုင်ရာ အကြောင်းအရာကို သုံးသပ်နိုင်သည်။', en: 'Can review assigned child-development content.' },
+  publisher: { mm: 'လိုအပ်သော သုံးသပ်ချက်များ ပြည့်စုံသည့် မူကွဲကိုသာ ထုတ်ဝေနိုင်သည်။', en: 'Can publish only a revision with all required approvals.' },
+  auditor: { mm: 'သုံးသပ်မှုနှင့် မှတ်တမ်းများကို ဖတ်ရှုစစ်ဆေးနိုင်သည်။', en: 'Can inspect review and audit records.' },
 };
 
 function MemberRow({
@@ -144,6 +155,12 @@ export function AdminTeam() {
   const [displayName, setDisplayName] = useState('');
   const [role, setRole] = useState<StaffRole>('content_editor');
   const [qualification, setQualification] = useState('');
+  const [organization, setOrganization] = useState('');
+  const [reviewScope, setReviewScope] = useState('assigned_content');
+  const [ageGroups, setAgeGroups] = useState('');
+  const [contentTypes, setContentTypes] = useState('');
+  const [expiresInDays, setExpiresInDays] = useState(7);
+  const [note, setNote] = useState('');
   const [inviteLink, setInviteLink] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
@@ -180,6 +197,12 @@ export function AdminTeam() {
               displayName,
               role,
               reviewerQualification: ['clinical_reviewer', 'evidence_reviewer'].includes(role) ? qualification.trim() : undefined,
+              organization: organization.trim() || undefined,
+              reviewScope,
+              ageGroups: ageGroups.split(',').map((value) => value.trim()).filter(Boolean),
+              contentTypes: contentTypes.split(',').map((value) => value.trim()).filter(Boolean),
+              expiresInDays,
+              note: note.trim() || undefined,
             });
             setInviteLink(`${window.location.origin}/admin/accept-invite/${encodeURIComponent(result.inviteCode)}`);
             setEmail('');
@@ -226,6 +249,17 @@ export function AdminTeam() {
             className="w-full rounded-lg border border-line px-3 py-2"
           />
         )}
+        <input value={organization} onChange={(event) => setOrganization(event.target.value)} placeholder={locale === 'mm' ? 'အဖွဲ့အစည်း (မဖြစ်မနေမဟုတ်)' : 'Organisation (optional)'} className="w-full rounded-lg border border-line px-3 py-2" />
+        <input required value={reviewScope} onChange={(event) => setReviewScope(event.target.value)} placeholder={locale === 'mm' ? 'သုံးသပ်ရမည့်နယ်ပယ်' : 'Review scope'} className="w-full rounded-lg border border-line px-3 py-2" />
+        <div className="grid gap-3 sm:grid-cols-2">
+          <input value={ageGroups} onChange={(event) => setAgeGroups(event.target.value)} placeholder={locale === 'mm' ? 'အသက်အုပ်စုများ (ကော်မာခြား)' : 'Age groups (comma separated)'} className="rounded-lg border border-line px-3 py-2" />
+          <input value={contentTypes} onChange={(event) => setContentTypes(event.target.value)} placeholder={locale === 'mm' ? 'အကြောင်းအရာအမျိုးအစားများ (ကော်မာခြား)' : 'Content types (comma separated)'} className="rounded-lg border border-line px-3 py-2" />
+        </div>
+        <label className="space-y-1 text-sm text-ink">
+          <span>{locale === 'mm' ? 'ဖိတ်ကြားချက်သက်တမ်း (ရက်)' : 'Invitation expiry (days)'}</span>
+          <input type="number" min={1} max={30} value={expiresInDays} onChange={(event) => setExpiresInDays(Number(event.target.value))} className="w-full rounded-lg border border-line px-3 py-2" />
+        </label>
+        <textarea value={note} onChange={(event) => setNote(event.target.value)} rows={3} placeholder={locale === 'mm' ? 'အတွင်းသုံးမှတ်ချက် (မဖြစ်မနေမဟုတ်)' : 'Internal note (optional)'} className="w-full rounded-lg border border-line px-3 py-2" />
         {error && <p className="text-sm text-state-red-deep">⚠️ {error}</p>}
         <button disabled={busy} className="rounded-pill bg-sky px-5 py-2 font-semibold text-white disabled:opacity-50">
           {busy ? '…' : locale === 'mm' ? 'ဖိတ်ကြားလင့်ခ် ဖန်တီးမည်' : 'Create invitation link'}

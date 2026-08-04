@@ -11,12 +11,13 @@ import { useLocale } from '../app/LocaleContext';
 // returns { allowed:false } to anyone who is not owner/content_editor, so this
 // is not client-side hiding.
 
-type Dimension = 'english' | 'native_myanmar' | 'evidence' | 'safety' | 'clinical';
-type Decision = 'in_review' | 'approved' | 'changes_requested' | 'not_applicable';
+type Dimension = 'english' | 'native_myanmar' | 'development' | 'evidence' | 'safety' | 'clinical';
+type Decision = 'in_review' | 'approved' | 'changes_requested' | 'not_applicable' | 'evidence_required' | 'blocked' | 'rejected';
 
 const DIMENSION_LABELS: Record<Dimension, { mm: string; en: string }> = {
   english: { mm: 'အင်္ဂလိပ်စာ', en: 'English' },
   native_myanmar: { mm: 'မြန်မာစာ', en: 'Native Myanmar' },
+  development: { mm: 'ကလေးဖွံ့ဖြိုးမှု', en: 'Child development' },
   evidence: { mm: 'ကိုးကားချက်', en: 'Evidence' },
   safety: { mm: 'ဘေးကင်းလုံခြုံရေး', en: 'Safety' },
   clinical: { mm: 'ဆေးဘက်ဆိုင်ရာ', en: 'Clinical' },
@@ -27,6 +28,9 @@ const DECISION_LABELS: Record<Decision, { mm: string; en: string }> = {
   approved: { mm: 'အတည်ပြုပြီး', en: 'Approved' },
   changes_requested: { mm: 'ပြင်ဆင်ရန် တောင်းဆိုထား', en: 'Changes requested' },
   not_applicable: { mm: 'သက်ဆိုင်မှု မရှိ', en: 'Not applicable' },
+  evidence_required: { mm: 'အထောက်အထားလိုအပ်', en: 'Evidence required' },
+  blocked: { mm: 'ပိတ်ဆို့နေသည်', en: 'Blocked' },
+  rejected: { mm: 'ပယ်ချထားသည်', en: 'Rejected' },
 };
 
 const ROLE_LABELS: Record<string, { mm: string; en: string }> = {
@@ -37,6 +41,11 @@ const ROLE_LABELS: Record<string, { mm: string; en: string }> = {
   clinical_reviewer: { mm: 'ဆေးဘက်ဆိုင်ရာ သုံးသပ်သူ', en: 'Clinical reviewer' },
   review_manager: { mm: 'စစ်ဆေးရေး မန်နေဂျာ', en: 'Review manager' },
   support: { mm: 'ပံ့ပိုးကူညီရေး', en: 'Support' },
+  system_admin: { mm: 'စနစ်စီမံခန့်ခွဲသူ', en: 'System admin' },
+  myanmar_language_reviewer: { mm: 'မြန်မာစာ သုံးသပ်သူ', en: 'Myanmar language reviewer' },
+  child_development_reviewer: { mm: 'ကလေးဖွံ့ဖြိုးမှု သုံးသပ်သူ', en: 'Child development reviewer' },
+  publisher: { mm: 'ထုတ်ဝေသူ', en: 'Publisher' },
+  auditor: { mm: 'မှတ်တမ်းစစ်ဆေးသူ', en: 'Auditor' },
 };
 
 const DECISION_TONE: Record<Decision, string> = {
@@ -44,6 +53,9 @@ const DECISION_TONE: Record<Decision, string> = {
   changes_requested: 'bg-pastel-yellow text-ink',
   in_review: 'bg-canvas text-ink-soft',
   not_applicable: 'bg-canvas text-ink-soft',
+  evidence_required: 'bg-pastel-yellow text-ink',
+  blocked: 'bg-pastel-yellow text-ink',
+  rejected: 'bg-state-red-soft text-state-red-deep',
 };
 
 function formatDateTime(ms: number, locale: 'mm' | 'en'): string {

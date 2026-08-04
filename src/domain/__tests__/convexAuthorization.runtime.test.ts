@@ -14,14 +14,18 @@ import {
   ownChild,
   requireContentEditor,
   requireEvidenceEditor,
+  requireExplicitStaffRole,
   requireProfessionalPublisher,
+  requireReviewManager,
   requireUser,
+  type StaffRole,
 } from '../../../convex/lib/auth';
 
 type Profile = {
   userId: string;
   isStaff?: boolean;
-  staffRole?: 'owner' | 'content_editor' | 'language_reviewer' | 'evidence_reviewer' | 'clinical_reviewer' | 'support';
+  staffRole?: StaffRole;
+  additionalStaffRoles?: StaffRole[];
   staffQualification?: string;
   displayName?: string;
 };
@@ -79,6 +83,41 @@ describe('Convex authorization helpers (runtime)', () => {
     authState.userId = 'user-1';
     const ctx = context({ profile: { userId: 'user-1', isStaff: true, staffRole: 'support' } });
     await expect(requireProfessionalPublisher(ctx)).rejects.toThrow('Insufficient staff permission');
+  });
+
+  it('keeps the legacy staff bootstrap outside high-impact explicit-role checks', async () => {
+    authState.userId = 'legacy-staff-1';
+    const ctx = context({ profile: { userId: 'legacy-staff-1', isStaff: true } });
+
+    await expect(requireReviewManager(ctx)).resolves.toMatchObject({
+      userId: 'legacy-staff-1',
+      access: { role: 'owner', roles: ['owner'] },
+    });
+    await expect(requireExplicitStaffRole(ctx, ['owner', 'system_admin', 'review_manager']))
+      .rejects.toThrow('Insufficient explicit staff permission');
+  });
+
+  it('allows monetary workflow roles only when active and explicitly persisted', async () => {
+    authState.userId = 'manager-1';
+    const active = context({
+      profile: {
+        userId: 'manager-1',
+        isStaff: true,
+        staffRole: 'review_manager',
+        displayName: 'Review Manager',
+      },
+    });
+    await expect(requireExplicitStaffRole(active, ['owner', 'system_admin', 'review_manager']))
+      .resolves.toMatchObject({
+        userId: 'manager-1',
+        access: { role: 'review_manager', roles: ['review_manager'], displayName: 'Review Manager' },
+      });
+
+    const inactive = context({
+      profile: { userId: 'manager-1', isStaff: false, staffRole: 'review_manager' },
+    });
+    await expect(requireExplicitStaffRole(inactive, ['owner', 'system_admin', 'review_manager']))
+      .rejects.toThrow('Insufficient explicit staff permission');
   });
 
   it('an unqualified owner cannot publish or imply clinical approval', async () => {

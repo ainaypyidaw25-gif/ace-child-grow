@@ -9,8 +9,10 @@ import { EVIDENCE_SOURCES } from '../../evidence/sources';
 import {
   publishedErrataSlugs,
   seedAuditSummary,
+  seedContentNeedsUpdate,
   seedMayUpdateExisting,
   seedMediaIsProtected,
+  seedReviewInvalidationPatch,
 } from '../../../convex/lib/seedPolicy';
 import { importSeed } from '../../../convex/library';
 import { run as seedRun } from '../../../convex/seed';
@@ -126,8 +128,9 @@ describe('seed generation', () => {
 // --- Idempotent upsert model ------------------------------------------------
 // Faithful in-memory model of the loop shared by convex/library.ts:importSeed
 // and convex/seed.ts:run: upsert by slug, patch preserves the human review
-// decision, insert clamps 'published' -> 'clinical_review', media is refreshed
-// per slug, and nothing is ever deleted from content or from unrelated tables.
+// decision history, insert clamps 'published' -> 'clinical_review', media is
+// refreshed per slug, and nothing is ever deleted from content or unrelated
+// workflow tables. Identical content is a true no-op for review revisions.
 
 type Row = Record<string, unknown> & { _id: string; slug: string };
 type MediaRow = {
@@ -145,6 +148,17 @@ class FakeDb {
   libraryContent: Row[] = [];
   libraryMedia: MediaRow[] = [];
   children: Row[] = []; // an unrelated user-data table, to prove it is untouched
+  auditLogs: Record<string, unknown>[] = [];
+  reviewWorkflow: Record<string, Record<string, unknown>[]> = {
+    reviewAssignments: [],
+    contentReviews: [],
+    reviewChecklists: [],
+    reviewComments: [],
+    reviewProposals: [],
+    reviewEvents: [],
+    reviewPaymentBatches: [],
+    notifications: [],
+  };
   private seq = 0;
 
   private id() {
@@ -190,16 +204,15 @@ function runImport(db: FakeDb, items: ReturnType<typeof seedPayload>, now: numbe
         skippedApproved += 1;
         continue;
       }
-      db.patchContent(existing._id, {
-        ...content,
-        // Never override a human review decision on re-seed.
-        clinicalStatus: existing.clinicalStatus,
-        reviewerId: existing.reviewerId,
-        reviewedAt: existing.reviewedAt,
-        nextReviewAt: existing.nextReviewAt,
-        updatedAt: now,
-      });
-      updated += 1;
+      if (seedContentNeedsUpdate(existing, content)) {
+        db.patchContent(existing._id, {
+          ...content,
+          clinicalStatus: existing.clinicalStatus,
+          ...seedReviewInvalidationPatch(existing),
+          updatedAt: now,
+        });
+        updated += 1;
+      }
     } else {
       const clinicalStatus = content.clinicalStatus === 'published' ? 'clinical_review' : content.clinicalStatus;
       db.insertContent({ ...content, clinicalStatus, createdAt: now, updatedAt: now });
@@ -220,6 +233,7 @@ function runImport(db: FakeDb, items: ReturnType<typeof seedPayload>, now: numbe
       } as Omit<MediaRow, '_id'>);
     }
   }
+  db.auditLogs.push({ action: 'library.import', createdAt: now });
   return { created, updated, skippedApproved, total: items.length };
 }
 
@@ -241,13 +255,15 @@ describe('seed import safety (upsert contract model)', () => {
     expect(db.libraryContent.length).toBe(payload.length);
   });
 
-  it('second import creates nothing, updates everything, and never duplicates', () => {
+  it('second identical import creates and updates nothing, and never duplicates', () => {
     const db = new FakeDb();
     runImport(db, payload, 1000);
+    const revisionsBefore = db.libraryContent.map((row) => row.reviewRevision);
     const res = runImport(db, payload, 2000);
     expect(res.created).toBe(0);
-    expect(res.updated).toBe(payload.length);
+    expect(res.updated).toBe(0);
     expect(db.libraryContent.length).toBe(payload.length);
+    expect(db.libraryContent.map((row) => row.reviewRevision)).toEqual(revisionsBefore);
     const slugs = db.libraryContent.map((r) => r.slug);
     expect(new Set(slugs).size).toBe(slugs.length);
   });
@@ -282,7 +298,7 @@ describe('seed import safety (upsert contract model)', () => {
     const result = runImport(db, payload, 2000);
     expect(db.findBySlug(target.slug)?.titleEn).toBe(payload[0].titleEn);
     expect(db.mediaForSlug(target.slug)).toHaveLength(mediaCount);
-    expect(result.updated).toBe(payload.length);
+    expect(result.updated).toBe(1);
     expect(result.skippedApproved).toBe(0);
   });
 
@@ -311,7 +327,7 @@ describe('seed import safety (upsert contract model)', () => {
 
     expect(db.findBySlug(target.slug)?.titleEn).not.toBe('Stale draft title');
     expect(JSON.stringify(db.mediaForSlug(target.slug).filter(seedMediaIsProtected))).toBe(protectedBefore);
-    expect(result.updated).toBe(payload.length);
+    expect(result.updated).toBe(1);
   });
 
   it('refreshes unresolved placeholders deterministically without accumulation', () => {
@@ -363,5 +379,62 @@ describe('seed import safety (upsert contract model)', () => {
     expect(db.libraryMedia.length).toBe(mediaAfterFirst);
     // Unrelated user data is never touched by seeding.
     expect(db.children).toEqual([{ _id: 'child_1', slug: 'n/a', nickname: 'Baby' }]);
+  });
+
+  it('preserves every reviewer workflow record while making changed wording require a new review', () => {
+    const db = new FakeDb();
+    runImport(db, payload, 1000);
+    const target = db.libraryContent[0];
+    db.patchContent(target._id, {
+      titleEn: 'Stale wording',
+      reviewRevision: 7,
+      publicationStatus: 'ready_to_publish',
+      publicationRevision: 7,
+      reviewerId: 'reviewer_1',
+      reviewerDisplayName: 'Reviewer',
+      reviewedAt: 1500,
+    });
+    for (const [table, rows] of Object.entries(db.reviewWorkflow)) {
+      rows.push({ _id: `${table}_1`, contentSlug: target.slug, contentVersion: 7, status: 'approved' });
+    }
+    db.auditLogs.push({ _id: 'audit_1', action: 'review.approved', contentSlug: target.slug });
+    const workflowBefore = structuredClone(db.reviewWorkflow);
+    const auditBefore = structuredClone(db.auditLogs);
+
+    const result = runImport(db, payload, 2000);
+    const revised = db.findBySlug(target.slug)!;
+
+    expect(result.updated).toBe(1);
+    expect(revised.reviewRevision).toBe(8);
+    expect(revised.publicationStatus).toBe('internal_review');
+    expect(revised.publicationRevision).toBeUndefined();
+    expect(revised.reviewerId).toBeUndefined();
+    expect(revised.reviewerDisplayName).toBeUndefined();
+    expect(db.reviewWorkflow).toEqual(workflowBefore);
+    expect(db.auditLogs.slice(0, auditBefore.length)).toEqual(auditBefore);
+    expect(db.auditLogs).toHaveLength(auditBefore.length + 1);
+  });
+
+  it('keeps seed/import access away from reviewer tables while appending an audit event', () => {
+    const librarySource = readFileSync('convex/library.ts', 'utf8');
+    const importer = librarySource.slice(
+      librarySource.indexOf('export const importSeed'),
+      librarySource.indexOf('export const updateDraft'),
+    );
+    const seedSource = readFileSync('convex/seed.ts', 'utf8');
+    const cliSeed = seedSource.slice(seedSource.indexOf('export const run'));
+    const legacySeed = readFileSync('convex/content.ts', 'utf8').slice(
+      readFileSync('convex/content.ts', 'utf8').indexOf('export const seedIfEmpty'),
+      readFileSync('convex/content.ts', 'utf8').indexOf('export const transition'),
+    );
+    const workflowTables = Object.keys(new FakeDb().reviewWorkflow);
+
+    for (const table of workflowTables) {
+      expect(`${importer}\n${cliSeed}\n${legacySeed}`, table).not.toMatch(
+        new RegExp(`[\\"']${table}[\\"']`),
+      );
+    }
+    expect(importer).toContain('await logAudit(');
+    expect(cliSeed).toContain('await logAudit(');
   });
 });

@@ -15,8 +15,15 @@
  * bundle can use it.
  */
 
-export type ReviewDimension = 'english' | 'native_myanmar' | 'evidence' | 'safety' | 'clinical';
-export type ReviewDecision = 'in_review' | 'approved' | 'changes_requested' | 'not_applicable';
+export type ReviewDimension = 'english' | 'native_myanmar' | 'development' | 'evidence' | 'safety' | 'clinical';
+export type ReviewDecision =
+  | 'in_review'
+  | 'approved'
+  | 'changes_requested'
+  | 'not_applicable'
+  | 'evidence_required'
+  | 'blocked'
+  | 'rejected';
 export type ReviewerRole =
   | 'owner'
   | 'content_editor'
@@ -24,22 +31,34 @@ export type ReviewerRole =
   | 'evidence_reviewer'
   | 'clinical_reviewer'
   | 'review_manager'
-  | 'support';
+  | 'support'
+  | 'system_admin'
+  | 'myanmar_language_reviewer'
+  | 'child_development_reviewer'
+  | 'publisher'
+  | 'auditor';
 
-export function roleMayReview(role: string | null | undefined, dimension: ReviewDimension): boolean {
-  if (!role || role === 'support') return false;
+export function roleMayReview(
+  role: string | null | undefined,
+  dimension: ReviewDimension,
+  roles: readonly string[] = role ? [role] : [],
+): boolean {
+  const activeRoles = new Set(roles.length > 0 ? roles : role ? [role] : []);
+  if (activeRoles.size === 0 || [...activeRoles].every((entry) => entry === 'support')) return false;
   // A review manager runs the queue: triages, confirms what a record needs,
   // and requests reviews. It signs off on NOTHING. Separating "decides what
   // must be reviewed" from "declares it reviewed" is the whole point of the
   // role — otherwise the person under pressure to clear a backlog is also the
   // person who can clear it by approving. Someone who is both a manager and a
   // qualified reviewer holds the reviewer role as well, and signs under that.
-  if (role === 'review_manager') return false;
-  if (dimension === 'clinical' || dimension === 'safety') return role === 'clinical_reviewer';
-  if (dimension === 'evidence') {
-    return ['owner', 'content_editor', 'evidence_reviewer', 'clinical_reviewer'].includes(role);
+  if (dimension === 'clinical' || dimension === 'safety') return activeRoles.has('clinical_reviewer');
+  if (dimension === 'development') {
+    return activeRoles.has('owner') || activeRoles.has('child_development_reviewer');
   }
-  return ['owner', 'content_editor', 'language_reviewer'].includes(role);
+  if (dimension === 'evidence') {
+    return activeRoles.has('owner') || activeRoles.has('evidence_reviewer') || activeRoles.has('clinical_reviewer');
+  }
+  return activeRoles.has('owner') || activeRoles.has('language_reviewer') || activeRoles.has('myanmar_language_reviewer');
 }
 
 /**
@@ -58,7 +77,9 @@ export type ReviewRefusalCode =
   | 'qualification_required'
   | 'note_required'
   | 'content_not_found'
-  | 'stale_revision';
+  | 'stale_revision'
+  | 'active_assignment_required'
+  | 'checklist_incomplete';
 
 export type ReviewRefusal = { code: ReviewRefusalCode; message: string };
 
@@ -73,6 +94,7 @@ export type ReviewRefusal = { code: ReviewRefusalCode; message: string };
  */
 export function reviewRefusal(input: {
   role: string | null | undefined;
+  roles?: readonly string[];
   dimension: ReviewDimension;
   decision: ReviewDecision;
   displayName: string | null | undefined;
@@ -80,19 +102,20 @@ export function reviewRefusal(input: {
   note: string | null | undefined;
   contentExists: boolean;
 }): ReviewRefusal | null {
-  if (!input.role || input.role === 'support') {
+  const roles = input.roles ?? (input.role ? [input.role] : []);
+  if (!input.role || roles.length === 0 || roles.every((role) => role === 'support')) {
     return {
       code: 'not_staff',
       message: 'Your account does not have permission to record review decisions.',
     };
   }
-  if (!roleMayReview(input.role, input.dimension)) {
+  if (!roleMayReview(input.role, input.dimension, roles)) {
     return {
       code: 'role_may_not_review_area',
       message: 'Your reviewer role cannot decide this review area.',
     };
   }
-  if (!input.displayName?.trim()) {
+  if ((input.dimension === 'clinical' || input.dimension === 'safety') && !input.displayName?.trim()) {
     return {
       code: 'display_name_required',
       message: 'Add your display name in your admin profile before recording a decision.',
@@ -108,7 +131,10 @@ export function reviewRefusal(input: {
       message: 'Add your professional qualification in your admin profile before approving this area.',
     };
   }
-  if (input.decision === 'changes_requested' && !input.note?.trim()) {
+  if (
+    ['changes_requested', 'evidence_required', 'blocked', 'rejected'].includes(input.decision) &&
+    !input.note?.trim()
+  ) {
     return {
       code: 'note_required',
       message: 'Write a note explaining what needs to change.',
@@ -149,5 +175,13 @@ export const REVIEW_REFUSAL_LABELS: Record<ReviewRefusalCode, { mm: string; en: 
   stale_revision: {
     mm: 'သင်ဖတ်ပြီးနောက် ဤအကြောင်းအရာ ပြောင်းလဲသွားပါပြီ။ မူကွဲအသစ်ကို ပြန်ဖတ်ပြီးမှ ဆုံးဖြတ်ပါ။',
     en: 'This content changed after you loaded it. Review the new revision before deciding.',
+  },
+  active_assignment_required: {
+    mm: 'ဤအကြောင်းအရာ မူကွဲအတွက် အသက်ဝင်နေသော သုံးသပ်တာဝန် လိုအပ်ပါသည်။',
+    en: 'An active assignment is required to review this content revision.',
+  },
+  checklist_incomplete: {
+    mm: 'အတည်ပြုမီ လိုအပ်သော စစ်ဆေးစာရင်းအားလုံးကို ပြီးစီးအောင် ဖြည့်ပါ။',
+    en: 'Complete every required checklist item before approval.',
   },
 };

@@ -22,7 +22,7 @@ import { v, type Infer } from 'convex/values';
 import type { Id } from './_generated/dataModel';
 import { getAuthUserId } from '@convex-dev/auth/server';
 import { hasStaffRole, requireEvidenceEditor, requireProfessionalPublisher } from './lib/auth';
-import { isPubliclyReadableStatus } from './library';
+import { canReadLibraryContent } from './library';
 import { logAudit } from './audit';
 
 const REVIEW_STATUSES = [
@@ -253,15 +253,12 @@ export const forContent = query({
     // disclose the existence and evidence base of unreleased content. Slugs with
     // no libraryContent row (safety_rule, hope_topic) are inherently public
     // safety references and remain visible. Mirrors library.getBySlug.
-    const staff = await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'language_reviewer', 'evidence_reviewer', 'clinical_reviewer']);
-    if (!staff) {
-      const content = await ctx.db
-        .query('libraryContent')
-        .withIndex('by_slug', (qq) => qq.eq('slug', args.slug))
-        .unique();
-      if (content && !isPubliclyReadableStatus(content.clinicalStatus)) {
-        return { allowed: true as const, sources: [] };
-      }
+    const content = await ctx.db
+      .query('libraryContent')
+      .withIndex('by_slug', (qq) => qq.eq('slug', args.slug))
+      .unique();
+    if (content && !(await canReadLibraryContent(ctx, userId, content))) {
+      return { allowed: true as const, sources: [] };
     }
     const links = await ctx.db
       .query('evidenceLinks')

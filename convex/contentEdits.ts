@@ -2,18 +2,9 @@ import { getAuthUserId } from '@convex-dev/auth/server';
 import { v } from 'convex/values';
 import { query } from './_generated/server';
 import { getStaffAccess, type StaffRole } from './lib/auth';
+import { staffRoleValidator as roleValidator } from './lib/reviewRoles';
 
 const SCAN_LIMIT = 2_000;
-
-const roleValidator = v.union(
-  v.literal('owner'),
-  v.literal('content_editor'),
-  v.literal('language_reviewer'),
-  v.literal('evidence_reviewer'),
-  v.literal('clinical_reviewer'),
-  v.literal('review_manager'),
-  v.literal('support'),
-);
 
 const changeValidator = v.object({
   path: v.string(),

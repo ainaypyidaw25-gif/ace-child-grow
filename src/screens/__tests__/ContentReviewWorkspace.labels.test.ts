@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import {
+  canExportReviewerCompletion,
   collectEditableFields,
   contentTypeLabel,
   decisionLabel,
@@ -61,6 +62,12 @@ describe('reviewer content field labels', () => {
     expect(contentTypeLabel('unknown_legacy_type', 'mm')).toBe('unknown_legacy_type');
   });
 
+  it('allows complete completion reports to export but blocks partial results', () => {
+    expect(canExportReviewerCompletion({ hasMore: false })).toBe(true);
+    expect(canExportReviewerCompletion({ hasMore: true })).toBe(false);
+    expect(canExportReviewerCompletion(undefined)).toBe(false);
+  });
+
   it('gives direct bilingual milestone fields clear Myanmar labels', () => {
     expect(humanizeField(field('encouragementMm', ['encouragementMm'], 'mm'), 'mm')).toBe('အားပေးစကား');
     expect(humanizeField(field('encouragementEn', ['encouragementEn'], 'en'), 'mm')).toBe('အားပေးစကား (English)');
@@ -87,7 +94,6 @@ describe('reviewer content field labels', () => {
     expect(reviewFieldElementId('data.quiz.0.options.0.mm'))
       .toBe('review-field-data-quiz-0-options-0-mm');
   });
-
   it('keeps system metadata out of the plain-language editor', () => {
     const fields = collectEditableFields({
       body: { mm: 'မိဘဖတ်ရန်စာ', en: 'Parent-facing copy' },
@@ -174,12 +180,12 @@ describe('reviewer content field labels', () => {
     expect(source).toContain('No technical format is required.');
     expect(source).toContain('You have unsaved changes. Change items without saving?');
     expect(source).toContain('mayEditContent(access.role)');
-    expect(source).toContain('You may correct wording directly while reviewing.');
+    expect(source).toContain('This account may edit all content wording.');
+    expect(source).not.toContain('You may correct wording directly while reviewing.');
     expect(source).toContain('disabled={busy}');
     expect(source).toContain('overflow-x-auto');
     expect(source).toContain("L('ခွဲခြားမှု အကြိုစစ်ဆေးရန်', 'Import preview')");
   });
-
   it('never exposes raw mm/en data keys for the current content library', () => {
     const seedPath = resolve(process.cwd(), 'convex/seedData.json');
     const items = JSON.parse(readFileSync(seedPath, 'utf8')) as Array<{ data: unknown }>;
