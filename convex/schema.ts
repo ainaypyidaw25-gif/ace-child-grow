@@ -770,6 +770,22 @@ export default defineSchema({
     .index('by_child_and_appointment_at', ['childId', 'appointmentAt'])
     .index('by_reminder_at', ['reminderAt']),
 
+  observations: defineTable({
+    userId: v.id('users'),
+    childId: v.id('children'),
+    observedOn: v.string(),
+    category: v.optional(v.union(
+      v.literal('behavior'),
+      v.literal('development'),
+      v.literal('health'),
+      v.literal('other'),
+    )),
+    note: v.string(),
+    createdAt: v.number(),
+  })
+    .index('by_user_and_observed_on', ['userId', 'observedOn'])
+    .index('by_child_and_observed_on', ['childId', 'observedOn']),
+
   familyCaregivers: defineTable({
     ownerId: v.id('users'),
     caregiverUserId: v.optional(v.id('users')),

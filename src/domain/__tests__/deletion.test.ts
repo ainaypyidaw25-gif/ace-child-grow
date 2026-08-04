@@ -275,7 +275,7 @@ describe('deletion completeness contracts', () => {
     for (const table of [
       'growthRecords', 'sleepRecords', 'healthRecords', 'vaccinationRecords',
       'medicationRecords', 'milestoneSessions', 'milestoneResponses',
-      'activityCompletions', 'appointments',
+      'activityCompletions', 'appointments', 'observations',
     ]) {
       expect(children).toContain(`query('${table}')`);
       expect(account).toContain(`query('${table}')`);

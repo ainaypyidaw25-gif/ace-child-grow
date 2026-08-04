@@ -87,6 +87,23 @@ export const en: Record<TranslationKey, string> = {
   'sleep.waking': 'Night wakings',
   'sleep.total': 'Total sleep',
 
+  'journal.title': 'Observation Journal',
+  'journal.subtitle': 'Jot down what you notice day to day — bring it to your next visit.',
+  'journal.add': 'Add note',
+  'journal.date': 'Date observed',
+  'journal.category': 'Category',
+  'journal.category.unset': 'No category',
+  'journal.category.behavior': 'Behavior',
+  'journal.category.development': 'Development',
+  'journal.category.health': 'Health',
+  'journal.category.other': 'Other',
+  'journal.note': 'What did you notice?',
+  'journal.placeholder': 'e.g. Said two new words today, pointed to the picture book…',
+  'journal.history': 'Past notes',
+  'journal.removeLabel': 'Delete',
+  'journal.removeConfirm': 'Delete this note?',
+  'journal.removeError': 'Unable to delete the note.',
+
   'learn.title': 'Learning Library',
   'learn.readMinutes': 'Reading time',
 

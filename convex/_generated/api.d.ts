@@ -43,6 +43,7 @@ import type * as milestones from "../milestones.js";
 import type * as mmpay from "../mmpay.js";
 import type * as mmpayData from "../mmpayData.js";
 import type * as notifications from "../notifications.js";
+import type * as observations from "../observations.js";
 import type * as ownerPriority from "../ownerPriority.js";
 import type * as parent from "../parent.js";
 import type * as referrals from "../referrals.js";
@@ -94,6 +95,7 @@ declare const fullApi: ApiFromModules<{
   mmpay: typeof mmpay;
   mmpayData: typeof mmpayData;
   notifications: typeof notifications;
+  observations: typeof observations;
   ownerPriority: typeof ownerPriority;
   parent: typeof parent;
   referrals: typeof referrals;
