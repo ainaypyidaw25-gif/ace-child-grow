@@ -83,6 +83,11 @@ export function ChildProfile() {
         <span aria-hidden>→</span>
       </Link>
 
+      <Link to="/milestone-gallery" role="button" className="flex min-h-touch w-full items-center justify-between rounded-2xl border border-sky/25 bg-mint-soft/45 px-5 py-3 font-semibold text-sky-deep">
+        <span>🏅 {t('milestoneGallery.title')}</span>
+        <span aria-hidden>→</span>
+      </Link>
+
       <button type="button" onClick={() => setConfirm(true)}
         className="w-full rounded-pill border border-state-red px-4 py-2 text-left text-state-red-deep">
         🗑️ {locale === 'mm' ? 'ဤကလေးကို ဖျက်ရန်' : 'Delete this child'}

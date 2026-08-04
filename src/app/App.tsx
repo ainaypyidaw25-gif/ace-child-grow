@@ -31,6 +31,8 @@ const Favorites = lazy(() => import('../screens/Favorites').then((module) => ({ 
 const Notifications = lazy(() => import('../screens/Notifications').then((module) => ({ default: module.Notifications })));
 const HealthcareDirectory = lazy(() => import('../screens/HealthcareDirectory').then((module) => ({ default: module.HealthcareDirectory })));
 const ChildProfile = lazy(() => import('../screens/ChildProfile').then((module) => ({ default: module.ChildProfile })));
+const MilestoneGallery = lazy(() => import('../screens/MilestoneGallery').then((module) => ({ default: module.MilestoneGallery })));
+const MilestoneKeepsake = lazy(() => import('../screens/MilestoneKeepsake').then((module) => ({ default: module.MilestoneKeepsake })));
 const AuditLog = lazy(() => import('../screens/AuditLog').then((module) => ({ default: module.AuditLog })));
 const AdminReviewQueue = lazy(() => import('../screens/AdminReviewQueue').then((module) => ({ default: module.AdminReviewQueue })));
 const ContentLibrary = lazy(() => import('../screens/ContentLibrary').then((module) => ({ default: module.ContentLibrary })));
@@ -276,6 +278,8 @@ function AppRoutes() {
       <Route path="/notifications" element={<AppScreen><Notifications /></AppScreen>} />
       <Route path="/directory" element={<AppScreen><HealthcareDirectory /></AppScreen>} />
       <Route path="/child-profile" element={<AppScreen><ChildProfile /></AppScreen>} />
+      <Route path="/milestone-gallery" element={<AppScreen><MilestoneGallery /></AppScreen>} />
+      <Route path="/milestone-gallery/:responseId/keepsake" element={<AppScreen><MilestoneKeepsake /></AppScreen>} />
       <Route path="/library" element={<AppScreen><ContentLibrary /></AppScreen>} />
       <Route path="/content/:slug" element={<AppScreen><ContentDetail /></AppScreen>} />
       <Route path="/admin" element={<StaffOnlyRoute><AppScreen><AdminReviewQueue /></AppScreen></StaffOnlyRoute>} />
