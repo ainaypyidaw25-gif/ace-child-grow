@@ -175,13 +175,22 @@ export const deleteChildBatch = internalMutation({
       ctx.db.query('vaccinationRecords').withIndex('by_child_and_scheduled_on', (q) => q.eq('childId', args.childId)).take(DELETION_BATCH_SIZE),
       ctx.db.query('medicationRecords').withIndex('by_child_and_started_on', (q) => q.eq('childId', args.childId)).take(DELETION_BATCH_SIZE),
       ctx.db.query('milestoneSessions').withIndex('by_child', (q) => q.eq('childId', args.childId)).take(DELETION_BATCH_SIZE),
-      ctx.db.query('milestoneResponses').withIndex('by_child', (q) => q.eq('childId', args.childId)).take(DELETION_BATCH_SIZE),
       ctx.db.query('activityCompletions').withIndex('by_child_and_completed_at', (q) => q.eq('childId', args.childId)).take(DELETION_BATCH_SIZE),
       ctx.db.query('appointments').withIndex('by_child_and_appointment_at', (q) => q.eq('childId', args.childId)).take(DELETION_BATCH_SIZE),
     ]);
     const rows = distinctRows(...groups);
-    if (rows.length > 0) {
+    // milestoneResponses can carry a user-uploaded keepsake photo blob, so it
+    // is swept separately — its blob must be deleted in the same pass as its row.
+    const milestoneResponses = await ctx.db
+      .query('milestoneResponses')
+      .withIndex('by_child', (q) => q.eq('childId', args.childId))
+      .take(DELETION_BATCH_SIZE);
+    if (rows.length > 0 || milestoneResponses.length > 0) {
       await deleteRows(ctx, rows);
+      for (const row of milestoneResponses) {
+        if (row.photoStorageId) await ctx.storage.delete(row.photoStorageId);
+        await ctx.db.delete(row._id);
+      }
       await ctx.scheduler.runAfter(0, internal.children.deleteChildBatch, args);
       return null;
     }

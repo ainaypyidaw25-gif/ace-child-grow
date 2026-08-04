@@ -148,7 +148,7 @@ describe('child deletion cascade', () => {
       rows: {
         growthRecords: [{ _id: 'growth-1', childId: 'child-1' }],
         healthRecords: [{ _id: 'health-1', childId: 'child-1' }],
-        milestoneResponses: [{ _id: 'response-1', childId: 'child-1' }],
+        milestoneResponses: [{ _id: 'response-1', childId: 'child-1', photoStorageId: 'photo-storage-1' }],
       },
     });
 
@@ -156,6 +156,7 @@ describe('child deletion cascade', () => {
     expect(ctx.db.delete).toHaveBeenCalledWith('growth-1');
     expect(ctx.db.delete).toHaveBeenCalledWith('health-1');
     expect(ctx.db.delete).toHaveBeenCalledWith('response-1');
+    expect(ctx.storage.delete).toHaveBeenCalledWith('photo-storage-1');
     expect(ctx.db.delete).not.toHaveBeenCalledWith('child-1');
     expect(ctx.scheduler.runAfter).toHaveBeenCalledWith(0, expect.anything(), {
       childId: 'child-1', ownerId: 'owner-1',
@@ -213,6 +214,9 @@ describe('account deletion pipeline', () => {
         paymentRequests: [{
           _id: 'payment-1', userId: 'user-1', proofStorageId: 'storage-1', reviewNote: 'Parent Name',
         }],
+        milestoneResponses: [{
+          _id: 'milestone-response-1', userId: 'user-1', childId: 'child-x', photoStorageId: 'photo-storage-1',
+        }],
         mmpayTransactions: [{ _id: 'transaction-1', userId: 'user-1', orderId: 'order-1' }],
         mmpayWebhookEvents: [{ _id: 'webhook-1', orderId: 'order-1' }],
         authAccounts: [{ _id: 'account-1', userId: 'user-1' }],
@@ -229,8 +233,10 @@ describe('account deletion pipeline', () => {
 
     await handler(deleteMineBatch)(ctx, batchArgs);
     expect(ctx.storage.delete).toHaveBeenCalledWith('storage-1');
+    expect(ctx.storage.delete).toHaveBeenCalledWith('photo-storage-1');
     for (const id of [
       'payment-1', 'webhook-1', 'code-1', 'account-rate-limit-1', 'refresh-1', 'verifier-1',
+      'milestone-response-1',
     ]) {
       expect(ctx.db.delete).toHaveBeenCalledWith(id);
     }
@@ -282,6 +288,7 @@ describe('deletion completeness contracts', () => {
   it('covers storage, provider webhooks, cross-account references, auth dependants, and full audit scanning', () => {
     for (const marker of [
       "ctx.storage.delete(row.proofStorageId)",
+      "ctx.storage.delete(row.photoStorageId)",
       "query('mmpayWebhookEvents')",
       "query('staffInvites')",
       "query('familyCaregivers')",
@@ -297,6 +304,10 @@ describe('deletion completeness contracts', () => {
     ]) {
       expect(account).toContain(marker);
     }
+  });
+
+  it('deletes the milestone keepsake photo blob in the single-child erasure worker too', () => {
+    expect(children).toContain("ctx.storage.delete(row.photoStorageId)");
   });
 
   it('defines indexes for every cross-account erasure lookup added by the worker', () => {
