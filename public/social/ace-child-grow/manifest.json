@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-04T00:37:46.736Z",
+  "generatedAt": "2026-08-04T10:11:15.480Z",
   "automationMode": "production",
   "killSwitch": false,
   "destination": {
@@ -97,8 +97,36 @@
       "platformPermalink": "https://www.facebook.com/111009258047115/posts/1067366379147476"
     },
     {
+      "id": "ACE-REEL-APP-TOUR-01",
+      "scheduledAt": "2026-08-02T06:30:00.000Z",
+      "category": "app-introduction",
+      "objective": "explain the app and invite Web Beta trials",
+      "captionMyanmar": "ACE Child Grow ဆိုတာ ဘာ app လဲ? 🌱\n\nမိဘတွေအတွက် ကလေးရဲ့ အသက်အလိုက် နေ့စဉ်လုပ်ဆောင်စရာတွေ၊ ဖွံ့ဖြိုးမှုမှတ်တမ်း၊ မိဘလမ်းညွှန်နဲ့ အသုံးဝင်တဲ့ activities တွေကို တစ်နေရာတည်းမှာ ကြည့်ရှုနိုင်အောင် ဖန်တီးထားတဲ့ app လေးပါ။\n\nလက်ရှိမှာ Web Beta အဖြစ် စမ်းသပ်အသုံးပြုနိုင်ပြီး မိဘတွေရဲ့ feedback နဲ့အတူ ပိုကောင်းအောင် ဆက်လုပ်နေပါတယ်။\n\nACE Child Grow ကို စမ်းသုံးချင်ရင် “Link” လို့ comment ပေးခဲ့ပါနော်။\n\n#ACEChildGrow #မိဘနှင့်ကလေး #ParentingApp #WebBeta",
+      "status": "published",
+      "approvalStatus": "approved",
+      "reviewerId": "OWNER_REEL_APPROVAL_2026_08_02",
+      "approvalTimestamp": "2026-08-02T00:55:00.000Z",
+      "approvalExpiresAt": "2026-10-01T00:00:00.000Z",
+      "approvedContentHash": "ab3bf29cf503702cb017038e762c5c8374ef1f963832a10dfe029b5540160b63",
+      "riskLevel": "low",
+      "clinicalApprovalId": null,
+      "mediaType": "reel",
+      "mediaUrl": "https://child.acegroup.com.mm/social/ace-child-grow/reels/app-tour-v1/ACE-REEL-APP-TOUR-01.mp4",
+      "coverUrl": "https://child.acegroup.com.mm/social/ace-child-grow/reels/app-tour-v1/ACE-REEL-APP-TOUR-01-cover.png",
+      "mediaSha256": "6e87e971421e591fecb9453012d4ac1e5a81273e89576105b447523309aeb663",
+      "coverSha256": "c8adaedf5cd1b1fabdd494de87e5cc2e14d4510c1c5d534f6e954accce1b0456",
+      "mediaWidth": 1080,
+      "mediaHeight": 1920,
+      "frameRate": 30,
+      "durationSeconds": 15,
+      "alreadyPublished": true,
+      "platformPostId": "1067960552421392",
+      "publishedAt": "2026-08-02T07:18:33.000Z",
+      "platformPermalink": null
+    },
+    {
       "id": "ACE-HOWTO-01",
-      "status": "scheduled",
+      "status": "published",
       "scheduledAt": "2026-08-02T03:30:00.000Z",
       "approvalStatus": "approved",
       "reviewerId": "OWNER_APP_FEATURES_REPLY_APPROVAL_2026_08_01",
@@ -111,9 +139,10 @@
       "mediaUrl": "https://child.acegroup.com.mm/social/ace-child-grow/posts/app-intro-v1/ACE-HOWTO-01.jpg",
       "mediaSha256": "0d8a81e27198bb2eaa6f59d98993a31bceb3bab173c4e274050dad5c14049880",
       "captionMyanmar": "ACE Child Grow ကို ဘယ်ကနေသုံးရမလဲ? 📱\n\nဒီ link ကို ဖုန်း browser မှာဖွင့်ပြီး စသုံးနိုင်ပါတယ်—\n👉 https://child.acegroup.com.mm\n\nApp ထည့်သွင်းစရာမလိုပါဘူး။\n\n၁။ အကောင့်ဖွင့်ပါ သို့မဟုတ် အကောင့်ဝင်ပါ\n၂။ ကလေးပရိုဖိုင်ထည့်ပါ\n၃။ “ဒီနေ့လှုပ်ရှားမှု”၊ “ဖွံ့ဖြိုးမှု” နဲ့ “ကျန်းမာရေးမှတ်တမ်း” ကို ရွေးသုံးပါ\n\nကျန်းမာရေးမှတ်တမ်းထဲမှာ ကာကွယ်ဆေးထိုးရန်ရက်/ထိုးပြီးရက်၊ ဆေးခန်းတွေ့ဆုံမှု၊ ဖျားနာမှု၊ စစ်ဆေးမှု၊ ဓာတ်မတည့်မှုနဲ့ ဆေးမှတ်တမ်းတွေကို သိမ်းနိုင်ပါတယ်။\n\nတစ်နေ့ ၅ မိနစ်လောက်နဲ့ စလို့ရပါတယ်။ App က ရောဂါရှာဖွေပေးတဲ့နေရာ မဟုတ်ပါဘူးနော်။\n\n#ACEChildGrow #Appအသုံးပြုနည်း #မိဘလမ်းညွှန်",
-      "alreadyPublished": false,
-      "platformPostId": null,
-      "platformPermalink": null
+      "alreadyPublished": true,
+      "platformPostId": "1067829045767876",
+      "publishedAt": "2026-08-02T06:57:12.000Z",
+      "platformPermalink": "https://www.facebook.com/photo/?fbid=1067829045767876"
     },
     {
       "id": "ACE-HEALTH-01",
