@@ -135,6 +135,10 @@ export const mm = {
   'milestoneKeepsake.achievedOn': 'အောင်မြင်ခဲ့သည့်ရက်',
   'milestoneKeepsake.notFound': 'ဤအမှတ်တရကို ရှာမတွေ့ပါ။',
   'milestoneKeepsake.noPhoto': 'ဤအမှတ်တရကို ပုံနှိပ်ရန် ဦးစွာ ဓာတ်ပုံထည့်ပါ။',
+  'milestoneKeepsake.share': 'Social media မှာ မျှဝေမည်',
+  'milestoneKeepsake.sharing': 'ပုံ ပြင်ဆင်နေသည်…',
+  'milestoneKeepsake.shareError': 'မျှဝေရန် ပုံ ဖန်တီး၍ မရပါ။',
+  'milestoneKeepsake.downloaded': 'ပုံ သိမ်းပြီးပါပြီ — ကိုယ်တိုင် post တင်နိုင်ပါပြီ။',
 
   'favorites.title': 'သိမ်းထားသော လှုပ်ရှားမှုများ',
   'favorites.empty': 'သိမ်းထားသော လှုပ်ရှားမှု မရှိသေးပါ။ ❤ ကို နှိပ်ပြီး သိမ်းပါ။',

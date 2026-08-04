@@ -134,6 +134,10 @@ export const en: Record<TranslationKey, string> = {
   'milestoneKeepsake.achievedOn': 'Achieved on',
   'milestoneKeepsake.notFound': 'This keepsake could not be found.',
   'milestoneKeepsake.noPhoto': 'Add a photo first to print this keepsake.',
+  'milestoneKeepsake.share': 'Share to social media',
+  'milestoneKeepsake.sharing': 'Preparing image…',
+  'milestoneKeepsake.shareError': 'Unable to create the shareable image.',
+  'milestoneKeepsake.downloaded': 'Image saved — you can now post it yourself.',
 
   'favorites.title': 'Saved activities',
   'favorites.empty': 'No saved activities yet. Tap ❤ to save one.',
