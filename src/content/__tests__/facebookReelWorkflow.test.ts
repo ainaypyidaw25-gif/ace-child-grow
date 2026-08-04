@@ -24,6 +24,7 @@ type SocialItem = {
   captionMyanmar: string;
   alreadyPublished: boolean;
   platformPostId: string | null;
+  platformPermalink?: string | null;
   publishedAt?: string;
 };
 
@@ -61,6 +62,8 @@ const workflow = JSON.parse(
 
 const reel = manifest.items.find((item) => item.id === 'ACE-REEL-APP-TOUR-01');
 const howTo = manifest.items.find((item) => item.id === 'ACE-HOWTO-01');
+const health = manifest.items.find((item) => item.id === 'ACE-HEALTH-01');
+const learn = manifest.items.find((item) => item.id === 'ACE-AUTO-03');
 const node = (name: string) => workflow.nodes.find((candidate) => candidate.name === name);
 const outputTargets = (name: string) =>
   (workflow.connections[name]?.main ?? []).map((branch) => branch.map((edge) => edge.node));
@@ -86,6 +89,25 @@ describe('Facebook Reel publishing workflow', () => {
         alreadyPublished: true,
         platformPostId: '1067960552421392',
         publishedAt: '2026-08-02T07:18:33.000Z',
+      }),
+    );
+
+    expect(health).toEqual(
+      expect.objectContaining({
+        status: 'published',
+        alreadyPublished: true,
+        platformPostId: '111009258047115_1069775308906583',
+        publishedAt: '2026-08-04T09:45:43.520Z',
+        platformPermalink: 'https://www.facebook.com/photo/?fbid=1069775275573253',
+      }),
+    );
+    expect(learn).toEqual(
+      expect.objectContaining({
+        status: 'published',
+        alreadyPublished: true,
+        platformPostId: '111009258047115_1069784295572351',
+        publishedAt: '2026-08-04T10:00:44.871Z',
+        platformPermalink: 'https://www.facebook.com/photo/?fbid=1069784258905688',
       }),
     );
   });
