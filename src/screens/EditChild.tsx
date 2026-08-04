@@ -102,7 +102,7 @@ export function EditChild() {
         </label>
       )}
 
-      {error && <p className="text-sm text-state-red">⚠️ {error}</p>}
+      {error && <p className="text-sm text-state-red-deep">⚠️ {error}</p>}
 
       <div className="flex gap-2">
         <button type="button" onClick={() => navigate('/profile')}

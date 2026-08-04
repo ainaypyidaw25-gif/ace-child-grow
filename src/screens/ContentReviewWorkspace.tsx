@@ -4,6 +4,7 @@ import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
 import { useUnsavedChangesGuard } from '../app/useUnsavedChangesGuard';
 import { OwnDisplayName } from '../components/OwnDisplayName';
+import { ConfirmDialog } from '../components/ConfirmDialog';
 import { AGE_GROUPS, CONTENT_TYPES, type ContentType } from '../content/taxonomy';
 // One source for who may review what, shared with the mutation. Two copies of
 // this rule drifted apart once already; the UI must not offer an action the
@@ -394,7 +395,7 @@ function ContentEditor({ item, role, targetFieldPath, onDirtyChange }: { item: {
         `Saved. Review revision ${result.reviewRevision} now requires fresh decisions.`,
       ));
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : L('သိမ်း၍ မရပါ။', 'Unable to save.'));
+      console.error(error); setMessage(L('သိမ်း၍ မရပါ။', 'Unable to save.'));
     } finally {
       setBusy(false);
     }
@@ -541,10 +542,13 @@ export function ContentReviewWorkspace() {
   const reviewLookupResults = useQuery(api.library.reviewSearch, itemQuery.trim() ? { q: itemQuery } : 'skip');
   const queueRow = queueState?.rows.find((row) => row.slug === selectedSlug);
 
-  const confirmSelectionChange = () => !editorDirty || window.confirm(L(
-    'မသိမ်းရသေးသော ပြင်ဆင်ချက်များ ရှိပါသည်။ မသိမ်းဘဲ အခြားအကြောင်းအရာသို့ ပြောင်းမည်လား။',
-    'You have unsaved changes. Change items without saving?',
-  ));
+  const [pendingSelectionChange, setPendingSelectionChange] = useState<(() => void) | null>(null);
+  // Runs `change` immediately when the editor has no unsaved edits; otherwise
+  // defers it behind the ConfirmDialog rendered near the top of this screen.
+  const requestSelectionChange = (change: () => void) => {
+    if (!editorDirty) { change(); return; }
+    setPendingSelectionChange(() => change);
+  };
 
   useEffect(() => {
     if (list?.items.length && !list.items.some((item) => item.slug === selectedSlug)) {
@@ -614,7 +618,7 @@ export function ContentReviewWorkspace() {
       setNote('');
       setMessage(L('သုံးသပ်ဆုံးဖြတ်ချက်ကို မှတ်တမ်းတင်ပြီးပါပြီ။', 'Review decision recorded.'));
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : L('မှတ်တမ်းတင်၍ မရပါ။', 'Unable to record decision.'));
+      console.error(error); setMessage(L('မှတ်တမ်းတင်၍ မရပါ။', 'Unable to record decision.'));
     } finally {
       setBusy(false);
     }
@@ -628,22 +632,25 @@ export function ContentReviewWorkspace() {
   const item = detail && 'item' in detail ? detail.item : null;
   const isOwner = access.role === 'owner';
   const openItemFromQueue = (row: QueueRowView) => {
-    if (!confirmSelectionChange()) return;
-    setEditorDirty(false);
-    setType(row.type);
-    setSelectedSlug(row.slug);
-    setTargetFieldPath(null);
-    setItemQuery('');
-    setTab('item');
+    requestSelectionChange(() => {
+      setEditorDirty(false);
+      setType(row.type);
+      setSelectedSlug(row.slug);
+      setTargetFieldPath(null);
+      setItemQuery('');
+      setTab('item');
+    });
   };
   const openReviewSearchResult = (result: (typeof reviewSearchResults)[number], fieldPath?: string) => {
     const changesItem = result.slug !== selectedSlug;
-    if (changesItem && !confirmSelectionChange()) return;
-    if (changesItem) setEditorDirty(false);
-    setType(result.type);
-    setSelectedSlug(result.slug);
-    setTargetFieldPath(fieldPath ?? result.matches[0]?.path ?? null);
-    setItemQuery('');
+    const apply = () => {
+      if (changesItem) setEditorDirty(false);
+      setType(result.type);
+      setSelectedSlug(result.slug);
+      setTargetFieldPath(fieldPath ?? result.matches[0]?.path ?? null);
+      setItemQuery('');
+    };
+    if (changesItem) requestSelectionChange(apply); else apply();
   };
   const tabs: Array<{ key: WorkspaceTab; label: string; visible: boolean }> = [
     { key: 'priority', label: L('ဦးစားပေးစစ်ဆေးရန်', 'Owner Priority'), visible: true },
@@ -664,6 +671,19 @@ export function ContentReviewWorkspace() {
         </p>
       </header>
 
+      {pendingSelectionChange && (
+        <ConfirmDialog
+          message={L(
+            'မသိမ်းရသေးသော ပြင်ဆင်ချက်များ ရှိပါသည်။ မသိမ်းဘဲ အခြားအကြောင်းအရာသို့ ပြောင်းမည်လား။',
+            'You have unsaved changes. Change items without saving?',
+          )}
+          cancelLabel={L('မလုပ်တော့ပါ', 'Cancel')}
+          confirmLabel={L('ပြောင်းမည်', 'Change anyway')}
+          onCancel={() => setPendingSelectionChange(null)}
+          onConfirm={() => { pendingSelectionChange(); setPendingSelectionChange(null); }}
+        />
+      )}
+
       <nav
         aria-label={L('အပိုင်းများ', 'Workspace sections')}
         className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0"
@@ -674,9 +694,11 @@ export function ContentReviewWorkspace() {
             type="button"
             data-testid={`tab-${entry.key}`}
             onClick={() => {
-              if (entry.key !== tab && !confirmSelectionChange()) return;
-              if (entry.key !== 'item') setEditorDirty(false);
-              setTab(entry.key);
+              const apply = () => {
+                if (entry.key !== 'item') setEditorDirty(false);
+                setTab(entry.key);
+              };
+              if (entry.key !== tab) requestSelectionChange(apply); else apply();
             }}
             aria-current={tab === entry.key ? 'page' : undefined}
             className={`shrink-0 rounded-pill px-3 py-2.5 text-xs font-semibold leading-6 transition sm:px-4 sm:py-2 sm:text-sm ${
@@ -697,12 +719,14 @@ export function ContentReviewWorkspace() {
         <label className="space-y-1.5 text-sm font-medium leading-6 text-ink">
           <span>{L('အမျိုးအစား', 'Content type')}</span>
           <select value={type} onChange={(event) => {
-            if (!confirmSelectionChange()) return;
-            setEditorDirty(false);
-            setType(event.target.value);
-            setSelectedSlug('');
-            setTargetFieldPath(null);
-            setItemQuery('');
+            const value = event.target.value;
+            requestSelectionChange(() => {
+              setEditorDirty(false);
+              setType(value);
+              setSelectedSlug('');
+              setTargetFieldPath(null);
+              setItemQuery('');
+            });
           }} className="min-h-touch w-full rounded-xl border border-line bg-white px-3 py-2 text-base">
             {CONTENT_TYPES.map((value) => <option key={value} value={value}>{contentTypeLabel(value, locale)}</option>)}
           </select>
@@ -782,10 +806,12 @@ export function ContentReviewWorkspace() {
           <label className="block space-y-1.5 text-sm font-medium leading-6 text-ink">
             <span>{L('သုံးသပ်မည့် အကြောင်းအရာ', 'Item to review')}</span>
             <select value={selectedSlug} onChange={(event) => {
-              if (!confirmSelectionChange()) return;
-              setEditorDirty(false);
-              setSelectedSlug(event.target.value);
-              setTargetFieldPath(null);
+              const value = event.target.value;
+              requestSelectionChange(() => {
+                setEditorDirty(false);
+                setSelectedSlug(value);
+                setTargetFieldPath(null);
+              });
             }} disabled={!list?.items.length} className="min-h-touch w-full rounded-xl border border-line bg-white px-3 py-2 text-base disabled:opacity-60">
               {list && list.items.length === 0 && (
                 <option value="">{L('ဤအမျိုးအစားတွင် အကြောင်းအရာ မရှိသေးပါ', 'No content of this type yet')}</option>

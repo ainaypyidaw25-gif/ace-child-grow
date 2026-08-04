@@ -61,7 +61,7 @@ export function ReferralSection() {
               await ensureCode({});
               setMessage(L('မိတ်ဆက်ကုဒ် ပြုလုပ်ပြီးပါပြီ။', 'Referral code created.'));
             } catch (error) {
-              setMessage(error instanceof Error ? error.message : L('ကုဒ်ပြုလုပ်၍ မရပါ။', 'Unable to create code.'));
+              console.error(error); setMessage(L('ကုဒ်ပြုလုပ်၍ မရပါ။', 'Unable to create code.'));
             }
           }}
           className="mt-3 rounded-pill bg-sky-deep px-5 py-2 text-sm font-semibold text-white"
@@ -87,7 +87,7 @@ export function ReferralSection() {
                 ? L('ဖိတ်ခေါ်သူကို မှတ်တမ်းတင်ထားပြီးဖြစ်ပါသည်။', 'A referrer is already recorded.')
                 : L('ဖိတ်ခေါ်သူကို မှတ်တမ်းတင်ပြီးပါပြီ။', 'Referrer recorded.'));
             } catch (error) {
-              setMessage(error instanceof Error ? error.message : L('ကုဒ်ထည့်၍ မရပါ။', 'Unable to apply code.'));
+              console.error(error); setMessage(L('ကုဒ်ထည့်၍ မရပါ။', 'Unable to apply code.'));
             }
           }}
         >

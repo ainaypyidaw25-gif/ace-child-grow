@@ -45,7 +45,7 @@ export function OwnDisplayName({
       setMessage(L('အမည် သိမ်းပြီးပါပြီ။', 'Name saved.'));
       onSaved?.();
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : L('သိမ်း၍ မရပါ။', 'Could not save.'));
+      console.error(error); setMessage(L('သိမ်း၍ မရပါ။', 'Could not save.'));
     } finally {
       setBusy(false);
     }

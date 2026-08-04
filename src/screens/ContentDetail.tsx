@@ -234,7 +234,7 @@ export function ContentDetail() {
           </Section>
           {(d.redMm || d.redEn) && (
             <Section title={L('သတိပြုစရာ', 'Worth watching')}>
-              <p className="text-sm text-state-orange">{L(String(d.redMm ?? ''), String(d.redEn ?? ''))}</p>
+              <p className="text-sm text-state-orange-deep">{L(String(d.redMm ?? ''), String(d.redEn ?? ''))}</p>
             </Section>
           )}
         </>
@@ -268,7 +268,7 @@ export function ContentDetail() {
           )}
           {list('redFlags').length > 0 && (
             <Section title={L('ကျွမ်းကျင်သူနှင့် တိုင်ပင်သင့်သည့် လက္ခဏာ', 'When to seek advice')}>
-              <ul className="ml-4 list-disc space-y-1 text-sm text-state-orange">
+              <ul className="ml-4 list-disc space-y-1 text-sm text-state-orange-deep">
                 {list('redFlags').map((x, i) => <li key={i}>{T(x)}</li>)}
               </ul>
             </Section>
@@ -329,7 +329,7 @@ export function ContentDetail() {
               <ul className="space-y-2 text-sm">
                 {(d.myths as { myth: BL; fact: BL }[]).map((m, i) => (
                   <li key={i} className="rounded-lg bg-canvas p-2">
-                    <p className="text-state-orange">✗ {T(m.myth)}</p>
+                    <p className="text-state-orange-deep">✗ {T(m.myth)}</p>
                     <p className="text-ink">✓ {T(m.fact)}</p>
                   </li>
                 ))}

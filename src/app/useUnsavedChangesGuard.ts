@@ -15,6 +15,11 @@ export function useUnsavedChangesGuard(dirty: boolean, message: string): void {
       : null;
     let restoringHistory = false;
 
+    // window.confirm is intentional here, not an oversight: link clicks and
+    // popstate must be interceptable synchronously (a React-rendered dialog
+    // can't block the event loop to decide preventDefault/history.go before
+    // the browser proceeds), and beforeunload can only ever show the
+    // browser's own native prompt — no in-app dialog is possible there.
     const confirmDiscard = () => window.confirm(message);
     const warnBeforeLeaving = (event: BeforeUnloadEvent) => {
       event.preventDefault();

@@ -58,7 +58,7 @@ export function Appointments() {
       setQuestions('');
       setMessage(L('ချိန်းဆိုမှုကို သိမ်းပြီးပါပြီ။', 'Appointment saved.'));
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : L('သိမ်း၍ မရပါ။', 'Could not save.'));
+      console.error(error); setMessage(L('သိမ်း၍ မရပါ။', 'Could not save.'));
     } finally {
       setBusy(false);
     }

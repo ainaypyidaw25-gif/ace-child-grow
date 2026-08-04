@@ -66,7 +66,7 @@ function MediaUploader({ slug }: { slug: string }) {
       setFile(null); setCaptionMm(''); setCaptionEn(''); setTranscriptMm(''); setTranscriptEn(''); setDurationSeconds('');
       setMessage(L('မီဒီယာ တင်ပြီးပါပြီ။ ပညာရှင် သုံးသပ်အတည်ပြုပြီးမှ မိဘများ မြင်ရပါမည်။', 'Media uploaded. Parents see it only after professional review.'));
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : L('တင်၍ မရပါ။', 'Unable to upload.'));
+      console.error(error); setMessage(L('တင်၍ မရပါ။', 'Unable to upload.'));
     } finally { setBusy(false); }
   };
 
@@ -205,7 +205,7 @@ export function LibraryAdmin() {
                 const result = await createAnimationQueue({});
                 setMsg(L(`Animation အစီအစဉ် — အသစ် ${result.created}၊ ရှိပြီး ${result.existing}`, `Animation queue — ${result.created} created, ${result.existing} existing`));
               } catch (error) {
-                setMsg(error instanceof Error ? error.message : L('အစီအစဉ်စာရင်း ဖန်တီး၍ မရပါ။', 'Unable to create queue'));
+                console.error(error); setMsg(L('အစီအစဉ်စာရင်း ဖန်တီး၍ မရပါ။', 'Unable to create queue'));
               } finally {
                 setBusy(false);
               }

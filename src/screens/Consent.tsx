@@ -65,7 +65,7 @@ export function Consent() {
       >
         {busy ? '…' : t('common.confirm')}
       </button>
-      {error && <p role="alert" className="text-sm text-state-red">⚠️ {error}</p>}
+      {error && <p role="alert" className="text-sm text-state-red-deep">⚠️ {error}</p>}
       {state.consentAcceptedAt && (
         <p className="text-center text-xs text-mint-deep">✓ {t('common.confirm')}</p>
       )}

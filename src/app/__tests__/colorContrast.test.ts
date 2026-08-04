@@ -45,6 +45,17 @@ describe('text colour contrast', () => {
     expect(contrast(shade('mint'), '#FFFFFF')).toBeLessThan(AA_NORMAL_TEXT);
   });
 
+  // ACG-A11Y audit follow-up: the `state.*` shades are rule-engine result
+  // colours used for backgrounds/icons; several fall under 4.5:1 as text on
+  // light surfaces (e.g. state.yellow is ~2.1:1 on white). `-deep` variants
+  // are the text-safe pairing, same pattern as mint/mint-deep above.
+  const stateColors = ['green', 'yellow', 'orange', 'red'];
+  for (const color of stateColors) {
+    it.each(lightSurfaces)(`state.${color}-deep text meets AA on %s`, (_name, background) => {
+      expect(contrast(shade('state', `${color}-deep`), background)).toBeGreaterThanOrEqual(AA_NORMAL_TEXT);
+    });
+  }
+
   it('keeps plain mint readable on the dark ink hero, where it is still used', () => {
     expect(contrast(shade('mint'), shade('ink'))).toBeGreaterThanOrEqual(AA_NORMAL_TEXT);
   });

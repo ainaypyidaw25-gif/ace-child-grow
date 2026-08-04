@@ -176,7 +176,7 @@ export function OfflineDownloads() {
         )}
 
         {message && <p role="status" className="rounded-card bg-mint-soft p-3 text-sm text-mint-deep">✓ {message}</p>}
-        {error && <p role="alert" className="rounded-card bg-pink/50 p-3 text-sm text-state-red">⚠️ {error}</p>}
+        {error && <p role="alert" className="rounded-card bg-pink/50 p-3 text-sm text-state-red-deep">⚠️ {error}</p>}
 
         <p className="text-xs text-ink-soft">
           {L(

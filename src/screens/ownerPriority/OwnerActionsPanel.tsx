@@ -49,7 +49,7 @@ export function OwnerActionsPanel({ slug, reviewRevision, role, dataComplete = t
       const result = await action();
       setMessage(result.ok ? done : (result.message ?? L('မအောင်မြင်ပါ။', 'The action was refused.')));
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : L('မအောင်မြင်ပါ။', 'The action failed.'));
+      console.error(error); setMessage(L('မအောင်မြင်ပါ။', 'The action failed.'));
     } finally {
       setBusy(false);
     }

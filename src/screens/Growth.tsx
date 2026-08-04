@@ -87,7 +87,7 @@ export function Growth() {
             </select>
           </div>
         </label>
-        {error && <p className="text-sm text-state-red">⚠️ {errText}</p>}
+        {error && <p className="text-sm text-state-red-deep">⚠️ {errText}</p>}
         <button onClick={add} type="button" disabled={busy}
           className="min-h-touch rounded-pill bg-sky px-5 py-2 font-semibold text-white disabled:opacity-50">
           {busy ? '…' : t('growth.add')}

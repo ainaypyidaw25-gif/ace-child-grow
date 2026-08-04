@@ -4,6 +4,7 @@ import type { Id } from '../../convex/_generated/dataModel';
 import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
 import { OwnDisplayName } from '../components/OwnDisplayName';
+import { ConfirmDialog } from '../components/ConfirmDialog';
 
 type StaffRole = 'owner' | 'content_editor' | 'language_reviewer' | 'evidence_reviewer' | 'clinical_reviewer' | 'review_manager' | 'support';
 
@@ -41,6 +42,7 @@ function MemberRow({
   const [displayName, setDisplayName] = useState(member.displayName ?? '');
   const [qualification, setQualification] = useState(member.qualification ?? '');
   const [busy, setBusy] = useState(false);
+  const [confirmRemove, setConfirmRemove] = useState(false);
   const mine = member.userId === currentUserId;
 
   return (
@@ -109,16 +111,25 @@ function MemberRow({
           <button
             type="button"
             disabled={busy}
-            onClick={async () => {
-              if (!window.confirm(locale === 'mm' ? 'ဤအကောင့်၏ စီမံခန့်ခွဲရေးဝင်ခွင့်ကို ဖယ်ရှားမလား။' : 'Remove this account’s admin access?')) return;
-              setBusy(true);
-              try { await removeStaff({ userId: member.userId }); } finally { setBusy(false); }
-            }}
-            className="rounded-pill border border-state-red px-4 py-2 text-sm text-state-red disabled:opacity-50"
+            onClick={() => setConfirmRemove(true)}
+            className="rounded-pill border border-state-red px-4 py-2 text-sm text-state-red-deep disabled:opacity-50"
           >
             {locale === 'mm' ? 'ဝင်ခွင့် ဖယ်ရှားမည်' : 'Remove access'}
           </button>
         </div>
+      )}
+      {confirmRemove && (
+        <ConfirmDialog
+          message={locale === 'mm' ? 'ဤအကောင့်၏ စီမံခန့်ခွဲရေးဝင်ခွင့်ကို ဖယ်ရှားမလား။' : 'Remove this account’s admin access?'}
+          cancelLabel={locale === 'mm' ? 'မလုပ်တော့ပါ' : 'Cancel'}
+          confirmLabel={locale === 'mm' ? 'ဖယ်ရှားမည်' : 'Remove'}
+          onCancel={() => setConfirmRemove(false)}
+          onConfirm={async () => {
+            setConfirmRemove(false);
+            setBusy(true);
+            try { await removeStaff({ userId: member.userId }); } finally { setBusy(false); }
+          }}
+        />
       )}
     </li>
   );
@@ -215,7 +226,7 @@ export function AdminTeam() {
             className="w-full rounded-lg border border-line px-3 py-2"
           />
         )}
-        {error && <p className="text-sm text-state-red">⚠️ {error}</p>}
+        {error && <p className="text-sm text-state-red-deep">⚠️ {error}</p>}
         <button disabled={busy} className="rounded-pill bg-sky px-5 py-2 font-semibold text-white disabled:opacity-50">
           {busy ? '…' : locale === 'mm' ? 'ဖိတ်ကြားလင့်ခ် ဖန်တီးမည်' : 'Create invitation link'}
         </button>
@@ -247,7 +258,7 @@ export function AdminTeam() {
                   <p className="text-xs text-ink-soft">{invite.email}</p>
                   <p className="text-xs text-ink-soft">{ROLE_LABELS[invite.role]?.[locale] ?? invite.role} · {new Date(invite.expiresAt).toLocaleDateString()}</p>
                 </div>
-                <button type="button" onClick={() => void revokeInvite({ id: invite.id })} className="text-sm text-state-red">
+                <button type="button" onClick={() => void revokeInvite({ id: invite.id })} className="text-sm text-state-red-deep">
                   {locale === 'mm' ? 'ပယ်ဖျက်မည်' : 'Revoke'}
                 </button>
               </li>

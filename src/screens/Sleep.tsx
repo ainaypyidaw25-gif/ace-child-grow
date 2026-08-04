@@ -89,7 +89,7 @@ export function Sleep() {
             onChange={(e) => setBreathingPauses(e.target.checked)} className="h-5 w-5" />
           {locale === 'mm' ? 'အသက်ရှူ ရပ်တန့်မှု' : 'Breathing pauses'}
         </label>
-        {error && <p className="text-sm text-state-red">⚠️ {t('sleep.bedtime')} / {t('sleep.wake')}</p>}
+        {error && <p className="text-sm text-state-red-deep">⚠️ {t('sleep.bedtime')} / {t('sleep.wake')}</p>}
         <button onClick={saveAndSummarize} type="button" disabled={busy}
           className="min-h-touch rounded-pill bg-sky px-5 py-2 font-semibold text-white disabled:opacity-50">
           {busy ? '…' : t('sleep.add')}
