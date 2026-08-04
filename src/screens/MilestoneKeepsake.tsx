@@ -1,8 +1,11 @@
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from 'convex/react';
 import type { Id } from '../../convex/_generated/dataModel';
 import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
+import { renderMilestoneShareCard } from '../lib/shareCard';
+import { buildMilestoneShareCaption } from '../domain/share/shareCaption';
 
 export function MilestoneKeepsake() {
   const { t, locale } = useLocale();
@@ -11,11 +14,49 @@ export function MilestoneKeepsake() {
     api.milestones.getMilestoneKeepsake,
     responseId ? { responseId: responseId as Id<'milestoneResponses'> } : 'skip',
   );
+  const [sharing, setSharing] = useState(false);
+  const [shareMessage, setShareMessage] = useState('');
 
   if (data === undefined) return <p className="text-ink-soft" role="status">…</p>;
   if (data === null) return <p className="text-ink-soft">{t('milestoneKeepsake.notFound')}</p>;
 
   const title = locale === 'mm' ? (data.titleMm ?? data.titleEn) : (data.titleEn ?? data.titleMm);
+
+  async function handleShare() {
+    if (!data || !data.photoUrl || !title) return;
+    setShareMessage('');
+    setSharing(true);
+    try {
+      const blob = await renderMilestoneShareCard({
+        photoUrl: data.photoUrl,
+        childNickname: data.childNickname,
+        title,
+        achievedAt: data.answeredAt,
+        locale,
+      });
+      const file = new File([blob], 'ace-child-grow-milestone.png', { type: 'image/png' });
+      const caption = buildMilestoneShareCaption(data.childNickname, title, locale);
+      const canShareFile = typeof navigator.canShare === 'function' && navigator.canShare({ files: [file] });
+      if (canShareFile && navigator.share) {
+        await navigator.share({ files: [file], text: caption });
+      } else {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'ace-child-grow-milestone.png';
+        link.click();
+        URL.revokeObjectURL(url);
+        setShareMessage(t('milestoneKeepsake.downloaded'));
+      }
+    } catch (error) {
+      // AbortError means the parent simply closed the native share sheet — not a failure.
+      if (error instanceof Error && error.name === 'AbortError') return;
+      console.error(error);
+      setShareMessage(t('milestoneKeepsake.shareError'));
+    } finally {
+      setSharing(false);
+    }
+  }
 
   return (
     <div className="mx-auto max-w-xl space-y-4">
@@ -44,14 +85,25 @@ export function MilestoneKeepsake() {
       </article>
 
       {data.photoUrl && (
-        <button
-          type="button"
-          onClick={() => window.print()}
-          className="min-h-touch rounded-pill bg-sky-deep px-6 py-2 font-semibold text-white print:hidden"
-        >
-          {t('report.print')}
-        </button>
+        <div className="flex flex-wrap gap-2 print:hidden">
+          <button
+            type="button"
+            onClick={() => window.print()}
+            className="min-h-touch rounded-pill bg-sky-deep px-6 py-2 font-semibold text-white"
+          >
+            {t('report.print')}
+          </button>
+          <button
+            type="button"
+            onClick={() => void handleShare()}
+            disabled={sharing}
+            className="min-h-touch rounded-pill border-2 border-sky-deep px-6 py-2 font-semibold text-sky-deep disabled:opacity-50"
+          >
+            {sharing ? t('milestoneKeepsake.sharing') : t('milestoneKeepsake.share')}
+          </button>
+        </div>
       )}
+      {shareMessage && <p className="text-sm text-ink-soft print:hidden">{shareMessage}</p>}
     </div>
   );
 }
