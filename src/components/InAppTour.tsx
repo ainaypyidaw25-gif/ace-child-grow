@@ -6,14 +6,19 @@ import { useLocale } from '../app/LocaleContext';
 import { useFocusTrap } from './useFocusTrap';
 import { shouldAutoShowTour, TOUR_VERSION, type TourKind } from '../domain/tour';
 
+const APP_STORE_DISTRIBUTION = import.meta.env.VITE_DISTRIBUTION === 'app-store';
+const PARENT_LIBRARY_SLIDE = APP_STORE_DISTRIBUTION
+  ? { icon: '📖', mm: ['ယုံကြည်ရသော ဗဟုသုတစာကြည့်တိုက်', 'ထုတ်ဝေပြီးသော မိဘလမ်းညွှန်၊ သင်ခန်းစာနှင့် ပုံပြင်များကို တစ်နေရာတည်းတွင် ရှာဖွေဖတ်ရှုနိုင်ပါသည်။'], en: ['Trusted learning library', 'Browse published parent guides, lessons and stories in one place.'] }
+  : { icon: '📖', mm: ['စာကြည့်တိုက်နှင့် အစီရင်ခံစာ', 'ယုံကြည်ရသော ကိုးကားချက်များ၊ သိမ်းထားသည့်မှတ်တမ်းများနှင့် ပညာရှင်ထံပြရန် အကျဉ်းချုပ်ကို တစ်နေရာတည်းတွင် ကြည့်နိုင်ပါသည်။'], en: ['Library and reports', 'Find evidence-based guidance, saved records and a summary you can share with a professional.'] };
+
 const TOUR_COPY = {
   parent: [
     { icon: '🏠', mm: ['မိဘအကောင့်မှ ကြိုဆိုပါတယ်', 'မူလစာမျက်နှာတွင် ကလေး၏အသက်နှင့် ကိုက်ညီသော ယနေ့အကြံပြုချက်များကို အလွယ်တကူ ကြည့်နိုင်ပါသည်။'], en: ['Welcome to the parent space', 'Home gives you age-matched suggestions for your child today.'] },
     { icon: '🌱', mm: ['ဖွံ့ဖြိုးမှုခရီးကို မှတ်တမ်းတင်ပါ', 'မှတ်တိုင်များသည် အပြိုင်အဆိုင်စစ်ဆေးမှု မဟုတ်ပါ။ တွေ့မြင်သည့်အရာကို မှတ်သားပြီး စိုးရိမ်ပါက ပညာရှင်နှင့် ဆွေးနွေးပါ။'], en: ['Track the development journey', 'Milestones are not a pass/fail test. Record what you observe and discuss concerns with a professional.'] },
     { icon: '🧩', mm: ['နေ့စဉ် အတူကစားပါ', 'အိမ်တွင် လွယ်ကူစွာ လုပ်နိုင်သော ကစားနည်း၊ စကားပြောနည်းနှင့် လှုပ်ရှားမှုများကို ရွေးချယ်နိုင်ပါသည်။'], en: ['Play and learn each day', 'Choose simple at-home play, communication and movement activities.'] },
-    { icon: '📖', mm: ['စာကြည့်တိုက်နှင့် အစီရင်ခံစာ', 'ယုံကြည်ရသော ကိုးကားချက်များ၊ သိမ်းထားသည့်မှတ်တမ်းများနှင့် ပညာရှင်ထံပြရန် အကျဉ်းချုပ်ကို တစ်နေရာတည်းတွင် ကြည့်နိုင်ပါသည်။'], en: ['Library and reports', 'Find evidence-based guidance, saved records and a summary you can share with a professional.'] },
+    PARENT_LIBRARY_SLIDE,
   ],
-  staff: [
+  staff: APP_STORE_DISTRIBUTION ? [] : [
     { icon: '🧭', mm: ['စီမံခန့်ခွဲရေးနေရာမှ ကြိုဆိုပါတယ်', 'Dashboard မှ အကြောင်းအရာ၊ သုံးသပ်မှု၊ ကိုးကားချက်နှင့် အဖွဲ့ဝင်များကို စီမံနိုင်ပါသည်။'], en: ['Welcome to the staff workspace', 'Use the dashboard to manage content, reviews, evidence and team access.'] },
     { icon: '✉️', mm: ['Account မရှိသေးသူကိုလည်း ဖိတ်နိုင်ပါသည်', 'ပိုင်ရှင်က email သတ်မှတ်ပြီး လျှို့ဝှက်လင့်ခ်ပို့နိုင်သည်။ သက်ဆိုင်သူသည် ထို email ဖြင့် account ဖွင့်ပြီး ဖိတ်ကြားချက်ကို လက်ခံရပါမည်။'], en: ['Invite before account creation', 'The owner can create a private email-bound link. The recipient signs up with that email and accepts it.'] },
     { icon: '✍️', mm: ['အကြောင်းအရာကို တိုက်ရိုက်ပြင်နိုင်ပါသည်', 'မူရင်းစာသားကို hard-code approval မလုပ်ပါ။ တာဝန်ရှိ reviewer သည် review workspace တွင် ပြင်ဆင်ချက်နှင့် ဆုံးဖြတ်ချက်ကို မှတ်တမ်းတင်နိုင်ပါသည်။'], en: ['Edit content in the review workspace', 'Approval is never hard-coded. Assigned reviewers can edit content and record decisions with attribution.'] },

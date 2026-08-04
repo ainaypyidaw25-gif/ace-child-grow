@@ -5,7 +5,7 @@ import type { Id } from '../../convex/_generated/dataModel';
 import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
 import { SourceTransparency } from '../components/SourceTransparency';
-import { isGooglePlayBuild } from '../app/platform';
+import { isNativeStoreBuild } from '../app/platform';
 
 const PLAN_FEATURES = {
   premium: {
@@ -49,6 +49,29 @@ export function SubscriptionPlans() {
 
   if (!options || !requests || !mmpayPayments || !subscription) return <p className="text-ink-soft" role="status">…</p>;
 
+  if (isNativeStoreBuild()) {
+    return (
+      <div className="mx-auto max-w-2xl space-y-5">
+        <header className="rounded-[30px] bg-ink px-6 py-8 text-white shadow-card">
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-mint">ACE Child Grow</p>
+          <h1 className="mt-3 text-2xl font-bold">{L('အသုံးပြုမှုအစီအစဉ်', 'Membership')}</h1>
+          <p className="mt-3 text-white/80">
+            {L('လက်ရှိအစီအစဉ် — အခမဲ့', 'Current plan — Free')}
+          </p>
+        </header>
+        <section className="rounded-card border border-line bg-white p-6 shadow-card">
+          <h2 className="font-bold text-ink">{L('မိဘများအတွက် အခြေခံဝန်ဆောင်မှုများ', 'Core features for parents')}</h2>
+          <p className="mt-2 leading-7 text-ink-soft">
+            {L('ကလေး၏ အသက်အလိုက် လမ်းညွှန်ချက်များ၊ ဖွံ့ဖြိုးမှုမှတ်တမ်းနှင့် မိဘအတွက် အသုံးဝင်သော အကြောင်းအရာများကို အခမဲ့ အသုံးပြုနိုင်ပါသည်။', 'Age-based guidance, development tracking, and essential parent resources are available free.')}
+          </p>
+          <Link to="/home" className="mt-5 inline-flex rounded-pill bg-sky-deep px-5 py-3 font-semibold text-white">
+            {L('ပင်မစာမျက်နှာသို့ ပြန်မည်', 'Return home')}
+          </Link>
+        </section>
+      </div>
+    );
+  }
+
   if (subscription.testingAccess) {
     return (
       <div className="mx-auto max-w-2xl space-y-5">
@@ -70,29 +93,6 @@ export function SubscriptionPlans() {
             ].map((feature) => <li key={feature} className="rounded-2xl bg-mint-soft/45 px-4 py-3">✓ {feature}</li>)}
           </ul>
           <Link to="/home" className="mt-5 inline-flex min-h-touch items-center rounded-pill bg-sky-deep px-5 py-3 font-semibold text-white">
-            {L('ပင်မစာမျက်နှာသို့ ပြန်မည်', 'Return home')}
-          </Link>
-        </section>
-      </div>
-    );
-  }
-
-  if (isGooglePlayBuild()) {
-    return (
-      <div className="mx-auto max-w-2xl space-y-5">
-        <header className="rounded-[30px] bg-ink px-6 py-8 text-white shadow-card">
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-mint">ACE Child Grow</p>
-          <h1 className="mt-3 text-2xl font-bold">{L('အသုံးပြုမှုအစီအစဉ်', 'Membership')}</h1>
-          <p className="mt-3 text-white/80">
-            {L(`လက်ရှိအစီအစဉ် — ${subscription.planKey === 'free' ? 'အခမဲ့' : subscription.planKey === 'premium' ? 'Premium' : 'Family'}`, `Current plan — ${subscription.planKey}`)}
-          </p>
-        </header>
-        <section className="rounded-card border border-line bg-white p-6 shadow-card">
-          <h2 className="font-bold text-ink">{L('မိဘများအတွက် အခြေခံဝန်ဆောင်မှုများ', 'Core features for parents')}</h2>
-          <p className="mt-2 leading-7 text-ink-soft">
-            {L('ကလေး၏ အသက်အလိုက် လမ်းညွှန်ချက်များ၊ ဖွံ့ဖြိုးမှုမှတ်တမ်းနှင့် မိဘအတွက် အသုံးဝင်သော အကြောင်းအရာများကို အခမဲ့ အသုံးပြုနိုင်ပါသည်။', 'Age-based guidance, development tracking, and essential parent resources are available free.')}
-          </p>
-          <Link to="/home" className="mt-5 inline-flex rounded-pill bg-sky-deep px-5 py-3 font-semibold text-white">
             {L('ပင်မစာမျက်နှာသို့ ပြန်မည်', 'Return home')}
           </Link>
         </section>

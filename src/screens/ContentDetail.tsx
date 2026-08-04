@@ -10,8 +10,10 @@ import { ReviewBadge } from '../components/ReviewBadge';
 import { ActivityScene } from '../components/ActivityScene';
 import { activityIllustration } from '../content/activityIllustrations';
 import { lessonIllustration } from '../content/lessonIllustrations';
+import { isAppleAppStoreBuild, isNativeStoreBuild } from '../app/platform';
 
 type BL = { mm: string; en: string };
+const APP_STORE_DISTRIBUTION = import.meta.env.VITE_DISTRIBUTION === 'app-store';
 
 export function ContentDetail() {
   const { slug = '' } = useParams();
@@ -81,13 +83,21 @@ export function ContentDetail() {
   }
 
   const { item, media } = res;
+  const appleAppStoreBuild = isAppleAppStoreBuild();
+  if (appleAppStoreBuild
+    && (item.clinicalStatus !== 'published' || item.type === 'printable')) {
+    return <p className="text-ink-soft">{locale === 'mm' ? 'မတွေ့ပါ။' : 'Not found.'}</p>;
+  }
   const mappedLessonIllustration = item.type === 'lesson'
     ? lessonIllustration(item.slug)
     : undefined;
   const mappedActivityIllustration = item.type === 'activity'
     ? activityIllustration(item.slug)
     : undefined;
-  const visibleMedia = media.filter((asset) => (
+  const platformMedia = isNativeStoreBuild()
+    ? media.filter((asset) => (asset.accessLevel ?? 'free_sample') === 'free_sample')
+    : media;
+  const visibleMedia = platformMedia.filter((asset) => (
     !asset.placeholder
     && asset.url
     && !(mappedLessonIllustration && asset.kind === 'illustration')
@@ -363,7 +373,7 @@ export function ContentDetail() {
       )}
 
       {/* Printable */}
-      {item.type === 'printable' && (
+      {!APP_STORE_DISTRIBUTION && item.type === 'printable' && (
         <Section title={L('ပုံနှိပ်အသုံးပြုနိုင်သော စာရွက်', 'Printable resource')}>
           <p className="text-sm text-ink-soft">{locale === 'mm' ? item.summaryMm : item.summaryEn}</p>
           <p className="mt-2 text-xs text-ink-soft">

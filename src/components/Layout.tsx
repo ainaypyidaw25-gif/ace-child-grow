@@ -8,12 +8,14 @@ import { useOnlineStatus } from '../app/useOnlineStatus';
 import { setPortalMode } from '../app/portalMode';
 import { DesktopNav } from './DesktopNav';
 import { InAppTour } from './InAppTour';
+import { isAppleAppStoreBuild } from '../app/platform';
 
 export function Layout({ children, showNav = true }: { children: ReactNode; showNav?: boolean }) {
   const { locale, setLocale } = useLocale();
   const online = useOnlineStatus();
   const unread = useQuery(api.notifications.unreadCount) ?? 0;
-  const staffAccess = useQuery(api.admin.myAccess);
+  const appleAppStoreBuild = isAppleAppStoreBuild();
+  const staffAccess = useQuery(api.admin.myAccess, appleAppStoreBuild ? 'skip' : {});
   const location = useLocation();
   const inStaffWorkspace = location.pathname.startsWith('/admin') || location.pathname === '/audit';
   // Staff screens have their own task navigation inside the workspace. Keeping

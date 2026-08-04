@@ -12,6 +12,8 @@ import { developmentalAgeMonths } from '../domain/age/age';
 import { resolveAgeGroup } from '../content/taxonomy';
 import { milestoneIllustration } from '../content/milestoneIllustrations';
 import { NoChild } from './Growth';
+import { Link } from 'react-router-dom';
+import { isAppleAppStoreBuild } from '../app/platform';
 
 const ANSWER_KEYS: Record<MilestoneAnswer, TranslationKey> = {
   yes: 'milestone.answer.yes',
@@ -52,6 +54,7 @@ export function MilestoneDemo() {
         gestationalWeeks: activeChild.gestationalWeeks,
       })
     : 0;
+  const appleAppStoreBuild = isAppleAppStoreBuild();
   const ageGroupKey = resolveAgeGroup(ageMonths)?.key;
   const data = useLibraryContent({
     type: 'milestone',
@@ -94,13 +97,24 @@ export function MilestoneDemo() {
       <section className="rounded-[28px] border border-line bg-white p-6 text-center shadow-card">
         <div className="text-4xl" aria-hidden>🌱</div>
         <h1 className="mt-3 text-xl font-bold text-ink">
-          {locale === 'mm' ? 'ဤအသက်အရွယ်အတွက် စစ်ဆေးစာရင်း ပြင်ဆင်ဆဲဖြစ်သည်' : 'The checklist for this age is being prepared'}
+          {appleAppStoreBuild
+            ? locale === 'mm' ? 'ဤအသက်အရွယ်အတွက် ထုတ်ဝေထားသော စစ်ဆေးစာရင်း မရှိပါ' : 'No published checklist is available for this age'
+            : locale === 'mm' ? 'ဤအသက်အရွယ်အတွက် စစ်ဆေးစာရင်း ပြင်ဆင်ဆဲဖြစ်သည်' : 'The checklist for this age is being prepared'}
         </h1>
         <p className="mt-2 text-sm leading-7 text-ink-soft">
-          {locale === 'mm'
-            ? 'လက်ရှိအပြည့်အစုံ သုံးနိုင်သော အသက်အပိုင်းအခြားမှာ မွေးကင်းမှ ၁၂ လအထိ ဖြစ်ပါသည်။'
-            : 'The currently complete age range is birth through 12 months.'}
+          {appleAppStoreBuild
+            ? locale === 'mm'
+              ? 'ထုတ်ဝေပြီးသော မိဘလမ်းညွှန်နှင့် လှုပ်ရှားမှုများကို ဗဟုသုတစာမျက်နှာတွင် ဆက်လက်ဖတ်ရှုနိုင်ပါသည်။'
+              : 'You can still browse published parent guides and activities in Learn.'
+            : locale === 'mm'
+              ? 'လက်ရှိအပြည့်အစုံ သုံးနိုင်သော အသက်အပိုင်းအခြားမှာ မွေးကင်းမှ ၁၂ လအထိ ဖြစ်ပါသည်။'
+              : 'The currently complete age range is birth through 12 months.'}
         </p>
+        {appleAppStoreBuild && (
+          <Link to="/learn" className="mt-4 inline-flex min-h-touch items-center rounded-pill bg-sky px-5 py-2 font-semibold text-white">
+            {locale === 'mm' ? 'ဗဟုသုတစာမျက်နှာ ဖွင့်ရန်' : 'Open Learn'}
+          </Link>
+        )}
       </section>
     );
   }
@@ -116,6 +130,9 @@ export function MilestoneDemo() {
             {t(result.guidanceKeys.consult)} · {t(result.guidanceKeys.repeatReview)}
           </p>
           <p className="mt-4 rounded-xl bg-canvas p-3 text-sm text-ink-soft">{t('result.disclaimer.nonDiagnostic')}</p>
+          <Link to="/methodology" className="mt-3 inline-flex text-sm font-semibold text-sky-deep underline">
+            {locale === 'mm' ? 'ဤလမ်းညွှန်ချက် အလုပ်လုပ်ပုံ' : 'How this guidance works'}
+          </Link>
         </section>
         <button type="button" className="rounded-pill bg-sky px-5 py-3 font-semibold text-white" onClick={() => {
           setSubmitted(false);
@@ -240,7 +257,7 @@ export function MilestoneDemo() {
             <fieldset className="rounded-2xl border border-line bg-white p-3 text-sm">
               <legend className="px-1 text-ink-soft">{t('safety.skillLoss.question')}</legend>
               <div className="mt-1 flex gap-2">
-                <button type="button" aria-pressed={lostSkill === true} onClick={() => setLostSkill(true)} className={`min-h-touch rounded-pill px-4 py-2 ${lostSkill === true ? 'bg-state-red text-white' : 'border border-line'}`}>{t('milestone.answer.yes')}</button>
+                <button type="button" aria-pressed={lostSkill === true} onClick={() => setLostSkill(true)} className={`min-h-touch rounded-pill px-4 py-2 ${lostSkill === true ? 'bg-state-orange text-white' : 'border border-line'}`}>{t('milestone.answer.yes')}</button>
                 <button type="button" aria-pressed={lostSkill === false} onClick={() => setLostSkill(false)} className={`min-h-touch rounded-pill px-4 py-2 ${lostSkill === false ? 'bg-mint text-white' : 'border border-line'}`}>{locale === 'mm' ? 'မရှိပါ' : 'No'}</button>
               </div>
             </fieldset>

@@ -6,6 +6,7 @@ import { useLocale } from '../app/LocaleContext';
 import { useAppState } from '../app/AppState';
 import { developmentalAgeMonths } from '../domain/age/age';
 import { ageGroup, resolveAgeGroup } from '../content/taxonomy';
+import { isAppleAppStoreBuild, isNativeStoreBuild } from '../app/platform';
 
 type LearnView = 'recommended' | 'lesson' | 'guide' | 'story';
 
@@ -46,6 +47,7 @@ export function Learn() {
   const [view, setView] = useState<LearnView>('recommended');
   const [category, setCategory] = useState('');
   const online = useOnlineStatus();
+  const appleAppStoreBuild = isAppleAppStoreBuild();
   const L = (mm: string, en: string) => locale === 'mm' ? mm : en;
 
   const ageMonths = activeChild
@@ -119,8 +121,12 @@ export function Learn() {
 
       {!online && (
         <section className="flex items-center justify-between gap-3 rounded-2xl bg-pastel-yellow/65 px-4 py-3 text-sm text-ink" role="status">
-          <span>{L('အင်တာနက်ပြတ်နေပါသည်။ ယခင်သိမ်းထားသောအကြောင်းအရာများကို ဖတ်နိုင်ပါသည်။', 'You are offline. Previously saved content remains available.')}</span>
-          <Link to="/offline" className="shrink-0 font-bold text-sky-deep underline">{L('သိမ်းထားသည်များ', 'Downloads')}</Link>
+          <span>
+            {appleAppStoreBuild
+              ? L('အင်တာနက်ပြတ်နေပါသည်။ ဗဟုသုတအကြောင်းအရာများကို ဖွင့်ရန် အင်တာနက် ပြန်ချိတ်ပါ။', 'You are offline. Reconnect to load learning resources.')
+              : L('အင်တာနက်ပြတ်နေပါသည်။ ယခင်သိမ်းထားသောအကြောင်းအရာများကို ဖတ်နိုင်ပါသည်။', 'You are offline. Previously saved content remains available.')}
+          </span>
+          {!isNativeStoreBuild() && <Link to="/offline" className="shrink-0 font-bold text-sky-deep underline">{L('သိမ်းထားသည်များ', 'Downloads')}</Link>}
         </section>
       )}
 
@@ -242,11 +248,11 @@ export function Learn() {
           <h2 className="mt-2 font-bold">{L('အသက်အလိုက် လှုပ်ရှားမှုများ', 'Age-based activities')}</h2>
           <p className="mt-1 text-sm leading-6 text-ink-soft">{L('အိမ်တွင် လွယ်ကူစွာ အတူကစားနိုင်သော နည်းလမ်းများ။', 'Simple ways to play and learn together at home.')}</p>
         </Link>
-        <Link to="/offline" className="rounded-[26px] bg-lavender/35 p-5 text-ink">
+        {!isNativeStoreBuild() && <Link to="/offline" className="rounded-[26px] bg-lavender/35 p-5 text-ink">
           <p className="text-xs font-bold uppercase tracking-[0.14em] text-sky-deep">{L('အင်တာနက်မရှိလည်း ဖတ်နိုင်ရန်', 'Ready when offline')}</p>
           <h2 className="mt-2 font-bold">{L('အကြောင်းအရာများ သိမ်းထားရန်', 'Save learning resources')}</h2>
           <p className="mt-1 text-sm leading-6 text-ink-soft">{L('လိုအပ်သည့်အကြောင်းအရာကို ဖုန်းထဲသိမ်းပြီး နောက်မှဖတ်နိုင်ပါသည်။', 'Keep useful resources on the device for later.')}</p>
-        </Link>
+        </Link>}
       </section>
     </div>
   );

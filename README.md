@@ -17,6 +17,31 @@ milestones, learn safe home activities, recognise possible concerns early,
 understand special needs without stigma, track growth and sleep, and prepare
 clear reports for professional visits — usable offline in low-connectivity areas.
 
+## Current delivery status — 2026-08-04
+
+ACE Child Grow is live at [child.acegroup.com.mm](https://child.acegroup.com.mm).
+The work below is intentionally isolated in draft pull requests and has **not**
+been merged, deployed to production, or submitted to Apple:
+
+- [Draft PR #95](https://github.com/ainaypyidaw25-gif/ace-child-grow/pull/95)
+  consolidates the unique reviewer-workspace changes from superseded draft PRs
+  #20–#25 onto the current `main`. Typecheck, lint, unit tests, production build,
+  Playwright, and Vercel preview checks pass.
+- [Draft PR #97](https://github.com/ainaypyidaw25-gif/ace-child-grow/pull/97)
+  prepares the current iOS App Store handoff: a bundled Capacitor/Xcode project,
+  App Store-only feature gates, privacy manifest, legal/support routes, metadata,
+  release checklist, and focused availability tests. All GitHub and Vercel checks
+  pass; the unsigned Xcode Release simulator build also succeeds.
+
+Before PR #97 can become a submission candidate, the owner must approve a
+full-bleed final app icon, capture 4–6 real feature screenshots, obtain clinical
+sign-off, record the React Router security-advisory disposition, complete Apple
+signing and physical-device/TestFlight QA, verify the deployed privacy/support/
+account-deletion routes while signed out, and approve App Store submission.
+
+See [`docs/app-store/release-checklist.md`](docs/app-store/release-checklist.md)
+for the evidence and remaining gates.
+
 ## Stack
 
 | Layer | Choice |
@@ -25,8 +50,9 @@ clear reports for professional visits — usable offline in low-connectivity are
 | Styling | Tailwind CSS (custom design tokens) |
 | PWA | `vite-plugin-pwa` (installable, offline public content) |
 | Backend | **Convex** — database, auth, functions and file storage |
-| Tests | Vitest + Testing Library (unit + component); Playwright (E2E, planned) |
-| Hosting (planned) | Vercel (preview + production) |
+| Tests | Vitest + Testing Library (unit + component); Playwright (E2E) |
+| Hosting | Vercel (preview + production) |
+| Native iOS | Capacitor + Xcode project (draft App Store handoff) |
 
 See `docs/architecture/architecture-decision-record.md` for the full rationale.
 
@@ -68,12 +94,14 @@ rows. Healthcare facilities are **never** seeded with invented data.
 ## Test
 
 ```bash
-npm run test   # 51 tests: age engine, corrected age, rule engine, safety triggers,
-               # sleep, unit conversion, translation completeness, content safety,
-               # milestone component
+npm run test        # unit + component suite
+npm run test:e2e    # Playwright browser suite
 ```
 
-Current results: **51/51 passing.** See `docs/testing/test-results.md`.
+Latest PR #97 verification: **1,055/1,055 tests passing** across 105 test files,
+with typecheck, lint, production build, Playwright, and Vercel preview checks
+also passing. See `docs/testing/test-results.md` and the pull-request checks for
+the dated evidence.
 
 ## Build
 
@@ -93,5 +121,7 @@ explicit human approval.**
 All health/development content is **Clinical Review Required** until a qualified
 reviewer approves it. See `docs/content/clinical-review-policy.md`.
 
-Current release verdict: **PREVIEW-READY FOUNDATION** (not production-ready).
-See the delivery summary and `docs/testing/test-results.md`.
+Current release verdict: **LIVE PRODUCTION + REVIEWED DRAFT RELEASE WORK**.
+The website is live, but PR #95 and PR #97 remain draft-only until their human
+review and release gates are complete. See the delivery status above and
+`docs/testing/test-results.md`.

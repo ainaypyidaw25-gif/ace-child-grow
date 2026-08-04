@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAuthActions } from '@convex-dev/auth/react';
+import { Link } from 'react-router-dom';
 import { useLocale } from '../app/LocaleContext';
 import { clearPortalMode, setPortalMode } from '../app/portalMode';
 import {
@@ -12,21 +13,27 @@ import {
   type AccountPasswordKind,
 } from '../domain/auth/passwordPolicy';
 import { captureReferralFromSearch } from '../domain/referrals/referralCapture';
-import { getAuthRedirectUrl, NATIVE_AUTH_CALLBACK_ERROR_EVENT } from '../app/platform';
+import { getAuthRedirectUrl, isAppleAppStoreBuild, NATIVE_AUTH_CALLBACK_ERROR_EVENT } from '../app/platform';
 
 type AuthFlow = 'signIn' | 'signUp' | 'reset' | 'resetVerification';
+const APP_STORE_DISTRIBUTION = import.meta.env.VITE_DISTRIBUTION === 'app-store';
 
 // Parent accounts use a memorable six-digit PIN. Existing accounts that still
 // use the former 8+ character password remain supported during sign-in.
 export function SignIn() {
   const { t, locale, setLocale } = useLocale();
   const { signIn } = useAuthActions();
-  const isStaffInvite = window.location.pathname.startsWith('/admin/accept-invite/')
+  const appleAppStoreBuild = APP_STORE_DISTRIBUTION || isAppleAppStoreBuild();
+  const isStaffInvite = !appleAppStoreBuild && (window.location.pathname.startsWith('/admin/accept-invite/')
     || (window.location.pathname === '/admin/accept-invite'
-      && new URLSearchParams(window.location.search).has('invite'));
+      && new URLSearchParams(window.location.search).has('invite')));
   const [flow, setFlow] = useState<AuthFlow>(() => isStaffInvite ? 'signUp' : 'signIn');
   const [portal, setPortal] = useState<'parent' | 'staff'>(() =>
-    isStaffInvite || new URLSearchParams(window.location.search).get('portal') === 'staff' ? 'staff' : 'parent',
+    !APP_STORE_DISTRIBUTION
+      && !appleAppStoreBuild
+      && (isStaffInvite || new URLSearchParams(window.location.search).get('portal') === 'staff')
+      ? 'staff'
+      : 'parent',
   );
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -57,7 +64,7 @@ export function SignIn() {
     return () => window.removeEventListener(NATIVE_AUTH_CALLBACK_ERROR_EVENT, showNativeCallbackError);
   }, [locale]);
 
-  const accountType: AccountPasswordKind = portal === 'staff' ? 'staff' : 'parent';
+  const accountType: AccountPasswordKind = !APP_STORE_DISTRIBUTION && portal === 'staff' ? 'staff' : 'parent';
   const requiresNewCredential = flow === 'signUp' || flow === 'resetVerification';
   const requiresSixDigitPin = accountType === 'parent' && requiresNewCredential;
   const normalizedEmail = email.trim().toLowerCase();
@@ -177,7 +184,7 @@ export function SignIn() {
         <p className="text-ink-soft">{t('app.tagline')}</p>
       </div>
 
-      <div className="grid grid-cols-2 rounded-pill border border-line bg-white p-1">
+      {!APP_STORE_DISTRIBUTION && <div className={`grid rounded-pill border border-line bg-white p-1 ${appleAppStoreBuild ? 'grid-cols-1' : 'grid-cols-2'}`}>
         <button
           type="button"
           onClick={() => { if (!isStaffInvite) { setPortal('parent'); resetToSignIn(); } }}
@@ -186,27 +193,33 @@ export function SignIn() {
         >
           {locale === 'mm' ? 'မိဘဝင်ရန်' : 'Parent sign in'}
         </button>
-        <button
+        {!appleAppStoreBuild && <button
           type="button"
           onClick={() => { setPortal('staff'); if (!isStaffInvite) resetToSignIn(); }}
           className={`rounded-pill px-3 py-2 text-sm font-semibold ${portal === 'staff' ? 'bg-sky text-white' : 'text-ink-soft'}`}
         >
           {locale === 'mm' ? 'အဖွဲ့ဝင်/ပညာရှင်ဝင်ရန်' : 'Staff/reviewer sign in'}
-        </button>
-      </div>
+        </button>}
+      </div>}
 
       <form onSubmit={submit} className="space-y-3 rounded-card border border-line bg-white p-5 shadow-card">
         <h2 className="font-semibold text-ink">
-          {flow === 'reset' || flow === 'resetVerification'
-            ? locale === 'mm' ? 'အကောင့် ပြန်လည်ဝင်ရောက်ရန်' : 'Recover account'
-            : flow === 'signUp'
-              ? locale === 'mm' ? 'အကောင့်သစ် ဖွင့်ရန်' : 'Create account'
-              : portal === 'staff'
-                ? locale === 'mm' ? 'အဖွဲ့ဝင် သို့မဟုတ် ပညာရှင်အကောင့်ဝင်ရန်' : 'Staff or reviewer sign in'
-                : locale === 'mm' ? 'မိဘအကောင့်ဝင်ရန်' : 'Parent sign in'}
+          {APP_STORE_DISTRIBUTION
+            ? flow === 'reset' || flow === 'resetVerification'
+              ? locale === 'mm' ? 'အကောင့် ပြန်လည်ဝင်ရောက်ရန်' : 'Recover account'
+              : flow === 'signUp'
+                ? locale === 'mm' ? 'အကောင့်သစ် ဖွင့်ရန်' : 'Create account'
+                : locale === 'mm' ? 'မိဘအကောင့်ဝင်ရန်' : 'Parent sign in'
+            : flow === 'reset' || flow === 'resetVerification'
+              ? locale === 'mm' ? 'အကောင့် ပြန်လည်ဝင်ရောက်ရန်' : 'Recover account'
+              : flow === 'signUp'
+                ? locale === 'mm' ? 'အကောင့်သစ် ဖွင့်ရန်' : 'Create account'
+                : portal === 'staff'
+                  ? locale === 'mm' ? 'အဖွဲ့ဝင် သို့မဟုတ် ပညာရှင်အကောင့်ဝင်ရန်' : 'Staff or reviewer sign in'
+                  : locale === 'mm' ? 'မိဘအကောင့်ဝင်ရန်' : 'Parent sign in'}
         </h2>
 
-        {portal === 'staff' && flow !== 'reset' && flow !== 'resetVerification' && (
+        {!APP_STORE_DISTRIBUTION && portal === 'staff' && flow !== 'reset' && flow !== 'resetVerification' && (
           <p className="rounded-xl bg-pastel-yellow/50 p-3 text-xs text-ink">
             {locale === 'mm'
               ? isStaffInvite
@@ -218,7 +231,7 @@ export function SignIn() {
           </p>
         )}
 
-        {(flow === 'signIn' || flow === 'signUp') && (
+        {!APP_STORE_DISTRIBUTION && !appleAppStoreBuild && (flow === 'signIn' || flow === 'signUp') && (
           <>
             <button
               type="button"
@@ -345,6 +358,11 @@ export function SignIn() {
         {locale === 'mm' ? 'English' : 'မြန်မာ'}
       </button>
       <p className="text-center text-xs text-ink-soft">{t('result.disclaimer.nonDiagnostic')}</p>
+      <nav aria-label={locale === 'mm' ? 'ဥပဒေနှင့် အကူအညီ' : 'Legal and support'} className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-xs font-semibold text-sky-deep">
+        <Link to="/privacy">{locale === 'mm' ? 'ကိုယ်ရေးမူဝါဒ' : 'Privacy'}</Link>
+        <Link to="/account-deletion">{locale === 'mm' ? 'အကောင့်ဖျက်နည်း' : 'Account deletion'}</Link>
+        <Link to="/support">{locale === 'mm' ? 'အကူအညီ' : 'Support'}</Link>
+      </nav>
     </div>
   );
 }
