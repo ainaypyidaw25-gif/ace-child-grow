@@ -170,7 +170,7 @@ export function MilestoneDemo() {
       });
       setSubmitted(true);
     } catch (error) {
-      setSaveError(error instanceof Error ? error.message : (locale === 'mm' ? 'သိမ်း၍ မရပါ။' : 'Could not save.'));
+      console.error(error); setSaveError((locale === 'mm' ? 'သိမ်း၍ မရပါ။' : 'Could not save.'));
     } finally {
       setBusy(false);
     }
@@ -250,7 +250,7 @@ export function MilestoneDemo() {
           </div>
         )}
       </div>
-      {saveError && <p className="text-sm text-state-red" role="alert">{saveError}</p>}
+      {saveError && <p className="text-sm text-state-red-deep" role="alert">{saveError}</p>}
     </div>
   );
 }

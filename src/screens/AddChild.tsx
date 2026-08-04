@@ -122,7 +122,7 @@ export function AddChild() {
 
       {/* role="alert" so a parent using a screen reader hears why Save did not
           go through — the message is otherwise silent. */}
-      {error && <p role="alert" className={`text-sm ${confirmDup ? 'text-state-orange' : 'text-state-red'}`}>⚠️ {error}</p>}
+      {error && <p role="alert" className={`text-sm ${confirmDup ? 'text-state-orange-deep' : 'text-state-red-deep'}`}>⚠️ {error}</p>}
 
       <button type="button" onClick={save} disabled={busy}
         className="min-h-touch w-full rounded-pill bg-sky px-6 py-3 font-semibold text-white disabled:opacity-50">

@@ -21,7 +21,7 @@ const PLAN_FEATURES = {
 const REQUEST_STYLES = {
   pending: 'bg-pastel-yellow/60 text-ink',
   approved: 'bg-mint-soft text-sky-deep',
-  rejected: 'bg-pink/55 text-state-red',
+  rejected: 'bg-pink/55 text-state-red-deep',
   canceled: 'bg-canvas text-ink-soft',
 } as const;
 
@@ -148,7 +148,7 @@ export function SubscriptionPlans() {
                 await startTrial({});
                 setMessage(L('Premium စမ်းသုံးကာလကို စတင်ပြီးပါပြီ။', 'Your Premium trial has started.'));
               } catch (error) {
-                setMessage(error instanceof Error ? error.message : L('စမ်းသုံးကာလကို စတင်၍ မရပါ။', 'Could not start the trial.'));
+                console.error(error); setMessage(L('စမ်းသုံးကာလကို စတင်၍ မရပါ။', 'Could not start the trial.'));
               } finally {
                 setTrialBusy(false);
               }
@@ -248,7 +248,7 @@ export function SubscriptionPlans() {
                     const payment = await startMmpay({ planId: selectedPlan._id });
                     navigate(`/payment/${payment.orderId}`);
                   } catch (error) {
-                    setMessage(error instanceof Error ? error.message : L('Myan Myan Pay ကို ချိတ်ဆက်၍ မရပါ။', 'Unable to connect to Myan Myan Pay.'));
+                    console.error(error); setMessage(L('Myan Myan Pay ကို ချိတ်ဆက်၍ မရပါ။', 'Unable to connect to Myan Myan Pay.'));
                   } finally {
                     setMmpayBusy(false);
                   }
@@ -259,7 +259,7 @@ export function SubscriptionPlans() {
               </button>
             )}
           </div>
-          {message && <p className="border-t border-line px-5 py-3 text-sm text-state-red sm:px-8" role="alert">{message}</p>}
+          {message && <p className="border-t border-line px-5 py-3 text-sm text-state-red-deep sm:px-8" role="alert">{message}</p>}
         </section>
       )}
 
@@ -304,7 +304,7 @@ export function SubscriptionPlans() {
                   setProof(null);
                   setMessage(L('ငွေပေးချေမှုကို အတည်ပြုစစ်ဆေးရန် ပို့ပြီးပါပြီ။', 'Payment submitted for verification.'));
                 } catch (error) {
-                  setMessage(error instanceof Error ? error.message : L('ပို့၍ မရပါ။', 'Unable to submit.'));
+                  console.error(error); setMessage(L('ပို့၍ မရပါ။', 'Unable to submit.'));
                 } finally {
                   setBusy(false);
                 }
@@ -377,7 +377,7 @@ export function SubscriptionPlans() {
                   <span className="mt-1 block text-xs text-ink-soft">{L('ငွေလွှဲနံပါတ်', 'Reference')}: {request.paymentReference}</span>
                 </span>
                 <span className={`rounded-pill px-3 py-1 text-xs font-semibold ${REQUEST_STYLES[request.status]}`}>{statusLabel(request.status)}</span>
-                {request.status === 'pending' && <button type="button" onClick={() => void cancel({ id: request._id })} className="min-h-touch px-2 text-sm font-semibold text-state-red underline">{L('ပယ်ဖျက်မည်', 'Cancel')}</button>}
+                {request.status === 'pending' && <button type="button" onClick={() => void cancel({ id: request._id })} className="min-h-touch px-2 text-sm font-semibold text-state-red-deep underline">{L('ပယ်ဖျက်မည်', 'Cancel')}</button>}
               </li>
             ))}
           </ul>

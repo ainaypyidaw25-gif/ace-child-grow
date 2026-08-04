@@ -249,7 +249,7 @@ export function SignIn() {
             className="mt-1 block min-h-touch w-full rounded-lg border border-line px-3 py-2 disabled:bg-canvas"
           />
           {likelyWebPrefix && (
-            <span className="mt-1 block text-xs text-state-red" role="alert">
+            <span className="mt-1 block text-xs text-state-red-deep" role="alert">
               {locale === 'mm'
                 ? 'အီးမေးလ်အစတွင် “www.” ပါနေသည်။ မိမိအကောင့်လိပ်စာမှန်ကြောင်း စစ်ပါ။'
                 : 'This email starts with “www.” Check that it is really part of your account address.'}
@@ -300,7 +300,7 @@ export function SignIn() {
         )}
 
         {message && <p className="rounded-xl bg-mint-soft p-3 text-sm text-sky-deep" role="status">{message}</p>}
-        {error && <p className="text-sm text-state-red" role="alert">⚠️ {error}</p>}
+        {error && <p className="text-sm text-state-red-deep" role="alert">⚠️ {error}</p>}
 
         {!busy && !formReady && (
           <p className="text-xs text-ink-soft" role="status">

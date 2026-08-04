@@ -84,7 +84,7 @@ export function ChildProfile() {
       </Link>
 
       <button type="button" onClick={() => setConfirm(true)}
-        className="w-full rounded-pill border border-state-red px-4 py-2 text-left text-state-red">
+        className="w-full rounded-pill border border-state-red px-4 py-2 text-left text-state-red-deep">
         🗑️ {locale === 'mm' ? 'ဤကလေးကို ဖျက်ရန်' : 'Delete this child'}
       </button>
 

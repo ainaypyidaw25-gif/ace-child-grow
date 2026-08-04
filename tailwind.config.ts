@@ -22,11 +22,20 @@ export default {
         line: '#DDE7E2',
         canvas: '#F4F7F3',
         // Result-state semantic colors (rule engine). Never used to imply diagnosis.
+        // The base shades are BACKGROUND/accent colors — as text on a light
+        // surface several fall below the WCAG AA 4.5:1 minimum. Use the
+        // `-deep` variant for state-colored text on any light surface (mirrors
+        // the `mint`/`mint-deep` precedent above); the base shade stays for
+        // backgrounds, borders, and icons.
         state: {
           green: '#2E9E6B',
+          'green-deep': '#22754F',
           yellow: '#E0A200',
+          'yellow-deep': '#876100',
           orange: '#E8722B',
+          'orange-deep': '#AA4B12',
           red: '#D64545',
+          'red-deep': '#C42B2B',
         },
       },
       fontFamily: {

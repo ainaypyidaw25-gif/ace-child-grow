@@ -46,7 +46,7 @@ export function Activities() {
     <div className="mx-auto max-w-4xl space-y-7">
       <header>
         <p className="text-xs font-bold uppercase tracking-[0.16em] text-sky-deep">
-          {premium ? 'ACE Premium · Daily plan' : L('ယနေ့ အတူကစားမယ်', 'Play together today')}
+          {premium ? `ACE Premium · ${L('နေ့စဉ်အစီအစဉ်', 'Daily plan')}` : L('ယနေ့ အတူကစားမယ်', 'Play together today')}
         </p>
         <h1 className="mt-1 text-2xl font-bold text-ink">{L(`${activeChild.nickname} အတွက် လှုပ်ရှားမှုများ`, `Activities for ${activeChild.nickname}`)}</h1>
         <p className="mt-2 text-sm leading-7 text-ink-soft">

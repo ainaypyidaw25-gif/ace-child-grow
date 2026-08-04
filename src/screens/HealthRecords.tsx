@@ -69,7 +69,7 @@ export function HealthRecords() {
       await task();
       setMessage(success);
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : L('မှတ်တမ်းကို သိမ်း၍ မရပါ။', 'Could not save the record.'));
+      console.error(error); setMessage(L('မှတ်တမ်းကို သိမ်း၍ မရပါ။', 'Could not save the record.'));
     } finally {
       setBusy(false);
     }
@@ -266,6 +266,6 @@ function StatusPill({ value, locale }: { value: 'scheduled' | 'completed' | 'mis
     completed: locale === 'mm' ? 'ထိုးပြီး' : 'Completed',
     missed: locale === 'mm' ? 'မထိုးဖြစ်သေး' : 'Missed',
   };
-  const style = value === 'completed' ? 'bg-mint-soft text-sky-deep' : value === 'missed' ? 'bg-pink/55 text-state-red' : 'bg-pastel-yellow/60 text-ink';
+  const style = value === 'completed' ? 'bg-mint-soft text-sky-deep' : value === 'missed' ? 'bg-pink/55 text-state-red-deep' : 'bg-pastel-yellow/60 text-ink';
   return <span className={`shrink-0 rounded-pill px-3 py-1 text-xs font-semibold ${style}`}>{labels[value]}</span>;
 }

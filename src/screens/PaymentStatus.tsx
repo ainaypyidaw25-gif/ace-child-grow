@@ -4,6 +4,7 @@ import QRCode from 'qrcode';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
+import { ConfirmDialog } from '../components/ConfirmDialog';
 
 type View = 'status' | 'success' | 'cancel';
 
@@ -19,6 +20,7 @@ export function PaymentStatus({ view = 'status' }: { view?: View }) {
   const [qrUrl, setQrUrl] = useState('');
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState('');
+  const [confirmCancel, setConfirmCancel] = useState(false);
   const L = (mm: string, en: string) => locale === 'mm' ? mm : en;
 
   useEffect(() => {
@@ -47,9 +49,9 @@ export function PaymentStatus({ view = 'status' }: { view?: View }) {
     if (payment.status === 'CANCELLED' && view !== 'cancel') navigate(`/payment/cancel/${payment.orderId}`, { replace: true });
   }, [navigate, payment, view]);
 
-  if (!orderId) return <p className="rounded-card bg-white p-5 text-state-red">{L('Order ID မရှိပါ။', 'Missing order ID.')}</p>;
+  if (!orderId) return <p className="rounded-card bg-white p-5 text-state-red-deep">{L('Order ID မရှိပါ။', 'Missing order ID.')}</p>;
   if (payment === undefined) return <p className="text-ink-soft" role="status">…</p>;
-  if (payment === null) return <p className="rounded-card bg-white p-5 text-state-red">{L('ဤငွေပေးချေမှုကို ရှာမတွေ့ပါ။', 'Payment not found.')}</p>;
+  if (payment === null) return <p className="rounded-card bg-white p-5 text-state-red-deep">{L('ဤငွေပေးချေမှုကို ရှာမတွေ့ပါ။', 'Payment not found.')}</p>;
 
   const pending = payment.status === 'INITIATING' || payment.status === 'PENDING';
   // Route names are presentation only. Never show a success/cancel result just
@@ -118,7 +120,7 @@ export function PaymentStatus({ view = 'status' }: { view?: View }) {
                 onClick={async () => {
                   setBusy(true); setMessage('');
                   try { await refresh({ orderId: payment.orderId }); }
-                  catch (error) { setMessage(error instanceof Error ? error.message : L('အခြေအနေ စစ်ဆေး၍ မရပါ။', 'Unable to refresh status.')); }
+                  catch (error) { console.error(error); setMessage(L('အခြေအနေ စစ်ဆေး၍ မရပါ။', 'Unable to refresh status.')); }
                   finally { setBusy(false); }
                 }}
                 className="min-h-touch flex-1 rounded-pill border border-sky-deep px-5 py-2 font-semibold text-sky-deep disabled:opacity-50"
@@ -126,19 +128,29 @@ export function PaymentStatus({ view = 'status' }: { view?: View }) {
               <button
                 type="button"
                 disabled={busy}
-                onClick={async () => {
-                  if (!window.confirm(L('ဤငွေပေးချေမှုကို ပယ်ဖျက်မလား။', 'Cancel this payment?'))) return;
-                  setBusy(true); setMessage('');
-                  try { await cancel({ orderId: payment.orderId }); }
-                  catch (error) { setMessage(error instanceof Error ? error.message : L('ပယ်ဖျက်၍ မရပါ။', 'Unable to cancel payment.')); }
-                  finally { setBusy(false); }
-                }}
-                className="min-h-touch flex-1 rounded-pill border border-state-red px-5 py-2 font-semibold text-state-red disabled:opacity-50"
+                onClick={() => setConfirmCancel(true)}
+                className="min-h-touch flex-1 rounded-pill border border-state-red px-5 py-2 font-semibold text-state-red-deep disabled:opacity-50"
               >{L('ပယ်ဖျက်မည်', 'Cancel payment')}</button>
             </div>
           )}
 
-          {message && <p className="text-sm text-state-red" role="alert">{message}</p>}
+          {confirmCancel && (
+            <ConfirmDialog
+              message={L('ဤငွေပေးချေမှုကို ပယ်ဖျက်မလား။', 'Cancel this payment?')}
+              cancelLabel={L('မလုပ်တော့ပါ', 'Cancel')}
+              confirmLabel={L('ပယ်ဖျက်မည်', 'Cancel payment')}
+              onCancel={() => setConfirmCancel(false)}
+              onConfirm={async () => {
+                setConfirmCancel(false);
+                setBusy(true); setMessage('');
+                try { await cancel({ orderId: payment.orderId }); }
+                catch (error) { console.error(error); setMessage(L('ပယ်ဖျက်၍ မရပါ။', 'Unable to cancel payment.')); }
+                finally { setBusy(false); }
+              }}
+            />
+          )}
+
+          {message && <p className="text-sm text-state-red-deep" role="alert">{message}</p>}
           <Link to={effectiveView === 'success' ? '/home' : '/subscription'} className="block text-center text-sm font-semibold text-sky-deep underline">
             {effectiveView === 'success' ? L('ပင်မစာမျက်နှာသို့', 'Go to home') : L('အစီအစဉ်များသို့ ပြန်မည်', 'Back to plans')}
           </Link>

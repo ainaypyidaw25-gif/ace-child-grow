@@ -116,18 +116,18 @@ const MILESTONES: SeedItem[] = [
   ),
   kb(
     milestone('7_9m', 'social', 3, {
-      title: b('Peekaboo ကစားခြင်းကို နှစ်သက်ပြီး မျှော်လင့်တတ်ခြင်း', 'Enjoys and anticipates peekaboo'),
+      title: b('"ဘယ်မှာလဲ… ဘူး" ကစားခြင်းကို နှစ်သက်ပြီး မျှော်လင့်တတ်ခြင်း', 'Enjoys and anticipates peek-a-boo'),
       observe: b(
         'မျက်နှာဖုံးထားပြီး "ဘူး" ဟု ပြသောအခါ ရယ်မောပါသလား။ နောက်တစ်ကြိမ် ဖုံးမည်ကို မျှော်လင့်၍ စောင့်ကြည့်ပါသလား။',
-        'When you cover your face and say "peekaboo," does your baby laugh? Do they start anticipating it before you reveal your face again?',
+        'When you cover your face and say "peek-a-boo," does your baby laugh? Do they start anticipating it before you reveal your face again?',
       ),
       why: b(
-        'Peekaboo ကို နှစ်သက်ခြင်းသည် "မမြင်ရလည်း ရှိနေဆဲ" ဆိုသော အသိစတင်ခြင်းနှင့် အလှည့်ကျ ကစားနည်း၏ အစောပိုင်း လက္ခဏာဖြစ်သည်။',
-        'Enjoying peekaboo shows early object permanence and the beginnings of turn-taking play.',
+        '"ဘယ်မှာလဲ… ဘူး" ကစားနည်းကို နှစ်သက်ခြင်းသည် "မမြင်ရလည်း ရှိနေဆဲ" ဆိုသော အသိစတင်ခြင်းနှင့် အလှည့်ကျ ကစားနည်း၏ အစောပိုင်း လက္ခဏာဖြစ်သည်။',
+        'Enjoying peek-a-boo shows early object permanence and the beginnings of turn-taking play.',
       ),
       encouragement: b(
-        'နေ့စဉ် ဝတ်ပြောင်းချိန်၊ ကစားချိန်များတွင် peekaboo လေးများ ထည့်ကစားပါ။',
-        'Work short peekaboo moments into everyday routines like dressing and playtime.',
+        'နေ့စဉ် ဝတ်ပြောင်းချိန်၊ ကစားချိန်များတွင် "ဘယ်မှာလဲ… ဘူး" ကစားနည်းလေးများ ထည့်ကစားပါ။',
+        'Work short peek-a-boo moments into everyday routines like dressing and playtime.',
       ),
     }),
     'Peekaboo as an early marker of object permanence and turn-taking is described in the AAP Power of Play guidance and WHO Care for Child Development materials in the registry.',

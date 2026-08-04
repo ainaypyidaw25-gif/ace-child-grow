@@ -98,7 +98,7 @@ export function Profile() {
                     {!c.isShared && <button type="button"
                       aria-label={locale === 'mm' ? `${c.nickname} ကို ဖျက်ရန်` : `Remove ${c.nickname}`}
                       onClick={() => { dispatch({ type: 'switch_child', id: c.id }); setConfirming('child'); }}
-                      className="min-h-touch min-w-touch text-sm text-state-red">✕</button>}
+                      className="min-h-touch min-w-touch text-sm text-state-red-deep">✕</button>}
                   </span>
                 </li>
               );
@@ -159,7 +159,8 @@ export function Profile() {
                 setCaregiverEmail('');
                 setCaregiverMessage(locale === 'mm' ? 'ဖိတ်ကြားမှုကို မှတ်တမ်းတင်ပြီးပါပြီ။' : 'Invitation recorded.');
               } catch (error) {
-                setCaregiverMessage(error instanceof Error ? error.message : 'Unable to invite');
+                if (error instanceof Error) console.error('inviteCaregiver failed:', error.message);
+                setCaregiverMessage(locale === 'mm' ? 'ဖိတ်ကြားမှု မအောင်မြင်ပါ။' : 'Unable to invite.');
               }
             }}
           >
@@ -173,7 +174,7 @@ export function Profile() {
                 <li key={caregiver._id} className="flex items-center justify-between gap-3 py-3 text-sm">
                   <span><b>{caregiver.caregiverEmail}</b><span className="ml-2 text-ink-soft">{caregiver.status}</span></span>
                   {caregiver.status !== 'revoked' && (
-                    <button type="button" onClick={() => void revokeCaregiver({ id: caregiver._id })} className="text-state-red">
+                    <button type="button" onClick={() => void revokeCaregiver({ id: caregiver._id })} className="text-state-red-deep">
                       {locale === 'mm' ? 'ပယ်ဖျက်မည်' : 'Revoke'}
                     </button>
                   )}
@@ -216,7 +217,7 @@ export function Profile() {
           ⬇️ {locale === 'mm' ? 'ကျွန်ုပ်၏ အချက်အလက် ထုတ်ယူရန်' : 'Export my data'}
         </button>
         <button type="button" onClick={() => setConfirming('account')}
-          className="w-full rounded-pill border border-state-red px-4 py-2 text-left text-state-red">
+          className="w-full rounded-pill border border-state-red px-4 py-2 text-left text-state-red-deep">
           🗑️ {locale === 'mm' ? 'အကောင့် ဖျက်ရန်' : 'Delete account'}
         </button>
       </section>
