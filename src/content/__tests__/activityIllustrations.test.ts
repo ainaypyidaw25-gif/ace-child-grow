@@ -32,10 +32,21 @@ const FIVE_TO_SIX_MONTH_ACTIVITY_SLUGS = [
   'act_safe_touch_basket',
 ] as const;
 
+const SEVEN_TO_NINE_MONTH_ACTIVITY_SLUGS = [
+  'act_drum_and_pause',
+  'act_lift_the_flap_book',
+  'act_name_and_wait',
+  'act_peekaboo',
+  'act_sit_and_reach_ring',
+  'act_two_texture_spoons',
+  'act_wave_bye_bye',
+] as const;
+
 const TARGETED_ACTIVITY_SLUGS = [
   ...BIRTH_2M_ACTIVITY_SLUGS,
   ...THREE_TO_FOUR_MONTH_ACTIVITY_SLUGS,
   ...FIVE_TO_SIX_MONTH_ACTIVITY_SLUGS,
+  ...SEVEN_TO_NINE_MONTH_ACTIVITY_SLUGS,
 ] as const;
 
 describe('published activity illustrations', () => {
@@ -48,11 +59,15 @@ describe('published activity illustrations', () => {
     expect(new Set(paths).size).toBe(TARGETED_ACTIVITY_SLUGS.length);
 
     TARGETED_ACTIVITY_SLUGS.forEach((slug) => {
-      const ageGroup = FIVE_TO_SIX_MONTH_ACTIVITY_SLUGS.includes(
-        slug as (typeof FIVE_TO_SIX_MONTH_ACTIVITY_SLUGS)[number],
+      const ageGroup = SEVEN_TO_NINE_MONTH_ACTIVITY_SLUGS.includes(
+        slug as (typeof SEVEN_TO_NINE_MONTH_ACTIVITY_SLUGS)[number],
       )
-        ? '5_6m'
-        : THREE_TO_FOUR_MONTH_ACTIVITY_SLUGS.includes(
+        ? '7_9m'
+        : FIVE_TO_SIX_MONTH_ACTIVITY_SLUGS.includes(
+              slug as (typeof FIVE_TO_SIX_MONTH_ACTIVITY_SLUGS)[number],
+            )
+          ? '5_6m'
+          : THREE_TO_FOUR_MONTH_ACTIVITY_SLUGS.includes(
               slug as (typeof THREE_TO_FOUR_MONTH_ACTIVITY_SLUGS)[number],
             )
           ? '3_4m'
@@ -89,6 +104,33 @@ describe('published activity illustrations', () => {
     ]);
   });
 
+  it('keeps every previously approved 5–6 month mapping unchanged', () => {
+    expect(
+      FIVE_TO_SIX_MONTH_ACTIVITY_SLUGS.map((slug) => activityIllustration(slug)),
+    ).toEqual([
+      '/activities/5_6m/act_babble_back_and_forth.f5cb049412.webp',
+      '/activities/5_6m/act_roll_and_reach.ee83a6db44.webp',
+      '/activities/5_6m/act_mirror_hello.8b5bc4a6ec.webp',
+      '/activities/5_6m/act_board_book_point.1f396ad081.webp',
+      '/activities/5_6m/act_clap_and_sing_5_6m.d81f12554d.webp',
+      '/activities/5_6m/act_safe_touch_basket.c953264aef.webp',
+    ]);
+  });
+
+  it('maps every published 7–9 month slug to its approved unique asset', () => {
+    expect(
+      SEVEN_TO_NINE_MONTH_ACTIVITY_SLUGS.map((slug) => activityIllustration(slug)),
+    ).toEqual([
+      '/activities/7_9m/act_drum_and_pause.86c0ba193b.webp',
+      '/activities/7_9m/act_lift_the_flap_book.6c33f2de2d.webp',
+      '/activities/7_9m/act_name_and_wait.9e9a12625f.webp',
+      '/activities/7_9m/act_peekaboo.03b58f4431.webp',
+      '/activities/7_9m/act_sit_and_reach_ring.305571520c.webp',
+      '/activities/7_9m/act_two_texture_spoons.f811d80c0a.webp',
+      '/activities/7_9m/act_wave_bye_bye.af8bd5d742.webp',
+    ]);
+  });
+
   it('resolves every exact mapping to an optimized existing file', () => {
     Object.values(ACTIVITY_ILLUSTRATIONS).forEach((assetPath) => {
       const filePath = resolve(process.cwd(), 'public', assetPath.slice(1));
@@ -101,6 +143,7 @@ describe('published activity illustrations', () => {
     expect(activityIllustration('birth_2m')).toBeUndefined();
     expect(activityIllustration('3_4m')).toBeUndefined();
     expect(activityIllustration('5_6m')).toBeUndefined();
+    expect(activityIllustration('7_9m')).toBeUndefined();
     expect(activityIllustration('fine_motor')).toBeUndefined();
     expect(activityIllustration('play')).toBeUndefined();
     expect(activityIllustration('unknown')).toBeUndefined();
