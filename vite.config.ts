@@ -12,6 +12,22 @@ export default defineConfig({
   resolve: {
     alias: { '@': path.resolve(__dirname, 'src') },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        // src/content/seed (bulk static content data) and src/evidence (the
+        // reference registry) are each only imported by one lazy-loaded,
+        // staff-only admin screen (LibraryAdmin, EvidenceAdmin respectively),
+        // but Rollup's default heuristic was bundling both into one shared
+        // 679 KB chunk loaded by either screen. Splitting them out means each
+        // admin screen pulls in only the heavy data it actually needs.
+        manualChunks(id) {
+          if (id.includes('/src/content/seed/')) return 'content-seed';
+          if (id.includes('/src/evidence/')) return 'evidence';
+        },
+      },
+    },
+  },
   plugins: [
     react(),
     VitePWA({
@@ -55,6 +71,13 @@ export default defineConfig({
         // activity from the picture alone, which only holds offline too if
         // they are actually on the device. All 16 together are ~170 KB.
         globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,webmanifest,woff2}'],
+        // public/social/** is Facebook/marketing content-calendar collateral
+        // (scripts/generate-social-calendar.mjs) — it matches the png/webp
+        // globs above but nothing in the app ever references it. Left
+        // unexcluded it was ~11.5 MB, over half of the entire precache,
+        // silently downloaded into every installed parent's PWA for content
+        // they can never see.
+        globIgnores: ['social/**'],
         // Only public educational routes are cached. Anything under /api/ (authenticated
         // child data) is explicitly excluded from runtime caching.
         navigateFallbackDenylist: [/^\/api\//, /^\/admin\//],

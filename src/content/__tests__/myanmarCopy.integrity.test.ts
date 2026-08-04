@@ -13,6 +13,7 @@ const BANNED_MYANMAR_FRAGMENTS = [
   'screen ',
   ' screen',
   'peek-a-boo',
+  'peekaboo',
   'physiotherapist',
   'occupational therapist',
   'speech therapist',
@@ -44,12 +45,22 @@ function collectMyanmar(value: unknown, key = ''): string[] {
   return Object.entries(value).flatMap(([childKey, child]) => collectMyanmar(child, childKey));
 }
 
+// Case and hyphenation vary ("Peekaboo" vs "peek-a-boo" vs "peekaboo") but the
+// leaked-English-word defect is the same regardless — a straight .toContain()
+// missed a capitalized, unhyphenated variant of an already-banned fragment
+// once already (see ms_7_9m_social_3). Normalizing both sides closes that
+// whole class of near-miss rather than chasing one variant at a time.
+function normalizeForBanCheck(value: string): string {
+  return value.toLowerCase().replace(/-/g, '');
+}
+
 describe('Myanmar copy quality', () => {
   it('contains none of the known typo, untranslated, or awkward legacy fragments', () => {
     for (const item of CONTENT_SEED) {
       const copy = [item.titleMm, item.summaryMm ?? '', ...collectMyanmar(item.data)].join('\n');
+      const normalizedCopy = normalizeForBanCheck(copy);
       for (const fragment of BANNED_MYANMAR_FRAGMENTS) {
-        expect(copy, `${item.slug} contains “${fragment}”`).not.toContain(fragment);
+        expect(normalizedCopy, `${item.slug} contains “${fragment}”`).not.toContain(normalizeForBanCheck(fragment));
       }
     }
   });
