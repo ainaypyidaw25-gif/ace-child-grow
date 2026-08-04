@@ -23,9 +23,19 @@ const THREE_TO_FOUR_MONTH_ACTIVITY_SLUGS = [
   'act_texture_basket_infant',
 ] as const;
 
+const FIVE_TO_SIX_MONTH_ACTIVITY_SLUGS = [
+  'act_babble_back_and_forth',
+  'act_roll_and_reach',
+  'act_mirror_hello',
+  'act_board_book_point',
+  'act_clap_and_sing_5_6m',
+  'act_safe_touch_basket',
+] as const;
+
 const TARGETED_ACTIVITY_SLUGS = [
   ...BIRTH_2M_ACTIVITY_SLUGS,
   ...THREE_TO_FOUR_MONTH_ACTIVITY_SLUGS,
+  ...FIVE_TO_SIX_MONTH_ACTIVITY_SLUGS,
 ] as const;
 
 describe('published activity illustrations', () => {
@@ -38,9 +48,15 @@ describe('published activity illustrations', () => {
     expect(new Set(paths).size).toBe(TARGETED_ACTIVITY_SLUGS.length);
 
     TARGETED_ACTIVITY_SLUGS.forEach((slug) => {
-      const ageGroup = THREE_TO_FOUR_MONTH_ACTIVITY_SLUGS.includes(
-        slug as (typeof THREE_TO_FOUR_MONTH_ACTIVITY_SLUGS)[number],
-      ) ? '3_4m' : 'birth_2m';
+      const ageGroup = FIVE_TO_SIX_MONTH_ACTIVITY_SLUGS.includes(
+        slug as (typeof FIVE_TO_SIX_MONTH_ACTIVITY_SLUGS)[number],
+      )
+        ? '5_6m'
+        : THREE_TO_FOUR_MONTH_ACTIVITY_SLUGS.includes(
+              slug as (typeof THREE_TO_FOUR_MONTH_ACTIVITY_SLUGS)[number],
+            )
+          ? '3_4m'
+          : 'birth_2m';
       expect(activityIllustration(slug)).toMatch(
         new RegExp(`/activities/${ageGroup}/${slug}\\.[a-f0-9]{10}\\.webp$`),
       );
@@ -59,6 +75,20 @@ describe('published activity illustrations', () => {
     ]);
   });
 
+  it('keeps every previously approved 3–4 month mapping unchanged', () => {
+    expect(
+      THREE_TO_FOUR_MONTH_ACTIVITY_SLUGS.map((slug) => activityIllustration(slug)),
+    ).toEqual([
+      '/activities/3_4m/act_sound_tracking.4cc5e73a1c.webp',
+      '/activities/3_4m/act_copy_my_sound.0f2257dcb6.webp',
+      '/activities/3_4m/act_reach_for_the_toy.70d1608428.webp',
+      '/activities/3_4m/act_peek_a_boo_cloth.e45d080f3e.webp',
+      '/activities/3_4m/act_picture_book_naming.4df4715aae.webp',
+      '/activities/3_4m/act_rhythm_and_rock.547948f6a7.webp',
+      '/activities/3_4m/act_texture_basket_infant.e670cf7869.webp',
+    ]);
+  });
+
   it('resolves every exact mapping to an optimized existing file', () => {
     Object.values(ACTIVITY_ILLUSTRATIONS).forEach((assetPath) => {
       const filePath = resolve(process.cwd(), 'public', assetPath.slice(1));
@@ -70,6 +100,7 @@ describe('published activity illustrations', () => {
   it('never resolves an age group, domain, category, or unknown fallback', () => {
     expect(activityIllustration('birth_2m')).toBeUndefined();
     expect(activityIllustration('3_4m')).toBeUndefined();
+    expect(activityIllustration('5_6m')).toBeUndefined();
     expect(activityIllustration('fine_motor')).toBeUndefined();
     expect(activityIllustration('play')).toBeUndefined();
     expect(activityIllustration('unknown')).toBeUndefined();

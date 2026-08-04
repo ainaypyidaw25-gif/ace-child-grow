@@ -27,6 +27,18 @@ export const ACTIVITY_ILLUSTRATIONS: Readonly<Record<string, string>> = {
     '/activities/3_4m/act_rhythm_and_rock.547948f6a7.webp',
   act_texture_basket_infant:
     '/activities/3_4m/act_texture_basket_infant.e670cf7869.webp',
+  act_babble_back_and_forth:
+    '/activities/5_6m/act_babble_back_and_forth.f5cb049412.webp',
+  act_roll_and_reach:
+    '/activities/5_6m/act_roll_and_reach.ee83a6db44.webp',
+  act_mirror_hello:
+    '/activities/5_6m/act_mirror_hello.8b5bc4a6ec.webp',
+  act_board_book_point:
+    '/activities/5_6m/act_board_book_point.1f396ad081.webp',
+  act_clap_and_sing_5_6m:
+    '/activities/5_6m/act_clap_and_sing_5_6m.d81f12554d.webp',
+  act_safe_touch_basket:
+    '/activities/5_6m/act_safe_touch_basket.c953264aef.webp',
 };
 
 export function activityIllustration(slug: string): string | undefined {
