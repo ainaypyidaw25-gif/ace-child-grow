@@ -20,6 +20,7 @@ const EditChild = lazy(() => import('../screens/EditChild').then((module) => ({ 
 const Home = lazy(() => import('../screens/Home').then((module) => ({ default: module.Home })));
 const MilestoneDemo = lazy(() => import('../screens/MilestoneDemo').then((module) => ({ default: module.MilestoneDemo })));
 const Activities = lazy(() => import('../screens/Activities').then((module) => ({ default: module.Activities })));
+const WeeklyPlan = lazy(() => import('../screens/WeeklyPlan').then((module) => ({ default: module.WeeklyPlan })));
 const Growth = lazy(() => import('../screens/Growth').then((module) => ({ default: module.Growth })));
 const Sleep = lazy(() => import('../screens/Sleep').then((module) => ({ default: module.Sleep })));
 const Learn = lazy(() => import('../screens/Learn').then((module) => ({ default: module.Learn })));
@@ -261,6 +262,7 @@ function AppRoutes() {
       <Route path="/home" element={<AppScreen><Home /></AppScreen>} />
       <Route path="/journey" element={<AppScreen><MilestoneDemo /></AppScreen>} />
       <Route path="/activities" element={<AppScreen><Activities /></AppScreen>} />
+      <Route path="/weekly-plan" element={<AppScreen><WeeklyPlan /></AppScreen>} />
       <Route path="/learn" element={<AppScreen><Learn /></AppScreen>} />
       <Route path="/hope" element={<AppScreen><HopeCenter /></AppScreen>} />
       <Route path="/growth" element={<AppScreen><Growth /></AppScreen>} />

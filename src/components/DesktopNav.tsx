@@ -50,6 +50,10 @@ export function DesktopNav() {
               <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-mint-soft">▤</span>
               {locale === 'mm' ? 'တိုးတက်မှုအစီရင်ခံစာ' : 'Progress report'}
             </Link>
+            <Link to="/weekly-plan" className="flex min-h-touch items-center gap-3 rounded-2xl px-3 py-2 text-sm font-medium text-ink-soft hover:bg-white">
+              <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-lavender/30">▦</span>
+              {locale === 'mm' ? 'တစ်ပတ်စာအစီအစဉ်' : 'Weekly plan'}
+            </Link>
           </div>
         </nav>
 
