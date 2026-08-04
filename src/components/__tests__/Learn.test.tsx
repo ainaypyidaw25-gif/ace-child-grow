@@ -10,9 +10,18 @@ const child = vi.hoisted(() => ({
   useCorrectedAge: false,
   gestationalWeeks: undefined as number | undefined,
 }));
+const platform = vi.hoisted(() => ({
+  apple: false,
+  native: false,
+}));
 
-vi.mock('convex/react', () => ({
-  useQuery: (_api: unknown, args?: { type?: string; ageGroupKey?: string }) => {
+vi.mock('../../app/platform', () => ({
+  isAppleAppStoreBuild: () => platform.apple,
+  isNativeStoreBuild: () => platform.native,
+}));
+
+vi.mock('../../app/useOfflineLibrary', () => ({
+  useLibraryContent: (args?: { type?: string; ageGroupKey?: string }) => {
     requests.push(args ?? {});
     if (args?.type === 'guide') {
       return {
@@ -54,6 +63,9 @@ describe('Learn', () => {
     child.birthDate = '2025-08-01';
     child.useCorrectedAge = false;
     child.gestationalWeeks = undefined;
+    platform.apple = false;
+    platform.native = false;
+    Object.defineProperty(window.navigator, 'onLine', { configurable: true, value: true });
     vi.useRealTimers();
   });
 
@@ -93,5 +105,22 @@ describe('Learn', () => {
 
     expect(requests).toContainEqual({ type: 'guide', ageGroupKey: '3_4m' });
     expect(requests).toContainEqual({ type: 'story', ageGroupKey: '3_4m' });
+  });
+
+  it('uses an honest connectivity message in the App Store build', () => {
+    platform.apple = true;
+    platform.native = true;
+    Object.defineProperty(window.navigator, 'onLine', { configurable: true, value: false });
+
+    render(
+      <MemoryRouter>
+        <LocaleProvider>
+          <Learn />
+        </LocaleProvider>
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByText('အင်တာနက်ပြတ်နေပါသည်။ ဗဟုသုတအကြောင်းအရာများကို ဖွင့်ရန် အင်တာနက် ပြန်ချိတ်ပါ။')).toBeVisible();
+    expect(screen.queryByText('သိမ်းထားသည်များ')).not.toBeInTheDocument();
   });
 });

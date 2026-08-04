@@ -4,6 +4,7 @@ import { useLocale } from '../app/LocaleContext';
 import { useAppState } from '../app/AppState';
 import { isDuplicateChild } from '../app/bootstrap';
 import { MIN_GESTATIONAL_WEEKS, MAX_GESTATIONAL_WEEKS } from '../domain/age/age';
+import { isNativeStoreBuild } from '../app/platform';
 
 /**
  * Today in the device's OWN timezone as yyyy-mm-dd. toISOString() would give the
@@ -33,10 +34,15 @@ export function AddChild() {
   // consent value can't bounce the user around.
   useEffect(() => {
     if (ready && !state.consentAcceptedAt) navigate('/consent', { replace: true });
-  }, [ready, state.consentAcceptedAt, navigate]);
+    else if (ready && isNativeStoreBuild() && state.children.length > 0) navigate('/profile', { replace: true });
+  }, [ready, state.children.length, state.consentAcceptedAt, navigate]);
 
   async function save() {
     setError('');
+    if (isNativeStoreBuild() && state.children.length > 0) {
+      setError(locale === 'mm' ? 'လက်ရှိ Store release တွင် ကလေးပရိုဖိုင်တစ်ခု အသုံးပြုနိုင်ပါသည်။' : 'The current Store release supports one child profile.');
+      return;
+    }
     if (!nickname.trim() || !birthDate) {
       setError(locale === 'mm' ? 'လိုအပ်သော အချက်အလက်များကို ဖြည့်ပါ။' : 'Please fill in the details');
       return;
