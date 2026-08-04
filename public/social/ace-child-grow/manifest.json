@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-08-04T10:11:15.480Z",
+  "generatedAt": "2026-08-04T10:28:52.168Z",
   "automationMode": "production",
   "killSwitch": false,
   "destination": {
@@ -146,7 +146,7 @@
     },
     {
       "id": "ACE-HEALTH-01",
-      "status": "scheduled",
+      "status": "published",
       "scheduledAt": "2026-08-03T03:30:00.000Z",
       "approvalStatus": "approved",
       "reviewerId": "OWNER_APP_FEATURES_REPLY_APPROVAL_2026_08_01",
@@ -159,13 +159,14 @@
       "mediaUrl": "https://child.acegroup.com.mm/social/ace-child-grow/posts/app-intro-v1/ACE-HEALTH-01.jpg",
       "mediaSha256": "d3f1f60816766aac15fcdd14730c0f763762c7275a440e937a0139287538706c",
       "captionMyanmar": "ကလေးက ဘယ်အသက်မှာ ဘာကာကွယ်ဆေးထိုးရမလဲ? ထိုးပြီးရက်ကို ဘယ်မှာ မှတ်မလဲ? 💉\n\nACE Child Grow ရဲ့ “ကျန်းမာရေးမှတ်တမ်း” မှာ—\n✓ ကလေးမွေးနေ့အပေါ်မူတည်ပြီး မြန်မာ EPI အစီအစဉ်အတိုင်း ကာကွယ်ဆေးထိုးရန်ရက်တွေ ကြည့်နိုင်ပါတယ်\n✓ ထိုးပြီးရက်၊ ဆေးခန်းနဲ့ မှတ်ချက်တွေ သိမ်းနိုင်ပါတယ်\n✓ ဆေးခန်း/ဆရာဝန်တွေ့ဆုံမှု၊ ဖျားနာမှု၊ စစ်ဆေးမှုနဲ့ ဓာတ်မတည့်မှုတွေ မှတ်နိုင်ပါတယ်\n✓ တိုက်ကျွေးနေတဲ့ဆေးအမည်၊ ပမာဏ၊ အကြိမ်ရေနဲ့ ရက်စွဲတွေ သိမ်းနိုင်ပါတယ်\n\nApp ကို ဒီမှာ စသုံးပါ—\n👉 https://child.acegroup.com.mm\n\nဒီမှတ်တမ်းတွေက မိဘကိုယ်တိုင် ထည့်ထားတဲ့မှတ်တမ်းဖြစ်ပြီး ဆေးညွှန်း သို့မဟုတ် ရောဂါသတ်မှတ်ချက် မဟုတ်ပါ။ ကာကွယ်ဆေးနောက်ကျနေပါက ကျန်းမာရေးဝန်ထမ်းနဲ့ တိုင်ပင်ပါနော်။\n\n#ACEChildGrow #ကာကွယ်ဆေးမှတ်တမ်း #ကလေးကျန်းမာရေး",
-      "alreadyPublished": false,
-      "platformPostId": null,
-      "platformPermalink": null
+      "alreadyPublished": true,
+      "platformPostId": "111009258047115_1069775308906583",
+      "publishedAt": "2026-08-04T09:45:43.520Z",
+      "platformPermalink": "https://www.facebook.com/photo/?fbid=1069775275573253"
     },
     {
       "id": "ACE-AUTO-03",
-      "status": "scheduled",
+      "status": "published",
       "scheduledAt": "2026-08-03T13:30:00.000Z",
       "approvalStatus": "approved",
       "reviewerId": "ACE_CONTENT_OWNER_2026_07_29",
@@ -178,9 +179,10 @@
       "mediaUrl": "https://child.acegroup.com.mm/social/ace-child-grow/posts/continuous-launch-v1/ACE-AUTO-03.png",
       "mediaSha256": "a308f37bce96214fbc19090f792377fe6815f9bf5dee702bcb3c75420a1d6df2",
       "captionMyanmar": "ကလေးပြုစုရင်း မေးချင်တာတွေက နေ့တိုင်းရှိတတ်ပါတယ်နော်။\n\nACE Child Grow ရဲ့ လေ့လာရန်ကဏ္ဍမှာ မိဘတို့အတွက် အကြောင်းအရာတွေကို ခေါင်းစဉ်အလိုက် ရှာဖွေဖတ်ရှုနိုင်ပါတယ်။\n\nအားတဲ့အချိန်ဖတ်မယ်၊ လိုတဲ့အချိန် ပြန်ရှာမယ်—မိဘဘေးမှာ အမြဲရှိနေမယ့် လေ့လာစရာနေရာလေးပါ။\n\n#ACEChildGrow #မိဘများအတွက်",
-      "alreadyPublished": false,
-      "platformPostId": null,
-      "platformPermalink": null
+      "alreadyPublished": true,
+      "platformPostId": "111009258047115_1069784295572351",
+      "publishedAt": "2026-08-04T10:00:44.871Z",
+      "platformPermalink": "https://www.facebook.com/photo/?fbid=1069784258905688"
     },
     {
       "id": "ACE-AUTO-04",
