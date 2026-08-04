@@ -177,6 +177,7 @@ export const deleteChildBatch = internalMutation({
       ctx.db.query('milestoneSessions').withIndex('by_child', (q) => q.eq('childId', args.childId)).take(DELETION_BATCH_SIZE),
       ctx.db.query('activityCompletions').withIndex('by_child_and_completed_at', (q) => q.eq('childId', args.childId)).take(DELETION_BATCH_SIZE),
       ctx.db.query('appointments').withIndex('by_child_and_appointment_at', (q) => q.eq('childId', args.childId)).take(DELETION_BATCH_SIZE),
+      ctx.db.query('observations').withIndex('by_child_and_observed_on', (q) => q.eq('childId', args.childId)).take(DELETION_BATCH_SIZE),
     ]);
     const rows = distinctRows(...groups);
     // milestoneResponses can carry a user-uploaded keepsake photo blob, so it

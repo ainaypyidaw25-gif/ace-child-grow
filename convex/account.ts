@@ -133,6 +133,7 @@ export const deleteMineBatch = internalMutation({
       ctx.db.query('milestoneSessions').withIndex('by_user', (q) => q.eq('userId', userId)).take(ROOT_BATCH_SIZE),
       ctx.db.query('activityCompletions').withIndex('by_user_and_completed_at', (q) => q.eq('userId', userId)).take(ROOT_BATCH_SIZE),
       ctx.db.query('appointments').withIndex('by_user_and_appointment_at', (q) => q.eq('userId', userId)).take(ROOT_BATCH_SIZE),
+      ctx.db.query('observations').withIndex('by_user_and_observed_on', (q) => q.eq('userId', userId)).take(ROOT_BATCH_SIZE),
     ]);
     if (await deleteRows(ctx, distinctRows(...userChildGroups))) hadWork = true;
 
@@ -163,6 +164,7 @@ export const deleteMineBatch = internalMutation({
         ctx.db.query('milestoneSessions').withIndex('by_child', (q) => q.eq('childId', child._id)).take(NESTED_BATCH_SIZE),
         ctx.db.query('activityCompletions').withIndex('by_child_and_completed_at', (q) => q.eq('childId', child._id)).take(NESTED_BATCH_SIZE),
         ctx.db.query('appointments').withIndex('by_child_and_appointment_at', (q) => q.eq('childId', child._id)).take(NESTED_BATCH_SIZE),
+        ctx.db.query('observations').withIndex('by_child_and_observed_on', (q) => q.eq('childId', child._id)).take(NESTED_BATCH_SIZE),
       ]);
       const linkedRows = distinctRows(...childGroups);
       const childMilestoneResponses = await ctx.db
