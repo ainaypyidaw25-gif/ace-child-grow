@@ -46,6 +46,7 @@ export function Home() {
     { to: '/sleep', label: t('sleep.title'), note: locale === 'mm' ? 'အိပ်ချိန် မှတ်တမ်း' : 'Sleep tracking', symbol: '◒', tone: 'bg-lavender/30 text-ink' },
     { to: '/report', label: t('report.title'), note: locale === 'mm' ? 'တစ်လစာ အနှစ်ချုပ်' : 'Monthly summary', symbol: '▤', tone: 'bg-pastel-yellow/40 text-ink' },
     { to: '/directory', label: locale === 'mm' ? 'ဝန်ဆောင်မှုများ' : 'Support services', note: locale === 'mm' ? 'ကျောင်းနှင့် ပညာရှင်များ' : 'Schools and specialists', symbol: '⌖', tone: 'bg-pink/40 text-ink' },
+    { to: '/weekly-plan', label: locale === 'mm' ? 'တစ်ပတ်စာအစီအစဉ်' : 'Weekly plan', note: locale === 'mm' ? 'ရက်အလိုက် ကစားစရာများ' : 'Day-by-day activities', symbol: '▦', tone: 'bg-lavender/30 text-ink' },
     { to: '/observations', label: t('journal.title'), note: locale === 'mm' ? 'နေ့စဉ်စောင့်ကြည့်မှတ်ချက်' : 'Daily behavior notes', symbol: '✎', tone: 'bg-mint-soft text-sky-deep' },
   ] as const;
 
