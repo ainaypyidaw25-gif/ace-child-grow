@@ -39,6 +39,20 @@ export const ACTIVITY_ILLUSTRATIONS: Readonly<Record<string, string>> = {
     '/activities/5_6m/act_clap_and_sing_5_6m.d81f12554d.webp',
   act_safe_touch_basket:
     '/activities/5_6m/act_safe_touch_basket.c953264aef.webp',
+  act_drum_and_pause:
+    '/activities/7_9m/act_drum_and_pause.86c0ba193b.webp',
+  act_lift_the_flap_book:
+    '/activities/7_9m/act_lift_the_flap_book.6c33f2de2d.webp',
+  act_name_and_wait:
+    '/activities/7_9m/act_name_and_wait.9e9a12625f.webp',
+  act_peekaboo:
+    '/activities/7_9m/act_peekaboo.03b58f4431.webp',
+  act_sit_and_reach_ring:
+    '/activities/7_9m/act_sit_and_reach_ring.305571520c.webp',
+  act_two_texture_spoons:
+    '/activities/7_9m/act_two_texture_spoons.f811d80c0a.webp',
+  act_wave_bye_bye:
+    '/activities/7_9m/act_wave_bye_bye.af8bd5d742.webp',
 };
 
 export function activityIllustration(slug: string): string | undefined {
