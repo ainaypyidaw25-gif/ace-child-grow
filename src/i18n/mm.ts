@@ -88,6 +88,23 @@ export const mm = {
   'sleep.waking': 'ညဘက် နိုးသည့်အကြိမ်',
   'sleep.total': 'စုစုပေါင်း အိပ်ချိန်',
 
+  'journal.title': 'စောင့်ကြည့်မှတ်တမ်း',
+  'journal.subtitle': 'နေ့စဉ် တွေ့ရှိချက်များကို မှတ်ထားပြီး နောက်တစ်ကြိမ် ဆေးရုံ/ဆေးခန်း သွားချိန် ယူဆောင်သွားပါ။',
+  'journal.add': 'မှတ်ချက် ထည့်ရန်',
+  'journal.date': 'တွေ့ရှိသည့်ရက်',
+  'journal.category': 'အမျိုးအစား',
+  'journal.category.unset': 'အမျိုးအစား မသတ်မှတ်ပါ',
+  'journal.category.behavior': 'အပြုအမူ',
+  'journal.category.development': 'ဖွံ့ဖြိုးမှု',
+  'journal.category.health': 'ကျန်းမာရေး',
+  'journal.category.other': 'အခြား',
+  'journal.note': 'ဘာကို တွေ့ရှိခဲ့ပါသလဲ?',
+  'journal.placeholder': 'ဥပမာ - ဒီနေ့ စကားလုံးအသစ် ၂ လုံး ပြောနိုင်သည်၊ ပုံစာအုပ်ကို လက်ညှိုးထိုးပြသည်…',
+  'journal.history': 'ယခင်မှတ်ချက်များ',
+  'journal.removeLabel': 'ဖျက်ရန်',
+  'journal.removeConfirm': 'ဤမှတ်ချက်ကို ဖျက်မည်လား?',
+  'journal.removeError': 'မှတ်ချက်ကို ဖျက်၍ မရပါ။',
+
   'learn.title': 'သင်ယူရန် စာကြည့်တိုက်',
   'learn.readMinutes': 'ဖတ်ရန်ကြာချိန်',
 

@@ -49,6 +49,7 @@ const SubscriptionPlans = lazy(() => import('../screens/SubscriptionPlans').then
 const PaymentStatus = lazy(() => import('../screens/PaymentStatus').then((module) => ({ default: module.PaymentStatus })));
 const Appointments = lazy(() => import('../screens/Appointments').then((module) => ({ default: module.Appointments })));
 const HealthRecords = lazy(() => import('../screens/HealthRecords').then((module) => ({ default: module.HealthRecords })));
+const ObservationJournal = lazy(() => import('../screens/ObservationJournal').then((module) => ({ default: module.ObservationJournal })));
 const LegalPage = lazy(() => import('../screens/LegalPage').then((module) => ({ default: module.LegalPage })));
 
 // Authentication gate: unauthenticated visitors see sign-in; the app (and all
@@ -280,6 +281,7 @@ function AppRoutes() {
       <Route path="/child-profile" element={<AppScreen><ChildProfile /></AppScreen>} />
       <Route path="/milestone-gallery" element={<AppScreen><MilestoneGallery /></AppScreen>} />
       <Route path="/milestone-gallery/:responseId/keepsake" element={<AppScreen><MilestoneKeepsake /></AppScreen>} />
+      <Route path="/observations" element={<AppScreen><ObservationJournal /></AppScreen>} />
       <Route path="/library" element={<AppScreen><ContentLibrary /></AppScreen>} />
       <Route path="/content/:slug" element={<AppScreen><ContentDetail /></AppScreen>} />
       <Route path="/admin" element={<StaffOnlyRoute><AppScreen><AdminReviewQueue /></AppScreen></StaffOnlyRoute>} />
