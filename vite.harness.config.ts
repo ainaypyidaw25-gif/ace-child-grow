@@ -34,6 +34,10 @@ export default defineConfig({
   build: {
     outDir: path.resolve(__dirname, 'dist-harness'),
     emptyOutDir: true,
+    // The private layout harness intentionally bundles the complete fixture
+    // library into a single offline artifact. It is never served by the app;
+    // keep a finite ceiling so unexpected growth still produces a warning.
+    chunkSizeWarningLimit: 3500,
     rollupOptions: {
       input: {
         // Layout checks, and the two silent training recordings.
