@@ -10,6 +10,9 @@ const manifestFile = path.join(socialDir, 'manifest.json')
 const calendarFile = path.join(socialDir, 'content-calendar.json')
 const galleryFile = path.join(socialDir, 'calendar.html')
 const launchDir = path.join(socialDir, 'posts/continuous-launch-v1')
+const activityCampaignDir = path.join(socialDir, 'posts/activity-5-6m-v1')
+const activityPostsFile = path.join(root, 'scripts/social/activity-5-6m-posts.json')
+const activityPosts = JSON.parse(await readFile(activityPostsFile, 'utf8'))
 
 const palette = {
   cream: '#FFF8EA',
@@ -144,6 +147,13 @@ function cardSvg(post, index, hasScreen) {
 }
 
 async function renderPost(post, index) {
+  const output = path.join(outputDir, `${post.id}.png`)
+  if (process.env.REGENERATE_SOCIAL_ASSETS !== '1') {
+    try {
+      await readFile(output)
+      return output
+    } catch {}
+  }
   const hasScreen = Boolean(post.source)
   const canvas = sharp({ create: { width: 1080, height: 1350, channels: 4, background: palette.cream } })
   const layers = []
@@ -157,8 +167,24 @@ async function renderPost(post, index) {
     layers.push({ input: crop, left: 625, top: 325 })
   }
   layers.push({ input: cardSvg(post, index, hasScreen), left: 0, top: 0 })
-  const output = path.join(outputDir, `${post.id}.png`)
   await canvas.composite(layers).png().toFile(output)
+  return output
+}
+
+async function renderActivityPost(post) {
+  const source = path.join(root, post.sourceAsset)
+  const output = path.join(activityCampaignDir, `${post.id}.jpg`)
+  if (process.env.REGENERATE_SOCIAL_ASSETS !== '1') {
+    try {
+      await readFile(output)
+      return output
+    } catch {}
+  }
+  await sharp(source)
+    .rotate()
+    .flatten({ background: '#FFF8EA' })
+    .jpeg({ quality: 88, chromaSubsampling: '4:4:4', mozjpeg: true })
+    .toFile(output)
   return output
 }
 
@@ -177,14 +203,33 @@ function galleryHtml(items) {
 }
 
 await mkdir(outputDir, { recursive: true })
+await mkdir(activityCampaignDir, { recursive: true })
 let previous = { items: [] }
 try { previous = JSON.parse(await readFile(manifestFile, 'utf8')) } catch {}
+const previousById = new Map((previous.items || []).map((item) => [item.id, item]))
+
+function preservePublishedState(item) {
+  const prior = previousById.get(item.id)
+  const wasPublished = prior && (prior.alreadyPublished || prior.status === 'published' || prior.platformPostId)
+  if (!wasPublished) return item
+  if (prior.approvedContentHash && prior.approvedContentHash !== item.approvedContentHash) {
+    throw new Error(`Refusing to change already-published Facebook content: ${item.id}`)
+  }
+  return {
+    ...item,
+    status: 'published',
+    alreadyPublished: true,
+    platformPostId: prior.platformPostId || null,
+    platformPermalink: prior.platformPermalink || null,
+    publishedAt: prior.publishedAt || null,
+  }
+}
 
 const generated = []
 for (const [index, post] of posts.entries()) {
   const output = await renderPost(post, index)
   const mediaSha256 = hash(await readFile(output))
-  generated.push({
+  generated.push(preservePublishedState({
     ...post,
     status: 'scheduled',
     approvalStatus: 'approved',
@@ -200,10 +245,43 @@ for (const [index, post] of posts.entries()) {
     alreadyPublished: false,
     platformPostId: null,
     platformPermalink: null,
-  })
+  }))
 }
 
-const generatedById = new Map(generated.map((item) => [item.id, item]))
+const activityGenerated = []
+for (const post of activityPosts) {
+  const output = await renderActivityPost(post)
+  const mediaSha256 = hash(await readFile(output))
+  activityGenerated.push(preservePublishedState({
+    id: post.id,
+    campaign: 'activity_5_6m',
+    sourceSlug: post.sourceSlug,
+    sourceAgeGroupKey: '5_6m',
+    sourceClinicalStatus: 'published',
+    sourceCheckedAt: '2026-08-04T00:24:00.000Z',
+    titleMm: post.titleMm,
+    titleEn: post.titleEn,
+    scheduledAt: post.scheduledAt,
+    status: 'scheduled',
+    approvalStatus: 'approved',
+    reviewerId: 'OWNER_FACEBOOK_ACTIVITY_APPROVAL_2026_08_04',
+    approvalTimestamp: '2026-08-04T00:29:42.000Z',
+    approvalExpiresAt: '2026-12-31T00:00:00.000Z',
+    approvedContentHash: hash(`${post.id}|${post.scheduledAt}|${post.captionMyanmar}|${mediaSha256}`),
+    riskLevel: 'low',
+    clinicalApprovalId: null,
+    mediaType: 'image',
+    mediaUrl: `https://child.acegroup.com.mm/social/ace-child-grow/posts/activity-5-6m-v1/${post.id}.jpg`,
+    mediaSha256,
+    captionMyanmar: post.captionMyanmar,
+    alreadyPublished: false,
+    platformPostId: null,
+    platformPermalink: null,
+  }))
+}
+
+const allGenerated = [...generated, ...activityGenerated]
+const generatedById = new Map(allGenerated.map((item) => [item.id, item]))
 const preserved = (previous.items || []).filter((item) => !generatedById.has(item.id))
 const manifest = {
   schemaVersion: 2,
@@ -217,7 +295,7 @@ const manifest = {
     graphApiVersion: 'v25.0',
   },
   cadence: { timezone: 'Asia/Yangon', weeklyPosts: 3, note: 'Mon/Wed 20:00 and Sat 10:00' },
-  items: [...preserved, ...generated],
+  items: [...preserved, ...allGenerated],
 }
 
 const calendar = {
@@ -231,4 +309,4 @@ const calendar = {
 await writeFile(manifestFile, `${JSON.stringify(manifest, null, 2)}\n`)
 await writeFile(calendarFile, `${JSON.stringify(calendar, null, 2)}\n`)
 await writeFile(galleryFile, galleryHtml(posts))
-console.log(JSON.stringify({ generated: generated.length, totalQueue: manifest.items.length, outputDir, manifestFile, calendarFile, galleryFile }, null, 2))
+console.log(JSON.stringify({ generated: generated.length, activityGenerated: activityGenerated.length, totalQueue: manifest.items.length, outputDir, activityCampaignDir, manifestFile, calendarFile, galleryFile }, null, 2))
