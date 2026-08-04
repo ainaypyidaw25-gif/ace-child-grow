@@ -131,11 +131,23 @@ export const deleteMineBatch = internalMutation({
       ctx.db.query('vaccinationRecords').withIndex('by_user_and_child', (q) => q.eq('userId', userId)).take(ROOT_BATCH_SIZE),
       ctx.db.query('medicationRecords').withIndex('by_user_and_child', (q) => q.eq('userId', userId)).take(ROOT_BATCH_SIZE),
       ctx.db.query('milestoneSessions').withIndex('by_user', (q) => q.eq('userId', userId)).take(ROOT_BATCH_SIZE),
-      ctx.db.query('milestoneResponses').withIndex('by_user_and_child', (q) => q.eq('userId', userId)).take(ROOT_BATCH_SIZE),
       ctx.db.query('activityCompletions').withIndex('by_user_and_completed_at', (q) => q.eq('userId', userId)).take(ROOT_BATCH_SIZE),
       ctx.db.query('appointments').withIndex('by_user_and_appointment_at', (q) => q.eq('userId', userId)).take(ROOT_BATCH_SIZE),
     ]);
     if (await deleteRows(ctx, distinctRows(...userChildGroups))) hadWork = true;
+
+    // milestoneResponses can carry a user-uploaded keepsake photo blob, so it
+    // is swept separately from the generic groups above — same reasoning as
+    // the payment-proof loop below: delete the blob in the same pass as its row.
+    const userMilestoneResponses = await ctx.db
+      .query('milestoneResponses')
+      .withIndex('by_user_and_child', (q) => q.eq('userId', userId))
+      .take(ROOT_BATCH_SIZE);
+    for (const row of userMilestoneResponses) {
+      if (row.photoStorageId) await ctx.storage.delete(row.photoStorageId);
+      await ctx.db.delete(row._id);
+      hadWork = true;
+    }
 
     const children = await ctx.db
       .query('children')
@@ -149,13 +161,20 @@ export const deleteMineBatch = internalMutation({
         ctx.db.query('vaccinationRecords').withIndex('by_child_and_scheduled_on', (q) => q.eq('childId', child._id)).take(NESTED_BATCH_SIZE),
         ctx.db.query('medicationRecords').withIndex('by_child_and_started_on', (q) => q.eq('childId', child._id)).take(NESTED_BATCH_SIZE),
         ctx.db.query('milestoneSessions').withIndex('by_child', (q) => q.eq('childId', child._id)).take(NESTED_BATCH_SIZE),
-        ctx.db.query('milestoneResponses').withIndex('by_child', (q) => q.eq('childId', child._id)).take(NESTED_BATCH_SIZE),
         ctx.db.query('activityCompletions').withIndex('by_child_and_completed_at', (q) => q.eq('childId', child._id)).take(NESTED_BATCH_SIZE),
         ctx.db.query('appointments').withIndex('by_child_and_appointment_at', (q) => q.eq('childId', child._id)).take(NESTED_BATCH_SIZE),
       ]);
       const linkedRows = distinctRows(...childGroups);
-      if (linkedRows.length > 0) {
+      const childMilestoneResponses = await ctx.db
+        .query('milestoneResponses')
+        .withIndex('by_child', (q) => q.eq('childId', child._id))
+        .take(NESTED_BATCH_SIZE);
+      if (linkedRows.length > 0 || childMilestoneResponses.length > 0) {
         await deleteRows(ctx, linkedRows);
+        for (const row of childMilestoneResponses) {
+          if (row.photoStorageId) await ctx.storage.delete(row.photoStorageId);
+          await ctx.db.delete(row._id);
+        }
         hadWork = true;
       } else {
         await ctx.db.delete(child._id);
@@ -163,8 +182,9 @@ export const deleteMineBatch = internalMutation({
       }
     }
 
-    // Manual payment proofs are the only user-uploaded storage blobs in the
-    // schema. Delete the blob in the same transaction as its request row.
+    // Payment proofs and milestone keepsake photos are the user-uploaded
+    // storage blobs in the schema. Delete each blob in the same transaction
+    // as its owning row.
     const [ownedPaymentRequests, reviewedPaymentRequests] = await Promise.all([
       ctx.db.query('paymentRequests').withIndex('by_user', (q) => q.eq('userId', userId)).take(ROOT_BATCH_SIZE),
       ctx.db.query('paymentRequests').withIndex('by_reviewed_by', (q) => q.eq('reviewedBy', userId)).take(ROOT_BATCH_SIZE),

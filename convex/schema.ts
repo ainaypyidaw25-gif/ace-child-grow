@@ -935,6 +935,10 @@ export default defineSchema({
       v.literal('not_sure'),
     ),
     note: v.optional(v.string()),
+    // Parent-initiated, opt-in keepsake photo for an achieved milestone. A
+    // deliberate exception to the app's default data-minimization stance
+    // (see AddChild.tsx's "nickname only" comment) — not a reversal of it.
+    photoStorageId: v.optional(v.id('_storage')),
     answeredAt: v.number(),
   })
     .index('by_session', ['sessionId'])

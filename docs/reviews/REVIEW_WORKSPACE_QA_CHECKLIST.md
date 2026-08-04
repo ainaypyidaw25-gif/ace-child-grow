@@ -64,8 +64,8 @@ The checked results below verify the reconciled #20–#25 development branch and
 
 - [x] Typecheck passed.
 - [x] Lint passed.
-- [x] Unit/integration/permission/UI suite passed: 108 files, 1,106 tests.
-- [x] Production build passed; PWA precache generated with 215 entries.
+- [x] Unit/integration/permission/UI suite passed: 110 files, 1,131 tests.
+- [x] Production build passed; PWA precache generated with 217 entries.
 - [x] Development Convex validation passed; schema and functions compiled without touching Production.
 - [x] Focused browser checks passed: 5 passed and 1 expected sign-in-dependent skip.
 

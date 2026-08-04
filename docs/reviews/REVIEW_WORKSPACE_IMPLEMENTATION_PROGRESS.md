@@ -1,7 +1,7 @@
 # Reviewer workspace implementation progress
 
 Date: 2026-08-04
-Base: `origin/main` at `0af4a78`
+Base: `origin/main` at `b89161e`
 Production changes: none
 
 ## Executive verdict
@@ -116,8 +116,8 @@ Commands executed from the clean reviewer worktree:
 
 - `npm run typecheck` — PASS
 - `npm run lint` — PASS
-- `npm test` — PASS, 108 files / 1,106 tests
-- `npm run build` — PASS; PWA precache generated successfully with 215 entries
+- `npm test` — PASS, 110 files / 1,131 tests
+- `npm run build` — PASS; PWA precache generated successfully with 217 entries
 - `npx convex codegen` — PASS against the Development Convex deployment; schema and functions compiled without touching Production
 - Focused Playwright checks — PASS, 5 passed / 1 expected sign-in-dependent skip; mobile/iPad owner queue, item opening, disabled import and production-bundle route safety verified
 
