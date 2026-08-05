@@ -4,6 +4,7 @@
 // environment, so this file is intentionally thin; testable copy logic lives
 // in src/domain/share/shareCaption.ts instead.
 import { formatShareCardDate } from '../domain/share/shareCaption';
+import { wrapText } from '../domain/share/textWrap';
 
 const SIZE = 1080;
 const MARGIN = 48;
@@ -63,23 +64,6 @@ function roundedRectPath(
   ctx.closePath();
 }
 
-function wrapText(ctx: CanvasRenderingContext2D, text: string, maxWidth: number): string[] {
-  const words = text.split(' ');
-  const lines: string[] = [];
-  let line = '';
-  for (const word of words) {
-    const candidate = line ? `${line} ${word}` : word;
-    if (line && ctx.measureText(candidate).width > maxWidth) {
-      lines.push(line);
-      line = word;
-    } else {
-      line = candidate;
-    }
-  }
-  if (line) lines.push(line);
-  return lines;
-}
-
 export interface MilestoneShareCardInput {
   photoUrl: string | null;
   childNickname: string;
@@ -126,7 +110,7 @@ export async function renderMilestoneShareCard(input: MilestoneShareCardInput): 
   ctx.font = `700 56px ${FONT_STACK}`;
   ctx.fillStyle = '#FBFAF5';
   const headline = `${input.childNickname} — ${input.title}`;
-  const headlineLines = wrapText(ctx, headline, SIZE - MARGIN * 2).slice(0, 3);
+  const headlineLines = wrapText(headline, SIZE - MARGIN * 2, (text) => ctx.measureText(text).width).slice(0, 3);
   let lineY = bannerY + 120;
   for (const line of headlineLines) {
     ctx.fillText(line, SIZE / 2, lineY);
