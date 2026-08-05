@@ -1,39 +1,33 @@
 # Getting a Live Preview URL (Vercel)
 
-The reliable way to deploy this app is to let Vercel build it from a Git repo.
-Everything is deploy-ready: `npm run build` passes, and Vercel's Vite preset
-handles SPA routing automatically.
+> **Historical note:** this doc originally walked through bootstrapping the
+> very first Vercel import from a delivered repo bundle, before the project
+> had a GitHub remote or a connected Vercel project. Both now exist —
+> [github.com/ainaypyidaw25-gif/ace-child-grow](https://github.com/ainaypyidaw25-gif/ace-child-grow)
+> is already imported into Vercel, so none of the bootstrap steps below apply
+> anymore. Kept for history; see **Current workflow** for what actually
+> happens today.
 
-## Option A — you push, Vercel imports (≈2 minutes, guaranteed)
+## Current workflow
 
-From the delivered `ace-child-grow-repo.bundle`:
+1. Push a branch and open a PR. Vercel automatically builds and deploys a
+   **preview** for that branch/PR (visible as a `Vercel` check + comment on
+   the PR, with a `*-git-<branch>-ace-group.vercel.app` URL).
+2. Preview builds use `.env.production` (there is currently no separate
+   preview-only env config), so they share the **production** Convex
+   deployment (`graceful-possum-566`) — a preview branch that adds new
+   Convex functions/schema won't see them work until that schema is deployed
+   to production (see `convex-setup.md`).
+3. Merging to `main` triggers a **production** Vercel deployment
+   automatically. There is no separate manual-approval gate in Vercel itself
+   today — approval happens via normal PR review before merge.
+4. The frontend deploy is independent of the backend: merging to `main`
+   does **not** deploy Convex functions/schema. After merging a change that
+   touches `convex/`, run the deploy command in `convex-setup.md` against the
+   production deploy key.
 
-```bash
-# 1. Restore the repo from the bundle
-git clone ace-child-grow-repo.bundle ace-child-grow
-cd ace-child-grow
+## Env vars
 
-# 2. Create an empty GitHub repo (via github.com or gh), then:
-git remote add origin https://github.com/<you>/ace-child-grow.git
-git push -u origin feature/ace-child-grow-production-foundation
-```
-
-Then in Vercel: **Add New → Project → Import** your GitHub repo. Framework is
-auto-detected as **Vite**; Build = `npm run build`, Output = `dist`. Click
-**Deploy** → you get a preview URL. (No `vercel.json` needed — the Vite preset
-adds the SPA fallback.)
-
-Add env vars later in **Project → Settings → Environment Variables**:
-`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY` (see `.env.example`).
-
-## Option B — I deploy it for you
-
-If you connect the **GitHub connector** in claude.ai (or give me a repo + token),
-I'll push the branch and wire the Vercel import for you, then hand back the
-preview URL. Production deploys still require your explicit approval.
-
-## Notes
-- Until Supabase env vars are set, the app runs in **demo mode** (in-memory,
-  clearly labelled) — the preview is fully clickable as a demo.
-- Production deployment and `main` merges require explicit approval + clinical
-  review sign-off before any content is published.
+See `environment-variables.md` for the full, current list
+(`VITE_CONVEX_URL` client-side; `SITE_URL`, auth, and payment secrets set on
+the Convex deployment, not in Vercel).

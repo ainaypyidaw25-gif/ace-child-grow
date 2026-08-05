@@ -22,10 +22,18 @@
 - Milestone checklist renders the four Myanmar answers, shows the Clinical Review
   badge, and advances on answer.
 
-## Integration (planned — needs live Supabase)
-Auth, child ownership (cross-account denial), milestone save, result generation,
-activity completion, growth/sleep entry, report generation, PDF export, offline
-manifest, admin publishing.
+## Integration (backend: Convex)
+Auth/ownership scoping is covered today by static analysis tests that check
+every Convex query/mutation derives the caller via `getAuthUserId`/
+`requireUser` and scopes reads/writes to that identity
+(`src/domain/__tests__/convexAuthGuard.test.ts`, `backendGuards.test.ts`,
+`deletion.test.ts`) — this catches a missing ownership check without needing
+a live two-account run. **Still needed:** an authenticated end-to-end run
+against a real Convex deployment exercising milestone save, result
+generation, activity completion, growth/sleep entry, report generation, PDF
+export, offline manifest, and admin publishing with two distinct accounts —
+this repo's sandboxed test environment cannot open a WebSocket to
+`*.convex.cloud`, so it has to run against a real browser + deployment.
 
 ## E2E (Playwright — partially implemented, runs in real Chromium)
 Implemented + passing: consent → add child → Home; bottom-nav localization;

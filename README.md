@@ -68,12 +68,14 @@ rows. Healthcare facilities are **never** seeded with invented data.
 ## Test
 
 ```bash
-npm run test   # 51 tests: age engine, corrected age, rule engine, safety triggers,
-               # sleep, unit conversion, translation completeness, content safety,
-               # milestone component
+npm run test   # age engine, corrected age, rule engine, safety triggers, sleep,
+               # unit conversion, translation completeness, content safety,
+               # Convex auth-guard coverage, deletion completeness, and more
 ```
 
-Current results: **51/51 passing.** See `docs/testing/test-results.md`.
+The exact count grows over time — run the command above (or check CI) for
+the current numbers rather than trusting a hardcoded count here. See
+`docs/testing/test-results.md` for a point-in-time snapshot with more detail.
 
 ## Build
 
