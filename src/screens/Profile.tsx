@@ -90,6 +90,11 @@ export function Profile() {
                     </span>
                   </button>
                   <span className="flex items-center gap-2">
+                    {active && (
+                      <Link to="/child-profile" className="text-sm text-sky-deep">
+                        {locale === 'mm' ? 'ပရိုဖိုင်' : 'Profile'}
+                      </Link>
+                    )}
                     {active && !c.isShared && (
                       <Link to="/edit-child" className="text-sm text-sky-deep">
                         {locale === 'mm' ? 'ပြင်ရန်' : 'Edit'}
@@ -195,6 +200,10 @@ export function Profile() {
             {locale === 'mm' ? 'မြန်မာ' : 'English'}
           </button>
         </div>
+        <Link to="/favorites" className="flex items-center justify-between py-2 text-sky-deep">
+          <span>♥ {locale === 'mm' ? 'သိမ်းထားသော လှုပ်ရှားမှုများ' : 'Saved activities'}</span>
+          <span aria-hidden>→</span>
+        </Link>
         <Link to="/offline" className="flex items-center justify-between py-2 text-sky-deep">
           <span>{locale === 'mm' ? 'အင်တာနက်မရှိချိန် ဖတ်ရန် သိမ်းထားမှု' : 'Offline downloads'}</span>
           <span aria-hidden>→</span>
