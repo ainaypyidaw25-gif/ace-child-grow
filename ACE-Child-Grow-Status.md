@@ -2,6 +2,9 @@
 
 _ရက်စွဲ — ၂၀၂၆ ဇူလိုင် ၂၅ · Bilingual (Myanmar–English) child development & parent education platform (0–5 နှစ်)_
 
+> **Historical snapshot (July 25 branch state) — see the Notion "Production Status & Roadmap" page for the current picture.**
+> Two facts below are now stale: production is served at **https://child.acegroup.com.mm** (also reachable at `ace-child-grow.vercel.app`, though Google sign-in only works from the custom domain), and the live **production** Convex deployment is **`graceful-possum-566`** — `uncommon-orca-603` below was the development deployment used for the clinical-pilot content work described in this doc, not the production backend.
+
 > **အရေးကြီး safety မူ —** ဤ app သည် ကလေးကို **ရောဂါ ဘယ်တော့မှ မဖော်ထုတ်ပါ**။ ပညာပေး/စောင့်ကြည့်ကူညီပေးရေး tool သာဖြစ်သည်။ ဆေးပညာဆိုင်ရာ content အားလုံးကို ကျွမ်းကျင်သူ review မဖြတ်ရသေးမချင်း မိဘများဆီ “အတည်ပြုပြီး” အဖြစ် မဖော်ပြပါ။
 
 ---

@@ -20,10 +20,12 @@ excessive bold. Tokens live in `tailwind.config.ts` / `src/index.css`.
 ## PDF rendering (implemented + verified)
 Monthly reports render Myanmar correctly in PDF via Chromium (HarfBuzz shaping)
 with an embedded Noto Sans Myanmar font — `scripts/pdf/renderReportPdf.mjs`,
-run with `npm run report:pdf`. Verified against a generated `sample-report-mm.pdf`:
-correct shaping/stacking, no clipped text, A4 layout, non-diagnostic disclaimer
-present. In production this module runs server-side (Supabase Edge Function); the
-in-app Report screen also offers browser print-to-PDF.
+run locally with `npm run report:pdf`. Verified against a generated
+`sample-report-mm.pdf`: correct shaping/stacking, no clipped text, A4 layout,
+non-diagnostic disclaimer present. This script is a local/dev-time tool for
+generating and spot-checking sample PDFs — it is not invoked by the running
+app. **The actual production PDF path is the in-app Report screen's browser
+print-to-PDF**, which uses the same Myanmar font stack and layout.
 
 ## Adding a key
 1. Add to `mm.ts` (source of truth for the key set) and `en.ts`.

@@ -12,9 +12,11 @@ export · delete child profile · delete account · logout from all sessions ·
 confirmation for every destructive action.
 
 ## Storage & access
-Private records are owned by `parent_id` and reachable only by that parent via
-RLS (security-model.md). Encryption in transit (HTTPS) and managed encryption at
-rest (Supabase).
+Private records are owned by `userId` and reachable only by that parent —
+enforced per-function in `convex/` (every query/mutation derives the caller
+from `getAuthUserId(ctx)` and scopes to it; see `security-model.md`), not by
+database-level row policies. Encryption in transit (HTTPS) and Convex-managed
+encryption at rest.
 
 ## Offline data
 Only **public educational content** is cached by the service worker. Private

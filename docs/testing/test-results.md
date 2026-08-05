@@ -1,75 +1,75 @@
 # Test Results
 
-**Run date:** 2026-07-24 · **Command:** `npm run test` (Vitest 2.1.9)
+> **This is a point-in-time snapshot, not a live source of truth.** The exact
+> counts below will drift as the suite grows — re-run `npm run test` (or check
+> CI) for the current numbers. This file is worth keeping for the *shape* of
+> what's covered and the sandbox limitations noted below, not the specific
+> counts.
+
+**Last regenerated:** 2026-08-05 · **Command:** `npx vitest run` (Vitest ^3.2.7 as pinned in `package.json`)
 
 ## Summary
+
 | Check | Result |
 |-------|--------|
 | TypeScript typecheck (`tsc -b --noEmit`) | ✅ PASS (0 errors) |
-| Unit + component tests | ✅ **90 / 90 passing** |
-| **E2E tests (Playwright, real Chromium)** | ✅ **4 / 4 passing** |
+| Unit + component tests | ✅ **1,072 / 1,072 passing**, 107 test files |
 | Production build (`vite build`) | ✅ PASS |
 | PWA service worker generated | ✅ precache public content only |
-| **Myanmar PDF generation** | ✅ **verified** — sample A4 PDF renders Myanmar correctly |
-| Dependency audit | ⚠️ 8 (dev-toolchain only) — see limitations |
+| Myanmar PDF generation | ✅ verified — sample A4 PDF renders Myanmar correctly (see below) |
+| Dependency audit (`npm audit --omit=dev`) | ⚠️ 1 **high**-severity advisory in `react-router` (GHSA-qwww-vcr4-c8h2) — see the 2026-08-05 production audit; not dev-toolchain-only |
 
 ## Backend (Convex) — verified
-- Convex deploy of schema + auth + functions to `uncommon-orca-603` **succeeded**.
-- Deployment reachable + functions execute: a Node `ConvexHttpClient` query to
-  `parent:me` returned `null` (unauthenticated) as expected.
-- Frontend builds with the Convex client + auth gate bundled.
+
+- Production deployment: `graceful-possum-566` (see `deployment/convex-setup.md`).
+- Every Convex query/mutation is statically checked to derive the caller from
+  an authenticated helper (`src/domain/__tests__/convexAuthGuard.test.ts`) —
+  this is the current stand-in for a live two-account integration test (see
+  the sandbox note below for why the live version can't run here).
 
 ## E2E (Playwright, `npm run test:e2e`)
-- `boot.spec.ts` — app boots and shows the sign-in gate (runs anywhere).
-- `parent-flow.spec.ts` / `safety.spec.ts` — full sign-up → consent → add child →
-  **persist across reload**, and **skill-loss → urgent safety banner**. Gated
-  behind `E2E_LIVE=1` because they need a real WebSocket connection to Convex.
 
-**Sandbox note:** the build sandbox blocks browser WebSocket (WSS) egress to
-`*.convex.cloud` (verified: Node HTTPS works, browser WSS times out), so the
-live-backend E2E cannot execute here. It runs in a normal browser/CI. This is an
-environment limitation, not an app defect — the deployment itself is confirmed
-reachable and the app boots against it.
+- `boot.spec.ts` — app boots and shows the sign-in gate (runs anywhere).
+- Full authenticated flows (sign-up → consent → add child → milestone → safety
+  banner, etc.) need `E2E_LIVE=1` and a real WebSocket connection to Convex.
+
+**Sandbox note:** this build/test sandbox blocks browser WebSocket (WSS)
+egress to `*.convex.cloud` (Node HTTPS works; browser WSS times out), so
+live-backend E2E cannot execute here. It runs in a normal browser/CI. This is
+an environment limitation, not an app defect.
 
 ## Myanmar PDF verification
-`npm run report:pdf` generates a real A4 PDF via Chromium (HarfBuzz shaping) with an
-embedded Noto Sans Myanmar font. The generated `sample-report-mm.pdf` was rendered
-to an image and visually confirmed: correct Myanmar glyph shaping, stacking and
-reordering, no tofu boxes, no clipped text, single-page A4, with the Myanmar
-non-diagnostic disclaimer present. This satisfies the spec rule "do not claim PDF
-export works unless tested with an actual generated PDF."
 
-## Test files (14 unit + 2 E2E)
-```
-✓ src/domain/__tests__/age.test.ts          (15)
-✓ src/domain/__tests__/resultEngine.test.ts  (9)
-✓ src/domain/__tests__/recommend.test.ts     (6)
-✓ src/domain/__tests__/report.test.ts        (5)
-✓ src/domain/__tests__/sleep.test.ts         (7)
-✓ src/domain/__tests__/safety.test.ts        (5)
-✓ src/domain/__tests__/units.test.ts         (4)
-✓ src/domain/__tests__/childStore.test.ts    (9)
-✓ src/domain/__tests__/ageLabel.test.ts      (4)
-✓ src/domain/__tests__/manifest.test.ts      (5)
-✓ src/domain/__tests__/workflow.test.ts      (6)
-✓ src/i18n/i18n.test.ts                       (5)
-✓ src/data/seed/content.test.ts              (3)
-✓ src/components/__tests__/MilestoneDemo.test.tsx (3)
-```
+`npm run report:pdf` generates a real A4 PDF via Chromium (HarfBuzz shaping)
+with an embedded Noto Sans Myanmar font, as a local/dev-time script (it is
+not invoked by the running app — the in-app Report screen's browser
+print-to-PDF is the production path; see `content/localization-guide.md`).
+The generated `sample-report-mm.pdf` was rendered to an image and visually
+confirmed: correct Myanmar glyph shaping, stacking and reordering, no tofu
+boxes, no clipped text, single-page A4, with the non-diagnostic disclaimer
+present.
 
 ## What is verified
-The safety-critical core is proven by real, passing tests: age & corrected-age
-math, the rule-based Green/Yellow/Orange/Red engine, the deterministic urgent-
-safety engine (including skill-loss → RED and "no fabricated phone number"),
-sleep-across-midnight, validated unit conversion, translation completeness, and
-the clinical-review content guard.
 
-## Not yet run (requires live backend / later phases)
-Integration (Supabase auth + RLS cross-account denial), full E2E (Playwright),
-PDF generation, visual regression, and offline runtime tests. See test-plan.md.
+The safety-critical core is proven by real, passing tests: age & corrected-age
+math, the rule-based Green/Yellow/Orange/Red engine, the deterministic
+urgent-safety engine (including skill-loss → RED and "no fabricated phone
+number"), sleep-across-midnight, validated unit conversion, translation
+completeness, per-function auth-guard coverage across every Convex module,
+and account/child deletion completeness (every linked table swept, storage
+blobs deleted alongside their row).
+
+## Not yet run (requires a live backend + real browser)
+
+Authenticated two-account cross-account-denial E2E, full Playwright suite
+against production, visual regression, and offline runtime tests. See
+`test-plan.md`.
 
 ## Known audit note
-Remaining `npm audit` findings are in the **dev toolchain** (vite/vitest/esbuild)
-and do not ship in the production bundle. Resolve via a scheduled toolchain
-upgrade (vite 7 / vitest 3), tracked as a follow-up. `react-router-dom` was
-already updated to a patched 6.30.x.
+
+`npm audit --omit=dev` currently reports one high-severity advisory in
+`react-router` (not just the dev toolchain, as an earlier version of this doc
+claimed) — see the 2026-08-05 production audit for the fix. Separately, `npm
+outdated` shows the build toolchain (vite, vitest, typescript, eslint,
+esbuild) several majors behind current; scheduled incremental upgrades are
+tracked as a follow-up.
