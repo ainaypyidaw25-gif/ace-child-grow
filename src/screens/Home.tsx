@@ -44,6 +44,8 @@ export function Home() {
   const tools = [
     { to: '/growth', label: t('growth.title'), note: locale === 'mm' ? 'အလေးချိန်နှင့် အရပ်' : 'Height and weight', symbol: '↗', tone: 'bg-mint-soft text-sky-deep' },
     { to: '/sleep', label: t('sleep.title'), note: locale === 'mm' ? 'အိပ်ချိန် မှတ်တမ်း' : 'Sleep tracking', symbol: '◒', tone: 'bg-lavender/30 text-ink' },
+    { to: '/health', label: locale === 'mm' ? 'ကျန်းမာရေးမှတ်တမ်း' : 'Health records', note: locale === 'mm' ? 'ကာကွယ်ဆေးနှင့် ဆေးဝါး' : 'Vaccinations and medications', symbol: '✚', tone: 'bg-mint-soft text-sky-deep' },
+    { to: '/appointments', label: locale === 'mm' ? 'ချိန်းဆိုမှုများ' : 'Appointments', note: locale === 'mm' ? 'ဆရာဝန်ချိန်းဆိုမှု' : 'Doctor visit scheduling', symbol: '⌁', tone: 'bg-pastel-yellow/40 text-ink' },
     { to: '/report', label: t('report.title'), note: locale === 'mm' ? 'တစ်လစာ အနှစ်ချုပ်' : 'Monthly summary', symbol: '▤', tone: 'bg-pastel-yellow/40 text-ink' },
     { to: '/directory', label: locale === 'mm' ? 'ဝန်ဆောင်မှုများ' : 'Support services', note: locale === 'mm' ? 'ကျောင်းနှင့် ပညာရှင်များ' : 'Schools and specialists', symbol: '⌖', tone: 'bg-pink/40 text-ink' },
     { to: '/weekly-plan', label: locale === 'mm' ? 'တစ်ပတ်စာအစီအစဉ်' : 'Weekly plan', note: locale === 'mm' ? 'ရက်အလိုက် ကစားစရာများ' : 'Day-by-day activities', symbol: '▦', tone: 'bg-lavender/30 text-ink' },
