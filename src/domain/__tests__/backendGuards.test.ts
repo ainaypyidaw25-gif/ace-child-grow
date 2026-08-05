@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Backend P3 hardening from the production-readiness audit:
 //   ACG-AGE-001  server-side gestational-age bound
+//   ACG-AGE-003  server-side birthDate format/future-date bound
 //   ACG-DATA-002 a soft-deleted child reads as gone
 //   ACG-SEC-004  payment-proof upload is validated, not trusted
 
@@ -85,6 +86,37 @@ describe('ACG-AGE-001 — gestational age is bounded server-side', () => {
     // developmentalAgeMonths falls back to chronological age, so this is valid
     // data — rejecting it would block edits to children that already have it.
     await expect(handler(addChild)(ctx({ rows: { children: [] } }), valid)).resolves.toBeDefined();
+  });
+});
+
+describe('ACG-AGE-003 — birthDate is validated server-side', () => {
+  const valid = { nickname: 'Baby', useCorrectedAge: false };
+
+  it.each(['not-a-date', '2025/01/01', '01-01-2025', ''])('rejects %s birth date on add', async (birthDate) => {
+    await expect(handler(addChild)(ctx({ rows: { children: [] } }), { ...valid, birthDate }))
+      .rejects.toThrow(/Birth date/);
+  });
+
+  it.each(['2025-02-30', '2025-13-01', '2025-00-15'])('rejects the impossible calendar date %s on add', async (birthDate) => {
+    await expect(handler(addChild)(ctx({ rows: { children: [] } }), { ...valid, birthDate }))
+      .rejects.toThrow(/Birth date/);
+  });
+
+  it('rejects a future birth date on add', async () => {
+    const future = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+    await expect(handler(addChild)(ctx({ rows: { children: [] } }), { ...valid, birthDate: future }))
+      .rejects.toThrow(/future/);
+  });
+
+  it('rejects a malformed birth date on update', async () => {
+    await expect(handler(updateChild)(ctx({ get: { _id: 'c1', userId: 'user-1' } }), {
+      id: 'c1', ...valid, birthDate: '2025/01/01',
+    })).rejects.toThrow(/Birth date/);
+  });
+
+  it('accepts a well-formed past birth date', async () => {
+    await expect(handler(addChild)(ctx({ rows: { children: [] } }), { ...valid, birthDate: '2024-06-15' }))
+      .resolves.toBeDefined();
   });
 });
 
