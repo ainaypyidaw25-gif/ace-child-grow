@@ -95,3 +95,40 @@ are never precached, so private child records never enter a public cache.
   direct-URL access) — this repo's sandboxed test environment cannot open a
   WebSocket to `*.convex.cloud`, so this has to run against a real browser +
   deployment.
+
+## Known `npm audit` finding (reviewed, not actionable today)
+
+`npm audit --omit=dev` reports one high-severity advisory,
+[GHSA-qwww-vcr4-c8h2](https://github.com/advisories/GHSA-qwww-vcr4-c8h2)
+("React Router: RSC Mode CSRF Bypass Allows Action Execution Before 400
+Response"), against `react-router` 7.12.0–8.2.x (this app is on
+`react-router-dom@7.18.2`).
+
+The advisory text is explicit: *"This only affects your application if you
+are using the unstable RSC APIs."* This app is a plain Vite SPA rendered
+with `<BrowserRouter>` (`src/main.tsx`) — no React Server Components, no
+`unstable_RSC` entry point anywhere in the codebase (verified by grep). The
+CSRF bypass this advisory describes is not reachable through any code path
+this app actually executes.
+
+Two "fixes" were considered and rejected:
+
+- `npm audit fix --force` installs `react-router-dom@7.11.0` — a
+  **downgrade** from the currently-installed 7.18.2. Since 7.11.0 merely
+  falls outside the advisory's version-matcher range (not because it ships
+  a real patch for anything relevant here), this would silence the audit
+  warning while giving up seven patch releases of real fixes, for a vector
+  that was never exploitable in this app to begin with.
+- The actual patched release is `react-router@8.3.0` — but React Router 8
+  retires the `react-router-dom` package entirely (npm confirms
+  `react-router-dom`'s `latest` dist-tag is still `7.18.2`; there is no 8.x
+  `react-router-dom` release), so adopting it means migrating every import
+  off `react-router-dom` onto `react-router` and re-verifying all
+  routing/auth flows against v8's breaking changes. That's a deliberate,
+  separately-tested migration, not a dependency bump — doing it as a
+  drive-by "security fix" risks shipping a real regression to close a
+  finding that isn't exploitable today.
+
+**Decision:** no dependency change. Re-evaluate if this app ever adopts
+RSC, or when a routine react-router v8 migration is scheduled with its own
+test pass.
