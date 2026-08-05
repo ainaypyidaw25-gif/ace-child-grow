@@ -28,6 +28,37 @@ function assertGestationalWeeks(weeks: number | undefined): void {
   }
 }
 
+const isoDatePattern = /^\d{4}-\d{2}-\d{2}$/;
+
+/**
+ * The same failure class as gestationalWeeks above: the Add/Edit screens
+ * already check birthDate client-side, but a malformed or future value
+ * persisted outside that check — a buggy build or a direct call — makes
+ * chronologicalAge()/developmentalAgeMonths() throw AgeInputError uncaught on
+ * every later render of the profile/milestone screens, locking the parent out
+ * of their own child's data with no way to correct it from the UI.
+ */
+function assertBirthDate(birthDate: string): void {
+  if (!isoDatePattern.test(birthDate)) {
+    throw new Error('Birth date must be in YYYY-MM-DD format');
+  }
+  const parsed = new Date(birthDate);
+  const [year, month, day] = birthDate.split('-').map(Number);
+  // Date silently rolls an out-of-range day/month over (e.g. 2025-02-30 becomes
+  // March 2nd) instead of throwing, so a round-trip check is required to catch it.
+  if (
+    Number.isNaN(parsed.getTime())
+    || parsed.getUTCFullYear() !== year
+    || parsed.getUTCMonth() + 1 !== month
+    || parsed.getUTCDate() !== day
+  ) {
+    throw new Error('Birth date is not a valid calendar date');
+  }
+  if (parsed.getTime() > Date.now()) {
+    throw new Error('Birth date cannot be in the future');
+  }
+}
+
 const childValidator = v.object({
   _id: v.id('children'),
   _creationTime: v.number(),
@@ -97,6 +128,7 @@ export const add = mutation({
   returns: v.id('children'),
   handler: async (ctx, args) => {
     const userId = await requireUser(ctx);
+    assertBirthDate(args.birthDate);
     assertGestationalWeeks(args.gestationalWeeks);
     const children = await ctx.db
       .query('children')
@@ -122,6 +154,7 @@ export const update = mutation({
   returns: v.null(),
   handler: async (ctx, args) => {
     const userId = await requireUser(ctx);
+    assertBirthDate(args.birthDate);
     assertGestationalWeeks(args.gestationalWeeks);
     const existing = await ctx.db.get(args.id);
     if (!existing || existing.userId !== userId) throw new Error('Not found');
