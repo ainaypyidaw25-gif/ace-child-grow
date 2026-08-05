@@ -118,6 +118,9 @@ export function AdminReviewQueue() {
                 <Link to="/admin/billing" className="rounded-pill border border-line px-4 py-2 text-sky-deep">
                   {locale === 'mm' ? 'Subscription နှင့် ငွေပေးချေမှု' : 'Subscriptions and billing'}
                 </Link>
+                <Link to="/audit" className="rounded-pill border border-line px-4 py-2 text-sky-deep">
+                  {locale === 'mm' ? 'Audit မှတ်တမ်း' : 'Audit log'}
+                </Link>
               </>
             )}
           </div>

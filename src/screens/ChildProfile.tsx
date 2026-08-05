@@ -68,10 +68,12 @@ export function ChildProfile() {
       </section>
 
       <div className="flex gap-2">
-        <Link to="/edit-child" role="button"
-          className="min-h-touch flex-1 rounded-pill bg-sky px-5 py-2 text-center font-semibold text-white">
-          {locale === 'mm' ? 'ပြင်ရန်' : 'Edit'}
-        </Link>
+        {!activeChild.isShared && (
+          <Link to="/edit-child" role="button"
+            className="min-h-touch flex-1 rounded-pill bg-sky px-5 py-2 text-center font-semibold text-white">
+            {locale === 'mm' ? 'ပြင်ရန်' : 'Edit'}
+          </Link>
+        )}
         <Link to="/report" role="button"
           className="min-h-touch flex-1 rounded-pill border border-line px-5 py-2 text-center">
           {t('report.title')}
@@ -88,10 +90,12 @@ export function ChildProfile() {
         <span aria-hidden>→</span>
       </Link>
 
-      <button type="button" onClick={() => setConfirm(true)}
-        className="w-full rounded-pill border border-state-red px-4 py-2 text-left text-state-red-deep">
-        🗑️ {locale === 'mm' ? 'ဤကလေးကို ဖျက်ရန်' : 'Delete this child'}
-      </button>
+      {!activeChild.isShared && (
+        <button type="button" onClick={() => setConfirm(true)}
+          className="w-full rounded-pill border border-state-red px-4 py-2 text-left text-state-red-deep">
+          🗑️ {locale === 'mm' ? 'ဤကလေးကို ဖျက်ရန်' : 'Delete this child'}
+        </button>
+      )}
 
       {confirm && (
         <ConfirmDialog
