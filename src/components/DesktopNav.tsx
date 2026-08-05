@@ -58,6 +58,10 @@ export function DesktopNav() {
               <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-lavender/30">✎</span>
               {locale === 'mm' ? 'စောင့်ကြည့်မှတ်တမ်း' : 'Observation journal'}
             </Link>
+            <Link to="/milestone-gallery" className="flex min-h-touch items-center gap-3 rounded-2xl px-3 py-2 text-sm font-medium text-ink-soft hover:bg-white">
+              <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-pastel-yellow/50">🏅</span>
+              {locale === 'mm' ? 'အောင်မြင်မှု အမှတ်တရများ' : 'Milestone keepsakes'}
+            </Link>
           </div>
         </nav>
 
