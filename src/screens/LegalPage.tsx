@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useLocale } from '../app/LocaleContext';
 import type { Locale } from '../domain/types';
 
-type LegalPageProps = { kind: 'privacy' | 'account-deletion' };
+type LegalPageProps = { kind: 'privacy' | 'account-deletion' | 'terms' };
 
 const supportEmail = 'admin-ace@acegroup.com.mm';
 
@@ -36,6 +36,75 @@ export function LegalPage({ kind }: LegalPageProps) {
             <p>If you can&rsquo;t sign in, email <a href={`mailto:${supportEmail}?subject=ACE%20Child%20Grow%20account%20deletion`} className="font-semibold text-sky-deep underline">{supportEmail}</a> from the address on your account to request deletion. We may contact you to confirm you&rsquo;re the account owner before proceeding.</p>
             <p className="text-sm text-ink-soft">A small number of records that must be kept for legal, security or audit reasons — such as review and billing records — may be retained in a de-identified form for a defined retention period.</p>
             <Link to="/" className="inline-flex rounded-pill bg-sky-deep px-5 py-3 font-semibold text-white">Sign in</Link>
+          </>
+        )}
+      </PublicLegalShell>
+    );
+  }
+
+  if (kind === 'terms') {
+    return (
+      <PublicLegalShell
+        title={locale === 'mm' ? 'ဝန်ဆောင်မှုစည်းမျဉ်းများ' : 'Terms of Service'}
+        locale={locale}
+        setLocale={setLocale}
+        draft
+      >
+        {locale === 'mm' ? (
+          <>
+            <p className="text-sm text-ink-soft">မူကြမ်းရေးသားသည့်နေ့ — ၅ ဩဂုတ် ၂၀၂၆</p>
+            <LegalSection title="ဝန်ဆောင်မှု အကြောင်း">
+              ACE Child Grow ကို လက်ခံသုံးစွဲခြင်းဖြင့် ဤစည်းမျဉ်းများကို သဘောတူပါသည်။ App ကို မိဘနှင့် စောင့်ရှောက်သူများ အသုံးပြုရန် ရည်ရွယ်ပြီး အထွေထွေဖွံ့ဖြိုးရေးလမ်းညွှန်ချက်ဖြစ်သည်၊ ဆေးဘက်ဆိုင်ရာ ရောဂါစစ်ဆေးမှု သို့မဟုတ် ကုသမှု အစားထိုးအဖြစ် မဟုတ်ပါ။
+            </LegalSection>
+            <LegalSection title="အစီအစဉ်များနှင့် စျေးနှုန်း">
+              Free အစီအစဉ်သည် အမြဲတမ်း အခမဲ့ဖြစ်ပါသည်။ Premium နှင့် Family အစီအစဉ်များကို လစဉ် (သို့) နှစ်စဉ် MMK ဖြင့် ကြေညာထားသည့်နှုန်းအတိုင်း ကောက်ခံပါသည်။ Premium ကို ကတ်မလိုဘဲ ၇ ရက် အခမဲ့ စမ်းသုံးနိုင်ပြီး စမ်းသုံးကာလကုန်ဆုံးလျှင် ကတ်အလိုအလျောက် ကောက်ခံခြင်း မရှိဘဲ Free သို့ ပြန်ရောက်သွားပါမည်။
+            </LegalSection>
+            <LegalSection title="ငွေပေးချေမှု">
+              ငွေပေးချေမှုကို Myan Myan Pay (MMQR) ဖြင့် ချက်ချင်း သို့မဟုတ် ငွေလွှဲအထောက်အထား upload တင်ခြင်းဖြင့် လုပ်ဆောင်နိုင်ပါသည်။ ဝန်ထမ်းက အထောက်အထားကို စစ်ဆေးပြီးမှ အစီအစဉ်ကို ဖွင့်ပေးပါမည်။ ငွေလက်ခံအကောင့်နှင့် API secret များကို browser သို့ မပို့ပါ။
+            </LegalSection>
+            <LegalSection title="သက်တမ်းတိုးခြင်းနှင့် ပယ်ဖျက်ခြင်း">
+              အစီအစဉ်များသည် ရွေးချယ်ထားသော ကာလ (တစ်လ သို့ တစ်နှစ်) ပြီးဆုံးသည်နှင့် ပယ်ဖျက်မထားပါက ဆက်လက်တိုးမြှင့်ပါသည်။ မည်သည့်အချိန်တွင်မဆို ပယ်ဖျက်နိုင်ပြီး ပယ်ဖျက်ပါက လက်ရှိပေးချေထားသည့် ကာလကုန်ဆုံးသည်အထိ ဝန်ဆောင်မှုအားလုံးကို ဆက်လက်အသုံးပြုနိုင်ပါသည်။ ကျန်ကာလအတွက် ပိုင်းခြား ငွေပြန်အမ်းမည် မဟုတ်ပါ။
+            </LegalSection>
+            <LegalSection title="ငွေပြန်အမ်းခြင်း">
+              ငွေပေးချေမှုအားလုံးကို ကိုယ်တိုင်စစ်ဆေးသည့်စနစ်ဖြင့် လုပ်ဆောင်ထားသောကြောင့် အလိုအလျောက် ငွေပြန်အမ်းစနစ် မရှိသေးပါ။ မှားယွင်းပေးချေမိခြင်း၊ နှစ်ကြိမ်ထပ်ပေးချေမိခြင်း သို့မဟုတ် အခြားပြဿနာများအတွက် ပေးချေပြီးချိန်မှ ၇ ရက်အတွင်း <a href={`mailto:${supportEmail}?subject=ACE%20Child%20Grow%20refund%20request`} className="font-semibold text-sky-deep underline">{supportEmail}</a> သို့ ဆက်သွယ်ပါက တစ်ခုချင်းစီ သုံးသပ်ပေးပါမည်။
+            </LegalSection>
+            <LegalSection title="အကြောင်းအရာနှင့် တာဝန်ကန့်သတ်ချက်">
+              App ၏ လမ်းညွှန်ချက်၊ လှုပ်ရှားမှုနှင့် အစီရင်ခံစာများသည် ယေဘုယျ ဖွံ့ဖြိုးရေးအထောက်အကူဖြစ်ပြီး ကလေးတစ်ဦးချင်းစီအတွက် ဆရာဝန် သို့မဟုတ် အထူးကုပညာရှင်၏ အကြံဉာဏ်ကို အစားထိုးသည် မဟုတ်ပါ။ ကျန်းမာရေးဆိုင်ရာ စိုးရိမ်စရာများအတွက် အမြဲ ပညာရှင်နှင့် တိုင်ပင်ပါ။
+            </LegalSection>
+            <LegalSection title="စည်းမျဉ်းပြောင်းလဲခြင်း">
+              ဤစည်းမျဉ်းများကို အချိန်ကာလအလိုက် ပြင်ဆင်နိုင်ပါသည်။ သိသာထင်ရှားသော ပြောင်းလဲမှုများကို App အတွင်းမှ အသိပေးပါမည်။
+            </LegalSection>
+            <LegalSection title="ဆက်သွယ်ရန်">
+              ဤစည်းမျဉ်းများနှင့်ပတ်သက်၍ မေးခွန်းများအတွက် <a href={`mailto:${supportEmail}`} className="font-semibold text-sky-deep underline">{supportEmail}</a> သို့ ဆက်သွယ်နိုင်ပါသည်။
+            </LegalSection>
+          </>
+        ) : (
+          <>
+            <p className="text-sm text-ink-soft">Drafted — 5 August 2026</p>
+            <LegalSection title="About this service">
+              By using ACE Child Grow you agree to these terms. The app is intended for parents and caregivers, and provides general developmental guidance — it is not a medical diagnosis or a substitute for treatment.
+            </LegalSection>
+            <LegalSection title="Plans and pricing">
+              The Free plan is always free. Premium and Family plans are billed monthly or yearly in MMK at the published rate. Premium can be trialed free for 7 days with no card required; when the trial ends you return to Free automatically — there is no automatic charge.
+            </LegalSection>
+            <LegalSection title="Payment">
+              Payment is handled either instantly via Myan Myan Pay (MMQR) or by uploading proof of a bank/wallet transfer, which staff review before activating your plan. Merchant credentials and API secrets never reach this browser.
+            </LegalSection>
+            <LegalSection title="Renewal and cancellation">
+              Plans renew automatically for the billing period you chose (monthly or yearly) unless canceled. You may cancel at any time; your plan stays active until the end of the period you already paid for. We do not prorate or partially refund the remaining period.
+            </LegalSection>
+            <LegalSection title="Refunds">
+              Because payments go through manual review rather than an automated billing processor, there is no self-service refund yet. If you were charged in error, charged twice, or hit another payment problem, contact <a href={`mailto:${supportEmail}?subject=ACE%20Child%20Grow%20refund%20request`} className="font-semibold text-sky-deep underline">{supportEmail}</a> within 7 days of payment and we will review it individually.
+            </LegalSection>
+            <LegalSection title="Content and liability">
+              The app&rsquo;s guidance, activities and reports are general developmental support and do not replace the advice of a doctor or specialist for your specific child. Always consult a qualified professional for health concerns.
+            </LegalSection>
+            <LegalSection title="Changes to these terms">
+              We may update these terms from time to time. We&rsquo;ll notify you in the app of significant changes.
+            </LegalSection>
+            <LegalSection title="Contact us">
+              For questions about these terms, contact <a href={`mailto:${supportEmail}`} className="font-semibold text-sky-deep underline">{supportEmail}</a>.
+            </LegalSection>
           </>
         )}
       </PublicLegalShell>
@@ -97,11 +166,13 @@ function PublicLegalShell({
   title,
   locale,
   setLocale,
+  draft = false,
   children,
 }: {
   title: string;
   locale: Locale;
   setLocale: (l: Locale) => void;
+  draft?: boolean;
   children: React.ReactNode;
 }) {
   return (
@@ -118,6 +189,13 @@ function PublicLegalShell({
           </button>
         </div>
         <h1 className="mt-4 text-2xl font-bold text-sky-deep">{title}</h1>
+        {draft && (
+          <p className="mt-3 rounded-2xl bg-pastel-yellow/60 px-4 py-3 text-sm font-semibold text-ink" role="note">
+            {locale === 'mm'
+              ? '⚠️ မူကြမ်းသာဖြစ်သည်။ Owner ၏ ဥပဒေရေးရာ သုံးသပ်ချက်မရမချင်း စာချုပ်အဖြစ် အတည်မဖြစ်သေးပါ။'
+              : '⚠️ This is a draft. It is not legally binding until the owner completes legal review and publishes it.'}
+          </p>
+        )}
         <div className="mt-7 space-y-6 leading-7">{children}</div>
       </article>
     </main>
