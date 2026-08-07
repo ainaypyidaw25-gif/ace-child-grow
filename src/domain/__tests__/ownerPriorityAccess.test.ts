@@ -79,7 +79,10 @@ describe('queue access policy', () => {
  */
 type StubProfile = { staffRole?: string; isStaff?: boolean; displayName?: string } | null;
 
-function makeCtx(profile: StubProfile, options: { content?: Record<string, unknown> } = {}) {
+function makeCtx(profile: StubProfile, options: {
+  content?: Record<string, unknown>;
+  assignments?: Array<Record<string, unknown>>;
+} = {}) {
   const inserted: unknown[] = [];
   const patched: unknown[] = [];
   const content = options.content ?? {
@@ -99,7 +102,7 @@ function makeCtx(profile: StubProfile, options: { content?: Record<string, unkno
       order: () => api,
       unique: async () => (name === 'parentProfiles' ? profile : name === 'libraryContent' ? content : null),
       collect: async () => (name === 'libraryContent' ? [content] : []),
-      take: async () => [],
+      take: async () => (name === 'reviewAssignments' ? (options.assignments ?? []) : []),
       paginate: async () => ({ page: [], isDone: true, continueCursor: '' }),
       eq: () => api,
     };
@@ -165,6 +168,28 @@ describe('direct-handler authorization — queues', () => {
     expect(result.allowed).toBe(true);
     expect(result.accessLevel).toBe('full');
     expect(result.countsAuthoritative).toBe(true);
+  });
+
+  it('derives assigned state from an active assignment at the exact content revision', async () => {
+    const { ctx } = makeCtx({ staffRole: 'owner' }, {
+      assignments: [{ contentSlug: 'act_one', contentVersion: 1, status: 'assigned' }],
+    });
+    const result = await handler<{
+      rows: Array<{ slug: string; hasActiveAssignment: boolean; priorityStatus: string }>;
+      counts: { currentlyAssigned: number };
+    }>(queues)(ctx, {});
+    expect(result.rows[0]).toMatchObject({
+      slug: 'act_one',
+      hasActiveAssignment: true,
+      priorityStatus: 'assigned',
+    });
+    expect(result.counts.currentlyAssigned).toBe(1);
+
+    const stale = makeCtx({ staffRole: 'owner' }, {
+      assignments: [{ contentSlug: 'act_one', contentVersion: 0, status: 'assigned' }],
+    });
+    const staleResult = await handler<{ rows: Array<{ hasActiveAssignment: boolean }> }>(queues)(stale.ctx, {});
+    expect(staleResult.rows[0]?.hasActiveAssignment).toBe(false);
   });
 });
 
@@ -374,15 +399,23 @@ describe('review_manager powers and limits', () => {
     expect(adminSource).toContain("review_manager: 'Review manager'");
   });
 
-  it('appears in every stored role union, so its decisions and edits are readable', async () => {
+  it('appears in every stored role union, directly or through the shared validator', async () => {
     const fs = await import('node:fs');
     for (const file of ['convex/schema.ts', 'convex/contentReviews.ts', 'convex/contentEdits.ts', 'convex/admin.ts']) {
-      expect(fs.readFileSync(file, 'utf8'), `${file} omits review_manager`).toContain('review_manager');
+      const source = fs.readFileSync(file, 'utf8');
+      expect(
+        source.includes('review_manager') || source.includes('staffRoleValidator'),
+        `${file} omits review_manager and the shared role validator`,
+      ).toBe(true);
     }
   });
 
-  it('system_admin remains undefined as a role — no account can hold it', async () => {
+  it('keeps system_admin explicit but separate from review and publishing authority', async () => {
     const schema = (await import('node:fs')).readFileSync('convex/schema.ts', 'utf8');
-    expect(schema).not.toContain('system_admin');
+    const { hasCapability } = await import('../../../convex/lib/reviewRoles');
+    expect(schema).toContain('system_admin');
+    expect(hasCapability(['system_admin'], 'manage_system')).toBe(true);
+    expect(hasCapability(['system_admin'], 'review_clinical')).toBe(false);
+    expect(hasCapability(['system_admin'], 'publish_content')).toBe(false);
   });
 });

@@ -5,22 +5,30 @@
 // Write access (import, review transitions,
 // media) is staff-only and audited. The library carries NO per-parent private
 // data, so reads are shared catalogue — but still behind authentication.
-import { query, mutation } from './_generated/server';
+import { query, mutation, type QueryCtx } from './_generated/server';
 import { v } from 'convex/values';
 import { getAuthUserId } from '@convex-dev/auth/server';
 import {
-  hasStaffRole,
-  requireClinicalPublisher,
+  getStaffAccess,
   requireContentEditor,
   requireProfessionalPublisher,
+  requirePublisher,
   requireReviewEditor,
 } from './lib/auth';
 import { logAudit } from './audit';
 import { resolveEntitlements } from './lib/entitlements';
 import { STARTER_ANIMATION_SLUGS } from './animationPlan';
 import { diffEditableContent } from './lib/contentEditDiff';
-import { seedAuditSummary, seedMayUpdateExisting, seedMediaIsProtected } from './lib/seedPolicy';
+import {
+  seedAuditSummary,
+  seedContentNeedsUpdate,
+  seedMayUpdateExisting,
+  seedMediaIsProtected,
+  seedReviewInvalidationPatch,
+} from './lib/seedPolicy';
 import { findReviewContentMatches } from './lib/reviewSearch';
+import type { Doc, Id } from './_generated/dataModel';
+import { mayActAsReviewerType, type StaffRole } from './lib/reviewRoles';
 
 const protectedContentDataFields = new Set([
   'editorialStatus',
@@ -75,8 +83,71 @@ function mergeEditableContentData(current: unknown, proposed: unknown): Record<s
 
 // List content by type, optionally filtered by age/domain/category and a query.
 // Non-staff receive published rows only; staff receive every workflow status.
-export function isPubliclyReadableStatus(status: string): boolean {
-  return status === 'published';
+export function isPubliclyReadableContent(content: {
+  clinicalStatus: string;
+  reviewScope?: 'education' | 'clinical';
+  publicationStatus?: 'draft' | 'internal_review' | 'pilot_review' | 'ready_to_publish' | 'published' | 'archived';
+  publicationRevision?: number;
+  reviewRevision?: number;
+}): boolean {
+  return content.clinicalStatus === 'published' &&
+    content.reviewScope === 'clinical' &&
+    content.publicationStatus === 'published' &&
+    content.publicationRevision === (content.reviewRevision ?? 1);
+}
+
+const catalogueManagerRoles = new Set<StaffRole>([
+  'owner',
+  'system_admin',
+  'review_manager',
+  'content_editor',
+  'publisher',
+  'auditor',
+]);
+
+type CatalogueAccess = {
+  staff: boolean;
+  browseAll: boolean;
+  assignedVersions: Map<string, Set<number>>;
+};
+
+/**
+ * Reviewer accounts are deliberately scoped to assigned content revisions.
+ * This check is server-side so direct Convex calls cannot bypass the queue UI.
+ */
+async function catalogueAccess(ctx: QueryCtx, userId: Id<'users'>): Promise<CatalogueAccess> {
+  const access = await getStaffAccess(ctx, userId);
+  if (!access) return { staff: false, browseAll: false, assignedVersions: new Map() };
+  if (access.roles.some((role) => catalogueManagerRoles.has(role))) {
+    return { staff: true, browseAll: true, assignedVersions: new Map() };
+  }
+  const assignments = await ctx.db.query('reviewAssignments')
+    .withIndex('by_reviewer', (q) => q.eq('reviewerId', userId))
+    .order('desc')
+    .take(500);
+  const assignedVersions = new Map<string, Set<number>>();
+  for (const assignment of assignments) {
+    if (assignment.status === 'cancelled' || !mayActAsReviewerType(access.roles, assignment.reviewerType)) continue;
+    const versions = assignedVersions.get(assignment.contentSlug) ?? new Set<number>();
+    versions.add(assignment.contentVersion);
+    assignedVersions.set(assignment.contentSlug, versions);
+  }
+  return { staff: true, browseAll: false, assignedVersions };
+}
+
+function mayReadAsAssigned(access: CatalogueAccess, row: Doc<'libraryContent'>): boolean {
+  return access.assignedVersions.get(row.slug)?.has(row.reviewRevision ?? 1) ?? false;
+}
+
+/** Shared server-side gate for evidence/media endpoints that read by slug. */
+export async function canReadLibraryContent(
+  ctx: QueryCtx,
+  userId: Id<'users'>,
+  row: Doc<'libraryContent'>,
+): Promise<boolean> {
+  if (isPubliclyReadableContent(row)) return true;
+  const access = await catalogueAccess(ctx, userId);
+  return access.staff && (access.browseAll || mayReadAsAssigned(access, row));
 }
 
 export const listByType = query({
@@ -90,7 +161,7 @@ export const listByType = query({
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) return { staff: false, items: [] };
-    const staff = await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'language_reviewer', 'evidence_reviewer', 'clinical_reviewer']);
+    const access = await catalogueAccess(ctx, userId);
 
     let rows = args.ageGroupKey
       ? await ctx.db
@@ -115,14 +186,15 @@ export const listByType = query({
     if (args.ageGroupKey) rows = rows.filter((r) => r.ageGroupKey === args.ageGroupKey);
     if (args.domainKey) rows = rows.filter((r) => r.domainKey === args.domainKey);
     if (args.category) rows = rows.filter((r) => r.category === args.category);
-    if (!staff) rows = rows.filter((r) => isPubliclyReadableStatus(r.clinicalStatus));
+    if (!access.staff) rows = rows.filter(isPubliclyReadableContent);
+    else if (!access.browseAll) rows = rows.filter((row) => mayReadAsAssigned(access, row));
     if (args.q) {
       const needle = args.q.toLowerCase();
       rows = rows.filter((r) => r.searchText.includes(needle));
     }
     // Stable ordering: age order not stored here, so order by slug for determinism.
     rows.sort((a, b) => a.slug.localeCompare(b.slug));
-    return { staff, items: rows };
+    return { staff: access.staff, items: rows };
   },
 });
 
@@ -132,18 +204,19 @@ export const getBySlug = query({
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) return null;
-    const staff = await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'language_reviewer', 'evidence_reviewer', 'clinical_reviewer']);
+    const access = await catalogueAccess(ctx, userId);
     const item = await ctx.db
       .query('libraryContent')
       .withIndex('by_slug', (qq) => qq.eq('slug', args.slug))
       .unique();
     if (!item) return null;
-    if (!staff && !isPubliclyReadableStatus(item.clinicalStatus)) return { restricted: true };
+    if (!access.staff && !isPubliclyReadableContent(item)) return { restricted: true };
+    if (access.staff && !access.browseAll && !mayReadAsAssigned(access, item)) return { restricted: true };
     let mediaRows = await ctx.db
       .query('libraryMedia')
       .withIndex('by_content', (qq) => qq.eq('contentSlug', args.slug))
       .take(20);
-    if (!staff) {
+    if (!access.staff) {
       const entitlements = await resolveEntitlements(ctx, userId);
       const canViewPremium = entitlements.features.includes('premium_media');
       mediaRows = mediaRows
@@ -154,7 +227,7 @@ export const getBySlug = query({
       ...row,
       url: row.storageId ? await ctx.storage.getUrl(row.storageId) : row.url,
     })));
-    return { item, media, staff };
+    return { item, media, staff: access.staff };
   },
 });
 
@@ -340,13 +413,14 @@ export const search = query({
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) return [];
-    const staff = await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'language_reviewer', 'evidence_reviewer', 'clinical_reviewer']);
+    const access = await catalogueAccess(ctx, userId);
     const needle = args.q.trim().toLowerCase();
     if (!needle) return [];
     let rows = args.type
       ? await ctx.db.query('libraryContent').withIndex('by_type', (qq) => qq.eq('type', args.type as string)).collect()
       : await ctx.db.query('libraryContent').collect();
-    if (!staff) rows = rows.filter((r) => isPubliclyReadableStatus(r.clinicalStatus));
+    if (!access.staff) rows = rows.filter(isPubliclyReadableContent);
+    else if (!access.browseAll) rows = rows.filter((row) => mayReadAsAssigned(access, row));
     return rows
       .filter((r) => r.searchText.includes(needle))
       .slice(0, 50)
@@ -393,15 +467,54 @@ export const reviewSearch = query({
   },
 });
 
+export const listPublishable = query({
+  args: { limit: v.optional(v.number()) },
+  returns: v.array(v.object({
+    slug: v.string(), titleMm: v.string(), titleEn: v.string(), type: v.string(),
+    reviewRevision: v.number(), publicationStatus: v.string(),
+  })),
+  handler: async (ctx, args) => {
+    await requirePublisher(ctx);
+    const limit = Math.max(1, Math.min(100, Math.floor(args.limit ?? 50)));
+    const rows = await ctx.db.query('libraryContent').take(1000);
+    const result = [];
+    const required = ['english', 'native_myanmar', 'evidence', 'safety', 'clinical'] as const;
+    for (const item of rows) {
+      if (isPubliclyReadableContent(item) || item.publicationStatus === 'archived') continue;
+      const revision = item.reviewRevision ?? 1;
+      const history = await ctx.db.query('contentReviews')
+        .withIndex('by_content', (q) => q.eq('contentSlug', item.slug))
+        .order('desc').take(100);
+      const current = new Map<string, string>();
+      for (const review of history) {
+        if (review.contentVersion === revision && !current.has(review.dimension)) current.set(review.dimension, review.decision);
+      }
+      if (!required.every((dimension) => current.get(dimension) === 'approved')) continue;
+      result.push({
+        slug: item.slug,
+        titleMm: item.titleMm,
+        titleEn: item.titleEn,
+        type: item.type,
+        reviewRevision: revision,
+        publicationStatus: item.publicationStatus ?? 'draft',
+      });
+      if (result.length >= limit) break;
+    }
+    return result;
+  },
+});
+
 // Coverage/stats — powers the admin dashboard and integrity checks.
 export const stats = query({
   args: {},
   handler: async (ctx) => {
     const userId = await getAuthUserId(ctx);
     // Staff-only: coverage/status counts (incl. unpublished) are an admin view.
-    if (!userId || !(await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'language_reviewer', 'evidence_reviewer', 'clinical_reviewer']))) {
+    if (!userId) {
       return { allowed: false, total: 0, byType: {}, byStatus: {}, ages: [], domains: [] };
     }
+    const access = await catalogueAccess(ctx, userId);
+    if (!access.browseAll) return { allowed: false, total: 0, byType: {}, byStatus: {}, ages: [], domains: [] };
     const rows = await ctx.db.query('libraryContent').collect();
     const byType: Record<string, number> = {};
     const byStatus: Record<string, number> = {};
@@ -474,24 +587,17 @@ export const importSeed = mutation({
           skippedApproved += 1;
           continue;
         }
-        await ctx.db.patch(existing._id, {
-          ...content,
-          // Preserve the workflow state; review decisions remain in the
-          // append-only review history rather than on this changed revision.
-          clinicalStatus: existing.clinicalStatus,
-          // The seed may contain new wording. Preserve old decisions as audit
-          // history, but never let them authorize content they did not review.
-          reviewRevision: (existing.reviewRevision ?? 1) + 1,
-          reviewerId: undefined,
-          reviewerQualification: undefined,
-          reviewerDisplayName: undefined,
-          reviewScope: undefined,
-          reviewedAt: undefined,
-          nextReviewAt: undefined,
-          reviewNote: undefined,
-          updatedAt: now,
-        });
-        updated++;
+        if (seedContentNeedsUpdate(existing, content)) {
+          await ctx.db.patch(existing._id, {
+            ...content,
+            // Preserve old decisions as append-only history, but make them
+            // stale for changed wording by advancing the review revision.
+            clinicalStatus: existing.clinicalStatus,
+            ...seedReviewInvalidationPatch(existing),
+            updatedAt: now,
+          });
+          updated++;
+        }
       } else {
         // Import can NEVER create published content — reaching 'published' is only
         // possible through setReview (the clinical-review workflow). Clamp on insert.
@@ -545,12 +651,9 @@ export const updateDraft = mutation({
   },
   returns: v.object({ ok: v.literal(true), reviewRevision: v.number() }),
   handler: async (ctx, args) => {
-    // All reviewer roles may correct parent-facing wording directly from the
-    // review workspace. This deliberately does not grant publishing, team,
-    // billing, evidence-registry or other owner-only permissions. Every save
-    // creates a fresh review revision below, so the editor cannot reuse a
-    // previous reviewer sign-off for changed text.
-    const { userId, access } = await requireReviewEditor(ctx);
+    const userId = await requireContentEditor(ctx);
+    const access = await getStaffAccess(ctx, userId);
+    if (!access) throw new Error('Content editor access is required');
     const item = await ctx.db
       .query('libraryContent')
       .withIndex('by_slug', (q) => q.eq('slug', args.slug))
@@ -650,24 +753,25 @@ export const setReview = mutation({
     if (!['draft', 'clinical_review', 'published'].includes(args.clinicalStatus)) {
       throw new Error('Invalid status');
     }
-    const approval = args.clinicalStatus === 'published'
-      ? await requireClinicalPublisher(ctx)
+    const publisher = args.clinicalStatus === 'published'
+      ? await requirePublisher(ctx)
       : null;
-    const userId = approval?.userId ?? await requireContentEditor(ctx);
+    const userId = publisher?.userId ?? await requireContentEditor(ctx);
     const item = await ctx.db
       .query('libraryContent')
       .withIndex('by_slug', (qq) => qq.eq('slug', args.slug))
       .unique();
     if (!item) throw new Error('Not found');
+    let clinicalApproval: Doc<'contentReviews'> | undefined;
+    const decisionsForPublication = args.clinicalStatus === 'published'
+      ? await ctx.db.query('contentReviews')
+        .withIndex('by_content', (q) => q.eq('contentSlug', args.slug))
+        .order('desc').take(100)
+      : [];
     if (args.clinicalStatus === 'published') {
       const revision = item.reviewRevision ?? 1;
-      const decisions = await ctx.db
-        .query('contentReviews')
-        .withIndex('by_content', (q) => q.eq('contentSlug', args.slug))
-        .order('desc')
-        .take(100);
       const approved = new Set(
-        decisions
+        decisionsForPublication
           .filter((row) => row.contentVersion === revision && row.decision === 'approved')
           .map((row) => row.dimension),
       );
@@ -676,20 +780,28 @@ export const setReview = mutation({
       if (missing.length > 0) {
         throw new Error(`Current revision is missing review approvals: ${missing.join(', ')}`);
       }
+      clinicalApproval = decisionsForPublication.find((row) =>
+        row.contentVersion === revision && row.dimension === 'clinical' && row.decision === 'approved',
+      );
+      if (!clinicalApproval?.reviewerQualification || !clinicalApproval.reviewerDisplayName) {
+        throw new Error('A named, qualified clinical approval is required');
+      }
     }
     const now = Date.now();
     await ctx.db.patch(item._id, {
       clinicalStatus: args.clinicalStatus,
       reviewerId: userId,
-      reviewerQualification: approval?.qualification ?? args.reviewerQualification?.trim(),
-      reviewerDisplayName: approval?.reviewerName,
-      reviewScope: approval?.scope,
+      reviewerQualification: clinicalApproval?.reviewerQualification ?? args.reviewerQualification?.trim(),
+      reviewerDisplayName: clinicalApproval?.reviewerDisplayName,
+      reviewScope: clinicalApproval ? 'clinical' : undefined,
+      publicationStatus: args.clinicalStatus === 'published' ? 'published' : 'internal_review',
+      publicationRevision: args.clinicalStatus === 'published' ? (item.reviewRevision ?? 1) : undefined,
       reviewedAt: now,
       nextReviewAt: args.nextReviewAt,
       reviewNote: args.reviewNote,
       updatedAt: now,
     });
     await logAudit(ctx, userId, `library.${args.clinicalStatus}`, 'libraryContent', item._id, item.titleEn);
-    return { ok: true as const, reviewScope: approval ? 'clinical' as const : null };
+    return { ok: true as const, reviewScope: clinicalApproval ? 'clinical' as const : null };
   },
 });

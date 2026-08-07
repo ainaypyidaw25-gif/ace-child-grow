@@ -32,8 +32,8 @@ export type PriorityStatus =
   // been named, invited or committed. Kept distinct from 'assigned' precisely
   // so a dashboard can never imply staffing that does not exist.
   | 'review_requested'
-  // Reserved for a genuine active reviewAssignment record. Nothing in this
-  // build sets it, because no assignment table is deployed yet.
+  // Reserved for a genuine active reviewAssignment record. It must never be
+  // hand-set from the governance editor.
   | 'assigned'
   | 'in_review'
   | 'corrected'

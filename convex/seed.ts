@@ -10,8 +10,10 @@ import seedData from './seedData.json';
 import {
   publishedErrataSlugs,
   seedAuditSummary,
+  seedContentNeedsUpdate,
   seedMayUpdateExisting,
   seedMediaIsProtected,
+  seedReviewInvalidationPatch,
 } from './lib/seedPolicy';
 
 const GRANTABLE_ROLES = [
@@ -261,15 +263,15 @@ export const run = internalMutation({
           skippedApproved += 1;
           continue;
         }
-        await ctx.db.patch(existing._id, {
-          ...content,
-          clinicalStatus: existing.clinicalStatus,
-          reviewerId: existing.reviewerId,
-          reviewedAt: existing.reviewedAt,
-          nextReviewAt: existing.nextReviewAt,
-          updatedAt: now,
-        });
-        updated++;
+        if (seedContentNeedsUpdate(existing, content)) {
+          await ctx.db.patch(existing._id, {
+            ...content,
+            clinicalStatus: existing.clinicalStatus,
+            ...seedReviewInvalidationPatch(existing),
+            updatedAt: now,
+          });
+          updated++;
+        }
       } else {
         // Seeding can never create published content (clinical-review gate).
         const clinicalStatus = content.clinicalStatus === 'published' ? 'clinical_review' : content.clinicalStatus;

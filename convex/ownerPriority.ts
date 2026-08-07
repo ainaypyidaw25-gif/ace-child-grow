@@ -46,6 +46,7 @@ import {
 // dangerous possible wrong answer for a safety queue) OR throwing a
 // too-many-documents error that would crash the workspace outright.
 const QUEUE_HISTORY_BUDGET = 12000;
+const QUEUE_ASSIGNMENT_BUDGET = 5000;
 
 const priorityStatusValidator = v.union(
   v.literal('unreviewed'),
@@ -139,17 +140,14 @@ async function loadAllEdits(ctx: QueryCtx, budget: number): Promise<{ rows: Edit
   return { rows: page.slice(0, budget) as unknown as EditRow[], complete: page.length <= budget };
 }
 
-/**
- * Whether a genuine, active reviewer assignment exists for this slug at this
- * revision. No assignment table is deployed on this branch, so this is always
- * false — which is the correct answer, and far better than treating a review
- * *request* as staffing. When the assignments table lands (PR #21–#25), this is
- * the single place to implement it.
- */
-function hasActiveAssignmentFor(slug: string, reviewRevision: number): boolean {
-  void slug;
-  void reviewRevision;
-  return false;
+type AssignmentRow = {
+  contentSlug: string;
+  contentVersion: number;
+  status: string;
+};
+
+function assignmentKey(slug: string, reviewRevision: number): string {
+  return `${slug}\u0000${reviewRevision}`;
 }
 
 /**
@@ -242,7 +240,17 @@ async function buildQueueResult(ctx: QueryCtx, level: string, role: string | und
     // dataComplete:false (below) — never a too-many-documents throw.
     const reviewsResult = await loadAllReviews(ctx, QUEUE_HISTORY_BUDGET);
     const editsResult = await loadAllEdits(ctx, Math.max(0, QUEUE_HISTORY_BUDGET - reviewsResult.rows.length));
-    const dataComplete = reviewsResult.complete && editsResult.complete;
+    const assignmentPage = await ctx.db.query('reviewAssignments').order('desc').take(QUEUE_ASSIGNMENT_BUDGET + 1);
+    const assignmentsComplete = assignmentPage.length <= QUEUE_ASSIGNMENT_BUDGET;
+    const activeAssignmentStatuses = new Map<string, Set<string>>();
+    for (const assignment of assignmentPage.slice(0, QUEUE_ASSIGNMENT_BUDGET) as AssignmentRow[]) {
+      if (['approved', 'cancelled'].includes(assignment.status)) continue;
+      const key = assignmentKey(assignment.contentSlug, assignment.contentVersion);
+      const statuses = activeAssignmentStatuses.get(key) ?? new Set<string>();
+      statuses.add(assignment.status);
+      activeAssignmentStatuses.set(key, statuses);
+    }
+    const dataComplete = reviewsResult.complete && editsResult.complete && assignmentsComplete;
     const links = await ctx.db.query('evidenceLinks').collect();
     const linkedSlugs = new Set(links.map((link) => link.slug));
 
@@ -316,10 +324,16 @@ async function buildQueueResult(ctx: QueryCtx, level: string, role: string | und
       const outstanding = confirmed.filter((dimension) => !approvedSet.has(dimension));
 
       const storedStatus = coercePriorityStatus(item.priorityStatus, triageRequired ? 'manual_triage_required' : 'unreviewed');
-      const hasActiveAssignment = hasActiveAssignmentFor(item.slug, revision);
+      const assignmentStatuses = activeAssignmentStatuses.get(assignmentKey(item.slug, revision));
+      const hasActiveAssignment = Boolean(assignmentStatuses?.size);
       // Never display 'assigned' without a real assignment record behind it.
-      const priorityStatus: PriorityStatus =
-        storedStatus === 'assigned' && !hasActiveAssignment ? 'review_requested' : storedStatus;
+      let priorityStatus: PriorityStatus = storedStatus === 'assigned' && !hasActiveAssignment
+        ? 'review_requested'
+        : storedStatus;
+      if (assignmentStatuses?.has('in_review')) priorityStatus = 'in_review';
+      else if (assignmentStatuses?.has('changes_requested') || assignmentStatuses?.has('blocked')) priorityStatus = 'correction_needed';
+      else if (assignmentStatuses?.has('revised') || assignmentStatuses?.has('re_review_required')) priorityStatus = 'ready_for_recheck';
+      else if (hasActiveAssignment) priorityStatus = 'assigned';
 
       const warnings: string[] = [];
       if (workflowBlocker) warnings.push(workflowBlocker);
@@ -589,13 +603,15 @@ export const setGovernance = mutation({
         }
       }
       if (args.priorityStatus === 'assigned') {
-        // 'assigned' must describe a real assignment record. Nothing may set it
-        // by hand while no assignment table is deployed.
+        // 'assigned' must describe a real assignment record and may not be set
+        // by hand from governance. Create the assignment in the reviewer
+        // workspace; the queue derives assignment presence and status from
+        // that record.
         return {
           ok: false as const,
           code: 'assignment_not_supported',
-          message: 'Assigned status requires an actual reviewer assignment, which this deployment does not yet support. Use “request review” instead.',
-          messageMm: 'တာဝန်ပေးထားသည် ဟူသောအခြေအနေအတွက် အမှန်တကယ် တာဝန်ပေးမှတ်တမ်း လိုအပ်သည်။ ယခုအစား “စစ်ဆေးမှု တောင်းဆိုရန်” ကို သုံးပါ။',
+          message: 'Assigned status is derived from an actual reviewer assignment. Create or manage the assignment in the reviewer workspace.',
+          messageMm: '“တာဝန်ပေးထားသည်” အခြေအနေကို အမှန်တကယ် သုံးသပ်တာဝန်မှ အလိုအလျောက်တွက်ချက်ပါသည်။ သုံးသပ်သူ workspace တွင် တာဝန်ဖန်တီး သို့မဟုတ် စီမံပါ။',
         };
       }
       patch.priorityStatus = args.priorityStatus;

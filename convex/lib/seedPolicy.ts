@@ -10,6 +10,39 @@ export function seedMayUpdateExisting(clinicalStatus: string): boolean {
 }
 
 /**
+ * Compare only fields owned by the generated seed. Workflow state is kept on
+ * the database row and must neither make an identical import look changed nor
+ * be overwritten by the seed snapshot.
+ */
+export function seedContentNeedsUpdate(existing: object, incoming: object): boolean {
+  const current = existing as Record<string, unknown>;
+  return Object.entries(incoming).some(([key, value]) =>
+    key !== 'clinicalStatus' && JSON.stringify(current[key]) !== JSON.stringify(value),
+  );
+}
+
+/**
+ * A real wording/data change starts a new review revision. Historical review
+ * rows, assignments, comments and audit records remain untouched; only the
+ * active sign-off cached on libraryContent is cleared for the new revision.
+ */
+export function seedReviewInvalidationPatch(existing: object) {
+  const reviewRevision = (existing as { reviewRevision?: number }).reviewRevision;
+  return {
+    reviewRevision: (reviewRevision ?? 1) + 1,
+    publicationStatus: 'internal_review' as const,
+    publicationRevision: undefined,
+    reviewerId: undefined,
+    reviewerQualification: undefined,
+    reviewerDisplayName: undefined,
+    reviewScope: undefined,
+    reviewedAt: undefined,
+    nextReviewAt: undefined,
+    reviewNote: undefined,
+  };
+}
+
+/**
  * Immutable, code-reviewed correction releases for rows already published.
  *
  * This is deliberately not a general published-content overwrite mechanism:

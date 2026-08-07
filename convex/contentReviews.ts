@@ -2,12 +2,19 @@ import { v } from 'convex/values';
 import { mutation, query } from './_generated/server';
 import type { Id } from './_generated/dataModel';
 import { logAudit } from './audit';
-import { getStaffAccess, requireUser, type StaffRole } from './lib/auth';
+import { getStaffAccess, requireUser, reviewerAuditName, type StaffRole } from './lib/auth';
 import { reviewRefusal, type ReviewDimension } from './lib/reviewPolicy';
+import {
+  mayActAsReviewerType,
+  reviewerTypeMayReviewDimension,
+  staffRoleValidator as roleValidator,
+} from './lib/reviewRoles';
+import { requiredChecklistKeys } from './lib/reviewChecklists';
 
 const dimensionValidator = v.union(
   v.literal('english'),
   v.literal('native_myanmar'),
+  v.literal('development'),
   v.literal('evidence'),
   v.literal('safety'),
   v.literal('clinical'),
@@ -18,16 +25,9 @@ const decisionValidator = v.union(
   v.literal('approved'),
   v.literal('changes_requested'),
   v.literal('not_applicable'),
-);
-
-const roleValidator = v.union(
-  v.literal('owner'),
-  v.literal('content_editor'),
-  v.literal('language_reviewer'),
-  v.literal('evidence_reviewer'),
-  v.literal('clinical_reviewer'),
-  v.literal('review_manager'),
-  v.literal('support'),
+  v.literal('evidence_required'),
+  v.literal('blocked'),
+  v.literal('rejected'),
 );
 
 const reviewValidator = v.object({
@@ -59,7 +59,7 @@ export const listForContent = query({
   handler: async (ctx, args) => {
     const userId = await requireUser(ctx);
     const access = await getStaffAccess(ctx, userId);
-    if (!access || access.role === 'support') {
+    if (!access || access.roles.every((role) => role === 'support')) {
       return { allowed: false, contentVersion: null, current: [], history: [] };
     }
     const content = await ctx.db
@@ -67,6 +67,21 @@ export const listForContent = query({
       .withIndex('by_slug', (q) => q.eq('slug', args.contentSlug))
       .unique();
     if (!content) return { allowed: true, contentVersion: null, current: [], history: [] };
+    const mayBrowseAll = access.roles.some((role) =>
+      ['owner', 'system_admin', 'review_manager', 'content_editor', 'publisher', 'auditor'].includes(role),
+    );
+    if (!mayBrowseAll) {
+      const assignments = await ctx.db.query('reviewAssignments')
+        .withIndex('by_content_reviewer', (q) => q.eq('contentSlug', args.contentSlug).eq('reviewerId', userId))
+        .order('desc')
+        .take(20);
+      const assigned = assignments.some((row) =>
+        row.status !== 'cancelled' &&
+        row.contentVersion === (content.reviewRevision ?? 1) &&
+        mayActAsReviewerType(access.roles, row.reviewerType),
+      );
+      if (!assigned) return { allowed: false, contentVersion: null, current: [], history: [] };
+    }
     const history = await ctx.db
       .query('contentReviews')
       .withIndex('by_content', (q) => q.eq('contentSlug', args.contentSlug))
@@ -251,7 +266,7 @@ export const saveDecision = mutation({
   handler: async (ctx, args) => {
     const userId = await requireUser(ctx);
     const access = await getStaffAccess(ctx, userId);
-
+    const note = args.note?.trim();
     const content = await ctx.db
       .query('libraryContent')
       .withIndex('by_slug', (q) => q.eq('slug', args.contentSlug))
@@ -262,6 +277,7 @@ export const saveDecision = mutation({
     // redacts thrown messages) and would roll back the audit row recording it.
     const refusal = reviewRefusal({
       role: access?.role,
+      roles: access?.roles,
       dimension: args.dimension,
       decision: args.decision,
       displayName: access?.displayName,
@@ -283,11 +299,10 @@ export const saveDecision = mutation({
     }
 
     // reviewRefusal has already established these.
-    const displayName = (access?.displayName ?? '').trim();
-    const note = args.note?.trim();
     if (!content || !access) {
       return { ok: false as const, code: 'content_not_found', message: 'This content item no longer exists.' };
     }
+    const displayName = await reviewerAuditName(ctx, userId, access);
     const reviewRevision = content.reviewRevision ?? 1;
     if (args.expectedReviewRevision !== reviewRevision) {
       await logAudit(
@@ -328,13 +343,58 @@ export const saveDecision = mutation({
       return { ok: true as const, contentVersion: reviewRevision, duplicate: true };
     }
 
+    const assignments = await ctx.db.query('reviewAssignments')
+      .withIndex('by_content_reviewer', (q) => q.eq('contentSlug', args.contentSlug).eq('reviewerId', userId))
+      .order('desc').take(20);
+    const assignment = assignments.find((row) =>
+      row.contentVersion === reviewRevision &&
+      !['cancelled', 'approved'].includes(row.status) &&
+      mayActAsReviewerType(access.roles, row.reviewerType) &&
+      reviewerTypeMayReviewDimension(row.reviewerType, args.dimension),
+    );
+    if (!assignment) {
+      await logAudit(
+        ctx,
+        userId,
+        `contentReview.${args.dimension}.${args.decision}`,
+        'libraryContent',
+        content._id,
+        `${args.contentSlug} · refused: active_assignment_required`,
+        { result: 'rejected' },
+      );
+      return {
+        ok: false as const,
+        code: 'active_assignment_required',
+        message: 'An active assignment is required to review this content revision.',
+      };
+    }
+    if (args.decision === 'approved') {
+      const checklist = await ctx.db.query('reviewChecklists')
+        .withIndex('by_assignment_dimension', (q) => q.eq('assignmentId', assignment._id).eq('dimension', args.dimension))
+        .unique();
+      const checked = new Set(checklist?.responses.filter((response) => response.checked).map((response) => response.key) ?? []);
+      const missing = requiredChecklistKeys(args.dimension).filter((key) => !checked.has(key));
+      if (missing.length > 0) {
+        await logAudit(
+          ctx,
+          userId,
+          `contentReview.${args.dimension}.${args.decision}`,
+          'libraryContent',
+          content._id,
+          `${args.contentSlug} · refused: checklist_incomplete`,
+          { result: 'rejected' },
+        );
+        return {
+          ok: false as const,
+          code: 'checklist_incomplete',
+          message: 'Complete every required checklist item before approval.',
+        };
+      }
+    }
     const now = Date.now();
     await ctx.db.insert('contentReviews', {
       contentSlug: args.contentSlug,
       contentVersion: reviewRevision,
-      // Explicit, unambiguous binding: decisions apply to exactly this
-      // reviewRevision (contentVersion above carries the same value for
-      // backwards compatibility with existing rows and readers).
       reviewRevision,
       dimension: args.dimension,
       decision: args.decision,
@@ -347,15 +407,38 @@ export const saveDecision = mutation({
       createdAt: now,
       updatedAt: now,
     });
+    const assignmentStatus = args.decision === 'approved'
+      ? 'approved'
+      : args.decision === 'changes_requested'
+        ? 'changes_requested'
+        : args.decision === 'blocked' || args.decision === 'evidence_required'
+          ? 'blocked'
+          : 'in_review';
+    await ctx.db.patch(assignment._id, {
+      status: assignmentStatus,
+      completionDate: assignmentStatus === 'approved' ? now : assignment.completionDate,
+      updatedAt: now,
+    });
+    await ctx.db.insert('reviewEvents', {
+      assignmentId: assignment._id,
+      contentSlug: args.contentSlug,
+      contentVersion: reviewRevision,
+      reviewRound: assignment.reviewRound,
+      actorId: userId,
+      action: `review.${args.dimension}.${args.decision}`,
+      after: args.decision,
+      reason: note,
+      createdAt: now,
+    });
     await logAudit(
       ctx,
       userId,
       `contentReview.${args.dimension}.${args.decision}`,
       'libraryContent',
       content._id,
-      `${args.contentSlug} · review revision ${content.reviewRevision ?? 1}`,
+      `${args.contentSlug} · review revision ${reviewRevision}`,
       { result: 'ok' },
     );
-    return { ok: true as const, contentVersion: content.reviewRevision ?? 1 };
+    return { ok: true as const, contentVersion: reviewRevision };
   },
 });

@@ -117,8 +117,8 @@ describe('role permissions on review areas', () => {
 
 describe('language/development reviewers cannot publish', () => {
   const librarySource = readFileSync('convex/library.ts', 'utf8');
-  it('publication still requires the clinical publisher gate and full approvals', () => {
-    expect(librarySource).toContain('requireClinicalPublisher');
+  it('publication requires the publisher role and full clinical approvals', () => {
+    expect(librarySource).toContain('requirePublisher');
     expect(librarySource).toContain('missing review approvals');
   });
 });
@@ -223,8 +223,10 @@ describe('schema additions are backwards compatible', () => {
     expect(reviews.fields.reviewRevision?.isOptional).toBe('optional');
   });
 
-  it('does not add publicationStatus — publication state is out of scope here', () => {
-    const schemaSource = code('convex/schema.ts');
-    expect(schemaSource).not.toContain('publicationStatus');
+  it('keeps publicationStatus optional for existing library rows', async () => {
+    const schema = (await import('../../../convex/schema')).default;
+    const library = schema.tables.libraryContent.validator as unknown as { fields: Record<string, { isOptional?: string }> };
+    expect(library.fields.publicationStatus).toBeDefined();
+    expect(library.fields.publicationStatus.isOptional).toBe('optional');
   });
 });

@@ -18,12 +18,25 @@ import { transition as transitionContent } from '../../../convex/content';
 import { listSessions, recordSession } from '../../../convex/milestones';
 import { complete as completeActivity, list as listActivities } from '../../../convex/activities';
 import { claimInvite, createInvite, setOwnDisplayName } from '../../../convex/admin';
+import { requiredChecklistKeys } from '../../../convex/lib/reviewChecklists';
+import {
+  addComment as addReviewComment,
+  decideProposal,
+  list as listReviewCollaboration,
+  saveProposal,
+} from '../../../convex/reviewCollaboration';
+import { completion as reviewerCompletion } from '../../../convex/reviewReports';
+import {
+  listManaged as listManagedAssignments,
+  transition as transitionAssignment,
+} from '../../../convex/reviewAssignments';
 
 type Row = Record<string, unknown> & { _id?: string };
 
 function ctx(options: {
   rows?: Record<string, Row[]>;
   get?: Row | null;
+  gets?: Record<string, Row | null>;
   profile?: Row | null;
 } = {}) {
   const patch = vi.fn();
@@ -60,7 +73,7 @@ function ctx(options: {
     auth: {},
     db: {
       query,
-      get: vi.fn(async () => options.get ?? null),
+      get: vi.fn(async (id: string) => options.gets?.[id] ?? options.get ?? null),
       patch,
       insert,
     },
@@ -102,6 +115,10 @@ describe('Convex registered handlers enforce authorization', () => {
       slug: 'safe-public',
       type: 'activity',
       clinicalStatus: 'published',
+      reviewScope: 'clinical',
+      publicationStatus: 'published',
+      reviewRevision: 1,
+      publicationRevision: 1,
       titleMm: 'အများသုံး',
       titleEn: 'Public',
     };
@@ -144,6 +161,7 @@ describe('Convex registered handlers enforce authorization', () => {
     });
     await expect(handler(createInvite)(context, {
       email: 'new.reviewer@example.com', displayName: 'New Reviewer', role: 'language_reviewer',
+      reviewScope: 'native_myanmar', ageGroups: [], contentTypes: [],
     })).resolves.toMatchObject({ email: 'new.reviewer@example.com' });
     expect(context.db.insert).toHaveBeenCalledWith('staffInvites', expect.objectContaining({
       email: 'new.reviewer@example.com', role: 'language_reviewer', status: 'pending',
@@ -166,7 +184,9 @@ describe('Convex registered handlers enforce authorization', () => {
         role: 'language_reviewer', codeHash, status: 'pending', expiresAt: Date.now() + 60_000,
       }] },
     });
-    await expect(handler(claimInvite)(context, { inviteCode: code })).resolves.toMatchObject({
+    await expect(handler(claimInvite)(context, {
+      inviteCode: code, termsAccepted: true, termsVersion: 'reviewer-terms-2026-07-29',
+    })).resolves.toMatchObject({
       ok: true, role: 'language_reviewer',
     });
     expect(context.db.insert).toHaveBeenCalledWith('parentProfiles', expect.objectContaining({
@@ -215,7 +235,7 @@ describe('Convex registered handlers enforce authorization', () => {
     expect(context.db.patch).not.toHaveBeenCalled();
   });
 
-  it('a qualified education owner cannot publish parent-facing library content', async () => {
+  it('an owner cannot publish parent-facing content until every required review gate is complete', async () => {
     authState.userId = 'owner-1';
     const context = ctx({
       profile: {
@@ -226,21 +246,24 @@ describe('Convex registered handlers enforce authorization', () => {
     });
     await expect(handler(setLibraryReview)(context, {
       slug: 'clinical-guidance', clinicalStatus: 'published',
-    })).rejects.toThrow('Insufficient staff permission');
+    })).rejects.toThrow('Current revision is missing review approvals');
     expect(context.db.patch).not.toHaveBeenCalled();
   });
 
-  it('a named qualified clinical reviewer can publish and records clinical scope', async () => {
+  it('a separately-authorised publisher can publish a clinically approved revision', async () => {
     authState.userId = 'reviewer-1';
     const context = ctx({
       profile: {
         userId: 'reviewer-1', isStaff: true, staffRole: 'clinical_reviewer',
+        additionalStaffRoles: ['publisher'],
         staffQualification: 'MBBS, MMedSc (Paediatrics)', displayName: 'Clinical Reviewer',
       },
       rows: {
         libraryContent: [{ _id: 'content-1', slug: 'clinical-guidance', titleEn: 'Clinical guidance', reviewRevision: 1 }],
         contentReviews: ['english', 'native_myanmar', 'evidence', 'safety', 'clinical'].map((dimension) => ({
           contentSlug: 'clinical-guidance', contentVersion: 1, dimension, decision: 'approved',
+          reviewerDisplayName: dimension === 'clinical' ? 'Clinical Reviewer' : 'Other Reviewer',
+          reviewerQualification: dimension === 'clinical' ? 'MBBS, MMedSc (Paediatrics)' : undefined,
         })),
       },
     });
@@ -270,6 +293,9 @@ describe('Convex registered handlers enforce authorization', () => {
       code: 'role_may_not_review_area',
       message: 'Your reviewer role cannot decide this review area.',
     });
+    await expect(handler(setLibraryReview)(context, {
+      slug: 'item-1', clinicalStatus: 'published',
+    })).rejects.toThrow('Insufficient staff permission');
     expect(context.db.patch).not.toHaveBeenCalled();
     // No decision recorded, but the refusal is audited.
     expect(context.db.insert).not.toHaveBeenCalledWith('contentReviews', expect.anything());
@@ -283,8 +309,8 @@ describe('Convex registered handlers enforce authorization', () => {
     const cases = [
       {
         name: 'missing display name',
-        profile: { userId: 'u-1', isStaff: true, staffRole: 'language_reviewer' },
-        args: { contentSlug: 'item-1', dimension: 'native_myanmar', decision: 'approved', expectedReviewRevision: 1 },
+        profile: { userId: 'u-1', isStaff: true, staffRole: 'clinical_reviewer', staffQualification: 'MBBS' },
+        args: { contentSlug: 'item-1', dimension: 'safety', decision: 'in_review', expectedReviewRevision: 1 },
         code: 'display_name_required',
       },
       {
@@ -335,6 +361,280 @@ describe('Convex registered handlers enforce authorization', () => {
     });
   });
 
+  it('a child-development reviewer cannot grant clinical approval or publish content', async () => {
+    authState.userId = 'development-1';
+    const context = ctx({
+      profile: {
+        userId: 'development-1', isStaff: true, staffRole: 'child_development_reviewer',
+        displayName: 'Development Reviewer',
+      },
+      rows: { libraryContent: [{ _id: 'content-1', slug: 'item-1', reviewRevision: 1 }] },
+    });
+    await expect(handler(saveDecision)(context, {
+      contentSlug: 'item-1', dimension: 'clinical', decision: 'approved', expectedReviewRevision: 1,
+    })).resolves.toMatchObject({ ok: false, code: 'role_may_not_review_area' });
+    await expect(handler(setLibraryReview)(context, {
+      slug: 'item-1', clinicalStatus: 'published',
+    })).rejects.toThrow('Insufficient staff permission');
+    expect(context.db.insert).not.toHaveBeenCalledWith('contentReviews', expect.anything());
+    expect(context.db.patch).not.toHaveBeenCalled();
+  });
+
+  it('a publisher may inspect review sign-offs but cannot create or alter them', async () => {
+    authState.userId = 'publisher-1';
+    const priorApproval = {
+      _id: 'review-1', contentSlug: 'item-1', contentVersion: 2, dimension: 'clinical',
+      decision: 'approved', reviewerId: 'clinical-1', reviewerDisplayName: 'Clinical Reviewer',
+      reviewerQualification: 'MBBS', reviewerRole: 'clinical_reviewer', reviewedAt: 1,
+      createdAt: 1, updatedAt: 1,
+    };
+    const context = ctx({
+      profile: {
+        userId: 'publisher-1', isStaff: true, staffRole: 'publisher', displayName: 'Publisher',
+      },
+      rows: {
+        libraryContent: [{ _id: 'content-1', slug: 'item-1', reviewRevision: 2 }],
+        contentReviews: [priorApproval],
+      },
+    });
+    await expect(handler(listContentReviews)(context, { contentSlug: 'item-1' })).resolves.toMatchObject({
+      allowed: true,
+      current: [priorApproval],
+      history: [priorApproval],
+    });
+    await expect(handler(saveDecision)(context, {
+      contentSlug: 'item-1', dimension: 'clinical', decision: 'changes_requested', note: 'Alter sign-off', expectedReviewRevision: 2,
+    })).resolves.toMatchObject({ ok: false, code: 'role_may_not_review_area' });
+    expect(context.db.insert).not.toHaveBeenCalledWith('contentReviews', expect.anything());
+    expect(context.db.patch).not.toHaveBeenCalled();
+  });
+
+  it('an auditor can read the managed queue but cannot transition assignments or review content', async () => {
+    authState.userId = 'auditor-1';
+    const readContext = ctx({
+      profile: { userId: 'auditor-1', isStaff: true, staffRole: 'auditor', displayName: 'Auditor' },
+      rows: { reviewAssignments: [] },
+    });
+    await expect(handler(listManagedAssignments)(readContext, {})).resolves.toEqual([]);
+    expect(readContext.db.insert).not.toHaveBeenCalled();
+    expect(readContext.db.patch).not.toHaveBeenCalled();
+
+    const writeContext = ctx({
+      profile: { userId: 'auditor-1', isStaff: true, staffRole: 'auditor', displayName: 'Auditor' },
+      get: {
+        _id: 'assignment-1', contentSlug: 'item-1', contentVersion: 1, reviewerId: 'reviewer-1',
+        reviewerType: 'language_reviewer', reviewRound: 1, status: 'in_review',
+      },
+    });
+    await expect(handler(transitionAssignment)(writeContext, {
+      assignmentId: 'assignment-1' as never, status: 'blocked', reason: 'Read-only audit',
+    })).rejects.toThrow('Assignment access denied');
+    await expect(handler(saveDecision)(writeContext, {
+      contentSlug: 'item-1', dimension: 'native_myanmar', decision: 'approved', expectedReviewRevision: 1,
+    })).resolves.toMatchObject({ ok: false, code: 'role_may_not_review_area' });
+    expect(writeContext.db.insert).not.toHaveBeenCalledWith('contentReviews', expect.anything());
+    expect(writeContext.db.patch).not.toHaveBeenCalled();
+  });
+
+  it('an owner can complete an assigned Myanmar-language review with the normal checklist and audit trail', async () => {
+    authState.userId = 'owner-1';
+    const context = ctx({
+      profile: {
+        userId: 'owner-1', isStaff: true, staffRole: 'owner', displayName: 'Owner Reviewer',
+      },
+      rows: {
+        libraryContent: [{ _id: 'content-1', slug: 'item-1', version: 1, reviewRevision: 2 }],
+        reviewAssignments: [{
+          _id: 'assignment-1', contentSlug: 'item-1', contentVersion: 2, reviewerId: 'owner-1',
+          reviewerType: 'myanmar_language_reviewer', assignedBy: 'owner-1', assignedAt: 1,
+          priority: 'normal', reviewRound: 1, reviewScope: 'Myanmar wording', status: 'assigned', updatedAt: 1,
+        }],
+        reviewChecklists: [{
+          assignmentId: 'assignment-1', contentSlug: 'item-1', contentVersion: 2, dimension: 'native_myanmar',
+          responses: requiredChecklistKeys('native_myanmar').map((key) => ({ key, checked: true })),
+          updatedBy: 'owner-1', updatedAt: 2,
+        }],
+      },
+    });
+    await expect(handler(saveDecision)(context, {
+      contentSlug: 'item-1', dimension: 'native_myanmar', decision: 'approved', note: 'စာသားကို စစ်ဆေးပြီးပါပြီ', expectedReviewRevision: 2,
+    })).resolves.toEqual({ ok: true, contentVersion: 2 });
+    expect(context.db.insert).toHaveBeenCalledWith('contentReviews', expect.objectContaining({
+      contentSlug: 'item-1', dimension: 'native_myanmar', reviewerRole: 'owner', decision: 'approved',
+    }));
+  });
+
+  it('uses the authenticated email as the audit label when a non-clinical reviewer has not set a display name', async () => {
+    authState.userId = 'owner-1';
+    const context = ctx({
+      profile: { userId: 'owner-1', isStaff: true, staffRole: 'owner' },
+      gets: { 'owner-1': { _id: 'owner-1', email: 'owner@example.com' } },
+      rows: {
+        libraryContent: [{ _id: 'content-1', slug: 'item-1', version: 1, reviewRevision: 2 }],
+        reviewAssignments: [{
+          _id: 'assignment-1', contentSlug: 'item-1', contentVersion: 2, reviewerId: 'owner-1',
+          reviewerType: 'myanmar_language_reviewer', assignedBy: 'owner-1', assignedAt: 1,
+          priority: 'normal', reviewRound: 1, reviewScope: 'Myanmar wording', status: 'assigned', updatedAt: 1,
+        }],
+        reviewChecklists: [{
+          assignmentId: 'assignment-1', contentSlug: 'item-1', contentVersion: 2, dimension: 'native_myanmar',
+          responses: requiredChecklistKeys('native_myanmar').map((key) => ({ key, checked: true })),
+          updatedBy: 'owner-1', updatedAt: 2,
+        }],
+      },
+    });
+    await expect(handler(saveDecision)(context, {
+      contentSlug: 'item-1', dimension: 'native_myanmar', decision: 'approved', expectedReviewRevision: 2,
+    })).resolves.toEqual({ ok: true, contentVersion: 2 });
+    expect(context.db.insert).toHaveBeenCalledWith('contentReviews', expect.objectContaining({
+      reviewerDisplayName: 'owner@example.com',
+      reviewerRole: 'owner',
+      decision: 'approved',
+    }));
+  });
+
+  it('still requires an explicit reviewer name for clinical and safety decisions', async () => {
+    authState.userId = 'clinical-1';
+    const context = ctx({
+      profile: {
+        userId: 'clinical-1', isStaff: true, staffRole: 'clinical_reviewer',
+        staffQualification: 'MBBS',
+      },
+      gets: { 'clinical-1': { _id: 'clinical-1', email: 'doctor@example.com' } },
+    });
+    await expect(handler(saveDecision)(context, {
+      contentSlug: 'item-1', dimension: 'safety', decision: 'in_review', expectedReviewRevision: 1,
+    })).resolves.toMatchObject({ ok: false, code: 'display_name_required' });
+    expect(context.db.insert).not.toHaveBeenCalledWith('contentReviews', expect.anything());
+  });
+
+  it('an unrelated reviewer cannot read another reviewer assignment collaboration', async () => {
+    authState.userId = 'reviewer-2';
+    const context = ctx({
+      profile: {
+        userId: 'reviewer-2', isStaff: true, staffRole: 'language_reviewer', displayName: 'Other Reviewer',
+      },
+      get: {
+        _id: 'assignment-1', contentSlug: 'item-1', contentVersion: 2, reviewerId: 'reviewer-1',
+        reviewerType: 'language_reviewer', reviewRound: 3, status: 'in_review',
+      },
+      rows: { reviewComments: [], reviewProposals: [] },
+    });
+    await expect(handler(listReviewCollaboration)(context, {
+      assignmentId: 'assignment-1' as never,
+    })).rejects.toThrow('Assignment access denied');
+    expect(context.db.query).toHaveBeenCalledWith('parentProfiles');
+    expect(context.db.query).not.toHaveBeenCalledWith('reviewComments');
+  });
+
+  it('a scoped reviewer cannot browse review history for content outside their assignments', async () => {
+    authState.userId = 'reviewer-2';
+    const context = ctx({
+      profile: {
+        userId: 'reviewer-2', isStaff: true, staffRole: 'language_reviewer', displayName: 'Scoped Reviewer',
+      },
+      rows: {
+        libraryContent: [{ _id: 'content-1', slug: 'unrelated-item', reviewRevision: 3 }],
+        // The reviewer-index query returns no row for reviewer-2. Any assignment
+        // owned by another reviewer remains invisible at the database boundary.
+        reviewAssignments: [],
+        contentReviews: [{
+          _id: 'review-1', contentSlug: 'unrelated-item', contentVersion: 3, dimension: 'clinical',
+          decision: 'approved', reviewerId: 'clinical-1', reviewerDisplayName: 'Clinical Reviewer',
+        }],
+      },
+    });
+    await expect(handler(listContentReviews)(context, {
+      contentSlug: 'unrelated-item',
+    })).resolves.toEqual({ allowed: false, contentVersion: null, current: [], history: [] });
+    expect(context.db.query).not.toHaveBeenCalledWith('contentReviews');
+    expect(context.db.insert).not.toHaveBeenCalled();
+    expect(context.db.patch).not.toHaveBeenCalled();
+  });
+
+  it('an assigned reviewer cannot create a manager-only note', async () => {
+    authState.userId = 'reviewer-1';
+    const context = ctx({
+      profile: {
+        userId: 'reviewer-1', isStaff: true, staffRole: 'language_reviewer', displayName: 'Language Reviewer',
+      },
+      get: {
+        _id: 'assignment-1', contentSlug: 'item-1', contentVersion: 2, reviewerId: 'reviewer-1',
+        reviewerType: 'language_reviewer', reviewRound: 3, status: 'in_review',
+      },
+    });
+    await expect(handler(addReviewComment)(context, {
+      assignmentId: 'assignment-1' as never,
+      body: 'Private manager note',
+      visibility: 'managers_only',
+    })).rejects.toThrow('Only managers may create a manager-only note');
+    expect(context.db.insert).not.toHaveBeenCalled();
+  });
+
+  it('a reviewer wording proposal is version-bound and never overwrites canonical content', async () => {
+    authState.userId = 'reviewer-1';
+    const context = ctx({
+      profile: {
+        userId: 'reviewer-1', isStaff: true, staffRole: 'language_reviewer', displayName: 'Language Reviewer',
+      },
+      get: {
+        _id: 'assignment-1', contentSlug: 'item-1', contentVersion: 4, reviewerId: 'reviewer-1',
+        reviewerType: 'language_reviewer', reviewRound: 2, status: 'in_review',
+      },
+    });
+    await expect(handler(saveProposal)(context, {
+      assignmentId: 'assignment-1' as never,
+      field: 'summaryMm',
+      proposedText: 'မိဘများ နားလည်လွယ်သော စာသား',
+      submit: true,
+    })).resolves.toMatchObject({ ok: true });
+    expect(context.db.insert).toHaveBeenCalledWith('reviewProposals', expect.objectContaining({
+      contentSlug: 'item-1', contentVersion: 4, reviewerId: 'reviewer-1', status: 'submitted',
+    }));
+    expect(context.db.patch).not.toHaveBeenCalled();
+  });
+
+  it('a normal reviewer cannot open the manager completion report', async () => {
+    authState.userId = 'reviewer-1';
+    const context = ctx({
+      profile: {
+        userId: 'reviewer-1', isStaff: true, staffRole: 'language_reviewer', displayName: 'Language Reviewer',
+      },
+      rows: { reviewAssignments: [] },
+    });
+    await expect(handler(reviewerCompletion)(context, {})).rejects.toThrow('Review report access denied');
+    expect(context.db.query).not.toHaveBeenCalledWith('reviewAssignments');
+  });
+
+  it('a content editor proposal decision records the actual review round without editing content', async () => {
+    authState.userId = 'editor-1';
+    const context = ctx({
+      profile: {
+        userId: 'editor-1', isStaff: true, staffRole: 'content_editor', displayName: 'Content Editor',
+      },
+      gets: {
+        'proposal-1': {
+          _id: 'proposal-1', assignmentId: 'assignment-1', contentSlug: 'item-1', contentVersion: 4,
+          reviewerId: 'reviewer-1', field: 'summaryMm', proposedText: 'စာသားအသစ်', status: 'submitted',
+        },
+        'assignment-1': {
+          _id: 'assignment-1', contentSlug: 'item-1', contentVersion: 4, reviewerId: 'reviewer-1',
+          reviewerType: 'language_reviewer', reviewRound: 5, status: 'in_review',
+        },
+      },
+    });
+    await expect(handler(decideProposal)(context, {
+      proposalId: 'proposal-1' as never,
+      decision: 'accepted',
+      reason: 'အသုံးအနှုန်း ပိုသဘာဝကျသည်',
+    })).resolves.toEqual({ ok: true });
+    expect(context.db.insert).toHaveBeenCalledWith('reviewEvents', expect.objectContaining({
+      assignmentId: 'assignment-1', reviewRound: 5, action: 'review.proposal.accepted',
+    }));
+    expect(context.db.patch).toHaveBeenCalledTimes(1);
+    expect(context.db.patch).toHaveBeenCalledWith('proposal-1', expect.objectContaining({ status: 'accepted' }));
+  });
+
   it('a qualified clinical reviewer can record a version-bound safety decision', async () => {
     authState.userId = 'clinical-1';
     const context = ctx({
@@ -342,7 +642,19 @@ describe('Convex registered handlers enforce authorization', () => {
         userId: 'clinical-1', isStaff: true, staffRole: 'clinical_reviewer',
         displayName: 'Dr Reviewer', staffQualification: 'MBBS',
       },
-      rows: { libraryContent: [{ _id: 'content-1', slug: 'item-1', version: 1, reviewRevision: 3 }] },
+      rows: {
+        libraryContent: [{ _id: 'content-1', slug: 'item-1', version: 1, reviewRevision: 3 }],
+        reviewAssignments: [{
+          _id: 'assignment-1', contentSlug: 'item-1', contentVersion: 3, reviewerId: 'clinical-1',
+          reviewerType: 'clinical_reviewer', assignedBy: 'manager-1', assignedAt: 1,
+          priority: 'normal', reviewRound: 1, reviewScope: 'safety', status: 'assigned', updatedAt: 1,
+        }],
+        reviewChecklists: [{
+          assignmentId: 'assignment-1', contentSlug: 'item-1', contentVersion: 3, dimension: 'safety',
+          responses: requiredChecklistKeys('safety').map((key) => ({ key, checked: true })),
+          updatedBy: 'clinical-1', updatedAt: 2,
+        }],
+      },
     });
     await expect(handler(saveDecision)(context, {
       contentSlug: 'item-1', dimension: 'safety', decision: 'approved', note: 'Checked', expectedReviewRevision: 3,
@@ -368,6 +680,16 @@ describe('Convex registered handlers enforce authorization', () => {
       rows: {
         libraryContent: [{ _id: 'content-1', slug: 'item-1', reviewRevision: 2 }],
         contentReviews: existingRows,
+        reviewAssignments: [{
+          _id: 'assignment-1', contentSlug: 'item-1', contentVersion: 2, reviewerId: 'clinical-1',
+          reviewerType: 'clinical_reviewer', assignedBy: 'manager-1', assignedAt: 1,
+          priority: 'normal', reviewRound: 2, reviewScope: 'clinical', status: 'in_review', updatedAt: 1,
+        }],
+        reviewChecklists: [{
+          assignmentId: 'assignment-1', contentSlug: 'item-1', contentVersion: 2, dimension: 'clinical',
+          responses: requiredChecklistKeys('clinical').map((key) => ({ key, checked: true })),
+          updatedBy: 'clinical-1', updatedAt: 2,
+        }],
       },
     });
     await expect(handler(listContentReviews)(listContext, { contentSlug: 'item-1' })).resolves.toEqual({
@@ -385,6 +707,16 @@ describe('Convex registered handlers enforce authorization', () => {
       rows: {
         libraryContent: [{ _id: 'content-1', slug: 'item-1', reviewRevision: 2 }],
         contentReviews: existingRows,
+        reviewAssignments: [{
+          _id: 'assignment-1', contentSlug: 'item-1', contentVersion: 2, reviewerId: 'clinical-1',
+          reviewerType: 'clinical_reviewer', assignedBy: 'manager-1', assignedAt: 1,
+          priority: 'normal', reviewRound: 2, reviewScope: 'clinical', status: 'in_review', updatedAt: 1,
+        }],
+        reviewChecklists: [{
+          assignmentId: 'assignment-1', contentSlug: 'item-1', contentVersion: 2, dimension: 'clinical',
+          responses: requiredChecklistKeys('clinical').map((key) => ({ key, checked: true })),
+          updatedBy: 'clinical-1', updatedAt: 2,
+        }],
       },
     });
     await expect(handler(saveDecision)(saveContext, {
@@ -393,7 +725,7 @@ describe('Convex registered handlers enforce authorization', () => {
     expect(saveContext.db.insert).toHaveBeenCalledWith('contentReviews', expect.objectContaining({
       contentSlug: 'item-1', contentVersion: 2, dimension: 'clinical', decision: 'approved',
     }));
-    expect(saveContext.db.patch).not.toHaveBeenCalled();
+    expect(saveContext.db.patch).toHaveBeenCalledWith('assignment-1', expect.objectContaining({ status: 'approved' }));
   });
 
   it('editing content increments the review revision and clears active publication metadata', async () => {
@@ -431,7 +763,7 @@ describe('Convex registered handlers enforce authorization', () => {
   });
 
   it.each(['language_reviewer', 'evidence_reviewer', 'clinical_reviewer'] as const)(
-    'lets a %s correct wording while resetting the item for fresh review',
+    'requires a %s to propose wording instead of editing canonical content',
     async (staffRole) => {
       authState.userId = 'reviewer-1';
       const context = ctx({
@@ -445,17 +777,8 @@ describe('Convex registered handlers enforce authorization', () => {
       await expect(handler(updateDraft)(context, {
         slug: 'item-1', titleMm: 'အသစ်', titleEn: 'New', data: { body: 'Revised' },
         expectedReviewRevision: 1,
-      })).resolves.toEqual({ ok: true, reviewRevision: 2 });
-      expect(context.db.patch).toHaveBeenCalledWith('content-1', expect.objectContaining({
-        titleMm: 'အသစ်',
-        titleEn: 'New',
-        data: { body: 'Revised' },
-        reviewRevision: 2,
-        clinicalStatus: 'clinical_review',
-        reviewerId: undefined,
-        reviewerQualification: undefined,
-        reviewerDisplayName: undefined,
-      }));
+      })).rejects.toThrow('Insufficient staff permission');
+      expect(context.db.patch).not.toHaveBeenCalled();
     },
   );
 
@@ -494,7 +817,7 @@ describe('Convex registered handlers enforce authorization', () => {
     authState.userId = 'reviewer-1';
     const context = ctx({
       profile: {
-        userId: 'reviewer-1', isStaff: true, staffRole: 'clinical_reviewer',
+        userId: 'reviewer-1', isStaff: true, staffRole: 'clinical_reviewer', additionalStaffRoles: ['publisher'],
         staffQualification: 'MBBS', displayName: 'Clinical Reviewer',
       },
       rows: {
@@ -729,6 +1052,7 @@ describe('Convex registered handlers enforce authorization', () => {
     });
     await handler(createInvite)(context, {
       email: 'solo@example.com', displayName: 'Someone', role: 'content_editor',
+      reviewScope: 'assigned_content', ageGroups: [], contentTypes: [],
     });
     expect(context.db.insert).toHaveBeenCalledWith('staffInvites', expect.objectContaining({
       email: 'solo@example.com', targetUserId: 'user-pin',

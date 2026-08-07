@@ -8,7 +8,6 @@ import { decideRoute } from './bootstrap';
 import { SignIn } from '../screens/SignIn';
 import { api } from '../../convex/_generated/api';
 import { getPortalMode, setPortalMode } from './portalMode';
-import { decideStaffRoute } from './staffRoute';
 import { isGooglePlayBuild, useNativeDeepLinks } from './platform';
 import { ScreenErrorBoundary } from '../components/ScreenErrorBoundary';
 import { useLocale } from './LocaleContext';
@@ -203,19 +202,12 @@ function ResetStaffPortalMode({ children }: { children: ReactNode }) {
   return children;
 }
 
-function StaffOnlyRoute({ children }: { children: ReactNode }) {
+function StaffRoleRoute({ children, allowedRoles }: { children: ReactNode; allowedRoles: string[] }) {
   const access = useQuery(api.admin.myAccess);
-  const decision = decideStaffRoute(access);
-
-  if (decision === 'loading') {
-    return (
-      <div className="flex min-h-[50vh] items-center justify-center text-ink-soft" role="status" aria-live="polite">
-        <span className="animate-pulse">…</span>
-      </div>
-    );
+  if (access === undefined) {
+    return <div className="flex min-h-[50vh] items-center justify-center text-ink-soft" role="status"><span className="animate-pulse">…</span></div>;
   }
-
-  return decision === 'allow' ? children : <Navigate to="/home" replace />;
+  return access?.roles.some((role) => allowedRoles.includes(role)) ? children : <Navigate to="/home" replace />;
 }
 
 function PageLoading({ locale }: { locale: 'mm' | 'en' }) {
@@ -286,17 +278,17 @@ function AppRoutes() {
       <Route path="/observations" element={<AppScreen><ObservationJournal /></AppScreen>} />
       <Route path="/library" element={<AppScreen><ContentLibrary /></AppScreen>} />
       <Route path="/content/:slug" element={<AppScreen><ContentDetail /></AppScreen>} />
-      <Route path="/admin" element={<StaffOnlyRoute><AppScreen><AdminReviewQueue /></AppScreen></StaffOnlyRoute>} />
-      <Route path="/admin/library" element={<StaffOnlyRoute><AppScreen><LibraryAdmin /></AppScreen></StaffOnlyRoute>} />
-      <Route path="/admin/reviews" element={<StaffOnlyRoute><AppScreen><ContentReviewWorkspace /></AppScreen></StaffOnlyRoute>} />
-      <Route path="/admin/review-activity" element={<StaffOnlyRoute><AppScreen><AdminReviewActivity /></AppScreen></StaffOnlyRoute>} />
-      <Route path="/admin/evidence" element={<StaffOnlyRoute><AppScreen><EvidenceAdmin /></AppScreen></StaffOnlyRoute>} />
-      <Route path="/admin/team" element={<StaffOnlyRoute><AppScreen><AdminTeam /></AppScreen></StaffOnlyRoute>} />
-      <Route path="/admin/directory" element={<StaffOnlyRoute><AppScreen><AdminDirectory /></AppScreen></StaffOnlyRoute>} />
-      <Route path="/admin/billing" element={<StaffOnlyRoute><AppScreen><AdminBilling /></AppScreen></StaffOnlyRoute>} />
+      <Route path="/admin" element={<StaffRoleRoute allowedRoles={['owner', 'system_admin', 'review_manager', 'content_editor', 'auditor']}><AppScreen><AdminReviewQueue /></AppScreen></StaffRoleRoute>} />
+      <Route path="/admin/library" element={<StaffRoleRoute allowedRoles={['owner', 'content_editor']}><AppScreen><LibraryAdmin /></AppScreen></StaffRoleRoute>} />
+      <Route path="/admin/reviews" element={<StaffRoleRoute allowedRoles={['owner', 'system_admin', 'review_manager', 'language_reviewer', 'myanmar_language_reviewer', 'child_development_reviewer', 'evidence_reviewer', 'clinical_reviewer', 'publisher', 'auditor']}><AppScreen><ContentReviewWorkspace /></AppScreen></StaffRoleRoute>} />
+      <Route path="/admin/review-activity" element={<StaffRoleRoute allowedRoles={['owner', 'content_editor']}><AppScreen><AdminReviewActivity /></AppScreen></StaffRoleRoute>} />
+      <Route path="/admin/evidence" element={<StaffRoleRoute allowedRoles={['owner', 'content_editor', 'evidence_reviewer', 'clinical_reviewer', 'auditor']}><AppScreen><EvidenceAdmin /></AppScreen></StaffRoleRoute>} />
+      <Route path="/admin/team" element={<StaffRoleRoute allowedRoles={['owner', 'system_admin', 'review_manager']}><AppScreen><AdminTeam /></AppScreen></StaffRoleRoute>} />
+      <Route path="/admin/directory" element={<StaffRoleRoute allowedRoles={['owner', 'system_admin', 'support']}><AppScreen><AdminDirectory /></AppScreen></StaffRoleRoute>} />
+      <Route path="/admin/billing" element={<StaffRoleRoute allowedRoles={['owner', 'system_admin']}><AppScreen><AdminBilling /></AppScreen></StaffRoleRoute>} />
       <Route path="/admin/accept-invite" element={<AppScreen showNav={false}><AcceptAdminInvite /></AppScreen>} />
       <Route path="/admin/accept-invite/:inviteCode" element={<AppScreen showNav={false}><AcceptAdminInvite /></AppScreen>} />
-      <Route path="/audit" element={<StaffOnlyRoute><AppScreen><AuditLog /></AppScreen></StaffOnlyRoute>} />
+      <Route path="/audit" element={<StaffRoleRoute allowedRoles={['owner', 'system_admin', 'auditor']}><AppScreen><AuditLog /></AppScreen></StaffRoleRoute>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

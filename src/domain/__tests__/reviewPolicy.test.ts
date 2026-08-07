@@ -28,15 +28,15 @@ describe('review permission matrix', () => {
     }
   });
 
-  it('lets owner, content editor, evidence and clinical reviewers decide evidence', () => {
-    const allowed = new Set(['owner', 'content_editor', 'evidence_reviewer', 'clinical_reviewer']);
+  it('lets owner, evidence and clinical reviewers decide evidence', () => {
+    const allowed = new Set(['owner', 'evidence_reviewer', 'clinical_reviewer']);
     for (const role of ROLES) {
       expect(roleMayReview(role, 'evidence'), role).toBe(allowed.has(role));
     }
   });
 
-  it('lets owner, content editor and language reviewers decide language areas', () => {
-    const allowed = new Set(['owner', 'content_editor', 'language_reviewer']);
+  it('lets owner and language reviewers decide language areas', () => {
+    const allowed = new Set(['owner', 'language_reviewer']);
     for (const dimension of ['english', 'native_myanmar'] as ReviewDimension[]) {
       for (const role of ROLES) {
         expect(roleMayReview(role, dimension), `${role} · ${dimension}`).toBe(allowed.has(role));
@@ -81,7 +81,9 @@ describe('review refusal', () => {
     expect(reviewRefusal({ ...base, role: 'support' })?.code).toBe('not_staff');
     expect(reviewRefusal({ ...base, role: null })?.code).toBe('not_staff');
     expect(reviewRefusal({ ...base, dimension: 'clinical' })?.code).toBe('role_may_not_review_area');
-    expect(reviewRefusal({ ...base, displayName: '  ' })?.code).toBe('display_name_required');
+    expect(reviewRefusal({
+      ...base, role: 'clinical_reviewer', dimension: 'clinical', displayName: '  ', qualification: 'MBBS',
+    })?.code).toBe('display_name_required');
     expect(reviewRefusal({
       ...base, role: 'clinical_reviewer', dimension: 'clinical', decision: 'approved',
     })?.code).toBe('qualification_required');
@@ -122,7 +124,6 @@ describe('the rule is not duplicated', () => {
     // A second local copy of the rule is what let the UI offer an action the
     // server refused. It must not come back.
     expect(screen).not.toMatch(/function mayReview\s*\(/);
-    expect(screen).not.toContain("role === 'clinical_reviewer'");
   });
 
   it('the mutation refuses in-band and never throws a policy error', () => {

@@ -80,7 +80,7 @@ export const publishLibraryEducationReviewed = internalMutation({
   returns: v.object({ published: v.number(), alreadyPublished: v.number(), total: v.number() }),
   handler: async (ctx) => {
     void ctx;
-    throw new Error('Bulk education-scoped publication has been retired; use individual review gates and qualified publication approval');
+    throw new Error('Bulk education-scoped publication has been retired; use individual assignment review gates and Publisher approval');
   },
 });
 
