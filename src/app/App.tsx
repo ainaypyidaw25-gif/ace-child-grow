@@ -61,6 +61,7 @@ export function App() {
     <Routes>
       <Route path="/privacy" element={<StandaloneScreen><LegalPage kind="privacy" /></StandaloneScreen>} />
       <Route path="/account-deletion" element={<StandaloneScreen><LegalPage kind="account-deletion" /></StandaloneScreen>} />
+      <Route path="/terms" element={<StandaloneScreen><LegalPage kind="terms" /></StandaloneScreen>} />
       <Route path="*" element={<>
       <AuthLoading>
         <AuthSplash />

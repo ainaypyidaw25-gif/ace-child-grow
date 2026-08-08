@@ -265,6 +265,12 @@ export function SubscriptionPlans() {
 
       <SourceTransparency />
 
+      <p className="text-center text-xs text-ink-soft">
+        {L('ငွေပေးချေခြင်းဖြင့် ', 'By paying you agree to our ')}
+        <Link to="/terms" className="font-semibold text-sky-deep underline">{L('ဝန်ဆောင်မှုစည်းမျဉ်းများ', 'Terms of Service')}</Link>
+        {L(' (ငွေပြန်အမ်းမူဝါဒ ပါဝင်သည်) ကို သဘောတူပါသည်။', ', including our refund policy.')}
+      </p>
+
       {selectedPlan && (
         <section aria-labelledby="payment-title" className="overflow-hidden rounded-[30px] border border-line bg-white shadow-card">
           <header className="border-b border-line bg-cream px-5 py-6 sm:px-8">

@@ -221,6 +221,10 @@ export function Profile() {
       {/* Privacy controls */}
       <section className="rounded-card border border-line bg-white p-4 shadow-card">
         <h2 className="mb-2 font-semibold text-ink">{locale === 'mm' ? 'ကိုယ်ရေးလုံခြုံမှု' : 'Privacy'}</h2>
+        <Link to="/terms" className="flex items-center justify-between py-2 text-sky-deep">
+          <span>{locale === 'mm' ? 'ဝန်ဆောင်မှုစည်းမျဉ်းများ' : 'Terms of Service'}</span>
+          <span aria-hidden>→</span>
+        </Link>
         <button type="button" onClick={download}
           className="mb-2 w-full rounded-pill border border-line px-4 py-2 text-left">
           ⬇️ {locale === 'mm' ? 'ကျွန်ုပ်၏ အချက်အလက် ထုတ်ယူရန်' : 'Export my data'}

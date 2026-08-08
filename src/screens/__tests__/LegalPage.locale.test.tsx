@@ -16,7 +16,7 @@ afterEach(() => {
   localStorage.clear();
 });
 
-function renderLegal(kind: 'privacy' | 'account-deletion') {
+function renderLegal(kind: 'privacy' | 'account-deletion' | 'terms') {
   return render(
     <MemoryRouter>
       <LocaleProvider>
@@ -57,5 +57,19 @@ describe('LegalPage locale correctness', () => {
     expect(screen.getByRole('heading', { name: 'Privacy Policy' })).toBeTruthy();
     expect(screen.getByText(/Information we collect/)).toBeTruthy();
     expect(document.documentElement.lang).toBe(documentLang('en'));
+  });
+
+  // Fix 7 (production audit fix plan): the Terms of Service draft must never
+  // read as a finished, binding document until the owner has reviewed it.
+  it('shows the terms draft with the not-yet-binding notice, in both locales', () => {
+    renderLegal('terms');
+    expect(screen.getByRole('heading', { name: 'ဝန်ဆောင်မှုစည်းမျဉ်းများ' })).toBeTruthy();
+    expect(screen.getByRole('note').textContent).toMatch(/မူကြမ်း/);
+
+    fireEvent.click(screen.getByRole('button', { name: 'English' }));
+
+    expect(screen.getByRole('heading', { name: 'Terms of Service' })).toBeTruthy();
+    expect(screen.getByRole('note').textContent).toMatch(/draft/i);
+    expect(screen.getByText(/Refunds/)).toBeTruthy();
   });
 });
