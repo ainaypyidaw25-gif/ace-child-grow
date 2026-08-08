@@ -393,6 +393,42 @@ export const reviewSearch = query({
   },
 });
 
+const bulkEditItemValidator = v.object({
+  slug: v.string(),
+  type: v.string(),
+  titleMm: v.string(),
+  titleEn: v.string(),
+  summaryMm: v.optional(v.string()),
+  summaryEn: v.optional(v.string()),
+  data: v.any(),
+  reviewRevision: v.optional(v.number()),
+});
+
+// Feeds the bulk find-and-replace tool in the review workspace: the same
+// staff who may edit one item's wording (requireReviewEditor, matching
+// updateDraft below) can preview and apply a literal find-and-replace across
+// every item at once, one updateDraft call per item — reusing that
+// mutation's existing revision/audit/review-reset behaviour rather than
+// introducing a separate bulk-write path. Same bounded read as reviewSearch.
+export const contentForBulkEdit = query({
+  args: {},
+  returns: v.array(bulkEditItemValidator),
+  handler: async (ctx) => {
+    await requireReviewEditor(ctx);
+    const rows = await ctx.db.query('libraryContent').take(1000);
+    return rows.map((row) => ({
+      slug: row.slug,
+      type: row.type,
+      titleMm: row.titleMm,
+      titleEn: row.titleEn,
+      summaryMm: row.summaryMm,
+      summaryEn: row.summaryEn,
+      data: row.data,
+      reviewRevision: row.reviewRevision,
+    }));
+  },
+});
+
 // Coverage/stats — powers the admin dashboard and integrity checks.
 export const stats = query({
   args: {},
