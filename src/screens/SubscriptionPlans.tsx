@@ -5,6 +5,7 @@ import type { Id } from '../../convex/_generated/dataModel';
 import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
 import { SourceTransparency } from '../components/SourceTransparency';
+import { ConfirmDialog } from '../components/ConfirmDialog';
 import { isGooglePlayBuild } from '../app/platform';
 
 const PLAN_FEATURES = {
@@ -36,6 +37,7 @@ export function SubscriptionPlans() {
   const submit = useMutation(api.billing.submitPaymentRequest);
   const cancel = useMutation(api.billing.cancelMyRequest);
   const startTrial = useMutation(api.subscriptions.startTrial);
+  const cancelRenewal = useMutation(api.subscriptions.cancelAtPeriodEnd);
   const [planId, setPlanId] = useState<Id<'subscriptionPlans'> | ''>('');
   const [methodId, setMethodId] = useState<Id<'paymentMethods'> | ''>('');
   const [reference, setReference] = useState('');
@@ -43,6 +45,8 @@ export function SubscriptionPlans() {
   const [busy, setBusy] = useState(false);
   const [mmpayBusy, setMmpayBusy] = useState(false);
   const [trialBusy, setTrialBusy] = useState(false);
+  const [confirmingCancel, setConfirmingCancel] = useState(false);
+  const [cancelMessage, setCancelMessage] = useState('');
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
   const L = (mm: string, en: string) => locale === 'mm' ? mm : en;
@@ -100,6 +104,9 @@ export function SubscriptionPlans() {
     );
   }
 
+  const periodEndLabel = subscription.currentPeriodEnd
+    ? new Date(subscription.currentPeriodEnd).toLocaleDateString(locale === 'mm' ? 'my-MM' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+    : L('မကြာမီ', 'soon');
   const selectedPlan = options.plans.find((plan) => plan._id === planId);
   const selectedMethod = options.methods.find((method) => method._id === methodId);
   const hasPendingRequest = requests.some((request) => request.status === 'pending');
@@ -128,6 +135,61 @@ export function SubscriptionPlans() {
           </p>
         </div>
       </header>
+
+      {/* Self-service renewal control for real paid plans. Deliberately excludes
+          the free trial (subscription.isTrial): that already carries
+          cancelAtPeriodEnd: true by design and needs no "cancel" action — see
+          startTrial in convex/subscriptions.ts. */}
+      {subscription.planKey !== 'free' && !subscription.isTrial && (
+        <section className="rounded-3xl border border-line bg-white p-5 shadow-card sm:p-6">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-sky-deep">{L('အသုံးပြုမှု စီမံခန့်ခွဲရန်', 'Manage subscription')}</p>
+              <p className="mt-1 text-sm text-ink-soft">
+                {subscription.cancelAtPeriodEnd
+                  ? L(
+                      `${periodEndLabel} ကျော်လွန်ပါက အလိုအလျောက် သက်တမ်းတိုးမည် မဟုတ်တော့ပါ — Free အစီအစဉ်သို့ ပြန်ရောက်သွားပါမည်။`,
+                      `Won't renew after ${periodEndLabel}. You'll return to the Free plan automatically.`,
+                    )
+                  : L(`${periodEndLabel} တွင် အလိုအလျောက် သက်တမ်းတိုးပါမည်။`, `Renews automatically on ${periodEndLabel}.`)}
+              </p>
+            </div>
+            {!subscription.cancelAtPeriodEnd && (
+              <button
+                type="button"
+                onClick={() => setConfirmingCancel(true)}
+                className="min-h-touch rounded-pill border border-state-red px-4 py-2 text-sm font-semibold text-state-red-deep"
+              >
+                {L('သက်တမ်းတိုးခြင်း ပယ်ဖျက်မည်', 'Cancel auto-renewal')}
+              </button>
+            )}
+          </div>
+          {confirmingCancel && (
+            <div className="mt-4">
+              <ConfirmDialog
+                message={L(
+                  'သက်တမ်းတိုးခြင်းကို ပယ်ဖျက်မှာ သေချာပါသလား။ လက်ရှိပေးချေထားသည့် ကာလကုန်ဆုံးသည်အထိ ဝန်ဆောင်မှုအားလုံးကို ဆက်လက်အသုံးပြုနိုင်ပါသည်။',
+                  'Cancel auto-renewal? You keep full access until the end of your current billing period.',
+                )}
+                confirmLabel={L('ပယ်ဖျက်မည်', 'Cancel renewal')}
+                cancelLabel={L('မလုပ်တော့ပါ', "Don't cancel")}
+                onCancel={() => setConfirmingCancel(false)}
+                onConfirm={async () => {
+                  setConfirmingCancel(false);
+                  try {
+                    await cancelRenewal({});
+                    setCancelMessage(L('သက်တမ်းတိုးခြင်းကို ပယ်ဖျက်ပြီးပါပြီ။', 'Auto-renewal canceled.'));
+                  } catch (error) {
+                    console.error(error);
+                    setCancelMessage(L('ပယ်ဖျက်၍ မရပါ။', 'Could not cancel auto-renewal.'));
+                  }
+                }}
+              />
+            </div>
+          )}
+          {cancelMessage && <p className="mt-3 text-sm text-ink-soft" role="status">{cancelMessage}</p>}
+        </section>
+      )}
 
       {subscription.trialEligible && subscription.planKey === 'free' && (
         <section className="flex flex-col gap-5 rounded-[30px] border border-mint bg-mint-soft/45 p-6 sm:flex-row sm:items-center sm:justify-between">
