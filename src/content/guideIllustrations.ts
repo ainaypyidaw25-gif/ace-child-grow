@@ -43,8 +43,32 @@ export const GUIDE_ILLUSTRATIONS: Readonly<Record<string, string>> = {
     '/guides/gd_3_4m_sleep.365616420a.webp',
   gd_3_4m_social:
     '/guides/gd_3_4m_social.ffe3653931.webp',
+  gd_5_6m_cognitive:
+    '/guides/gd_5_6m_cognitive.97a0fd0b5b.webp',
+  gd_5_6m_communication:
+    '/guides/gd_5_6m_communication.3f70d31d54.webp',
+  gd_5_6m_daily_routine:
+    '/guides/gd_5_6m_daily_routine.7a2b5f0311.webp',
+  gd_5_6m_emotional:
+    '/guides/gd_5_6m_emotional.edccb2ce38.webp',
+  gd_5_6m_fine_motor:
+    '/guides/gd_5_6m_fine_motor.f1d6e9d0b0.webp',
+  gd_5_6m_gross_motor:
+    '/guides/gd_5_6m_gross_motor.d99d468e14.webp',
+  gd_5_6m_language:
+    '/guides/gd_5_6m_language.a18e680d90.webp',
+  gd_5_6m_nutrition:
+    '/guides/gd_5_6m_nutrition.1c900fe81c.webp',
+  gd_5_6m_play:
+    '/guides/gd_5_6m_play.63ec9daa99.webp',
+  gd_5_6m_safety:
+    '/guides/gd_5_6m_safety.0baf304cd9.webp',
+  gd_5_6m_sleep:
+    '/guides/gd_5_6m_sleep.432e63096b.webp',
   gd_5_6m_social:
     '/guides/gd_5_6m_social.f45ff11649.webp',
+  gd_5_6m_speech:
+    '/guides/gd_5_6m_speech.7a0f1ebe34.webp',
   gd_7_9m_cognitive:
     '/guides/gd_7_9m_cognitive.573c2f0d30.webp',
   gd_7_9m_communication:
