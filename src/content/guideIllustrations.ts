@@ -21,6 +21,28 @@ export const GUIDE_ILLUSTRATIONS: Readonly<Record<string, string>> = {
     '/guides/gd_birth_2m_sleep.3bf5cea75b.webp',
   gd_birth_2m_social:
     '/guides/gd_birth_2m_social.d03fb94d44.webp',
+  gd_3_4m_cognitive:
+    '/guides/gd_3_4m_cognitive.43e67ef564.webp',
+  gd_3_4m_communication:
+    '/guides/gd_3_4m_communication.d6301611d2.webp',
+  gd_3_4m_daily_routine:
+    '/guides/gd_3_4m_daily_routine.61d54d81d3.webp',
+  gd_3_4m_emotional:
+    '/guides/gd_3_4m_emotional.83d0e47c19.webp',
+  gd_3_4m_fine_motor:
+    '/guides/gd_3_4m_fine_motor.b3be622766.webp',
+  gd_3_4m_gross_motor:
+    '/guides/gd_3_4m_gross_motor.82c903f693.webp',
+  gd_3_4m_nutrition:
+    '/guides/gd_3_4m_nutrition.fe59f60d33.webp',
+  gd_3_4m_play:
+    '/guides/gd_3_4m_play.159c31b92c.webp',
+  gd_3_4m_safety:
+    '/guides/gd_3_4m_safety.4b72559806.webp',
+  gd_3_4m_sleep:
+    '/guides/gd_3_4m_sleep.365616420a.webp',
+  gd_3_4m_social:
+    '/guides/gd_3_4m_social.ffe3653931.webp',
   gd_5_6m_social:
     '/guides/gd_5_6m_social.f45ff11649.webp',
   gd_7_9m_cognitive:
