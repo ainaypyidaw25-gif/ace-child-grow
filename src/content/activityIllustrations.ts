@@ -59,6 +59,8 @@ export const ACTIVITY_ILLUSTRATIONS: Readonly<Record<string, string>> = {
     '/activities/10_12m/act_obstacle_crawl.459e65a32d.webp',
   act_roll_the_ball_back:
     '/activities/10_12m/act_roll_the_ball_back.5a37c8d923.webp',
+  act_water_pouring:
+    '/activities/2y/act_water_pouring.3ba2a48346.webp',
   act_story_sequence:
     '/activities/4y/act_story_sequence.8064356734.webp',
 };

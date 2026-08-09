@@ -48,6 +48,8 @@ const TEN_TO_TWELVE_MONTH_ACTIVITY_SLUGS = [
   'act_roll_the_ball_back',
 ] as const;
 
+const TWO_YEAR_ACTIVITY_SLUGS = ['act_water_pouring'] as const;
+
 const FOUR_YEAR_ACTIVITY_SLUGS = ['act_story_sequence'] as const;
 
 const TARGETED_ACTIVITY_SLUGS = [
@@ -56,6 +58,7 @@ const TARGETED_ACTIVITY_SLUGS = [
   ...FIVE_TO_SIX_MONTH_ACTIVITY_SLUGS,
   ...SEVEN_TO_NINE_MONTH_ACTIVITY_SLUGS,
   ...TEN_TO_TWELVE_MONTH_ACTIVITY_SLUGS,
+  ...TWO_YEAR_ACTIVITY_SLUGS,
   ...FOUR_YEAR_ACTIVITY_SLUGS,
 ] as const;
 
@@ -73,23 +76,27 @@ describe('published activity illustrations', () => {
         slug as (typeof FOUR_YEAR_ACTIVITY_SLUGS)[number],
       )
         ? '4y'
-        : TEN_TO_TWELVE_MONTH_ACTIVITY_SLUGS.includes(
-              slug as (typeof TEN_TO_TWELVE_MONTH_ACTIVITY_SLUGS)[number],
+        : TWO_YEAR_ACTIVITY_SLUGS.includes(
+              slug as (typeof TWO_YEAR_ACTIVITY_SLUGS)[number],
             )
-          ? '10_12m'
-          : SEVEN_TO_NINE_MONTH_ACTIVITY_SLUGS.includes(
-                slug as (typeof SEVEN_TO_NINE_MONTH_ACTIVITY_SLUGS)[number],
+          ? '2y'
+          : TEN_TO_TWELVE_MONTH_ACTIVITY_SLUGS.includes(
+                slug as (typeof TEN_TO_TWELVE_MONTH_ACTIVITY_SLUGS)[number],
               )
-            ? '7_9m'
-            : FIVE_TO_SIX_MONTH_ACTIVITY_SLUGS.includes(
-                  slug as (typeof FIVE_TO_SIX_MONTH_ACTIVITY_SLUGS)[number],
+            ? '10_12m'
+            : SEVEN_TO_NINE_MONTH_ACTIVITY_SLUGS.includes(
+                  slug as (typeof SEVEN_TO_NINE_MONTH_ACTIVITY_SLUGS)[number],
                 )
-              ? '5_6m'
-              : THREE_TO_FOUR_MONTH_ACTIVITY_SLUGS.includes(
-                    slug as (typeof THREE_TO_FOUR_MONTH_ACTIVITY_SLUGS)[number],
+              ? '7_9m'
+              : FIVE_TO_SIX_MONTH_ACTIVITY_SLUGS.includes(
+                    slug as (typeof FIVE_TO_SIX_MONTH_ACTIVITY_SLUGS)[number],
                   )
-                ? '3_4m'
-                : 'birth_2m';
+                ? '5_6m'
+                : THREE_TO_FOUR_MONTH_ACTIVITY_SLUGS.includes(
+                      slug as (typeof THREE_TO_FOUR_MONTH_ACTIVITY_SLUGS)[number],
+                    )
+                  ? '3_4m'
+                  : 'birth_2m';
       expect(activityIllustration(slug)).toMatch(
         new RegExp(`/activities/${ageGroup}/${slug}\\.[a-f0-9]{10}\\.webp$`),
       );
@@ -159,6 +166,12 @@ describe('published activity illustrations', () => {
     ]);
   });
 
+  it('maps every published 2-year slug to its approved unique asset', () => {
+    expect(TWO_YEAR_ACTIVITY_SLUGS.map((slug) => activityIllustration(slug))).toEqual([
+      '/activities/2y/act_water_pouring.3ba2a48346.webp',
+    ]);
+  });
+
   it('maps the published 4-year slug to its approved unique asset', () => {
     expect(FOUR_YEAR_ACTIVITY_SLUGS.map((slug) => activityIllustration(slug))).toEqual([
       '/activities/4y/act_story_sequence.8064356734.webp',
@@ -179,6 +192,7 @@ describe('published activity illustrations', () => {
     expect(activityIllustration('5_6m')).toBeUndefined();
     expect(activityIllustration('7_9m')).toBeUndefined();
     expect(activityIllustration('10_12m')).toBeUndefined();
+    expect(activityIllustration('2y')).toBeUndefined();
     expect(activityIllustration('4y')).toBeUndefined();
     expect(activityIllustration('fine_motor')).toBeUndefined();
     expect(activityIllustration('play')).toBeUndefined();
