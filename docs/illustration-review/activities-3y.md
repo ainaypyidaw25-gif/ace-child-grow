@@ -79,11 +79,11 @@ Rejected candidate: attempt 1 matched the behaviour, object count and safety req
 
 ## Engineering verification
 
-- Focused mapping and exact ContentDetail rendering tests: **PASS — 10/10**
-- Full unit test suite: **PASS — 1,115/1,115 across 112 test files**
+- Focused mapping and exact ContentDetail rendering tests: **PASS — 18/18**
+- Full unit test suite: **PASS — 1,123/1,123 across 115 test files**
 - Typecheck: **PASS**
 - Lint: **PASS**
-- Production build and PWA precache: **PASS — 220 precache entries; no missing image or asset-related warning**
+- Production build and PWA precache: **PASS — 225 precache entries; no missing image or asset-related warning**
 - Existing unrelated React Testing Library `act(...)` warnings remain in older milestone/Learn/AgeBand tests; this batch adds no new warning and its focused tests are clean.
 
 ## Deployment authorization
