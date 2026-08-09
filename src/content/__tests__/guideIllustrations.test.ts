@@ -8,7 +8,18 @@ import {
   guideIllustration,
 } from '../guideIllustrations';
 
-const PUBLISHED_GUIDE_SLUGS = [
+const PRODUCTION_GUIDE_SLUGS = [
+  'gd_birth_2m_cognitive',
+  'gd_birth_2m_communication',
+  'gd_birth_2m_daily_routine',
+  'gd_birth_2m_emotional',
+  'gd_birth_2m_fine_motor',
+  'gd_birth_2m_gross_motor',
+  'gd_birth_2m_nutrition',
+  'gd_birth_2m_play',
+  'gd_birth_2m_safety',
+  'gd_birth_2m_sleep',
+  'gd_birth_2m_social',
   'gd_5_6m_social',
   'gd_7_9m_cognitive',
   'gd_7_9m_communication',
@@ -18,16 +29,16 @@ const PUBLISHED_GUIDE_SLUGS = [
   'gd_7_9m_social',
 ] as const;
 
-describe('published guide illustrations', () => {
-  it('maps every published Production slug directly to one unique versioned WebP', () => {
+describe('Production guide illustrations', () => {
+  it('maps every owner-authorized Production slug directly to one unique versioned WebP', () => {
     expect(Object.keys(GUIDE_ILLUSTRATIONS).sort()).toEqual(
-      [...PUBLISHED_GUIDE_SLUGS].sort(),
+      [...PRODUCTION_GUIDE_SLUGS].sort(),
     );
 
-    const paths = PUBLISHED_GUIDE_SLUGS.map((slug) => guideIllustration(slug));
-    expect(new Set(paths).size).toBe(PUBLISHED_GUIDE_SLUGS.length);
+    const paths = PRODUCTION_GUIDE_SLUGS.map((slug) => guideIllustration(slug));
+    expect(new Set(paths).size).toBe(PRODUCTION_GUIDE_SLUGS.length);
 
-    PUBLISHED_GUIDE_SLUGS.forEach((slug) => {
+    PRODUCTION_GUIDE_SLUGS.forEach((slug) => {
       expect(guideIllustration(slug)).toMatch(
         new RegExp(`^/guides/${slug}\\.[a-f0-9]{10}\\.webp$`),
       );
