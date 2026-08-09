@@ -94,7 +94,7 @@ describe('ContentDetail owner-authorized Production guide illustrations', () => 
 
   it.each(GUIDES)(
     'renders %s with its exact unique image and bilingual title',
-    (slug, titleMm, titleEn, asset, _clinicalStatus) => {
+    (slug, titleMm, titleEn, asset) => {
       localStorage.setItem('ace-locale', 'mm');
       const myanmarView = renderGuide(slug);
 
