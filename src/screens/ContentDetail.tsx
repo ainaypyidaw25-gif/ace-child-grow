@@ -9,6 +9,7 @@ import type { OfflineMediaRecord } from '../domain/offline/offlineLibrary';
 import { ReviewBadge } from '../components/ReviewBadge';
 import { ActivityScene } from '../components/ActivityScene';
 import { activityIllustration } from '../content/activityIllustrations';
+import { guideIllustration } from '../content/guideIllustrations';
 import { lessonIllustration } from '../content/lessonIllustrations';
 import { printableIllustration } from '../content/printableIllustrations';
 import { storyIllustration } from '../content/storyIllustrations';
@@ -89,6 +90,9 @@ export function ContentDetail() {
   const mappedActivityIllustration = item.type === 'activity'
     ? activityIllustration(item.slug)
     : undefined;
+  const mappedGuideIllustration = item.type === 'guide'
+    ? guideIllustration(item.slug)
+    : undefined;
   const mappedPrintableIllustration = item.type === 'printable'
     ? printableIllustration(item.slug)
     : undefined;
@@ -100,6 +104,7 @@ export function ContentDetail() {
     && asset.url
     && !(mappedLessonIllustration && asset.kind === 'illustration')
     && !(mappedActivityIllustration && asset.kind === 'illustration')
+    && !(mappedGuideIllustration && asset.kind === 'illustration')
     && !(mappedPrintableIllustration && asset.kind === 'illustration')
     && !(mappedStoryIllustration && asset.kind === 'illustration')
   ));
@@ -164,6 +169,21 @@ export function ContentDetail() {
             loading="eager"
             decoding="async"
             data-testid="activity-illustration"
+            className="aspect-[4/3] w-full bg-canvas object-cover"
+          />
+        </figure>
+      )}
+
+      {mappedGuideIllustration && (
+        <figure className="overflow-hidden rounded-card border border-line bg-white shadow-card">
+          <img
+            src={mappedGuideIllustration}
+            alt={locale === 'mm' ? item.titleMm : item.titleEn}
+            width={1200}
+            height={900}
+            loading="eager"
+            decoding="async"
+            data-testid="guide-illustration"
             className="aspect-[4/3] w-full bg-canvas object-cover"
           />
         </figure>
