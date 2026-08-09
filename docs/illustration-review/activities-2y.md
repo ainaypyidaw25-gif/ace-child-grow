@@ -1,6 +1,8 @@
 # ACE Child Grow — 2-Year Published Activity Illustration Review
 
-Status: **READY FOR OWNER REVIEW — NOT DEPLOYED**
+Status: **OWNER APPROVED — PRODUCTION DEPLOYMENT AUTHORIZED**
+
+Owner approval received: **2026-08-09**
 
 Source of truth: Production Convex `libraryContent`, filtered to exact `type = activity`, `ageGroupKey = 2y`, and `clinicalStatus = published`. Read directly from Production on 2026-08-09. Production contains exactly one matching published record. Every available record field was read; Production data was read only and was not modified.
 
@@ -88,8 +90,8 @@ QA: behaviour ✓ · two-year age/body/posture ✓ · anatomy ✓ · both child 
 
 ## Deployment authorization
 
-Owner approval: **NOT YET RECEIVED FOR THIS BATCH**
+Owner approval: **RECEIVED — 2026-08-09**
 
-Final review result: **READY FOR OWNER REVIEW — DO NOT DEPLOY**
+Final review result: **OWNER APPROVED FOR PRODUCTION**
 
 This batch changes only the exact published 2-year activity illustration, its exact slug mapping, related tests, and this review record.
