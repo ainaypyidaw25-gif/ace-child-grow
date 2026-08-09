@@ -70,11 +70,12 @@ Rejected candidate: attempt 1 matched the behaviour, object count and safety req
 
 - Published Production slug maps directly to its new versioned WebP: **PASS**
 - Asset exists, is exact 4:3, has a content-hash filename, and is below 500 KB: **PASS**
+- Vercel PR preview deployment is Ready; the exact asset returns `200 image/webp`, 335,186 bytes, and SHA-256 `baca30dca4aaf76ab78a8301885365cb71692e82faa953e873c38d3a5ddf53a1`, matching the approved local file: **PASS**
 - No age-group/domain/category/unknown fallback resolves for `3y`: **PASS**
 - Previously approved activity mappings remain unchanged: **PASS**
 - Component-level `/content/act_color_sort` rendering shows the exact Production Myanmar title, summary, image `src`, and image `alt`: **PASS — 1/1**
 - Local running application signed-out authentication gate and browser console: **PASS — no console error**
-- Authenticated text-plus-image card and mobile/desktop review: **PENDING OWNER REVIEW** — no credential will be entered or authentication bypassed during this draft run.
+- Authenticated PR-preview text-plus-image card and mobile/desktop review: **BLOCKED BY VERCEL PREVIEW AUTHENTICATION** — the browser reached Vercel Login and Vercel could not issue a temporary share URL; no credential was entered and authentication was not bypassed. The exact rendered card remains protected by its passing component test and the approved image preview below.
 - Production Convex records were read only; no Production data was changed: **PASS**
 
 ## Engineering verification
@@ -84,6 +85,7 @@ Rejected candidate: attempt 1 matched the behaviour, object count and safety req
 - Typecheck: **PASS**
 - Lint: **PASS**
 - Production build and PWA precache: **PASS — 225 precache entries; no missing image or asset-related warning**
+- GitHub PR CI: **PASS — Playwright; typecheck, lint, unit tests and build; Vercel preview; Vercel Preview Comments**
 - Existing unrelated React Testing Library `act(...)` warnings remain in older milestone/Learn/AgeBand tests; this batch adds no new warning and its focused tests are clean.
 
 ## Deployment authorization
