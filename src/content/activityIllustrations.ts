@@ -53,6 +53,12 @@ export const ACTIVITY_ILLUSTRATIONS: Readonly<Record<string, string>> = {
     '/activities/7_9m/act_two_texture_spoons.f811d80c0a.webp',
   act_wave_bye_bye:
     '/activities/7_9m/act_wave_bye_bye.af8bd5d742.webp',
+  act_container_in_and_out:
+    '/activities/10_12m/act_container_in_and_out.69ff724ffa.webp',
+  act_obstacle_crawl:
+    '/activities/10_12m/act_obstacle_crawl.459e65a32d.webp',
+  act_roll_the_ball_back:
+    '/activities/10_12m/act_roll_the_ball_back.5a37c8d923.webp',
   act_story_sequence:
     '/activities/4y/act_story_sequence.8064356734.webp',
 };
