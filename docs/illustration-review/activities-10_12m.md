@@ -1,6 +1,6 @@
 # ACE Child Grow — 10–12 Month Published Activity Illustration Review
 
-Status: **READY FOR OWNER REVIEW — NOT DEPLOYED**
+Status: **OWNER APPROVED — PRODUCTION DEPLOYMENT AUTHORIZED**
 
 Source of truth: Production Convex `libraryContent`, filtered to `type = activity`, exact `ageGroupKey = 10_12m`, and `clinicalStatus = published`. Read directly from Production on 2026-08-09. Production contains exactly three matching published records. Every available record field was read; Production data was read only and was not modified.
 
@@ -86,7 +86,8 @@ QA: behaviour ✓ · age ✓ · anatomy ✓ · hands ✓ · feet ✓ · shared g
 - Previously approved activity mappings remain unchanged: **PASS**
 - Component-level `/content/<exact-slug>` route rendering shows the exact Production Myanmar title, summary, image `src`, and image `alt`: **PASS — 3/3**
 - Local running application signed-out authentication gate: **PASS**
-- Authenticated mobile/desktop browser review: **PENDING OWNER REVIEW** — no test credential was used or bypassed during this draft run.
+- Owner visual review of all three complete text + illustration cards: **PASS — APPROVED 2026-08-09**
+- Authenticated production mobile/desktop route verification: **REQUIRED POST-DEPLOYMENT**
 - Production Convex records were read only; no Production data was changed: **PASS**
 
 ## Engineering verification
@@ -100,8 +101,8 @@ QA: behaviour ✓ · age ✓ · anatomy ✓ · hands ✓ · feet ✓ · shared g
 
 ## Deployment authorization
 
-Owner approval: **NOT YET RECEIVED FOR THIS BATCH**
+Owner approval: **RECEIVED 2026-08-09**
 
-Final review result: **READY FOR OWNER REVIEW — DO NOT DEPLOY**
+Final review result: **OWNER APPROVED FOR PRODUCTION**
 
 This batch changes only the three exact 10–12 month activity illustrations, their exact slug mappings, related tests, and this review record.
