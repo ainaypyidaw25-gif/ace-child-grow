@@ -42,11 +42,18 @@ const SEVEN_TO_NINE_MONTH_ACTIVITY_SLUGS = [
   'act_wave_bye_bye',
 ] as const;
 
+const TEN_TO_TWELVE_MONTH_ACTIVITY_SLUGS = [
+  'act_container_in_and_out',
+  'act_obstacle_crawl',
+  'act_roll_the_ball_back',
+] as const;
+
 const TARGETED_ACTIVITY_SLUGS = [
   ...BIRTH_2M_ACTIVITY_SLUGS,
   ...THREE_TO_FOUR_MONTH_ACTIVITY_SLUGS,
   ...FIVE_TO_SIX_MONTH_ACTIVITY_SLUGS,
   ...SEVEN_TO_NINE_MONTH_ACTIVITY_SLUGS,
+  ...TEN_TO_TWELVE_MONTH_ACTIVITY_SLUGS,
 ] as const;
 
 describe('published activity illustrations', () => {
@@ -59,7 +66,11 @@ describe('published activity illustrations', () => {
     expect(new Set(paths).size).toBe(TARGETED_ACTIVITY_SLUGS.length);
 
     TARGETED_ACTIVITY_SLUGS.forEach((slug) => {
-      const ageGroup = SEVEN_TO_NINE_MONTH_ACTIVITY_SLUGS.includes(
+      const ageGroup = TEN_TO_TWELVE_MONTH_ACTIVITY_SLUGS.includes(
+        slug as (typeof TEN_TO_TWELVE_MONTH_ACTIVITY_SLUGS)[number],
+      )
+        ? '10_12m'
+        : SEVEN_TO_NINE_MONTH_ACTIVITY_SLUGS.includes(
         slug as (typeof SEVEN_TO_NINE_MONTH_ACTIVITY_SLUGS)[number],
       )
         ? '7_9m'
@@ -131,6 +142,16 @@ describe('published activity illustrations', () => {
     ]);
   });
 
+  it('maps every published 10–12 month slug to its approved unique asset', () => {
+    expect(
+      TEN_TO_TWELVE_MONTH_ACTIVITY_SLUGS.map((slug) => activityIllustration(slug)),
+    ).toEqual([
+      '/activities/10_12m/act_container_in_and_out.69ff724ffa.webp',
+      '/activities/10_12m/act_obstacle_crawl.459e65a32d.webp',
+      '/activities/10_12m/act_roll_the_ball_back.5a37c8d923.webp',
+    ]);
+  });
+
   it('resolves every exact mapping to an optimized existing file', () => {
     Object.values(ACTIVITY_ILLUSTRATIONS).forEach((assetPath) => {
       const filePath = resolve(process.cwd(), 'public', assetPath.slice(1));
@@ -144,6 +165,7 @@ describe('published activity illustrations', () => {
     expect(activityIllustration('3_4m')).toBeUndefined();
     expect(activityIllustration('5_6m')).toBeUndefined();
     expect(activityIllustration('7_9m')).toBeUndefined();
+    expect(activityIllustration('10_12m')).toBeUndefined();
     expect(activityIllustration('fine_motor')).toBeUndefined();
     expect(activityIllustration('play')).toBeUndefined();
     expect(activityIllustration('unknown')).toBeUndefined();
