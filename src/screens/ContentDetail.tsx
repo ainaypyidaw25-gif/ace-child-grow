@@ -11,6 +11,7 @@ import { ActivityScene } from '../components/ActivityScene';
 import { activityIllustration } from '../content/activityIllustrations';
 import { lessonIllustration } from '../content/lessonIllustrations';
 import { printableIllustration } from '../content/printableIllustrations';
+import { storyIllustration } from '../content/storyIllustrations';
 
 type BL = { mm: string; en: string };
 
@@ -91,12 +92,16 @@ export function ContentDetail() {
   const mappedPrintableIllustration = item.type === 'printable'
     ? printableIllustration(item.slug)
     : undefined;
+  const mappedStoryIllustration = item.type === 'story'
+    ? storyIllustration(item.slug)
+    : undefined;
   const visibleMedia = media.filter((asset) => (
     !asset.placeholder
     && asset.url
     && !(mappedLessonIllustration && asset.kind === 'illustration')
     && !(mappedActivityIllustration && asset.kind === 'illustration')
     && !(mappedPrintableIllustration && asset.kind === 'illustration')
+    && !(mappedStoryIllustration && asset.kind === 'illustration')
   ));
   const d = (item.data ?? {}) as Record<string, unknown>;
   const list = (k: string): BL[] => (Array.isArray(d[k]) ? (d[k] as BL[]) : []);
@@ -174,6 +179,21 @@ export function ContentDetail() {
             loading="eager"
             decoding="async"
             data-testid="printable-illustration"
+            className="aspect-[4/3] w-full bg-canvas object-cover"
+          />
+        </figure>
+      )}
+
+      {mappedStoryIllustration && (
+        <figure className="overflow-hidden rounded-card border border-line bg-white shadow-card">
+          <img
+            src={mappedStoryIllustration}
+            alt={locale === 'mm' ? item.titleMm : item.titleEn}
+            width={1200}
+            height={900}
+            loading="eager"
+            decoding="async"
+            data-testid="story-illustration"
             className="aspect-[4/3] w-full bg-canvas object-cover"
           />
         </figure>
