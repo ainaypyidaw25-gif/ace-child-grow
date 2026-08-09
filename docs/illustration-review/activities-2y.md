@@ -72,7 +72,8 @@ QA: behaviour ✓ · two-year age/body/posture ✓ · anatomy ✓ · both child 
 - Previously approved activity mappings remain unchanged: **PASS**
 - Component-level `/content/act_water_pouring` rendering shows the exact Production Myanmar title, summary, image `src`, and image `alt`: **PASS — 1/1**
 - Local running application signed-out authentication gate: **PASS**
-- Authenticated text-plus-image card and mobile/desktop review: **PENDING OWNER REVIEW** — no credential was entered or authentication bypassed during this draft run.
+- Vercel draft-preview asset: **PASS** — browser loaded the exact hashed WebP with `complete = true`, natural size 1448×1086, no horizontal overflow, and zero console errors.
+- Authenticated text-plus-image card and mobile/desktop review: **BLOCKED** — signed-in Chrome passed Vercel preview protection, but the preview origin correctly showed the ACE application sign-in gate. No application credential was entered and no authentication control was bypassed. Exact title/summary/image rendering remains covered by the component test and the embedded owner-review preview above.
 - Production Convex records were read only; no Production data was changed: **PASS**
 
 ## Engineering verification
@@ -82,6 +83,7 @@ QA: behaviour ✓ · two-year age/body/posture ✓ · anatomy ✓ · both child 
 - Typecheck: **PASS**
 - Lint: **PASS**
 - Production build and PWA precache: **PASS — 224 precache entries; no missing image or asset-related warning**
+- GitHub CI: **PASS** — Playwright 1m20s; typecheck/lint/unit/build 1m46s; Vercel preview READY in 16s
 - Existing unrelated React Testing Library `act(...)` warnings remain in older milestone/Learn/AgeBand tests; this batch adds no new warning and its focused tests are clean.
 
 ## Deployment authorization
