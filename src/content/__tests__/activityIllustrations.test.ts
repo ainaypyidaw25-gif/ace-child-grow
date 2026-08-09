@@ -42,11 +42,14 @@ const SEVEN_TO_NINE_MONTH_ACTIVITY_SLUGS = [
   'act_wave_bye_bye',
 ] as const;
 
+const THREE_YEAR_ACTIVITY_SLUGS = ['act_color_sort'] as const;
+
 const TARGETED_ACTIVITY_SLUGS = [
   ...BIRTH_2M_ACTIVITY_SLUGS,
   ...THREE_TO_FOUR_MONTH_ACTIVITY_SLUGS,
   ...FIVE_TO_SIX_MONTH_ACTIVITY_SLUGS,
   ...SEVEN_TO_NINE_MONTH_ACTIVITY_SLUGS,
+  ...THREE_YEAR_ACTIVITY_SLUGS,
 ] as const;
 
 describe('published activity illustrations', () => {
@@ -63,15 +66,19 @@ describe('published activity illustrations', () => {
         slug as (typeof SEVEN_TO_NINE_MONTH_ACTIVITY_SLUGS)[number],
       )
         ? '7_9m'
-        : FIVE_TO_SIX_MONTH_ACTIVITY_SLUGS.includes(
-              slug as (typeof FIVE_TO_SIX_MONTH_ACTIVITY_SLUGS)[number],
+        : THREE_YEAR_ACTIVITY_SLUGS.includes(
+              slug as (typeof THREE_YEAR_ACTIVITY_SLUGS)[number],
             )
-          ? '5_6m'
-          : THREE_TO_FOUR_MONTH_ACTIVITY_SLUGS.includes(
-              slug as (typeof THREE_TO_FOUR_MONTH_ACTIVITY_SLUGS)[number],
-            )
-          ? '3_4m'
-          : 'birth_2m';
+          ? '3y'
+          : FIVE_TO_SIX_MONTH_ACTIVITY_SLUGS.includes(
+                slug as (typeof FIVE_TO_SIX_MONTH_ACTIVITY_SLUGS)[number],
+              )
+            ? '5_6m'
+            : THREE_TO_FOUR_MONTH_ACTIVITY_SLUGS.includes(
+                  slug as (typeof THREE_TO_FOUR_MONTH_ACTIVITY_SLUGS)[number],
+                )
+              ? '3_4m'
+              : 'birth_2m';
       expect(activityIllustration(slug)).toMatch(
         new RegExp(`/activities/${ageGroup}/${slug}\\.[a-f0-9]{10}\\.webp$`),
       );
@@ -131,6 +138,12 @@ describe('published activity illustrations', () => {
     ]);
   });
 
+  it('maps every published 3-year slug to its approved unique asset', () => {
+    expect(THREE_YEAR_ACTIVITY_SLUGS.map((slug) => activityIllustration(slug))).toEqual([
+      '/activities/3y/act_color_sort.baca30dca4.webp',
+    ]);
+  });
+
   it('resolves every exact mapping to an optimized existing file', () => {
     Object.values(ACTIVITY_ILLUSTRATIONS).forEach((assetPath) => {
       const filePath = resolve(process.cwd(), 'public', assetPath.slice(1));
@@ -144,6 +157,7 @@ describe('published activity illustrations', () => {
     expect(activityIllustration('3_4m')).toBeUndefined();
     expect(activityIllustration('5_6m')).toBeUndefined();
     expect(activityIllustration('7_9m')).toBeUndefined();
+    expect(activityIllustration('3y')).toBeUndefined();
     expect(activityIllustration('fine_motor')).toBeUndefined();
     expect(activityIllustration('play')).toBeUndefined();
     expect(activityIllustration('unknown')).toBeUndefined();
