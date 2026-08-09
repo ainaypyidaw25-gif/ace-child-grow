@@ -53,6 +53,8 @@ export const ACTIVITY_ILLUSTRATIONS: Readonly<Record<string, string>> = {
     '/activities/7_9m/act_two_texture_spoons.f811d80c0a.webp',
   act_wave_bye_bye:
     '/activities/7_9m/act_wave_bye_bye.af8bd5d742.webp',
+  act_story_sequence:
+    '/activities/4y/act_story_sequence.8064356734.webp',
 };
 
 export function activityIllustration(slug: string): string | undefined {
