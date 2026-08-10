@@ -73,14 +73,28 @@ export const GUIDE_ILLUSTRATIONS: Readonly<Record<string, string>> = {
     '/guides/gd_7_9m_cognitive.573c2f0d30.webp',
   gd_7_9m_communication:
     '/guides/gd_7_9m_communication.bdb749e2a3.webp',
+  gd_7_9m_daily_routine:
+    '/guides/gd_7_9m_daily_routine.fa72ddb356.webp',
   gd_7_9m_emotional:
     '/guides/gd_7_9m_emotional.73eabf88fb.webp',
+  gd_7_9m_fine_motor:
+    '/guides/gd_7_9m_fine_motor.90cd7a6e1a.webp',
+  gd_7_9m_gross_motor:
+    '/guides/gd_7_9m_gross_motor.9ede7495bd.webp',
+  gd_7_9m_language:
+    '/guides/gd_7_9m_language.4d8fa21cb8.webp',
+  gd_7_9m_nutrition:
+    '/guides/gd_7_9m_nutrition.4276d1d573.webp',
   gd_7_9m_safety:
     '/guides/gd_7_9m_safety.d33c9acaf9.webp',
   gd_7_9m_self_help:
     '/guides/gd_7_9m_self_help.cdfac6e4bf.webp',
+  gd_7_9m_sleep:
+    '/guides/gd_7_9m_sleep.49c5004bb6.webp',
   gd_7_9m_social:
     '/guides/gd_7_9m_social.2a908691eb.webp',
+  gd_7_9m_speech:
+    '/guides/gd_7_9m_speech.b2b52b6578.webp',
 };
 
 export function guideIllustration(slug: string): string | undefined {
