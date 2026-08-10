@@ -77,6 +77,11 @@ const PRODUCTION_GUIDE_SLUGS = [
   'gd_13_18m_safety',
   'gd_13_18m_self_help',
   'gd_13_18m_sleep',
+  'gd_19_24m_daily_routine',
+  'gd_19_24m_nutrition',
+  'gd_19_24m_safety',
+  'gd_19_24m_sleep',
+  'gd_19_24m_speech',
 ] as const;
 
 const PRODUCTION_7_9M_GUIDE_SLUGS = PRODUCTION_GUIDE_SLUGS.filter(
@@ -89,6 +94,10 @@ const PRODUCTION_10_12M_GUIDE_SLUGS = PRODUCTION_GUIDE_SLUGS.filter(
 
 const PRODUCTION_13_18M_GUIDE_SLUGS = PRODUCTION_GUIDE_SLUGS.filter(
   (slug) => slug.startsWith('gd_13_18m_'),
+);
+
+const PRODUCTION_19_24M_GUIDE_SLUGS = PRODUCTION_GUIDE_SLUGS.filter(
+  (slug) => slug.startsWith('gd_19_24m_'),
 );
 
 describe('Production guide illustrations', () => {
@@ -136,6 +145,14 @@ describe('Production guide illustrations', () => {
     const paths = PRODUCTION_13_18M_GUIDE_SLUGS.map((slug) => guideIllustration(slug));
     expect(paths.every((path) => path?.startsWith('/guides/gd_13_18m_'))).toBe(true);
     expect(new Set(paths).size).toBe(6);
+  });
+
+  it('maps all 5 exact 19–24 month Production slugs without a shared asset', () => {
+    expect(PRODUCTION_19_24M_GUIDE_SLUGS).toHaveLength(5);
+
+    const paths = PRODUCTION_19_24M_GUIDE_SLUGS.map((slug) => guideIllustration(slug));
+    expect(paths.every((path) => path?.startsWith('/guides/gd_19_24m_'))).toBe(true);
+    expect(new Set(paths).size).toBe(5);
   });
 
   it('resolves every mapping to the content-hashed file under public', () => {
