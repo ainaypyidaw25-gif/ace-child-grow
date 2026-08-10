@@ -46,11 +46,22 @@ const PRODUCTION_GUIDE_SLUGS = [
   'gd_5_6m_speech',
   'gd_7_9m_cognitive',
   'gd_7_9m_communication',
+  'gd_7_9m_daily_routine',
   'gd_7_9m_emotional',
+  'gd_7_9m_fine_motor',
+  'gd_7_9m_gross_motor',
+  'gd_7_9m_language',
+  'gd_7_9m_nutrition',
   'gd_7_9m_safety',
   'gd_7_9m_self_help',
+  'gd_7_9m_sleep',
   'gd_7_9m_social',
+  'gd_7_9m_speech',
 ] as const;
+
+const PRODUCTION_7_9M_GUIDE_SLUGS = PRODUCTION_GUIDE_SLUGS.filter(
+  (slug) => slug.startsWith('gd_7_9m_'),
+);
 
 describe('Production guide illustrations', () => {
   it('maps every owner-authorized Production slug directly to one unique versioned WebP', () => {
@@ -73,6 +84,14 @@ describe('Production guide illustrations', () => {
     expect(guideIllustration('7_9m')).toBeUndefined();
     expect(guideIllustration('guide')).toBeUndefined();
     expect(guideIllustration('unknown')).toBeUndefined();
+  });
+
+  it('maps all 13 exact 7–9 month Production slugs without a shared asset', () => {
+    expect(PRODUCTION_7_9M_GUIDE_SLUGS).toHaveLength(13);
+
+    const paths = PRODUCTION_7_9M_GUIDE_SLUGS.map((slug) => guideIllustration(slug));
+    expect(paths.every((path) => path?.startsWith('/guides/gd_7_9m_'))).toBe(true);
+    expect(new Set(paths).size).toBe(13);
   });
 
   it('resolves every mapping to the content-hashed file under public', () => {

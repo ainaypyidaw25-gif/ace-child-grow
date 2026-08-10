@@ -42,10 +42,17 @@ const GUIDES = vi.hoisted(() => [
   ['gd_5_6m_speech', '၅ – ၆ လ — စကားသံ ထွက်ဆိုမှု လမ်းညွှန်', '5–6 months — Speech guide', '/guides/gd_5_6m_speech.7a0f1ebe34.webp', 'clinical_review'],
   ['gd_7_9m_cognitive', '၇ – ၉ လ — အသိဉာဏ် ဖွံ့ဖြိုးမှု လမ်းညွှန်', '7–9 months — Cognitive guide', '/guides/gd_7_9m_cognitive.573c2f0d30.webp', 'published'],
   ['gd_7_9m_communication', '၇ – ၉ လ — ဆက်သွယ်ပြောဆိုမှု လမ်းညွှန်', '7–9 months — Communication guide', '/guides/gd_7_9m_communication.bdb749e2a3.webp', 'published'],
+  ['gd_7_9m_daily_routine', '၇ – ၉ လ — နေ့စဉ် လုပ်ရိုးလုပ်စဉ် လမ်းညွှန်', '7–9 months — Daily routine guide', '/guides/gd_7_9m_daily_routine.fa72ddb356.webp', 'clinical_review'],
   ['gd_7_9m_emotional', '၇ – ၉ လ — စိတ်ခံစားမှု လမ်းညွှန်', '7–9 months — Emotional guide', '/guides/gd_7_9m_emotional.73eabf88fb.webp', 'published'],
+  ['gd_7_9m_fine_motor', '၇ – ၉ လ — လက်ချောင်းငယ် လှုပ်ရှားမှု လမ်းညွှန်', '7–9 months — Fine motor guide', '/guides/gd_7_9m_fine_motor.90cd7a6e1a.webp', 'clinical_review'],
+  ['gd_7_9m_gross_motor', '၇–၉ လ — ကြွက်သားကြီး လှုပ်ရှားမှု', '7–9 months — Gross Motor', '/guides/gd_7_9m_gross_motor.9ede7495bd.webp', 'clinical_review'],
+  ['gd_7_9m_language', '၇ – ၉ လ — ဘာသာစကား နားလည်မှု လမ်းညွှန်', '7–9 months — Language guide', '/guides/gd_7_9m_language.4d8fa21cb8.webp', 'clinical_review'],
+  ['gd_7_9m_nutrition', '၇ – ၉ လ — အာဟာရ လမ်းညွှန်', '7–9 months — Nutrition guide', '/guides/gd_7_9m_nutrition.4276d1d573.webp', 'clinical_review'],
   ['gd_7_9m_safety', '၇ – ၉ လ — ဘေးကင်းလုံခြုံရေး လမ်းညွှန်', '7–9 months — Safety guide', '/guides/gd_7_9m_safety.d33c9acaf9.webp', 'published'],
   ['gd_7_9m_self_help', '၇ – ၉ လ — ကိုယ်တိုင် လုပ်ဆောင်နိုင်မှု လမ်းညွှန်', '7–9 months — Self-help guide', '/guides/gd_7_9m_self_help.cdfac6e4bf.webp', 'published'],
+  ['gd_7_9m_sleep', '၇ – ၉ လ — အိပ်စက်ခြင်း လမ်းညွှန်', '7–9 months — Sleep guide', '/guides/gd_7_9m_sleep.49c5004bb6.webp', 'clinical_review'],
   ['gd_7_9m_social', '၇ – ၉ လ — လူမှုဆက်ဆံရေး လမ်းညွှန်', '7–9 months — Social guide', '/guides/gd_7_9m_social.2a908691eb.webp', 'published'],
+  ['gd_7_9m_speech', '၇ – ၉ လ — စကားသံ ထွက်ဆိုမှု လမ်းညွှန်', '7–9 months — Speech guide', '/guides/gd_7_9m_speech.b2b52b6578.webp', 'clinical_review'],
 ] as const);
 const EMPTY_RECORDS = vi.hoisted(() => [] as const);
 
