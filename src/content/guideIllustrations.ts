@@ -95,6 +95,34 @@ export const GUIDE_ILLUSTRATIONS: Readonly<Record<string, string>> = {
     '/guides/gd_7_9m_social.2a908691eb.webp',
   gd_7_9m_speech:
     '/guides/gd_7_9m_speech.b2b52b6578.webp',
+  gd_10_12m_cognitive:
+    '/guides/gd_10_12m_cognitive.b07b3296a1.webp',
+  gd_10_12m_communication:
+    '/guides/gd_10_12m_communication.b4bbd30a3d.webp',
+  gd_10_12m_daily_routine:
+    '/guides/gd_10_12m_daily_routine.53210581ab.webp',
+  gd_10_12m_emotional:
+    '/guides/gd_10_12m_emotional.2c08ce4b18.webp',
+  gd_10_12m_fine_motor:
+    '/guides/gd_10_12m_fine_motor.5053c77e93.webp',
+  gd_10_12m_gross_motor:
+    '/guides/gd_10_12m_gross_motor.c00d6ea6f9.webp',
+  gd_10_12m_language:
+    '/guides/gd_10_12m_language.5f707ac4bc.webp',
+  gd_10_12m_nutrition:
+    '/guides/gd_10_12m_nutrition.6040ff99d5.webp',
+  gd_10_12m_play:
+    '/guides/gd_10_12m_play.5b6fab6c04.webp',
+  gd_10_12m_safety:
+    '/guides/gd_10_12m_safety.982cb1efe2.webp',
+  gd_10_12m_self_help:
+    '/guides/gd_10_12m_self_help.ad95467b37.webp',
+  gd_10_12m_sleep:
+    '/guides/gd_10_12m_sleep.ed83041f69.webp',
+  gd_10_12m_social:
+    '/guides/gd_10_12m_social.e95293d313.webp',
+  gd_10_12m_speech:
+    '/guides/gd_10_12m_speech.457c2b581c.webp',
 };
 
 export function guideIllustration(slug: string): string | undefined {
