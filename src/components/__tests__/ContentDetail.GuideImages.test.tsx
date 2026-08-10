@@ -67,6 +67,12 @@ const GUIDES = vi.hoisted(() => [
   ['gd_10_12m_sleep', '၁၀ – ၁၂ လ — အိပ်စက်ခြင်း လမ်းညွှန်', '10–12 months — Sleep guide', '/guides/gd_10_12m_sleep.ed83041f69.webp', 'clinical_review'],
   ['gd_10_12m_social', '၁၀ – ၁၂ လ — လူမှုဆက်ဆံရေး လမ်းညွှန်', '10–12 months — Social guide', '/guides/gd_10_12m_social.e95293d313.webp', 'clinical_review'],
   ['gd_10_12m_speech', '၁၀ – ၁၂ လ — စကားသံ ထွက်ဆိုမှု လမ်းညွှန်', '10–12 months — Speech guide', '/guides/gd_10_12m_speech.457c2b581c.webp', 'clinical_review'],
+  ['gd_13_18m_daily_routine', '၁၃–၁၈ လ — နေ့စဉ်လုပ်ရိုးလုပ်စဉ် လမ်းညွှန်', '13–18 months — daily routine guide', '/guides/gd_13_18m_daily_routine.cf3d513e9d.webp', 'clinical_review'],
+  ['gd_13_18m_fine_motor', '၁၃–၁၈ လ — လက်ချောင်းငယ် လှုပ်ရှားမှု', '13–18 months — Fine Motor', '/guides/gd_13_18m_fine_motor.f1740c1cd4.webp', 'clinical_review'],
+  ['gd_13_18m_nutrition', '၁၃–၁၈ လ — အာဟာရ လမ်းညွှန်', '13–18 months — nutrition guide', '/guides/gd_13_18m_nutrition.be0990bf57.webp', 'clinical_review'],
+  ['gd_13_18m_safety', '၁၃–၁၈ လ — ဘေးကင်းလုံခြုံရေး လမ်းညွှန်', '13–18 months — safety guide', '/guides/gd_13_18m_safety.72be1e8e99.webp', 'clinical_review'],
+  ['gd_13_18m_self_help', '၁၃–၁၈ လ — ကိုယ်တိုင် လုပ်ဆောင်နိုင်မှု', '13–18 months — Self Help', '/guides/gd_13_18m_self_help.ffc00eff93.webp', 'clinical_review'],
+  ['gd_13_18m_sleep', '၁၃–၁၈ လ — အိပ်စက်ခြင်း လမ်းညွှန်', '13–18 months — sleep guide', '/guides/gd_13_18m_sleep.824b435f9a.webp', 'clinical_review'],
 ] as const);
 const EMPTY_RECORDS = vi.hoisted(() => [] as const);
 
