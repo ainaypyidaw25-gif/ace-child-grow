@@ -1,7 +1,18 @@
 import { describe, it, expect } from 'vitest';
-import { evaluateSafety, EMERGENCY_MESSAGE } from '../safety/safety';
+import {
+  ACUTE_URGENT_SYMPTOMS,
+  evaluateSafety,
+  EMERGENCY_MESSAGE,
+  URGENT_SYMPTOMS,
+} from '../safety/safety';
 
 describe('urgent safety engine', () => {
+  it('exposes every fixed urgent symptom except skill loss as an acute UI option', () => {
+    expect(ACUTE_URGENT_SYMPTOMS).toEqual(
+      URGENT_SYMPTOMS.filter((symptom) => symptom !== 'loss_of_acquired_skills'),
+    );
+  });
+
   it('is not urgent with no symptoms and no skill loss', () => {
     const r = evaluateSafety({ confirmedSymptoms: [], lostSkill: false });
     expect(r.urgent).toBe(false);
@@ -9,12 +20,15 @@ describe('urgent safety engine', () => {
     expect(r.triggers).toEqual([]);
   });
 
-  it('fires on a single fixed urgent symptom and returns the fixed message', () => {
-    const r = evaluateSafety({ confirmedSymptoms: ['seizure'], lostSkill: false });
-    expect(r.urgent).toBe(true);
-    expect(r.message).toEqual(EMERGENCY_MESSAGE);
-    expect(r.triggers).toContain('seizure');
-  });
+  it.each(ACUTE_URGENT_SYMPTOMS)(
+    'fires on the fixed acute symptom %s and returns the fixed message',
+    (symptom) => {
+      const r = evaluateSafety({ confirmedSymptoms: [symptom], lostSkill: false });
+      expect(r.urgent).toBe(true);
+      expect(r.message).toEqual(EMERGENCY_MESSAGE);
+      expect(r.triggers).toEqual([symptom]);
+    },
+  );
 
   it('treats skill loss as an urgent trigger and saves the concern', () => {
     const r = evaluateSafety({ confirmedSymptoms: [], lostSkill: true });

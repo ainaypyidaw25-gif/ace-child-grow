@@ -20,6 +20,58 @@ export const URGENT_SYMPTOMS = [
 ] as const;
 export type UrgentSymptom = (typeof URGENT_SYMPTOMS)[number];
 
+/** Acute symptoms that parents can confirm in the milestone assessment UI. */
+export const ACUTE_URGENT_SYMPTOMS = [
+  'severe_breathing_difficulty',
+  'blue_lips',
+  'breathing_pauses',
+  'seizure',
+  'unresponsiveness',
+  'sudden_weakness',
+  'serious_injury',
+  'severe_dehydration',
+] as const satisfies readonly UrgentSymptom[];
+export type AcuteUrgentSymptom = (typeof ACUTE_URGENT_SYMPTOMS)[number];
+
+/** Fixed display labels for the fixed acute rules; these are not library content. */
+export const ACUTE_URGENT_SYMPTOM_LABELS: Record<
+  AcuteUrgentSymptom,
+  { mm: string; en: string }
+> = {
+  severe_breathing_difficulty: {
+    mm: 'အသက်ရှူရ အလွန်ခက်ခဲခြင်း',
+    en: 'Severe difficulty breathing',
+  },
+  blue_lips: {
+    mm: 'နှုတ်ခမ်းပြာခြင်း',
+    en: 'Blue lips',
+  },
+  breathing_pauses: {
+    mm: 'အသက်ရှူခြင်း ခေတ္တရပ်သွားခြင်း',
+    en: 'Pauses in breathing',
+  },
+  seizure: {
+    mm: 'တက်ခြင်း',
+    en: 'Seizure',
+  },
+  unresponsiveness: {
+    mm: 'ခေါ်၍ သို့မဟုတ် ထိ၍ မတုံ့ပြန်ခြင်း',
+    en: 'Not responding when called or touched',
+  },
+  sudden_weakness: {
+    mm: 'ရုတ်တရက် အားနည်းသွားခြင်း',
+    en: 'Sudden weakness',
+  },
+  serious_injury: {
+    mm: 'ပြင်းထန်သော ထိခိုက်ဒဏ်ရာ',
+    en: 'Serious injury',
+  },
+  severe_dehydration: {
+    mm: 'ပြင်းထန်စွာ ရေဓာတ်ခန်းခြောက်ခြင်း',
+    en: 'Severe dehydration',
+  },
+};
+
 /** Fixed emergency message. Text only — no fabricated numbers. */
 export const EMERGENCY_MESSAGE = {
   mm: 'အနီးဆုံး အရေးပေါ်ကျန်းမာရေးဝန်ဆောင်မှုသို့ ချက်ချင်းသွားပါ သို့မဟုတ် သင့်ဒေသရှိ အရေးပေါ်နံပါတ်ကို ဆက်သွယ်ပါ။',

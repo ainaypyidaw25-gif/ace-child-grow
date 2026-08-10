@@ -47,6 +47,8 @@ export const en: Record<TranslationKey, string> = {
   'safety.emergency':
     'Go to the nearest emergency health service immediately, or call your local emergency number.',
   'safety.skillLoss.question': 'Has your child lost any skill they could previously do?',
+  'safety.acute.question': 'Does your child have any of these urgent symptoms now?',
+  'safety.acute.help': 'Select every symptom that is happening. Leave all unselected if none apply.',
 
   'hope.title': 'Hope & Understanding Center',
   'growth.title': 'Growth Tracker',

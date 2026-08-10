@@ -6,6 +6,11 @@ import { useLocale } from '../app/LocaleContext';
 import { useAppState } from '../app/AppState';
 import { computeResult, type MilestoneResponseInput } from '../domain/rules/resultEngine';
 import { SafetyBanner } from '../components/SafetyBanner';
+import {
+  ACUTE_URGENT_SYMPTOMS,
+  ACUTE_URGENT_SYMPTOM_LABELS,
+  type AcuteUrgentSymptom,
+} from '../domain/safety/safety';
 import type { DevelopmentDomain, MilestoneAnswer } from '../domain/types';
 import type { TranslationKey } from '../i18n';
 import { developmentalAgeMonths } from '../domain/age/age';
@@ -62,6 +67,7 @@ export function MilestoneDemo() {
   const [answers, setAnswers] = useState<Record<number, MilestoneAnswer>>({});
   const [notes, setNotes] = useState<Record<number, string>>({});
   const [lostSkill, setLostSkill] = useState<boolean | null>(null);
+  const [confirmedSymptoms, setConfirmedSymptoms] = useState<AcuteUrgentSymptom[]>([]);
   const [submitted, setSubmitted] = useState(false);
   const [busy, setBusy] = useState(false);
   const [saveError, setSaveError] = useState('');
@@ -84,8 +90,8 @@ export function MilestoneDemo() {
       domain: normalizeDomain(item.domainKey),
       answer: answers[index] ?? 'not_sure',
     }));
-    return computeResult(responses, { confirmedSymptoms: [], lostSkill: lostSkill === true });
-  }, [submitted, answers, lostSkill, items]);
+    return computeResult(responses, { confirmedSymptoms, lostSkill: lostSkill === true });
+  }, [submitted, answers, lostSkill, confirmedSymptoms, items]);
 
   if (!activeChild) return <NoChild />;
   if (data === undefined) return <p className="text-ink-soft" role="status">…</p>;
@@ -123,6 +129,7 @@ export function MilestoneDemo() {
           setAnswers({});
           setNotes({});
           setLostSkill(null);
+          setConfirmedSymptoms([]);
         }}>
           {locale === 'mm' ? 'စစ်ဆေးစာရင်း အသစ်စမည်' : 'Start a new checklist'}
         </button>
@@ -153,7 +160,7 @@ export function MilestoneDemo() {
         domain: response.domain,
         answer: response.answer,
       })),
-      { confirmedSymptoms: [], lostSkill },
+      { confirmedSymptoms, lostSkill },
     );
     try {
       await recordSession({
@@ -165,6 +172,7 @@ export function MilestoneDemo() {
           state: computed.state,
           answeredCount: answered,
           completedAt: Date.now(),
+          safetyTriggers: computed.safety.triggers,
         },
         responses,
       });
@@ -237,6 +245,27 @@ export function MilestoneDemo() {
           </button>
         ) : (
           <div className="flex max-w-sm flex-col items-end gap-2">
+            <fieldset className="w-full rounded-2xl border border-line bg-white p-3 text-sm">
+              <legend className="px-1 font-medium text-ink">{t('safety.acute.question')}</legend>
+              <p className="mb-2 mt-1 text-xs leading-5 text-ink-soft">{t('safety.acute.help')}</p>
+              <div className="grid gap-2">
+                {ACUTE_URGENT_SYMPTOMS.map((symptom) => (
+                  <label key={symptom} className="flex min-h-touch cursor-pointer items-center gap-3 rounded-xl border border-line px-3 py-2">
+                    <input
+                      type="checkbox"
+                      checked={confirmedSymptoms.includes(symptom)}
+                      onChange={(event) => setConfirmedSymptoms((previous) => (
+                        event.target.checked
+                          ? [...previous, symptom]
+                          : previous.filter((value) => value !== symptom)
+                      ))}
+                      className="h-5 w-5 accent-state-red"
+                    />
+                    <span>{ACUTE_URGENT_SYMPTOM_LABELS[symptom][locale]}</span>
+                  </label>
+                ))}
+              </div>
+            </fieldset>
             <fieldset className="rounded-2xl border border-line bg-white p-3 text-sm">
               <legend className="px-1 text-ink-soft">{t('safety.skillLoss.question')}</legend>
               <div className="mt-1 flex gap-2">
