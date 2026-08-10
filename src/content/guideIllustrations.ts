@@ -123,6 +123,18 @@ export const GUIDE_ILLUSTRATIONS: Readonly<Record<string, string>> = {
     '/guides/gd_10_12m_social.e95293d313.webp',
   gd_10_12m_speech:
     '/guides/gd_10_12m_speech.457c2b581c.webp',
+  gd_13_18m_daily_routine:
+    '/guides/gd_13_18m_daily_routine.cf3d513e9d.webp',
+  gd_13_18m_fine_motor:
+    '/guides/gd_13_18m_fine_motor.f1740c1cd4.webp',
+  gd_13_18m_nutrition:
+    '/guides/gd_13_18m_nutrition.be0990bf57.webp',
+  gd_13_18m_safety:
+    '/guides/gd_13_18m_safety.72be1e8e99.webp',
+  gd_13_18m_self_help:
+    '/guides/gd_13_18m_self_help.ffc00eff93.webp',
+  gd_13_18m_sleep:
+    '/guides/gd_13_18m_sleep.824b435f9a.webp',
 };
 
 export function guideIllustration(slug: string): string | undefined {
