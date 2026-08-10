@@ -53,6 +53,20 @@ const GUIDES = vi.hoisted(() => [
   ['gd_7_9m_sleep', '၇ – ၉ လ — အိပ်စက်ခြင်း လမ်းညွှန်', '7–9 months — Sleep guide', '/guides/gd_7_9m_sleep.49c5004bb6.webp', 'clinical_review'],
   ['gd_7_9m_social', '၇ – ၉ လ — လူမှုဆက်ဆံရေး လမ်းညွှန်', '7–9 months — Social guide', '/guides/gd_7_9m_social.2a908691eb.webp', 'published'],
   ['gd_7_9m_speech', '၇ – ၉ လ — စကားသံ ထွက်ဆိုမှု လမ်းညွှန်', '7–9 months — Speech guide', '/guides/gd_7_9m_speech.b2b52b6578.webp', 'clinical_review'],
+  ['gd_10_12m_cognitive', '၁၀ – ၁၂ လ — အသိဉာဏ် ဖွံ့ဖြိုးမှု လမ်းညွှန်', '10–12 months — Cognitive guide', '/guides/gd_10_12m_cognitive.b07b3296a1.webp', 'clinical_review'],
+  ['gd_10_12m_communication', '၁၀–၁၂ လ — ဆက်သွယ်ပြောဆိုမှု', '10–12 months — Communication', '/guides/gd_10_12m_communication.b4bbd30a3d.webp', 'clinical_review'],
+  ['gd_10_12m_daily_routine', '၁၀ – ၁၂ လ — နေ့စဉ် လုပ်ရိုးလုပ်စဉ် လမ်းညွှန်', '10–12 months — Daily routine guide', '/guides/gd_10_12m_daily_routine.53210581ab.webp', 'clinical_review'],
+  ['gd_10_12m_emotional', '၁၀ – ၁၂ လ — စိတ်ခံစားမှု ဖွံ့ဖြိုးမှု လမ်းညွှန်', '10–12 months — Emotional guide', '/guides/gd_10_12m_emotional.2c08ce4b18.webp', 'clinical_review'],
+  ['gd_10_12m_fine_motor', '၁၀ – ၁၂ လ — လက်ချောင်းငယ် လှုပ်ရှားမှု လမ်းညွှန်', '10–12 months — Fine motor guide', '/guides/gd_10_12m_fine_motor.5053c77e93.webp', 'clinical_review'],
+  ['gd_10_12m_gross_motor', '၁၀ – ၁၂ လ — ကြွက်သားကြီး လှုပ်ရှားမှု လမ်းညွှန်', '10–12 months — Gross motor guide', '/guides/gd_10_12m_gross_motor.c00d6ea6f9.webp', 'clinical_review'],
+  ['gd_10_12m_language', '၁၀ – ၁၂ လ — ဘာသာစကား နားလည်မှု လမ်းညွှန်', '10–12 months — Language understanding guide', '/guides/gd_10_12m_language.5f707ac4bc.webp', 'clinical_review'],
+  ['gd_10_12m_nutrition', '၁၀ – ၁၂ လ — အာဟာရ လမ်းညွှန်', '10–12 months — Nutrition guide', '/guides/gd_10_12m_nutrition.6040ff99d5.webp', 'clinical_review'],
+  ['gd_10_12m_play', '၁၀ – ၁၂ လ — ကစားခြင်းနှင့် အိမ်တွင်း ဘေးကင်းရေး လမ်းညွှန်', '10–12 months — Play and home-safety guide', '/guides/gd_10_12m_play.5b6fab6c04.webp', 'clinical_review'],
+  ['gd_10_12m_safety', '၁၀–၁၂ လ — ဘေးကင်းလုံခြုံရေး', '10–12 months — Safety', '/guides/gd_10_12m_safety.982cb1efe2.webp', 'clinical_review'],
+  ['gd_10_12m_self_help', '၁၀ – ၁၂ လ — ကိုယ်တိုင် လုပ်ဆောင်နိုင်မှု လမ်းညွှန်', '10–12 months — Self-help guide', '/guides/gd_10_12m_self_help.ad95467b37.webp', 'clinical_review'],
+  ['gd_10_12m_sleep', '၁၀ – ၁၂ လ — အိပ်စက်ခြင်း လမ်းညွှန်', '10–12 months — Sleep guide', '/guides/gd_10_12m_sleep.ed83041f69.webp', 'clinical_review'],
+  ['gd_10_12m_social', '၁၀ – ၁၂ လ — လူမှုဆက်ဆံရေး လမ်းညွှန်', '10–12 months — Social guide', '/guides/gd_10_12m_social.e95293d313.webp', 'clinical_review'],
+  ['gd_10_12m_speech', '၁၀ – ၁၂ လ — စကားသံ ထွက်ဆိုမှု လမ်းညွှန်', '10–12 months — Speech guide', '/guides/gd_10_12m_speech.457c2b581c.webp', 'clinical_review'],
 ] as const);
 const EMPTY_RECORDS = vi.hoisted(() => [] as const);
 
