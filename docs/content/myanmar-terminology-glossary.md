@@ -1,7 +1,9 @@
 # Myanmar Terminology Glossary
 
-Consistent Myanmar terms for ACE Child Grow. **These are AI-drafted and still
-require native-Myanmar and clinical review** before being treated as final.
+Consistent Myanmar terms for ACE Child Grow. **These terms require native-
+Myanmar, evidence and safety review** before being treated as final. Clinical
+review is additionally required only when a term is used in diagnosis,
+treatment, medication, individualized-advice or emergency-decision wording.
 Translators editing content via the CMS should follow this table.
 
 | Concept (EN) | Myanmar (use consistently) | Notes |
@@ -31,7 +33,8 @@ Translators editing content via the CMS should follow this table.
 - Body text ≥ 16px, line-height 1.65–1.85, font stack
   `"Noto Sans Myanmar", "Pyidaungsu", "Myanmar Text", sans-serif`.
 
-## Still requiring native-human review
-All milestone, activity, awareness, and lesson wording in `src/data/seed/content.ts`
-is AI-drafted placeholder marked `clinical_review`. A native Myanmar speaker +
-qualified clinical reviewer must finalize before publication.
+## Review boundary
+Milestone, activity, awareness and lesson wording requires a native Myanmar
+speaker plus English, evidence and safety review. Ordinary education does not
+require a clinical reviewer record. Specialist-risk wording must additionally
+be finalized through the clinical-review workflow before publication.

@@ -82,6 +82,35 @@ export function isPubliclyReadableStatus(status: string): boolean {
   return status === 'published';
 }
 
+const PUBLICATION_MANIFEST_LIMIT = 5_000;
+
+/**
+ * Complete parent-readable slug manifest used only to withdraw stale offline
+ * copies. It contains no draft slug, wording, media or review metadata. If the
+ * bounded query ever exceeds its catalogue budget, `complete` is false and the
+ * client refuses to delete anything from an incomplete manifest.
+ */
+export const publicationManifest = query({
+  args: {},
+  returns: v.object({
+    complete: v.boolean(),
+    slugs: v.array(v.string()),
+  }),
+  handler: async (ctx) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) return { complete: false, slugs: [] };
+    const rows = await ctx.db
+      .query('libraryContent')
+      .withIndex('by_status', (q) => q.eq('clinicalStatus', 'published'))
+      .take(PUBLICATION_MANIFEST_LIMIT + 1);
+    if (rows.length > PUBLICATION_MANIFEST_LIMIT) return { complete: false, slugs: [] };
+    return {
+      complete: true,
+      slugs: rows.map((row) => row.slug).sort((a, b) => a.localeCompare(b)),
+    };
+  },
+});
+
 export const listByType = query({
   args: {
     type: v.string(),
@@ -735,7 +764,9 @@ export const setReview = mutation({
     });
     const auditSummary = specialistReason === 'focused_emergency_wording'
       ? `${item.titleEn} · specialist review limited to emergency wording`
-      : item.titleEn;
+      : specialistReason === 'bed_sharing_wording'
+        ? `${item.titleEn} · specialist review required for bed-sharing wording`
+        : item.titleEn;
     await logAudit(ctx, userId, `library.${args.clinicalStatus}`, 'libraryContent', item._id, auditSummary);
     return { ok: true as const, reviewScope: approval?.scope ?? null };
   },

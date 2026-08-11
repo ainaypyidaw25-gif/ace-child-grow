@@ -15,10 +15,11 @@
  * nothing, so the backend is faked and the content is real.
  *
  * WHAT IS REAL HERE
- *   - The library is `convex/seedData.json`, the same 383 records the app
- *     ships, filtered by `fixtures/publishedSlugs.json` — the exact 226 slugs
- *     that are published in Production. So the video shows a parent the
- *     library they actually have, not a mock-up of one.
+ *   - The library is `convex/seedData.json`, the same source records the app
+ *     ships, filtered by `fixtures/publishedSlugs.json`. That fixture preserves
+ *     the exact 226-slug production read made before the coordinated duplicate
+ *     withdrawal; six retired source slugs are absent from seedData and
+ *     therefore cannot render in this harness.
  *   - The publish filter mirrors `isPubliclyReadableStatus` (status ===
  *     'published'), so the harness cannot show a parent something the real
  *     backend would withhold.
@@ -176,6 +177,11 @@ function runQuery(name: string, args: Record<string, unknown>): unknown {
       return FREE_SUBSCRIPTION;
     case 'library:listByType':
       return listByType(args as ListArgs);
+    case 'library:publicationManifest':
+      return {
+        complete: true,
+        slugs: LIBRARY.filter(publiclyReadable).map((row) => String(row.slug)).sort(),
+      };
     case 'library:getBySlug': {
       const item = LIBRARY.find((r) => r.slug === args.slug);
       if (!item) return null;

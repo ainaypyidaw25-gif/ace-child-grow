@@ -12,6 +12,7 @@ import { decideStaffRoute } from './staffRoute';
 import { isGooglePlayBuild, useNativeDeepLinks } from './platform';
 import { ScreenErrorBoundary } from '../components/ScreenErrorBoundary';
 import { useLocale } from './LocaleContext';
+import { useOfflineWithdrawal } from './useOfflineLibrary';
 
 const Welcome = lazy(() => import('../screens/Welcome').then((module) => ({ default: module.Welcome })));
 const Consent = lazy(() => import('../screens/Consent').then((module) => ({ default: module.Consent })));
@@ -255,6 +256,7 @@ function StandaloneScreen({ children }: { children: ReactNode }) {
 
 function AppRoutes() {
   const googlePlayBuild = isGooglePlayBuild();
+  useOfflineWithdrawal();
   return (
     <Routes>
       <Route path="/" element={<Bootstrap />} />

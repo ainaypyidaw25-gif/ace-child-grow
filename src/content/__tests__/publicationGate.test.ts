@@ -52,6 +52,21 @@ describe('risk-scoped publication gate', () => {
     expect(librarySource).toContain('!isPubliclyReadableStatus(item.clinicalStatus)');
   });
 
+  it('automatically withdraws offline rows and media from a complete live publication manifest', () => {
+    expect(librarySource).toContain('export const publicationManifest = query');
+    expect(librarySource).toContain("withIndex('by_status'");
+    expect(librarySource).toContain("q.eq('clinicalStatus', 'published')");
+    expect(librarySource).toContain('PUBLICATION_MANIFEST_LIMIT + 1');
+
+    const offlineHook = readFileSync('src/app/useOfflineLibrary.ts', 'utf8');
+    expect(offlineHook).toContain('api.library.publicationManifest');
+    expect(offlineHook).toContain('withdrawUnavailableOfflineContent');
+    expect(offlineHook).toContain('removeOfflineMedia');
+
+    const app = readFileSync('src/app/App.tsx', 'utf8');
+    expect(app).toContain('useOfflineWithdrawal();');
+  });
+
   it('does not allow parents to complete an unpublished activity', () => {
     const activitiesSource = readFileSync('convex/activities.ts', 'utf8');
     expect(activitiesSource).toContain("content.clinicalStatus !== 'published'");

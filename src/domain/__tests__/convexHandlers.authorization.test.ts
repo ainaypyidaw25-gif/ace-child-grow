@@ -300,6 +300,53 @@ describe('Convex registered handlers enforce authorization', () => {
     expect(context.db.patch).not.toHaveBeenCalled();
   });
 
+  it('an education owner cannot publish bed-sharing wording', async () => {
+    authState.userId = 'owner-1';
+    const context = ctx({
+      profile: {
+        userId: 'owner-1', isStaff: true, staffRole: 'owner',
+        staffQualification: 'MEd Early Childhood Education', displayName: 'Education Owner',
+      },
+      rows: { libraryContent: [{
+        _id: 'content-1', slug: 'future-bed-sharing-guide', titleEn: 'Infant sleep', reviewRevision: 1,
+        data: { safety: { en: 'How to bed-share with a baby.' } },
+      }] },
+    });
+    await expect(handler(setLibraryReview)(context, {
+      slug: 'future-bed-sharing-guide', clinicalStatus: 'published',
+    })).rejects.toThrow('Insufficient staff permission');
+    expect(context.db.patch).not.toHaveBeenCalled();
+  });
+
+  it('records a qualified specialist decision for bed-sharing wording at clinical scope', async () => {
+    authState.userId = 'reviewer-1';
+    const context = ctx({
+      profile: {
+        userId: 'reviewer-1', isStaff: true, staffRole: 'clinical_reviewer',
+        staffQualification: 'MBBS, MMedSc (Paediatrics)', displayName: 'Clinical Reviewer',
+      },
+      rows: {
+        libraryContent: [{
+          _id: 'content-1', slug: 'future-bed-sharing-guide', titleEn: 'Infant sleep', reviewRevision: 3,
+          data: { safety: { en: 'How to bed-share with a baby.' } },
+        }],
+        contentReviews: ['english', 'native_myanmar', 'evidence', 'safety', 'clinical'].map((dimension) => ({
+          contentSlug: 'future-bed-sharing-guide', contentVersion: 3, dimension, decision: 'approved',
+        })),
+      },
+    });
+    await expect(handler(setLibraryReview)(context, {
+      slug: 'future-bed-sharing-guide', clinicalStatus: 'published',
+    })).resolves.toEqual({ ok: true, reviewScope: 'clinical' });
+    expect(context.db.patch).toHaveBeenCalledWith('content-1', expect.objectContaining({
+      clinicalStatus: 'published', reviewScope: 'clinical', reviewerDisplayName: 'Clinical Reviewer',
+    }));
+    expect(context.db.insert).toHaveBeenCalledWith('auditLogs', expect.objectContaining({
+      action: 'library.published',
+      summary: 'Infant sleep · specialist review required for bed-sharing wording',
+    }));
+  });
+
   it('an education owner cannot publish newly-authored medication wording', async () => {
     authState.userId = 'owner-1';
     const context = ctx({

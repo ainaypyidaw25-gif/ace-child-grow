@@ -14,6 +14,10 @@ import {
 } from '../../../convex/lib/seedPolicy';
 import { importSeed } from '../../../convex/library';
 import { run as seedRun } from '../../../convex/seed';
+import {
+  DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID,
+  DUPLICATE_MILESTONE_SLUGS,
+} from '../../../convex/lib/contentRetirements';
 
 // Resolved from this file, not the runner's cwd, so the guard cannot silently
 // pass (or fail) because of where vitest was invoked from.
@@ -46,6 +50,13 @@ const IMPORTER_FIELDS = new Set([
 ]);
 
 describe('seed generation', () => {
+  it('excludes the exact code-reviewed duplicate-milestone retirement release', () => {
+    expect(DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID).toBe('2026-08-11-duplicate-milestones');
+    expect(DUPLICATE_MILESTONE_SLUGS).toHaveLength(6);
+    const slugs = new Set(seedPayload().map((item) => item.slug));
+    for (const slug of DUPLICATE_MILESTONE_SLUGS) expect(slugs.has(slug), slug).toBe(false);
+  });
+
   it('keeps published errata narrow and code-versioned', () => {
     const releases = [
       ['2026-07-28-content-remediation', 11],

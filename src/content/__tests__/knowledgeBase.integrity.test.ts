@@ -3,6 +3,7 @@ import { INFANT_CONTENT } from '../seed/infant';
 import { CONTENT_SEED } from '../seed';
 import { AUTHORABLE_EDITORIAL_STATUSES } from '../seed/infant/editorial';
 import { sourcesForContent } from '../../evidence/links';
+import { isDuplicateMilestoneSlug } from '../../../convex/lib/contentRetirements';
 
 // Gates for the 0–12 month knowledge base.
 //
@@ -11,6 +12,9 @@ import { sourcesForContent } from '../../evidence/links';
 // verified reference, and nothing may promise an outcome or diagnose.
 
 const BANDS_SHIPPED = ['birth_2m', '3_4m', '5_6m', '7_9m', '10_12m'];
+const ACTIVE_INFANT_CONTENT = INFANT_CONTENT.filter(
+  (item) => !isDuplicateMilestoneSlug(item.slug),
+);
 
 describe('knowledge base — 0–12 months', () => {
   it('every authored item carries an editorial status an author is allowed to assert', () => {
@@ -38,7 +42,7 @@ describe('knowledge base — 0–12 months', () => {
   });
 
   it('every authored item resolves to at least one verified reference', () => {
-    for (const i of INFANT_CONTENT) {
+    for (const i of ACTIVE_INFANT_CONTENT) {
       const sources = sourcesForContent(i.slug);
       expect(sources.length, `${i.slug} has no resolved reference`).toBeGreaterThan(0);
     }
@@ -52,7 +56,12 @@ describe('knowledge base — 0–12 months', () => {
   it('each shipped band covers milestones, guides, activities and a checklist', () => {
     for (const band of BANDS_SHIPPED) {
       const inBand = CONTENT_SEED.filter((i) => i.ageGroupKey === band);
-      expect(inBand.filter((i) => i.type === 'milestone').length, `${band} milestones`).toBeGreaterThanOrEqual(8);
+      // The reviewed 5–6 month catalogue intentionally contains seven unique
+      // milestones after five duplicate/early claims were retired. A duplicate
+      // must never be counted as domain coverage merely to satisfy a quota.
+      const minimumMilestones = band === '5_6m' ? 7 : 8;
+      expect(inBand.filter((i) => i.type === 'milestone').length, `${band} milestones`)
+        .toBeGreaterThanOrEqual(minimumMilestones);
       expect(inBand.filter((i) => i.type === 'guide').length, `${band} guides`).toBeGreaterThanOrEqual(8);
       expect(inBand.filter((i) => i.type === 'activity').length, `${band} activities`).toBeGreaterThanOrEqual(5);
       const checklist = CONTENT_SEED.find((i) => i.type === 'printable' && i.category === `checklist_${band}`);

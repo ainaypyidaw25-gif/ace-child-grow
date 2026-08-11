@@ -6,7 +6,9 @@ import {
   FOCUSED_SPECIALIST_REVIEW_SLUGS,
   requiredPublicationReviews,
   requiresSpecialistReview,
+  specialistReviewReason,
 } from '../../../convex/lib/contentReviewRequirements';
+import { DUPLICATE_MILESTONE_SLUGS } from '../../../convex/lib/contentRetirements';
 
 const rows = seedPayload();
 const bySlug = (slug: string) => {
@@ -23,10 +25,13 @@ describe('evidence and child-safety content corrections', () => {
   });
 
   it('uses the corrected age-specific English milestone claims', () => {
-    expect(bySlug('ms_5_6m_language_1').titleEn).toBe('Takes turns making sounds with you');
     expect(bySlug('ms_5_6m_cognitive_2').titleEn).toBe('Explores cause and effect in play');
-    expect(bySlug('ms_5_6m_fine_motor_1').titleEn).toContain('Beginning');
     expect(bySlug('ms_5_6m_gross_motor_2').titleEn).toBe('Rolls from tummy to back');
+    expect(bySlug('ms_5_6m_speech_2').titleEn).toContain('consonant sounds');
+    expect(bySlug('ms_7_9m_fine_motor_1').titleEn).toBe('Passes objects hand to hand');
+    expect(bySlug('ms_7_9m_language_1').titleEn).toBe('Responds to own name');
+    expect(bySlug('ms_7_9m_social_1').titleEn).toBe('Knows familiar people');
+    expect(bySlug('ms_7_9m_gross_motor_2').titleEn).toBe('Sitting without support');
     expect(bySlug('ms_2y_gross_motor_1').titleEn).toBe('Runs');
     expect(bySlug('ms_2_5y_gross_motor_2').titleEn).toBe('Jumps off the ground with both feet');
     expect(bySlug('ms_3y_cognitive_1').titleEn).toBe('Shows they know at least one color');
@@ -35,6 +40,29 @@ describe('evidence and child-safety content corrections', () => {
     expect(bySlug('ms_5y_school_readiness_1').titleEn).toBe('Writes some letters in their name');
     expect(bySlug('ms_2_5y_fine_motor_1').titleEn).toBe('Turns book pages one at a time');
     expect(bySlug('ms_2y_speech_1').titleEn).toBe('Says at least two words together');
+  });
+
+  it('retires the exact six duplicate or age-misaligned milestone slugs from every new seed', () => {
+    expect(DUPLICATE_MILESTONE_SLUGS).toHaveLength(6);
+    for (const slug of DUPLICATE_MILESTONE_SLUGS) {
+      expect(rows.some((row) => row.slug === slug), slug).toBe(false);
+    }
+  });
+
+  it('routes bed-sharing wording to specialist review without treating general safe sleep as clinical approval', () => {
+    const bedSharing = {
+      slug: 'future-bed-sharing-guide',
+      titleEn: 'Infant sleep',
+      data: { safety: { en: 'How to bed-share with a baby.' } },
+    };
+    expect(specialistReviewReason(bedSharing)).toBe('bed_sharing_wording');
+    expect(requiredPublicationReviews(bedSharing)).toEqual([
+      ...EDUCATION_REVIEW_DIMENSIONS,
+      'clinical',
+    ]);
+    expect(specialistReviewReason(bySlug('gd_birth_2m_safety'))).toBe('bed_sharing_wording');
+    expect(bySlug('gd_birth_2m_safety').clinicalStatus).not.toBe('published');
+    expect(specialistReviewReason(bySlug('gd_birth_2m_sleep'))).toBe('risk_wording');
   });
 
   it('preserves exact Myanmar-English meaning in corrected fields', () => {
@@ -89,6 +117,7 @@ describe('evidence and child-safety content corrections', () => {
   it('removes stale pending-clinical metadata from every known parent-facing slug', () => {
     expect(publishedSlugs.length).toBeGreaterThanOrEqual(110);
     for (const slug of publishedSlugs) {
+      if ((DUPLICATE_MILESTONE_SLUGS as readonly string[]).includes(slug)) continue;
       expect(bySlug(slug).source, slug).not.toMatch(/pending native-Myanmar and clinical review/i);
     }
   });

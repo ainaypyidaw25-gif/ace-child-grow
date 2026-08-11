@@ -189,52 +189,6 @@
   },
   {
     "ageGroupKey": "5_6m",
-    "domainKey": "gross_motor",
-    "tags": [
-      "gross_motor",
-      "5_6m"
-    ],
-    "data": {
-      "observeMm": "ကျောမှ ဗိုက်ဘက်သို့ သို့မဟုတ် ပြန်၍ လှိမ့်နိုင်ပါသလား။",
-      "observeEn": "Rolls from back to tummy or the reverse?",
-      "whyMm": "လှိမ့်ခြင်းသည် ခန္ဓာကိုယ် ထိန်းချုပ်မှု တိုးတက်ကြောင်း ပြသည်။",
-      "whyEn": "Rolling shows growing body control."
-    },
-    "type": "milestone",
-    "slug": "ms_5_6m_gross_motor_1",
-    "titleMm": "တစ်ဘက်မှ တစ်ဘက်သို့ လှိမ့်ခြင်း",
-    "titleEn": "Rolls over",
-    "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
-    "version": 1,
-    "clinicalStatus": "clinical_review",
-    "media": [],
-    "searchText": "တစ်ဘက်မှ တစ်ဘက်သို့ လှိမ့်ခြင်း rolls over   gross_motor 5_6m ကျောမှ ဗိုက်ဘက်သို့ သို့မဟုတ် ပြန်၍ လှိမ့်နိုင်ပါသလား။ rolls from back to tummy or the reverse? လှိမ့်ခြင်းသည် ခန္ဓာကိုယ် ထိန်းချုပ်မှု တိုးတက်ကြောင်း ပြသည်။ rolling shows growing body control."
-  },
-  {
-    "ageGroupKey": "5_6m",
-    "domainKey": "speech",
-    "tags": [
-      "speech",
-      "5_6m"
-    ],
-    "data": {
-      "observeMm": "“ဘ” “မ” “ဒ” ကဲ့သို့ အသံများ ထုတ်ပါသလား။",
-      "observeEn": "Makes sounds like “ba”, “ma”, “da”?",
-      "whyMm": "ဗျည်းသံ တွဲရွတ်ခြင်းသည် ပထမဆုံးစကားလုံးများ၏ အခြေခံဖြစ်သည်။",
-      "whyEn": "Consonant babbling is the base for first words."
-    },
-    "type": "milestone",
-    "slug": "ms_5_6m_speech_1",
-    "titleMm": "ဗျည်းသံများ တွဲရွတ်ခြင်း",
-    "titleEn": "Babbles with consonants",
-    "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
-    "version": 1,
-    "clinicalStatus": "clinical_review",
-    "media": [],
-    "searchText": "ဗျည်းသံများ တွဲရွတ်ခြင်း babbles with consonants   speech 5_6m “ဘ” “မ” “ဒ” ကဲ့သို့ အသံများ ထုတ်ပါသလား။ makes sounds like “ba”, “ma”, “da”? ဗျည်းသံ တွဲရွတ်ခြင်းသည် ပထမဆုံးစကားလုံးများ၏ အခြေခံဖြစ်သည်။ consonant babbling is the base for first words."
-  },
-  {
-    "ageGroupKey": "5_6m",
     "domainKey": "cognitive",
     "tags": [
       "cognitive",
@@ -278,29 +232,6 @@
     "clinicalStatus": "clinical_review",
     "media": [],
     "searchText": "ကစားစရာများကို ပါးစပ်ဖြင့် စူးစမ်းခြင်း explores toys by mouthing   play 5_6m ကစားစရာများကို ကိုင်ပြီး ပါးစပ်သို့ ယူပါသလား။ brings toys to the mouth to explore? ဤသည်မှာ ပုံမှန်စူးစမ်းမှုဖြစ်၍ ဘေးကင်းသော ပစ္စည်းများသာ ပေးပါ။ mouthing is normal exploring — offer only safe objects."
-  },
-  {
-    "ageGroupKey": "7_9m",
-    "domainKey": "gross_motor",
-    "tags": [
-      "gross_motor",
-      "7_9m"
-    ],
-    "data": {
-      "observeMm": "ခဏတာ တစ်ယောက်တည်း ထိုင်နိုင်ပါသလား။",
-      "observeEn": "Sits alone for a short while?",
-      "whyMm": "တည်ငြိမ်စွာ ထိုင်ခြင်းသည် လက်နှစ်ဖက်ဖြင့် ကစားရန် လွတ်လပ်စေသည်။",
-      "whyEn": "Steady sitting frees both hands to play."
-    },
-    "type": "milestone",
-    "slug": "ms_7_9m_gross_motor_1",
-    "titleMm": "အထောက်မပါဘဲ ထိုင်ခြင်း",
-    "titleEn": "Sits without support",
-    "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
-    "version": 1,
-    "clinicalStatus": "clinical_review",
-    "media": [],
-    "searchText": "အထောက်မပါဘဲ ထိုင်ခြင်း sits without support   gross_motor 7_9m ခဏတာ တစ်ယောက်တည်း ထိုင်နိုင်ပါသလား။ sits alone for a short while? တည်ငြိမ်စွာ ထိုင်ခြင်းသည် လက်နှစ်ဖက်ဖြင့် ကစားရန် လွတ်လပ်စေသည်။ steady sitting frees both hands to play."
   },
   {
     "ageGroupKey": "7_9m",
@@ -13157,35 +13088,6 @@
   },
   {
     "ageGroupKey": "5_6m",
-    "domainKey": "fine_motor",
-    "tags": [
-      "fine_motor",
-      "5_6m"
-    ],
-    "data": {
-      "observeMm": "ကိုင်ထားသော ပစ္စည်းကို အခြားလက်သို့ စတင်ပြောင်းကိုင်နေပါသလား။ မပြောင်းကိုင်သေးလျှင် ၆ လအရွယ် စစ်ဆေးချက် မအောင်မြင်ခြင်းဟု မယူဆပါ။",
-      "observeEn": "Is she beginning to move a toy from one hand to the other? Not doing this yet is not a failed 6-month checkpoint.",
-      "whyMm": "ဤအရွယ်တွင် အလိုရှိသလို လှမ်းယူနိုင်လာပြီး လက်နှစ်ဖက် ပူးတွဲ အသုံးပြုမှု စတင်သည်။ ကိုင်မိသမျှကို ပါးစပ်ထဲ ထည့်ခြင်းသည် သင်ယူမှု ဖြစ်သည်။",
-      "whyEn": "Reaching becomes deliberate and the two hands start working together. Mouthing what she catches is learning, not a problem.",
-      "redMm": "လ ၆ လအရွယ်တွင် ပစ္စည်းကို လုံးဝ မလှမ်းယူခြင်း၊ လက်တစ်ဖက်တည်းကိုသာ အမြဲ သုံးခြင်းကို ပြပါ။",
-      "redEn": "No reaching at all by 6 months, or always using one hand only, should be checked.",
-      "encouragementMm": "လုံခြုံသော ပစ္စည်းများကို လက်လှမ်းမီရာတွင် ထားပေးပါ။",
-      "encouragementEn": "Keep a few safe objects within reach.",
-      "editorialStatus": "reference_verified",
-      "evidenceSummary": "Deliberate reaching is expected around 6 months; hand-to-hand transfer is labelled as emerging because current CDC checklists place it later."
-    },
-    "type": "milestone",
-    "slug": "ms_5_6m_fine_motor_1",
-    "titleMm": "ပစ္စည်းကို လက်တစ်ဖက်မှ တစ်ဖက်သို့ စတင်ပြောင်းကိုင်ခြင်း",
-    "titleEn": "Beginning to pass an object between hands",
-    "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
-    "version": 1,
-    "clinicalStatus": "clinical_review",
-    "media": [],
-    "searchText": "ပစ္စည်းကို လက်တစ်ဖက်မှ တစ်ဖက်သို့ စတင်ပြောင်းကိုင်ခြင်း beginning to pass an object between hands   fine_motor 5_6m ကိုင်ထားသော ပစ္စည်းကို အခြားလက်သို့ စတင်ပြောင်းကိုင်နေပါသလား။ မပြောင်းကိုင်သေးလျှင် ၆ လအရွယ် စစ်ဆေးချက် မအောင်မြင်ခြင်းဟု မယူဆပါ။ is she beginning to move a toy from one hand to the other? not doing this yet is not a failed 6-month checkpoint. ဤအရွယ်တွင် အလိုရှိသလို လှမ်းယူနိုင်လာပြီး လက်နှစ်ဖက် ပူးတွဲ အသုံးပြုမှု စတင်သည်။ ကိုင်မိသမျှကို ပါးစပ်ထဲ ထည့်ခြင်းသည် သင်ယူမှု ဖြစ်သည်။ reaching becomes deliberate and the two hands start working together. mouthing what she catches is learning, not a problem. လ ၆ လအရွယ်တွင် ပစ္စည်းကို လုံးဝ မလှမ်းယူခြင်း၊ လက်တစ်ဖက်တည်းကိုသာ အမြဲ သုံးခြင်းကို ပြပါ။ no reaching at all by 6 months, or always using one hand only, should be checked. လုံခြုံသော ပစ္စည်းများကို လက်လှမ်းမီရာတွင် ထားပေးပါ။ keep a few safe objects within reach. reference_verified deliberate reaching is expected around 6 months; hand-to-hand transfer is labelled as emerging because current cdc checklists place it later."
-  },
-  {
-    "ageGroupKey": "5_6m",
     "domainKey": "speech",
     "tags": [
       "speech",
@@ -13212,64 +13114,6 @@
     "clinicalStatus": "clinical_review",
     "media": [],
     "searchText": "\"ဘ\"၊ \"ဒ\" ကဲ့သို့ ဗျည်းသံများ ပေါင်းစပ် မြည်တွန်ခြင်း babbling with consonant sounds like \"ba\" and \"da\"   speech 5_6m \"ဘဘဘ\"၊ \"ဒဒဒ\" ကဲ့သို့ အသံများ ထွက်ပါသလား။ do you hear strings like \"ba-ba-ba\" or \"da-da-da\"? “ဘဘ”၊ “မမ” ကဲ့သို့ ဗျည်းသံတွဲများ ထပ်ခါတလဲလဲ ထွက်လာခြင်းသည် နောက်ပိုင်း စကားပြောနိုင်ရန် အသံထွက်လေ့ကျင့်နေခြင်း ဖြစ်သည်။ အဓိပ္ပာယ်ရှိသော စကားလုံး မဟုတ်သေးသော်လည်း အရေးကြီးသော ဖွံ့ဖြိုးမှုအဆင့်တစ်ခု ဖြစ်သည်။ consonant babble is the practice run for speech. it does not carry meaning yet, but it is an important step. လ ၆ လအရွယ်တွင် အသံ လုံးဝ မထွက်ခြင်း၊ ကျယ်လောင်သော အသံကို မတုံ့ပြန်ခြင်း သို့မဟုတ် ယခင်က ထွက်ခဲ့သော အသံများ ရပ်သွားခြင်းကို ပြပါ။ no sounds at all by 6 months, no reaction to loud sounds, or losing sounds she used to make should be checked. ကလေးထွက်သော အသံကို ပြန်အတုယူပါ — စကားဝိုင်း ဖြစ်လာပါမည်။ copy her sounds back — that turns babble into conversation. reference_verified consonant babbling at 5–6 months follows cdc and aap milestone guidance, nhs learn-to-talk advice and the speech-language pathology references in the registry."
-  },
-  {
-    "ageGroupKey": "5_6m",
-    "domainKey": "language",
-    "tags": [
-      "language",
-      "5_6m"
-    ],
-    "data": {
-      "observeMm": "သင် အသံထုတ်ပြီး ခဏစောင့်လျှင် ကလေးက အသံပြန်ထုတ်ပါသလား။",
-      "observeEn": "When you make a sound and pause, does your baby make a sound back?",
-      "whyMm": "အသံကို အပြန်အလှန် ထုတ်ခြင်းသည် နောက်ပိုင်း စကားဝိုင်း၏ အစောပိုင်း အခြေခံ ဖြစ်သည်။",
-      "whyEn": "Taking turns with sounds is an early foundation for later conversation.",
-      "redMm": "လ ၆ လအရွယ်တွင် အသံလုံးဝ မထုတ်ခြင်း သို့မဟုတ် အသံကို လုံးဝ မတုံ့ပြန်ခြင်းကို ကျန်းမာရေးဝန်ထမ်းအား ပြပါ။",
-      "redEn": "No sounds at all by 6 months, or no response to sound, should be checked.",
-      "encouragementMm": "ကလေးထုတ်သော အသံကို ပြန်လိုက်ပြီး တုံ့ပြန်ရန် အချိန်ပေးပါ။",
-      "encouragementEn": "Copy your baby’s sounds and pause to let them answer.",
-      "editorialStatus": "reference_verified",
-      "evidenceSummary": "Taking turns making sounds follows the current CDC 6-month language milestone."
-    },
-    "type": "milestone",
-    "slug": "ms_5_6m_language_1",
-    "titleMm": "အသံများကို အပြန်အလှန် ထုတ်ခြင်း",
-    "titleEn": "Takes turns making sounds with you",
-    "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
-    "version": 1,
-    "clinicalStatus": "clinical_review",
-    "media": [],
-    "searchText": "အသံများကို အပြန်အလှန် ထုတ်ခြင်း takes turns making sounds with you   language 5_6m သင် အသံထုတ်ပြီး ခဏစောင့်လျှင် ကလေးက အသံပြန်ထုတ်ပါသလား။ when you make a sound and pause, does your baby make a sound back? အသံကို အပြန်အလှန် ထုတ်ခြင်းသည် နောက်ပိုင်း စကားဝိုင်း၏ အစောပိုင်း အခြေခံ ဖြစ်သည်။ taking turns with sounds is an early foundation for later conversation. လ ၆ လအရွယ်တွင် အသံလုံးဝ မထုတ်ခြင်း သို့မဟုတ် အသံကို လုံးဝ မတုံ့ပြန်ခြင်းကို ကျန်းမာရေးဝန်ထမ်းအား ပြပါ။ no sounds at all by 6 months, or no response to sound, should be checked. ကလေးထုတ်သော အသံကို ပြန်လိုက်ပြီး တုံ့ပြန်ရန် အချိန်ပေးပါ။ copy your baby’s sounds and pause to let them answer. reference_verified taking turns making sounds follows the current cdc 6-month language milestone."
-  },
-  {
-    "ageGroupKey": "5_6m",
-    "domainKey": "social",
-    "tags": [
-      "social",
-      "5_6m"
-    ],
-    "data": {
-      "observeMm": "အသိမိသားစုဝင်များကို မြင်လျှင် ပိုပျော်ပါသလား။ အသစ်တွေ့သူများကို ကြည့်နေတတ်ပါသလား။",
-      "observeEn": "Is she happier with familiar people? Does she stare at new faces?",
-      "whyMm": "အသစ်တွေ့သူကို သတိထားခြင်းသည် ဆက်နွယ်မှု ကောင်းမွန်နေခြင်း၏ လက္ခဏာ ဖြစ်သည် — ပြဿနာ မဟုတ်ပါ။",
-      "whyEn": "Wariness of new people is a sign of healthy attachment, not a problem.",
-      "redMm": "လူများနှင့် လုံးဝ မဆက်သွယ်ခြင်း၊ မျက်လုံးချင်း လုံးဝ မဆုံခြင်း၊ ယခင် တုံ့ပြန်မှုများ ပျောက်သွားခြင်းကို ပြပါ။",
-      "redEn": "No social engagement at all, no eye contact, or loss of skills she had should be checked.",
-      "encouragementMm": "အသစ်တွေ့သူများနှင့် တဖြည်းဖြည်း မိတ်ဆက်ပေးပါ — အလျင်စလို မလုပ်ပါနှင့်။",
-      "encouragementEn": "Introduce new people slowly — no need to rush.",
-      "editorialStatus": "reference_verified",
-      "evidenceSummary": "Familiar-versus-unfamiliar discrimination and early attachment at 5–6 months follow CDC and AAP milestone guidance, NICE social and emotional wellbeing guidance and the developmental-behavioural paediatrics references in the registry."
-    },
-    "type": "milestone",
-    "slug": "ms_5_6m_social_1",
-    "titleMm": "အသိမျက်နှာနှင့် အသစ်ကို ခွဲခြားလာခြင်း",
-    "titleEn": "Telling familiar people from strangers",
-    "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
-    "version": 1,
-    "clinicalStatus": "clinical_review",
-    "media": [],
-    "searchText": "အသိမျက်နှာနှင့် အသစ်ကို ခွဲခြားလာခြင်း telling familiar people from strangers   social 5_6m အသိမိသားစုဝင်များကို မြင်လျှင် ပိုပျော်ပါသလား။ အသစ်တွေ့သူများကို ကြည့်နေတတ်ပါသလား။ is she happier with familiar people? does she stare at new faces? အသစ်တွေ့သူကို သတိထားခြင်းသည် ဆက်နွယ်မှု ကောင်းမွန်နေခြင်း၏ လက္ခဏာ ဖြစ်သည် — ပြဿနာ မဟုတ်ပါ။ wariness of new people is a sign of healthy attachment, not a problem. လူများနှင့် လုံးဝ မဆက်သွယ်ခြင်း၊ မျက်လုံးချင်း လုံးဝ မဆုံခြင်း၊ ယခင် တုံ့ပြန်မှုများ ပျောက်သွားခြင်းကို ပြပါ။ no social engagement at all, no eye contact, or loss of skills she had should be checked. အသစ်တွေ့သူများနှင့် တဖြည်းဖြည်း မိတ်ဆက်ပေးပါ — အလျင်စလို မလုပ်ပါနှင့်။ introduce new people slowly — no need to rush. reference_verified familiar-versus-unfamiliar discrimination and early attachment at 5–6 months follow cdc and aap milestone guidance, nice social and emotional wellbeing guidance and the developmental-behavioural paediatrics references in the registry."
   },
   {
     "ageGroupKey": "5_6m",

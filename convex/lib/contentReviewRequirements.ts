@@ -31,6 +31,7 @@ type ReviewableContent = {
 export type SpecialistReviewReason =
   | 'focused_emergency_wording'
   | 'explicit_clinical_requirement'
+  | 'bed_sharing_wording'
   | 'risk_wording';
 
 /** Specialist review is based on medical decision risk, not parent visibility. */
@@ -63,6 +64,17 @@ export function specialistReviewReason(item: ReviewableContent): SpecialistRevie
     .replace(/\bwithout (?:a |any )?diagnosis\b/g, '')
     .replace(/\bno diagnosis\b/g, '')
     .replace(/\b(?:this (?:content|app|guide) )?is not medical advice\b/g, '');
+
+  // Bed-sharing guidance differs materially between current authoritative
+  // public sources (for example AAP and NHS). Any wording that tells a parent
+  // whether or how to share a sleep surface therefore stays inside the focused
+  // specialist boundary instead of receiving an ordinary education sign-off.
+  const hasBedSharingWording = [
+    /\bbed[- ]?shar(?:e|es|ed|ing)\b/,
+    /\bshare (?:a |the )?(?:bed|sleep surface)\b/,
+    /(?:အိပ်ရာတူ|အိပ်ရာမတူ|တစ်အိပ်ရာတည်း|အိပ်ရာ.{0,20}မျှဝေ)/,
+  ].some((pattern) => pattern.test(text));
+  if (hasBedSharingWording) return 'bed_sharing_wording';
 
   const hasRiskWording = [
     /\bdiagnos(?:e|es|ed|ing|is|tic|tics|tically)\b/,

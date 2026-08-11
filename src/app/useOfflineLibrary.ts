@@ -51,6 +51,47 @@ export function useDownloadedLibrary(): { records: OfflineRecord[]; loaded: bool
 
 export type LibraryResult = { staff: boolean; items: LibraryRowLike[] } | undefined;
 
+export interface OfflineWithdrawalOutcome {
+  ok: boolean;
+  removed: number;
+}
+
+/**
+ * Remove device-held text and media that are absent from a complete live
+ * publication manifest. The server publishes only current parent-readable
+ * slugs, so an archived/unpublished row disappears automatically on reconnect
+ * rather than waiting for the parent to tap “Update download”.
+ */
+export async function withdrawUnavailableOfflineContent(
+  publishedSlugs: string[],
+): Promise<OfflineWithdrawalOutcome> {
+  const stored = await readAllRecords();
+  const published = new Set(publishedSlugs);
+  const remove = stored.filter((record) => !published.has(record.slug));
+  if (remove.length === 0) return { ok: true, removed: 0 };
+
+  const keep = stored.filter((record) => published.has(record.slug));
+  const ok = await saveRecords(keep, remove.map((record) => record.slug));
+  if (!ok) return { ok: false, removed: 0 };
+
+  await removeOfflineMedia(
+    remove.flatMap((record) => (record.media ?? []).map((media) => media.cacheKey)),
+  );
+  publish(keep);
+  return { ok: true, removed: remove.length };
+}
+
+/** Run once per live manifest revision from the authenticated app shell. */
+export function useOfflineWithdrawal(): void {
+  const manifest = useQuery(api.library.publicationManifest);
+  const manifestKey = manifest?.complete ? manifest.slugs.join('\u0000') : null;
+
+  useEffect(() => {
+    if (!manifest?.complete || manifestKey === null) return;
+    void withdrawUnavailableOfflineContent(manifest.slugs);
+  }, [manifest, manifestKey]);
+}
+
 /**
  * The parent-facing library query with an offline fallback.
  *
