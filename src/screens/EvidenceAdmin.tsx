@@ -429,7 +429,7 @@ export function EvidenceAdmin() {
                             type="button"
                             disabled={
                               pending === r.sourceId ||
-                              (r.reviewStatus === next && !(next === 'approved' && access?.role === 'clinical_reviewer' && r.reviewScope !== 'clinical')) ||
+                              r.reviewStatus === next ||
                               (next !== 'approved' && (!reviewer.trim() || !reviewerQualification.trim())) ||
                               (next === 'approved' && (!access?.qualification || (access?.role === 'clinical_reviewer' && !access.displayName))) ||
                               (next === 'approved' && !canApprove) ||

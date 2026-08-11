@@ -237,6 +237,28 @@ describe('Convex registered handlers enforce authorization', () => {
     }));
   });
 
+  it('a clinical reviewer publishing ordinary content still records education scope', async () => {
+    authState.userId = 'reviewer-1';
+    const context = ctx({
+      profile: {
+        userId: 'reviewer-1', isStaff: true, staffRole: 'clinical_reviewer',
+        staffQualification: 'MBBS, MMedSc (Paediatrics)', displayName: 'Clinical Reviewer',
+      },
+      rows: {
+        libraryContent: [{ _id: 'content-1', slug: 'ordinary-parent-guide', titleEn: 'Play together', reviewRevision: 1 }],
+        contentReviews: ['english', 'native_myanmar', 'evidence', 'safety'].map((dimension) => ({
+          contentSlug: 'ordinary-parent-guide', contentVersion: 1, dimension, decision: 'approved',
+        })),
+      },
+    });
+    await expect(handler(setLibraryReview)(context, {
+      slug: 'ordinary-parent-guide', clinicalStatus: 'published',
+    })).resolves.toEqual({ ok: true, reviewScope: 'education' });
+    expect(context.db.patch).toHaveBeenCalledWith('content-1', expect.objectContaining({
+      clinicalStatus: 'published', reviewScope: 'education', reviewerDisplayName: 'Clinical Reviewer',
+    }));
+  });
+
   it('an education owner cannot publish emergency-decision wording', async () => {
     authState.userId = 'owner-1';
     const context = ctx({
