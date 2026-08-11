@@ -576,8 +576,8 @@ export const importLinksFromCli = internalMutation({
 });
 
 /**
- * Record a clinical review decision on one reference. This is the ONLY path to
- * 'approved', it requires a named and qualified reviewer, and it is audited —
+ * Record a professional evidence-review decision on one reference. This is the
+ * ONLY path to 'approved', it requires a named and qualified reviewer, and it is audited —
  * whether it succeeds or is refused. A record that was imported as
  * 'evidence_required' (metadata that could not be verified against the
  * publisher page) cannot be approved until the metadata is fixed and

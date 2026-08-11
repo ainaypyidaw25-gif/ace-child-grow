@@ -11,8 +11,10 @@
 // A record missing a printed year is forced to 'evidence_required' by
 // resolveReviewStatus() in ./types — that is the intended behaviour, not a bug.
 //
-// No record here is 'approved'. Approval requires a named clinical reviewer,
-// which is a human act performed in the admin Evidence Library.
+// No record here is 'approved'. Approval requires a named qualified reviewer,
+// which is a human act performed in the admin Evidence Library. Ordinary
+// reference approval is education-scoped; clinical scope remains a separate
+// specialist-risk decision and is never inferred from parent visibility.
 
 import type { EvidenceSource } from './types';
 

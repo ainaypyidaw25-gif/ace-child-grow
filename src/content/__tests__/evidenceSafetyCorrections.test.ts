@@ -2,7 +2,9 @@ import { describe, expect, it } from 'vitest';
 import publishedSlugs from '../../../tests/harness/fixtures/publishedSlugs.json';
 import { seedPayload } from '../seed';
 import {
+  EDUCATION_REVIEW_DIMENSIONS,
   FOCUSED_SPECIALIST_REVIEW_SLUGS,
+  requiredPublicationReviews,
   requiresSpecialistReview,
 } from '../../../convex/lib/contentReviewRequirements';
 
@@ -72,6 +74,7 @@ describe('evidence and child-safety content corrections', () => {
         availability: 'preview_only',
       });
       expect(item.media.some((asset) => asset.kind === 'pdf' && asset.placeholder === true)).toBe(true);
+      expect(requiredPublicationReviews(item), item.slug).toEqual(EDUCATION_REVIEW_DIMENSIONS);
     }
   });
 });

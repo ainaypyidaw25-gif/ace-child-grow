@@ -20,6 +20,7 @@ export const FOCUSED_SPECIALIST_REVIEW_SLUGS = [
 const focusedSpecialistSlugs = new Set<string>(FOCUSED_SPECIALIST_REVIEW_SLUGS);
 
 type ReviewableContent = {
+  type?: string;
   slug: string;
   titleEn?: string;
   summaryEn?: string;
@@ -32,8 +33,23 @@ export function requiresSpecialistReview(item: ReviewableContent): boolean {
   if (focusedSpecialistSlugs.has(item.slug)) return true;
   if (item.requiredReviewDimensions?.includes('clinical')) return true;
 
+  // A preview-only printable is catalogue metadata, not the missing PDF
+  // payload. Its English, Myanmar, evidence and safety wording still requires
+  // review, but it cannot be clinically signed off as though the unavailable
+  // document had been inspected. A future payload gets its own media approval
+  // and an explicit clinical requirement when its full wording carries risk.
+  const data = item.data && typeof item.data === 'object'
+    ? item.data as Record<string, unknown>
+    : null;
+  if (item.type === 'printable' && data?.availability === 'preview_only') return false;
+
   const text = `${item.titleEn ?? ''} ${item.summaryEn ?? ''} ${JSON.stringify(item.data ?? {})}`
     .toLowerCase()
+    .replace(/\bnon[- ]diagnostic\b/g, '')
+    .replace(/\bnot (?:a )?diagnostic (?:checklist|screen|tool)\b/g, '')
+    .replace(/\bnot intended to (?:diagnose|treat)(?:(?:,| and| or) (?:diagnose|treat))*\b/g, '')
+    .replace(/\b(?:this (?:content|app|guide) )?does not (?:diagnose|treat)(?:(?:,| and| or) (?:diagnose|treat))*\b/g, '')
+    .replace(/\bdoes not provide (?:a )?diagnosis (?:and|or) treatment\b/g, '')
     .replace(/\b(?:this (?:content|app|guide) )?does not diagnose\b/g, '')
     .replace(/\b(?:is |are )?not (?:a )?diagnosis\b/g, '')
     .replace(/\bwithout (?:a |any )?diagnosis\b/g, '')
@@ -41,12 +57,20 @@ export function requiresSpecialistReview(item: ReviewableContent): boolean {
     .replace(/\b(?:this (?:content|app|guide) )?is not medical advice\b/g, '');
 
   return [
-    /\bdiagnos(?:e|es|is|tic)\b/,
-    /\b(?:treat|prescribe|administer)\b/,
-    /\b(?:dose|dosage)\b/,
-    /\bindividuali[sz]ed (?:advice|treatment|care)\b/,
-    /\b(?:seek|get) (?:emergency|medical) help immediately\b/,
-    /\b(?:go|take (?:the )?child) to (?:a |the )?hospital immediately\b/,
+    /\bdiagnos(?:e|es|ed|ing|is|tic|tics|tically)\b/,
+    /\b(?:treat(?:s|ed|ing|ment|ments)?|prescrib(?:e|es|ed|ing)|administer(?:s|ed|ing)?)\b/,
+    /\b(?:medication|medications|medicine|medicines|medicinal|drug|drugs)\b/,
+    /\b(?:dose|doses|dosing|dosage|dosages)\b/,
+    /\b(?:individuali[sz]ed|personali[sz]ed|individual) (?:advice|guidance|recommendation|treatment|care|plan)\b/,
+    /\b(?:seek|get|obtain) (?:urgent|emergency|immediate)(?: medical)? (?:help|care|attention)\b/,
+    /\b(?:seek|get|obtain) medical (?:help|care|attention) immediately\b/,
+    /\bcall (?:an? |the |your |local )*(?:ambulance|emergency (?:number|services?))\b/,
+    /\b(?:go|take (?:the )?child) to (?:a |the |your |the nearest )?(?:hospital|emergency (?:department|service)) (?:now|immediately)\b/,
+    /(?:ရောဂါအမည်တပ်|ရောဂါရှာဖွေ|ရောဂါသတ်မှတ်)/,
+    /(?:ကုသမှု|ကုသရန်|ကုသမည်|ကုသပေး)/,
+    /(?:ဆေးဝါး|ဆေးပမာဏ|ဆေးတိုက်)/,
+    /(?:တစ်ဦးချင်း|တစ်ယောက်ချင်း).{0,40}(?:အကြံပြု|ကုသ|စောင့်ရှောက်)/,
+    /(?:အရေးပေါ်|ဆေးကုသမှု).{0,40}ချက်ချင်း|ချက်ချင်း.{0,40}(?:အရေးပေါ်|ဆေးကုသမှု)/,
   ].some((pattern) => pattern.test(text));
 }
 

@@ -19,22 +19,40 @@ describe('risk-scoped content review requirements', () => {
     }
   });
 
-  it('detects newly-authored diagnosis, treatment, dosage, individualized, and emergency decisions', () => {
+  it('detects newly-authored diagnosis, treatment, medication, dosage, individualized, and emergency decisions', () => {
     for (const wording of [
       'Diagnose the condition from these signs.',
-      'Treat the child at home.',
+      'This treatment should be started at home.',
+      'Give the child this medication.',
       'Give this dosage.',
-      'Individualized treatment is provided here.',
-      'Seek medical help immediately.',
+      'Personalized treatment is provided here.',
+      'Seek emergency medical care immediately.',
+      'Call your local emergency number.',
     ]) {
       expect(requiresSpecialistReview({ slug: 'future-item', summaryEn: wording }), wording).toBe(true);
     }
   });
 
-  it('does not turn non-diagnostic disclaimers into clinical triggers', () => {
+  it('does not turn non-diagnostic disclaimers or preview-only printable metadata into clinical triggers', () => {
+    for (const data of [
+      { note: 'This content does not diagnose. This is not a diagnosis. It is general parent education.' },
+      { evidenceSummary: 'This is a non-diagnostic observation tool.' },
+      { note: 'This checklist is not a diagnostic tool.' },
+      { note: 'This guide is not intended to diagnose or treat and does not provide a diagnosis or treatment.' },
+    ]) {
+      expect(requiresSpecialistReview({ slug: 'ordinary-printable', data }), JSON.stringify(data)).toBe(false);
+    }
     expect(requiresSpecialistReview({
-      slug: 'ordinary-guide',
-      data: { note: 'This content does not diagnose. This is not a diagnosis. It is general parent education.' },
+      type: 'printable',
+      slug: 'preview-only-checklist',
+      summaryEn: 'Catalogue preview: the future PDF will cover medicine safety and emergency signs.',
+      data: { availability: 'preview_only' },
     })).toBe(false);
+    expect(requiresSpecialistReview({
+      type: 'printable',
+      slug: 'explicitly-risk-scoped-preview',
+      data: { availability: 'preview_only' },
+      requiredReviewDimensions: ['clinical'],
+    })).toBe(true);
   });
 });

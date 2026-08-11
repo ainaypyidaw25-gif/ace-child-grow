@@ -21,8 +21,8 @@ import { needsEvidenceAttention } from '../evidence/registryVisibility';
 
 // Admin Evidence Library — STAFF ONLY (the server returns `allowed: false` to
 // anyone else). This screen shows the reference registry, the eight filters the
-// evidence policy requires, the five governance reports, and the clinical
-// review action. It never displays a reference as a citation to a parent and it
+// evidence policy requires, the five governance reports, and the professional
+// evidence-review action. It never displays a reference as a citation to a parent and it
 // never fills in a missing field: a blank cell here means "not printed on the
 // publisher page", which is the honest answer.
 export function EvidenceAdmin() {

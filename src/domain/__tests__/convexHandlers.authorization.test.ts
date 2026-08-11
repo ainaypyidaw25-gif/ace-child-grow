@@ -259,6 +259,30 @@ describe('Convex registered handlers enforce authorization', () => {
     }));
   });
 
+  it('a qualified education owner can publish preview-only printable metadata without a clinical record', async () => {
+    authState.userId = 'owner-1';
+    const context = ctx({
+      profile: {
+        userId: 'owner-1', isStaff: true, staffRole: 'owner',
+        staffQualification: 'MEd Early Childhood Education', displayName: 'Education Owner',
+      },
+      rows: {
+        libraryContent: [{
+          _id: 'content-1', type: 'printable', slug: 'prt_preview_only', reviewRevision: 1,
+          titleEn: 'Parent checklist preview',
+          summaryEn: 'Catalogue preview: the future PDF will cover medicine safety and emergency signs.',
+          data: { availability: 'preview_only' },
+        }],
+        contentReviews: ['english', 'native_myanmar', 'evidence', 'safety'].map((dimension) => ({
+          contentSlug: 'prt_preview_only', contentVersion: 1, dimension, decision: 'approved',
+        })),
+      },
+    });
+    await expect(handler(setLibraryReview)(context, {
+      slug: 'prt_preview_only', clinicalStatus: 'published',
+    })).resolves.toEqual({ ok: true, reviewScope: 'education' });
+  });
+
   it('an education owner cannot publish emergency-decision wording', async () => {
     authState.userId = 'owner-1';
     const context = ctx({
@@ -272,6 +296,24 @@ describe('Convex registered handlers enforce authorization', () => {
     });
     await expect(handler(setLibraryReview)(context, {
       slug: 'gd_7_9m_safety', clinicalStatus: 'published',
+    })).rejects.toThrow('Insufficient staff permission');
+    expect(context.db.patch).not.toHaveBeenCalled();
+  });
+
+  it('an education owner cannot publish newly-authored medication wording', async () => {
+    authState.userId = 'owner-1';
+    const context = ctx({
+      profile: {
+        userId: 'owner-1', isStaff: true, staffRole: 'owner',
+        staffQualification: 'MEd Early Childhood Education', displayName: 'Education Owner',
+      },
+      rows: { libraryContent: [{
+        _id: 'content-1', slug: 'future-medication-guide', titleEn: 'Medication guide', reviewRevision: 1,
+        summaryEn: 'Give this medication to the child.',
+      }] },
+    });
+    await expect(handler(setLibraryReview)(context, {
+      slug: 'future-medication-guide', clinicalStatus: 'published',
     })).rejects.toThrow('Insufficient staff permission');
     expect(context.db.patch).not.toHaveBeenCalled();
   });

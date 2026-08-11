@@ -37,11 +37,11 @@ export const EVIDENCE_LEVEL_RANK: Record<EvidenceLevel, number> = {
 export const EVIDENCE_REVIEW_STATUSES = [
   /** Metadata could not be verified against a publisher page. Unusable until fixed. */
   'evidence_required',
-  /** Metadata verified; a qualified clinical reviewer has not yet signed off. */
+  /** Metadata verified; a qualified evidence reviewer has not yet signed off. */
   'awaiting_review',
-  /** Under active clinical review. */
+  /** Under active evidence review. */
   'in_review',
-  /** Signed off by a named clinical reviewer. */
+  /** Signed off by a named qualified reviewer; scope is recorded separately. */
   'approved',
   /** Superseded or withdrawn; kept for audit, not for citation. */
   'retired',

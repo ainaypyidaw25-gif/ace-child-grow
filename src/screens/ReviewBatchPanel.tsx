@@ -2,12 +2,12 @@ import { useMemo, useState } from 'react';
 import { useLocale } from '../app/LocaleContext';
 import { buildReviewBatch, REVIEWER_CHECKLIST, type BatchItem } from '../evidence/reviewBatch';
 
-// Clinical review batch — ages 0–12 months.
+// Evidence and safety review batch — ages 0–12 months.
 //
 // This panel is a WORK QUEUE, not an approval control. There is deliberately no
 // button here that changes a review status: a reviewer signs items off in the
 // registry, one reference at a time, with their name and qualification attached.
-// What this screen does is tell a clinical reviewer what is in front of them,
+// What this screen does is tell the assigned reviewers what is in front of them,
 // how it is grouped, what is blocked and why, and how much is left — so a batch
 // can be planned and handed over rather than guessed at.
 //
@@ -56,15 +56,15 @@ export function ReviewBatchPanel({ todayIso }: { todayIso: string }) {
           will read it, not only in the code. */}
       <p className="rounded-lg bg-pastel-yellow/60 px-3 py-2 text-sm text-ink">
         {L(
-          'ဤစာမျက်နှာသည် သုံးသပ်ရန် စာရင်းသာ ဖြစ်သည်။ ဤနေရာမှ မည်သည့် အကြောင်းအရာကိုမျှ အလိုအလျောက် ထုတ်ဝေခြင်း သို့မဟုတ် အတည်ပြုခြင်း မပြုပါ။',
-          'This page is a work queue only. Nothing here publishes or approves any content automatically.',
+          'ဤစာမျက်နှာသည် အထောက်အထားနှင့် ဘေးကင်းရေး သုံးသပ်ရန် စာရင်းသာ ဖြစ်သည်။ ဤနေရာမှ မည်သည့် အကြောင်းအရာကိုမျှ အလိုအလျောက် ထုတ်ဝေခြင်း သို့မဟုတ် အတည်ပြုခြင်း မပြုပါ။ သာမန်ပညာပေးအကြောင်းအရာအတွက် ဆေးဘက်ဆိုင်ရာအတည်ပြုချက် မလိုအပ်ပါ။',
+          'This page is an evidence-and-safety work queue only. Nothing here publishes or approves content automatically. Ordinary education does not require clinical approval.',
         )}
       </p>
 
       <section className="rounded-card border border-line bg-white p-4 shadow-card">
         <div className="flex flex-wrap items-baseline justify-between gap-2">
           <h2 className="font-semibold text-ink">
-            {L('သုံးသပ်ရန် အစု — ၀–၁၂ လ', 'Clinical review batch — 0–12 months')}
+            {L('အထောက်အထားနှင့် ဘေးကင်းရေး သုံးသပ်ရန် အစု — ၀–၁၂ လ', 'Evidence and safety review batch — 0–12 months')}
           </h2>
           <span className="text-xs text-ink-soft">
             {batch.batchId} · {batch.generatedOn}
@@ -77,7 +77,7 @@ export function ReviewBatchPanel({ todayIso }: { todayIso: string }) {
           <Stat label={L('ပိတ်ဆို့ထား', 'Blocked')} value={p.blocked} tone={p.blocked > 0 ? 'warn' : 'good'} />
           <Stat label={L('သတိပြုရန် ရှိ', 'With advisories')} value={p.withAdvisories} tone="note" />
           <Stat label={L('ထုတ်ဝေပြီး', 'Published')} value={p.published} />
-          <Stat label={L('သုံးသပ်ဆဲ', 'In clinical review')} value={p.inClinicalReview} />
+          <Stat label={L('သုံးသပ်ဆဲ', 'In review')} value={p.inClinicalReview} />
           <Stat label={L('ကိုးကားချက် အရေအတွက်', 'Distinct references')} value={p.distinctReferences} />
           <Stat
             label={L('ဖြေဆိုရမည့် စစ်ဆေးချက်', 'Checklist answers required')}
