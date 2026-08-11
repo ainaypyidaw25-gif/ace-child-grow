@@ -21,11 +21,14 @@ import { STARTER_ANIMATION_SLUGS } from './animationPlan';
 import { diffEditableContent } from './lib/contentEditDiff';
 import { seedAuditSummary, seedMayUpdateExisting, seedMediaIsProtected } from './lib/seedPolicy';
 import { findReviewContentMatches } from './lib/reviewSearch';
+import { requiredPublicationReviews, specialistReviewReason } from './lib/contentReviewRequirements';
 
 const protectedContentDataFields = new Set([
   'editorialStatus',
   'evidenceSummary',
   'format',
+  'requestedFormat',
+  'availability',
   'readingLevel',
   'domains',
   'references',
@@ -78,6 +81,35 @@ function mergeEditableContentData(current: unknown, proposed: unknown): Record<s
 export function isPubliclyReadableStatus(status: string): boolean {
   return status === 'published';
 }
+
+const PUBLICATION_MANIFEST_LIMIT = 5_000;
+
+/**
+ * Complete parent-readable slug manifest used only to withdraw stale offline
+ * copies. It contains no draft slug, wording, media or review metadata. If the
+ * bounded query ever exceeds its catalogue budget, `complete` is false and the
+ * client refuses to delete anything from an incomplete manifest.
+ */
+export const publicationManifest = query({
+  args: {},
+  returns: v.object({
+    complete: v.boolean(),
+    slugs: v.array(v.string()),
+  }),
+  handler: async (ctx) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) return { complete: false, slugs: [] };
+    const rows = await ctx.db
+      .query('libraryContent')
+      .withIndex('by_status', (q) => q.eq('clinicalStatus', 'published'))
+      .take(PUBLICATION_MANIFEST_LIMIT + 1);
+    if (rows.length > PUBLICATION_MANIFEST_LIMIT) return { complete: false, slugs: [] };
+    return {
+      complete: true,
+      slugs: rows.map((row) => row.slug).sort((a, b) => a.localeCompare(b)),
+    };
+  },
+});
 
 export const listByType = query({
   args: {
@@ -680,21 +712,26 @@ export const setReview = mutation({
   },
   returns: v.object({
     ok: v.literal(true),
-    reviewScope: v.union(v.literal('clinical'), v.null()),
+    reviewScope: v.union(v.literal('education'), v.literal('clinical'), v.null()),
   }),
   handler: async (ctx, args) => {
     if (!['draft', 'clinical_review', 'published'].includes(args.clinicalStatus)) {
       throw new Error('Invalid status');
     }
-    const approval = args.clinicalStatus === 'published'
-      ? await requireClinicalPublisher(ctx)
-      : null;
-    const userId = approval?.userId ?? await requireContentEditor(ctx);
     const item = await ctx.db
       .query('libraryContent')
       .withIndex('by_slug', (qq) => qq.eq('slug', args.slug))
       .unique();
     if (!item) throw new Error('Not found');
+    const specialistReason = args.clinicalStatus === 'published'
+      ? specialistReviewReason(item)
+      : null;
+    const approval = args.clinicalStatus === 'published'
+      ? specialistReason
+        ? await requireClinicalPublisher(ctx)
+        : await requireProfessionalPublisher(ctx)
+      : null;
+    const userId = approval?.userId ?? await requireContentEditor(ctx);
     if (args.clinicalStatus === 'published') {
       const revision = item.reviewRevision ?? 1;
       const decisions = await ctx.db
@@ -707,7 +744,7 @@ export const setReview = mutation({
           .filter((row) => row.contentVersion === revision && row.decision === 'approved')
           .map((row) => row.dimension),
       );
-      const required = ['english', 'native_myanmar', 'evidence', 'safety', 'clinical'] as const;
+      const required = requiredPublicationReviews(item);
       const missing = required.filter((dimension) => !approved.has(dimension));
       if (missing.length > 0) {
         throw new Error(`Current revision is missing review approvals: ${missing.join(', ')}`);
@@ -725,7 +762,12 @@ export const setReview = mutation({
       reviewNote: args.reviewNote,
       updatedAt: now,
     });
-    await logAudit(ctx, userId, `library.${args.clinicalStatus}`, 'libraryContent', item._id, item.titleEn);
-    return { ok: true as const, reviewScope: approval ? 'clinical' as const : null };
+    const auditSummary = specialistReason === 'focused_emergency_wording'
+      ? `${item.titleEn} · specialist review limited to emergency wording`
+      : specialistReason === 'bed_sharing_wording'
+        ? `${item.titleEn} · specialist review required for bed-sharing wording`
+        : item.titleEn;
+    await logAudit(ctx, userId, `library.${args.clinicalStatus}`, 'libraryContent', item._id, auditSummary);
+    return { ok: true as const, reviewScope: approval?.scope ?? null };
   },
 });

@@ -4,6 +4,7 @@
 // it safely skips the staff auth gate that guards the public importSeed. It is
 // idempotent (upsert by slug) and never overrides an existing review decision.
 import { internalMutation, internalQuery } from './_generated/server';
+import type { Doc } from './_generated/dataModel';
 import { v } from 'convex/values';
 import { logAudit } from './audit';
 import seedData from './seedData.json';
@@ -13,6 +14,11 @@ import {
   seedMayUpdateExisting,
   seedMediaIsProtected,
 } from './lib/seedPolicy';
+import {
+  DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID,
+  DUPLICATE_MILESTONE_SLUGS,
+  type DuplicateMilestoneSlug,
+} from './lib/contentRetirements';
 
 const GRANTABLE_ROLES = [
   'owner',
@@ -144,6 +150,184 @@ type Item = {
   difficulty?: string; durationMinutes?: number; offline?: boolean; source: string;
   version: number; clinicalStatus: string; data: unknown; media: Media[]; searchText: string;
 };
+
+const duplicateMilestoneSlugValidator = v.union(
+  v.literal('ms_5_6m_gross_motor_1'),
+  v.literal('ms_5_6m_speech_1'),
+  v.literal('ms_7_9m_gross_motor_1'),
+  v.literal('ms_5_6m_fine_motor_1'),
+  v.literal('ms_5_6m_language_1'),
+  v.literal('ms_5_6m_social_1'),
+);
+
+const retirementPreflightRowValidator = v.object({
+  slug: duplicateMilestoneSlugValidator,
+  found: v.boolean(),
+  clinicalStatus: v.union(v.string(), v.null()),
+  reviewRevision: v.union(v.number(), v.null()),
+  mediaRows: v.number(),
+  evidenceLinkRows: v.number(),
+});
+
+// The production preflight on 2026-08-11 found five legacy published rows and
+// one row already withdrawn to clinical_review. Both states are safe inputs to
+// this exact retirement release: the former are unpublished by the archive;
+// the latter is permanently retired so a future review cannot republish it.
+const DUPLICATE_MILESTONE_RETIRABLE_STATUSES = new Set([
+  'published',
+  'clinical_review',
+]);
+
+/**
+ * Read-only production preflight for the exact retirement release. Run this
+ * after deployment and copy the six reported review revisions into the guarded
+ * mutation. It cannot expose or mutate any other slug.
+ */
+export const preflightDuplicateMilestoneRetirement = internalQuery({
+  args: { releaseId: v.literal(DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID) },
+  returns: v.array(retirementPreflightRowValidator),
+  handler: async (ctx) => {
+    const rows: Array<{
+      slug: DuplicateMilestoneSlug;
+      found: boolean;
+      clinicalStatus: string | null;
+      reviewRevision: number | null;
+      mediaRows: number;
+      evidenceLinkRows: number;
+    }> = [];
+    for (const slug of DUPLICATE_MILESTONE_SLUGS) {
+      const content = await ctx.db
+        .query('libraryContent')
+        .withIndex('by_slug', (q) => q.eq('slug', slug))
+        .unique();
+      const mediaRows = await ctx.db
+        .query('libraryMedia')
+        .withIndex('by_content', (q) => q.eq('contentSlug', slug))
+        .take(100);
+      const evidenceLinkRows = await ctx.db
+        .query('evidenceLinks')
+        .withIndex('by_slug', (q) => q.eq('slug', slug))
+        .take(20);
+      rows.push({
+        slug,
+        found: content !== null,
+        clinicalStatus: content?.clinicalStatus ?? null,
+        reviewRevision: content ? (content.reviewRevision ?? 1) : null,
+        mediaRows: mediaRows.length,
+        evidenceLinkRows: evidenceLinkRows.length,
+      });
+    }
+    return rows;
+  },
+});
+
+/**
+ * Atomically archive the six reviewed duplicate milestones.
+ *
+ * INTERNAL means no browser or parent session can call it. The caller must use
+ * the exact code-reviewed release id and the review revisions returned by the
+ * preflight. Every target is validated before the first write, so a changed or
+ * missing row aborts the whole transaction instead of partially withdrawing a
+ * catalogue. Media, evidence links and review decisions remain for staff audit
+ * but become unreachable to parents through the existing publication gates.
+ */
+export const retireDuplicateMilestones = internalMutation({
+  args: {
+    releaseId: v.literal(DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID),
+    targets: v.array(v.object({
+      slug: duplicateMilestoneSlugValidator,
+      expectedReviewRevision: v.number(),
+    })),
+  },
+  returns: v.object({
+    retired: v.number(),
+    alreadyRetired: v.number(),
+    publishedWithdrawn: v.number(),
+    unpublishedArchived: v.number(),
+    total: v.number(),
+  }),
+  handler: async (ctx, args) => {
+    const expectedSlugs = new Set<string>(DUPLICATE_MILESTONE_SLUGS);
+    const suppliedSlugs = new Set<string>(args.targets.map((target) => target.slug));
+    if (
+      args.targets.length !== DUPLICATE_MILESTONE_SLUGS.length
+      || suppliedSlugs.size !== DUPLICATE_MILESTONE_SLUGS.length
+      || [...expectedSlugs].some((slug) => !suppliedSlugs.has(slug))
+    ) {
+      throw new Error('Retirement targets must match the exact six-slug release');
+    }
+
+    const targetBySlug = new Map(args.targets.map((target) => [target.slug, target]));
+    const validated: Array<Doc<'libraryContent'>> = [];
+    let alreadyRetired = 0;
+    let publishedWithdrawn = 0;
+    let unpublishedArchived = 0;
+
+    // Validate the entire release before writing anything (stale-state guard).
+    for (const slug of DUPLICATE_MILESTONE_SLUGS) {
+      const content = await ctx.db
+        .query('libraryContent')
+        .withIndex('by_slug', (q) => q.eq('slug', slug))
+        .unique();
+      if (!content) throw new Error(`Retirement target missing: ${slug}`);
+      const target = targetBySlug.get(slug);
+      if (!target || (content.reviewRevision ?? 1) !== target.expectedReviewRevision) {
+        throw new Error(`Retirement target has a newer review revision: ${slug}`);
+      }
+      if (content.clinicalStatus === 'archived') {
+        alreadyRetired += 1;
+        continue;
+      }
+      if (!DUPLICATE_MILESTONE_RETIRABLE_STATUSES.has(content.clinicalStatus)) {
+        throw new Error(`Retirement target has an unexpected status: ${slug}`);
+      }
+      if (content.clinicalStatus === 'published') publishedWithdrawn += 1;
+      else unpublishedArchived += 1;
+      validated.push(content);
+    }
+
+    const now = Date.now();
+    for (const content of validated) {
+      await ctx.db.patch(content._id, {
+        clinicalStatus: 'archived',
+        reviewerId: undefined,
+        reviewerQualification: undefined,
+        reviewerDisplayName: undefined,
+        reviewScope: undefined,
+        reviewedAt: undefined,
+        nextReviewAt: undefined,
+        reviewNote: `Retired by ${DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID}`,
+        updatedAt: now,
+      });
+      await logAudit(
+        ctx,
+        null,
+        'library.duplicate_milestone.retired',
+        'libraryContent',
+        content._id,
+        `${DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID} · ${content.slug}`,
+        {
+          before: JSON.stringify({
+            clinicalStatus: content.clinicalStatus,
+            reviewRevision: content.reviewRevision ?? 1,
+          }),
+          after: JSON.stringify({
+            clinicalStatus: 'archived',
+            reviewRevision: content.reviewRevision ?? 1,
+          }),
+        },
+      );
+    }
+
+    return {
+      retired: validated.length,
+      alreadyRetired,
+      publishedWithdrawn,
+      unpublishedArchived,
+      total: DUPLICATE_MILESTONE_SLUGS.length,
+    };
+  },
+});
 
 /**
  * Applies one code-reviewed correction release to rows already published.

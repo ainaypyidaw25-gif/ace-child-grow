@@ -16,6 +16,7 @@ import {
   EVIDENCE_LINKS,
   EVIDENCE_LINK_KINDS,
   MILESTONE_DOMAIN_SOURCES,
+  SAFETY_RULE_SOURCES,
   buildEvidenceLinks,
   relatedContent,
   sourcesForContent,
@@ -170,8 +171,36 @@ describe('content links', () => {
   });
 
   it('cites every reference it carries', () => {
-    // A registry entry nothing links to is dead weight a reviewer must justify.
+    // A working registry entry nothing links to is dead weight a reviewer must
+    // justify. Retired rows remain only as an audit trail and are exempt.
     expect(unusedSourceIds()).toEqual([]);
+  });
+
+  it('keeps known-dead and retired sources out of every active safety rule', () => {
+    const knownDeadSourceIds = new Set(['nhs-seriously-ill-2023']);
+    expect(SOURCE_BY_ID.get('nhs-seriously-ill-2023')?.reviewStatus).toBe('retired');
+
+    for (const [rule, ids] of Object.entries(SAFETY_RULE_SOURCES)) {
+      expect(ids.some((id) => knownDeadSourceIds.has(id)), rule).toBe(false);
+      const usable = ids.filter((id) => {
+        const source = SOURCE_BY_ID.get(id);
+        return source && source.reviewStatus !== 'retired' && source.reviewStatus !== 'evidence_required';
+      });
+      expect(usable.length, `${rule} needs a structurally usable public source`).toBeGreaterThan(0);
+    }
+  });
+
+  it('binds the corrected safety and screen-time claims to current public pages', () => {
+    expect(SAFETY_RULE_SOURCES.sudden_weakness).toContain('cdc-afm-signs-2024');
+    expect(SOURCE_BY_ID.get('tb-swaiman-7e-2025')?.reviewStatus).toBe('evidence_required');
+    expect(SOURCE_BY_ID.get('nhs-sids-2025')?.url).toBe(
+      'https://www.nhs.uk/baby/caring-for-a-newborn/sudden-infant-death-syndrome-sids/',
+    );
+    expect(SOURCE_BY_ID.get('hc-screen-time-5cs-2024')?.url).toBe(
+      'https://www.healthychildren.org/English/family-life/Media/Pages/kids-and-screen-time-5-cs-questions-for-toddlers-and-preschoolers.aspx',
+    );
+    expect(sourcesForContent('st_little_seed')).toContain('hc-choking-prevention-2026');
+    expect(sourcesForContent('lsn_screen_time')).toContain('hc-screen-time-5cs-infants-2024');
   });
 
   it('links only to ids present in the registry map', () => {

@@ -1,7 +1,9 @@
 // Content review workflow state machine (Phase 23). Pure + tested.
 //
 // Enforces the editorial pipeline. Content is only visible to parents at
-// 'published'. Transitions are validated so content cannot skip clinical review.
+// 'published'. `clinical_review` is retained as a backwards-compatible stored
+// state name; for ordinary education it means professional evidence-and-safety
+// review, while only risk-triggered wording requires a clinical decision.
 
 export const REVIEW_STATES = [
   'draft',

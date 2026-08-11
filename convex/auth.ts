@@ -39,7 +39,13 @@ const passwordResetEmail: EmailConfig = {
 // tables (see authTables in schema.ts). Every data function derives the owner
 // from the authenticated identity — never from client input.
 export const { auth, signIn, signOut, store, isAuthenticated } = convexAuth({
-  providers: [Google, Password({
+  providers: [Google({
+    // These credentials live in the Convex deployment environment. Binding
+    // them explicitly prevents Auth.js from emitting client_id=undefined in
+    // isolated preview deployments, where AUTH_GOOGLE_* aliases are absent.
+    clientId: process.env.GOOGLE_ID,
+    clientSecret: process.env.GOOGLE_SECRET,
+  }), Password({
     reset: passwordResetEmail,
     validatePasswordRequirements(password) {
       const valid = /^\d{6}$/.test(password) || password.length >= 8;

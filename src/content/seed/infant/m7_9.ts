@@ -610,7 +610,7 @@ const GUIDES_C: SeedItem[] = [
       ],
       materials: b('မလိုအပ်ပါ', 'Nothing needed'),
       safety: b(
-        'ကလေး ငိုသံကြောင့် စိတ်မထိန်းနိုင်တော့လျှင် ကလေးကို လုံခြုံသော နေရာ (ကလေးအိပ်ရာ) တွင် ပက်လက် ချထားပြီး ခဏ ခွာ၍ အသက်ရှူပါ — ထို့နောက် ပြန်လာပါ။ မည်သည့်အခြေအနေတွင်မျှ ကလေးကို မလှုပ်ခါပါနှင့် — ဦးနှောက်နှင့် မျက်လုံး ထိခိုက်ပြီး သေဆုံးနိုင်သည်။ မိဘ၏ စိတ်ဓာတ်ကျခြင်း လက္ခဏာများ ရှိပါက ကျန်းမာရေးဝန်ထမ်းအား ပြပါ။',
+        'ကလေး ငိုသံကြောင့် စိတ်မထိန်းနိုင်တော့လျှင် ကလေးကို လုံခြုံသော နေရာ (ကလေးအိပ်ရာ) တွင် ပက်လက် ချထားပြီး ခဏ ခွာ၍ အသက်ရှူပါ — ထို့နောက် ပြန်လာပါ။ မည်သည့်အခြေအနေတွင်မျှ ကလေးကို မလှုပ်ခါပါနှင့် — ဦးနှောက်နှင့် မျက်လုံး ထိခိုက်ပြီး သေဆုံးနိုင်သည်။ မိဘသည် စိတ်မကြည်ခြင်း သို့မဟုတ် စိတ်ကျနေခြင်း ရှိပါက ကျန်းမာရေးဝန်ထမ်းနှင့် ဆွေးနွေးပါ။',
         'If crying becomes overwhelming, put her down on her back in a safe place such as her cot, step away and breathe, then come back. Never shake a baby under any circumstances — it can cause brain and eye injury and death. If you have signs of low mood, speak to a health worker.',
       ),
       commonMistakes: [
@@ -627,7 +627,7 @@ const GUIDES_C: SeedItem[] = [
           a: b('ဤအရွယ်တွင် ညအိပ် နိုးခြင်းသည် ပုံမှန် ဖြစ်ပြီး ခွဲခွာမှု စိုးရိမ်ခြင်းနှင့်လည်း ဆက်စပ်နိုင်သည်။ ငြိမ်းချမ်းစွာ တုံ့ပြန်ပေးပါ။ အစာ မစားနိုင်ခြင်း၊ ဖျားခြင်းများ ပါလျှင် ကျန်းမာရေးဝန်ထမ်းအား ပြပါ။', 'Night waking is normal at this age and can be linked to separation anxiety. Respond calmly. If she is also not feeding or is feverish, see a health worker.'),
         },
         {
-          q: b('မိခင်ဖြစ်သူ စိတ်ဓာတ်ကျနေရင် ကလေးကို ထိခိုက်မလား။', 'If a mother feels low, does it affect the baby?'),
+          q: b('မိခင်ဖြစ်သူ စိတ်မကြည်ခြင်း သို့မဟုတ် စိတ်ကျနေခြင်း ရှိလျှင် ကလေးကို ထိခိုက်မလား။', 'If a mother feels low, does it affect the baby?'),
           a: b('မိဘ၏ စိတ်ကျန်းမာရေးသည် ကလေး၏ ဖွံ့ဖြိုးမှုနှင့် ဆက်စပ်နေပါသည်။ ထို့ကြောင့် အကူအညီ ရယူခြင်းသည် ကလေးအတွက်လည်း အကျိုးရှိပါသည်။ ဤသည် အပြစ်တင်ခြင်း မဟုတ်ပါ။', 'Parental wellbeing is linked to child development, so getting support helps your baby too. This is not about blame.'),
         },
         { q: b("ဘယ်အပူချိန် ရောက်ရင် ဆေးရုံ သွားရမလဲ။", "What temperature means we should seek care?"), a: b("အပူချိန် တိုင်းပါ။ အသက် ၃ လအောက် ကလေး ၃၈°C (၁၀၀.၄°F) နှင့်အထက် ဖျားပါက — ကလေး ပုံမှန်လို ထင်ရလျှင်ပင် ချက်ချင်း ပြသပါ။ အသက် ၃ လမှ ၆ လကြား ၃၉°C (၁၀၂.၂°F) နှင့်အထက် ဖျားပါက အမြန် ပြသပါ။ အသက် ၆ လကျော်လျှင် အပူချိန် ကိန်းဂဏန်းတစ်ခုတည်းက အဖြေ မပေးပါ — ကလေး၏ ပုံစံနှင့် အပြုအမူကို ကြည့်ပါ။ ဖျားချိန် ၅ ရက်နှင့်အထက် ကြာလျှင်၊ ရေ/နို့ မသောက်နိုင်လျှင် သို့မဟုတ် ပုံမှန်လို တုံ့ပြန်မှု မရှိတော့လျှင် ပြသပါ။ အသက်မရွေး — ဖျားခြင်းနှင့်အတူ အသက်ရှူခက်ခြင်း၊ နှိပ်လျှင် မပျောက်သော အနီစက်၊ လည်ပင်း တောင့်တင်းခြင်း သို့မဟုတ် နိုးရခက်ခြင်း ပါလာပါက ချက်ချင်း ပြသပါ။ အပူချိန်တိုင်းကိရိယာ မရှိပါက — ကလေး ပူနေပြီး အထက်ပါ လက္ခဏာများ ပါလျှင် မစောင့်ဘဲ ပြသပါ။", "Take the temperature. Under 3 months, 38°C (100.4°F) or above: seek care straight away, even if the baby otherwise seems well. Between 3 and 6 months, 39°C (102.2°F) or above: seek care promptly. Over 6 months, the number alone does not decide — go by how she looks and behaves. Seek advice if the fever lasts 5 days or more, if she will not drink, or if she is much less responsive than usual. At any age, fever together with difficulty breathing, a rash that does not fade under pressure, a stiff neck, or being hard to wake: seek care immediately. If you have no thermometer, and the child feels hot and has any of those signs, do not wait.") },
@@ -929,14 +929,14 @@ const GUIDES_E: SeedItem[] = [
         },
         {
           q: b('ဘယ်အချိန်မှာ ချက်ချင်း ဆေးရုံသွားရမလဲ။', 'When should I go to hospital immediately?'),
-          a: b('အသက်ရှူရ ခက်ခဲခြင်း၊ တက်ခြင်း၊ နှိုးရ မရခြင်း၊ ဆက်တိုက် အန်ခြင်း၊ ကြက်သွေးရောင် အဖုအပိန့်များ ပေါ်ခြင်း၊ ခလုတ်ဘက်ထရီ သို့မဟုတ် ဓာတုပစ္စည်း မျိုမိခြင်း — ချက်ချင်း ဆေးကုသမှု ခံယူပါ။', 'Difficulty breathing, a fit, being very hard to wake, repeated vomiting, a rash that does not fade, or swallowing a button battery or chemical — get medical help immediately.'),
+          a: b('အသက်ရှူရ ခက်ခဲခြင်း၊ တက်ခြင်း၊ နှိုးရ မရခြင်း၊ ဆက်တိုက် အန်ခြင်း၊ ဖိကြည့်လျှင် အရောင်မပျောက်သော အဖုအပိန့်များ ပေါ်ခြင်း၊ ခလုတ်ဘက်ထရီ သို့မဟုတ် ဓာတုပစ္စည်း မျိုမိခြင်း — ချက်ချင်း ဆေးကုသမှု ခံယူပါ။', 'Difficulty breathing, a fit, being very hard to wake, repeated vomiting, a rash that does not fade under pressure, or swallowing a button battery or chemical — get medical help immediately.'),
         },
         { q: b("ဘယ်အပူချိန် ရောက်ရင် ဆေးရုံ သွားရမလဲ။", "What temperature means we should seek care?"), a: b("အပူချိန် တိုင်းပါ။ အသက် ၃ လအောက် ကလေး ၃၈°C (၁၀၀.၄°F) နှင့်အထက် ဖျားပါက — ကလေး ပုံမှန်လို ထင်ရလျှင်ပင် ချက်ချင်း ပြသပါ။ အသက် ၃ လမှ ၆ လကြား ၃၉°C (၁၀၂.၂°F) နှင့်အထက် ဖျားပါက အမြန် ပြသပါ။ အသက် ၆ လကျော်လျှင် အပူချိန် ကိန်းဂဏန်းတစ်ခုတည်းက အဖြေ မပေးပါ — ကလေး၏ ပုံစံနှင့် အပြုအမူကို ကြည့်ပါ။ ဖျားချိန် ၅ ရက်နှင့်အထက် ကြာလျှင်၊ ရေ/နို့ မသောက်နိုင်လျှင် သို့မဟုတ် ပုံမှန်လို တုံ့ပြန်မှု မရှိတော့လျှင် ပြသပါ။ အသက်မရွေး — ဖျားခြင်းနှင့်အတူ အသက်ရှူခက်ခြင်း၊ နှိပ်လျှင် မပျောက်သော အနီစက်၊ လည်ပင်း တောင့်တင်းခြင်း သို့မဟုတ် နိုးရခက်ခြင်း ပါလာပါက ချက်ချင်း ပြသပါ။ အပူချိန်တိုင်းကိရိယာ မရှိပါက — ကလေး ပူနေပြီး အထက်ပါ လက္ခဏာများ ပါလျှင် မစောင့်ဘဲ ပြသပါ။", "Take the temperature. Under 3 months, 38°C (100.4°F) or above: seek care straight away, even if the baby otherwise seems well. Between 3 and 6 months, 39°C (102.2°F) or above: seek care promptly. Over 6 months, the number alone does not decide — go by how she looks and behaves. Seek advice if the fever lasts 5 days or more, if she will not drink, or if she is much less responsive than usual. At any age, fever together with difficulty breathing, a rash that does not fade under pressure, a stiff neck, or being hard to wake: seek care immediately. If you have no thermometer, and the child feels hot and has any of those signs, do not wait.") },
       ],
       redFlags: [
         b('အသက်ရှူရ ခက်ခဲခြင်း သို့မဟုတ် နှုတ်ခမ်း ညိုခြင်း — ချက်ချင်း ဆေးကုသမှု ခံယူပါ။', 'Difficulty breathing or blue lips — get medical help immediately.'),
         b('တက်ခြင်း သို့မဟုတ် နှိုးရ မရခြင်း — ချက်ချင်း ဆေးကုသမှု ခံယူပါ။', 'A fit, or being very hard to wake — get medical help immediately.'),
-        b('ကြက်သွေးရောင် အဖုအပိန့်များ ပေါ်ခြင်း — ချက်ချင်း ဆေးကုသမှု ခံယူပါ။', 'A rash that does not fade under pressure — get medical help immediately.'),
+        b('ဖိကြည့်လျှင် အရောင်မပျောက်သော အဖုအပိန့်များ ပေါ်ခြင်း — ချက်ချင်း ဆေးကုသမှု ခံယူပါ။', 'A rash that does not fade under pressure — get medical help immediately.'),
         b('ခေါင်းကို ပြင်းထန်စွာ ရိုက်မိပြီးနောက် အန်ခြင်း၊ အိပ်ငိုက်ခြင်း — ချက်ချင်း ဆေးကုသမှု ခံယူပါ။', 'Vomiting or drowsiness after a significant head injury — get medical help immediately.'),
       ],
       referral: b(

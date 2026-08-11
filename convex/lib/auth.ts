@@ -125,9 +125,10 @@ export async function requireClinicalReviewer(
 }
 
 /**
- * Publishing authority with an explicit scope. A clinical reviewer signs with
- * clinical scope. A qualified owner may sign education / special-education
- * material, but this never turns their decision into medical approval.
+ * Publishing authority for ordinary educational material. The resulting
+ * decision is always education-scoped, including when the qualified publisher
+ * happens to be a clinical reviewer. Clinical scope is reserved for the
+ * explicit specialist-risk path in requireClinicalPublisher.
  */
 export async function requireProfessionalPublisher(ctx: Ctx): Promise<ProfessionalApproval> {
   const { userId, access } = await requireOneOf(ctx, ['owner', 'clinical_reviewer']);
@@ -138,7 +139,7 @@ export async function requireProfessionalPublisher(ctx: Ctx): Promise<Profession
       userId,
       qualification: access.qualification,
       reviewerName: access.displayName,
-      scope: 'clinical',
+      scope: 'education',
     };
   }
   return {
@@ -150,10 +151,9 @@ export async function requireProfessionalPublisher(ctx: Ctx): Promise<Profession
 }
 
 /**
- * Publishing parent-facing developmental or health content is a clinical
- * decision. Education-scoped owner approval is intentionally insufficient;
- * it remains valid for evidence/media governance but cannot expose guidance
- * to parent accounts as clinically reviewed content.
+ * Specialist publishing authority for diagnosis, treatment, medication,
+ * individualized advice and emergency-decision wording. Ordinary educational
+ * parent content uses requireProfessionalPublisher and retains education scope.
  */
 export async function requireClinicalPublisher(ctx: Ctx): Promise<ProfessionalApproval> {
   const reviewer = await requireClinicalReviewer(ctx);

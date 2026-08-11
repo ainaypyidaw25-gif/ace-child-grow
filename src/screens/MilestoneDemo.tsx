@@ -12,6 +12,11 @@ import { developmentalAgeMonths } from '../domain/age/age';
 import { resolveAgeGroup } from '../content/taxonomy';
 import { milestoneIllustration } from '../content/milestoneIllustrations';
 import { NoChild } from './Growth';
+import {
+  ACUTE_URGENT_SYMPTOMS,
+  ACUTE_URGENT_SYMPTOM_LABELS,
+  type AcuteUrgentSymptom,
+} from '../domain/safety/safety';
 
 const ANSWER_KEYS: Record<MilestoneAnswer, TranslationKey> = {
   yes: 'milestone.answer.yes',
@@ -61,6 +66,9 @@ export function MilestoneDemo() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Record<number, MilestoneAnswer>>({});
   const [notes, setNotes] = useState<Record<number, string>>({});
+  const [confirmedSymptoms, setConfirmedSymptoms] = useState<AcuteUrgentSymptom[]>([]);
+  const [urgentSymptomsAnswered, setUrgentSymptomsAnswered] = useState(false);
+  const [urgentSymptomsExpanded, setUrgentSymptomsExpanded] = useState(false);
   const [lostSkill, setLostSkill] = useState<boolean | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -84,8 +92,8 @@ export function MilestoneDemo() {
       domain: normalizeDomain(item.domainKey),
       answer: answers[index] ?? 'not_sure',
     }));
-    return computeResult(responses, { confirmedSymptoms: [], lostSkill: lostSkill === true });
-  }, [submitted, answers, lostSkill, items]);
+    return computeResult(responses, { confirmedSymptoms, lostSkill: lostSkill === true });
+  }, [submitted, answers, confirmedSymptoms, lostSkill, items]);
 
   if (!activeChild) return <NoChild />;
   if (data === undefined) return <p className="text-ink-soft" role="status">…</p>;
@@ -122,6 +130,9 @@ export function MilestoneDemo() {
           setStep(0);
           setAnswers({});
           setNotes({});
+          setConfirmedSymptoms([]);
+          setUrgentSymptomsAnswered(false);
+          setUrgentSymptomsExpanded(false);
           setLostSkill(null);
         }}>
           {locale === 'mm' ? 'စစ်ဆေးစာရင်း အသစ်စမည်' : 'Start a new checklist'}
@@ -136,7 +147,7 @@ export function MilestoneDemo() {
   const illustration = milestoneIllustration(current.slug);
 
   async function save() {
-    if (!activeChild || lostSkill === null) return;
+    if (!activeChild || lostSkill === null || !urgentSymptomsAnswered) return;
     setBusy(true);
     setSaveError('');
     const responses = items.map((item, index) => ({
@@ -153,7 +164,7 @@ export function MilestoneDemo() {
         domain: response.domain,
         answer: response.answer,
       })),
-      { confirmedSymptoms: [], lostSkill },
+      { confirmedSymptoms, lostSkill },
     );
     try {
       await recordSession({
@@ -161,9 +172,11 @@ export function MilestoneDemo() {
         ageGroupKey,
         resultState: computed.state,
         lostSkill,
+        urgentSymptoms: confirmedSymptoms,
         resultSnapshot: {
           state: computed.state,
           answeredCount: answered,
+          urgentSymptoms: computed.safety.triggers,
           completedAt: Date.now(),
         },
         responses,
@@ -174,6 +187,16 @@ export function MilestoneDemo() {
     } finally {
       setBusy(false);
     }
+  }
+
+  function toggleUrgentSymptom(symptom: AcuteUrgentSymptom) {
+    const removing = confirmedSymptoms.includes(symptom);
+    // Removing the last selected symptom is not the same as explicitly
+    // confirming "none". Keep Save disabled until the parent chooses one.
+    setUrgentSymptomsAnswered(!removing || confirmedSymptoms.length > 1);
+    setConfirmedSymptoms((previous) => removing
+      ? previous.filter((value) => value !== symptom)
+      : [...previous, symptom]);
   }
 
   return (
@@ -227,8 +250,8 @@ export function MilestoneDemo() {
         </label>
       </section>
 
-      <div className="flex justify-between gap-2">
-        <button type="button" disabled={step === 0} onClick={() => setStep((value) => Math.max(0, value - 1))} className="min-h-touch rounded-pill border border-line bg-white px-5 py-2 disabled:opacity-40">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+        <button type="button" disabled={step === 0} onClick={() => setStep((value) => Math.max(0, value - 1))} className="min-h-touch self-start rounded-pill border border-line bg-white px-5 py-2 disabled:opacity-40">
           {t('milestone.prev')}
         </button>
         {step < items.length - 1 ? (
@@ -236,15 +259,91 @@ export function MilestoneDemo() {
             {t('milestone.next')}
           </button>
         ) : (
-          <div className="flex max-w-sm flex-col items-end gap-2">
+          <div className="flex w-full flex-col items-stretch gap-2 sm:max-w-lg sm:items-end">
+            <fieldset className="w-full rounded-2xl border border-line bg-white p-3 text-sm">
+              <legend className="px-1 font-medium text-ink">
+                {locale === 'mm'
+                  ? 'မသိမ်းမီ ကလေး၏ လက်ရှိအခြေအနေကို တစ်ချက်စစ်ပါ။'
+                  : 'Before saving, briefly check how your child is now.'}
+              </legend>
+              {!urgentSymptomsExpanded ? (
+                <div className="mt-2 space-y-2">
+                  {urgentSymptomsAnswered && confirmedSymptoms.length === 0 ? (
+                    <p role="status" className="rounded-xl bg-mint-soft px-3 py-3 text-ink">
+                      {locale === 'mm'
+                        ? 'အရေးပေါ်လက္ခဏာများ မရှိပါဟု မှတ်သားထားသည်။'
+                        : 'You confirmed that none of the urgent signs are present.'}
+                    </p>
+                  ) : (
+                    <p className="leading-6 text-ink-soft">
+                      {locale === 'mm'
+                        ? 'လက်ရှိ ရှိ/မရှိကို သေချာဖြေရန် ကျန်းမာရေးလက္ခဏာစာရင်းကို တစ်ချက်ကြည့်ပါ။'
+                        : 'Review the short health-sign list, then confirm whether any are present now.'}
+                    </p>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => setUrgentSymptomsExpanded(true)}
+                    className="min-h-touch w-full rounded-xl border border-sky bg-white px-3 py-2 font-semibold text-sky-deep"
+                  >
+                    {locale === 'mm'
+                      ? urgentSymptomsAnswered ? 'လက္ခဏာစာရင်းကို ပြန်စစ်မည်' : 'လက္ခဏာစာရင်းကို ကြည့်မည်'
+                      : urgentSymptomsAnswered ? 'Review the signs again' : 'Review the health signs'}
+                  </button>
+                </div>
+              ) : (
+                <div className="mt-2 grid gap-2">
+                  <p className="mb-1 leading-6 text-ink-soft">
+                    {locale === 'mm'
+                      ? 'ယခုတွေ့ရသည့် အရေးပေါ်လက္ခဏာရှိသမျှကို ရွေးပါ။ မရှိပါက အောက်ဆုံးအဖြေကို ရွေးပါ။'
+                      : 'Select every urgent sign present now. If there are none, choose the last answer.'}
+                  </p>
+                  {ACUTE_URGENT_SYMPTOMS.map((symptom) => {
+                    const selected = confirmedSymptoms.includes(symptom);
+                    return (
+                      <button
+                        key={symptom}
+                        type="button"
+                        aria-pressed={selected}
+                        onClick={() => toggleUrgentSymptom(symptom)}
+                        className={`min-h-touch rounded-xl border px-3 py-2 text-left ${
+                          selected ? 'border-state-red bg-pink font-semibold text-state-red-deep' : 'border-line text-ink'
+                        }`}
+                      >
+                        {ACUTE_URGENT_SYMPTOM_LABELS[symptom][locale]}
+                      </button>
+                    );
+                  })}
+                  <button
+                    type="button"
+                    aria-pressed={urgentSymptomsAnswered && confirmedSymptoms.length === 0}
+                    onClick={() => {
+                      setConfirmedSymptoms([]);
+                      setUrgentSymptomsAnswered(true);
+                      setUrgentSymptomsExpanded(false);
+                    }}
+                    className={`min-h-touch rounded-xl border px-3 py-2 text-left ${
+                      urgentSymptomsAnswered && confirmedSymptoms.length === 0
+                        ? 'border-sky bg-mint-soft font-semibold text-sky-deep'
+                        : 'border-line text-ink'
+                    }`}
+                  >
+                    {locale === 'mm' ? 'ဤလက္ခဏာများ မရှိပါ' : 'None of these'}
+                  </button>
+                </div>
+              )}
+            </fieldset>
+            {confirmedSymptoms.length > 0 || lostSkill === true
+              ? <div className="w-full"><SafetyBanner /></div>
+              : null}
             <fieldset className="rounded-2xl border border-line bg-white p-3 text-sm">
               <legend className="px-1 text-ink-soft">{t('safety.skillLoss.question')}</legend>
               <div className="mt-1 flex gap-2">
-                <button type="button" aria-pressed={lostSkill === true} onClick={() => setLostSkill(true)} className={`min-h-touch rounded-pill px-4 py-2 ${lostSkill === true ? 'bg-state-red text-white' : 'border border-line'}`}>{t('milestone.answer.yes')}</button>
+                <button type="button" aria-pressed={lostSkill === true} onClick={() => setLostSkill(true)} className={`min-h-touch rounded-pill px-4 py-2 ${lostSkill === true ? 'bg-state-red text-white' : 'border border-line'}`}>{locale === 'mm' ? 'ရှိပါသည်' : 'Yes'}</button>
                 <button type="button" aria-pressed={lostSkill === false} onClick={() => setLostSkill(false)} className={`min-h-touch rounded-pill px-4 py-2 ${lostSkill === false ? 'bg-mint text-white' : 'border border-line'}`}>{locale === 'mm' ? 'မရှိပါ' : 'No'}</button>
               </div>
             </fieldset>
-            <button type="button" disabled={busy || answered !== items.length || lostSkill === null} onClick={() => void save()} className="min-h-touch rounded-pill bg-sky-deep px-6 py-2 font-semibold text-white disabled:opacity-40">
+            <button type="button" disabled={busy || answered !== items.length || !urgentSymptomsAnswered || lostSkill === null} onClick={() => void save()} className="min-h-touch self-end rounded-pill bg-sky-deep px-6 py-2 font-semibold text-white disabled:opacity-40">
               {busy ? '…' : t('milestone.save')}
             </button>
           </div>

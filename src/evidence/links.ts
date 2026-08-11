@@ -60,9 +60,14 @@ export const MILESTONE_DOMAIN_SOURCES: Record<string, string[]> = {
   play: ['aap-power-of-play-2018', 'who-care-for-child-development-2012'],
   nutrition: ['who-iycf-model-chapter-2025', 'who-complementary-feeding-2023', 'nhs-first-solid-foods-2026'],
   sleep: ['who-pa-sleep-under5-2019', 'aap-safe-sleep-2022', 'nhs-sids-2025'],
-  safety: ['aap-drowning-2021', 'tb-bright-futures-4e-2017', 'nhs-seriously-ill-2023'],
+  safety: ['aap-drowning-2021', 'tb-bright-futures-4e-2017', 'nhs-child-accident-2025', 'hc-child-ems-2026'],
   daily_routine: ['tb-bright-futures-4e-2017', 'jr-aasm-bedtime-2006'],
   school_readiness: ['hc-early-literacy-2023', 'tb-handbook-ecse-2016'],
+};
+
+/** Sources supporting a claim that is intentionally specific to one slug. */
+export const MILESTONE_SLUG_SOURCES: Record<string, string[]> = {
+  ms_4y_gross_motor_1: ['nhs-beds-4y-milestones-2024'],
 };
 
 /**
@@ -95,11 +100,11 @@ export const EXPLICIT_CONTENT_SOURCES: Record<string, string[]> = {
   gd_birth_2m_fine_motor: ['tb-case-smith-9e-2025', 'aap-milestones-2022', 'cdc-milestone-checklists-2025'],
   gd_birth_2m_communication: ['nhs-learn-to-talk-2023', 'aap-media-young-minds-2016', 'who-care-for-child-development-2012', 'jr-weisleder-2013'],
   gd_birth_2m_social: ['nice-ph40-social-emotional-2012', 'nice-ng194-postnatal-2021', 'who-nurturing-care-2018', 'cdc-milestones-2026'],
-  gd_birth_2m_emotional: ['aap-toxic-stress-2021', 'who-nurturing-care-2018', 'nhs-seriously-ill-2023', 'nice-ng143-fever-2019'],
+  gd_birth_2m_emotional: ['aap-toxic-stress-2021', 'who-nurturing-care-2018', 'nhs-child-accident-2025', 'nice-ng143-fever-2019'],
   gd_birth_2m_cognitive: ['tb-dbp-5e-2022', 'aap-power-of-play-2018', 'who-care-for-child-development-2012', 'aap-media-young-minds-2016'],
   gd_birth_2m_play: ['aap-power-of-play-2018', 'who-care-for-child-development-2012', 'unicef-early-moments-2017'],
   gd_birth_2m_nutrition: ['who-iycf-model-chapter-2025', 'who-bf-counselling-2018', 'nhs-breastfeeding-first-days-2023', 'who-unicef-iycf-strategy-2003', 'nice-ng75-faltering-growth-2017', 'who-growth-standards-2006'],
-  gd_birth_2m_safety: ['aap-safe-sleep-2022', 'nhs-sids-2025', 'aap-drowning-2021', 'nhs-seriously-ill-2023', 'nice-ng143-fever-2019', 'who-imci-chart-2014', 'hc-safe-sleep-2026'],
+  gd_birth_2m_safety: ['aap-safe-sleep-2022', 'nhs-sids-2025', 'aap-drowning-2021', 'nhs-child-accident-2025', 'hc-child-ems-2026', 'nice-ng143-fever-2019', 'who-imci-chart-2014', 'hc-safe-sleep-2026'],
   gd_birth_2m_daily_routine: ['jr-aasm-bedtime-2006', 'who-pa-sleep-under5-2019', 'aap-safe-sleep-2022', 'tb-bright-futures-4e-2017'],
 
   // --- Knowledge base: Birth–2 months (activities + printable) --------------
@@ -116,12 +121,12 @@ export const EXPLICIT_CONTENT_SOURCES: Record<string, string[]> = {
   gd_3_4m_fine_motor: ['tb-case-smith-9e-2025', 'aap-milestones-2022', 'cdc-milestone-checklists-2025', 'aap-power-of-play-2018'],
   gd_3_4m_communication: ['nhs-learn-to-talk-2023', 'cdc-milestones-2026', 'aap-surveillance-2020', 'who-care-for-child-development-2012', 'jr-weisleder-2013'],
   gd_3_4m_social: ['cdc-milestones-2026', 'aap-milestones-2022', 'who-nurturing-care-2018', 'nice-ng194-postnatal-2021', 'nice-ph40-social-emotional-2012'],
-  gd_3_4m_emotional: ['aap-toxic-stress-2021', 'who-nurturing-care-2018', 'nhs-seriously-ill-2023', 'nice-ng143-fever-2019', 'who-imci-chart-2014', 'tb-nelson-22e-2024'],
+  gd_3_4m_emotional: ['aap-toxic-stress-2021', 'who-nurturing-care-2018', 'nhs-child-accident-2025', 'nice-ng143-fever-2019', 'who-imci-chart-2014', 'tb-nelson-22e-2024'],
   gd_3_4m_cognitive: ['tb-dbp-5e-2022', 'cdc-milestone-checklists-2025', 'aap-milestones-2022', 'who-pa-sleep-under5-2019', 'aap-media-young-minds-2016'],
   gd_3_4m_play: ['aap-power-of-play-2018', 'who-care-for-child-development-2012', 'unicef-early-moments-2017', 'cdc-milestones-2026', 'aap-safe-sleep-2022'],
   gd_3_4m_nutrition: ['who-iycf-model-chapter-2025', 'who-unicef-iycf-strategy-2003', 'nhs-first-solid-foods-2026', 'who-bf-counselling-2018', 'nice-ng75-faltering-growth-2017', 'aap-breastfeeding-2022'],
   gd_3_4m_sleep: ['who-pa-sleep-under5-2019', 'aap-safe-sleep-2022', 'nhs-sids-2025', 'hc-safe-sleep-2026', 'jr-aasm-bedtime-2006'],
-  gd_3_4m_safety: ['aap-drowning-2021', 'aap-safe-sleep-2022', 'nhs-seriously-ill-2023', 'nice-ng143-fever-2019', 'who-imci-chart-2014', 'tb-bright-futures-4e-2017'],
+  gd_3_4m_safety: ['aap-drowning-2021', 'aap-safe-sleep-2022', 'nhs-child-accident-2025', 'hc-child-ems-2026', 'nice-ng143-fever-2019', 'who-imci-chart-2014', 'tb-bright-futures-4e-2017'],
   gd_3_4m_daily_routine: ['who-nurturing-care-2018', 'jr-aasm-bedtime-2006', 'aap-drowning-2021', 'nice-ng143-fever-2019', 'tb-bright-futures-4e-2017', 'cdc-immunization-schedule-2025'],
 
   // --- Knowledge base: 3–4 months (activities + printable) ------------------
@@ -143,7 +148,7 @@ export const EXPLICIT_CONTENT_SOURCES: Record<string, string[]> = {
   gd_5_6m_emotional: ['aap-toxic-stress-2021', 'who-nurturing-care-2018', 'nice-ng194-postnatal-2021', 'nice-ph40-social-emotional-2012', 'tb-nelson-22e-2024'],
   gd_5_6m_cognitive: ['cdc-milestone-checklists-2025', 'aap-milestones-2022', 'tb-dbp-5e-2022', 'aap-media-young-minds-2016', 'who-pa-sleep-under5-2019'],
   gd_5_6m_sleep: ['who-pa-sleep-under5-2019', 'aap-safe-sleep-2022', 'nhs-sids-2025', 'hc-safe-sleep-2026', 'jr-aasm-bedtime-2006', 'jr-hiscock-sleep-rct-2002'],
-  gd_5_6m_safety: ['aap-drowning-2021', 'tb-bright-futures-4e-2017', 'nhs-seriously-ill-2023', 'nice-ng143-fever-2019', 'who-imci-chart-2014', 'aap-safe-sleep-2022'],
+  gd_5_6m_safety: ['aap-drowning-2021', 'tb-bright-futures-4e-2017', 'nhs-child-accident-2025', 'hc-child-ems-2026', 'nice-ng143-fever-2019', 'who-imci-chart-2014', 'aap-safe-sleep-2022'],
   gd_5_6m_daily_routine: ['who-nurturing-care-2018', 'tb-bright-futures-4e-2017', 'jr-aasm-bedtime-2006', 'jr-hiscock-sleep-rct-2002', 'who-iycf-model-chapter-2025', 'aap-drowning-2021', 'nice-ng143-fever-2019', 'cdc-immunization-schedule-2025'],
 
   // --- Knowledge base: 5–6 months (activities + printable) ------------------
@@ -166,7 +171,7 @@ export const EXPLICIT_CONTENT_SOURCES: Record<string, string[]> = {
   gd_7_9m_nutrition: ['who-complementary-feeding-2023', 'who-iycf-model-chapter-2025', 'who-iycf-indicators-2021', 'nhs-first-solid-foods-2026', 'cdc-foods-6-24m-2025', 'nice-ng247-maternal-child-nutrition-2025', 'asha-pediatric-feeding-swallowing'],
   gd_7_9m_self_help: ['tb-case-smith-9e-2025', 'tb-bright-futures-4e-2017', 'who-iycf-model-chapter-2025', 'cdc-foods-6-24m-2025', 'aota-early-intervention'],
   gd_7_9m_sleep: ['who-pa-sleep-under5-2019', 'aap-safe-sleep-2022', 'nhs-sids-2025', 'hc-safe-sleep-2026', 'jr-aasm-bedtime-2006', 'jr-hiscock-sleep-rct-2002'],
-  gd_7_9m_safety: ['aap-drowning-2021', 'tb-bright-futures-4e-2017', 'nhs-seriously-ill-2023', 'nice-ng143-fever-2019', 'who-imci-chart-2014', 'aap-safe-sleep-2022'],
+  gd_7_9m_safety: ['aap-drowning-2021', 'tb-bright-futures-4e-2017', 'nhs-child-accident-2025', 'hc-child-ems-2026', 'nice-ng143-fever-2019', 'who-imci-chart-2014', 'aap-safe-sleep-2022'],
   gd_7_9m_daily_routine: ['who-nurturing-care-2018', 'tb-bright-futures-4e-2017', 'jr-aasm-bedtime-2006', 'jr-hiscock-sleep-rct-2002', 'who-iycf-model-chapter-2025', 'aap-drowning-2021', 'nice-ng143-fever-2019', 'cdc-immunization-schedule-2025'],
 
   // --- Knowledge base: 7–9 months (activities + printable) ------------------
@@ -183,14 +188,14 @@ export const EXPLICIT_CONTENT_SOURCES: Record<string, string[]> = {
   gd_10_12m_fine_motor: ['cdc-milestone-checklists-2025', 'aap-milestones-2022', 'aap-power-of-play-2018', 'tb-case-smith-9e-2025', 'tb-bright-futures-4e-2017'],
   gd_10_12m_speech: ['cdc-milestones-2026', 'aap-milestones-2022', 'nhs-learn-to-talk-2023', 'tb-paul-language-6e-2024', 'asha-late-language-emergence'],
   gd_10_12m_language: ['cdc-milestones-2026', 'aap-surveillance-2020', 'nhs-learn-to-talk-2023', 'jr-weisleder-2013', 'tb-paul-language-6e-2024'],
-  gd_10_12m_cognitive: ['cdc-milestone-checklists-2025', 'aap-milestones-2022', 'aap-power-of-play-2018', 'tb-dbp-5e-2022', 'aap-media-young-minds-2016', 'hc-screen-time-5cs-2024', 'jr-madigan-screen-language-2020', 'who-pa-sleep-under5-2019'],
+  gd_10_12m_cognitive: ['cdc-milestone-checklists-2025', 'aap-milestones-2022', 'aap-power-of-play-2018', 'tb-dbp-5e-2022', 'aap-media-young-minds-2016', 'hc-screen-time-5cs-2024', 'hc-screen-time-5cs-infants-2024', 'jr-madigan-screen-language-2020', 'who-pa-sleep-under5-2019'],
   gd_10_12m_social: ['cdc-milestones-2026', 'aap-milestones-2022', 'who-nurturing-care-2018', 'nice-ph40-social-emotional-2012', 'aap-power-of-play-2018'],
   gd_10_12m_emotional: ['aap-toxic-stress-2021', 'who-nurturing-care-2018', 'nice-ng194-postnatal-2021', 'nice-ph40-social-emotional-2012', 'tb-nelson-22e-2024'],
   gd_10_12m_self_help: ['tb-case-smith-9e-2025', 'tb-bright-futures-4e-2017', 'who-iycf-model-chapter-2025', 'cdc-foods-6-24m-2025', 'aap-oral-health-2023', 'who-caries-2020', 'aota-early-intervention', 'asha-pediatric-feeding-swallowing'],
   gd_10_12m_play: ['aap-power-of-play-2018', 'who-care-for-child-development-2012', 'unicef-early-moments-2017', 'tb-bright-futures-4e-2017', 'aap-drowning-2021', 'aap-safe-sleep-2022'],
   gd_10_12m_nutrition: ['who-complementary-feeding-2023', 'who-iycf-model-chapter-2025', 'who-iycf-indicators-2021', 'nhs-first-solid-foods-2026', 'cdc-foods-6-24m-2025', 'nice-ng247-maternal-child-nutrition-2025', 'aap-breastfeeding-2022', 'asha-pediatric-feeding-swallowing'],
   gd_10_12m_sleep: ['who-pa-sleep-under5-2019', 'aap-safe-sleep-2022', 'nhs-sids-2025', 'hc-safe-sleep-2026', 'jr-aasm-bedtime-2006', 'jr-hiscock-sleep-rct-2002'],
-  gd_10_12m_daily_routine: ['who-nurturing-care-2018', 'tb-bright-futures-4e-2017', 'jr-aasm-bedtime-2006', 'jr-hiscock-sleep-rct-2002', 'who-iycf-model-chapter-2025', 'aap-drowning-2021', 'nice-ng143-fever-2019', 'nhs-seriously-ill-2023', 'who-imci-chart-2014', 'cdc-immunization-schedule-2025', 'who-ia2030-2020'],
+  gd_10_12m_daily_routine: ['who-nurturing-care-2018', 'tb-bright-futures-4e-2017', 'jr-aasm-bedtime-2006', 'jr-hiscock-sleep-rct-2002', 'who-iycf-model-chapter-2025', 'aap-drowning-2021', 'nice-ng143-fever-2019', 'nhs-child-accident-2025', 'hc-child-ems-2026', 'who-imci-chart-2014', 'cdc-immunization-schedule-2025', 'who-ia2030-2020'],
 
   // --- Knowledge base: 10–12 months (activities + printable) ----------------
   act_container_in_and_out: ['tb-case-smith-9e-2025', 'aap-power-of-play-2018', 'cdc-milestone-checklists-2025', 'tb-dbp-5e-2022'],
@@ -228,7 +233,7 @@ export const EXPLICIT_CONTENT_SOURCES: Record<string, string[]> = {
   lsn_balanced_meals: ['who-complementary-feeding-2023', 'cdc-foods-6-24m-2025', 'nice-ng247-maternal-child-nutrition-2025', 'who-unicef-iycf-strategy-2003', 'who-bfhi-2017', 'who-bf-counselling-2018', 'who-iycf-indicators-2021', 'unicef-sowc-2019', 'jr-lancet-undernutrition-2013'],
   lsn_healthy_sleep: ['who-pa-sleep-under5-2019', 'jr-aasm-bedtime-2006', 'aap-safe-sleep-2022'],
   lsn_home_safety: ['aap-drowning-2021', 'tb-bright-futures-4e-2017', 'cdc-positive-parenting-toddlers-2026', 'tb-caring-birth-to-5-8e-2024'],
-  lsn_screen_time: ['aap-media-young-minds-2016', 'jr-madigan-screen-language-2020', 'who-pa-sleep-under5-2019', 'hc-screen-time-5cs-2024', 'jr-madigan-screen-asq-2019'],
+  lsn_screen_time: ['aap-media-young-minds-2016', 'jr-madigan-screen-language-2020', 'who-pa-sleep-under5-2019', 'hc-screen-time-5cs-2024', 'hc-screen-time-5cs-infants-2024', 'jr-madigan-screen-asq-2019'],
   lsn_big_feelings: ['nice-ph40-social-emotional-2012', 'aap-toxic-stress-2021'],
   lsn_making_friends: ['aap-power-of-play-2018', 'nice-ph40-social-emotional-2012'],
   lsn_early_math: ['aap-power-of-play-2018', 'tb-handbook-ecse-2016'],
@@ -262,7 +267,7 @@ export const EXPLICIT_CONTENT_SOURCES: Record<string, string[]> = {
   // --- Stories ---------------------------------------------------------------
   // Stories teach one developmental idea each; the reference backs that idea,
   // not the narrative.
-  st_little_seed: ['who-nurturing-care-2018', 'aap-milestones-2022'],
+  st_little_seed: ['who-nurturing-care-2018', 'aap-milestones-2022', 'hc-choking-prevention-2026'],
   st_ba_ba_sounds: ['nhs-learn-to-talk-2023', 'jr-weisleder-2013', 'tb-paul-language-6e-2024'],
   st_when_i_feel_angry: ['nice-ph40-social-emotional-2012', 'aap-toxic-stress-2021'],
   st_taking_turns: ['aap-power-of-play-2018', 'nice-ph40-social-emotional-2012'],
@@ -293,19 +298,19 @@ export const EXPLICIT_CONTENT_SOURCES: Record<string, string[]> = {
  * of each urgent rule against.
  */
 export const SAFETY_RULE_SOURCES: Record<string, string[]> = {
-  severe_breathing_difficulty: ['nhs-seriously-ill-2023', 'who-imci-chart-2014', 'tb-nelson-22e-2024'],
-  blue_lips: ['nhs-seriously-ill-2023', 'who-imci-chart-2014'],
-  breathing_pauses: ['nhs-seriously-ill-2023', 'tb-nelson-22e-2024'],
-  seizure: ['nice-ng143-fever-2019', 'tb-swaiman-7e-2025', 'nhs-seriously-ill-2023'],
-  unresponsiveness: ['nhs-seriously-ill-2023', 'who-imci-chart-2014'],
-  sudden_weakness: ['tb-swaiman-7e-2025', 'nhs-seriously-ill-2023'],
-  serious_injury: ['aap-drowning-2021', 'nhs-seriously-ill-2023'],
-  severe_dehydration: ['who-imci-chart-2014', 'nhs-seriously-ill-2023', 'tb-nelson-22e-2024'],
+  severe_breathing_difficulty: ['nhs-child-accident-2025', 'hc-child-ems-2026', 'nhs-sids-2025', 'who-imci-chart-2014', 'tb-nelson-22e-2024'],
+  blue_lips: ['nhs-child-accident-2025', 'hc-child-ems-2026', 'nhs-sids-2025', 'who-imci-chart-2014'],
+  breathing_pauses: ['nhs-child-accident-2025', 'nhs-sids-2025', 'tb-nelson-22e-2024'],
+  seizure: ['nice-ng143-fever-2019', 'tb-swaiman-7e-2025', 'nhs-child-accident-2025', 'hc-child-ems-2026', 'nhs-sids-2025'],
+  unresponsiveness: ['nhs-child-accident-2025', 'hc-child-ems-2026', 'nhs-sids-2025', 'who-imci-chart-2014'],
+  sudden_weakness: ['cdc-afm-signs-2024', 'tb-swaiman-7e-2025'],
+  serious_injury: ['aap-drowning-2021', 'nhs-child-accident-2025', 'hc-child-ems-2026'],
+  severe_dehydration: ['who-imci-chart-2014', 'hc-child-ems-2026', 'tb-nelson-22e-2024'],
   loss_of_acquired_skills: ['aap-surveillance-2020', 'cdc-autism-signs-2024', 'aap-asd-2020'],
   /** The standing skill-loss question asked alongside every milestone check. */
   skill_loss_question: ['aap-surveillance-2020', 'aap-asd-2020', 'cdc-monitoring-screening-2026'],
   /** The fixed emergency wording shown when any urgent rule fires. */
-  emergency_message: ['nhs-seriously-ill-2023', 'who-imci-chart-2014'],
+  emergency_message: ['nhs-child-accident-2025', 'hc-child-ems-2026', 'who-imci-chart-2014'],
 };
 
 /** References behind each Hope Center (awareness) topic. */
@@ -376,7 +381,11 @@ export function buildEvidenceLinks(): EvidenceLinkBuild {
         // A milestone domain with no reference mapping is a gap, not a default.
         orphans.push(`milestone_domain_unmapped:${domain}:${item.slug}`);
       }
-      push(kind, item.slug, [...MILESTONE_BASE_SOURCES, ...(domainIds ?? [])]);
+      push(kind, item.slug, [
+        ...MILESTONE_BASE_SOURCES,
+        ...(domainIds ?? []),
+        ...(MILESTONE_SLUG_SOURCES[item.slug] ?? []),
+      ]);
       continue;
     }
     push(kind, item.slug, EXPLICIT_CONTENT_SOURCES[item.slug] ?? []);
@@ -432,5 +441,8 @@ export function relatedContent(sourceId: string): Record<EvidenceLinkKind, strin
 
 /** Reference ids that no content, safety rule or Hope Center topic cites. */
 export function unusedSourceIds(): string[] {
-  return [...SOURCE_BY_ID.keys()].filter((id) => !RELATED_BY_SOURCE.has(id)).sort();
+  return [...SOURCE_BY_ID.entries()]
+    .filter(([id, source]) => source.reviewStatus !== 'retired' && !RELATED_BY_SOURCE.has(id))
+    .map(([id]) => id)
+    .sort();
 }

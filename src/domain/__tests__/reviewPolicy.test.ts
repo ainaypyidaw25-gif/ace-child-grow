@@ -19,12 +19,16 @@ const ROLES: ReviewerRole[] = [
 ];
 
 describe('review permission matrix', () => {
-  it('lets only a clinical reviewer decide clinical and safety', () => {
-    for (const dimension of ['clinical', 'safety'] as ReviewDimension[]) {
-      for (const role of ROLES) {
-        expect(roleMayReview(role, dimension), `${role} · ${dimension}`)
-          .toBe(role === 'clinical_reviewer');
-      }
+  it('lets only a clinical reviewer decide clinical review', () => {
+    for (const role of ROLES) {
+      expect(roleMayReview(role, 'clinical'), role).toBe(role === 'clinical_reviewer');
+    }
+  });
+
+  it('lets qualified evidence and editorial professionals decide child safety review', () => {
+    const allowed = new Set(['owner', 'content_editor', 'evidence_reviewer', 'clinical_reviewer']);
+    for (const role of ROLES) {
+      expect(roleMayReview(role, 'safety'), role).toBe(allowed.has(role));
     }
   });
 

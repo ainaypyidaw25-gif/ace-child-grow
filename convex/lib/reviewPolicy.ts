@@ -35,7 +35,10 @@ export function roleMayReview(role: string | null | undefined, dimension: Review
   // person who can clear it by approving. Someone who is both a manager and a
   // qualified reviewer holds the reviewer role as well, and signs under that.
   if (role === 'review_manager') return false;
-  if (dimension === 'clinical' || dimension === 'safety') return role === 'clinical_reviewer';
+  if (dimension === 'clinical') return role === 'clinical_reviewer';
+  if (dimension === 'safety') {
+    return ['owner', 'content_editor', 'evidence_reviewer', 'clinical_reviewer'].includes(role);
+  }
   if (dimension === 'evidence') {
     return ['owner', 'content_editor', 'evidence_reviewer', 'clinical_reviewer'].includes(role);
   }
@@ -43,9 +46,8 @@ export function roleMayReview(role: string | null | undefined, dimension: Review
 }
 
 /**
- * Clinical, safety and evidence approvals are professional sign-offs, so the
- * reviewer's stated qualification is recorded with them. Language review is
- * editorial and does not carry that claim.
+ * Clinical, child-safety and evidence decisions record the reviewer's stated
+ * qualification. A safety decision is not represented as clinical approval.
  */
 export function approvalNeedsQualification(dimension: ReviewDimension): boolean {
   return dimension === 'clinical' || dimension === 'safety' || dimension === 'evidence';

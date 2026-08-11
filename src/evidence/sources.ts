@@ -11,8 +11,10 @@
 // A record missing a printed year is forced to 'evidence_required' by
 // resolveReviewStatus() in ./types — that is the intended behaviour, not a bug.
 //
-// No record here is 'approved'. Approval requires a named clinical reviewer,
-// which is a human act performed in the admin Evidence Library.
+// No record here is 'approved'. Approval requires a named qualified reviewer,
+// which is a human act performed in the admin Evidence Library. Ordinary
+// reference approval is education-scoped; clinical scope remains a separate
+// specialist-risk decision and is never inferred from parent visibility.
 
 import type { EvidenceSource } from './types';
 
@@ -634,6 +636,23 @@ export const AAP_SOURCES: EvidenceSource[] = [
 
 export const CDC_SOURCES: EvidenceSource[] = [
   s({
+    id: 'cdc-afm-signs-2024',
+    org: 'Centers for Disease Control and Prevention',
+    orgKey: 'CDC',
+    title: 'Signs and Symptoms of Acute Flaccid Myelitis',
+    year: 2024,
+    verifiedOn: '2026-08-11',
+    country: 'United States',
+    url: 'https://www.cdc.gov/acute-flaccid-myelitis/signs-symptoms/index.html',
+    evidenceLevel: 'parent_education',
+    keywords: ['sudden weakness', 'arm weakness', 'leg weakness', 'urgent medical care'],
+    topics: ['safety', 'motor'],
+    ageMonthsMin: 0,
+    ageMonthsMax: 60,
+    verifiedNote:
+      'CDC page prints this title and "June 4, 2024" and tells caregivers to seek medical care right away for a child with sudden arm or leg weakness.',
+  }),
+  s({
     id: 'cdc-milestones-2026',
     org: 'Centers for Disease Control and Prevention',
     orgKey: 'CDC',
@@ -791,15 +810,67 @@ export const HEALTHYCHILDREN_SOURCES: EvidenceSource[] = [
     orgKey: 'HealthyChildren',
     title: "Kids & Screen Time: 5 C's Questions for Toddlers & Preschoolers",
     year: 2024,
+    verifiedOn: '2026-08-11',
     country: 'United States',
-    url: 'https://www.healthychildren.org/English/family-life/Media/Pages/healthy-digital-media-use-habits-for-babies-toddlers-preschoolers.aspx',
+    url: 'https://www.healthychildren.org/English/family-life/Media/Pages/kids-and-screen-time-5-cs-questions-for-toddlers-and-preschoolers.aspx',
     evidenceLevel: 'parent_education',
     keywords: ['screen time', 'digital media', 'family media plan', '5 Cs'],
     topics: ['screen_time', 'parenting'],
     ageMonthsMin: 12,
     ageMonthsMax: 60,
     verifiedNote:
-      'HealthyChildren.org page shows the title and a "Last Updated" date in 2024; `year` records that update year.',
+      'HealthyChildren.org page prints this title and "Last Updated 4/30/2024".',
+  }),
+  s({
+    id: 'hc-screen-time-5cs-infants-2024',
+    org: 'HealthyChildren.org (American Academy of Pediatrics)',
+    orgKey: 'HealthyChildren',
+    title: "Kids & Screen Time: The 5 C's Questions to Ask for Infants",
+    year: 2024,
+    verifiedOn: '2026-08-11',
+    country: 'United States',
+    url: 'https://www.healthychildren.org/English/family-life/Media/Pages/infants-and-screen-time-5-cs-questions-to-ask.aspx',
+    evidenceLevel: 'parent_education',
+    keywords: ['infant screen time', 'video calls', 'digital media', '5 Cs'],
+    topics: ['screen_time', 'parenting'],
+    ageMonthsMin: 0,
+    ageMonthsMax: 18,
+    verifiedNote:
+      'HealthyChildren.org page prints this title and "Last Updated 4/30/2024" and says video chats can support relationships while prolonged TV or YouTube viewing should be avoided.',
+  }),
+  s({
+    id: 'hc-choking-prevention-2026',
+    org: 'HealthyChildren.org (American Academy of Pediatrics)',
+    orgKey: 'HealthyChildren',
+    title: 'Choking Prevention for Babies & Children: What Every Parent Needs to Know',
+    year: 2026,
+    verifiedOn: '2026-08-11',
+    country: 'United States',
+    url: 'https://www.healthychildren.org/English/health-issues/injuries-emergencies/pages/Choking-Prevention.aspx',
+    evidenceLevel: 'parent_education',
+    keywords: ['choking', 'seeds', 'small objects', 'supervision'],
+    topics: ['safety', 'nutrition'],
+    ageMonthsMin: 0,
+    ageMonthsMax: 60,
+    verifiedNote:
+      'HealthyChildren.org page prints this title and "Last Updated 2/27/2026" and lists nuts and seeds among high-risk foods to keep from children until age 4 or older.',
+  }),
+  s({
+    id: 'hc-child-ems-2026',
+    org: 'HealthyChildren.org (American Academy of Pediatrics)',
+    orgKey: 'HealthyChildren',
+    title: 'When to Call Emergency Medical Services (EMS) for Your Child',
+    year: 2026,
+    verifiedOn: '2026-08-11',
+    country: 'United States',
+    url: 'https://www.healthychildren.org/English/health-issues/injuries-emergencies/Pages/When-to-Call-Emergency-Medical-Services-EMS.aspx',
+    evidenceLevel: 'parent_education',
+    keywords: ['emergency medical services', 'difficulty breathing', 'seizure', 'dehydration'],
+    topics: ['safety'],
+    ageMonthsMin: 0,
+    ageMonthsMax: 60,
+    verifiedNote:
+      'HealthyChildren.org page prints this title and "Last Updated 5/11/2026" and lists difficulty breathing, blue or grey lips, seizure, unresponsiveness, significant injury and significant dehydration as reasons for urgent emergency assessment.',
   }),
 ];
 
@@ -972,14 +1043,33 @@ export const NICE_SOURCES: EvidenceSource[] = [
 
 export const NHS_SOURCES: EvidenceSource[] = [
   s({
+    id: 'nhs-beds-4y-milestones-2024',
+    org: 'Bedfordshire and Luton Children’s Health Services (NHS)',
+    orgKey: 'NHS',
+    title: '4 year developmental milestones',
+    year: 2024,
+    verifiedOn: '2026-08-11',
+    edition: 'Last reviewed: 1 November 2024',
+    country: 'United Kingdom',
+    url: 'https://www.bedslutonchildrenshealth.nhs.uk/child-development-and-growing-up/milestones/4-years/',
+    evidenceLevel: 'parent_education',
+    keywords: ['four years', 'gross motor', 'hop', 'one foot'],
+    topics: ['milestones', 'motor'],
+    ageMonthsMin: 48,
+    ageMonthsMax: 48,
+    verifiedNote:
+      'NHS service page prints “Last reviewed: 1 November, 2024” and lists “hop and stand on one foot” at around 4 years.',
+  }),
+  s({
     id: 'nhs-sids-2025',
     org: 'National Health Service (UK)',
     orgKey: 'NHS',
     title: 'Sudden infant death syndrome (SIDS)',
     year: 2025,
+    verifiedOn: '2026-08-11',
     edition: 'Page last reviewed: 25 November 2025; Next review due: 25 November 2028',
     country: 'United Kingdom',
-    url: 'https://www.nhs.uk/conditions/sudden-infant-death-syndrome-sids/',
+    url: 'https://www.nhs.uk/baby/caring-for-a-newborn/sudden-infant-death-syndrome-sids/',
     nextReviewDate: '2028-11-25',
     evidenceLevel: 'parent_education',
     keywords: ['SIDS', 'cot death', 'safe sleep', 'smoking'],
@@ -987,7 +1077,26 @@ export const NHS_SOURCES: EvidenceSource[] = [
     ageMonthsMin: 0,
     ageMonthsMax: 12,
     verifiedNote:
-      'NHS page prints this title with "Page last reviewed: 25 November 2025" and "Next review due: 25 November 2028".',
+      'NHS page prints this title with "Page last reviewed: 25 November 2025" and "Next review due: 25 November 2028"; it includes current safe-sleep and infant emergency-sign guidance.',
+  }),
+  s({
+    id: 'nhs-child-accident-2025',
+    org: 'National Health Service (UK)',
+    orgKey: 'NHS',
+    title: 'What to do if your child has an accident',
+    year: 2025,
+    verifiedOn: '2026-08-11',
+    edition: 'Page last reviewed: 18 December 2025; Next review due: 18 December 2028',
+    country: 'United Kingdom',
+    url: 'https://www.nhs.uk/baby/first-aid-and-safety/first-aid/what-to-do-if-your-child-has-an-accident/',
+    nextReviewDate: '2028-12-18',
+    evidenceLevel: 'parent_education',
+    keywords: ['child accident', 'call 999', 'breathing', 'seizure', 'serious injury'],
+    topics: ['safety'],
+    ageMonthsMin: 0,
+    ageMonthsMax: 60,
+    verifiedNote:
+      'NHS page prints this title, "Page last reviewed: 18 December 2025" and "Next review due: 18 December 2028" and lists stopped or difficult breathing, seizure, unresponsiveness, blue or grey colour and severe injury as ambulance triggers.',
   }),
   s({
     id: 'nhs-baby-reviews-2023',
@@ -1052,14 +1161,16 @@ export const NHS_SOURCES: EvidenceSource[] = [
     edition: 'Page last reviewed: 24 August 2023; Next review due: 24 August 2026',
     country: 'United Kingdom',
     url: 'https://www.nhs.uk/baby/health/is-your-baby-or-toddler-seriously-ill/',
-    nextReviewDate: '2026-08-24',
+    reviewStatus: 'retired',
+    verifiedOn: '2026-08-11',
+    nextReviewDate: null,
     evidenceLevel: 'parent_education',
     keywords: ['serious illness', 'red flags', 'when to call 999', 'sepsis signs'],
     topics: ['safety'],
     ageMonthsMin: 0,
     ageMonthsMax: 60,
     verifiedNote:
-      'NHS page prints this title with "Page last reviewed: 24 August 2023" and "Next review due: 24 August 2026". Note: earlier candidate URLs under /conditions/baby/health/ return 404; this is the live page.',
+      'Retained for audit only. The recorded NHS URL and the former /conditions/baby/health/ path both returned 404 on 2026-08-11; this record must not be used as an active citation.',
   }),
   s({
     id: 'nhs-breastfeeding-first-days-2023',
@@ -1497,6 +1608,8 @@ export const TEXTBOOK_SOURCES: EvidenceSource[] = [
     edition: '7th Edition',
     country: 'United States',
     url: 'https://shop.elsevier.com/books/swaimans-pediatric-neurology/ashwal/978-0-443-10944-7',
+    reviewStatus: 'evidence_required',
+    verifiedOn: '2026-08-11',
     isbn: '9780443109447',
     evidenceLevel: 'textbook',
     keywords: ['pediatric neurology', 'cerebral palsy', 'neurodevelopment'],
@@ -1504,7 +1617,7 @@ export const TEXTBOOK_SOURCES: EvidenceSource[] = [
     ageMonthsMin: 0,
     ageMonthsMax: 60,
     verifiedNote:
-      'Elsevier store page prints the title, "7th Edition" and ISBN 9780443109447. Year 2025 is taken from the page release-date metadata (2025-05-01). Editor list is not rendered on the page beyond the lead editor.',
+      'ISBN 9780443109447 preserves the independently identifiable edition. The Elsevier publisher URL returned a server error during the 2026-08-11 re-check, so this record is evidence_required and must not be counted as currently verified.',
   }),
   s({
     id: 'tb-case-smith-9e-2025',

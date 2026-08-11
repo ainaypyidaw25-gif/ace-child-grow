@@ -13,6 +13,7 @@ import { guideIllustration } from '../content/guideIllustrations';
 import { lessonIllustration } from '../content/lessonIllustrations';
 import { printableIllustration } from '../content/printableIllustrations';
 import { storyIllustration } from '../content/storyIllustrations';
+import { approvedPrintablePayload } from '../domain/content/printableAvailability';
 
 type BL = { mm: string; en: string };
 
@@ -108,6 +109,7 @@ export function ContentDetail() {
     && !(mappedPrintableIllustration && asset.kind === 'illustration')
     && !(mappedStoryIllustration && asset.kind === 'illustration')
   ));
+  const printablePayload = approvedPrintablePayload(media);
   const d = (item.data ?? {}) as Record<string, unknown>;
   const list = (k: string): BL[] => (Array.isArray(d[k]) ? (d[k] as BL[]) : []);
   const bl = (k: string): BL | undefined => (d[k] && typeof d[k] === 'object' ? (d[k] as BL) : undefined);
@@ -426,9 +428,15 @@ export function ContentDetail() {
       {item.type === 'printable' && (
         <Section title={L('ပုံနှိပ်အသုံးပြုနိုင်သော စာရွက်', 'Printable resource')}>
           <p className="text-sm text-ink-soft">{locale === 'mm' ? item.summaryMm : item.summaryEn}</p>
-          <p className="mt-2 text-xs text-ink-soft">
-            {L('ပုံနှိပ်အသုံးပြုနိုင်သော ဖိုင်ကို အကြောင်းအရာစီမံခန့်ခွဲရေးစနစ်မှတစ်ဆင့် ပြင်ဆင်တင်ပါမည်။', 'The printable PDF is prepared via the CMS.')}
-          </p>
+          {printablePayload?.url ? (
+            <a className="mt-3 inline-block text-sm text-sky-deep underline" href={printablePayload.url} download>
+              {L('သုံးသပ်ပြီးသော ဖိုင်ကို ဒေါင်းလုဒ်လုပ်ရန်', 'Download reviewed printable')}
+            </a>
+          ) : (
+            <p className="mt-2 text-xs text-ink-soft">
+              {L('အကြိုကြည့်ရှုရန်သာ — သုံးသပ်ပြီးသော မြန်မာ–အင်္ဂလိပ် PDF ဖိုင် မရရှိသေးပါ။', 'Preview only — a reviewed bilingual PDF is not yet available.')}
+            </p>
+          )}
         </Section>
       )}
 

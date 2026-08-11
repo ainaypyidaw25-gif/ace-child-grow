@@ -100,4 +100,18 @@ describe('Convex authorization helpers (runtime)', () => {
     });
     await expect(requireProfessionalPublisher(ctx)).resolves.toMatchObject({ scope: 'education' });
   });
+
+  it('a clinical reviewer also receives education scope on the ordinary-content path', async () => {
+    authState.userId = 'reviewer-1';
+    const ctx = context({
+      profile: {
+        userId: 'reviewer-1',
+        isStaff: true,
+        staffRole: 'clinical_reviewer',
+        staffQualification: 'MBBS, MMedSc (Paediatrics)',
+        displayName: 'Clinical Reviewer',
+      },
+    });
+    await expect(requireProfessionalPublisher(ctx)).resolves.toMatchObject({ scope: 'education' });
+  });
 });

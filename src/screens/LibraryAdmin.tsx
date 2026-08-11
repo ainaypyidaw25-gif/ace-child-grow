@@ -167,12 +167,12 @@ export function LibraryAdmin() {
           canReview
             ? educationReviewer
               ? 'ပညာရေးနှင့် အထူးပညာရေးဆိုင်ရာ သုံးသပ်သူအဖြစ် အကြောင်းအရာများကို ထုတ်ဝေနိုင်ပါသည်။ ဤအတည်ပြုချက်သည် ဆေးဘက်ဆိုင်ရာ အတည်ပြုချက် မဟုတ်ပါ။ လုပ်ဆောင်ချက်တိုင်းကို မှတ်တမ်းတင်ထားသည်။'
-              : 'ဆေးဘက်ဆိုင်ရာ သုံးသပ်သူအဖြစ် အကြောင်းအရာများကို ထုတ်ဝေနိုင်ပါသည်။ လုပ်ဆောင်ချက်တိုင်းကို မှတ်တမ်းတင်ထားသည်။'
+              : 'သာမန်အကြောင်းအရာကို ပညာရေးသုံးသပ်မှုနယ်ပယ်ဖြင့်၊ အထူးကုသုံးသပ်ရန်လိုသော စာသားကို ဆေးဘက်ဆိုင်ရာသုံးသပ်မှုနယ်ပယ်ဖြင့် ထုတ်ဝေနိုင်ပါသည်။ သာမန်အကြောင်းအရာအတွက် ဤသည်မှာ ဆေးဘက်ဆိုင်ရာအတည်ပြုချက် မဟုတ်ပါ။ လုပ်ဆောင်ချက်တိုင်းကို မှတ်တမ်းတင်ထားသည်။'
             : 'အကြောင်းအရာများကို ကြည့်ရှုတည်းဖြတ်နိုင်ပါသည်။ ထုတ်ဝေရန် သတ်မှတ်ထားသော အရည်အချင်းရှိ ပညာရှင်၏ သုံးသပ်ချက် လိုအပ်ပါသည်။',
           canReview
             ? educationReviewer
               ? 'You may publish with education and special-education review scope. This is not clinical approval. Every action is audited.'
-              : 'You may publish as the assigned clinical reviewer. Every action is audited.'
+              : 'You may publish ordinary content with education review scope and specialist-risk wording with clinical review scope. Ordinary content is not thereby clinically approved. Every action is audited.'
             : 'You may inspect and edit content. Publishing requires an assigned qualified reviewer.',
         )}
       </p>
@@ -239,7 +239,7 @@ export function LibraryAdmin() {
                   {['draft', 'clinical_review', 'published'].map((s) => (
                     <button key={s} type="button" onClick={() => transition(it.slug, s)}
                       disabled={
-                        (it.clinicalStatus === s && !(s === 'published' && access?.role === 'clinical_reviewer' && it.reviewScope !== 'clinical')) ||
+                        it.clinicalStatus === s ||
                         pending === it.slug ||
                         (s === 'published' ? !canReview : !canEdit)
                       }
@@ -247,9 +247,7 @@ export function LibraryAdmin() {
                         it.clinicalStatus === s ? 'bg-lavender/40 text-ink-soft' : 'border border-line text-ink'
                       }`}>
                       {s === 'published'
-                        ? access?.role === 'clinical_reviewer' && it.reviewScope !== 'clinical'
-                          ? L('သုံးသပ်ပြီးသော မူကွဲကို ထုတ်ဝေမည်', 'Publish reviewed revision')
-                          : L('ထုတ်ဝေမည်', 'Publish')
+                        ? L('ထုတ်ဝေမည်', 'Publish')
                         : s === 'clinical_review' ? L('သုံးသပ်ရန်', 'Review') : L('မူကြမ်း', 'Draft')}
                     </button>
                   ))}

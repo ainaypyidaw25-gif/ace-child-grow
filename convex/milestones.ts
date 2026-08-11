@@ -10,12 +10,61 @@ const answerValidator = v.union(
   v.literal('not_sure'),
 );
 
+const acuteUrgentSymptomIds = [
+  'severe_breathing_difficulty',
+  'blue_lips',
+  'breathing_pauses',
+  'seizure',
+  'unresponsiveness',
+  'sudden_weakness',
+  'serious_injury',
+  'severe_dehydration',
+] as const;
+type AcuteUrgentSymptom = (typeof acuteUrgentSymptomIds)[number];
+
+const acuteUrgentSymptomValidator = v.union(
+  v.literal('severe_breathing_difficulty'),
+  v.literal('blue_lips'),
+  v.literal('breathing_pauses'),
+  v.literal('seizure'),
+  v.literal('unresponsiveness'),
+  v.literal('sudden_weakness'),
+  v.literal('serious_injury'),
+  v.literal('severe_dehydration'),
+);
+
+const acuteUrgentSymptomSet = new Set<string>(acuteUrgentSymptomIds);
+
+function snapshotRecord(value: unknown): Record<string, unknown> {
+  return value !== null && typeof value === 'object' && !Array.isArray(value)
+    ? value as Record<string, unknown>
+    : {};
+}
+
+function normalizedUrgentSymptoms(
+  firstClassSymptoms: readonly AcuteUrgentSymptom[] | undefined,
+  snapshot: Record<string, unknown>,
+): AcuteUrgentSymptom[] {
+  // The snapshot fallback keeps a stale pre-wiring client safe. The new,
+  // validated argument is authoritative for current clients, but either path
+  // can only contribute one of the eight known acute symptoms.
+  const snapshotSymptoms = Array.isArray(snapshot.urgentSymptoms) ? snapshot.urgentSymptoms : [];
+  return [...new Set([...(firstClassSymptoms ?? []), ...snapshotSymptoms]
+    .filter((value): value is AcuteUrgentSymptom => (
+      typeof value === 'string' && acuteUrgentSymptomSet.has(value)
+    )))];
+}
+
 // Persist a completed milestone review session (result snapshot) for history.
 export const recordSession = mutation({
   args: {
     childId: v.id('children'),
     resultState: v.union(v.literal('green'), v.literal('yellow'), v.literal('orange'), v.literal('red')),
     lostSkill: v.boolean(),
+    // Optional for backwards compatibility with clients that only included
+    // these values in resultSnapshot. New clients send the eight acute
+    // symptoms here so Convex validates every identifier at the API boundary.
+    urgentSymptoms: v.optional(v.array(acuteUrgentSymptomValidator)),
     resultSnapshot: v.any(),
     ageGroupKey: v.optional(v.string()),
     responses: v.optional(v.array(v.object({
@@ -31,14 +80,29 @@ export const recordSession = mutation({
   handler: async (ctx, args) => {
     const userId = await requireUser(ctx);
     const child = await ownChild(ctx, args.childId, userId);
+    const submittedSnapshot = snapshotRecord(args.resultSnapshot);
+    const urgentSymptoms = normalizedUrgentSymptoms(args.urgentSymptoms, submittedSnapshot);
+    const safetyUrgent = urgentSymptoms.length > 0 || args.lostSkill;
+    // Safety dominance is enforced again on the server. A stale or tampered
+    // client cannot persist green/yellow/orange while also reporting an acute
+    // symptom or loss of an acquired skill.
+    const resultState = safetyUrgent ? 'red' as const : args.resultState;
+    const safetyTriggers = args.lostSkill
+      ? [...urgentSymptoms, 'loss_of_acquired_skills']
+      : urgentSymptoms;
     const sessionId = await ctx.db.insert('milestoneSessions', {
       userId: child.userId,
       childId: args.childId,
       ageGroupKey: args.ageGroupKey,
       completedAt: Date.now(),
-      resultState: args.resultState,
+      resultState,
       lostSkill: args.lostSkill,
-      resultSnapshot: args.resultSnapshot,
+      resultSnapshot: {
+        ...submittedSnapshot,
+        state: resultState,
+        urgentSymptoms: safetyTriggers,
+        safetyUrgent,
+      },
     });
     const answeredAt = Date.now();
     for (const response of args.responses ?? []) {

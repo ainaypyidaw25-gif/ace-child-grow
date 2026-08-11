@@ -7,14 +7,19 @@ const releaseSource = readFileSync('convex/release.ts', 'utf8');
 const libraryAdminSource = readFileSync('src/screens/LibraryAdmin.tsx', 'utf8');
 const contentDetailSource = readFileSync('src/screens/ContentDetail.tsx', 'utf8');
 
-describe('clinically scoped publication gate', () => {
-  it('requires a named qualified clinical reviewer before library content can be published', () => {
+describe('risk-scoped publication gate', () => {
+  it('uses education review for ordinary content and specialist review for medical-decision wording', () => {
     expect(librarySource).toContain("args.clinicalStatus === 'published'");
+    expect(librarySource).toContain('specialistReviewReason(item)');
+    expect(librarySource).toContain('specialist review limited to emergency wording');
+    expect(librarySource).toContain('await requireProfessionalPublisher(ctx)');
     expect(librarySource).toContain('await requireClinicalPublisher(ctx)');
   });
 
-  it('requires a named qualified clinical reviewer before workflow approval or publishing', () => {
+  it('applies the same risk scope to the legacy workflow', () => {
     expect(workflowSource).toContain("['approved', 'published'].includes(to)");
+    expect(workflowSource).toContain('requiresSpecialistReview({');
+    expect(workflowSource).toContain('await requireProfessionalPublisher(ctx)');
     expect(workflowSource).toContain('await requireClinicalPublisher(ctx)');
   });
 
@@ -45,6 +50,21 @@ describe('clinically scoped publication gate', () => {
     expect(librarySource).toContain("return status === 'published'");
     expect(librarySource).toContain('isPubliclyReadableStatus(r.clinicalStatus)');
     expect(librarySource).toContain('!isPubliclyReadableStatus(item.clinicalStatus)');
+  });
+
+  it('automatically withdraws offline rows and media from a complete live publication manifest', () => {
+    expect(librarySource).toContain('export const publicationManifest = query');
+    expect(librarySource).toContain("withIndex('by_status'");
+    expect(librarySource).toContain("q.eq('clinicalStatus', 'published')");
+    expect(librarySource).toContain('PUBLICATION_MANIFEST_LIMIT + 1');
+
+    const offlineHook = readFileSync('src/app/useOfflineLibrary.ts', 'utf8');
+    expect(offlineHook).toContain('api.library.publicationManifest');
+    expect(offlineHook).toContain('withdrawUnavailableOfflineContent');
+    expect(offlineHook).toContain('removeOfflineMedia');
+
+    const app = readFileSync('src/app/App.tsx', 'utf8');
+    expect(app).toContain('useOfflineWithdrawal();');
   });
 
   it('does not allow parents to complete an unpublished activity', () => {

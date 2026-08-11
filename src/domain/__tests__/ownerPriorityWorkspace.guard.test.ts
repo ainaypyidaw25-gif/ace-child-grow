@@ -99,10 +99,12 @@ describe('duplicate decision prevention and exact revision binding', () => {
 });
 
 describe('role permissions on review areas', () => {
-  it('an owner or publisher account cannot record clinical or safety approvals', () => {
+  it('keeps clinical approval specialist-only while allowing qualified child-safety review', () => {
     expect(roleMayReview('owner', 'clinical')).toBe(false);
-    expect(roleMayReview('owner', 'safety')).toBe(false);
+    expect(roleMayReview('owner', 'safety')).toBe(true);
     expect(roleMayReview('content_editor', 'clinical')).toBe(false);
+    expect(roleMayReview('content_editor', 'safety')).toBe(true);
+    expect(roleMayReview('evidence_reviewer', 'safety')).toBe(true);
   });
   it('language and development reviewers cannot decide clinical areas', () => {
     expect(roleMayReview('language_reviewer', 'clinical')).toBe(false);

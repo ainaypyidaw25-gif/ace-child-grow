@@ -1,5 +1,5 @@
 // Developmental milestones — general, widely-accepted guidance written in simple
-// language. Every item is clinical_review until approved. These describe typical
+// language. Every item stays in review until its required reviews pass. These describe typical
 // emerging skills; they are NOT a pass/fail test and never diagnose. Ranges vary
 // widely between healthy children.
 import { milestone, type SeedItem } from '../types';
@@ -166,14 +166,14 @@ export const MILESTONES: SeedItem[] = [
 
   // ---- 2 years ----
   m('2y', 'gross_motor', 1, {
-    title: { mm: 'ပြေးခြင်းနှင့် ခုန်ခြင်း', en: 'Runs and jumps' },
-    observe: { mm: 'ပြေးနိုင်၍ နေရာတွင် ခုန်နိုင်ပါသလား။', en: 'Runs and jumps in place?' },
+    title: { mm: 'ပြေးခြင်း', en: 'Runs' },
+    observe: { mm: 'ပြေးနိုင်ပါသလား။', en: 'Runs?' },
     why: { mm: 'ဤသည်မှာ ခြေထောက် ခိုင်မာမှုနှင့် ဟန်ချက်ကို ပြသည်။', en: 'This shows leg strength and balance.' },
   }),
   m('2y', 'speech', 1, {
-    title: { mm: 'မိသားစုက နားလည်နိုင်သော စကားပြောခြင်း', en: 'Speech family understands' },
-    observe: { mm: 'ကလေးပြောသည့် တစ်ဝက်ခန့်ကို မိသားစုက နားလည်ပါသလား။', en: 'Family understands about half of their speech?' },
-    why: { mm: 'ရှင်းလင်းမှု တဖြည်းဖြည်း တိုးလာသည်။', en: 'Clarity grows steadily.' },
+    title: { mm: 'စကားလုံးနှစ်လုံး ပေါင်းပြောခြင်း', en: 'Says at least two words together' },
+    observe: { mm: '“နို့ ထပ်ပေး” ကဲ့သို့ စကားလုံးနှစ်လုံးကို ပေါင်းပြောပါသလား။', en: 'Says at least two words together, such as “more milk”?' },
+    why: { mm: 'စကားလုံးများ ပေါင်းပြောခြင်းသည် ဘာသာစကား ဖွံ့ဖြိုးလာမှုကို ပြသည်။', en: 'Combining words shows growing language.' },
   }),
   m('2y', 'problem_solving', 1, {
     title: { mm: 'ရိုးရှင်းသော ပဟေဠိ တပ်ဆင်ခြင်း', en: 'Simple puzzles / shapes' },
@@ -188,9 +188,9 @@ export const MILESTONES: SeedItem[] = [
 
   // ---- 2.5 years ----
   m('2_5y', 'fine_motor', 1, {
-    title: { mm: 'ခဲတံကိုင်၍ ခြစ်ရေးခြင်း', en: 'Scribbles with a crayon' },
-    observe: { mm: 'ခဲတံ/ခရေယွန်ကို ကိုင်၍ ခြစ်ရေးပါသလား။', en: 'Holds a crayon and scribbles?' },
-    why: { mm: 'ဤသည်မှာ နောင်ရေးသားခြင်းအတွက် လက်ကို ပြင်ဆင်ပေးသည်။', en: 'This prepares the hand for later writing.' },
+    title: { mm: 'စာအုပ်စာမျက်နှာကို တစ်ရွက်စီ လှန်ခြင်း', en: 'Turns book pages one at a time' },
+    observe: { mm: 'စာအုပ်စာမျက်နှာကို တစ်ရွက်စီ လှန်ပါသလား။', en: 'Turns book pages one at a time?' },
+    why: { mm: 'စာမျက်နှာကို တစ်ရွက်စီ ကိုင်လှန်ခြင်းက လက်ချောင်းထိန်းချုပ်မှု တိုးလာကြောင်း ပြသည်။', en: 'Turning one page at a time shows growing finger control.' },
   }),
   m('2_5y', 'language', 1, {
     title: { mm: 'စကားလုံး သုံးလုံး ဝါကျ ပြောခြင်း', en: 'Three-word sentences' },
@@ -210,9 +210,9 @@ export const MILESTONES: SeedItem[] = [
     why: { mm: 'ဟန်ချက်သည် ပြေးခုန်ခြင်းများကို ပိုမိုကောင်းစေသည်။', en: 'Balance improves running and climbing.' },
   }),
   m('3y', 'cognitive', 1, {
-    title: { mm: 'အရောင်/အရေအတွက် အနည်းငယ် သိရှိခြင်း', en: 'Knows some colors / counting' },
-    observe: { mm: 'အရောင် အနည်းငယ်ကို အမည်တပ်၍ “၃” အထိ ရေတွက်ပါသလား။', en: 'Names a few colors and counts to three?' },
-    why: { mm: 'ဤသည်မှာ အခြေခံ သင်ယူမှု စွမ်းရည်ကို ပြသည်။', en: 'This shows early learning skills.' },
+    title: { mm: 'အနည်းဆုံး အရောင်တစ်ရောင်ကို သိခြင်း', en: 'Shows they know at least one color' },
+    observe: { mm: 'မေးမြန်းလျှင် အနည်းဆုံး အရောင်တစ်ရောင်ကို မှန်ကန်စွာ ပြပါသလား။', en: 'When asked, shows they know at least one color?' },
+    why: { mm: 'အရောင်တစ်ရောင်ကို သိခြင်းသည် အစောပိုင်း သင်ယူမှု ဖွံ့ဖြိုးလာခြင်း၏ ဥပမာတစ်ခု ဖြစ်သည်။', en: 'Knowing one color is one example of growing early learning.' },
   }),
   m('3y', 'social', 1, {
     title: { mm: 'အခြားကလေးများနှင့် အတူ ကစားခြင်း', en: 'Plays with other children' },
@@ -244,7 +244,7 @@ export const MILESTONES: SeedItem[] = [
 
   // ---- 4 years ----
   m('4y', 'gross_motor', 1, {
-    title: { mm: 'ခုန်ခြင်း၊ ခြေထောက်တစ်ဖက်ဖြင့် ခုန်ခြင်း', en: 'Hops and skips' },
+    title: { mm: 'ခြေထောက်တစ်ဖက်ဖြင့် ခုန်ခြင်း', en: 'Hops on one foot' },
     observe: { mm: 'ခြေထောက်တစ်ဖက်ဖြင့် ခုန်နိုင်ပါသလား။', en: 'Hops on one foot?' },
     why: { mm: 'ဤသည်မှာ ခွန်အားနှင့် ဟန်ချက် တိုးတက်ခြင်းဖြစ်သည်။', en: 'This shows growing strength and balance.' },
   }),
@@ -259,8 +259,8 @@ export const MILESTONES: SeedItem[] = [
     why: { mm: 'ဤသည်မှာ တွေးခေါ်၍ စီစဉ်နိုင်ခြင်းကို ပြသည်။', en: 'This shows planning and reasoning.' },
   }),
   m('4y', 'school_readiness', 1, {
-    title: { mm: 'မိမိနာမည်ကို မှတ်မိ/ရေးရန် ကြိုးစားခြင်း', en: 'Recognizes / tries to write name' },
-    observe: { mm: 'မိမိနာမည် စာလုံးများကို မှတ်မိ/ရေးရန် ကြိုးစားပါသလား။', en: 'Knows some letters of their name?' },
+    title: { mm: 'ရေးထားသော မိမိနာမည်ကို မှတ်မိခြင်း', en: 'Recognizes their written name' },
+    observe: { mm: 'ရေးထားသော မိမိနာမည်ကို မြင်လျှင် မှတ်မိပါသလား။', en: 'Recognizes their written name when they see it?' },
     why: { mm: 'ဤသည်မှာ စာဖတ်/ရေးခြင်း အခြေခံဖြစ်သည်။', en: 'This is early literacy.' },
   }),
 
@@ -293,9 +293,9 @@ export const MILESTONES: SeedItem[] = [
     why: { mm: 'ဤသည်မှာ ကျောင်းတွင် ဆက်သွယ်ရန် အသင့်ဖြစ်ခြင်းဖြစ်သည်။', en: 'This is readiness to communicate at school.' },
   }),
   m('5y', 'school_readiness', 1, {
-    title: { mm: 'အက္ခရာ/ဂဏန်း အများစုကို သိရှိခြင်း', en: 'Knows most letters / numbers' },
-    observe: { mm: 'အက္ခရာ/ဂဏန်း အများစုကို မှတ်မိပါသလား။', en: 'Recognizes most letters and numbers?' },
-    why: { mm: 'ဤသည်မှာ စာဖတ်ခြင်းနှင့် သင်္ချာ၏ အခြေခံဖြစ်သည်။', en: 'This is the base for reading and math.' },
+    title: { mm: 'မိမိနာမည်မှ စာလုံးအချို့ ရေးခြင်း', en: 'Writes some letters in their name' },
+    observe: { mm: 'မိမိနာမည်မှ စာလုံးအချို့ ရေးပါသလား။', en: 'Writes some letters in their name?' },
+    why: { mm: 'နာမည်မှ စာလုံးများ ရေးခြင်းသည် အစောပိုင်း စာရေးစွမ်းရည်ကို ပြသည်။', en: 'Writing letters from their name shows emerging writing skill.' },
   }),
   m('5y', 'self_help', 1, {
     title: { mm: 'အိမ်သာ/လက်ဆေးခြင်း ကိုယ်တိုင်လုပ်ခြင်း', en: 'Manages toilet and handwashing' },

@@ -1,8 +1,9 @@
 import { query, mutation } from './_generated/server';
 import { v } from 'convex/values';
 import { getAuthUserId } from '@convex-dev/auth/server';
-import { hasStaffRole, requireClinicalPublisher, requireContentEditor } from './lib/auth';
+import { hasStaffRole, requireClinicalPublisher, requireContentEditor, requireProfessionalPublisher, requireReviewEditor } from './lib/auth';
 import { logAudit } from './audit';
+import { requiresSpecialistReview } from './lib/contentReviewRequirements';
 
 // Mirror of src/domain/content/workflow.ts (convex functions can't import src/).
 const TRANSITIONS: Record<string, string[]> = {
@@ -33,7 +34,7 @@ export const list = query({
 });
 
 // Idempotent seed so the Admin CMS has content to manage. Staff-only; every item
-// starts in clinical_review (never published without the review workflow below).
+// starts in review (never published without the review workflow below).
 export const seedIfEmpty = mutation({
   args: {
     items: v.array(v.object({ kind: v.string(), titleMm: v.string(), titleEn: v.string() })),
@@ -55,12 +56,19 @@ export const transition = mutation({
     reviewerQualification: v.optional(v.string()),
   },
   handler: async (ctx, { id, to, reviewerQualification }) => {
-    const approval = ['approved', 'published'].includes(to)
-      ? await requireClinicalPublisher(ctx)
-      : null;
-    const userId = approval?.userId ?? await requireContentEditor(ctx);
+    const editor = await requireReviewEditor(ctx);
     const item = await ctx.db.get(id);
     if (!item) throw new Error('Not found');
+    const approval = ['approved', 'published'].includes(to)
+      ? requiresSpecialistReview({
+          slug: String(id),
+          titleEn: item.titleEn,
+          data: { kind: item.kind, bodyEn: item.bodyEn },
+        })
+        ? await requireClinicalPublisher(ctx)
+        : await requireProfessionalPublisher(ctx)
+      : null;
+    const userId = approval?.userId ?? editor.userId;
     const allowed = TRANSITIONS[item.reviewStatus] ?? [];
     if (!allowed.includes(to)) throw new Error(`Invalid transition ${item.reviewStatus} -> ${to}`);
     await ctx.db.patch(id, {
@@ -76,7 +84,7 @@ export const transition = mutation({
 });
 
 // Translation review: staff edit the mm/en pair and move its translation state.
-// Clinical content still cannot be published without the review workflow above.
+// Risk-scoped content still cannot be published without the review workflow above.
 export const setTranslation = mutation({
   args: {
     id: v.id('contentItems'),

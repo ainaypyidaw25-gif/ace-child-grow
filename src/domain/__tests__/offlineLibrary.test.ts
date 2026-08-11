@@ -15,6 +15,7 @@ import {
   type OfflineMediaCandidate,
   type LibraryRowLike,
 } from '../offline/offlineLibrary';
+import { DUPLICATE_MILESTONE_SLUGS } from '../../../convex/lib/contentRetirements';
 
 const row = (over: Partial<LibraryRowLike> = {}): LibraryRowLike => ({
   _id: 'id_guide_sleep',
@@ -111,6 +112,17 @@ describe('refreshing a download', () => {
     );
     expect(plan.remove).toEqual(['guide_old']);
     expect(plan.put.map((r) => r.slug)).toEqual(['guide_new']);
+  });
+
+  it('withdraws all six retired milestone slugs together while keeping their replacement', () => {
+    const replacement = row({ slug: 'ms_5_6m_gross_motor_2', type: 'milestone' });
+    const stored = [
+      ...DUPLICATE_MILESTONE_SLUGS.map((slug) => ({ slug, savedAt: 1 })),
+      { slug: replacement.slug, savedAt: 1 },
+    ];
+    const plan = buildDownloadPlan(selectDownloadable([replacement], 2), stored);
+    expect(plan.remove).toEqual(DUPLICATE_MILESTONE_SLUGS);
+    expect(plan.put.map((record) => record.slug)).toEqual(['ms_5_6m_gross_motor_2']);
   });
 
   it('reports how many were already held', () => {

@@ -215,17 +215,152 @@ describe('Convex registered handlers enforce authorization', () => {
     expect(context.db.patch).not.toHaveBeenCalled();
   });
 
-  it('a qualified education owner cannot publish parent-facing library content', async () => {
+  it('a qualified education owner can publish ordinary content after four scoped reviews', async () => {
     authState.userId = 'owner-1';
     const context = ctx({
       profile: {
         userId: 'owner-1', isStaff: true, staffRole: 'owner',
         staffQualification: 'MEd Early Childhood Education', displayName: 'Education Owner',
       },
-      rows: { libraryContent: [{ _id: 'content-1', slug: 'clinical-guidance', titleEn: 'Clinical guidance' }] },
+      rows: {
+        libraryContent: [{ _id: 'content-1', slug: 'ordinary-parent-guide', titleEn: 'Play together', reviewRevision: 1 }],
+        contentReviews: ['english', 'native_myanmar', 'evidence', 'safety'].map((dimension) => ({
+          contentSlug: 'ordinary-parent-guide', contentVersion: 1, dimension, decision: 'approved',
+        })),
+      },
     });
     await expect(handler(setLibraryReview)(context, {
-      slug: 'clinical-guidance', clinicalStatus: 'published',
+      slug: 'ordinary-parent-guide', clinicalStatus: 'published',
+    })).resolves.toEqual({ ok: true, reviewScope: 'education' });
+    expect(context.db.patch).toHaveBeenCalledWith('content-1', expect.objectContaining({
+      clinicalStatus: 'published', reviewScope: 'education', reviewerDisplayName: 'Education Owner',
+    }));
+  });
+
+  it('a clinical reviewer publishing ordinary content still records education scope', async () => {
+    authState.userId = 'reviewer-1';
+    const context = ctx({
+      profile: {
+        userId: 'reviewer-1', isStaff: true, staffRole: 'clinical_reviewer',
+        staffQualification: 'MBBS, MMedSc (Paediatrics)', displayName: 'Clinical Reviewer',
+      },
+      rows: {
+        libraryContent: [{ _id: 'content-1', slug: 'ordinary-parent-guide', titleEn: 'Play together', reviewRevision: 1 }],
+        contentReviews: ['english', 'native_myanmar', 'evidence', 'safety'].map((dimension) => ({
+          contentSlug: 'ordinary-parent-guide', contentVersion: 1, dimension, decision: 'approved',
+        })),
+      },
+    });
+    await expect(handler(setLibraryReview)(context, {
+      slug: 'ordinary-parent-guide', clinicalStatus: 'published',
+    })).resolves.toEqual({ ok: true, reviewScope: 'education' });
+    expect(context.db.patch).toHaveBeenCalledWith('content-1', expect.objectContaining({
+      clinicalStatus: 'published', reviewScope: 'education', reviewerDisplayName: 'Clinical Reviewer',
+    }));
+  });
+
+  it('a qualified education owner can publish preview-only printable metadata without a clinical record', async () => {
+    authState.userId = 'owner-1';
+    const context = ctx({
+      profile: {
+        userId: 'owner-1', isStaff: true, staffRole: 'owner',
+        staffQualification: 'MEd Early Childhood Education', displayName: 'Education Owner',
+      },
+      rows: {
+        libraryContent: [{
+          _id: 'content-1', type: 'printable', slug: 'prt_preview_only', reviewRevision: 1,
+          titleEn: 'Parent checklist preview',
+          summaryEn: 'Catalogue preview: the future PDF will cover medicine safety and emergency signs.',
+          data: { availability: 'preview_only' },
+        }],
+        contentReviews: ['english', 'native_myanmar', 'evidence', 'safety'].map((dimension) => ({
+          contentSlug: 'prt_preview_only', contentVersion: 1, dimension, decision: 'approved',
+        })),
+      },
+    });
+    await expect(handler(setLibraryReview)(context, {
+      slug: 'prt_preview_only', clinicalStatus: 'published',
+    })).resolves.toEqual({ ok: true, reviewScope: 'education' });
+  });
+
+  it('an education owner cannot publish emergency-decision wording', async () => {
+    authState.userId = 'owner-1';
+    const context = ctx({
+      profile: {
+        userId: 'owner-1', isStaff: true, staffRole: 'owner',
+        staffQualification: 'MEd Early Childhood Education', displayName: 'Education Owner',
+      },
+      rows: { libraryContent: [{
+        _id: 'content-1', slug: 'gd_7_9m_safety', titleEn: 'Safety guide', reviewRevision: 1,
+      }] },
+    });
+    await expect(handler(setLibraryReview)(context, {
+      slug: 'gd_7_9m_safety', clinicalStatus: 'published',
+    })).rejects.toThrow('Insufficient staff permission');
+    expect(context.db.patch).not.toHaveBeenCalled();
+  });
+
+  it('an education owner cannot publish bed-sharing wording', async () => {
+    authState.userId = 'owner-1';
+    const context = ctx({
+      profile: {
+        userId: 'owner-1', isStaff: true, staffRole: 'owner',
+        staffQualification: 'MEd Early Childhood Education', displayName: 'Education Owner',
+      },
+      rows: { libraryContent: [{
+        _id: 'content-1', slug: 'future-bed-sharing-guide', titleEn: 'Infant sleep', reviewRevision: 1,
+        data: { safety: { en: 'How to bed-share with a baby.' } },
+      }] },
+    });
+    await expect(handler(setLibraryReview)(context, {
+      slug: 'future-bed-sharing-guide', clinicalStatus: 'published',
+    })).rejects.toThrow('Insufficient staff permission');
+    expect(context.db.patch).not.toHaveBeenCalled();
+  });
+
+  it('records a qualified specialist decision for bed-sharing wording at clinical scope', async () => {
+    authState.userId = 'reviewer-1';
+    const context = ctx({
+      profile: {
+        userId: 'reviewer-1', isStaff: true, staffRole: 'clinical_reviewer',
+        staffQualification: 'MBBS, MMedSc (Paediatrics)', displayName: 'Clinical Reviewer',
+      },
+      rows: {
+        libraryContent: [{
+          _id: 'content-1', slug: 'future-bed-sharing-guide', titleEn: 'Infant sleep', reviewRevision: 3,
+          data: { safety: { en: 'How to bed-share with a baby.' } },
+        }],
+        contentReviews: ['english', 'native_myanmar', 'evidence', 'safety', 'clinical'].map((dimension) => ({
+          contentSlug: 'future-bed-sharing-guide', contentVersion: 3, dimension, decision: 'approved',
+        })),
+      },
+    });
+    await expect(handler(setLibraryReview)(context, {
+      slug: 'future-bed-sharing-guide', clinicalStatus: 'published',
+    })).resolves.toEqual({ ok: true, reviewScope: 'clinical' });
+    expect(context.db.patch).toHaveBeenCalledWith('content-1', expect.objectContaining({
+      clinicalStatus: 'published', reviewScope: 'clinical', reviewerDisplayName: 'Clinical Reviewer',
+    }));
+    expect(context.db.insert).toHaveBeenCalledWith('auditLogs', expect.objectContaining({
+      action: 'library.published',
+      summary: 'Infant sleep · specialist review required for bed-sharing wording',
+    }));
+  });
+
+  it('an education owner cannot publish newly-authored medication wording', async () => {
+    authState.userId = 'owner-1';
+    const context = ctx({
+      profile: {
+        userId: 'owner-1', isStaff: true, staffRole: 'owner',
+        staffQualification: 'MEd Early Childhood Education', displayName: 'Education Owner',
+      },
+      rows: { libraryContent: [{
+        _id: 'content-1', slug: 'future-medication-guide', titleEn: 'Medication guide', reviewRevision: 1,
+        summaryEn: 'Give this medication to the child.',
+      }] },
+    });
+    await expect(handler(setLibraryReview)(context, {
+      slug: 'future-medication-guide', clinicalStatus: 'published',
     })).rejects.toThrow('Insufficient staff permission');
     expect(context.db.patch).not.toHaveBeenCalled();
   });
@@ -238,17 +373,21 @@ describe('Convex registered handlers enforce authorization', () => {
         staffQualification: 'MBBS, MMedSc (Paediatrics)', displayName: 'Clinical Reviewer',
       },
       rows: {
-        libraryContent: [{ _id: 'content-1', slug: 'clinical-guidance', titleEn: 'Clinical guidance', reviewRevision: 1 }],
+        libraryContent: [{ _id: 'content-1', slug: 'gd_7_9m_safety', titleEn: 'Safety guide', reviewRevision: 1 }],
         contentReviews: ['english', 'native_myanmar', 'evidence', 'safety', 'clinical'].map((dimension) => ({
-          contentSlug: 'clinical-guidance', contentVersion: 1, dimension, decision: 'approved',
+          contentSlug: 'gd_7_9m_safety', contentVersion: 1, dimension, decision: 'approved',
         })),
       },
     });
     await expect(handler(setLibraryReview)(context, {
-      slug: 'clinical-guidance', clinicalStatus: 'published',
+      slug: 'gd_7_9m_safety', clinicalStatus: 'published',
     })).resolves.toEqual({ ok: true, reviewScope: 'clinical' });
     expect(context.db.patch).toHaveBeenCalledWith('content-1', expect.objectContaining({
       clinicalStatus: 'published', reviewScope: 'clinical', reviewerDisplayName: 'Clinical Reviewer',
+    }));
+    expect(context.db.insert).toHaveBeenCalledWith('auditLogs', expect.objectContaining({
+      action: 'library.published',
+      summary: 'Safety guide · specialist review limited to emergency wording',
     }));
   });
 
@@ -548,6 +687,57 @@ describe('Convex registered handlers enforce authorization', () => {
     })).resolves.toBe('session-1');
     expect(context.db.insert).toHaveBeenCalledWith('milestoneSessions', expect.objectContaining({
       userId: 'user-1', childId: 'child-1', resultState: 'green',
+      resultSnapshot: expect.objectContaining({ state: 'green', urgentSymptoms: [], safetyUrgent: false }),
+    }));
+  });
+
+  it('milestone server preserves all eight validated acute symptoms and forces red', async () => {
+    authState.userId = 'user-1';
+    const context = ctx({ get: { _id: 'child-1', userId: 'user-1' } });
+    const urgentSymptoms = [
+      'severe_breathing_difficulty',
+      'blue_lips',
+      'breathing_pauses',
+      'seizure',
+      'unresponsiveness',
+      'sudden_weakness',
+      'serious_injury',
+      'severe_dehydration',
+    ];
+    await handler(recordSession)(context, {
+      childId: 'child-1', resultState: 'green', lostSkill: false,
+      urgentSymptoms, resultSnapshot: { state: 'green' }, responses: [],
+    });
+    expect(context.db.insert).toHaveBeenCalledWith('milestoneSessions', expect.objectContaining({
+      resultState: 'red',
+      resultSnapshot: expect.objectContaining({
+        state: 'red', urgentSymptoms, safetyUrgent: true,
+      }),
+    }));
+  });
+
+  it('milestone server keeps stale snapshot-only clients safe and forces skill loss to red', async () => {
+    authState.userId = 'user-1';
+    const symptomContext = ctx({ get: { _id: 'child-1', userId: 'user-1' } });
+    await handler(recordSession)(symptomContext, {
+      childId: 'child-1', resultState: 'yellow', lostSkill: false,
+      resultSnapshot: { state: 'yellow', urgentSymptoms: ['blue_lips'] }, responses: [],
+    });
+    expect(symptomContext.db.insert).toHaveBeenCalledWith('milestoneSessions', expect.objectContaining({
+      resultState: 'red',
+      resultSnapshot: expect.objectContaining({ state: 'red', urgentSymptoms: ['blue_lips'] }),
+    }));
+
+    const skillLossContext = ctx({ get: { _id: 'child-1', userId: 'user-1' } });
+    await handler(recordSession)(skillLossContext, {
+      childId: 'child-1', resultState: 'green', lostSkill: true,
+      resultSnapshot: { state: 'green' }, responses: [],
+    });
+    expect(skillLossContext.db.insert).toHaveBeenCalledWith('milestoneSessions', expect.objectContaining({
+      resultState: 'red',
+      resultSnapshot: expect.objectContaining({
+        state: 'red', urgentSymptoms: ['loss_of_acquired_skills'], safetyUrgent: true,
+      }),
     }));
   });
 

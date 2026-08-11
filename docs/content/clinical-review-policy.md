@@ -2,15 +2,17 @@
 
 ## Purpose
 ACE Child Grow is educational and screening-support only. It must **never
-diagnose**. All health and development content must be reviewed by a qualified
-professional before it reaches parents as approved guidance.
+diagnose**. Parent-facing education requires evidence, child-safety, English and
+native-Myanmar review. A qualified clinical specialist is required only for
+diagnosis, treatment, medication, individualized advice or emergency-decision
+wording.
 
 ## Golden rules
 1. No content is shown to parents as guidance unless `review_status = 'published'`.
    Enforced in the DB (RLS) and in the UI (`isApprovedForParents`).
-2. Every generated milestone, activity, awareness topic, myth/fact and lesson is
-   created as `clinical_review` (or earlier). The seed sample in
-   `src/data/seed/content.ts` is entirely `clinical_review`.
+2. A legacy field named `clinicalStatus` stores the publication lifecycle. The
+   field name does not make ordinary educational content clinical, and a
+   `clinical_review` value is never evidence that a clinician approved it.
 3. Never display: autism %, disorder probability, intelligence estimate,
    "normal vs abnormal child", diagnosis from a checklist, unsupported treatment
    outcomes, fabricated emergency numbers/facilities, or fabricated WHO
@@ -20,11 +22,13 @@ professional before it reaches parents as approved guidance.
 
 ## Workflow (Admin CMS)
 Library review is revision-bound. English copy, native-Myanmar language,
-evidence, safety and clinical decisions are recorded separately in
-`contentReviews`. Publishing is blocked until all five areas are approved for
-the current revision and the final publish action is performed by a named,
-qualified clinical reviewer. Every decision and transition is also written to
-`auditLogs`.
+evidence and safety decisions are recorded separately in `contentReviews` for
+every item. Those four current-revision approvals are sufficient for ordinary
+milestones, activities, stories, lessons, printable catalogue metadata and
+general parenting guidance. A current clinical decision and a named, qualified
+clinical publisher are additionally required when risk detection finds
+diagnosis, treatment, medication, individualized advice or emergency-decision
+wording. Every decision and transition is written to `auditLogs`.
 
 ## Reviewer record
 Each review captures `reviewerId`, `reviewerDisplayName`, `reviewerRole`,
@@ -33,11 +37,19 @@ Each review captures `reviewerId`, `reviewerDisplayName`, `reviewerRole`,
 approvals remain visible history but are no longer current.
 
 ## When no clinical reviewer is assigned
-The owner may receive staff access to inspect unpublished drafts, translations,
-evidence links and audit reports. Staff preview access is not clinical approval.
-The application and backend keep approval/publishing locked until a reviewer
-qualification is supplied through the clinical-review workflow. Parent accounts
+The owner may still route ordinary education through English, native-Myanmar,
+evidence and safety review. Staff preview access is not clinical approval.
+Specialist-risk items stay unpublished until the additional reviewer identity,
+qualification and current-revision clinical decision exist. Parent accounts
 continue to receive only published items.
+
+## Focused specialist boundaries
+The seven slugs listed in `convex/lib/contentReviewRequirements.ts` require
+specialist review for their emergency-decision wording only. Bed-sharing wording
+also stays inside a specialist boundary because current authoritative public
+guidance differs materially. Neither focused decision is approval of unrelated
+developmental or education claims, and the words “clinically approved” must not
+be used unless a licensed clinician formally approved that specific content.
 
 ## WHO growth standards
 Percentiles/z-scores are shown **only** after: official WHO datasets are

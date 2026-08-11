@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { computeResult, type MilestoneResponseInput } from '../rules/resultEngine';
+import { ACUTE_URGENT_SYMPTOMS } from '../safety/safety';
 
 const noSafety = { confirmedSymptoms: [], lostSkill: false };
 const resp = (
@@ -58,6 +59,18 @@ describe('rule-based result engine', () => {
     });
     expect(r.state).toBe('red');
     expect(r.safety.urgent).toBe(true);
+  });
+
+  it('returns RED for every acute symptom collected by the milestone assessment', () => {
+    expect(ACUTE_URGENT_SYMPTOMS).toHaveLength(8);
+    for (const symptom of ACUTE_URGENT_SYMPTOMS) {
+      const result = computeResult([resp('yes'), resp('yes')], {
+        confirmedSymptoms: [symptom],
+        lostSkill: false,
+      });
+      expect(result.state, symptom).toBe('red');
+      expect(result.safety.triggers, symptom).toContain(symptom);
+    }
   });
 
   it('skill loss forces RED even with all-yes answers', () => {

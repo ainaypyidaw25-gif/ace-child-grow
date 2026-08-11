@@ -104,8 +104,9 @@ export interface AwaitingReviewRow {
 }
 
 /**
- * Everything a clinical reviewer still has to sign off: content items that are
- * not yet published, and references that are not yet approved.
+ * Everything the assigned reviewers still have to sign off: content items that
+ * are not yet published, and references that are not yet approved. This report
+ * does not imply that every row requires clinical review.
  */
 export function contentAwaitingReview(
   sources: EvidenceSource[] = EVIDENCE_SOURCES,

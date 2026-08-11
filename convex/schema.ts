@@ -331,7 +331,9 @@ export default defineSchema({
   // One row per content item across all types (milestone/guide/activity/
   // lesson/special_need/story/printable). Type-specific structure lives in
   // `data`; first-class columns carry the searchable/indexed metadata and the
-  // clinical-review lifecycle. Nothing is 'published' until a reviewer approves.
+  // review lifecycle. `clinicalStatus` is a legacy field name; ordinary content
+  // follows education-scoped review and only risk-triggered wording needs a
+  // clinical decision. Nothing is 'published' until required reviews approve it.
   // ------------------------------------------------------------------
   libraryContent: defineTable({
     type: v.string(),
