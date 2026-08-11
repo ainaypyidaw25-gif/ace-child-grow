@@ -34,6 +34,7 @@ import type * as lib_contentEditDiff from "../lib/contentEditDiff.js";
 import type * as lib_contentRetirements from "../lib/contentRetirements.js";
 import type * as lib_contentReviewRequirements from "../lib/contentReviewRequirements.js";
 import type * as lib_entitlements from "../lib/entitlements.js";
+import type * as lib_evidenceSafetyRelease from "../lib/evidenceSafetyRelease.js";
 import type * as lib_ownerPriority from "../lib/ownerPriority.js";
 import type * as lib_ownerPriorityAccess from "../lib/ownerPriorityAccess.js";
 import type * as lib_reviewPolicy from "../lib/reviewPolicy.js";
@@ -88,6 +89,7 @@ declare const fullApi: ApiFromModules<{
   "lib/contentRetirements": typeof lib_contentRetirements;
   "lib/contentReviewRequirements": typeof lib_contentReviewRequirements;
   "lib/entitlements": typeof lib_entitlements;
+  "lib/evidenceSafetyRelease": typeof lib_evidenceSafetyRelease;
   "lib/ownerPriority": typeof lib_ownerPriority;
   "lib/ownerPriorityAccess": typeof lib_ownerPriorityAccess;
   "lib/reviewPolicy": typeof lib_reviewPolicy;
