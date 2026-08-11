@@ -58,6 +58,34 @@ describe('evidence and child-safety content corrections', () => {
     expect(school.data.observeMm).toBe('ရေးထားသော မိမိနာမည်ကို မြင်လျှင် မှတ်မိပါသလား။');
   });
 
+  it('keeps safe-sleep instructions complete and parallel without adding bed-sharing advice', () => {
+    const sleep = JSON.stringify(bySlug('lsn_healthy_sleep').data);
+    expect(sleep).toContain('နေ့အိပ်ချိန်နှင့် ညအိပ်ချိန်တိုင်း');
+    expect(sleep).toContain('မစောင်းသော မာကျောညီညာသည့် အိပ်ရာမျက်နှာပြင်');
+    expect(sleep).toContain('ခေါင်းအုံး၊ စောင်၊ ဘေးကာ၊ အရုပ်ပျော့');
+    expect(sleep).toContain('ပထမ ၆ လအထိ');
+    expect(sleep).toContain('ကလေး၏ သီးခြားအိပ်ရာ');
+    expect(sleep).toContain('For every nap and overnight sleep until age 1');
+    expect(sleep).toContain('firm, flat, non-inclined sleep surface');
+    expect(sleep).toContain('no pillow, blanket, bumper, soft toy, or loose cloth');
+    expect(sleep).toContain('own separate sleep space in the parents’ room');
+    expect(sleep).not.toContain('How to share a bed');
+  });
+
+  it('names the bean choking risk and the WHO screen-time limit in both languages', () => {
+    const seedStory = JSON.stringify(bySlug('st_little_seed').data);
+    expect(seedStory).toContain('အသက် ၄ နှစ်အောက်');
+    expect(seedStory).toContain('လည်ချောင်းပိတ်စေနိုင်');
+    expect(seedStory).toContain('An adult plants the bean');
+    expect(seedStory).toContain('choking risk for children under 4');
+
+    const screenTime = JSON.stringify(bySlug('lsn_screen_time').data);
+    expect(screenTime).toContain('အသက် ၂ နှစ်မှ ၄ နှစ်အထိ');
+    expect(screenTime).toContain('တစ်နေ့ ၁ နာရီထက် မကျော်');
+    expect(screenTime).toContain('For ages 2 to 4');
+    expect(screenTime).toContain('no more than 1 hour a day; less is better');
+  });
+
   it('removes stale pending-clinical metadata from every known parent-facing slug', () => {
     expect(publishedSlugs.length).toBeGreaterThanOrEqual(110);
     for (const slug of publishedSlugs) {

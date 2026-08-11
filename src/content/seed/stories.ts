@@ -14,7 +14,7 @@ export const STORIES: SeedItem[] = [
     vocabulary: [b('မျိုးစေ့', 'seed'), b('မိုးရေ', 'rain'), b('နေရောင်', 'sunlight')],
     body: b('မျိုးစေ့ငယ်လေးက မြေအောက်မှာ အိပ်နေတယ်။ မိုးရေ ကျလာတော့ ခေါင်းလေး ထောင်လာတယ်။ နေရောင်လေး ထိတော့ အရွက်ငယ် ၂ ရွက် ပေါ်လာတယ်။ တဖြည်းဖြည်း ကြီးလာပြီး ပန်းလေး ပွင့်တယ်။', 'A little seed slept under the soil. When the rain fell, it lifted its head. When the sun touched it, two tiny leaves appeared. Slowly it grew, and a flower bloomed.'),
     questions: [b('မျိုးစေ့ ကြီးဖို့ ဘာတွေ လိုအပ်လဲ။', 'What did the seed need to grow?')],
-    activities: [b('အိမ်မှာ ပဲစေ့ တစ်လုံး စိုက်၍ ကြည့်ပါ။', 'Plant a bean at home and watch it grow.')],
+    activities: [b('လူကြီးက ပဲစေ့ကို စိုက်ပေးပြီး ကလေးက ကြည့်ကာ ရေလောင်းပေးပါ။ အသက် ၄ နှစ်အောက် ကလေးများအတွက် ပဲစေ့နှင့် မျိုးစေ့များသည် လည်ချောင်းပိတ်စေနိုင်သောကြောင့် ကလေးလက်လှမ်းမမီရာတွင် ထားပြီး ပါးစပ်ထဲ မထည့်စေပါနှင့်။', 'An adult plants the bean; your child watches and waters it. Keep beans and seeds out of reach and out of the mouth—they are a choking risk for children under 4.')],
   }),
   story({
     slug: 'ba_ba_sounds', storyType: 'speech', ageGroupKey: '13_18m',
