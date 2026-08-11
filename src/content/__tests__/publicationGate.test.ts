@@ -7,14 +7,18 @@ const releaseSource = readFileSync('convex/release.ts', 'utf8');
 const libraryAdminSource = readFileSync('src/screens/LibraryAdmin.tsx', 'utf8');
 const contentDetailSource = readFileSync('src/screens/ContentDetail.tsx', 'utf8');
 
-describe('clinically scoped publication gate', () => {
-  it('requires a named qualified clinical reviewer before library content can be published', () => {
+describe('risk-scoped publication gate', () => {
+  it('uses education review for ordinary content and specialist review for medical-decision wording', () => {
     expect(librarySource).toContain("args.clinicalStatus === 'published'");
+    expect(librarySource).toContain('requiresSpecialistReview(item)');
+    expect(librarySource).toContain('await requireProfessionalPublisher(ctx)');
     expect(librarySource).toContain('await requireClinicalPublisher(ctx)');
   });
 
-  it('requires a named qualified clinical reviewer before workflow approval or publishing', () => {
+  it('applies the same risk scope to the legacy workflow', () => {
     expect(workflowSource).toContain("['approved', 'published'].includes(to)");
+    expect(workflowSource).toContain('requiresSpecialistReview({');
+    expect(workflowSource).toContain('await requireProfessionalPublisher(ctx)');
     expect(workflowSource).toContain('await requireClinicalPublisher(ctx)');
   });
 

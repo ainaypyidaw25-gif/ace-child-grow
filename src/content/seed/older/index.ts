@@ -192,7 +192,7 @@ const bands: Band[] = [
 
 // The preschool bands use the same safe structure with age-specific practice.
 const preschool: Band[] = [
-  ['2_5y','၂ နှစ်ခွဲ','2.5 years','မျဉ်းပေါ်လျှောက်ခြင်း','Walks along a line','နှစ်ဆင့်ညွှန်ကြားချက် လိုက်နာခြင်း','Follows a two-step direction','တူရာပုံ တွဲခြင်း','Matches identical pictures','အင်္ကျီချွတ်ရန် ကူညီခြင်း','Helps remove clothing'],
+  ['2_5y','၂ နှစ်ခွဲ','2.5 years','ခြေနှစ်ဖက်ဖြင့် မြေပေါ်မှ ခုန်ခြင်း','Jumps off the ground with both feet','နှစ်ဆင့်ညွှန်ကြားချက် လိုက်နာခြင်း','Follows a two-step direction','တူရာပုံ တွဲခြင်း','Matches identical pictures','အင်္ကျီချွတ်ရန် ကူညီခြင်း','Helps remove clothing'],
   ['3y','၃ နှစ်','3 years','ခြေတစ်ဖက်စီဖြင့် လှေကားတက်ခြင်း','Walks upstairs with alternating feet','အပြန်အလှန် စကားပြောခြင်း','Has a back-and-forth conversation','မိမိအမည် ပြောခြင်း','Says own first name','ဇွန်းခက်ရင်း သုံးခြင်း','Uses a spoon and fork'],
   ['3_5y','၃ နှစ်ခွဲ','3.5 years','ခုန်ပြီး ရပ်တည်ထိန်းခြင်း','Jumps and regains balance','ဖြစ်ရပ်တိုတစ်ခု ပြန်ပြောခြင်း','Retells a short event','အရောင်နှင့် ပုံသဏ္ဌာန် ခွဲခြားခြင်း','Sorts colors and shapes','အဝတ်ဝတ်ရာတွင် ပါဝင်ခြင်း','Participates in dressing'],
   ['4y','၄ နှစ်','4 years','ဘောလုံးကြီးကို ဖမ်းခြင်း','Catches a large ball','မေးခွန်းရိုးရိုး ဖြေခြင်း','Answers simple questions','လူပုံအပိုင်းအချို့ ဆွဲခြင်း','Draws a person with several parts','အကူအညီမပါဘဲ လက်ကို ကိုယ်တိုင် ဆေးပြီး သုတ်နိုင်ခြင်း','Washes and dries hands without help'],

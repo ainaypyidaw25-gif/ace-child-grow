@@ -65,6 +65,11 @@ export const MILESTONE_DOMAIN_SOURCES: Record<string, string[]> = {
   school_readiness: ['hc-early-literacy-2023', 'tb-handbook-ecse-2016'],
 };
 
+/** Sources supporting a claim that is intentionally specific to one slug. */
+export const MILESTONE_SLUG_SOURCES: Record<string, string[]> = {
+  ms_4y_gross_motor_1: ['nhs-beds-4y-milestones-2024'],
+};
+
 /**
  * Explicit links for everything that is not a milestone. Each entry is chosen
  * for topic fit, not convenience — a reference listed here must actually cover
@@ -376,7 +381,11 @@ export function buildEvidenceLinks(): EvidenceLinkBuild {
         // A milestone domain with no reference mapping is a gap, not a default.
         orphans.push(`milestone_domain_unmapped:${domain}:${item.slug}`);
       }
-      push(kind, item.slug, [...MILESTONE_BASE_SOURCES, ...(domainIds ?? [])]);
+      push(kind, item.slug, [
+        ...MILESTONE_BASE_SOURCES,
+        ...(domainIds ?? []),
+        ...(MILESTONE_SLUG_SOURCES[item.slug] ?? []),
+      ]);
       continue;
     }
     push(kind, item.slug, EXPLICIT_CONTENT_SOURCES[item.slug] ?? []);

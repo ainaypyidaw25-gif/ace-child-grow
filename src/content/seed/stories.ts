@@ -29,12 +29,12 @@ export const STORIES: SeedItem[] = [
   story({
     slug: 'when_i_feel_angry', storyType: 'emotion', ageGroupKey: '3y',
     title: b('စိတ်ဆိုးတဲ့အခါ', 'When I Feel Angry'),
-    summary: b('စိတ်ဆိုးတဲ့အခါ အသက်ပြင်းပြင်းရှူ၍ ငြိမ်အောင် လုပ်နည်း။', 'A gentle way to calm down when angry.'),
+    summary: b('စိတ်ဆိုးတဲ့အခါ ဖြည်းဖြည်း နက်နက် အသက်ရှူ၍ ငြိမ်အောင် လုပ်နည်း။', 'A gentle way to calm down when angry.'),
     readingLevel: 'Beginner', readingMinutes: 3,
     vocabulary: [b('စိတ်ဆိုး', 'angry'), b('ငြိမ်', 'calm'), b('အသက်ရှူ', 'breathe')],
-    body: b('တစ်ခါတစ်ရံ မီမီ စိတ်ဆိုးတယ်။ ခန္ဓာကိုယ်လေး ပူလာတယ်။ မီမီက အသက်ကို ပြင်းပြင်း ရှူ၍ ၁-၂-၃ ရေတွက်တယ်။ ဖြည်းဖြည်းချင်း စိတ်လေး ငြိမ်သွားတယ်။ စိတ်ဆိုးတာ ပုံမှန်ပဲ — ငြိမ်အောင် လုပ်တတ်ရင် ရပါတယ်။', 'Sometimes Mimi feels angry. Her body feels hot. Mimi breathes in deeply and counts 1-2-3. Slowly, she feels calm. Feeling angry is okay — we can learn to settle it.'),
+    body: b('တစ်ခါတစ်ရံ မီမီ စိတ်ဆိုးတယ်။ ခန္ဓာကိုယ်လေး ပူလာတယ်။ မီမီက ဖြည်းဖြည်း နက်နက် အသက်ရှူပြီး ၁-၂-၃ ရေတွက်တယ်။ ဖြည်းဖြည်းချင်း စိတ်လေး ငြိမ်သွားတယ်။ စိတ်ဆိုးတာ ပုံမှန်ပဲ — ငြိမ်အောင် လုပ်တတ်ရင် ရပါတယ်။', 'Sometimes Mimi feels angry. Her body feels hot. Mimi breathes in deeply and counts 1-2-3. Slowly, she feels calm. Feeling angry is okay — we can learn to settle it.'),
     questions: [b('စိတ်ဆိုးတဲ့အခါ မီမီ ဘာလုပ်လဲ။', 'What did Mimi do when angry?')],
-    activities: [b('အတူတူ အသက်ပြင်းပြင်း ၃ ကြိမ် ရှူ ကြည့်ပါ။', 'Take three deep breaths together.')],
+    activities: [b('အတူတူ ဖြည်းဖြည်း နက်နက် အသက် ၃ ကြိမ် ရှူကြည့်ပါ။', 'Take three deep breaths together.')],
   }),
   story({
     slug: 'taking_turns', storyType: 'social', ageGroupKey: '3y',

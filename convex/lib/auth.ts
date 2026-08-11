@@ -150,10 +150,9 @@ export async function requireProfessionalPublisher(ctx: Ctx): Promise<Profession
 }
 
 /**
- * Publishing parent-facing developmental or health content is a clinical
- * decision. Education-scoped owner approval is intentionally insufficient;
- * it remains valid for evidence/media governance but cannot expose guidance
- * to parent accounts as clinically reviewed content.
+ * Specialist publishing authority for diagnosis, treatment, medication,
+ * individualized advice and emergency-decision wording. Ordinary educational
+ * parent content uses requireProfessionalPublisher and retains education scope.
  */
 export async function requireClinicalPublisher(ctx: Ctx): Promise<ProfessionalApproval> {
   const reviewer = await requireClinicalReviewer(ctx);

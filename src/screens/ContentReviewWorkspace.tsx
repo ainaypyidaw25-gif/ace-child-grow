@@ -210,6 +210,8 @@ export const HIDDEN_SYSTEM_FIELDS = new Set([
   'editorialStatus',
   'evidenceSummary',
   'format',
+  'requestedFormat',
+  'availability',
   'readingLevel',
   'domains',
   'references',

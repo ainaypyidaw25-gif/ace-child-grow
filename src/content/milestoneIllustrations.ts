@@ -62,7 +62,7 @@ export const MILESTONE_ILLUSTRATIONS: Readonly<Record<string, string>> = {
   ms_2y_gross_motor_1: '/milestones/2y/ms_2y_gross_motor_1.0cb00a9f38.webp',
   ms_2_5y_emotional_1: '/milestones/2_5y/ms_2_5y_emotional_1.eb517bb6af.webp',
   ms_2_5y_language_1: '/milestones/2_5y/ms_2_5y_language_1.496ca2a451.webp',
-  ms_2_5y_fine_motor_1: '/milestones/2_5y/ms_2_5y_fine_motor_1.3f9ad040ae.webp',
+  ms_2_5y_fine_motor_1: '/milestones/2_5y/ms_2_5y_fine_motor_1.66128da864.webp',
   ms_3y_school_readiness_1:
     '/milestones/3y/ms_3y_school_readiness_1.71617709a6.webp',
   ms_3y_social_1: '/milestones/3y/ms_3y_social_1.6b352a869e.webp',

@@ -154,7 +154,7 @@ export const ACTIVITIES: SeedItem[] = [
     materials: b('ပုံပြင်စာအုပ်။', 'A story book.'),
     setup: b('ပုံပြင်တစ်ပုဒ် အတူဖတ်ပါ။', 'Read a story together.'),
     instructions: [b('“ပထမ ဘာဖြစ်လဲ၊ ပြီးတော့” ဟု အစီအစဉ်ဖြင့် မေးပါ။', 'Ask “what happened first, then?” in order.')],
-    safety: b('—', 'None specific.'),
+    safety: b('အထူးသတိပြုရန် မရှိပါ။', 'None specific.'),
     indoor: true, outdoor: false, oneChild: true, group: true, parentChild: true,
     outcomes: [b('ဘာသာစကား၊ အစီအစဉ် တွေးခေါ်မှု။', 'Language and sequencing.')],
   }),

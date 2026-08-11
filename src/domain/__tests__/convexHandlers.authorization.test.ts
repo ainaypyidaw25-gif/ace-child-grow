@@ -215,17 +215,41 @@ describe('Convex registered handlers enforce authorization', () => {
     expect(context.db.patch).not.toHaveBeenCalled();
   });
 
-  it('a qualified education owner cannot publish parent-facing library content', async () => {
+  it('a qualified education owner can publish ordinary content after four scoped reviews', async () => {
     authState.userId = 'owner-1';
     const context = ctx({
       profile: {
         userId: 'owner-1', isStaff: true, staffRole: 'owner',
         staffQualification: 'MEd Early Childhood Education', displayName: 'Education Owner',
       },
-      rows: { libraryContent: [{ _id: 'content-1', slug: 'clinical-guidance', titleEn: 'Clinical guidance' }] },
+      rows: {
+        libraryContent: [{ _id: 'content-1', slug: 'ordinary-parent-guide', titleEn: 'Play together', reviewRevision: 1 }],
+        contentReviews: ['english', 'native_myanmar', 'evidence', 'safety'].map((dimension) => ({
+          contentSlug: 'ordinary-parent-guide', contentVersion: 1, dimension, decision: 'approved',
+        })),
+      },
     });
     await expect(handler(setLibraryReview)(context, {
-      slug: 'clinical-guidance', clinicalStatus: 'published',
+      slug: 'ordinary-parent-guide', clinicalStatus: 'published',
+    })).resolves.toEqual({ ok: true, reviewScope: 'education' });
+    expect(context.db.patch).toHaveBeenCalledWith('content-1', expect.objectContaining({
+      clinicalStatus: 'published', reviewScope: 'education', reviewerDisplayName: 'Education Owner',
+    }));
+  });
+
+  it('an education owner cannot publish emergency-decision wording', async () => {
+    authState.userId = 'owner-1';
+    const context = ctx({
+      profile: {
+        userId: 'owner-1', isStaff: true, staffRole: 'owner',
+        staffQualification: 'MEd Early Childhood Education', displayName: 'Education Owner',
+      },
+      rows: { libraryContent: [{
+        _id: 'content-1', slug: 'gd_7_9m_safety', titleEn: 'Safety guide', reviewRevision: 1,
+      }] },
+    });
+    await expect(handler(setLibraryReview)(context, {
+      slug: 'gd_7_9m_safety', clinicalStatus: 'published',
     })).rejects.toThrow('Insufficient staff permission');
     expect(context.db.patch).not.toHaveBeenCalled();
   });
@@ -238,14 +262,14 @@ describe('Convex registered handlers enforce authorization', () => {
         staffQualification: 'MBBS, MMedSc (Paediatrics)', displayName: 'Clinical Reviewer',
       },
       rows: {
-        libraryContent: [{ _id: 'content-1', slug: 'clinical-guidance', titleEn: 'Clinical guidance', reviewRevision: 1 }],
+        libraryContent: [{ _id: 'content-1', slug: 'gd_7_9m_safety', titleEn: 'Safety guide', reviewRevision: 1 }],
         contentReviews: ['english', 'native_myanmar', 'evidence', 'safety', 'clinical'].map((dimension) => ({
-          contentSlug: 'clinical-guidance', contentVersion: 1, dimension, decision: 'approved',
+          contentSlug: 'gd_7_9m_safety', contentVersion: 1, dimension, decision: 'approved',
         })),
       },
     });
     await expect(handler(setLibraryReview)(context, {
-      slug: 'clinical-guidance', clinicalStatus: 'published',
+      slug: 'gd_7_9m_safety', clinicalStatus: 'published',
     })).resolves.toEqual({ ok: true, reviewScope: 'clinical' });
     expect(context.db.patch).toHaveBeenCalledWith('content-1', expect.objectContaining({
       clinicalStatus: 'published', reviewScope: 'clinical', reviewerDisplayName: 'Clinical Reviewer',

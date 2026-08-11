@@ -972,6 +972,24 @@ export const NICE_SOURCES: EvidenceSource[] = [
 
 export const NHS_SOURCES: EvidenceSource[] = [
   s({
+    id: 'nhs-beds-4y-milestones-2024',
+    org: 'Bedfordshire and Luton Children’s Health Services (NHS)',
+    orgKey: 'NHS',
+    title: '4 year developmental milestones',
+    year: 2024,
+    verifiedOn: '2026-08-11',
+    edition: 'Last reviewed: 1 November 2024',
+    country: 'United Kingdom',
+    url: 'https://www.bedslutonchildrenshealth.nhs.uk/child-development-and-growing-up/milestones/4-years/',
+    evidenceLevel: 'parent_education',
+    keywords: ['four years', 'gross motor', 'hop', 'one foot'],
+    topics: ['milestones', 'motor'],
+    ageMonthsMin: 48,
+    ageMonthsMax: 48,
+    verifiedNote:
+      'NHS service page prints “Last reviewed: 1 November, 2024” and lists “hop and stand on one foot” at around 4 years.',
+  }),
+  s({
     id: 'nhs-sids-2025',
     org: 'National Health Service (UK)',
     orgKey: 'NHS',

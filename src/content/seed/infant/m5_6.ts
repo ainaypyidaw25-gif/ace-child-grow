@@ -14,8 +14,8 @@ const b = (mm: string, en: string) => ({ mm, en });
 const MILESTONES: SeedItem[] = [
   kb(
     milestone('5_6m', 'gross_motor', 2, {
-      title: b('တစ်ဖက်မှ တစ်ဖက်သို့ လှိမ့်ခြင်း', 'Rolling from back to front and front to back'),
-      observe: b('ကလေးသည် ပက်လက်မှ မှောက်သို့၊ မှောက်မှ ပက်လက်သို့ လှိမ့်နိုင်ပါသလား။', 'Can your baby roll from back to front, and from front to back?'),
+      title: b('မှောက်လျက်မှ ပက်လက်သို့ လှိမ့်ခြင်း', 'Rolls from tummy to back'),
+      observe: b('ကလေးသည် မှောက်လျက်မှ ပက်လက်သို့ လှိမ့်နိုင်ပါသလား။', 'Can your baby roll from tummy to back?'),
       why: b('လှိမ့်ခြင်းသည် များသောအားဖြင့် ၄ လမှ ၆ လကြားတွင် စတတ်ပြီး ကွာဟမှု ကျယ်ပါသည်။ တစ်ဖက်ကို အရင်တတ်ပြီး နောက်တစ်ဖက်ကို နောက်မှ တတ်တတ်သည်။', 'Rolling usually appears between about 4 and 6 months, with wide variation. One direction often comes well before the other.'),
       red: b('လ ၆ လအရွယ်တွင် လှိမ့်ရန် လုံးဝ မကြိုးစားခြင်း၊ ကိုယ်တစ်ဖက်ခြမ်းသာ လှုပ်ရှားခြင်းကို ကျန်းမာရေးဝန်ထမ်းအား ပြပါ။', 'No attempt to roll at all by 6 months, or movement on one side of the body only, is worth checking.'),
       encouragement: b('ကြမ်းပြင်ပေါ် လွတ်လပ်စွာ လှုပ်ရှားခွင့် ပေးပါ — အကောင်းဆုံး လေ့ကျင့်ခန်း ဖြစ်သည်။', 'Free floor time is the best practice there is.'),
@@ -24,13 +24,13 @@ const MILESTONES: SeedItem[] = [
   ),
   kb(
     milestone('5_6m', 'fine_motor', 1, {
-      title: b('ပစ္စည်းကို လက်တစ်ဖက်မှ တစ်ဖက်သို့ ပြောင်းကိုင်ခြင်း', 'Passing an object from one hand to the other'),
-      observe: b('ကိုင်ထားသော ပစ္စည်းကို အခြားလက်သို့ ပြောင်းကိုင်ပါသလား။ လက်ဖဝါးတစ်ခုလုံးဖြင့် ဆုပ်ကိုင်ပါသလား။', 'Does she move a toy from one hand to the other? Does she grab with the whole palm?'),
+      title: b('ပစ္စည်းကို လက်တစ်ဖက်မှ တစ်ဖက်သို့ စတင်ပြောင်းကိုင်ခြင်း', 'Beginning to pass an object between hands'),
+      observe: b('ကိုင်ထားသော ပစ္စည်းကို အခြားလက်သို့ စတင်ပြောင်းကိုင်နေပါသလား။ မပြောင်းကိုင်သေးလျှင် ၆ လအရွယ် စစ်ဆေးချက် မအောင်မြင်ခြင်းဟု မယူဆပါ။', 'Is she beginning to move a toy from one hand to the other? Not doing this yet is not a failed 6-month checkpoint.'),
       why: b('ဤအရွယ်တွင် အလိုရှိသလို လှမ်းယူနိုင်လာပြီး လက်နှစ်ဖက် ပူးတွဲ အသုံးပြုမှု စတင်သည်။ ကိုင်မိသမျှကို ပါးစပ်ထဲ ထည့်ခြင်းသည် သင်ယူမှု ဖြစ်သည်။', 'Reaching becomes deliberate and the two hands start working together. Mouthing what she catches is learning, not a problem.'),
       red: b('လ ၆ လအရွယ်တွင် ပစ္စည်းကို လုံးဝ မလှမ်းယူခြင်း၊ လက်တစ်ဖက်တည်းကိုသာ အမြဲ သုံးခြင်းကို ပြပါ။', 'No reaching at all by 6 months, or always using one hand only, should be checked.'),
       encouragement: b('လုံခြုံသော ပစ္စည်းများကို လက်လှမ်းမီရာတွင် ထားပေးပါ။', 'Keep a few safe objects within reach.'),
     }),
-    'Deliberate reaching and hand-to-hand transfer at 5–6 months follow CDC milestone checklists, AAP milestone guidance and the paediatric occupational-therapy references in the registry.',
+    'Deliberate reaching is expected around 6 months; hand-to-hand transfer is labelled as emerging because current CDC checklists place it later.',
   ),
   kb(
     milestone('5_6m', 'speech', 2, {
@@ -44,13 +44,13 @@ const MILESTONES: SeedItem[] = [
   ),
   kb(
     milestone('5_6m', 'language', 1, {
-      title: b('နာမည်ခေါ်လျှင် လှည့်ကြည့်ခြင်း', 'Turning when her name is called'),
-      observe: b('နာမည်ခေါ်လျှင် လှည့်ကြည့်ပါသလား။ အသံအနေအထား ပြောင်းလျှင် တုံ့ပြန်ပါသလား။', 'Does she turn when you call her name? Does she react to changes in your tone?'),
-      why: b('ဤသည် ဘာသာစကား နားလည်မှု၏ အစောဆုံး လက္ခဏာ ဖြစ်သည်။ အားလုံး တစ်ချိန်တည်း မတတ်ကြပါ — ကွာဟမှု ရှိသည်။', 'This is one of the earliest signs of language understanding. Babies get there at different times.'),
-      red: b('နာမည်ခေါ်လျှင် လုံးဝ မတုံ့ပြန်ခြင်း၊ အသံကို လုံးဝ မတုံ့ပြန်ခြင်းကို နားကြားစစ်ဆေးရန် ပြပါ။', 'No response at all to her name or to sound should prompt a hearing check.'),
-      encouragement: b('နေ့စဉ် နာမည်ကို မကြာခဏ ခေါ်ပေးပါ။', 'Use her name often through the day.'),
+      title: b('အသံများကို အပြန်အလှန် ထုတ်ခြင်း', 'Takes turns making sounds with you'),
+      observe: b('သင် အသံထုတ်ပြီး ခဏစောင့်လျှင် ကလေးက အသံပြန်ထုတ်ပါသလား။', 'When you make a sound and pause, does your baby make a sound back?'),
+      why: b('အသံကို အပြန်အလှန် ထုတ်ခြင်းသည် နောက်ပိုင်း စကားဝိုင်း၏ အစောပိုင်း အခြေခံ ဖြစ်သည်။', 'Taking turns with sounds is an early foundation for later conversation.'),
+      red: b('လ ၆ လအရွယ်တွင် အသံလုံးဝ မထုတ်ခြင်း သို့မဟုတ် အသံကို လုံးဝ မတုံ့ပြန်ခြင်းကို ကျန်းမာရေးဝန်ထမ်းအား ပြပါ။', 'No sounds at all by 6 months, or no response to sound, should be checked.'),
+      encouragement: b('ကလေးထုတ်သော အသံကို ပြန်လိုက်ပြီး တုံ့ပြန်ရန် အချိန်ပေးပါ။', 'Copy your baby’s sounds and pause to let them answer.'),
     }),
-    'Responding to name and early receptive language at 5–6 months follow CDC and AAP milestone guidance, AAP developmental-surveillance guidance and the language-development references in the registry.',
+    'Taking turns making sounds follows the current CDC 6-month language milestone.',
   ),
   kb(
     milestone('5_6m', 'social', 1, {
@@ -64,13 +64,13 @@ const MILESTONES: SeedItem[] = [
   ),
   kb(
     milestone('5_6m', 'cognitive', 2, {
-      title: b('ကျသွားသော ပစ္စည်းကို လိုက်ရှာကြည့်ခြင်း', 'Looking for a dropped object'),
-      observe: b('ပစ္စည်း ကျသွားလျှင် အောက်သို့ လိုက်ကြည့်ပါသလား။ ပစ္စည်းကို လှုပ်၍ ဘာဖြစ်မလဲ စမ်းကြည့်ပါသလား။', 'Does she look down when something falls? Does she shake things to see what happens?'),
+      title: b('အကြောင်းနှင့် အကျိုးကို စူးစမ်းကစားခြင်း', 'Explores cause and effect in play'),
+      observe: b('ပစ္စည်းကို လှုပ်ခြင်း သို့မဟုတ် ချခြင်းဖြင့် ဘာဖြစ်မလဲ စမ်းကြည့်ပါသလား။ မမြင်ရတော့သော ပစ္စည်းကို ရှာရန် မလိုသေးပါ။', 'Does she shake or drop an object to see what happens? Searching for an object that is out of sight is not required yet.'),
       why: b('ဤသည် အကြောင်းအကျိုး နားလည်မှု၏ အစ ဖြစ်သည်။ ထပ်ခါထပ်ခါ လုပ်ကြည့်ခြင်းဖြင့် သင်ယူသည်။', 'This is the beginning of cause and effect. Repetition is how it is learned.'),
       red: b('ပတ်ဝန်းကျင်ကို လုံးဝ စိတ်မဝင်စားခြင်း၊ ပစ္စည်းကို လုံးဝ မကြည့်ခြင်းကို ပြပါ။', 'No interest in surroundings, or not looking at objects at all, should be checked.'),
       encouragement: b('ကျသွားသည်ကို ပြန်ကောက်ပေးခြင်းသည် ကစားနည်း ဖြစ်သည် — ငြီးငွေ့စရာ မဟုတ်ပါ။', 'Picking it up again is the game, not a chore.'),
     }),
-    'Object permanence precursors and cause-and-effect play at 5–6 months follow CDC and AAP milestone guidance and standard paediatric developmental references in the registry.',
+    'This is labelled cause-and-effect play, not a 6-month object-search checkpoint; current CDC guidance places searching for dropped objects later.',
   ),
   kb(
     milestone('5_6m', 'nutrition', 1, {
