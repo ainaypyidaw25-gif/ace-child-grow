@@ -31,6 +31,8 @@ import type * as http from "../http.js";
 import type * as lib_auth from "../lib/auth.js";
 import type * as lib_classificationImport from "../lib/classificationImport.js";
 import type * as lib_contentEditDiff from "../lib/contentEditDiff.js";
+import type * as lib_contentRetirements from "../lib/contentRetirements.js";
+import type * as lib_contentReviewRequirements from "../lib/contentReviewRequirements.js";
 import type * as lib_entitlements from "../lib/entitlements.js";
 import type * as lib_ownerPriority from "../lib/ownerPriority.js";
 import type * as lib_ownerPriorityAccess from "../lib/ownerPriorityAccess.js";
@@ -83,6 +85,8 @@ declare const fullApi: ApiFromModules<{
   "lib/auth": typeof lib_auth;
   "lib/classificationImport": typeof lib_classificationImport;
   "lib/contentEditDiff": typeof lib_contentEditDiff;
+  "lib/contentRetirements": typeof lib_contentRetirements;
+  "lib/contentReviewRequirements": typeof lib_contentReviewRequirements;
   "lib/entitlements": typeof lib_entitlements;
   "lib/ownerPriority": typeof lib_ownerPriority;
   "lib/ownerPriorityAccess": typeof lib_ownerPriorityAccess;
