@@ -42,20 +42,20 @@ function handler(fn: unknown) {
     ._handler;
 }
 
-function contentRows(status = 'published'): Row[] {
+function contentRows(status?: string): Row[] {
   return DUPLICATE_MILESTONE_SLUGS.map((slug, index) => ({
     _id: `content-${index + 1}`,
     slug,
     titleEn: slug,
-    clinicalStatus: status,
-    reviewRevision: index + 1,
+    clinicalStatus: status ?? (slug === 'ms_5_6m_speech_1' ? 'clinical_review' : 'published'),
+    reviewRevision: slug === 'ms_5_6m_speech_1' ? 2 : undefined,
   }));
 }
 
 function exactTargets() {
-  return DUPLICATE_MILESTONE_SLUGS.map((slug, index) => ({
+  return DUPLICATE_MILESTONE_SLUGS.map((slug) => ({
     slug,
-    expectedReviewRevision: index + 1,
+    expectedReviewRevision: slug === 'ms_5_6m_speech_1' ? 2 : 1,
   }));
 }
 
@@ -71,7 +71,15 @@ describe('duplicate milestone retirement release', () => {
     }) as Array<Record<string, unknown>>;
 
     expect(result.map((row) => row.slug)).toEqual(DUPLICATE_MILESTONE_SLUGS);
-    expect(result.every((row) => row.clinicalStatus === 'published')).toBe(true);
+    expect(result.map((row) => row.clinicalStatus)).toEqual([
+      'published',
+      'clinical_review',
+      'published',
+      'published',
+      'published',
+      'published',
+    ]);
+    expect(result.map((row) => row.reviewRevision)).toEqual([1, 2, 1, 1, 1, 1]);
     expect(result[0]).toMatchObject({ mediaRows: 1, evidenceLinkRows: 1 });
     expect(context.db.patch).not.toHaveBeenCalled();
     expect(context.db.insert).not.toHaveBeenCalled();
@@ -82,7 +90,13 @@ describe('duplicate milestone retirement release', () => {
     await expect(handler(retireDuplicateMilestones)(context, {
       releaseId: DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID,
       targets: exactTargets(),
-    })).resolves.toEqual({ retired: 6, alreadyRetired: 0, total: 6 });
+    })).resolves.toEqual({
+      retired: 6,
+      alreadyRetired: 0,
+      publishedWithdrawn: 5,
+      unpublishedArchived: 1,
+      total: 6,
+    });
 
     expect(context.db.patch).toHaveBeenCalledTimes(6);
     for (const [index] of DUPLICATE_MILESTONE_SLUGS.entries()) {
@@ -113,12 +127,30 @@ describe('duplicate milestone retirement release', () => {
     expect(context.db.insert).not.toHaveBeenCalled();
   });
 
+  it('aborts before every write when a target leaves the authorized status set', async () => {
+    const rows = contentRows();
+    rows[4] = { ...rows[4], clinicalStatus: 'draft' };
+    const context = retirementContext({ libraryContent: rows });
+    await expect(handler(retireDuplicateMilestones)(context, {
+      releaseId: DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID,
+      targets: exactTargets(),
+    })).rejects.toThrow('unexpected status');
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalled();
+  });
+
   it('is idempotent after all six rows are already archived', async () => {
     const context = retirementContext({ libraryContent: contentRows('archived') });
     await expect(handler(retireDuplicateMilestones)(context, {
       releaseId: DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID,
       targets: exactTargets(),
-    })).resolves.toEqual({ retired: 0, alreadyRetired: 6, total: 6 });
+    })).resolves.toEqual({
+      retired: 0,
+      alreadyRetired: 6,
+      publishedWithdrawn: 0,
+      unpublishedArchived: 0,
+      total: 6,
+    });
     expect(context.db.patch).not.toHaveBeenCalled();
     expect(context.db.insert).not.toHaveBeenCalled();
   });

@@ -169,6 +169,15 @@ const retirementPreflightRowValidator = v.object({
   evidenceLinkRows: v.number(),
 });
 
+// The production preflight on 2026-08-11 found five legacy published rows and
+// one row already withdrawn to clinical_review. Both states are safe inputs to
+// this exact retirement release: the former are unpublished by the archive;
+// the latter is permanently retired so a future review cannot republish it.
+const DUPLICATE_MILESTONE_RETIRABLE_STATUSES = new Set([
+  'published',
+  'clinical_review',
+]);
+
 /**
  * Read-only production preflight for the exact retirement release. Run this
  * after deployment and copy the six reported review revisions into the guarded
@@ -233,6 +242,8 @@ export const retireDuplicateMilestones = internalMutation({
   returns: v.object({
     retired: v.number(),
     alreadyRetired: v.number(),
+    publishedWithdrawn: v.number(),
+    unpublishedArchived: v.number(),
     total: v.number(),
   }),
   handler: async (ctx, args) => {
@@ -249,6 +260,8 @@ export const retireDuplicateMilestones = internalMutation({
     const targetBySlug = new Map(args.targets.map((target) => [target.slug, target]));
     const validated: Array<Doc<'libraryContent'>> = [];
     let alreadyRetired = 0;
+    let publishedWithdrawn = 0;
+    let unpublishedArchived = 0;
 
     // Validate the entire release before writing anything (stale-state guard).
     for (const slug of DUPLICATE_MILESTONE_SLUGS) {
@@ -265,9 +278,11 @@ export const retireDuplicateMilestones = internalMutation({
         alreadyRetired += 1;
         continue;
       }
-      if (content.clinicalStatus !== 'published') {
-        throw new Error(`Retirement target is not published: ${slug}`);
+      if (!DUPLICATE_MILESTONE_RETIRABLE_STATUSES.has(content.clinicalStatus)) {
+        throw new Error(`Retirement target has an unexpected status: ${slug}`);
       }
+      if (content.clinicalStatus === 'published') publishedWithdrawn += 1;
+      else unpublishedArchived += 1;
       validated.push(content);
     }
 
@@ -307,6 +322,8 @@ export const retireDuplicateMilestones = internalMutation({
     return {
       retired: validated.length,
       alreadyRetired,
+      publishedWithdrawn,
+      unpublishedArchived,
       total: DUPLICATE_MILESTONE_SLUGS.length,
     };
   },

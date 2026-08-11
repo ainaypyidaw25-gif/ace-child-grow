@@ -22,6 +22,11 @@ The source seed excludes exactly these six. Their current media, evidence links
 and review history remain stored for staff audit, but existing server-side
 publication gates make all of them unreachable to parents after archive.
 
+Read-only production verification on 2026-08-11 found all six rows: five were
+`published` with the legacy absent `reviewRevision` treated as revision 1, and
+`ms_5_6m_speech_1` was already `clinical_review` at revision 2. No record was
+changed during that verification.
+
 ## 1. Read-only preflight
 
 Do not use `--push`. Run against production only after the release containing
@@ -32,15 +37,19 @@ npx convex run seed:preflightDuplicateMilestoneRetirement \
   '{"releaseId":"2026-08-11-duplicate-milestones"}' --prod
 ```
 
-Stop unless the output contains exactly six rows, each `found: true` and
-`clinicalStatus: "published"` (or all six already `"archived"` after a
-verified retry). Copy each reported `reviewRevision`; do not guess it.
+Stop unless the output contains exactly six rows with `found: true`. Each status
+must be `"published"`, `"clinical_review"` or `"archived"`; the expected first-
+run baseline is five published and `ms_5_6m_speech_1` in clinical review. Any
+other status requires a new authorization decision. Copy each reported
+`reviewRevision`; do not guess it or rely on the earlier snapshot.
 
 ## 2. Authorized atomic archive
 
 Replace each `REVIEW_REVISION_*` placeholder with the matching integer returned
 by preflight. The mutation validates the exact set and every revision before its
-first write, so a missing, non-published or changed row aborts the whole release.
+first write, so a missing, unsupported-status or changed row aborts the whole
+release. The already-unpublished clinical-review row is archived with the five
+published rows so it cannot be republished later.
 
 ```sh
 npx convex run seed:retireDuplicateMilestones \
@@ -48,7 +57,9 @@ npx convex run seed:retireDuplicateMilestones \
   --prod
 ```
 
-Expected first-run result: `retired: 6`, `alreadyRetired: 0`, `total: 6`.
+Expected result against the verified snapshot: `retired: 6`,
+`alreadyRetired: 0`, `publishedWithdrawn: 5`, `unpublishedArchived: 1`,
+`total: 6`.
 The mutation writes one immutable `library.duplicate_milestone.retired` audit
 event per slug. A verified repeat is idempotent.
 
