@@ -157,7 +157,7 @@ describe('reviewer content field labels', () => {
   it('falls back to the raw value instead of crashing on an unknown decision or dimension', () => {
     // Known values still resolve to their localized label.
     expect(decisionLabel('approved', 'en')).toBe('Approve this revision');
-    expect(dimensionLabel('clinical', 'mm')).toBe('ဆေးဘက်ဆိုင်ရာ သုံးသပ်မှု');
+    expect(dimensionLabel('clinical', 'mm')).toBe('အထူးကျွမ်းကျင်သူ ဘေးကင်းရေးသုံးသပ်မှု');
     // A legacy/unrecognized string from the database must not throw — it is
     // shown verbatim so the "Review item" tab keeps rendering.
     expect(decisionLabel('legacy_rejected', 'en')).toBe('legacy_rejected');

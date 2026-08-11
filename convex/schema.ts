@@ -566,7 +566,7 @@ export default defineSchema({
     reviewStatus: v.string(), // evidence_required | awaiting_review | in_review | approved | retired
     reviewer: v.union(v.string(), v.null()),
     // Professional qualification of the named reviewer (e.g. 'MBBS, MMedSc
-    // (Paediatrics)'). Recorded alongside the name so a clinical sign-off can
+    // (Paediatrics)'). Recorded alongside the audit identity so a specialist safety decision can
     // be audited: an approval with no stated qualification is not a sign-off.
     reviewerQualification: v.optional(v.string()),
     reviewDate: v.union(v.string(), v.null()),

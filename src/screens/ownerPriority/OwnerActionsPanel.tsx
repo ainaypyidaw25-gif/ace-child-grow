@@ -17,7 +17,7 @@ const DIMENSION_LABELS: Record<string, { mm: string; en: string }> = {
   child_development: { mm: 'ကလေးဖွံ့ဖြိုးမှု စစ်ဆေးရန်', en: 'Request child-development review' },
   evidence: { mm: 'အထောက်အထား စစ်ဆေးရန်', en: 'Request evidence review' },
   safety: { mm: 'ဘေးကင်းရေး စစ်ဆေးရန်', en: 'Request safety review' },
-  clinical: { mm: 'ဆေးဘက် စစ်ဆေးရန်', en: 'Request clinical review' },
+  clinical: { mm: 'အထူးကျွမ်းကျင်သူ ဘေးကင်းရေး စစ်ဆေးရန်', en: 'Request specialist safety review' },
 };
 
 export function OwnerActionsPanel({ slug, reviewRevision, role, dataComplete = true, outstandingDimensions = [] }: {

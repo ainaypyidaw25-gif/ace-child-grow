@@ -2,13 +2,13 @@
 //
 // EVERY item here is marked reviewStatus: 'clinical_review'. It may be shown as
 // clearly labelled, general educational content while professional review
-// continues, but MUST NOT be described as clinically approved. Reviewers can
+// continues, but MUST NOT be described as a personal professional endorsement. Reviewers can
 // revise it through the editorial workflow; it must never be used to diagnose.
 //
 // This file is a representative sample across age groups. The full catalogue
 // (8 milestones / 5 activities / 2 lessons / 1 safety tip / 1 awareness tip per
 // age group) is generated and reviewed through the Admin CMS — see
-// docs/content/clinical-review-policy.md. Do not hardcode the entire catalogue
+// docs/content/evidence-and-safety-review-policy.md. Do not hardcode the entire catalogue
 // as "published".
 
 import type { DevelopmentDomain } from '../../domain/types';

@@ -5,7 +5,7 @@ _ရက်စွဲ — ၂၀၂၆ ဇူလိုင် ၂၅ · Bilingual (
 > **Historical snapshot (July 25 branch state) — see the Notion "Production Status & Roadmap" page for the current picture.**
 > Two facts below are now stale: production is served at **https://child.acegroup.com.mm** (also reachable at `ace-child-grow.vercel.app`, though Google sign-in only works from the custom domain), and the live **production** Convex deployment is **`graceful-possum-566`** — `uncommon-orca-603` below was the development deployment used for the clinical-pilot content work described in this doc, not the production backend.
 
-> **အရေးကြီး safety မူ —** ဤ app သည် ကလေးကို **ရောဂါ ဘယ်တော့မှ မဖော်ထုတ်ပါ**။ ပညာပေး/စောင့်ကြည့်ကူညီပေးရေး tool သာဖြစ်သည်။ ဆေးပညာဆိုင်ရာ content အားလုံးကို ကျွမ်းကျင်သူ review မဖြတ်ရသေးမချင်း မိဘများဆီ “အတည်ပြုပြီး” အဖြစ် မဖော်ပြပါ။
+> **လက်ရှိ safety မူ —** ဤ app သည် ကလေးကို **ရောဂါ ဘယ်တော့မှ မဖော်ထုတ်ပါ**။ ပညာပေး/စောင့်ကြည့်ကူညီပေးရေး tool သာဖြစ်သည်။ သာမန်ပညာပေးအကြောင်းအရာကို English၊ native-Myanmar၊ evidence နှင့် safety review လုပ်ပြီးမှ ထုတ်ဝေသည်။ Diagnosis၊ treatment၊ medication၊ individualized advice နှင့် emergency-decision wording ကို `SPECIALIST REVIEW REQUIRED` အဖြစ် သီးခြားပိတ်ထားသည်။
 
 ---
 
@@ -115,7 +115,7 @@ _ရက်စွဲ — ၂၀၂၆ ဇူလိုင် ၂၅ · Bilingual (
 ## ၈။ ရိုးသားချက် (Scope & Limitations)
 
 - Content 134 က **coverage-complete starter** — activity ၁၀၀၀+ / lesson ၂၀၀+ ပန်းတိုင်အပြည့် မဟုတ်သေး။ platform က အဲဒီအထိ **CMS/data-entry အလုပ်** ဖြစ်အောင် လုပ်ထားပြီ (code မဟုတ်တော့)
-- Myanmar + clinical စာသားအားလုံး **AI-drafted** — native Myanmar speaker + qualified clinical reviewer (ဆရာဝန်/therapist) မ finalize ရသေးမချင်း pilot အစစ်မှာ publish မလုပ်သင့်
+- Myanmar စာသားအားလုံး **AI-drafted** — native Myanmar၊ evidence နှင့် safety review မပြီးမချင်း မထုတ်ဝေသင့်ပါ။ အန္တရာယ်မြင့်စာသားများသည် သီးခြား specialist safety boundary အတွင်း ရှိရမည်။
 - Sandbox browser က convex.cloud WSS ကို block လုပ်လို့ live E2E ကို sandbox မှာ run မရ (auth-guard static test က P0 isolation ကို ဖုံးအုပ်ပေး)
 - Bundle note — seed (~130KB) က LibraryAdmin မှတစ်ဆင့် main bundle ထဲ ရှိ; နောင် lazy-load/split လုပ်နိုင်
 
@@ -124,7 +124,7 @@ _ရက်စွဲ — ၂၀၂၆ ဇူလိုင် ၂၅ · Bilingual (
 ## ၉။ Cleanup / Next
 
 - Convex **deploy key** + GitHub **PAT** ကို အသုံးပြုပြီးရင် revoke လုပ်ပါ (နှစ်ခုစလုံး deploy ခွင့်ပေးသည်)
-- Content clinical review မပြီးမချင်း **`main` သို့ merge မလုပ်ပါနှင့်**
+- Evidence/safety corrections နှင့် focused specialist boundary မပြည့်မချင်း အန္တရာယ်ရှိ content ကို **`main` သို့ merge မလုပ်ပါနှင့်**
 - ကျန် clinical-pilot sections — password reset (in-app), onboarding wizard, article detail, translation review UI, doctor-visit prep, observation journal, weekly plan, pilot mode, analytics, card-heavy UI reduction
 
 ---
@@ -132,4 +132,4 @@ _ရက်စွဲ — ၂၀၂၆ ဇူလိုင် ၂၅ · Bilingual (
 ## Verdict
 
 **Content Platform — DEPLOYED + SEEDED (staff အတွက် end-to-end အလုပ်လုပ်ပြီ)**
-ကျန်တာက clinical review + publish — လူသား ကျွမ်းကျင်သူ ဆုံးဖြတ်ရမည့် အဆင့်။
+ဤစာတမ်းသည် historical snapshot ဖြစ်သည်။ လက်ရှိ production/review အခြေအနေကို Notion production status နှင့် `docs/content/evidence-and-safety-review-policy.md` တွင် စစ်ပါ။

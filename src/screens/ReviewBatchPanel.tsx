@@ -56,8 +56,8 @@ export function ReviewBatchPanel({ todayIso }: { todayIso: string }) {
           will read it, not only in the code. */}
       <p className="rounded-lg bg-pastel-yellow/60 px-3 py-2 text-sm text-ink">
         {L(
-          'ဤစာမျက်နှာသည် အထောက်အထားနှင့် ဘေးကင်းရေး သုံးသပ်ရန် စာရင်းသာ ဖြစ်သည်။ ဤနေရာမှ မည်သည့် အကြောင်းအရာကိုမျှ အလိုအလျောက် ထုတ်ဝေခြင်း သို့မဟုတ် အတည်ပြုခြင်း မပြုပါ။ သာမန်ပညာပေးအကြောင်းအရာအတွက် ဆေးဘက်ဆိုင်ရာအတည်ပြုချက် မလိုအပ်ပါ။',
-          'This page is an evidence-and-safety work queue only. Nothing here publishes or approves content automatically. Ordinary education does not require clinical approval.',
+          'ဤစာမျက်နှာသည် အထောက်အထားနှင့် ဘေးကင်းရေး သုံးသပ်ရန် စာရင်းသာ ဖြစ်သည်။ ဤနေရာမှ မည်သည့် အကြောင်းအရာကိုမျှ အလိုအလျောက် ထုတ်ဝေခြင်း သို့မဟုတ် အတည်ပြုခြင်း မပြုပါ။ သာမန်ပညာပေးအကြောင်းအရာအတွက် အထူးကျွမ်းကျင်သူ သုံးသပ်မှု မလိုအပ်ပါ။',
+          'This page is an evidence-and-safety work queue only. Nothing here publishes or approves content automatically. Ordinary education does not require specialist review.',
         )}
       </p>
 

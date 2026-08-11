@@ -324,9 +324,9 @@ async function buildQueueResult(ctx: QueryCtx, level: string, role: string | und
       const warnings: string[] = [];
       if (workflowBlocker) warnings.push(workflowBlocker);
       if (item.clinicalStatus === 'published' && result.riskClass === 'C') {
-        warnings.push('parent-visible now with no clinical approval (education-scoped legacy publication)');
+        warnings.push('parent-visible high-risk wording has only an education-scoped legacy publication record');
       }
-      if (item.reviewScope === 'education') warnings.push('education-scoped review must never be read as clinical approval');
+      if (item.reviewScope === 'education') warnings.push('education-scoped review covers general education only, not a specialist safety decision');
       if (!linkedSlugs.has(item.slug)) warnings.push('no evidence link recorded on this deployment');
       if (result.provisional) warnings.push('classification is provisional (in-app rules) — not yet owner-confirmed');
       if (triageRequired) warnings.push('manual triage required: a manager must confirm the required review dimensions');

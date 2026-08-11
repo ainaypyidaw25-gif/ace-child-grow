@@ -38,7 +38,7 @@ export type SpecialistReviewReason =
 export function specialistReviewReason(item: ReviewableContent): SpecialistReviewReason | null {
   // These seven records are routed only for their emergency-decision wording.
   // Their ordinary developmental or parent-education claims are not thereby
-  // clinically approved.
+  // represented as a personal endorsement.
   if (focusedSpecialistSlugs.has(item.slug)) return 'focused_emergency_wording';
   if (item.requiredReviewDimensions?.includes('clinical')) return 'explicit_clinical_requirement';
 

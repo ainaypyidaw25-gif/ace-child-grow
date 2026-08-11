@@ -13,17 +13,17 @@ const ROLE_LABELS: Record<StaffRole, { mm: string; en: string }> = {
   content_editor: { mm: 'အကြောင်းအရာ သုံးသပ်/တည်းဖြတ်သူ', en: 'Content reviewer / editor' },
   language_reviewer: { mm: 'မြန်မာဘာသာစကား သုံးသပ်သူ', en: 'Native-language reviewer' },
   evidence_reviewer: { mm: 'ကိုးကားအထောက်အထား သုံးသပ်သူ', en: 'Evidence reviewer' },
-  clinical_reviewer: { mm: 'ဆေးဘက်ဆိုင်ရာ သုံးသပ်သူ', en: 'Clinical reviewer' },
+  clinical_reviewer: { mm: 'အထူးကျွမ်းကျင်သူ ဘေးကင်းရေးသုံးသပ်သူ', en: 'Specialist safety reviewer' },
   review_manager: { mm: 'စစ်ဆေးရေး မန်နေဂျာ', en: 'Review manager' },
   support: { mm: 'အသုံးပြုသူအကူအညီပေးသူ', en: 'Support' },
 };
 
 const ROLE_DESCRIPTIONS: Record<StaffRole, { mm: string; en: string }> = {
-  owner: { mm: 'အဖွဲ့၊ အကြောင်းအရာနှင့် စနစ်ဆိုင်ရာ စီမံခန့်ခွဲမှုအားလုံးကို လုပ်နိုင်သည်။ Clinical approval ကို သက်ဆိုင်ရာ clinical reviewer က သီးခြားမှတ်တမ်းတင်ရသည်။', en: 'Full team, content and system administration. Clinical approval remains a separate clinical-reviewer decision.' },
-  content_editor: { mm: 'အကြောင်းအရာအားလုံးကို တည်းဖြတ်ပြီး သုံးသပ်လုပ်ငန်းကို စီမံနိုင်သည်။ ငွေပေးချေမှု၊ အဖွဲ့ဝင်အခန်းကဏ္ဍနှင့် clinical approval မပါဝင်ပါ။', en: 'Can edit all content and manage content review work. Billing, team roles and clinical approval are excluded.' },
+  owner: { mm: 'အဖွဲ့၊ အကြောင်းအရာနှင့် စနစ်ဆိုင်ရာ စီမံခန့်ခွဲမှုအားလုံးကို လုပ်နိုင်သည်။ အန္တရာယ်မြင့်စာသားအတွက် အထူးကျွမ်းကျင်သူ ဘေးကင်းရေးဆုံးဖြတ်ချက်ကို သီးခြားမှတ်တမ်းတင်ရသည်။', en: 'Full team, content and system administration. Specialist safety decisions for high-risk wording remain separate.' },
+  content_editor: { mm: 'အကြောင်းအရာအားလုံးကို တည်းဖြတ်ပြီး သုံးသပ်လုပ်ငန်းကို စီမံနိုင်သည်။ ငွေပေးချေမှု၊ အဖွဲ့ဝင်အခန်းကဏ္ဍနှင့် အထူးကျွမ်းကျင်သူ ဘေးကင်းရေးဆုံးဖြတ်ချက် မပါဝင်ပါ။', en: 'Can edit all content and manage content review work. Billing, team roles and specialist safety decisions are excluded.' },
   language_reviewer: { mm: 'မြန်မာနှင့် အင်္ဂလိပ်စာသားကို တိုက်ရိုက်ပြင်ပြီး ဘာသာစကားသုံးသပ်ချက် မှတ်တမ်းတင်နိုင်သည်။', en: 'Can correct wording directly and record language-review decisions.' },
   evidence_reviewer: { mm: 'စာသားကို ပြင်နိုင်ပြီး ကိုးကားအထောက်အထား သုံးသပ်ချက်ကို ပညာအရည်အချင်းနှင့်အတူ မှတ်တမ်းတင်နိုင်သည်။', en: 'Can correct wording and record qualified evidence-review decisions.' },
-  clinical_reviewer: { mm: 'စာသားကို ပြင်နိုင်ပြီး သက်ဆိုင်ရာ ဘေးကင်းရေးနှင့် ဆေးဘက်ဆိုင်ရာ သုံးသပ်ချက်ကို မှတ်တမ်းတင်နိုင်သည်။', en: 'Can correct wording and record qualified safety and clinical decisions.' },
+  clinical_reviewer: { mm: 'စာသားကို ပြင်နိုင်ပြီး အန္တရာယ်မြင့်စာသားအတွက် အထူးကျွမ်းကျင်သူ ဘေးကင်းရေးဆုံးဖြတ်ချက်ကို မှတ်တမ်းတင်နိုင်သည်။', en: 'Can correct wording and record qualified specialist safety decisions for high-risk wording.' },
   review_manager: { mm: 'ဦးစားပေးတန်းအားလုံးကို ကြည့်နိုင်ပြီး စိစစ်ခြင်း၊ လိုအပ်သည့် စစ်ဆေးမှုများ အတည်ပြုခြင်း၊ တောင်းဆိုခြင်း လုပ်နိုင်သည်။ သုံးသပ်ဆုံးဖြတ်ချက် မှတ်တမ်းတင်ခွင့်နှင့် ထုတ်ဝေခွင့် မရှိပါ။', en: 'Sees the whole priority queue; triages, confirms required reviews and requests them. Records no review decision and cannot publish.' },
   support: { mm: 'အသုံးပြုသူအကူအညီပေးနိုင်သော်လည်း အကြောင်းအရာကို တည်းဖြတ်၍ မရပါ။', en: 'Can support users but cannot edit content.' },
 };

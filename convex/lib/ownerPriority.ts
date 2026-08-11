@@ -259,6 +259,8 @@ export function classifyRecord(record: ClassifiableRecord): ProvisionalClassific
   for (const [name, pattern] of C_TRIGGERS) if (pattern.test(text)) clinicalTriggers.push(name);
 
   const bilingualConflicts = findBilingualConflicts(record.data);
+  // Legacy imported metadata used this exact phrase. Keep detecting it so an
+  // old row cannot escape review merely because current UI terminology changed.
   const pendingClinicalReferences = /pending clinical reviewer/i.test(safeStringify((record.data as Record<string, unknown> | null)?.references ?? ''));
 
   let riskClass: RiskClass;
@@ -364,15 +366,15 @@ export function computePriority(record: ClassifiableRecord): PriorityResult {
   }
   if (visible && provisionalResult.pendingClinicalReferences) {
     priority = 'P0';
-    reasons.push('parent-visible while its own text says clinical references are pending');
+      reasons.push('parent-visible while its own legacy metadata says specialist source review is pending');
   }
 
   if (!priority) {
     if (riskClass === 'C' || riskClass === 'D' || riskClass === 'E') {
       priority = visible ? 'P1' : 'P2';
       reasons.push(visible
-        ? 'parent-visible clinical/safety-sensitive record awaiting clinical review'
-        : 'unpublished clinical/safety-sensitive record');
+        ? 'parent-visible high-risk record awaiting specialist safety review'
+        : 'unpublished high-risk record awaiting specialist safety review');
     } else {
       priority = 'P3';
       reasons.push('standard review (Class A/B)');
