@@ -3,7 +3,7 @@
 // by the Convex CLI/admin (`npx convex run seed:run`), never by app clients, so
 // it safely skips the staff auth gate that guards the public importSeed. It is
 // idempotent (upsert by slug) and never overrides an existing review decision.
-import { internalMutation, internalQuery } from './_generated/server';
+import { internalMutation, internalQuery, type QueryCtx } from './_generated/server';
 import type { Doc } from './_generated/dataModel';
 import { v } from 'convex/values';
 import { logAudit } from './audit';
@@ -19,6 +19,14 @@ import {
   DUPLICATE_MILESTONE_SLUGS,
   type DuplicateMilestoneSlug,
 } from './lib/contentRetirements';
+import {
+  EVIDENCE_REVIEWED_EDUCATION_SOURCE,
+  FOCUSED_SPECIALIST_REVIEW_SLUGS,
+  isFocusedSpecialistReviewSlug,
+  isPublishedContentCorrectionSlug,
+  LEGACY_PENDING_REVIEW_SOURCE,
+  PUBLISHED_EVIDENCE_SAFETY_RELEASE_ID,
+} from './lib/evidenceSafetyRelease';
 
 const GRANTABLE_ROLES = [
   'owner',
@@ -150,6 +158,324 @@ type Item = {
   difficulty?: string; durationMinutes?: number; offline?: boolean; source: string;
   version: number; clinicalStatus: string; data: unknown; media: Media[]; searchText: string;
 };
+
+const PUBLISHED_RELEASE_LIMIT = 5_000;
+
+const publishedReleaseTargetValidator = v.object({
+  slug: v.string(),
+  expectedReviewRevision: v.number(),
+});
+
+const specialistReleaseTargetValidator = v.object({
+  slug: v.string(),
+  expectedClinicalStatus: v.string(),
+  expectedReviewRevision: v.number(),
+});
+
+const publishedReleaseRowValidator = v.object({
+  slug: v.string(),
+  reviewRevision: v.number(),
+  sourceState: v.union(v.literal('legacy'), v.literal('reviewed'), v.literal('unexpected')),
+  action: v.union(
+    v.literal('metadata_only'),
+    v.literal('correction_to_review'),
+    v.literal('specialist_to_review'),
+  ),
+});
+
+const specialistReleaseRowValidator = v.object({
+  slug: v.string(),
+  found: v.boolean(),
+  clinicalStatus: v.union(v.string(), v.null()),
+  reviewRevision: v.union(v.number(), v.null()),
+});
+
+function sourceState(source: string): 'legacy' | 'reviewed' | 'unexpected' {
+  if (source === LEGACY_PENDING_REVIEW_SOURCE) return 'legacy';
+  if (source === EVIDENCE_REVIEWED_EDUCATION_SOURCE) return 'reviewed';
+  return 'unexpected';
+}
+
+function publishedReleaseAction(slug: string) {
+  if (isPublishedContentCorrectionSlug(slug)) return 'correction_to_review' as const;
+  if (isFocusedSpecialistReviewSlug(slug)) return 'specialist_to_review' as const;
+  return 'metadata_only' as const;
+}
+
+function desiredLibraryPatch(desired: Item) {
+  return {
+    type: desired.type,
+    slug: desired.slug,
+    ageGroupKey: desired.ageGroupKey,
+    domainKey: desired.domainKey,
+    category: desired.category,
+    titleMm: desired.titleMm,
+    titleEn: desired.titleEn,
+    summaryMm: desired.summaryMm,
+    summaryEn: desired.summaryEn,
+    tags: desired.tags,
+    difficulty: desired.difficulty,
+    durationMinutes: desired.durationMinutes,
+    offline: desired.offline,
+    data: desired.data,
+    source: desired.source,
+    version: desired.version,
+    searchText: desired.searchText,
+  };
+}
+
+async function evidenceSafetyReleaseApplied(ctx: Pick<QueryCtx, 'db'>) {
+  const rows = await ctx.db
+    .query('auditLogs')
+    .withIndex('by_action', (q) => q.eq('action', 'library.evidence_safety.release'))
+    .take(100);
+  return rows.some((row) => row.summary === PUBLISHED_EVIDENCE_SAFETY_RELEASE_ID);
+}
+
+/**
+ * Read-only snapshot for the exact published-content release. The caller must
+ * pass every returned slug/revision back to the mutation. This binds the write
+ * to the complete parent-visible catalogue instead of a stale count.
+ */
+export const preflightPublishedEvidenceSafetyRelease = internalQuery({
+  args: { releaseId: v.literal(PUBLISHED_EVIDENCE_SAFETY_RELEASE_ID) },
+  returns: v.object({
+    releaseApplied: v.boolean(),
+    published: v.array(publishedReleaseRowValidator),
+    specialist: v.array(specialistReleaseRowValidator),
+  }),
+  handler: async (ctx) => {
+    const publishedRows = await ctx.db
+      .query('libraryContent')
+      .withIndex('by_status', (q) => q.eq('clinicalStatus', 'published'))
+      .take(PUBLISHED_RELEASE_LIMIT + 1);
+    if (publishedRows.length > PUBLISHED_RELEASE_LIMIT) {
+      throw new Error('Published catalogue exceeds the guarded release limit');
+    }
+    const published = publishedRows
+      .map((row) => ({
+        slug: row.slug,
+        reviewRevision: row.reviewRevision ?? 1,
+        sourceState: sourceState(row.source),
+        action: publishedReleaseAction(row.slug),
+      }))
+      .sort((a, b) => a.slug.localeCompare(b.slug));
+    const specialist = [];
+    for (const slug of FOCUSED_SPECIALIST_REVIEW_SLUGS) {
+      const row = await ctx.db
+        .query('libraryContent')
+        .withIndex('by_slug', (q) => q.eq('slug', slug))
+        .unique();
+      specialist.push({
+        slug,
+        found: row !== null,
+        clinicalStatus: row?.clinicalStatus ?? null,
+        reviewRevision: row ? (row.reviewRevision ?? 1) : null,
+      });
+    }
+    return {
+      releaseApplied: await evidenceSafetyReleaseApplied(ctx),
+      published,
+      specialist,
+    };
+  },
+});
+
+/**
+ * Reconcile reviewed source metadata and stage every substantive or
+ * specialist-scoped edit at a fresh review revision.
+ *
+ * The exact current published set and every review revision are validated
+ * before the first write. Ordinary metadata-only rows remain published;
+ * changed wording and emergency-decision wording fail closed into review.
+ */
+export const applyPublishedEvidenceSafetyRelease = internalMutation({
+  args: {
+    releaseId: v.literal(PUBLISHED_EVIDENCE_SAFETY_RELEASE_ID),
+    publishedTargets: v.array(publishedReleaseTargetValidator),
+    specialistTargets: v.array(specialistReleaseTargetValidator),
+  },
+  returns: v.object({
+    alreadyApplied: v.boolean(),
+    metadataUpdated: v.number(),
+    correctionsStaged: v.number(),
+    specialistStaged: v.number(),
+    specialistAlreadyInReview: v.number(),
+    unchanged: v.number(),
+    total: v.number(),
+  }),
+  handler: async (ctx, args) => {
+    if (await evidenceSafetyReleaseApplied(ctx)) {
+      return {
+        alreadyApplied: true,
+        metadataUpdated: 0,
+        correctionsStaged: 0,
+        specialistStaged: 0,
+        specialistAlreadyInReview: 0,
+        unchanged: 0,
+        total: 0,
+      };
+    }
+
+    const publishedRows = await ctx.db
+      .query('libraryContent')
+      .withIndex('by_status', (q) => q.eq('clinicalStatus', 'published'))
+      .take(PUBLISHED_RELEASE_LIMIT + 1);
+    if (publishedRows.length > PUBLISHED_RELEASE_LIMIT) {
+      throw new Error('Published catalogue exceeds the guarded release limit');
+    }
+    const suppliedSlugs = new Set(args.publishedTargets.map((target) => target.slug));
+    const currentSlugs = new Set(publishedRows.map((row) => row.slug));
+    if (
+      suppliedSlugs.size !== args.publishedTargets.length
+      || args.publishedTargets.length !== publishedRows.length
+      || [...currentSlugs].some((slug) => !suppliedSlugs.has(slug))
+    ) {
+      throw new Error('Published targets must match the complete current published catalogue');
+    }
+
+    const expectedSpecialistSlugs = new Set<string>(FOCUSED_SPECIALIST_REVIEW_SLUGS);
+    const suppliedSpecialistSlugs = new Set(args.specialistTargets.map((target) => target.slug));
+    if (
+      suppliedSpecialistSlugs.size !== args.specialistTargets.length
+      || args.specialistTargets.length !== expectedSpecialistSlugs.size
+      || [...expectedSpecialistSlugs].some((slug) => !suppliedSpecialistSlugs.has(slug))
+    ) {
+      throw new Error('Specialist targets must match the complete focused specialist set');
+    }
+
+    let specialistAlreadyInReview = 0;
+    const specialistTargetBySlug = new Map(args.specialistTargets.map((target) => [target.slug, target]));
+    for (const slug of FOCUSED_SPECIALIST_REVIEW_SLUGS) {
+      const row = await ctx.db
+        .query('libraryContent')
+        .withIndex('by_slug', (q) => q.eq('slug', slug))
+        .unique();
+      const target = specialistTargetBySlug.get(slug);
+      if (
+        !row
+        || !target
+        || row.clinicalStatus !== target.expectedClinicalStatus
+        || (row.reviewRevision ?? 1) !== target.expectedReviewRevision
+      ) {
+        throw new Error(`Specialist target changed after preflight: ${slug}`);
+      }
+      if (row.clinicalStatus !== 'published' && row.clinicalStatus !== 'clinical_review') {
+        throw new Error(`Specialist target is not in a releasable review state: ${slug}`);
+      }
+      if (row.clinicalStatus === 'clinical_review') specialistAlreadyInReview += 1;
+    }
+
+    const desiredBySlug = new Map((seedData as unknown as Item[]).map((item) => [item.slug, item]));
+    const targetBySlug = new Map(args.publishedTargets.map((target) => [target.slug, target]));
+    for (const row of publishedRows) {
+      const target = targetBySlug.get(row.slug);
+      if (!target || target.expectedReviewRevision !== (row.reviewRevision ?? 1)) {
+        throw new Error(`Published target has a newer review revision: ${row.slug}`);
+      }
+      if (sourceState(row.source) === 'unexpected') {
+        throw new Error(`Published target has unexpected source metadata: ${row.slug}`);
+      }
+      if (!desiredBySlug.has(row.slug)) {
+        throw new Error(`Published target is missing from the reviewed seed: ${row.slug}`);
+      }
+    }
+
+    let metadataUpdated = 0;
+    let correctionsStaged = 0;
+    let specialistStaged = 0;
+    let unchanged = 0;
+    const now = Date.now();
+    for (const row of publishedRows) {
+      const action = publishedReleaseAction(row.slug);
+      if (action === 'metadata_only') {
+        if (row.source === EVIDENCE_REVIEWED_EDUCATION_SOURCE) {
+          unchanged += 1;
+          continue;
+        }
+        await ctx.db.patch(row._id, {
+          source: EVIDENCE_REVIEWED_EDUCATION_SOURCE,
+          updatedAt: now,
+        });
+        await logAudit(
+          ctx,
+          null,
+          'library.evidence_safety.source_metadata_updated',
+          'libraryContent',
+          row._id,
+          `${PUBLISHED_EVIDENCE_SAFETY_RELEASE_ID} · ${row.slug}`,
+          { before: row.source, after: EVIDENCE_REVIEWED_EDUCATION_SOURCE },
+        );
+        metadataUpdated += 1;
+        continue;
+      }
+
+      const desired = desiredBySlug.get(row.slug);
+      if (!desired) throw new Error(`Reviewed seed target missing: ${row.slug}`);
+      const reviewRevision = (row.reviewRevision ?? 1) + 1;
+      await ctx.db.patch(row._id, {
+        ...desiredLibraryPatch(desired),
+        reviewRevision,
+        clinicalStatus: 'clinical_review',
+        reviewerId: undefined,
+        reviewerQualification: undefined,
+        reviewerDisplayName: undefined,
+        reviewScope: undefined,
+        reviewedAt: undefined,
+        nextReviewAt: undefined,
+        reviewNote: undefined,
+        updatedAt: now,
+      });
+      await logAudit(
+        ctx,
+        null,
+        action === 'specialist_to_review'
+          ? 'library.evidence_safety.specialist_review_staged'
+          : 'library.evidence_safety.correction_staged',
+        'libraryContent',
+        row._id,
+        `${PUBLISHED_EVIDENCE_SAFETY_RELEASE_ID} · ${row.slug}`,
+        {
+          before: JSON.stringify({
+            clinicalStatus: row.clinicalStatus,
+            reviewRevision: row.reviewRevision ?? 1,
+          }),
+          after: JSON.stringify({ clinicalStatus: 'clinical_review', reviewRevision }),
+        },
+      );
+      if (action === 'specialist_to_review') specialistStaged += 1;
+      else correctionsStaged += 1;
+    }
+
+    await logAudit(
+      ctx,
+      null,
+      'library.evidence_safety.release',
+      'libraryContent',
+      undefined,
+      PUBLISHED_EVIDENCE_SAFETY_RELEASE_ID,
+      {
+        after: JSON.stringify({
+          metadataUpdated,
+          correctionsStaged,
+          specialistStaged,
+          specialistAlreadyInReview,
+          unchanged,
+          total: publishedRows.length,
+        }),
+      },
+    );
+    return {
+      alreadyApplied: false,
+      metadataUpdated,
+      correctionsStaged,
+      specialistStaged,
+      specialistAlreadyInReview,
+      unchanged,
+      total: publishedRows.length,
+    };
+  },
+});
 
 const duplicateMilestoneSlugValidator = v.union(
   v.literal('ms_5_6m_gross_motor_1'),
