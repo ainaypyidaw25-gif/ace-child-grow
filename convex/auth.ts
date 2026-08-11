@@ -41,10 +41,10 @@ const passwordResetEmail: EmailConfig = {
 export const { auth, signIn, signOut, store, isAuthenticated } = convexAuth({
   providers: [Google({
     // These credentials live in the Convex deployment environment. Binding
-    // them explicitly prevents Auth.js from emitting client_id=undefined in
-    // isolated preview deployments, where AUTH_GOOGLE_* aliases are absent.
-    clientId: process.env.GOOGLE_ID,
-    clientSecret: process.env.GOOGLE_SECRET,
+    // the Auth.js-standard AUTH_GOOGLE_* names explicitly prevents an
+    // undefined client ID while keeping secrets out of the frontend bundle.
+    clientId: process.env.AUTH_GOOGLE_ID,
+    clientSecret: process.env.AUTH_GOOGLE_SECRET,
   }), Password({
     reset: passwordResetEmail,
     validatePasswordRequirements(password) {
