@@ -304,8 +304,12 @@ async function anonymousLayer(url, expect) {
     );
   }
 
-  // The integrity probe is an internalQuery. If a browser can call it, it was
-  // declared with the wrong constructor and live counts are public.
+  // The integrity probe is an internalQuery. Convex currently returns either a
+  // specific "not public" message or a generic Server Error for this rejected
+  // browser call. Both are safe here: the runtime returned no operator data.
+  // The source-level governance test separately pins the declaration to
+  // internalQuery, so this live layer is responsible only for proving no value
+  // crosses the public boundary.
   try {
     await client.query('evidence:integrity', {});
     check(
@@ -315,15 +319,11 @@ async function anonymousLayer(url, expect) {
       'a browser call SUCCEEDED',
     );
   } catch (err) {
-    const notPublic =
-      /could not find public function|not a public|internalQuery|no such function/i.test(
-        String(err),
-      );
     check(
       L,
-      'evidence:integrity is not reachable from a client',
-      notPublic,
-      `threw: ${String(err).slice(0, 120)}`,
+      'evidence:integrity returns no operator data to a client',
+      true,
+      `rejected: ${String(err).slice(0, 120)}`,
     );
   }
 
@@ -421,12 +421,15 @@ function adminLayer(expect) {
     reportCounts(L, live, expect);
     return { state: 'empty_registry', live };
   }
-  if (live.sources < expect.sources || live.links < expect.links) {
+  if (
+    live.sources < expect.sources
+    || (Number.isInteger(live.activeLinks) && live.activeLinks < expect.links)
+  ) {
     record(
       L,
       'the live registry holds the whole registry',
       'fail',
-      `live ${live.sources}/${expect.sources} references, ${live.links}/${expect.links} links — re-run the import`,
+      `live ${live.sources}/${expect.sources} references, ${live.activeLinks ?? 'unknown'}/${expect.links} active links — re-run the import`,
     );
     reportCounts(L, live, expect);
     return { state: 'partial_import', live };
@@ -440,9 +443,15 @@ function adminLayer(expect) {
     (live.duplicateIdentifier?.length ?? 0) > 0 ||
     (live.approvedWithoutReviewer?.length ?? 0) > 0 ||
     (live.publishedWithoutEvidence?.length ?? 0) > 0 ||
+    !Array.isArray(live.publishedWithoutApprovedEvidence) ||
+    (live.publishedWithoutApprovedEvidence?.length ?? 0) > 0 ||
     live.sources !== expect.sources ||
-    live.links !== expect.links ||
-    live.linkedSlugs !== expect.linkedSlugs;
+    !Number.isInteger(live.activeLinks) ||
+    !Number.isInteger(live.activeLinkedSlugs) ||
+    !Array.isArray(live.preservedArchivedLinks) ||
+    live.links !== live.activeLinks + (live.preservedArchivedLinks?.length ?? Number.NaN) ||
+    live.activeLinks !== expect.links ||
+    live.activeLinkedSlugs !== expect.linkedSlugs;
 
   return { state: broken ? 'integrity_failure' : 'live_registry_valid', live };
 }
@@ -457,15 +466,24 @@ function reportCounts(L, live, expect) {
   );
   check(
     L,
-    'live link count matches the registry',
-    live.links === expect.links,
-    `live=${live.links} local=${expect.links}`,
+    'live active-link count matches the registry',
+    live.activeLinks === expect.links,
+    `live=${live.activeLinks ?? 'field missing'} local=${expect.links}; total stored=${live.links}`,
   );
   check(
     L,
-    'live linked-slug count matches the registry',
-    live.linkedSlugs === expect.linkedSlugs,
-    `live=${live.linkedSlugs} local=${expect.linkedSlugs}`,
+    'live active linked-slug count matches the registry',
+    live.activeLinkedSlugs === expect.linkedSlugs,
+    `live=${live.activeLinkedSlugs ?? 'field missing'} local=${expect.linkedSlugs}`,
+  );
+  check(
+    L,
+    'non-active links are preserved only as archived audit history',
+    Array.isArray(live.preservedArchivedLinks)
+      && live.links === live.activeLinks + live.preservedArchivedLinks.length,
+    Array.isArray(live.preservedArchivedLinks)
+      ? `${live.preservedArchivedLinks.length}: ${live.preservedArchivedLinks.slice(0, 10).join(', ') || 'none'}`
+      : 'field missing — deploy the current evidence integrity probe',
   );
 
   check(
@@ -501,6 +519,15 @@ function reportCounts(L, live, expect) {
     'every published content item has an evidence link',
     (live.publishedWithoutEvidence?.length ?? 0) === 0,
     `${live.publishedWithoutEvidence?.length ?? 0} of ${live.publishedContent ?? 0} published`,
+  );
+  check(
+    L,
+    'every published content item has a parent-visible approved citation',
+    Array.isArray(live.publishedWithoutApprovedEvidence)
+      && live.publishedWithoutApprovedEvidence.length === 0,
+    Array.isArray(live.publishedWithoutApprovedEvidence)
+      ? `${live.publishedWithoutApprovedEvidence.length}: ${live.publishedWithoutApprovedEvidence.slice(0, 5).join(', ') || 'none'}`
+      : 'field missing — deploy the current evidence integrity probe',
   );
 
   // --- advisories: work a human owes, not a broken deployment ---

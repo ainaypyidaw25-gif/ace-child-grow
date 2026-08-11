@@ -365,6 +365,27 @@ describe('live check state machine', () => {
     expect(broken).not.toContain('unusedSources');
   });
 
+  it('fails closed when the deployed probe cannot report approved parent citations', () => {
+    const broken = liveSrc.slice(
+      liveSrc.indexOf('const broken ='),
+      liveSrc.indexOf("return { state: broken"),
+    );
+    expect(broken).toContain('!Array.isArray(live.publishedWithoutApprovedEvidence)');
+    expect(broken).toContain('(live.publishedWithoutApprovedEvidence?.length ?? 0) > 0');
+  });
+
+  it('compares the registry with active links while preserving archived audit history', () => {
+    const broken = liveSrc.slice(
+      liveSrc.indexOf('const broken ='),
+      liveSrc.indexOf("return { state: broken"),
+    );
+    expect(broken).toContain('!Number.isInteger(live.activeLinks)');
+    expect(broken).toContain('!Number.isInteger(live.activeLinkedSlugs)');
+    expect(broken).toContain('!Array.isArray(live.preservedArchivedLinks)');
+    expect(broken).toContain('live.activeLinks !== expect.links');
+    expect(broken).not.toContain('live.links !== expect.links');
+  });
+
   it('never lets an absent function pass as a working authorization gate', () => {
     expect(liveSrc).toContain('const NOT_DEPLOYED =');
     expect(liveSrc).toContain('const UNAUTHORIZED =');
@@ -378,6 +399,9 @@ describe('live check state machine', () => {
     for (const key of [
       'sources',
       'links',
+      'activeLinks',
+      'activeLinkedSlugs',
+      'preservedArchivedLinks',
       'orphanLinks',
       'danglingLinks',
       'duplicateIdentifier',

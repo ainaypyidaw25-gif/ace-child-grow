@@ -156,6 +156,66 @@ function sameSource(existing: Record<string, unknown>, next: Record<string, unkn
   });
 }
 
+/**
+ * Published rows are parent-visible, but `forContent` deliberately exposes
+ * approved sources only. A link to awaiting or retired evidence therefore does
+ * not make a parent-visible citation. Keep this calculation separate from the
+ * database query so the exact release rule can be regression-tested.
+ */
+export function publishedSlugsWithoutApprovedEvidence(
+  publishedSlugs: readonly string[],
+  links: readonly { slug: string; sourceIds: readonly string[] }[],
+  sources: readonly { sourceId: string; reviewStatus: string }[],
+): string[] {
+  const approvedSourceIds = new Set(
+    sources
+      .filter((source) => source.reviewStatus === 'approved')
+      .map((source) => source.sourceId),
+  );
+  const approvedSlugs = new Set(
+    links
+      .filter((link) => link.sourceIds.some((sourceId) => approvedSourceIds.has(sourceId)))
+      .map((link) => link.slug),
+  );
+  return [...publishedSlugs]
+    .filter((slug) => !approvedSlugs.has(slug))
+    .sort((a, b) => a.localeCompare(b));
+}
+
+/**
+ * Evidence links for archived library rows are deliberately retained as audit
+ * history, but they are no longer part of the active source registry that an
+ * import or release check should compare with. Anything that is not bound to
+ * an archived library row remains active, including safety-rule and hope-topic
+ * links that do not have a libraryContent row.
+ */
+export function evidenceLinkReadinessCounts(
+  links: readonly { kind: string; slug: string }[],
+  libraryRows: readonly { type: string; slug: string; clinicalStatus: string }[],
+): {
+  activeLinks: number;
+  activeLinkedSlugs: number;
+  preservedArchivedLinks: string[];
+} {
+  const archivedKeys = new Set(
+    libraryRows
+      .filter((row) => row.clinicalStatus === 'archived')
+      .map((row) => `${row.type}:${row.slug}`),
+  );
+  const activeKeys: string[] = [];
+  const preservedArchivedLinks: string[] = [];
+  for (const link of links) {
+    const key = `${link.kind}:${link.slug}`;
+    if (archivedKeys.has(key)) preservedArchivedLinks.push(key);
+    else activeKeys.push(key);
+  }
+  return {
+    activeLinks: activeKeys.length,
+    activeLinkedSlugs: new Set(activeKeys).size,
+    preservedArchivedLinks: preservedArchivedLinks.sort((a, b) => a.localeCompare(b)),
+  };
+}
+
 const EMPTY_LIST = {
   allowed: false as const,
   total: 0,
@@ -877,13 +937,20 @@ export const integrity = internalQuery({
       )
       .map((s) => s.sourceId);
 
-    const publishedContent = (await ctx.db.query('libraryContent').collect()).filter(
+    const libraryContent = await ctx.db.query('libraryContent').collect();
+    const publishedContent = libraryContent.filter(
       (c) => c.clinicalStatus === 'published',
     );
     const linkedSlugs = new Set(links.map((l) => l.slug));
+    const linkReadiness = evidenceLinkReadinessCounts(links, libraryContent);
     const publishedWithoutEvidence = publishedContent
       .filter((c) => !linkedSlugs.has(c.slug))
       .map((c) => c.slug);
+    const publishedWithoutApprovedEvidence = publishedSlugsWithoutApprovedEvidence(
+      publishedContent.map((content) => content.slug),
+      links,
+      sources,
+    );
 
     // A reference nothing cites is either a link that was never made or a
     // record that should be retired; either way an operator should see it.
@@ -939,7 +1006,10 @@ export const integrity = internalQuery({
       todayIso: today,
       sources: sources.length,
       links: links.length,
-      linkedSlugs: linkedSlugs.size,
+      linkedSlugs: new Set(links.map((l) => `${l.kind}:${l.slug}`)).size,
+      activeLinks: linkReadiness.activeLinks,
+      activeLinkedSlugs: linkReadiness.activeLinkedSlugs,
+      preservedArchivedLinks: linkReadiness.preservedArchivedLinks,
       byStatus,
       approved: byStatus.approved ?? 0,
       awaitingReview: byStatus.awaiting_review ?? 0,
@@ -958,6 +1028,7 @@ export const integrity = internalQuery({
       approvedWithoutReviewer,
       publishedContent: publishedContent.length,
       publishedWithoutEvidence,
+      publishedWithoutApprovedEvidence,
     };
   },
 });
