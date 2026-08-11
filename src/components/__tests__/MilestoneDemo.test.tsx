@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { LocaleProvider } from '../../app/LocaleContext';
 import { MilestoneDemo } from '../../screens/MilestoneDemo';
@@ -136,5 +136,35 @@ describe('MilestoneDemo (component)', () => {
     expect(screen.getByRole('status')).toHaveTextContent('အရေးပေါ်လက္ခဏာများ မရှိပါဟု မှတ်သားထားသည်။');
     expect(screen.queryByRole('button', { name: 'အသက်ရှူရန် အလွန်ခက်ခဲခြင်း' })).not.toBeInTheDocument();
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+  });
+
+  it('uses clear skill-loss answers and makes an affirmed loss urgent', async () => {
+    recordSession.mockClear();
+    renderWithProviders();
+    fireEvent.click(screen.getByText('လုပ်နိုင်ပြီ'));
+    fireEvent.click(screen.getByText('ရှေ့သို့'));
+    fireEvent.click(screen.getAllByRole('button', { name: 'လုပ်နိုင်ပြီ' })[0]);
+    fireEvent.click(screen.getByRole('button', { name: 'လက္ခဏာစာရင်းကို ကြည့်မည်' }));
+    fireEvent.click(screen.getByRole('button', { name: 'ဤလက္ခဏာများ မရှိပါ' }));
+
+    const skillLossGroup = screen.getByRole('group', {
+      name: /အရင်လုပ်နိုင်ခဲ့သော.*မလုပ်နိုင်တော့ပါသလား/,
+    });
+    expect(within(skillLossGroup).getByRole('button', { name: 'ရှိပါသည်' })).toBeInTheDocument();
+    expect(within(skillLossGroup).getByRole('button', { name: 'မရှိပါ' })).toBeInTheDocument();
+    expect(within(skillLossGroup).queryByRole('button', { name: 'လုပ်နိုင်ပြီ' })).not.toBeInTheDocument();
+
+    fireEvent.click(within(skillLossGroup).getByRole('button', { name: 'ရှိပါသည်' }));
+    expect(screen.getByRole('alert')).toBeInTheDocument();
+    const saveButton = screen.getByRole('button', { name: 'သိမ်းဆည်းမည်' });
+    expect(saveButton).toBeEnabled();
+    fireEvent.click(saveButton);
+
+    await waitFor(() => expect(recordSession).toHaveBeenCalledWith(expect.objectContaining({
+      resultState: 'red',
+      lostSkill: true,
+      urgentSymptoms: [],
+      resultSnapshot: expect.objectContaining({ urgentSymptoms: ['loss_of_acquired_skills'] }),
+    })));
   });
 });
