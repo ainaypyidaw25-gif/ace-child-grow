@@ -644,17 +644,27 @@ describe('Convex registered handlers enforce authorization', () => {
     }));
   });
 
-  it('milestone server forces red when any validated acute symptom is reported', async () => {
+  it('milestone server preserves all eight validated acute symptoms and forces red', async () => {
     authState.userId = 'user-1';
     const context = ctx({ get: { _id: 'child-1', userId: 'user-1' } });
+    const urgentSymptoms = [
+      'severe_breathing_difficulty',
+      'blue_lips',
+      'breathing_pauses',
+      'seizure',
+      'unresponsiveness',
+      'sudden_weakness',
+      'serious_injury',
+      'severe_dehydration',
+    ];
     await handler(recordSession)(context, {
       childId: 'child-1', resultState: 'green', lostSkill: false,
-      urgentSymptoms: ['seizure'], resultSnapshot: { state: 'green' }, responses: [],
+      urgentSymptoms, resultSnapshot: { state: 'green' }, responses: [],
     });
     expect(context.db.insert).toHaveBeenCalledWith('milestoneSessions', expect.objectContaining({
       resultState: 'red',
       resultSnapshot: expect.objectContaining({
-        state: 'red', urgentSymptoms: ['seizure'], safetyUrgent: true,
+        state: 'red', urgentSymptoms, safetyUrgent: true,
       }),
     }));
   });

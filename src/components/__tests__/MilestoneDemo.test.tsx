@@ -75,39 +75,42 @@ describe('MilestoneDemo (component)', () => {
     expect(screen.getByText('စိတ်ဝင်စားသည့်အရာကို လက်ညှိုးထိုးပြပါသလား။')).toBeInTheDocument();
   });
 
-  it('collects all eight acute symptoms and sends a selected symptom to the urgent-result engine', async () => {
+  it('collects all eight acute symptoms and sends every selection to the urgent-result engine', async () => {
     recordSession.mockClear();
     renderWithProviders();
     fireEvent.click(screen.getByText('လုပ်နိုင်ပြီ'));
     fireEvent.click(screen.getByText('ရှေ့သို့'));
     fireEvent.click(screen.getAllByRole('button', { name: 'လုပ်နိုင်ပြီ' })[0]);
 
-    const acuteLabels = [
-      'အသက်ရှူရန် အလွန်ခက်ခဲခြင်း',
-      'နှုတ်ခမ်းပြာလာခြင်း',
-      'အသက်ရှူရပ်သလို ဖြစ်ခြင်း',
-      'တက်ခြင်း',
-      'မနိုးနိုင်ခြင်း သို့မဟုတ် တုံ့ပြန်မှုမရှိခြင်း',
-      'ရုတ်တရက် အားနည်းသွားခြင်း',
-      'ပြင်းထန်သော ထိခိုက်ဒဏ်ရာ',
-      'ပြင်းထန်စွာ ရေဓာတ်ခန်းခြောက်ခြင်း',
+    const acuteSymptoms = [
+      ['အသက်ရှူရန် အလွန်ခက်ခဲခြင်း', 'severe_breathing_difficulty'],
+      ['နှုတ်ခမ်းပြာလာခြင်း', 'blue_lips'],
+      ['အသက်ရှူရပ်သလို ဖြစ်ခြင်း', 'breathing_pauses'],
+      ['တက်ခြင်း', 'seizure'],
+      ['မနိုးနိုင်ခြင်း သို့မဟုတ် တုံ့ပြန်မှုမရှိခြင်း', 'unresponsiveness'],
+      ['ရုတ်တရက် အားနည်းသွားခြင်း', 'sudden_weakness'],
+      ['ပြင်းထန်သော ထိခိုက်ဒဏ်ရာ', 'serious_injury'],
+      ['ပြင်းထန်စွာ ရေဓာတ်ခန်းခြောက်ခြင်း', 'severe_dehydration'],
     ];
-    for (const label of acuteLabels) {
+    for (const [label] of acuteSymptoms) {
       expect(screen.getByRole('button', { name: label })).toBeInTheDocument();
     }
 
     const saveButton = screen.getByRole('button', { name: 'သိမ်းဆည်းမည်' });
     fireEvent.click(screen.getByRole('button', { name: 'မရှိပါ' }));
     expect(saveButton).toBeDisabled();
-    fireEvent.click(screen.getByRole('button', { name: 'တက်ခြင်း' }));
+    for (const [label] of acuteSymptoms) {
+      fireEvent.click(screen.getByRole('button', { name: label }));
+    }
     expect(screen.getByRole('alert')).toBeInTheDocument();
     expect(saveButton).toBeEnabled();
     fireEvent.click(saveButton);
 
+    const urgentSymptoms = acuteSymptoms.map(([, symptom]) => symptom);
     await waitFor(() => expect(recordSession).toHaveBeenCalledWith(expect.objectContaining({
       resultState: 'red',
-      urgentSymptoms: ['seizure'],
-      resultSnapshot: expect.objectContaining({ urgentSymptoms: ['seizure'] }),
+      urgentSymptoms,
+      resultSnapshot: expect.objectContaining({ urgentSymptoms }),
     })));
   });
 });
