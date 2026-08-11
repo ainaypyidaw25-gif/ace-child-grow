@@ -27,6 +27,10 @@ import {
   LEGACY_PENDING_REVIEW_SOURCE,
   PUBLISHED_EVIDENCE_SAFETY_RELEASE_ID,
 } from './lib/evidenceSafetyRelease';
+import {
+  PLACEHOLDER_PRINTABLE_SLUGS,
+  PRINTABLE_PAYLOAD_RELEASE_ID,
+} from './lib/printablePayloadRelease';
 
 const GRANTABLE_ROLES = [
   'owner',
@@ -474,6 +478,217 @@ export const applyPublishedEvidenceSafetyRelease = internalMutation({
       unchanged,
       total: publishedRows.length,
     };
+  },
+});
+
+const printablePayloadTargetValidator = v.object({
+  slug: v.string(),
+  expectedReviewRevision: v.number(),
+});
+
+const printablePayloadPreflightRowValidator = v.object({
+  slug: v.string(),
+  found: v.boolean(),
+  clinicalStatus: v.union(v.string(), v.null()),
+  reviewRevision: v.union(v.number(), v.null()),
+  pdfRows: v.number(),
+  approvedPayloads: v.number(),
+  previewSeedReady: v.boolean(),
+});
+
+function hasApprovedPrintablePayload(media: Doc<'libraryMedia'>): boolean {
+  return (
+    (media.kind === 'pdf' || media.kind === 'download')
+    && media.placeholder !== true
+    && media.reviewStatus === 'approved'
+    && Boolean(media.url || media.storageId)
+  );
+}
+
+function isPreviewOnlyPrintable(item: Item | undefined): boolean {
+  if (!item || item.type !== 'printable' || typeof item.data !== 'object' || item.data === null) return false;
+  const data = item.data as Record<string, unknown>;
+  return (
+    data.format === 'Preview only — bilingual PDF not yet available'
+    && data.availability === 'preview_only'
+  );
+}
+
+async function printablePayloadReleaseApplied(ctx: Pick<QueryCtx, 'db'>) {
+  const rows = await ctx.db
+    .query('auditLogs')
+    .withIndex('by_action', (q) => q.eq('action', 'library.printable_payload.release'))
+    .take(100);
+  return rows.some((row) => row.summary === PRINTABLE_PAYLOAD_RELEASE_ID);
+}
+
+/** Read-only snapshot of the exact published placeholder-printable release. */
+export const preflightPrintablePayloadRelease = internalQuery({
+  args: { releaseId: v.literal(PRINTABLE_PAYLOAD_RELEASE_ID) },
+  returns: v.object({
+    releaseApplied: v.boolean(),
+    publishedPrintableSlugs: v.array(v.string()),
+    targets: v.array(printablePayloadPreflightRowValidator),
+  }),
+  handler: async (ctx) => {
+    const desiredBySlug = new Map((seedData as unknown as Item[]).map((item) => [item.slug, item]));
+    const printableRows = await ctx.db
+      .query('libraryContent')
+      .withIndex('by_type', (q) => q.eq('type', 'printable'))
+      .take(PUBLISHED_RELEASE_LIMIT + 1);
+    if (printableRows.length > PUBLISHED_RELEASE_LIMIT) {
+      throw new Error('Printable catalogue exceeds the guarded release limit');
+    }
+    const targets = [];
+    for (const slug of PLACEHOLDER_PRINTABLE_SLUGS) {
+      const row = printableRows.find((candidate) => candidate.slug === slug) ?? null;
+      const mediaRows = await ctx.db
+        .query('libraryMedia')
+        .withIndex('by_content', (q) => q.eq('contentSlug', slug))
+        .take(100);
+      targets.push({
+        slug,
+        found: row !== null,
+        clinicalStatus: row?.clinicalStatus ?? null,
+        reviewRevision: row ? (row.reviewRevision ?? 1) : null,
+        pdfRows: mediaRows.filter((media) => media.kind === 'pdf' || media.kind === 'download').length,
+        approvedPayloads: mediaRows.filter(hasApprovedPrintablePayload).length,
+        previewSeedReady: isPreviewOnlyPrintable(desiredBySlug.get(slug)),
+      });
+    }
+    return {
+      releaseApplied: await printablePayloadReleaseApplied(ctx),
+      publishedPrintableSlugs: printableRows
+        .filter((row) => row.clinicalStatus === 'published')
+        .map((row) => row.slug)
+        .sort((a, b) => a.localeCompare(b)),
+      targets,
+    };
+  },
+});
+
+/**
+ * Withdraw the exact parent-visible printable rows whose promised PDF is only
+ * a placeholder. The reviewed preview-only catalogue wording is staged at a
+ * fresh revision; media and history remain available to staff.
+ */
+export const applyPrintablePayloadRelease = internalMutation({
+  args: {
+    releaseId: v.literal(PRINTABLE_PAYLOAD_RELEASE_ID),
+    targets: v.array(printablePayloadTargetValidator),
+  },
+  returns: v.object({
+    alreadyApplied: v.boolean(),
+    staged: v.number(),
+    total: v.number(),
+  }),
+  handler: async (ctx, args) => {
+    if (await printablePayloadReleaseApplied(ctx)) {
+      return { alreadyApplied: true, staged: 0, total: 0 };
+    }
+
+    const expectedSlugs = new Set<string>(PLACEHOLDER_PRINTABLE_SLUGS);
+    const suppliedSlugs = new Set(args.targets.map((target) => target.slug));
+    if (
+      suppliedSlugs.size !== args.targets.length
+      || args.targets.length !== expectedSlugs.size
+      || [...expectedSlugs].some((slug) => !suppliedSlugs.has(slug))
+    ) {
+      throw new Error('Printable targets must match the exact placeholder release set');
+    }
+
+    const printableRows = await ctx.db
+      .query('libraryContent')
+      .withIndex('by_type', (q) => q.eq('type', 'printable'))
+      .take(PUBLISHED_RELEASE_LIMIT + 1);
+    if (printableRows.length > PUBLISHED_RELEASE_LIMIT) {
+      throw new Error('Printable catalogue exceeds the guarded release limit');
+    }
+    const currentPublishedSlugs = printableRows
+      .filter((row) => row.clinicalStatus === 'published')
+      .map((row) => row.slug);
+    if (
+      currentPublishedSlugs.length !== expectedSlugs.size
+      || currentPublishedSlugs.some((slug) => !expectedSlugs.has(slug))
+    ) {
+      throw new Error('Published printable catalogue changed after review');
+    }
+
+    const desiredBySlug = new Map((seedData as unknown as Item[]).map((item) => [item.slug, item]));
+    const targetBySlug = new Map(args.targets.map((target) => [target.slug, target]));
+    const validated: Array<{ row: Doc<'libraryContent'>; desired: Item }> = [];
+    for (const slug of PLACEHOLDER_PRINTABLE_SLUGS) {
+      const row = printableRows.find((candidate) => candidate.slug === slug);
+      const target = targetBySlug.get(slug);
+      const desired = desiredBySlug.get(slug);
+      if (
+        !row
+        || !target
+        || row.clinicalStatus !== 'published'
+        || (row.reviewRevision ?? 1) !== target.expectedReviewRevision
+      ) {
+        throw new Error(`Printable target changed after preflight: ${slug}`);
+      }
+      if (!isPreviewOnlyPrintable(desired)) {
+        throw new Error(`Printable preview-only seed is not ready: ${slug}`);
+      }
+      const mediaRows = await ctx.db
+        .query('libraryMedia')
+        .withIndex('by_content', (q) => q.eq('contentSlug', slug))
+        .take(100);
+      if (mediaRows.some(hasApprovedPrintablePayload)) {
+        throw new Error(`Printable now has an approved payload and needs content review: ${slug}`);
+      }
+      validated.push({ row, desired: desired as Item });
+    }
+
+    const now = Date.now();
+    for (const { row, desired } of validated) {
+      const reviewRevision = (row.reviewRevision ?? 1) + 1;
+      await ctx.db.patch(row._id, {
+        ...desiredLibraryPatch(desired),
+        clinicalStatus: 'clinical_review',
+        reviewRevision,
+        reviewerId: undefined,
+        reviewerQualification: undefined,
+        reviewerDisplayName: undefined,
+        reviewScope: undefined,
+        reviewedAt: undefined,
+        nextReviewAt: undefined,
+        reviewNote: undefined,
+        updatedAt: now,
+      });
+      await logAudit(
+        ctx,
+        null,
+        'library.printable_payload.withdrawn',
+        'libraryContent',
+        row._id,
+        `${PRINTABLE_PAYLOAD_RELEASE_ID} · ${row.slug}`,
+        {
+          before: JSON.stringify({
+            clinicalStatus: row.clinicalStatus,
+            reviewRevision: row.reviewRevision ?? 1,
+            format: (row.data as Record<string, unknown>)?.format ?? null,
+          }),
+          after: JSON.stringify({
+            clinicalStatus: 'clinical_review',
+            reviewRevision,
+            format: 'Preview only — bilingual PDF not yet available',
+          }),
+        },
+      );
+    }
+    await logAudit(
+      ctx,
+      null,
+      'library.printable_payload.release',
+      'libraryContent',
+      undefined,
+      PRINTABLE_PAYLOAD_RELEASE_ID,
+      { after: JSON.stringify({ staged: validated.length, total: validated.length }) },
+    );
+    return { alreadyApplied: false, staged: validated.length, total: validated.length };
   },
 });
 
