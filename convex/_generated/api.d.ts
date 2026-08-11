@@ -37,6 +37,7 @@ import type * as lib_entitlements from "../lib/entitlements.js";
 import type * as lib_evidenceSafetyRelease from "../lib/evidenceSafetyRelease.js";
 import type * as lib_ownerPriority from "../lib/ownerPriority.js";
 import type * as lib_ownerPriorityAccess from "../lib/ownerPriorityAccess.js";
+import type * as lib_printablePayloadRelease from "../lib/printablePayloadRelease.js";
 import type * as lib_reviewPolicy from "../lib/reviewPolicy.js";
 import type * as lib_reviewSearch from "../lib/reviewSearch.js";
 import type * as lib_seedPolicy from "../lib/seedPolicy.js";
@@ -92,6 +93,7 @@ declare const fullApi: ApiFromModules<{
   "lib/evidenceSafetyRelease": typeof lib_evidenceSafetyRelease;
   "lib/ownerPriority": typeof lib_ownerPriority;
   "lib/ownerPriorityAccess": typeof lib_ownerPriorityAccess;
+  "lib/printablePayloadRelease": typeof lib_printablePayloadRelease;
   "lib/reviewPolicy": typeof lib_reviewPolicy;
   "lib/reviewSearch": typeof lib_reviewSearch;
   "lib/seedPolicy": typeof lib_seedPolicy;
