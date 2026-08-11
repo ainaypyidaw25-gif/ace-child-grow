@@ -421,12 +421,15 @@ function adminLayer(expect) {
     reportCounts(L, live, expect);
     return { state: 'empty_registry', live };
   }
-  if (live.sources < expect.sources || live.links < expect.links) {
+  if (
+    live.sources < expect.sources
+    || (Number.isInteger(live.activeLinks) && live.activeLinks < expect.links)
+  ) {
     record(
       L,
       'the live registry holds the whole registry',
       'fail',
-      `live ${live.sources}/${expect.sources} references, ${live.links}/${expect.links} links — re-run the import`,
+      `live ${live.sources}/${expect.sources} references, ${live.activeLinks ?? 'unknown'}/${expect.links} active links — re-run the import`,
     );
     reportCounts(L, live, expect);
     return { state: 'partial_import', live };
@@ -443,8 +446,12 @@ function adminLayer(expect) {
     !Array.isArray(live.publishedWithoutApprovedEvidence) ||
     (live.publishedWithoutApprovedEvidence?.length ?? 0) > 0 ||
     live.sources !== expect.sources ||
-    live.links !== expect.links ||
-    live.linkedSlugs !== expect.linkedSlugs;
+    !Number.isInteger(live.activeLinks) ||
+    !Number.isInteger(live.activeLinkedSlugs) ||
+    !Array.isArray(live.preservedArchivedLinks) ||
+    live.links !== live.activeLinks + (live.preservedArchivedLinks?.length ?? Number.NaN) ||
+    live.activeLinks !== expect.links ||
+    live.activeLinkedSlugs !== expect.linkedSlugs;
 
   return { state: broken ? 'integrity_failure' : 'live_registry_valid', live };
 }
@@ -459,15 +466,24 @@ function reportCounts(L, live, expect) {
   );
   check(
     L,
-    'live link count matches the registry',
-    live.links === expect.links,
-    `live=${live.links} local=${expect.links}`,
+    'live active-link count matches the registry',
+    live.activeLinks === expect.links,
+    `live=${live.activeLinks ?? 'field missing'} local=${expect.links}; total stored=${live.links}`,
   );
   check(
     L,
-    'live linked-slug count matches the registry',
-    live.linkedSlugs === expect.linkedSlugs,
-    `live=${live.linkedSlugs} local=${expect.linkedSlugs}`,
+    'live active linked-slug count matches the registry',
+    live.activeLinkedSlugs === expect.linkedSlugs,
+    `live=${live.activeLinkedSlugs ?? 'field missing'} local=${expect.linkedSlugs}`,
+  );
+  check(
+    L,
+    'non-active links are preserved only as archived audit history',
+    Array.isArray(live.preservedArchivedLinks)
+      && live.links === live.activeLinks + live.preservedArchivedLinks.length,
+    Array.isArray(live.preservedArchivedLinks)
+      ? `${live.preservedArchivedLinks.length}: ${live.preservedArchivedLinks.slice(0, 10).join(', ') || 'none'}`
+      : 'field missing — deploy the current evidence integrity probe',
   );
 
   check(

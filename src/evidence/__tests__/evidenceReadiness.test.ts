@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { publishedSlugsWithoutApprovedEvidence } from '../../../convex/evidence';
+import {
+  evidenceLinkReadinessCounts,
+  publishedSlugsWithoutApprovedEvidence,
+} from '../../../convex/evidence';
 
 describe('published evidence readiness', () => {
   const sources = [
@@ -33,5 +36,40 @@ describe('published evidence readiness', () => {
       ],
       sources,
     )).toEqual(['m-awaiting', 'z-missing']);
+  });
+});
+
+describe('active evidence-link readiness', () => {
+  it('retains archived citations as exact audit history without counting them as active', () => {
+    expect(evidenceLinkReadinessCounts(
+      [
+        { kind: 'milestone', slug: 'active-milestone' },
+        { kind: 'milestone', slug: 'archived-b' },
+        { kind: 'milestone', slug: 'archived-a' },
+        { kind: 'safety_rule', slug: 'no-library-row' },
+      ],
+      [
+        { type: 'milestone', slug: 'active-milestone', clinicalStatus: 'published' },
+        { type: 'milestone', slug: 'archived-a', clinicalStatus: 'archived' },
+        { type: 'milestone', slug: 'archived-b', clinicalStatus: 'archived' },
+      ],
+    )).toEqual({
+      activeLinks: 2,
+      activeLinkedSlugs: 2,
+      preservedArchivedLinks: [
+        'milestone:archived-a',
+        'milestone:archived-b',
+      ],
+    });
+  });
+
+  it('keeps unknown or unpublished non-archived links inside the fail-closed active count', () => {
+    expect(evidenceLinkReadinessCounts(
+      [
+        { kind: 'milestone', slug: 'draft-row' },
+        { kind: 'activity', slug: 'stale-or-unknown' },
+      ],
+      [{ type: 'milestone', slug: 'draft-row', clinicalStatus: 'clinical_review' }],
+    )).toMatchObject({ activeLinks: 2, preservedArchivedLinks: [] });
   });
 });

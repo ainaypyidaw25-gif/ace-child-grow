@@ -182,6 +182,40 @@ export function publishedSlugsWithoutApprovedEvidence(
     .sort((a, b) => a.localeCompare(b));
 }
 
+/**
+ * Evidence links for archived library rows are deliberately retained as audit
+ * history, but they are no longer part of the active source registry that an
+ * import or release check should compare with. Anything that is not bound to
+ * an archived library row remains active, including safety-rule and hope-topic
+ * links that do not have a libraryContent row.
+ */
+export function evidenceLinkReadinessCounts(
+  links: readonly { kind: string; slug: string }[],
+  libraryRows: readonly { type: string; slug: string; clinicalStatus: string }[],
+): {
+  activeLinks: number;
+  activeLinkedSlugs: number;
+  preservedArchivedLinks: string[];
+} {
+  const archivedKeys = new Set(
+    libraryRows
+      .filter((row) => row.clinicalStatus === 'archived')
+      .map((row) => `${row.type}:${row.slug}`),
+  );
+  const activeKeys: string[] = [];
+  const preservedArchivedLinks: string[] = [];
+  for (const link of links) {
+    const key = `${link.kind}:${link.slug}`;
+    if (archivedKeys.has(key)) preservedArchivedLinks.push(key);
+    else activeKeys.push(key);
+  }
+  return {
+    activeLinks: activeKeys.length,
+    activeLinkedSlugs: new Set(activeKeys).size,
+    preservedArchivedLinks: preservedArchivedLinks.sort((a, b) => a.localeCompare(b)),
+  };
+}
+
 const EMPTY_LIST = {
   allowed: false as const,
   total: 0,
@@ -903,10 +937,12 @@ export const integrity = internalQuery({
       )
       .map((s) => s.sourceId);
 
-    const publishedContent = (await ctx.db.query('libraryContent').collect()).filter(
+    const libraryContent = await ctx.db.query('libraryContent').collect();
+    const publishedContent = libraryContent.filter(
       (c) => c.clinicalStatus === 'published',
     );
     const linkedSlugs = new Set(links.map((l) => l.slug));
+    const linkReadiness = evidenceLinkReadinessCounts(links, libraryContent);
     const publishedWithoutEvidence = publishedContent
       .filter((c) => !linkedSlugs.has(c.slug))
       .map((c) => c.slug);
@@ -970,7 +1006,10 @@ export const integrity = internalQuery({
       todayIso: today,
       sources: sources.length,
       links: links.length,
-      linkedSlugs: linkedSlugs.size,
+      linkedSlugs: new Set(links.map((l) => `${l.kind}:${l.slug}`)).size,
+      activeLinks: linkReadiness.activeLinks,
+      activeLinkedSlugs: linkReadiness.activeLinkedSlugs,
+      preservedArchivedLinks: linkReadiness.preservedArchivedLinks,
       byStatus,
       approved: byStatus.approved ?? 0,
       awaitingReview: byStatus.awaiting_review ?? 0,
