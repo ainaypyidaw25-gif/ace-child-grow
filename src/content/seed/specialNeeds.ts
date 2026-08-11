@@ -1,21 +1,21 @@
 // Hope & Understanding Center — special-needs awareness. Strengths-based,
 // respectful, and NON-DIAGNOSTIC. "Possible signs" are awareness points only —
 // they never diagnose; the app always guides families to a qualified
-// professional. clinical_review until a reviewer approves.
+// professional. The legacy clinical_review value keeps these rows unpublished.
 //
 // References now carry real citations, verified against public guidance and
 // accepted by the product owner on 2026-07-31. Every record still ends its
-// reference list with REF_CLINICAL_PENDING, because owner acceptance of wording
-// is NOT a clinical sign-off — no qualified clinical reviewer has signed these
-// pages, and the improved sourcing must not make them read as though one had.
-// clinicalStatus stays 'clinical_review' for the same reason.
+// reference list with REF_SPECIALIST_REVIEW_REQUIRED. Verified sourcing does
+// not turn diagnosis, treatment, individualized-advice or emergency wording
+// into an endorsement. clinicalStatus stays 'clinical_review' so these records
+// remain unavailable to parents until the focused safety boundary is complete.
 import { specialNeed, type SeedItem } from '../types';
 
 const b = (mm: string, en: string) => ({ mm, en });
 const myth = (m: string, mEn: string, f: string, fEn: string) => ({ myth: b(m, mEn), fact: b(f, fEn) });
 const qa = (q: string, qEn: string, a: string, aEn: string) => ({ q: b(q, qEn), a: b(a, aEn) });
 
-const REF_CLINICAL_PENDING = "Clinical review still outstanding: sources verified against public guidance and the wording accepted by the product owner, but no qualified clinical reviewer has signed off this page.";
+const REF_SPECIALIST_REVIEW_REQUIRED = 'SPECIALIST REVIEW REQUIRED for any diagnosis, treatment, individualized-advice or emergency wording. Public guidance links are recorded; no individual clinician endorsement is claimed.';
 const NOT_DIAGNOSIS_MM = 'ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။';
 const NOT_DIAGNOSIS_EN = 'These are awareness points, not a diagnosis — if concerned, consult a professional.';
 
@@ -41,7 +41,7 @@ export const SPECIAL_NEEDS: SeedItem[] = [
       "WHO Global Advisory Committee on Vaccine Safety. Statement on vaccines and autism, 11 December 2025. https://www.who.int/news/item/11-12-2025-statement-gacvs-vaccines-autism",
       "Hviid A, Hansen JV, Frisch M, Melbye M. Measles, Mumps, Rubella Vaccination and Autism: A Nationwide Cohort Study. Ann Intern Med. 2019;170(8):513–520.",
       "Lipkin PH, Macias MM. Promoting Optimal Development… Developmental Surveillance and Screening. Pediatrics. 2020;145(1):e20193449.",
-      REF_CLINICAL_PENDING,
+      REF_SPECIALIST_REVIEW_REQUIRED,
     ],
   }),
   specialNeed({
@@ -61,7 +61,7 @@ export const SPECIAL_NEEDS: SeedItem[] = [
       "ASHA. Learning More Than One Language. https://www.asha.org/public/speech/development/learning-more-than-one-language/ (accessed 2026-07-31)",
       "ASHA. Late Language Emergence — practice portal. https://www.asha.org/practice-portal/clinical-topics/late-language-emergence/",
       "CDC. About Hearing Loss in Children. https://www.cdc.gov/hearing-loss-children/about/index.html (accessed 2026-07-31)",
-      REF_CLINICAL_PENDING,
+      REF_SPECIALIST_REVIEW_REQUIRED,
     ],
   }),
   specialNeed({
@@ -81,7 +81,7 @@ export const SPECIAL_NEEDS: SeedItem[] = [
       "Wolraich ML et al. Clinical Practice Guideline for the Diagnosis, Evaluation, and Treatment of ADHD in Children and Adolescents. Pediatrics. 2019;144(4):e20192528.",
       "CDC. About ADHD — causes and risk factors. https://www.cdc.gov/adhd/about/index.html (accessed 2026-07-31)",
       "CDC. ADHD — Signs and Symptoms. https://www.cdc.gov/adhd/signs-symptoms/index.html (accessed 2026-07-31)",
-      REF_CLINICAL_PENDING,
+      REF_SPECIALIST_REVIEW_REQUIRED,
     ],
   }),
   specialNeed({
@@ -100,7 +100,7 @@ export const SPECIAL_NEEDS: SeedItem[] = [
     references: [
       "Bull MJ et al. Health Supervision for Children and Adolescents With Down Syndrome. Pediatrics. 2022;149(5):e2022057010.",
       "CDC. About Down Syndrome. https://www.cdc.gov/birth-defects/about/down-syndrome.html (accessed 2026-07-31)",
-      REF_CLINICAL_PENDING,
+      REF_SPECIALIST_REVIEW_REQUIRED,
     ],
   }),
   specialNeed({
@@ -118,7 +118,7 @@ export const SPECIAL_NEEDS: SeedItem[] = [
     relatedLessons: ['lsn_what_is_development'], relatedActivities: ['act_obstacle_crawl'],
     references: [
       "NHS. Cerebral palsy. https://www.nhs.uk/conditions/cerebral-palsy/ (accessed 2026-07-31)",
-      REF_CLINICAL_PENDING,
+      REF_SPECIALIST_REVIEW_REQUIRED,
     ],
   }),
   specialNeed({
@@ -136,7 +136,7 @@ export const SPECIAL_NEEDS: SeedItem[] = [
     relatedLessons: ['lsn_language_rich_home'], relatedActivities: ['act_sound_tracking'],
     references: [
       "CDC. About Hearing Loss in Children. https://www.cdc.gov/hearing-loss-children/about/index.html (accessed 2026-07-31)",
-      REF_CLINICAL_PENDING,
+      REF_SPECIALIST_REVIEW_REQUIRED,
     ],
   }),
   specialNeed({
@@ -155,7 +155,7 @@ export const SPECIAL_NEEDS: SeedItem[] = [
     references: [
       "Donahue SP, Nixon CN, et al. Visual System Assessment in Infants, Children, and Young Adults by Pediatricians. Pediatrics. 2016;137(1):e20153596.",
       "American Academy of Ophthalmology. Common Eye and Vision Myths. https://www.aao.org/eye-health/tips-prevention/common-eye-vision-myths-facts (accessed 2026-07-31)",
-      REF_CLINICAL_PENDING,
+      REF_SPECIALIST_REVIEW_REQUIRED,
     ],
   }),
   specialNeed({
@@ -173,7 +173,7 @@ export const SPECIAL_NEEDS: SeedItem[] = [
     relatedLessons: ['lsn_what_is_development'], relatedActivities: ['act_cup_stacking'],
     references: [
       "Lipkin PH, Macias MM. Promoting Optimal Development: Identifying Infants and Young Children With Developmental Disorders Through Developmental Surveillance and Screening. Pediatrics. 2020;145(1):e20193449.",
-      REF_CLINICAL_PENDING,
+      REF_SPECIALIST_REVIEW_REQUIRED,
     ],
   }),
   specialNeed({
@@ -192,7 +192,7 @@ export const SPECIAL_NEEDS: SeedItem[] = [
     references: [
       "NHS. Learning disabilities. https://www.nhs.uk/conditions/learning-disabilities/ (accessed 2026-07-31)",
       "Mencap. What is a learning disability? https://www.mencap.org.uk/learning-disability-explained/what-learning-disability (accessed 2026-07-31)",
-      REF_CLINICAL_PENDING,
+      REF_SPECIALIST_REVIEW_REQUIRED,
     ],
   }),
   specialNeed({
@@ -210,7 +210,7 @@ export const SPECIAL_NEEDS: SeedItem[] = [
     relatedLessons: ['lsn_big_feelings'], relatedActivities: ['act_water_pouring'],
     references: [
       "AAP Section on Complementary and Integrative Medicine; Council on Children with Disabilities. Sensory Integration Therapies for Children With Developmental and Behavioral Disorders. Pediatrics. 2012;129(6):1186–1189.",
-      REF_CLINICAL_PENDING,
+      REF_SPECIALIST_REVIEW_REQUIRED,
     ],
   }),
   specialNeed({
@@ -229,7 +229,7 @@ export const SPECIAL_NEEDS: SeedItem[] = [
     references: [
       "NHS. Dyslexia. https://www.nhs.uk/conditions/dyslexia/ (accessed 2026-07-31)",
       "International Dyslexia Association. Definition of dyslexia. https://dyslexiaida.org/definition-of-dyslexia/",
-      REF_CLINICAL_PENDING,
+      REF_SPECIALIST_REVIEW_REQUIRED,
     ],
   }),
   specialNeed({
@@ -247,7 +247,7 @@ export const SPECIAL_NEEDS: SeedItem[] = [
     relatedLessons: ['lsn_power_of_play'], relatedActivities: ['act_obstacle_course'],
     references: [
       "NHS. Developmental co-ordination disorder (dyspraxia) in children. https://www.nhs.uk/conditions/developmental-coordination-disorder-dyspraxia/ (accessed 2026-07-31)",
-      REF_CLINICAL_PENDING,
+      REF_SPECIALIST_REVIEW_REQUIRED,
     ],
   }),
   specialNeed({
@@ -265,7 +265,7 @@ export const SPECIAL_NEEDS: SeedItem[] = [
     relatedLessons: ['lsn_big_feelings'], relatedActivities: ['act_feeling_faces'],
     references: [
       "NHS. Selective mutism. https://www.nhs.uk/mental-health/conditions/selective-mutism/ (accessed 2026-07-31)",
-      REF_CLINICAL_PENDING,
+      REF_SPECIALIST_REVIEW_REQUIRED,
     ],
   }),
 ];

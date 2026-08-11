@@ -19,7 +19,7 @@ const DIMENSION_LABELS: Record<Dimension, { mm: string; en: string }> = {
   native_myanmar: { mm: 'မြန်မာစာ', en: 'Native Myanmar' },
   evidence: { mm: 'ကိုးကားချက်', en: 'Evidence' },
   safety: { mm: 'ဘေးကင်းလုံခြုံရေး', en: 'Safety' },
-  clinical: { mm: 'ဆေးဘက်ဆိုင်ရာ', en: 'Clinical' },
+  clinical: { mm: 'အထူးကျွမ်းကျင်သူ ဘေးကင်းရေး', en: 'Specialist safety' },
 };
 
 const DECISION_LABELS: Record<Decision, { mm: string; en: string }> = {
@@ -34,7 +34,7 @@ const ROLE_LABELS: Record<string, { mm: string; en: string }> = {
   content_editor: { mm: 'အကြောင်းအရာ တည်းဖြတ်သူ', en: 'Content editor' },
   language_reviewer: { mm: 'ဘာသာစကား သုံးသပ်သူ', en: 'Language reviewer' },
   evidence_reviewer: { mm: 'ကိုးကားချက် သုံးသပ်သူ', en: 'Evidence reviewer' },
-  clinical_reviewer: { mm: 'ဆေးဘက်ဆိုင်ရာ သုံးသပ်သူ', en: 'Clinical reviewer' },
+  clinical_reviewer: { mm: 'အထူးကျွမ်းကျင်သူ ဘေးကင်းရေးသုံးသပ်သူ', en: 'Specialist safety reviewer' },
   review_manager: { mm: 'စစ်ဆေးရေး မန်နေဂျာ', en: 'Review manager' },
   support: { mm: 'ပံ့ပိုးကူညီရေး', en: 'Support' },
 };

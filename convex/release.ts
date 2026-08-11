@@ -9,7 +9,7 @@ const OWNER_REVIEWER_LABEL = 'ACE Child Grow Owner / Education Reviewer';
 const REVIEWED_ON = '2026-07-26';
 const NEXT_REVIEW_ON = '2027-07-26';
 const REVIEW_NOTE =
-  'Education and special-needs professional review completed. This is not medical or clinical approval; medical guidance remains general, evidence-based information.';
+  'Education and special-needs review completed. General guidance was checked against authoritative public evidence and is not individualized medical advice.';
 
 // These five records were previously evidence_required. Their official
 // publisher pages were opened and their registry metadata checked on

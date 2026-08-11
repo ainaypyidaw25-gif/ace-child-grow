@@ -294,7 +294,7 @@ export const EXPLICIT_CONTENT_SOURCES: Record<string, string[]> = {
 /**
  * References behind the deterministic safety engine
  * (src/domain/safety/safety.ts). These do not drive the logic — the logic is
- * fixed and rule-based — they are what a clinical reviewer checks the wording
+ * fixed and rule-based — they are what a specialist safety reviewer checks the wording
  * of each urgent rule against.
  */
 export const SAFETY_RULE_SOURCES: Record<string, string[]> = {

@@ -77,13 +77,13 @@ export function AdminReviewQueue() {
             {locale === 'mm'
               ? canReview
                 ? educationReviewer
-                  ? 'ပညာရေးနှင့် အထူးပညာရေးဆိုင်ရာ အတည်ပြုချက်ဖြင့် ထုတ်ဝေနိုင်ပါသည်။ ဆေးဘက်ဆိုင်ရာ အတည်ပြုချက် မဟုတ်ပါ။ လုပ်ဆောင်ချက်တိုင်းကို မှတ်တမ်းတင်ထားသည်။'
-                  : 'သာမန်အကြောင်းအရာကို ပညာရေးသုံးသပ်မှုနယ်ပယ်ဖြင့်၊ အထူးကုသုံးသပ်ရန်လိုသော စာသားကို ဆေးဘက်ဆိုင်ရာသုံးသပ်မှုနယ်ပယ်ဖြင့် ထုတ်ဝေနိုင်ပါသည်။ သာမန်အကြောင်းအရာအတွက် ဤသည်မှာ ဆေးဘက်ဆိုင်ရာအတည်ပြုချက် မဟုတ်ပါ။ လုပ်ဆောင်ချက်တိုင်းကို မှတ်တမ်းတင်ထားသည်။'
+                  ? 'ပညာရေးနှင့် အထူးပညာရေးဆိုင်ရာ သုံးသပ်မှုဖြင့် သာမန်ပညာပေးအကြောင်းအရာကို ထုတ်ဝေနိုင်ပါသည်။ အထောက်အထားနှင့် ဘေးကင်းရေးဆုံးဖြတ်ချက်တိုင်းကို မှတ်တမ်းတင်ထားသည်။'
+                  : 'သာမန်အကြောင်းအရာကို ပညာရေးသုံးသပ်မှုနယ်ပယ်ဖြင့်၊ အန္တရာယ်မြင့်စာသားကို အထူးကျွမ်းကျင်သူ ဘေးကင်းရေးသုံးသပ်မှုနယ်ပယ်ဖြင့် ထုတ်ဝေနိုင်ပါသည်။ လုပ်ဆောင်ချက်တိုင်းကို မှတ်တမ်းတင်ထားသည်။'
                 : 'မူကြမ်းများကို ကြည့်ရှုတည်းဖြတ်နိုင်ပါသည်။ အတည်ပြုပြီး ထုတ်ဝေရန် အရည်အချင်းရှိ ပညာရှင် လိုအပ်ပါသည်။'
               : canReview
                 ? educationReviewer
-                  ? 'You may publish with education and special-education review scope. This is not clinical approval.'
-                  : 'You may publish ordinary content with education review scope and specialist-risk wording with clinical review scope. Ordinary content is not thereby clinically approved. Every action is audited.'
+                  ? 'You may publish ordinary education with education and special-education review scope. Evidence and safety decisions are audited.'
+                  : 'You may publish ordinary content with education review scope and high-risk wording with specialist safety review scope. Every action is audited.'
                 : 'You may inspect and edit drafts. A qualified assigned reviewer is required to publish.'}
           </p>
           <div className="mt-3 flex flex-wrap gap-2 text-sm">

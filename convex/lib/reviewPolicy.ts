@@ -47,7 +47,7 @@ export function roleMayReview(role: string | null | undefined, dimension: Review
 
 /**
  * Clinical, child-safety and evidence decisions record the reviewer's stated
- * qualification. A safety decision is not represented as clinical approval.
+ * qualification. A safety decision is never represented as a personal endorsement.
  */
 export function approvalNeedsQualification(dimension: ReviewDimension): boolean {
   return dimension === 'clinical' || dimension === 'safety' || dimension === 'evidence';

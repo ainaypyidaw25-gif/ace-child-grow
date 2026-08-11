@@ -39,9 +39,9 @@ describe('admin team and subscription security', () => {
     expect(admin).toContain('invite.expiresAt < Date.now()');
   });
 
-  it('does not let an owner impersonate a clinical reviewer', () => {
+  it('does not let an owner impersonate the legacy specialist-review role', () => {
     expect(auth).toContain("requireOneOf(ctx, ['clinical_reviewer'])");
-    expect(auth).toContain('Clinical reviewer qualification is required');
+    expect(auth).toContain('Specialist safety reviewer qualification is required');
   });
 
   it('stores version-bound, reviewer-attributed decisions outside content documents', () => {

@@ -90,10 +90,12 @@ backend is deployed separately with `npx convex deploy` — a frontend deploy al
 does not ship backend changes. **Production deployment and `main` merges require
 explicit human approval.**
 
-## Safety & clinical status
+## Evidence and safety status
 
-All health/development content is **Clinical Review Required** until a qualified
-reviewer approves it. See `docs/content/clinical-review-policy.md`.
+Ordinary parent education requires English, native-Myanmar, evidence and safety
+review. Diagnosis, treatment, medication, individualized advice and emergency-
+decision wording remain fail-closed as **SPECIALIST REVIEW REQUIRED**. See
+`docs/content/evidence-and-safety-review-policy.md`.
 
 Current release verdict: **PREVIEW-READY FOUNDATION** (not production-ready).
 See the delivery summary and `docs/testing/test-results.md`.

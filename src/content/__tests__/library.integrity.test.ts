@@ -82,13 +82,14 @@ describe('content library integrity', () => {
     }
   });
 
-  it('keeps the newly added older-child activity evidence notes explicitly non-approved', () => {
+  it('keeps the newly added older-child activity evidence notes revision-bound', () => {
     for (const slug of ['act_copy_everyday_actions', 'act_follow_the_pattern', 'act_draw_and_tell']) {
       const item = CONTENT_SEED.find((candidate) => candidate.slug === slug);
       expect(item, slug).toBeDefined();
       const summary = (item?.data as Record<string, unknown>).evidenceSummary;
       expect(typeof summary, `${slug} evidence summary`).toBe('string');
-      expect(summary, `${slug} evidence summary`).toContain('No clinical approval has been recorded');
+      expect(summary, `${slug} evidence summary`).toContain('evidence and safety review remains revision-bound');
+      expect(summary, `${slug} evidence summary`).not.toMatch(/personal endorsement/i);
       expect(item?.clinicalStatus, `${slug} status`).toBe('clinical_review');
     }
   });

@@ -119,22 +119,23 @@ export async function requireClinicalReviewer(
   ctx: Ctx,
 ): Promise<{ userId: Id<'users'>; qualification: string; reviewerName: string }> {
   const { userId, access } = await requireOneOf(ctx, ['clinical_reviewer']);
-  if (!access.qualification) throw new Error('Clinical reviewer qualification is required');
-  if (!access.displayName) throw new Error('Clinical reviewer name is required');
+  if (!access.qualification) throw new Error('Specialist safety reviewer qualification is required');
+  if (!access.displayName) throw new Error('Specialist safety reviewer audit identity is required');
   return { userId, qualification: access.qualification, reviewerName: access.displayName };
 }
 
 /**
  * Publishing authority for ordinary educational material. The resulting
  * decision is always education-scoped, including when the qualified publisher
- * happens to be a clinical reviewer. Clinical scope is reserved for the
+ * happens to hold the legacy `clinical_reviewer` role. The legacy clinical
+ * scope value is reserved for the
  * explicit specialist-risk path in requireClinicalPublisher.
  */
 export async function requireProfessionalPublisher(ctx: Ctx): Promise<ProfessionalApproval> {
   const { userId, access } = await requireOneOf(ctx, ['owner', 'clinical_reviewer']);
   if (!access.qualification) throw new Error('Professional qualification is required');
   if (access.role === 'clinical_reviewer') {
-    if (!access.displayName) throw new Error('Clinical reviewer name is required');
+    if (!access.displayName) throw new Error('Specialist safety reviewer audit identity is required');
     return {
       userId,
       qualification: access.qualification,

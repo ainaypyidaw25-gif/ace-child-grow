@@ -169,7 +169,7 @@ export function OwnerPriorityView({
     { key: 'p2', label: L('P2 ကျန်', 'P2 remaining'), value: counts.p2Remaining, apply: { priority: 'P2' } },
     { key: 'p3', label: L('P3 ကျန်', 'P3 remaining'), value: counts.p3Remaining, apply: { priority: 'P3' } },
     { key: 'visC', label: L('မိဘမြင် Class C', 'Parent-visible Class C'), value: counts.parentVisibleClassC, apply: { riskClass: 'C', visibility: 'visible' } },
-    { key: 'clin', label: L('ဆေးဘက် စစ်ရန်', 'Clinical reviews required'), value: counts.clinicalReviewsRequired, apply: { clinicalRequired: true } },
+    { key: 'clin', label: L('အထူးကျွမ်းကျင်သူ ဘေးကင်းရေး စစ်ရန်', 'Specialist safety reviews required'), value: counts.clinicalReviewsRequired, apply: { clinicalRequired: true } },
     { key: 'safe', label: L('ဘေးကင်းရေး စစ်ရန်', 'Safety reviews required'), value: counts.safetyReviewsRequired, apply: { safetyRequired: true } },
     { key: 'mm', label: L('မြန်မာ စစ်ရန်', 'Myanmar reviews required'), value: counts.myanmarReviewsRequired, apply: {} },
     { key: 'corr', label: L('ပြင်ဆင်ရန် လို', 'Correction needed'), value: counts.correctionNeeded, apply: { correctionStatus: 'correction_needed' } },
@@ -307,7 +307,7 @@ export function OwnerPriorityView({
         </label>
         <label className="flex items-end gap-2 pb-2 text-xs font-medium text-ink">
           <input type="checkbox" checked={filters.clinicalRequired} onChange={(event) => set('clinicalRequired', event.target.checked)} className="h-4 w-4 rounded border-line" />
-          <span>{L('ဆေးဘက် စစ်ရန် လိုသည်များသာ', 'Clinical review required')}</span>
+          <span>{L('အထူးကျွမ်းကျင်သူ ဘေးကင်းရေး စစ်ရန် လိုသည်များသာ', 'Specialist safety review required')}</span>
         </label>
         <label className="flex items-end gap-2 pb-2 text-xs font-medium text-ink">
           <input type="checkbox" checked={filters.safetyRequired} onChange={(event) => set('safetyRequired', event.target.checked)} className="h-4 w-4 rounded border-line" />

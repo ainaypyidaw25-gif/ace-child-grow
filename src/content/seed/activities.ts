@@ -75,7 +75,7 @@ export const ACTIVITIES: SeedItem[] = [
     safety: b('ကျိုးပဲ့နိုင်သော သို့မဟုတ် မျိုချနိုင်သော ပစ္စည်းမသုံးပါနှင့်။ အနီးကပ် ကြီးကြပ်ပါ။', 'Do not use breakable or swallowable objects. Supervise closely.'),
     indoor: true, outdoor: false, oneChild: true, group: true, parentChild: true,
     outcomes: [b('ဟန်ဆောင်ကစားမှု၊ တုပနိုင်မှုနှင့် အလှည့်ကျ ဆက်သွယ်မှု။', 'Pretend play, imitation, and communication turn-taking.')],
-    evidenceSummary: 'Topic-fit play and communication references are linked for professional review. No clinical approval has been recorded.',
+    evidenceSummary: 'Topic-fit play and communication references are linked; evidence and safety review remains revision-bound.',
   }),
   activity({
     slug: 'obstacle_crawl', title: b('ခေါင်းအုံး အတားအဆီး တွားကစားခြင်း', 'Pillow obstacle crawl'),
@@ -123,7 +123,7 @@ export const ACTIVITIES: SeedItem[] = [
     safety: b('အသက်အရွယ်နှင့် သင့်တော်သော ကစားတုံးကြီးများကိုသာ သုံးပြီး ကြီးကြပ်ပါ။', 'Use only age-appropriate large blocks and supervise.'),
     indoor: true, outdoor: false, oneChild: true, group: true, parentChild: true,
     outcomes: [b('ပုံစံသိမှု၊ အစီအစဉ်နှင့် ပြဿနာဖြေရှင်းမှု။', 'Pattern recognition, sequencing, and problem-solving.')],
-    evidenceSummary: 'Topic-fit play and developmental references are linked for professional review. No clinical approval has been recorded.',
+    evidenceSummary: 'Topic-fit play and developmental references are linked; evidence and safety review remains revision-bound.',
   }),
   activity({
     slug: 'water_pouring', title: b('ရေ လောင်း/ကူးကစားခြင်း', 'Water pouring play'),
@@ -171,7 +171,7 @@ export const ACTIVITIES: SeedItem[] = [
     safety: b('အဆိပ်မရှိသော အသက်အရွယ်သင့် ပစ္စည်းများကိုသာ သုံးပြီး ပါးစပ်ထဲမထည့်ရန် ကြီးကြပ်ပါ။', 'Use only non-toxic, age-appropriate materials and supervise to prevent mouthing.'),
     indoor: true, outdoor: true, oneChild: true, group: true, parentChild: true,
     outcomes: [b('တီထွင်ဖန်တီးမှု၊ လက်ထိန်းချုပ်မှုနှင့် ဇာတ်ကြောင်းပြောဆိုမှု။', 'Creativity, hand control, and narrative communication.')],
-    evidenceSummary: 'Topic-fit play and early-literacy references are linked for professional review. No clinical approval has been recorded.',
+    evidenceSummary: 'Topic-fit play and early-literacy references are linked; evidence and safety review remains revision-bound.',
   }),
   activity({
     slug: 'name_writing', title: b('နာမည် ခြစ်ရေးကစားခြင်း', 'Name tracing play'),

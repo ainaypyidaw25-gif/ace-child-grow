@@ -99,8 +99,8 @@ export function OwnDisplayName({
       {message && <p role="status" className="text-xs text-ink-soft">{message}</p>}
       <p className="text-xs text-ink-soft">
         {L(
-          'ပညာအရည်အချင်းကို ပိုင်ရှင်သာ သတ်မှတ်ပေးနိုင်ပါသည် — ဆေးဘက်ဆိုင်ရာ အတည်ပြုချက်၏ အခြေခံ ဖြစ်သောကြောင့် ဖြစ်သည်။',
-          'Only an owner can set a professional qualification, because it is what makes a clinical approval a sign-off.',
+          'ပညာအရည်အချင်းကို ပိုင်ရှင်သာ သတ်မှတ်ပေးနိုင်ပါသည်။ ၎င်းကို သုံးသပ်မှုမှတ်တမ်းနှင့် တာဝန်ခံမှုအတွက်သာ သိမ်းဆည်းပြီး မိဘများဖတ်ရှုသည့် အကြောင်းအရာတွင် ပုဂ္ဂိုလ်အမည်ဖြင့် ထောက်ခံချက်အဖြစ် မဖော်ပြပါ။',
+          'Only an owner can set a professional qualification. It is retained for review accountability and is not shown to parents as a personal endorsement.',
         )}
       </p>
     </form>

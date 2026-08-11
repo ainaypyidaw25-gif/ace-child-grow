@@ -31,7 +31,7 @@ const DIMENSION_LABELS: Record<Dimension, { mm: string; en: string }> = {
   native_myanmar: { mm: 'သဘာဝကျသော မြန်မာအသုံးအနှုန်း', en: 'Native Myanmar language' },
   evidence: { mm: 'ကိုးကားအထောက်အထား', en: 'Evidence' },
   safety: { mm: 'ဘေးကင်းရေး', en: 'Safety' },
-  clinical: { mm: 'ဆေးဘက်ဆိုင်ရာ သုံးသပ်မှု', en: 'Clinical review' },
+  clinical: { mm: 'အထူးကျွမ်းကျင်သူ ဘေးကင်းရေးသုံးသပ်မှု', en: 'Specialist safety review' },
 };
 
 const DECISION_LABELS: Record<Decision, { mm: string; en: string }> = {
@@ -418,8 +418,8 @@ function ContentEditor({ item, role, targetFieldPath, onDirtyChange }: { item: {
       <p className="rounded-xl bg-mint-soft px-3 py-2 text-sm text-ink">
         {role === 'content_editor' || role === 'owner'
           ? L(
-            'ဤအကောင့်ဖြင့် အကြောင်းအရာစာသားအားလုံးကို တည်းဖြတ်နိုင်သည်။ အဖွဲ့ဝင်၊ ငွေပေးချေမှုနှင့် ဆေးဘက်ဆိုင်ရာ အတည်ပြုချက်တို့ကို သီးခြားခွင့်ပြုချက်ဖြင့်သာ စီမံနိုင်သည်။',
-            'This account may edit all content wording. Team, billing and clinical approval remain separately permissioned.',
+            'ဤအကောင့်ဖြင့် အကြောင်းအရာစာသားအားလုံးကို တည်းဖြတ်နိုင်သည်။ အဖွဲ့ဝင်၊ ငွေပေးချေမှုနှင့် အထူးကျွမ်းကျင်သူ ဘေးကင်းရေးဆုံးဖြတ်ချက်တို့ကို သီးခြားခွင့်ပြုချက်ဖြင့်သာ စီမံနိုင်သည်။',
+            'This account may edit all content wording. Team, billing and specialist safety decisions remain separately permissioned.',
           )
           : L(
             'သုံးသပ်နေစဉ် တွေ့ရှိသည့် စာသားအမှားကို ဤနေရာတွင် တိုက်ရိုက်ပြင်နိုင်သည်။ သိမ်းပြီးနောက် အတည်ပြုချက်များကို မူကွဲအသစ်အတွက် ပြန်လည်စစ်ဆေးရမည်။',
