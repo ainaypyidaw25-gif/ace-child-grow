@@ -68,6 +68,7 @@ export function MilestoneDemo() {
   const [notes, setNotes] = useState<Record<number, string>>({});
   const [confirmedSymptoms, setConfirmedSymptoms] = useState<AcuteUrgentSymptom[]>([]);
   const [urgentSymptomsAnswered, setUrgentSymptomsAnswered] = useState(false);
+  const [urgentSymptomsExpanded, setUrgentSymptomsExpanded] = useState(false);
   const [lostSkill, setLostSkill] = useState<boolean | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -131,6 +132,7 @@ export function MilestoneDemo() {
           setNotes({});
           setConfirmedSymptoms([]);
           setUrgentSymptomsAnswered(false);
+          setUrgentSymptomsExpanded(false);
           setLostSkill(null);
         }}>
           {locale === 'mm' ? 'စစ်ဆေးစာရင်း အသစ်စမည်' : 'Start a new checklist'}
@@ -188,8 +190,11 @@ export function MilestoneDemo() {
   }
 
   function toggleUrgentSymptom(symptom: AcuteUrgentSymptom) {
-    setUrgentSymptomsAnswered(true);
-    setConfirmedSymptoms((previous) => previous.includes(symptom)
+    const removing = confirmedSymptoms.includes(symptom);
+    // Removing the last selected symptom is not the same as explicitly
+    // confirming "none". Keep Save disabled until the parent chooses one.
+    setUrgentSymptomsAnswered(!removing || confirmedSymptoms.length > 1);
+    setConfirmedSymptoms((previous) => removing
       ? previous.filter((value) => value !== symptom)
       : [...previous, symptom]);
   }
@@ -258,42 +263,75 @@ export function MilestoneDemo() {
             <fieldset className="w-full rounded-2xl border border-line bg-white p-3 text-sm">
               <legend className="px-1 font-medium text-ink">
                 {locale === 'mm'
-                  ? 'သင့်ကလေးတွင် ယခု အောက်ပါ အရေးပေါ်လက္ခဏာများ တစ်ခုခု ရှိပါသလား။ ရှိသမျှကို ရွေးပါ။'
-                  : 'Does your child have any of these urgent symptoms now? Select all that apply.'}
+                  ? 'မသိမ်းမီ ကလေး၏ လက်ရှိအခြေအနေကို တစ်ချက်စစ်ပါ။'
+                  : 'Before saving, briefly check how your child is now.'}
               </legend>
-              <div className="mt-2 grid gap-2">
-                {ACUTE_URGENT_SYMPTOMS.map((symptom) => {
-                  const selected = confirmedSymptoms.includes(symptom);
-                  return (
-                    <button
-                      key={symptom}
-                      type="button"
-                      aria-pressed={selected}
-                      onClick={() => toggleUrgentSymptom(symptom)}
-                      className={`min-h-touch rounded-xl border px-3 py-2 text-left ${
-                        selected ? 'border-state-red bg-pink font-semibold text-state-red-deep' : 'border-line text-ink'
-                      }`}
-                    >
-                      {ACUTE_URGENT_SYMPTOM_LABELS[symptom][locale]}
-                    </button>
-                  );
-                })}
-                <button
-                  type="button"
-                  aria-pressed={urgentSymptomsAnswered && confirmedSymptoms.length === 0}
-                  onClick={() => {
-                    setConfirmedSymptoms([]);
-                    setUrgentSymptomsAnswered(true);
-                  }}
-                  className={`min-h-touch rounded-xl border px-3 py-2 text-left ${
-                    urgentSymptomsAnswered && confirmedSymptoms.length === 0
-                      ? 'border-sky bg-mint-soft font-semibold text-sky-deep'
-                      : 'border-line text-ink'
-                  }`}
-                >
-                  {locale === 'mm' ? 'ဤလက္ခဏာများ မရှိပါ' : 'None of these'}
-                </button>
-              </div>
+              {!urgentSymptomsExpanded ? (
+                <div className="mt-2 space-y-2">
+                  {urgentSymptomsAnswered && confirmedSymptoms.length === 0 ? (
+                    <p role="status" className="rounded-xl bg-mint-soft px-3 py-3 text-ink">
+                      {locale === 'mm'
+                        ? 'အရေးပေါ်လက္ခဏာများ မရှိပါဟု မှတ်သားထားသည်။'
+                        : 'You confirmed that none of the urgent signs are present.'}
+                    </p>
+                  ) : (
+                    <p className="leading-6 text-ink-soft">
+                      {locale === 'mm'
+                        ? 'လက်ရှိ ရှိ/မရှိကို သေချာဖြေရန် ကျန်းမာရေးလက္ခဏာစာရင်းကို တစ်ချက်ကြည့်ပါ။'
+                        : 'Review the short health-sign list, then confirm whether any are present now.'}
+                    </p>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => setUrgentSymptomsExpanded(true)}
+                    className="min-h-touch w-full rounded-xl border border-sky bg-white px-3 py-2 font-semibold text-sky-deep"
+                  >
+                    {locale === 'mm'
+                      ? urgentSymptomsAnswered ? 'လက္ခဏာစာရင်းကို ပြန်စစ်မည်' : 'လက္ခဏာစာရင်းကို ကြည့်မည်'
+                      : urgentSymptomsAnswered ? 'Review the signs again' : 'Review the health signs'}
+                  </button>
+                </div>
+              ) : (
+                <div className="mt-2 grid gap-2">
+                  <p className="mb-1 leading-6 text-ink-soft">
+                    {locale === 'mm'
+                      ? 'ယခုတွေ့ရသည့် အရေးပေါ်လက္ခဏာရှိသမျှကို ရွေးပါ။ မရှိပါက အောက်ဆုံးအဖြေကို ရွေးပါ။'
+                      : 'Select every urgent sign present now. If there are none, choose the last answer.'}
+                  </p>
+                  {ACUTE_URGENT_SYMPTOMS.map((symptom) => {
+                    const selected = confirmedSymptoms.includes(symptom);
+                    return (
+                      <button
+                        key={symptom}
+                        type="button"
+                        aria-pressed={selected}
+                        onClick={() => toggleUrgentSymptom(symptom)}
+                        className={`min-h-touch rounded-xl border px-3 py-2 text-left ${
+                          selected ? 'border-state-red bg-pink font-semibold text-state-red-deep' : 'border-line text-ink'
+                        }`}
+                      >
+                        {ACUTE_URGENT_SYMPTOM_LABELS[symptom][locale]}
+                      </button>
+                    );
+                  })}
+                  <button
+                    type="button"
+                    aria-pressed={urgentSymptomsAnswered && confirmedSymptoms.length === 0}
+                    onClick={() => {
+                      setConfirmedSymptoms([]);
+                      setUrgentSymptomsAnswered(true);
+                      setUrgentSymptomsExpanded(false);
+                    }}
+                    className={`min-h-touch rounded-xl border px-3 py-2 text-left ${
+                      urgentSymptomsAnswered && confirmedSymptoms.length === 0
+                        ? 'border-sky bg-mint-soft font-semibold text-sky-deep'
+                        : 'border-line text-ink'
+                    }`}
+                  >
+                    {locale === 'mm' ? 'ဤလက္ခဏာများ မရှိပါ' : 'None of these'}
+                  </button>
+                </div>
+              )}
             </fieldset>
             {confirmedSymptoms.length > 0 || lostSkill === true
               ? <div className="w-full"><SafetyBanner /></div>

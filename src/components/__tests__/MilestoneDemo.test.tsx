@@ -92,6 +92,11 @@ describe('MilestoneDemo (component)', () => {
       ['ပြင်းထန်သော ထိခိုက်ဒဏ်ရာ', 'serious_injury'],
       ['ပြင်းထန်စွာ ရေဓာတ်ခန်းခြောက်ခြင်း', 'severe_dehydration'],
     ];
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    for (const [label] of acuteSymptoms) {
+      expect(screen.queryByRole('button', { name: label })).not.toBeInTheDocument();
+    }
+    fireEvent.click(screen.getByRole('button', { name: 'လက္ခဏာစာရင်းကို ကြည့်မည်' }));
     for (const [label] of acuteSymptoms) {
       expect(screen.getByRole('button', { name: label })).toBeInTheDocument();
     }
@@ -112,5 +117,24 @@ describe('MilestoneDemo (component)', () => {
       urgentSymptoms,
       resultSnapshot: expect.objectContaining({ urgentSymptoms }),
     })));
+  });
+
+  it('keeps the default safety check calm and collapses after an explicit none response', () => {
+    renderWithProviders();
+    fireEvent.click(screen.getByText('လုပ်နိုင်ပြီ'));
+    fireEvent.click(screen.getByText('ရှေ့သို့'));
+    fireEvent.click(screen.getAllByRole('button', { name: 'လုပ်နိုင်ပြီ' })[0]);
+
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'အသက်ရှူရန် အလွန်ခက်ခဲခြင်း' })).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'လက္ခဏာစာရင်းကို ကြည့်မည်' }));
+    expect(screen.getByRole('button', { name: 'အသက်ရှူရန် အလွန်ခက်ခဲခြင်း' })).toBeInTheDocument();
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'ဤလက္ခဏာများ မရှိပါ' }));
+    expect(screen.getByRole('status')).toHaveTextContent('အရေးပေါ်လက္ခဏာများ မရှိပါဟု မှတ်သားထားသည်။');
+    expect(screen.queryByRole('button', { name: 'အသက်ရှူရန် အလွန်ခက်ခဲခြင်း' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 });
