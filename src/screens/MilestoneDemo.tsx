@@ -170,6 +170,7 @@ export function MilestoneDemo() {
         ageGroupKey,
         resultState: computed.state,
         lostSkill,
+        urgentSymptoms: confirmedSymptoms,
         resultSnapshot: {
           state: computed.state,
           answeredCount: answered,

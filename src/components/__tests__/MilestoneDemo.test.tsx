@@ -106,6 +106,7 @@ describe('MilestoneDemo (component)', () => {
 
     await waitFor(() => expect(recordSession).toHaveBeenCalledWith(expect.objectContaining({
       resultState: 'red',
+      urgentSymptoms: ['seizure'],
       resultSnapshot: expect.objectContaining({ urgentSymptoms: ['seizure'] }),
     })));
   });

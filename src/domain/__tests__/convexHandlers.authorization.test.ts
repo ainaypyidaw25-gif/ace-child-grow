@@ -338,6 +338,10 @@ describe('Convex registered handlers enforce authorization', () => {
     expect(context.db.patch).toHaveBeenCalledWith('content-1', expect.objectContaining({
       clinicalStatus: 'published', reviewScope: 'clinical', reviewerDisplayName: 'Clinical Reviewer',
     }));
+    expect(context.db.insert).toHaveBeenCalledWith('auditLogs', expect.objectContaining({
+      action: 'library.published',
+      summary: 'Safety guide · specialist review limited to emergency wording',
+    }));
   });
 
   it('a language reviewer cannot make a clinical or safety decision', async () => {
@@ -636,6 +640,47 @@ describe('Convex registered handlers enforce authorization', () => {
     })).resolves.toBe('session-1');
     expect(context.db.insert).toHaveBeenCalledWith('milestoneSessions', expect.objectContaining({
       userId: 'user-1', childId: 'child-1', resultState: 'green',
+      resultSnapshot: expect.objectContaining({ state: 'green', urgentSymptoms: [], safetyUrgent: false }),
+    }));
+  });
+
+  it('milestone server forces red when any validated acute symptom is reported', async () => {
+    authState.userId = 'user-1';
+    const context = ctx({ get: { _id: 'child-1', userId: 'user-1' } });
+    await handler(recordSession)(context, {
+      childId: 'child-1', resultState: 'green', lostSkill: false,
+      urgentSymptoms: ['seizure'], resultSnapshot: { state: 'green' }, responses: [],
+    });
+    expect(context.db.insert).toHaveBeenCalledWith('milestoneSessions', expect.objectContaining({
+      resultState: 'red',
+      resultSnapshot: expect.objectContaining({
+        state: 'red', urgentSymptoms: ['seizure'], safetyUrgent: true,
+      }),
+    }));
+  });
+
+  it('milestone server keeps stale snapshot-only clients safe and forces skill loss to red', async () => {
+    authState.userId = 'user-1';
+    const symptomContext = ctx({ get: { _id: 'child-1', userId: 'user-1' } });
+    await handler(recordSession)(symptomContext, {
+      childId: 'child-1', resultState: 'yellow', lostSkill: false,
+      resultSnapshot: { state: 'yellow', urgentSymptoms: ['blue_lips'] }, responses: [],
+    });
+    expect(symptomContext.db.insert).toHaveBeenCalledWith('milestoneSessions', expect.objectContaining({
+      resultState: 'red',
+      resultSnapshot: expect.objectContaining({ state: 'red', urgentSymptoms: ['blue_lips'] }),
+    }));
+
+    const skillLossContext = ctx({ get: { _id: 'child-1', userId: 'user-1' } });
+    await handler(recordSession)(skillLossContext, {
+      childId: 'child-1', resultState: 'green', lostSkill: true,
+      resultSnapshot: { state: 'green' }, responses: [],
+    });
+    expect(skillLossContext.db.insert).toHaveBeenCalledWith('milestoneSessions', expect.objectContaining({
+      resultState: 'red',
+      resultSnapshot: expect.objectContaining({
+        state: 'red', urgentSymptoms: ['loss_of_acquired_skills'], safetyUrgent: true,
+      }),
     }));
   });
 

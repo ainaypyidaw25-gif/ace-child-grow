@@ -4,6 +4,7 @@ import {
   FOCUSED_SPECIALIST_REVIEW_SLUGS,
   requiredPublicationReviews,
   requiresSpecialistReview,
+  specialistReviewReason,
 } from '../../../convex/lib/contentReviewRequirements';
 
 describe('risk-scoped content review requirements', () => {
@@ -15,6 +16,7 @@ describe('risk-scoped content review requirements', () => {
   it('routes the exact seven emergency-wording records to specialist review', () => {
     expect(FOCUSED_SPECIALIST_REVIEW_SLUGS).toHaveLength(7);
     for (const slug of FOCUSED_SPECIALIST_REVIEW_SLUGS) {
+      expect(specialistReviewReason({ slug })).toBe('focused_emergency_wording');
       expect(requiredPublicationReviews({ slug })).toEqual([...EDUCATION_REVIEW_DIMENSIONS, 'clinical']);
     }
   });

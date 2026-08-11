@@ -28,10 +28,18 @@ type ReviewableContent = {
   requiredReviewDimensions?: string[];
 };
 
+export type SpecialistReviewReason =
+  | 'focused_emergency_wording'
+  | 'explicit_clinical_requirement'
+  | 'risk_wording';
+
 /** Specialist review is based on medical decision risk, not parent visibility. */
-export function requiresSpecialistReview(item: ReviewableContent): boolean {
-  if (focusedSpecialistSlugs.has(item.slug)) return true;
-  if (item.requiredReviewDimensions?.includes('clinical')) return true;
+export function specialistReviewReason(item: ReviewableContent): SpecialistReviewReason | null {
+  // These seven records are routed only for their emergency-decision wording.
+  // Their ordinary developmental or parent-education claims are not thereby
+  // clinically approved.
+  if (focusedSpecialistSlugs.has(item.slug)) return 'focused_emergency_wording';
+  if (item.requiredReviewDimensions?.includes('clinical')) return 'explicit_clinical_requirement';
 
   // A preview-only printable is catalogue metadata, not the missing PDF
   // payload. Its English, Myanmar, evidence and safety wording still requires
@@ -41,7 +49,7 @@ export function requiresSpecialistReview(item: ReviewableContent): boolean {
   const data = item.data && typeof item.data === 'object'
     ? item.data as Record<string, unknown>
     : null;
-  if (item.type === 'printable' && data?.availability === 'preview_only') return false;
+  if (item.type === 'printable' && data?.availability === 'preview_only') return null;
 
   const text = `${item.titleEn ?? ''} ${item.summaryEn ?? ''} ${JSON.stringify(item.data ?? {})}`
     .toLowerCase()
@@ -56,7 +64,7 @@ export function requiresSpecialistReview(item: ReviewableContent): boolean {
     .replace(/\bno diagnosis\b/g, '')
     .replace(/\b(?:this (?:content|app|guide) )?is not medical advice\b/g, '');
 
-  return [
+  const hasRiskWording = [
     /\bdiagnos(?:e|es|ed|ing|is|tic|tics|tically)\b/,
     /\b(?:treat(?:s|ed|ing|ment|ments)?|prescrib(?:e|es|ed|ing)|administer(?:s|ed|ing)?)\b/,
     /\b(?:medication|medications|medicine|medicines|medicinal|drug|drugs)\b/,
@@ -72,6 +80,11 @@ export function requiresSpecialistReview(item: ReviewableContent): boolean {
     /(?:တစ်ဦးချင်း|တစ်ယောက်ချင်း).{0,40}(?:အကြံပြု|ကုသ|စောင့်ရှောက်)/,
     /(?:အရေးပေါ်|ဆေးကုသမှု).{0,40}ချက်ချင်း|ချက်ချင်း.{0,40}(?:အရေးပေါ်|ဆေးကုသမှု)/,
   ].some((pattern) => pattern.test(text));
+  return hasRiskWording ? 'risk_wording' : null;
+}
+
+export function requiresSpecialistReview(item: ReviewableContent): boolean {
+  return specialistReviewReason(item) !== null;
 }
 
 export function requiredPublicationReviews(item: ReviewableContent): ReviewDimension[] {

@@ -21,7 +21,7 @@ import { STARTER_ANIMATION_SLUGS } from './animationPlan';
 import { diffEditableContent } from './lib/contentEditDiff';
 import { seedAuditSummary, seedMayUpdateExisting, seedMediaIsProtected } from './lib/seedPolicy';
 import { findReviewContentMatches } from './lib/reviewSearch';
-import { requiredPublicationReviews, requiresSpecialistReview } from './lib/contentReviewRequirements';
+import { requiredPublicationReviews, specialistReviewReason } from './lib/contentReviewRequirements';
 
 const protectedContentDataFields = new Set([
   'editorialStatus',
@@ -694,8 +694,11 @@ export const setReview = mutation({
       .withIndex('by_slug', (qq) => qq.eq('slug', args.slug))
       .unique();
     if (!item) throw new Error('Not found');
+    const specialistReason = args.clinicalStatus === 'published'
+      ? specialistReviewReason(item)
+      : null;
     const approval = args.clinicalStatus === 'published'
-      ? requiresSpecialistReview(item)
+      ? specialistReason
         ? await requireClinicalPublisher(ctx)
         : await requireProfessionalPublisher(ctx)
       : null;
@@ -730,7 +733,10 @@ export const setReview = mutation({
       reviewNote: args.reviewNote,
       updatedAt: now,
     });
-    await logAudit(ctx, userId, `library.${args.clinicalStatus}`, 'libraryContent', item._id, item.titleEn);
+    const auditSummary = specialistReason === 'focused_emergency_wording'
+      ? `${item.titleEn} · specialist review limited to emergency wording`
+      : item.titleEn;
+    await logAudit(ctx, userId, `library.${args.clinicalStatus}`, 'libraryContent', item._id, auditSummary);
     return { ok: true as const, reviewScope: approval?.scope ?? null };
   },
 });

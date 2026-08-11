@@ -10,7 +10,8 @@ const contentDetailSource = readFileSync('src/screens/ContentDetail.tsx', 'utf8'
 describe('risk-scoped publication gate', () => {
   it('uses education review for ordinary content and specialist review for medical-decision wording', () => {
     expect(librarySource).toContain("args.clinicalStatus === 'published'");
-    expect(librarySource).toContain('requiresSpecialistReview(item)');
+    expect(librarySource).toContain('specialistReviewReason(item)');
+    expect(librarySource).toContain('specialist review limited to emergency wording');
     expect(librarySource).toContain('await requireProfessionalPublisher(ctx)');
     expect(librarySource).toContain('await requireClinicalPublisher(ctx)');
   });
