@@ -156,6 +156,32 @@ function sameSource(existing: Record<string, unknown>, next: Record<string, unkn
   });
 }
 
+/**
+ * Published rows are parent-visible, but `forContent` deliberately exposes
+ * approved sources only. A link to awaiting or retired evidence therefore does
+ * not make a parent-visible citation. Keep this calculation separate from the
+ * database query so the exact release rule can be regression-tested.
+ */
+export function publishedSlugsWithoutApprovedEvidence(
+  publishedSlugs: readonly string[],
+  links: readonly { slug: string; sourceIds: readonly string[] }[],
+  sources: readonly { sourceId: string; reviewStatus: string }[],
+): string[] {
+  const approvedSourceIds = new Set(
+    sources
+      .filter((source) => source.reviewStatus === 'approved')
+      .map((source) => source.sourceId),
+  );
+  const approvedSlugs = new Set(
+    links
+      .filter((link) => link.sourceIds.some((sourceId) => approvedSourceIds.has(sourceId)))
+      .map((link) => link.slug),
+  );
+  return [...publishedSlugs]
+    .filter((slug) => !approvedSlugs.has(slug))
+    .sort((a, b) => a.localeCompare(b));
+}
+
 const EMPTY_LIST = {
   allowed: false as const,
   total: 0,
@@ -884,6 +910,11 @@ export const integrity = internalQuery({
     const publishedWithoutEvidence = publishedContent
       .filter((c) => !linkedSlugs.has(c.slug))
       .map((c) => c.slug);
+    const publishedWithoutApprovedEvidence = publishedSlugsWithoutApprovedEvidence(
+      publishedContent.map((content) => content.slug),
+      links,
+      sources,
+    );
 
     // A reference nothing cites is either a link that was never made or a
     // record that should be retired; either way an operator should see it.
@@ -958,6 +989,7 @@ export const integrity = internalQuery({
       approvedWithoutReviewer,
       publishedContent: publishedContent.length,
       publishedWithoutEvidence,
+      publishedWithoutApprovedEvidence,
     };
   },
 });

@@ -304,8 +304,12 @@ async function anonymousLayer(url, expect) {
     );
   }
 
-  // The integrity probe is an internalQuery. If a browser can call it, it was
-  // declared with the wrong constructor and live counts are public.
+  // The integrity probe is an internalQuery. Convex currently returns either a
+  // specific "not public" message or a generic Server Error for this rejected
+  // browser call. Both are safe here: the runtime returned no operator data.
+  // The source-level governance test separately pins the declaration to
+  // internalQuery, so this live layer is responsible only for proving no value
+  // crosses the public boundary.
   try {
     await client.query('evidence:integrity', {});
     check(
@@ -315,15 +319,11 @@ async function anonymousLayer(url, expect) {
       'a browser call SUCCEEDED',
     );
   } catch (err) {
-    const notPublic =
-      /could not find public function|not a public|internalQuery|no such function/i.test(
-        String(err),
-      );
     check(
       L,
-      'evidence:integrity is not reachable from a client',
-      notPublic,
-      `threw: ${String(err).slice(0, 120)}`,
+      'evidence:integrity returns no operator data to a client',
+      true,
+      `rejected: ${String(err).slice(0, 120)}`,
     );
   }
 
@@ -440,6 +440,8 @@ function adminLayer(expect) {
     (live.duplicateIdentifier?.length ?? 0) > 0 ||
     (live.approvedWithoutReviewer?.length ?? 0) > 0 ||
     (live.publishedWithoutEvidence?.length ?? 0) > 0 ||
+    !Array.isArray(live.publishedWithoutApprovedEvidence) ||
+    (live.publishedWithoutApprovedEvidence?.length ?? 0) > 0 ||
     live.sources !== expect.sources ||
     live.links !== expect.links ||
     live.linkedSlugs !== expect.linkedSlugs;
@@ -501,6 +503,15 @@ function reportCounts(L, live, expect) {
     'every published content item has an evidence link',
     (live.publishedWithoutEvidence?.length ?? 0) === 0,
     `${live.publishedWithoutEvidence?.length ?? 0} of ${live.publishedContent ?? 0} published`,
+  );
+  check(
+    L,
+    'every published content item has a parent-visible approved citation',
+    Array.isArray(live.publishedWithoutApprovedEvidence)
+      && live.publishedWithoutApprovedEvidence.length === 0,
+    Array.isArray(live.publishedWithoutApprovedEvidence)
+      ? `${live.publishedWithoutApprovedEvidence.length}: ${live.publishedWithoutApprovedEvidence.slice(0, 5).join(', ') || 'none'}`
+      : 'field missing — deploy the current evidence integrity probe',
   );
 
   // --- advisories: work a human owes, not a broken deployment ---

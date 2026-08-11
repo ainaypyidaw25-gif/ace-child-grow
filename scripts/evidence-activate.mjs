@@ -301,6 +301,7 @@ row('approved', live.approved);
 row('approved without a qualified reviewer', live.approvedWithoutReviewer.length);
 row('published content', live.publishedContent);
 row('published without evidence', live.publishedWithoutEvidence.length);
+row('published without approved citation', live.publishedWithoutApprovedEvidence.length);
 say('');
 say('Nothing was approved or published by this script. Approval is a human act');
 say('performed by a named, qualified reviewer through the admin screen.');

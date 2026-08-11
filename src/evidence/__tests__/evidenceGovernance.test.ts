@@ -365,6 +365,15 @@ describe('live check state machine', () => {
     expect(broken).not.toContain('unusedSources');
   });
 
+  it('fails closed when the deployed probe cannot report approved parent citations', () => {
+    const broken = liveSrc.slice(
+      liveSrc.indexOf('const broken ='),
+      liveSrc.indexOf("return { state: broken"),
+    );
+    expect(broken).toContain('!Array.isArray(live.publishedWithoutApprovedEvidence)');
+    expect(broken).toContain('(live.publishedWithoutApprovedEvidence?.length ?? 0) > 0');
+  });
+
   it('never lets an absent function pass as a working authorization gate', () => {
     expect(liveSrc).toContain('const NOT_DEPLOYED =');
     expect(liveSrc).toContain('const UNAUTHORIZED =');
