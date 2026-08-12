@@ -1,6 +1,6 @@
 # ACE Child Grow — 4-year guide illustration review
 
-Status: **3/6 OWNER APPROVED; 3/6 CORRECTED AND READY FOR OWNER RE-REVIEW — NOT DEPLOYED**
+Status: **6/6 OWNER APPROVED — PRODUCTION DEPLOYMENT AUTHORIZED; NOT YET DEPLOYED**
 
 ## Production source of truth
 
@@ -47,7 +47,7 @@ Status: **3/6 OWNER APPROVED; 3/6 CORRECTED AND READY FOR OWNER RE-REVIEW — NO
 
 ![gd_4y_daily_routine illustration](../../public/guides/gd_4y_daily_routine.2425854507.webp)
 
-### `gd_4y_nutrition` — READY FOR OWNER RE-REVIEW
+### `gd_4y_nutrition` — OWNER APPROVED
 
 - Myanmar title: ၄ နှစ် — အာဟာရ လမ်းညွှန်
 - English title: 4 years — nutrition guide
@@ -58,7 +58,7 @@ Status: **3/6 OWNER APPROVED; 3/6 CORRECTED AND READY FOR OWNER RE-REVIEW — NO
 
 ![gd_4y_nutrition illustration](../../public/guides/gd_4y_nutrition.432cc475f0.webp)
 
-### `gd_4y_problem_solving` — READY FOR OWNER RE-REVIEW
+### `gd_4y_problem_solving` — OWNER APPROVED
 
 - Myanmar title: ၄ နှစ် — ပြဿနာ ဖြေရှင်းခြင်း
 - English title: 4 years — Problem Solving
@@ -91,7 +91,7 @@ Status: **3/6 OWNER APPROVED; 3/6 CORRECTED AND READY FOR OWNER RE-REVIEW — NO
 
 ![gd_4y_school_readiness illustration](../../public/guides/gd_4y_school_readiness.44eee6681f.webp)
 
-### `gd_4y_sleep` — READY FOR OWNER RE-REVIEW
+### `gd_4y_sleep` — OWNER APPROVED
 
 - Myanmar title: ၄ နှစ် — အိပ်စက်ခြင်း လမ်းညွှန်
 - English title: 4 years — sleep guide
@@ -133,4 +133,4 @@ Status: **3/6 OWNER APPROVED; 3/6 CORRECTED AND READY FOR OWNER RE-REVIEW — NO
 
 ## Deployment gate
 
-The unchanged daily-routine, safety, and school-readiness illustrations retain the owner's earlier 4-year approval. Release QA changed nutrition, problem-solving, and sleep to correct hidden hands or feet. **Explicit owner re-approval of those three corrected previews is required before push, merge, or production deployment.** Production Convex remains read only and no clinical wording is changed.
+The unchanged daily-routine, safety, and school-readiness illustrations retain the owner's earlier 4-year approval. Release QA changed nutrition, problem-solving, and sleep to correct hidden hands or feet. The owner explicitly approved all three corrected previews on 2026-08-12, authorizing push, merge, and production deployment. Production Convex remains read only and no clinical wording is changed.
