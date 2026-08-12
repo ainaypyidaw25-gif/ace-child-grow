@@ -100,6 +100,10 @@ const GUIDES = vi.hoisted(() => [
   ['gd_4y_safety', '၄ နှစ် — ဘေးကင်းလုံခြုံရေး လမ်းညွှန်', '4 years — safety guide', '/guides/gd_4y_safety.35e6619556.webp', 'clinical_review'],
   ['gd_4y_school_readiness', '၄ နှစ် — ကျောင်းအတွက် အသင့်ဖြစ်မှု', '4 years — School Readiness', '/guides/gd_4y_school_readiness.44eee6681f.webp', 'clinical_review'],
   ['gd_4y_sleep', '၄ နှစ် — အိပ်စက်ခြင်း လမ်းညွှန်', '4 years — sleep guide', '/guides/gd_4y_sleep.ce53f5b92f.webp', 'clinical_review'],
+  ['gd_4_5y_daily_routine', '၄ နှစ်ခွဲ — နေ့စဉ်လုပ်ရိုးလုပ်စဉ် လမ်းညွှန်', '4.5 years — daily routine guide', '/guides/gd_4_5y_daily_routine.5877b17356.webp', 'clinical_review'],
+  ['gd_4_5y_nutrition', '၄ နှစ်ခွဲ — အာဟာရ လမ်းညွှန်', '4.5 years — nutrition guide', '/guides/gd_4_5y_nutrition.072745f055.webp', 'clinical_review'],
+  ['gd_4_5y_safety', '၄ နှစ်ခွဲ — ဘေးကင်းလုံခြုံရေး လမ်းညွှန်', '4.5 years — safety guide', '/guides/gd_4_5y_safety.6cac88d3a8.webp', 'clinical_review'],
+  ['gd_4_5y_sleep', '၄ နှစ်ခွဲ — အိပ်စက်ခြင်း လမ်းညွှန်', '4.5 years — sleep guide', '/guides/gd_4_5y_sleep.3032ba1b07.webp', 'clinical_review'],
 ] as const);
 const EMPTY_RECORDS = vi.hoisted(() => [] as const);
 
