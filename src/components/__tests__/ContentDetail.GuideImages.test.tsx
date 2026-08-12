@@ -104,6 +104,10 @@ const GUIDES = vi.hoisted(() => [
   ['gd_4_5y_nutrition', '၄ နှစ်ခွဲ — အာဟာရ လမ်းညွှန်', '4.5 years — nutrition guide', '/guides/gd_4_5y_nutrition.072745f055.webp', 'clinical_review'],
   ['gd_4_5y_safety', '၄ နှစ်ခွဲ — ဘေးကင်းလုံခြုံရေး လမ်းညွှန်', '4.5 years — safety guide', '/guides/gd_4_5y_safety.6cac88d3a8.webp', 'clinical_review'],
   ['gd_4_5y_sleep', '၄ နှစ်ခွဲ — အိပ်စက်ခြင်း လမ်းညွှန်', '4.5 years — sleep guide', '/guides/gd_4_5y_sleep.3032ba1b07.webp', 'clinical_review'],
+  ['gd_5y_daily_routine', '၅ နှစ် — နေ့စဉ်လုပ်ရိုးလုပ်စဉ် လမ်းညွှန်', '5 years — daily routine guide', '/guides/gd_5y_daily_routine.a8bef9fde0.webp', 'clinical_review'],
+  ['gd_5y_nutrition', '၅ နှစ် — အာဟာရ လမ်းညွှန်', '5 years — nutrition guide', '/guides/gd_5y_nutrition.ba81d83df8.webp', 'clinical_review'],
+  ['gd_5y_safety', '၅ နှစ် — ဘေးကင်းလုံခြုံရေး လမ်းညွှန်', '5 years — safety guide', '/guides/gd_5y_safety.610b5aeca8.webp', 'clinical_review'],
+  ['gd_5y_sleep', '၅ နှစ် — အိပ်စက်ခြင်း လမ်းညွှန်', '5 years — sleep guide', '/guides/gd_5y_sleep.89936421f7.webp', 'clinical_review'],
 ] as const);
 const EMPTY_RECORDS = vi.hoisted(() => [] as const);
 
