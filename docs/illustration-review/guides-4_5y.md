@@ -1,6 +1,6 @@
 # ACE Child Grow — 4.5-year guide illustration review
 
-Status: **4/4 READY FOR OWNER REVIEW — DEPLOYMENT DISABLED**
+Status: **4/4 OWNER APPROVED — PRODUCTION DEPLOYMENT AUTHORIZED; NOT YET DEPLOYED**
 
 ## Production source of truth
 
@@ -32,7 +32,7 @@ Status: **4/4 READY FOR OWNER REVIEW — DEPLOYMENT DISABLED**
 
 ## Owner-review items
 
-### `gd_4_5y_daily_routine` — READY FOR OWNER REVIEW
+### `gd_4_5y_daily_routine` — OWNER APPROVED
 
 - Myanmar title: ၄ နှစ်ခွဲ — နေ့စဉ်လုပ်ရိုးလုပ်စဉ် လမ်းညွှန်
 - English title: 4.5 years — daily routine guide
@@ -43,7 +43,7 @@ Status: **4/4 READY FOR OWNER REVIEW — DEPLOYMENT DISABLED**
 
 ![gd_4_5y_daily_routine illustration](../../public/guides/gd_4_5y_daily_routine.5877b17356.webp)
 
-### `gd_4_5y_nutrition` — READY FOR OWNER REVIEW
+### `gd_4_5y_nutrition` — OWNER APPROVED
 
 - Myanmar title: ၄ နှစ်ခွဲ — အာဟာရ လမ်းညွှန်
 - English title: 4.5 years — nutrition guide
@@ -54,7 +54,7 @@ Status: **4/4 READY FOR OWNER REVIEW — DEPLOYMENT DISABLED**
 
 ![gd_4_5y_nutrition illustration](../../public/guides/gd_4_5y_nutrition.072745f055.webp)
 
-### `gd_4_5y_safety` — READY FOR OWNER REVIEW
+### `gd_4_5y_safety` — OWNER APPROVED
 
 - Myanmar title: ၄ နှစ်ခွဲ — ဘေးကင်းလုံခြုံရေး လမ်းညွှန်
 - English title: 4.5 years — safety guide
@@ -65,7 +65,7 @@ Status: **4/4 READY FOR OWNER REVIEW — DEPLOYMENT DISABLED**
 
 ![gd_4_5y_safety illustration](../../public/guides/gd_4_5y_safety.6cac88d3a8.webp)
 
-### `gd_4_5y_sleep` — READY FOR OWNER REVIEW
+### `gd_4_5y_sleep` — OWNER APPROVED
 
 - Myanmar title: ၄ နှစ်ခွဲ — အိပ်စက်ခြင်း လမ်းညွှန်
 - English title: 4.5 years — sleep guide
@@ -104,4 +104,4 @@ Status: **4/4 READY FOR OWNER REVIEW — DEPLOYMENT DISABLED**
 
 ## Deployment gate
 
-`DEPLOY_ALLOWED = false`. A local review commit may be prepared, but no push, merge, deployment, publication, or Production Convex update is authorized. Explicit owner approval is required for this exact four-item 4.5-year guide review before production release.
+The owner explicitly approved this exact four-item 4.5-year guide review on 2026-08-12, authorizing push, merge, and production deployment. Production Convex remains read only and no clinical wording is changed.
