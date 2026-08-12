@@ -157,6 +157,18 @@ export const GUIDE_ILLUSTRATIONS: Readonly<Record<string, string>> = {
     '/guides/gd_2y_safety.91fe18f7fc.webp',
   gd_2y_sleep:
     '/guides/gd_2y_sleep.873a520e2c.webp',
+  gd_3y_cognitive:
+    '/guides/gd_3y_cognitive.6e4d7b1737.webp',
+  gd_3y_daily_routine:
+    '/guides/gd_3y_daily_routine.819d380c64.webp',
+  gd_3y_nutrition:
+    '/guides/gd_3y_nutrition.2077c69177.webp',
+  gd_3y_safety:
+    '/guides/gd_3y_safety.ea3175b45e.webp',
+  gd_3y_sleep:
+    '/guides/gd_3y_sleep.f742f1b5f9.webp',
+  gd_3y_social:
+    '/guides/gd_3y_social.6b54712467.webp',
   gd_3_5y_daily_routine:
     '/guides/gd_3_5y_daily_routine.52c15c6500.webp',
   gd_3_5y_nutrition:
