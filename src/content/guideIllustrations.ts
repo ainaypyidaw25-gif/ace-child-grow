@@ -145,6 +145,18 @@ export const GUIDE_ILLUSTRATIONS: Readonly<Record<string, string>> = {
     '/guides/gd_19_24m_sleep.106f76d450.webp',
   gd_19_24m_speech:
     '/guides/gd_19_24m_speech.00e0c08e9d.webp',
+  gd_2y_daily_routine:
+    '/guides/gd_2y_daily_routine.d4f5f46241.webp',
+  gd_2y_language:
+    '/guides/gd_2y_language.81dbfe69c9.webp',
+  gd_2y_nutrition:
+    '/guides/gd_2y_nutrition.9ee40be9a7.webp',
+  gd_2y_play:
+    '/guides/gd_2y_play.79ad541bd1.webp',
+  gd_2y_safety:
+    '/guides/gd_2y_safety.91fe18f7fc.webp',
+  gd_2y_sleep:
+    '/guides/gd_2y_sleep.873a520e2c.webp',
   gd_3_5y_daily_routine:
     '/guides/gd_3_5y_daily_routine.52c15c6500.webp',
   gd_3_5y_nutrition:
