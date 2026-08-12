@@ -94,6 +94,12 @@ const GUIDES = vi.hoisted(() => [
   ['gd_3_5y_nutrition', '၃ နှစ်ခွဲ — အာဟာရ လမ်းညွှန်', '3.5 years — nutrition guide', '/guides/gd_3_5y_nutrition.a9bb6fe8f1.webp', 'clinical_review'],
   ['gd_3_5y_safety', '၃ နှစ်ခွဲ — ဘေးကင်းလုံခြုံရေး လမ်းညွှန်', '3.5 years — safety guide', '/guides/gd_3_5y_safety.9293fe1354.webp', 'clinical_review'],
   ['gd_3_5y_sleep', '၃ နှစ်ခွဲ — အိပ်စက်ခြင်း လမ်းညွှန်', '3.5 years — sleep guide', '/guides/gd_3_5y_sleep.da3b8b7d22.webp', 'clinical_review'],
+  ['gd_4y_daily_routine', '၄ နှစ် — နေ့စဉ်လုပ်ရိုးလုပ်စဉ် လမ်းညွှန်', '4 years — daily routine guide', '/guides/gd_4y_daily_routine.2425854507.webp', 'clinical_review'],
+  ['gd_4y_nutrition', '၄ နှစ် — အာဟာရ လမ်းညွှန်', '4 years — nutrition guide', '/guides/gd_4y_nutrition.432cc475f0.webp', 'clinical_review'],
+  ['gd_4y_problem_solving', '၄ နှစ် — ပြဿနာ ဖြေရှင်းခြင်း', '4 years — Problem Solving', '/guides/gd_4y_problem_solving.4570a87a16.webp', 'clinical_review'],
+  ['gd_4y_safety', '၄ နှစ် — ဘေးကင်းလုံခြုံရေး လမ်းညွှန်', '4 years — safety guide', '/guides/gd_4y_safety.35e6619556.webp', 'clinical_review'],
+  ['gd_4y_school_readiness', '၄ နှစ် — ကျောင်းအတွက် အသင့်ဖြစ်မှု', '4 years — School Readiness', '/guides/gd_4y_school_readiness.44eee6681f.webp', 'clinical_review'],
+  ['gd_4y_sleep', '၄ နှစ် — အိပ်စက်ခြင်း လမ်းညွှန်', '4 years — sleep guide', '/guides/gd_4y_sleep.ce53f5b92f.webp', 'clinical_review'],
 ] as const);
 const EMPTY_RECORDS = vi.hoisted(() => [] as const);
 
