@@ -177,6 +177,18 @@ export const GUIDE_ILLUSTRATIONS: Readonly<Record<string, string>> = {
     '/guides/gd_3_5y_safety.9293fe1354.webp',
   gd_3_5y_sleep:
     '/guides/gd_3_5y_sleep.da3b8b7d22.webp',
+  gd_4y_daily_routine:
+    '/guides/gd_4y_daily_routine.2425854507.webp',
+  gd_4y_nutrition:
+    '/guides/gd_4y_nutrition.432cc475f0.webp',
+  gd_4y_problem_solving:
+    '/guides/gd_4y_problem_solving.4570a87a16.webp',
+  gd_4y_safety:
+    '/guides/gd_4y_safety.35e6619556.webp',
+  gd_4y_school_readiness:
+    '/guides/gd_4y_school_readiness.44eee6681f.webp',
+  gd_4y_sleep:
+    '/guides/gd_4y_sleep.ce53f5b92f.webp',
 };
 
 export function guideIllustration(slug: string): string | undefined {
