@@ -145,6 +145,14 @@ export const GUIDE_ILLUSTRATIONS: Readonly<Record<string, string>> = {
     '/guides/gd_19_24m_sleep.106f76d450.webp',
   gd_19_24m_speech:
     '/guides/gd_19_24m_speech.00e0c08e9d.webp',
+  gd_3_5y_daily_routine:
+    '/guides/gd_3_5y_daily_routine.52c15c6500.webp',
+  gd_3_5y_nutrition:
+    '/guides/gd_3_5y_nutrition.a9bb6fe8f1.webp',
+  gd_3_5y_safety:
+    '/guides/gd_3_5y_safety.9293fe1354.webp',
+  gd_3_5y_sleep:
+    '/guides/gd_3_5y_sleep.da3b8b7d22.webp',
 };
 
 export function guideIllustration(slug: string): string | undefined {

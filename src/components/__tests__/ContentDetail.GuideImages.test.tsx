@@ -78,6 +78,10 @@ const GUIDES = vi.hoisted(() => [
   ['gd_19_24m_safety', '၁၉–၂၄ လ — ဘေးကင်းလုံခြုံရေး လမ်းညွှန်', '19–24 months — safety guide', '/guides/gd_19_24m_safety.3e762eb8c3.webp', 'clinical_review'],
   ['gd_19_24m_sleep', '၁၉–၂၄ လ — အိပ်စက်ခြင်း လမ်းညွှန်', '19–24 months — sleep guide', '/guides/gd_19_24m_sleep.106f76d450.webp', 'clinical_review'],
   ['gd_19_24m_speech', '၁၉–၂၄ လ — စကားသံ ထွက်ဆိုမှု', '19–24 months — Speech', '/guides/gd_19_24m_speech.00e0c08e9d.webp', 'clinical_review'],
+  ['gd_3_5y_daily_routine', '၃ နှစ်ခွဲ — နေ့စဉ်လုပ်ရိုးလုပ်စဉ် လမ်းညွှန်', '3.5 years — daily routine guide', '/guides/gd_3_5y_daily_routine.52c15c6500.webp', 'clinical_review'],
+  ['gd_3_5y_nutrition', '၃ နှစ်ခွဲ — အာဟာရ လမ်းညွှန်', '3.5 years — nutrition guide', '/guides/gd_3_5y_nutrition.a9bb6fe8f1.webp', 'clinical_review'],
+  ['gd_3_5y_safety', '၃ နှစ်ခွဲ — ဘေးကင်းလုံခြုံရေး လမ်းညွှန်', '3.5 years — safety guide', '/guides/gd_3_5y_safety.9293fe1354.webp', 'clinical_review'],
+  ['gd_3_5y_sleep', '၃ နှစ်ခွဲ — အိပ်စက်ခြင်း လမ်းညွှန်', '3.5 years — sleep guide', '/guides/gd_3_5y_sleep.da3b8b7d22.webp', 'clinical_review'],
 ] as const);
 const EMPTY_RECORDS = vi.hoisted(() => [] as const);
 
