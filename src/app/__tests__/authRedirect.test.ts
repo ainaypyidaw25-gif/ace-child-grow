@@ -37,6 +37,14 @@ describe('native authentication redirects', () => {
     expect(signInSource).not.toContain('redirectTo: window.location.origin');
   });
 
+  it('presents Google first and keeps PIN/password behind an explicit fallback', () => {
+    const signInSource = readFileSync('src/screens/SignIn.tsx', 'utf8');
+    expect(signInSource).toContain("const [showCredentialForm, setShowCredentialForm] = useState(isStaffInvite)");
+    expect(signInSource).toContain("flow === 'signIn' && !showEmailCredentialFields");
+    expect(signInSource).toContain('Gmail/Google အကောင့်ဖြင့် အလွယ်တကူဝင်နိုင်ပြီး');
+    expect(signInSource).toContain('အီးမေးလ်နှင့် PIN/စကားဝှက်ဖြင့် ဝင်မည်');
+  });
+
   it('accepts only the exact production App Link and removes the one-time code', () => {
     expect(parseNativeAuthCallback('https://child.acegroup.com.mm/admin?invite=abc&code=secret#review')).toEqual({
       code: 'secret',
