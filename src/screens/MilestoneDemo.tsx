@@ -106,8 +106,8 @@ export function MilestoneDemo() {
         </h1>
         <p className="mt-2 text-sm leading-7 text-ink-soft">
           {locale === 'mm'
-            ? 'လက်ရှိအပြည့်အစုံ သုံးနိုင်သော အသက်အပိုင်းအခြားမှာ မွေးကင်းမှ ၁၂ လအထိ ဖြစ်ပါသည်။'
-            : 'The currently complete age range is birth through 12 months.'}
+            ? 'ဤအသက်အုပ်စုအတွက် အတည်ပြုထုတ်ဝေထားသော ဖွံ့ဖြိုးမှုမှတ်တိုင် မရှိသေးပါ။'
+            : 'There are no approved published milestones for this age group yet.'}
         </p>
       </section>
     );

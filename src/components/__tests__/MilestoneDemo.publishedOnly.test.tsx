@@ -28,8 +28,10 @@ const unpublished = {
   data: { observeMm: 'ဤမေးခွန်းကို မပြရပါ။', observeEn: 'This question must not be shown.' },
 };
 
+let queryItems = [unpublished, published];
+
 vi.mock('convex/react', () => ({
-  useQuery: () => ({ staff: true, items: [unpublished, published] }),
+  useQuery: () => ({ staff: true, items: queryItems }),
   useMutation: () => vi.fn(),
 }));
 
@@ -61,5 +63,20 @@ describe('MilestoneDemo published-only staff preview', () => {
       'src',
       expect.stringContaining(`/${published.slug}.`),
     );
+  });
+
+  it('uses an age-neutral message when no approved milestone is published', () => {
+    queryItems = [unpublished];
+    render(
+      <MemoryRouter>
+        <LocaleProvider>
+          <MilestoneDemo />
+        </LocaleProvider>
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByText('ဤအသက်အုပ်စုအတွက် အတည်ပြုထုတ်ဝေထားသော ဖွံ့ဖြိုးမှုမှတ်တိုင် မရှိသေးပါ။')).toBeInTheDocument();
+    expect(screen.queryByText(/မွေးကင်းမှ ၁၂ လအထိ/)).not.toBeInTheDocument();
+    queryItems = [unpublished, published];
   });
 });

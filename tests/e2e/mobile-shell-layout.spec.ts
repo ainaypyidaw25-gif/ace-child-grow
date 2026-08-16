@@ -12,6 +12,7 @@ async function onboardParent(page: Page): Promise<Locator> {
   // is not part of the app and would otherwise cover Profile at 320px.
   await page.getByTestId('next-step').evaluate((button) => { button.style.display = 'none'; });
   const app = await stage(page);
+  await app.getByRole('button', { name: /အီးမေးလ်နှင့် PIN\/စကားဝှက်ဖြင့် ဝင်မည်/ }).click();
   await app.getByRole('button', { name: /အကောင့်မရှိသေးပါက အသစ်ဖွင့်ရန်/ }).click();
   await app.getByLabel(/အီးမေးလ်/).fill('mobile-layout@example.com');
   await app.locator('input[type="password"]').first().fill('481920');
