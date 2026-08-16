@@ -1,6 +1,6 @@
 # ACE Child Grow — creativity lesson illustration review
 
-Status: **READY FOR OWNER REVIEW — NOT DEPLOYED**
+Status: **OWNER APPROVED — RELEASE AUTHORIZED**
 
 ## Production source of truth
 
@@ -15,7 +15,7 @@ Status: **READY FOR OWNER REVIEW — NOT DEPLOYED**
 
 | Slug | Lesson meaning | Primary visual message | Scene | Must not show | Safety requirements | Status |
 |---|---|---|---|---|---|---|
-| `lsn_creativity` | Creativity grows through open-ended activity without one correct answer; the caregiver values the child’s process and lets the child lead the idea. | A preschool-aged child freely makes their own colourful marks on blank paper while a caregiver watches warmly without touching, pointing, correcting, or demonstrating. | One Myanmar/Southeast Asian preschool child sits stably at a very low table with both feet supported on the floor. The child holds one thick, blunt coloured pencil naturally and draws free non-letter, non-number colour marks on one plain sheet of paper; the other hand steadies the paper. One caregiver sits at the child’s eye level within reach, with both empty hands relaxed on their own lap and an encouraging expression. The child’s complete body and both people’s visible anatomy are natural. The background is plain and uncluttered. | Adult touching the pencil or paper; pointing, directing, correcting, copying, tracing, colouring inside a template, holding up a finished result, award/ribbon/star, praise text, letters, numbers, name, worksheet, colouring book, screen, blocks, pretend-play props, scissors, glue, paint, easel, extra toys, distress, text, label, arrow, logo, UI, or watermark. | Stable floor-level furniture; caregiver supervision; thick blunt child-safe pencil; no sharp tool, small choking object, spill, glass, hot item, elevated chair, or trip hazard. | READY FOR OWNER REVIEW |
+| `lsn_creativity` | Creativity grows through open-ended activity without one correct answer; the caregiver values the child’s process and lets the child lead the idea. | A preschool-aged child freely makes their own colourful marks on blank paper while a caregiver watches warmly without touching, pointing, correcting, or demonstrating. | One Myanmar/Southeast Asian preschool child sits stably at a very low table with both feet supported on the floor. The child holds one thick, blunt coloured pencil naturally and draws free non-letter, non-number colour marks on one plain sheet of paper; the other hand steadies the paper. One caregiver sits at the child’s eye level within reach, with both empty hands relaxed on their own lap and an encouraging expression. The child’s complete body and both people’s visible anatomy are natural. The background is plain and uncluttered. | Adult touching the pencil or paper; pointing, directing, correcting, copying, tracing, colouring inside a template, holding up a finished result, award/ribbon/star, praise text, letters, numbers, name, worksheet, colouring book, screen, blocks, pretend-play props, scissors, glue, paint, easel, extra toys, distress, text, label, arrow, logo, UI, or watermark. | Stable floor-level furniture; caregiver supervision; thick blunt child-safe pencil; no sharp tool, small choking object, spill, glass, hot item, elevated chair, or trip hazard. | OWNER APPROVED |
 
 ## Exact Production record
 
@@ -65,7 +65,7 @@ Status: **READY FOR OWNER REVIEW — NOT DEPLOYED**
 - Myanmar/Southeast Asian cultural fit: **PASS**
 - Unique exact-slug mapping with no creativity/category fallback: **PASS**
 
-Final result: **READY FOR OWNER REVIEW**
+Final result: **OWNER APPROVED**
 
 ## Engineering and application verification
 
@@ -88,4 +88,4 @@ Review captures:
 
 ## Deployment gate
 
-`DEPLOY_ALLOWED = false`. No push, deployment, publication, or Production Convex update is allowed before the completed creativity review receives explicit owner approval.
+`DEPLOY_ALLOWED = true`. The owner explicitly approved the complete creativity lesson text-and-image review on 2026-08-16. Repository release and application deployment are authorized; this approval does not authorize changing Production Convex text, translations, evidence, or review metadata.
