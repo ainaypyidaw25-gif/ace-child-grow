@@ -1,14 +1,14 @@
 # ACE Child Grow — Published Problem-Solving Lesson Illustration Review
 
-Status: **READY FOR OWNER REVIEW — NOT DEPLOYED**
+Status: **OWNER APPROVED — RELEASE CONFIRMED**
 
-Source of truth: Production Convex `libraryContent`, filtered to `type = lesson`, `category = problem_solving`, and `clinicalStatus = published`. Read on 2026-08-03. Production contains exactly one matching published record. `ageGroupKey` and separate safety guidance are unavailable in the production record.
+Source of truth: Production Convex `libraryContent`, filtered to `type = lesson`, `category = problem_solving`, and `clinicalStatus = published`. A fresh read-only Production snapshot on 2026-08-16 confirmed exactly one matching published record. `ageGroupKey` and separate safety guidance are unavailable in the production record.
 
 ## Pre-generation review
 
 | Slug | Lesson meaning | Primary visual message | Scene | Must not show | Status |
 |---|---|---|---|---|---|
-| `lsn_problem_solving_parenting` | When a child is stuck, ask a guiding question and allow another attempt instead of supplying the answer; mistakes build learning, patience, and confidence. | The child keeps trying a simple problem while the caregiver encourages thinking without pointing out the answer. | One Myanmar child works independently with a large three-piece inset puzzle on a floor mat while a caregiver sits at eye level, hands away, using a gentle palm-up conversational gesture. | Text, speech bubbles, question marks, caregiver touching or pointing to the answer, a completed puzzle, scolding, distress, screens, unrelated toys/actions, or choking-size pieces. | READY |
+| `lsn_problem_solving_parenting` | When a child is stuck, ask a guiding question and allow another attempt instead of supplying the answer; mistakes build learning, patience, and confidence. | The child keeps trying a simple problem while the caregiver encourages thinking without pointing out the answer. | One Myanmar child works independently with a large three-piece inset puzzle on a floor mat while a caregiver sits at eye level, hands away, using a gentle palm-up conversational gesture. | Text, speech bubbles, question marks, caregiver touching or pointing to the answer, a completed puzzle, scolding, distress, screens, unrelated toys/actions, or choking-size pieces. | OWNER APPROVED |
 
 ## `lsn_problem_solving_parenting`
 
@@ -46,7 +46,7 @@ Source of truth: Production Convex `libraryContent`, filtered to `type = lesson`
 - Landscape 4:3 WebP, 1200×900, 155,084 bytes: **PASS**
 - Exact slug mapping with no category fallback: **PASS**
 
-Final result: **READY FOR OWNER REVIEW**
+Final result: **OWNER APPROVED**
 
 ## Engineering verification
 
@@ -59,4 +59,4 @@ Final result: **READY FOR OWNER REVIEW**
 - Missing asset, broken import, or asset-related warning: **NONE**
 - Existing bundle chunk-size warning: unrelated to this illustration change
 
-Deployment: **NOT ALLOWED / NOT PERFORMED**
+Deployment: **CONFIRMED BY OWNER ON 2026-08-16** — the exact-slug asset is already live in the Production application. This approval records the completed visual review and does not change Production Convex text, translations, evidence, or clinical status.
