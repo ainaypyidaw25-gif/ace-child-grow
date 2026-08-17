@@ -35,33 +35,33 @@ export const MILESTONES: SeedItem[] = [
   m('3_4m', 'gross_motor', 1, {
     title: { mm: 'ခေါင်းကို တည်ငြိမ်စွာ ထိန်းခြင်း', en: 'Holds head steady' },
     observe: { mm: 'မတ်မတ်ချီထားစဉ် ခေါင်းကို တည်ငြိမ်စွာ ထိန်းနိုင်ပါသလား။', en: 'Holds head steady when held upright?' },
-    why: { mm: 'ခေါင်းထိန်းနိုင်ခြင်းသည် ထိုင်ခြင်းဆီသို့ ဦးတည်စေသည်။', en: 'Head control leads toward sitting.' },
+    why: { mm: 'ခေါင်းကို တည်ငြိမ်စွာ ထိန်းနိုင်ခြင်းသည် နောင်တွင် ထိုင်တတ်လာစေရန် အခြေခံဖြစ်ပါသည်။', en: 'Head control leads toward sitting.' },
   }),
   m('3_4m', 'fine_motor', 1, {
-    title: { mm: 'လက်များကို ဆုံစည်းခြင်း', en: 'Brings hands together' },
-    observe: { mm: 'လက်နှစ်ဖက်ကို အလယ်တွင် ဆုံစည်းပါသလား။', en: 'Brings both hands together at the middle?' },
+    title: { mm: 'လက်နှစ်ဖက်ကို အလယ်တွင် ထိတွေ့ဆုံစည်းခြင်း', en: 'Brings hands together' },
+    observe: { mm: 'လက်နှစ်ဖက်ကို ခန္ဓာကိုယ်အလယ်တည့်တည့်တွင် ထိတွေ့ဆုံစည်းပါသလား။', en: 'Brings both hands together at the middle?' },
     why: { mm: 'လက်နှစ်ဖက် ပူးတွဲသုံးခြင်းသည် ကိုင်တွယ်မှု ဖွံ့ဖြိုးမှု၏ အစဖြစ်သည်။', en: 'Using two hands together starts grasping skills.' },
   }),
   m('3_4m', 'communication', 1, {
     title: { mm: '“အူး”၊ “အား” အသံများ ထွက်ခြင်း', en: 'Coos and makes sounds' },
     observe: { mm: '“အူး” “အာ” ကဲ့သို့ အသံများ ထုတ်ပါသလား။', en: 'Makes cooing sounds like “ooh”, “aah”?' },
-    why: { mm: 'ဤအသံများသည် စကားပြောရန် လေ့ကျင့်ခြင်းဖြစ်သည်။', en: 'These sounds are early speech practice.' },
+    why: { mm: 'ဤအသံငယ်များသည် စကားပြောတတ်လာစေရန် အစောပိုင်း အသံလေ့ကျင့်မှုများ ဖြစ်ပါသည်။', en: 'These sounds are early speech practice.' },
   }),
   m('3_4m', 'emotional', 1, {
     title: { mm: 'ပျော်ရွှင်မှု ဖော်ပြခြင်း', en: 'Shows joy' },
-    observe: { mm: 'ရင်းနှီးသူများကို မြင်ရပါက ပျော်ရွှင်ဟန် ပြပါသလား။', en: 'Shows delight seeing familiar people?' },
+    observe: { mm: 'မိဘ သို့မဟုတ် ရင်းနှီးသူများကို မြင်တွေ့ရပါက ပျော်ရွှင်ဟန် ပြပါသလား။', en: 'Shows delight seeing familiar people?' },
     why: { mm: 'ခံစားမှု ဖော်ပြခြင်းသည် လူမှုချိတ်ဆက်မှုကို အားပေးသည်။', en: 'Expressing feelings strengthens bonding.' },
   }),
 
   // ---- 5–6 months ----
   m('5_6m', 'gross_motor', 1, {
-    title: { mm: 'တစ်ဘက်မှ တစ်ဘက်သို့ လှိမ့်ခြင်း', en: 'Rolls over' },
-    observe: { mm: 'ကျောမှ ဗိုက်ဘက်သို့ သို့မဟုတ် ပြန်၍ လှိမ့်နိုင်ပါသလား။', en: 'Rolls from back to tummy or the reverse?' },
+    title: { mm: 'တစ်ဖက်မှ တစ်ဖက်သို့ လှိမ့်ခြင်း', en: 'Rolls over' },
+    observe: { mm: 'ပက်လက်မှ မှောက်လျက် သို့မဟုတ် မှောက်လျက်မှ ပက်လက်သို့ လှိမ့်နိုင်ပါသလား။', en: 'Rolls from back to tummy or the reverse?' },
     why: { mm: 'လှိမ့်ခြင်းသည် ခန္ဓာကိုယ် ထိန်းချုပ်မှု တိုးတက်ကြောင်း ပြသည်။', en: 'Rolling shows growing body control.' },
   }),
   m('5_6m', 'speech', 1, {
     title: { mm: 'ဗျည်းသံများ တွဲရွတ်ခြင်း', en: 'Babbles with consonants' },
-    observe: { mm: '“ဘ” “မ” “ဒ” ကဲ့သို့ အသံများ ထုတ်ပါသလား။', en: 'Makes sounds like “ba”, “ma”, “da”?' },
+    observe: { mm: '“ဘ” “မ” “ဒ” ကဲ့သို့သော ဗျည်းသံတွဲ အသံလေးများ ထွက်ပါသလား။', en: 'Makes sounds like “ba”, “ma”, “da”?' },
     why: { mm: 'ဗျည်းသံ တွဲရွတ်ခြင်းသည် ပထမဆုံးစကားလုံးများ၏ အခြေခံဖြစ်သည်။', en: 'Consonant babbling is the base for first words.' },
   }),
   m('5_6m', 'cognitive', 1, {
@@ -82,9 +82,9 @@ export const MILESTONES: SeedItem[] = [
     why: { mm: 'တည်ငြိမ်စွာ ထိုင်ခြင်းသည် လက်နှစ်ဖက်ဖြင့် ကစားရန် လွတ်လပ်စေသည်။', en: 'Steady sitting frees both hands to play.' },
   }),
   m('7_9m', 'fine_motor', 1, {
-    title: { mm: 'ပစ္စည်းကို လက်တစ်ဖက်မှ တစ်ဖက်သို့ ကူးခြင်း', en: 'Passes objects hand to hand' },
+    title: { mm: 'ပစ္စည်းကို လက်တစ်ဖက်မှ အခြားလက်တစ်ဖက်သို့ ပြောင်းကိုင်ခြင်း', en: 'Passes objects hand to hand' },
     observe: { mm: 'ကစားစရာကို လက်တစ်ဖက်မှ အခြားတစ်ဖက်သို့ ကူးပါသလား။', en: 'Moves a toy from one hand to the other?' },
-    why: { mm: 'ဤသည်မှာ ပိုမိုတိကျသော ကိုင်တွယ်မှုကို လေ့ကျင့်စေသည်။', en: 'This practices more precise handling.' },
+    why: { mm: 'လက်တစ်ဖက်မှ အခြားလက်တစ်ဖက်သို့ ပြောင်းကိုင်နိုင်ခြင်းသည် လက်လှုပ်ရှားမှု ပိုမိုတိကျလာစေရန် လေ့ကျင့်ပေးပါသည်။', en: 'This practices more precise handling.' },
   }),
   m('7_9m', 'language', 1, {
     title: { mm: 'မိမိနာမည်ကို တုံ့ပြန်ခြင်း', en: 'Responds to own name' },
@@ -94,7 +94,7 @@ export const MILESTONES: SeedItem[] = [
   }),
   m('7_9m', 'social', 1, {
     title: { mm: 'ရင်းနှီးသူ/မရင်းနှီးသူ ခွဲခြားခြင်း', en: 'Knows familiar people' },
-    observe: { mm: 'ရင်းနှီးသူနှင့် အစိမ်းလူကို ကွဲပြားစွာ တုံ့ပြန်ပါသလား။', en: 'Reacts differently to familiar vs. new people?' },
+    observe: { mm: 'မိသားစုဝင်များနှင့် မရင်းနှီးသူများကို ကွဲပြားစွာ တုံ့ပြန်တတ်ပါသလား။', en: 'Reacts differently to familiar vs. new people?' },
     why: { mm: 'ဤသည်မှာ လူမှုမှတ်ဉာဏ် ဖွံ့ဖြိုးလာခြင်း ဖြစ်သည်။', en: 'This shows growing social memory.' },
   }),
 
@@ -102,7 +102,7 @@ export const MILESTONES: SeedItem[] = [
   m('10_12m', 'gross_motor', 1, {
     title: { mm: 'ပရိဘောဂကိုကိုင်၍ မတ်တပ်ရပ်ခြင်း', en: 'Pulls up to stand' },
     observe: { mm: 'ပရိဘောဂကိုကိုင်ပြီး မတ်တပ်ရပ်ပါသလား။', en: 'Pulls up to stand holding furniture?' },
-    why: { mm: 'ဤသည်မှာ လမ်းလျှောက်ခြင်းဆီသို့ ဦးတည်စေသည်။', en: 'This leads toward walking.' },
+    why: { mm: 'ပရိဘောဂကိုကိုင်၍ မတ်တပ်ရပ်နိုင်ခြင်းသည် နောင်တွင် လမ်းလျှောက်တတ်လာစေရန် အထောက်အကူပြုပါသည်။', en: 'This leads toward walking.' },
   }),
   m('10_12m', 'communication', 1, {
     title: { mm: 'လက်ညှိုးထိုး၍ ပြသခြင်း', en: 'Points to show' },
@@ -123,29 +123,29 @@ export const MILESTONES: SeedItem[] = [
   // ---- 13–18 months ----
   m('13_18m', 'gross_motor', 1, {
     title: { mm: 'တစ်ယောက်တည်း လမ်းလျှောက်ခြင်း', en: 'Walks alone' },
-    observe: { mm: 'အထောက်မပါဘဲ လှမ်းအနည်းငယ် လျှောက်နိုင်ပါသလား။', en: 'Takes steps without holding on?' },
-    why: { mm: 'လမ်းလျှောက်ခြင်းသည် စူးစမ်းမှု နယ်ပယ်ကို ကျယ်စေသည်။', en: 'Walking widens the world to explore.' },
+    observe: { mm: 'အထောက်အကူမပါဘဲ ခြေလှမ်းအနည်းငယ် လျှောက်နိုင်ပါသလား။', en: 'Takes steps without holding on?' },
+    why: { mm: 'လမ်းလျှောက်တတ်လာခြင်းသည် ပတ်ဝန်းကျင်ကို ပိုမိုလွတ်လပ်စွာ စူးစမ်းလေ့လာနိုင်စေပါသည်။', en: 'Walking widens the world to explore.' },
   }),
   m('13_18m', 'speech', 1, {
     title: { mm: 'အဓိပ္ပာယ်ရှိသော စကားလုံး အနည်းငယ် ပြောခြင်း', en: 'Says a few words' },
-    observe: { mm: '“မေမေ” “ဖေဖေ” အပြင် စကားလုံး ၂–၃ လုံး ပြောပါသလား။', en: 'Uses a few words beyond mama/dada?' },
+    observe: { mm: '“မေမေ”၊ “ဖေဖေ” အပြင် အခြား စကားလုံး ၂–၃ လုံး ပြောပါသလား။', en: 'Uses a few words beyond mama/dada?' },
     why: { mm: 'ပထမစကားလုံးများသည် ဘာသာစကား တိုးတက်မှုကို ဖော်ပြသည်။', en: 'First words mark growing language.' },
   }),
   m('13_18m', 'language', 1, {
     title: { mm: 'ရိုးရှင်းသော ညွှန်ကြားချက်ကို လိုက်နာခြင်း', en: 'Follows simple directions' },
-    observe: { mm: '“ဒါလေးပေးပါ” ဆိုလျှင် ပေးပါသလား။', en: 'Follows “give me the ball”?' },
+    observe: { mm: '“ဒါလေးပေးပါ” ဆိုလျှင် ကမ်းပေးပါသလား။', en: 'Follows “give me the ball”?' },
     why: { mm: 'ဤသည်မှာ စကားနားလည်မှု တိုးတက်ခြင်းဖြစ်သည်။', en: 'This shows understanding is growing.' },
   }),
   m('13_18m', 'self_help', 1, {
     title: { mm: 'ဇွန်း/ခွက်ကို ကြိုးစားသုံးခြင်း', en: 'Tries spoon and cup' },
     observe: { mm: 'ဇွန်း သို့မဟုတ် ခွက်ကို ကိုယ်တိုင် သုံးရန် ကြိုးစားပါသလား။', en: 'Tries to use a spoon or cup?' },
-    why: { mm: 'စားပွဲပေါ် အနည်းငယ် ပေကျံနိုင်သော်လည်း ကိုယ်တိုင် ကြိုးစားသုံးတတ်လာခြင်းက အရေးကြီးသည်။', en: 'Some mess is fine — trying is what matters.' },
+    why: { mm: 'အနည်းငယ် ပေကျံနိုင်သော်လည်း ကိုယ်တိုင် ကြိုးစားသုံးစွဲတတ်လာခြင်းက အရေးကြီးပါသည်။', en: 'Some mess is fine — trying is what matters.' },
   }),
 
   // ---- 19–24 months ----
   m('19_24m', 'language', 1, {
     title: { mm: 'စကားလုံး နှစ်လုံး ပေါင်းပြောခြင်း', en: 'Puts two words together' },
-    observe: { mm: '“ရေ သောက်” ကဲ့သို့ နှစ်လုံးတွဲ ပြောပါသလား။', en: 'Says two-word phrases like “want milk”?' },
+    observe: { mm: '“ရေ သောက်မယ်”၊ “နို့ ထပ်” ကဲ့သို့ စကားလုံးနှစ်လုံး တွဲပြောပါသလား။', en: 'Says two-word phrases like “want milk”?' },
     why: { mm: 'ဤသည်မှာ ဝါကျ တည်ဆောက်မှု၏ အစဖြစ်သည်။', en: 'This is the start of building sentences.' },
   }),
   m('19_24m', 'cognitive', 1, {
@@ -155,7 +155,7 @@ export const MILESTONES: SeedItem[] = [
   }),
   m('19_24m', 'emotional', 1, {
     title: { mm: 'အခြားသူများ၏ ခံစားမှုကို သတိပြုခြင်း', en: 'Notices others’ feelings' },
-    observe: { mm: 'တစ်ယောက်ငိုပါက စိတ်ဝင်စား/စိုးရိမ်ဟန် ပြပါသလား။', en: 'Reacts when someone is upset?' },
+    observe: { mm: 'အခြားသူတစ်ဦး ငိုနေပါက စိတ်ဝင်စားဟန် သို့မဟုတ် စိုးရိမ်ဟန် ပြတတ်ပါသလား။', en: 'Reacts when someone is upset?' },
     why: { mm: 'ဤသည်မှာ သူတစ်ပါး၏ ခံစားချက်ကို နားလည်စာနာတတ်လာခြင်း၏ အစဖြစ်သည်။', en: 'This is the beginning of empathy.' },
   }),
   m('19_24m', 'play', 1, {
@@ -177,7 +177,7 @@ export const MILESTONES: SeedItem[] = [
   }),
   m('2y', 'problem_solving', 1, {
     title: { mm: 'ရိုးရှင်းသော ပဟေဠိ တပ်ဆင်ခြင်း', en: 'Simple puzzles / shapes' },
-    observe: { mm: 'ပုံသဏ္ဌာန်ရိုးရိုးများကို နေရာတကျ ထည့်နိုင်ပါသလား။', en: 'Fits simple shapes into a sorter?' },
+    observe: { mm: 'ပုံသဏ္ဌာန်ရိုးရိုးများကို သက်ဆိုင်ရာနေရာတွင် နေရာတကျ ထည့်နိုင်ပါသလား။', en: 'Fits simple shapes into a sorter?' },
     why: { mm: 'ဤသည်မှာ တွေးခေါ်မှုနှင့် ကြိုးစားမှုကို လေ့ကျင့်စေသည်။', en: 'This builds thinking and persistence.' },
   }),
   m('2y', 'daily_routine', 1, {
@@ -216,29 +216,29 @@ export const MILESTONES: SeedItem[] = [
   }),
   m('3y', 'social', 1, {
     title: { mm: 'အခြားကလေးများနှင့် အတူ ကစားခြင်း', en: 'Plays with other children' },
-    observe: { mm: 'အခြားကလေးများနှင့် ဝေမျှ၍ ကစားရန် ကြိုးစားပါသလား။', en: 'Tries to play and share with other children?' },
+    observe: { mm: 'အခြားကလေးများနှင့်အတူ ကစားရန်နှင့် ဝေမျှရန် ကြိုးစားပါသလား။', en: 'Tries to play and share with other children?' },
     why: { mm: 'အတူကစားခြင်းသည် လူမှုကျွမ်းကျင်မှုကို လေ့ကျင့်စေသည်။', en: 'Playing together builds social skills.' },
   }),
   m('3y', 'school_readiness', 1, {
     title: { mm: 'မိဘနှင့် ခွဲ၍ ခဏနေနိုင်ခြင်း', en: 'Separates from parent briefly' },
-    observe: { mm: 'ရင်းနှီးသူနှင့် ခဏခွဲနေရသည်ကို လက်ခံနိုင်ပါသလား။', en: 'Copes with brief separation from a caregiver?' },
+    observe: { mm: 'မိဘ သို့မဟုတ် ပြုစုစောင့်ရှောက်သူနှင့် ခေတ္တခွဲနေရသည့်အခါ အဆင်ပြေစွာ နေနိုင်ပါသလား။', en: 'Copes with brief separation from a caregiver?' },
     why: { mm: 'ဤသည်မှာ ကျောင်း/မူကြိုအတွက် အသင့်ဖြစ်မှု အစိတ်အပိုင်းဖြစ်သည်။', en: 'This is part of readiness for preschool.' },
   }),
 
   // ---- 3.5 years ----
   m('3_5y', 'fine_motor', 1, {
     title: { mm: 'စက်ဝိုင်း/မျဉ်း ကူးရေးခြင်း', en: 'Copies a circle / line' },
-    observe: { mm: 'စက်ဝိုင်း သို့မဟုတ် မျဉ်းကို ကူးဆွဲပါသလား။', en: 'Copies a circle or straight line?' },
+    observe: { mm: 'စက်ဝိုင်း သို့မဟုတ် မျဉ်းဖြောင့်ကို ကြည့်၍ ကူးဆွဲနိုင်ပါသလား။', en: 'Copies a circle or straight line?' },
     why: { mm: 'ဤသည်မှာ ရေးသားမှုနှင့် တိကျမှုကို လေ့ကျင့်စေသည်။', en: 'This builds pre-writing control.' },
   }),
   m('3_5y', 'communication', 1, {
     title: { mm: '“ဘာကြောင့်” မေးခွန်းများ မေးခြင်း', en: 'Asks “why” questions' },
-    observe: { mm: '“ဘာကြောင့်” “ဘယ်လို” မေးခွန်းများ မေးပါသလား။', en: 'Asks lots of why/how questions?' },
+    observe: { mm: '“ဘာဖြစ်လို့လဲ”၊ “ဘယ်လိုလုပ်မလဲ” ကဲ့သို့ မေးခွန်းများ မေးပါသလား။', en: 'Asks lots of why/how questions?' },
     why: { mm: 'မေးခွန်းများသည် သိလိုစိတ်နှင့် ဘာသာစကား တိုးတက်မှုကို ပြသည်။', en: 'Questions show curiosity and language growth.' },
   }),
   m('3_5y', 'school_readiness', 1, {
     title: { mm: 'ရိုးရှင်းသော စည်းကမ်းများ လိုက်နာခြင်း', en: 'Follows simple group rules' },
-    observe: { mm: 'အလှည့်စောင့်ခြင်းကဲ့သို့ ရိုးရှင်းစည်းကမ်းများ လိုက်နာပါသလား။', en: 'Takes turns and follows simple rules?' },
+    observe: { mm: 'အလှည့်စောင့်ခြင်းကဲ့သို့ ရိုးရှင်းသော အုပ်စုစည်းကမ်းများကို လိုက်နာပါသလား။', en: 'Takes turns and follows simple rules?' },
     why: { mm: 'ဤသည်မှာ အုပ်စုဖြင့် သင်ယူရန် ပြင်ဆင်ပေးသည်။', en: 'This prepares for learning in a group.' },
   }),
 
@@ -250,12 +250,12 @@ export const MILESTONES: SeedItem[] = [
   }),
   m('4y', 'language', 1, {
     title: { mm: 'ဇာတ်လမ်း/ဖြစ်ရပ်ကို ပြန်ပြောခြင်း', en: 'Tells a short story' },
-    observe: { mm: 'ဖြစ်ခဲ့သည့် ဖြစ်ရပ်ကို အစီအစဉ်တကျ ပြန်ပြောပါသလား။', en: 'Retells a simple event in order?' },
+    observe: { mm: 'ဖြစ်ပျက်ခဲ့သော အကြောင်းအရာကို အစီအစဉ်တကျ ပြန်ပြောပြနိုင်ပါသလား။', en: 'Retells a simple event in order?' },
     why: { mm: 'ဤသည်မှာ အတွေးများကို စီစဉ်နိုင်ခြင်းဖြစ်သည်။', en: 'This shows organizing thoughts in sequence.' },
   }),
   m('4y', 'problem_solving', 1, {
     title: { mm: 'ရိုးရှင်းသော ပြဿနာများ ဖြေရှင်းခြင်း', en: 'Solves simple problems' },
-    observe: { mm: 'မလှမ်းမီပစ္စည်းယူရန် ခုံတင်ကဲ့သို့ နည်းလမ်းရှာပါသလား။', en: 'Finds a way to reach something out of grasp?' },
+    observe: { mm: 'လက်လှမ်းမမီသော ပစ္စည်းကို ယူရန် ခုံတစ်ခုခုယူသုံးခြင်းကဲ့သို့ နည်းလမ်းရှာပါသလား။', en: 'Finds a way to reach something out of grasp?' },
     why: { mm: 'ဤသည်မှာ တွေးခေါ်၍ စီစဉ်နိုင်ခြင်းကို ပြသည်။', en: 'This shows planning and reasoning.' },
   }),
   m('4y', 'school_readiness', 1, {
@@ -267,12 +267,12 @@ export const MILESTONES: SeedItem[] = [
   // ---- 4.5 years ----
   m('4_5y', 'fine_motor', 1, {
     title: { mm: 'ကတ်ကြေးဖြင့် ဖြတ်ခြင်း', en: 'Cuts with child scissors' },
-    observe: { mm: 'ကလေးကတ်ကြေးဖြင့် စက္ကူကို မျဉ်းအတိုင်း ဖြတ်ပါသလား။', en: 'Cuts along a line with safe scissors?' },
+    observe: { mm: 'ဘေးကင်းသော ကလေးကတ်ကြေးဖြင့် စက္ကူကို မျဉ်းအတိုင်း ဖြတ်နိုင်ပါသလား။', en: 'Cuts along a line with safe scissors?' },
     why: { mm: 'ဤသည်မှာ လက်နှစ်ဖက် ပေါင်းစပ်မှုကို လေ့ကျင့်စေသည်။', en: 'This builds two-hand coordination.' },
   }),
   m('4_5y', 'cognitive', 1, {
     title: { mm: 'အရာဝတ္ထုများကို အမျိုးအစားခွဲခြင်း', en: 'Sorts by category' },
-    observe: { mm: 'ပစ္စည်းများကို အရောင်/ပုံသဏ္ဌာန်ဖြင့် ခွဲခြားပါသလား။', en: 'Sorts objects by color or shape?' },
+    observe: { mm: 'ပစ္စည်းများကို အရောင် သို့မဟုတ် ပုံသဏ္ဌာန်အလိုက် ခွဲခြားနိုင်ပါသလား။', en: 'Sorts objects by color or shape?' },
     why: { mm: 'ဤသည်မှာ သင်္ချာနှင့် ယုတ္တိတွေးခေါ်မှု၏ အခြေခံဖြစ်သည်။', en: 'This is the base for math and logic.' },
   }),
   m('4_5y', 'daily_routine', 1, {
@@ -284,12 +284,12 @@ export const MILESTONES: SeedItem[] = [
   // ---- 5 years ----
   m('5y', 'gross_motor', 1, {
     title: { mm: 'ခုန်ကျော်၊ ဟန်ချက်ညီ လှုပ်ရှားခြင်း', en: 'Skips and balances well' },
-    observe: { mm: 'ခုန်ကျော်နိုင်၍ ဟန်ချက်ညီစွာ လှုပ်ရှားပါသလား။', en: 'Skips and moves with good balance?' },
+    observe: { mm: 'ခုန်ဆွခုန်ဆွ သွားနိုင်ပြီး ဟန်ချက်ညီစွာ လှုပ်ရှားနိုင်ပါသလား။', en: 'Skips and moves with good balance?' },
     why: { mm: 'ဤသည်မှာ ကစားနှင့် အားကစားအတွက် အသင့်ဖြစ်ခြင်းဖြစ်သည်။', en: 'This supports active play and sport.' },
   }),
   m('5y', 'language', 1, {
     title: { mm: 'ရှင်းလင်းသော ဝါကျ အပြည့်အစုံ ပြောခြင်း', en: 'Speaks in clear full sentences' },
-    observe: { mm: 'အစိမ်းလူများ နားလည်နိုင်စွာ ဝါကျ အပြည့်အစုံ ပြောပါသလား။', en: 'Uses clear sentences strangers understand?' },
+    observe: { mm: 'မရင်းနှီးသူများ နားလည်နိုင်လောက်အောင် ဝါကျ အပြည့်အစုံဖြင့် ရှင်းလင်းစွာ ပြောနိုင်ပါသလား။', en: 'Uses clear sentences strangers understand?' },
     why: { mm: 'ဤသည်မှာ ကျောင်းတွင် ဆက်သွယ်ရန် အသင့်ဖြစ်ခြင်းဖြစ်သည်။', en: 'This is readiness to communicate at school.' },
   }),
   m('5y', 'school_readiness', 1, {
@@ -298,8 +298,8 @@ export const MILESTONES: SeedItem[] = [
     why: { mm: 'နာမည်မှ စာလုံးများ ရေးခြင်းသည် အစောပိုင်း စာရေးစွမ်းရည်ကို ပြသည်။', en: 'Writing letters from their name shows emerging writing skill.' },
   }),
   m('5y', 'self_help', 1, {
-    title: { mm: 'အိမ်သာ/လက်ဆေးခြင်း ကိုယ်တိုင်လုပ်ခြင်း', en: 'Manages toilet and handwashing' },
-    observe: { mm: 'အိမ်သာသုံးပြီး လက်ကို ကိုယ်တိုင် ဆေးနိုင်ပါသလား။', en: 'Uses the toilet and washes hands alone?' },
-    why: { mm: 'ဤသည်မှာ ကျန်းမာရေးနှင့် ကျောင်းအတွက် အရေးကြီးသည်။', en: 'This matters for health and school.' },
+    title: { mm: 'အိမ်သာသုံးပြီး လက်ဆေးခြင်းကို ကိုယ်တိုင်လုပ်ခြင်း', en: 'Manages toilet and handwashing' },
+    observe: { mm: 'အိမ်သာသုံးပြီးနောက် လက်ကို ကိုယ်တိုင် ဆေးကြောနိုင်ပါသလား။', en: 'Uses the toilet and washes hands alone?' },
+    why: { mm: 'ဤသည်မှာ တစ်ကိုယ်ရေ သန့်ရှင်းရေးနှင့် ကျောင်းနေအရွယ်အတွက် အရေးကြီးသော အလေ့အထ ဖြစ်ပါသည်။', en: 'This matters for health and school.' },
   }),
 ];

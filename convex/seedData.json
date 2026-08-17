@@ -105,7 +105,7 @@
     "data": {
       "observeMm": "မတ်မတ်ချီထားစဉ် ခေါင်းကို တည်ငြိမ်စွာ ထိန်းနိုင်ပါသလား။",
       "observeEn": "Holds head steady when held upright?",
-      "whyMm": "ခေါင်းထိန်းနိုင်ခြင်းသည် ထိုင်ခြင်းဆီသို့ ဦးတည်စေသည်။",
+      "whyMm": "ခေါင်းကို တည်ငြိမ်စွာ ထိန်းနိုင်ခြင်းသည် နောင်တွင် ထိုင်တတ်လာစေရန် အခြေခံဖြစ်ပါသည်။",
       "whyEn": "Head control leads toward sitting."
     },
     "type": "milestone",
@@ -116,7 +116,7 @@
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "ခေါင်းကို တည်ငြိမ်စွာ ထိန်းခြင်း holds head steady   gross_motor 3_4m မတ်မတ်ချီထားစဉ် ခေါင်းကို တည်ငြိမ်စွာ ထိန်းနိုင်ပါသလား။ holds head steady when held upright? ခေါင်းထိန်းနိုင်ခြင်းသည် ထိုင်ခြင်းဆီသို့ ဦးတည်စေသည်။ head control leads toward sitting."
+    "searchText": "ခေါင်းကို တည်ငြိမ်စွာ ထိန်းခြင်း holds head steady   gross_motor 3_4m မတ်မတ်ချီထားစဉ် ခေါင်းကို တည်ငြိမ်စွာ ထိန်းနိုင်ပါသလား။ holds head steady when held upright? ခေါင်းကို တည်ငြိမ်စွာ ထိန်းနိုင်ခြင်းသည် နောင်တွင် ထိုင်တတ်လာစေရန် အခြေခံဖြစ်ပါသည်။ head control leads toward sitting."
   },
   {
     "ageGroupKey": "3_4m",
@@ -126,20 +126,20 @@
       "3_4m"
     ],
     "data": {
-      "observeMm": "လက်နှစ်ဖက်ကို အလယ်တွင် ဆုံစည်းပါသလား။",
+      "observeMm": "လက်နှစ်ဖက်ကို ခန္ဓာကိုယ်အလယ်တည့်တည့်တွင် ထိတွေ့ဆုံစည်းပါသလား။",
       "observeEn": "Brings both hands together at the middle?",
       "whyMm": "လက်နှစ်ဖက် ပူးတွဲသုံးခြင်းသည် ကိုင်တွယ်မှု ဖွံ့ဖြိုးမှု၏ အစဖြစ်သည်။",
       "whyEn": "Using two hands together starts grasping skills."
     },
     "type": "milestone",
     "slug": "ms_3_4m_fine_motor_1",
-    "titleMm": "လက်များကို ဆုံစည်းခြင်း",
+    "titleMm": "လက်နှစ်ဖက်ကို အလယ်တွင် ထိတွေ့ဆုံစည်းခြင်း",
     "titleEn": "Brings hands together",
     "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "လက်များကို ဆုံစည်းခြင်း brings hands together   fine_motor 3_4m လက်နှစ်ဖက်ကို အလယ်တွင် ဆုံစည်းပါသလား။ brings both hands together at the middle? လက်နှစ်ဖက် ပူးတွဲသုံးခြင်းသည် ကိုင်တွယ်မှု ဖွံ့ဖြိုးမှု၏ အစဖြစ်သည်။ using two hands together starts grasping skills."
+    "searchText": "လက်နှစ်ဖက်ကို အလယ်တွင် ထိတွေ့ဆုံစည်းခြင်း brings hands together   fine_motor 3_4m လက်နှစ်ဖက်ကို ခန္ဓာကိုယ်အလယ်တည့်တည့်တွင် ထိတွေ့ဆုံစည်းပါသလား။ brings both hands together at the middle? လက်နှစ်ဖက် ပူးတွဲသုံးခြင်းသည် ကိုင်တွယ်မှု ဖွံ့ဖြိုးမှု၏ အစဖြစ်သည်။ using two hands together starts grasping skills."
   },
   {
     "ageGroupKey": "3_4m",
@@ -151,7 +151,7 @@
     "data": {
       "observeMm": "“အူး” “အာ” ကဲ့သို့ အသံများ ထုတ်ပါသလား။",
       "observeEn": "Makes cooing sounds like “ooh”, “aah”?",
-      "whyMm": "ဤအသံများသည် စကားပြောရန် လေ့ကျင့်ခြင်းဖြစ်သည်။",
+      "whyMm": "ဤအသံငယ်များသည် စကားပြောတတ်လာစေရန် အစောပိုင်း အသံလေ့ကျင့်မှုများ ဖြစ်ပါသည်။",
       "whyEn": "These sounds are early speech practice."
     },
     "type": "milestone",
@@ -162,7 +162,7 @@
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "“အူး”၊ “အား” အသံများ ထွက်ခြင်း coos and makes sounds   communication 3_4m “အူး” “အာ” ကဲ့သို့ အသံများ ထုတ်ပါသလား။ makes cooing sounds like “ooh”, “aah”? ဤအသံများသည် စကားပြောရန် လေ့ကျင့်ခြင်းဖြစ်သည်။ these sounds are early speech practice."
+    "searchText": "“အူး”၊ “အား” အသံများ ထွက်ခြင်း coos and makes sounds   communication 3_4m “အူး” “အာ” ကဲ့သို့ အသံများ ထုတ်ပါသလား။ makes cooing sounds like “ooh”, “aah”? ဤအသံငယ်များသည် စကားပြောတတ်လာစေရန် အစောပိုင်း အသံလေ့ကျင့်မှုများ ဖြစ်ပါသည်။ these sounds are early speech practice."
   },
   {
     "ageGroupKey": "3_4m",
@@ -172,7 +172,7 @@
       "3_4m"
     ],
     "data": {
-      "observeMm": "ရင်းနှီးသူများကို မြင်ရပါက ပျော်ရွှင်ဟန် ပြပါသလား။",
+      "observeMm": "မိဘ သို့မဟုတ် ရင်းနှီးသူများကို မြင်တွေ့ရပါက ပျော်ရွှင်ဟန် ပြပါသလား။",
       "observeEn": "Shows delight seeing familiar people?",
       "whyMm": "ခံစားမှု ဖော်ပြခြင်းသည် လူမှုချိတ်ဆက်မှုကို အားပေးသည်။",
       "whyEn": "Expressing feelings strengthens bonding."
@@ -185,7 +185,7 @@
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "ပျော်ရွှင်မှု ဖော်ပြခြင်း shows joy   emotional 3_4m ရင်းနှီးသူများကို မြင်ရပါက ပျော်ရွှင်ဟန် ပြပါသလား။ shows delight seeing familiar people? ခံစားမှု ဖော်ပြခြင်းသည် လူမှုချိတ်ဆက်မှုကို အားပေးသည်။ expressing feelings strengthens bonding."
+    "searchText": "ပျော်ရွှင်မှု ဖော်ပြခြင်း shows joy   emotional 3_4m မိဘ သို့မဟုတ် ရင်းနှီးသူများကို မြင်တွေ့ရပါက ပျော်ရွှင်ဟန် ပြပါသလား။ shows delight seeing familiar people? ခံစားမှု ဖော်ပြခြင်းသည် လူမှုချိတ်ဆက်မှုကို အားပေးသည်။ expressing feelings strengthens bonding."
   },
   {
     "ageGroupKey": "5_6m",
@@ -243,18 +243,18 @@
     "data": {
       "observeMm": "ကစားစရာကို လက်တစ်ဖက်မှ အခြားတစ်ဖက်သို့ ကူးပါသလား။",
       "observeEn": "Moves a toy from one hand to the other?",
-      "whyMm": "ဤသည်မှာ ပိုမိုတိကျသော ကိုင်တွယ်မှုကို လေ့ကျင့်စေသည်။",
+      "whyMm": "လက်တစ်ဖက်မှ အခြားလက်တစ်ဖက်သို့ ပြောင်းကိုင်နိုင်ခြင်းသည် လက်လှုပ်ရှားမှု ပိုမိုတိကျလာစေရန် လေ့ကျင့်ပေးပါသည်။",
       "whyEn": "This practices more precise handling."
     },
     "type": "milestone",
     "slug": "ms_7_9m_fine_motor_1",
-    "titleMm": "ပစ္စည်းကို လက်တစ်ဖက်မှ တစ်ဖက်သို့ ကူးခြင်း",
+    "titleMm": "ပစ္စည်းကို လက်တစ်ဖက်မှ အခြားလက်တစ်ဖက်သို့ ပြောင်းကိုင်ခြင်း",
     "titleEn": "Passes objects hand to hand",
     "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "ပစ္စည်းကို လက်တစ်ဖက်မှ တစ်ဖက်သို့ ကူးခြင်း passes objects hand to hand   fine_motor 7_9m ကစားစရာကို လက်တစ်ဖက်မှ အခြားတစ်ဖက်သို့ ကူးပါသလား။ moves a toy from one hand to the other? ဤသည်မှာ ပိုမိုတိကျသော ကိုင်တွယ်မှုကို လေ့ကျင့်စေသည်။ this practices more precise handling."
+    "searchText": "ပစ္စည်းကို လက်တစ်ဖက်မှ အခြားလက်တစ်ဖက်သို့ ပြောင်းကိုင်ခြင်း passes objects hand to hand   fine_motor 7_9m ကစားစရာကို လက်တစ်ဖက်မှ အခြားတစ်ဖက်သို့ ကူးပါသလား။ moves a toy from one hand to the other? လက်တစ်ဖက်မှ အခြားလက်တစ်ဖက်သို့ ပြောင်းကိုင်နိုင်ခြင်းသည် လက်လှုပ်ရှားမှု ပိုမိုတိကျလာစေရန် လေ့ကျင့်ပေးပါသည်။ this practices more precise handling."
   },
   {
     "ageGroupKey": "7_9m",
@@ -289,7 +289,7 @@
       "7_9m"
     ],
     "data": {
-      "observeMm": "ရင်းနှီးသူနှင့် အစိမ်းလူကို ကွဲပြားစွာ တုံ့ပြန်ပါသလား။",
+      "observeMm": "မိသားစုဝင်များနှင့် မရင်းနှီးသူများကို ကွဲပြားစွာ တုံ့ပြန်တတ်ပါသလား။",
       "observeEn": "Reacts differently to familiar vs. new people?",
       "whyMm": "ဤသည်မှာ လူမှုမှတ်ဉာဏ် ဖွံ့ဖြိုးလာခြင်း ဖြစ်သည်။",
       "whyEn": "This shows growing social memory."
@@ -302,7 +302,7 @@
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "ရင်းနှီးသူ/မရင်းနှီးသူ ခွဲခြားခြင်း knows familiar people   social 7_9m ရင်းနှီးသူနှင့် အစိမ်းလူကို ကွဲပြားစွာ တုံ့ပြန်ပါသလား။ reacts differently to familiar vs. new people? ဤသည်မှာ လူမှုမှတ်ဉာဏ် ဖွံ့ဖြိုးလာခြင်း ဖြစ်သည်။ this shows growing social memory."
+    "searchText": "ရင်းနှီးသူ/မရင်းနှီးသူ ခွဲခြားခြင်း knows familiar people   social 7_9m မိသားစုဝင်များနှင့် မရင်းနှီးသူများကို ကွဲပြားစွာ တုံ့ပြန်တတ်ပါသလား။ reacts differently to familiar vs. new people? ဤသည်မှာ လူမှုမှတ်ဉာဏ် ဖွံ့ဖြိုးလာခြင်း ဖြစ်သည်။ this shows growing social memory."
   },
   {
     "ageGroupKey": "10_12m",
@@ -314,7 +314,7 @@
     "data": {
       "observeMm": "ပရိဘောဂကိုကိုင်ပြီး မတ်တပ်ရပ်ပါသလား။",
       "observeEn": "Pulls up to stand holding furniture?",
-      "whyMm": "ဤသည်မှာ လမ်းလျှောက်ခြင်းဆီသို့ ဦးတည်စေသည်။",
+      "whyMm": "ပရိဘောဂကိုကိုင်၍ မတ်တပ်ရပ်နိုင်ခြင်းသည် နောင်တွင် လမ်းလျှောက်တတ်လာစေရန် အထောက်အကူပြုပါသည်။",
       "whyEn": "This leads toward walking."
     },
     "type": "milestone",
@@ -325,7 +325,7 @@
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "ပရိဘောဂကိုကိုင်၍ မတ်တပ်ရပ်ခြင်း pulls up to stand   gross_motor 10_12m ပရိဘောဂကိုကိုင်ပြီး မတ်တပ်ရပ်ပါသလား။ pulls up to stand holding furniture? ဤသည်မှာ လမ်းလျှောက်ခြင်းဆီသို့ ဦးတည်စေသည်။ this leads toward walking."
+    "searchText": "ပရိဘောဂကိုကိုင်၍ မတ်တပ်ရပ်ခြင်း pulls up to stand   gross_motor 10_12m ပရိဘောဂကိုကိုင်ပြီး မတ်တပ်ရပ်ပါသလား။ pulls up to stand holding furniture? ပရိဘောဂကိုကိုင်၍ မတ်တပ်ရပ်နိုင်ခြင်းသည် နောင်တွင် လမ်းလျှောက်တတ်လာစေရန် အထောက်အကူပြုပါသည်။ this leads toward walking."
   },
   {
     "ageGroupKey": "10_12m",
@@ -404,9 +404,9 @@
       "13_18m"
     ],
     "data": {
-      "observeMm": "အထောက်မပါဘဲ လှမ်းအနည်းငယ် လျှောက်နိုင်ပါသလား။",
+      "observeMm": "အထောက်အကူမပါဘဲ ခြေလှမ်းအနည်းငယ် လျှောက်နိုင်ပါသလား။",
       "observeEn": "Takes steps without holding on?",
-      "whyMm": "လမ်းလျှောက်ခြင်းသည် စူးစမ်းမှု နယ်ပယ်ကို ကျယ်စေသည်။",
+      "whyMm": "လမ်းလျှောက်တတ်လာခြင်းသည် ပတ်ဝန်းကျင်ကို ပိုမိုလွတ်လပ်စွာ စူးစမ်းလေ့လာနိုင်စေပါသည်။",
       "whyEn": "Walking widens the world to explore."
     },
     "type": "milestone",
@@ -417,7 +417,7 @@
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "တစ်ယောက်တည်း လမ်းလျှောက်ခြင်း walks alone   gross_motor 13_18m အထောက်မပါဘဲ လှမ်းအနည်းငယ် လျှောက်နိုင်ပါသလား။ takes steps without holding on? လမ်းလျှောက်ခြင်းသည် စူးစမ်းမှု နယ်ပယ်ကို ကျယ်စေသည်။ walking widens the world to explore."
+    "searchText": "တစ်ယောက်တည်း လမ်းလျှောက်ခြင်း walks alone   gross_motor 13_18m အထောက်အကူမပါဘဲ ခြေလှမ်းအနည်းငယ် လျှောက်နိုင်ပါသလား။ takes steps without holding on? လမ်းလျှောက်တတ်လာခြင်းသည် ပတ်ဝန်းကျင်ကို ပိုမိုလွတ်လပ်စွာ စူးစမ်းလေ့လာနိုင်စေပါသည်။ walking widens the world to explore."
   },
   {
     "ageGroupKey": "13_18m",
@@ -427,7 +427,7 @@
       "13_18m"
     ],
     "data": {
-      "observeMm": "“မေမေ” “ဖေဖေ” အပြင် စကားလုံး ၂–၃ လုံး ပြောပါသလား။",
+      "observeMm": "“မေမေ”၊ “ဖေဖေ” အပြင် အခြား စကားလုံး ၂–၃ လုံး ပြောပါသလား။",
       "observeEn": "Uses a few words beyond mama/dada?",
       "whyMm": "ပထမစကားလုံးများသည် ဘာသာစကား တိုးတက်မှုကို ဖော်ပြသည်။",
       "whyEn": "First words mark growing language."
@@ -440,7 +440,7 @@
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "အဓိပ္ပာယ်ရှိသော စကားလုံး အနည်းငယ် ပြောခြင်း says a few words   speech 13_18m “မေမေ” “ဖေဖေ” အပြင် စကားလုံး ၂–၃ လုံး ပြောပါသလား။ uses a few words beyond mama/dada? ပထမစကားလုံးများသည် ဘာသာစကား တိုးတက်မှုကို ဖော်ပြသည်။ first words mark growing language."
+    "searchText": "အဓိပ္ပာယ်ရှိသော စကားလုံး အနည်းငယ် ပြောခြင်း says a few words   speech 13_18m “မေမေ”၊ “ဖေဖေ” အပြင် အခြား စကားလုံး ၂–၃ လုံး ပြောပါသလား။ uses a few words beyond mama/dada? ပထမစကားလုံးများသည် ဘာသာစကား တိုးတက်မှုကို ဖော်ပြသည်။ first words mark growing language."
   },
   {
     "ageGroupKey": "13_18m",
@@ -450,7 +450,7 @@
       "13_18m"
     ],
     "data": {
-      "observeMm": "“ဒါလေးပေးပါ” ဆိုလျှင် ပေးပါသလား။",
+      "observeMm": "“ဒါလေးပေးပါ” ဆိုလျှင် ကမ်းပေးပါသလား။",
       "observeEn": "Follows “give me the ball”?",
       "whyMm": "ဤသည်မှာ စကားနားလည်မှု တိုးတက်ခြင်းဖြစ်သည်။",
       "whyEn": "This shows understanding is growing."
@@ -463,7 +463,7 @@
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "ရိုးရှင်းသော ညွှန်ကြားချက်ကို လိုက်နာခြင်း follows simple directions   language 13_18m “ဒါလေးပေးပါ” ဆိုလျှင် ပေးပါသလား။ follows “give me the ball”? ဤသည်မှာ စကားနားလည်မှု တိုးတက်ခြင်းဖြစ်သည်။ this shows understanding is growing."
+    "searchText": "ရိုးရှင်းသော ညွှန်ကြားချက်ကို လိုက်နာခြင်း follows simple directions   language 13_18m “ဒါလေးပေးပါ” ဆိုလျှင် ကမ်းပေးပါသလား။ follows “give me the ball”? ဤသည်မှာ စကားနားလည်မှု တိုးတက်ခြင်းဖြစ်သည်။ this shows understanding is growing."
   },
   {
     "ageGroupKey": "13_18m",
@@ -475,7 +475,7 @@
     "data": {
       "observeMm": "ဇွန်း သို့မဟုတ် ခွက်ကို ကိုယ်တိုင် သုံးရန် ကြိုးစားပါသလား။",
       "observeEn": "Tries to use a spoon or cup?",
-      "whyMm": "စားပွဲပေါ် အနည်းငယ် ပေကျံနိုင်သော်လည်း ကိုယ်တိုင် ကြိုးစားသုံးတတ်လာခြင်းက အရေးကြီးသည်။",
+      "whyMm": "အနည်းငယ် ပေကျံနိုင်သော်လည်း ကိုယ်တိုင် ကြိုးစားသုံးစွဲတတ်လာခြင်းက အရေးကြီးပါသည်။",
       "whyEn": "Some mess is fine — trying is what matters."
     },
     "type": "milestone",
@@ -486,7 +486,7 @@
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "ဇွန်း/ခွက်ကို ကြိုးစားသုံးခြင်း tries spoon and cup   self_help 13_18m ဇွန်း သို့မဟုတ် ခွက်ကို ကိုယ်တိုင် သုံးရန် ကြိုးစားပါသလား။ tries to use a spoon or cup? စားပွဲပေါ် အနည်းငယ် ပေကျံနိုင်သော်လည်း ကိုယ်တိုင် ကြိုးစားသုံးတတ်လာခြင်းက အရေးကြီးသည်။ some mess is fine — trying is what matters."
+    "searchText": "ဇွန်း/ခွက်ကို ကြိုးစားသုံးခြင်း tries spoon and cup   self_help 13_18m ဇွန်း သို့မဟုတ် ခွက်ကို ကိုယ်တိုင် သုံးရန် ကြိုးစားပါသလား။ tries to use a spoon or cup? အနည်းငယ် ပေကျံနိုင်သော်လည်း ကိုယ်တိုင် ကြိုးစားသုံးစွဲတတ်လာခြင်းက အရေးကြီးပါသည်။ some mess is fine — trying is what matters."
   },
   {
     "ageGroupKey": "19_24m",
@@ -496,7 +496,7 @@
       "19_24m"
     ],
     "data": {
-      "observeMm": "“ရေ သောက်” ကဲ့သို့ နှစ်လုံးတွဲ ပြောပါသလား။",
+      "observeMm": "“ရေ သောက်မယ်”၊ “နို့ ထပ်” ကဲ့သို့ စကားလုံးနှစ်လုံး တွဲပြောပါသလား။",
       "observeEn": "Says two-word phrases like “want milk”?",
       "whyMm": "ဤသည်မှာ ဝါကျ တည်ဆောက်မှု၏ အစဖြစ်သည်။",
       "whyEn": "This is the start of building sentences."
@@ -509,7 +509,7 @@
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "စကားလုံး နှစ်လုံး ပေါင်းပြောခြင်း puts two words together   language 19_24m “ရေ သောက်” ကဲ့သို့ နှစ်လုံးတွဲ ပြောပါသလား။ says two-word phrases like “want milk”? ဤသည်မှာ ဝါကျ တည်ဆောက်မှု၏ အစဖြစ်သည်။ this is the start of building sentences."
+    "searchText": "စကားလုံး နှစ်လုံး ပေါင်းပြောခြင်း puts two words together   language 19_24m “ရေ သောက်မယ်”၊ “နို့ ထပ်” ကဲ့သို့ စကားလုံးနှစ်လုံး တွဲပြောပါသလား။ says two-word phrases like “want milk”? ဤသည်မှာ ဝါကျ တည်ဆောက်မှု၏ အစဖြစ်သည်။ this is the start of building sentences."
   },
   {
     "ageGroupKey": "19_24m",
@@ -542,7 +542,7 @@
       "19_24m"
     ],
     "data": {
-      "observeMm": "တစ်ယောက်ငိုပါက စိတ်ဝင်စား/စိုးရိမ်ဟန် ပြပါသလား။",
+      "observeMm": "အခြားသူတစ်ဦး ငိုနေပါက စိတ်ဝင်စားဟန် သို့မဟုတ် စိုးရိမ်ဟန် ပြတတ်ပါသလား။",
       "observeEn": "Reacts when someone is upset?",
       "whyMm": "ဤသည်မှာ သူတစ်ပါး၏ ခံစားချက်ကို နားလည်စာနာတတ်လာခြင်း၏ အစဖြစ်သည်။",
       "whyEn": "This is the beginning of empathy."
@@ -555,7 +555,7 @@
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "အခြားသူများ၏ ခံစားမှုကို သတိပြုခြင်း notices others’ feelings   emotional 19_24m တစ်ယောက်ငိုပါက စိတ်ဝင်စား/စိုးရိမ်ဟန် ပြပါသလား။ reacts when someone is upset? ဤသည်မှာ သူတစ်ပါး၏ ခံစားချက်ကို နားလည်စာနာတတ်လာခြင်း၏ အစဖြစ်သည်။ this is the beginning of empathy."
+    "searchText": "အခြားသူများ၏ ခံစားမှုကို သတိပြုခြင်း notices others’ feelings   emotional 19_24m အခြားသူတစ်ဦး ငိုနေပါက စိတ်ဝင်စားဟန် သို့မဟုတ် စိုးရိမ်ဟန် ပြတတ်ပါသလား။ reacts when someone is upset? ဤသည်မှာ သူတစ်ပါး၏ ခံစားချက်ကို နားလည်စာနာတတ်လာခြင်း၏ အစဖြစ်သည်။ this is the beginning of empathy."
   },
   {
     "ageGroupKey": "19_24m",
@@ -634,7 +634,7 @@
       "2y"
     ],
     "data": {
-      "observeMm": "ပုံသဏ္ဌာန်ရိုးရိုးများကို နေရာတကျ ထည့်နိုင်ပါသလား။",
+      "observeMm": "ပုံသဏ္ဌာန်ရိုးရိုးများကို သက်ဆိုင်ရာနေရာတွင် နေရာတကျ ထည့်နိုင်ပါသလား။",
       "observeEn": "Fits simple shapes into a sorter?",
       "whyMm": "ဤသည်မှာ တွေးခေါ်မှုနှင့် ကြိုးစားမှုကို လေ့ကျင့်စေသည်။",
       "whyEn": "This builds thinking and persistence."
@@ -647,7 +647,7 @@
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "ရိုးရှင်းသော ပဟေဠိ တပ်ဆင်ခြင်း simple puzzles / shapes   problem_solving 2y ပုံသဏ္ဌာန်ရိုးရိုးများကို နေရာတကျ ထည့်နိုင်ပါသလား။ fits simple shapes into a sorter? ဤသည်မှာ တွေးခေါ်မှုနှင့် ကြိုးစားမှုကို လေ့ကျင့်စေသည်။ this builds thinking and persistence."
+    "searchText": "ရိုးရှင်းသော ပဟေဠိ တပ်ဆင်ခြင်း simple puzzles / shapes   problem_solving 2y ပုံသဏ္ဌာန်ရိုးရိုးများကို သက်ဆိုင်ရာနေရာတွင် နေရာတကျ ထည့်နိုင်ပါသလား။ fits simple shapes into a sorter? ဤသည်မှာ တွေးခေါ်မှုနှင့် ကြိုးစားမှုကို လေ့ကျင့်စေသည်။ this builds thinking and persistence."
   },
   {
     "ageGroupKey": "2y",
@@ -795,7 +795,7 @@
       "3y"
     ],
     "data": {
-      "observeMm": "အခြားကလေးများနှင့် ဝေမျှ၍ ကစားရန် ကြိုးစားပါသလား။",
+      "observeMm": "အခြားကလေးများနှင့်အတူ ကစားရန်နှင့် ဝေမျှရန် ကြိုးစားပါသလား။",
       "observeEn": "Tries to play and share with other children?",
       "whyMm": "အတူကစားခြင်းသည် လူမှုကျွမ်းကျင်မှုကို လေ့ကျင့်စေသည်။",
       "whyEn": "Playing together builds social skills."
@@ -808,7 +808,7 @@
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "အခြားကလေးများနှင့် အတူ ကစားခြင်း plays with other children   social 3y အခြားကလေးများနှင့် ဝေမျှ၍ ကစားရန် ကြိုးစားပါသလား။ tries to play and share with other children? အတူကစားခြင်းသည် လူမှုကျွမ်းကျင်မှုကို လေ့ကျင့်စေသည်။ playing together builds social skills."
+    "searchText": "အခြားကလေးများနှင့် အတူ ကစားခြင်း plays with other children   social 3y အခြားကလေးများနှင့်အတူ ကစားရန်နှင့် ဝေမျှရန် ကြိုးစားပါသလား။ tries to play and share with other children? အတူကစားခြင်းသည် လူမှုကျွမ်းကျင်မှုကို လေ့ကျင့်စေသည်။ playing together builds social skills."
   },
   {
     "ageGroupKey": "3y",
@@ -818,7 +818,7 @@
       "3y"
     ],
     "data": {
-      "observeMm": "ရင်းနှီးသူနှင့် ခဏခွဲနေရသည်ကို လက်ခံနိုင်ပါသလား။",
+      "observeMm": "မိဘ သို့မဟုတ် ပြုစုစောင့်ရှောက်သူနှင့် ခေတ္တခွဲနေရသည့်အခါ အဆင်ပြေစွာ နေနိုင်ပါသလား။",
       "observeEn": "Copes with brief separation from a caregiver?",
       "whyMm": "ဤသည်မှာ ကျောင်း/မူကြိုအတွက် အသင့်ဖြစ်မှု အစိတ်အပိုင်းဖြစ်သည်။",
       "whyEn": "This is part of readiness for preschool."
@@ -831,7 +831,7 @@
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "မိဘနှင့် ခွဲ၍ ခဏနေနိုင်ခြင်း separates from parent briefly   school_readiness 3y ရင်းနှီးသူနှင့် ခဏခွဲနေရသည်ကို လက်ခံနိုင်ပါသလား။ copes with brief separation from a caregiver? ဤသည်မှာ ကျောင်း/မူကြိုအတွက် အသင့်ဖြစ်မှု အစိတ်အပိုင်းဖြစ်သည်။ this is part of readiness for preschool."
+    "searchText": "မိဘနှင့် ခွဲ၍ ခဏနေနိုင်ခြင်း separates from parent briefly   school_readiness 3y မိဘ သို့မဟုတ် ပြုစုစောင့်ရှောက်သူနှင့် ခေတ္တခွဲနေရသည့်အခါ အဆင်ပြေစွာ နေနိုင်ပါသလား။ copes with brief separation from a caregiver? ဤသည်မှာ ကျောင်း/မူကြိုအတွက် အသင့်ဖြစ်မှု အစိတ်အပိုင်းဖြစ်သည်။ this is part of readiness for preschool."
   },
   {
     "ageGroupKey": "3_5y",
@@ -841,7 +841,7 @@
       "3_5y"
     ],
     "data": {
-      "observeMm": "စက်ဝိုင်း သို့မဟုတ် မျဉ်းကို ကူးဆွဲပါသလား။",
+      "observeMm": "စက်ဝိုင်း သို့မဟုတ် မျဉ်းဖြောင့်ကို ကြည့်၍ ကူးဆွဲနိုင်ပါသလား။",
       "observeEn": "Copies a circle or straight line?",
       "whyMm": "ဤသည်မှာ ရေးသားမှုနှင့် တိကျမှုကို လေ့ကျင့်စေသည်။",
       "whyEn": "This builds pre-writing control."
@@ -854,7 +854,7 @@
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "စက်ဝိုင်း/မျဉ်း ကူးရေးခြင်း copies a circle / line   fine_motor 3_5y စက်ဝိုင်း သို့မဟုတ် မျဉ်းကို ကူးဆွဲပါသလား။ copies a circle or straight line? ဤသည်မှာ ရေးသားမှုနှင့် တိကျမှုကို လေ့ကျင့်စေသည်။ this builds pre-writing control."
+    "searchText": "စက်ဝိုင်း/မျဉ်း ကူးရေးခြင်း copies a circle / line   fine_motor 3_5y စက်ဝိုင်း သို့မဟုတ် မျဉ်းဖြောင့်ကို ကြည့်၍ ကူးဆွဲနိုင်ပါသလား။ copies a circle or straight line? ဤသည်မှာ ရေးသားမှုနှင့် တိကျမှုကို လေ့ကျင့်စေသည်။ this builds pre-writing control."
   },
   {
     "ageGroupKey": "3_5y",
@@ -864,7 +864,7 @@
       "3_5y"
     ],
     "data": {
-      "observeMm": "“ဘာကြောင့်” “ဘယ်လို” မေးခွန်းများ မေးပါသလား။",
+      "observeMm": "“ဘာဖြစ်လို့လဲ”၊ “ဘယ်လိုလုပ်မလဲ” ကဲ့သို့ မေးခွန်းများ မေးပါသလား။",
       "observeEn": "Asks lots of why/how questions?",
       "whyMm": "မေးခွန်းများသည် သိလိုစိတ်နှင့် ဘာသာစကား တိုးတက်မှုကို ပြသည်။",
       "whyEn": "Questions show curiosity and language growth."
@@ -877,7 +877,7 @@
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "“ဘာကြောင့်” မေးခွန်းများ မေးခြင်း asks “why” questions   communication 3_5y “ဘာကြောင့်” “ဘယ်လို” မေးခွန်းများ မေးပါသလား။ asks lots of why/how questions? မေးခွန်းများသည် သိလိုစိတ်နှင့် ဘာသာစကား တိုးတက်မှုကို ပြသည်။ questions show curiosity and language growth."
+    "searchText": "“ဘာကြောင့်” မေးခွန်းများ မေးခြင်း asks “why” questions   communication 3_5y “ဘာဖြစ်လို့လဲ”၊ “ဘယ်လိုလုပ်မလဲ” ကဲ့သို့ မေးခွန်းများ မေးပါသလား။ asks lots of why/how questions? မေးခွန်းများသည် သိလိုစိတ်နှင့် ဘာသာစကား တိုးတက်မှုကို ပြသည်။ questions show curiosity and language growth."
   },
   {
     "ageGroupKey": "3_5y",
@@ -887,7 +887,7 @@
       "3_5y"
     ],
     "data": {
-      "observeMm": "အလှည့်စောင့်ခြင်းကဲ့သို့ ရိုးရှင်းစည်းကမ်းများ လိုက်နာပါသလား။",
+      "observeMm": "အလှည့်စောင့်ခြင်းကဲ့သို့ ရိုးရှင်းသော အုပ်စုစည်းကမ်းများကို လိုက်နာပါသလား။",
       "observeEn": "Takes turns and follows simple rules?",
       "whyMm": "ဤသည်မှာ အုပ်စုဖြင့် သင်ယူရန် ပြင်ဆင်ပေးသည်။",
       "whyEn": "This prepares for learning in a group."
@@ -900,7 +900,7 @@
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "ရိုးရှင်းသော စည်းကမ်းများ လိုက်နာခြင်း follows simple group rules   school_readiness 3_5y အလှည့်စောင့်ခြင်းကဲ့သို့ ရိုးရှင်းစည်းကမ်းများ လိုက်နာပါသလား။ takes turns and follows simple rules? ဤသည်မှာ အုပ်စုဖြင့် သင်ယူရန် ပြင်ဆင်ပေးသည်။ this prepares for learning in a group."
+    "searchText": "ရိုးရှင်းသော စည်းကမ်းများ လိုက်နာခြင်း follows simple group rules   school_readiness 3_5y အလှည့်စောင့်ခြင်းကဲ့သို့ ရိုးရှင်းသော အုပ်စုစည်းကမ်းများကို လိုက်နာပါသလား။ takes turns and follows simple rules? ဤသည်မှာ အုပ်စုဖြင့် သင်ယူရန် ပြင်ဆင်ပေးသည်။ this prepares for learning in a group."
   },
   {
     "ageGroupKey": "4y",
@@ -933,7 +933,7 @@
       "4y"
     ],
     "data": {
-      "observeMm": "ဖြစ်ခဲ့သည့် ဖြစ်ရပ်ကို အစီအစဉ်တကျ ပြန်ပြောပါသလား။",
+      "observeMm": "ဖြစ်ပျက်ခဲ့သော အကြောင်းအရာကို အစီအစဉ်တကျ ပြန်ပြောပြနိုင်ပါသလား။",
       "observeEn": "Retells a simple event in order?",
       "whyMm": "ဤသည်မှာ အတွေးများကို စီစဉ်နိုင်ခြင်းဖြစ်သည်။",
       "whyEn": "This shows organizing thoughts in sequence."
@@ -946,7 +946,7 @@
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "ဇာတ်လမ်း/ဖြစ်ရပ်ကို ပြန်ပြောခြင်း tells a short story   language 4y ဖြစ်ခဲ့သည့် ဖြစ်ရပ်ကို အစီအစဉ်တကျ ပြန်ပြောပါသလား။ retells a simple event in order? ဤသည်မှာ အတွေးများကို စီစဉ်နိုင်ခြင်းဖြစ်သည်။ this shows organizing thoughts in sequence."
+    "searchText": "ဇာတ်လမ်း/ဖြစ်ရပ်ကို ပြန်ပြောခြင်း tells a short story   language 4y ဖြစ်ပျက်ခဲ့သော အကြောင်းအရာကို အစီအစဉ်တကျ ပြန်ပြောပြနိုင်ပါသလား။ retells a simple event in order? ဤသည်မှာ အတွေးများကို စီစဉ်နိုင်ခြင်းဖြစ်သည်။ this shows organizing thoughts in sequence."
   },
   {
     "ageGroupKey": "4y",
@@ -956,7 +956,7 @@
       "4y"
     ],
     "data": {
-      "observeMm": "မလှမ်းမီပစ္စည်းယူရန် ခုံတင်ကဲ့သို့ နည်းလမ်းရှာပါသလား။",
+      "observeMm": "လက်လှမ်းမမီသော ပစ္စည်းကို ယူရန် ခုံတစ်ခုခုယူသုံးခြင်းကဲ့သို့ နည်းလမ်းရှာပါသလား။",
       "observeEn": "Finds a way to reach something out of grasp?",
       "whyMm": "ဤသည်မှာ တွေးခေါ်၍ စီစဉ်နိုင်ခြင်းကို ပြသည်။",
       "whyEn": "This shows planning and reasoning."
@@ -969,7 +969,7 @@
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "ရိုးရှင်းသော ပြဿနာများ ဖြေရှင်းခြင်း solves simple problems   problem_solving 4y မလှမ်းမီပစ္စည်းယူရန် ခုံတင်ကဲ့သို့ နည်းလမ်းရှာပါသလား။ finds a way to reach something out of grasp? ဤသည်မှာ တွေးခေါ်၍ စီစဉ်နိုင်ခြင်းကို ပြသည်။ this shows planning and reasoning."
+    "searchText": "ရိုးရှင်းသော ပြဿနာများ ဖြေရှင်းခြင်း solves simple problems   problem_solving 4y လက်လှမ်းမမီသော ပစ္စည်းကို ယူရန် ခုံတစ်ခုခုယူသုံးခြင်းကဲ့သို့ နည်းလမ်းရှာပါသလား။ finds a way to reach something out of grasp? ဤသည်မှာ တွေးခေါ်၍ စီစဉ်နိုင်ခြင်းကို ပြသည်။ this shows planning and reasoning."
   },
   {
     "ageGroupKey": "4y",
@@ -1002,7 +1002,7 @@
       "4_5y"
     ],
     "data": {
-      "observeMm": "ကလေးကတ်ကြေးဖြင့် စက္ကူကို မျဉ်းအတိုင်း ဖြတ်ပါသလား။",
+      "observeMm": "ဘေးကင်းသော ကလေးကတ်ကြေးဖြင့် စက္ကူကို မျဉ်းအတိုင်း ဖြတ်နိုင်ပါသလား။",
       "observeEn": "Cuts along a line with safe scissors?",
       "whyMm": "ဤသည်မှာ လက်နှစ်ဖက် ပေါင်းစပ်မှုကို လေ့ကျင့်စေသည်။",
       "whyEn": "This builds two-hand coordination."
@@ -1015,7 +1015,7 @@
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "ကတ်ကြေးဖြင့် ဖြတ်ခြင်း cuts with child scissors   fine_motor 4_5y ကလေးကတ်ကြေးဖြင့် စက္ကူကို မျဉ်းအတိုင်း ဖြတ်ပါသလား။ cuts along a line with safe scissors? ဤသည်မှာ လက်နှစ်ဖက် ပေါင်းစပ်မှုကို လေ့ကျင့်စေသည်။ this builds two-hand coordination."
+    "searchText": "ကတ်ကြေးဖြင့် ဖြတ်ခြင်း cuts with child scissors   fine_motor 4_5y ဘေးကင်းသော ကလေးကတ်ကြေးဖြင့် စက္ကူကို မျဉ်းအတိုင်း ဖြတ်နိုင်ပါသလား။ cuts along a line with safe scissors? ဤသည်မှာ လက်နှစ်ဖက် ပေါင်းစပ်မှုကို လေ့ကျင့်စေသည်။ this builds two-hand coordination."
   },
   {
     "ageGroupKey": "4_5y",
@@ -1025,7 +1025,7 @@
       "4_5y"
     ],
     "data": {
-      "observeMm": "ပစ္စည်းများကို အရောင်/ပုံသဏ္ဌာန်ဖြင့် ခွဲခြားပါသလား။",
+      "observeMm": "ပစ္စည်းများကို အရောင် သို့မဟုတ် ပုံသဏ္ဌာန်အလိုက် ခွဲခြားနိုင်ပါသလား။",
       "observeEn": "Sorts objects by color or shape?",
       "whyMm": "ဤသည်မှာ သင်္ချာနှင့် ယုတ္တိတွေးခေါ်မှု၏ အခြေခံဖြစ်သည်။",
       "whyEn": "This is the base for math and logic."
@@ -1038,7 +1038,7 @@
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "အရာဝတ္ထုများကို အမျိုးအစားခွဲခြင်း sorts by category   cognitive 4_5y ပစ္စည်းများကို အရောင်/ပုံသဏ္ဌာန်ဖြင့် ခွဲခြားပါသလား။ sorts objects by color or shape? ဤသည်မှာ သင်္ချာနှင့် ယုတ္တိတွေးခေါ်မှု၏ အခြေခံဖြစ်သည်။ this is the base for math and logic."
+    "searchText": "အရာဝတ္ထုများကို အမျိုးအစားခွဲခြင်း sorts by category   cognitive 4_5y ပစ္စည်းများကို အရောင် သို့မဟုတ် ပုံသဏ္ဌာန်အလိုက် ခွဲခြားနိုင်ပါသလား။ sorts objects by color or shape? ဤသည်မှာ သင်္ချာနှင့် ယုတ္တိတွေးခေါ်မှု၏ အခြေခံဖြစ်သည်။ this is the base for math and logic."
   },
   {
     "ageGroupKey": "4_5y",
@@ -1071,7 +1071,7 @@
       "5y"
     ],
     "data": {
-      "observeMm": "ခုန်ကျော်နိုင်၍ ဟန်ချက်ညီစွာ လှုပ်ရှားပါသလား။",
+      "observeMm": "ခုန်ဆွခုန်ဆွ သွားနိုင်ပြီး ဟန်ချက်ညီစွာ လှုပ်ရှားနိုင်ပါသလား။",
       "observeEn": "Skips and moves with good balance?",
       "whyMm": "ဤသည်မှာ ကစားနှင့် အားကစားအတွက် အသင့်ဖြစ်ခြင်းဖြစ်သည်။",
       "whyEn": "This supports active play and sport."
@@ -1084,7 +1084,7 @@
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "ခုန်ကျော်၊ ဟန်ချက်ညီ လှုပ်ရှားခြင်း skips and balances well   gross_motor 5y ခုန်ကျော်နိုင်၍ ဟန်ချက်ညီစွာ လှုပ်ရှားပါသလား။ skips and moves with good balance? ဤသည်မှာ ကစားနှင့် အားကစားအတွက် အသင့်ဖြစ်ခြင်းဖြစ်သည်။ this supports active play and sport."
+    "searchText": "ခုန်ကျော်၊ ဟန်ချက်ညီ လှုပ်ရှားခြင်း skips and balances well   gross_motor 5y ခုန်ဆွခုန်ဆွ သွားနိုင်ပြီး ဟန်ချက်ညီစွာ လှုပ်ရှားနိုင်ပါသလား။ skips and moves with good balance? ဤသည်မှာ ကစားနှင့် အားကစားအတွက် အသင့်ဖြစ်ခြင်းဖြစ်သည်။ this supports active play and sport."
   },
   {
     "ageGroupKey": "5y",
@@ -1094,7 +1094,7 @@
       "5y"
     ],
     "data": {
-      "observeMm": "အစိမ်းလူများ နားလည်နိုင်စွာ ဝါကျ အပြည့်အစုံ ပြောပါသလား။",
+      "observeMm": "မရင်းနှီးသူများ နားလည်နိုင်လောက်အောင် ဝါကျ အပြည့်အစုံဖြင့် ရှင်းလင်းစွာ ပြောနိုင်ပါသလား။",
       "observeEn": "Uses clear sentences strangers understand?",
       "whyMm": "ဤသည်မှာ ကျောင်းတွင် ဆက်သွယ်ရန် အသင့်ဖြစ်ခြင်းဖြစ်သည်။",
       "whyEn": "This is readiness to communicate at school."
@@ -1107,7 +1107,7 @@
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "ရှင်းလင်းသော ဝါကျ အပြည့်အစုံ ပြောခြင်း speaks in clear full sentences   language 5y အစိမ်းလူများ နားလည်နိုင်စွာ ဝါကျ အပြည့်အစုံ ပြောပါသလား။ uses clear sentences strangers understand? ဤသည်မှာ ကျောင်းတွင် ဆက်သွယ်ရန် အသင့်ဖြစ်ခြင်းဖြစ်သည်။ this is readiness to communicate at school."
+    "searchText": "ရှင်းလင်းသော ဝါကျ အပြည့်အစုံ ပြောခြင်း speaks in clear full sentences   language 5y မရင်းနှီးသူများ နားလည်နိုင်လောက်အောင် ဝါကျ အပြည့်အစုံဖြင့် ရှင်းလင်းစွာ ပြောနိုင်ပါသလား။ uses clear sentences strangers understand? ဤသည်မှာ ကျောင်းတွင် ဆက်သွယ်ရန် အသင့်ဖြစ်ခြင်းဖြစ်သည်။ this is readiness to communicate at school."
   },
   {
     "ageGroupKey": "5y",
@@ -1140,20 +1140,20 @@
       "5y"
     ],
     "data": {
-      "observeMm": "အိမ်သာသုံးပြီး လက်ကို ကိုယ်တိုင် ဆေးနိုင်ပါသလား။",
+      "observeMm": "အိမ်သာသုံးပြီးနောက် လက်ကို ကိုယ်တိုင် ဆေးကြောနိုင်ပါသလား။",
       "observeEn": "Uses the toilet and washes hands alone?",
-      "whyMm": "ဤသည်မှာ ကျန်းမာရေးနှင့် ကျောင်းအတွက် အရေးကြီးသည်။",
+      "whyMm": "ဤသည်မှာ တစ်ကိုယ်ရေ သန့်ရှင်းရေးနှင့် ကျောင်းနေအရွယ်အတွက် အရေးကြီးသော အလေ့အထ ဖြစ်ပါသည်။",
       "whyEn": "This matters for health and school."
     },
     "type": "milestone",
     "slug": "ms_5y_self_help_1",
-    "titleMm": "အိမ်သာ/လက်ဆေးခြင်း ကိုယ်တိုင်လုပ်ခြင်း",
+    "titleMm": "အိမ်သာသုံးပြီး လက်ဆေးခြင်းကို ကိုယ်တိုင်လုပ်ခြင်း",
     "titleEn": "Manages toilet and handwashing",
     "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "အိမ်သာ/လက်ဆေးခြင်း ကိုယ်တိုင်လုပ်ခြင်း manages toilet and handwashing   self_help 5y အိမ်သာသုံးပြီး လက်ကို ကိုယ်တိုင် ဆေးနိုင်ပါသလား။ uses the toilet and washes hands alone? ဤသည်မှာ ကျန်းမာရေးနှင့် ကျောင်းအတွက် အရေးကြီးသည်။ this matters for health and school."
+    "searchText": "အိမ်သာသုံးပြီး လက်ဆေးခြင်းကို ကိုယ်တိုင်လုပ်ခြင်း manages toilet and handwashing   self_help 5y အိမ်သာသုံးပြီးနောက် လက်ကို ကိုယ်တိုင် ဆေးကြောနိုင်ပါသလား။ uses the toilet and washes hands alone? ဤသည်မှာ တစ်ကိုယ်ရေ သန့်ရှင်းရေးနှင့် ကျောင်းနေအရွယ်အတွက် အရေးကြီးသော အလေ့အထ ဖြစ်ပါသည်။ this matters for health and school."
   },
   {
     "ageGroupKey": "7_9m",
@@ -7610,12 +7610,12 @@
     ],
     "type": "printable",
     "slug": "prt_flash_cards",
-    "titleMm": "ဖလက်ရှ် ကတ်များ",
+    "titleMm": "ရုပ်ပုံ ဝေါဟာရကတ်များ",
     "titleEn": "Flash Cards",
     "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
     "version": 1,
     "clinicalStatus": "clinical_review",
-    "searchText": "ဖလက်ရှ် ကတ်များ flash cards ဝေါဟာရ တိုးပွားစေရန် ရုပ်ပုံ/စကားလုံး ကတ်များ။ picture/word cards to grow vocabulary. flash_cards printable toolkit preview only — bilingual pdf not yet available preview_only"
+    "searchText": "ရုပ်ပုံ ဝေါဟာရကတ်များ flash cards ဝေါဟာရ တိုးပွားစေရန် ရုပ်ပုံ/စကားလုံး ကတ်များ။ picture/word cards to grow vocabulary. flash_cards printable toolkit preview only — bilingual pdf not yet available preview_only"
   },
   {
     "category": "emotion_cards",
@@ -7769,7 +7769,7 @@
   },
   {
     "category": "visual_schedule",
-    "summaryMm": "ကူးပြောင်းမှုများ လွယ်ကူစေရန် ပုံရိပ် အစီအစဉ်ဇယား။",
+    "summaryMm": "နေ့စဉ်လုပ်ငန်းများ ကူးပြောင်းရာတွင် လွယ်ကူစေရန် ရုပ်ပုံ အစီအစဉ်ဇယား။",
     "summaryEn": "A picture schedule to ease transitions.",
     "tags": [
       "visual_schedule",
@@ -7790,16 +7790,16 @@
     ],
     "type": "printable",
     "slug": "prt_visual_schedule",
-    "titleMm": "ပုံရိပ် အစီအစဉ်ဇယား",
+    "titleMm": "ရုပ်ပုံ အစီအစဉ်ဇယား",
     "titleEn": "Visual Schedule",
     "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
     "version": 1,
     "clinicalStatus": "clinical_review",
-    "searchText": "ပုံရိပ် အစီအစဉ်ဇယား visual schedule ကူးပြောင်းမှုများ လွယ်ကူစေရန် ပုံရိပ် အစီအစဉ်ဇယား။ a picture schedule to ease transitions. visual_schedule printable toolkit preview only — bilingual pdf not yet available preview_only"
+    "searchText": "ရုပ်ပုံ အစီအစဉ်ဇယား visual schedule နေ့စဉ်လုပ်ငန်းများ ကူးပြောင်းရာတွင် လွယ်ကူစေရန် ရုပ်ပုံ အစီအစဉ်ဇယား။ a picture schedule to ease transitions. visual_schedule printable toolkit preview only — bilingual pdf not yet available preview_only"
   },
   {
     "category": "doctor_visit_checklist",
-    "summaryMm": "ဆရာဝန်မပြမီ မေးခွန်း/မှတ်စုများ ပြင်ဆင်ရန် စာရင်း။",
+    "summaryMm": "ဆရာဝန်နှင့် မတွေ့ဆုံမီ မေးခွန်းများနှင့် မှတ်စုများ ကြိုတင်ပြင်ဆင်ရန် စစ်ဆေးစာရင်း။",
     "summaryEn": "Prep questions and notes before a doctor visit.",
     "tags": [
       "doctor_visit_checklist",
@@ -7820,12 +7820,12 @@
     ],
     "type": "printable",
     "slug": "prt_doctor_visit_checklist",
-    "titleMm": "ဆရာဝန်ပြသ စစ်ဆေးစာရင်း",
+    "titleMm": "ဆရာဝန်ပြသရန် စစ်ဆေးစာရင်း",
     "titleEn": "Doctor Visit Checklist",
     "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
     "version": 1,
     "clinicalStatus": "clinical_review",
-    "searchText": "ဆရာဝန်ပြသ စစ်ဆေးစာရင်း doctor visit checklist ဆရာဝန်မပြမီ မေးခွန်း/မှတ်စုများ ပြင်ဆင်ရန် စာရင်း။ prep questions and notes before a doctor visit. doctor_visit_checklist printable toolkit preview only — bilingual pdf not yet available preview_only"
+    "searchText": "ဆရာဝန်ပြသရန် စစ်ဆေးစာရင်း doctor visit checklist ဆရာဝန်နှင့် မတွေ့ဆုံမီ မေးခွန်းများနှင့် မှတ်စုများ ကြိုတင်ပြင်ဆင်ရန် စစ်ဆေးစာရင်း။ prep questions and notes before a doctor visit. doctor_visit_checklist printable toolkit preview only — bilingual pdf not yet available preview_only"
   },
   {
     "category": "growth_log",
@@ -8132,7 +8132,7 @@
       "whyEn": "Total sleep at 0–3 months is commonly about 14–17 hours in 24, with wide normal variation. Day–night rhythm has not developed yet.",
       "redMm": "နိုးရန် အလွန်ခက်ခဲခြင်း၊ တစ်ရက်လုံး နို့စို့ရန် မနိုးခြင်းကို ကျန်းမာရေးဝန်ထမ်းအား ချက်ချင်း ပြပါ။",
       "redEn": "A baby who is very hard to wake, or who does not wake to feed, needs to be seen promptly.",
-      "encouragementMm": "အိပ်တိုင်း ပက်လက်အနေအထား၊ ပြားပြီး မာသော အိပ်ရာ၊ အိပ်ရာပေါ်တွင် အနူအထောင်း မထားပါနှင့်။ အခန်းတူ အိပ်ရာမတူ။",
+      "encouragementMm": "အိပ်ချိန်တိုင်း ပက်လက်အနေအထား၊ ပြားပြီး မာသော အိပ်ရာ၊ အိပ်ရာပေါ်တွင် ပျော့ပျောင်းသောအရာများ မထားပါနှင့်။ အခန်းတူ အိပ်ရာမတူ။",
       "encouragementEn": "Back to sleep every sleep, on a firm flat surface with nothing soft in the cot. Room-share, but do not bed-share.",
       "editorialStatus": "reference_verified",
       "evidenceSummary": "Sleep amounts at 0–3 months follow WHO physical activity and sleep guidance for under-5s; the safe sleep positioning advice follows AAP safe sleep guidance and NHS SIDS advice."
@@ -8145,7 +8145,7 @@
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "တိုတောင်းသော အိပ်ချိန်များဖြင့် တစ်ရက်လုံး အိပ်ခြင်း sleeps in short stretches across the day and night   sleep birth_2m ကလေးသည် တစ်ရက်လျှင် အကြိမ်များစွာ အိပ်ပါသလား။ တစ်ကြိမ်လျှင် နာရီအနည်းငယ်သာ ကြာပါသလား။ does your baby sleep many times across 24 hours, each stretch only a few hours long? အသက် ၀–၃ လအရွယ်တွင် စုစုပေါင်း အိပ်ချိန် ၁၄–၁၇ နာရီခန့် ဖြစ်တတ်သည်။ ကွာဟမှု များပါသည်။ ညနှင့် နေ့ ခွဲခြားနိုင်စွမ်း မရှိသေးပါ။ total sleep at 0–3 months is commonly about 14–17 hours in 24, with wide normal variation. day–night rhythm has not developed yet. နိုးရန် အလွန်ခက်ခဲခြင်း၊ တစ်ရက်လုံး နို့စို့ရန် မနိုးခြင်းကို ကျန်းမာရေးဝန်ထမ်းအား ချက်ချင်း ပြပါ။ a baby who is very hard to wake, or who does not wake to feed, needs to be seen promptly. အိပ်တိုင်း ပက်လက်အနေအထား၊ ပြားပြီး မာသော အိပ်ရာ၊ အိပ်ရာပေါ်တွင် အနူအထောင်း မထားပါနှင့်။ အခန်းတူ အိပ်ရာမတူ။ back to sleep every sleep, on a firm flat surface with nothing soft in the cot. room-share, but do not bed-share. reference_verified sleep amounts at 0–3 months follow who physical activity and sleep guidance for under-5s; the safe sleep positioning advice follows aap safe sleep guidance and nhs sids advice."
+    "searchText": "တိုတောင်းသော အိပ်ချိန်များဖြင့် တစ်ရက်လုံး အိပ်ခြင်း sleeps in short stretches across the day and night   sleep birth_2m ကလေးသည် တစ်ရက်လျှင် အကြိမ်များစွာ အိပ်ပါသလား။ တစ်ကြိမ်လျှင် နာရီအနည်းငယ်သာ ကြာပါသလား။ does your baby sleep many times across 24 hours, each stretch only a few hours long? အသက် ၀–၃ လအရွယ်တွင် စုစုပေါင်း အိပ်ချိန် ၁၄–၁၇ နာရီခန့် ဖြစ်တတ်သည်။ ကွာဟမှု များပါသည်။ ညနှင့် နေ့ ခွဲခြားနိုင်စွမ်း မရှိသေးပါ။ total sleep at 0–3 months is commonly about 14–17 hours in 24, with wide normal variation. day–night rhythm has not developed yet. နိုးရန် အလွန်ခက်ခဲခြင်း၊ တစ်ရက်လုံး နို့စို့ရန် မနိုးခြင်းကို ကျန်းမာရေးဝန်ထမ်းအား ချက်ချင်း ပြပါ။ a baby who is very hard to wake, or who does not wake to feed, needs to be seen promptly. အိပ်ချိန်တိုင်း ပက်လက်အနေအထား၊ ပြားပြီး မာသော အိပ်ရာ၊ အိပ်ရာပေါ်တွင် ပျော့ပျောင်းသောအရာများ မထားပါနှင့်။ အခန်းတူ အိပ်ရာမတူ။ back to sleep every sleep, on a firm flat surface with nothing soft in the cot. room-share, but do not bed-share. reference_verified sleep amounts at 0–3 months follow who physical activity and sleep guidance for under-5s; the safe sleep positioning advice follows aap safe sleep guidance and nhs sids advice."
   },
   {
     "ageGroupKey": "birth_2m",
@@ -9395,7 +9395,7 @@
       },
       "observationQuestions": [
         {
-          "mm": "အိပ်ရာသည် ပြားပြီး မာပါသလား။ အိပ်ရာပေါ်တွင် ခေါင်းအုံး၊ စောင်ထူ၊ အနူအထောင်း ရှိပါသလား။",
+          "mm": "အိပ်ရာသည် ပြားပြီး မာပါသလား။ အိပ်ရာပေါ်တွင် ခေါင်းအုံး၊ စောင်ထူ၊ ပျော့ပျောင်းသောအရာများ ရှိပါသလား။",
           "en": "Is the sleep surface firm and flat? Are there pillows, thick blankets or soft items in it?"
         },
         {
@@ -9441,7 +9441,7 @@
       ],
       "lowCost": [
         {
-          "mm": "ဘေးကင်းသော အိပ်စက်မှုသည် ကုန်ကျစရိတ် မရှိပါ — ပြားပြီး မာသော မျက်နှာပြင်နှင့် အနူအထောင်း မထားခြင်းသာ ဖြစ်သည်။",
+          "mm": "ဘေးကင်းသော အိပ်စက်မှုသည် ကုန်ကျစရိတ် မရှိပါ — ပြားပြီး မာသော မျက်နှာပြင်နှင့် ပျော့ပျောင်းသောအရာများ မထားရှိခြင်းသာ ဖြစ်သည်။",
           "en": "Safe sleep costs nothing — a firm flat surface and nothing soft in it."
         }
       ],
@@ -9459,7 +9459,7 @@
           "en": "Falling asleep with the baby on a sofa or armchair."
         },
         {
-          "mm": "အိပ်ရာထဲ ခေါင်းအုံး၊ အနူထောင်း၊ စောင်ထူ ထည့်ထားခြင်း။",
+          "mm": "အိပ်ရာထဲ ခေါင်းအုံး၊ ပျော့ပျောင်းသော အရုပ်များ၊ စောင်ထူ ထည့်ထားခြင်း။",
           "en": "Putting pillows, soft toys or thick blankets in the cot."
         },
         {
@@ -9558,7 +9558,7 @@
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "မွေးကင်း – ၂ လ — ဘေးကင်းလုံခြုံရေး လမ်းညွှန် birth–2 months — safety guide မွေးကင်းစကလေးသည် လုံးဝ မိမိကိုယ်ကို မကာကွယ်နိုင်ပါ။ ဤအရွယ်တွင် အဓိက အန္တရာယ်များမှာ အိပ်စက်ရာ အန္တရာယ်၊ ပြုတ်ကျခြင်း၊ အပူလောင်ခြင်း၊ ရေနစ်ခြင်းနှင့် လှုပ်ခါခံရခြင်း ဖြစ်သည်။ a newborn cannot protect herself at all. the main risks at this age are unsafe sleep, falls, burns, drowning and being shaken. safety birth_2m guide မွေးကင်း – ၂ လ — ဘေးကင်းလုံခြုံရေး လမ်းညွှန် birth–2 months — safety guide မွေးကင်းစကလေးသည် လုံးဝ မိမိကိုယ်ကို မကာကွယ်နိုင်ပါ။ ဤအရွယ်တွင် အဓိက အန္တရာယ်များမှာ အိပ်စက်ရာ အန္တရာယ်၊ ပြုတ်ကျခြင်း၊ အပူလောင်ခြင်း၊ ရေနစ်ခြင်းနှင့် လှုပ်ခါခံရခြင်း ဖြစ်သည်။ a newborn cannot protect herself at all. the main risks at this age are unsafe sleep, falls, burns, drowning and being shaken. အိပ်ရာသည် ပြားပြီး မာပါသလား။ အိပ်ရာပေါ်တွင် ခေါင်းအုံး၊ စောင်ထူ၊ အနူအထောင်း ရှိပါသလား။ is the sleep surface firm and flat? are there pillows, thick blankets or soft items in it? ကလေးကို မြင့်သော နေရာတွင် ခဏမျှ ချန်ထားမိပါသလား။ is your baby ever left on a high surface, even briefly? အိမ်တွင် ဆေးလိပ်သောက်သူ ရှိပါသလား။ does anyone smoke in the home? အိပ်တိုင်း ပက်လက် — နေ့အိပ်ပါ အပါအဝင်။ back to sleep for every sleep, including naps. အိပ်ရာကို စစ်ဆေးပါ — ပြားပြီး မာသော မျက်နှာပြင်၊ ဘာမှ မထားပါနှင့်။ check the cot — firm, flat, and empty. ရေနွေးအိုး၊ ထမင်းအိုးများကို ကလေးပွေ့ချီစဉ် မကိုင်ပါနှင့်။ do not carry hot drinks or hot pots while holding your baby. အိမ်တွင်း ဘေးအန္တရာယ် တစ်ပတ်လျှင် တစ်ကြိမ် လျှောက်၍ စစ်ဆေးပါ။ do a weekly walk-through of the home for hazards. ကလေးအိပ်ရာကို မိဘအခန်းထဲတွင် ထားပါ — အိပ်ရာမတူဘဲ အခန်းတူ။ keep the baby’s cot in the parents’ room — room-share, do not bed-share. တိုက်ရိုက် နေရောင်မှ ကာကွယ်ပါ။ ကားစီးလျှင် သတ်မှတ်ချက်ပြည့်မီသော ကလေးထိုင်ခုံ သုံးပါ။ keep out of direct sun. in a vehicle, use an appropriate infant car seat. ဘေးကင်းသော အိပ်စက်မှုသည် ကုန်ကျစရိတ် မရှိပါ — ပြားပြီး မာသော မျက်နှာပြင်နှင့် အနူအထောင်း မထားခြင်းသာ ဖြစ်သည်။ safe sleep costs nothing — a firm flat surface and nothing soft in it. ပြားပြီး မာသော အိပ်ရာ၊ ပါးလွှာသော အဝတ် a firm flat sleep surface and light bedding အဓိက စည်းမျဉ်းများ — အိပ်တိုင်း ပက်လက်၊ ပြားပြီး မာသော မျက်နှာပြင်၊ အိပ်ရာထဲ ဘာမှ မထား၊ အခန်းတူ အိပ်ရာမတူ၊ ဆေးလိပ်မီးခိုး လုံးဝ မထိစေရ၊ ကလေးကို ဘယ်တော့မှ မလှုပ်ခါရ၊ ရေချိုးစဉ် တစ်စက္ကန့်မျှ မခွာရ၊ မြင့်သောနေရာတွင် တစ်ယောက်တည်း မထားရ။ the core rules — back to sleep every sleep; firm flat surface; nothing in the cot; room-share but do not bed-share; no smoke exposure at all; never shake a baby; never leave a baby alone in or near water; never leave a baby alone on a high surface. ဆိုဖာ သို့မဟုတ် ကုလားထိုင်ပေါ်တွင် ကလေးနှင့်အတူ အိပ်ပျော်သွားခြင်း။ falling asleep with the baby on a sofa or armchair. အိပ်ရာထဲ ခေါင်းအုံး၊ အနူထောင်း၊ စောင်ထူ ထည့်ထားခြင်း။ putting pillows, soft toys or thick blankets in the cot. အဝတ် အလွန်ထူထပ်စွာ ခြုံပေးခြင်း — အပူလွန်ခြင်း အန္တရာယ် ရှိသည်။ over-wrapping — overheating is a risk. အလေးချိန်ပါသော စောင်၊ အိပ်ဝတ်စုံ သို့မဟုတ် ပတ်ရစ်ပိတ်စများ သုံးခြင်း။ using weighted blankets, weighted sleepers or weighted swaddles. အိမ်သုံး အသက်ရှူ/နှလုံးခုန် စောင့်ကြည့်စက်ကို ဘေးကင်းစွာ အိပ်စေခြင်း၏ အစား အားကိုးခြင်း — အန္တရာယ် လျှော့ချပေးသည်ဟု သက်သေ မရှိပါ။ relying on a home breathing or heart-rate monitor instead of a safe sleep space — these have not been shown to reduce the risk of sids. ကလေးကို ပြုစုပေးသူ တိုင်းကို ဤစည်းမျဉ်းများ ပြောပြထားပါ — အဖွား၊ အိမ်နီးချင်း အပါအဝင်။ tell every carer these rules — grandparents and neighbours included. အရေးပေါ်အခြေအနေတွင် ဘယ်ကို သွားရမည်ကို ကြိုတင် သိထားပါ။ know in advance where you would go in an emergency. ကလေးက ဘေးစောင်း အိပ်ချင်ရင် ရလား။ can my baby sleep on the side? အိပ်စက်ရန် အန္တရာယ် အနည်းဆုံး အနေအထားမှာ ပက်လက် ဖြစ်သည်။ ဘေးစောင်းနှင့် မှောက်လျက် အိပ်စက်ခြင်းကို မအကြံပြုပါ။ the back is the safest sleep position. side and tummy sleeping are not recommended for sleep. တစ်အိပ်ရာတည်း အိပ်တာ ဘယ်လိုလဲ။ what about sharing a bed? အခန်းတူ အိပ်ရာမတူ ဖြစ်ရန် အကြံပြုသည်။ ကလေးအတွက် သီးသန့် ပြားပြီး မာသော အိပ်ရာကို မိဘအခန်းထဲတွင် ထားပါ။ room-sharing without bed-sharing is advised: a separate firm flat sleep space for the baby, in the parents’ room. ဘယ်အပူချိန် ရောက်ရင် ဆေးရုံ သွားရမလဲ။ what temperature means we should seek care? အပူချိန် တိုင်းပါ။ အသက် ၃ လအောက် ကလေး ၃၈°c (၁၀၀.၄°f) နှင့်အထက် ဖျားပါက — ကလေး ပုံမှန်လို ထင်ရလျှင်ပင် ချက်ချင်း ပြသပါ။ အသက် ၃ လမှ ၆ လကြား ၃၉°c (၁၀၂.၂°f) နှင့်အထက် ဖျားပါက အမြန် ပြသပါ။ အသက်မရွေး — ဖျားခြင်းနှင့်အတူ အသက်ရှူခက်ခြင်း၊ နှိပ်လျှင် မပျောက်သော အနီစက်၊ လည်ပင်း တောင့်တင်းခြင်း သို့မဟုတ် နိုးရခက်ခြင်း ပါလာပါက ချက်ချင်း ပြသပါ။ အပူချိန်တိုင်းကိရိယာ မရှိပါက — ကလေး ပူနေပြီး အထက်ပါ လက္ခဏာများ ပါလျှင် မစောင့်ဘဲ ပြသပါ။ take the temperature. under 3 months, 38°c (100.4°f) or above: seek care straight away, even if the baby otherwise seems well. between 3 and 6 months, 39°c (102.2°f) or above: seek care promptly. at any age, fever together with difficulty breathing, a rash that does not fade under pressure, a stiff neck, or being hard to wake: seek care immediately. if you have no thermometer, and the child feels hot and has any of those signs, do not wait. အသက် ၃ လအောက် ကလေးတွင် ဖျားခြင်း — အရေးပေါ် စစ်ဆေးရန် လိုသည်။ fever in a baby under 3 months — needs urgent assessment. အသက်ရှူ ခက်ခဲခြင်း၊ နှုတ်ခမ်း/အရေပြား ညိုမည်းလာခြင်း။ difficulty breathing, or lips/skin turning blue or grey. တုံ့ပြန်မှု မရှိခြင်း၊ နိုးရန် အလွန်ခက်ခဲခြင်း၊ ကိုယ်ခန္ဓာ ပျော့ခွေခြင်း။ unresponsive, very hard to wake, or floppy. တက်ခြင်း။ a fit or seizure. နှိပ်လျှင် မပျောက်သော အနီစက်များ — ဖန်ခွက်ဖြင့် ဖိကြည့်ပါ။ ဖိထားစဉ် အနီရောင် မပျောက်ပါက ချက်ချင်း ဆေးရုံသို့ သွားပါ။ a rash that does not fade when you press on it — press a clear glass against the skin. if the red marks stay visible while you press, go to hospital immediately. ဤလက္ခဏာများသည် အရေးပေါ် ဖြစ်သည် — အနီးဆုံး ဆေးရုံ သို့မဟုတ် ကျန်းမာရေးဌာနသို့ ချက်ချင်း သွားပါ။ ဤအက်ပ်သည် အရေးပေါ် ဝန်ဆောင်မှု မဟုတ်ပါ။ these are emergencies — go to the nearest hospital or health facility immediately. this app is not an emergency service. ဘေးကင်းသော အခန်းတစ်ခန်းနှင့် တစ်သမတ်တည်း စည်းမျဉ်းများက အန္တရာယ် အများစုကို ကာကွယ်ပေးသည်။ a safe room and consistent rules prevent most of the risk. reference_verified safe sleep, room-sharing, smoke avoidance, drowning and burn prevention follow aap safe sleep guidance, nhs sids advice and aap drowning-prevention guidance; the urgent-symptom list follows nhs seriously-ill-child advice, nice fever guidance and the who imci danger signs."
+    "searchText": "မွေးကင်း – ၂ လ — ဘေးကင်းလုံခြုံရေး လမ်းညွှန် birth–2 months — safety guide မွေးကင်းစကလေးသည် လုံးဝ မိမိကိုယ်ကို မကာကွယ်နိုင်ပါ။ ဤအရွယ်တွင် အဓိက အန္တရာယ်များမှာ အိပ်စက်ရာ အန္တရာယ်၊ ပြုတ်ကျခြင်း၊ အပူလောင်ခြင်း၊ ရေနစ်ခြင်းနှင့် လှုပ်ခါခံရခြင်း ဖြစ်သည်။ a newborn cannot protect herself at all. the main risks at this age are unsafe sleep, falls, burns, drowning and being shaken. safety birth_2m guide မွေးကင်း – ၂ လ — ဘေးကင်းလုံခြုံရေး လမ်းညွှန် birth–2 months — safety guide မွေးကင်းစကလေးသည် လုံးဝ မိမိကိုယ်ကို မကာကွယ်နိုင်ပါ။ ဤအရွယ်တွင် အဓိက အန္တရာယ်များမှာ အိပ်စက်ရာ အန္တရာယ်၊ ပြုတ်ကျခြင်း၊ အပူလောင်ခြင်း၊ ရေနစ်ခြင်းနှင့် လှုပ်ခါခံရခြင်း ဖြစ်သည်။ a newborn cannot protect herself at all. the main risks at this age are unsafe sleep, falls, burns, drowning and being shaken. အိပ်ရာသည် ပြားပြီး မာပါသလား။ အိပ်ရာပေါ်တွင် ခေါင်းအုံး၊ စောင်ထူ၊ ပျော့ပျောင်းသောအရာများ ရှိပါသလား။ is the sleep surface firm and flat? are there pillows, thick blankets or soft items in it? ကလေးကို မြင့်သော နေရာတွင် ခဏမျှ ချန်ထားမိပါသလား။ is your baby ever left on a high surface, even briefly? အိမ်တွင် ဆေးလိပ်သောက်သူ ရှိပါသလား။ does anyone smoke in the home? အိပ်တိုင်း ပက်လက် — နေ့အိပ်ပါ အပါအဝင်။ back to sleep for every sleep, including naps. အိပ်ရာကို စစ်ဆေးပါ — ပြားပြီး မာသော မျက်နှာပြင်၊ ဘာမှ မထားပါနှင့်။ check the cot — firm, flat, and empty. ရေနွေးအိုး၊ ထမင်းအိုးများကို ကလေးပွေ့ချီစဉ် မကိုင်ပါနှင့်။ do not carry hot drinks or hot pots while holding your baby. အိမ်တွင်း ဘေးအန္တရာယ် တစ်ပတ်လျှင် တစ်ကြိမ် လျှောက်၍ စစ်ဆေးပါ။ do a weekly walk-through of the home for hazards. ကလေးအိပ်ရာကို မိဘအခန်းထဲတွင် ထားပါ — အိပ်ရာမတူဘဲ အခန်းတူ။ keep the baby’s cot in the parents’ room — room-share, do not bed-share. တိုက်ရိုက် နေရောင်မှ ကာကွယ်ပါ။ ကားစီးလျှင် သတ်မှတ်ချက်ပြည့်မီသော ကလေးထိုင်ခုံ သုံးပါ။ keep out of direct sun. in a vehicle, use an appropriate infant car seat. ဘေးကင်းသော အိပ်စက်မှုသည် ကုန်ကျစရိတ် မရှိပါ — ပြားပြီး မာသော မျက်နှာပြင်နှင့် ပျော့ပျောင်းသောအရာများ မထားရှိခြင်းသာ ဖြစ်သည်။ safe sleep costs nothing — a firm flat surface and nothing soft in it. ပြားပြီး မာသော အိပ်ရာ၊ ပါးလွှာသော အဝတ် a firm flat sleep surface and light bedding အဓိက စည်းမျဉ်းများ — အိပ်တိုင်း ပက်လက်၊ ပြားပြီး မာသော မျက်နှာပြင်၊ အိပ်ရာထဲ ဘာမှ မထား၊ အခန်းတူ အိပ်ရာမတူ၊ ဆေးလိပ်မီးခိုး လုံးဝ မထိစေရ၊ ကလေးကို ဘယ်တော့မှ မလှုပ်ခါရ၊ ရေချိုးစဉ် တစ်စက္ကန့်မျှ မခွာရ၊ မြင့်သောနေရာတွင် တစ်ယောက်တည်း မထားရ။ the core rules — back to sleep every sleep; firm flat surface; nothing in the cot; room-share but do not bed-share; no smoke exposure at all; never shake a baby; never leave a baby alone in or near water; never leave a baby alone on a high surface. ဆိုဖာ သို့မဟုတ် ကုလားထိုင်ပေါ်တွင် ကလေးနှင့်အတူ အိပ်ပျော်သွားခြင်း။ falling asleep with the baby on a sofa or armchair. အိပ်ရာထဲ ခေါင်းအုံး၊ ပျော့ပျောင်းသော အရုပ်များ၊ စောင်ထူ ထည့်ထားခြင်း။ putting pillows, soft toys or thick blankets in the cot. အဝတ် အလွန်ထူထပ်စွာ ခြုံပေးခြင်း — အပူလွန်ခြင်း အန္တရာယ် ရှိသည်။ over-wrapping — overheating is a risk. အလေးချိန်ပါသော စောင်၊ အိပ်ဝတ်စုံ သို့မဟုတ် ပတ်ရစ်ပိတ်စများ သုံးခြင်း။ using weighted blankets, weighted sleepers or weighted swaddles. အိမ်သုံး အသက်ရှူ/နှလုံးခုန် စောင့်ကြည့်စက်ကို ဘေးကင်းစွာ အိပ်စေခြင်း၏ အစား အားကိုးခြင်း — အန္တရာယ် လျှော့ချပေးသည်ဟု သက်သေ မရှိပါ။ relying on a home breathing or heart-rate monitor instead of a safe sleep space — these have not been shown to reduce the risk of sids. ကလေးကို ပြုစုပေးသူ တိုင်းကို ဤစည်းမျဉ်းများ ပြောပြထားပါ — အဖွား၊ အိမ်နီးချင်း အပါအဝင်။ tell every carer these rules — grandparents and neighbours included. အရေးပေါ်အခြေအနေတွင် ဘယ်ကို သွားရမည်ကို ကြိုတင် သိထားပါ။ know in advance where you would go in an emergency. ကလေးက ဘေးစောင်း အိပ်ချင်ရင် ရလား။ can my baby sleep on the side? အိပ်စက်ရန် အန္တရာယ် အနည်းဆုံး အနေအထားမှာ ပက်လက် ဖြစ်သည်။ ဘေးစောင်းနှင့် မှောက်လျက် အိပ်စက်ခြင်းကို မအကြံပြုပါ။ the back is the safest sleep position. side and tummy sleeping are not recommended for sleep. တစ်အိပ်ရာတည်း အိပ်တာ ဘယ်လိုလဲ။ what about sharing a bed? အခန်းတူ အိပ်ရာမတူ ဖြစ်ရန် အကြံပြုသည်။ ကလေးအတွက် သီးသန့် ပြားပြီး မာသော အိပ်ရာကို မိဘအခန်းထဲတွင် ထားပါ။ room-sharing without bed-sharing is advised: a separate firm flat sleep space for the baby, in the parents’ room. ဘယ်အပူချိန် ရောက်ရင် ဆေးရုံ သွားရမလဲ။ what temperature means we should seek care? အပူချိန် တိုင်းပါ။ အသက် ၃ လအောက် ကလေး ၃၈°c (၁၀၀.၄°f) နှင့်အထက် ဖျားပါက — ကလေး ပုံမှန်လို ထင်ရလျှင်ပင် ချက်ချင်း ပြသပါ။ အသက် ၃ လမှ ၆ လကြား ၃၉°c (၁၀၂.၂°f) နှင့်အထက် ဖျားပါက အမြန် ပြသပါ။ အသက်မရွေး — ဖျားခြင်းနှင့်အတူ အသက်ရှူခက်ခြင်း၊ နှိပ်လျှင် မပျောက်သော အနီစက်၊ လည်ပင်း တောင့်တင်းခြင်း သို့မဟုတ် နိုးရခက်ခြင်း ပါလာပါက ချက်ချင်း ပြသပါ။ အပူချိန်တိုင်းကိရိယာ မရှိပါက — ကလေး ပူနေပြီး အထက်ပါ လက္ခဏာများ ပါလျှင် မစောင့်ဘဲ ပြသပါ။ take the temperature. under 3 months, 38°c (100.4°f) or above: seek care straight away, even if the baby otherwise seems well. between 3 and 6 months, 39°c (102.2°f) or above: seek care promptly. at any age, fever together with difficulty breathing, a rash that does not fade under pressure, a stiff neck, or being hard to wake: seek care immediately. if you have no thermometer, and the child feels hot and has any of those signs, do not wait. အသက် ၃ လအောက် ကလေးတွင် ဖျားခြင်း — အရေးပေါ် စစ်ဆေးရန် လိုသည်။ fever in a baby under 3 months — needs urgent assessment. အသက်ရှူ ခက်ခဲခြင်း၊ နှုတ်ခမ်း/အရေပြား ညိုမည်းလာခြင်း။ difficulty breathing, or lips/skin turning blue or grey. တုံ့ပြန်မှု မရှိခြင်း၊ နိုးရန် အလွန်ခက်ခဲခြင်း၊ ကိုယ်ခန္ဓာ ပျော့ခွေခြင်း။ unresponsive, very hard to wake, or floppy. တက်ခြင်း။ a fit or seizure. နှိပ်လျှင် မပျောက်သော အနီစက်များ — ဖန်ခွက်ဖြင့် ဖိကြည့်ပါ။ ဖိထားစဉ် အနီရောင် မပျောက်ပါက ချက်ချင်း ဆေးရုံသို့ သွားပါ။ a rash that does not fade when you press on it — press a clear glass against the skin. if the red marks stay visible while you press, go to hospital immediately. ဤလက္ခဏာများသည် အရေးပေါ် ဖြစ်သည် — အနီးဆုံး ဆေးရုံ သို့မဟုတ် ကျန်းမာရေးဌာနသို့ ချက်ချင်း သွားပါ။ ဤအက်ပ်သည် အရေးပေါ် ဝန်ဆောင်မှု မဟုတ်ပါ။ these are emergencies — go to the nearest hospital or health facility immediately. this app is not an emergency service. ဘေးကင်းသော အခန်းတစ်ခန်းနှင့် တစ်သမတ်တည်း စည်းမျဉ်းများက အန္တရာယ် အများစုကို ကာကွယ်ပေးသည်။ a safe room and consistent rules prevent most of the risk. reference_verified safe sleep, room-sharing, smoke avoidance, drowning and burn prevention follow aap safe sleep guidance, nhs sids advice and aap drowning-prevention guidance; the urgent-symptom list follows nhs seriously-ill-child advice, nice fever guidance and the who imci danger signs."
   },
   {
     "ageGroupKey": "birth_2m",
@@ -11981,7 +11981,7 @@
         "en": "A firm flat sleep surface and a light cover"
       },
       "safety": {
-        "mm": "အိပ်ချိန်တိုင်း ပက်လက် အိပ်စေပါ။ မာပြီး ပြားသော မျက်နှာပြင်ပေါ်တွင်သာ အိပ်စေပါ။ ခေါင်းအုံး၊ အနူးအညံ့ အရုပ်၊ စောင်ထူ၊ အနားခံများကို အိပ်ရာထဲ မထားပါနှင့်။ မိဘအခန်းတွင် သီးသန့်အိပ်ရာဖြင့် အိပ်ခြင်းက အကောင်းဆုံး ဖြစ်ပြီး တစ်အိပ်ရာတည်း အတူအိပ်ခြင်းကို အကြံမပြုပါ။ ဆေးလိပ်၊ အရက် သို့မဟုတ် အိပ်ဆေး သောက်ထားပါက ကလေးနှင့် အတူ လုံးဝ မအိပ်ပါနှင့်။ ဆိုဖာ၊ ကုလားထိုင်ပေါ်တွင် ကလေးနှင့် အတူ မအိပ်ပါနှင့်။ ကလေးအနီး ဆေးလိပ် လုံးဝ မသောက်ပါနှင့်။ အိပ်ချိန်နှင့် ညအိပ်ချိန်တွင် နို့သီးခေါင်း ပေးကြည့်နိုင်ပါသည် — ရုတ်တရက် သေဆုံးမှု အန္တရာယ် လျော့ကျစေကြောင်း တွေ့ရှိထားပါသည်။ နို့တိုက်နေပါက နို့တိုက်ခြင်း အသားကျပြီးမှ စတင်ပေးပါ။",
+        "mm": "အိပ်ချိန်တိုင်း ပက်လက် အိပ်စေပါ။ မာပြီး ပြားသော မျက်နှာပြင်ပေါ်တွင်သာ အိပ်စေပါ။ ခေါင်းအုံး၊ ပျော့ပျောင်းသော အရုပ်များ၊ စောင်ထူ၊ အနားခံများကို အိပ်ရာထဲ မထားပါနှင့်။ မိဘအခန်းတွင် သီးသန့်အိပ်ရာဖြင့် အိပ်ခြင်းက အကောင်းဆုံး ဖြစ်ပြီး တစ်အိပ်ရာတည်း အတူအိပ်ခြင်းကို အကြံမပြုပါ။ ဆေးလိပ်၊ အရက် သို့မဟုတ် အိပ်ဆေး သောက်ထားပါက ကလေးနှင့် အတူ လုံးဝ မအိပ်ပါနှင့်။ ဆိုဖာ၊ ကုလားထိုင်ပေါ်တွင် ကလေးနှင့် အတူ မအိပ်ပါနှင့်။ ကလေးအနီး ဆေးလိပ် လုံးဝ မသောက်ပါနှင့်။ အိပ်ချိန်နှင့် ညအိပ်ချိန်တွင် နို့သီးခေါင်း ပေးကြည့်နိုင်ပါသည် — ရုတ်တရက် သေဆုံးမှု အန္တရာယ် လျော့ကျစေကြောင်း တွေ့ရှိထားပါသည်။ နို့တိုက်နေပါက နို့တိုက်ခြင်း အသားကျပြီးမှ စတင်ပေးပါ။",
         "en": "Back to sleep for every sleep, on a firm flat surface. Nothing else in the sleep space — no pillows, soft toys, thick covers or bumpers. Room-sharing with a separate sleep surface is safest; bed-sharing is not recommended. Never share a sleep surface after smoking, alcohol or sedating medicine, and never sleep with the baby on a sofa or armchair. Keep the baby away from all tobacco smoke. You can try offering a pacifier at nap time and bedtime — it is associated with a lower risk of SIDS. If you are breastfeeding, wait until feeding is well established before offering one."
       },
       "commonMistakes": [
@@ -12075,7 +12075,7 @@
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "၃ – ၄ လ — အိပ်စက်ခြင်း လမ်းညွှန် 3–4 months — sleep guide ဤအရွယ်တွင် ညအိပ်ချိန် တဖြည်းဖြည်း ရှည်လာပြီး နေ့နှင့် ည ခွဲခြားလာသည်။ အသက် ၄–၁၁ လအရွယ်တွင် စုစုပေါင်း အိပ်ချိန် ၁၂–၁၆ နာရီခန့် (နေ့အိပ် အပါအဝင်) ဖြစ်တတ်သည်၊ ကွာဟမှု ကျယ်ပါသည်။ ညဘက် နိုးခြင်းသည် ဤအရွယ်တွင် ပုံမှန် ဖြစ်သည်။ night sleep gradually lengthens and a day–night pattern appears. total sleep at 4–11 months is commonly about 12–16 hours including naps, with wide variation. waking at night is still normal. sleep 3_4m guide ၃ – ၄ လ — အိပ်စက်ခြင်း လမ်းညွှန် 3–4 months — sleep guide ဤအရွယ်တွင် ညအိပ်ချိန် တဖြည်းဖြည်း ရှည်လာပြီး နေ့နှင့် ည ခွဲခြားလာသည်။ အသက် ၄–၁၁ လအရွယ်တွင် စုစုပေါင်း အိပ်ချိန် ၁၂–၁၆ နာရီခန့် (နေ့အိပ် အပါအဝင်) ဖြစ်တတ်သည်၊ ကွာဟမှု ကျယ်ပါသည်။ ညဘက် နိုးခြင်းသည် ဤအရွယ်တွင် ပုံမှန် ဖြစ်သည်။ night sleep gradually lengthens and a day–night pattern appears. total sleep at 4–11 months is commonly about 12–16 hours including naps, with wide variation. waking at night is still normal. အိပ်ချိန်တိုင်း ပက်လက် အိပ်ပါသလား။ is she placed on her back for every sleep? အိပ်ရာသည် ပြားပြီး မာပါသလား။ အိပ်ရာပေါ်တွင် အခြားပစ္စည်း ရှိပါသလား။ is the sleep surface firm and flat, and clear of other items? နေ့နှင့် ည ခွဲခြားလာပါသလား။ is a day–night difference appearing? ညတိုင်း တူညီသော အစီအစဉ်ဖြင့် အိပ်ရာဝင်ပါ (ရေချိုး၊ နို့တိုက်၊ သီချင်း၊ အိပ်)။ the same short bedtime routine each night — wash, feed, song, sleep. နေ့ဘက်တွင် အလင်းရောင်နှင့် ပုံမှန် အသံများ ရှိစေပါ။ keep daytime bright and normally noisy. ညဘက်တွင် အလင်း လျှော့၍ တိုးတိုး ပြောပါ။ keep nights dim and quiet. အိပ်ချိန် ပုံစံကို မှတ်တမ်းတင်ပါ။ keep a simple sleep log. ညဘက် အလှည့်ကျ တာဝန်ယူရန် စီစဉ်ပါ။ plan who takes which night. မိဘအခန်းတွင် ကလေးအတွက် သီးသန့် အိပ်ရာ ထားပါ။ a separate sleep space for the baby in the parents’ room. နေ့ဘက် အရိပ်အောက် လမ်းလျှောက်ခြင်းက နေ့/ည ခွဲခြားမှုကို ကူညီသည်။ daytime walks in the shade help set the day–night rhythm. သန့်ရှင်း၍ ပြားသော ဖျာ သို့မဟုတ် မွေ့ရာ မာမာဖြင့် လုံလောက်သည်။ a clean, firm, flat mat or mattress is enough. မာပြီး ပြားသော အိပ်ရာ၊ ပါးလွှာသော အဝတ် a firm flat sleep surface and a light cover အိပ်ချိန်တိုင်း ပက်လက် အိပ်စေပါ။ မာပြီး ပြားသော မျက်နှာပြင်ပေါ်တွင်သာ အိပ်စေပါ။ ခေါင်းအုံး၊ အနူးအညံ့ အရုပ်၊ စောင်ထူ၊ အနားခံများကို အိပ်ရာထဲ မထားပါနှင့်။ မိဘအခန်းတွင် သီးသန့်အိပ်ရာဖြင့် အိပ်ခြင်းက အကောင်းဆုံး ဖြစ်ပြီး တစ်အိပ်ရာတည်း အတူအိပ်ခြင်းကို အကြံမပြုပါ။ ဆေးလိပ်၊ အရက် သို့မဟုတ် အိပ်ဆေး သောက်ထားပါက ကလေးနှင့် အတူ လုံးဝ မအိပ်ပါနှင့်။ ဆိုဖာ၊ ကုလားထိုင်ပေါ်တွင် ကလေးနှင့် အတူ မအိပ်ပါနှင့်။ ကလေးအနီး ဆေးလိပ် လုံးဝ မသောက်ပါနှင့်။ အိပ်ချိန်နှင့် ညအိပ်ချိန်တွင် နို့သီးခေါင်း ပေးကြည့်နိုင်ပါသည် — ရုတ်တရက် သေဆုံးမှု အန္တရာယ် လျော့ကျစေကြောင်း တွေ့ရှိထားပါသည်။ နို့တိုက်နေပါက နို့တိုက်ခြင်း အသားကျပြီးမှ စတင်ပေးပါ။ back to sleep for every sleep, on a firm flat surface. nothing else in the sleep space — no pillows, soft toys, thick covers or bumpers. room-sharing with a separate sleep surface is safest; bed-sharing is not recommended. never share a sleep surface after smoking, alcohol or sedating medicine, and never sleep with the baby on a sofa or armchair. keep the baby away from all tobacco smoke. you can try offering a pacifier at nap time and bedtime — it is associated with a lower risk of sids. if you are breastfeeding, wait until feeding is well established before offering one. အိပ်ရာထဲ ခေါင်းအုံး၊ အရုပ် ထည့်ပေးခြင်း။ adding pillows or toys to the sleep space. ဆိုဖာပေါ်တွင် ကလေးကို ပွေ့ချီရင်း အိပ်ပျော်သွားခြင်း။ falling asleep with the baby on a sofa. ဤအရွယ်တွင် \"အိပ်စက်လေ့ကျင့်ရေး\" တင်းကျပ်စွာ လုပ်ခြင်း။ strict sleep training at this age. အလေးချိန်ပါသော စောင်၊ အိပ်ဝတ်စုံ သို့မဟုတ် ပတ်ရစ်ပိတ်စများ သုံးခြင်း။ using weighted blankets, weighted sleepers or weighted swaddles. အိမ်သုံး အသက်ရှူ/နှလုံးခုန် စောင့်ကြည့်စက်ကို ဘေးကင်းစွာ အိပ်စေခြင်း၏ အစား အားကိုးခြင်း — အန္တရာယ် လျှော့ချပေးသည်ဟု သက်သေ မရှိပါ။ relying on a home breathing or heart-rate monitor instead of a safe sleep space — these have not been shown to reduce the risk of sids. ကလေး အိပ်ချိန်တွင် မိဘလည်း အနားယူပါ။ rest when the baby rests. ညဘက် နိုးခြင်းသည် သင့်အမှား မဟုတ်ပါ။ night waking is not your fault. ကလေးက ဘေးစောင်း လှိမ့်သွားရင် ဘာလုပ်ရမလဲ။ what if she rolls onto her side or front? ကိုယ်တိုင် လှိမ့်နိုင်ပြီဆိုလျှင် ပြန်လှည့်ပေးရန် မလိုပါ။ သို့သော် အိပ်ရာဝင်ချိန်တိုင်း ပက်လက်ဖြင့်သာ စတင်ပါ၊ အိပ်ရာကိုလည်း လွတ်လပ်စွာ ထားပါ။ once she can roll on her own you do not need to turn her back. but always start every sleep on the back, and keep the sleep space clear. တစ်ညလုံး အိပ်သင့်ပြီလား။ should she sleep through the night by now? မလိုအပ်ပါ။ ဤအရွယ်တွင် ညဘက် နိုးခြင်းသည် အလွန် အဖြစ်များပါသည်။ not necessarily. waking at night is very common at this age. နိုးရန် အလွန် ခက်ခဲခြင်း သို့မဟုတ် တုံ့ပြန်မှု မရှိခြင်း။ very hard to rouse, or unresponsive. အသက်ရှူ ရပ်တန့်ခြင်း၊ အသံမြည်၍ ခက်ခဲစွာ ရှူခြင်း၊ နှုတ်ခမ်း ညိုခြင်း။ pauses in breathing, noisy laboured breathing, or blue lips. အိပ်နေရာမှ ရုတ်တရက် ပြောင်းလဲသော ငိုသံ ပုံစံ။ a sudden marked change in cry pattern. နှိပ်လျှင် မပျောက်သော အနီစက်များ — ဖန်ခွက်ဖြင့် ဖိကြည့်ပါ။ ဖိထားစဉ် အနီရောင် မပျောက်ပါက ချက်ချင်း ဆေးရုံသို့ သွားပါ။ a rash that does not fade when you press on it — press a clear glass against the skin. if the red marks stay visible while you press, go to hospital immediately. ဤလက္ခဏာများသည် ချက်ချင်း ဆေးကုသမှု လိုအပ်ပါသည်။ ဤသည် ရောဂါ ဖော်ထုတ်ချက် မဟုတ်ပါ။ these need urgent medical care. this is not a diagnosis. ဘေးကင်းသော အိပ်စက်မှုကို နေ့စဉ် ပြင်ဆင်ပေးနေခြင်းသည် အလွန် အရေးကြီးသော ကာကွယ်မှု ဖြစ်ပါသည်။ setting up safe sleep every single night is one of the most protective things you do. reference_verified sleep duration at 4–11 months follows who physical activity and sleep guidance for under-5s; back-to-sleep, firm flat clear surface, room-sharing without bed-sharing and smoke avoidance follow aap safe sleep guidance, nhs sids advice and national safe-sleep guidance in the registry."
+    "searchText": "၃ – ၄ လ — အိပ်စက်ခြင်း လမ်းညွှန် 3–4 months — sleep guide ဤအရွယ်တွင် ညအိပ်ချိန် တဖြည်းဖြည်း ရှည်လာပြီး နေ့နှင့် ည ခွဲခြားလာသည်။ အသက် ၄–၁၁ လအရွယ်တွင် စုစုပေါင်း အိပ်ချိန် ၁၂–၁၆ နာရီခန့် (နေ့အိပ် အပါအဝင်) ဖြစ်တတ်သည်၊ ကွာဟမှု ကျယ်ပါသည်။ ညဘက် နိုးခြင်းသည် ဤအရွယ်တွင် ပုံမှန် ဖြစ်သည်။ night sleep gradually lengthens and a day–night pattern appears. total sleep at 4–11 months is commonly about 12–16 hours including naps, with wide variation. waking at night is still normal. sleep 3_4m guide ၃ – ၄ လ — အိပ်စက်ခြင်း လမ်းညွှန် 3–4 months — sleep guide ဤအရွယ်တွင် ညအိပ်ချိန် တဖြည်းဖြည်း ရှည်လာပြီး နေ့နှင့် ည ခွဲခြားလာသည်။ အသက် ၄–၁၁ လအရွယ်တွင် စုစုပေါင်း အိပ်ချိန် ၁၂–၁၆ နာရီခန့် (နေ့အိပ် အပါအဝင်) ဖြစ်တတ်သည်၊ ကွာဟမှု ကျယ်ပါသည်။ ညဘက် နိုးခြင်းသည် ဤအရွယ်တွင် ပုံမှန် ဖြစ်သည်။ night sleep gradually lengthens and a day–night pattern appears. total sleep at 4–11 months is commonly about 12–16 hours including naps, with wide variation. waking at night is still normal. အိပ်ချိန်တိုင်း ပက်လက် အိပ်ပါသလား။ is she placed on her back for every sleep? အိပ်ရာသည် ပြားပြီး မာပါသလား။ အိပ်ရာပေါ်တွင် အခြားပစ္စည်း ရှိပါသလား။ is the sleep surface firm and flat, and clear of other items? နေ့နှင့် ည ခွဲခြားလာပါသလား။ is a day–night difference appearing? ညတိုင်း တူညီသော အစီအစဉ်ဖြင့် အိပ်ရာဝင်ပါ (ရေချိုး၊ နို့တိုက်၊ သီချင်း၊ အိပ်)။ the same short bedtime routine each night — wash, feed, song, sleep. နေ့ဘက်တွင် အလင်းရောင်နှင့် ပုံမှန် အသံများ ရှိစေပါ။ keep daytime bright and normally noisy. ညဘက်တွင် အလင်း လျှော့၍ တိုးတိုး ပြောပါ။ keep nights dim and quiet. အိပ်ချိန် ပုံစံကို မှတ်တမ်းတင်ပါ။ keep a simple sleep log. ညဘက် အလှည့်ကျ တာဝန်ယူရန် စီစဉ်ပါ။ plan who takes which night. မိဘအခန်းတွင် ကလေးအတွက် သီးသန့် အိပ်ရာ ထားပါ။ a separate sleep space for the baby in the parents’ room. နေ့ဘက် အရိပ်အောက် လမ်းလျှောက်ခြင်းက နေ့/ည ခွဲခြားမှုကို ကူညီသည်။ daytime walks in the shade help set the day–night rhythm. သန့်ရှင်း၍ ပြားသော ဖျာ သို့မဟုတ် မွေ့ရာ မာမာဖြင့် လုံလောက်သည်။ a clean, firm, flat mat or mattress is enough. မာပြီး ပြားသော အိပ်ရာ၊ ပါးလွှာသော အဝတ် a firm flat sleep surface and a light cover အိပ်ချိန်တိုင်း ပက်လက် အိပ်စေပါ။ မာပြီး ပြားသော မျက်နှာပြင်ပေါ်တွင်သာ အိပ်စေပါ။ ခေါင်းအုံး၊ ပျော့ပျောင်းသော အရုပ်များ၊ စောင်ထူ၊ အနားခံများကို အိပ်ရာထဲ မထားပါနှင့်။ မိဘအခန်းတွင် သီးသန့်အိပ်ရာဖြင့် အိပ်ခြင်းက အကောင်းဆုံး ဖြစ်ပြီး တစ်အိပ်ရာတည်း အတူအိပ်ခြင်းကို အကြံမပြုပါ။ ဆေးလိပ်၊ အရက် သို့မဟုတ် အိပ်ဆေး သောက်ထားပါက ကလေးနှင့် အတူ လုံးဝ မအိပ်ပါနှင့်။ ဆိုဖာ၊ ကုလားထိုင်ပေါ်တွင် ကလေးနှင့် အတူ မအိပ်ပါနှင့်။ ကလေးအနီး ဆေးလိပ် လုံးဝ မသောက်ပါနှင့်။ အိပ်ချိန်နှင့် ညအိပ်ချိန်တွင် နို့သီးခေါင်း ပေးကြည့်နိုင်ပါသည် — ရုတ်တရက် သေဆုံးမှု အန္တရာယ် လျော့ကျစေကြောင်း တွေ့ရှိထားပါသည်။ နို့တိုက်နေပါက နို့တိုက်ခြင်း အသားကျပြီးမှ စတင်ပေးပါ။ back to sleep for every sleep, on a firm flat surface. nothing else in the sleep space — no pillows, soft toys, thick covers or bumpers. room-sharing with a separate sleep surface is safest; bed-sharing is not recommended. never share a sleep surface after smoking, alcohol or sedating medicine, and never sleep with the baby on a sofa or armchair. keep the baby away from all tobacco smoke. you can try offering a pacifier at nap time and bedtime — it is associated with a lower risk of sids. if you are breastfeeding, wait until feeding is well established before offering one. အိပ်ရာထဲ ခေါင်းအုံး၊ အရုပ် ထည့်ပေးခြင်း။ adding pillows or toys to the sleep space. ဆိုဖာပေါ်တွင် ကလေးကို ပွေ့ချီရင်း အိပ်ပျော်သွားခြင်း။ falling asleep with the baby on a sofa. ဤအရွယ်တွင် \"အိပ်စက်လေ့ကျင့်ရေး\" တင်းကျပ်စွာ လုပ်ခြင်း။ strict sleep training at this age. အလေးချိန်ပါသော စောင်၊ အိပ်ဝတ်စုံ သို့မဟုတ် ပတ်ရစ်ပိတ်စများ သုံးခြင်း။ using weighted blankets, weighted sleepers or weighted swaddles. အိမ်သုံး အသက်ရှူ/နှလုံးခုန် စောင့်ကြည့်စက်ကို ဘေးကင်းစွာ အိပ်စေခြင်း၏ အစား အားကိုးခြင်း — အန္တရာယ် လျှော့ချပေးသည်ဟု သက်သေ မရှိပါ။ relying on a home breathing or heart-rate monitor instead of a safe sleep space — these have not been shown to reduce the risk of sids. ကလေး အိပ်ချိန်တွင် မိဘလည်း အနားယူပါ။ rest when the baby rests. ညဘက် နိုးခြင်းသည် သင့်အမှား မဟုတ်ပါ။ night waking is not your fault. ကလေးက ဘေးစောင်း လှိမ့်သွားရင် ဘာလုပ်ရမလဲ။ what if she rolls onto her side or front? ကိုယ်တိုင် လှိမ့်နိုင်ပြီဆိုလျှင် ပြန်လှည့်ပေးရန် မလိုပါ။ သို့သော် အိပ်ရာဝင်ချိန်တိုင်း ပက်လက်ဖြင့်သာ စတင်ပါ၊ အိပ်ရာကိုလည်း လွတ်လပ်စွာ ထားပါ။ once she can roll on her own you do not need to turn her back. but always start every sleep on the back, and keep the sleep space clear. တစ်ညလုံး အိပ်သင့်ပြီလား။ should she sleep through the night by now? မလိုအပ်ပါ။ ဤအရွယ်တွင် ညဘက် နိုးခြင်းသည် အလွန် အဖြစ်များပါသည်။ not necessarily. waking at night is very common at this age. နိုးရန် အလွန် ခက်ခဲခြင်း သို့မဟုတ် တုံ့ပြန်မှု မရှိခြင်း။ very hard to rouse, or unresponsive. အသက်ရှူ ရပ်တန့်ခြင်း၊ အသံမြည်၍ ခက်ခဲစွာ ရှူခြင်း၊ နှုတ်ခမ်း ညိုခြင်း။ pauses in breathing, noisy laboured breathing, or blue lips. အိပ်နေရာမှ ရုတ်တရက် ပြောင်းလဲသော ငိုသံ ပုံစံ။ a sudden marked change in cry pattern. နှိပ်လျှင် မပျောက်သော အနီစက်များ — ဖန်ခွက်ဖြင့် ဖိကြည့်ပါ။ ဖိထားစဉ် အနီရောင် မပျောက်ပါက ချက်ချင်း ဆေးရုံသို့ သွားပါ။ a rash that does not fade when you press on it — press a clear glass against the skin. if the red marks stay visible while you press, go to hospital immediately. ဤလက္ခဏာများသည် ချက်ချင်း ဆေးကုသမှု လိုအပ်ပါသည်။ ဤသည် ရောဂါ ဖော်ထုတ်ချက် မဟုတ်ပါ။ these need urgent medical care. this is not a diagnosis. ဘေးကင်းသော အိပ်စက်မှုကို နေ့စဉ် ပြင်ဆင်ပေးနေခြင်းသည် အလွန် အရေးကြီးသော ကာကွယ်မှု ဖြစ်ပါသည်။ setting up safe sleep every single night is one of the most protective things you do. reference_verified sleep duration at 4–11 months follows who physical activity and sleep guidance for under-5s; back-to-sleep, firm flat clear surface, room-sharing without bed-sharing and smoke avoidance follow aap safe sleep guidance, nhs sids advice and national safe-sleep guidance in the registry."
   },
   {
     "ageGroupKey": "3_4m",
@@ -13302,7 +13302,7 @@
         "en": "A mat, a rattle, a mirror"
       },
       "safety": {
-        "mm": "ကလေး လှိမ့်နိုင်လာသည်နှင့် အိပ်ရာ၊ စားပွဲ၊ ဆိုဖာပေါ်တွင် တစ်စက္ကန့်မျှ တစ်ယောက်တည်း မထားပါနှင့် — လိမ့်ကျနိုင်သည်။ ကြမ်းပြင်ပေါ်တွင် ကစားစေခြင်းက အလုံခြုံဆုံး ဖြစ်သည်။ အိပ်ချိန်တိုင်း ပက်လက် အိပ်စေပါ — ကလေး ကိုယ်တိုင် လှိမ့်သွားပါက ပြန်လှည့်ပေးရန် မလိုပါ။ အိပ်ရာပေါ်တွင် ခေါင်းအုံး၊ အနူးအညံ့ ကစားစရာ၊ စောင်ပုံ မထားပါနှင့်။ ကလေးပါးစပ်ထဲ ဝင်နိုင်သော ပစ္စည်း အားလုံးကို ဖယ်ရှားပါ။ ကလေးကို ဘယ်တော့မျှ မလှုပ်ခါပါနှင့်။",
+        "mm": "ကလေး လှိမ့်နိုင်လာသည်နှင့် အိပ်ရာ၊ စားပွဲ၊ ဆိုဖာပေါ်တွင် တစ်စက္ကန့်မျှ တစ်ယောက်တည်း မထားပါနှင့် — လိမ့်ကျနိုင်သည်။ ကြမ်းပြင်ပေါ်တွင် ကစားစေခြင်းက အလုံခြုံဆုံး ဖြစ်သည်။ အိပ်ချိန်တိုင်း ပက်လက် အိပ်စေပါ — ကလေး ကိုယ်တိုင် လှိမ့်သွားပါက ပြန်လှည့်ပေးရန် မလိုပါ။ အိပ်ရာပေါ်တွင် ခေါင်းအုံး၊ ပျော့ပျောင်းသော အရုပ်များ၊ စောင်ပုံ မထားပါနှင့်။ ကလေးပါးစပ်ထဲ ဝင်နိုင်သော ပစ္စည်း အားလုံးကို ဖယ်ရှားပါ။ ကလေးကို ဘယ်တော့မျှ မလှုပ်ခါပါနှင့်။",
         "en": "Now that she rolls, never leave her alone on a bed, table or sofa even for a second — the floor is safest. Place her on her back for every sleep; if she rolls herself in sleep there is no need to turn her back. Keep the sleep surface clear of pillows, soft toys and loose bedding. Remove anything small enough to fit in her mouth. Never shake a baby."
       },
       "commonMistakes": [
@@ -13388,7 +13388,7 @@
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "၅ – ၆ လ — ကြွက်သားကြီး လှုပ်ရှားမှု လမ်းညွှန် 5–6 months — gross motor guide ဤအရွယ်တွင် ကလေးအများစုသည် လှိမ့်နိုင်လာပြီး ထောက်ပံ့ပေးလျှင် ခဏ ထိုင်နိုင်တတ်သည်။ ကြွက်သားများ တစ်ပြေးညီ ဖွံ့ဖြိုးလာသဖြင့် လက်နှစ်ဖက်ဖြင့် ထောက်၍ ရင်ဘတ်ကို မြင့်မြင့် မြှင့်နိုင်သည်။ ကလေးတိုင်း အချိန်တူ မဟုတ်ပါ — အချို့က ၄ လတွင် လှိမ့်ပြီး အချို့က ၆ လကျော်မှ လှိမ့်သည်။ ဤသည် ပုံမှန် ကွဲပြားမှု ဖြစ်သည်။ most babies now roll and can sit briefly with support. stronger muscles let them push up on straight arms during tummy time. timing varies widely — some roll at 4 months, others after 6. that is normal variation. gross_motor 5_6m guide ၅ – ၆ လ — ကြွက်သားကြီး လှုပ်ရှားမှု လမ်းညွှန် 5–6 months — gross motor guide ဤအရွယ်တွင် ကလေးအများစုသည် လှိမ့်နိုင်လာပြီး ထောက်ပံ့ပေးလျှင် ခဏ ထိုင်နိုင်တတ်သည်။ ကြွက်သားများ တစ်ပြေးညီ ဖွံ့ဖြိုးလာသဖြင့် လက်နှစ်ဖက်ဖြင့် ထောက်၍ ရင်ဘတ်ကို မြင့်မြင့် မြှင့်နိုင်သည်။ ကလေးတိုင်း အချိန်တူ မဟုတ်ပါ — အချို့က ၄ လတွင် လှိမ့်ပြီး အချို့က ၆ လကျော်မှ လှိမ့်သည်။ ဤသည် ပုံမှန် ကွဲပြားမှု ဖြစ်သည်။ most babies now roll and can sit briefly with support. stronger muscles let them push up on straight arms during tummy time. timing varies widely — some roll at 4 months, others after 6. that is normal variation. ပက်လက်မှ မှောက် သို့မဟုတ် မှောက်မှ ပက်လက် လှိမ့်နိုင်ပါသလား။ does she roll back to front, or front to back? ခါးကို ထောက်ပေးလျှင် ခဏ ထိုင်နိုင်ပါသလား။ can she sit for a moment when you support her hips? မှောက်ချထားစဉ် လက်နှစ်ဖက် ဖြောင့်ဖြောင့်ဖြင့် ထောက်နိုင်ပါသလား။ during tummy time, can she push up on straight arms? ခေါင်းကို ဘက်နှစ်ဖက်စလုံးသို့ တူညီစွာ လှည့်နိုင်ပါသလား။ does she turn her head equally to both sides? နေ့စဉ် မှောက်ချချိန်ကို အကြိမ်ခွဲ၍ စုစုပေါင်း မိနစ် ၃၀ ခန့်အထိ တိုးပေးပါ။ build tummy time up to about 30 minutes a day in short sessions. ကစားစရာကို ဘေးတစ်ဖက်တွင် ထားပေး၍ လှိမ့်ရန် ဆွဲဆောင်ပါ။ place a toy just to one side to invite a roll. ခါးကို လက်ဖြင့် ထောက်၍ ထိုင်ခိုင်းပြီး ရှေ့တွင် ကစားစရာ ကိုင်ပြပါ။ support her hips in sitting and hold a toy in front. ကလေးကို ကြမ်းပြင်ပေါ် အခင်းခင်း၍ လွတ်လပ်စွာ လှုပ်ရှားခွင့် ပေးပါ။ give free floor time on a mat so she can move as she likes. တစ်ပတ်လျှင် အနေအထား အသစ် တစ်မျိုး (ဘေးစောင်း အိပ်ကစားခြင်း) ထပ်ထည့်ပါ။ add one new position each week, such as playing on her side. မိသားစုဝင် တစ်ဦးစီက ကြမ်းပြင်ပေါ်တွင် အတူကစားပေးပါ။ let a different family member join floor play each week. အခင်းပေါ်တွင် လှိမ့်ကစားခြင်း — ဘေးပတ်လည် လွတ်လပ်စွာ ထားပါ။ rolling play on a mat with clear space all around. မှန်ရှေ့တွင် မှောက်ချ၍ ကိုယ့်ကိုယ်ကို ကြည့်စေခြင်း။ tummy time in front of a mirror. အရိပ်ရှိသော နေရာတွင် အခင်းခင်း၍ ကစားခြင်း — နေပူ တိုက်ရိုက် ရှောင်ပါ။ play on a mat in the shade — avoid direct midday sun. မိဘရင်ခွင်တွင် ပွေ့ချီ၍ လမ်းလျှောက်ရင်း ပတ်ဝန်းကျင်ကို ပြပါ။ carry her while walking and show her the world around. အိမ်သုံး အဝတ်ထူထူ တစ်ထည်ကို အခင်းအဖြစ် သုံးပါ။ a folded blanket makes a fine play mat. သန့်ရှင်းသော ပလတ်စတစ်ဗူးထဲ ပဲစေ့ ထည့်၍ အသံမြည် ကစားစရာ လုပ်ပါ (ခိုင်ခံ့စွာ ပိတ်ပါ)။ a clean sealed bottle with a few beans makes a rattle — seal it firmly. အခင်း၊ အသံမြည် ကစားစရာ၊ မှန် a mat, a rattle, a mirror ကလေး လှိမ့်နိုင်လာသည်နှင့် အိပ်ရာ၊ စားပွဲ၊ ဆိုဖာပေါ်တွင် တစ်စက္ကန့်မျှ တစ်ယောက်တည်း မထားပါနှင့် — လိမ့်ကျနိုင်သည်။ ကြမ်းပြင်ပေါ်တွင် ကစားစေခြင်းက အလုံခြုံဆုံး ဖြစ်သည်။ အိပ်ချိန်တိုင်း ပက်လက် အိပ်စေပါ — ကလေး ကိုယ်တိုင် လှိမ့်သွားပါက ပြန်လှည့်ပေးရန် မလိုပါ။ အိပ်ရာပေါ်တွင် ခေါင်းအုံး၊ အနူးအညံ့ ကစားစရာ၊ စောင်ပုံ မထားပါနှင့်။ ကလေးပါးစပ်ထဲ ဝင်နိုင်သော ပစ္စည်း အားလုံးကို ဖယ်ရှားပါ။ ကလေးကို ဘယ်တော့မျှ မလှုပ်ခါပါနှင့်။ now that she rolls, never leave her alone on a bed, table or sofa even for a second — the floor is safest. place her on her back for every sleep; if she rolls herself in sleep there is no need to turn her back. keep the sleep surface clear of pillows, soft toys and loose bedding. remove anything small enough to fit in her mouth. never shake a baby. အခြားကလေးနှင့် နှိုင်းယှဉ်၍ စိတ်ပူခြင်း — အချိန်ကွာခြားမှုသည် ပုံမှန် ဖြစ်သည်။ comparing with another baby — differences in timing are normal. ကလေးလမ်းလျှောက်စက် သုံးခြင်း — မလိုအပ်သည့်အပြင် ထိခိုက်ဒဏ်ရာရစေနိုင်သည်။ using a baby walker — it is unnecessary and can cause injury. တစ်နေကုန် ချီထားခြင်း — ကြမ်းပြင်ပေါ် လွတ်လပ်စွာ လှုပ်ရှားခွင့် လိုအပ်သည်။ holding her all day — she needs free floor time to move. မှောက်ချချိန်ကို မိနစ်အနည်းငယ်စီ အကြိမ်များများ ခွဲလုပ်ပါ — ငိုလျှင် ရပ်ပါ။ do tummy time in many short bursts, and stop if she cries. ကလေး၏ မျက်နှာအဆင့်တွင် သင်လည်း မှောက်ချ၍ အတူကစားပါ။ lie down at her level and play face to face. ၆ လပြည့်ပြီ၊ မလှိမ့်သေးဘူး။ စိုးရိမ်စရာလား။ she is 6 months and not rolling yet. should i worry? ကလေးအချို့သည် ၆ လကျော်မှ လှိမ့်တတ်သည် — အထူးသဖြင့် မှောက်ချချိန် နည်းခဲ့လျှင် ဖြစ်သည်။ ခြေလက် လှုပ်ရှားမှု ကောင်းပြီး ခေါင်းထောင်နိုင်လျှင် မှောက်ချချိန် တိုးပေးပါ။ လုံးဝ မလှုပ်ရှားခြင်း၊ ကြွက်သား တင်းလွန်း/ပျော့လွန်းခြင်း ရှိပါက ကျန်းမာရေးဝန်ထမ်းအား ပြပါ။ some babies roll after 6 months, especially with less tummy time. if she moves her arms and legs well and holds her head up, increase tummy time. if she is very stiff or very floppy, or barely moves, see a health worker. ထိုင်ဖို့ လေ့ကျင့်ပေးသင့်လား။ should i train her to sit? အတင်း လေ့ကျင့်ပေးရန် မလိုပါ။ ခါးကို ထောက်၍ ခဏ ထိုင်ခိုင်းခြင်း၊ ကြမ်းပြင်ပေါ် လွတ်လပ်စွာ ကစားခွင့် ပေးခြင်းက ကြွက်သားကို သဘာဝအတိုင်း အားကောင်းစေသည်။ ခေါင်းအုံးဖြင့် ကာ၍ တစ်ယောက်တည်း ထိုင်ခိုင်းခြင်းကို ရှောင်ပါ။ no training is needed. brief supported sitting and free floor play build the muscles naturally. avoid propping her alone with pillows. လ ၆ လအရွယ်တွင် ခေါင်းကို မတ်မတ် လုံးဝ မထိန်းနိုင်ခြင်း။ at 6 months, no steady head control at all. ကိုယ်ခန္ဓာ အလွန် တင်းကျပ်ခြင်း သို့မဟုတ် အလွန် ပျော့ခွေခြင်း။ a body that is very stiff or very floppy. တစ်ဖက်ခြမ်းကိုသာ အမြဲ သုံးပြီး ကျန်တစ်ဖက် မလှုပ်ခြင်း။ using only one side of the body and not moving the other. ယခင်က လုပ်နိုင်ခဲ့သော လှုပ်ရှားမှုများ ဆုံးရှုံးသွားခြင်း။ loss of movements she could do before. ဤလက္ခဏာများ တွေ့ပါက ကျန်းမာရေးဝန်ထမ်း သို့မဟုတ် ကလေးအထူးကုဆရာဝန်ထံ ပြသပါ။ ဤသည် ရောဂါ ဖော်ထုတ်ချက် မဟုတ်ဘဲ စစ်ဆေးရန် အချက်ပြခြင်းသာ ဖြစ်သည်။ if you see these, ask a health worker or paediatrician to check. this is a prompt to check, not a diagnosis. လှိမ့်နိုင်ခြင်းသည် ကလေး ကမ္ဘာကြီးကို ကိုယ်တိုင် ရွေးချယ်ရှာဖွေနိုင်သော ပထမဆုံး နည်းလမ်း ဖြစ်ပါသည်။ rolling is the first way your baby chooses where to go in the world. reference_verified rolling and supported sitting between 4 and 6 months follow cdc milestone checklists, aap milestone guidance and the who motor development study windows; tummy time and the roll-off and safe sleep precautions follow aap safe sleep guidance and the paediatric physical-therapy references in the registry."
+    "searchText": "၅ – ၆ လ — ကြွက်သားကြီး လှုပ်ရှားမှု လမ်းညွှန် 5–6 months — gross motor guide ဤအရွယ်တွင် ကလေးအများစုသည် လှိမ့်နိုင်လာပြီး ထောက်ပံ့ပေးလျှင် ခဏ ထိုင်နိုင်တတ်သည်။ ကြွက်သားများ တစ်ပြေးညီ ဖွံ့ဖြိုးလာသဖြင့် လက်နှစ်ဖက်ဖြင့် ထောက်၍ ရင်ဘတ်ကို မြင့်မြင့် မြှင့်နိုင်သည်။ ကလေးတိုင်း အချိန်တူ မဟုတ်ပါ — အချို့က ၄ လတွင် လှိမ့်ပြီး အချို့က ၆ လကျော်မှ လှိမ့်သည်။ ဤသည် ပုံမှန် ကွဲပြားမှု ဖြစ်သည်။ most babies now roll and can sit briefly with support. stronger muscles let them push up on straight arms during tummy time. timing varies widely — some roll at 4 months, others after 6. that is normal variation. gross_motor 5_6m guide ၅ – ၆ လ — ကြွက်သားကြီး လှုပ်ရှားမှု လမ်းညွှန် 5–6 months — gross motor guide ဤအရွယ်တွင် ကလေးအများစုသည် လှိမ့်နိုင်လာပြီး ထောက်ပံ့ပေးလျှင် ခဏ ထိုင်နိုင်တတ်သည်။ ကြွက်သားများ တစ်ပြေးညီ ဖွံ့ဖြိုးလာသဖြင့် လက်နှစ်ဖက်ဖြင့် ထောက်၍ ရင်ဘတ်ကို မြင့်မြင့် မြှင့်နိုင်သည်။ ကလေးတိုင်း အချိန်တူ မဟုတ်ပါ — အချို့က ၄ လတွင် လှိမ့်ပြီး အချို့က ၆ လကျော်မှ လှိမ့်သည်။ ဤသည် ပုံမှန် ကွဲပြားမှု ဖြစ်သည်။ most babies now roll and can sit briefly with support. stronger muscles let them push up on straight arms during tummy time. timing varies widely — some roll at 4 months, others after 6. that is normal variation. ပက်လက်မှ မှောက် သို့မဟုတ် မှောက်မှ ပက်လက် လှိမ့်နိုင်ပါသလား။ does she roll back to front, or front to back? ခါးကို ထောက်ပေးလျှင် ခဏ ထိုင်နိုင်ပါသလား။ can she sit for a moment when you support her hips? မှောက်ချထားစဉ် လက်နှစ်ဖက် ဖြောင့်ဖြောင့်ဖြင့် ထောက်နိုင်ပါသလား။ during tummy time, can she push up on straight arms? ခေါင်းကို ဘက်နှစ်ဖက်စလုံးသို့ တူညီစွာ လှည့်နိုင်ပါသလား။ does she turn her head equally to both sides? နေ့စဉ် မှောက်ချချိန်ကို အကြိမ်ခွဲ၍ စုစုပေါင်း မိနစ် ၃၀ ခန့်အထိ တိုးပေးပါ။ build tummy time up to about 30 minutes a day in short sessions. ကစားစရာကို ဘေးတစ်ဖက်တွင် ထားပေး၍ လှိမ့်ရန် ဆွဲဆောင်ပါ။ place a toy just to one side to invite a roll. ခါးကို လက်ဖြင့် ထောက်၍ ထိုင်ခိုင်းပြီး ရှေ့တွင် ကစားစရာ ကိုင်ပြပါ။ support her hips in sitting and hold a toy in front. ကလေးကို ကြမ်းပြင်ပေါ် အခင်းခင်း၍ လွတ်လပ်စွာ လှုပ်ရှားခွင့် ပေးပါ။ give free floor time on a mat so she can move as she likes. တစ်ပတ်လျှင် အနေအထား အသစ် တစ်မျိုး (ဘေးစောင်း အိပ်ကစားခြင်း) ထပ်ထည့်ပါ။ add one new position each week, such as playing on her side. မိသားစုဝင် တစ်ဦးစီက ကြမ်းပြင်ပေါ်တွင် အတူကစားပေးပါ။ let a different family member join floor play each week. အခင်းပေါ်တွင် လှိမ့်ကစားခြင်း — ဘေးပတ်လည် လွတ်လပ်စွာ ထားပါ။ rolling play on a mat with clear space all around. မှန်ရှေ့တွင် မှောက်ချ၍ ကိုယ့်ကိုယ်ကို ကြည့်စေခြင်း။ tummy time in front of a mirror. အရိပ်ရှိသော နေရာတွင် အခင်းခင်း၍ ကစားခြင်း — နေပူ တိုက်ရိုက် ရှောင်ပါ။ play on a mat in the shade — avoid direct midday sun. မိဘရင်ခွင်တွင် ပွေ့ချီ၍ လမ်းလျှောက်ရင်း ပတ်ဝန်းကျင်ကို ပြပါ။ carry her while walking and show her the world around. အိမ်သုံး အဝတ်ထူထူ တစ်ထည်ကို အခင်းအဖြစ် သုံးပါ။ a folded blanket makes a fine play mat. သန့်ရှင်းသော ပလတ်စတစ်ဗူးထဲ ပဲစေ့ ထည့်၍ အသံမြည် ကစားစရာ လုပ်ပါ (ခိုင်ခံ့စွာ ပိတ်ပါ)။ a clean sealed bottle with a few beans makes a rattle — seal it firmly. အခင်း၊ အသံမြည် ကစားစရာ၊ မှန် a mat, a rattle, a mirror ကလေး လှိမ့်နိုင်လာသည်နှင့် အိပ်ရာ၊ စားပွဲ၊ ဆိုဖာပေါ်တွင် တစ်စက္ကန့်မျှ တစ်ယောက်တည်း မထားပါနှင့် — လိမ့်ကျနိုင်သည်။ ကြမ်းပြင်ပေါ်တွင် ကစားစေခြင်းက အလုံခြုံဆုံး ဖြစ်သည်။ အိပ်ချိန်တိုင်း ပက်လက် အိပ်စေပါ — ကလေး ကိုယ်တိုင် လှိမ့်သွားပါက ပြန်လှည့်ပေးရန် မလိုပါ။ အိပ်ရာပေါ်တွင် ခေါင်းအုံး၊ ပျော့ပျောင်းသော အရုပ်များ၊ စောင်ပုံ မထားပါနှင့်။ ကလေးပါးစပ်ထဲ ဝင်နိုင်သော ပစ္စည်း အားလုံးကို ဖယ်ရှားပါ။ ကလေးကို ဘယ်တော့မျှ မလှုပ်ခါပါနှင့်။ now that she rolls, never leave her alone on a bed, table or sofa even for a second — the floor is safest. place her on her back for every sleep; if she rolls herself in sleep there is no need to turn her back. keep the sleep surface clear of pillows, soft toys and loose bedding. remove anything small enough to fit in her mouth. never shake a baby. အခြားကလေးနှင့် နှိုင်းယှဉ်၍ စိတ်ပူခြင်း — အချိန်ကွာခြားမှုသည် ပုံမှန် ဖြစ်သည်။ comparing with another baby — differences in timing are normal. ကလေးလမ်းလျှောက်စက် သုံးခြင်း — မလိုအပ်သည့်အပြင် ထိခိုက်ဒဏ်ရာရစေနိုင်သည်။ using a baby walker — it is unnecessary and can cause injury. တစ်နေကုန် ချီထားခြင်း — ကြမ်းပြင်ပေါ် လွတ်လပ်စွာ လှုပ်ရှားခွင့် လိုအပ်သည်။ holding her all day — she needs free floor time to move. မှောက်ချချိန်ကို မိနစ်အနည်းငယ်စီ အကြိမ်များများ ခွဲလုပ်ပါ — ငိုလျှင် ရပ်ပါ။ do tummy time in many short bursts, and stop if she cries. ကလေး၏ မျက်နှာအဆင့်တွင် သင်လည်း မှောက်ချ၍ အတူကစားပါ။ lie down at her level and play face to face. ၆ လပြည့်ပြီ၊ မလှိမ့်သေးဘူး။ စိုးရိမ်စရာလား။ she is 6 months and not rolling yet. should i worry? ကလေးအချို့သည် ၆ လကျော်မှ လှိမ့်တတ်သည် — အထူးသဖြင့် မှောက်ချချိန် နည်းခဲ့လျှင် ဖြစ်သည်။ ခြေလက် လှုပ်ရှားမှု ကောင်းပြီး ခေါင်းထောင်နိုင်လျှင် မှောက်ချချိန် တိုးပေးပါ။ လုံးဝ မလှုပ်ရှားခြင်း၊ ကြွက်သား တင်းလွန်း/ပျော့လွန်းခြင်း ရှိပါက ကျန်းမာရေးဝန်ထမ်းအား ပြပါ။ some babies roll after 6 months, especially with less tummy time. if she moves her arms and legs well and holds her head up, increase tummy time. if she is very stiff or very floppy, or barely moves, see a health worker. ထိုင်ဖို့ လေ့ကျင့်ပေးသင့်လား။ should i train her to sit? အတင်း လေ့ကျင့်ပေးရန် မလိုပါ။ ခါးကို ထောက်၍ ခဏ ထိုင်ခိုင်းခြင်း၊ ကြမ်းပြင်ပေါ် လွတ်လပ်စွာ ကစားခွင့် ပေးခြင်းက ကြွက်သားကို သဘာဝအတိုင်း အားကောင်းစေသည်။ ခေါင်းအုံးဖြင့် ကာ၍ တစ်ယောက်တည်း ထိုင်ခိုင်းခြင်းကို ရှောင်ပါ။ no training is needed. brief supported sitting and free floor play build the muscles naturally. avoid propping her alone with pillows. လ ၆ လအရွယ်တွင် ခေါင်းကို မတ်မတ် လုံးဝ မထိန်းနိုင်ခြင်း။ at 6 months, no steady head control at all. ကိုယ်ခန္ဓာ အလွန် တင်းကျပ်ခြင်း သို့မဟုတ် အလွန် ပျော့ခွေခြင်း။ a body that is very stiff or very floppy. တစ်ဖက်ခြမ်းကိုသာ အမြဲ သုံးပြီး ကျန်တစ်ဖက် မလှုပ်ခြင်း။ using only one side of the body and not moving the other. ယခင်က လုပ်နိုင်ခဲ့သော လှုပ်ရှားမှုများ ဆုံးရှုံးသွားခြင်း။ loss of movements she could do before. ဤလက္ခဏာများ တွေ့ပါက ကျန်းမာရေးဝန်ထမ်း သို့မဟုတ် ကလေးအထူးကုဆရာဝန်ထံ ပြသပါ။ ဤသည် ရောဂါ ဖော်ထုတ်ချက် မဟုတ်ဘဲ စစ်ဆေးရန် အချက်ပြခြင်းသာ ဖြစ်သည်။ if you see these, ask a health worker or paediatrician to check. this is a prompt to check, not a diagnosis. လှိမ့်နိုင်ခြင်းသည် ကလေး ကမ္ဘာကြီးကို ကိုယ်တိုင် ရွေးချယ်ရှာဖွေနိုင်သော ပထမဆုံး နည်းလမ်း ဖြစ်ပါသည်။ rolling is the first way your baby chooses where to go in the world. reference_verified rolling and supported sitting between 4 and 6 months follow cdc milestone checklists, aap milestone guidance and the who motor development study windows; tummy time and the roll-off and safe sleep precautions follow aap safe sleep guidance and the paediatric physical-therapy references in the registry."
   },
   {
     "ageGroupKey": "5_6m",
@@ -14710,12 +14710,12 @@
         "en": "A firm sleep surface and a light cover"
       },
       "safety": {
-        "mm": "အိပ်ချိန်တိုင်း ပက်လက် အနေအထားဖြင့် ချထားပါ။ ကလေး ကိုယ်တိုင် လှိမ့်သွားပါက ပြန်လှည့်ပေးရန် မလိုပါ — သို့သော် စတင် ချထားချိန်တွင် အမြဲ ပက်လက် ဖြစ်ရမည်။ အိပ်ရာသည် မာကျောပြီး ပြားညီရမည်၊ အပေါ်တွင် ခေါင်းအုံး၊ အနူးအညံ့ ကစားစရာ၊ စောင်ပုံ၊ ကြိုး မရှိစေရ။ အခန်းတူ အိပ်ပါ၊ အိပ်ရာတူ မအိပ်ပါနှင့်။ ဆေးလိပ် သောက်ပြီးလျှင်၊ အရက် သောက်ပြီးလျှင်၊ အိပ်ဆေး/ငိုက်စေသော ဆေး သောက်ပြီးလျှင် ကလေးနှင့် အိပ်ရာတူ လုံးဝ မအိပ်ပါနှင့်။ ဆိုဖာ၊ အနားထိုင်ကုလားထိုင်ပေါ်တွင် ကလေးနှင့် အတူ လုံးဝ မအိပ်ပါနှင့်။ ကလေးမျက်နှာကို မဖုံးပါနှင့်။ အခန်းအပူချိန်ကို သင့်တင့်စွာ ထားပြီး အဝတ် အလွန်အကျွံ မထူပါစေနှင့်။ ကလေးအနီးတွင် ဆေးလိပ် လုံးဝ မသောက်ပါနှင့်။ ကလေးကို ဘယ်တော့မျှ မလှုပ်ခါပါနှင့်။ အိပ်ချိန်နှင့် ညအိပ်ချိန်တွင် နို့သီးခေါင်း ပေးကြည့်နိုင်ပါသည် — ရုတ်တရက် သေဆုံးမှု အန္တရာယ် လျော့ကျစေကြောင်း တွေ့ရှိထားပါသည်။ နို့တိုက်နေပါက နို့တိုက်ခြင်း အသားကျပြီးမှ စတင်ပေးပါ။",
+        "mm": "အိပ်ချိန်တိုင်း ပက်လက် အနေအထားဖြင့် ချထားပါ။ ကလေး ကိုယ်တိုင် လှိမ့်သွားပါက ပြန်လှည့်ပေးရန် မလိုပါ — သို့သော် စတင် ချထားချိန်တွင် အမြဲ ပက်လက် ဖြစ်ရမည်။ အိပ်ရာသည် မာကျောပြီး ပြားညီရမည်၊ အပေါ်တွင် ခေါင်းအုံး၊ ပျော့ပျောင်းသော အရုပ်များ၊ စောင်ပုံ၊ ကြိုး မရှိစေရ။ အခန်းတူ အိပ်ပါ၊ အိပ်ရာတူ မအိပ်ပါနှင့်။ ဆေးလိပ် သောက်ပြီးလျှင်၊ အရက် သောက်ပြီးလျှင်၊ အိပ်ဆေး/ငိုက်စေသော ဆေး သောက်ပြီးလျှင် ကလေးနှင့် အိပ်ရာတူ လုံးဝ မအိပ်ပါနှင့်။ ဆိုဖာ၊ အနားထိုင်ကုလားထိုင်ပေါ်တွင် ကလေးနှင့် အတူ လုံးဝ မအိပ်ပါနှင့်။ ကလေးမျက်နှာကို မဖုံးပါနှင့်။ အခန်းအပူချိန်ကို သင့်တင့်စွာ ထားပြီး အဝတ် အလွန်အကျွံ မထူပါစေနှင့်။ ကလေးအနီးတွင် ဆေးလိပ် လုံးဝ မသောက်ပါနှင့်။ ကလေးကို ဘယ်တော့မျှ မလှုပ်ခါပါနှင့်။ အိပ်ချိန်နှင့် ညအိပ်ချိန်တွင် နို့သီးခေါင်း ပေးကြည့်နိုင်ပါသည် — ရုတ်တရက် သေဆုံးမှု အန္တရာယ် လျော့ကျစေကြောင်း တွေ့ရှိထားပါသည်။ နို့တိုက်နေပါက နို့တိုက်ခြင်း အသားကျပြီးမှ စတင်ပေးပါ။",
         "en": "Back to sleep for every sleep. If she rolls herself over in sleep there is no need to turn her back, but always start her on her back. The surface must be firm and flat, with no pillows, soft toys, loose bedding or cords. Share a room, not a bed. Never bed-share after smoking, alcohol or any sedating medicine. Never sleep with her on a sofa or armchair. Never cover her face. Keep the room a comfortable temperature and do not over-wrap her. No tobacco smoke anywhere near her. Never shake a baby. You can try offering a pacifier at nap time and bedtime — it is associated with a lower risk of SIDS. If you are breastfeeding, wait until feeding is well established before offering one."
       },
       "commonMistakes": [
         {
-          "mm": "အိပ်ရာပေါ်တွင် အနူးအညံ့ ကစားစရာ၊ ခေါင်းအုံး ထားခြင်း။",
+          "mm": "အိပ်ရာပေါ်တွင် ပျော့ပျောင်းသော အရုပ်များ၊ ခေါင်းအုံး ထားခြင်း။",
           "en": "Leaving soft toys or pillows in the sleep space."
         },
         {
@@ -14814,7 +14814,7 @@
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "၅ – ၆ လ — အိပ်စက်ခြင်း လမ်းညွှန် 5–6 months — sleep guide အသက် ၄–၁၁ လအရွယ်တွင် စုစုပေါင်း အိပ်ချိန် ၁၂–၁၆ နာရီခန့် (နေ့အိပ် အပါအဝင်) ဖြစ်တတ်သည်။ ကလေးအများစုသည် ညဘက် အိပ်ချိန် ရှည်လာသော်လည်း ညတွင် နိုးခြင်းသည် ဤအရွယ်၌ ပုံမှန်ပင် ဖြစ်သည်။ ကလေး လှိမ့်နိုင်လာသဖြင့် အိပ်ရာ လုံခြုံမှုသည် ယခင်ထက်ပင် ပိုအရေးကြီးလာသည်။ at 4–11 months total sleep is commonly about 12–16 hours including naps. night stretches usually lengthen, but waking at night is still normal at this age. now that she rolls, a safe sleep space matters more than ever. sleep 5_6m guide ၅ – ၆ လ — အိပ်စက်ခြင်း လမ်းညွှန် 5–6 months — sleep guide အသက် ၄–၁၁ လအရွယ်တွင် စုစုပေါင်း အိပ်ချိန် ၁၂–၁၆ နာရီခန့် (နေ့အိပ် အပါအဝင်) ဖြစ်တတ်သည်။ ကလေးအများစုသည် ညဘက် အိပ်ချိန် ရှည်လာသော်လည်း ညတွင် နိုးခြင်းသည် ဤအရွယ်၌ ပုံမှန်ပင် ဖြစ်သည်။ ကလေး လှိမ့်နိုင်လာသဖြင့် အိပ်ရာ လုံခြုံမှုသည် ယခင်ထက်ပင် ပိုအရေးကြီးလာသည်။ at 4–11 months total sleep is commonly about 12–16 hours including naps. night stretches usually lengthen, but waking at night is still normal at this age. now that she rolls, a safe sleep space matters more than ever. တစ်ရက်လျှင် စုစုပေါင်း အိပ်ချိန် မည်မျှ ရှိသနည်း။ how much sleep does she get in total each day? အိပ်ရာဝင် အစီအစဉ် တည်ငြိမ်ပါသလား။ is there a steady bedtime routine? အိပ်ရာသည် မာကျောပြီး ပြားညီပါသလား၊ အပေါ်တွင် ပစ္စည်း ရှင်းပါသလား။ is the sleep surface firm, flat and clear? နေ့ဘက်တွင် နိုးကြားပြီး တက်ကြွပါသလား။ is she alert and active during the day? အိပ်ချိန်တိုင်း ပက်လက် အနေအထားဖြင့် ချထားပါ။ place her on her back for every sleep. ညတိုင်း တူညီသော အိပ်ရာဝင် အစီအစဉ် (ရေချိုး၊ နို့တိုက်၊ သီချင်း၊ အိပ်) ကို လိုက်နာပါ။ follow the same short bedtime routine each night — wash, feed, song, sleep. နေ့ဘက်တွင် အလင်းရောင်နှင့် လှုပ်ရှားမှု၊ ညဘက်တွင် အလင်းမှိန်ပြီး တိတ်ဆိတ်စေပါ။ keep days bright and active, nights dim and quiet. အိပ်ငိုက်လာသော်လည်း မအိပ်သေးမီ အိပ်ရာတွင် ချထားကြည့်ပါ။ try putting her down drowsy but not yet asleep. အိပ်ချိန် မှတ်တမ်း တစ်ပတ်စာ ရေးမှတ်၍ ပုံစံကို လေ့လာပါ။ keep a week of sleep notes to see the pattern. အိပ်ရာနေရာကို ပတ်ပတ်လည် စစ်ဆေးပါ — ကြိုး၊ လိုက်ကာကြိုး ဝေးအောင် ထားပါ။ check the sleep area weekly — keep cords and blind pulls far away. အိပ်ရာဝင်မီ တိတ်ဆိတ်သော ကစားချိန် ၁၀ မိနစ်။ ten quiet minutes of calm play before bed. ငြိမ်သက်သော သီချင်း သို့မဟုတ် ပုံပြင် တစ်ပုဒ်။ one calm song or story. နေ့ဘက် အရိပ်တွင် ခဏ ထွက်ခြင်း — နေ့/ည ခွဲခြားမှုကို ကူညီသည်။ a short time outside in the shade by day helps set day from night. မာကျောပြီး ပြားညီသော အိပ်ရာ တစ်ခုသာ လိုအပ်သည် — အထူး ပစ္စည်း မလိုပါ။ all you need is a firm flat surface — no special equipment. အဝတ်ပါးဖြင့် အလင်းကာ၍ အခန်းကို မှောင်စေခြင်း။ a thin cloth over the window to darken the room. မာကျောသော အိပ်ရာ၊ ပါးလွှာသော စောင် a firm sleep surface and a light cover အိပ်ချိန်တိုင်း ပက်လက် အနေအထားဖြင့် ချထားပါ။ ကလေး ကိုယ်တိုင် လှိမ့်သွားပါက ပြန်လှည့်ပေးရန် မလိုပါ — သို့သော် စတင် ချထားချိန်တွင် အမြဲ ပက်လက် ဖြစ်ရမည်။ အိပ်ရာသည် မာကျောပြီး ပြားညီရမည်၊ အပေါ်တွင် ခေါင်းအုံး၊ အနူးအညံ့ ကစားစရာ၊ စောင်ပုံ၊ ကြိုး မရှိစေရ။ အခန်းတူ အိပ်ပါ၊ အိပ်ရာတူ မအိပ်ပါနှင့်။ ဆေးလိပ် သောက်ပြီးလျှင်၊ အရက် သောက်ပြီးလျှင်၊ အိပ်ဆေး/ငိုက်စေသော ဆေး သောက်ပြီးလျှင် ကလေးနှင့် အိပ်ရာတူ လုံးဝ မအိပ်ပါနှင့်။ ဆိုဖာ၊ အနားထိုင်ကုလားထိုင်ပေါ်တွင် ကလေးနှင့် အတူ လုံးဝ မအိပ်ပါနှင့်။ ကလေးမျက်နှာကို မဖုံးပါနှင့်။ အခန်းအပူချိန်ကို သင့်တင့်စွာ ထားပြီး အဝတ် အလွန်အကျွံ မထူပါစေနှင့်။ ကလေးအနီးတွင် ဆေးလိပ် လုံးဝ မသောက်ပါနှင့်။ ကလေးကို ဘယ်တော့မျှ မလှုပ်ခါပါနှင့်။ အိပ်ချိန်နှင့် ညအိပ်ချိန်တွင် နို့သီးခေါင်း ပေးကြည့်နိုင်ပါသည် — ရုတ်တရက် သေဆုံးမှု အန္တရာယ် လျော့ကျစေကြောင်း တွေ့ရှိထားပါသည်။ နို့တိုက်နေပါက နို့တိုက်ခြင်း အသားကျပြီးမှ စတင်ပေးပါ။ back to sleep for every sleep. if she rolls herself over in sleep there is no need to turn her back, but always start her on her back. the surface must be firm and flat, with no pillows, soft toys, loose bedding or cords. share a room, not a bed. never bed-share after smoking, alcohol or any sedating medicine. never sleep with her on a sofa or armchair. never cover her face. keep the room a comfortable temperature and do not over-wrap her. no tobacco smoke anywhere near her. never shake a baby. you can try offering a pacifier at nap time and bedtime — it is associated with a lower risk of sids. if you are breastfeeding, wait until feeding is well established before offering one. အိပ်ရာပေါ်တွင် အနူးအညံ့ ကစားစရာ၊ ခေါင်းအုံး ထားခြင်း။ leaving soft toys or pillows in the sleep space. ကလေး လှိမ့်သွားမည်ကို စိုးရိမ်၍ အဝတ်လိပ်ဖြင့် ကာထားခြင်း — ဤသည် အန္တရာယ် ရှိသည်။ wedging her in with rolled cloth to stop her rolling — this is dangerous. ညဘက် နိုးတိုင်း ချက်ချင်း မီးဖွင့်၍ ကစားပေးခြင်း။ turning on the light and playing at every night waking. အလေးချိန်ပါသော စောင်၊ အိပ်ဝတ်စုံ သို့မဟုတ် ပတ်ရစ်ပိတ်စများ သုံးခြင်း။ using weighted blankets, weighted sleepers or weighted swaddles. အိမ်သုံး အသက်ရှူ/နှလုံးခုန် စောင့်ကြည့်စက်ကို ဘေးကင်းစွာ အိပ်စေခြင်း၏ အစား အားကိုးခြင်း — အန္တရာယ် လျှော့ချပေးသည်ဟု သက်သေ မရှိပါ။ relying on a home breathing or heart-rate monitor instead of a safe sleep space — these have not been shown to reduce the risk of sids. ညဘက် နိုးလျှင် အလင်းမှိန်မှိန်ဖြင့် တိတ်ဆိတ်စွာ ကိုင်တွယ်ပါ။ handle night wakings quietly and in dim light. တူညီသော အစီအစဉ်သည် အချိန်တိကျမှုထက် ပိုအရေးကြီးသည်။ consistency of routine matters more than exact clock times. ကလေး လှိမ့်ပြီး မှောက်အိပ်သွားရင် ပြန်လှည့်ပေးရမလား။ she rolls onto her tummy in her sleep. should i turn her back? ကလေး ကိုယ်တိုင် ဘက်နှစ်ဖက် လှိမ့်နိုင်ပြီဆိုလျှင် ပြန်လှည့်ပေးရန် မလိုပါ။ သို့သော် စတင် ချထားချိန်တွင် အမြဲ ပက်လက် ဖြစ်ရမည်ဖြစ်ပြီး အိပ်ရာပေါ်တွင် ပစ္စည်း ရှင်းလင်းနေရမည်။ once she can roll both ways herself you do not need to turn her back, but always place her on her back to start and keep the surface clear. ညဘက် အိပ်ဖို့ ဆန်ဖြူပြုတ်/နို့မှုန့် တိုးပေးသင့်လား။ should i give porridge or extra formula so she sleeps at night? ညအိပ်ရန်အတွက် အစားအစာ တိုးပေးခြင်းသည် အလုပ်မဖြစ်ကြောင်း အထောက်အထားများက ပြသည်။ အသက် ၆ လဝန်းကျင်တွင် အသင့်ဖြစ်မှု လက္ခဏာများ ပေါ်လာမှသာ အစားအစာ စတင်သင့်သည်။ ပုလင်းကို မထောက်ထားပါနှင့်။ adding food to make her sleep is not supported by evidence. solids should start at around 6 months when readiness signs appear. never prop a bottle. ညဘက် အကြိမ်ကြိမ် နိုးတယ်။ ပုံမှန်လား။ she wakes several times a night. is that normal? ဤအရွယ်တွင် ညဘက် နိုးခြင်းသည် ပုံမှန် ဖြစ်သည်။ တည်ငြိမ်သော အိပ်ရာဝင် အစီအစဉ်နှင့် တိတ်ဆိတ်သော တုံ့ပြန်မှုက အထောက်အကူ ဖြစ်သည်။ ကလေး နေ့ဘက် နိုးကြားပြီး ကိုယ်အလေးချိန် တက်နေလျှင် စိုးရိမ်စရာ မရှိပါ။ night waking is normal at this age. a steady bedtime routine and quiet responses help. if she is alert by day and gaining weight, there is no cause for concern. နိုးရန် အလွန် ခက်ခဲခြင်း သို့မဟုတ် လုံးဝ မနိုးခြင်း။ very hard to wake, or not waking at all. အသက်ရှူရာတွင် ရပ်တန့်ခြင်း၊ အရေပြားညိုမှဲခြင်း၊ အသံမြည်၍ ခက်ခဲစွာ ရှူခြင်း။ pauses in breathing, blue or dusky colour, or noisy laboured breathing. အစာစားမှု သိသိသာသာ ကျဆင်းခြင်းနှင့် အားနည်းလာခြင်း။ a marked drop in feeding with growing weakness. နှိပ်လျှင် မပျောက်သော အနီစက်များ — ဖန်ခွက်ဖြင့် ဖိကြည့်ပါ။ ဖိထားစဉ် အနီရောင် မပျောက်ပါက ချက်ချင်း ဆေးရုံသို့ သွားပါ။ a rash that does not fade when you press on it — press a clear glass against the skin. if the red marks stay visible while you press, go to hospital immediately. ဤလက္ခဏာများသည် ချက်ချင်း ဆေးကုသမှု လိုအပ်သည် — အနီးဆုံး ကျန်းမာရေးဌာနသို့ ချက်ချင်း သွားပါ။ ဤသည် ရောဂါ ဖော်ထုတ်ချက် မဟုတ်ပါ။ these need urgent medical care — go to the nearest health facility straight away. this is not a diagnosis. အိပ်ရေးပျက်ခြင်းသည် ဤကာလ၏ အခက်ခဲဆုံး အပိုင်း ဖြစ်ပါသည် — သင် တစ်ယောက်တည်း မဟုတ်ပါ။ broken sleep is the hardest part of this stage — you are not alone in it. reference_verified sleep amounts at 4–11 months follow who physical activity and sleep guidance for under-5s; safe sleep positioning, surface and room-sharing follow aap safe sleep guidance, nhs sids advice and health canada safe sleep guidance; the value of a consistent bedtime routine follows the sleep-intervention trials in the registry."
+    "searchText": "၅ – ၆ လ — အိပ်စက်ခြင်း လမ်းညွှန် 5–6 months — sleep guide အသက် ၄–၁၁ လအရွယ်တွင် စုစုပေါင်း အိပ်ချိန် ၁၂–၁၆ နာရီခန့် (နေ့အိပ် အပါအဝင်) ဖြစ်တတ်သည်။ ကလေးအများစုသည် ညဘက် အိပ်ချိန် ရှည်လာသော်လည်း ညတွင် နိုးခြင်းသည် ဤအရွယ်၌ ပုံမှန်ပင် ဖြစ်သည်။ ကလေး လှိမ့်နိုင်လာသဖြင့် အိပ်ရာ လုံခြုံမှုသည် ယခင်ထက်ပင် ပိုအရေးကြီးလာသည်။ at 4–11 months total sleep is commonly about 12–16 hours including naps. night stretches usually lengthen, but waking at night is still normal at this age. now that she rolls, a safe sleep space matters more than ever. sleep 5_6m guide ၅ – ၆ လ — အိပ်စက်ခြင်း လမ်းညွှန် 5–6 months — sleep guide အသက် ၄–၁၁ လအရွယ်တွင် စုစုပေါင်း အိပ်ချိန် ၁၂–၁၆ နာရီခန့် (နေ့အိပ် အပါအဝင်) ဖြစ်တတ်သည်။ ကလေးအများစုသည် ညဘက် အိပ်ချိန် ရှည်လာသော်လည်း ညတွင် နိုးခြင်းသည် ဤအရွယ်၌ ပုံမှန်ပင် ဖြစ်သည်။ ကလေး လှိမ့်နိုင်လာသဖြင့် အိပ်ရာ လုံခြုံမှုသည် ယခင်ထက်ပင် ပိုအရေးကြီးလာသည်။ at 4–11 months total sleep is commonly about 12–16 hours including naps. night stretches usually lengthen, but waking at night is still normal at this age. now that she rolls, a safe sleep space matters more than ever. တစ်ရက်လျှင် စုစုပေါင်း အိပ်ချိန် မည်မျှ ရှိသနည်း။ how much sleep does she get in total each day? အိပ်ရာဝင် အစီအစဉ် တည်ငြိမ်ပါသလား။ is there a steady bedtime routine? အိပ်ရာသည် မာကျောပြီး ပြားညီပါသလား၊ အပေါ်တွင် ပစ္စည်း ရှင်းပါသလား။ is the sleep surface firm, flat and clear? နေ့ဘက်တွင် နိုးကြားပြီး တက်ကြွပါသလား။ is she alert and active during the day? အိပ်ချိန်တိုင်း ပက်လက် အနေအထားဖြင့် ချထားပါ။ place her on her back for every sleep. ညတိုင်း တူညီသော အိပ်ရာဝင် အစီအစဉ် (ရေချိုး၊ နို့တိုက်၊ သီချင်း၊ အိပ်) ကို လိုက်နာပါ။ follow the same short bedtime routine each night — wash, feed, song, sleep. နေ့ဘက်တွင် အလင်းရောင်နှင့် လှုပ်ရှားမှု၊ ညဘက်တွင် အလင်းမှိန်ပြီး တိတ်ဆိတ်စေပါ။ keep days bright and active, nights dim and quiet. အိပ်ငိုက်လာသော်လည်း မအိပ်သေးမီ အိပ်ရာတွင် ချထားကြည့်ပါ။ try putting her down drowsy but not yet asleep. အိပ်ချိန် မှတ်တမ်း တစ်ပတ်စာ ရေးမှတ်၍ ပုံစံကို လေ့လာပါ။ keep a week of sleep notes to see the pattern. အိပ်ရာနေရာကို ပတ်ပတ်လည် စစ်ဆေးပါ — ကြိုး၊ လိုက်ကာကြိုး ဝေးအောင် ထားပါ။ check the sleep area weekly — keep cords and blind pulls far away. အိပ်ရာဝင်မီ တိတ်ဆိတ်သော ကစားချိန် ၁၀ မိနစ်။ ten quiet minutes of calm play before bed. ငြိမ်သက်သော သီချင်း သို့မဟုတ် ပုံပြင် တစ်ပုဒ်။ one calm song or story. နေ့ဘက် အရိပ်တွင် ခဏ ထွက်ခြင်း — နေ့/ည ခွဲခြားမှုကို ကူညီသည်။ a short time outside in the shade by day helps set day from night. မာကျောပြီး ပြားညီသော အိပ်ရာ တစ်ခုသာ လိုအပ်သည် — အထူး ပစ္စည်း မလိုပါ။ all you need is a firm flat surface — no special equipment. အဝတ်ပါးဖြင့် အလင်းကာ၍ အခန်းကို မှောင်စေခြင်း။ a thin cloth over the window to darken the room. မာကျောသော အိပ်ရာ၊ ပါးလွှာသော စောင် a firm sleep surface and a light cover အိပ်ချိန်တိုင်း ပက်လက် အနေအထားဖြင့် ချထားပါ။ ကလေး ကိုယ်တိုင် လှိမ့်သွားပါက ပြန်လှည့်ပေးရန် မလိုပါ — သို့သော် စတင် ချထားချိန်တွင် အမြဲ ပက်လက် ဖြစ်ရမည်။ အိပ်ရာသည် မာကျောပြီး ပြားညီရမည်၊ အပေါ်တွင် ခေါင်းအုံး၊ ပျော့ပျောင်းသော အရုပ်များ၊ စောင်ပုံ၊ ကြိုး မရှိစေရ။ အခန်းတူ အိပ်ပါ၊ အိပ်ရာတူ မအိပ်ပါနှင့်။ ဆေးလိပ် သောက်ပြီးလျှင်၊ အရက် သောက်ပြီးလျှင်၊ အိပ်ဆေး/ငိုက်စေသော ဆေး သောက်ပြီးလျှင် ကလေးနှင့် အိပ်ရာတူ လုံးဝ မအိပ်ပါနှင့်။ ဆိုဖာ၊ အနားထိုင်ကုလားထိုင်ပေါ်တွင် ကလေးနှင့် အတူ လုံးဝ မအိပ်ပါနှင့်။ ကလေးမျက်နှာကို မဖုံးပါနှင့်။ အခန်းအပူချိန်ကို သင့်တင့်စွာ ထားပြီး အဝတ် အလွန်အကျွံ မထူပါစေနှင့်။ ကလေးအနီးတွင် ဆေးလိပ် လုံးဝ မသောက်ပါနှင့်။ ကလေးကို ဘယ်တော့မျှ မလှုပ်ခါပါနှင့်။ အိပ်ချိန်နှင့် ညအိပ်ချိန်တွင် နို့သီးခေါင်း ပေးကြည့်နိုင်ပါသည် — ရုတ်တရက် သေဆုံးမှု အန္တရာယ် လျော့ကျစေကြောင်း တွေ့ရှိထားပါသည်။ နို့တိုက်နေပါက နို့တိုက်ခြင်း အသားကျပြီးမှ စတင်ပေးပါ။ back to sleep for every sleep. if she rolls herself over in sleep there is no need to turn her back, but always start her on her back. the surface must be firm and flat, with no pillows, soft toys, loose bedding or cords. share a room, not a bed. never bed-share after smoking, alcohol or any sedating medicine. never sleep with her on a sofa or armchair. never cover her face. keep the room a comfortable temperature and do not over-wrap her. no tobacco smoke anywhere near her. never shake a baby. you can try offering a pacifier at nap time and bedtime — it is associated with a lower risk of sids. if you are breastfeeding, wait until feeding is well established before offering one. အိပ်ရာပေါ်တွင် ပျော့ပျောင်းသော အရုပ်များ၊ ခေါင်းအုံး ထားခြင်း။ leaving soft toys or pillows in the sleep space. ကလေး လှိမ့်သွားမည်ကို စိုးရိမ်၍ အဝတ်လိပ်ဖြင့် ကာထားခြင်း — ဤသည် အန္တရာယ် ရှိသည်။ wedging her in with rolled cloth to stop her rolling — this is dangerous. ညဘက် နိုးတိုင်း ချက်ချင်း မီးဖွင့်၍ ကစားပေးခြင်း။ turning on the light and playing at every night waking. အလေးချိန်ပါသော စောင်၊ အိပ်ဝတ်စုံ သို့မဟုတ် ပတ်ရစ်ပိတ်စများ သုံးခြင်း။ using weighted blankets, weighted sleepers or weighted swaddles. အိမ်သုံး အသက်ရှူ/နှလုံးခုန် စောင့်ကြည့်စက်ကို ဘေးကင်းစွာ အိပ်စေခြင်း၏ အစား အားကိုးခြင်း — အန္တရာယ် လျှော့ချပေးသည်ဟု သက်သေ မရှိပါ။ relying on a home breathing or heart-rate monitor instead of a safe sleep space — these have not been shown to reduce the risk of sids. ညဘက် နိုးလျှင် အလင်းမှိန်မှိန်ဖြင့် တိတ်ဆိတ်စွာ ကိုင်တွယ်ပါ။ handle night wakings quietly and in dim light. တူညီသော အစီအစဉ်သည် အချိန်တိကျမှုထက် ပိုအရေးကြီးသည်။ consistency of routine matters more than exact clock times. ကလေး လှိမ့်ပြီး မှောက်အိပ်သွားရင် ပြန်လှည့်ပေးရမလား။ she rolls onto her tummy in her sleep. should i turn her back? ကလေး ကိုယ်တိုင် ဘက်နှစ်ဖက် လှိမ့်နိုင်ပြီဆိုလျှင် ပြန်လှည့်ပေးရန် မလိုပါ။ သို့သော် စတင် ချထားချိန်တွင် အမြဲ ပက်လက် ဖြစ်ရမည်ဖြစ်ပြီး အိပ်ရာပေါ်တွင် ပစ္စည်း ရှင်းလင်းနေရမည်။ once she can roll both ways herself you do not need to turn her back, but always place her on her back to start and keep the surface clear. ညဘက် အိပ်ဖို့ ဆန်ဖြူပြုတ်/နို့မှုန့် တိုးပေးသင့်လား။ should i give porridge or extra formula so she sleeps at night? ညအိပ်ရန်အတွက် အစားအစာ တိုးပေးခြင်းသည် အလုပ်မဖြစ်ကြောင်း အထောက်အထားများက ပြသည်။ အသက် ၆ လဝန်းကျင်တွင် အသင့်ဖြစ်မှု လက္ခဏာများ ပေါ်လာမှသာ အစားအစာ စတင်သင့်သည်။ ပုလင်းကို မထောက်ထားပါနှင့်။ adding food to make her sleep is not supported by evidence. solids should start at around 6 months when readiness signs appear. never prop a bottle. ညဘက် အကြိမ်ကြိမ် နိုးတယ်။ ပုံမှန်လား။ she wakes several times a night. is that normal? ဤအရွယ်တွင် ညဘက် နိုးခြင်းသည် ပုံမှန် ဖြစ်သည်။ တည်ငြိမ်သော အိပ်ရာဝင် အစီအစဉ်နှင့် တိတ်ဆိတ်သော တုံ့ပြန်မှုက အထောက်အကူ ဖြစ်သည်။ ကလေး နေ့ဘက် နိုးကြားပြီး ကိုယ်အလေးချိန် တက်နေလျှင် စိုးရိမ်စရာ မရှိပါ။ night waking is normal at this age. a steady bedtime routine and quiet responses help. if she is alert by day and gaining weight, there is no cause for concern. နိုးရန် အလွန် ခက်ခဲခြင်း သို့မဟုတ် လုံးဝ မနိုးခြင်း။ very hard to wake, or not waking at all. အသက်ရှူရာတွင် ရပ်တန့်ခြင်း၊ အရေပြားညိုမှဲခြင်း၊ အသံမြည်၍ ခက်ခဲစွာ ရှူခြင်း။ pauses in breathing, blue or dusky colour, or noisy laboured breathing. အစာစားမှု သိသိသာသာ ကျဆင်းခြင်းနှင့် အားနည်းလာခြင်း။ a marked drop in feeding with growing weakness. နှိပ်လျှင် မပျောက်သော အနီစက်များ — ဖန်ခွက်ဖြင့် ဖိကြည့်ပါ။ ဖိထားစဉ် အနီရောင် မပျောက်ပါက ချက်ချင်း ဆေးရုံသို့ သွားပါ။ a rash that does not fade when you press on it — press a clear glass against the skin. if the red marks stay visible while you press, go to hospital immediately. ဤလက္ခဏာများသည် ချက်ချင်း ဆေးကုသမှု လိုအပ်သည် — အနီးဆုံး ကျန်းမာရေးဌာနသို့ ချက်ချင်း သွားပါ။ ဤသည် ရောဂါ ဖော်ထုတ်ချက် မဟုတ်ပါ။ these need urgent medical care — go to the nearest health facility straight away. this is not a diagnosis. အိပ်ရေးပျက်ခြင်းသည် ဤကာလ၏ အခက်ခဲဆုံး အပိုင်း ဖြစ်ပါသည် — သင် တစ်ယောက်တည်း မဟုတ်ပါ။ broken sleep is the hardest part of this stage — you are not alone in it. reference_verified sleep amounts at 4–11 months follow who physical activity and sleep guidance for under-5s; safe sleep positioning, surface and room-sharing follow aap safe sleep guidance, nhs sids advice and health canada safe sleep guidance; the value of a consistent bedtime routine follows the sleep-intervention trials in the registry."
   },
   {
     "ageGroupKey": "5_6m",
@@ -17802,7 +17802,7 @@
         "en": "A firm flat sleep surface and a light blanket"
       },
       "safety": {
-        "mm": "အိပ်ချိန်တိုင်း ကလေးကို ပက်လက် အိပ်စေပါ — မာပြီး ပြားသော၊ အပေါ်တွင် ဘာမျှ မရှိသော နေရာတွင် ဖြစ်ရမည်။ ကလေး ကိုယ်တိုင် လှိမ့်နိုင်ပါက ပြန်လှန်ပေးရန် မလိုသော်လည်း အိပ်ရာဝင်ချိန်တွင် အမြဲ ပက်လက်မှ စတင်ပါ။ ခေါင်းအုံး၊ အနူးအညံ့ ကစားစရာ၊ ထူထဲသော စောင်များကို အိပ်ရာထဲ မထားပါနှင့်။ တစ်ခန်းတည်း အိပ်ပါ — အိပ်ရာတူ မအိပ်ပါနှင့်။ ဆေးလိပ်၊ အရက် သို့မဟုတ် အိပ်ဆေး သောက်ထားပါက ကလေးနှင့် အတူ လုံးဝ မအိပ်ပါနှင့်။ ဆိုဖာ သို့မဟုတ် ကုလားထိုင်ပေါ်တွင် ကလေးနှင့် အတူ မအိပ်ပါနှင့်။ ကလေး၏ မျက်နှာကို မဖုံးပါနှင့်။ ကလေး လှုပ်ရှားနိုင်ပြီ ဖြစ်၍ အိပ်ရာအနီးရှိ ကြိုးများ၊ လိုက်ကာကြိုးများကို ဖယ်ရှားပါ။ အိပ်ချိန်နှင့် ညအိပ်ချိန်တွင် နို့သီးခေါင်း ပေးကြည့်နိုင်ပါသည် — ရုတ်တရက် သေဆုံးမှု အန္တရာယ် လျော့ကျစေကြောင်း တွေ့ရှိထားပါသည်။ နို့တိုက်နေပါက နို့တိုက်ခြင်း အသားကျပြီးမှ စတင်ပေးပါ။",
+        "mm": "အိပ်ချိန်တိုင်း ကလေးကို ပက်လက် အိပ်စေပါ — မာပြီး ပြားသော၊ အပေါ်တွင် ဘာမျှ မရှိသော နေရာတွင် ဖြစ်ရမည်။ ကလေး ကိုယ်တိုင် လှိမ့်နိုင်ပါက ပြန်လှန်ပေးရန် မလိုသော်လည်း အိပ်ရာဝင်ချိန်တွင် အမြဲ ပက်လက်မှ စတင်ပါ။ ခေါင်းအုံး၊ ပျော့ပျောင်းသော အရုပ်များ၊ ထူထဲသော စောင်များကို အိပ်ရာထဲ မထားပါနှင့်။ တစ်ခန်းတည်း အိပ်ပါ — အိပ်ရာတူ မအိပ်ပါနှင့်။ ဆေးလိပ်၊ အရက် သို့မဟုတ် အိပ်ဆေး သောက်ထားပါက ကလေးနှင့် အတူ လုံးဝ မအိပ်ပါနှင့်။ ဆိုဖာ သို့မဟုတ် ကုလားထိုင်ပေါ်တွင် ကလေးနှင့် အတူ မအိပ်ပါနှင့်။ ကလေး၏ မျက်နှာကို မဖုံးပါနှင့်။ ကလေး လှုပ်ရှားနိုင်ပြီ ဖြစ်၍ အိပ်ရာအနီးရှိ ကြိုးများ၊ လိုက်ကာကြိုးများကို ဖယ်ရှားပါ။ အိပ်ချိန်နှင့် ညအိပ်ချိန်တွင် နို့သီးခေါင်း ပေးကြည့်နိုင်ပါသည် — ရုတ်တရက် သေဆုံးမှု အန္တရာယ် လျော့ကျစေကြောင်း တွေ့ရှိထားပါသည်။ နို့တိုက်နေပါက နို့တိုက်ခြင်း အသားကျပြီးမှ စတင်ပေးပါ။",
         "en": "Put her on her back for every sleep, on a firm flat surface with nothing on it. If she rolls herself you do not need to turn her back, but always start her on her back. Keep pillows, soft toys and thick bedding out of the sleep space. Room-share, do not bed-share. Never sleep with her after smoking, alcohol or sedating medicine, and never on a sofa or armchair. Never cover her face. Now that she can move, remove cords and blind pulls from near the bed. You can try offering a pacifier at nap time and bedtime — it is associated with a lower risk of SIDS. If you are breastfeeding, wait until feeding is well established before offering one."
       },
       "commonMistakes": [
@@ -17898,7 +17898,7 @@
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "၇ – ၉ လ — အိပ်စက်ခြင်း လမ်းညွှန် 7–9 months — sleep guide ၄ လမှ ၁၁ လအရွယ်တွင် တစ်ရက်လျှင် စုစုပေါင်း ၁၂ နာရီမှ ၁၆ နာရီ (နေ့ခင်း အိပ်ချိန် အပါအဝင်) အိပ်ရန် အကြံပြုထားသည်။ ဤအရွယ်တွင် ခွဲခွာမှု စိုးရိမ်ခြင်းကြောင့် ညအိပ် နိုးခြင်း ပြန်များလာတတ်ပြီး ၎င်းသည် ပုံမှန် ဖြစ်သည်။ တည်ငြိမ်ပြီး ခန့်မှန်းနိုင်သော အိပ်ရာဝင် လုပ်ရိုးလုပ်စဉ်သည် အထောက်အကူ ပြုသည်။ between 4 and 11 months, 12 to 16 hours of sleep a day including naps is what guidance suggests. night waking often increases again at this age because of separation anxiety, and that is normal. a calm, predictable bedtime routine helps. sleep 7_9m guide ၇ – ၉ လ — အိပ်စက်ခြင်း လမ်းညွှန် 7–9 months — sleep guide ၄ လမှ ၁၁ လအရွယ်တွင် တစ်ရက်လျှင် စုစုပေါင်း ၁၂ နာရီမှ ၁၆ နာရီ (နေ့ခင်း အိပ်ချိန် အပါအဝင်) အိပ်ရန် အကြံပြုထားသည်။ ဤအရွယ်တွင် ခွဲခွာမှု စိုးရိမ်ခြင်းကြောင့် ညအိပ် နိုးခြင်း ပြန်များလာတတ်ပြီး ၎င်းသည် ပုံမှန် ဖြစ်သည်။ တည်ငြိမ်ပြီး ခန့်မှန်းနိုင်သော အိပ်ရာဝင် လုပ်ရိုးလုပ်စဉ်သည် အထောက်အကူ ပြုသည်။ between 4 and 11 months, 12 to 16 hours of sleep a day including naps is what guidance suggests. night waking often increases again at this age because of separation anxiety, and that is normal. a calm, predictable bedtime routine helps. တစ်ရက်လျှင် စုစုပေါင်း ဘယ်နှစ်နာရီ အိပ်ပါသလဲ။ how many hours does she sleep in total each day? အိပ်ရာဝင် လုပ်ရိုးလုပ်စဉ် တူညီပါသလား။ is her bedtime routine the same each night? အိပ်ရာသည် မာပြီး ပြားနေပါသလား၊ အပေါ်တွင် ပစ္စည်း မရှိပါသလား။ is her sleep surface firm, flat and clear? မိဘများ လုံလောက်စွာ အနားရပါသလား။ are the adults getting enough rest? ညတိုင်း အချိန်တူတွင် အိပ်ရာဝင် လုပ်ရိုးလုပ်စဉ် လုပ်ပါ (ရေချိုး၊ စာဖတ်၊ သီချင်း)။ follow the same bedtime routine at the same time — bath, book, song. နေ့ခင်းတွင် အလင်းရောင်နှင့် လှုပ်ရှားမှု ပေးပါ။ give her daylight and active play during the day. အိပ်ချိန် နီးလျှင် ငြိမ်သက်သော ကစားချိန်သို့ ကူးပြောင်းပါ။ move to quiet play as bedtime approaches. အိပ်ချိန်များကို မှတ်တမ်းတင်၍ ပုံစံကို ကြည့်ပါ။ keep a simple sleep log and look for the pattern. အိပ်ရာနေရာ၏ လုံခြုံမှုကို ပြန်စစ်ပါ။ re-check the safety of her sleep space each week. အိပ်ရာမဝင်မီ တိုတောင်းသော ပုံပြင် သို့မဟုတ် သီချင်း။ a short story or song before bed. အလင်းရောင် လျှော့ချ၍ ငြိမ်သက်သော ပတ်ဝန်းကျင် ဖန်တီးခြင်း။ dimming the light to create calm. နေ့လယ်ပိုင်းတွင် အပြင်ထွက်ခြင်းသည် ညအိပ်ချိန်ကို ကူညီသည်။ time outdoors in the day supports night sleep. တူညီသော အစီအစဉ်သည် အခမဲ့ဖြစ်ပြီး အထိရောက်ဆုံး ဖြစ်သည်။ a consistent routine is free and works best. မာပြီး ပြားသော အိပ်ရာသည် စျေးကြီးရန် မလိုပါ။ a firm flat surface does not need to be expensive. မာပြီး ပြားသော အိပ်ရာ၊ ပါးလွှာသော စောင် a firm flat sleep surface and a light blanket အိပ်ချိန်တိုင်း ကလေးကို ပက်လက် အိပ်စေပါ — မာပြီး ပြားသော၊ အပေါ်တွင် ဘာမျှ မရှိသော နေရာတွင် ဖြစ်ရမည်။ ကလေး ကိုယ်တိုင် လှိမ့်နိုင်ပါက ပြန်လှန်ပေးရန် မလိုသော်လည်း အိပ်ရာဝင်ချိန်တွင် အမြဲ ပက်လက်မှ စတင်ပါ။ ခေါင်းအုံး၊ အနူးအညံ့ ကစားစရာ၊ ထူထဲသော စောင်များကို အိပ်ရာထဲ မထားပါနှင့်။ တစ်ခန်းတည်း အိပ်ပါ — အိပ်ရာတူ မအိပ်ပါနှင့်။ ဆေးလိပ်၊ အရက် သို့မဟုတ် အိပ်ဆေး သောက်ထားပါက ကလေးနှင့် အတူ လုံးဝ မအိပ်ပါနှင့်။ ဆိုဖာ သို့မဟုတ် ကုလားထိုင်ပေါ်တွင် ကလေးနှင့် အတူ မအိပ်ပါနှင့်။ ကလေး၏ မျက်နှာကို မဖုံးပါနှင့်။ ကလေး လှုပ်ရှားနိုင်ပြီ ဖြစ်၍ အိပ်ရာအနီးရှိ ကြိုးများ၊ လိုက်ကာကြိုးများကို ဖယ်ရှားပါ။ အိပ်ချိန်နှင့် ညအိပ်ချိန်တွင် နို့သီးခေါင်း ပေးကြည့်နိုင်ပါသည် — ရုတ်တရက် သေဆုံးမှု အန္တရာယ် လျော့ကျစေကြောင်း တွေ့ရှိထားပါသည်။ နို့တိုက်နေပါက နို့တိုက်ခြင်း အသားကျပြီးမှ စတင်ပေးပါ။ put her on her back for every sleep, on a firm flat surface with nothing on it. if she rolls herself you do not need to turn her back, but always start her on her back. keep pillows, soft toys and thick bedding out of the sleep space. room-share, do not bed-share. never sleep with her after smoking, alcohol or sedating medicine, and never on a sofa or armchair. never cover her face. now that she can move, remove cords and blind pulls from near the bed. you can try offering a pacifier at nap time and bedtime — it is associated with a lower risk of sids. if you are breastfeeding, wait until feeding is well established before offering one. နေ့ခင်း အိပ်ချိန်ကို လုံးဝ ဖြတ်၍ ညအိပ် ကောင်းစေရန် ကြိုးစားခြင်း — ပိုဆိုးစေတတ်သည်။ cutting naps to improve night sleep, which usually backfires. အိပ်ရာထဲတွင် နူးညံ့သော ပစ္စည်းများ ထည့်ပေးခြင်း။ adding soft items to the sleep space. အလေးချိန်ပါသော စောင်၊ အိပ်ဝတ်စုံ သို့မဟုတ် ပတ်ရစ်ပိတ်စများ သုံးခြင်း။ using weighted blankets, weighted sleepers or weighted swaddles. အိမ်သုံး အသက်ရှူ/နှလုံးခုန် စောင့်ကြည့်စက်ကို ဘေးကင်းစွာ အိပ်စေခြင်း၏ အစား အားကိုးခြင်း — အန္တရာယ် လျှော့ချပေးသည်ဟု သက်သေ မရှိပါ။ relying on a home breathing or heart-rate monitor instead of a safe sleep space — these have not been shown to reduce the risk of sids. ညအိပ် နိုးခြင်းသည် ဤအရွယ်တွင် ပုံမှန် ဖြစ်သည် — အမှား မဟုတ်ပါ။ night waking is normal at this age — it is not a failure. ဖြစ်နိုင်လျှင် မိဘနှစ်ဦး အလှည့်ကျ တာဝန်ယူပါ။ share the night load between adults where you can. ၈ လမှာ ညအိပ် ပြန်နိုးလာတယ် — ဘာဖြစ်တာလဲ။ she started waking again at 8 months — why? ဤအရွယ်တွင် ခွဲခွာမှု စိုးရိမ်ခြင်းနှင့် ဖွံ့ဖြိုးမှု အပြောင်းအလဲများကြောင့် ညအိပ် နိုးခြင်း ပြန်များတတ်ပါသည်။ ငြိမ်းချမ်းစွာ တုံ့ပြန်ပြီး လုပ်ရိုးလုပ်စဉ်ကို ဆက်ထိန်းပါ။ separation anxiety and new skills often disturb sleep around this age. respond calmly and keep the routine steady. ကလေးက မှောက်အိပ်နေရင် ပြန်လှန်ပေးရမလား။ she rolls onto her tummy in her sleep — should i turn her back? ကိုယ်တိုင် လှိမ့်နိုင်ပြီဆိုပါက ပြန်လှန်ပေးရန် မလိုပါ။ သို့သော် အိပ်ရာဝင်ချိန်တွင် အမြဲ ပက်လက်မှ စတင်ပြီး အိပ်ရာပေါ်တွင် ဘာမျှ မရှိစေရပါ။ if she rolls herself, you do not need to turn her back. always start her on her back, and keep the surface clear. ဘယ်အပူချိန် ရောက်ရင် ဆေးရုံ သွားရမလဲ။ what temperature means we should seek care? အပူချိန် တိုင်းပါ။ အသက် ၃ လအောက် ကလေး ၃၈°c (၁၀၀.၄°f) နှင့်အထက် ဖျားပါက — ကလေး ပုံမှန်လို ထင်ရလျှင်ပင် ချက်ချင်း ပြသပါ။ အသက် ၃ လမှ ၆ လကြား ၃၉°c (၁၀၂.၂°f) နှင့်အထက် ဖျားပါက အမြန် ပြသပါ။ အသက် ၆ လကျော်လျှင် အပူချိန် ကိန်းဂဏန်းတစ်ခုတည်းက အဖြေ မပေးပါ — ကလေး၏ ပုံစံနှင့် အပြုအမူကို ကြည့်ပါ။ ဖျားချိန် ၅ ရက်နှင့်အထက် ကြာလျှင်၊ ရေ/နို့ မသောက်နိုင်လျှင် သို့မဟုတ် ပုံမှန်လို တုံ့ပြန်မှု မရှိတော့လျှင် ပြသပါ။ အသက်မရွေး — ဖျားခြင်းနှင့်အတူ အသက်ရှူခက်ခြင်း၊ နှိပ်လျှင် မပျောက်သော အနီစက်၊ လည်ပင်း တောင့်တင်းခြင်း သို့မဟုတ် နိုးရခက်ခြင်း ပါလာပါက ချက်ချင်း ပြသပါ။ အပူချိန်တိုင်းကိရိယာ မရှိပါက — ကလေး ပူနေပြီး အထက်ပါ လက္ခဏာများ ပါလျှင် မစောင့်ဘဲ ပြသပါ။ take the temperature. under 3 months, 38°c (100.4°f) or above: seek care straight away, even if the baby otherwise seems well. between 3 and 6 months, 39°c (102.2°f) or above: seek care promptly. over 6 months, the number alone does not decide — go by how she looks and behaves. seek advice if the fever lasts 5 days or more, if she will not drink, or if she is much less responsive than usual. at any age, fever together with difficulty breathing, a rash that does not fade under pressure, a stiff neck, or being hard to wake: seek care immediately. if you have no thermometer, and the child feels hot and has any of those signs, do not wait. အသက်ရှူရ ခက်ခဲခြင်း၊ အသက်ရှူသံ မြည်ခြင်း၊ နှုတ်ခမ်း ညိုခြင်း — ချက်ချင်း ဆေးကုသမှု ခံယူပါ။ difficulty breathing, noisy breathing or blue lips — get medical help immediately. နှိုးရ မရခြင်း၊ အလွန် အိပ်ငိုက်နေခြင်း — ချက်ချင်း ဆေးကုသမှု ခံယူပါ။ very hard to wake or unusually drowsy — get medical help immediately. ကြက်သွေးရောင် အဖုအပိန့်များ ပေါ်ခြင်း၊ ပြင်းထန်စွာ ဖျားခြင်း — ချက်ချင်း ဆေးကုသမှု ခံယူပါ။ a rash that does not fade, or a high fever — get medical help immediately. အထက်ပါ အရေးပေါ် လက္ခဏာများ တွေ့ပါက ချက်ချင်း ဆေးကုသမှု ခံယူပါ။ အိပ်စက်မှု ပုံစံ စိုးရိမ်ဖွယ် ရှိပါက ကျန်းမာရေးဝန်ထမ်းအား ပြပါ။ ဤသည် ရောဂါ ဖော်ထုတ်ချက် မဟုတ်ပါ။ seek medical care immediately for the urgent signs above. raise other sleep concerns with a health worker. this is not a diagnosis. ကလေး၏ အိပ်စက်မှုပုံစံသည် အမြဲ တဖြည်းဖြည်း ကောင်းမွန်လာမည် မဟုတ်ပါ။ တစ်ခါတစ်ရံ ပြန်လည်မတည်ငြိမ်ခြင်းသည်လည်း တွေ့ရတတ်ပါသည်။ sleep does not improve in a straight line — steps backwards are normal. reference_verified sleep amounts at 4–11 months follow who physical activity and sleep guidance for under-5s; safe sleep positioning, surface and room-sharing follow aap safe sleep guidance, nhs sids advice and health canada safe sleep guidance; the value of a consistent bedtime routine follows the sleep-intervention trials in the registry."
+    "searchText": "၇ – ၉ လ — အိပ်စက်ခြင်း လမ်းညွှန် 7–9 months — sleep guide ၄ လမှ ၁၁ လအရွယ်တွင် တစ်ရက်လျှင် စုစုပေါင်း ၁၂ နာရီမှ ၁၆ နာရီ (နေ့ခင်း အိပ်ချိန် အပါအဝင်) အိပ်ရန် အကြံပြုထားသည်။ ဤအရွယ်တွင် ခွဲခွာမှု စိုးရိမ်ခြင်းကြောင့် ညအိပ် နိုးခြင်း ပြန်များလာတတ်ပြီး ၎င်းသည် ပုံမှန် ဖြစ်သည်။ တည်ငြိမ်ပြီး ခန့်မှန်းနိုင်သော အိပ်ရာဝင် လုပ်ရိုးလုပ်စဉ်သည် အထောက်အကူ ပြုသည်။ between 4 and 11 months, 12 to 16 hours of sleep a day including naps is what guidance suggests. night waking often increases again at this age because of separation anxiety, and that is normal. a calm, predictable bedtime routine helps. sleep 7_9m guide ၇ – ၉ လ — အိပ်စက်ခြင်း လမ်းညွှန် 7–9 months — sleep guide ၄ လမှ ၁၁ လအရွယ်တွင် တစ်ရက်လျှင် စုစုပေါင်း ၁၂ နာရီမှ ၁၆ နာရီ (နေ့ခင်း အိပ်ချိန် အပါအဝင်) အိပ်ရန် အကြံပြုထားသည်။ ဤအရွယ်တွင် ခွဲခွာမှု စိုးရိမ်ခြင်းကြောင့် ညအိပ် နိုးခြင်း ပြန်များလာတတ်ပြီး ၎င်းသည် ပုံမှန် ဖြစ်သည်။ တည်ငြိမ်ပြီး ခန့်မှန်းနိုင်သော အိပ်ရာဝင် လုပ်ရိုးလုပ်စဉ်သည် အထောက်အကူ ပြုသည်။ between 4 and 11 months, 12 to 16 hours of sleep a day including naps is what guidance suggests. night waking often increases again at this age because of separation anxiety, and that is normal. a calm, predictable bedtime routine helps. တစ်ရက်လျှင် စုစုပေါင်း ဘယ်နှစ်နာရီ အိပ်ပါသလဲ။ how many hours does she sleep in total each day? အိပ်ရာဝင် လုပ်ရိုးလုပ်စဉ် တူညီပါသလား။ is her bedtime routine the same each night? အိပ်ရာသည် မာပြီး ပြားနေပါသလား၊ အပေါ်တွင် ပစ္စည်း မရှိပါသလား။ is her sleep surface firm, flat and clear? မိဘများ လုံလောက်စွာ အနားရပါသလား။ are the adults getting enough rest? ညတိုင်း အချိန်တူတွင် အိပ်ရာဝင် လုပ်ရိုးလုပ်စဉ် လုပ်ပါ (ရေချိုး၊ စာဖတ်၊ သီချင်း)။ follow the same bedtime routine at the same time — bath, book, song. နေ့ခင်းတွင် အလင်းရောင်နှင့် လှုပ်ရှားမှု ပေးပါ။ give her daylight and active play during the day. အိပ်ချိန် နီးလျှင် ငြိမ်သက်သော ကစားချိန်သို့ ကူးပြောင်းပါ။ move to quiet play as bedtime approaches. အိပ်ချိန်များကို မှတ်တမ်းတင်၍ ပုံစံကို ကြည့်ပါ။ keep a simple sleep log and look for the pattern. အိပ်ရာနေရာ၏ လုံခြုံမှုကို ပြန်စစ်ပါ။ re-check the safety of her sleep space each week. အိပ်ရာမဝင်မီ တိုတောင်းသော ပုံပြင် သို့မဟုတ် သီချင်း။ a short story or song before bed. အလင်းရောင် လျှော့ချ၍ ငြိမ်သက်သော ပတ်ဝန်းကျင် ဖန်တီးခြင်း။ dimming the light to create calm. နေ့လယ်ပိုင်းတွင် အပြင်ထွက်ခြင်းသည် ညအိပ်ချိန်ကို ကူညီသည်။ time outdoors in the day supports night sleep. တူညီသော အစီအစဉ်သည် အခမဲ့ဖြစ်ပြီး အထိရောက်ဆုံး ဖြစ်သည်။ a consistent routine is free and works best. မာပြီး ပြားသော အိပ်ရာသည် စျေးကြီးရန် မလိုပါ။ a firm flat surface does not need to be expensive. မာပြီး ပြားသော အိပ်ရာ၊ ပါးလွှာသော စောင် a firm flat sleep surface and a light blanket အိပ်ချိန်တိုင်း ကလေးကို ပက်လက် အိပ်စေပါ — မာပြီး ပြားသော၊ အပေါ်တွင် ဘာမျှ မရှိသော နေရာတွင် ဖြစ်ရမည်။ ကလေး ကိုယ်တိုင် လှိမ့်နိုင်ပါက ပြန်လှန်ပေးရန် မလိုသော်လည်း အိပ်ရာဝင်ချိန်တွင် အမြဲ ပက်လက်မှ စတင်ပါ။ ခေါင်းအုံး၊ ပျော့ပျောင်းသော အရုပ်များ၊ ထူထဲသော စောင်များကို အိပ်ရာထဲ မထားပါနှင့်။ တစ်ခန်းတည်း အိပ်ပါ — အိပ်ရာတူ မအိပ်ပါနှင့်။ ဆေးလိပ်၊ အရက် သို့မဟုတ် အိပ်ဆေး သောက်ထားပါက ကလေးနှင့် အတူ လုံးဝ မအိပ်ပါနှင့်။ ဆိုဖာ သို့မဟုတ် ကုလားထိုင်ပေါ်တွင် ကလေးနှင့် အတူ မအိပ်ပါနှင့်။ ကလေး၏ မျက်နှာကို မဖုံးပါနှင့်။ ကလေး လှုပ်ရှားနိုင်ပြီ ဖြစ်၍ အိပ်ရာအနီးရှိ ကြိုးများ၊ လိုက်ကာကြိုးများကို ဖယ်ရှားပါ။ အိပ်ချိန်နှင့် ညအိပ်ချိန်တွင် နို့သီးခေါင်း ပေးကြည့်နိုင်ပါသည် — ရုတ်တရက် သေဆုံးမှု အန္တရာယ် လျော့ကျစေကြောင်း တွေ့ရှိထားပါသည်။ နို့တိုက်နေပါက နို့တိုက်ခြင်း အသားကျပြီးမှ စတင်ပေးပါ။ put her on her back for every sleep, on a firm flat surface with nothing on it. if she rolls herself you do not need to turn her back, but always start her on her back. keep pillows, soft toys and thick bedding out of the sleep space. room-share, do not bed-share. never sleep with her after smoking, alcohol or sedating medicine, and never on a sofa or armchair. never cover her face. now that she can move, remove cords and blind pulls from near the bed. you can try offering a pacifier at nap time and bedtime — it is associated with a lower risk of sids. if you are breastfeeding, wait until feeding is well established before offering one. နေ့ခင်း အိပ်ချိန်ကို လုံးဝ ဖြတ်၍ ညအိပ် ကောင်းစေရန် ကြိုးစားခြင်း — ပိုဆိုးစေတတ်သည်။ cutting naps to improve night sleep, which usually backfires. အိပ်ရာထဲတွင် နူးညံ့သော ပစ္စည်းများ ထည့်ပေးခြင်း။ adding soft items to the sleep space. အလေးချိန်ပါသော စောင်၊ အိပ်ဝတ်စုံ သို့မဟုတ် ပတ်ရစ်ပိတ်စများ သုံးခြင်း။ using weighted blankets, weighted sleepers or weighted swaddles. အိမ်သုံး အသက်ရှူ/နှလုံးခုန် စောင့်ကြည့်စက်ကို ဘေးကင်းစွာ အိပ်စေခြင်း၏ အစား အားကိုးခြင်း — အန္တရာယ် လျှော့ချပေးသည်ဟု သက်သေ မရှိပါ။ relying on a home breathing or heart-rate monitor instead of a safe sleep space — these have not been shown to reduce the risk of sids. ညအိပ် နိုးခြင်းသည် ဤအရွယ်တွင် ပုံမှန် ဖြစ်သည် — အမှား မဟုတ်ပါ။ night waking is normal at this age — it is not a failure. ဖြစ်နိုင်လျှင် မိဘနှစ်ဦး အလှည့်ကျ တာဝန်ယူပါ။ share the night load between adults where you can. ၈ လမှာ ညအိပ် ပြန်နိုးလာတယ် — ဘာဖြစ်တာလဲ။ she started waking again at 8 months — why? ဤအရွယ်တွင် ခွဲခွာမှု စိုးရိမ်ခြင်းနှင့် ဖွံ့ဖြိုးမှု အပြောင်းအလဲများကြောင့် ညအိပ် နိုးခြင်း ပြန်များတတ်ပါသည်။ ငြိမ်းချမ်းစွာ တုံ့ပြန်ပြီး လုပ်ရိုးလုပ်စဉ်ကို ဆက်ထိန်းပါ။ separation anxiety and new skills often disturb sleep around this age. respond calmly and keep the routine steady. ကလေးက မှောက်အိပ်နေရင် ပြန်လှန်ပေးရမလား။ she rolls onto her tummy in her sleep — should i turn her back? ကိုယ်တိုင် လှိမ့်နိုင်ပြီဆိုပါက ပြန်လှန်ပေးရန် မလိုပါ။ သို့သော် အိပ်ရာဝင်ချိန်တွင် အမြဲ ပက်လက်မှ စတင်ပြီး အိပ်ရာပေါ်တွင် ဘာမျှ မရှိစေရပါ။ if she rolls herself, you do not need to turn her back. always start her on her back, and keep the surface clear. ဘယ်အပူချိန် ရောက်ရင် ဆေးရုံ သွားရမလဲ။ what temperature means we should seek care? အပူချိန် တိုင်းပါ။ အသက် ၃ လအောက် ကလေး ၃၈°c (၁၀၀.၄°f) နှင့်အထက် ဖျားပါက — ကလေး ပုံမှန်လို ထင်ရလျှင်ပင် ချက်ချင်း ပြသပါ။ အသက် ၃ လမှ ၆ လကြား ၃၉°c (၁၀၂.၂°f) နှင့်အထက် ဖျားပါက အမြန် ပြသပါ။ အသက် ၆ လကျော်လျှင် အပူချိန် ကိန်းဂဏန်းတစ်ခုတည်းက အဖြေ မပေးပါ — ကလေး၏ ပုံစံနှင့် အပြုအမူကို ကြည့်ပါ။ ဖျားချိန် ၅ ရက်နှင့်အထက် ကြာလျှင်၊ ရေ/နို့ မသောက်နိုင်လျှင် သို့မဟုတ် ပုံမှန်လို တုံ့ပြန်မှု မရှိတော့လျှင် ပြသပါ။ အသက်မရွေး — ဖျားခြင်းနှင့်အတူ အသက်ရှူခက်ခြင်း၊ နှိပ်လျှင် မပျောက်သော အနီစက်၊ လည်ပင်း တောင့်တင်းခြင်း သို့မဟုတ် နိုးရခက်ခြင်း ပါလာပါက ချက်ချင်း ပြသပါ။ အပူချိန်တိုင်းကိရိယာ မရှိပါက — ကလေး ပူနေပြီး အထက်ပါ လက္ခဏာများ ပါလျှင် မစောင့်ဘဲ ပြသပါ။ take the temperature. under 3 months, 38°c (100.4°f) or above: seek care straight away, even if the baby otherwise seems well. between 3 and 6 months, 39°c (102.2°f) or above: seek care promptly. over 6 months, the number alone does not decide — go by how she looks and behaves. seek advice if the fever lasts 5 days or more, if she will not drink, or if she is much less responsive than usual. at any age, fever together with difficulty breathing, a rash that does not fade under pressure, a stiff neck, or being hard to wake: seek care immediately. if you have no thermometer, and the child feels hot and has any of those signs, do not wait. အသက်ရှူရ ခက်ခဲခြင်း၊ အသက်ရှူသံ မြည်ခြင်း၊ နှုတ်ခမ်း ညိုခြင်း — ချက်ချင်း ဆေးကုသမှု ခံယူပါ။ difficulty breathing, noisy breathing or blue lips — get medical help immediately. နှိုးရ မရခြင်း၊ အလွန် အိပ်ငိုက်နေခြင်း — ချက်ချင်း ဆေးကုသမှု ခံယူပါ။ very hard to wake or unusually drowsy — get medical help immediately. ကြက်သွေးရောင် အဖုအပိန့်များ ပေါ်ခြင်း၊ ပြင်းထန်စွာ ဖျားခြင်း — ချက်ချင်း ဆေးကုသမှု ခံယူပါ။ a rash that does not fade, or a high fever — get medical help immediately. အထက်ပါ အရေးပေါ် လက္ခဏာများ တွေ့ပါက ချက်ချင်း ဆေးကုသမှု ခံယူပါ။ အိပ်စက်မှု ပုံစံ စိုးရိမ်ဖွယ် ရှိပါက ကျန်းမာရေးဝန်ထမ်းအား ပြပါ။ ဤသည် ရောဂါ ဖော်ထုတ်ချက် မဟုတ်ပါ။ seek medical care immediately for the urgent signs above. raise other sleep concerns with a health worker. this is not a diagnosis. ကလေး၏ အိပ်စက်မှုပုံစံသည် အမြဲ တဖြည်းဖြည်း ကောင်းမွန်လာမည် မဟုတ်ပါ။ တစ်ခါတစ်ရံ ပြန်လည်မတည်ငြိမ်ခြင်းသည်လည်း တွေ့ရတတ်ပါသည်။ sleep does not improve in a straight line — steps backwards are normal. reference_verified sleep amounts at 4–11 months follow who physical activity and sleep guidance for under-5s; safe sleep positioning, surface and room-sharing follow aap safe sleep guidance, nhs sids advice and health canada safe sleep guidance; the value of a consistent bedtime routine follows the sleep-intervention trials in the registry."
   },
   {
     "ageGroupKey": "7_9m",
