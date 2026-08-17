@@ -4,7 +4,7 @@ import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
 import { useAppState } from '../app/AppState';
 import { ageLabels } from '../domain/age/ageLabel';
-import { isGooglePlayBuild } from '../app/platform';
+import { effectivePlanKeyForCurrentPlatform, isAppleAppStoreBuild, isNativeStoreBuild } from '../app/platform';
 
 export function Home() {
   const { t, locale } = useLocale();
@@ -41,7 +41,7 @@ export function Home() {
     },
   ];
 
-  const tools = [
+  const allTools = [
     { to: '/growth', label: t('growth.title'), note: locale === 'mm' ? 'အလေးချိန်နှင့် အရပ်' : 'Height and weight', symbol: '↗', tone: 'bg-mint-soft text-sky-deep' },
     { to: '/sleep', label: t('sleep.title'), note: locale === 'mm' ? 'အိပ်ချိန် မှတ်တမ်း' : 'Sleep tracking', symbol: '◒', tone: 'bg-lavender/30 text-ink' },
     { to: '/health', label: locale === 'mm' ? 'ကျန်းမာရေးမှတ်တမ်း' : 'Health records', note: locale === 'mm' ? 'ကာကွယ်ဆေးနှင့် ဆေးဝါး' : 'Vaccinations and medications', symbol: '✚', tone: 'bg-mint-soft text-sky-deep' },
@@ -50,11 +50,16 @@ export function Home() {
     { to: '/directory', label: locale === 'mm' ? 'ဝန်ဆောင်မှုများ' : 'Support services', note: locale === 'mm' ? 'ကျောင်းနှင့် ပညာရှင်များ' : 'Schools and specialists', symbol: '⌖', tone: 'bg-pink/40 text-ink' },
     { to: '/weekly-plan', label: locale === 'mm' ? 'တစ်ပတ်စာအစီအစဉ်' : 'Weekly plan', note: locale === 'mm' ? 'ရက်အလိုက် ကစားစရာများ' : 'Day-by-day activities', symbol: '▦', tone: 'bg-lavender/30 text-ink' },
     { to: '/observations', label: t('journal.title'), note: locale === 'mm' ? 'နေ့စဉ်စောင့်ကြည့်မှတ်ချက်' : 'Daily behavior notes', symbol: '✎', tone: 'bg-mint-soft text-sky-deep' },
-    { to: '/milestone-gallery', label: t('milestoneGallery.title'), note: locale === 'mm' ? 'ဓာတ်ပုံထည့်၊ Social media မှာ မျှဝေ' : 'Add a photo, share on social media', symbol: '🏅', tone: 'bg-pastel-yellow/40 text-ink' },
+    { to: '/milestone-gallery', label: t('milestoneGallery.title'), note: locale === 'mm' ? 'ဓာတ်ပုံထည့်၊ လူမှုကွန်ရက်တွင် မျှဝေ' : 'Add a photo, share on social media', symbol: '🏅', tone: 'bg-pastel-yellow/40 text-ink' },
     { to: '/hope', label: t('hope.title'), note: locale === 'mm' ? 'အထူးလိုအပ်ချက် နားလည်မှု' : 'Understanding special needs', symbol: '◇', tone: 'bg-pink/40 text-ink' },
   ] as const;
+  const appStoreBuild = isAppleAppStoreBuild();
+  const tools = appStoreBuild
+    ? allTools.filter((tool) => !['/appointments', '/report', '/weekly-plan', '/observations', '/hope'].includes(tool.to))
+    : allTools;
 
-  const premium = subscription?.planKey === 'premium' || subscription?.planKey === 'family';
+  const planKey = effectivePlanKeyForCurrentPlatform(subscription?.planKey ?? 'free');
+  const premium = planKey === 'premium' || planKey === 'family';
 
   return (
     <div className="space-y-7">
@@ -143,7 +148,7 @@ export function Home() {
             </Link>
           </section>
 
-          {!premium && !isGooglePlayBuild() && (
+          {!premium && !isNativeStoreBuild() && (
             <section className="rounded-3xl bg-pastel-yellow/55 p-5">
               <span className="text-xs font-bold uppercase tracking-[0.15em] text-ink-soft">ACE Premium</span>
               <h2 className="mt-2 font-bold text-ink">

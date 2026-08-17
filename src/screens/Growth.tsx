@@ -124,7 +124,7 @@ export function NoChild() {
     <div className="flex min-h-[50vh] flex-col items-center justify-center gap-3 text-center">
       <div aria-hidden className="text-4xl">🌱</div>
       <p className="text-ink-soft">
-        {locale === 'mm' ? 'ဤအင်္ဂါရပ်ကို သုံးရန် ကလေးတစ်ဦး အရင်ထည့်ပါ။' : 'Add a child first to use this feature.'}
+        {locale === 'mm' ? 'ဤဝန်ဆောင်မှုကို အသုံးပြုရန် ဦးစွာ ကလေးအချက်အလက် ထည့်ပါ။' : 'Add a child first to use this feature.'}
       </p>
       <Link to="/add-child" role="button" className="rounded-pill bg-sky px-5 py-2 font-semibold text-white">
         {locale === 'mm' ? 'ကလေး ထည့်ရန်' : 'Add child'}

@@ -18,6 +18,7 @@ import { OwnerPriorityView, type QueueRowView } from './ownerPriority/OwnerPrior
 import { ClassificationImportPreview } from './ownerPriority/ClassificationImportPreview';
 import { OwnerActionsPanel, SecuritySummaryPanel } from './ownerPriority/OwnerActionsPanel';
 import { BulkReplacePanel } from './contentReview/BulkReplacePanel';
+import { ManualReviewPanel } from './contentReview/ManualReviewPanel';
 import { matchesSearchQuery, normalizeSearchText } from '../domain/search';
 
 const DIMENSIONS = ['english', 'native_myanmar', 'evidence', 'safety', 'clinical'] as const;
@@ -496,7 +497,7 @@ function ContentEditor({ item, role, targetFieldPath, onDirtyChange }: { item: {
   );
 }
 
-type WorkspaceTab = 'priority' | 'item' | 'bulkReplace' | 'import' | 'security';
+type WorkspaceTab = 'priority' | 'manual' | 'item' | 'bulkReplace' | 'import' | 'security';
 
 /** Live Owner Priority tab: server queues + the shared presentational view. */
 function OwnerPriorityContainer({ onOpenItem }: { onOpenItem: (row: QueueRowView) => void }) {
@@ -655,8 +656,14 @@ export function ContentReviewWorkspace() {
     };
     if (changesItem) requestSelectionChange(apply); else apply();
   };
+  const searchContentFromManualReview = (query: string) => {
+    setItemQuery(query);
+    setTargetFieldPath(null);
+    setTab('item');
+  };
   const tabs: Array<{ key: WorkspaceTab; label: string; visible: boolean }> = [
     { key: 'priority', label: L('ဦးစားပေးစစ်ဆေးရန်', 'Owner Priority'), visible: true },
+    { key: 'manual', label: L('လူကိုယ်တိုင် စစ်ဆေးရန်', 'Manual review'), visible: true },
     { key: 'item', label: L('အကြောင်းအရာ စစ်ဆေးရန်', 'Review item'), visible: true },
     { key: 'bulkReplace', label: L('ရှာပြီး အစားထိုးရန်', 'Find and replace'), visible: mayEditContent(access.role) },
     { key: 'import', label: L('ခွဲခြားမှု အကြိုစစ်ဆေးရန်', 'Import preview'), visible: isOwner },
@@ -715,6 +722,7 @@ export function ContentReviewWorkspace() {
       </nav>
 
       {tab === 'priority' && <OwnerPriorityContainer onOpenItem={openItemFromQueue} />}
+      {tab === 'manual' && <ManualReviewPanel onSearchContent={searchContentFromManualReview} />}
       {tab === 'bulkReplace' && <BulkReplacePanel canEdit={mayEditContent(access.role)} />}
       {tab === 'import' && isOwner && <ClassificationImportPreview />}
       {tab === 'security' && isOwner && <SecuritySummaryPanel />}

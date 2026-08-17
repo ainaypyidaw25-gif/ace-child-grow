@@ -75,7 +75,7 @@ describe('MilestoneDemo published-only staff preview', () => {
       </MemoryRouter>,
     );
 
-    expect(screen.getByText('ဤအသက်အုပ်စုအတွက် အတည်ပြုထုတ်ဝေထားသော ဖွံ့ဖြိုးမှုမှတ်တိုင် မရှိသေးပါ။')).toBeInTheDocument();
+    expect(screen.getByText('ဤအသက်အရွယ်နှင့် ကိုက်ညီသော ဖွံ့ဖြိုးမှုမှတ်တိုင် မတွေ့ပါ')).toBeInTheDocument();
     expect(screen.queryByText(/မွေးကင်းမှ ၁၂ လအထိ/)).not.toBeInTheDocument();
     queryItems = [unpublished, published];
   });

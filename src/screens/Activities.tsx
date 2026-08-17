@@ -7,10 +7,9 @@ import { useLocale } from '../app/LocaleContext';
 import { useAppState } from '../app/AppState';
 import { developmentalAgeMonths } from '../domain/age/age';
 import { resolveAgeGroup } from '../content/taxonomy';
-import { ReviewBadge } from '../components/ReviewBadge';
 import { DomainArt } from '../components/DomainArt';
 import { NoChild } from './Growth';
-import { isGooglePlayBuild } from '../app/platform';
+import { isFeatureAvailableOnCurrentPlatform, isNativeStoreBuild } from '../app/platform';
 import { matchesSearchQuery } from '../domain/search';
 
 export function Activities() {
@@ -39,7 +38,7 @@ export function Activities() {
   if (!activeChild) return <NoChild />;
   if (data === undefined || subscription === undefined) return <p className="text-ink-soft" role="status">…</p>;
 
-  const premium = subscription.features.includes('personalized_plan');
+  const premium = isFeatureAvailableOnCurrentPlatform(subscription.features, 'personalized_plan');
   const daily = activities.slice(0, 3);
 
   return (
@@ -52,7 +51,9 @@ export function Activities() {
         <p className="mt-2 text-sm leading-7 text-ink-soft">
           {premium
             ? L('ကလေး၏ အသက်အရွယ်နှင့် မှတ်တမ်းများအလိုက် ယနေ့လုပ်နိုင်သည့် လှုပ်ရှားမှုများကို ရွေးပေးထားပါသည်။', 'A calm daily plan selected for your child’s age and records.')
-            : L('အခြေခံလှုပ်ရှားမှုများကို အခမဲ့ အသုံးပြုနိုင်ပါသည်။ အလိုအလျောက်နေ့စဉ်အစီအစဉ်နှင့် ပြီးစီးမှုမှတ်တမ်းအတွက် Premium စမ်းသုံးနိုင်ပါသည်။', 'Core activities are free. Try Premium for a personalized plan and completion history.')}
+            : isNativeStoreBuild()
+              ? L('အသက်အရွယ်နှင့် ကိုက်ညီသော လှုပ်ရှားမှုများကို အခမဲ့ အသုံးပြုနိုင်ပါသည်။', 'Age-appropriate activities are available free.')
+              : L('အခြေခံလှုပ်ရှားမှုများကို အခမဲ့ အသုံးပြုနိုင်ပါသည်။ အလိုအလျောက်နေ့စဉ်အစီအစဉ်နှင့် ပြီးစီးမှုမှတ်တမ်းအတွက် Premium စမ်းသုံးနိုင်ပါသည်။', 'Core activities are free. Try Premium for a personalized plan and completion history.')}
         </p>
       </header>
 
@@ -117,7 +118,6 @@ export function Activities() {
               <li key={activity._id} className="flex items-center gap-3 p-4">
                 <DomainArt domainKey={activity.domainKey} className="h-14 w-14 shrink-0 self-start" />
                 <Link to={`/content/${activity.slug}`} className="min-w-0 flex-1">
-                  <ReviewBadge published={activity.clinicalStatus === 'published'} />
                   <h3 className="font-semibold text-ink">{locale === 'mm' ? activity.titleMm : activity.titleEn}</h3>
                   <p className="mt-1 line-clamp-2 text-sm leading-6 text-ink-soft">{locale === 'mm' ? activity.summaryMm : activity.summaryEn}</p>
                   {activity.durationMinutes && <span className="mt-2 inline-block text-xs text-ink-soft">⏱ {activity.durationMinutes} {L('မိနစ်', 'min')}</span>}
@@ -136,7 +136,7 @@ export function Activities() {
         </section>
       )}
 
-      {!premium && !isGooglePlayBuild() && (
+      {!premium && !isNativeStoreBuild() && (
         <Link to="/subscription" className="block rounded-[28px] bg-ink p-6 text-white shadow-card">
           <p className="text-xs font-bold uppercase tracking-[0.16em] text-mint">ACE Premium</p>
           <h2 className="mt-2 text-xl font-bold">{L('နေ့စဉ်အစီအစဉ်နှင့် တိုးတက်မှုမှတ်တမ်း', 'Daily plan & progress history')}</h2>

@@ -95,7 +95,7 @@ export function PaymentStatus({ view = 'status' }: { view?: View }) {
 
           {pending && payment.checkoutUrl && (
             <a href={payment.checkoutUrl} target="_blank" rel="noreferrer" className="block min-h-touch rounded-pill bg-sky-deep px-6 py-3 text-center font-bold text-white">
-              {L('Payment app/page ကိုဖွင့်မည်', 'Open payment page')}
+              {L('ငွေပေးချေမှု စာမျက်နှာ ဖွင့်မည်', 'Open payment page')}
             </a>
           )}
 

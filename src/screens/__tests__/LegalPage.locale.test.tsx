@@ -16,7 +16,7 @@ afterEach(() => {
   localStorage.clear();
 });
 
-function renderLegal(kind: 'privacy' | 'account-deletion' | 'terms') {
+function renderLegal(kind: 'privacy' | 'account-deletion' | 'terms' | 'support') {
   return render(
     <MemoryRouter>
       <LocaleProvider>
@@ -46,6 +46,17 @@ describe('LegalPage locale correctness', () => {
     renderLegal('account-deletion');
     expect(screen.getByRole('heading', { name: 'ACE Child Grow အကောင့် ဖျက်ရန်' })).toBeTruthy();
     expect(document.documentElement.lang).toBe(documentLang('mm'));
+  });
+
+  it('renders a functional public support page in both locales', () => {
+    renderLegal('support');
+    expect(screen.getByRole('heading', { name: 'ACE Child Grow အကူအညီ' })).toBeTruthy();
+    expect(screen.getByRole('link', { name: 'admin-ace@acegroup.com.mm' })).toHaveAttribute('href', expect.stringContaining('mailto:'));
+    expect(screen.getByText(/PIN၊ စကားဝှက်/)).toBeTruthy();
+
+    fireEvent.click(screen.getByRole('button', { name: 'English' }));
+    expect(screen.getByRole('heading', { name: 'ACE Child Grow Support' })).toBeTruthy();
+    expect(screen.getByText(/Medical emergencies/)).toBeTruthy();
   });
 
   it('toggling the language switches body content and <html lang> together', () => {

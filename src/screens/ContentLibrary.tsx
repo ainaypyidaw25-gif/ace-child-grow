@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useLibraryContent } from '../app/useOfflineLibrary';
 import { useLocale } from '../app/LocaleContext';
 import { AGE_GROUPS, DOMAINS, CONTENT_TYPES, ageGroup, domain } from '../content/taxonomy';
-import { ReviewBadge } from '../components/ReviewBadge';
+import { isAppleAppStoreBuild } from '../app/platform';
 
 const TYPE_LABEL: Record<string, { mm: string; en: string; emoji: string }> = {
   milestone: { mm: 'မှတ်တိုင်', en: 'Milestones', emoji: '🎯' },
@@ -21,6 +21,9 @@ export function ContentLibrary() {
   const [ageKey, setAgeKey] = useState<string>('');
   const [domainKey, setDomainKey] = useState<string>('');
   const [q, setQ] = useState('');
+  const contentTypes = isAppleAppStoreBuild()
+    ? CONTENT_TYPES.filter((contentType) => contentType !== 'printable')
+    : CONTENT_TYPES;
 
   const usesAge = type === 'milestone' || type === 'guide' || type === 'activity';
   const usesDomain = type === 'milestone' || type === 'guide';
@@ -48,7 +51,7 @@ export function ContentLibrary() {
       </div>
 
       <div className="flex gap-2 overflow-x-auto pb-1">
-        {CONTENT_TYPES.map((tk) => (
+        {contentTypes.map((tk) => (
           <button
             key={tk} type="button" onClick={() => setType(tk)}
             className={`whitespace-nowrap rounded-pill px-3 py-1.5 text-sm ${
@@ -118,7 +121,6 @@ export function ContentLibrary() {
                       it.domainKey && (locale === 'mm' ? domain(it.domainKey)?.labelMm : domain(it.domainKey)?.labelEn)]
                       .filter(Boolean).join(' · ')}
                   </span>
-                  <ReviewBadge published={it.clinicalStatus === 'published'} />
                 </div>
                 <h2 className="mt-1 font-semibold text-ink">{locale === 'mm' ? it.titleMm : it.titleEn}</h2>
                 {(it.summaryMm || it.summaryEn) && (

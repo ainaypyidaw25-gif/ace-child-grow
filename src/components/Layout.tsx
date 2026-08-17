@@ -8,6 +8,7 @@ import { useOnlineStatus } from '../app/useOnlineStatus';
 import { setPortalMode } from '../app/portalMode';
 import { DesktopNav } from './DesktopNav';
 import { InAppTour } from './InAppTour';
+import { isAppleAppStoreBuild } from '../app/platform';
 
 export function Layout({ children, showNav = true }: { children: ReactNode; showNav?: boolean }) {
   const { locale, setLocale } = useLocale();
@@ -45,7 +46,7 @@ export function Layout({ children, showNav = true }: { children: ReactNode; show
                 {locale === 'mm' ? 'အင်တာနက်မရှိ' : 'Offline'}
               </span>
             )}
-            {staffAccess?.isStaff && (
+            {!isAppleAppStoreBuild() && staffAccess?.isStaff && (
               <Link
                 to={inStaffWorkspace ? '/home' : '/admin'}
                 onClick={() => setPortalMode(inStaffWorkspace ? 'parent' : 'staff')}

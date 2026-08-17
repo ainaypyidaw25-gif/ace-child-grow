@@ -102,12 +102,12 @@ export function MilestoneDemo() {
       <section className="rounded-[28px] border border-line bg-white p-6 text-center shadow-card">
         <div className="text-4xl" aria-hidden>🌱</div>
         <h1 className="mt-3 text-xl font-bold text-ink">
-          {locale === 'mm' ? 'ဤအသက်အရွယ်အတွက် စစ်ဆေးစာရင်း ပြင်ဆင်ဆဲဖြစ်သည်' : 'The checklist for this age is being prepared'}
+          {locale === 'mm' ? 'ဤအသက်အရွယ်နှင့် ကိုက်ညီသော ဖွံ့ဖြိုးမှုမှတ်တိုင် မတွေ့ပါ' : 'No milestones match this age yet'}
         </h1>
         <p className="mt-2 text-sm leading-7 text-ink-soft">
           {locale === 'mm'
-            ? 'ဤအသက်အုပ်စုအတွက် အတည်ပြုထုတ်ဝေထားသော ဖွံ့ဖြိုးမှုမှတ်တိုင် မရှိသေးပါ။'
-            : 'There are no approved published milestones for this age group yet.'}
+            ? 'ကလေး၏ မွေးသက္ကရာဇ် သို့မဟုတ် ရက်စေ့တွက်ချက်အသက် ဆက်တင်ကို စစ်ကြည့်ပါ။ အခြားအသက်အုပ်စုရှိ မှတ်တိုင်များကို စာကြည့်တိုက်တွင်လည်း ရှာနိုင်ပါသည်။'
+            : 'Check the child’s birth date or corrected-age setting. You can also browse milestones for other ages in the library.'}
         </p>
       </section>
     );

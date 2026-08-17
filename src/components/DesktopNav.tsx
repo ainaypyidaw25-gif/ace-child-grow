@@ -1,7 +1,7 @@
 import { NavLink, Link } from 'react-router-dom';
 import { useLocale } from '../app/LocaleContext';
 import { PRIMARY_NAV_ITEMS } from './navigationItems';
-import { isGooglePlayBuild } from '../app/platform';
+import { isAppleAppStoreBuild, isNativeStoreBuild } from '../app/platform';
 
 export function DesktopNav() {
   const { t, locale } = useLocale();
@@ -33,7 +33,7 @@ export function DesktopNav() {
           </ul>
         </nav>
 
-        <nav aria-label={locale === 'mm' ? 'မိသားစုကိရိယာများ' : 'Family tools'}>
+        {!isAppleAppStoreBuild() && <nav aria-label={locale === 'mm' ? 'မိသားစုကိရိယာများ' : 'Family tools'}>
           <p className="px-3 text-[11px] font-bold uppercase tracking-[0.16em] text-ink-soft">
             {locale === 'mm' ? 'မှတ်တမ်းကိရိယာများ' : 'Tools'}
           </p>
@@ -63,9 +63,9 @@ export function DesktopNav() {
               {locale === 'mm' ? 'အောင်မြင်မှု အမှတ်တရများ' : 'Milestone keepsakes'}
             </Link>
           </div>
-        </nav>
+        </nav>}
 
-        {!isGooglePlayBuild() && <div className="overflow-hidden rounded-3xl bg-ink p-4 text-white shadow-card">
+        {!isNativeStoreBuild() && <div className="overflow-hidden rounded-3xl bg-ink p-4 text-white shadow-card">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-mint">
             ACE Premium
           </p>

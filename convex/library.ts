@@ -118,6 +118,7 @@ export const listByType = query({
     domainKey: v.optional(v.string()),
     category: v.optional(v.string()),
     q: v.optional(v.string()),
+    audience: v.optional(v.literal('parent')),
   },
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
@@ -147,35 +148,37 @@ export const listByType = query({
     if (args.ageGroupKey) rows = rows.filter((r) => r.ageGroupKey === args.ageGroupKey);
     if (args.domainKey) rows = rows.filter((r) => r.domainKey === args.domainKey);
     if (args.category) rows = rows.filter((r) => r.category === args.category);
-    if (!staff) rows = rows.filter((r) => isPubliclyReadableStatus(r.clinicalStatus));
+    const parentAudience = args.audience === 'parent';
+    if (parentAudience || !staff) rows = rows.filter((r) => isPubliclyReadableStatus(r.clinicalStatus));
     if (args.q) {
       const needle = args.q.toLowerCase();
       rows = rows.filter((r) => r.searchText.includes(needle));
     }
     // Stable ordering: age order not stored here, so order by slug for determinism.
     rows.sort((a, b) => a.slug.localeCompare(b.slug));
-    return { staff, items: rows };
+    return { staff: parentAudience ? false : staff, items: rows };
   },
 });
 
 // Fetch one item by slug (with its media). Non-staff can read published items only.
 export const getBySlug = query({
-  args: { slug: v.string() },
+  args: { slug: v.string(), audience: v.optional(v.literal('parent')) },
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) return null;
     const staff = await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'language_reviewer', 'evidence_reviewer', 'clinical_reviewer']);
+    const parentAudience = args.audience === 'parent';
     const item = await ctx.db
       .query('libraryContent')
       .withIndex('by_slug', (qq) => qq.eq('slug', args.slug))
       .unique();
     if (!item) return null;
-    if (!staff && !isPubliclyReadableStatus(item.clinicalStatus)) return { restricted: true };
+    if ((parentAudience || !staff) && !isPubliclyReadableStatus(item.clinicalStatus)) return { restricted: true };
     let mediaRows = await ctx.db
       .query('libraryMedia')
       .withIndex('by_content', (qq) => qq.eq('contentSlug', args.slug))
       .take(20);
-    if (!staff) {
+    if (parentAudience || !staff) {
       const entitlements = await resolveEntitlements(ctx, userId);
       const canViewPremium = entitlements.features.includes('premium_media');
       mediaRows = mediaRows
@@ -186,7 +189,7 @@ export const getBySlug = query({
       ...row,
       url: row.storageId ? await ctx.storage.getUrl(row.storageId) : row.url,
     })));
-    return { item, media, staff };
+    return { item, media, staff: parentAudience ? false : staff };
   },
 });
 
@@ -368,7 +371,7 @@ export const createStarterAnimationQueue = mutation({
 
 // Cross-type search (for the library search box).
 export const search = query({
-  args: { q: v.string(), type: v.optional(v.string()) },
+  args: { q: v.string(), type: v.optional(v.string()), audience: v.optional(v.literal('parent')) },
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) return [];
@@ -378,7 +381,7 @@ export const search = query({
     let rows = args.type
       ? await ctx.db.query('libraryContent').withIndex('by_type', (qq) => qq.eq('type', args.type as string)).collect()
       : await ctx.db.query('libraryContent').collect();
-    if (!staff) rows = rows.filter((r) => isPubliclyReadableStatus(r.clinicalStatus));
+    if (args.audience === 'parent' || !staff) rows = rows.filter((r) => isPubliclyReadableStatus(r.clinicalStatus));
     return rows
       .filter((r) => r.searchText.includes(needle))
       .slice(0, 50)
