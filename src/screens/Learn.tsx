@@ -26,7 +26,7 @@ const CATEGORY_LABELS: Record<string, { mm: string; en: string }> = {
   nutrition: { mm: 'အာဟာရ', en: 'Nutrition' },
   sleep: { mm: 'အိပ်စက်ခြင်း', en: 'Sleep' },
   safety: { mm: 'ဘေးကင်းရေး', en: 'Safety' },
-  screen_time: { mm: 'ဖုန်းနှင့် မျက်နှာပြင်သုံးချိန်', en: 'Screen time' },
+  screen_time: { mm: 'ဖန်သားပြင် ကြည့်ရှုချိန်', en: 'Screen time' },
   emotional_development: { mm: 'စိတ်ခံစားမှု', en: 'Emotional development' },
   social_skills: { mm: 'လူမှုဆက်ဆံရေး', en: 'Social skills' },
   reading: { mm: 'စာဖတ်ခြင်း', en: 'Reading' },
