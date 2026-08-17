@@ -145,4 +145,25 @@ describe('Myanmar copy quality', () => {
       expect(item?.searchText, slug + ' searchText').toContain(titleMm.toLowerCase());
     }
   });
+
+  it('keeps the safe record-level copy from reviewer language batch four', () => {
+    const expectedTitles = new Map<string, string>([
+      ['ms_7_9m_social_3', 'မျက်နှာဖုံးတမ်း ကစားခြင်းကို နှစ်သက်ပြီး ကြိုတင်မျှော်လင့်တတ်ခြင်း'],
+      ['ms_birth_2m_gross_motor_3', 'နိုးနေချိန်တွင် လက်နှင့် ခြေထောက်များကို တက်ကြွစွာ လှုပ်ရှားကန်ကျောက်ခြင်း'],
+    ]);
+
+    for (const [slug, titleMm] of expectedTitles) {
+      const item = CONTENT_SEED.find((entry) => entry.slug === slug);
+      expect(item, slug + ' must remain in the seed').toBeDefined();
+      expect(item?.titleMm, slug).toBe(titleMm);
+      expect(item?.searchText, slug + ' searchText').toContain(titleMm.toLowerCase());
+    }
+
+    const adhd = CONTENT_SEED.find((entry) => entry.slug === 'sn_adhd');
+    const autism = CONTENT_SEED.find((entry) => entry.slug === 'sn_autism');
+    expect(JSON.stringify(adhd?.data), 'sn_adhd copy').toContain('နေရာနှစ်ခုနှင့်အထက်');
+    expect(JSON.stringify(adhd?.data), 'sn_adhd copy').toContain('ခေတ္တ ကိုယ်လက်လှုပ်ရှား အနားယူချိန်များ');
+    expect(JSON.stringify(autism?.data), 'sn_autism copy').toContain('မိမိတို့နည်းလမ်းဖြင့် ကွဲပြားစွာ ဖော်ပြတတ်ကြခြင်း');
+    expect(JSON.stringify(autism?.data), 'sn_autism copy').toContain('နေ့စဉ် ကျွမ်းကျင်မှုစွမ်းရည်များ');
+  });
 });
