@@ -9,7 +9,12 @@ import { ConfirmDialog } from '../components/ConfirmDialog';
 import { useMutation, useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { clearPortalMode } from '../app/portalMode';
-import { isGooglePlayBuild } from '../app/platform';
+import {
+  effectivePlanKeyForCurrentPlatform,
+  isAppleAppStoreBuild,
+  isFeatureAvailableOnCurrentPlatform,
+  isNativeStoreBuild,
+} from '../app/platform';
 import { ReferralSection } from '../components/ReferralSection';
 
 const PLAN_LABELS = {
@@ -34,8 +39,10 @@ export function Profile() {
   const { signOut } = useAuthActions();
   const navigate = useNavigate();
   const subscription = useQuery(api.subscriptions.mine);
-  const familyEnabled = hasFamilyProfiles(subscription?.features);
-  const planKey = safePlanKey(subscription?.planKey);
+  const familyEnabled = hasFamilyProfiles(subscription?.features)
+    && isFeatureAvailableOnCurrentPlatform(subscription?.features ?? [], 'family_profiles');
+  const planKey = safePlanKey(effectivePlanKeyForCurrentPlatform(subscription?.planKey ?? 'free'));
+  const appStoreBuild = isAppleAppStoreBuild();
   const caregivers = useQuery(api.family.listCaregivers, familyEnabled ? {} : 'skip');
   const inviteCaregiver = useMutation(api.family.inviteCaregiver);
   const revokeCaregiver = useMutation(api.family.revokeCaregiver);
@@ -115,7 +122,7 @@ export function Profile() {
             + {locale === 'mm' ? 'ကလေး ထပ်ထည့်ရန်' : 'Add another child'}
           </Link>
         )}
-        {state.children.length > 0 && !familyEnabled && !isGooglePlayBuild() && (
+        {state.children.length > 0 && !familyEnabled && !isNativeStoreBuild() && (
           <Link to="/subscription" className="mt-3 inline-block text-sm font-semibold text-sky-deep">
             {locale === 'mm' ? 'ကလေးတစ်ဦးထက်ပို ထည့်ရန် Family အစီအစဉ် ကြည့်မည် →' : 'View Family to add more children →'}
           </Link>
@@ -137,7 +144,7 @@ export function Profile() {
                   ? 'Core features are available free.'
                   : 'Premium features are enabled for this account.'}
             </p>
-            {!isGooglePlayBuild() && (
+            {!isNativeStoreBuild() && (
               <Link to="/subscription" className="mt-3 inline-block rounded-pill bg-sky px-4 py-2 text-sm font-semibold text-white">
                 {locale === 'mm' ? 'အစီအစဉ်နှင့် ငွေပေးချေမှု ကြည့်ရန်' : 'View plans and payment'}
               </Link>
@@ -146,7 +153,7 @@ export function Profile() {
         )}
       </section>
 
-      <ReferralSection />
+      {!isNativeStoreBuild() && <ReferralSection />}
 
       {familyEnabled && !subscription?.inheritedFamilyAccess && (
         <section className="rounded-card border border-line bg-white p-4 shadow-card">
@@ -200,14 +207,14 @@ export function Profile() {
             {locale === 'mm' ? 'မြန်မာ' : 'English'}
           </button>
         </div>
-        <Link to="/favorites" className="flex items-center justify-between py-2 text-sky-deep">
+        {!appStoreBuild && <Link to="/favorites" className="flex items-center justify-between py-2 text-sky-deep">
           <span>♥ {locale === 'mm' ? 'သိမ်းထားသော လှုပ်ရှားမှုများ' : 'Saved activities'}</span>
           <span aria-hidden>→</span>
-        </Link>
-        <Link to="/offline" className="flex items-center justify-between py-2 text-sky-deep">
+        </Link>}
+        {!appStoreBuild && <Link to="/offline" className="flex items-center justify-between py-2 text-sky-deep">
           <span>{locale === 'mm' ? 'အင်တာနက်မရှိချိန် ဖတ်ရန် သိမ်းထားမှု' : 'Offline downloads'}</span>
           <span aria-hidden>→</span>
-        </Link>
+        </Link>}
         <Link to="/home?tour=parent" className="flex items-center justify-between py-2 text-sky-deep">
           <span>{locale === 'mm' ? 'အသုံးပြုနည်း ပြန်ကြည့်ရန်' : 'Replay app tour'}</span>
           <span aria-hidden>→</span>
@@ -223,6 +230,18 @@ export function Profile() {
         <h2 className="mb-2 font-semibold text-ink">{locale === 'mm' ? 'ကိုယ်ရေးလုံခြုံမှု' : 'Privacy'}</h2>
         <Link to="/terms" className="flex items-center justify-between py-2 text-sky-deep">
           <span>{locale === 'mm' ? 'ဝန်ဆောင်မှုစည်းမျဉ်းများ' : 'Terms of Service'}</span>
+          <span aria-hidden>→</span>
+        </Link>
+        <Link to="/support" className="flex items-center justify-between py-2 text-sky-deep">
+          <span>{locale === 'mm' ? 'အကူအညီနှင့် ဆက်သွယ်ရန်' : 'Help and support'}</span>
+          <span aria-hidden>→</span>
+        </Link>
+        <Link to="/privacy" className="flex items-center justify-between py-2 text-sky-deep">
+          <span>{locale === 'mm' ? 'ကိုယ်ရေးအချက်အလက် မူဝါဒ' : 'Privacy Policy'}</span>
+          <span aria-hidden>→</span>
+        </Link>
+        <Link to="/account-deletion" className="flex items-center justify-between py-2 text-sky-deep">
+          <span>{locale === 'mm' ? 'အကောင့်ဖျက်နည်း' : 'Account deletion information'}</span>
           <span aria-hidden>→</span>
         </Link>
         <button type="button" onClick={download}

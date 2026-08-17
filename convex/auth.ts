@@ -1,6 +1,7 @@
 import { convexAuth } from '@convex-dev/auth/server';
 import { Password } from '@convex-dev/auth/providers/Password';
 import Google from '@auth/core/providers/google';
+import Apple from '@auth/core/providers/apple';
 import type { EmailConfig } from '@auth/core/providers';
 import { validateAccountPassword } from '../src/domain/auth/passwordPolicy';
 
@@ -39,7 +40,12 @@ const passwordResetEmail: EmailConfig = {
 // tables (see authTables in schema.ts). Every data function derives the owner
 // from the authenticated identity — never from client input.
 export const { auth, signIn, signOut, store, isAuthenticated } = convexAuth({
-  providers: [Google({
+  providers: [Apple({
+    // Apple web OAuth uses a Services ID and a signed client-secret JWT.
+    // Both values live only in the Convex deployment environment.
+    clientId: process.env.AUTH_APPLE_ID,
+    clientSecret: process.env.AUTH_APPLE_SECRET,
+  }), Google({
     // These credentials live in the Convex deployment environment. Binding
     // the Auth.js-standard AUTH_GOOGLE_* names explicitly prevents an
     // undefined client ID while keeping secrets out of the frontend bundle.

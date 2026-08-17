@@ -6,6 +6,7 @@ import { useLocale } from '../app/LocaleContext';
 import { useAppState } from '../app/AppState';
 import { developmentalAgeMonths } from '../domain/age/age';
 import { ageGroup, resolveAgeGroup } from '../content/taxonomy';
+import { isAppleAppStoreBuild } from '../app/platform';
 
 type LearnView = 'recommended' | 'lesson' | 'guide' | 'story';
 
@@ -46,6 +47,7 @@ export function Learn() {
   const [view, setView] = useState<LearnView>('recommended');
   const [category, setCategory] = useState('');
   const online = useOnlineStatus();
+  const appStoreBuild = isAppleAppStoreBuild();
   const L = (mm: string, en: string) => locale === 'mm' ? mm : en;
 
   const ageMonths = activeChild
@@ -119,8 +121,10 @@ export function Learn() {
 
       {!online && (
         <section className="flex items-center justify-between gap-3 rounded-2xl bg-pastel-yellow/65 px-4 py-3 text-sm text-ink" role="status">
-          <span>{L('အင်တာနက်ပြတ်နေပါသည်။ ယခင်သိမ်းထားသောအကြောင်းအရာများကို ဖတ်နိုင်ပါသည်။', 'You are offline. Previously saved content remains available.')}</span>
-          <Link to="/offline" className="shrink-0 font-bold text-sky-deep underline">{L('သိမ်းထားသည်များ', 'Downloads')}</Link>
+          <span>{appStoreBuild
+            ? L('အင်တာနက်ပြတ်နေပါသည်။ ချိတ်ဆက်ပြီးနောက် ထပ်မံကြိုးစားပါ။', 'You are offline. Reconnect and try again.')
+            : L('အင်တာနက်ပြတ်နေပါသည်။ ယခင်သိမ်းထားသောအကြောင်းအရာများကို ဖတ်နိုင်ပါသည်။', 'You are offline. Previously saved content remains available.')}</span>
+          {!appStoreBuild && <Link to="/offline" className="shrink-0 font-bold text-sky-deep underline">{L('သိမ်းထားသည်များ', 'Downloads')}</Link>}
         </section>
       )}
 
@@ -193,7 +197,7 @@ export function Learn() {
             <h3 className="mt-3 font-bold text-ink">{L('ကိုက်ညီသောအကြောင်းအရာ မတွေ့ပါ', 'No matching resources found')}</h3>
             <p className="mt-2 text-sm leading-7 text-ink-soft">
               {view === 'guide' && currentAgeGroup
-                ? L(`${currentAgeGroup.labelMm} အတွက် ထုတ်ဝေပြီးသော လမ်းညွှန်များကို ပြင်ဆင်နေဆဲဖြစ်နိုင်ပါသည်။ အခြားအမျိုးအစားကို ကြည့်နိုင်ပါသည်။`, `Published guides for ${currentAgeGroup.labelEn} may still be in preparation. Try another section.`)
+                ? L(`${currentAgeGroup.labelMm} အတွက် ကိုက်ညီသော လမ်းညွှန် မတွေ့ပါ။ အခြားအမျိုးအစားကို ကြည့်နိုင်ပါသည်။`, `No guides match ${currentAgeGroup.labelEn}. Try another section.`)
                 : L('ရှာဖွေသည့်စကားလုံးကို ပြောင်းပါ သို့မဟုတ် အမျိုးအစားအားလုံးကို ပြန်ကြည့်ပါ။', 'Change the search term or reset the filters.')}
             </p>
             <button type="button" onClick={() => { setQuery(''); setCategory(''); setView('recommended'); }} className="mt-4 min-h-touch rounded-pill bg-sky-deep px-5 py-2 text-sm font-semibold text-white">
@@ -236,17 +240,17 @@ export function Learn() {
         )}
       </section>
 
-      <section className="grid gap-3 sm:grid-cols-2">
+      <section className={`grid gap-3 ${appStoreBuild ? '' : 'sm:grid-cols-2'}`}>
         <Link to="/activities" className="rounded-[26px] bg-mint-soft p-5 text-ink">
           <p className="text-xs font-bold uppercase tracking-[0.14em] text-sky-deep">{L('ဖတ်ပြီး လက်တွေ့လုပ်မယ်', 'Learn by doing')}</p>
           <h2 className="mt-2 font-bold">{L('အသက်အလိုက် လှုပ်ရှားမှုများ', 'Age-based activities')}</h2>
           <p className="mt-1 text-sm leading-6 text-ink-soft">{L('အိမ်တွင် လွယ်ကူစွာ အတူကစားနိုင်သော နည်းလမ်းများ။', 'Simple ways to play and learn together at home.')}</p>
         </Link>
-        <Link to="/offline" className="rounded-[26px] bg-lavender/35 p-5 text-ink">
+        {!appStoreBuild && <Link to="/offline" className="rounded-[26px] bg-lavender/35 p-5 text-ink">
           <p className="text-xs font-bold uppercase tracking-[0.14em] text-sky-deep">{L('အင်တာနက်မရှိလည်း ဖတ်နိုင်ရန်', 'Ready when offline')}</p>
           <h2 className="mt-2 font-bold">{L('အကြောင်းအရာများ သိမ်းထားရန်', 'Save learning resources')}</h2>
           <p className="mt-1 text-sm leading-6 text-ink-soft">{L('လိုအပ်သည့်အကြောင်းအရာကို ဖုန်းထဲသိမ်းပြီး နောက်မှဖတ်နိုင်ပါသည်။', 'Keep useful resources on the device for later.')}</p>
-        </Link>
+        </Link>}
       </section>
     </div>
   );

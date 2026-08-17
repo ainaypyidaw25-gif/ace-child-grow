@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
-import { isGooglePlayBuild } from '../app/platform';
+import { isFeatureAvailableOnCurrentPlatform, isNativeStoreBuild } from '../app/platform';
 
 export function PremiumGate({
   feature,
@@ -13,10 +13,10 @@ export function PremiumGate({
   children: ReactNode;
 }) {
   const { locale } = useLocale();
-  const googlePlayBuild = isGooglePlayBuild();
+  const nativeStoreBuild = isNativeStoreBuild();
   const subscription = useQuery(api.subscriptions.mine);
   if (subscription === undefined) return <p className="text-ink-soft" role="status">…</p>;
-  if (subscription.features.includes(feature)) return children;
+  if (isFeatureAvailableOnCurrentPlatform(subscription.features, feature)) return children;
   return (
     <section className="mx-auto max-w-xl overflow-hidden rounded-[30px] border border-sky/20 bg-white shadow-card">
       <div className="bg-ink px-6 py-8 text-white">
@@ -25,7 +25,7 @@ export function PremiumGate({
           {locale === 'mm' ? 'ဤဝန်ဆောင်မှုကို Premium ဖြင့် အသုံးပြုနိုင်ပါသည်' : 'This feature is available with Premium'}
         </h1>
         <p className="mt-3 text-sm leading-7 text-white/75">
-          {googlePlayBuild
+          {nativeStoreBuild
             ? locale === 'mm'
               ? 'ဤဝန်ဆောင်မှုသည် လက်ရှိအခမဲ့အစီအစဉ်တွင် မပါဝင်ပါ။'
               : 'This feature is not included in the current free plan.'
@@ -34,7 +34,7 @@ export function PremiumGate({
             : 'Try it free for 7 days without a card. You will return to Free automatically after the trial.'}
         </p>
       </div>
-      {!googlePlayBuild && <div className="p-6">
+      {!nativeStoreBuild && <div className="p-6">
         <Link
           to="/subscription"
           className="flex min-h-touch w-full items-center justify-center rounded-pill bg-sky-deep px-6 py-3 font-bold text-white"

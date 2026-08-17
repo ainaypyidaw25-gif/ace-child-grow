@@ -2,7 +2,9 @@ import { Link } from 'react-router-dom';
 import { useLocale } from '../app/LocaleContext';
 import type { Locale } from '../domain/types';
 
-type LegalPageProps = { kind: 'privacy' | 'account-deletion' | 'terms' };
+const APP_STORE_DISTRIBUTION = import.meta.env.VITE_DISTRIBUTION === 'app-store';
+
+type LegalPageProps = { kind: 'privacy' | 'account-deletion' | 'terms' | 'support' };
 
 const supportEmail = 'admin-ace@acegroup.com.mm';
 
@@ -13,6 +15,54 @@ const supportEmail = 'admin-ace@acegroup.com.mm';
 // regardless of the visitor's saved language choice.
 export function LegalPage({ kind }: LegalPageProps) {
   const { locale, setLocale } = useLocale();
+
+  if (kind === 'support') {
+    return (
+      <PublicLegalShell
+        title={locale === 'mm' ? 'ACE Child Grow အကူအညီ' : 'ACE Child Grow Support'}
+        locale={locale}
+        setLocale={setLocale}
+      >
+        {locale === 'mm' ? (
+          <>
+            <p>အကောင့်ဝင်ခြင်း၊ အကောင့်ပြန်လည်ရယူခြင်း၊ App အသုံးပြုခြင်း၊ ကိုယ်ရေးလုံခြုံမှု သို့မဟုတ် အကောင့်ဖျက်ခြင်းအတွက် <a href={`mailto:${supportEmail}?subject=ACE%20Child%20Grow%20support`} className="font-semibold text-sky-deep underline">{supportEmail}</a> သို့ ဆက်သွယ်နိုင်ပါသည်။</p>
+            <LegalSection title="အကောင့် ပြန်လည်ရယူရန်">
+              အကောင့်ဝင်စာမျက်နှာရှိ <strong>PIN/စကားဝှက် မေ့နေပါသလား?</strong> ကို ရွေးပြီး အီးမေးလ်သို့ ပို့ထားသော ၆ လုံးကုဒ်ကို ဖြည့်ပါ။ Google သို့မဟုတ် Apple ဖြင့် အကောင့်ဖွင့်ထားပါက မူလအသုံးပြုခဲ့သော ဝင်ရောက်နည်းကိုပင် ရွေးပါ။
+            </LegalSection>
+            <LegalSection title="ပြဿနာတင်ပြရာတွင် ပါဝင်သင့်သည်များ">
+              App version နှင့် build၊ ဖုန်းအမျိုးအစား၊ OS version၊ ဖြစ်ပွားသည့်အဆင့်များနှင့် ပြထားသော error စာသားကို ရေးပို့ပါ။ လိုအပ်ပါက ကိုယ်ရေးအချက်အလက် မပါသော screenshot တစ်ပုံ ပူးတွဲနိုင်ပါသည်။ PIN၊ စကားဝှက်၊ အတည်ပြုကုဒ်၊ ကလေး၏အမည်အပြည့်အစုံ၊ မွေးသက္ကရာဇ် သို့မဟုတ် ကျန်းမာရေးမှတ်တမ်းကို အီးမေးလ်ဖြင့် မပို့ပါနှင့်။
+            </LegalSection>
+            <LegalSection title="ကျန်းမာရေး အရေးပေါ်အခြေအနေ">
+              ACE Child Grow သည် အရေးပေါ်ဝန်ဆောင်မှု မဟုတ်သလို ရောဂါရှာဖွေခြင်း မပြုပါ။ အရေးပေါ်အခြေအနေတွင် App support ကို မစောင့်ဘဲ ဒေသဆိုင်ရာ အရေးပေါ်ဝန်ဆောင်မှု သို့မဟုတ် အရည်အချင်းပြည့်မီသော ကျန်းမာရေးပညာရှင်ထံ ချက်ချင်း ဆက်သွယ်ပါ။
+            </LegalSection>
+            <div className="flex flex-wrap gap-4">
+              <Link to="/privacy" className="font-semibold text-sky-deep underline">ကိုယ်ရေးအချက်အလက် မူဝါဒ</Link>
+              <Link to="/account-deletion" className="font-semibold text-sky-deep underline">အကောင့်ဖျက်နည်း</Link>
+            </div>
+            <Link to="/" className="inline-flex rounded-pill bg-sky-deep px-5 py-3 font-semibold text-white">ACE Child Grow သို့ ပြန်သွားမည်</Link>
+          </>
+        ) : (
+          <>
+            <p>For help with sign-in, account recovery, using the app, privacy, or account deletion, email <a href={`mailto:${supportEmail}?subject=ACE%20Child%20Grow%20support`} className="font-semibold text-sky-deep underline">{supportEmail}</a>.</p>
+            <LegalSection title="Recover your account">
+              Choose <strong>Forgot PIN/password?</strong> on the sign-in screen and enter the six-digit code sent to your email. If you created the account with Google or Apple, use the same sign-in method again.
+            </LegalSection>
+            <LegalSection title="What to include in a support request">
+              Include the app version and build, device model, OS version, steps that caused the problem, and the exact error shown. You may attach a screenshot that contains no personal information. Never email a PIN, password, verification code, child&rsquo;s full identity or birth date, or health records.
+            </LegalSection>
+            <LegalSection title="Medical emergencies">
+              ACE Child Grow is not an emergency service and does not diagnose. In an emergency, do not wait for app support; contact local emergency services or a qualified health professional immediately.
+            </LegalSection>
+            <div className="flex flex-wrap gap-4">
+              <Link to="/privacy" className="font-semibold text-sky-deep underline">Privacy Policy</Link>
+              <Link to="/account-deletion" className="font-semibold text-sky-deep underline">Account deletion</Link>
+            </div>
+            <Link to="/" className="inline-flex rounded-pill bg-sky-deep px-5 py-3 font-semibold text-white">Return to ACE Child Grow</Link>
+          </>
+        )}
+      </PublicLegalShell>
+    );
+  }
 
   if (kind === 'account-deletion') {
     return (
@@ -43,6 +93,29 @@ export function LegalPage({ kind }: LegalPageProps) {
   }
 
   if (kind === 'terms') {
+    if (APP_STORE_DISTRIBUTION) {
+      return (
+        <PublicLegalShell
+          title={locale === 'mm' ? 'ဝန်ဆောင်မှုစည်းမျဉ်းများ' : 'Terms of Service'}
+          locale={locale}
+          setLocale={setLocale}
+        >
+          {locale === 'mm' ? (
+            <>
+              <LegalSection title="ဝန်ဆောင်မှု အကြောင်း">ACE Child Grow သည် မိဘနှင့် စောင့်ရှောက်သူများအတွက် အထွေထွေ ဖွံ့ဖြိုးရေးနှင့် မှတ်တမ်းတင်ရေး အထောက်အကူဖြစ်သည်။ ရောဂါရှာဖွေခြင်း သို့မဟုတ် ဆရာဝန်၏ အကြံဉာဏ်ကို အစားထိုးခြင်း မပြုပါ။</LegalSection>
+              <LegalSection title="App Store version">ဤ App Store version တွင် ဖော်ပြထားသော မိဘဝန်ဆောင်မှုများကို အခမဲ့ အသုံးပြုနိုင်ပြီး App အတွင်း ဝယ်ယူမှု သို့မဟုတ် ပြင်ပငွေပေးချေမှု မရှိပါ။</LegalSection>
+              <LegalSection title="ဆက်သွယ်ရန်">မေးခွန်းများအတွက် <a href={`mailto:${supportEmail}`} className="font-semibold text-sky-deep underline">{supportEmail}</a> သို့ ဆက်သွယ်နိုင်ပါသည်။</LegalSection>
+            </>
+          ) : (
+            <>
+              <LegalSection title="About the service">ACE Child Grow provides general development guidance and record-keeping support for parents and caregivers. It does not diagnose or replace a doctor&rsquo;s advice.</LegalSection>
+              <LegalSection title="App Store version">The parent features shown in this App Store version are available free. It contains no in-app purchase or external payment flow.</LegalSection>
+              <LegalSection title="Contact">For questions, contact <a href={`mailto:${supportEmail}`} className="font-semibold text-sky-deep underline">{supportEmail}</a>.</LegalSection>
+            </>
+          )}
+        </PublicLegalShell>
+      );
+    }
     return (
       <PublicLegalShell
         title={locale === 'mm' ? 'ဝန်ဆောင်မှုစည်းမျဉ်းများ' : 'Terms of Service'}

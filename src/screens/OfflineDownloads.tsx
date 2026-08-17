@@ -39,13 +39,13 @@ export function OfflineDownloads() {
   const L = (mm: string, en: string) => (locale === 'mm' ? mm : en);
 
   // One query per readable type; each returns published rows only for a parent.
-  const guides = useQuery(api.library.listByType, { type: 'guide' });
-  const activities = useQuery(api.library.listByType, { type: 'activity' });
-  const lessons = useQuery(api.library.listByType, { type: 'lesson' });
-  const stories = useQuery(api.library.listByType, { type: 'story' });
-  const milestones = useQuery(api.library.listByType, { type: 'milestone' });
-  const specialNeeds = useQuery(api.library.listByType, { type: 'special_need' });
-  const printables = useQuery(api.library.listByType, { type: 'printable' });
+  const guides = useQuery(api.library.listByType, { type: 'guide', audience: 'parent' });
+  const activities = useQuery(api.library.listByType, { type: 'activity', audience: 'parent' });
+  const lessons = useQuery(api.library.listByType, { type: 'lesson', audience: 'parent' });
+  const stories = useQuery(api.library.listByType, { type: 'story', audience: 'parent' });
+  const milestones = useQuery(api.library.listByType, { type: 'milestone', audience: 'parent' });
+  const specialNeeds = useQuery(api.library.listByType, { type: 'special_need', audience: 'parent' });
+  const printables = useQuery(api.library.listByType, { type: 'printable', audience: 'parent' });
 
   const available = useMemo(() => {
     const groups = [guides, activities, lessons, stories, milestones, specialNeeds, printables];

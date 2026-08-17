@@ -6,8 +6,8 @@ const authSource = import.meta.glob('../../../convex/auth.ts', {
   eager: true,
 }) as Record<string, string>;
 
-describe('Google OAuth provider configuration', () => {
-  it('binds the Convex OAuth credentials using the deployment env convention', () => {
+describe('OAuth provider configuration', () => {
+  it('binds Google and Apple credentials using server-only deployment env names', () => {
     const source = Object.values(authSource)[0];
 
     expect(source).toBeDefined();
@@ -16,5 +16,10 @@ describe('Google OAuth provider configuration', () => {
     expect(source).toContain('clientSecret: process.env.AUTH_GOOGLE_SECRET');
     expect(source).not.toMatch(/process\.env\.GOOGLE_(?:ID|SECRET)/);
     expect(source).not.toContain('providers: [Google,');
+    expect(source).toContain("import Apple from '@auth/core/providers/apple'");
+    expect(source).toContain('Apple({');
+    expect(source).toContain('clientId: process.env.AUTH_APPLE_ID');
+    expect(source).toContain('clientSecret: process.env.AUTH_APPLE_SECRET');
+    expect(source).not.toMatch(/VITE_(?:AUTH_)?APPLE/);
   });
 });

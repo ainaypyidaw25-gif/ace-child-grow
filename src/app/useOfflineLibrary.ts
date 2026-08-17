@@ -102,7 +102,7 @@ export function useOfflineWithdrawal(): void {
  * reach the server again.
  */
 export function useLibraryContent(filter: LibraryFilter): LibraryResult {
-  const remote = useQuery(api.library.listByType, filter) as LibraryResult;
+  const remote = useQuery(api.library.listByType, { ...filter, audience: 'parent' }) as LibraryResult;
   const { records, loaded } = useDownloadedLibrary();
 
   return useMemo(() => {

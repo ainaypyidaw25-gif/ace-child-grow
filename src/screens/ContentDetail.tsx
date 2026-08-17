@@ -6,7 +6,6 @@ import { useLocale } from '../app/LocaleContext';
 import { useDownloadedLibrary } from '../app/useOfflineLibrary';
 import { readOfflineMediaObjectUrl } from '../app/offlineMediaStore';
 import type { OfflineMediaRecord } from '../domain/offline/offlineLibrary';
-import { ReviewBadge } from '../components/ReviewBadge';
 import { ActivityScene } from '../components/ActivityScene';
 import { activityIllustration } from '../content/activityIllustrations';
 import { guideIllustration } from '../content/guideIllustrations';
@@ -14,13 +13,14 @@ import { lessonIllustration } from '../content/lessonIllustrations';
 import { printableIllustration } from '../content/printableIllustrations';
 import { storyIllustration } from '../content/storyIllustrations';
 import { approvedPrintablePayload } from '../domain/content/printableAvailability';
+import { isAppleAppStoreBuild } from '../app/platform';
 
 type BL = { mm: string; en: string };
 
 export function ContentDetail() {
   const { slug = '' } = useParams();
   const { locale } = useLocale();
-  const remote = useQuery(api.library.getBySlug, { slug });
+  const remote = useQuery(api.library.getBySlug, { slug, audience: 'parent' });
   const { records, loaded } = useDownloadedLibrary();
   const offlineRecord = useMemo(
     () => records.find((record) => record.slug === slug),
@@ -85,6 +85,9 @@ export function ContentDetail() {
   }
 
   const { item, media } = res;
+  if (isAppleAppStoreBuild() && item.type === 'printable') {
+    return <p className="text-ink-soft">{locale === 'mm' ? 'မတွေ့ပါ။' : 'Not found.'}</p>;
+  }
   const mappedLessonIllustration = item.type === 'lesson'
     ? lessonIllustration(item.slug)
     : undefined;
@@ -138,7 +141,6 @@ export function ContentDetail() {
           <Link to="/library" className="text-sm text-sky-deep underline">
             {L('← စာကြည့်တိုက်', '← Library')}
           </Link>
-          <ReviewBadge published={item.clinicalStatus === 'published'} />
         </div>
         <h1 className="mt-1 text-xl font-bold text-sky-deep">{locale === 'mm' ? item.titleMm : item.titleEn}</h1>
         {(item.summaryMm || item.summaryEn) && (
@@ -442,14 +444,10 @@ export function ContentDetail() {
 
       <p className="rounded-lg bg-pastel-yellow/50 px-3 py-2 text-[11px] leading-relaxed text-ink-soft">
         {locale === 'mm'
-          ? item.clinicalStatus !== 'published'
-            ? 'စိစစ်ဆဲ — ဤအကြောင်းအရာကို ယခု ဖတ်ရှုအသုံးပြုနိုင်သော်လည်း ပညာရှင်များက ဆက်လက်စိစစ်ပြင်ဆင်နိုင်ပါသည်။ ရောဂါသတ်မှတ်ချက် သို့မဟုတ် တစ်ဦးချင်းဆေးဘက်ဆိုင်ရာ အကြံဉာဏ် မဟုတ်ပါ။'
-            : item.reviewScope === 'education'
+          ? item.reviewScope === 'education'
             ? 'သုံးသပ်မှုမှတ်တမ်း — ဤသာမန်ပညာပေးအကြောင်းအရာသည် လက်ရှိယုံကြည်ရသော ကိုးကားချက်များနှင့် ကိုက်ညီပြီး ပညာရေး၊ မြန်မာဘာသာ၊ အထောက်အထားနှင့် ဘေးကင်းရေးသုံးသပ်မှု ပြီးစီးထားပါသည်။ တစ်ဦးချင်းဆေးဘက်ဆိုင်ရာ အကြံဉာဏ် မဟုတ်ပါ။ စိုးရိမ်စရာရှိပါက သက်ဆိုင်ရာ ကျန်းမာရေးပညာရှင်နှင့် တိုင်ပင်ပါ။'
             : 'မှတ်ချက် — ဤအကြောင်းအရာသည် ယုံကြည်ရသော ကိုးကားချက်များအပေါ် အခြေခံထားသည့် အထွေထွေ မိဘလမ်းညွှန် ဖြစ်ပါသည်။ ဆေးဘက်ဆိုင်ရာ အကြံဉာဏ်အဖြစ် မယူဆသင့်ပါ။'
-          : item.clinicalStatus !== 'published'
-            ? 'Review ongoing — this content is available now, but professional reviewers may revise it. It is not a diagnosis or personal medical advice.'
-            : item.reviewScope === 'education'
+          : item.reviewScope === 'education'
             ? 'Review record: this general educational content aligns with current authoritative sources and has completed English, Myanmar, evidence and safety review. It is not individualized medical advice. Consult an appropriate health professional if concerned.'
             : `General evidence-based parent guidance, not medical advice. Source: ${item.source}`}
       </p>
