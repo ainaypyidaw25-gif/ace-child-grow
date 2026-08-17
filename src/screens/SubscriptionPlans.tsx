@@ -336,7 +336,7 @@ export function SubscriptionPlans() {
       {selectedPlan && (
         <section aria-labelledby="payment-title" className="overflow-hidden rounded-[30px] border border-line bg-white shadow-card">
           <header className="border-b border-line bg-cream px-5 py-6 sm:px-8">
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-sky-deep">{L('အခြားနည်းလမ်း', 'Alternative')} · {L('လက်ဖြင့်ငွေလွှဲခြင်း', 'Manual transfer')}</p>
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-sky-deep">{L('အခြားနည်းလမ်း', 'Alternative')} · {L('ဘဏ်အကောင့်သို့ တိုက်ရိုက်ငွေလွှဲခြင်း', 'Manual transfer')}</p>
             <h2 id="payment-title" className="mt-1 text-xl font-bold text-ink">{L('ငွေလွှဲအထောက်အထားဖြင့် ပေးချေပါ', 'Pay with transfer proof')}</h2>
             <ol className="mt-4 grid gap-3 text-sm text-ink-soft sm:grid-cols-3">
               {[L('အစီအစဉ်ရွေးရန်', 'Choose a plan'), L('သတ်မှတ်အကောင့်သို့ ငွေလွှဲရန်', 'Make the transfer'), L('ငွေလွှဲနံပါတ် ပို့ရန်', 'Submit the reference')].map((step, index) => <li key={step} className="flex gap-2"><span className="font-bold text-sky-deep">{index + 1}</span><span>{step}</span></li>)}

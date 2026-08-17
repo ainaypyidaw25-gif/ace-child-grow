@@ -84,7 +84,7 @@ export function OwnDisplayName({
           onChange={(event) => setName(event.target.value)}
           disabled={busy}
           maxLength={120}
-          placeholder={L('ဥပမာ — ဒေါ်လပြယ်ဝန်း', 'e.g. Daw La Pyae Wun')}
+          placeholder={L('ဥပမာ — ဒေါ်လပြည့်ဝန်း', 'e.g. Daw La Pyae Wun')}
           aria-label={L('သုံးသပ်မှတ်တမ်းတွင် ပြသမည့် သင့်အမည်', 'Your name on review records')}
           className="min-w-[12rem] flex-1 rounded-lg border border-line px-3 py-2 text-sm"
         />

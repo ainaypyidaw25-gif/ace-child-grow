@@ -227,7 +227,7 @@ export function Profile() {
         </Link>
         <button type="button" onClick={download}
           className="mb-2 w-full rounded-pill border border-line px-4 py-2 text-left">
-          ⬇️ {locale === 'mm' ? 'ကျွန်ုပ်၏ အချက်အလက် ထုတ်ယူရန်' : 'Export my data'}
+          ⬇️ {locale === 'mm' ? 'အချက်အလက်များ ထုတ်ယူရန်' : 'Export my data'}
         </button>
         <button type="button" onClick={() => setConfirming('account')}
           className="w-full rounded-pill border border-state-red px-4 py-2 text-left text-state-red-deep">

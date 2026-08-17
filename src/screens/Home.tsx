@@ -50,7 +50,7 @@ export function Home() {
     { to: '/directory', label: locale === 'mm' ? 'ဝန်ဆောင်မှုများ' : 'Support services', note: locale === 'mm' ? 'ကျောင်းနှင့် ပညာရှင်များ' : 'Schools and specialists', symbol: '⌖', tone: 'bg-pink/40 text-ink' },
     { to: '/weekly-plan', label: locale === 'mm' ? 'တစ်ပတ်စာအစီအစဉ်' : 'Weekly plan', note: locale === 'mm' ? 'ရက်အလိုက် ကစားစရာများ' : 'Day-by-day activities', symbol: '▦', tone: 'bg-lavender/30 text-ink' },
     { to: '/observations', label: t('journal.title'), note: locale === 'mm' ? 'နေ့စဉ်စောင့်ကြည့်မှတ်ချက်' : 'Daily behavior notes', symbol: '✎', tone: 'bg-mint-soft text-sky-deep' },
-    { to: '/milestone-gallery', label: t('milestoneGallery.title'), note: locale === 'mm' ? 'ဓာတ်ပုံထည့်၊ Social media မှာ မျှဝေ' : 'Add a photo, share on social media', symbol: '🏅', tone: 'bg-pastel-yellow/40 text-ink' },
+    { to: '/milestone-gallery', label: t('milestoneGallery.title'), note: locale === 'mm' ? 'ဓာတ်ပုံထည့်၊ လူမှုကွန်ရက်တွင် မျှဝေ' : 'Add a photo, share on social media', symbol: '🏅', tone: 'bg-pastel-yellow/40 text-ink' },
     { to: '/hope', label: t('hope.title'), note: locale === 'mm' ? 'အထူးလိုအပ်ချက် နားလည်မှု' : 'Understanding special needs', symbol: '◇', tone: 'bg-pink/40 text-ink' },
   ] as const;
 
