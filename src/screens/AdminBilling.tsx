@@ -102,7 +102,7 @@ export function AdminBilling() {
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <p className="truncate font-semibold text-ink">{member.name ?? member.email ?? L('အမည်မဖြည့်ထားပါ', 'Name not provided')}</p>
-                    <p className="mt-1 break-all text-sm text-ink-soft">{member.email ?? L('Email မရှိပါ', 'No email')}</p>
+                    <p className="mt-1 break-all text-sm text-ink-soft">{member.email ?? L('အီးမေးလ် မရှိပါ', 'No email')}</p>
                   </div>
                   <span className="shrink-0 rounded-pill bg-white px-2.5 py-1 text-xs font-semibold text-sky-deep">{memberPlanLabel(member.planKey)}</span>
                 </div>

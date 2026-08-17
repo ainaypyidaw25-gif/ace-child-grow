@@ -57,7 +57,7 @@ export function AdminDirectory() {
             if (editing) await update({ id: editing, ...payload } as Parameters<typeof update>[0]);
             else await create(payload as Parameters<typeof create>[0]);
             setForm(EMPTY); setEditing(null);
-            setMessage(L('သိမ်းပြီးပါပြီ။ မိဘများမြင်နိုင်ရန် “အတည်ပြုမည်” ကို နှိပ်ပါ။', 'Saved. Select Verify before parents can see it.'));
+            setMessage(L('သိမ်းပြီးပါပြီ။ မိဘများ မြင်တွေ့နိုင်ရန် “စစ်ဆေးပြီး အတည်ပြုမည်” ကို နှိပ်ပါ။', 'Saved. Select Verify before parents can see it.'));
           } catch (error) { console.error(error); setMessage(L('သိမ်း၍ မရပါ။', 'Unable to save.')); }
           finally { setBusy(false); }
         }}

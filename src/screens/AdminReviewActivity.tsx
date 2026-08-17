@@ -168,7 +168,7 @@ export function AdminReviewActivity() {
                     <dd className="inline font-semibold text-ink">{r.inReview}</dd>
                   </div>
                   <div>
-                    <dt className="inline">{L('အကြောင်းအရာ အမျိုးအစား', 'Items touched')}: </dt>
+                    <dt className="inline">{L('သုံးသပ်ခဲ့သော အကြောင်းအရာ', 'Items touched')}: </dt>
                     <dd className="inline font-semibold text-ink">{r.distinctItems}</dd>
                   </div>
                 </dl>

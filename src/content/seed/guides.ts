@@ -244,7 +244,7 @@ export const GUIDES: SeedItem[] = [
     materials: b('ကွဲပြားသော ဖွဲ့စည်းပုံ ကစားစရာ၊ မှန်။', 'Textured toys, mirror.'),
     safety: b('ပါးစပ်ထဲဝင်နိုင်သော ငယ်သောပစ္စည်းများ ရှောင်ပါ။', 'Avoid small choking-risk objects.'),
     commonMistakes: [b('ကစားစရာ များလွန်းခြင်း — အနည်းငယ်က ပို၍ ကောင်းသည်။', 'Too many toys — a few is better.')],
-    parentTips: [b('အဈေးကြီး ကစားစရာ မလို — သင်၏ တုံ့ပြန်မှုက အရေးအကြီးဆုံး။', 'No pricey toys needed — your interaction matters most.')],
+    parentTips: [b('ဈေးကြီးသော ကစားစရာ မလို — သင်၏ တုံ့ပြန်မှုက အရေးအကြီးဆုံး။', 'No pricey toys needed — your interaction matters most.')],
     faq: [{ q: b('ဖုန်း သို့မဟုတ် ရုပ်မြင်သံကြား ကြည့်စေလို့ ရပါသလား။', 'Is screen time okay?'), a: b('အသက် ၂ နှစ်အောက်တွင် မိသားစုနှင့် ဗီဒီယိုခေါ်ဆိုခြင်းမှလွဲ၍ ဖန်သားပြင်ကြည့်ချိန်ကို တတ်နိုင်သမျှ ရှောင်ရန် အကြံပြုထားသည်။ လူချင်း အပြန်အလှန်ကစားခြင်းက ပိုမို အကျိုးရှိသည်။', 'Screens are discouraged under 2; interactive play is far better.') }],
     redFlags: [b('ကစားစရာ/လူများကို လုံးဝ စိတ်မဝင်စားခြင်း။', 'No interest in toys or people at all.')],
     referral: b('စိုးရိမ်ပါက ကလေးကျန်းမာရေးဆရာဝန်နှင့် တိုင်ပင်ပါ။', 'If concerned, consult a pediatrician.'),

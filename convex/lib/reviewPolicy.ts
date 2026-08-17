@@ -129,27 +129,27 @@ export const REVIEW_REFUSAL_LABELS: Record<ReviewRefusalCode, { mm: string; en: 
     en: 'Your account does not have permission to record review decisions.',
   },
   role_may_not_review_area: {
-    mm: 'သင့်သုံးသပ်သူ အခန်းကနေ ဤအပိုင်းကို ဆုံးဖြတ်ခွင့် မရှိပါ။',
+    mm: 'သင့်သုံးသပ်သူ အခန်းကဏ္ဍအရ ဤအပိုင်းကို ဆုံးဖြတ်ခွင့် မရှိပါ။',
     en: 'Your reviewer role cannot decide this review area.',
   },
   display_name_required: {
-    mm: 'ဆုံးဖြတ်ချက် မှတ်တမ်းတင်မီ သင့်အကောင့်တွင် ပြသမည့်နာမည် ထည့်ပါ။',
+    mm: 'ဆုံးဖြတ်ချက် မှတ်တမ်းမတင်မီ သင့်အကောင့်တွင် ပြသမည့်အမည် ထည့်ပါ။',
     en: 'Add your display name in your admin profile before recording a decision.',
   },
   qualification_required: {
-    mm: 'ဤအပိုင်းကို အတည်ပြုမီ သင့်အကောင့်တွင် ကျွမ်းကျင်မှု အရည်အချင်း ထည့်ပါ။',
+    mm: 'ဤအပိုင်းကို အတည်မပြုမီ သင့်အကောင့်တွင် ပညာအရည်အချင်း ထည့်ပါ။',
     en: 'Add your professional qualification in your admin profile before approving this area.',
   },
   note_required: {
-    mm: 'ပြင်ဆင်ရန် တောင်းဆိုပါက ဘာပြင်ရမည်ကို မှတ်ချက်တွင် ရေးပါ။',
+    mm: 'ပြင်ဆင်ရန် တောင်းဆိုပါက မည်သည့်အချက်ကို ပြင်ဆင်ရမည်ဖြစ်ကြောင်း မှတ်ချက်တွင် ရေးပါ။',
     en: 'Write a note explaining what needs to change.',
   },
   content_not_found: {
-    mm: 'ဤအကြောင်းအရာ မတွေ့ရပါ။',
+    mm: 'ဤအကြောင်းအရာကို ရှာမတွေ့ပါ။',
     en: 'This content item no longer exists.',
   },
   stale_revision: {
-    mm: 'သင်ဖတ်ပြီးနောက် ဤအကြောင်းအရာ ပြောင်းလဲသွားပါပြီ။ မူကွဲအသစ်ကို ပြန်ဖတ်ပြီးမှ ဆုံးဖြတ်ပါ။',
+    mm: 'သင်ဖတ်ရှုပြီးနောက် ဤအကြောင်းအရာ ပြောင်းလဲသွားပါပြီ။ မူကွဲအသစ်ကို ပြန်လည်စစ်ဆေးပြီးမှ ဆုံးဖြတ်ပါ။',
     en: 'This content changed after you loaded it. Review the new revision before deciding.',
   },
 };
