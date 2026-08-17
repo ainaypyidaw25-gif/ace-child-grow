@@ -599,20 +599,20 @@ for (const [ageGroupKey, domain, n, title, observe, why, encouragement] of GAP_F
 // A few small, genuinely absent items remained, all at 13_18m.
 const UNICEF_GAP_FILL: GapFill[] = [
   ['13_18m', 'cognitive', 2,
-    b('ခန္ဓာကိုယ်အစိတ်အပိုင်းကို လက်ညှိုးထိုးပြနိုင်ခြင်း', 'Points to a body part when asked'),
-    b('"နှာခေါင်း ဘယ်မှာလဲ" ဟုမေးလျှင် မိမိကိုယ်ပေါ်ရှိ နှာခေါင်း၊ မျက်လုံး ကဲ့သို့ အစိတ်အပိုင်းတစ်ခုကို ညွှန်ပြနိုင်ပါသလား။', 'If asked "where\'s your nose?", can your child point to their own nose, eyes, or another familiar body part?'),
-    b('ခန္ဓာကိုယ်အစိတ်အပိုင်းများကို အမည်နှင့် ချိတ်ဆက်နိုင်ခြင်းသည် စကားလုံးနားလည်မှုနှင့် ကိုယ်ပိုင်ခန္ဓာကိုယ် အသိတို့ ပေါင်းစပ်ပြီး တိုးတက်လာကြောင်း ပြသည်။', 'Connecting a body part to its name shows growing language understanding paired with body awareness.'),
-    b('ရေချိုးချိန်၊ အဝတ်ဝတ်ချိန်တွင် "မျက်လုံးဘယ်မှာလဲ" ကဲ့သို့ ကစားရင်း မေးကြည့်ပါ။', 'Ask playfully during bath time or dressing — "where are your eyes?"')],
+    b('မေးမြန်းသည့်အခါ ခန္ဓာကိုယ်အစိတ်အပိုင်းများကို လက်ညှိုးထိုးပြနိုင်ခြင်း', 'Points to a body part when asked'),
+    b('"နှာခေါင်းလေး ဘယ်မှာလဲ" ဟု မေးသည့်အခါ ကလေးငယ်က မိမိ၏ နှာခေါင်း သို့မဟုတ် မျက်လုံးစသည့် လူသိများသော ခန္ဓာကိုယ်အစိတ်အပိုင်းတစ်ခုခုကို လက်ညှိုးထိုးပြနိုင်ပါသလား။', 'If asked "where\'s your nose?", can your child point to their own nose, eyes, or another familiar body part?'),
+    b('ခန္ဓာကိုယ်အစိတ်အပိုင်းများကို ၎င်းတို့၏ အမည်များနှင့် ချိတ်ဆက်နားလည်နိုင်ခြင်းသည် စကားလုံး နားလည်နိုင်စွမ်းနှင့် မိမိခန္ဓာကိုယ်အပေါ် သတိပြုနားလည်မှု ပေါင်းစပ်တိုးတက်လာခြင်းကို ဖော်ပြပါသည်။', 'Connecting a body part to its name shows growing language understanding paired with body awareness.'),
+    b('ရေချိုးချိန် သို့မဟုတ် အဝတ်အစား ဝတ်ဆင်ပေးချိန်များတွင် "မျက်လုံးလေး ဘယ်မှာလဲ"၊ "ပါးစပ်လေး ဘယ်မှာလဲ" စသည်ဖြင့် ပျော်ရွှင်စွာ ကစားရင်း မေးမြန်းပေးပါ။', 'Ask playfully during bath time or dressing — "where are your eyes?"')],
   ['13_18m', 'cognitive', 3,
-    b('လက်ဟန်ပြမပါဘဲ အဆင့်တစ်ခုတည်း ညွှန်ကြားချက်ကို လိုက်နာနိုင်ခြင်း', 'Follows a one-step instruction without a gesture'),
-    b('"လာပါ" ဒါမှမဟုတ် "ထိုင်ပါ" ကဲ့သို့ စကားလုံးသက်သက်ကို (လက်ညွှန်ပြခြင်း မပါဘဲ) လိုက်နာနိုင်ပါသလား။', 'Can your child follow a simple word-only instruction like "come here" or "sit down," without you pointing or gesturing?'),
-    b('လက်ဟန်ပြမပါဘဲ စကားလုံးကိုသာ နားလည်ခြင်းသည် ဘာသာစကား နားလည်မှု ပိုမိုစစ်မှန်စွာ ဖွံ့ဖြိုးလာကြောင်း ပြသည်။', 'Understanding words alone, without a gesture as a hint, shows more genuine language comprehension.'),
-    b('ရိုးရှင်းသော ညွှန်ကြားချက်ကို လက်ဟန်မပြဘဲ ပထမဆုံး စမ်းကြည့်ပါ။', 'Try giving a simple instruction with words alone first, before adding a gesture.')],
+    b('လက်ဟန်ခြေဟန် မပါဘဲ စကားလုံးသက်သက်ဖြင့် ပေးသော ရိုးရှင်းသည့် ညွှန်ကြားချက်ကို လိုက်နာနိုင်ခြင်း', 'Follows a one-step instruction without a gesture'),
+    b('လက်ညှိုးထိုးပြခြင်း သို့မဟုတ် လက်ဟန်ပြခြင်း မပါဘဲ "ဒီကိုလာပါ" သို့မဟုတ် "ထိုင်ပါ" ကဲ့သို့သော စကားလုံးသက်သက်ဖြင့် ပေးသည့် ညွှန်ကြားချက်ကို ကလေးငယ်က လိုက်နာနိုင်ပါသလား။', 'Can your child follow a simple word-only instruction like "come here" or "sit down," without you pointing or gesturing?'),
+    b('လက်ဟန်ခြေဟန် အကူအညီမပါဘဲ စကားသံသက်သက်ကို နားလည်နိုင်ခြင်းသည် ဘာသာစကား နားလည်သဘောပေါက်နိုင်စွမ်း ပိုမိုခိုင်မာတိုးတက်လာကြောင်း ဖော်ပြသည်။', 'Understanding words alone, without a gesture as a hint, shows more genuine language comprehension.'),
+    b('ရိုးရှင်းသော ညွှန်ကြားချက်များ ပေးသည့်အခါ လက်ဟန်မပြမီ စကားလုံးသက်သက်ဖြင့် ဦးစွာ ပြောပြပြီး စောင့်ကြည့်ပါ။', 'Try giving a simple instruction with words alone first, before adding a gesture.')],
   ['13_18m', 'emotional', 1,
-    b('စိတ်ပျက်သောအခါ စိတ်ဆိုးထွက်တတ်ခြင်း', 'Has temper tantrums when frustrated'),
-    b('လိုအပ်ချက်ကို စကားဖြင့် မပြောနိုင်သေးသောအခါ ငိုကြွေးခြင်း၊ ကြမ်းပေါ်လှဲခြင်းကဲ့သို့ ပြင်းထန်စွာ ခံစားမှုပြသပါသလား။', 'When unable to express a need in words, does your child show intense frustration — crying hard, or dropping to the floor?'),
-    b('ဤအရွယ်တွင် ဆန္ဒနှင့် စကားပြောနိုင်စွမ်း မကိုက်ညီသေးသဖြင့် စိတ်ဆိုးထွက်ခြင်းသည် အလွန်ပုံမှန် ဖြစ်ပြီး ကိုယ်ကျင့်တရား ချို့ယွင်းခြင်း မဟုတ်ပါ။', 'A mismatch between wants and words makes tantrums very normal at this age — not a sign of poor character.'),
-    b('ငြိမ်သက်စွာ အနီးတွင်နေပြီး ဘေးကင်းလုံခြုံအောင် ထားကာ ခံစားချက်ကို အမည်တပ်ပေးပါ ("စိတ်ပျက်နေတာ သိတယ်")။', 'Stay calm and nearby, keep your child safe, and name the feeling ("I see you\'re frustrated").')],
+    b('စိတ်တိုင်းမကျသည့်အခါ ဂျီကျဒေါသထွက်တတ်ခြင်း', 'Has temper tantrums when frustrated'),
+    b('မိမိလိုလားချက်ကို စကားဖြင့် မဖော်ပြနိုင်သေးသည့်အခါ ကလေးငယ်က ပြင်းပြင်းထန်ထန် ငိုကြွေးခြင်း သို့မဟုတ် ကြမ်းပြင်ပေါ် လှဲချခြင်းကဲ့သို့ စိတ်တိုင်းမကျမှုကို ဖော်ပြတတ်ပါသလား။', 'When unable to express a need in words, does your child show intense frustration — crying hard, or dropping to the floor?'),
+    b('ဤအရွယ်တွင် ကလေး၏ စိတ်ဆန္ဒနှင့် စကားဖြင့် ဖော်ပြနိုင်စွမ်းအကြား ကွာဟချက် ရှိနေသေးသဖြင့် စိတ်ဆိုးဒေါသထွက်ခြင်းသည် အလွန်ပုံမှန်ဖြစ်သော ဖွံ့ဖြိုးမှုအပိုင်းအခြားတစ်ခုဖြစ်ပြီး ကလေး၏ အကျင့်စာရိတ္တ မကောင်းခြင်း မဟုတ်ပါ။', 'A mismatch between wants and words makes tantrums very normal at this age — not a sign of poor character.'),
+    b('ကလေး ဒေါသထွက်နေချိန်တွင် မိဘက တည်ငြိမ်စွာ အနားတွင် နေပေးပါ။ ဘေးကင်းအောင် ထိန်းသိမ်းပေးပြီး ကလေး၏ ခံစားချက်ကို အသိအမှတ်ပြု နားလည်ပေးပါ (ဥပမာ — "သမီး/သား စိတ်တိုင်းမကျဖြစ်နေတာ မေမေ/ဖေဖေ သိပါတယ်")။', 'Stay calm and nearby, keep your child safe, and name the feeling ("I see you\'re frustrated").')],
 ];
 
 const UNICEF_GAP_FILL_EVIDENCE: Record<string, string> = {
@@ -639,10 +639,10 @@ const FINAL_GAP_FILL: GapFill[] = [
     b('ဒီလုပ်ဆောင်ချက်သည် လက်နှစ်ဖက် ညှိနှိုင်းအသုံးပြုနိုင်မှုနှင့် အသံနှင့် လှုပ်ရှားမှု ဆက်စပ်နေကြောင်း စူးစမ်းလေ့လာခြင်း ဖြစ်သည်။', 'This action shows two-handed coordination and early exploration of cause and effect through sound.'),
     b('အသံထွက်တတ်သော ဘေးကင်းသည့် ကစားစရာနှစ်ခုကို ပေးထားပါ။', 'Offer two safe toys that make a sound when tapped together.')],
   ['13_18m', 'fine_motor', 2,
-    b('စာအုပ် စာမျက်နှာများကို လှန်နိုင်ခြင်း', 'Turns the pages of a book'),
-    b('ထူသော ရွက်ဖုံးစာအုပ်ကို စာမျက်နှာ တစ်ခြမ်းချင်းစီ (ရော၍ ဖြစ်စေ) လှန်ကြည့်ပါသလား။', 'Can your child turn the pages of a board book, even several at a time?'),
-    b('စာမျက်နှာလှန်ခြင်းသည် လက်ချောင်းငယ် ထိန်းချုပ်မှုနှင့် စာအုပ်ကို ကိုယ်တိုင် စူးစမ်းလိုသော စိတ်ကို ပြသည်။', 'Page-turning shows finger control and a growing interest in exploring books independently.'),
-    b('ထူထောင့်ပြီး ဆွဲမပြတ်တတ်သော ရွက်ဖုံးစာအုပ်များကို ပေးပြီး ကိုယ်တိုင် လှန်ခွင့်ပေးပါ။', 'Offer sturdy board books and let your child try turning the pages themselves.')],
+    b('စာအုပ် စာမျက်နှာများကို လှန်လှောကြည့်နိုင်ခြင်း', 'Turns the pages of a book'),
+    b('ဂျပ်ထူ ကလေးစာအုပ်များကို ကလေးငယ်က စာမျက်နှာ တစ်ရွက်ချင်းစီဖြစ်စေ၊ အများအပြားဖြစ်စေ ကိုယ်တိုင် လှန်လှောကြည့်ပါသလား။', 'Can your child turn the pages of a board book, even several at a time?'),
+    b('စာမျက်နှာများကို လှန်လှောနိုင်ခြင်းသည် လက်ချောင်းငယ်များ ထိန်းချုပ်နိုင်စွမ်းနှင့် စာအုပ်များကို ကိုယ်တိုင် စူးစမ်းလေ့လာလိုစိတ် တိုးတက်လာခြင်းကို ဖော်ပြပါသည်။', 'Page-turning shows finger control and a growing interest in exploring books independently.'),
+    b('အလွယ်တကူ မစုတ်ပြဲနိုင်သော ဂျပ်ထူ ကလေးပုံပြင်စာအုပ်များကို ပေးထားပြီး စာမျက်နှာများကို ကလေးငယ် ကိုယ်တိုင် လှန်လှောခွင့် ပြုပါ။', 'Offer sturdy board books and let your child try turning the pages themselves.')],
 ];
 
 const FINAL_GAP_FILL_EVIDENCE: Record<string, string> = {
