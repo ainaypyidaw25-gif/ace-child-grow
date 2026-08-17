@@ -51,7 +51,7 @@ export function AdminReviewQueue() {
       </h1>
       <p className="rounded-lg bg-pastel-yellow/60 px-3 py-2 text-sm text-ink">
         {locale === 'mm'
-          ? `စောင့်ဆိုင်းဆဲ ${pending} ခု။ Approve/Publish မလုပ်မချင်း မိဘတွေဆီ မရောက်ပါဘူး။`
+          ? `စောင့်ဆိုင်းဆဲ ${pending} ခု။ ထုတ်ဝေခြင်း (Publish) မပြုလုပ်မချင်း မိဘများထံ မရောက်ရှိပါ။`
           : `${pending} awaiting review. Nothing reaches parents until published.`}
         {!staff && ` · ${t('admin.staffOnly')}`}
       </p>
