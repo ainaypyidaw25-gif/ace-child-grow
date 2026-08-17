@@ -27,7 +27,7 @@ export function AdminDirectory() {
   const [message, setMessage] = useState('');
   const L = (mm: string, en: string) => locale === 'mm' ? mm : en;
 
-  if (data === undefined) return <p className="text-ink-soft">…</p>;
+  if (data === undefined) return <p role="status" aria-live="polite" className="text-ink-soft">…</p>;
   if (!data.allowed) return <p className="rounded-card bg-white p-4">{L('Owner သာ စီမံနိုင်ပါသည်။', 'Only the owner can manage this directory.')}</p>;
 
   const field = (key: keyof FacilityForm, labelMm: string, labelEn: string, required = false) => (
@@ -74,7 +74,7 @@ export function AdminDirectory() {
           <button disabled={busy} className="rounded-pill bg-sky px-5 py-2 font-semibold text-white disabled:opacity-50">{busy ? '…' : L('သိမ်းမည်', 'Save')}</button>
           {editing && <button type="button" onClick={() => { setEditing(null); setForm(EMPTY); }} className="rounded-pill border border-line px-4 py-2">{L('မပြင်တော့ပါ', 'Cancel')}</button>}
         </div>
-        {message && <p className="text-sm text-ink-soft">{message}</p>}
+        {message && <p role="status" className="text-sm text-ink-soft">{message}</p>}
       </form>
 
       <ul className="space-y-3">

@@ -116,6 +116,10 @@ describe('review refusal', () => {
       expect(REVIEW_REFUSAL_LABELS[code]?.mm, code).toBeTruthy();
       expect(REVIEW_REFUSAL_LABELS[code]?.en, code).toBeTruthy();
     }
+    expect(REVIEW_REFUSAL_LABELS.qualification_required.mm).toBe(
+      'ဤအပိုင်းကို အတည်မပြုမီ သင့်အကောင့်တွင် သက်ဆိုင်ရာ ပညာရပ်ဆိုင်ရာ အရည်အချင်းကို ထည့်ပါ။',
+    );
+    expect(REVIEW_REFUSAL_LABELS.qualification_required.en).toContain('professional qualification');
   });
 });
 
