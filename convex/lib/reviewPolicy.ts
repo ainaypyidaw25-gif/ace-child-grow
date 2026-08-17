@@ -137,7 +137,7 @@ export const REVIEW_REFUSAL_LABELS: Record<ReviewRefusalCode, { mm: string; en: 
     en: 'Add your display name in your admin profile before recording a decision.',
   },
   qualification_required: {
-    mm: 'ဤအပိုင်းကို အတည်မပြုမီ သင့်အကောင့်တွင် ပညာအရည်အချင်း ထည့်ပါ။',
+    mm: 'ဤအပိုင်းကို အတည်မပြုမီ သင့်အကောင့်တွင် သက်ဆိုင်ရာ ပညာရပ်ဆိုင်ရာ အရည်အချင်းကို ထည့်ပါ။',
     en: 'Add your professional qualification in your admin profile before approving this area.',
   },
   note_required: {

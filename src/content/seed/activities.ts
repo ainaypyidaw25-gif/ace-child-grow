@@ -180,7 +180,7 @@ export const ACTIVITIES: SeedItem[] = [
     materials: b('ရောင်စုံခဲတံ၊ စက္ကူ။', 'Colored pencils and paper.'),
     setup: b('နာမည်ကို အကြီးဖြင့် ရေးပြထားပါ။', 'Write the child’s name in large letters.'),
     instructions: [b('စာလုံးများအပေါ်မှ ထပ်၍ ကူးရေးစေပါ။', 'Let the child trace over the letters.')],
-    safety: b('ချွန်ထက်သော ခဲတံထိပ်များကို သတိပြုပါ။', 'Watch sharp pencil tips.'),
+    safety: b('ရောင်စုံခဲတံများ၏ ချွန်ထက်သော ခဲသားထိပ်များကို သတိပြုပါ။', 'Watch sharp pencil tips.'),
     indoor: true, outdoor: false, oneChild: true, group: true, parentChild: true,
     outcomes: [b('ရေးသားမှု အခြေခံ၊ အက္ခရာသိမှု။', 'Pre-writing and letter recognition.')],
   }),

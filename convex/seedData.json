@@ -4030,7 +4030,7 @@
         }
       ],
       "safety": {
-        "mm": "ချွန်ထက်သော ခဲတံထိပ်များကို သတိပြုပါ။",
+        "mm": "ရောင်စုံခဲတံများ၏ ချွန်ထက်သော ခဲသားထိပ်များကို သတိပြုပါ။",
         "en": "Watch sharp pencil tips."
       },
       "indoor": true,
@@ -4065,7 +4065,7 @@
     "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
     "version": 1,
     "clinicalStatus": "clinical_review",
-    "searchText": "နာမည် ကူးရေးကစားခြင်း name tracing play မိမိနာမည်ကို ကူးရေး၍ အစောပိုင်း ရေးသားမှု အခြေခံကို လေ့ကျင့်ခြင်း။ practice pre-writing by tracing one’s name. fine_motor school_readiness 5y fine_motor school_readiness ရောင်စုံခဲတံ၊ စက္ကူ။ colored pencils and paper. နာမည်ကို အကြီးဖြင့် ရေးပြထားပါ။ write the child’s name in large letters. စာလုံးများအပေါ်မှ ထပ်၍ ကူးရေးစေပါ။ let the child trace over the letters. ချွန်ထက်သော ခဲတံထိပ်များကို သတိပြုပါ။ watch sharp pencil tips. ရေးသားမှု အခြေခံ၊ အက္ခရာသိမှု။ pre-writing and letter recognition."
+    "searchText": "နာမည် ကူးရေးကစားခြင်း name tracing play မိမိနာမည်ကို ကူးရေး၍ အစောပိုင်း ရေးသားမှု အခြေခံကို လေ့ကျင့်ခြင်း။ practice pre-writing by tracing one’s name. fine_motor school_readiness 5y fine_motor school_readiness ရောင်စုံခဲတံ၊ စက္ကူ။ colored pencils and paper. နာမည်ကို အကြီးဖြင့် ရေးပြထားပါ။ write the child’s name in large letters. စာလုံးများအပေါ်မှ ထပ်၍ ကူးရေးစေပါ။ let the child trace over the letters. ရောင်စုံခဲတံများ၏ ချွန်ထက်သော ခဲသားထိပ်များကို သတိပြုပါ။ watch sharp pencil tips. ရေးသားမှု အခြေခံ၊ အက္ခရာသိမှု။ pre-writing and letter recognition."
   },
   {
     "category": "understanding_development",

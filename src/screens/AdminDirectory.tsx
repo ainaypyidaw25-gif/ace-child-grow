@@ -57,7 +57,7 @@ export function AdminDirectory() {
             if (editing) await update({ id: editing, ...payload } as Parameters<typeof update>[0]);
             else await create(payload as Parameters<typeof create>[0]);
             setForm(EMPTY); setEditing(null);
-            setMessage(L('သိမ်းပြီးပါပြီ။ မိဘများ မြင်တွေ့နိုင်ရန် “စစ်ဆေးပြီး အတည်ပြုမည်” ကို နှိပ်ပါ။', 'Saved. Select Verify before parents can see it.'));
+            setMessage(L('သိမ်းပြီးပါပြီ။ မိဘများ မြင်တွေ့နိုင်ရန် “စစ်ဆေးအတည်ပြုပြီး ထုတ်ဝေမည်” ကို နှိပ်ပါ။', 'Saved. Select Verify before parents can see it.'));
           } catch (error) { console.error(error); setMessage(L('သိမ်း၍ မရပါ။', 'Unable to save.')); }
           finally { setBusy(false); }
         }}
@@ -91,7 +91,7 @@ export function AdminDirectory() {
                 setForm({ country: row.country, region: row.region ?? '', township: row.township ?? '', name: row.name, facilityType: row.facilityType ?? '', phone: row.phone ?? '', address: row.address ?? '', services: row.services ?? '', source: row.source ?? '' });
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }} className="rounded-pill border border-line px-3 py-1 text-sm">{L('ပြင်မည်', 'Edit')}</button>
-              {!row.isActive ? <button type="button" onClick={() => void verify({ id: row._id })} className="rounded-pill bg-mint px-3 py-1 text-sm font-semibold text-white">{L('စစ်ဆေးပြီး အတည်ပြုမည်', 'Verify and publish')}</button>
+              {!row.isActive ? <button type="button" onClick={() => void verify({ id: row._id })} className="rounded-pill bg-mint px-3 py-1 text-sm font-semibold text-white">{L('စစ်ဆေးအတည်ပြုပြီး ထုတ်ဝေမည်', 'Verify and publish')}</button>
                 : <button type="button" onClick={() => void deactivate({ id: row._id })} className="rounded-pill border border-state-red px-3 py-1 text-sm text-state-red-deep">{L('ပိတ်ထားမည်', 'Deactivate')}</button>}
             </div>
           </li>
