@@ -73,6 +73,12 @@ describe('evidence and child-safety content corrections', () => {
     expect(nameWritingSafety.mm).toBe('ရောင်စုံခဲတံများ၏ ချွန်ထက်သော ခဲသားထိပ်များကို သတိပြုပါ။');
     expect(nameWritingSafety.en).toBe('Watch sharp pencil tips.');
 
+    const boardBook = bySlug('act_board_book_point');
+    expect(boardBook.titleMm).toBe('စာမျက်နှာထူ ရုပ်ပုံစာအုပ်ဖြင့် လက်ညှိုးထိုးကစားခြင်း');
+    expect(boardBook.summaryMm).toBe(
+      'စာမျက်နှာထူ ရုပ်ပုံစာအုပ်ကို အတူကြည့်ရင်း ပုံများကို လက်ညှိုးထိုး၍ အမည်ခေါ်ပေးခြင်း။',
+    );
+
     const angry = bySlug('st_when_i_feel_angry');
     expect(JSON.stringify(angry.data)).toContain('ဖြည်းဖြည်း နက်နက် အသက်ရှူ');
     expect(JSON.stringify(angry.data)).not.toContain('အသက်ပြင်းပြင်း');
