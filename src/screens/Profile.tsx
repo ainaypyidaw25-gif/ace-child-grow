@@ -212,7 +212,7 @@ export function Profile() {
           <span aria-hidden>→</span>
         </Link>}
         {!appStoreBuild && <Link to="/offline" className="flex items-center justify-between py-2 text-sky-deep">
-          <span>{locale === 'mm' ? 'အင်တာနက်မရှိချိန် ဖတ်ရန် သိမ်းထားမှု' : 'Offline downloads'}</span>
+          <span>{locale === 'mm' ? 'အင်တာနက်မရှိချိန် ဖတ်ရှုရန် သိမ်းထားသည့် အကြောင်းအရာများ' : 'Offline downloads'}</span>
           <span aria-hidden>→</span>
         </Link>}
         <Link to="/home?tour=parent" className="flex items-center justify-between py-2 text-sky-deep">

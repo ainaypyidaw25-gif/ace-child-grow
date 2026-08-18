@@ -18,6 +18,11 @@ import {
   DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID,
   DUPLICATE_MILESTONE_SLUGS,
 } from '../../../convex/lib/contentRetirements';
+import {
+  BURMESE_COPY_AUDIT_HELD_SLUGS,
+  BURMESE_COPY_AUDIT_RELEASE_ID,
+  BURMESE_COPY_AUDIT_TARGETS,
+} from '../../../convex/lib/burmeseCopyAuditRelease';
 
 // Resolved from this file, not the runner's cwd, so the guard cannot silently
 // pass (or fail) because of where vitest was invoked from.
@@ -70,6 +75,18 @@ describe('seed generation', () => {
       expect(slugs?.every((slug) => seedPayload().some((item) => item.slug === slug))).toBe(true);
     }
     expect(publishedErrataSlugs('unknown-release')).toBeNull();
+  });
+
+  it('keeps the guarded Burmese production release exact and separate from specialist review', () => {
+    expect(BURMESE_COPY_AUDIT_RELEASE_ID).toBe('2026-08-18-burmese-copy-audit');
+    expect(BURMESE_COPY_AUDIT_TARGETS).toHaveLength(25);
+    expect(new Set(BURMESE_COPY_AUDIT_TARGETS.map((target) => target.slug)).size).toBe(25);
+    expect(BURMESE_COPY_AUDIT_HELD_SLUGS).toEqual(['ms_birth_2m_sleep_1']);
+    for (const target of BURMESE_COPY_AUDIT_TARGETS) {
+      expect(seedPayload().some((item) => item.slug === target.slug), target.slug).toBe(true);
+      expect(target.expectedReviewRevision).toBeGreaterThan(0);
+      expect(target.expectedUpdatedAt).toBeGreaterThan(0);
+    }
   });
 
   it('has unique slugs across the whole payload', () => {

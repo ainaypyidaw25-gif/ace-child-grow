@@ -8,7 +8,7 @@ const b = (mm: string, en: string) => ({ mm, en });
 export const STORIES: SeedItem[] = [
   story({
     slug: 'little_seed', storyType: 'picture', ageGroupKey: '2y',
-    title: b('မျိုးစေ့ လေးရဲ့ ခရီး', 'The Little Seed’s Journey'),
+    title: b('မျိုးစေ့လေးရဲ့ ခရီးစဉ်', 'The Little Seed’s Journey'),
     summary: b('မျိုးစေ့ငယ်လေးက မိုးရေ၊ နေရောင်ဖြင့် တဖြည်းဖြည်း ကြီးထွားလာပုံ။', 'A tiny seed slowly grows with rain and sun.'),
     readingLevel: 'Beginner', readingMinutes: 3,
     vocabulary: [b('မျိုးစေ့', 'seed'), b('မိုးရေ', 'rain'), b('နေရောင်', 'sunlight')],
@@ -48,7 +48,7 @@ export const STORIES: SeedItem[] = [
   }),
   story({
     slug: 'goodnight_moon_friend', storyType: 'bedtime', ageGroupKey: '2y',
-    title: b('ကောင်းသောည လရဲ့ လေး', 'Goodnight, Little Moon'),
+    title: b('ကောင်းသောညပါ၊ လမင်းလေးရေ', 'Goodnight, Little Moon'),
     summary: b('ည အိပ်ရာဝင်ချိန် ငြိမ်သက်စေသော ပုံပြင်လေး။', 'A calming bedtime story.'),
     readingLevel: 'Beginner', readingMinutes: 3,
     vocabulary: [b('ည', 'night'), b('လ', 'moon'), b('အိပ်', 'sleep')],
@@ -68,8 +68,8 @@ export const STORIES: SeedItem[] = [
   }),
   story({
     slug: 'visit_to_doctor', storyType: 'hospital', ageGroupKey: '3y',
-    title: b('ဆရာဝန် ဆီ သွားခြင်း', 'A Visit to the Doctor'),
-    summary: b('ဆရာဝန်ပြခြင်းကို ကြောက်စိတ်မဖြစ်စေဘဲ ရင်းနှီးစေသော ပုံပြင်။', 'A reassuring story about seeing the doctor.'),
+    title: b('ဆရာဝန်ထံ သွားရောက်ပြသခြင်း', 'A Visit to the Doctor'),
+    summary: b('ဆရာဝန်ပြသခြင်းကို မကြောက်ဘဲ ရင်းနှီးကျွမ်းဝင်စေမည့် ပုံပြင်လေး။', 'A reassuring story about seeing the doctor.'),
     readingLevel: 'Beginner', readingMinutes: 3,
     vocabulary: [b('ဆရာဝန်', 'doctor'), b('ကျန်းမာ', 'healthy'), b('စစ်ဆေး', 'check')],
     body: b('ကိုကိုက ဆရာဝန်ဆီ သွားတယ်။ ဆရာဝန်က ပြုံး၍ “မင်္ဂလာပါ” လို့ နှုတ်ဆက်တယ်။ နားကို ကြည့်၊ ရင်ဘတ်ကို နားထောင်တယ်။ နာကျင်တာ မရှိဘူး။ ကိုကို ကျန်းမာနေတယ်လို့ ဆရာဝန်က ပြောတယ်။ ကိုကို ရယ်ပြီး ပြန်လာတယ်။', 'Ko-Ko goes to the doctor. The doctor smiles and says hello. She looks in his ears and listens to his chest. It does not hurt. The doctor says Ko-Ko is healthy. Ko-Ko smiles and goes home.'),
@@ -78,8 +78,8 @@ export const STORIES: SeedItem[] = [
   }),
   story({
     slug: 'first_day_school', storyType: 'school', ageGroupKey: '4y',
-    title: b('ကျောင်း ပထမနေ့', 'My First Day at School'),
-    summary: b('ကျောင်းပထမနေ့ စိုးရိမ်စိတ်ကို ရင်းနှီးမှုဖြင့် ကူညီသော ပုံပြင်။', 'Easing first-day nerves with warmth.'),
+    title: b('ကျောင်းစတက်သည့် ပထမဆုံးနေ့', 'My First Day at School'),
+    summary: b('ကျောင်းစတက်သည့် ပထမဆုံးနေ့ စိုးရိမ်ပူပန်မှုကို နွေးထွေးစွာ ဖြေလျှော့ပေးသည့် ပုံပြင်လေး။', 'Easing first-day nerves with warmth.'),
     readingLevel: 'Beginner', readingMinutes: 3,
     vocabulary: [b('ကျောင်း', 'school'), b('ဆရာမ', 'teacher'), b('သူငယ်ချင်း', 'friend')],
     body: b('ယနေ့ ဆုဆုရဲ့ ကျောင်း ပထမနေ့ပါ။ အနည်းငယ် ကြောက်တယ်။ ဆရာမက ပြုံး၍ ကြိုဆိုတယ်။ သူငယ်ချင်းအသစ်လေးနဲ့ အတူ ပုံဆွဲကြတယ်။ နေ့လယ်ရောက်တော့ ဆုဆု ပျော်နေပြီ။ မေမေ ပြန်လာခေါ်တော့ “မနက်ဖြန် ထပ်လာမယ်” လို့ ဆိုတယ်။', 'Today is Su-Su’s first day at school. She feels a little scared. The teacher smiles and welcomes her. She draws with a new friend. By noon, Su-Su is happy. When Mommy comes, she says, “I’ll come again tomorrow.”'),

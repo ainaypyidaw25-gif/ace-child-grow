@@ -41,4 +41,17 @@ describe('admin and reviewer locale labels', () => {
     expect(billing).not.toContain('<th className="px-3 py-2">Status</th>');
     expect(billing).toContain("L('ဝန်ဆောင်မှုပေးသူ', 'Provider')");
   });
+
+  it('localises directory verify-and-publish workflow and preserves accessibility', () => {
+    const directory = read('src/screens/AdminDirectory.tsx');
+    expect(directory).toContain("L('စစ်ဆေးအတည်ပြုပြီး ထုတ်ဝေမည်', 'Verify and publish')");
+    expect(directory).toContain("L('သိမ်းပြီးပါပြီ။ မိဘများ မြင်တွေ့နိုင်ရန် “စစ်ဆေးအတည်ပြုပြီး ထုတ်ဝေမည်” ကို နှိပ်ပါ။', 'Saved. Select Verify before parents can see it.')");
+    expect(directory).not.toContain('စစ်ဆေးပြီး အတည်ပြုမည်');
+    expect(directory).toContain('verify({ id: row._id })');
+    expect(directory).toContain('role="status" aria-live="polite"');
+    expect(directory).toContain('{message && <p role="status"');
+    expect(directory).toContain('flex flex-wrap gap-2');
+    expect(directory).not.toMatch(/Verify and publish['"][^>]*whitespace-nowrap/);
+    expect(directory).not.toMatch(/Verify and publish['"][^>]*w-\[/);
+  });
 });

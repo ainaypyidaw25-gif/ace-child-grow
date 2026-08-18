@@ -382,9 +382,9 @@ export function SignIn() {
       </button>
       <p className="text-center text-xs text-ink-soft">{t('result.disclaimer.nonDiagnostic')}</p>
       <nav aria-label={locale === 'mm' ? 'အကူအညီနှင့် မူဝါဒများ' : 'Help and policies'} className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-xs font-semibold text-sky-deep">
-        <Link to="/support">{locale === 'mm' ? 'အကူအညီ' : 'Support'}</Link>
-        <Link to="/privacy">{locale === 'mm' ? 'ကိုယ်ရေးမူဝါဒ' : 'Privacy'}</Link>
-        <Link to="/account-deletion">{locale === 'mm' ? 'အကောင့်ဖျက်နည်း' : 'Account deletion'}</Link>
+        <Link to="/support" className="inline-flex min-h-touch items-center px-1">{locale === 'mm' ? 'အကူအညီ' : 'Support'}</Link>
+        <Link to="/privacy" className="inline-flex min-h-touch items-center px-1">{locale === 'mm' ? 'ကိုယ်ရေးမူဝါဒ' : 'Privacy'}</Link>
+        <Link to="/account-deletion" className="inline-flex min-h-touch items-center px-1">{locale === 'mm' ? 'အကောင့်ဖျက်နည်း' : 'Account deletion'}</Link>
       </nav>
     </div>
   );

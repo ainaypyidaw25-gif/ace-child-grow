@@ -180,7 +180,7 @@ const MILESTONES: SeedItem[] = [
         'A baby who is very hard to wake, or who does not wake to feed, needs to be seen promptly.',
       ),
       encouragement: b(
-        'အိပ်တိုင်း ပက်လက်အနေအထား၊ ပြားပြီး မာသော အိပ်ရာ၊ အိပ်ရာပေါ်တွင် အနူအထောင်း မထားပါနှင့်။ အခန်းတူ အိပ်ရာမတူ။',
+        'အိပ်ချိန်တိုင်း ပက်လက်အနေအထား၊ ပြားပြီး မာသော အိပ်ရာ၊ အိပ်ရာပေါ်တွင် ပျော့ပျောင်းသောအရာများ မထားပါနှင့်။ အခန်းတူ အိပ်ရာမတူ။',
         'Back to sleep every sleep, on a firm flat surface with nothing soft in the cot. Room-share, but do not bed-share.',
       ),
     }),
@@ -679,7 +679,7 @@ const GUIDES_D: SeedItem[] = [
         'A newborn cannot protect herself at all. The main risks at this age are unsafe sleep, falls, burns, drowning and being shaken.',
       ),
       observationQuestions: [
-        b('အိပ်ရာသည် ပြားပြီး မာပါသလား။ အိပ်ရာပေါ်တွင် ခေါင်းအုံး၊ စောင်ထူ၊ အနူအထောင်း ရှိပါသလား။', 'Is the sleep surface firm and flat? Are there pillows, thick blankets or soft items in it?'),
+        b('အိပ်ရာသည် ပြားပြီး မာပါသလား။ အိပ်ရာပေါ်တွင် ခေါင်းအုံး၊ စောင်ထူ၊ ပျော့ပျောင်းသောအရာများ ရှိပါသလား။', 'Is the sleep surface firm and flat? Are there pillows, thick blankets or soft items in it?'),
         b('ကလေးကို မြင့်သော နေရာတွင် ခဏမျှ ချန်ထားမိပါသလား။', 'Is your baby ever left on a high surface, even briefly?'),
         b('အိမ်တွင် ဆေးလိပ်သောက်သူ ရှိပါသလား။', 'Does anyone smoke in the home?'),
       ],
@@ -693,7 +693,7 @@ const GUIDES_D: SeedItem[] = [
       ],
       indoor: [b('ကလေးအိပ်ရာကို မိဘအခန်းထဲတွင် ထားပါ — အိပ်ရာမတူဘဲ အခန်းတူ။', 'Keep the baby’s cot in the parents’ room — room-share, do not bed-share.')],
       outdoor: [b('တိုက်ရိုက် နေရောင်မှ ကာကွယ်ပါ။ ကားစီးလျှင် သတ်မှတ်ချက်ပြည့်မီသော ကလေးထိုင်ခုံ သုံးပါ။', 'Keep out of direct sun. In a vehicle, use an appropriate infant car seat.')],
-      lowCost: [b('ဘေးကင်းသော အိပ်စက်မှုသည် ကုန်ကျစရိတ် မရှိပါ — ပြားပြီး မာသော မျက်နှာပြင်နှင့် အနူအထောင်း မထားခြင်းသာ ဖြစ်သည်။', 'Safe sleep costs nothing — a firm flat surface and nothing soft in it.')],
+      lowCost: [b('ဘေးကင်းသော အိပ်စက်မှုသည် ကုန်ကျစရိတ် မရှိပါ — ပြားပြီး မာသော မျက်နှာပြင်နှင့် ပျော့ပျောင်းသောအရာများ မထားရှိခြင်းသာ ဖြစ်သည်။', 'Safe sleep costs nothing — a firm flat surface and nothing soft in it.')],
       materials: b('ပြားပြီး မာသော အိပ်ရာ၊ ပါးလွှာသော အဝတ်', 'A firm flat sleep surface and light bedding'),
       safety: b(
         'အဓိက စည်းမျဉ်းများ — အိပ်တိုင်း ပက်လက်၊ ပြားပြီး မာသော မျက်နှာပြင်၊ အိပ်ရာထဲ ဘာမှ မထား၊ အခန်းတူ အိပ်ရာမတူ၊ ဆေးလိပ်မီးခိုး လုံးဝ မထိစေရ၊ ကလေးကို ဘယ်တော့မှ မလှုပ်ခါရ၊ ရေချိုးစဉ် တစ်စက္ကန့်မျှ မခွာရ၊ မြင့်သောနေရာတွင် တစ်ယောက်တည်း မထားရ။',
@@ -701,7 +701,7 @@ const GUIDES_D: SeedItem[] = [
       ),
       commonMistakes: [
         b('ဆိုဖာ သို့မဟုတ် ကုလားထိုင်ပေါ်တွင် ကလေးနှင့်အတူ အိပ်ပျော်သွားခြင်း။', 'Falling asleep with the baby on a sofa or armchair.'),
-        b('အိပ်ရာထဲ ခေါင်းအုံး၊ အနူထောင်း၊ စောင်ထူ ထည့်ထားခြင်း။', 'Putting pillows, soft toys or thick blankets in the cot.'),
+        b('အိပ်ရာထဲ ခေါင်းအုံး၊ ပျော့ပျောင်းသော အရုပ်များ၊ စောင်ထူ ထည့်ထားခြင်း။', 'Putting pillows, soft toys or thick blankets in the cot.'),
         b('အဝတ် အလွန်ထူထပ်စွာ ခြုံပေးခြင်း — အပူလွန်ခြင်း အန္တရာယ် ရှိသည်။', 'Over-wrapping — overheating is a risk.'),
         b("အလေးချိန်ပါသော စောင်၊ အိပ်ဝတ်စုံ သို့မဟုတ် ပတ်ရစ်ပိတ်စများ သုံးခြင်း။", "Using weighted blankets, weighted sleepers or weighted swaddles."),
         b("အိမ်သုံး အသက်ရှူ/နှလုံးခုန် စောင့်ကြည့်စက်ကို ဘေးကင်းစွာ အိပ်စေခြင်း၏ အစား အားကိုးခြင်း — အန္တရာယ် လျှော့ချပေးသည်ဟု သက်သေ မရှိပါ။", "Relying on a home breathing or heart-rate monitor instead of a safe sleep space — these have not been shown to reduce the risk of SIDS."),

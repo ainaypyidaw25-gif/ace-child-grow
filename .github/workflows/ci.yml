@@ -89,8 +89,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # The hosted runner already carries Chromium's system libraries. Install
+      # only the pinned browser binary so an unavailable apt mirror cannot
+      # prevent the actual browser suite from starting.
       - name: Install Chromium for Playwright
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install chromium
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '0'
 

@@ -138,7 +138,7 @@ export const mm = {
   'milestoneKeepsake.share': 'လူမှုကွန်ရက်တွင် မျှဝေမည်',
   'milestoneKeepsake.sharing': 'ပုံ ပြင်ဆင်နေသည်…',
   'milestoneKeepsake.shareError': 'မျှဝေရန် ပုံ ဖန်တီး၍ မရပါ။',
-  'milestoneKeepsake.downloaded': 'ပုံ သိမ်းပြီးပါပြီ — ကိုယ်တိုင် post တင်နိုင်ပါပြီ။',
+  'milestoneKeepsake.downloaded': 'ပုံ သိမ်းဆည်းပြီးပါပြီ — မိမိစိတ်ကြိုက် မျှဝေနိုင်ပါပြီ။',
 
   'favorites.title': 'သိမ်းထားသော လှုပ်ရှားမှုများ',
   'favorites.empty': 'သိမ်းထားသော လှုပ်ရှားမှု မရှိသေးပါ။ ❤ ကို နှိပ်ပြီး သိမ်းပါ။',

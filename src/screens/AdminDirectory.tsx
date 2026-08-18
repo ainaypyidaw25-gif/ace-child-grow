@@ -27,7 +27,7 @@ export function AdminDirectory() {
   const [message, setMessage] = useState('');
   const L = (mm: string, en: string) => locale === 'mm' ? mm : en;
 
-  if (data === undefined) return <p className="text-ink-soft">…</p>;
+  if (data === undefined) return <p role="status" aria-live="polite" className="text-ink-soft">…</p>;
   if (!data.allowed) return <p className="rounded-card bg-white p-4">{L('Owner သာ စီမံနိုင်ပါသည်။', 'Only the owner can manage this directory.')}</p>;
 
   const field = (key: keyof FacilityForm, labelMm: string, labelEn: string, required = false) => (
@@ -57,7 +57,7 @@ export function AdminDirectory() {
             if (editing) await update({ id: editing, ...payload } as Parameters<typeof update>[0]);
             else await create(payload as Parameters<typeof create>[0]);
             setForm(EMPTY); setEditing(null);
-            setMessage(L('သိမ်းပြီးပါပြီ။ မိဘများမြင်နိုင်ရန် “အတည်ပြုမည်” ကို နှိပ်ပါ။', 'Saved. Select Verify before parents can see it.'));
+            setMessage(L('သိမ်းပြီးပါပြီ။ မိဘများ မြင်တွေ့နိုင်ရန် “စစ်ဆေးအတည်ပြုပြီး ထုတ်ဝေမည်” ကို နှိပ်ပါ။', 'Saved. Select Verify before parents can see it.'));
           } catch (error) { console.error(error); setMessage(L('သိမ်း၍ မရပါ။', 'Unable to save.')); }
           finally { setBusy(false); }
         }}
@@ -74,7 +74,7 @@ export function AdminDirectory() {
           <button disabled={busy} className="rounded-pill bg-sky px-5 py-2 font-semibold text-white disabled:opacity-50">{busy ? '…' : L('သိမ်းမည်', 'Save')}</button>
           {editing && <button type="button" onClick={() => { setEditing(null); setForm(EMPTY); }} className="rounded-pill border border-line px-4 py-2">{L('မပြင်တော့ပါ', 'Cancel')}</button>}
         </div>
-        {message && <p className="text-sm text-ink-soft">{message}</p>}
+        {message && <p role="status" className="text-sm text-ink-soft">{message}</p>}
       </form>
 
       <ul className="space-y-3">
@@ -91,7 +91,7 @@ export function AdminDirectory() {
                 setForm({ country: row.country, region: row.region ?? '', township: row.township ?? '', name: row.name, facilityType: row.facilityType ?? '', phone: row.phone ?? '', address: row.address ?? '', services: row.services ?? '', source: row.source ?? '' });
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }} className="rounded-pill border border-line px-3 py-1 text-sm">{L('ပြင်မည်', 'Edit')}</button>
-              {!row.isActive ? <button type="button" onClick={() => void verify({ id: row._id })} className="rounded-pill bg-mint px-3 py-1 text-sm font-semibold text-white">{L('စစ်ဆေးပြီး အတည်ပြုမည်', 'Verify and publish')}</button>
+              {!row.isActive ? <button type="button" onClick={() => void verify({ id: row._id })} className="rounded-pill bg-mint px-3 py-1 text-sm font-semibold text-white">{L('စစ်ဆေးအတည်ပြုပြီး ထုတ်ဝေမည်', 'Verify and publish')}</button>
                 : <button type="button" onClick={() => void deactivate({ id: row._id })} className="rounded-pill border border-state-red px-3 py-1 text-sm text-state-red-deep">{L('ပိတ်ထားမည်', 'Deactivate')}</button>}
             </div>
           </li>
