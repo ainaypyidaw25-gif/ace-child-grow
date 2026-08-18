@@ -38,6 +38,7 @@ import {
   evidenceImportReviewFields,
   evidenceImportReviewPolicy,
 } from './lib/evidenceImportPolicy';
+import { unprotectedCitationGapKeys } from './lib/evidenceImportSafety';
 
 const REVIEW_STATUSES = [
   'evidence_required',
@@ -629,6 +630,27 @@ async function applySources(
     const dependencies = linkSnapshot
       .filter((link) => link.sourceIds.some((sourceId) => resetIdSet.has(sourceId)))
       .map((link) => ({ kind: link.kind, slug: link.slug }));
+    const sourceSnapshot = await ctx.db.query('evidenceSources').take(2_001);
+    if (sourceSnapshot.length > 2_000) {
+      throw new Error('Evidence source safety preflight exceeded the 2,000-source bound');
+    }
+    const librarySnapshot = await ctx.db.query('libraryContent').take(5_001);
+    if (librarySnapshot.length > 5_000) {
+      throw new Error('Evidence source safety preflight exceeded the 5,000-content bound');
+    }
+    const citationGaps = unprotectedCitationGapKeys(
+      linkSnapshot.filter((link) =>
+        link.sourceIds.some((sourceId) => resetIdSet.has(sourceId))),
+      sourceSnapshot,
+      new Set(librarySnapshot.map((row) => row.slug)),
+      todayIsoUtc(),
+    );
+    if (citationGaps.length > 0) {
+      throw new Error(
+        'Evidence import would remove the last eligible citation from inherently public content: '
+          + citationGaps.slice(0, 20).join(', '),
+      );
+    }
     invalidatedContentKeys = await invalidateDependentContentReviews(
       ctx,
       dependencies,

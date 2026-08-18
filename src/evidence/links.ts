@@ -103,8 +103,8 @@ export const EXPLICIT_CONTENT_SOURCES: Record<string, string[]> = {
   gd_birth_2m_emotional: ['aap-toxic-stress-2021', 'who-nurturing-care-2018', 'nhs-child-accident-2025', 'nice-ng143-fever-2019'],
   gd_birth_2m_cognitive: ['tb-dbp-5e-2022', 'aap-power-of-play-2018', 'who-care-for-child-development-2012', 'aap-digital-ecosystems-technical-2026'],
   gd_birth_2m_play: ['aap-power-of-play-2018', 'who-care-for-child-development-2012', 'unicef-early-moments-2017'],
-  gd_birth_2m_nutrition: ['who-iycf-model-chapter-2025', 'who-bf-counselling-2018', 'nhs-breastfeeding-first-days-2023', 'who-unicef-iycf-strategy-2003', 'nice-ng75-faltering-growth-2017', 'who-growth-standards-2006'],
-  gd_birth_2m_safety: ['aap-safe-sleep-2022', 'nhs-sids-2025', 'aap-drowning-2021', 'nhs-child-accident-2025', 'hc-child-ems-2026', 'nice-ng143-fever-2019', 'who-imci-chart-2014', 'hc-safe-sleep-2026'],
+  gd_birth_2m_nutrition: ['who-iycf-model-chapter-2025', 'who-bf-counselling-2018', 'nhs-breastfeeding-first-days-2023', 'who-unicef-iycf-strategy-2003', 'nice-ng75-faltering-growth-2017', 'who-growth-standards-2006', 'who-child-growth-standards-qa-2025', 'cdc-foods-avoid-limit-2026'],
+  gd_birth_2m_safety: ['aap-safe-sleep-2022', 'nhs-sids-2025', 'aap-drowning-2021', 'nhs-child-accident-2025', 'hc-child-ems-2026', 'nice-ng143-fever-2019', 'who-imci-sick-young-infant-2019', 'hc-safe-sleep-2026'],
   gd_birth_2m_daily_routine: ['jr-aasm-bedtime-2006', 'who-pa-sleep-under5-2019', 'aap-safe-sleep-2022', 'tb-bright-futures-4e-2017'],
 
   // --- Knowledge base: Birth–2 months (activities + printable) --------------
@@ -292,7 +292,7 @@ export const EXPLICIT_CONTENT_SOURCES: Record<string, string[]> = {
   prt_behavior_chart: ['cdc-positive-parenting-toddlers-2026', 'jr-plosmed-parenting-2021'],
   prt_visual_schedule: ['tb-case-smith-9e-2025', 'tb-handbook-ecse-2016'],
   prt_doctor_visit_checklist: ['tb-bright-futures-4e-2017', 'nhs-baby-reviews-2023', 'cdc-monitoring-screening-2026'],
-  prt_growth_log: ['who-growth-standards-2006', 'nice-ng75-faltering-growth-2017'],
+  prt_growth_log: ['who-growth-standards-2006', 'who-child-growth-standards-qa-2025', 'nice-ng75-faltering-growth-2017'],
   prt_sleep_diary: ['jr-hiscock-sleep-rct-2002', 'who-pa-sleep-under5-2019'],
   prt_milestone_checklist: ['cdc-milestone-checklists-2025', 'aap-milestones-2022', 'aap-surveillance-2020'],
 };
@@ -304,19 +304,19 @@ export const EXPLICIT_CONTENT_SOURCES: Record<string, string[]> = {
  * of each urgent rule against.
  */
 export const SAFETY_RULE_SOURCES: Record<string, string[]> = {
-  severe_breathing_difficulty: ['nhs-child-accident-2025', 'hc-child-ems-2026', 'nhs-sids-2025', 'who-imci-chart-2014', 'tb-nelson-22e-2024'],
-  blue_lips: ['nhs-child-accident-2025', 'hc-child-ems-2026', 'nhs-sids-2025', 'who-imci-chart-2014'],
+  severe_breathing_difficulty: ['nhs-child-accident-2025', 'hc-child-ems-2026', 'nhs-sids-2025', 'tb-nelson-22e-2024'],
+  blue_lips: ['nhs-child-accident-2025', 'hc-child-ems-2026', 'nhs-sids-2025'],
   breathing_pauses: ['nhs-child-accident-2025', 'nhs-sids-2025', 'tb-nelson-22e-2024'],
   seizure: ['nice-ng143-fever-2019', 'nhs-child-accident-2025', 'hc-child-ems-2026', 'nhs-sids-2025'],
-  unresponsiveness: ['nhs-child-accident-2025', 'hc-child-ems-2026', 'nhs-sids-2025', 'who-imci-chart-2014'],
+  unresponsiveness: ['nhs-child-accident-2025', 'hc-child-ems-2026', 'nhs-sids-2025', 'who-imci-chart-2014', 'who-imci-sick-young-infant-2019'],
   sudden_weakness: ['cdc-afm-signs-2024'],
   serious_injury: ['aap-drowning-2021', 'nhs-child-accident-2025', 'hc-child-ems-2026'],
-  severe_dehydration: ['who-imci-chart-2014', 'hc-child-ems-2026', 'tb-nelson-22e-2024'],
+  severe_dehydration: ['who-imci-chart-2014', 'who-imci-sick-young-infant-2019', 'hc-child-ems-2026', 'tb-nelson-22e-2024'],
   loss_of_acquired_skills: ['aap-surveillance-2020', 'cdc-autism-signs-2024', 'aap-asd-2020'],
   /** The standing skill-loss question asked alongside every milestone check. */
   skill_loss_question: ['aap-surveillance-2020', 'aap-asd-2020', 'cdc-monitoring-screening-2026'],
   /** The fixed emergency wording shown when any urgent rule fires. */
-  emergency_message: ['nhs-child-accident-2025', 'hc-child-ems-2026', 'who-imci-chart-2014'],
+  emergency_message: ['nhs-child-accident-2025', 'hc-child-ems-2026', 'who-imci-chart-2014', 'who-imci-sick-young-infant-2019'],
 };
 
 /** References behind each Hope Center (awareness) topic. */

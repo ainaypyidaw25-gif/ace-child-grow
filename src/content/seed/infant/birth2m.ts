@@ -635,7 +635,7 @@ const GUIDES_D: SeedItem[] = [
       lowCost: [b('မိခင်နို့သည် အခမဲ့ဖြစ်ပြီး ဘေးကင်းသည်။', 'Breast milk is free and safe.')],
       materials: b('မလိုအပ်ပါ — နို့ပုလင်းသုံးပါက ကျန်းမာရေးဝန်ထမ်း၏ လမ်းညွှန်ဖြင့် သန့်ရှင်းစွာ ပြင်ဆင်ပါ။', 'None — if bottles are used, prepare them hygienically following health-worker guidance.'),
       safety: b(
-        'နို့ပုလင်းကို ထောက်ထားပြီး ကလေးကို တစ်ယောက်တည်း မထားပါနှင့် — နို့တစ်ဆို့နိုင်သည်။ အသက် ၆ လအောက် ကလေးအား ပျားရည် မကျွေးပါနှင့်။ နွားနို့အစစ်ကို ပင်မ အစားအစာအဖြစ် ၁၂ လအောက်တွင် မကျွေးပါနှင့်။',
+        'နို့ပုလင်းကို ထောက်ထားပြီး ကလေးကို တစ်ယောက်တည်း မထားပါနှင့် — နို့တစ်ဆို့နိုင်သည်။ အသက် ၁၂ လအောက် ကလေးအား ပျားရည် မကျွေးပါနှင့်။ နွားနို့အစစ်ကို ပင်မ အစားအစာအဖြစ် ၁၂ လအောက်တွင် မကျွေးပါနှင့်။',
         'Never prop a bottle and leave your baby — it is a choking risk. Do not give honey under 12 months. Do not use fresh cow’s milk as the main drink under 12 months.',
       ),
       commonMistakes: [

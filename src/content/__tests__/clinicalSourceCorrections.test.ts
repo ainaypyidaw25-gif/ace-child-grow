@@ -361,6 +361,7 @@ describe('clinically sourced content corrections', () => {
       'cdc-adhd-clinical-care-2026',
       'cdc-introduce-solid-foods-2026',
       'cdc-cows-milk-2026',
+      'cdc-foods-avoid-limit-2026',
       'cdc-ehdi-toolkit-2024',
       'cdc-hearing-treatment-2024',
       'nhs-cerebral-palsy-symptoms-2023',
@@ -375,6 +376,8 @@ describe('clinically sourced content corrections', () => {
       'hc-poison-prevention-2026',
       'asha-language-communication-dhh',
       'asha-aac',
+      'who-imci-sick-young-infant-2019',
+      'who-child-growth-standards-qa-2025',
     ]) {
       expect(resolveReviewStatus(SOURCE_BY_ID.get(id)!), id).not.toBe('approved');
     }
@@ -432,5 +435,117 @@ describe('clinically sourced content corrections', () => {
       .toContain('nhs-learning-disabilities-2025');
     expect(sourcesForContent('sn_developmental_coordination_disorder', 'special_need'))
       .toContain('nhs-dcd-diagnosis-2023');
+  });
+
+  it('keeps WHO growth standards scoped to birth through 60 months', () => {
+    expect(SOURCE_BY_ID.get('who-growth-standards-2006')).toMatchObject({
+      authors: 'World Health Organization',
+      year: 2006,
+      evidenceLevel: 'cohort',
+      ageMonthsMin: 0,
+      ageMonthsMax: 60,
+      verifiedOn: '2026-08-18',
+    });
+    expect(SOURCE_BY_ID.get('who-growth-standards-2006')?.verifiedNote)
+      .not.toContain('12 February 2025');
+    expect(SOURCE_BY_ID.get('who-child-growth-standards-qa-2025')).toMatchObject({
+      title: 'Child growth standards',
+      year: 2025,
+      evidenceLevel: 'parent_education',
+      ageMonthsMin: 0,
+      ageMonthsMax: 60,
+      verifiedOn: '2026-08-18',
+    });
+    expect(SOURCE_BY_ID.get('who-child-growth-standards-qa-2025')?.verifiedNote)
+      .toContain('12 February 2025');
+    expect(sourcesForContent('gd_4_5y_nutrition', 'guide'))
+      .toEqual(expect.arrayContaining([
+        'who-growth-standards-2006',
+        'who-child-growth-standards-qa-2025',
+      ]));
+    expect(sourcesForContent('gd_5y_nutrition', 'guide'))
+      .not.toContain('who-growth-standards-2006');
+    expect(sourcesForContent('gd_5y_nutrition', 'guide'))
+      .not.toContain('who-child-growth-standards-qa-2025');
+  });
+
+  it('uses age-specific WHO IMCI records without generic breathing overreach', () => {
+    expect(SOURCE_BY_ID.get('who-imci-chart-2014')).toMatchObject({
+      authors: 'WHO',
+      evidenceLevel: 'guideline',
+      ageMonthsMin: 2,
+      ageMonthsMax: 60,
+      verifiedOn: '2026-08-18',
+    });
+    expect(SOURCE_BY_ID.get('who-imci-sick-young-infant-2019')).toMatchObject({
+      authors: 'WHO, UNICEF',
+      year: 2019,
+      edition: null,
+      isbn: '978-92-4-151636-5',
+      evidenceLevel: 'guideline',
+      ageMonthsMin: 0,
+      ageMonthsMax: 2,
+      verifiedOn: '2026-08-18',
+    });
+    expect(sourcesForContent('gd_birth_2m_safety', 'guide'))
+      .toContain('who-imci-sick-young-infant-2019');
+    expect(sourcesForContent('gd_birth_2m_safety', 'guide'))
+      .not.toContain('who-imci-chart-2014');
+    expect(sourcesForContent('severe_breathing_difficulty', 'safety_rule'))
+      .not.toContain('who-imci-chart-2014');
+    expect(sourcesForContent('blue_lips', 'safety_rule'))
+      .not.toContain('who-imci-chart-2014');
+    for (const slug of ['unresponsiveness', 'severe_dehydration', 'emergency_message']) {
+      expect(sourcesForContent(slug, 'safety_rule')).toEqual(expect.arrayContaining([
+        'who-imci-chart-2014',
+        'who-imci-sick-young-infant-2019',
+      ]));
+    }
+  });
+
+  it('preserves exact infant safety thresholds and Myanmar-English parity', () => {
+    const birthNutrition = dataFor('gd_birth_2m_nutrition').safety as {
+      mm: string; en: string;
+    };
+    expect(birthNutrition.mm).toContain('အသက် ၁၂ လအောက် ကလေးအား ပျားရည် မကျွေးပါနှင့်');
+    expect(birthNutrition.mm).not.toContain('အသက် ၆ လအောက် ကလေးအား ပျားရည်');
+    expect(sourcesForContent('gd_birth_2m_nutrition', 'guide'))
+      .toContain('cdc-foods-avoid-limit-2026');
+
+    const emotionalReferral = dataFor('gd_3_4m_emotional').referral as {
+      mm: string; en: string;
+    };
+    expect(emotionalReferral.en).toContain('38°C (100.4°F) or above');
+    expect(emotionalReferral.mm).toContain('၃၈°C (၁၀၀.၄°F) နှင့်အထက်');
+
+    const threeToFourFaq = dataFor('gd_3_4m_safety').faq as Array<{
+      a: { mm: string; en: string };
+    }>;
+    expect(threeToFourFaq[1].a.mm).toContain('ကိုယ်ခန္ဓာ ပျော့ခွေခြင်း');
+
+    const fiveToSix = dataFor('gd_5_6m_safety');
+    expect((fiveToSix.safety as { mm: string }).mm)
+      .toContain('ဂေါ်လီလုံး၊ အခွံမာသီး');
+    expect((fiveToSix.safety as { en: string }).en)
+      .toContain('marbles, nuts');
+    expect(JSON.stringify(fiveToSix.redFlags)).not.toContain('အသက် ၃ လကျော်');
+
+    const sevenToNineFaq = dataFor('gd_7_9m_safety').faq as Array<{
+      a: { mm: string; en: string };
+    }>;
+    expect(sevenToNineFaq[1].a.en).toContain('vomiting everything');
+    expect(sevenToNineFaq[1].a.en).not.toContain('repeated vomiting');
+
+    const daily = dataFor('gd_10_12m_daily_routine');
+    const dailySafety = daily.safety as { mm: string; en: string };
+    expect(dailySafety.en).toContain('severe difficulty breathing');
+    expect(dailySafety.en).toContain('sunken eyes together with');
+    expect(dailySafety.en).toContain('vomiting everything');
+    expect(dailySafety.en).not.toContain('difficulty or fast breathing');
+    expect((daily.redFlags as Array<{ en: string }>)[0].en)
+      .toContain('Severe difficulty breathing');
+    const dailyFaq = daily.faq as Array<{ a: { mm: string; en: string } }>;
+    expect(dailyFaq[1].a.en).toContain('five days or longer');
+    expect(dailyFaq[1].a.en).not.toContain('under three months');
   });
 });

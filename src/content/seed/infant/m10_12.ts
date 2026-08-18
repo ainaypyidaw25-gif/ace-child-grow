@@ -1124,8 +1124,8 @@ const GUIDES_G: SeedItem[] = [
       ],
       materials: b('ကာကွယ်ဆေး မှတ်တမ်းကတ်၊ ကိုယ်အလေးချိန် မှတ်တမ်း', 'The immunisation card and a growth record'),
       safety: b(
-        'ကလေး ဖျားနာလျှင် အောက်ပါ လက္ခဏာများသည် အရေးပေါ် ဖြစ်ပြီး ချက်ချင်း ဆေးကုသမှု လိုအပ်သည် — အသက်ရှူ ခက်ခဲခြင်း သို့မဟုတ် မြန်ဆန်ခြင်း၊ နှုတ်ခမ်း သို့မဟုတ် အရေပြား ညိုမည်းလာခြင်း၊ တက်ခြင်း၊ နိုးရန် အလွန် ခက်ခဲခြင်း သို့မဟုတ် တုံ့ပြန်မှု မရှိခြင်း၊ ဖိကြည့်လျှင် မပျောက်သော အနီကွက်များ၊ ပြင်းထန်စွာ ရေဓာတ်ခန်းခြောက်ခြင်း (ဆီးနည်းခြင်း၊ ပါးစပ် ခြောက်ခြင်း၊ မျက်လုံး ချိုင့်ဝင်ခြင်း)၊ ထပ်ခါထပ်ခါ အန်ခြင်း သို့မဟုတ် အစာ၊ ရေ လုံးဝ မသောက်နိုင်ခြင်း။ ကာကွယ်ဆေးများကို ဒေသ အစီအစဉ်အတိုင်း အချိန်မီ ထိုးပါ။ ဆေးမည်သည်ကိုမဆို ကျန်းမာရေးဝန်ထမ်း၏ ညွှန်ကြားချက်မပါဘဲ မတိုက်ပါနှင့် — ဗီတာမင်နှင့် အားဆေးများ အပါအဝင်။ ဆေးများကို သော့ခတ် သိမ်းပါ။',
-        'When she is unwell, these are emergency signs needing immediate medical care — difficulty or fast breathing, blue or very pale lips or skin, a fit or convulsion, being very hard to wake or unresponsive, a rash that does not fade when pressed, severe dehydration (very little urine, dry mouth, sunken eyes), repeated vomiting, or refusing all feeds and fluids. Keep immunisations on schedule according to your local programme. Do not give any medicine, including vitamins and supplements, without advice from a health worker, and keep all medicines locked away.',
+        'ကလေး ဖျားနာလျှင် အောက်ပါ လက္ခဏာများသည် အရေးပေါ် ဖြစ်ပြီး ချက်ချင်း ဆေးကုသမှု လိုအပ်သည် — အသက်ရှူရန် အလွန် ခက်ခဲခြင်း၊ နှုတ်ခမ်း သို့မဟုတ် အရေပြား ပြာ/ညိုမည်းလာခြင်း သို့မဟုတ် အလွန် ဖြူဖျော့လာခြင်း၊ တက်ခြင်း၊ နိုးရန် အလွန် ခက်ခဲခြင်း သို့မဟုတ် တုံ့ပြန်မှု မရှိခြင်း၊ ဖိကြည့်လျှင် မပျောက်သော အနီကွက်များ၊ ပြင်းထန်သော ရေဓာတ်ခန်းခြောက်မှုဟု သံသယရှိခြင်း (မျက်လုံး ချိုင့်ဝင်ခြင်းနှင့်အတူ နိုးရခက်/တုံ့ပြန်မှုမရှိခြင်း သို့မဟုတ် ရေမသောက်နိုင်ခြင်း)၊ တိုက်ကျွေးသမျှ အန်ထွက်ခြင်း သို့မဟုတ် အရည်ကို မထိန်းထားနိုင်ခြင်း။ ကာကွယ်ဆေးများကို ဒေသ အစီအစဉ်အတိုင်း အချိန်မီ ထိုးပါ။ ဆေးမည်သည်ကိုမဆို ကျန်းမာရေးဝန်ထမ်း၏ ညွှန်ကြားချက်မပါဘဲ မတိုက်ပါနှင့် — ဗီတာမင်နှင့် အားဆေးများ အပါအဝင်။ ဆေးများကို သော့ခတ် သိမ်းပါ။',
+        'When she is unwell, these are emergency signs needing immediate medical care — severe difficulty breathing; blue, grey or very pale lips or skin; a fit or convulsion; being very hard to wake or unresponsive; a rash that does not fade when pressed; suspected severe dehydration (sunken eyes together with lethargy/unresponsiveness or inability to drink); or vomiting everything or being unable to keep fluids down. Keep immunisations on schedule according to your local programme. Do not give any medicine, including vitamins and supplements, without advice from a health worker, and keep all medicines locked away.',
       ),
       commonMistakes: [
         b('နာရီအတိအကျ လိုက်နာရန် ကြိုးစား၍ ဖိအား ဖြစ်ခြင်း — အစဉ်လိုက်သာ အရေးကြီးသည်။', 'Chasing an exact clock — the order matters more than the minute.'),
@@ -1142,11 +1142,11 @@ const GUIDES_G: SeedItem[] = [
         },
         {
           q: b('ဖျားရင် ဘယ်အချိန် ဆေးခန်း သွားရမလဲ။', 'When should I take her to a clinic for a fever?'),
-          a: b('အထက်ပါ အရေးပေါ် လက္ခဏာများ တစ်ခုခု ရှိလျှင် ချက်ချင်း သွားပါ။ ထို့အပြင် ကလေးသည် ၃ လအောက် ဖြစ်လျှင်၊ ဖျားချိန် ၅ ရက်ထက် ကြာလျှင်၊ သို့မဟုတ် ကလေး၏ အနေအထားက သင့်ကို စိုးရိမ်စေလျှင် ကျန်းမာရေးဝန်ထမ်းနှင့် ပြသပါ — မိဘ၏ ခံစားချက်သည်လည်း အရေးကြီးသော အချက်ပြမှု ဖြစ်သည်။', 'Go immediately with any of the emergency signs above. Also seek advice if the baby is under three months, if fever lasts more than five days, or if she simply seems wrong to you — a parent’s instinct is an important signal.'),
+          a: b('အထက်ပါ အရေးပေါ် လက္ခဏာများ တစ်ခုခု ရှိလျှင် ချက်ချင်း သွားပါ။ ထို့အပြင် အဖျားသည် ၅ ရက် သို့မဟုတ် ထိုထက်ပိုကြာလျှင်၊ သို့မဟုတ် ကလေး၏ အနေအထားက သင့်ကို စိုးရိမ်စေလျှင် ကျန်းမာရေးဝန်ထမ်းနှင့် ပြသပါ — မိဘ၏ ခံစားချက်သည်လည်း အရေးကြီးသော အချက်ပြမှု ဖြစ်သည်။', 'Go immediately with any of the emergency signs above. Also seek advice if fever lasts five days or longer, or if she simply seems wrong to you — a parent’s instinct is an important signal.'),
         },
       ],
       redFlags: [
-        b('အသက်ရှူ ခက်ခဲခြင်း သို့မဟုတ် မြန်ဆန်ခြင်း၊ နှုတ်ခမ်း ညိုမည်းလာခြင်း။', 'Difficult or fast breathing, or blue lips.'),
+        b('အသက်ရှူရန် အလွန် ခက်ခဲခြင်း သို့မဟုတ် နှုတ်ခမ်း ပြာ/ညိုမည်းလာခြင်း။', 'Severe difficulty breathing, or blue or grey lips.'),
         b('တက်ခြင်း၊ နိုးရန် အလွန် ခက်ခဲခြင်း၊ တုံ့ပြန်မှု မရှိခြင်း။', 'A fit, being very hard to wake, or unresponsiveness.'),
         b('ဖိကြည့်လျှင် မပျောက်သော အနီကွက်များ။', 'A rash that does not fade under pressure.'),
         b('အစာ၊ ရေ လုံးဝ မသောက်နိုင်ခြင်း သို့မဟုတ် ပြင်းထန်သော ရေဓာတ်ခန်းခြောက်မှု။', 'Refusing all fluids or severe dehydration.'),

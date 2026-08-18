@@ -38,7 +38,7 @@ const GUIDE_SAFETY: Record<string, Bilingual> = {
 };
 
 const GUIDE_SOURCES: Record<string, string[]> = {
-  nutrition: ['tb-bright-futures-4e-2017', 'tb-caring-birth-to-5-8e-2024', 'who-growth-standards-2006'],
+  nutrition: ['tb-bright-futures-4e-2017', 'tb-caring-birth-to-5-8e-2024', 'who-growth-standards-2006', 'who-child-growth-standards-qa-2025'],
   sleep: ['who-pa-sleep-under5-2019', 'jr-aasm-bedtime-2006', 'tb-caring-birth-to-5-8e-2024'],
   safety: ['aap-drowning-2021', 'tb-bright-futures-4e-2017', 'cdc-positive-parenting-toddlers-2026'],
   daily_routine: ['tb-bright-futures-4e-2017', 'aap-oral-health-2023', 'jr-aasm-bedtime-2006'],
@@ -227,6 +227,11 @@ for (const band of bands) {
   }
   for (const [domain, focus, daily] of band.guides) {
     const editorial = GUIDE_EDITORIAL[domain] ?? GUIDE_EDITORIAL.daily_routine;
+    const guideSources = domain === 'nutrition' && band.key === '5y'
+      ? GUIDE_SOURCES[domain].filter((sourceId) =>
+          sourceId !== 'who-growth-standards-2006'
+          && sourceId !== 'who-child-growth-standards-qa-2025')
+      : GUIDE_SOURCES[domain];
     authored.push(linked(guide(band.key, domain, {
       title: b(`${band.mm} — ${domain === 'nutrition' ? 'အာဟာရ' : domain === 'sleep' ? 'အိပ်စက်ခြင်း' : domain === 'safety' ? 'ဘေးကင်းလုံခြုံရေး' : domain === 'play' ? 'ကစားခြင်း' : 'နေ့စဉ်လုပ်ရိုးလုပ်စဉ်'} လမ်းညွှန်`, `${band.en} — ${domain.replace('_', ' ')} guide`),
       why: focus,
@@ -240,7 +245,7 @@ for (const band of bands) {
       redFlags: [editorial.redFlag],
       referral: editorial.referral,
       encouragement: editorial.encouragement,
-    }), `Registered ${domain.replace('_', ' ')} references support this conservative parent guide for ${band.en}.`, GUIDE_SOURCES[domain]));
+    }), `Registered ${domain.replace('_', ' ')} references support this conservative parent guide for ${band.en}.`, guideSources));
   }
   for (const [slug, title, goal, materials, step, safety, domains] of band.play) {
     authored.push(linked(activity({ slug, title, summary: goal, ageGroupKey: band.key, domains, difficulty: 'easy', durationMinutes: 10,

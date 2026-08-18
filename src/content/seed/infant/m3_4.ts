@@ -464,8 +464,8 @@ const GUIDES_C: SeedItem[] = [
         b('တုံ့ပြန်မှု နည်းပါးပြီး အလွန် ပျော့ခွေနေခြင်း။', 'Unusually unresponsive or floppy.'),
       ],
       referral: b(
-        'ဤလက္ခဏာများသည် ချက်ချင်း ဆေးကုသမှု လိုအပ်သည်။ လ ၃ လအောက် ကလေး ဖျားပါက ချက်ချင်း ပြပါ။ ဤသည် ရောဂါ ဖော်ထုတ်ချက် မဟုတ်ပါ။',
-        'These need prompt medical care. Any fever in a baby under 3 months needs same-day assessment. This is not a diagnosis.',
+        'ဤလက္ခဏာများသည် အမြန် ဆေးကုသမှု လိုအပ်ပါသည်။ အသက် ၃ လအောက် ကလေး၏ အပူချိန် ၃၈°C (၁၀၀.၄°F) နှင့်အထက် ဖြစ်ပါက ချက်ချင်း ပြသပါ။ ဤသည် ရောဂါ ဖော်ထုတ်ချက် မဟုတ်ပါ။',
+        'These signs need prompt medical care. A temperature of 38°C (100.4°F) or above in a baby under 3 months needs assessment straight away. This is not a diagnosis.',
       ),
       encouragement: b(
         'သင် တုံ့ပြန်ပေးသော အကြိမ်တိုင်းသည် ကလေး၏ ယုံကြည်မှုကို တည်ဆောက်နေပါသည်။',
@@ -815,7 +815,7 @@ const GUIDES_E: SeedItem[] = [
         },
         {
           q: b('အရေးပေါ် ဖြစ်ရင် ဘယ်လက္ခဏာတွေက ချက်ချင်း ပြရမလဲ။', 'Which signs mean go straight for help?'),
-          a: b('အသက်ရှူ ခက်ခဲခြင်း၊ အရေပြား/နှုတ်ခမ်း ညိုခြင်း၊ တုံ့ပြန်မှု မရှိခြင်း၊ တက်ခြင်း၊ ဖျားခြင်း (လ ၃ လအောက်)၊ အစာ လုံးဝ မစားနိုင်ခြင်း — ချက်ချင်း ပြပါ။', 'Difficulty breathing, blue or grey colour, unresponsive or floppy, a seizure, fever under 3 months, or unable to feed at all — get help immediately.'),
+          a: b('အသက်ရှူ ခက်ခဲခြင်း၊ အရေပြား/နှုတ်ခမ်း ပြာ သို့မဟုတ် ညိုမည်းလာခြင်း၊ တုံ့ပြန်မှု မရှိခြင်း သို့မဟုတ် ကိုယ်ခန္ဓာ ပျော့ခွေခြင်း၊ တက်ခြင်း၊ ဖျားခြင်း (အသက် ၃ လအောက်)၊ အစာ လုံးဝ မစားနိုင်ခြင်း — ချက်ချင်း ပြပါ။', 'Difficulty breathing, blue or grey colour, unresponsive or floppy, a seizure, fever under 3 months, or unable to feed at all — get help immediately.'),
         },
         { q: b("ဘယ်အပူချိန် ရောက်ရင် ဆေးရုံ သွားရမလဲ။", "What temperature means we should seek care?"), a: b("အပူချိန် တိုင်းပါ။ အသက် ၃ လအောက် ကလေး ၃၈°C (၁၀၀.၄°F) နှင့်အထက် ဖျားပါက — ကလေး ပုံမှန်လို ထင်ရလျှင်ပင် ချက်ချင်း ပြသပါ။ အသက် ၃ လမှ ၆ လကြား ၃၉°C (၁၀၂.၂°F) နှင့်အထက် ဖျားပါက အမြန် ပြသပါ။ အသက်မရွေး — ဖျားခြင်းနှင့်အတူ အသက်ရှူခက်ခြင်း၊ နှိပ်လျှင် မပျောက်သော အနီစက်၊ လည်ပင်း တောင့်တင်းခြင်း သို့မဟုတ် နိုးရခက်ခြင်း ပါလာပါက ချက်ချင်း ပြသပါ။ အပူချိန်တိုင်းကိရိယာ မရှိပါက — ကလေး ပူနေပြီး အထက်ပါ လက္ခဏာများ ပါလျှင် မစောင့်ဘဲ ပြသပါ။", "Take the temperature. Under 3 months, 38°C (100.4°F) or above: seek care straight away, even if the baby otherwise seems well. Between 3 and 6 months, 39°C (102.2°F) or above: seek care promptly. At any age, fever together with difficulty breathing, a rash that does not fade under pressure, a stiff neck, or being hard to wake: seek care immediately. If you have no thermometer, and the child feels hot and has any of those signs, do not wait.") },
       ],
