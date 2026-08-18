@@ -2,11 +2,15 @@
  * Evidence rules for a new parent-visible publication transition.
  *
  * A content link may include non-citable sources that are still being reviewed,
- * but publication needs at least one currently approved, current source. Every
+ * but publication needs at least one approved, verified and unexpired source.
+ * Document age is an advisory rather than proof that guidance is wrong. Every
  * linked id must resolve, and retired evidence may not remain attached.
  */
 
-import { evidenceIsCurrent } from './evidenceFreshness';
+import {
+  evidenceIsEligibleForCitation,
+  evidenceIsOutdated,
+} from './evidenceFreshness';
 
 export type PublicationEvidenceSource = {
   sourceId: string;
@@ -18,11 +22,11 @@ export type PublicationEvidenceSource = {
   verifiedOn: string | null;
 };
 
-export function publicationEvidenceIsCurrent(
+export function publicationEvidenceIsEligible(
   source: PublicationEvidenceSource,
   todayIso: string,
 ): boolean {
-  return evidenceIsCurrent(source, todayIso);
+  return evidenceIsEligibleForCitation(source, todayIso);
 }
 
 export function evaluatePublicationEvidence(
@@ -33,22 +37,32 @@ export function evaluatePublicationEvidence(
   allowed: boolean;
   unknownSourceIds: string[];
   retiredSourceIds: string[];
-  currentApprovedSourceIds: string[];
-  staleApprovedSourceIds: string[];
+  evidenceRequiredSourceIds: string[];
+  eligibleApprovedSourceIds: string[];
+  ineligibleApprovedSourceIds: string[];
+  /** Age advisory only; these sources remain eligible when their review is current. */
+  outdatedApprovedSourceIds: string[];
 } {
   const byId = new Map(sources.map((source) => [source.sourceId, source]));
   const unknownSourceIds = linkedSourceIds.filter((sourceId) => !byId.has(sourceId));
   const retiredSourceIds: string[] = [];
-  const currentApprovedSourceIds: string[] = [];
-  const staleApprovedSourceIds: string[] = [];
+  const evidenceRequiredSourceIds: string[] = [];
+  const eligibleApprovedSourceIds: string[] = [];
+  const ineligibleApprovedSourceIds: string[] = [];
+  const outdatedApprovedSourceIds: string[] = [];
 
   for (const sourceId of linkedSourceIds) {
     const source = byId.get(sourceId);
     if (!source) continue;
     if (source.reviewStatus === 'retired') retiredSourceIds.push(sourceId);
+    if (source.reviewStatus === 'evidence_required') evidenceRequiredSourceIds.push(sourceId);
     if (source.reviewStatus !== 'approved') continue;
-    if (publicationEvidenceIsCurrent(source, todayIso)) currentApprovedSourceIds.push(sourceId);
-    else staleApprovedSourceIds.push(sourceId);
+    if (publicationEvidenceIsEligible(source, todayIso)) {
+      eligibleApprovedSourceIds.push(sourceId);
+      if (evidenceIsOutdated(source, todayIso)) outdatedApprovedSourceIds.push(sourceId);
+    } else {
+      ineligibleApprovedSourceIds.push(sourceId);
+    }
   }
 
   return {
@@ -56,11 +70,14 @@ export function evaluatePublicationEvidence(
       linkedSourceIds.length > 0 &&
       unknownSourceIds.length === 0 &&
       retiredSourceIds.length === 0 &&
-      currentApprovedSourceIds.length > 0 &&
-      staleApprovedSourceIds.length === 0,
+      evidenceRequiredSourceIds.length === 0 &&
+      eligibleApprovedSourceIds.length > 0 &&
+      ineligibleApprovedSourceIds.length === 0,
     unknownSourceIds,
     retiredSourceIds,
-    currentApprovedSourceIds,
-    staleApprovedSourceIds,
+    evidenceRequiredSourceIds,
+    eligibleApprovedSourceIds,
+    ineligibleApprovedSourceIds,
+    outdatedApprovedSourceIds,
   };
 }

@@ -90,6 +90,8 @@ describe('invalid review transitions', () => {
     ['a decision with a malformed next review date', 'next_review_date_invalid'],
     ['a decision on a reference that does not exist', 'not_found'],
     ['approving a record held at evidence_required', 'evidence_required'],
+    ['approving an old source without a justification note', 'outdated_note_required'],
+    ['recording an overlong reviewer note', 'note_too_long'],
   ] as const;
 
   it.each(refusals)('refuses %s', (_case, code) => {
@@ -173,6 +175,35 @@ describe('invalid review transitions', () => {
       reviewStatus: 'awaiting_review', evidenceLevel: 'parent_education', year: 2023,
       verifiedOn: '2026-08-18', reviewDate: null, nextReviewDate: '2026-02-17',
     })?.code).toBe('source_review_overdue');
+  });
+
+  it('requires an auditable note for old evidence but does not reject age alone', () => {
+    const row = {
+      reviewStatus: 'awaiting_review', evidenceLevel: 'guideline', year: 2017,
+      verifiedOn: '2026-08-18', reviewDate: null, nextReviewDate: '2027-08-18',
+    };
+    const args = {
+      status: 'approved', reviewer: 'Dr Reviewer', reviewerQualification: 'MBBS',
+      reviewDate: '2026-08-18', nextReviewDate: '2027-08-18',
+    };
+    expect(reviewRefusalPolicy(args, row)?.code).toBe('outdated_note_required');
+    expect(reviewRefusalPolicy({
+      ...args,
+      note: 'Publisher confirms this remains the current standard; no replacement edition exists.',
+    }, row)).toBeNull();
+    expect(reviewRefusalPolicy({ ...args, note: 'x'.repeat(2_001) }, row)?.code)
+      .toBe('note_too_long');
+  });
+
+  it('passes reviewer notes through the UI and preserves them in append-only audit details', () => {
+    const admin = raw(
+      import.meta.glob('../../screens/EvidenceAdmin.tsx', {
+        query: '?raw', import: 'default', eager: true,
+      }) as Record<string, string>,
+    );
+    expect(admin).toContain('reviewerNote.trim()');
+    expect(admin).toContain("res.code === 'outdated_note_required'");
+    expect(functionBody(evidenceSrc, 'setReview')).toContain('` / note: ${reviewNote}`');
   });
 
   it('makes the caller check the outcome instead of assuming success', () => {

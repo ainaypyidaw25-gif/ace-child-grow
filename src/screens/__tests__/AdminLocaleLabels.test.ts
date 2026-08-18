@@ -29,6 +29,8 @@ describe('admin and reviewer locale labels', () => {
       .toContain("L('မူကွဲ', 'rev')");
     expect(read('src/screens/EvidenceAdmin.tsx'))
       .toContain("locale === 'mm' ? 'ခု ထပ်ရှိသည်' : 'more'");
+    expect(read('src/screens/EvidenceAdmin.tsx'))
+      .toContain("L('သုံးသပ်သူမှတ်ချက်', 'Reviewer note')");
   });
 
   it('localises CMS and billing form placeholders', () => {

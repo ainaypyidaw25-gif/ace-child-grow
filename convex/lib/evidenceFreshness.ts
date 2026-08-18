@@ -119,11 +119,18 @@ export function evidenceIsOutdated(
     || thisYear - source.year > maxAge;
 }
 
-/** A parent-citable approval must be signed, verified, unexpired and current. */
-export function evidenceIsCurrent(
+/**
+ * A parent-citable approval must be signed, verified and unexpired.
+ *
+ * Document age is deliberately not part of this hard eligibility decision.
+ * `evidenceIsOutdated` is a review-scheduling advisory: an old source may be
+ * superseded, but age alone is not proof that an official standard or a
+ * reviewer-approved claim is wrong.
+ */
+export function evidenceIsEligibleForCitation(
   source: EvidenceFreshnessFields,
   todayIso: string,
 ): boolean {
   if (!source.verifiedOn || !source.reviewDate) return false;
-  return !evidenceIsExpired(source, todayIso) && !evidenceIsOutdated(source, todayIso);
+  return !evidenceIsExpired(source, todayIso);
 }

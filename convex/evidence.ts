@@ -29,7 +29,10 @@ import {
   evidenceIsOutdated,
   todayIsoUtc,
 } from './lib/evidenceFreshness';
-import { publicationEvidenceIsCurrent } from './lib/evidencePublicationGate';
+import {
+  evaluatePublicationEvidence,
+  publicationEvidenceIsEligible,
+} from './lib/evidencePublicationGate';
 import { contentIsParentReadable } from './lib/publicationVisibility';
 import {
   evidenceImportReviewFields,
@@ -257,16 +260,14 @@ export function publishedSlugsWithoutApprovedEvidence(
       const sourceIds = [...new Set(
         links.filter((link) => link.slug === slug).flatMap((link) => [...link.sourceIds]),
       )];
-      if (sourceIds.length === 0) return true;
-      let currentApproved = 0;
-      for (const sourceId of sourceIds) {
-        const source = sourceById.get(sourceId);
-        if (!source || source.reviewStatus === 'retired') return true;
-        if (source.reviewStatus !== 'approved') continue;
-        if (!publicationEvidenceIsCurrent(source, todayIso)) return true;
-        currentApproved += 1;
-      }
-      return currentApproved === 0;
+      return !evaluatePublicationEvidence(
+        sourceIds,
+        sourceIds.flatMap((sourceId) => {
+          const source = sourceById.get(sourceId);
+          return source ? [source] : [];
+        }),
+        todayIso,
+      ).allowed;
     })
     .sort((a, b) => a.localeCompare(b));
 }
@@ -428,7 +429,7 @@ export const forContent = query({
       if (
         src
         && src.reviewStatus === 'approved'
-        && (staff || publicationEvidenceIsCurrent(src, todayIsoUtc()))
+        && (staff || publicationEvidenceIsEligible(src, todayIsoUtc()))
       ) {
         const {
           sourceId, org, title, authors, year, edition, country, language,
@@ -842,6 +843,7 @@ export function reviewRefusal(
     reviewerQualification: string;
     reviewDate: string;
     nextReviewDate?: string;
+    note?: string;
   },
   row: {
     reviewStatus: string;
@@ -865,6 +867,9 @@ export function reviewRefusal(
   }
   if (!args.reviewDate.trim()) {
     return { code: 'review_date_required', message: 'A review date is required' };
+  }
+  if (args.note && args.note.trim().length > 2_000) {
+    return { code: 'note_too_long', message: 'Reviewer note must be 2,000 characters or fewer' };
   }
   const dateProblem = evidenceDateValidationProblem({
     verifiedOn: null,
@@ -917,10 +922,14 @@ export function reviewRefusal(
         message: 'The publisher or prior review date is overdue; refresh the source metadata before approving',
       };
     }
-    if (evidenceIsOutdated({ evidenceLevel: row.evidenceLevel, year: row.year }, todayIsoUtc())) {
+    if (
+      evidenceIsOutdated({ evidenceLevel: row.evidenceLevel, year: row.year }, todayIsoUtc())
+      && !args.note?.trim()
+    ) {
       return {
-        code: 'source_outdated',
-        message: 'The source is outside the current evidence-age policy; find or verify a newer source',
+        code: 'outdated_note_required',
+        message:
+          'This source is old enough to check for a replacement. Record why it remains appropriate, or use a newer source.',
       };
     }
     if (
@@ -993,6 +1002,9 @@ export const setReview = mutation({
     // the kind of thing that stops being true after a future edit.
     if (!row) return refuse('not_found', 'Reference not found', 'unchanged');
 
+    const reviewNote = args.note?.trim() || undefined;
+    const outdatedAdvisory = args.status === 'approved'
+      && evidenceIsOutdated({ evidenceLevel: row.evidenceLevel ?? '', year: row.year ?? null }, todayIsoUtc());
     const before = `${row.reviewStatus} / ${row.reviewer ?? 'no reviewer'} / ${row.reviewDate ?? 'no date'}`;
     await ctx.db.patch(row._id, {
       reviewStatus: args.status,
@@ -1000,12 +1012,12 @@ export const setReview = mutation({
       reviewerQualification: reviewArgs.reviewerQualification.trim(),
       reviewDate: args.reviewDate,
       nextReviewDate: row.nextReviewDate ?? args.nextReviewDate ?? null,
-      reviewNote: args.note,
+      reviewNote,
       reviewerId: userId,
       reviewScope: approval?.scope,
       updatedAt: Date.now(),
     });
-    const after = `${args.status} / ${reviewArgs.reviewer.trim()} (${reviewArgs.reviewerQualification.trim()}) / ${args.reviewDate}`;
+    const after = `${args.status} / ${reviewArgs.reviewer.trim()} (${reviewArgs.reviewerQualification.trim()}) / ${args.reviewDate}${reviewNote ? ` / note: ${reviewNote}` : ''}`;
 
     await logAudit(
       ctx,
@@ -1013,7 +1025,7 @@ export const setReview = mutation({
       'evidence.setReview',
       'evidenceSources',
       args.sourceId,
-      `${row.reviewStatus} → ${args.status} by ${reviewArgs.reviewer.trim()} (${reviewArgs.reviewerQualification.trim()})`,
+      `${row.reviewStatus} → ${args.status} by ${reviewArgs.reviewer.trim()} (${reviewArgs.reviewerQualification.trim()})${outdatedAdvisory ? ' · outdated-source advisory acknowledged in reviewer note' : ''}`,
       { result: 'ok', before, after },
     );
     return { ok: true as const, reviewScope: approval?.scope ?? null };
@@ -1051,6 +1063,7 @@ export const reviewGate = internalQuery({
     reviewerQualification: v.string(),
     reviewDate: v.string(),
     nextReviewDate: v.optional(v.string()),
+    note: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const row = await ctx.db

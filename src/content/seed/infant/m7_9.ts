@@ -484,7 +484,7 @@ const GUIDES_C: SeedItem[] = [
         },
         {
           q: b('ပညာပေး ဗီဒီယိုတွေက ဦးနှောက် ဖွံ့ဖြိုးမှုကို ကူညီလား။', 'Do educational videos help her brain?'),
-          a: b('ဤအရွယ်တွင် အထောက်အကူ ပြုသည်ဟု အထောက်အထား မရှိပါ။ လက်တွေ့ ကစားခြင်းနှင့် လူနှင့် ဆက်ဆံခြင်းကသာ အထိရောက်ဆုံး ဖြစ်သည်။', 'There is no evidence they help at this age. Hands-on play and interaction with people work best.'),
+          a: b('ဤအရွယ်တွင် ဖန်သားပြင်အကြောင်းအရာအများစုမှ သင်ယူနိုင်မှုမှာ အကန့်အသတ်ရှိပါသည်။ လက်တွေ့ ကစားခြင်းနှင့် လူနှင့် တိုက်ရိုက် အပြန်အလှန်ဆက်သွယ်ခြင်းကို ဦးစားပေးပါ။ လူကြီးတစ်ဦးက ကလေး ပါဝင်နိုင်အောင် ကူညီပေးသည့် မိသားစုနှင့် တိုက်ရိုက် ဗီဒီယိုခေါ်ဆိုမှုမှာ အပြန်အလှန်ဆက်သွယ်မှု ဖြစ်နိုင်ပါသည်။', 'Learning from most screen media is limited at this age. Prioritize hands-on play and live interaction with people. A live family video call can be interactive when an adult helps the baby take part.'),
         },
       ],
       redFlags: [

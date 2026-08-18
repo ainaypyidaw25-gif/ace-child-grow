@@ -182,7 +182,7 @@ describe('content links', () => {
       'tb-swaiman-7e-2025',
     ]);
     for (const id of unused) {
-      expect(['evidence_required', 'awaiting_review']).toContain(
+      expect(['evidence_required', 'awaiting_review', 'retired']).toContain(
         resolveReviewStatus(SOURCE_BY_ID.get(id)!),
       );
     }
@@ -213,6 +213,12 @@ describe('content links', () => {
     );
     expect(sourcesForContent('st_little_seed')).toContain('hc-choking-prevention-2026');
     expect(sourcesForContent('lsn_screen_time')).toContain('hc-screen-time-5cs-infants-2024');
+    expect(sourcesForContent('lsn_screen_time')).toEqual(expect.arrayContaining([
+      'aap-digital-ecosystems-policy-2026',
+      'aap-digital-ecosystems-technical-2026',
+    ]));
+    expect(sourcesForContent('lsn_screen_time')).not.toContain('aap-media-young-minds-2016');
+    expect(SOURCE_BY_ID.get('aap-media-young-minds-2016')?.reviewStatus).toBe('retired');
   });
 
   it('links only to ids present in the registry map', () => {

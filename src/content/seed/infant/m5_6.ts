@@ -657,7 +657,7 @@ const GUIDES_D: SeedItem[] = [
       commonMistakes: [
         b('ကစားစရာ များစွာ တစ်ပြိုင်နက် ပေးခြင်း — အာရုံစိုက်မှု ပျက်ပြားစေသည်။', 'Offering many toys at once — it breaks her concentration.'),
         b('ထပ်ခါထပ်ခါ လုပ်နေခြင်းကို ရပ်ခိုင်းခြင်း — ဤသည် သင်ယူနေခြင်း ဖြစ်သည်။', 'Stopping the repetition — repeating is how she learns.'),
-        b('ဖန်သားပြင်ဖြင့် "ပညာပေး" ရန် ကြိုးစားခြင်း — ဤအရွယ်တွင် အကျိုးမရှိပါ။', 'Trying to "teach" with a screen — it does not work at this age.'),
+        b('ဖန်သားပြင်ဖြင့် "ပညာပေး" ရန် ကြိုးစားခြင်း — ဤအရွယ်တွင် ဖန်သားပြင်က လူနှင့် တိုက်ရိုက် အပြန်အလှန် ကစားသင်ယူမှုကို အစားမထိုးသင့်ပါ။', 'Trying to "teach" with a screen — at this age it should not replace live, responsive play.'),
       ],
       parentTips: [
         b('ကလေး အာရုံစိုက်နေစဉ် မနှောင့်ယှက်ပါနှင့် — အာရုံစိုက်နိုင်စွမ်း တည်ဆောက်နေခြင်း ဖြစ်သည်။', 'Do not interrupt when she is concentrating — she is building attention.'),
@@ -670,7 +670,7 @@ const GUIDES_D: SeedItem[] = [
         },
         {
           q: b('ပညာပေး ဗီဒီယိုတွေ ကြည့်ခိုင်းသင့်လား။', 'Should I show her educational videos?'),
-          a: b('ဤအရွယ်တွင် ဖန်သားပြင်မှ သင်ယူနိုင်ခြင်း မရှိသေးပါ။ လူတစ်ဦးနှင့် တိုက်ရိုက် ကစားခြင်းက အဆမတန် ပိုအကျိုးရှိသည်။ မိသားစုနှင့် ဗီဒီယိုခေါ်ဆိုခြင်းကတော့ ကွာခြားပါသည်။', 'Babies this age do not learn from screens. Playing with a person is far more useful. A family video call is different.'),
+          a: b('ဤအရွယ်ကလေးများသည် လူနှင့် တိုက်ရိုက် အပြန်အလှန်ဆက်သွယ်ရာမှ အကောင်းဆုံး သင်ယူကြပြီး ဖန်သားပြင်အကြောင်းအရာအများစုမှ သင်ယူနိုင်မှုမှာ အကန့်အသတ်ရှိပါသည်။ လူတစ်ဦးနှင့် တိုက်ရိုက် ကစားခြင်းကို ဦးစားပေးပါ။ လူကြီးတစ်ဦးက ကလေး ပါဝင်ဆက်သွယ်နိုင်အောင် ကူညီပေးသည့် မိသားစုနှင့် တိုက်ရိုက် ဗီဒီယိုခေါ်ဆိုမှုမှာ ကွာခြားနိုင်ပါသည်။', 'Babies this age learn best through live, responsive interaction; learning from most screen media is limited. Prioritize playing with a person. A live family video call can be different when an adult helps the baby take part.'),
         },
       ],
       redFlags: [

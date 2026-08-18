@@ -628,7 +628,7 @@ const GUIDES_C: SeedItem[] = [
         },
         {
           q: b('ပညာပေး ဗီဒီယိုတွေ ကြည့်ခိုင်းသင့်လား။', 'Should I use educational videos?'),
-          a: b('၁ နှစ်အောက် ကလေးများသည် ဖန်သားပြင်မှ သင်ယူနိုင်မှု အလွန် နည်းပါသည်။ ထိုအချိန်ကို မိဘနှင့် တိုက်ရိုက် ကစားချိန်အဖြစ် သုံးခြင်းက ပိုအကျိုးရှိသည်။ ဗီဒီယိုခေါ်ဆိုမှုဖြင့် ဆွေမျိုးများနှင့် စကားပြောခြင်းမှာမူ ကွာခြားပါသည်။', 'Under one year, children learn very little from screens. That time is better spent playing directly with you. Video calls with family are different.'),
+          a: b('၁ နှစ်အောက် ကလေးများသည် လူနှင့် တိုက်ရိုက် အပြန်အလှန်ဆက်သွယ်ခြင်းမှ သင်ယူနိုင်မှုနှင့် နှိုင်းယှဉ်ပါက ဖန်သားပြင်အကြောင်းအရာမှ သင်ယူနိုင်ခြေ ပိုနည်းပါသည်။ ထိုအချိန်ကို မိဘနှင့် တိုက်ရိုက် ကစားချိန်အဖြစ် သုံးခြင်းက ပိုအကျိုးရှိသည်။ လူကြီးတစ်ဦးက ကလေး ပါဝင်ဆက်သွယ်နိုင်အောင် ကူညီပေးသည့် မိသားစုနှင့် တိုက်ရိုက် ဗီဒီယိုခေါ်ဆိုမှုမှာ ကွာခြားနိုင်ပါသည်။', 'Children under one are less likely to learn from screen media than from live, responsive interaction. That time is better spent playing directly with you. A live family video call can be different when an adult helps the child take part.'),
         },
       ],
       redFlags: [

@@ -772,11 +772,14 @@ export const setReview = mutation({
           evidenceGate.retiredSourceIds.length > 0
             ? `retired: ${evidenceGate.retiredSourceIds.join(', ')}`
             : null,
-          evidenceGate.currentApprovedSourceIds.length === 0
-            ? 'no current approved source'
+          evidenceGate.evidenceRequiredSourceIds.length > 0
+            ? `evidence required: ${evidenceGate.evidenceRequiredSourceIds.join(', ')}`
             : null,
-          evidenceGate.staleApprovedSourceIds.length > 0
-            ? `stale approved: ${evidenceGate.staleApprovedSourceIds.join(', ')}`
+          evidenceGate.eligibleApprovedSourceIds.length === 0
+            ? 'no approved, verified and unexpired source'
+            : null,
+          evidenceGate.ineligibleApprovedSourceIds.length > 0
+            ? `ineligible approved: ${evidenceGate.ineligibleApprovedSourceIds.join(', ')}`
             : null,
         ].filter(Boolean).join('; ');
         throw new Error(`Evidence is not ready for publication: ${details}`);

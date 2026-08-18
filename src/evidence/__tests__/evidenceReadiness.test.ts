@@ -11,6 +11,8 @@ describe('published evidence readiness', () => {
     { sourceId: 'awaiting-b', reviewStatus: 'awaiting_review', evidenceLevel: 'guideline', year: 2025, reviewDate: null, nextReviewDate: null, verifiedOn: '2026-08-01' },
     { sourceId: 'retired-c', reviewStatus: 'retired', evidenceLevel: 'guideline', year: 2025, reviewDate: '2026-08-01', nextReviewDate: '2028-08-01', verifiedOn: '2026-08-01' },
     { sourceId: 'stale-d', reviewStatus: 'approved', evidenceLevel: 'guideline', year: 2025, reviewDate: '2024-01-01', nextReviewDate: '2026-08-17', verifiedOn: '2024-01-01' },
+    { sourceId: 'old-reviewed-e', reviewStatus: 'approved', evidenceLevel: 'guideline', year: 2017, reviewDate: '2026-08-01', nextReviewDate: '2028-08-01', verifiedOn: '2026-08-01' },
+    { sourceId: 'required-f', reviewStatus: 'evidence_required', evidenceLevel: 'guideline', year: 2025, reviewDate: null, nextReviewDate: null, verifiedOn: '2026-08-01' },
   ];
 
   it('reports a linked published slug when none of its sources are parent-visible', () => {
@@ -50,6 +52,24 @@ describe('published evidence readiness', () => {
       sources,
       today,
     )).toEqual(['mixed-current-stale']);
+  });
+
+  it('does not withdraw a slug solely because a reviewed source is old', () => {
+    expect(publishedSlugsWithoutApprovedEvidence(
+      ['reviewed-old-source'],
+      [{ slug: 'reviewed-old-source', sourceIds: ['old-reviewed-e'] }],
+      sources,
+      today,
+    )).toEqual([]);
+  });
+
+  it('reports a mixed link that still contains evidence-required metadata', () => {
+    expect(publishedSlugsWithoutApprovedEvidence(
+      ['mixed-required'],
+      [{ slug: 'mixed-required', sourceIds: ['approved-a', 'required-f'] }],
+      sources,
+      today,
+    )).toEqual(['mixed-required']);
   });
 });
 

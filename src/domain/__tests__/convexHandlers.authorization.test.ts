@@ -332,7 +332,7 @@ describe('Convex registered handlers enforce authorization', () => {
     });
     await expect(handler(setLibraryReview)(context, {
       slug: 'ordinary-parent-guide', clinicalStatus: 'published',
-    })).rejects.toThrow('no current approved source');
+    })).rejects.toThrow('no approved, verified and unexpired source');
     expect(context.db.patch).not.toHaveBeenCalled();
   });
 

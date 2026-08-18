@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   evaluatePublicationEvidence,
-  publicationEvidenceIsCurrent,
+  publicationEvidenceIsEligible,
   type PublicationEvidenceSource,
 } from '../../../convex/lib/evidencePublicationGate';
 
@@ -24,14 +24,14 @@ function source(
 }
 
 describe('publication evidence gate', () => {
-  it('accepts a complete link with at least one current human-approved source', () => {
+  it('accepts a complete link with at least one eligible human-approved source', () => {
     const result = evaluatePublicationEvidence(
       ['approved', 'awaiting'],
       [source('approved'), source('awaiting', { reviewStatus: 'awaiting_review' })],
       today,
     );
     expect(result.allowed).toBe(true);
-    expect(result.currentApprovedSourceIds).toEqual(['approved']);
+    expect(result.eligibleApprovedSourceIds).toEqual(['approved']);
   });
 
   it('does not treat awaiting or evidence-required records as approval', () => {
@@ -44,7 +44,20 @@ describe('publication evidence gate', () => {
       today,
     );
     expect(result.allowed).toBe(false);
-    expect(result.currentApprovedSourceIds).toEqual([]);
+    expect(result.eligibleApprovedSourceIds).toEqual([]);
+    expect(result.evidenceRequiredSourceIds).toEqual(['required']);
+  });
+
+  it('blocks a mixed link when any source remains evidence-required', () => {
+    expect(evaluatePublicationEvidence(
+      ['approved', 'required'],
+      [source('approved'), source('required', { reviewStatus: 'evidence_required' })],
+      today,
+    )).toMatchObject({
+      allowed: false,
+      evidenceRequiredSourceIds: ['required'],
+      eligibleApprovedSourceIds: ['approved'],
+    });
   });
 
   it('rejects dangling and retired links even when another source is approved', () => {
@@ -61,18 +74,20 @@ describe('publication evidence gate', () => {
     )).toMatchObject({ allowed: false, retiredSourceIds: ['retired'] });
   });
 
-  it('does not count expired or outdated approvals as current evidence', () => {
+  it('rejects expired approvals but treats document age as an advisory', () => {
     const expired = source('expired', { nextReviewDate: '2026-08-17' });
     const outdated = source('outdated', { year: 2017, nextReviewDate: '2027-01-01' });
-    expect(publicationEvidenceIsCurrent(expired, today)).toBe(false);
-    expect(publicationEvidenceIsCurrent(outdated, today)).toBe(false);
+    expect(publicationEvidenceIsEligible(expired, today)).toBe(false);
+    expect(publicationEvidenceIsEligible(outdated, today)).toBe(true);
     expect(evaluatePublicationEvidence(
       ['expired', 'outdated'],
       [expired, outdated],
       today,
     )).toMatchObject({
       allowed: false,
-      staleApprovedSourceIds: ['expired', 'outdated'],
+      eligibleApprovedSourceIds: ['outdated'],
+      ineligibleApprovedSourceIds: ['expired'],
+      outdatedApprovedSourceIds: ['outdated'],
     });
   });
 
@@ -83,11 +98,11 @@ describe('publication evidence gate', () => {
       source('future-review', { reviewDate: '2026-08-19' }),
       source('future-verification', { verifiedOn: '2026-08-19' }),
     ]) {
-      expect(publicationEvidenceIsCurrent(invalid, today)).toBe(false);
+      expect(publicationEvidenceIsEligible(invalid, today)).toBe(false);
     }
   });
 
-  it('rejects a mixed link when any approved citation is stale', () => {
+  it('rejects a mixed link when any approved citation is expired', () => {
     const current = source('current');
     const stale = source('stale', { nextReviewDate: '2026-08-17' });
     expect(evaluatePublicationEvidence(
@@ -96,18 +111,33 @@ describe('publication evidence gate', () => {
       today,
     )).toMatchObject({
       allowed: false,
-      currentApprovedSourceIds: ['current'],
-      staleApprovedSourceIds: ['stale'],
+      eligibleApprovedSourceIds: ['current'],
+      ineligibleApprovedSourceIds: ['stale'],
+    });
+  });
+
+  it('keeps reviewed old evidence eligible while reporting the age advisory', () => {
+    const current = source('current');
+    const outdated = source('outdated', { year: 2017 });
+    expect(evaluatePublicationEvidence(
+      ['current', 'outdated'],
+      [current, outdated],
+      today,
+    )).toMatchObject({
+      allowed: true,
+      eligibleApprovedSourceIds: ['current', 'outdated'],
+      ineligibleApprovedSourceIds: [],
+      outdatedApprovedSourceIds: ['outdated'],
     });
   });
 
   it('derives a review due date when an explicit next-review date is absent', () => {
-    expect(publicationEvidenceIsCurrent(source('derived', {
+    expect(publicationEvidenceIsEligible(source('derived', {
       nextReviewDate: null,
       reviewDate: '2026-01-01',
       evidenceLevel: 'guideline',
     }), today)).toBe(true);
-    expect(publicationEvidenceIsCurrent(source('never-checked', {
+    expect(publicationEvidenceIsEligible(source('never-checked', {
       nextReviewDate: null,
       reviewDate: null,
       verifiedOn: null,
