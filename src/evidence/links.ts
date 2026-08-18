@@ -80,7 +80,7 @@ export const EXPLICIT_CONTENT_SOURCES: Record<string, string[]> = {
   // --- Guides (age + domain specific) ---------------------------------------
   gd_7_9m_gross_motor: ['jr-who-motor-windows-2006', 'cdc-milestone-checklists-2025', 'tb-campbell-pt-6e-2022'],
   gd_13_18m_fine_motor: ['tb-case-smith-9e-2025', 'aap-milestones-2022', 'hc-choking-prevention-2026', 'cdc-introduce-solid-foods-2026'],
-  gd_19_24m_speech: ['tb-paul-language-6e-2024', 'nhs-learn-to-talk-2023', 'asha-late-language-emergence', 'asha-speech-sound-disorders'],
+  gd_19_24m_speech: ['tb-paul-language-6e-2024', 'nhs-learn-to-talk-2023', 'asha-late-language-emergence'],
   gd_2y_language: ['jr-weisleder-2013', 'tb-paul-language-6e-2024', 'aap-literacy-2024'],
   gd_10_12m_communication: ['who-care-for-child-development-2012', 'cdc-milestones-2026'],
   gd_3y_cognitive: ['aap-power-of-play-2018', 'tb-dbp-5e-2022'],
@@ -141,7 +141,7 @@ export const EXPLICIT_CONTENT_SOURCES: Record<string, string[]> = {
   // --- Knowledge base: 5–6 months (guides) ----------------------------------
   gd_5_6m_gross_motor: ['cdc-milestone-checklists-2025', 'aap-milestones-2022', 'jr-who-motor-windows-2006', 'aap-safe-sleep-2022', 'tb-campbell-pt-6e-2022'],
   gd_5_6m_fine_motor: ['cdc-milestone-checklists-2025', 'aap-milestones-2022', 'aap-power-of-play-2018', 'tb-case-smith-9e-2025'],
-  gd_5_6m_speech: ['cdc-milestones-2026', 'aap-milestones-2022', 'nhs-learn-to-talk-2023', 'tb-paul-language-6e-2024', 'asha-late-language-emergence'],
+  gd_5_6m_speech: ['cdc-milestones-2026', 'aap-milestones-2022', 'nhs-learn-to-talk-2023', 'tb-paul-language-6e-2024'],
   gd_5_6m_language: ['cdc-milestones-2026', 'aap-surveillance-2020', 'nhs-learn-to-talk-2023', 'jr-weisleder-2013', 'tb-paul-language-6e-2024'],
   gd_5_6m_communication: ['who-care-for-child-development-2012', 'cdc-milestones-2026', 'nhs-learn-to-talk-2023', 'jr-weisleder-2013', 'aap-media-young-minds-2016'],
   gd_5_6m_social: ['cdc-milestones-2026', 'aap-milestones-2022', 'who-nurturing-care-2018', 'nice-ph40-social-emotional-2012', 'aap-power-of-play-2018'],
@@ -162,14 +162,14 @@ export const EXPLICIT_CONTENT_SOURCES: Record<string, string[]> = {
 
   // --- Knowledge base: 7–9 months (guides) ----------------------------------
   gd_7_9m_fine_motor: ['cdc-milestone-checklists-2025', 'aap-milestones-2022', 'aap-power-of-play-2018', 'tb-case-smith-9e-2025', 'tb-bright-futures-4e-2017'],
-  gd_7_9m_speech: ['cdc-milestones-2026', 'aap-milestones-2022', 'nhs-learn-to-talk-2023', 'tb-paul-language-6e-2024', 'asha-late-language-emergence'],
+  gd_7_9m_speech: ['cdc-milestones-2026', 'aap-milestones-2022', 'nhs-learn-to-talk-2023', 'tb-paul-language-6e-2024'],
   gd_7_9m_language: ['cdc-milestones-2026', 'aap-surveillance-2020', 'nhs-learn-to-talk-2023', 'jr-weisleder-2013', 'tb-paul-language-6e-2024'],
   gd_7_9m_communication: ['who-care-for-child-development-2012', 'cdc-milestones-2026', 'nhs-learn-to-talk-2023', 'jr-weisleder-2013', 'aap-media-young-minds-2016'],
   gd_7_9m_cognitive: ['cdc-milestone-checklists-2025', 'aap-milestones-2022', 'aap-power-of-play-2018', 'tb-dbp-5e-2022', 'aap-media-young-minds-2016', 'who-pa-sleep-under5-2019'],
   gd_7_9m_social: ['cdc-milestones-2026', 'aap-milestones-2022', 'who-nurturing-care-2018', 'nice-ph40-social-emotional-2012', 'aap-power-of-play-2018'],
   gd_7_9m_emotional: ['aap-toxic-stress-2021', 'who-nurturing-care-2018', 'nice-ng194-postnatal-2021', 'nice-ph40-social-emotional-2012', 'tb-nelson-22e-2024'],
-  gd_7_9m_nutrition: ['who-complementary-feeding-2023', 'who-iycf-model-chapter-2025', 'who-iycf-indicators-2021', 'nhs-first-solid-foods-2026', 'cdc-foods-6-24m-2025', 'nice-ng247-maternal-child-nutrition-2025', 'asha-pediatric-feeding-swallowing'],
-  gd_7_9m_self_help: ['tb-case-smith-9e-2025', 'tb-bright-futures-4e-2017', 'who-iycf-model-chapter-2025', 'cdc-foods-6-24m-2025', 'aota-early-intervention'],
+  gd_7_9m_nutrition: ['who-complementary-feeding-2023', 'who-iycf-model-chapter-2025', 'who-iycf-indicators-2021', 'nhs-first-solid-foods-2026', 'cdc-foods-6-24m-2025', 'cdc-introduce-solid-foods-2026', 'jr-niaid-peanut-prevention-2017', 'nice-ng247-maternal-child-nutrition-2025', 'asha-pediatric-feeding-swallowing'],
+  gd_7_9m_self_help: ['tb-case-smith-9e-2025', 'tb-bright-futures-4e-2017', 'who-iycf-model-chapter-2025', 'cdc-foods-6-24m-2025'],
   gd_7_9m_sleep: ['who-pa-sleep-under5-2019', 'aap-safe-sleep-2022', 'nhs-sids-2025', 'hc-safe-sleep-2026', 'jr-aasm-bedtime-2006', 'jr-hiscock-sleep-rct-2002'],
   gd_7_9m_safety: ['aap-drowning-2021', 'tb-bright-futures-4e-2017', 'nhs-child-accident-2025', 'hc-child-ems-2026', 'nice-ng143-fever-2019', 'who-imci-chart-2014', 'aap-safe-sleep-2022'],
   gd_7_9m_daily_routine: ['who-nurturing-care-2018', 'tb-bright-futures-4e-2017', 'jr-aasm-bedtime-2006', 'jr-hiscock-sleep-rct-2002', 'who-iycf-model-chapter-2025', 'aap-drowning-2021', 'nice-ng143-fever-2019', 'cdc-immunization-schedule-2025'],
@@ -180,20 +180,20 @@ export const EXPLICIT_CONTENT_SOURCES: Record<string, string[]> = {
   act_wave_bye_bye: ['cdc-milestones-2026', 'aap-milestones-2022', 'who-care-for-child-development-2012', 'aap-power-of-play-2018'],
   act_lift_the_flap_book: ['aap-literacy-2024', 'hc-early-literacy-2023', 'nhs-learn-to-talk-2023', 'jr-dowdall-bookreading-2020'],
   act_drum_and_pause: ['who-care-for-child-development-2012', 'aap-power-of-play-2018', 'tb-dbp-5e-2022'],
-  act_two_texture_spoons: ['who-iycf-model-chapter-2025', 'cdc-foods-6-24m-2025', 'tb-case-smith-9e-2025', 'asha-pediatric-feeding-swallowing'],
+  act_two_texture_spoons: ['who-iycf-model-chapter-2025', 'cdc-foods-6-24m-2025', 'tb-case-smith-9e-2025'],
   prt_checklist_7_9m: ['cdc-milestone-checklists-2025', 'aap-milestones-2022', 'who-iycf-model-chapter-2025', 'aap-safe-sleep-2022', 'nhs-baby-reviews-2023'],
 
   // --- Knowledge base: 10–12 months (guides) --------------------------------
   gd_10_12m_gross_motor: ['cdc-milestone-checklists-2025', 'aap-milestones-2022', 'jr-who-motor-windows-2006', 'tb-campbell-pt-6e-2022', 'tb-bright-futures-4e-2017'],
   gd_10_12m_fine_motor: ['cdc-milestone-checklists-2025', 'aap-milestones-2022', 'aap-power-of-play-2018', 'tb-case-smith-9e-2025', 'tb-bright-futures-4e-2017'],
-  gd_10_12m_speech: ['cdc-milestones-2026', 'aap-milestones-2022', 'nhs-learn-to-talk-2023', 'tb-paul-language-6e-2024', 'asha-late-language-emergence'],
+  gd_10_12m_speech: ['cdc-milestones-2026', 'aap-milestones-2022', 'nhs-learn-to-talk-2023', 'tb-paul-language-6e-2024'],
   gd_10_12m_language: ['cdc-milestones-2026', 'aap-surveillance-2020', 'nhs-learn-to-talk-2023', 'jr-weisleder-2013', 'tb-paul-language-6e-2024'],
   gd_10_12m_cognitive: ['cdc-milestone-checklists-2025', 'aap-milestones-2022', 'aap-power-of-play-2018', 'tb-dbp-5e-2022', 'aap-media-young-minds-2016', 'hc-screen-time-5cs-2024', 'hc-screen-time-5cs-infants-2024', 'jr-madigan-screen-language-2020', 'who-pa-sleep-under5-2019'],
   gd_10_12m_social: ['cdc-milestones-2026', 'aap-milestones-2022', 'who-nurturing-care-2018', 'nice-ph40-social-emotional-2012', 'aap-power-of-play-2018'],
   gd_10_12m_emotional: ['aap-toxic-stress-2021', 'who-nurturing-care-2018', 'nice-ng194-postnatal-2021', 'nice-ph40-social-emotional-2012', 'tb-nelson-22e-2024'],
-  gd_10_12m_self_help: ['tb-case-smith-9e-2025', 'tb-bright-futures-4e-2017', 'who-iycf-model-chapter-2025', 'cdc-foods-6-24m-2025', 'aap-oral-health-2023', 'who-caries-2020', 'aota-early-intervention', 'asha-pediatric-feeding-swallowing'],
+  gd_10_12m_self_help: ['tb-case-smith-9e-2025', 'tb-bright-futures-4e-2017', 'who-iycf-model-chapter-2025', 'cdc-foods-6-24m-2025', 'aap-oral-health-2023', 'who-caries-2020', 'asha-pediatric-feeding-swallowing', 'hc-choking-prevention-2026'],
   gd_10_12m_play: ['aap-power-of-play-2018', 'who-care-for-child-development-2012', 'unicef-early-moments-2017', 'tb-bright-futures-4e-2017', 'aap-drowning-2021', 'aap-safe-sleep-2022'],
-  gd_10_12m_nutrition: ['who-complementary-feeding-2023', 'who-iycf-model-chapter-2025', 'who-iycf-indicators-2021', 'nhs-first-solid-foods-2026', 'cdc-foods-6-24m-2025', 'nice-ng247-maternal-child-nutrition-2025', 'aap-breastfeeding-2022', 'asha-pediatric-feeding-swallowing'],
+  gd_10_12m_nutrition: ['who-complementary-feeding-2023', 'who-iycf-model-chapter-2025', 'who-iycf-indicators-2021', 'nhs-first-solid-foods-2026', 'cdc-foods-6-24m-2025', 'cdc-introduce-solid-foods-2026', 'jr-niaid-peanut-prevention-2017', 'nice-ng247-maternal-child-nutrition-2025', 'aap-breastfeeding-2022', 'asha-pediatric-feeding-swallowing'],
   gd_10_12m_sleep: ['who-pa-sleep-under5-2019', 'aap-safe-sleep-2022', 'nhs-sids-2025', 'hc-safe-sleep-2026', 'jr-aasm-bedtime-2006', 'jr-hiscock-sleep-rct-2002'],
   gd_10_12m_daily_routine: ['who-nurturing-care-2018', 'tb-bright-futures-4e-2017', 'jr-aasm-bedtime-2006', 'jr-hiscock-sleep-rct-2002', 'who-iycf-model-chapter-2025', 'aap-drowning-2021', 'nice-ng143-fever-2019', 'nhs-child-accident-2025', 'hc-child-ems-2026', 'who-imci-chart-2014', 'cdc-immunization-schedule-2025', 'who-ia2030-2020'],
 
@@ -204,7 +204,7 @@ export const EXPLICIT_CONTENT_SOURCES: Record<string, string[]> = {
   act_roll_the_ball_back: ['aap-power-of-play-2018', 'who-care-for-child-development-2012', 'cdc-milestones-2026', 'tb-campbell-pt-6e-2022'],
   act_show_me_and_name_it: ['nhs-learn-to-talk-2023', 'cdc-milestones-2026', 'jr-weisleder-2013', 'who-care-for-child-development-2012'],
   act_first_words_book_share: ['aap-literacy-2024', 'hc-early-literacy-2023', 'jr-dowdall-bookreading-2020', 'nhs-learn-to-talk-2023'],
-  act_open_cup_sips: ['who-iycf-model-chapter-2025', 'cdc-foods-6-24m-2025', 'tb-case-smith-9e-2025', 'asha-pediatric-feeding-swallowing', 'aap-oral-health-2023'],
+  act_open_cup_sips: ['who-iycf-model-chapter-2025', 'cdc-foods-6-24m-2025', 'tb-case-smith-9e-2025', 'aap-oral-health-2023'],
   prt_checklist_10_12m: ['cdc-milestone-checklists-2025', 'aap-milestones-2022', 'who-iycf-model-chapter-2025', 'aap-safe-sleep-2022', 'nhs-baby-reviews-2023', 'tb-bright-futures-4e-2017'],
 
   // --- Activities -----------------------------------------------------------
@@ -251,15 +251,15 @@ export const EXPLICIT_CONTENT_SOURCES: Record<string, string[]> = {
   // references are the recognition-and-referral literature a parent-facing
   // awareness page is allowed to summarise.
   sn_autism: ['aap-asd-2020', 'cdc-autism-signs-2024', 'nice-cg128-autism-2011', 'who-unicef-developmental-disabilities-2023'],
-  sn_speech_delay: ['asha-late-language-emergence', 'tb-paul-language-6e-2024', 'nhs-learn-to-talk-2023', 'asha-speech-sound-disorders'],
+  sn_speech_delay: ['cdc-milestones-2026', 'asha-late-language-emergence', 'tb-paul-language-6e-2024', 'nhs-learn-to-talk-2023'],
   sn_adhd: ['aap-adhd-guideline-2019', 'cdc-adhd-clinical-care-2026', 'nice-ng87-adhd-2018', 'tb-dbp-5e-2022'],
   sn_down_syndrome: ['aap-down-syndrome-supervision-2022', 'tb-nelson-22e-2024', 'who-unicef-developmental-disabilities-2023', 'tb-dbp-5e-2022'],
-  sn_cerebral_palsy: ['nice-ng62-cerebral-palsy-2017', 'nhs-cerebral-palsy-symptoms-2023', 'nhs-cerebral-palsy-treatment-2023', 'tb-swaiman-7e-2025', 'tb-campbell-pt-6e-2022'],
-  sn_hearing_loss: ['cdc-ehdi-toolkit-2024', 'cdc-hearing-treatment-2024', 'tb-nelson-22e-2024', 'asha-spoken-language-disorders', 'who-unicef-developmental-disabilities-2023'],
+  sn_cerebral_palsy: ['nice-ng62-cerebral-palsy-2017', 'nhs-cerebral-palsy-symptoms-2023', 'nhs-cerebral-palsy-treatment-2023', 'tb-campbell-pt-6e-2022'],
+  sn_hearing_loss: ['cdc-ehdi-toolkit-2024', 'cdc-hearing-treatment-2024', 'tb-nelson-22e-2024', 'asha-language-communication-dhh', 'who-unicef-developmental-disabilities-2023'],
   sn_visual_impairment: ['tb-nelson-22e-2024', 'who-unicef-developmental-disabilities-2023'],
   sn_global_developmental_delay: ['aap-surveillance-2020', 'tb-dbp-5e-2022', 'who-unicef-developmental-disabilities-2023', 'tb-bayley-4-2019', 'nice-ng72-preterm-2017', 'tb-ccitsn-3e-2004'],
   sn_learning_disability: ['nhs-learning-disabilities-2025', 'tb-dbp-5e-2022', 'unicef-seen-counted-included-2022', 'tb-handbook-ecse-2016'],
-  sn_sensory_processing: ['tb-case-smith-9e-2025', 'aota-early-intervention'],
+  sn_sensory_processing: ['tb-case-smith-9e-2025', 'aap-sensory-integration-2012'],
   sn_dyslexia: ['ida-dyslexia-definition-2025', 'aap-dyslexia-early-identification-2020', 'nhs-dyslexia-children-2026', 'tb-dbp-5e-2022', 'hc-early-literacy-2023'],
   sn_developmental_coordination_disorder: ['nhs-dcd-diagnosis-2023', 'tb-case-smith-9e-2025', 'tb-campbell-pt-6e-2022', 'tb-dbp-5e-2022'],
   sn_selective_mutism: [
@@ -286,7 +286,7 @@ export const EXPLICIT_CONTENT_SOURCES: Record<string, string[]> = {
   // --- Printables ------------------------------------------------------------
   prt_flash_cards: ['jr-weisleder-2013', 'hc-early-literacy-2023'],
   prt_emotion_cards: ['nice-ph40-social-emotional-2012', 'aap-toxic-stress-2021'],
-  prt_communication_cards: ['who-care-for-child-development-2012', 'asha-spoken-language-disorders'],
+  prt_communication_cards: ['who-care-for-child-development-2012', 'asha-aac'],
   prt_routine_chart: ['tb-bright-futures-4e-2017', 'cdc-positive-parenting-toddlers-2026'],
   prt_reward_chart: ['cdc-positive-parenting-toddlers-2026', 'jr-plosmed-parenting-2021'],
   prt_behavior_chart: ['cdc-positive-parenting-toddlers-2026', 'jr-plosmed-parenting-2021'],
@@ -307,9 +307,9 @@ export const SAFETY_RULE_SOURCES: Record<string, string[]> = {
   severe_breathing_difficulty: ['nhs-child-accident-2025', 'hc-child-ems-2026', 'nhs-sids-2025', 'who-imci-chart-2014', 'tb-nelson-22e-2024'],
   blue_lips: ['nhs-child-accident-2025', 'hc-child-ems-2026', 'nhs-sids-2025', 'who-imci-chart-2014'],
   breathing_pauses: ['nhs-child-accident-2025', 'nhs-sids-2025', 'tb-nelson-22e-2024'],
-  seizure: ['nice-ng143-fever-2019', 'tb-swaiman-7e-2025', 'nhs-child-accident-2025', 'hc-child-ems-2026', 'nhs-sids-2025'],
+  seizure: ['nice-ng143-fever-2019', 'nhs-child-accident-2025', 'hc-child-ems-2026', 'nhs-sids-2025'],
   unresponsiveness: ['nhs-child-accident-2025', 'hc-child-ems-2026', 'nhs-sids-2025', 'who-imci-chart-2014'],
-  sudden_weakness: ['cdc-afm-signs-2024', 'tb-swaiman-7e-2025'],
+  sudden_weakness: ['cdc-afm-signs-2024'],
   serious_injury: ['aap-drowning-2021', 'nhs-child-accident-2025', 'hc-child-ems-2026'],
   severe_dehydration: ['who-imci-chart-2014', 'hc-child-ems-2026', 'tb-nelson-22e-2024'],
   loss_of_acquired_skills: ['aap-surveillance-2020', 'cdc-autism-signs-2024', 'aap-asd-2020'],
@@ -324,8 +324,8 @@ export const HOPE_TOPIC_SOURCES: Record<string, string[]> = {
   'autism-spectrum': ['aap-asd-2020', 'cdc-autism-signs-2024', 'nice-cg128-autism-2011', 'jr-mchat-rf-2014'],
   'speech-language-delay': ['asha-late-language-emergence', 'tb-paul-language-6e-2024', 'nhs-learn-to-talk-2023'],
   adhd: ['nice-ng87-adhd-2018', 'tb-dbp-5e-2022'],
-  'hearing-loss': ['tb-nelson-22e-2024', 'asha-spoken-language-disorders', 'who-unicef-developmental-disabilities-2023'],
-  'cerebral-palsy': ['nice-ng62-cerebral-palsy-2017', 'tb-swaiman-7e-2025', 'tb-campbell-pt-6e-2022'],
+  'hearing-loss': ['cdc-hearing-treatment-2024', 'asha-language-communication-dhh', 'tb-nelson-22e-2024', 'who-unicef-developmental-disabilities-2023'],
+  'cerebral-palsy': ['nice-ng62-cerebral-palsy-2017', 'nhs-cerebral-palsy-symptoms-2023', 'nhs-cerebral-palsy-treatment-2023', 'tb-campbell-pt-6e-2022'],
 };
 
 // ---------------------------------------------------------------------------

@@ -498,7 +498,7 @@ const GUIDES_B: SeedItem[] = [
         'Every sound you answer teaches her that her voice matters.',
       ),
     }),
-    'The move from repetitive babble to first meaningful words, and the wide normal range for first words, follow CDC and AAP milestone guidance, the NHS learn-to-talk guidance and the language-development textbook in the registry, with the late-language-emergence points drawn from the ASHA practice portal.',
+    'The move from repetitive babble to first meaningful words, and the wide normal range for first words, follow CDC and AAP milestone guidance, the NHS learn-to-talk guidance and the language-development textbook in the registry.',
   ),
   kb(
     guide('10_12m', 'language', {
@@ -827,12 +827,12 @@ const GUIDES_D: SeedItem[] = [
       ],
       materials: b('ခွက်ငယ်၊ ဇွန်း၊ ပျော့သော သွားတိုက်တံ', 'A small cup, a spoon, a soft toothbrush'),
       safety: b(
-        'ကလေး စားနေစဉ် အမြဲ အနီးကပ်ကြီးကြပ်ပြီး မတ်မတ်ထိုင်စေပါ။ လမ်းလျှောက်နေစဉ် သို့မဟုတ် ကားစီးနေစဉ် မစားစေပါနှင့်။ အသက်ရှူလမ်းကြောင်း ပိတ်ဆို့စေနိုင်သော အခွံမာသီးလုံး၊ ပဲစေ့လုံး၊ စပျစ်သီးလုံး၊ ချယ်ရီသီးလုံး၊ ပြောင်းဖူးပေါက်ပေါက်၊ သကြားလုံးမာ၊ ဝက်အူချောင်းအဝိုင်း၊ ငါးရိုးပါသောအသားနှင့် မာသော ဟင်းသီးဟင်းရွက်အတုံးများကို မပေးပါနှင့်။ စပျစ်သီးနှင့် ချယ်ရီသီးကို အလျားလိုက် လေးစိတ်ခွဲပေးပါ။ အသက် ၁ နှစ်မပြည့်မီ ပျားရည် မပေးပါနှင့်။ အသက် ၁၂ လမပြည့်မီ နွားနို့ကို အဓိကသောက်စရာအဖြစ် မပေးသင့်သော်လည်း ချက်ပြုတ်ရာတွင် အနည်းငယ် ထည့်သုံးနိုင်သည်။ ဆားနှင့် သကြား ထပ်မထည့်ပါနှင့်။ သွားတိုက်ဆေးသုံးပါက ဆန်စေ့ပမာဏခန့်သာ သုံးပါ။ အိပ်ရာဝင်ချိန်တွင် နို့ဗူး သို့မဟုတ် နို့ခွက်ကို ပါးစပ်တွင် တပ်ထားပေးခြင်းက သွားပိုးစားစေနိုင်သဖြင့် ရှောင်ပါ။',
-        'Always supervise eating, keep her sitting upright, and never let her eat while walking or in a moving vehicle. Avoid choking foods — nuts, whole beans, whole grapes, whole cherries, popcorn, hard sweets, sausage rounds, fish with bones, and hard raw vegetable chunks. Quarter grapes and cherries lengthways. Never give honey before 12 months (risk of infant botulism). Do not give cow’s milk as a main drink before 12 months, though small amounts in cooking are fine. Add no salt or sugar. If using toothpaste, use only a rice-grain smear. Avoid leaving her with a bottle or cup of milk at bedtime — it causes tooth decay.',
+        'ကလေး စားနေစဉ် အမြဲ အနီးကပ်ကြီးကြပ်ပြီး မတ်မတ်ထိုင်စေပါ။ လမ်းလျှောက်နေစဉ် သို့မဟုတ် ကားစီးနေစဉ် မစားစေပါနှင့်။ အသက်ရှူလမ်းကြောင်း ပိတ်ဆို့စေနိုင်သော အခွံမာသီးလုံး၊ ပဲစေ့လုံး၊ စပျစ်သီးလုံး၊ ချယ်ရီသီးလုံး၊ ပြောင်းဖူးပေါက်ပေါက်၊ သကြားလုံးမာ၊ ဝက်အူချောင်းအဝိုင်း၊ ငါးရိုးပါသောအသားနှင့် မာသော ဟင်းသီးဟင်းရွက်အတုံးများကို မပေးပါနှင့်။ စပျစ်သီးနှင့် ချယ်ရီသီးကို အလျားလိုက် လေးစိတ်ခွဲပေးပါ။ မွေးကင်းစကလေး ဘိုကျူလစ်ဇင် အန္တရာယ်ကြောင့် အသက် ၁၂ လမပြည့်မီ ပျားရည် မပေးပါနှင့်။ အသက် ၁၂ လမပြည့်မီ နွားနို့ကို အဓိကသောက်စရာအဖြစ် မပေးသင့်သော်လည်း ချက်ပြုတ်ရာတွင် အနည်းငယ် ထည့်သုံးနိုင်သည်။ ဆားနှင့် သကြား ထပ်မထည့်ပါနှင့်။ သွားတိုက်ဆေးသုံးပါက ဆန်စေ့ပမာဏခန့်သာ သုံးပါ။ အိပ်ရာဝင်ချိန်တွင် နို့ဗူး သို့မဟုတ် နို့ခွက်ကို ပါးစပ်တွင် တပ်ထားပေးခြင်းက သွားပိုးစားစေနိုင်သဖြင့် ရှောင်ပါ။',
+        'Always supervise eating, keep her sitting upright, and never let her eat while walking or in a moving vehicle. Avoid choking foods — whole nuts, whole beans, whole grapes, whole cherries, popcorn, hard sweets, sausage rounds, fish with bones, and hard raw vegetable chunks. Quarter grapes and cherries lengthways. Never give honey before 12 months (risk of infant botulism). Do not give cow’s milk as a main drink before 12 months, though small amounts in cooking are fine. Add no salt or sugar. If using toothpaste, use only a rice-grain smear. Avoid leaving her with a bottle or cup of milk at bedtime — it can contribute to tooth decay.',
       ),
       commonMistakes: [
         b('ရှုပ်ပွမည် စိုးရိမ်၍ ကိုယ်တိုင် စားခွင့် မပေးခြင်း။', 'Not letting her self-feed because of the mess.'),
-        b('ကလေး ချောင်းဆိုးတိုင်း အစာကြောင့် အသက်ရှူလမ်းကြောင်း ပိတ်နေသည်ဟု ထင်ခြင်း။ ချောင်းဆိုးနိုင်သေးခြင်းက အစာကို ကိုယ်တိုင်ဖယ်ရှားရန် ကြိုးစားနေခြင်း ဖြစ်နိုင်သည်။', 'Confusing coughing with choking — coughing usually means she is clearing it herself.'),
+        b('ချောင်းဆိုးခြင်းနှင့် အစာတစ်ဆို့၍ အသက်ရှူလမ်းကြောင်း ပိတ်ခြင်းကို တူညီသည်ဟု မယူဆပါနှင့်။ ကလေးက အသံထွက်၍ အားကောင်းစွာ ချောင်းဆိုးနိုင်သေးပါက အနီးကပ်စောင့်ကြည့်ပြီး ချောင်းဆိုးထုတ်ခွင့်ပေးပါ။ အသံမထွက်နိုင်၊ အသက်မရှူနိုင် သို့မဟုတ် ပြာလာပါက အရေးပေါ် အစာတစ်ဆို့ ရှေးဦးပြုစုနည်းကို ချက်ချင်းလုပ်ပြီး အရေးပေါ်အကူအညီ တောင်းပါ။ အစာစားတိုင်း သို့မဟုတ် မကြာခဏ ချောင်းဆိုးပါက ကျန်းမာရေးဝန်ထမ်းနှင့် ပြသပါ။', 'Do not treat coughing and complete airway blockage as the same thing. If the child can make sound and cough forcefully, watch closely and let them cough. If the child cannot make sound or breathe, or turns blue, start emergency choking first aid and get emergency help immediately. If coughing happens at every feed or often, seek assessment from a health worker.'),
       ],
       parentTips: [
         b('အစာကို ကလေး၏ လက်ညှိုးအရွယ် အရှည်လိုက် ဖြတ်ပေးပါ — ကိုင်ရလွယ်ပြီး ပိုလုံခြုံသည်။', 'Cut food into finger-length strips — easier to hold and safer.'),
@@ -862,7 +862,7 @@ const GUIDES_D: SeedItem[] = [
         'Every messy meal is practice at doing it herself.',
       ),
     }),
-    'Self-feeding, open-cup practice and early oral care at 10–12 months follow the paediatric occupational-therapy reference, the Bright Futures preventive-care schedule, the WHO infant and young child feeding model chapter and the CDC foods and drinks guidance for 6–24 months, with the tooth-brushing and decay-prevention points from the AAP oral-health guidance and the WHO report on ending childhood dental caries, and the feeding and swallowing cautions from the ASHA practice portal and the occupational-therapy early-intervention guidance.',
+    'Self-feeding, open-cup practice and early oral care at 10–12 months follow the paediatric occupational-therapy reference, the Bright Futures preventive-care schedule, the WHO infant and young child feeding model chapter and the CDC foods and drinks guidance for 6–24 months, with the tooth-brushing and decay-prevention points from the AAP oral-health guidance and the WHO report on ending childhood dental caries, and the feeding and swallowing cautions from the ASHA practice portal.',
   ),
 ];
 
@@ -977,8 +977,8 @@ const GUIDES_F: SeedItem[] = [
       ],
       materials: b('ခွက်၊ ဇွန်း၊ မိသားစု အစာ (ဆား၊ သကြား မထည့်ရသေးသော အပိုင်း)', 'A cup, a spoon and family food set aside before salt or sugar'),
       safety: b(
-        'အသက်ရှူလမ်းကြောင်း ပိတ်ဆို့စေနိုင်သော အခွံမာသီးလုံး၊ ပဲစေ့လုံး၊ စပျစ်သီးနှင့် ချယ်ရီသီးလုံး၊ ပြောင်းဖူးပေါက်ပေါက်၊ သကြားလုံးမာ၊ ဝက်အူချောင်းအဝိုင်း၊ ငါးရိုးပါသောအသားနှင့် မာသော ဟင်းသီးဟင်းရွက်အတုံးများကို ရှောင်ပါ။ စပျစ်သီးနှင့် ချယ်ရီသီးကို အလျားလိုက် လေးစိတ်ခွဲပေးပါ။ အစာစားစဉ် အမြဲ အနီးကပ်ကြီးကြပ်ပြီး ကလေးကို မတ်မတ်ထိုင်စေပါ။ အသက် ၁၂ လမပြည့်မီ ပျားရည် မပေးပါနှင့်။ နွားနို့ကိုလည်း အဓိကသောက်စရာအဖြစ် မပေးပါနှင့်။ ဆားနှင့် သကြား ထပ်မထည့်ဘဲ ချိုသောအချိုရည်နှင့် လက်ဖက်ရည်ကို ရှောင်ပါ။ ဥ၊ ငါး၊ နို့ထွက်ပစ္စည်းနှင့် ချောမွေ့အောင် ဖျော်ထားသော အခွံမာသီးထုတ်ကုန်များကဲ့သို့ ဓာတ်မတည့်နိုင်သော အစားအစာများကို တစ်မျိုးချင်း အနည်းငယ်စီ စတင်ပေးပြီး တုံ့ပြန်မှုကို စောင့်ကြည့်နိုင်သည်။ မိသားစုတွင် ဓာတ်မတည့်မှုမှတ်တမ်းရှိပါက ကျန်းမာရေးဝန်ထမ်းနှင့် တိုင်ပင်ပါ။ အစားအစာကို ကောင်းစွာချက်ပြုတ်ပြီး လက်နှင့် အသုံးအဆောင်များကို သန့်ရှင်းစွာထားပါ။ သန့်ရှင်းသောရေကို သုံးပြီး ကျန်ရှိသောအစာကို အချိန်ကြာမြင့်စွာ မထားပါနှင့်။',
-        'Avoid choking foods — nuts, whole beans, whole grapes and cherries (quarter them), popcorn, hard sweets, whole sausage rounds, fish with bones and hard raw vegetable chunks. Always supervise meals with her sitting upright. Never give honey before 12 months. Do not use cow’s milk as a main drink before 12 months. Add no salt or sugar and avoid sweet drinks and tea. Common allergenic foods such as egg, fish, dairy and nut products (as smooth pastes, never whole nuts) do not need to be avoided — introduce them one at a time and watch the response. If there is a family history of allergy, discuss it with a health worker first. Cook food thoroughly, wash hands, use clean water, and do not keep leftovers for long.',
+        'အသက်ရှူလမ်းကြောင်း ပိတ်ဆို့စေနိုင်သော အခွံမာသီးလုံး၊ ပဲစေ့လုံး၊ စပျစ်သီးနှင့် ချယ်ရီသီးလုံး၊ ပြောင်းဖူးပေါက်ပေါက်၊ သကြားလုံးမာ၊ ဝက်အူချောင်းအဝိုင်း၊ ငါးရိုးပါသောအသားနှင့် မာသော ဟင်းသီးဟင်းရွက်အတုံးများကို ရှောင်ပါ။ စပျစ်သီးနှင့် ချယ်ရီသီးကို အလျားလိုက် လေးစိတ်ခွဲပေးပါ။ အစာစားစဉ် အမြဲ အနီးကပ်ကြီးကြပ်ပြီး ကလေးကို မတ်မတ်ထိုင်စေပါ။ အသက် ၁၂ လမပြည့်မီ ပျားရည် မပေးပါနှင့်။ နွားနို့ကိုလည်း အဓိကသောက်စရာအဖြစ် မပေးပါနှင့်။ ဆားနှင့် သကြား ထပ်မထည့်ဘဲ ချိုသောအချိုရည်နှင့် လက်ဖက်ရည်ကို ရှောင်ပါ။ ဥ၊ ငါး၊ နို့ထွက်ပစ္စည်းနှင့် ချောမွေ့အောင် ဖျော်ထားသော အခွံမာသီးထုတ်ကုန်များကဲ့သို့ ဓာတ်မတည့်နိုင်သော အစားအစာများကို တစ်မျိုးချင်း အနည်းငယ်စီ စတင်ပေးပြီး အစားအစာအသစ် တစ်မျိုးနှင့်တစ်မျိုးကြား ၃ ရက်မှ ၅ ရက် စောင့်ကြည့်ပါ။ ကလေးတွင် ပြင်းထန်သော အရေပြားရောင်ရမ်းနာ သို့မဟုတ် ဥနှင့် ဓာတ်မတည့်မှု ရှိပါက မြေပဲမစတင်မီ ဆရာဝန်နှင့် တိုင်ပင်ပါ။ သိရှိထားသော အစားအစာဓာတ်မတည့်မှု သို့မဟုတ် ယခင်က တုံ့ပြန်မှုရှိပါက ထိုအစားအစာကို ဘေးကင်းစွာ မိတ်ဆက်ပုံကို ဆရာဝန်အား မေးမြန်းပါ။ အစားအစာကို ကောင်းစွာချက်ပြုတ်ပြီး လက်နှင့် အသုံးအဆောင်များကို သန့်ရှင်းစွာထားပါ။ သန့်ရှင်းသောရေကို သုံးပြီး ကျန်ရှိသောအစာကို အချိန်ကြာမြင့်စွာ မထားပါနှင့်။',
+        'Avoid choking foods — whole nuts, whole beans, whole grapes and cherries (quarter them), popcorn, hard sweets, whole sausage rounds, fish with bones and hard raw vegetable chunks. Always supervise meals with her sitting upright. Never give honey before 12 months. Do not use cow’s milk as a main drink before 12 months. Add no salt or sugar and avoid sweet drinks and tea. Common allergenic foods such as egg, fish, dairy and nut products (as smooth pastes, never whole nuts) do not need to be avoided. Introduce them one at a time and wait 3 to 5 days between each new food. If your child has severe eczema or egg allergy, talk with a doctor before introducing peanut. If your child has a known food allergy or has previously reacted to a food, ask a doctor how to introduce that food safely. Cook food thoroughly, wash hands, use clean water, and do not keep leftovers for long.',
       ),
       commonMistakes: [
         b('ချောမွေ့အောင် ကြိတ်ထားသော အစာကိုသာ အချိန်ကြာမြင့်စွာ ကျွေးခြင်း။ ကလေးစားနိုင်သည့် အစာအဖတ်နှင့် ပုံစံကို တဖြည်းဖြည်း ပြောင်းပေးရန် လိုသည်။', 'Staying on purée too long — textures need to progress.'),
@@ -1405,7 +1405,7 @@ const ACTIVITIES_C: SeedItem[] = [
     activity({
       slug: 'open_cup_sips',
       title: b('ခွက်ဖြင့် ရေသောက် လေ့ကျင့်ခြင်း', 'Open cup practice'),
-      summary: b('သေးငယ်သော ခွက်ဖြင့် ရေအနည်းငယ် သောက်ခြင်းသည် ကိုယ်တိုင် စားသောက်နိုင်မှုနှင့် ပါးစပ် ကြွက်သားများကို လေ့ကျင့်ပေးသည်။', 'Sipping a little water from a small open cup builds self-feeding skill and oral strength.'),
+      summary: b('သေးငယ်သော ခွက်ဖြင့် ရေအနည်းငယ် သောက်ခြင်းသည် ခွက်မှ သောက်တတ်ရန်နှင့် ကိုယ်တိုင် လုပ်ဆောင်နိုင်မှုကို လေ့ကျင့်ပေးသည်။', 'Sipping a little water from a small open cup helps your child practise drinking from a cup and doing more for themselves.'),
       ageGroupKey: '10_12m',
       domains: ['self_help', 'nutrition'],
       difficulty: 'easy',
@@ -1415,11 +1415,11 @@ const ACTIVITIES_C: SeedItem[] = [
       instructions: [
         b('ခွက်ထဲ ရေ အနည်းငယ်သာ ထည့်ပါ (တစ်ဝက်အောက်)။', 'Put only a small amount of water in the cup — less than half.'),
         b('ခွက်ကို ကလေး၏ အောက်နှုတ်ခမ်းတွင် ဖြည်းညှင်းစွာ ကပ်ပေးပါ။', 'Rest the cup gently on her lower lip.'),
-        b('ဖြည်းညှင်းစွာ စောင်းပေးပြီး ကလေး မျိုချသည်ကို စောင့်ပါ။', 'Tilt slowly and wait for her to swallow.'),
+        b('ခွက်ကို ရေက အောက်နှုတ်ခမ်းကို ထိရုံသာ ဖြည်းညှင်းစွာ စောင်းပေးပါ။ ကလေးကိုယ်တိုင် စုပ်သောက်ပြီး မျိုချနိုင်ရန် စောင့်ပါ — ပါးစပ်ထဲသို့ မလောင်းထည့်ပါနှင့်။', 'Tilt the cup only until the water touches the lower lip. Let the child sip and swallow at their own pace—do not pour liquid into the mouth.'),
         b('ကလေး ခွက်ကို ကိုင်လိုလျှင် သင့်လက်ဖြင့် အတူ ကိုင်ပေးပါ။', 'If she wants to hold it, hold it together with her.'),
         b('တစ်ရက်လျှင် စားသောက်ချိန်တွင် အနည်းငယ်စီ လေ့ကျင့်ပါ — ဖိအားမပေးပါနှင့်။', 'Practise a little at mealtimes — never force it.'),
       ],
-      safety: b('ကလေး မတ်မတ် ထိုင်နေစဉ်သာ တိုက်ပါ — လှဲလျက် မတိုက်ပါနှင့်။ ကလေးအား ခွက်နှင့် တစ်ယောက်တည်း မထားပါနှင့်။ ကလေး ချောင်းဆိုးလျှင် ရပ်ပါ။ ဖန်ခွက် သို့မဟုတ် ကွဲနိုင်သော ခွက်ကို မသုံးပါနှင့်။ အိပ်ရာထဲတွင် ခွက် သို့မဟုတ် ပုလင်း မထားခဲ့ပါနှင့် — သွားပိုးစားနိုင်သည်။', 'Only offer it while she is sitting upright, never lying down. Do not leave her alone with the cup. Stop if she coughs. Do not use glass or anything breakable. Never leave a cup or bottle with her in bed — it harms the teeth.'),
+      safety: b('ကလေး မတ်မတ် ထိုင်နေစဉ်သာ တိုက်ပါ — လှဲလျက် မတိုက်ပါနှင့်။ ကလေးအား ခွက်နှင့် တစ်ယောက်တည်း မထားပါနှင့်။ ကလေး ချောင်းဆိုးလျှင် ရပ်ပါ။ ဖန်ခွက် သို့မဟုတ် ကွဲနိုင်သော ခွက်ကို မသုံးပါနှင့်။ အိပ်ရာထဲတွင် ခွက် သို့မဟုတ် ပုလင်း မထားခဲ့ပါနှင့် — သွားပိုးစားနိုင်သည်။', 'Only offer it while she is sitting upright, never lying down. Do not leave her alone with the cup. Stop if she coughs. Do not use glass or anything breakable. Never leave a cup or bottle with her in bed — it can contribute to tooth decay.'),
       indoor: true,
       outdoor: false,
       oneChild: true,
@@ -1437,7 +1437,7 @@ const ACTIVITIES_C: SeedItem[] = [
       offline: true,
       tags: ['cup_drinking', 'self_feeding'],
     }),
-    'Open-cup practice and the safety points around it follow the WHO infant and young child feeding model chapter, CDC feeding guidance for 6–24 months, the paediatric occupational-therapy reference, the ASHA pediatric feeding and swallowing resource and AAP oral-health guidance in the registry.',
+    'Open-cup practice and the safety points around it follow the WHO infant and young child feeding model chapter, CDC feeding guidance for 6–24 months, the paediatric occupational-therapy reference and AAP oral-health guidance in the registry.',
   ),
 ];
 

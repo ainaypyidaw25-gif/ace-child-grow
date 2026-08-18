@@ -13,7 +13,10 @@ import {
   OUTDATED_AFTER_YEARS as SERVER_OUTDATED_AFTER_YEARS,
   REVIEW_CADENCE_MONTHS as SERVER_REVIEW_CADENCE_MONTHS,
 } from '../../../convex/lib/evidenceFreshness';
-import { reviewRefusal as reviewRefusalPolicy } from '../../../convex/evidence';
+import {
+  evidenceDependencyInvalidationPatch,
+  reviewRefusal as reviewRefusalPolicy,
+} from '../../../convex/evidence';
 
 const raw = (glob: Record<string, string>) => Object.values(glob)[0] ?? '';
 
@@ -280,19 +283,49 @@ describe('import result reporting', () => {
     expect(importLinks).toContain('unchanged += 1');
   });
 
-  it('never lets an import assert approval or wipe a review decision', () => {
+  it('never lets an import assert approval and invalidates review on changed evidence', () => {
     expect(importSources).toContain("rest.reviewStatus === 'approved' ? 'awaiting_review'");
-    for (const field of [
-      'reviewStatus',
-      'reviewer',
-      'reviewerQualification',
-      'reviewDate',
-      'reviewNote',
-    ]) {
-      expect(importSources, `${field} is not preserved on re-import`).toContain(
-        `${field}: existing.${field}`,
-      );
-    }
+    expect(importSources).toContain('evidenceImportReviewPolicy(');
+    expect(importSources).toContain('evidenceImportReviewFields(');
+    expect(importSources).toContain('reviewReset += 1');
+  });
+
+  it('makes retired source rows immutable and invalidates dependent content revisions', () => {
+    expect(importSources).toContain("if (existing.reviewStatus === 'retired')");
+    expect(importSources).toContain('invalidateDependentContentReviews(');
+    expect(importLinks).toContain('invalidateDependentContentReviews(');
+    expect(evidenceDependencyInvalidationPatch(7, 123)).toEqual({
+      reviewRevision: 8,
+      clinicalStatus: 'clinical_review',
+      reviewerId: undefined,
+      reviewerQualification: undefined,
+      reviewerDisplayName: undefined,
+      reviewScope: undefined,
+      reviewedAt: undefined,
+      nextReviewAt: undefined,
+      reviewNote: undefined,
+      updatedAt: 123,
+    });
+  });
+
+  it('validates import statuses and declares the expanded result contract', () => {
+    expect(evidenceSrc).toContain("v.literal('evidence_required')");
+    expect(evidenceSrc).toContain("v.literal('awaiting_review')");
+    expect(evidenceSrc).toContain('returns: sourceImportResultValidator');
+    expect(evidenceSrc).toContain('returns: linkImportResultValidator');
+  });
+
+  it('shows approval resets and stops links after a source-import failure', () => {
+    const admin = raw(
+      import.meta.glob('../../screens/EvidenceAdmin.tsx', {
+        query: '?raw',
+        import: 'default',
+        eager: true,
+      }) as Record<string, string>,
+    );
+    expect(admin).toContain('src.reviewResetIds.join');
+    expect(admin).toContain('if (src.failed > 0)');
+    expect(admin.indexOf('if (src.failed > 0)')).toBeLessThan(admin.indexOf('await importLinks'));
   });
 });
 
@@ -504,6 +537,15 @@ describe('activation script safety', () => {
   it('reads the live counts back instead of reporting what it submitted', () => {
     expect(activateSrc).toContain("runFunction('evidence:integrity'");
     expect(activateSrc).toContain('LIVE COUNTS (queried from the deployment, not assumed)');
+  });
+
+  it('reports reset ids and refuses to continue after a partial source import', () => {
+    expect(activateSrc).toContain('reviewResetIds');
+    expect(activateSrc).toContain('invalidatedContentKeys');
+    expect(activateSrc).toContain('link import was NOT started');
+    expect(activateSrc).toContain(
+      "link import partially failed. Failed keys: ${linkResult.failedIds.join(', ')}",
+    );
   });
 });
 

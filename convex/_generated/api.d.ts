@@ -37,6 +37,7 @@ import type * as lib_contentRetirements from "../lib/contentRetirements.js";
 import type * as lib_contentReviewRequirements from "../lib/contentReviewRequirements.js";
 import type * as lib_entitlements from "../lib/entitlements.js";
 import type * as lib_evidenceFreshness from "../lib/evidenceFreshness.js";
+import type * as lib_evidenceImportPolicy from "../lib/evidenceImportPolicy.js";
 import type * as lib_evidencePublicationGate from "../lib/evidencePublicationGate.js";
 import type * as lib_evidenceSafetyRelease from "../lib/evidenceSafetyRelease.js";
 import type * as lib_ownerPriority from "../lib/ownerPriority.js";
@@ -98,6 +99,7 @@ declare const fullApi: ApiFromModules<{
   "lib/contentReviewRequirements": typeof lib_contentReviewRequirements;
   "lib/entitlements": typeof lib_entitlements;
   "lib/evidenceFreshness": typeof lib_evidenceFreshness;
+  "lib/evidenceImportPolicy": typeof lib_evidenceImportPolicy;
   "lib/evidencePublicationGate": typeof lib_evidencePublicationGate;
   "lib/evidenceSafetyRelease": typeof lib_evidenceSafetyRelease;
   "lib/ownerPriority": typeof lib_ownerPriority;

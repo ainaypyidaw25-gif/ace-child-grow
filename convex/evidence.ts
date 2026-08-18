@@ -31,6 +31,10 @@ import {
 } from './lib/evidenceFreshness';
 import { publicationEvidenceIsCurrent } from './lib/evidencePublicationGate';
 import { contentIsParentReadable } from './lib/publicationVisibility';
+import {
+  evidenceImportReviewFields,
+  evidenceImportReviewPolicy,
+} from './lib/evidenceImportPolicy';
 
 const REVIEW_STATUSES = [
   'evidence_required',
@@ -39,6 +43,14 @@ const REVIEW_STATUSES = [
   'approved',
   'retired',
 ] as const;
+
+const reviewStatusValidator = v.union(
+  v.literal('evidence_required'),
+  v.literal('awaiting_review'),
+  v.literal('in_review'),
+  v.literal('approved'),
+  v.literal('retired'),
+);
 
 const sourceValidator = v.object({
   id: v.string(),
@@ -55,7 +67,7 @@ const sourceValidator = v.object({
   isbn: v.union(v.string(), v.null()),
   pmid: v.union(v.string(), v.null()),
   evidenceLevel: v.string(),
-  reviewStatus: v.string(),
+  reviewStatus: reviewStatusValidator,
   reviewer: v.union(v.string(), v.null()),
   reviewDate: v.union(v.string(), v.null()),
   nextReviewDate: v.union(v.string(), v.null()),
@@ -71,6 +83,28 @@ const linkValidator = v.object({
   kind: v.string(),
   slug: v.string(),
   sourceIds: v.array(v.string()),
+});
+
+const sourceImportResultValidator = v.object({
+  created: v.number(),
+  updated: v.number(),
+  unchanged: v.number(),
+  reviewReset: v.number(),
+  reviewResetIds: v.array(v.string()),
+  invalidatedContentKeys: v.array(v.string()),
+  skipped: v.number(),
+  failed: v.number(),
+  failedIds: v.array(v.string()),
+});
+
+const linkImportResultValidator = v.object({
+  created: v.number(),
+  updated: v.number(),
+  unchanged: v.number(),
+  invalidatedContentKeys: v.array(v.string()),
+  skipped: v.number(),
+  failed: v.number(),
+  failedKeys: v.array(v.string()),
 });
 
 const publicCitationValidator = v.object({
@@ -129,6 +163,72 @@ function sameSource(existing: Record<string, unknown>, next: Record<string, unkn
     if ((a ?? null) === null && (b ?? null) === null) return true;
     return a === b;
   });
+}
+
+type EvidenceDependency = { kind: string; slug: string };
+
+export function evidenceDependencyInvalidationPatch(
+  currentReviewRevision: number | undefined,
+  now: number,
+) {
+  return {
+    reviewRevision: (currentReviewRevision ?? 1) + 1,
+    clinicalStatus: 'clinical_review' as const,
+    reviewerId: undefined,
+    reviewerQualification: undefined,
+    reviewerDisplayName: undefined,
+    reviewScope: undefined,
+    reviewedAt: undefined,
+    nextReviewAt: undefined,
+    reviewNote: undefined,
+    updatedAt: now,
+  };
+}
+
+/**
+ * A changed evidence dependency invalidates every prior content decision for
+ * that exact revision. Revision bumps retain the append-only decisions as
+ * history while making them unusable for publication, and immediately remove
+ * a published row from parent visibility until named humans review it again.
+ */
+async function invalidateDependentContentReviews(
+  ctx: MutationCtx,
+  dependencies: readonly EvidenceDependency[],
+  actorId: Id<'users'> | null,
+  reason: string,
+  now: number,
+): Promise<string[]> {
+  const wanted = new Set(dependencies.map(({ kind, slug }) => `${kind}:${slug}`));
+  if (wanted.size === 0) return [];
+
+  const libraryRows = await ctx.db.query('libraryContent').take(5_001);
+  if (libraryRows.length > 5_000) {
+    throw new Error('Evidence dependency invalidation exceeded the 5,000-content safety bound');
+  }
+
+  const invalidated: string[] = [];
+  for (const row of libraryRows) {
+    const key = `${row.type}:${row.slug}`;
+    if (!wanted.has(key) || row.clinicalStatus === 'archived') continue;
+    const fromRevision = row.reviewRevision ?? 1;
+    const patch = evidenceDependencyInvalidationPatch(row.reviewRevision, now);
+    const toRevision = patch.reviewRevision;
+    await ctx.db.patch(row._id, patch);
+    await logAudit(
+      ctx,
+      actorId,
+      'library.evidence_dependency_invalidated',
+      'libraryContent',
+      row._id,
+      `${key} · ${reason} · review revision ${fromRevision} → ${toRevision}`,
+      {
+        before: JSON.stringify({ clinicalStatus: row.clinicalStatus, reviewRevision: fromRevision }),
+        after: JSON.stringify({ clinicalStatus: 'clinical_review', reviewRevision: toRevision }),
+      },
+    );
+    invalidated.push(key);
+  }
+  return invalidated.sort((a, b) => a.localeCompare(b));
 }
 
 /**
@@ -385,8 +485,11 @@ export const stats = query({
 /**
  * Import the verified reference registry. Idempotent by sourceId.
  *
- * A re-import refreshes publisher metadata but NEVER overwrites a human review
- * decision — reviewStatus, reviewer and reviewDate on an existing row are kept.
+ * An identical re-import preserves a human decision. A materially changed
+ * publisher record invalidates that decision and returns the source to
+ * awaiting_review; a structurally incomplete record is forced to
+ * evidence_required. This prevents an approval from silently moving onto a
+ * different evidence payload.
  * An insert can never arrive as 'approved': approval is a human act performed
  * through setReview, not something an import can assert.
  *
@@ -408,6 +511,8 @@ async function applySources(
   let created = 0;
   let updated = 0;
   let unchanged = 0;
+  let reviewReset = 0;
+  const reviewResetIds: string[] = [];
   let skipped = 0;
   const failed: string[] = [];
 
@@ -433,19 +538,47 @@ async function applySources(
       const searchText = searchTextFor(rest);
 
       if (existing) {
-        const next = {
-          ...rest,
+        // Retired means immutable audit history. A new publisher snapshot may
+        // be imported under a new source id, but this exact retired row is
+        // never rewritten by a registry refresh.
+        if (existing.reviewStatus === 'retired') {
+          unchanged += 1;
+          continue;
+        }
+        const {
+          reviewStatus: _incomingReviewStatus,
+          reviewer: _incomingReviewer,
+          reviewDate: _incomingReviewDate,
+          nextReviewDate: incomingNextReviewDate,
+          ...incomingMetadata
+        } = rest;
+        // These imported review fields are intentionally discarded: only the
+        // policy below may decide whether a stored human review survives.
+        void _incomingReviewStatus;
+        void _incomingReviewer;
+        void _incomingReviewDate;
+        const metadata = {
+          ...incomingMetadata,
           sourceId: id,
-          // Human review decisions survive re-import.
-          reviewStatus: existing.reviewStatus,
-          reviewer: existing.reviewer,
-          reviewerQualification: existing.reviewerQualification,
-          reviewDate: existing.reviewDate,
-          reviewNote: existing.reviewNote,
-          nextReviewDate: existing.nextReviewDate ?? rest.nextReviewDate,
-          reviewerId: existing.reviewerId,
-          reviewScope: existing.reviewScope,
           searchText,
+        };
+        const metadataChanged = !sameSource(existing, metadata);
+        const policy = evidenceImportReviewPolicy(
+          existing.reviewStatus,
+          rest.reviewStatus,
+          metadataChanged,
+          incomingNextReviewDate !== null
+            && incomingNextReviewDate !== existing.nextReviewDate,
+        );
+        const reviewFields = evidenceImportReviewFields(
+          existing,
+          rest.reviewStatus,
+          metadataChanged,
+          incomingNextReviewDate,
+        );
+        const next = {
+          ...metadata,
+          ...reviewFields,
         };
         const preservedDateProblem = evidenceDateValidationProblem(next, todayIsoUtc());
         if (preservedDateProblem) {
@@ -460,6 +593,10 @@ async function applySources(
         } else {
           await ctx.db.patch(existing._id, { ...next, updatedAt: now });
           updated += 1;
+          if (policy.resetReview) {
+            reviewReset += 1;
+            reviewResetIds.push(id);
+          }
         }
       } else {
         const reviewStatus =
@@ -481,7 +618,26 @@ async function applySources(
     }
   }
 
-  const summary = `created ${created}, updated ${updated}, unchanged ${unchanged}, skipped ${skipped}, failed ${failed.length}`;
+  const resetIdSet = new Set(reviewResetIds);
+  let invalidatedContentKeys: string[] = [];
+  if (resetIdSet.size > 0) {
+    const linkSnapshot = await ctx.db.query('evidenceLinks').take(5_001);
+    if (linkSnapshot.length > 5_000) {
+      throw new Error('Evidence source invalidation exceeded the 5,000-link safety bound');
+    }
+    const dependencies = linkSnapshot
+      .filter((link) => link.sourceIds.some((sourceId) => resetIdSet.has(sourceId)))
+      .map((link) => ({ kind: link.kind, slug: link.slug }));
+    invalidatedContentKeys = await invalidateDependentContentReviews(
+      ctx,
+      dependencies,
+      userId,
+      `source review reset: ${reviewResetIds.join(', ')}`,
+      now,
+    );
+  }
+
+  const summary = `created ${created}, updated ${updated}, unchanged ${unchanged}, review-reset ${reviewReset}, content-invalidated ${invalidatedContentKeys.length}, skipped ${skipped}, failed ${failed.length}`;
   await logAudit(
     ctx,
     userId,
@@ -492,13 +648,16 @@ async function applySources(
     {
       result: failed.length > 0 ? 'failed' : 'ok',
       before: `${sources.length} submitted`,
-      after: summary,
+      after: `${summary}; reset ids: ${reviewResetIds.join(', ') || 'none'}; invalidated content: ${invalidatedContentKeys.join(', ') || 'none'}`,
     },
   );
   return {
     created,
     updated,
     unchanged,
+    reviewReset,
+    reviewResetIds,
+    invalidatedContentKeys,
     skipped,
     failed: failed.length,
     failedIds: failed,
@@ -507,6 +666,7 @@ async function applySources(
 
 export const importSources = mutation({
   args: { sources: v.array(sourceValidator) },
+  returns: sourceImportResultValidator,
   handler: async (ctx, { sources }) =>
     applySources(ctx, sources, await requireEvidenceEditor(ctx), 'admin screen'),
 });
@@ -520,6 +680,7 @@ export const importSources = mutation({
  */
 export const importSourcesFromCli = internalMutation({
   args: { sources: v.array(sourceValidator) },
+  returns: sourceImportResultValidator,
   handler: async (ctx, { sources }) => applySources(ctx, sources, null, 'deploy key (CLI)'),
 });
 
@@ -536,7 +697,11 @@ async function applyLinks(
 ) {
   const userId = actorId;
   const now = Date.now();
-  const known = new Set((await ctx.db.query('evidenceSources').collect()).map((r) => r.sourceId));
+  const sourceSnapshot = await ctx.db.query('evidenceSources').take(2_001);
+  if (sourceSnapshot.length > 2_000) {
+    throw new Error('Evidence link import exceeded the 2,000-source safety bound');
+  }
+  const known = new Set(sourceSnapshot.map((r) => r.sourceId));
 
   const unknown = [...new Set(links.flatMap((l) => l.sourceIds).filter((id) => !known.has(id)))];
   if (unknown.length > 0) {
@@ -557,6 +722,7 @@ async function applyLinks(
   let unchanged = 0;
   let skipped = 0;
   const failed: string[] = [];
+  const changedLinks: EvidenceDependency[] = [];
   const seen = new Set<string>();
 
   for (const link of links) {
@@ -584,6 +750,7 @@ async function applyLinks(
             updatedAt: now,
           });
           updated += 1;
+          changedLinks.push({ kind: link.kind, slug: link.slug });
         }
       } else {
         await ctx.db.insert('evidenceLinks', {
@@ -592,13 +759,21 @@ async function applyLinks(
           updatedAt: now,
         });
         created += 1;
+        changedLinks.push({ kind: link.kind, slug: link.slug });
       }
     } catch {
       failed.push(key);
     }
   }
 
-  const summary = `created ${created}, updated ${updated}, unchanged ${unchanged}, skipped ${skipped}, failed ${failed.length}`;
+  const invalidatedContentKeys = await invalidateDependentContentReviews(
+    ctx,
+    changedLinks,
+    userId,
+    'evidence link set changed',
+    now,
+  );
+  const summary = `created ${created}, updated ${updated}, unchanged ${unchanged}, content-invalidated ${invalidatedContentKeys.length}, skipped ${skipped}, failed ${failed.length}`;
   await logAudit(
     ctx,
     userId,
@@ -609,13 +784,14 @@ async function applyLinks(
     {
       result: failed.length > 0 ? 'failed' : 'ok',
       before: `${links.length} submitted`,
-      after: summary,
+      after: `${summary}; invalidated content: ${invalidatedContentKeys.join(', ') || 'none'}`,
     },
   );
   return {
     created,
     updated,
     unchanged,
+    invalidatedContentKeys,
     skipped,
     failed: failed.length,
     failedKeys: failed,
@@ -624,6 +800,7 @@ async function applyLinks(
 
 export const importLinks = mutation({
   args: { links: v.array(linkValidator) },
+  returns: linkImportResultValidator,
   handler: async (ctx, { links }) =>
     applyLinks(ctx, links, await requireEvidenceEditor(ctx), 'admin screen'),
 });
@@ -631,6 +808,7 @@ export const importLinks = mutation({
 /** CLI-only counterpart to importLinks. See importSourcesFromCli. */
 export const importLinksFromCli = internalMutation({
   args: { links: v.array(linkValidator) },
+  returns: linkImportResultValidator,
   handler: async (ctx, { links }) => applyLinks(ctx, links, null, 'deploy key (CLI)'),
 });
 

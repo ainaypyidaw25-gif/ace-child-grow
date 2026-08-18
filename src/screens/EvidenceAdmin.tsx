@@ -94,15 +94,26 @@ export function EvidenceAdmin() {
       const src = await importSources({
         sources: EVIDENCE_SOURCES.map((s) => ({ ...s, topics: [...s.topics], keywords: [...s.keywords] })),
       });
+      if (src.failed > 0) {
+        setMsg(
+          L(
+            `ကိုးကားချက် ${src.failed} ခု တင်သွင်းမှု မအောင်မြင်သဖြင့် ချိတ်ဆက်မှုများကို မတင်သွင်းပါ။ မအောင်မြင်သော ID များ — ${src.failedIds.join(', ')}`,
+            `${src.failed} reference imports failed, so links were not imported. Failed IDs: ${src.failedIds.join(', ')}`,
+          ),
+        );
+        return;
+      }
       const lnk = await importLinks({
         links: EVIDENCE_LINKS.map((l) => ({ kind: l.kind, slug: l.slug, sourceIds: [...l.sourceIds] })),
       });
       setMsg(
         L(
           `ကိုးကား — အသစ် ${src.created}၊ ပြင်ဆင် ${src.updated}၊ မပြောင်းလဲ ${src.unchanged}၊ ကျော် ${src.skipped}၊ မအောင်မြင် ${src.failed}။ ` +
-            `ချိတ်ဆက်မှု — အသစ် ${lnk.created}၊ ပြင်ဆင် ${lnk.updated}၊ မပြောင်းလဲ ${lnk.unchanged}၊ ကျော် ${lnk.skipped}၊ မအောင်မြင် ${lnk.failed}။`,
+            `အတည်ပြုချက် ပြန်စရန် ${src.reviewReset} ခု (${src.reviewResetIds.join(', ') || 'မရှိ'})၊ အကြောင်းအရာ ပြန်လည်သုံးသပ်ရန် ${src.invalidatedContentKeys.length} ခု။ ` +
+            `ချိတ်ဆက်မှု — အသစ် ${lnk.created}၊ ပြင်ဆင် ${lnk.updated}၊ မပြောင်းလဲ ${lnk.unchanged}၊ ပြန်လည်သုံးသပ်ရန် ${lnk.invalidatedContentKeys.length} ခု၊ ကျော် ${lnk.skipped}၊ မအောင်မြင် ${lnk.failed}။`,
           `References: ${src.created} created, ${src.updated} updated, ${src.unchanged} unchanged, ${src.skipped} skipped, ${src.failed} failed. ` +
-            `Links: ${lnk.created} created, ${lnk.updated} updated, ${lnk.unchanged} unchanged, ${lnk.skipped} skipped, ${lnk.failed} failed.`,
+            `${src.reviewReset} reviews reset (${src.reviewResetIds.join(', ') || 'none'}), ${src.invalidatedContentKeys.length} content items invalidated. ` +
+            `Links: ${lnk.created} created, ${lnk.updated} updated, ${lnk.unchanged} unchanged, ${lnk.invalidatedContentKeys.length} content items invalidated, ${lnk.skipped} skipped, ${lnk.failed} failed.`,
         ),
       );
     } catch (e) {

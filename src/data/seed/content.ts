@@ -232,8 +232,8 @@ export const SAMPLE_AWARENESS: SeedAwarenessTopic[] = [
   {
     slug: 'cerebral-palsy',
     titleMm: 'ဦးနှောက်ဆိုင်ရာ ကြွက်သားထိန်းချုပ်မှု (Cerebral Palsy)', titleEn: 'Cerebral Palsy',
-    whatItMeansMm: 'ဦးနှောက် စောစီးစွာ ဖွံ့ဖြိုးမှုကြောင့် လှုပ်ရှားမှုနှင့် ကိုယ်ဟန်အနေအထားတွင် ကွဲပြားမှု ဖြစ်သည်။',
-    whatItMeansEn: 'A difference in movement and posture from early brain development.',
+    whatItMeansMm: 'ဖွံ့ဖြိုးဆဲ ဦးနှောက်၏ ပုံမှန်မဟုတ်သော ဖွံ့ဖြိုးမှု သို့မဟုတ် ထိခိုက်မှုကြောင့် လှုပ်ရှားမှုနှင့် ကိုယ်ဟန်အနေအထားကို သက်ရောက်စေသော အခြေအနေအုပ်စု ဖြစ်သည်။',
+    whatItMeansEn: 'A group of conditions affecting movement and posture caused by abnormal development of, or injury to, the developing brain.',
     whatItDoesNotMeanMm: 'ကလေး၏ ဉာဏ်ရည် (သို့) အလားအလာကို ဆုံးဖြတ်ပေးသည် မဟုတ်ပါ။',
     whatItDoesNotMeanEn: 'It does not define a child’s intelligence or potential.',
     reviewStatus: 'clinical_review',

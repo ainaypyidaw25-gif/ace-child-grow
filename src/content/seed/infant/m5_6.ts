@@ -306,7 +306,7 @@ const GUIDES_B: SeedItem[] = [
       ],
       redFlags: [
         b('အသံကျယ်ကို လုံးဝ မတုံ့ပြန်ခြင်း။', 'No reaction at all to loud sounds.'),
-        b('လ ၆ လအရွယ်တွင် ဗျည်းသံ လုံးဝ မထွက်ခြင်း။', 'No consonant sounds at all by 6 months.'),
+        b('၆ လအရွယ်တွင် အသံဖြင့် အပြန်အလှန် တုံ့ပြန်ခြင်း မရှိခြင်း သို့မဟုတ် အသံလုံးဝ မထွက်ခြင်း။', 'By 6 months: no back-and-forth sound-making, or no vocal sounds at all.'),
         b('ယခင်က ထွက်နေသော အသံများ ရပ်ဆိုင်းသွားခြင်း။', 'Loss of sounds she used to make.'),
       ],
       referral: b(

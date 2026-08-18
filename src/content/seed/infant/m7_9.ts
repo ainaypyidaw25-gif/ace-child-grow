@@ -709,7 +709,7 @@ const GUIDES_D: SeedItem[] = [
         },
         {
           q: b('ဓာတ်မတည့်တတ်သော အစားအစာများကို ရှောင်သင့်သလား။', 'Should I avoid foods that commonly cause allergy?'),
-          a: b('ရှောင်ရန် မလိုပါ။ ဥ၊ ငါး၊ မြေပဲထောပတ် (ချောမွေ့အောင် ဖျော်ထားသော)၊ နို့ထွက်ပစ္စည်း စသည်တို့ကို ခြောက်လအရွယ်မှစ၍ တစ်မျိုးချင်း၊ အနည်းငယ်စီ စတင်ပေးနိုင်ပါသည်။ တစ်မျိုးပေးပြီးနောက် နှစ်ရက်ခန့် စောင့်ကြည့်ပါ။ အရေပြားယားယံ၊ ဖုထစ်ပေါ်ခြင်း၊ အော့အန်ခြင်း ဖြစ်လျှင် ရပ်ပြီး ကျန်းမာရေးဝန်ထမ်းနှင့် ဆွေးနွေးပါ။ နှုတ်ခမ်း/မျက်နှာ ရောင်ခြင်း သို့မဟုတ် အသက်ရှူ ခက်ခြင်း ဖြစ်လျှင် ချက်ချင်း အရေးပေါ် ဆေးကုသမှု ရယူပါ။ မိသားစုတွင် ဓာတ်မတည့်မှု သမိုင်း ရှိပါက အရင်ဆုံး ကျန်းမာရေးဝန်ထမ်းနှင့် တိုင်ပင်ပါ။', 'There is no need to avoid them. Egg, fish, smooth peanut paste and dairy can be introduced from around six months, one at a time and in small amounts. Wait about two days after each new food. If you see a rash, hives or vomiting, stop and talk to a health worker. If the lips or face swell or breathing becomes difficult, seek emergency care immediately. If allergy runs in your family, discuss it with a health worker first.'),
+          a: b('ရှောင်ရန် မလိုပါ။ ဥ၊ ငါး၊ ချောမွေ့အောင် ဖျော်ထားသော မြေပဲထောပတ်နှင့် နို့ထွက်ပစ္စည်းများကို ခြောက်လခန့်မှစ၍ တစ်မျိုးချင်း အနည်းငယ်စီ စတင်ပေးနိုင်ပါသည်။ အစားအစာအသစ် တစ်မျိုးနှင့်တစ်မျိုးကြား ၃ ရက်မှ ၅ ရက် စောင့်ကြည့်ပါ။ အရေပြားယားယံခြင်း၊ အဖုအပိန့်ထွက်ခြင်း သို့မဟုတ် အော့အန်ခြင်း ဖြစ်ပါက ဆက်မပေးဘဲ ကျန်းမာရေးဝန်ထမ်းနှင့် တိုင်ပင်ပါ။ နှုတ်ခမ်း သို့မဟုတ် မျက်နှာရောင်ခြင်း၊ အသက်ရှူခက်ခြင်း ဖြစ်ပါက အရေးပေါ် ဆေးကုသမှု ချက်ချင်းခံယူပါ။ ကလေးတွင် ပြင်းထန်သော အရေပြားရောင်ရမ်းနာ သို့မဟုတ် ဥနှင့် ဓာတ်မတည့်မှု ရှိပါက မြေပဲမစတင်မီ ဆရာဝန်နှင့် တိုင်ပင်ပါ။ သိရှိထားသော အစားအစာဓာတ်မတည့်မှု သို့မဟုတ် ယခင်က တုံ့ပြန်မှုရှိပါက ထိုအစားအစာကို ဘေးကင်းစွာ မိတ်ဆက်ပုံကို ဆရာဝန်အား မေးမြန်းပါ။', 'There is no need to avoid them. Egg, fish, smooth peanut paste and dairy can be introduced from around six months, one at a time and in small amounts. Wait 3 to 5 days between each new food. If you see a rash, hives or vomiting, stop and talk to a health worker. If the lips or face swell or breathing becomes difficult, seek emergency care immediately. If your child has severe eczema or egg allergy, talk with a doctor before introducing peanut. If your child has a known food allergy or has previously reacted to a food, ask a doctor how to introduce that food safely.'),
         },
       ],
       redFlags: [
@@ -799,7 +799,7 @@ const GUIDES_D: SeedItem[] = [
         'Every time you let her try, her confidence grows a step.',
       ),
     }),
-    'Self-feeding, cup holding and cooperation in dressing at 7–9 months follow the paediatric occupational-therapy references in the registry, the Bright Futures preventive-care schedule, the WHO infant and young child feeding model chapter, CDC guidance on foods for 6–24 months and the early-intervention occupational-therapy guidance in the registry.',
+    'Self-feeding, cup holding and cooperation in dressing at 7–9 months follow the paediatric occupational-therapy reference in the registry, the Bright Futures preventive-care schedule, the WHO infant and young child feeding model chapter and CDC guidance on foods for 6–24 months.',
   ),
 ];
 
@@ -1198,12 +1198,12 @@ const ACTIVITIES_B: SeedItem[] = [
       domains: ['self_help', 'nutrition', 'fine_motor'],
       difficulty: 'easy',
       durationMinutes: 15,
-      materials: b('ကလေး၏ ဇွန်း နှစ်ချောင်း၊ ချောမွေ့သော အစားအစာ တစ်မျိုး (ဥပမာ ဆန်ပြုတ်) နှင့် ပျော့ပြီး တုံးငယ် အစားအစာ တစ်မျိုး (ဥပမာ ချက်ပြုတ်ထားသော ကန်စွန်းဥ)။', 'Two baby spoons, one smooth food such as thick porridge, and one soft lumpy food such as cooked sweet potato.'),
+      materials: b('ကလေး၏ ဇွန်း နှစ်ချောင်း၊ ချောမွေ့သော အစားအစာ တစ်မျိုး (ဥပမာ ဆန်ပြုတ်) နှင့် အသက်အရွယ်နှင့် ကိုက်ညီသော ပုံသဏ္ဌာန်၊ အရွယ်အစားဖြင့် ပြင်ဆင်ထားသည့် နူးညံ့သော လက်ဖြင့်ကိုင်စားနိုင်သည့် အစားအစာ တစ်မျိုး။', 'Two baby spoons, one smooth food such as thick porridge, and one soft finger food prepared in an age-appropriate shape and size.'),
       setup: b('လက်ဆေးပါ။ ကလေးကို မတ်မတ် ထိုင်စေပါ။ ကြမ်းပြင်တွင် သတင်းစာ ခင်းထားနိုင်သည်။', 'Wash hands. Seat her upright. Spread paper on the floor if you like.'),
       instructions: [
         b('ကလေး၏ လက်ထဲသို့ ဇွန်း တစ်ချောင်း ပေးပါ — သင် နောက်တစ်ချောင်းဖြင့် ကျွေးပါ။', 'Give her one spoon to hold while you feed with the other.'),
         b('ချောမွေ့သော အစားအစာကို အနည်းငယ် ကျွေးပါ။', 'Offer a little of the smooth food.'),
-        b('ပျော့သော တုံးငယ် အစားအစာကို ခင်းပေါ်တွင် ချထား၍ ကိုင်ခွင့် ပေးပါ။', 'Put a little of the soft lumpy food in front of her to pick up.'),
+        b('အသက်အရွယ်နှင့် ကိုက်ညီသော ပုံသဏ္ဌာန်နှင့် အရွယ်အစားဖြင့် ပြင်ဆင်ထားသည့် လက်ဖြင့်ကိုင်စားနိုင်သော နူးညံ့သည့် အစားအစာတစ်ပိုင်းကို ကလေးရှေ့တွင် ချထား၍ ကိုင်စားခွင့်ပေးပါ။', 'Place one piece of soft finger food prepared in an age-appropriate shape and size in front of the child to pick up.'),
         b('ဖိတ်စင်ခြင်း၊ ပွတ်သပ်ခြင်းကို ခွင့်ပြုပါ — ဤသည် သင်ယူမှု ဖြစ်သည်။', 'Allow mess and squeezing — that is how she learns.'),
         b('ကလေး မျက်နှာလွှဲလျှင် သို့မဟုတ် ခေါင်းလှည့်လျှင် ရပ်ပါ — အတင်း မကျွေးပါနှင့်။', 'Stop when she turns her head away — never force a feed.'),
         b('အစားအစာ အသစ် တစ်မျိုးကို အကြိမ်ပေါင်း များစွာ ပြန်ပေးရနိုင်သည်။', 'A new food may need to be offered many times before she takes it.'),
@@ -1219,7 +1219,7 @@ const ACTIVITIES_B: SeedItem[] = [
       offline: true,
       tags: ['sensory_activity', 'feeding'],
     }),
-    'Responsive self-feeding and progression to lumpy and finger foods in this period follow the WHO infant and young child feeding model chapter, CDC guidance on foods for children aged 6–24 months, the paediatric occupational-therapy textbook and the ASHA pediatric feeding and swallowing materials in the registry.',
+    'Responsive self-feeding and progression to lumpy and finger foods in this period follow the WHO infant and young child feeding model chapter, CDC guidance on foods for children aged 6–24 months and the paediatric occupational-therapy textbook in the registry.',
   ),
 ];
 

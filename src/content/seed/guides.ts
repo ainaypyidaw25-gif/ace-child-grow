@@ -75,7 +75,7 @@ export const GUIDES: SeedItem[] = [
     commonMistakes: [b('ကလေးအတွက် အားလုံး ကြိုတင်လုပ်ပေးခြင်း — တောင်းဆိုရန် အခွင့်အလမ်း မပေးခြင်း။', 'Anticipating every need, so the child has no reason to ask.')],
     parentTips: [b('စကားပြောရန် အချိန်ပေးပါ — အမြန်မဖြေပါနှင့်။', 'Pause and wait, giving time to respond.')],
     faq: [{ q: b('ဘာသာစကား ၂ မျိုး သင်ပေးလို့ရလား။', 'Is raising bilingual okay?'), a: b('ရပါသည် — ဘာသာစကား ၂ မျိုးသည် ကလေးကို မရှုပ်ထွေးစေပါ။', 'Yes — two languages does not confuse children.') }],
-    redFlags: [b('၂၄ လတွင် အဓိပ္ပာယ်ရှိစကားလုံး အလွန်နည်းခြင်း သို့မဟုတ် စကားလုံး ဆုံးရှုံးသွားခြင်း။', 'By 24 months: very few words, or loss of words already used.')],
+    redFlags: [b('၂၄ လအရွယ်တွင် စကားလုံးနှစ်လုံးတွဲ မပြောသေးခြင်း၊ သုံးစွဲသော ဘာသာစကားအားလုံးတွင် စကားလုံးအလွန်နည်းခြင်း သို့မဟုတ် ယခင်သုံးခဲ့သော စကားလုံးများ ပျောက်သွားခြင်း။', 'By 24 months: no two-word combinations, a very small vocabulary across all languages used, or loss of words previously used.')],
     referral: b('ကလေး၏ စကားပြောဖွံ့ဖြိုးမှုအတွက် စိုးရိမ်ပါက ကလေးဆရာဝန် သို့မဟုတ် စကားပြောနှင့် ဘာသာစကားဆိုင်ရာ ပညာရှင်နှင့် တိုင်ပင်ပါ။', 'If worried about speech delay, consult a pediatrician or speech therapist.'),
     encouragement: b('စကားလုံးတိုင်းသည် အောင်မြင်မှုတစ်ခုဖြစ်သည် — အတူပြောဆိုမှုကို ပျော်ရွှင်စွာ ဆက်လုပ်ပါ။', 'Every word is a win — keep talking together joyfully.'),
   }),
