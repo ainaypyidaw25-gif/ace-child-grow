@@ -48,7 +48,7 @@ export const STORIES: SeedItem[] = [
   }),
   story({
     slug: 'goodnight_moon_friend', storyType: 'bedtime', ageGroupKey: '2y',
-    title: b('ကောင်းသောည လမင်းလေး', 'Goodnight, Little Moon'),
+    title: b('ကောင်းသောညပါ၊ လမင်းလေးရေ', 'Goodnight, Little Moon'),
     summary: b('ည အိပ်ရာဝင်ချိန် ငြိမ်သက်စေသော ပုံပြင်လေး။', 'A calming bedtime story.'),
     readingLevel: 'Beginner', readingMinutes: 3,
     vocabulary: [b('ည', 'night'), b('လ', 'moon'), b('အိပ်', 'sleep')],

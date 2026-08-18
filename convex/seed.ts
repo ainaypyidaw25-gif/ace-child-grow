@@ -31,6 +31,13 @@ import {
   PLACEHOLDER_PRINTABLE_SLUGS,
   PRINTABLE_PAYLOAD_RELEASE_ID,
 } from './lib/printablePayloadRelease';
+import {
+  BURMESE_COPY_AUDIT_HELD_SLUGS,
+  BURMESE_COPY_AUDIT_PAYLOAD_SHA256,
+  BURMESE_COPY_AUDIT_RELEASE_ID,
+  BURMESE_COPY_AUDIT_TARGETS,
+  type BurmeseCopyAuditTarget,
+} from './lib/burmeseCopyAuditRelease';
 
 const GRANTABLE_ROLES = [
   'owner',
@@ -227,6 +234,337 @@ function desiredLibraryPatch(desired: Item) {
     searchText: desired.searchText,
   };
 }
+
+const burmeseCopyAuditActionValidator = v.union(
+  v.literal('ready'),
+  v.literal('already_current'),
+  v.literal('already_applied'),
+  v.literal('seed_mismatch'),
+  v.literal('missing_seed'),
+  v.literal('missing_row'),
+  v.literal('not_published'),
+  v.literal('stale_state'),
+);
+
+const burmeseCopyAuditRowValidator = v.object({
+  slug: v.string(),
+  found: v.boolean(),
+  clinicalStatus: v.union(v.string(), v.null()),
+  reviewRevision: v.union(v.number(), v.null()),
+  updatedAt: v.union(v.number(), v.null()),
+  expectedReviewRevision: v.number(),
+  expectedUpdatedAt: v.number(),
+  seedMatchesRelease: v.boolean(),
+  desiredMatches: v.boolean(),
+  action: burmeseCopyAuditActionValidator,
+});
+
+function releasePathValue(value: unknown, path: string): unknown {
+  let current = value;
+  for (const part of path.split('.')) {
+    if (!current || typeof current !== 'object' || Array.isArray(current)) return undefined;
+    current = (current as Record<string, unknown>)[part];
+  }
+  return current;
+}
+
+function seedMatchesBurmeseCopyRelease(target: BurmeseCopyAuditTarget, desired: Item): boolean {
+  return target.patches.every((patch) =>
+    releasePathValue(desired, patch.path) === patch.value);
+}
+
+function rowPatchValuesMatchBurmeseCopyRelease(
+  target: BurmeseCopyAuditTarget,
+  row: Doc<'libraryContent'>,
+): boolean {
+  return target.patches.every((patch) =>
+    releasePathValue(row, patch.path) === patch.value);
+}
+
+function setNestedString(root: Record<string, unknown>, path: string[], value: string) {
+  let current = root;
+  for (const part of path.slice(0, -1)) {
+    const next = current[part];
+    if (!next || typeof next !== 'object' || Array.isArray(next)) {
+      throw new Error(`Burmese copy patch path is not an object: ${path.join('.')}`);
+    }
+    current = next as Record<string, unknown>;
+  }
+  const leaf = path.at(-1);
+  if (!leaf) throw new Error('Burmese copy patch path is empty');
+  current[leaf] = value;
+}
+
+function collectSearchStrings(value: unknown, out: string[]): void {
+  if (value == null) return;
+  if (typeof value === 'string') {
+    out.push(value);
+    return;
+  }
+  if (Array.isArray(value)) {
+    value.forEach((entry) => collectSearchStrings(entry, out));
+    return;
+  }
+  if (typeof value === 'object') {
+    Object.values(value).forEach((entry) => collectSearchStrings(entry, out));
+  }
+}
+
+function searchTextForLibraryRow(row: {
+  titleMm: string;
+  titleEn: string;
+  summaryMm?: string;
+  summaryEn?: string;
+  tags: string[];
+  data: unknown;
+}) {
+  const parts = [
+    row.titleMm,
+    row.titleEn,
+    row.summaryMm ?? '',
+    row.summaryEn ?? '',
+    ...row.tags,
+  ];
+  collectSearchStrings(row.data, parts);
+  return parts.join(' ').toLowerCase();
+}
+
+function burmeseCopyPatchForRow(
+  target: BurmeseCopyAuditTarget,
+  row: Doc<'libraryContent'>,
+) {
+  let titleMm = row.titleMm;
+  let summaryMm = row.summaryMm;
+  let data = row.data;
+  let dataChanged = false;
+  let titleChanged = false;
+  let summaryChanged = false;
+
+  for (const patch of target.patches) {
+    if (patch.path === 'titleMm') {
+      titleMm = patch.value;
+      titleChanged = true;
+      continue;
+    }
+    if (patch.path === 'summaryMm') {
+      summaryMm = patch.value;
+      summaryChanged = true;
+      continue;
+    }
+    if (!dataChanged) {
+      data = JSON.parse(JSON.stringify(row.data)) as unknown;
+      dataChanged = true;
+    }
+    if (!data || typeof data !== 'object' || Array.isArray(data)) {
+      throw new Error(`Burmese copy data is not patchable: ${target.slug}`);
+    }
+    setNestedString(
+      data as Record<string, unknown>,
+      patch.path.slice('data.'.length).split('.'),
+      patch.value,
+    );
+  }
+
+  const update: Record<string, unknown> = {};
+  if (titleChanged) update.titleMm = titleMm;
+  if (summaryChanged) update.summaryMm = summaryMm;
+  if (dataChanged) update.data = data;
+  update.searchText = searchTextForLibraryRow({
+    titleMm,
+    titleEn: row.titleEn,
+    summaryMm,
+    summaryEn: row.summaryEn,
+    tags: row.tags,
+    data,
+  });
+  return update;
+}
+
+function rowMatchesBurmeseCopyRelease(
+  target: BurmeseCopyAuditTarget,
+  row: Doc<'libraryContent'>,
+): boolean {
+  if (!rowPatchValuesMatchBurmeseCopyRelease(target, row)) return false;
+  return row.searchText === burmeseCopyPatchForRow(target, row).searchText;
+}
+
+async function burmeseCopyAuditReleaseApplied(ctx: Pick<QueryCtx, 'db'>) {
+  const rows = await ctx.db
+    .query('auditLogs')
+    .withIndex('by_action', (q) => q.eq('action', 'library.burmese_copy_audit.release'))
+    .take(100);
+  return rows.some((row) => row.summary === BURMESE_COPY_AUDIT_RELEASE_ID);
+}
+
+/** Read-only, exact-state preflight for the published Burmese copy release. */
+export const preflightBurmeseCopyAuditRelease = internalQuery({
+  args: { releaseId: v.literal(BURMESE_COPY_AUDIT_RELEASE_ID) },
+  returns: v.object({
+    releaseApplied: v.boolean(),
+    payloadSha256: v.string(),
+    heldSlugs: v.array(v.string()),
+    targets: v.array(burmeseCopyAuditRowValidator),
+  }),
+  handler: async (ctx) => {
+    const releaseApplied = await burmeseCopyAuditReleaseApplied(ctx);
+    const desiredBySlug = new Map((seedData as unknown as Item[]).map((item) => [item.slug, item]));
+    const targets = [];
+    for (const target of BURMESE_COPY_AUDIT_TARGETS) {
+      const desired = desiredBySlug.get(target.slug);
+      const row = await ctx.db
+        .query('libraryContent')
+        .withIndex('by_slug', (q) => q.eq('slug', target.slug))
+        .unique();
+      const seedMatchesRelease = Boolean(desired && seedMatchesBurmeseCopyRelease(target, desired));
+      const desiredMatches = Boolean(row && rowMatchesBurmeseCopyRelease(target, row));
+      let action: 'ready' | 'already_current' | 'already_applied' | 'seed_mismatch' | 'missing_seed'
+        | 'missing_row' | 'not_published' | 'stale_state';
+      if (releaseApplied) action = 'already_applied';
+      else if (!desired) action = 'missing_seed';
+      else if (!seedMatchesRelease) action = 'seed_mismatch';
+      else if (!row) action = 'missing_row';
+      else if (row.clinicalStatus !== 'published') action = 'not_published';
+      else if (
+        (row.reviewRevision ?? 1) !== target.expectedReviewRevision
+        || row.updatedAt !== target.expectedUpdatedAt
+      ) action = 'stale_state';
+      else if (desiredMatches) action = 'already_current';
+      else action = 'ready';
+      targets.push({
+        slug: target.slug,
+        found: row !== null,
+        clinicalStatus: row?.clinicalStatus ?? null,
+        reviewRevision: row ? (row.reviewRevision ?? 1) : null,
+        updatedAt: row?.updatedAt ?? null,
+        expectedReviewRevision: target.expectedReviewRevision,
+        expectedUpdatedAt: target.expectedUpdatedAt,
+        seedMatchesRelease,
+        desiredMatches,
+        action,
+      });
+    }
+    return {
+      releaseApplied,
+      payloadSha256: BURMESE_COPY_AUDIT_PAYLOAD_SHA256,
+      heldSlugs: [...BURMESE_COPY_AUDIT_HELD_SLUGS],
+      targets,
+    };
+  },
+});
+
+/**
+ * Apply only the 25 code-reviewed language corrections that were published at
+ * the exact state captured by the preflight. The specialist safe-sleep row and
+ * every row already in clinical review are deliberately outside this release.
+ * All targets are validated before the first write, and a completion audit
+ * makes the operation idempotent.
+ */
+export const applyBurmeseCopyAuditRelease = internalMutation({
+  args: { releaseId: v.literal(BURMESE_COPY_AUDIT_RELEASE_ID) },
+  returns: v.object({
+    alreadyApplied: v.boolean(),
+    updated: v.number(),
+    unchanged: v.number(),
+    total: v.number(),
+    held: v.number(),
+  }),
+  handler: async (ctx) => {
+    if (await burmeseCopyAuditReleaseApplied(ctx)) {
+      return {
+        alreadyApplied: true,
+        updated: 0,
+        unchanged: 0,
+        total: 0,
+        held: BURMESE_COPY_AUDIT_HELD_SLUGS.length,
+      };
+    }
+
+    const desiredBySlug = new Map((seedData as unknown as Item[]).map((item) => [item.slug, item]));
+    const validated: Array<{
+      row: Doc<'libraryContent'>;
+      target: BurmeseCopyAuditTarget;
+      changed: boolean;
+    }> = [];
+    for (const target of BURMESE_COPY_AUDIT_TARGETS) {
+      const desired = desiredBySlug.get(target.slug);
+      const row = await ctx.db
+        .query('libraryContent')
+        .withIndex('by_slug', (q) => q.eq('slug', target.slug))
+        .unique();
+      if (!desired) throw new Error(`Burmese copy target missing from seed: ${target.slug}`);
+      if (!seedMatchesBurmeseCopyRelease(target, desired)) {
+        throw new Error(`Burmese copy seed does not match immutable release: ${target.slug}`);
+      }
+      if (!row) throw new Error(`Burmese copy target missing from production: ${target.slug}`);
+      if (row.clinicalStatus !== 'published') {
+        throw new Error(`Burmese copy target is no longer published: ${target.slug}`);
+      }
+      if (
+        (row.reviewRevision ?? 1) !== target.expectedReviewRevision
+        || row.updatedAt !== target.expectedUpdatedAt
+      ) {
+        throw new Error(`Burmese copy target changed after preflight: ${target.slug}`);
+      }
+      validated.push({ target, row, changed: !rowMatchesBurmeseCopyRelease(target, row) });
+    }
+
+    const now = Date.now();
+    let updated = 0;
+    let unchanged = 0;
+    for (const { target, row, changed } of validated) {
+      if (!changed) {
+        unchanged += 1;
+        continue;
+      }
+      const rowUpdate = burmeseCopyPatchForRow(target, row);
+      const changes: Array<{ path: string; before: unknown; after: unknown }> = target.patches.map((patch) => ({
+        path: patch.path,
+        before: releasePathValue(row, patch.path),
+        after: patch.value,
+      }));
+      if (row.searchText !== rowUpdate.searchText) {
+        changes.push({ path: 'searchText', before: row.searchText, after: rowUpdate.searchText });
+      }
+      await ctx.db.patch(row._id, { ...rowUpdate, updatedAt: now });
+      await logAudit(
+        ctx,
+        null,
+        'library.published_errata',
+        'libraryContent',
+        row._id,
+        `${BURMESE_COPY_AUDIT_RELEASE_ID} · ${row.slug}`,
+        {
+          before: JSON.stringify({ reviewRevision: row.reviewRevision ?? 1, updatedAt: row.updatedAt }),
+          after: JSON.stringify({ reviewRevision: row.reviewRevision ?? 1, updatedAt: now, changes }),
+        },
+      );
+      updated += 1;
+    }
+    await logAudit(
+      ctx,
+      null,
+      'library.burmese_copy_audit.release',
+      'libraryContent',
+      undefined,
+      BURMESE_COPY_AUDIT_RELEASE_ID,
+      {
+        after: JSON.stringify({
+          payloadSha256: BURMESE_COPY_AUDIT_PAYLOAD_SHA256,
+          updated,
+          unchanged,
+          total: validated.length,
+        }),
+      },
+    );
+    return {
+      alreadyApplied: false,
+      updated,
+      unchanged,
+      total: validated.length,
+      held: BURMESE_COPY_AUDIT_HELD_SLUGS.length,
+    };
+  },
+});
 
 async function evidenceSafetyReleaseApplied(ctx: Pick<QueryCtx, 'db'>) {
   const rows = await ctx.db

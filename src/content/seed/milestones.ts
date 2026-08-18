@@ -38,8 +38,8 @@ export const MILESTONES: SeedItem[] = [
     why: { mm: 'ခေါင်းကို တည်ငြိမ်စွာ ထိန်းနိုင်ခြင်းသည် နောင်တွင် ထိုင်တတ်လာစေရန် အခြေခံဖြစ်ပါသည်။', en: 'Head control leads toward sitting.' },
   }),
   m('3_4m', 'fine_motor', 1, {
-    title: { mm: 'လက်နှစ်ဖက်ကို အလယ်တွင် ထိတွေ့ဆုံစည်းခြင်း', en: 'Brings hands together' },
-    observe: { mm: 'လက်နှစ်ဖက်ကို ခန္ဓာကိုယ်အလယ်တည့်တည့်တွင် ထိတွေ့ဆုံစည်းပါသလား။', en: 'Brings both hands together at the middle?' },
+    title: { mm: 'လက်နှစ်ဖက်ကို အလယ်တွင် ဆုံခြင်း', en: 'Brings hands together' },
+    observe: { mm: 'လက်နှစ်ဖက်ကို ခန္ဓာကိုယ်အလယ်တည့်တည့်တွင် ဆုံပါသလား။', en: 'Brings both hands together at the middle?' },
     why: { mm: 'လက်နှစ်ဖက် ပူးတွဲသုံးခြင်းသည် ကိုင်တွယ်မှု ဖွံ့ဖြိုးမှု၏ အစဖြစ်သည်။', en: 'Using two hands together starts grasping skills.' },
   }),
   m('3_4m', 'communication', 1, {
@@ -83,7 +83,7 @@ export const MILESTONES: SeedItem[] = [
   }),
   m('7_9m', 'fine_motor', 1, {
     title: { mm: 'ပစ္စည်းကို လက်တစ်ဖက်မှ အခြားလက်တစ်ဖက်သို့ ပြောင်းကိုင်ခြင်း', en: 'Passes objects hand to hand' },
-    observe: { mm: 'ကစားစရာကို လက်တစ်ဖက်မှ အခြားတစ်ဖက်သို့ ကူးပါသလား။', en: 'Moves a toy from one hand to the other?' },
+    observe: { mm: 'ကစားစရာကို လက်တစ်ဖက်မှ အခြားလက်တစ်ဖက်သို့ ပြောင်းကိုင်ပါသလား။', en: 'Moves a toy from one hand to the other?' },
     why: { mm: 'လက်တစ်ဖက်မှ အခြားလက်တစ်ဖက်သို့ ပြောင်းကိုင်နိုင်ခြင်းသည် လက်လှုပ်ရှားမှု ပိုမိုတိကျလာစေရန် လေ့ကျင့်ပေးပါသည်။', en: 'This practices more precise handling.' },
   }),
   m('7_9m', 'language', 1, {
@@ -298,8 +298,8 @@ export const MILESTONES: SeedItem[] = [
     why: { mm: 'နာမည်မှ စာလုံးများ ရေးခြင်းသည် အစောပိုင်း စာရေးစွမ်းရည်ကို ပြသည်။', en: 'Writing letters from their name shows emerging writing skill.' },
   }),
   m('5y', 'self_help', 1, {
-    title: { mm: 'အိမ်သာသုံးပြီး လက်ဆေးခြင်းကို ကိုယ်တိုင်လုပ်ခြင်း', en: 'Manages toilet and handwashing' },
-    observe: { mm: 'အိမ်သာသုံးပြီးနောက် လက်ကို ကိုယ်တိုင် ဆေးကြောနိုင်ပါသလား။', en: 'Uses the toilet and washes hands alone?' },
+    title: { mm: 'အိမ်သာသုံးခြင်းနှင့် လက်ဆေးခြင်းကို ကိုယ်တိုင်လုပ်ခြင်း', en: 'Manages toilet and handwashing' },
+    observe: { mm: 'အိမ်သာကို ကိုယ်တိုင်သုံးပြီး လက်ကိုလည်း ကိုယ်တိုင် ဆေးကြောနိုင်ပါသလား။', en: 'Uses the toilet and washes hands alone?' },
     why: { mm: 'ဤသည်မှာ တစ်ကိုယ်ရေ သန့်ရှင်းရေးနှင့် ကျောင်းနေအရွယ်အတွက် အရေးကြီးသော အလေ့အထ ဖြစ်ပါသည်။', en: 'This matters for health and school.' },
   }),
 ];

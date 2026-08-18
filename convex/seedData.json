@@ -126,20 +126,20 @@
       "3_4m"
     ],
     "data": {
-      "observeMm": "လက်နှစ်ဖက်ကို ခန္ဓာကိုယ်အလယ်တည့်တည့်တွင် ထိတွေ့ဆုံစည်းပါသလား။",
+      "observeMm": "လက်နှစ်ဖက်ကို ခန္ဓာကိုယ်အလယ်တည့်တည့်တွင် ဆုံပါသလား။",
       "observeEn": "Brings both hands together at the middle?",
       "whyMm": "လက်နှစ်ဖက် ပူးတွဲသုံးခြင်းသည် ကိုင်တွယ်မှု ဖွံ့ဖြိုးမှု၏ အစဖြစ်သည်။",
       "whyEn": "Using two hands together starts grasping skills."
     },
     "type": "milestone",
     "slug": "ms_3_4m_fine_motor_1",
-    "titleMm": "လက်နှစ်ဖက်ကို အလယ်တွင် ထိတွေ့ဆုံစည်းခြင်း",
+    "titleMm": "လက်နှစ်ဖက်ကို အလယ်တွင် ဆုံခြင်း",
     "titleEn": "Brings hands together",
     "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "လက်နှစ်ဖက်ကို အလယ်တွင် ထိတွေ့ဆုံစည်းခြင်း brings hands together   fine_motor 3_4m လက်နှစ်ဖက်ကို ခန္ဓာကိုယ်အလယ်တည့်တည့်တွင် ထိတွေ့ဆုံစည်းပါသလား။ brings both hands together at the middle? လက်နှစ်ဖက် ပူးတွဲသုံးခြင်းသည် ကိုင်တွယ်မှု ဖွံ့ဖြိုးမှု၏ အစဖြစ်သည်။ using two hands together starts grasping skills."
+    "searchText": "လက်နှစ်ဖက်ကို အလယ်တွင် ဆုံခြင်း brings hands together   fine_motor 3_4m လက်နှစ်ဖက်ကို ခန္ဓာကိုယ်အလယ်တည့်တည့်တွင် ဆုံပါသလား။ brings both hands together at the middle? လက်နှစ်ဖက် ပူးတွဲသုံးခြင်းသည် ကိုင်တွယ်မှု ဖွံ့ဖြိုးမှု၏ အစဖြစ်သည်။ using two hands together starts grasping skills."
   },
   {
     "ageGroupKey": "3_4m",
@@ -241,7 +241,7 @@
       "7_9m"
     ],
     "data": {
-      "observeMm": "ကစားစရာကို လက်တစ်ဖက်မှ အခြားတစ်ဖက်သို့ ကူးပါသလား။",
+      "observeMm": "ကစားစရာကို လက်တစ်ဖက်မှ အခြားလက်တစ်ဖက်သို့ ပြောင်းကိုင်ပါသလား။",
       "observeEn": "Moves a toy from one hand to the other?",
       "whyMm": "လက်တစ်ဖက်မှ အခြားလက်တစ်ဖက်သို့ ပြောင်းကိုင်နိုင်ခြင်းသည် လက်လှုပ်ရှားမှု ပိုမိုတိကျလာစေရန် လေ့ကျင့်ပေးပါသည်။",
       "whyEn": "This practices more precise handling."
@@ -254,7 +254,7 @@
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "ပစ္စည်းကို လက်တစ်ဖက်မှ အခြားလက်တစ်ဖက်သို့ ပြောင်းကိုင်ခြင်း passes objects hand to hand   fine_motor 7_9m ကစားစရာကို လက်တစ်ဖက်မှ အခြားတစ်ဖက်သို့ ကူးပါသလား။ moves a toy from one hand to the other? လက်တစ်ဖက်မှ အခြားလက်တစ်ဖက်သို့ ပြောင်းကိုင်နိုင်ခြင်းသည် လက်လှုပ်ရှားမှု ပိုမိုတိကျလာစေရန် လေ့ကျင့်ပေးပါသည်။ this practices more precise handling."
+    "searchText": "ပစ္စည်းကို လက်တစ်ဖက်မှ အခြားလက်တစ်ဖက်သို့ ပြောင်းကိုင်ခြင်း passes objects hand to hand   fine_motor 7_9m ကစားစရာကို လက်တစ်ဖက်မှ အခြားလက်တစ်ဖက်သို့ ပြောင်းကိုင်ပါသလား။ moves a toy from one hand to the other? လက်တစ်ဖက်မှ အခြားလက်တစ်ဖက်သို့ ပြောင်းကိုင်နိုင်ခြင်းသည် လက်လှုပ်ရှားမှု ပိုမိုတိကျလာစေရန် လေ့ကျင့်ပေးပါသည်။ this practices more precise handling."
   },
   {
     "ageGroupKey": "7_9m",
@@ -1140,20 +1140,20 @@
       "5y"
     ],
     "data": {
-      "observeMm": "အိမ်သာသုံးပြီးနောက် လက်ကို ကိုယ်တိုင် ဆေးကြောနိုင်ပါသလား။",
+      "observeMm": "အိမ်သာကို ကိုယ်တိုင်သုံးပြီး လက်ကိုလည်း ကိုယ်တိုင် ဆေးကြောနိုင်ပါသလား။",
       "observeEn": "Uses the toilet and washes hands alone?",
       "whyMm": "ဤသည်မှာ တစ်ကိုယ်ရေ သန့်ရှင်းရေးနှင့် ကျောင်းနေအရွယ်အတွက် အရေးကြီးသော အလေ့အထ ဖြစ်ပါသည်။",
       "whyEn": "This matters for health and school."
     },
     "type": "milestone",
     "slug": "ms_5y_self_help_1",
-    "titleMm": "အိမ်သာသုံးပြီး လက်ဆေးခြင်းကို ကိုယ်တိုင်လုပ်ခြင်း",
+    "titleMm": "အိမ်သာသုံးခြင်းနှင့် လက်ဆေးခြင်းကို ကိုယ်တိုင်လုပ်ခြင်း",
     "titleEn": "Manages toilet and handwashing",
     "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "အိမ်သာသုံးပြီး လက်ဆေးခြင်းကို ကိုယ်တိုင်လုပ်ခြင်း manages toilet and handwashing   self_help 5y အိမ်သာသုံးပြီးနောက် လက်ကို ကိုယ်တိုင် ဆေးကြောနိုင်ပါသလား။ uses the toilet and washes hands alone? ဤသည်မှာ တစ်ကိုယ်ရေ သန့်ရှင်းရေးနှင့် ကျောင်းနေအရွယ်အတွက် အရေးကြီးသော အလေ့အထ ဖြစ်ပါသည်။ this matters for health and school."
+    "searchText": "အိမ်သာသုံးခြင်းနှင့် လက်ဆေးခြင်းကို ကိုယ်တိုင်လုပ်ခြင်း manages toilet and handwashing   self_help 5y အိမ်သာကို ကိုယ်တိုင်သုံးပြီး လက်ကိုလည်း ကိုယ်တိုင် ဆေးကြောနိုင်ပါသလား။ uses the toilet and washes hands alone? ဤသည်မှာ တစ်ကိုယ်ရေ သန့်ရှင်းရေးနှင့် ကျောင်းနေအရွယ်အတွက် အရေးကြီးသော အလေ့အထ ဖြစ်ပါသည်။ this matters for health and school."
   },
   {
     "ageGroupKey": "7_9m",
@@ -6226,7 +6226,7 @@
             "en": "Glasses make eyes weaker"
           },
           "fact": {
-            "mm": "မဟုတ်ပါ။ သင့်လျော်သော မျက်မှန် တပ်ဆင်ခြင်းသည် အမြင်အာရုံ ဖွံ့ဖြိုးမှုကို အထောက်အကူပြုပါသည်။",
+            "mm": "မဟုတ်ပါ။ သင့်လျော်သော မျက်မှန်သည် အမြင်အာရုံ ကောင်းမွန်စေရန် ကူညီပါသည်။",
             "en": "No — the right glasses help vision."
           }
         }
@@ -6298,7 +6298,7 @@
     "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
     "version": 1,
     "clinicalStatus": "clinical_review",
-    "searchText": "မျက်စိအမြင် ချို့တဲ့မှု understanding visual impairment အမြင်အာရုံ အားနည်းမှုသည် ကလေးတစ်ဦးနှင့်တစ်ဦး အတိုင်းအတာ ကွာခြားနိုင်သည်။ စောစီးစွာ သိရှိပြီး သင့်လျော်သော ပံ့ပိုးမှုရရှိပါက ကလေးများ ကောင်းစွာ ဖွံ့ဖြိုးတိုးတက်နိုင်သည်။ visual impairment varies in degree. with early detection and support, children thrive. visual_impairment hope_center special_needs အမြင်အာရုံ အားနည်းမှုသည် ကလေးတစ်ဦးနှင့်တစ်ဦး အတိုင်းအတာ ကွာခြားနိုင်သည်။ စောစီးစွာ သိရှိပြီး သင့်လျော်သော ပံ့ပိုးမှုရရှိပါက ကလေးများ ကောင်းစွာ ဖွံ့ဖြိုးတိုးတက်နိုင်သည်။ visual impairment varies in degree. with early detection and support, children thrive. အကြားအာရုံနှင့် ထိတွေ့ခံစားမှု ကောင်းမွန်မှု strong hearing and touch senses မျက်လုံးဖြင့် အရာဝတ္ထု သို့မဟုတ် မျက်နှာကို မလိုက်ကြည့်ခြင်း not following objects or faces with their eyes မျက်လုံး လှုပ်ရှားမှု ထူးခြားခြင်း unusual eye movements အောက်ပါတို့ တွေ့ပါက ဆရာဝန်ထံ အမြန်ဆုံး ပြသပါ — မျက်သူငယ်အဝိုင်း ဖြူဖျော့ဖျော့/မီးခိုးရောင်/မှုန်ဝါးနေခြင်း (ဓာတ်ပုံ မီးလျှပ်ရိုက်ထားသည့် ပုံတွင် တွေ့ရသည်လည်း အပါအဝင်)၊ အသက် ၄ လကျော်ပြီးနောက် မျက်လုံးတစ်ဖက် အမြဲ အတွင်း/အပြင်သို့ စောင်းနေခြင်း၊ သို့မဟုတ် မျက်လုံးများ အလင်းကို အလွန်ခံနိုင်ရည်မရှိခြင်း/မျက်ရည် အမြဲယိုစီးခြင်း။ ဤအချက်များကို နောက်ထပ် ပုံမှန်ချိန်းဆိုမှုအထိ မစောင့်ဘဲ အမြန် စစ်ဆေးရန် လိုပါသည်။ see a doctor urgently if you notice: a white, grey or cloudy pupil (including in flash photographs), an eye that constantly turns in or out after 4 months of age, or eyes that are very sensitive to light or watering constantly. these need to be checked quickly, not at the next routine visit. ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။ these are awareness points, not a diagnosis — if concerned, consult a professional. မျက်မှန်တပ်ဆင်ခြင်းက မျက်စိကို ပိုမို အားနည်းစေသည် glasses make eyes weaker မဟုတ်ပါ။ သင့်လျော်သော မျက်မှန် တပ်ဆင်ခြင်းသည် အမြင်အာရုံ ဖွံ့ဖြိုးမှုကို အထောက်အကူပြုပါသည်။ no — the right glasses help vision. အသံ/ထိတွေ့မှုဖြင့် ဆက်သွယ်၍ ဘေးကင်းသော ပတ်ဝန်းကျင် ဖန်တီးပါ။ connect through sound/touch; keep a safe, predictable space. အလင်းရောင် ကောင်း၊ ကြီးမားသော စာလုံး/ထိတွေ့ပစ္စည်းများ ပေးပါ။ good lighting, large print or tactile materials. မျက်စိအထူးကုနှင့် စောစီးစွာ ပံ့ပိုးရေး ဝန်ဆောင်မှုများနှင့် တိုင်ပင်ပါ။ consult an eye specialist and early-support services. ကလေး ပုံမှန်ဟု ထင်ရသော်လည်း ပုံမှန် အမြင်အာရုံ စစ်ဆေးမှုကို တောင်းခံပါ — မွေးကင်းစတွင် red reflex စစ်ဆေးမှု အပါအဝင် မျက်စိစစ်ဆေးမှု၊ ၁၂ လမှ ၃ နှစ်အတွင်း ပုံမှန်ပြသချိန်များတွင် စစ်ဆေးမှု။ မျက်လုံးတစ်ဖက် ကောင်းပြီး တစ်ဖက် အားနည်းနေသော ကလေးသည် ပုံမှန်အတိုင်းပင် နေတတ်ပါသည် — ကုသချိန်မီ တွေ့ရှိရန် စစ်ဆေးမှုသာ နည်းလမ်း ဖြစ်ပါသည်။ ask for routine vision screening even if your child seems fine: a newborn eye check including the red reflex test, and from 12 months to 3 years a screening check at routine visits. a child who sees well with one eye and poorly with the other usually behaves completely normally — screening is how this is found in time to treat it. ထိတွေ့ခံစားမှုနှင့် အသံဖြင့် ကစားနည်းများ။ touch-and-sound play. စောစီးစွာ ရှာဖွေတွေ့ရှိမှုက ကူညီသလား။ does early detection help? ကူညီသည် — စောစီးစွာ ပံ့ပိုးမှုက ဖွံ့ဖြိုးမှုကို အထောက်အကူပြုသည်။ yes — early support aids development. lsn_power_of_play act_sound_tracking donahue sp, nixon cn, et al. visual system assessment in infants, children, and young adults by pediatricians. pediatrics. 2016;137(1):e20153596. american academy of ophthalmology. common eye and vision myths. https://www.aao.org/eye-health/tips-prevention/common-eye-vision-myths-facts (accessed 2026-07-31) specialist review required for any diagnosis, treatment, individualized-advice or emergency wording. public guidance links are recorded; no individual clinician endorsement is claimed."
+    "searchText": "မျက်စိအမြင် ချို့တဲ့မှု understanding visual impairment အမြင်အာရုံ အားနည်းမှုသည် ကလေးတစ်ဦးနှင့်တစ်ဦး အတိုင်းအတာ ကွာခြားနိုင်သည်။ စောစီးစွာ သိရှိပြီး သင့်လျော်သော ပံ့ပိုးမှုရရှိပါက ကလေးများ ကောင်းစွာ ဖွံ့ဖြိုးတိုးတက်နိုင်သည်။ visual impairment varies in degree. with early detection and support, children thrive. visual_impairment hope_center special_needs အမြင်အာရုံ အားနည်းမှုသည် ကလေးတစ်ဦးနှင့်တစ်ဦး အတိုင်းအတာ ကွာခြားနိုင်သည်။ စောစီးစွာ သိရှိပြီး သင့်လျော်သော ပံ့ပိုးမှုရရှိပါက ကလေးများ ကောင်းစွာ ဖွံ့ဖြိုးတိုးတက်နိုင်သည်။ visual impairment varies in degree. with early detection and support, children thrive. အကြားအာရုံနှင့် ထိတွေ့ခံစားမှု ကောင်းမွန်မှု strong hearing and touch senses မျက်လုံးဖြင့် အရာဝတ္ထု သို့မဟုတ် မျက်နှာကို မလိုက်ကြည့်ခြင်း not following objects or faces with their eyes မျက်လုံး လှုပ်ရှားမှု ထူးခြားခြင်း unusual eye movements အောက်ပါတို့ တွေ့ပါက ဆရာဝန်ထံ အမြန်ဆုံး ပြသပါ — မျက်သူငယ်အဝိုင်း ဖြူဖျော့ဖျော့/မီးခိုးရောင်/မှုန်ဝါးနေခြင်း (ဓာတ်ပုံ မီးလျှပ်ရိုက်ထားသည့် ပုံတွင် တွေ့ရသည်လည်း အပါအဝင်)၊ အသက် ၄ လကျော်ပြီးနောက် မျက်လုံးတစ်ဖက် အမြဲ အတွင်း/အပြင်သို့ စောင်းနေခြင်း၊ သို့မဟုတ် မျက်လုံးများ အလင်းကို အလွန်ခံနိုင်ရည်မရှိခြင်း/မျက်ရည် အမြဲယိုစီးခြင်း။ ဤအချက်များကို နောက်ထပ် ပုံမှန်ချိန်းဆိုမှုအထိ မစောင့်ဘဲ အမြန် စစ်ဆေးရန် လိုပါသည်။ see a doctor urgently if you notice: a white, grey or cloudy pupil (including in flash photographs), an eye that constantly turns in or out after 4 months of age, or eyes that are very sensitive to light or watering constantly. these need to be checked quickly, not at the next routine visit. ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။ these are awareness points, not a diagnosis — if concerned, consult a professional. မျက်မှန်တပ်ဆင်ခြင်းက မျက်စိကို ပိုမို အားနည်းစေသည် glasses make eyes weaker မဟုတ်ပါ။ သင့်လျော်သော မျက်မှန်သည် အမြင်အာရုံ ကောင်းမွန်စေရန် ကူညီပါသည်။ no — the right glasses help vision. အသံ/ထိတွေ့မှုဖြင့် ဆက်သွယ်၍ ဘေးကင်းသော ပတ်ဝန်းကျင် ဖန်တီးပါ။ connect through sound/touch; keep a safe, predictable space. အလင်းရောင် ကောင်း၊ ကြီးမားသော စာလုံး/ထိတွေ့ပစ္စည်းများ ပေးပါ။ good lighting, large print or tactile materials. မျက်စိအထူးကုနှင့် စောစီးစွာ ပံ့ပိုးရေး ဝန်ဆောင်မှုများနှင့် တိုင်ပင်ပါ။ consult an eye specialist and early-support services. ကလေး ပုံမှန်ဟု ထင်ရသော်လည်း ပုံမှန် အမြင်အာရုံ စစ်ဆေးမှုကို တောင်းခံပါ — မွေးကင်းစတွင် red reflex စစ်ဆေးမှု အပါအဝင် မျက်စိစစ်ဆေးမှု၊ ၁၂ လမှ ၃ နှစ်အတွင်း ပုံမှန်ပြသချိန်များတွင် စစ်ဆေးမှု။ မျက်လုံးတစ်ဖက် ကောင်းပြီး တစ်ဖက် အားနည်းနေသော ကလေးသည် ပုံမှန်အတိုင်းပင် နေတတ်ပါသည် — ကုသချိန်မီ တွေ့ရှိရန် စစ်ဆေးမှုသာ နည်းလမ်း ဖြစ်ပါသည်။ ask for routine vision screening even if your child seems fine: a newborn eye check including the red reflex test, and from 12 months to 3 years a screening check at routine visits. a child who sees well with one eye and poorly with the other usually behaves completely normally — screening is how this is found in time to treat it. ထိတွေ့ခံစားမှုနှင့် အသံဖြင့် ကစားနည်းများ။ touch-and-sound play. စောစီးစွာ ရှာဖွေတွေ့ရှိမှုက ကူညီသလား။ does early detection help? ကူညီသည် — စောစီးစွာ ပံ့ပိုးမှုက ဖွံ့ဖြိုးမှုကို အထောက်အကူပြုသည်။ yes — early support aids development. lsn_power_of_play act_sound_tracking donahue sp, nixon cn, et al. visual system assessment in infants, children, and young adults by pediatricians. pediatrics. 2016;137(1):e20153596. american academy of ophthalmology. common eye and vision myths. https://www.aao.org/eye-health/tips-prevention/common-eye-vision-myths-facts (accessed 2026-07-31) specialist review required for any diagnosis, treatment, individualized-advice or emergency wording. public guidance links are recorded; no individual clinician endorsement is claimed."
   },
   {
     "category": "global_developmental_delay",
@@ -7304,12 +7304,12 @@
     ],
     "type": "story",
     "slug": "st_goodnight_moon_friend",
-    "titleMm": "ကောင်းသောည လမင်းလေး",
+    "titleMm": "ကောင်းသောညပါ၊ လမင်းလေးရေ",
     "titleEn": "Goodnight, Little Moon",
     "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
     "version": 1,
     "clinicalStatus": "clinical_review",
-    "searchText": "ကောင်းသောည လမင်းလေး goodnight, little moon ည အိပ်ရာဝင်ချိန် ငြိမ်သက်စေသော ပုံပြင်လေး။ a calming bedtime story. bedtime story beginner ည night လ moon အိပ် sleep နေဝင်သွားပြီ။ ကောင်းကင်မှာ ကြယ်လေးတွေ တဖျတ်ဖျတ် လင်းလက်နေတယ်။ ငှက်ကလေးတွေလည်း အိပ်ပျော်နေပြီ။ ကလေးငယ်က စောင်လေးခြုံပြီး မျက်လုံးမှိတ်လိုက်တယ်။ “ကောင်းသောညပါ” လို့ လမင်းကြီးကို နှုတ်ဆက်လိုက်တယ်။ the sun has set. the little stars twinkle. the little birds are asleep. the child pulls up the blanket and closes their eyes. “goodnight,” they say to the moon. ညဘက် ဘယ်သူတွေ အိပ်ကြလဲ။ who goes to sleep at night? အိပ်ရာမဝင်မီ ဤပုံပြင်ကို တိုးတိုးလေး ဖတ်ပြပါ။ read this softly before bed."
+    "searchText": "ကောင်းသောညပါ၊ လမင်းလေးရေ goodnight, little moon ည အိပ်ရာဝင်ချိန် ငြိမ်သက်စေသော ပုံပြင်လေး။ a calming bedtime story. bedtime story beginner ည night လ moon အိပ် sleep နေဝင်သွားပြီ။ ကောင်းကင်မှာ ကြယ်လေးတွေ တဖျတ်ဖျတ် လင်းလက်နေတယ်။ ငှက်ကလေးတွေလည်း အိပ်ပျော်နေပြီ။ ကလေးငယ်က စောင်လေးခြုံပြီး မျက်လုံးမှိတ်လိုက်တယ်။ “ကောင်းသောညပါ” လို့ လမင်းကြီးကို နှုတ်ဆက်လိုက်တယ်။ the sun has set. the little stars twinkle. the little birds are asleep. the child pulls up the blanket and closes their eyes. “goodnight,” they say to the moon. ညဘက် ဘယ်သူတွေ အိပ်ကြလဲ။ who goes to sleep at night? အိပ်ရာမဝင်မီ ဤပုံပြင်ကို တိုးတိုးလေး ဖတ်ပြပါ။ read this softly before bed."
   },
   {
     "category": "waiting",
