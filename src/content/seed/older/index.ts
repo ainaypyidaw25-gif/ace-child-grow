@@ -47,7 +47,26 @@ const GUIDE_SOURCES: Record<string, string[]> = {
 
 const BEDTIME_ROUTINE_RCT_BANDS = new Set(['13_18m', '19_24m', '2y', '2_5y']);
 
-const ACTIVITY_SOURCES = ['aap-power-of-play-2018', 'who-care-for-child-development-2012', 'cdc-milestones-2026'];
+const ACTIVITY_SOURCES = ['aap-power-of-play-2018', 'cdc-milestones-2026'];
+
+// WHO/UNICEF CCD gives exact age-banded play/communication recommendations;
+// it is not a generic source for every generated activity.
+const CCD_OLDER_ACTIVITY_SLUGS = new Set([
+  'act_posting_big_shapes_13_18m',
+  'act_point_name_13_18m',
+  'act_tower_crash_2y',
+  'act_action_song_2y',
+  'act_large_puzzle_2y',
+  'act_picture_story_2_5y',
+  'act_helper_sort_2_5y',
+  'act_picture_story_3y',
+  'act_helper_sort_3y',
+  'act_picture_story_3_5y',
+  'act_helper_sort_3_5y',
+  'act_picture_story_4y',
+  'act_picture_story_4_5y',
+  'act_helper_sort_4_5y',
+]);
 
 const GUIDE_EDITORIAL: Record<string, GuideEditorial> = {
   nutrition: {
@@ -93,7 +112,7 @@ const GUIDE_EDITORIAL: Record<string, GuideEditorial> = {
     faq: { q: b('ကလေးက တစ်မျိုးတည်းကို ထပ်ခါကစားလျှင် အဆင်ပြေလား။', 'Is repeated play with the same thing okay?'), a: b('ထပ်ခါကစားခြင်းက သင်ယူမှုကို အားပေးနိုင်သည်။ ကလေးစိတ်ဝင်စားမှုနောက်လိုက်ပြီး အဆင့်သေးသေးတစ်ခု သို့မဟုတ် စကားအသစ်တစ်လုံး ထည့်ပေးပါ။', 'Repetition can support learning. Follow the child’s interest and add one small step or new word.') },
     redFlag: b('လူများ သို့မဟုတ် ကစားစရာများကို ဆက်တိုက် စိတ်မဝင်စားခြင်း၊ ယခင်ကရှိသည့် ကစား/ဆက်သွယ်အရည်အချင်း ပျောက်ဆုံးခြင်း။', 'Persistent lack of interest in people or play, or loss of previously acquired play or communication skills.'),
     referral: b('ကစားခြင်း၊ ဆက်သွယ်ခြင်း သို့မဟုတ် အရည်အချင်းပျောက်ဆုံးမှု စိုးရိမ်ပါက ကလေးဆရာဝန် သို့မဟုတ် ဖွံ့ဖြိုးမှုဆိုင်ရာပညာရှင်နှင့် ဆွေးနွေးပါ။', 'Discuss concerns about play, communication, or lost skills with a paediatrician or developmental professional.'),
-    encouragement: b('နေ့စဉ် မိနစ်အနည်းငယ် အာရုံစိုက်ပြီး အတူကစားခြင်းက ဈေးကြီးသော ကစားစရာများထက် ပိုအရေးကြီးသည်။', 'A few focused minutes of shared play each day matter more than expensive toys.'),
+    encouragement: b('နေ့စဉ် မိနစ်အနည်းငယ် အာရုံစိုက်၍ အတူကစားခြင်းသည် အဖိုးတန်ပါသည်။ ဈေးကြီးသော ကစားစရာ မလိုပါ။', 'A few focused minutes of shared play each day are valuable; expensive toys are not needed.'),
   },
 };
 
@@ -157,7 +176,7 @@ const bands: Band[] = [
     ['daily_routine', b('စားချိန်၊ ကစားချိန်နှင့် အိပ်ချိန်ကို နေ့စဉ် ခန့်မှန်းနိုင်အောင် စီစဉ်ပါ။', 'Keep meals, play, and sleep reasonably predictable.'), b('ရိုးရှင်းသော ရွေးချယ်စရာနှစ်ခု ပေးပါ။', 'Offer two simple choices.')],
   ], play: [
     ['posting_big_shapes_13_18m', b('အပေါက်ထဲ ပုံသဏ္ဌာန်ကြီး ထည့်ကစားခြင်း', 'Post large shapes'), b('လက်ထိန်းချုပ်မှုနှင့် အကြောင်းအကျိုး နားလည်မှု', 'Hand control and cause-and-effect'), b('ဘူးကြီးနှင့် မျိုမချနိုင်သော အရာကြီးများ', 'A container and non-swallowable large objects'), b('အရာတစ်ခုစီကို အပေါက်ထဲထည့်ပြီး ပြန်ထုတ်ခိုင်းပါ။', 'Post each object, then empty the container together.'), b('အရာအားလုံးကို ကလေးပါးစပ်ထက် ကြီးစေရန် စစ်ပါ။', 'Ensure every object is larger than the child’s mouth.'), ['fine_motor', 'cognitive']],
-    ['push_pull_walk_13_18m', b('တွန်းဆွဲ လမ်းလျှောက်ကစားခြင်း', 'Push-and-pull walk'), b('ဟန်ချက်နှင့် လမ်းလျှောက်ယုံကြည်မှု', 'Balance and walking confidence'), b('ခိုင်ခံ့သော တွန်းကစားစရာ', 'A stable push toy'), b('ပြားသောနေရာတွင် ဖြည်းဖြည်း တွန်းသွားစေပါ။', 'Let the child push slowly on a level surface.'), b('ဘီးပါလမ်းလျှောက်ကူကိရိယာ မသုံးဘဲ အနီးကပ်စောင့်ကြည့်ပါ။', 'Avoid seated baby walkers and supervise closely.'), ['gross_motor', 'play']],
+    ['push_pull_walk_13_18m', b('တွန်းဆွဲ လမ်းလျှောက်ကစားခြင်း', 'Push-and-pull walk'), b('ဟန်ချက်နှင့် လမ်းလျှောက်ယုံကြည်မှု', 'Balance and walking confidence'), b('ခိုင်ခံ့သော တွန်းကစားစရာ', 'A stable push toy'), b('ပြားသောနေရာတွင် ဖြည်းဖြည်း တွန်းသွားစေပါ။', 'Let the child push slowly on a level surface.'), b('ထိုင်ခုံပါသော ဘီးတပ် ကလေးလမ်းလျှောက်ကူကိရိယာကို မသုံးပါနှင့်။ ခိုင်ခံ့သော တွန်းကစားစရာကို အသုံးပြုစဉ် အနီးကပ် စောင့်ကြည့်ပါ။', 'Do not use seated baby walkers. Supervise closely when using a stable push toy.'), ['gross_motor', 'play']],
     ['point_name_13_18m', b('ညွှန်ပြပြီး အမည်ပြောကစားခြင်း', 'Point and name'), b('စကားနားလည်မှုနှင့် ပူးတွဲအာရုံစိုက်မှု', 'Language and shared attention'), b('ပုံစာအုပ်', 'A picture book'), b('ကလေးညွှန်ပြသောပုံကို အမည်တိုတို ပြောပေးပါ။', 'Name each picture the child points to.'), b('ကလေးကို စကားပြောရန် ဖိအားမပေးပါနှင့်။', 'Do not pressure the child to repeat words.'), ['language', 'communication']],
   ]},
   { key: '19_24m', mm: '၁၉–၂၄ လ', en: '19–24 months', skills: [
@@ -184,7 +203,7 @@ const bands: Band[] = [
     ['nutrition', b('ပုံမှန်စားချိန်ထားပြီး အုပ်စုစုံပေးကာ မည်မျှစားမည်ကို ကလေးဆုံးဖြတ်ခွင့်ပေးပါ။', 'Keep regular meals, offer variety, and let the child decide how much to eat.'), b('အချိုရည်အစား ရေနှင့် သင့်တော်သော နို့ကိုပေးပါ။', 'Offer water and suitable milk instead of sugary drinks.')],
     ['sleep', b('ညအိပ်ချိန်မတိုင်မီ တူညီသော အဆင့်တိုများ အသုံးပြုပါ။', 'Use the same short sequence before bed.'), b('ရေချိုး၊ သွားတိုက်၊ စာဖတ်၊ အိပ် ဟူသောအစီအစဉ်ကို လိုက်နာပါ။', 'Follow a bath, brush, book, bed sequence.')],
     ['safety', b('ပြေးတတ်လာသောကလေးအတွက် လမ်းမ၊ ရေကန်နှင့် မီးဖိုအန္တရာယ်ကို ကြိုကာကွယ်ပါ။', 'Plan ahead for traffic, water, and burn hazards as running begins.'), b('အပြင်ထွက်တိုင်း လူကြီးလက်ကိုင်ခြင်းကို လေ့ကျင့်ပါ။', 'Practise holding an adult’s hand outdoors.')],
-    ['play', b('အတုယူကစားခြင်း၊ ကစားတုံးနှင့် ပုံစာအုပ်ကို နေ့စဉ် အလှည့်ကျကစားပါ။', 'Rotate pretend play, blocks, and picture books each day.'), b('ကလေးဦးဆောင်သော ကစားချိန် ဆယ်မိနစ်ပေးပါ။', 'Give ten minutes of child-led play.')],
+    ['play', b('အတုယူကစားခြင်း၊ ကစားတုံးနှင့် ပုံစာအုပ်ကို နေ့စဉ် အလှည့်ကျကစားပါ။', 'Rotate pretend play, blocks, and picture books each day.'), b('နေ့စဉ် ကလေးဦးဆောင်သော ကစားချိန် အနည်းငယ် ပေးပါ။', 'Set aside a little child-led play time each day.')],
   ], play: [
     ['tower_crash_2y', b('မျှော်စင်တည်ပြီး ဖြိုကစားခြင်း', 'Build and tumble'), b('လက်ထိန်းချုပ်မှုနှင့် ပြဿနာဖြေရှင်းမှု', 'Hand control and problem-solving'), b('ကစားတုံးကြီးများ', 'Large blocks'), b('မျှော်စင်တည်ပြီး အတူရေတွက်ကာ ဖြိုပါ။', 'Build a tower, count, and knock it down together.'), b('မာကျောလေးလံသောတုံး မသုံးပါနှင့်။', 'Avoid hard or heavy blocks.'), ['fine_motor', 'problem_solving']],
     ['action_song_2y', b('လှုပ်ရှားသီချင်း ကစားခြင်း', 'Action-song play'), b('စကားနားလည်မှုနှင့် ကိုယ်လက်ညှိနှိုင်းမှု', 'Language and coordination'), b('သီချင်းတစ်ပုဒ်', 'A familiar song'), b('လက်ခုပ်တီး၊ ခြေထောက်ဆောင့် စသည့် လှုပ်ရှားမှုကို အတူလုပ်ပါ။', 'Add clapping and stamping actions to the song.'), b('မလဲကျနိုင်သော နေရာလွတ်တွင် ကစားပါ။', 'Use a clear, non-slip space.'), ['communication', 'gross_motor']],
@@ -257,12 +276,19 @@ for (const band of bands) {
     }), `Registered ${domain.replace('_', ' ')} references support this conservative parent guide for ${band.en}.`, guideSources));
   }
   for (const [slug, title, goal, materials, step, safety, domains] of band.play) {
-    authored.push(linked(activity({ slug, title, summary: goal, ageGroupKey: band.key, domains, difficulty: 'easy', durationMinutes: 10,
+    const activityItem = activity({ slug, title, summary: goal, ageGroupKey: band.key, domains, difficulty: 'easy', durationMinutes: 10,
       materials, setup: b('ဘေးကင်းပြီး နေရာလွတ်ရှိသောနေရာကို ရွေးပါ။', 'Choose a safe, clear space.'), instructions: [step], safety,
       indoor: true, outdoor: true, oneChild: true, group: true, parentChild: true,
       outcomes: [goal], variations: [b('ကလေးပင်ပန်းလျှင် အဆင့်ကို လျှော့ပြီး ရပ်နားပါ။', 'Simplify or stop when the child is tired.')],
       evidenceSummary: `Play and developmental references support this age-adapted activity for ${band.en}.`,
-    }), `Play and developmental references support this age-adapted activity for ${band.en}.`, ACTIVITY_SOURCES));
+    });
+    const activitySources = [...ACTIVITY_SOURCES];
+    if (CCD_OLDER_ACTIVITY_SLUGS.has(activityItem.slug)) {
+      activitySources.push('who-care-for-child-development-2012');
+    }
+    authored.push(linked(activityItem,
+      `Play and developmental references support this age-adapted activity for ${band.en}.`,
+      activitySources));
   }
   const checklist = { ...printable({ key: `checklist_${band.key}`, format: 'A4 PDF',
     title: b(`${band.mm} — မိဘမှတ်သားစာရင်း`, `${band.en} — Parent observation sheet`),

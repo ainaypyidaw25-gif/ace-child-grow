@@ -87,7 +87,7 @@ const MILESTONES: SeedItem[] = [
         'When she points, look where she points and name it — that is what keeps the gesture growing.',
       ),
     }),
-    'The appearance of pointing, showing, giving and waving between 9 and 12 months follows CDC milestone guidance, AAP milestone guidance and the AAP developmental-surveillance report, with the everyday communication advice taken from the WHO Care for Child Development package and NHS learn-to-talk guidance in the registry.',
+    'The appearance of pointing, showing, giving and waving near the end of the first year follows CDC and AAP milestone guidance and the AAP developmental-surveillance report, with everyday communication advice supported by NHS learn-to-talk guidance.',
   ),
   kb(
     milestone('10_12m', 'speech', 1, {
@@ -217,7 +217,7 @@ const MILESTONES: SeedItem[] = [
         'Model waving and saying "bye-bye" every time someone leaves the room.',
       ),
     }),
-    'Early communicative gestures such as waving and reaching to be held are described in CDC/AAP milestone guidance and the WHO Care for Child Development materials in the registry.',
+    'Early communicative gestures such as waving and reaching to be held are described in CDC and AAP milestone guidance in the registry.',
   ),
   kb(
     milestone('10_12m', 'communication', 4, {
@@ -239,7 +239,7 @@ const MILESTONES: SeedItem[] = [
         'Point at interesting things and name them out loud — "look, a dog."',
       ),
     }),
-    'Joint attention (following a point) as an early social-communication milestone is described in the WHO Care for Child Development materials and the language-development research (Weisleder 2013) in the registry.',
+    'Following another person’s point as an emerging social-communication skill near the end of the first year is described in AAP developmental-surveillance and paediatric developmental references in the registry.',
   ),
   kb(
     milestone('10_12m', 'self_help', 2, {
@@ -871,8 +871,8 @@ const GUIDES_E: SeedItem[] = [
     guide('10_12m', 'play', {
       title: b('၁၀ – ၁၂ လ — ကစားခြင်းနှင့် အိမ်တွင်း ဘေးကင်းရေး လမ်းညွှန်', '10–12 months — Play and home-safety guide'),
       why: b(
-        'ကစားခြင်းသည် ဤအရွယ်၏ အဓိက သင်ယူနည်း ဖြစ်သည်။ ကလေးသည် ရွေ့လျားနိုင်လာသည်နှင့်အမျှ ကစားနယ်ပယ် ကျယ်လာပြီး အိမ်တွင်း အန္တရာယ်များနှင့်လည်း ပိုနီးလာသည်။ ထို့ကြောင့် ကြမ်းပြင်ပေါ် လုံခြုံစွာ ကစားနိုင်ရန် ပတ်ဝန်းကျင်ကို ပြင်ဆင်ပေးခြင်းသည် ကလေးကို အမြဲ တားမြစ်ခြင်းထက် ပိုထိရောက်သည်။ "မလုပ်နဲ့" ဟု အကြိမ် ၅၀ ပြောရမည့်အစား အခန်းကို လုံခြုံအောင် ပြင်လိုက်ခြင်းက ကလေးကိုလည်း လွတ်လပ်စွာ လေ့လာခွင့် ပေးသည်။',
-        'Play is how she learns now. As she becomes mobile her play area widens and she comes closer to household hazards, so preparing the environment works better than constant prohibition. Instead of saying "no" fifty times, make the room safe and let her explore.',
+        'ကစားခြင်းသည် ဤအရွယ်တွင် အရေးပါသော သင်ယူနည်းတစ်ခု ဖြစ်ပါသည်။ ကလေးသည် ရွေ့လျားနိုင်လာသည်နှင့်အမျှ အိမ်တွင်း အန္တရာယ်များနှင့် ပိုနီးလာနိုင်ပါသည်။ ကြမ်းပြင်ပေါ် လုံခြုံစွာ ကစားနိုင်ရန် ပတ်ဝန်းကျင်ကို ပြင်ဆင်ပေးခြင်းက ကလေးကို လွတ်လပ်စွာ စူးစမ်းခွင့် ပေးနိုင်ပါသည်။',
+        'Play is an important way of learning at this age. As the child becomes mobile, household hazards come within easier reach. Preparing a safe floor-play environment lets the child explore more freely.',
       ),
       observationQuestions: [
         b('ကြမ်းပြင်ပေါ်တွင် လွတ်လပ်စွာ ကစားရန် နေရာ ရှိပါသလား။', 'Is there clear floor space for free play?'),
@@ -897,8 +897,8 @@ const GUIDES_E: SeedItem[] = [
         b('အရိပ်ရှိ၊ သန့်ရှင်းသော နေရာတွင် ဖျာခင်း၍ ကစားခြင်း။', 'Mat play in a clean, shaded spot.'),
       ],
       lowCost: [
-        b('ဗူးခွံ၊ ခွက်၊ အဝတ်စများသည် အကောင်းဆုံး ကစားစရာ ဖြစ်သည်။', 'Empty containers, cups and cloths make the best toys.'),
-        b('ကစားစရာ များများ မလိုပါ — မိဘနှင့် အတူ ကစားချိန်က ပိုအရေးကြီးသည်။', 'Many toys are not needed — your time playing together matters more.'),
+        b('ဗူးခွံ၊ ခွက်နှင့် အဝတ်စများကို ဘေးကင်းကြောင်း စစ်ဆေးပြီး ကစားစရာအဖြစ် အသုံးပြုနိုင်ပါသည်။', 'Checked, safe containers, cups, and cloths can be used for play.'),
+        b('ကစားစရာ များများ မလိုပါ — မိဘနှင့်အတူ ကစားချိန်ကလည်း အရေးပါပါသည်။', 'Many toys are not needed — time playing together is also important.'),
       ],
       materials: b('ဖျာ၊ ဗူးခွံ၊ ခွက်၊ အဝတ်စ၊ ပျော့သော ဘောလုံး', 'A mat, empty containers, cups, cloths, a soft ball'),
       safety: b(
@@ -906,7 +906,7 @@ const GUIDES_E: SeedItem[] = [
         'Home-safety check — fit gates at the top and bottom of stairs. Anchor shelves, tables and TVs that could tip. Keep windows closed or guarded and move climbable furniture away from them. Tie blind cords high. Cover sockets and tuck away electrical cords. Empty buckets, basins and tubs or keep them covered — a child can drown in very little water, and never leave her alone near water even for a moment. Keep the stove, hot drinks, irons and candles out of reach and hot liquids away from table edges. Lock away medicines, cleaning products, tobacco and alcohol. Remove coins, buttons, button batteries and small magnets. Keep plastic bags and balloons well away.',
       ),
       commonMistakes: [
-        b('ကလေးကို အမြဲ တားမြစ်ခြင်း — ပတ်ဝန်းကျင်ကို ပြင်ခြင်းက ပိုထိရောက်သည်။', 'Constantly stopping her — changing the environment works better.'),
+        b('ကလေးကို အမြဲ တားမြစ်ခြင်း — အန္တရာယ်များကို ဖယ်ရှားပြီး ဘေးကင်းသော စူးစမ်းနေရာ ပြင်ဆင်ပေးပါ။', 'Constantly stopping the child — remove hazards and prepare a safe space to explore.'),
         b('"ခဏလေးပဲ" ဟု ထင်၍ ရေအနီးတွင် ချန်ထားခြင်း။', 'Leaving her near water "just for a second".'),
       ],
       parentTips: [
@@ -916,11 +916,11 @@ const GUIDES_E: SeedItem[] = [
       faq: [
         {
           q: b('ကလေးကို ကစားရာမှာ အမြဲ ဦးဆောင်ပေးရမလား။', 'Should I always lead the play?'),
-          a: b('မလိုပါ။ ကလေး ရွေးသည့် အရာကို လိုက်ကစားပေးခြင်းက အာရုံစူးစိုက်မှုနှင့် ဘာသာစကား ဖွံ့ဖြိုးမှုကို ပိုအထောက်အကူ ပြုသည်။ သင့်အလုပ်မှာ လုံခြုံမှု ပေးခြင်းနှင့် အတူ ရှိပေးခြင်း ဖြစ်သည်။', 'No. Following her choice supports attention and language better. Your job is to keep it safe and be present.'),
+          a: b('မလိုပါ။ ကလေး ရွေးသည့်အရာကို လိုက်ကစားပေးခြင်းက အာရုံစူးစိုက်မှုနှင့် ဘာသာစကား ဖွံ့ဖြိုးရေးကို အထောက်အကူပြုနိုင်ပါသည်။ သင့်အလုပ်မှာ လုံခြုံမှု ပေးခြင်းနှင့် အတူ ရှိပေးခြင်း ဖြစ်သည်။', 'No. Following her choice in play can support attention and language development. Your job is to keep it safe and be present.'),
         },
         {
           q: b('ကစားစရာ ဘယ်နှစ်ခု လိုအပ်လဲ။', 'How many toys does she need?'),
-          a: b('အနည်းငယ်သာ လိုပါသည်။ ပစ္စည်း ၃–၄ ခုကို လှည့်ပြောင်း ပေးခြင်းက ပစ္စည်း အများကြီး တစ်ပြိုင်နက် ပေးခြင်းထက် ပိုကောင်းသည်။', 'Very few. Rotating three or four items works better than offering many at once.'),
+          a: b('ပစ္စည်းအနည်းငယ်ကို တစ်ကြိမ်စီပေးပြီး အခါအားလျော်စွာ လှည့်ပြောင်းပေးနိုင်ပါသည်။', 'Offer a few safe items at a time and rotate them occasionally.'),
         },
       ],
       redFlags: [
@@ -1208,7 +1208,7 @@ const ACTIVITIES: SeedItem[] = [
     activity({
       slug: 'hide_and_find_toy',
       title: b('ကစားစရာ ဝှက်၍ ရှာခြင်း', 'Hide and find the toy'),
-      summary: b('အဝတ်စအောက်တွင် ကစားစရာကို ဝှက်၍ ရှာစေခြင်းဖြင့် "မမြင်ရလည်း ရှိနေသေးတယ်" ဟူသော အသိကို လေ့ကျင့်ပေးသည်။', 'Hiding a toy under a cloth for her to find strengthens the idea that things still exist when out of sight.'),
+      summary: b('အဝတ်စအောက်တွင် ကစားစရာကို ဝှက်ပြီး မမြင်ရသော်လည်း အရာများ ရှိနေဆဲဖြစ်ကြောင်း အတူ စူးစမ်းကစားပါ။', 'Hide a toy under a cloth and explore together that things still exist when out of sight.'),
       ageGroupKey: '10_12m',
       domains: ['cognitive', 'problem_solving', 'play'],
       difficulty: 'easy',
@@ -1222,7 +1222,7 @@ const ACTIVITIES: SeedItem[] = [
         b('ကလေး မရှာလျှင် အဝတ်စ၏ အစွန်းကို အနည်းငယ် ဖွင့်ပြပါ။', 'If she does not search, lift a corner to help.'),
         b('ကလေး ကျွမ်းလာလျှင် အပြည့် ဖုံးကြည့်ပါ။', 'Once she succeeds, try covering it completely.'),
       ],
-      safety: b('ပါးလွှာသော အဝတ်စကိုသာ သုံးပါ — ပလတ်စတစ်အိတ်ကို လုံးဝ မသုံးပါနှင့် (အသက်ရှူ ပိတ်နိုင်သည်)။ ကလေး၏ မျက်နှာပေါ်တွင် အဝတ်စ ကြာရှည် မတင်ထားပါနှင့်။ ကစားစရာသည် ပါးစပ်ထဲ မဝင်နိုင်လောက်အောင် ကြီးရမည်။', 'Use only a light cloth — never a plastic bag, which is a suffocation risk. Do not leave the cloth over her face. The toy must be too large to fit in her mouth.'),
+      safety: b('ပါးလွှာသော အဝတ်စကိုသာ သုံးပါ — ပလတ်စတစ်အိတ်ကို လုံးဝ မသုံးပါနှင့် (အသက်ရှူ ပိတ်နိုင်သည်)။ ကလေး၏ မျက်နှာပေါ်တွင် အဝတ်စ မတင်ထားပါနှင့်။ ကစားစရာသည် ပါးစပ်ထဲ မဝင်နိုင်လောက်အောင် ကြီးရမည်။', 'Use only a light cloth — never a plastic bag, which is a suffocation risk. Do not leave the cloth over her face. The toy must be too large to fit in her mouth.'),
       indoor: true,
       outdoor: false,
       oneChild: true,
@@ -1320,13 +1320,13 @@ const ACTIVITIES_B: SeedItem[] = [
       offline: true,
       tags: ['turn_taking', 'ball_play'],
     }),
-    'Turn-taking ball play draws on AAP guidance on the power of play, the WHO Care for Child Development package, CDC milestone guidance and the paediatric physical-therapy reference held in the registry.',
+    'Turn-taking ball play draws on AAP play guidance, CDC milestone guidance and paediatric physical-therapy references in the registry.',
   ),
   kb(
     activity({
       slug: 'show_me_and_name_it',
       title: b('ညွှန်ပြပြီး နာမည်ခေါ်ခြင်း', 'Point and name it'),
-      summary: b('ကလေး ညွှန်ပြသည့် အရာကို နာမည်ခေါ်ပေးခြင်းဖြင့် ဝေါဟာရနှင့် ပူးတွဲ အာရုံစိုက်မှုကို တည်ဆောက်ပေးသည်။', 'Naming what she points at builds vocabulary and shared attention.'),
+      summary: b('ကလေး ညွှန်ပြသည့်အရာကို အမည်ခေါ်ပေးခြင်းက ဝေါဟာရ သင်ယူမှုနှင့် ပူးတွဲအာရုံစိုက်မှုကို အထောက်အကူပြုပါသည်။', 'Naming what the child points at supports vocabulary learning and shared attention.'),
       ageGroupKey: '10_12m',
       domains: ['language', 'communication'],
       difficulty: 'easy',

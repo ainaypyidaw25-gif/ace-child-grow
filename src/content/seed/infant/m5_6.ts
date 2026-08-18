@@ -401,8 +401,8 @@ const GUIDES_C: SeedItem[] = [
     guide('5_6m', 'communication', {
       title: b('၅ – ၆ လ — ဆက်သွယ်ပြောဆိုမှု လမ်းညွှန်', '5–6 months — Communication guide'),
       why: b(
-        'ကလေးသည် စကားလုံး မသုံးဘဲ ဆက်သွယ်တတ်နေပြီ ဖြစ်သည် — မျက်လုံးချင်းဆုံခြင်း၊ ပြုံးခြင်း၊ လက်လှမ်းခြင်း၊ မျက်နှာလွှဲခြင်း တို့ဖြင့် "ဆက်ကစားချင်တယ်" သို့မဟုတ် "အနားယူချင်ပြီ" ဟု ပြောနေခြင်း ဖြစ်သည်။ မိဘက ဤအချက်ပြမှုများကို သတိထားမိပြီး တုံ့ပြန်ပေးခြင်းသည် ကလေး၏ ဆက်သွယ်မှု စွမ်းရည်ကို အခိုင်မာဆုံး တည်ဆောက်ပေးသည်။',
-        'She already communicates without words — eye contact, smiling, reaching, and turning away all say "more please" or "I need a break". Noticing these signals and answering them is what builds communication most strongly.',
+        'ကလေးသည် စကားလုံး မသုံးဘဲ ဆက်သွယ်တတ်နေပြီ ဖြစ်သည်။ မျက်လုံးချင်းဆုံခြင်း၊ ပြုံးခြင်း၊ လက်လှမ်းခြင်းနှင့် မျက်နှာလွှဲခြင်းတို့က ဆက်ကစားလိုခြင်း၊ အနားယူလိုခြင်း သို့မဟုတ် အခြားလိုအပ်ချက်များကို ပြနိုင်ပါသည်။ မိဘက ဤအချက်ပြမှုများကို သတိပြုပြီး တုံ့ပြန်ပေးခြင်းက အစောပိုင်း ဆက်သွယ်မှုနှင့် ဆက်ဆံရေးကို အထောက်အကူပြုပါသည်။',
+        'Your baby already communicates without words. Eye contact, smiling, reaching, and turning away can signal interest, a need for a break, or another need. Noticing and responding to these signals supports early communication and connection.',
       ),
       observationQuestions: [
         b('ဆက်ကစားချင်သည့်အခါ မည်သို့ ပြသနည်း (ပြုံးခြင်း၊ လှမ်းခြင်း)။', 'How does she show she wants more — smiling, reaching?'),
@@ -413,7 +413,7 @@ const GUIDES_C: SeedItem[] = [
       dailyActivities: [
         b('ကလေး၏ အချက်ပြမှုကို စကားဖြင့် ပြန်ပြောပေးပါ ("ထပ်ကစားချင်တာလား")။', 'Put her signals into words — "you want more, don’t you".'),
         b('နို့တိုက်ချိန်၊ အဝတ်လဲချိန်တွင် မျက်နှာချင်းဆိုင် စကားပြောပါ။', 'Talk face to face during feeds and nappy changes.'),
-        b('ကလေး မျက်နှာလွှဲလျှင် ခဏ ရပ်ပေးပါ — အနားယူချင်ခြင်း ဖြစ်သည်။', 'Pause when she looks away — that is her asking for a break.'),
+        b('ကလေး မျက်နှာလွှဲလျှင် ခဏရပ်ပြီး အနားယူလိုသလား သို့မဟုတ် အခြားလိုအပ်ချက် ရှိသလား စစ်ဆေးပါ။', 'If the baby looks away, pause and check whether they need a break or something else.'),
       ],
       weeklyActivities: [
         b('မိသားစုဝင် တစ်ဦးစီနှင့် မျက်နှာချင်းဆိုင် ကစားချိန် ပေးပါ။', 'Give her face-to-face time with a different family member each week.'),
@@ -427,7 +427,7 @@ const GUIDES_C: SeedItem[] = [
         b('အပြင်တွင် တွေ့သမျှကို လက်ညှိုးထိုးပြ၍ အတူကြည့်ခြင်း။', 'Pointing at things outside and looking at them together.'),
       ],
       lowCost: [
-        b('သင်၏ မျက်နှာသည် အကောင်းဆုံး ဆက်သွယ်ရေး ကိရိယာ ဖြစ်သည်။', 'Your face is the best communication tool there is.'),
+        b('သင်၏ မျက်နှာနှင့် အသံကို ဆက်သွယ်ကစားရာတွင် အခမဲ့ အသုံးပြုနိုင်ပါသည်။', 'Your face and voice offer a free way to play and communicate.'),
         b('အဝတ်စ တစ်ထည်ဖြင့် ကစားနည်း များစွာ လုပ်နိုင်သည်။', 'One cloth is enough for many games.'),
       ],
       materials: b('မလိုအပ်ပါ — သင်၏ မျက်နှာ၊ အသံနှင့် အဝတ်စ တစ်ထည်', 'Nothing needed — your face, your voice and a cloth'),
@@ -440,13 +440,13 @@ const GUIDES_C: SeedItem[] = [
         b('ငိုသံကို "အလိုလိုက်လွန်းမည်" ဟု ထင်၍ လျစ်လျူရှုခြင်း — ဤအရွယ်တွင် ငိုခြင်းသည် ဆက်သွယ်ခြင်း ဖြစ်သည်။', 'Ignoring crying for fear of spoiling — at this age crying is communication.'),
       ],
       parentTips: [
-        b('တုံ့ပြန်ချိန် မြန်လေ ကလေး၏ ယုံကြည်မှု ခိုင်မာလေ ဖြစ်သည်။', 'The quicker you respond, the more secure she feels.'),
+        b('ကလေး၏ အချက်ပြမှုကို သတိပြုပြီး နွေးထွေးစွာ တုံ့ပြန်ပေးပါ။', 'Notice the baby’s signals and respond warmly.'),
         b('ဖုန်းကို ချထား၍ မျက်လုံးချင်း ဆုံစည်းပေးပါ။', 'Put the phone down and give her your eyes.'),
       ],
       faq: [
         {
           q: b('ငိုတိုင်း ချီပေးရင် အလိုလိုက်လွန်းသွားမလား။', 'If I pick her up every time she cries, will I spoil her?'),
-          a: b('မဖြစ်ပါ။ ဤအရွယ်တွင် ငိုခြင်းသည် တစ်ခုတည်းသော ဆက်သွယ်နည်း ဖြစ်သည်။ တုံ့ပြန်ပေးခြင်းက ကလေးကို ပိုမို လုံခြုံစိတ်ချစေပြီး နောင်တွင် ငိုမှု လျော့နည်းစေသည်။', 'No. Crying is her only way to communicate now. Responding makes her feel secure and tends to reduce crying later.'),
+          a: b('မဖြစ်ပါ။ ဤအရွယ်တွင် ငိုခြင်းသည် ကလေးအသုံးပြုသည့် ဆက်သွယ်နည်းများထဲမှ တစ်ခုဖြစ်ပါသည်။ ငိုသံနှင့် အခြားအချက်ပြမှုများကို သတိပြုပြီး နွေးထွေးစွာ တုံ့ပြန်ပေးခြင်းက ကလေးကို လုံခြုံသည်ဟု ခံစားရရန် ကူညီနိုင်ပါသည်။', 'No. Crying is one of the ways babies communicate at this age. Noticing cries and other signals and responding warmly can help the baby feel secure.'),
         },
         {
           q: b('ဗီဒီယိုခေါ်ဆိုမှုက ဖန်သားပြင် အသုံးပြုမှု မဟုတ်ဘူးလား။', 'Isn’t a video call also screen use?'),
@@ -463,8 +463,8 @@ const GUIDES_C: SeedItem[] = [
         'Raise these with a health worker. This is a prompt to check, not a diagnosis.',
       ),
       encouragement: b(
-        'ကလေးက စကားမပြောနိုင်သေးသော်လည်း သင့်ကို နေ့စဉ် စကားပြောနေပါသည် — ကြည့်လိုက်ရုံသာ လိုပါသည်။',
-        'She talks to you every day without words — you only have to look.',
+        'ကလေးက စကားမပြောနိုင်သေးသော်လည်း အသံ၊ အမူအရာနှင့် အခြားအချက်ပြမှုများဖြင့် နေ့စဉ် ဆက်သွယ်နေပါသည်။',
+        'Although your baby cannot yet use words, they communicate each day through sounds, gestures, and other signals.',
       ),
     }),
     'Reading and answering a baby’s cues at 5–6 months follows the WHO Care for Child Development approach, CDC milestone guidance, NHS learn-to-talk advice, the conversational-turns research in the registry, and AAP media guidance for the screen advice.',
@@ -1079,7 +1079,7 @@ const ACTIVITIES: SeedItem[] = [
       offline: true,
       tags: ['music_activity', 'daily'],
     }),
-    'Singing and rhythmic play with infants are supported by WHO Care for Child Development counselling materials and AAP guidance on the power of play.',
+    'Singing and rhythmic play with infants are supported by AAP guidance on the power of play.',
   ),
   kb(
     activity({
@@ -1091,7 +1091,7 @@ const ACTIVITIES: SeedItem[] = [
       difficulty: 'easy',
       durationMinutes: 10,
       materials: b('ခြင်းတောင်း တစ်လုံးနှင့် ကလေးပါးစပ်ထက် ကြီးသော ပစ္စည်း ၃–၄ ခု (အဝတ်စ၊ သစ်သားဇွန်း၊ ပလတ်စတစ်ခွက်)။', 'A basket and three or four objects larger than her mouth — a cloth, a wooden spoon, a plastic cup.'),
-      setup: b('ပစ္စည်းများကို ရေနွေးဖြင့် ဆေးပါ။ ကလေးကို အခင်းပေါ်တွင် ထားပါ။', 'Wash the objects in hot water. Put her on a mat.'),
+      setup: b('ပစ္စည်းများကို ဆေးကြောသန့်စင်ပြီး အခြောက်ခံပါ။ ကလေးကို အခင်းပေါ်တွင် ထားပါ။', 'Wash and dry the objects before use. Put her on a mat.'),
       instructions: [
         b('ပစ္စည်း တစ်ခုကို ရွေး၍ ကလေးလက်ထဲ ဖြေးညှင်းစွာ ထည့်ပေးပါ။', 'Choose one object and place it gently in her hand.'),
         b('ပစ္စည်း၏ အမည်နှင့် အထိအတွေ့ကို ပြောပြပါ ("နူးနူးလေးနော်")။', 'Name the object and the feel — "this is soft".'),

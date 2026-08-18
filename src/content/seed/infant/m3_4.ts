@@ -244,8 +244,8 @@ const GUIDES_B: SeedItem[] = [
     guide('3_4m', 'communication', {
       title: b('၃ – ၄ လ — ဆက်သွယ်ပြောဆိုမှု လမ်းညွှန်', '3–4 months — Communication guide'),
       why: b(
-        'ဤအရွယ်တွင် ကလေးသည် "အူး"၊ "အာ" ကဲ့သို့ သရသံများ ထွက်လာပြီး ရယ်မောသံ ကြားရတတ်သည်။ သင်ပြောသောအခါ ခေတ္တရပ်၍ တုံ့ပြန်ခြင်းသည် အပြန်အလှန် စကားပြောခြင်း၏ အခြေခံ ဖြစ်သည်။ ဤ "စကားပြောလှည့်" သည် နောင် ဘာသာစကား ဖွံ့ဖြိုးမှုအတွက် အရေးအကြီးဆုံး အရာ ဖြစ်သည်။',
-        'Babies now coo with vowel sounds and may laugh out loud. When you talk, pause and let her answer — this turn-taking is the base of conversation and matters more for later language than any toy.',
+        'ဤအရွယ်တွင် ကလေးသည် “အူး”၊ “အာ” ကဲ့သို့ သရသံများ ထွက်လာပြီး ရယ်မောသံ ကြားရနိုင်ပါသည်။ သင်ပြောသောအခါ ခေတ္တရပ်၍ ကလေး တုံ့ပြန်ရန် အချိန်ပေးပါ။ ဤအပြန်အလှန် အသံဖလှယ်ခြင်းက အစောပိုင်း ဆက်သွယ်မှုနှင့် နောက်ပိုင်း ဘာသာစကား ဖွံ့ဖြိုးရေးကို အထောက်အကူပြုပါသည်။',
+        'Babies now coo with vowel sounds and may laugh aloud. When you talk, pause and give the baby time to respond. This back-and-forth exchange supports early communication and later language development.',
       ),
       observationQuestions: [
         b('"အူး"၊ "အာ" ကဲ့သို့ သံများ ထွက်ပါသလား။', 'Does she make cooing vowel sounds?'),
@@ -269,7 +269,7 @@ const GUIDES_B: SeedItem[] = [
         b('အပြင်ထွက်စဉ် ကြားရသော အသံများ (ငှက်၊ လေ) ကို ပြောပြပါ။', 'Naming sounds you hear outside — birds, wind.'),
       ],
       lowCost: [
-        b('သင့်အသံသည် အကောင်းဆုံး ကစားစရာ ဖြစ်သည် — ကုန်ကျစရိတ် မရှိပါ။', 'Your voice is the best toy and costs nothing.'),
+        b('သင့်အသံဖြင့် အခမဲ့ ကစားပြောဆိုနိုင်ပါသည်။', 'Your voice offers a free way to play and communicate.'),
         b('အိမ်လုပ် အသံမြည်ဗူးဖြင့် အသံရင်းမြစ်ကို ရှာစေခြင်း။', 'A home-made rattle to help her locate sound.'),
       ],
       materials: b('မလိုအပ်ပါ — သင်၏အသံနှင့် မျက်နှာ လုံလောက်သည်', 'Nothing needed — your voice and face are enough'),
@@ -283,12 +283,12 @@ const GUIDES_B: SeedItem[] = [
       ],
       parentTips: [
         b('ကလေး အသံထွက်ပြီးနောက် ၅ စက္ကန့် စောင့်ပါ — တုံ့ပြန်ရန် အချိန်ပေးပါ။', 'Wait about five seconds after her sound — give her time to take a turn.'),
-        b('မိခင်ဘာသာစကားဖြင့် ပြောပါ — အကောင်းဆုံး ဖြစ်သည်။', 'Speak in your own mother tongue — it is the best choice.'),
+        b('သင် အဆင်ပြေဆုံး ဘာသာစကားဖြင့် သဘာဝကျစွာ ပြောပါ။', 'Speak naturally in the language you know best.'),
       ],
       faq: [
         {
           q: b('ဘာသာစကား နှစ်မျိုး ပြောရင် ကလေး ရှုပ်မလား။', 'Will two languages confuse my baby?'),
-          a: b('မရှုပ်ပါ။ ကလေးများသည် ဘာသာစကား တစ်မျိုးထက် ပို၍ သင်ယူနိုင်သည်။ တစ်ဦးချင်းစီက မိမိအကျွမ်းဝင်ဆုံး ဘာသာစကားဖြင့် ပြောပေးခြင်းက အကောင်းဆုံး ဖြစ်သည်။', 'No. Babies can learn more than one language. It works best when each person speaks the language they know best.'),
+          a: b('မရှုပ်ပါ။ ကလေးများသည် ဘာသာစကား တစ်မျိုးထက်ပို၍ သင်ယူနိုင်ပါသည်။ လူကြီးတစ်ဦးစီက မိမိအကျွမ်းဝင်ဆုံး ဘာသာစကားဖြင့် သဘာဝကျစွာ ပြောပေးနိုင်ပါသည်။', 'No. Babies can learn more than one language. Each person can speak naturally in the language they know best.'),
         },
         {
           q: b('ကလေး ရယ်သံ မကြားရသေးဘူး။', 'I have not heard a laugh yet.'),
@@ -305,8 +305,8 @@ const GUIDES_B: SeedItem[] = [
         'If hearing is in doubt, early checking matters. Ask a health worker. This is not a diagnosis.',
       ),
       encouragement: b(
-        'သင်ပြောသော စကားလုံးတိုင်းသည် ကလေး၏ ဦးနှောက်ကို တည်ဆောက်နေပါသည်။',
-        'Every word you say is building your baby’s brain.',
+        'ကလေးနှင့် စကားပြောပြီး တုံ့ပြန်ပေးခြင်းက အစောပိုင်း ဆက်သွယ်မှုနှင့် သင်ယူမှုကို အထောက်အကူပြုပါသည်။',
+        'Talking and responding to your baby supports early communication and learning.',
       ),
     }),
     'Cooing, laughing and vocal turn-taking at 3–4 months follow CDC and AAP milestone guidance; the hearing-response red flags follow CDC and AAP developmental-surveillance guidance and NHS learn-to-talk advice.',
@@ -531,8 +531,8 @@ const GUIDES_C: SeedItem[] = [
     guide('3_4m', 'play', {
       title: b('၃ – ၄ လ — ကစားခြင်း လမ်းညွှန်', '3–4 months — Play guide'),
       why: b(
-        'ဤအရွယ်တွင် ကစားခြင်းဆိုသည်မှာ ကြည့်ခြင်း၊ နားထောင်ခြင်း၊ ထိတွေ့ခြင်းနှင့် လှမ်းယူရန် ကြိုးစားခြင်း ဖြစ်သည်။ ကစားစရာ ဈေးကြီးများ မလိုအပ်ပါ။ အရေးကြီးဆုံးမှာ သင်နှင့် အတူရှိသော အချိန် ဖြစ်သည်။',
-        'Play at this age means looking, listening, touching and reaching. Expensive toys are not needed. What matters most is time together with you.',
+        'ဤအရွယ်တွင် ကစားခြင်းဆိုသည်မှာ ကြည့်ခြင်း၊ နားထောင်ခြင်း၊ ထိတွေ့ခြင်းနှင့် လှမ်းယူရန် ကြိုးစားခြင်း ဖြစ်သည်။ ကစားစရာ ဈေးကြီးများ မလိုအပ်ပါ။ သင်နှင့် အတူရှိသော အချိန်က ကလေး၏ ကစားခြင်းနှင့် သင်ယူမှုကို အထောက်အကူပြုပါသည်။',
+        'Play at this age means looking, listening, touching and reaching. Expensive toys are not needed. Time with you supports your baby’s play and learning.',
       ),
       observationQuestions: [
         b('ကစားချိန်တွင် အာရုံစိုက်နိုင်သည့် အချိန် ရှည်လာပါသလား။', 'Is she able to pay attention for longer during play?'),
@@ -576,7 +576,7 @@ const GUIDES_C: SeedItem[] = [
       faq: [
         {
           q: b('ကစားစရာ ဘယ်နှစ်ခု လိုအပ်လဲ။', 'How many toys does she need?'),
-          a: b('နည်းနည်းဖြင့် လုံလောက်ပါသည်။ ဤအရွယ်တွင် သင်၏မျက်နှာ၊ အသံနှင့် အိမ်တွင်း လုံခြုံသော ပစ္စည်း အနည်းငယ်ဖြင့် ရပါသည်။', 'Very few. At this age your face, your voice and a handful of safe household objects are enough.'),
+          a: b('အနည်းငယ်သာ လိုပါသည်။ ဤအရွယ်တွင် သင်၏မျက်နှာ၊ အသံနှင့် အိမ်တွင်း လုံခြုံသော ပစ္စည်းအနည်းငယ်ဖြင့် ကစားနိုင်ပါသည်။', 'Very few. At this age, your face, voice, and a few safe household objects can provide play opportunities.'),
         },
         {
           q: b('ကလေး ကစားရင်း ငိုသွားရင်။', 'She cries during play.'),
@@ -593,11 +593,11 @@ const GUIDES_C: SeedItem[] = [
         'Raise these with a health worker. This is a prompt to check, not a diagnosis.',
       ),
       encouragement: b(
-        'ကလေးအတွက် အကောင်းဆုံး ကစားစရာသည် သင် ဖြစ်ပါသည်။',
-        'The best toy your baby has is you.',
+        'သင်သည် ကလေး၏ အရေးကြီးသော ကစားဖော် ဖြစ်ပါသည်။',
+        'You are an important play partner for your baby.',
       ),
     }),
-    'Play as looking, listening, touching and reaching at 3–4 months follows the WHO/UNICEF nurturing care framework and CDC and AAP milestone guidance; choking and strangulation precautions follow AAP safe sleep and play guidance.',
+    'Play as looking, listening, touching, and reaching at 3–4 months follows WHO/UNICEF Care for Child Development recommendations and CDC and AAP milestone guidance; choking and strangulation precautions follow AAP safe-sleep and play guidance.',
   ),
 ];
 
@@ -1026,15 +1026,15 @@ const ACTIVITIES: SeedItem[] = [
         b('ကလေး တုံ့ပြန်လျှင် ရပ်နား၍ တုံ့ပြန်ပြန်ပါ။', 'When she responds, pause and answer her.'),
         b('အိပ်ရာဝင်ချိန်တွင် တစ်ပုဒ်တည်းကို ပုံမှန် ဆိုပါ။', 'Use one regular song at bedtime.'),
       ],
-      safety: b('လုံးဝ မလှုပ်ခါပါနှင့် — ဖြေးညှင်းစွာသာ ယိမ်းပါ။ ခေါင်းနှင့် လည်ပင်းကို အမြဲ ထောက်ပံ့ပါ။ ကလေးအိပ်ပျော်သွားလျှင် ပက်လက် အိပ်ရာသို့ ပြောင်းပေးပါ။', 'Never shake — sway slowly only. Always support head and neck. If she falls asleep, move her onto her back in her own sleep space.'),
+      safety: b('လုံးဝ မလှုပ်ခါပါနှင့် — ဖြေးညှင်းစွာသာ ယိမ်းပါ။ ခေါင်းနှင့် လည်ပင်းကို အမြဲ ထောက်ပံ့ပါ။ ကလေးအိပ်ပျော်သွားလျှင် မိမိ၏ သီးသန့် ဘေးကင်းသော အိပ်ရာပေါ်တွင် ပက်လက်အနေအထားဖြင့် အိပ်စေပါ။', 'Never shake — sway slowly only. Always support head and neck. If she falls asleep, move her onto her back in her own safe sleep space.'),
       indoor: true, outdoor: true, oneChild: true, group: false, parentChild: true,
       outcomes: [
         b('အသံအနေအထား၊ စည်းချက်ကို ခံစားစေပြီး စိတ်ငြိမ်စေရန်။', 'Learning objective — to experience rhythm and tone, and to settle.'),
-        b('အိပ်ရာဝင် အစီအစဉ်ကို ခိုင်မာစေခြင်း။', 'A stronger bedtime routine.'),
+        b('တူညီသော သီချင်းကို ရင်းနှီးသော အိပ်ရာဝင် အချက်ပြမှုအဖြစ် အသုံးပြုနိုင်ခြင်း။', 'Use the same song as a familiar bedtime cue.'),
       ],
       tags: ['music_activity', 'daily'],
     }),
-    'Singing, rhythm and rocking as soothing and early language input follow WHO Care for Child Development materials; the never-shake and back-to-sleep points follow AAP safe sleep guidance.',
+    'Talking or singing during care, gentle holding or rocking, and responsive communication follow WHO Care for Child Development materials; back-to-sleep follows AAP safe-sleep guidance.',
   ),
   kb(
     activity({

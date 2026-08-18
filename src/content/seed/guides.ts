@@ -106,7 +106,7 @@ export const GUIDES: SeedItem[] = [
     title: b('၁၀–၁၂ လ — ဆက်သွယ်ပြောဆိုမှု', '10–12 months — Communication'),
     why: b('လက်ညှိုးထိုးခြင်း၊ လက်ဝှေ့ခြင်းသည် စကားလုံးမတိုင်မီ ဆက်သွယ်မှုနည်းလမ်းများဖြစ်သည်။', 'Pointing and waving are communication before words.'),
     observationQuestions: [
-      b('လက်ပြ/လက်ဝှေ့ လုပ်ပါသလား။', 'Waves bye or claps?'),
+      b('လက်ပြနှုတ်ဆက်ခြင်း သို့မဟုတ် လက်ခုပ်တီးခြင်း ပြုလုပ်ပါသလား။', 'Waves bye-bye or claps?'),
       b('အလိုရှိသည်ကို အသံ/လက်ဟန်ဖြင့် ပြသပါသလား။', 'Uses sounds or gestures to show wants?'),
     ],
     dailyActivities: [b('လက်ခုပ်တီးခြင်းနှင့် လက်ပြနှုတ်ဆက်ခြင်းကဲ့သို့ လက်ဟန်များကို အတူ လုပ်ပြပါ။', 'Practice gestures like clap and wave.')],
@@ -115,7 +115,7 @@ export const GUIDES: SeedItem[] = [
     lowCost: [b('ပဝါ သို့မဟုတ် စောင်ပါးတစ်ထည်ဖြင့် မျက်နှာဖုံးဖော် ကစားနိုင်သည်။', 'Peek-a-boo with a cloth — no cost.')],
     materials: b('စောင်၊ ရုပ်ပုံ။', 'Cloth, pictures.'),
     safety: b('မျက်နှာချင်းဆိုင် အပြန်အလှန် ကစားချိန်ကို ဦးစားပေးပါ။', 'Prioritize face-to-face back-and-forth play.'),
-    commonMistakes: [b('ကလေး၏ လက်ဟန်များကို လျစ်လျူရှုခြင်း — တုံ့ပြန်မှုက အရေးကြီးသည်။', 'Ignoring gestures — responding is what teaches.')],
+    commonMistakes: [b('ကလေး၏ လက်ဟန်များကို လျစ်လျူရှုခြင်း — တုံ့ပြန်ပေးခြင်းက ဆက်သွယ်မှု သင်ယူရာတွင် အထောက်အကူပြုသည်။', 'Ignoring gestures — responding supports communication learning.')],
     parentTips: [b('ကလေး ညွှန်ပြသည့်အရာ၏ အမည်ကို ပြောပေးပါ။', 'Name whatever your child points at.')],
     faq: [{ q: b('လက်ဟန်များသည် စကားပြောခြင်းကို နှောင့်နှေးစေမလား။', 'Do gestures delay talking?'), a: b('မဟုတ်ပါ — လက်ဟန်များသည် စကားပြောခြင်းကို အားပေးသည်။', 'No — gestures support talking.') }],
     redFlags: [b('၁၂ လအရွယ်တွင် လက်ပြနှုတ်ဆက်ခြင်း မပြုခြင်း၊ မိဘ သို့မဟုတ် အုပ်ထိန်းသူကို “မေမေ”၊ “ဖေဖေ” သို့မဟုတ် အခြားအထူးအမည်ဖြင့် မခေါ်ခြင်း၊ သို့မဟုတ် “မလုပ်နဲ့” ဟူသော စကားကို နားမလည်ခြင်း။', 'By 12 months: does not wave bye-bye, call a parent or caregiver “mama”, “dada” or another special name, or understand “no”.')],
@@ -232,23 +232,23 @@ export const GUIDES: SeedItem[] = [
 
   guide('5_6m', 'play', {
     title: b('၅–၆ လ — ကစားခြင်း', '5–6 months — Play'),
-    why: b('ကစားခြင်းသည် ကလေး၏ အလုပ်ဖြစ်၍ ဦးနှောက်၊ ခန္ဓာကိုယ်နှင့် ဆက်ဆံရေးကို ဖွံ့ဖြိုးစေသည်။', 'Play is a child’s work — it grows brain, body, and bonds.'),
+    why: b('ကစားခြင်းသည် ကလေး၏ သင်ယူမှု၊ လှုပ်ရှားမှုနှင့် ပြုစုစောင့်ရှောက်သူနှင့် ဆက်သွယ်မှုကို အထောက်အကူပြုပါသည်။', 'Play supports your baby’s learning, movement, and connection with caregivers.'),
     observationQuestions: [
-      b('ကစားစရာများကို ကိုင်၍ စူးစမ်းပါသလား။', 'Explores toys by holding and mouthing?'),
+      b('ကစားစရာများကို ကိုင်၍ ပါးစပ်ဖြင့်လည်း စူးစမ်းပါသလား။', 'Explores toys by holding and mouthing?'),
       b('အသံ/အရောင်များကို စိတ်ဝင်စားပါသလား။', 'Shows interest in sounds and colors?'),
     ],
     dailyActivities: [b('ကွဲပြားသော ဖွဲ့စည်းပုံ (ကြမ်း/နူး) ပစ္စည်းများ ပေးပါ။', 'Offer objects with different textures.')],
-    indoor: [b('မှန်ရှေ့တွင် ကိုယ်ကို ကြည့် ကစားပါ။', 'Play in front of a safe mirror.')],
+    indoor: [b('ဘေးကင်းသော မှန်ရှေ့တွင် ကိုယ်ကိုကြည့် ကစားပါ။', 'Play in front of a safe mirror.')],
     outdoor: [b('အရိပ်အောက်တွင် သဘာဝ အသံ/မြင်ကွင်း ခံစားစေပါ။', 'Enjoy nature sights/sounds in the shade.')],
-    lowCost: [b('အိမ်သုံး ပလတ်စတစ်ခွက်/ဇွန်းများဖြင့် ကစားပါ။', 'Play with clean plastic cups and spoons.')],
+    lowCost: [b('သန့်ရှင်းသော အိမ်သုံး ပလတ်စတစ်ခွက်နှင့် ဇွန်းများဖြင့် ကစားပါ။', 'Play with clean plastic cups and spoons.')],
     materials: b('ကွဲပြားသော ဖွဲ့စည်းပုံ ကစားစရာ၊ မှန်။', 'Textured toys, mirror.'),
     safety: b('ပါးစပ်ထဲဝင်နိုင်သော ငယ်သောပစ္စည်းများ ရှောင်ပါ။', 'Avoid small choking-risk objects.'),
-    commonMistakes: [b('ကစားစရာ များလွန်းခြင်း — အနည်းငယ်က ပို၍ ကောင်းသည်။', 'Too many toys — a few is better.')],
-    parentTips: [b('ဈေးကြီးသော ကစားစရာ မလို — သင်၏ တုံ့ပြန်မှုက အရေးအကြီးဆုံး။', 'No pricey toys needed — your interaction matters most.')],
+    commonMistakes: [b('ကစားစရာ အများကြီးကို တစ်ပြိုင်နက်ပေးခြင်း — ဘေးကင်းသော ပစ္စည်းအနည်းငယ်ကို တစ်ခုချင်းစီ စူးစမ်းရန် အချိန်ပေးပါ။', 'Offering many toys at once — give time to explore a few safe objects one at a time.')],
+    parentTips: [b('ဈေးကြီးသော ကစားစရာ မလိုပါ — သင်၏ နွေးထွေးသော တုံ့ပြန်မှုက အရေးပါပါသည်။', 'No expensive toys are needed — warm, responsive interaction matters.')],
     faq: [{ q: b('ဖုန်း သို့မဟုတ် ရုပ်မြင်သံကြား ကြည့်စေလို့ ရပါသလား။', 'Is screen time okay?'), a: b('ဤအသက်အရွယ်တွင် ဖန်သားပြင်အသုံးပြုမှုကို အလွန်ကန့်သတ်ထားပါ။ လူကြီးတစ်ဦးက ကလေး ပါဝင်ဆက်သွယ်နိုင်အောင် ကူညီပေးသော မိသားစုနှင့် တိုက်ရိုက် ဗီဒီယိုခေါ်ဆိုမှုကို အပြန်အလှန်ဆက်သွယ်မှုအဖြစ် အသုံးပြုနိုင်ပါသည်။ ဖန်သားပြင်က မျက်နှာချင်းဆိုင် ကစားပြောဆိုမှုကို အစားမထိုးစေပါနှင့်။', 'At this age, keep screen use very limited. A live video call with family can be interactive when an adult helps the baby take part. Do not let screens replace face-to-face play.') }],
     redFlags: [b('ကစားစရာ/လူများကို လုံးဝ စိတ်မဝင်စားခြင်း။', 'No interest in toys or people at all.')],
     referral: b('စိုးရိမ်ပါက ကလေးကျန်းမာရေးဆရာဝန်နှင့် တိုင်ပင်ပါ။', 'If concerned, consult a pediatrician.'),
-    encouragement: b('သင်နှင့်အတူ ကစားခြင်းသည် ကလေးအတွက် အကောင်းဆုံး လက်ဆောင်ဖြစ်သည်။', 'Playing with you is your child’s best gift.'),
+    encouragement: b('သင်နှင့်အတူ ကစားချိန်သည် ကလေး၏ သင်ယူမှုနှင့် ဆက်ဆံရေးကို အထောက်အကူပြုပါသည်။', 'Playing with you supports your baby’s learning and connection.'),
   }),
 
   guide('5_6m', 'nutrition', {

@@ -894,4 +894,247 @@ describe('clinically sourced content corrections', () => {
       'us-hhs-head-start-elof-2015',
     );
   });
+
+  it('uses WHO/UNICEF CCD only for claim-direct caregiver play and communication guidance', () => {
+    const sourceId = 'who-care-for-child-development-2012';
+    expect(SOURCE_BY_ID.get(sourceId)).toMatchObject({
+      authors: 'WHO/UNICEF',
+      year: 2012,
+      ageMonthsMin: 0,
+      ageMonthsMax: 59,
+      verifiedOn: '2026-08-18',
+      topics: ['motor', 'speech_language', 'cognitive', 'social_emotional', 'play', 'parenting'],
+    });
+    expect(SOURCE_BY_ID.get(sourceId)?.verifiedNote).toContain('26 July 2012');
+
+    const related = relatedContent(sourceId);
+    expect(related.milestone).toEqual([]);
+    expect(related.guide).toEqual([
+      'gd_10_12m_communication',
+      'gd_5_6m_play',
+      'gd_birth_2m_communication',
+      'gd_birth_2m_cognitive',
+      'gd_birth_2m_play',
+      'gd_3_4m_communication',
+      'gd_3_4m_play',
+      'gd_5_6m_communication',
+      'gd_7_9m_communication',
+      'gd_10_12m_play',
+      'gd_2y_play',
+    ]);
+    expect([...related.activity].sort()).toEqual([
+      'act_action_song_2y',
+      'act_babble_back_and_forth',
+      'act_copy_everyday_actions',
+      'act_copy_my_sound',
+      'act_drum_and_pause',
+      'act_face_to_face_talk',
+      'act_helper_sort_2_5y',
+      'act_helper_sort_3_5y',
+      'act_helper_sort_3y',
+      'act_helper_sort_4_5y',
+      'act_hide_and_find_toy',
+      'act_large_puzzle_2y',
+      'act_lullaby_and_rock',
+      'act_name_and_wait',
+      'act_picture_story_2_5y',
+      'act_picture_story_3_5y',
+      'act_picture_story_3y',
+      'act_picture_story_4_5y',
+      'act_picture_story_4y',
+      'act_point_name_13_18m',
+      'act_posting_big_shapes_13_18m',
+      'act_rhythm_and_rock',
+      'act_safe_touch_basket',
+      'act_show_me_and_name_it',
+      'act_texture_basket_infant',
+      'act_texture_touch',
+      'act_tower_crash_2y',
+    ]);
+    expect(related.lesson).toEqual(['lsn_power_of_play']);
+    expect(related.story).toEqual([]);
+    expect(related.printable).toEqual([]);
+
+    const linkedSlugs = new Set(Object.values(related).flat());
+    for (const row of rows.values()) {
+      if (JSON.stringify(row.data).includes('Care for Child Development')) {
+        expect(linkedSlugs.has(row.slug), `${row.slug} has a stale CCD attribution`).toBe(true);
+      }
+    }
+
+    expect(sourcesForContent('prt_communication_cards', 'printable')).toEqual([
+      'asha-aac',
+      'unicef-caregiver-disability-resources-2022',
+    ]);
+    expect(SOURCE_BY_ID.get('unicef-caregiver-disability-resources-2022')).toMatchObject({
+      year: 2022,
+      ageMonthsMin: 36,
+      ageMonthsMax: 144,
+      reviewStatus: 'awaiting_review',
+      verifiedOn: '2026-08-18',
+    });
+    expect(sourcesForContent('act_push_pull_walk_13_18m', 'activity')).toContain(
+      'hc-baby-walkers-danger-2022',
+    );
+    expect(SOURCE_BY_ID.get('hc-baby-walkers-danger-2022')).toMatchObject({
+      year: 2022,
+      reviewStatus: 'awaiting_review',
+      verifiedOn: '2026-08-18',
+    });
+    const pushWalk = dataFor('act_push_pull_walk_13_18m');
+    expect((pushWalk.safety as { mm: string }).mm).toBe(
+      'ထိုင်ခုံပါသော ဘီးတပ် ကလေးလမ်းလျှောက်ကူကိရိယာကို မသုံးပါနှင့်။ ခိုင်ခံ့သော တွန်းကစားစရာကို အသုံးပြုစဉ် အနီးကပ် စောင့်ကြည့်ပါ။',
+    );
+    expect((pushWalk.safety as { en: string }).en).toBe(
+      'Do not use seated baby walkers. Supervise closely when using a stable push toy.',
+    );
+  });
+
+  it('keeps responsive-caregiving copy bilingual and avoids categorical benefit claims', () => {
+    const powerOfPlay = dataFor('lsn_power_of_play');
+    expect((powerOfPlay.actionToday as { en: string }).en).toBe(
+      'Today, use one safe household object to play with your child.',
+    );
+
+    const birthCommunication = dataFor('gd_birth_2m_communication');
+    expect((birthCommunication.why as { en: string }).en).toContain(
+      'supports early communication and language development',
+    );
+    expect((birthCommunication.parentTips as Array<{ en: string }>)[1].en).toBe(
+      'Speak naturally in the language you know best.',
+    );
+    expect((birthCommunication.parentTips as Array<{ mm: string; en: string }>)[0]).toEqual({
+      mm: 'ကလေးနှင့် နှေးနှေး၊ နွေးထွေးပြီး နူးညံ့သောအသံဖြင့် ပြောပါ။',
+      en: 'Speak slowly to your baby in a warm, gentle voice.',
+    });
+
+    const birthPlay = dataFor('gd_birth_2m_play');
+    expect((birthPlay.commonMistakes as Array<{ en: string }>)[1].en).toContain(
+      'tired, hungry, or needs something else',
+    );
+    expect((birthPlay.faq as Array<{ a: { en: string } }>)[0].a.en).toContain(
+      'gentle responses support play and learning',
+    );
+    expect((birthPlay.observationQuestions as Array<{ mm: string }>)[1].mm).toContain(
+      'သမ်းဝေခြင်း၊ ဂျီကျခြင်း',
+    );
+    expect(birthPlay.evidenceSummary).toBe(
+      'Play as interaction and reading infant engagement and disengagement cues follow AAP power-of-play guidance, WHO Care for Child Development materials, and UNICEF early-childhood guidance in the registry.',
+    );
+
+    const birthCognitive = dataFor('gd_birth_2m_cognitive');
+    expect((birthCognitive.encouragement as { mm: string; en: string })).toEqual({
+      mm: 'ရိုးရှင်းသော နေ့စဉ် အပြန်အလှန် ဆက်ဆံမှုများက ကလေး၏ အစောပိုင်း သင်ယူမှုကို အထောက်အကူပြုနိုင်ပါသည်။',
+      en: 'Simple everyday interactions can support your baby’s early learning.',
+    });
+    expect((birthCognitive.dailyActivities as Array<{ en: string }>)[1].en).toBe(
+      'During daily routines, give your baby time to look, listen, and explore through touch.',
+    );
+
+    const communication3To4 = dataFor('gd_3_4m_communication');
+    expect((communication3To4.lowCost as Array<{ en: string }>)[0].en).toBe(
+      'Your voice offers a free way to play and communicate.',
+    );
+    expect((communication3To4.faq as Array<{ a: { en: string } }>)[0].a.en).toContain(
+      'Each person can speak naturally in the language they know best.',
+    );
+
+    const communication5To6 = dataFor('gd_5_6m_communication');
+    expect((communication5To6.why as { en: string }).en).toContain(
+      'can signal interest, a need for a break, or another need',
+    );
+    expect((communication5To6.dailyActivities as Array<{ en: string }>)[2].en).toContain(
+      'check whether they need a break or something else',
+    );
+    expect((communication5To6.lowCost as Array<{ en: string }>)[0].en).toBe(
+      'Your face and voice offer a free way to play and communicate.',
+    );
+    expect((communication5To6.encouragement as { en: string }).en).toContain(
+      'sounds, gestures, and other signals',
+    );
+
+    const communication7To9 = dataFor('gd_7_9m_communication');
+    expect((communication7To9.lowCost as Array<{ en: string }>)[0].en).toBe(
+      'You can use your face, voice, and gestures for communication play at no cost.',
+    );
+    expect((communication7To9.encouragement as { en: string }).en).toContain(
+      'sounds, gestures, and other signals',
+    );
+
+    const play5To6 = dataFor('gd_5_6m_play');
+    expect((play5To6.observationQuestions as Array<{ mm: string }>)[0].mm).toContain(
+      'ပါးစပ်ဖြင့်လည်း စူးစမ်း',
+    );
+    expect((play5To6.indoor as Array<{ mm: string }>)[0].mm).toContain('ဘေးကင်းသော မှန်');
+    expect((play5To6.lowCost as Array<{ mm: string }>)[0].mm).toContain('သန့်ရှင်းသော');
+
+    expect((dataFor('gd_10_12m_communication').observationQuestions as Array<{ mm: string }>)[0].mm)
+      .toContain('လက်ခုပ်တီးခြင်း');
+
+    const communication = dataFor('gd_3_4m_communication');
+    expect((communication.why as { en: string }).en).toContain(
+      'supports early communication and later language development',
+    );
+    expect((communication.encouragement as { en: string }).en).toBe(
+      'Talking and responding to your baby supports early communication and learning.',
+    );
+
+    expect((dataFor('gd_5_6m_play').why as { en: string }).en).toContain(
+      'supports your baby’s learning, movement, and connection',
+    );
+    expect((dataFor('gd_7_9m_communication').commonMistakes as Array<{ en: string }>)[0].en)
+      .toContain('can reduce opportunities to show a choice or request');
+    expect((dataFor('gd_10_12m_play').why as { en: string }).en).toContain(
+      'important way of learning',
+    );
+    expect((dataFor('gd_10_12m_play').lowCost as Array<{ en: string }>)[1].en).toBe(
+      'Many toys are not needed — time playing together is also important.',
+    );
+    expect(dataFor('act_lullaby_and_rock').evidenceSummary).toContain(
+      'gentle holding or rocking, and responsive soothing',
+    );
+    expect(dataFor('gd_3_4m_play').evidenceSummary).toContain(
+      'WHO/UNICEF Care for Child Development recommendations',
+    );
+    expect(dataFor('act_rhythm_and_rock').evidenceSummary).toContain(
+      'responsive communication follow WHO Care for Child Development materials',
+    );
+    expect((dataFor('act_rhythm_and_rock').outcomes as Array<{ en: string }>)[1].en).toBe(
+      'Use the same song as a familiar bedtime cue.',
+    );
+    expect((dataFor('act_rhythm_and_rock').safety as { mm: string; en: string })).toEqual({
+      mm: 'လုံးဝ မလှုပ်ခါပါနှင့် — ဖြေးညှင်းစွာသာ ယိမ်းပါ။ ခေါင်းနှင့် လည်ပင်းကို အမြဲ ထောက်ပံ့ပါ။ ကလေးအိပ်ပျော်သွားလျှင် မိမိ၏ သီးသန့် ဘေးကင်းသော အိပ်ရာပေါ်တွင် ပက်လက်အနေအထားဖြင့် အိပ်စေပါ။',
+      en: 'Never shake — sway slowly only. Always support head and neck. If she falls asleep, move her onto her back in her own safe sleep space.',
+    });
+    expect((dataFor('act_drum_and_pause').outcomes as Array<{ en: string }>)[1].en).toBe(
+      'Practise attending to sound and rhythm.',
+    );
+    expect((dataFor('act_drum_and_pause').instructions as Array<{ en: string }>)[3].en).toBe(
+      'Keeping the sound soft, alternate a slow beat with a slightly faster beat.',
+    );
+    expect((dataFor('act_safe_touch_basket').setup as { en: string }).en).toBe(
+      'Wash and dry the objects before use. Put her on a mat.',
+    );
+    expect(rowFor('act_lullaby_and_rock').summaryMm).toContain('နေ့တိုင်း တူညီသော');
+    expect((dataFor('act_face_to_face_talk').outcomes as Array<{ mm: string }>)[1].mm)
+      .toContain('ပူးတွဲအာရုံစိုက်မှု');
+    expect((dataFor('gd_2y_play').encouragement as { en: string }).en).toBe(
+      'A few focused minutes of shared play each day are valuable; expensive toys are not needed.',
+    );
+    expect((dataFor('gd_10_12m_play').commonMistakes as Array<{ en: string }>)[0].en).toContain(
+      'remove hazards and prepare a safe space to explore',
+    );
+    expect(rowFor('act_hide_and_find_toy').summaryEn).toBe(
+      'Hide a toy under a cloth and explore together that things still exist when out of sight.',
+    );
+    expect((dataFor('act_hide_and_find_toy').safety as { mm: string }).mm).toContain(
+      'ကလေး၏ မျက်နှာပေါ်တွင် အဝတ်စ မတင်ထားပါနှင့်။',
+    );
+    expect(rowFor('act_show_me_and_name_it').summaryEn).toBe(
+      'Naming what the child points at supports vocabulary learning and shared attention.',
+    );
+    expect((dataFor('lsn_power_of_play').takeaway as { en: string }).en).toBe(
+      'Playing with you is valuable learning time for your child.',
+    );
+  });
 });

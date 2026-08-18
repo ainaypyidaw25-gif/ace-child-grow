@@ -280,16 +280,36 @@ export const WHO_UNICEF_SOURCES: EvidenceSource[] = [
     org: 'World Health Organization / UNICEF',
     orgKey: 'WHO',
     title: 'Care for child development: improving the care of young children',
+    authors: 'WHO/UNICEF',
     year: 2012,
     isbn: '978 92 4 154840 3',
     url: 'https://www.who.int/publications/i/item/9789241548403',
     evidenceLevel: 'guideline',
     keywords: ['care for child development', 'play', 'communication', 'counselling cards'],
-    topics: ['play', 'parenting', 'speech_language', 'milestones'],
+    topics: ['motor', 'speech_language', 'cognitive', 'social_emotional', 'play', 'parenting'],
     ageMonthsMin: 0,
-    ageMonthsMax: 60,
+    ageMonthsMax: 59,
+    verifiedOn: '2026-08-18',
     verifiedNote:
-      'WHO publication page shows the title, "1 January 2012" and ISBN "978 92 4 154840 3" (checksum valid once spaces are stripped).',
+      'WHO publication page shows the exact title, "26 July 2012", type "Guideline", Editors "WHO/UNICEF", 152 pages and ISBN "978 92 4 154840 3".',
+  }),
+  s({
+    id: 'unicef-caregiver-disability-resources-2022',
+    org: 'UNICEF Office of Research – Innocenti',
+    orgKey: 'UNICEF',
+    title: 'Directory of Resources to Support Caregivers of Children with Disability',
+    authors: 'UNICEF',
+    year: 2022,
+    country: null,
+    url: 'https://www.unicef.org/innocenti/media/4016/file/UNICEF-Caregivers-Guide-Inclusive-Education-Directory-of-Resources-2022.pdf',
+    evidenceLevel: 'parent_education',
+    keywords: ['communication board', 'AAC', 'picture communication', 'children with disabilities'],
+    topics: ['special_needs', 'speech_language', 'parenting'],
+    ageMonthsMin: 36,
+    ageMonthsMax: 144,
+    verifiedOn: '2026-08-18',
+    verifiedNote:
+      'UNICEF PDF prints the exact title, citation year 2022 and UNICEF Office of Research – Innocenti. Its Communication Board section covers ages 3–12 and describes pointing to pictures to request help, express feelings and communicate other messages.',
   }),
   s({
     id: 'who-unicef-developmental-disabilities-2023',
@@ -1186,6 +1206,23 @@ export const CDC_SOURCES: EvidenceSource[] = [
 // ---------------------------------------------------------------------------
 
 export const HEALTHYCHILDREN_SOURCES: EvidenceSource[] = [
+  s({
+    id: 'hc-baby-walkers-danger-2022',
+    org: 'HealthyChildren.org (American Academy of Pediatrics)',
+    orgKey: 'HealthyChildren',
+    title: 'Baby Walkers: A Dangerous Choice',
+    year: 2022,
+    country: 'United States',
+    url: 'https://www.healthychildren.org/English/safety-prevention/at-home/Pages/Baby-Walkers-A-Dangerous-Choice.aspx',
+    evidenceLevel: 'parent_education',
+    keywords: ['baby walkers', 'injury prevention', 'falls', 'burns', 'walking delay'],
+    topics: ['safety', 'motor', 'parenting'],
+    ageMonthsMin: null,
+    ageMonthsMax: null,
+    verifiedOn: '2026-08-18',
+    verifiedNote:
+      'HealthyChildren.org page prints this title, “Last Updated 8/15/2022” and “Source: Adapted from Baby Walkers: Important Safety Information (American Academy of Pediatrics Copyright © 2022).” It states that baby walkers are unsafe, can cause serious injuries and may delay walking.',
+  }),
   s({
     id: 'hc-mental-emotional-development-2026',
     org: 'HealthyChildren.org (American Academy of Pediatrics)',

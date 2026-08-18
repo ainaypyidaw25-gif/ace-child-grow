@@ -25,13 +25,13 @@ export const LESSONS: SeedItem[] = [
   lesson({
     slug: 'power_of_play', category: 'learning_through_play',
     title: b('ကစားခြင်း၏ အကျိုးကျေးဇူးများ', 'The power of play'),
-    summary: b('ကလေးငယ်များသည် ကစားရင်း အကောင်းဆုံး သင်ယူကြသည်။', 'Play is how young children learn best.'),
+    summary: b('ကစားခြင်းသည် ကလေးငယ်များ သင်ယူရာတွင် အရေးပါသော နည်းလမ်းတစ်ခု ဖြစ်သည်။', 'Play is an important way young children learn.'),
     objectives: [b('ကစားခြင်းက ကလေးဖွံ့ဖြိုးမှုကို မည်သို့ အထောက်အကူပြုသည်ကို သိရှိရန်။', 'Know the benefits of play.')],
     readingMinutes: 3,
-    body: b('ကစားခြင်းသည် ကလေးငယ်များအတွက် အရေးပါသော သင်ယူနည်းတစ်ခု ဖြစ်သည်။ ကစားနေစဉ် စဉ်းစားတွေးခေါ်နိုင်စွမ်း၊ ဘာသာစကား၊ ကိုယ်လက်လှုပ်ရှားမှုနှင့် လူမှုဆက်ဆံရေးတို့ တဖြည်းဖြည်း ဖွံ့ဖြိုးလာသည်။ ဈေးကြီးသော ကစားစရာများ မလိုအပ်ပါ။ မိဘ၏ အာရုံစိုက်ပေးမှုနှင့် ဘေးကင်းသော အိမ်သုံးပစ္စည်းများဖြင့်လည်း ကောင်းစွာ ကစားသင်ယူနိုင်သည်။', 'Play is a child’s work. Through play, the brain, language, body, and relationships grow. Expensive toys are not needed — your attention and household objects are enough.'),
+    body: b('ကစားခြင်းသည် ကလေးငယ်များအတွက် အရေးပါသော သင်ယူနည်းတစ်ခု ဖြစ်သည်။ ကစားနေစဉ် စဉ်းစားတွေးခေါ်နိုင်စွမ်း၊ ဘာသာစကား၊ ကိုယ်လက်လှုပ်ရှားမှုနှင့် လူမှုဆက်ဆံရေးတို့ တဖြည်းဖြည်း ဖွံ့ဖြိုးလာနိုင်သည်။ ဈေးကြီးသော ကစားစရာများ မလိုအပ်ပါ။ မိဘ၏ အာရုံစိုက်ပေးမှုနှင့် ဘေးကင်းသော အိမ်သုံးပစ္စည်းများက ကစားခြင်းနှင့် သင်ယူမှုကို အထောက်အကူပြုနိုင်ပါသည်။', 'Play is an important way young children learn. Through play, thinking, language, movement, and relationships can develop gradually. Expensive toys are not needed; caregiver attention and safe household objects can support play and learning.'),
     quiz: [q('ကလေးနှင့် ကစားရန် ဈေးကြီးသော ကစားစရာများ —', 'Expensive toys are —', [['မဖြစ်မနေ လိုအပ်သည်', 'essential'], ['မလိုအပ်ပါ', 'not needed']], 1)],
-    takeaway: b('မိဘနှင့်အတူ ကစားချိန်သည် ကလေးအတွက် အဖိုးတန်သော သင်ယူချိန် ဖြစ်သည်။', 'Playing with you is best.'),
-    actionToday: b('ယနေ့ အိမ်တွင်ရှိသော ဘေးကင်းသည့် ပစ္စည်းတစ်ခုကို အသုံးပြုပြီး ကလေးနှင့်အတူ ကစားပါ။', 'Invent one game with a household object.'),
+    takeaway: b('မိဘနှင့်အတူ ကစားချိန်သည် ကလေးအတွက် အဖိုးတန်သော သင်ယူချိန် ဖြစ်သည်။', 'Playing with you is valuable learning time for your child.'),
+    actionToday: b('ယနေ့ အိမ်တွင်ရှိသော ဘေးကင်းသည့် ပစ္စည်းတစ်ခုကို အသုံးပြုပြီး ကလေးနှင့်အတူ ကစားပါ။', 'Today, use one safe household object to play with your child.'),
   }),
   lesson({
     slug: 'talk_more', category: 'speech_development',

@@ -130,7 +130,7 @@ const MILESTONES: SeedItem[] = [
         'Work short peek-a-boo moments into everyday routines like dressing and playtime.',
       ),
     }),
-    'Peekaboo as an early marker of object permanence and turn-taking is described in the AAP Power of Play guidance and WHO Care for Child Development materials in the registry.',
+    'Peekaboo as an early marker of object permanence and turn-taking is described in AAP Power of Play guidance in the registry.',
   ),
 ];
 
@@ -360,8 +360,8 @@ const GUIDES_B: SeedItem[] = [
     guide('7_9m', 'communication', {
       title: b('၇ – ၉ လ — ဆက်သွယ်ပြောဆိုမှု လမ်းညွှန်', '7–9 months — Communication guide'),
       why: b(
-        'ဤအရွယ်တွင် ကလေးသည် စကားလုံး မသုံးဘဲ ရည်ရွယ်ချက်ဖြင့် ဆက်သွယ်တတ်လာသည် — လိုချင်သည့်ဘက်သို့ လက်လှမ်းခြင်း၊ မိဘမျက်နှာကို ကြည့်ပြီး ပစ္စည်းကို ပြန်ကြည့်ခြင်း၊ လက်ကို မြှောက်ပြခြင်း တို့ဖြင့် ဖြစ်သည်။ ဤအချက်ပြမှုများကို မိဘက စကားဖြင့် ပြန်ပြောပေးခြင်းသည် ဆက်သွယ်မှု စွမ်းရည်ကို အခိုင်မာဆုံး တည်ဆောက်ပေးသည်။',
-        'She now communicates on purpose without words — reaching for what she wants, looking from your face to an object and back, lifting her arms to be picked up. Putting those signals into words is what builds communication most strongly.',
+        'ဤအရွယ်တွင် ကလေးသည် စကားလုံး မသုံးဘဲ ရည်ရွယ်ချက်ဖြင့် ဆက်သွယ်တတ်လာသည် — လိုချင်သည့်ဘက်သို့ လက်လှမ်းခြင်း၊ မိဘမျက်နှာကို ကြည့်ပြီး ပစ္စည်းကို ပြန်ကြည့်ခြင်း၊ လက်ကို မြှောက်ပြခြင်း တို့ဖြင့် ဖြစ်သည်။ မိဘက ဤအချက်ပြမှုများကို စကားလုံးဖြင့် ပြန်ဖော်ပြပြီး တုံ့ပြန်ပေးခြင်းက အစောပိုင်း ဆက်သွယ်မှုနှင့် ဘာသာစကား သင်ယူမှုကို အထောက်အကူပြုပါသည်။',
+        'She now communicates on purpose without words — reaching for what she wants, looking from your face to an object and back, lifting her arms to be picked up. Putting these signals into words and responding to them supports early communication and language learning.',
       ),
       observationQuestions: [
         b('လိုချင်သည့် ပစ္စည်းဘက်သို့ လက်လှမ်းပါသလား။', 'Does she reach towards what she wants?'),
@@ -386,7 +386,7 @@ const GUIDES_B: SeedItem[] = [
         b('အပြင်တွင် တွေ့ရသည်များကို လက်ညှိုးထိုးပြ၍ အတူကြည့်ခြင်း။', 'Pointing at things outside and looking together.'),
       ],
       lowCost: [
-        b('သင်၏ မျက်နှာနှင့် လက်များသည် အကောင်းဆုံး ကိရိယာ ဖြစ်သည်။', 'Your face and hands are the best tools.'),
+        b('သင်၏ မျက်နှာ၊ အသံနှင့် လက်ဟန်များဖြင့် အခမဲ့ ဆက်သွယ်ကစားနိုင်ပါသည်။', 'You can use your face, voice, and gestures for communication play at no cost.'),
         b('အဝတ်စ တစ်ထည်ဖြင့် ကစားနည်း များစွာ လုပ်နိုင်သည်။', 'One cloth is enough for many games.'),
       ],
       materials: b('မလိုအပ်ပါ — သင်၏ မျက်နှာ၊ အသံနှင့် အဝတ်စ တစ်ထည်', 'Nothing needed — your face, your voice and a cloth'),
@@ -395,7 +395,7 @@ const GUIDES_B: SeedItem[] = [
         'Never leave a cloth lying over her face—it can block breathing. Keep screen use very limited at this age, and do not let it replace face-to-face interaction. Never play by jerking or pulling her, and never hold her down so she cannot move.',
       ),
       commonMistakes: [
-        b('ကလေး မတောင်းဆိုမီ အားလုံး ကြိုပေးထားခြင်း — တောင်းဆိုရန် အခွင့်အရေး ဆုံးရှုံးစေသည်။', 'Giving everything before she asks — she loses the chance to communicate.'),
+        b('ကလေး၏ အချက်ပြမှုကို မစောင့်ဘဲ အားလုံး ကြိုပေးခြင်း — ရွေးချယ်မှု သို့မဟုတ် တောင်းဆိုမှုကို ပြသရန် အခွင့်အရေး နည်းသွားနိုင်သည်။', 'Anticipating every need before a signal — this can reduce opportunities to show a choice or request.'),
         b('ကလေး မျက်နှာလွှဲသော်လည်း ဆက်လက် ကစားရန် တိုက်တွန်းခြင်း။', 'Pushing on with play when she has turned away.'),
       ],
       parentTips: [
@@ -422,8 +422,8 @@ const GUIDES_B: SeedItem[] = [
         'Raise these with a health worker. This is a prompt to check, not a diagnosis.',
       ),
       encouragement: b(
-        'ကလေးက စကားမပြောနိုင်သေးသော်လည်း သင့်ကို နေ့စဉ် စကားပြောနေပါသည် — ကြည့်လိုက်ရုံသာ လိုပါသည်။',
-        'She talks to you every day without words — you only have to look.',
+        'ကလေးက စကားမပြောနိုင်သေးသော်လည်း အသံ၊ အမူအရာနှင့် အခြားအချက်ပြမှုများဖြင့် နေ့စဉ် ဆက်သွယ်နေပါသည်။',
+        'Although your baby cannot yet use words, they communicate each day through sounds, gestures, and other signals.',
       ),
     }),
     'Reading and answering a baby’s intentional signals at 7–9 months follows the WHO Care for Child Development approach, CDC milestone guidance and NHS learn-to-talk advice, with the conversational-turns research in the registry and AAP media guidance for the screen advice.',
@@ -1109,7 +1109,7 @@ const ACTIVITIES: SeedItem[] = [
         b('နေ့စဉ် တူညီသော စကားလုံးနှင့် အမူအရာကို သုံးပါ။', 'Use the same words and gesture every day.'),
         b('ကလေး လက်ပြရန် အချိန် ရက်သတ္တပတ် များစွာ ကြာနိုင်သည် — စောင့်ပေးပါ။', 'It may take many weeks before she waves back — keep waiting patiently.'),
       ],
-      safety: b('ခွဲခွာချိန်တွင် ကလေး ငိုလျှင် ချီပွေ့ နှစ်သိမ့်ပေးပါ — ဤသည် ကျန်းမာသော တွယ်တာမှု ဖြစ်သည်။ ကလေးကို လုံးဝ မလှုပ်ခါပါနှင့်။', 'If she cries at separation, hold and comfort her — this is healthy attachment. Never shake a baby.'),
+      safety: b('ခွဲခွာချိန်တွင် ကလေး ငိုလျှင် ပွေ့ဖက်နှစ်သိမ့်ပေးပါ။ ဤတုံ့ပြန်မှုသည် ဤအရွယ်တွင် တွေ့ရလေ့ရှိသော်လည်း ကလေးတစ်ဦးနှင့်တစ်ဦး ကွာခြားနိုင်ပါသည်။ ကလေးကို လုံးဝ မလှုပ်ခါပါနှင့်။', 'If she cries at separation, hold and comfort her. This response is common at this age but varies between children. Never shake a baby.'),
       indoor: true, outdoor: true, oneChild: true, group: true, parentChild: true,
       outcomes: [
         b('ပထမဆုံး ဆက်သွယ်ရေး အမူအရာကို အားပေးရန်။', 'Learning objective — to encourage a first communication gesture.'),
@@ -1120,7 +1120,7 @@ const ACTIVITIES: SeedItem[] = [
       offline: true,
       tags: ['social_activity', 'daily'],
     }),
-    'Gesture use such as waving at this age follows CDC milestone guidance and AAP milestone guidance, and the responsive-caregiving approach follows the WHO Care for Child Development counselling materials and the AAP power-of-play report.',
+    'Gesture use such as waving near the end of the first year follows CDC and AAP milestone guidance; modelling gestures and responding to the child follows AAP play guidance.',
   ),
 ];
 
@@ -1172,7 +1172,7 @@ const ACTIVITIES_B: SeedItem[] = [
         b('ဇွန်းဖြင့် ခွက်ကို ဖြေးညှင်းစွာ သုံးချက် ရိုက်ပါ။', 'Tap the bowl gently three times.'),
         b('ရပ်၍ ကလေးကို ကြည့်ပါ — ၅ စက္ကန့် စောင့်ပါ။', 'Stop, look at her, and wait five seconds.'),
         b('ကလေး ရိုက်လျှင် သို့မဟုတ် အသံထွက်လျှင် ချီးကျူးပြီး ပြန်ရိုက်ပါ။', 'If she taps or makes a sound, praise her and tap back.'),
-        b('အသံ ကျယ်လိုက် တိုးလိုက် ပြောင်းပြပါ။', 'Show her a loud beat and a soft beat.'),
+        b('အသံမကျယ်စေဘဲ ဖြည်းသောစည်းချက်နှင့် အနည်းငယ်မြန်သောစည်းချက်ကို ပြောင်းပြပါ။', 'Keeping the sound soft, alternate a slow beat with a slightly faster beat.'),
         b('သီချင်း တစ်ပုဒ်ကို တူညီသော အချိန်တွင် ဆိုပေးပါ — အမြဲ တူညီသော သီချင်း ဖြစ်စေပါ။', 'Sing the same short song each time so it becomes familiar.'),
         b('ကလေး မောလျှင် ရပ်ပါ။', 'Stop when she tires.'),
       ],
@@ -1180,7 +1180,7 @@ const ACTIVITIES_B: SeedItem[] = [
       indoor: true, outdoor: true, oneChild: true, group: true, parentChild: true,
       outcomes: [
         b('အကြောင်းနှင့် အကျိုး နားလည်မှုနှင့် အလှည့်ကျမှုကို အားပေးရန်။', 'Learning objective — to build cause-and-effect understanding and turn-taking.'),
-        b('အသံနှင့် စည်းချက်ကို အာရုံစိုက်နိုင်မှု တိုးတက်ခြင်း။', 'Better attention to sound and rhythm.'),
+        b('အသံနှင့် စည်းချက်ကို အာရုံစိုက်ကစားခြင်း။', 'Practise attending to sound and rhythm.'),
       ],
       variations: [b('မိသားစုဝင် အသီးသီးက အလှည့်ကျ ရိုက်ပြပါ။', 'Let each family member take a turn with the beat.')],
       lowCost: true,
