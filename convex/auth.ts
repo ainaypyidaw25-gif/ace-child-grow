@@ -3,6 +3,7 @@ import { Password } from '@convex-dev/auth/providers/Password';
 import Google from '@auth/core/providers/google';
 import Apple from '@auth/core/providers/apple';
 import type { EmailConfig } from '@auth/core/providers';
+import { normalizeAppleProfile } from '../src/domain/auth/appleProfile';
 import { validateAccountPassword } from '../src/domain/auth/passwordPolicy';
 
 const passwordResetEmail: EmailConfig = {
@@ -45,6 +46,11 @@ export const { auth, signIn, signOut, store, isAuthenticated } = convexAuth({
     // Both values live only in the Convex deployment environment.
     clientId: process.env.AUTH_APPLE_ID,
     clientSecret: process.env.AUTH_APPLE_SECRET,
+    // Apple's Auth.js provider returns `image: null`, while Convex Auth's
+    // optional users.image field accepts a string or omission, not null.
+    profile(profile) {
+      return normalizeAppleProfile(profile);
+    },
   }), Google({
     // These credentials live in the Convex deployment environment. Binding
     // the Auth.js-standard AUTH_GOOGLE_* names explicitly prevents an
