@@ -20,6 +20,7 @@ describe('OAuth provider configuration', () => {
     expect(source).toContain('Apple({');
     expect(source).toContain('clientId: process.env.AUTH_APPLE_ID');
     expect(source).toContain('clientSecret: process.env.AUTH_APPLE_SECRET');
+    expect(source).toContain('return normalizeAppleProfile(profile)');
     expect(source).not.toMatch(/VITE_(?:AUTH_)?APPLE/);
   });
 });
