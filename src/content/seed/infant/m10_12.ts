@@ -1023,8 +1023,8 @@ const GUIDES_G: SeedItem[] = [
     guide('10_12m', 'sleep', {
       title: b('၁၀ – ၁၂ လ — အိပ်စက်ခြင်း လမ်းညွှန်', '10–12 months — Sleep guide'),
       why: b(
-        'ဤအရွယ်တွင် ကလေးအများစုသည် ၂၄ နာရီအတွင်း ၁၂ နာရီမှ ၁၆ နာရီခန့် (နေ့ဘက် အိပ်ချိန် အပါအဝင်) အိပ်လေ့ရှိသည်၊ သို့သော် ကလေးတစ်ဦးနှင့်တစ်ဦး ကွာခြားနိုင်သည်။ နေ့ဘက်တွင် ၂ ကြိမ် အိပ်ခြင်းမှ ၁ ကြိမ်သို့ တဖြည်းဖြည်း ပြောင်းလာနိုင်သည်။ ခွဲခွာမှု စိုးရိမ်ခြင်း အထွတ်အထိပ် ရောက်ချိန်ဖြစ်၍ ညဘက် နိုးခြင်းများ ပြန်များလာတတ်သည် — ဤသည် နောက်ပြန်ဆုတ်ခြင်း မဟုတ်ဘဲ ဖွံ့ဖြိုးမှု၏ တစ်စိတ်တစ်ပိုင်း ဖြစ်သည်။ တည်ငြိမ်၍ ထပ်တလဲလဲ တူညီသော အိပ်ရာဝင် ပုံစံသည် အထောက်အကူ အဖြစ်ဆုံး ဖြစ်သည်။',
-        'Most babies this age sleep about 12 to 16 hours in 24 hours including naps, though this varies. Two naps often become one over these months. Because separation anxiety peaks now, night waking can increase again — that is development, not a setback. A calm, repeated bedtime routine helps most.',
+        'ဤအရွယ်တွင် ကလေးအများစုသည် ၂၄ နာရီအတွင်း ၁၂ နာရီမှ ၁၆ နာရီခန့် (နေ့ဘက် အိပ်ချိန် အပါအဝင်) အိပ်လေ့ရှိသည်၊ သို့သော် ကလေးတစ်ဦးနှင့်တစ်ဦး ကွာခြားနိုင်သည်။ ဤကာလအဆုံးပိုင်းတွင် ကလေးအချို့သည် နေ့ဘက် ၂ ကြိမ်အိပ်ခြင်းမှ ၁ ကြိမ်အိပ်ခြင်းသို့ စတင်ပြောင်းလဲနိုင်သော်လည်း အများအားဖြင့် ၁၂–၁၈ လခန့်တွင် တဖြည်းဖြည်း ပြောင်းလဲတတ်သည်။ ခွဲခွာမှု စိုးရိမ်ခြင်း အထွတ်အထိပ် ရောက်ချိန်ဖြစ်၍ ညဘက် နိုးခြင်းများ ပြန်များလာတတ်သည် — ဤသည် နောက်ပြန်ဆုတ်ခြင်း မဟုတ်ဘဲ ဖွံ့ဖြိုးမှု၏ တစ်စိတ်တစ်ပိုင်း ဖြစ်သည်။ တည်ငြိမ်၍ ထပ်တလဲလဲ တူညီသော အိပ်ရာဝင်ပုံစံသည် အိပ်စက်မှုကို အထောက်အကူပြုနိုင်သည်။',
+        'Most babies this age sleep about 12 to 16 hours in 24 hours including naps, though this varies. Some babies may begin moving from two naps toward one near the end of this period, but the transition commonly happens gradually around 12–18 months. Because separation anxiety peaks now, night waking can increase again — that is development, not a setback. A calm, repeated bedtime routine may help sleep.',
       ),
       observationQuestions: [
         b('အိပ်ရာဝင်ချိန် ပုံစံ တူညီပါသလား။', 'Is the bedtime routine the same each night?'),
@@ -1049,19 +1049,19 @@ const GUIDES_G: SeedItem[] = [
         b('နေ့ခင်းပိုင်းတွင် အပြင်ထွက်၍ သဘာဝ အလင်းရောင် ရစေခြင်း။', 'Time outdoors in natural daylight during the day.'),
       ],
       lowCost: [
-        b('တူညီသော အစီအစဉ်နှင့် တည်ငြိမ်သော အသံသည် အခမဲ့ဖြစ်ပြီး ထိရောက်သည်။', 'A consistent routine and a calm voice cost nothing.'),
+        b('တူညီသော အစီအစဉ်နှင့် တည်ငြိမ်သော အသံသည် အခမဲ့ ဖြစ်သည်။', 'A consistent routine and a calm voice cost nothing.'),
       ],
-      materials: b('ခိုင်ခံ့သော အိပ်ရာခင်း၊ ပါးလွှာသော စောင်၊ စာအုပ်တစ်အုပ်', 'A firm sleep surface, a light blanket, one book'),
+      materials: b('မာပြီး ပြားညီသော ကလေးအိပ်ရာနှင့် တင်းကျပ်စွာ ခင်းထားသော အိပ်ရာခင်းတစ်ထည်သာ။ စာအုပ်ကို အိပ်ရာပြင်ပတွင် ထားပါ။', 'A firm, flat infant sleep surface with only a fitted sheet. Keep the book outside the sleep space.'),
       safety: b(
-        'ကလေးအား အိပ်ရာဝင်တိုင်း ပက်လက် (ကျောပေး) အနေအထားဖြင့် အိပ်စေပါ — ၁ နှစ်ပြည့်သည်အထိ ဤအချက်သည် အရေးကြီးဆုံး လုံခြုံရေး အချက် ဖြစ်သည်။ ကလေး ကိုယ်တိုင် လှိမ့်တတ်ပြီဆိုလျှင် အလိုအလျောက် ပြန်လှည့်ပေးရန် မလိုပါ။ အိပ်ရာသည် ခိုင်ခံ့၍ ညီညာရမည်၊ ခေါင်းအုံး၊ မွေ့ရာနူးနူး၊ စောင်ထူ၊ ကစားစရာ ပျော့များ၊ ကြိုးများကို အိပ်ရာထဲတွင် မထားပါနှင့်။ ကလေးအား အခန်းတူတွင် သီးခြား အိပ်ရာဖြင့် အိပ်စေခြင်းသည် အကြံပြုထားသော နည်းလမ်း ဖြစ်သည်။ မိဘသည် ဆေးလိပ်သောက်ခြင်း၊ အရက် သို့မဟုတ် အိပ်ဆေး သောက်ထားခြင်း၊ အလွန် ပင်ပန်းနေခြင်း ရှိလျှင် အိပ်ရာ တူတူ မမျှဝေပါနှင့် — ဆိုဖာ သို့မဟုတ် အာမ်ချဲယားတွင် ကလေးနှင့် အတူ လုံးဝ မအိပ်ပါနှင့်၊ ၎င်းသည် အလွန် အန္တရာယ်များသည်။ အခန်းအပူချိန်ကို သင့်တင့်အောင် ထားပြီး အလွန် ထူထပ်စွာ မခြုံပါနှင့်။ ကလေး၏ အနီးတွင် ဆေးလိပ် မသောက်ပါနှင့်။',
-        'Place her on her back for every sleep — this remains the single most important safety point up to one year. Once she can roll herself, you do not need to keep turning her back. The sleep surface should be firm and flat, with no pillows, soft mattresses, thick quilts, soft toys or cords in it. Room-sharing with her on her own separate sleep surface is the recommended arrangement. Do not share a bed if anyone smokes, has drunk alcohol or taken sedating medicine, or is very tired — and never sleep with her on a sofa or armchair, which is especially dangerous. Keep the room at a comfortable temperature and avoid heavy covering. Keep the home smoke-free.',
+        'ကလေးအား အိပ်ရာဝင်တိုင်း ပက်လက် (ကျောပေး) အနေအထားဖြင့် အိပ်စေပါ — ၁ နှစ်ပြည့်သည်အထိ ဤအချက်သည် အရေးကြီးဆုံး လုံခြုံရေး အချက် ဖြစ်သည်။ ကလေးသည် ပက်လက်မှ မှောက်နှင့် မှောက်မှ ပက်လက် ဘက်နှစ်ဖက်စလုံး ကိုယ်တိုင် လှိမ့်နိုင်ပြီဆိုလျှင် ပြန်လှည့်ပေးရန် မလိုပါ။ အိပ်ရာသည် ခိုင်ခံ့၍ ညီညာရမည်။ အိပ်ရာထဲတွင် ခေါင်းအုံး၊ ပျော့ပျောင်းသော အရုပ်၊ လွတ်နေသော စောင်၊ အိပ်ရာခင်း၊ အဝတ် သို့မဟုတ် ကြိုး မထားပါနှင့်။ ကလေးအား အခန်းတူတွင် သီးခြား အိပ်ရာဖြင့် အိပ်စေခြင်းသည် အကြံပြုထားသော နည်းလမ်း ဖြစ်သည်။ မိဘသည် ဆေးလိပ်သောက်ခြင်း၊ အရက် သို့မဟုတ် အိပ်ဆေး သောက်ထားခြင်း၊ အလွန် ပင်ပန်းနေခြင်း ရှိလျှင် အိပ်ရာ တူတူ မမျှဝေပါနှင့် — ဆိုဖာ သို့မဟုတ် အာမ်ချဲယားတွင် ကလေးနှင့် အတူ လုံးဝ မအိပ်ပါနှင့်၊ ၎င်းသည် အလွန် အန္တရာယ်များသည်။ ကလေးကို သင့်တော်သော အိပ်ဝတ်အလွှာဖြင့် ဝတ်ပေးပြီး အလွန်ပူမနေစေပါနှင့်။ အိပ်ရာထဲတွင် လွတ်နေသော စောင် မထားပါနှင့်။ အိမ်ကို ဆေးလိပ်ငွေ့ကင်းစင်စွာ ထားပါ။',
+        'Place her on her back for every sleep — this remains the single most important safety point up to one year. Once she can roll both ways on her own, you do not need to keep turning her back. The sleep surface should be firm and flat. Keep pillows, soft toys, loose blankets, bedding, cloths, and cords out of the sleep space. Room-sharing with her on her own separate sleep surface is the recommended arrangement. Do not share a bed if anyone smokes, has drunk alcohol or taken sedating medicine, or is very tired — and never sleep with her on a sofa or armchair, which is especially dangerous. Dress her in suitable sleep clothing and avoid overheating; do not use a loose blanket in the sleep space. Keep the home smoke-free.',
       ),
       commonMistakes: [
         b('အိပ်ရာထဲတွင် ခေါင်းအုံးနှင့် ကစားစရာ ပျော့များ ထားခြင်း။', 'Leaving pillows and soft toys in the sleep space.'),
-        b('ညဘက် နိုးတိုင်း ချက်ချင်း နို့တိုက်ခြင်း — ခဏ စောင့်ကြည့်ပါ၊ ကိုယ်တိုင် ပြန်အိပ်နိုင်သည်။', 'Feeding at every waking — pause briefly; she may resettle herself.'),
+        b('ညဘက် နိုးတိုင်း တူညီသောနည်းဖြင့် အလိုအလျောက် တုံ့ပြန်ခြင်း — ဆာလောင်မှု၊ မသက်မသာဖြစ်မှုနှင့် နှစ်သိမ့်မှုလိုအပ်ချက်ကို စစ်ဆေးပြီး ကလေး၏ အချက်ပြမှုအတိုင်း တုံ့ပြန်ပါ။', 'Responding automatically in the same way at every waking — check for hunger, discomfort, or a need for reassurance, and respond to your baby’s cues.'),
       ],
       parentTips: [
-        b('အိပ်ငိုက်နေဆဲ (မအိပ်ပျော်သေး) အချိန်တွင် အိပ်ရာချပေးပါ — ကိုယ်တိုင် အိပ်ပျော်တတ်လာသည်။', 'Put her down drowsy but still awake so she learns to fall asleep herself.'),
+        b('အိပ်ငိုက်နေဆဲ (မအိပ်ပျော်သေး) အချိန်တွင် အိပ်ရာချပေးကြည့်ပါ — ကိုယ်တိုင် ပြန်ငြိမ်သက်၍ အိပ်ပျော်ရန် လေ့ကျင့်ရာတွင် အထောက်အကူပြုနိုင်သည်။', 'Try putting her down drowsy but still awake; this may help her practise settling to sleep.'),
         b('ခွဲခွာမှု စိုးရိမ်ချိန်တွင် ညဘက် နိုးမှု များလာခြင်းသည် ယာယီ ဖြစ်သည်။', 'More night waking during separation anxiety is temporary.'),
       ],
       faq: [
@@ -1085,10 +1085,10 @@ const GUIDES_G: SeedItem[] = [
       ),
       encouragement: b(
         'ကလေး၏ အိပ်စက်မှုပုံစံသည် အမြဲ တဖြည်းဖြည်း ကောင်းမွန်လာမည် မဟုတ်ပါ။ တစ်ခါတစ်ရံ ပြန်လည်မတည်ငြိမ်နိုင်သော်လည်း ပုံမှန်လုပ်ရိုးလုပ်စဉ်ကို ဆက်လက်လုပ်ပေးခြင်းက အချိန်ကြာလာသည်နှင့်အမျှ အထောက်အကူပြုနိုင်သည်။',
-        'Sleep does not improve in a straight line — a steady routine pays off over time.',
+        'Sleep does not improve in a straight line — a steady routine may help over time.',
       ),
     }),
-    'Total sleep ranges, nap transition and bedtime-routine advice at this age follow the WHO guidelines on physical activity, sedentary behaviour and sleep for under-fives, the American Academy of Sleep Medicine review of bedtime routines and behavioural sleep interventions and the randomised controlled trial of a behavioural infant-sleep intervention in the registry, with the safe-sleep, bed-sharing and sleep-surface points taken from the AAP safe-sleep recommendations, the NHS guidance on reducing the risk of sudden infant death and the Health Canada safe-sleep statement.',
+    'Total sleep ranges follow WHO guidance for under-fives. The direct bedtime-routine trial supports a calm routine at this age; the AASM review, the newer systematic review and the age-matched Hiscock trial support behavioral help for established bedtime or night-waking problems rather than a universal controlled-crying instruction. Cue-responsive wording follows the WHO/UNICEF Nurturing Care Framework. Safe-sleep, bed-sharing and sleep-surface points follow AAP, NHS and Health Canada guidance.',
   ),
   kb(
     guide('10_12m', 'daily_routine', {
@@ -1160,7 +1160,7 @@ const GUIDES_G: SeedItem[] = [
         'A rhythm that fits your family beats a perfect timetable.',
       ),
     }),
-    'The value of predictable daily routines follows the Nurturing Care Framework, the Bright Futures preventive-care schedule, the American Academy of Sleep Medicine review of bedtime routines and the randomised controlled trial of a behavioural infant-sleep intervention, with feeding rhythm from the WHO infant and young child feeding model chapter, water-safety points from the AAP drowning-prevention policy, the fever and serious-illness signs from the NICE fever in under-5s guideline, the NHS guidance on spotting a seriously ill child and the WHO IMCI chart booklet, and immunisation timing from the CDC immunisation schedule and the WHO Immunization Agenda 2030.',
+    'Predictable daily routines follow the Nurturing Care Framework and the Bright Futures preventive-care schedule, with feeding rhythm from the WHO infant and young child feeding model chapter, water-safety points from the AAP drowning-prevention policy, fever and serious-illness signs from NICE, NHS and WHO IMCI guidance, and immunisation timing from the CDC schedule and the WHO Immunization Agenda 2030.',
   ),
 ];
 

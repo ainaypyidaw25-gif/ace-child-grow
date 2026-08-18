@@ -39,11 +39,13 @@ const GUIDE_SAFETY: Record<string, Bilingual> = {
 
 const GUIDE_SOURCES: Record<string, string[]> = {
   nutrition: ['tb-bright-futures-4e-2017', 'tb-caring-birth-to-5-8e-2024', 'who-growth-standards-2006', 'who-child-growth-standards-qa-2025'],
-  sleep: ['who-pa-sleep-under5-2019', 'jr-aasm-bedtime-2006', 'tb-caring-birth-to-5-8e-2024'],
+  sleep: ['who-pa-sleep-under5-2019', 'jr-aasm-bedtime-2006', 'jr-lecuelle-behavioral-insomnia-review-2024', 'tb-caring-birth-to-5-8e-2024'],
   safety: ['aap-drowning-2021', 'tb-bright-futures-4e-2017', 'cdc-positive-parenting-toddlers-2026'],
-  daily_routine: ['tb-bright-futures-4e-2017', 'aap-oral-health-2023', 'jr-aasm-bedtime-2006'],
+  daily_routine: ['tb-bright-futures-4e-2017', 'aap-oral-health-2023'],
   play: ['aap-power-of-play-2018', 'who-care-for-child-development-2012', 'tb-caring-birth-to-5-8e-2024'],
 };
+
+const BEDTIME_ROUTINE_RCT_BANDS = new Set(['13_18m', '19_24m', '2y', '2_5y']);
 
 const ACTIVITY_SOURCES = ['aap-power-of-play-2018', 'who-care-for-child-development-2012', 'cdc-milestones-2026'];
 
@@ -227,11 +229,18 @@ for (const band of bands) {
   }
   for (const [domain, focus, daily] of band.guides) {
     const editorial = GUIDE_EDITORIAL[domain] ?? GUIDE_EDITORIAL.daily_routine;
-    const guideSources = domain === 'nutrition' && band.key === '5y'
-      ? GUIDE_SOURCES[domain].filter((sourceId) =>
-          sourceId !== 'who-growth-standards-2006'
-          && sourceId !== 'who-child-growth-standards-qa-2025')
-      : GUIDE_SOURCES[domain];
+    let guideSources = [...GUIDE_SOURCES[domain]];
+    if (domain === 'nutrition' && band.key === '5y') {
+      guideSources = guideSources.filter((sourceId) =>
+        sourceId !== 'who-growth-standards-2006'
+        && sourceId !== 'who-child-growth-standards-qa-2025');
+    }
+    if (domain === 'sleep' && band.key === '5y') {
+      guideSources = guideSources.filter((sourceId) => sourceId !== 'jr-aasm-bedtime-2006');
+    }
+    if (domain === 'sleep' && BEDTIME_ROUTINE_RCT_BANDS.has(band.key)) {
+      guideSources.push('jr-mindell-bedtime-routine-rct-2009');
+    }
     authored.push(linked(guide(band.key, domain, {
       title: b(`${band.mm} — ${domain === 'nutrition' ? 'အာဟာရ' : domain === 'sleep' ? 'အိပ်စက်ခြင်း' : domain === 'safety' ? 'ဘေးကင်းလုံခြုံရေး' : domain === 'play' ? 'ကစားခြင်း' : 'နေ့စဉ်လုပ်ရိုးလုပ်စဉ်'} လမ်းညွှန်`, `${band.en} — ${domain.replace('_', ' ')} guide`),
       why: focus,
@@ -423,25 +432,25 @@ const NUTRITION_SLEEP_SAFETY_EVIDENCE: Record<string, string> = {
   '13_18m:sleep': 'The transition from two naps to one around 12-18 months follows WHO physical activity and sleep guidance for under-5s in the registry.',
   '13_18m:safety': 'Early, unreliable response to danger words and the ongoing need for close supervision at this age follow AAP positive-parenting guidance and Bright Futures guidance in the registry.',
   '19_24m:nutrition': 'Improving spoon and open-cup competence around 18-24 months is described in the Bright Futures preventive-care schedule and paediatric occupational-therapy references in the registry.',
-  '19_24m:sleep': 'Consistent bedtime routines supporting settling around this age follow AASM behavioural sleep guidance and WHO sleep guidance for under-5s in the registry.',
+  '19_24m:sleep': 'A direct bedtime-routine trial and WHO sleep guidance support this conservative observation without treating normal night waking as illness.',
   '19_24m:safety': 'Repetition and consistent labelling as the basis for early hazard recognition follow AAP positive-parenting guidance in the registry.',
   '2y:nutrition': 'Normal picky eating and growing food independence at 2 years follow the Bright Futures preventive-care schedule and WHO complementary-feeding guidance in the registry.',
-  '2y:sleep': 'Lengthening night sleep with brief self-settling around 2 years follows WHO sleep guidance for under-5s and AASM behavioural sleep guidance in the registry.',
+  '2y:sleep': 'WHO sleep guidance and a direct bedtime-routine trial support this conservative observation without setting a diagnostic threshold.',
   '2y:safety': 'Early, inconsistent rule-following around 2 years and the value of simple consistent rules follow AAP positive-parenting guidance in the registry.',
   '2_5y:nutrition': 'The need for repeated, pressure-free exposure to accept new foods is described in Bright Futures guidance and WHO complementary-feeding guidance in the registry.',
-  '2_5y:sleep': 'Common bedtime resistance during the push for independence around this age follows AASM behavioural sleep guidance in the registry.',
+  '2_5y:sleep': 'A direct bedtime-routine trial and the newer systematic review of behavioral insomnia support this conservative observation.',
   '2_5y:safety': 'Growing verbal hazard-naming as a precursor to rule understanding follows AAP positive-parenting guidance and developmental-behavioral paediatrics references in the registry.',
   '3y:nutrition': 'Utensil competence by around 3 years is described in the Bright Futures preventive-care schedule and paediatric occupational-therapy references in the registry.',
   '3y:sleep': 'The typical transition away from napping around age 3, and the importance of a stable bedtime through it, follows WHO sleep guidance for under-5s in the registry.',
   '3y:safety': 'More reliable rule-following by age 3 while supervision remains essential follows AAP positive-parenting guidance in the registry.',
   '3_5y:nutrition': 'Growing ability to sit through family meals is described in Bright Futures guidance and general paediatric developmental references in the registry.',
-  '3_5y:sleep': 'Predictable, child-anticipated bedtime routines are described in AASM behavioural sleep guidance in the registry.',
+  '3_5y:sleep': 'The newer systematic review of behavioral insomnia and general developmental-surveillance references support this conservative observation.',
   '3_5y:safety': 'Teaching young children to seek a trusted adult when unsafe is described in AAP positive-parenting guidance in the registry.',
   '4y:nutrition': 'Supervised self-serving as a self-help and fine-motor skill around 4 years is described in paediatric occupational-therapy references and Bright Futures guidance in the registry.',
-  '4y:sleep': 'Sleep consolidation and common nighttime fears around age 4 are described in the general paediatrics and AASM behavioural sleep references in the registry.',
+  '4y:sleep': 'Sleep consolidation and common nighttime fears around age 4 are described in the general paediatrics and newer sleep-review references in the registry.',
   '4y:safety': 'Understanding the reasoning behind safety rules around age 4 is described in AAP positive-parenting guidance and developmental-behavioral paediatrics references in the registry.',
   '4_5y:nutrition': 'Early food knowledge and supervised kitchen participation are described in the Bright Futures preventive-care schedule and WHO nutrition-education guidance in the registry.',
-  '4_5y:sleep': 'Growing independent nighttime self-settling around this age follows AASM behavioural sleep guidance in the registry.',
+  '4_5y:sleep': 'The newer systematic review of behavioral insomnia and general developmental-surveillance references support this conservative observation.',
   '4_5y:safety': 'Structured road-safety habit-building at this age follows AAP positive-parenting guidance and Bright Futures guidance in the registry.',
   '5y:nutrition': 'Food variety and household task participation as school-readiness self-help skills are described in the Bright Futures preventive-care schedule in the registry.',
   '5y:sleep': 'Independent bedtime-routine management as a school-readiness skill is described in the Bright Futures preventive-care schedule in the registry.',

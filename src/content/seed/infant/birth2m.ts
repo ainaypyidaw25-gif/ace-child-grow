@@ -783,7 +783,7 @@ const GUIDES_D: SeedItem[] = [
       referral: b('ဤအခြေအနေများကို ကျန်းမာရေးဝန်ထမ်းအား ပြပါ။ ရောဂါ ဖော်ထုတ်ချက် မဟုတ်ပါ။', 'Raise these with a health worker. This is not a diagnosis.'),
       encouragement: b('ပုံစံမကျသေးခြင်းသည် ပုံမှန် ဖြစ်သည် — တဖြည်းဖြည်း ပေါ်လာပါလိမ့်မည်။', 'Having no pattern yet is normal — it will come.'),
     }),
-    'Day–night light and sound cues, avoiding rigid newborn schedules, and moving a sleeping baby to a safe sleep surface follow AAP safe sleep guidance, WHO sleep guidance for under-5s and the AASM/behavioural sleep literature in the registry.',
+    'Day–night light and sound cues, avoiding rigid newborn schedules, and moving a sleeping baby to a safe sleep surface follow AAP safe sleep guidance, WHO sleep guidance for under-5s and Bright Futures preventive-care guidance in the registry.',
   ),
 ];
 
@@ -933,7 +933,7 @@ const ACTIVITIES: SeedItem[] = [
       ],
       tags: ['music_activity', 'bedtime'],
     }),
-    'Singing, rhythm and consistent bedtime routines follow WHO Care for Child Development materials and the behavioural bedtime-routine sleep literature in the registry; safe-sleep transfer follows AAP safe sleep guidance.',
+    'Singing and rhythm as soothing and early communication follow WHO Care for Child Development materials; safe-sleep transfer follows AAP safe sleep guidance.',
   ),
   kb(
     activity({

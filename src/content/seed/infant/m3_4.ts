@@ -718,14 +718,14 @@ const GUIDES_D: SeedItem[] = [
         b('နေ့ဘက် အရိပ်အောက် လမ်းလျှောက်ခြင်းက နေ့/ည ခွဲခြားမှုကို ကူညီသည်။', 'Daytime walks in the shade help set the day–night rhythm.'),
       ],
       lowCost: [
-        b('သန့်ရှင်း၍ ပြားသော ဖျာ သို့မဟုတ် မွေ့ရာ မာမာဖြင့် လုံလောက်သည်။', 'A clean, firm, flat mat or mattress is enough.'),
+        b('ဘေးကင်းရေးစံနှုန်းနှင့် ကိုက်ညီသော ကလေးအိပ်ရာ၊ မာပြီး ပြားညီသော မွေ့ရာနှင့် တင်းကျပ်စွာ ခင်းထားသော အိပ်ရာခင်းတစ်ထည်သာ အသုံးပြုပါ။', 'Use an infant sleep space that meets safety standards, with a firm, flat mattress and only a fitted sheet.'),
       ],
-      materials: b('မာပြီး ပြားသော အိပ်ရာ၊ ပါးလွှာသော အဝတ်', 'A firm flat sleep surface and a light cover'),
-      safety: b("အိပ်ချိန်တိုင်း ပက်လက် အိပ်စေပါ။ မာပြီး ပြားသော မျက်နှာပြင်ပေါ်တွင်သာ အိပ်စေပါ။ ခေါင်းအုံး၊ ပျော့ပျောင်းသော အရုပ်များ၊ စောင်ထူ၊ အနားခံများကို အိပ်ရာထဲ မထားပါနှင့်။ မိဘအခန်းတွင် သီးသန့်အိပ်ရာဖြင့် အိပ်ခြင်းက အကောင်းဆုံး ဖြစ်ပြီး တစ်အိပ်ရာတည်း အတူအိပ်ခြင်းကို အကြံမပြုပါ။ ဆေးလိပ်၊ အရက် သို့မဟုတ် အိပ်ဆေး သောက်ထားပါက ကလေးနှင့် အတူ လုံးဝ မအိပ်ပါနှင့်။ ဆိုဖာ၊ ကုလားထိုင်ပေါ်တွင် ကလေးနှင့် အတူ မအိပ်ပါနှင့်။ ကလေးအနီး ဆေးလိပ် လုံးဝ မသောက်ပါနှင့်။ အိပ်ချိန်နှင့် ညအိပ်ချိန်တွင် နို့သီးခေါင်း ပေးကြည့်နိုင်ပါသည် — ရုတ်တရက် သေဆုံးမှု အန္တရာယ် လျော့ကျစေကြောင်း တွေ့ရှိထားပါသည်။ နို့တိုက်နေပါက နို့တိုက်ခြင်း အသားကျပြီးမှ စတင်ပေးပါ။", "Back to sleep for every sleep, on a firm flat surface. Nothing else in the sleep space — no pillows, soft toys, thick covers or bumpers. Room-sharing with a separate sleep surface is safest; bed-sharing is not recommended. Never share a sleep surface after smoking, alcohol or sedating medicine, and never sleep with the baby on a sofa or armchair. Keep the baby away from all tobacco smoke. You can try offering a pacifier at nap time and bedtime — it is associated with a lower risk of SIDS. If you are breastfeeding, wait until feeding is well established before offering one."),
+      materials: b('မာပြီး ပြားညီသော ကလေးအိပ်ရာနှင့် တင်းကျပ်စွာ ခင်းထားသော အိပ်ရာခင်းတစ်ထည်သာ', 'A firm, flat infant sleep surface with only a fitted sheet'),
+      safety: b("အိပ်ချိန်တိုင်း ပက်လက် အိပ်စေပါ။ မာပြီး ပြားသော မျက်နှာပြင်ပေါ်တွင်သာ အိပ်စေပါ။ အိပ်ရာထဲတွင် ခေါင်းအုံး၊ ပျော့ပျောင်းသော အရုပ်၊ လွတ်နေသော စောင်၊ အိပ်ရာခင်း၊ အဝတ် သို့မဟုတ် ကြိုး မထားပါနှင့်။ မိဘအခန်းတွင် သီးသန့်အိပ်ရာဖြင့် အိပ်ခြင်းက အကောင်းဆုံး ဖြစ်ပြီး တစ်အိပ်ရာတည်း အတူအိပ်ခြင်းကို အကြံမပြုပါ။ ဆေးလိပ်၊ အရက် သို့မဟုတ် အိပ်ဆေး သောက်ထားပါက ကလေးနှင့် အတူ လုံးဝ မအိပ်ပါနှင့်။ ဆိုဖာ၊ ကုလားထိုင်ပေါ်တွင် ကလေးနှင့် အတူ မအိပ်ပါနှင့်။ ကလေးအနီး ဆေးလိပ် လုံးဝ မသောက်ပါနှင့်။ အိပ်ချိန်နှင့် ညအိပ်ချိန်တွင် နို့သီးခေါင်း ပေးကြည့်နိုင်ပါသည် — ရုတ်တရက် သေဆုံးမှု အန္တရာယ် လျော့ကျစေကြောင်း တွေ့ရှိထားပါသည်။ နို့တိုက်နေပါက နို့တိုက်ခြင်း အသားကျပြီးမှ စတင်ပေးပါ။", "Back to sleep for every sleep, on a firm flat surface. Keep pillows, soft toys, loose blankets, bedding, cloths, and cords out of the sleep space. Room-sharing with a separate sleep surface is safest; bed-sharing is not recommended. Never share a sleep surface after smoking, alcohol or sedating medicine, and never sleep with the baby on a sofa or armchair. Keep the baby away from all tobacco smoke. You can try offering a pacifier at nap time and bedtime — it is associated with a lower risk of SIDS. If you are breastfeeding, wait until feeding is well established before offering one."),
       commonMistakes: [
         b('အိပ်ရာထဲ ခေါင်းအုံး၊ အရုပ် ထည့်ပေးခြင်း။', 'Adding pillows or toys to the sleep space.'),
         b('ဆိုဖာပေါ်တွင် ကလေးကို ပွေ့ချီရင်း အိပ်ပျော်သွားခြင်း။', 'Falling asleep with the baby on a sofa.'),
-        b('ဤအရွယ်တွင် "အိပ်စက်လေ့ကျင့်ရေး" တင်းကျပ်စွာ လုပ်ခြင်း။', 'Strict sleep training at this age.'),
+        b('ကလေး၏ ဆာလောင်မှု၊ နာမကျန်းမှု သို့မဟုတ် နှစ်သိမ့်ရန်လိုအပ်မှုကို မစစ်ဆေးဘဲ တင်းကျပ်သော အိပ်စက်လေ့ကျင့်ရေး လုပ်ခြင်း။', 'Using a rigid sleep-training approach without first checking feeding, illness, or comfort needs.'),
         b("အလေးချိန်ပါသော စောင်၊ အိပ်ဝတ်စုံ သို့မဟုတ် ပတ်ရစ်ပိတ်စများ သုံးခြင်း။", "Using weighted blankets, weighted sleepers or weighted swaddles."),
         b("အိမ်သုံး အသက်ရှူ/နှလုံးခုန် စောင့်ကြည့်စက်ကို ဘေးကင်းစွာ အိပ်စေခြင်း၏ အစား အားကိုးခြင်း — အန္တရာယ် လျှော့ချပေးသည်ဟု သက်သေ မရှိပါ။", "Relying on a home breathing or heart-rate monitor instead of a safe sleep space — these have not been shown to reduce the risk of SIDS."),
       ],
@@ -736,7 +736,7 @@ const GUIDES_D: SeedItem[] = [
       faq: [
         {
           q: b('ကလေးက ဘေးစောင်း လှိမ့်သွားရင် ဘာလုပ်ရမလဲ။', 'What if she rolls onto her side or front?'),
-          a: b('ကိုယ်တိုင် လှိမ့်နိုင်ပြီဆိုလျှင် ပြန်လှည့်ပေးရန် မလိုပါ။ သို့သော် အိပ်ရာဝင်ချိန်တိုင်း ပက်လက်ဖြင့်သာ စတင်ပါ၊ အိပ်ရာကိုလည်း လွတ်လပ်စွာ ထားပါ။', 'Once she can roll on her own you do not need to turn her back. But always start every sleep on the back, and keep the sleep space clear.'),
+          a: b('ကလေးသည် ပက်လက်မှ မှောက်နှင့် မှောက်မှ ပက်လက် ဘက်နှစ်ဖက်စလုံး ကိုယ်တိုင် လှိမ့်နိုင်ပြီဆိုလျှင် ပြန်လှည့်ပေးရန် မလိုပါ။ ဘက်နှစ်ဖက်စလုံး မလှိမ့်နိုင်သေးပါက ပက်လက်အနေအထားသို့ ပြန်လှည့်ပေးပါ။ အိပ်ရာဝင်ချိန်တိုင်း ပက်လက်ဖြင့်သာ စတင်ပြီး အိပ်ရာကိုလည်း ပစ္စည်းများကင်းရှင်းစွာ ထားပါ။', 'Once she can roll both ways on her own, you do not need to turn her back. If she cannot yet roll both ways, return her to her back. Always start every sleep on the back, and keep the sleep space clear.'),
         },
         {
           q: b('တစ်ညလုံး အိပ်သင့်ပြီလား။', 'Should she sleep through the night by now?'),
@@ -1052,7 +1052,7 @@ const ACTIVITIES: SeedItem[] = [
       ],
       tags: ['music_activity', 'daily'],
     }),
-    'Singing, rhythm and rocking as soothing and early language input follow the WHO Care for Child Development materials and the bedtime-routine research in the registry; the never-shake and back-to-sleep points follow AAP safe sleep guidance.',
+    'Singing, rhythm and rocking as soothing and early language input follow WHO Care for Child Development materials; the never-shake and back-to-sleep points follow AAP safe sleep guidance.',
   ),
   kb(
     activity({

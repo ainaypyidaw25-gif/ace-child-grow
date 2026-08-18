@@ -720,11 +720,11 @@ const GUIDES_D: SeedItem[] = [
         b('နေ့ဘက် အရိပ်တွင် ခဏ ထွက်ခြင်း — နေ့/ည ခွဲခြားမှုကို ကူညီသည်။', 'A short time outside in the shade by day helps set day from night.'),
       ],
       lowCost: [
-        b('မာကျောပြီး ပြားညီသော အိပ်ရာ တစ်ခုသာ လိုအပ်သည် — အထူး ပစ္စည်း မလိုပါ။', 'All you need is a firm flat surface — no special equipment.'),
+        b('ဘေးကင်းရေးစံနှုန်းနှင့် ကိုက်ညီသော ကလေးအိပ်ရာ၊ မာပြီး ပြားညီသော မွေ့ရာနှင့် တင်းကျပ်စွာ ခင်းထားသော အိပ်ရာခင်းတစ်ထည်သာ အသုံးပြုပါ။', 'Use an infant sleep space that meets safety standards, with a firm, flat mattress and only a fitted sheet.'),
         b('အဝတ်ပါးဖြင့် အလင်းကာ၍ အခန်းကို မှောင်စေခြင်း။', 'A thin cloth over the window to darken the room.'),
       ],
-      materials: b('မာကျောသော အိပ်ရာ၊ ပါးလွှာသော စောင်', 'A firm sleep surface and a light cover'),
-      safety: b("အိပ်ချိန်တိုင်း ပက်လက် အနေအထားဖြင့် ချထားပါ။ ကလေး ကိုယ်တိုင် လှိမ့်သွားပါက ပြန်လှည့်ပေးရန် မလိုပါ — သို့သော် စတင် ချထားချိန်တွင် အမြဲ ပက်လက် ဖြစ်ရမည်။ အိပ်ရာသည် မာကျောပြီး ပြားညီရမည်၊ အပေါ်တွင် ခေါင်းအုံး၊ ပျော့ပျောင်းသော အရုပ်များ၊ စောင်ပုံ၊ ကြိုး မရှိစေရ။ အခန်းတူ အိပ်ပါ၊ အိပ်ရာတူ မအိပ်ပါနှင့်။ ဆေးလိပ် သောက်ပြီးလျှင်၊ အရက် သောက်ပြီးလျှင်၊ အိပ်ဆေး/ငိုက်စေသော ဆေး သောက်ပြီးလျှင် ကလေးနှင့် အိပ်ရာတူ လုံးဝ မအိပ်ပါနှင့်။ ဆိုဖာ၊ အနားထိုင်ကုလားထိုင်ပေါ်တွင် ကလေးနှင့် အတူ လုံးဝ မအိပ်ပါနှင့်။ ကလေးမျက်နှာကို မဖုံးပါနှင့်။ အခန်းအပူချိန်ကို သင့်တင့်စွာ ထားပြီး အဝတ် အလွန်အကျွံ မထူပါစေနှင့်။ ကလေးအနီးတွင် ဆေးလိပ် လုံးဝ မသောက်ပါနှင့်။ ကလေးကို ဘယ်တော့မျှ မလှုပ်ခါပါနှင့်။ အိပ်ချိန်နှင့် ညအိပ်ချိန်တွင် နို့သီးခေါင်း ပေးကြည့်နိုင်ပါသည် — ရုတ်တရက် သေဆုံးမှု အန္တရာယ် လျော့ကျစေကြောင်း တွေ့ရှိထားပါသည်။ နို့တိုက်နေပါက နို့တိုက်ခြင်း အသားကျပြီးမှ စတင်ပေးပါ။", "Back to sleep for every sleep. If she rolls herself over in sleep there is no need to turn her back, but always start her on her back. The surface must be firm and flat, with no pillows, soft toys, loose bedding or cords. Share a room, not a bed. Never bed-share after smoking, alcohol or any sedating medicine. Never sleep with her on a sofa or armchair. Never cover her face. Keep the room a comfortable temperature and do not over-wrap her. No tobacco smoke anywhere near her. Never shake a baby. You can try offering a pacifier at nap time and bedtime — it is associated with a lower risk of SIDS. If you are breastfeeding, wait until feeding is well established before offering one."),
+      materials: b('မာပြီး ပြားညီသော ကလေးအိပ်ရာနှင့် တင်းကျပ်စွာ ခင်းထားသော အိပ်ရာခင်းတစ်ထည်သာ', 'A firm, flat infant sleep surface with only a fitted sheet'),
+      safety: b("အိပ်ချိန်တိုင်း ပက်လက် အနေအထားဖြင့် ချထားပါ။ ကလေးသည် ပက်လက်မှ မှောက်နှင့် မှောက်မှ ပက်လက် ဘက်နှစ်ဖက်စလုံး ကိုယ်တိုင် လှိမ့်နိုင်ပြီဆိုလျှင် ပြန်လှည့်ပေးရန် မလိုပါ — သို့သော် စတင် ချထားချိန်တွင် အမြဲ ပက်လက် ဖြစ်ရမည်။ အိပ်ရာသည် မာကျောပြီး ပြားညီရမည်။ အိပ်ရာထဲတွင် ခေါင်းအုံး၊ ပျော့ပျောင်းသော အရုပ်၊ လွတ်နေသော စောင်၊ အိပ်ရာခင်း၊ အဝတ် သို့မဟုတ် ကြိုး မထားပါနှင့်။ အခန်းတူ အိပ်ပါ၊ အိပ်ရာတူ မအိပ်ပါနှင့်။ ဆေးလိပ် သောက်ပြီးလျှင်၊ အရက် သောက်ပြီးလျှင်၊ အိပ်ဆေး/ငိုက်စေသော ဆေး သောက်ပြီးလျှင် ကလေးနှင့် အိပ်ရာတူ လုံးဝ မအိပ်ပါနှင့်။ ဆိုဖာ၊ အနားထိုင်ကုလားထိုင်ပေါ်တွင် ကလေးနှင့် အတူ လုံးဝ မအိပ်ပါနှင့်။ ကလေးမျက်နှာကို မဖုံးပါနှင့်။ အခန်းအပူချိန်ကို သင့်တင့်စွာ ထားပြီး အဝတ် အလွန်အကျွံ မထူပါစေနှင့်။ ကလေးအနီးတွင် ဆေးလိပ် လုံးဝ မသောက်ပါနှင့်။ ကလေးကို ဘယ်တော့မျှ မလှုပ်ခါပါနှင့်။ အိပ်ချိန်နှင့် ညအိပ်ချိန်တွင် နို့သီးခေါင်း ပေးကြည့်နိုင်ပါသည် — ရုတ်တရက် သေဆုံးမှု အန္တရာယ် လျော့ကျစေကြောင်း တွေ့ရှိထားပါသည်။ နို့တိုက်နေပါက နို့တိုက်ခြင်း အသားကျပြီးမှ စတင်ပေးပါ။", "Back to sleep for every sleep. Once she can roll both ways on her own, you do not need to turn her back, but always start her on her back. The surface must be firm and flat. Keep pillows, soft toys, loose blankets, bedding, cloths, and cords out of the sleep space. Share a room, not a bed. Never bed-share after smoking, alcohol or any sedating medicine. Never sleep with her on a sofa or armchair. Never cover her face. Keep the room a comfortable temperature and do not over-wrap her. No tobacco smoke anywhere near her. Never shake a baby. You can try offering a pacifier at nap time and bedtime — it is associated with a lower risk of SIDS. If you are breastfeeding, wait until feeding is well established before offering one."),
       commonMistakes: [
         b('အိပ်ရာပေါ်တွင် ပျော့ပျောင်းသော အရုပ်များ၊ ခေါင်းအုံး ထားခြင်း။', 'Leaving soft toys or pillows in the sleep space.'),
         b('ကလေး လှိမ့်သွားမည်ကို စိုးရိမ်၍ အဝတ်လိပ်ဖြင့် ကာထားခြင်း — ဤသည် အန္တရာယ် ရှိသည်။', 'Wedging her in with rolled cloth to stop her rolling — this is dangerous.'),
@@ -747,7 +747,7 @@ const GUIDES_D: SeedItem[] = [
         },
         {
           q: b('ညဘက် အကြိမ်ကြိမ် နိုးတယ်။ ပုံမှန်လား။', 'She wakes several times a night. Is that normal?'),
-          a: b('ဤအရွယ်တွင် ညဘက် နိုးခြင်းသည် ပုံမှန် ဖြစ်သည်။ တည်ငြိမ်သော အိပ်ရာဝင် အစီအစဉ်နှင့် တိတ်ဆိတ်သော တုံ့ပြန်မှုက အထောက်အကူ ဖြစ်သည်။ ကလေး နေ့ဘက် နိုးကြားပြီး ကိုယ်အလေးချိန် တက်နေလျှင် စိုးရိမ်စရာ မရှိပါ။', 'Night waking is normal at this age. A steady bedtime routine and quiet responses help. If she is alert by day and gaining weight, there is no cause for concern.'),
+          a: b('ဤအရွယ်တွင် ညဘက် နိုးခြင်းသည် ပုံမှန် ဖြစ်နိုင်သည်။ တည်ငြိမ်သော အိပ်ရာဝင်လုပ်ရိုးလုပ်စဉ်နှင့် တိတ်ဆိတ်စွာ တုံ့ပြန်ခြင်းက အထောက်အကူပြုနိုင်သည်။ ကလေးသည် နေ့ဘက် နိုးကြားပြီး ကိုယ်အလေးချိန် တက်နေကာ အောက်ပါ အရေးပေါ်လက္ခဏာများ မရှိပါက အများအားဖြင့် အရေးပေါ်ကိစ္စ မဟုတ်ပါ။ အသက်ရှူမှု မူမမှန်ပါက၊ နိုးရခက်ပါက၊ အစာစားမှု ကျဆင်းပါက သို့မဟုတ် အိပ်ရေးပြဿနာက မိသားစုကို အလွန်ထိခိုက်နေပါက ကျန်းမာရေးဝန်ထမ်းနှင့် ဆွေးနွေးပါ။', 'Night waking can be normal at this age. A steady bedtime routine and quiet responses may help. If she is alert by day, gaining weight, and has none of the urgent signs below, it is usually not an emergency. Discuss it with a health worker if breathing is abnormal, she is hard to wake, feeding drops, or sleep is seriously affecting the family.'),
         },
       ],
       redFlags: [
@@ -765,7 +765,7 @@ const GUIDES_D: SeedItem[] = [
         'Broken sleep is the hardest part of this stage — you are not alone in it.',
       ),
     }),
-    'Sleep amounts at 4–11 months follow WHO physical activity and sleep guidance for under-5s; safe sleep positioning, surface and room-sharing follow AAP safe sleep guidance, NHS SIDS advice and Health Canada safe sleep guidance; the value of a consistent bedtime routine follows the sleep-intervention trials in the registry.',
+    'Sleep amounts at 4–11 months follow WHO physical activity and sleep guidance for under-5s; safe sleep positioning, surface and room-sharing follow AAP safe sleep guidance, NHS SIDS advice and Health Canada safe sleep guidance; the newer systematic review in the registry supports professional use of behavioral approaches for established sleep problems without treating one routine as universally effective.',
   ),
 ];
 
@@ -919,7 +919,7 @@ const GUIDES_E: SeedItem[] = [
         'She does not need a perfect day — only a predictable one.',
       ),
     }),
-    'The value of predictable daily rhythms and responsive care follows the WHO/UNICEF nurturing care framework and the Bright Futures preventive-care schedule; the bedtime-routine advice follows the sleep-intervention trials in the registry; the feeding-safety points follow the WHO infant and young child feeding model chapter; the drowning and fall precautions follow AAP drowning-prevention guidance; the fever advice follows NICE fever guidance; the immunisation reminder follows the CDC immunisation schedule.',
+    'Predictable daily rhythms and responsive care follow the WHO/UNICEF nurturing care framework and the Bright Futures preventive-care schedule; feeding-safety points follow the WHO infant and young child feeding model chapter; drowning and fall precautions follow AAP drowning-prevention guidance; fever advice follows NICE fever guidance; the immunisation reminder follows the CDC immunisation schedule.',
   ),
 ];
 
@@ -1079,7 +1079,7 @@ const ACTIVITIES: SeedItem[] = [
       offline: true,
       tags: ['music_activity', 'daily'],
     }),
-    'Singing and rhythmic play with infants is supported by the WHO Care for Child Development counselling materials and AAP guidance on the power of play; using a calm song within a bedtime routine follows the sleep-intervention trials in the registry.',
+    'Singing and rhythmic play with infants are supported by WHO Care for Child Development counselling materials and AAP guidance on the power of play.',
   ),
   kb(
     activity({

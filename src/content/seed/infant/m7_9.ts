@@ -834,11 +834,11 @@ const GUIDES_E: SeedItem[] = [
         b('နေ့လယ်ပိုင်းတွင် အပြင်ထွက်ခြင်းသည် ညအိပ်ချိန်ကို ကူညီသည်။', 'Time outdoors in the day supports night sleep.'),
       ],
       lowCost: [
-        b('တူညီသော အစီအစဉ်သည် အခမဲ့ဖြစ်ပြီး အထိရောက်ဆုံး ဖြစ်သည်။', 'A consistent routine is free and works best.'),
-        b('မာပြီး ပြားသော အိပ်ရာသည် စျေးကြီးရန် မလိုပါ။', 'A firm flat surface does not need to be expensive.'),
+        b('တူညီသော အိပ်ရာဝင်လုပ်ရိုးလုပ်စဉ်သည် အခမဲ့ဖြစ်ပြီး အထောက်အကူပြုနိုင်သည်။', 'A consistent bedtime routine is free and may help.'),
+        b('ဘေးကင်းရေးစံနှုန်းနှင့် ကိုက်ညီသော ကလေးအိပ်ရာ၊ မာပြီး ပြားညီသော မွေ့ရာနှင့် တင်းကျပ်စွာ ခင်းထားသော အိပ်ရာခင်းတစ်ထည်သာ အသုံးပြုပါ။', 'Use an infant sleep space that meets safety standards, with a firm, flat mattress and only a fitted sheet.'),
       ],
-      materials: b('မာပြီး ပြားသော အိပ်ရာ၊ ပါးလွှာသော စောင်', 'A firm flat sleep surface and a light blanket'),
-      safety: b("အိပ်ချိန်တိုင်း ကလေးကို ပက်လက် အိပ်စေပါ — မာပြီး ပြားသော၊ အပေါ်တွင် ဘာမျှ မရှိသော နေရာတွင် ဖြစ်ရမည်။ ကလေး ကိုယ်တိုင် လှိမ့်နိုင်ပါက ပြန်လှန်ပေးရန် မလိုသော်လည်း အိပ်ရာဝင်ချိန်တွင် အမြဲ ပက်လက်မှ စတင်ပါ။ ခေါင်းအုံး၊ ပျော့ပျောင်းသော အရုပ်များ၊ ထူထဲသော စောင်များကို အိပ်ရာထဲ မထားပါနှင့်။ တစ်ခန်းတည်း အိပ်ပါ — အိပ်ရာတူ မအိပ်ပါနှင့်။ ဆေးလိပ်၊ အရက် သို့မဟုတ် အိပ်ဆေး သောက်ထားပါက ကလေးနှင့် အတူ လုံးဝ မအိပ်ပါနှင့်။ ဆိုဖာ သို့မဟုတ် ကုလားထိုင်ပေါ်တွင် ကလေးနှင့် အတူ မအိပ်ပါနှင့်။ ကလေး၏ မျက်နှာကို မဖုံးပါနှင့်။ ကလေး လှုပ်ရှားနိုင်ပြီ ဖြစ်၍ အိပ်ရာအနီးရှိ ကြိုးများ၊ လိုက်ကာကြိုးများကို ဖယ်ရှားပါ။ အိပ်ချိန်နှင့် ညအိပ်ချိန်တွင် နို့သီးခေါင်း ပေးကြည့်နိုင်ပါသည် — ရုတ်တရက် သေဆုံးမှု အန္တရာယ် လျော့ကျစေကြောင်း တွေ့ရှိထားပါသည်။ နို့တိုက်နေပါက နို့တိုက်ခြင်း အသားကျပြီးမှ စတင်ပေးပါ။", "Put her on her back for every sleep, on a firm flat surface with nothing on it. If she rolls herself you do not need to turn her back, but always start her on her back. Keep pillows, soft toys and thick bedding out of the sleep space. Room-share, do not bed-share. Never sleep with her after smoking, alcohol or sedating medicine, and never on a sofa or armchair. Never cover her face. Now that she can move, remove cords and blind pulls from near the bed. You can try offering a pacifier at nap time and bedtime — it is associated with a lower risk of SIDS. If you are breastfeeding, wait until feeding is well established before offering one."),
+      materials: b('မာပြီး ပြားညီသော ကလေးအိပ်ရာနှင့် တင်းကျပ်စွာ ခင်းထားသော အိပ်ရာခင်းတစ်ထည်သာ', 'A firm, flat infant sleep surface with only a fitted sheet'),
+      safety: b("အိပ်ချိန်တိုင်း ကလေးကို ပက်လက် အိပ်စေပါ — မာပြီး ပြားသော၊ အပေါ်တွင် ဘာမျှ မရှိသော နေရာတွင် ဖြစ်ရမည်။ ကလေးသည် ပက်လက်မှ မှောက်နှင့် မှောက်မှ ပက်လက် ဘက်နှစ်ဖက်စလုံး ကိုယ်တိုင် လှိမ့်နိုင်ပြီဆိုလျှင် ပြန်လှည့်ပေးရန် မလိုပါ — သို့သော် အိပ်ရာဝင်ချိန်တွင် အမြဲ ပက်လက်မှ စတင်ပါ။ အိပ်ရာထဲတွင် ခေါင်းအုံး၊ ပျော့ပျောင်းသော အရုပ်၊ လွတ်နေသော စောင်၊ အိပ်ရာခင်း၊ အဝတ် သို့မဟုတ် ကြိုး မထားပါနှင့်။ တစ်ခန်းတည်း အိပ်ပါ — အိပ်ရာတူ မအိပ်ပါနှင့်။ ဆေးလိပ်၊ အရက် သို့မဟုတ် အိပ်ဆေး သောက်ထားပါက ကလေးနှင့် အတူ လုံးဝ မအိပ်ပါနှင့်။ ဆိုဖာ သို့မဟုတ် ကုလားထိုင်ပေါ်တွင် ကလေးနှင့် အတူ မအိပ်ပါနှင့်။ ကလေး၏ မျက်နှာကို မဖုံးပါနှင့်။ ကလေး လှုပ်ရှားနိုင်ပြီ ဖြစ်၍ အိပ်ရာအနီးရှိ ကြိုးများ၊ လိုက်ကာကြိုးများကို ဖယ်ရှားပါ။ အိပ်ချိန်နှင့် ညအိပ်ချိန်တွင် နို့သီးခေါင်း ပေးကြည့်နိုင်ပါသည် — ရုတ်တရက် သေဆုံးမှု အန္တရာယ် လျော့ကျစေကြောင်း တွေ့ရှိထားပါသည်။ နို့တိုက်နေပါက နို့တိုက်ခြင်း အသားကျပြီးမှ စတင်ပေးပါ။", "Put her on her back for every sleep, on a firm flat surface with nothing on it. Once she can roll both ways on her own, you do not need to turn her back, but always start her on her back. Keep pillows, soft toys, loose blankets, bedding, cloths, and cords out of the sleep space. Room-share, do not bed-share. Never sleep with her after smoking, alcohol or sedating medicine, and never on a sofa or armchair. Never cover her face. Now that she can move, remove cords and blind pulls from near the bed. You can try offering a pacifier at nap time and bedtime — it is associated with a lower risk of SIDS. If you are breastfeeding, wait until feeding is well established before offering one."),
       commonMistakes: [
         b('နေ့ခင်း အိပ်ချိန်ကို လုံးဝ ဖြတ်၍ ညအိပ် ကောင်းစေရန် ကြိုးစားခြင်း — ပိုဆိုးစေတတ်သည်။', 'Cutting naps to improve night sleep, which usually backfires.'),
         b('အိပ်ရာထဲတွင် နူးညံ့သော ပစ္စည်းများ ထည့်ပေးခြင်း။', 'Adding soft items to the sleep space.'),
@@ -856,14 +856,14 @@ const GUIDES_E: SeedItem[] = [
         },
         {
           q: b('ကလေးက မှောက်အိပ်နေရင် ပြန်လှန်ပေးရမလား။', 'She rolls onto her tummy in her sleep — should I turn her back?'),
-          a: b('ကိုယ်တိုင် လှိမ့်နိုင်ပြီဆိုပါက ပြန်လှန်ပေးရန် မလိုပါ။ သို့သော် အိပ်ရာဝင်ချိန်တွင် အမြဲ ပက်လက်မှ စတင်ပြီး အိပ်ရာပေါ်တွင် ဘာမျှ မရှိစေရပါ။', 'If she rolls herself, you do not need to turn her back. Always start her on her back, and keep the surface clear.'),
+          a: b('ကလေးသည် ပက်လက်မှ မှောက်နှင့် မှောက်မှ ပက်လက် ဘက်နှစ်ဖက်စလုံး ကိုယ်တိုင် လှိမ့်နိုင်ပြီဆိုလျှင် ပြန်လှည့်ပေးရန် မလိုပါ။ ဘက်နှစ်ဖက်စလုံး မလှိမ့်နိုင်သေးပါက ပက်လက်အနေအထားသို့ ပြန်လှည့်ပေးပါ။ အိပ်ရာဝင်ချိန်တွင် အမြဲ ပက်လက်မှ စတင်ပြီး အိပ်ရာပေါ်တွင် ဘာမျှ မရှိစေရပါ။', 'Once she can roll both ways on her own, you do not need to turn her back. If she cannot yet roll both ways, return her to her back. Always start her on her back, and keep the surface clear.'),
         },
         { q: b("ဘယ်အပူချိန် ရောက်ရင် ဆေးရုံ သွားရမလဲ။", "What temperature means we should seek care?"), a: b("အပူချိန် တိုင်းပါ။ အသက် ၃ လအောက် ကလေး ၃၈°C (၁၀၀.၄°F) နှင့်အထက် ဖျားပါက — ကလေး ပုံမှန်လို ထင်ရလျှင်ပင် ချက်ချင်း ပြသပါ။ အသက် ၃ လမှ ၆ လကြား ၃၉°C (၁၀၂.၂°F) နှင့်အထက် ဖျားပါက အမြန် ပြသပါ။ အသက် ၆ လကျော်လျှင် အပူချိန် ကိန်းဂဏန်းတစ်ခုတည်းက အဖြေ မပေးပါ — ကလေး၏ ပုံစံနှင့် အပြုအမူကို ကြည့်ပါ။ ဖျားချိန် ၅ ရက်နှင့်အထက် ကြာလျှင်၊ ရေ/နို့ မသောက်နိုင်လျှင် သို့မဟုတ် ပုံမှန်လို တုံ့ပြန်မှု မရှိတော့လျှင် ပြသပါ။ အသက်မရွေး — ဖျားခြင်းနှင့်အတူ အသက်ရှူခက်ခြင်း၊ နှိပ်လျှင် မပျောက်သော အနီစက်၊ လည်ပင်း တောင့်တင်းခြင်း သို့မဟုတ် နိုးရခက်ခြင်း ပါလာပါက ချက်ချင်း ပြသပါ။ အပူချိန်တိုင်းကိရိယာ မရှိပါက — ကလေး ပူနေပြီး အထက်ပါ လက္ခဏာများ ပါလျှင် မစောင့်ဘဲ ပြသပါ။", "Take the temperature. Under 3 months, 38°C (100.4°F) or above: seek care straight away, even if the baby otherwise seems well. Between 3 and 6 months, 39°C (102.2°F) or above: seek care promptly. Over 6 months, the number alone does not decide — go by how she looks and behaves. Seek advice if the fever lasts 5 days or more, if she will not drink, or if she is much less responsive than usual. At any age, fever together with difficulty breathing, a rash that does not fade under pressure, a stiff neck, or being hard to wake: seek care immediately. If you have no thermometer, and the child feels hot and has any of those signs, do not wait.") },
       ],
       redFlags: [
         b('အသက်ရှူရ ခက်ခဲခြင်း၊ အသက်ရှူသံ မြည်ခြင်း၊ နှုတ်ခမ်း ညိုခြင်း — ချက်ချင်း ဆေးကုသမှု ခံယူပါ။', 'Difficulty breathing, noisy breathing or blue lips — get medical help immediately.'),
         b('နှိုးရ မရခြင်း၊ အလွန် အိပ်ငိုက်နေခြင်း — ချက်ချင်း ဆေးကုသမှု ခံယူပါ။', 'Very hard to wake or unusually drowsy — get medical help immediately.'),
-        b('ကြက်သွေးရောင် အဖုအပိန့်များ ပေါ်ခြင်း၊ ပြင်းထန်စွာ ဖျားခြင်း — ချက်ချင်း ဆေးကုသမှု ခံယူပါ။', 'A rash that does not fade, or a high fever — get medical help immediately.'),
+        b('ဖိကြည့်လျှင် မပျောက်သော အနီကွက်များ၊ သို့မဟုတ် အဖျားနှင့်အတူ အသက်ရှူခက်ခြင်း/နိုးရခက်ခြင်း — ချက်ချင်း ဆေးကုသမှု ခံယူပါ။', 'A rash that does not fade under pressure, or fever with difficulty breathing or being hard to wake — get medical help immediately.'),
       ],
       referral: b(
         'အထက်ပါ အရေးပေါ် လက္ခဏာများ တွေ့ပါက ချက်ချင်း ဆေးကုသမှု ခံယူပါ။ အိပ်စက်မှု ပုံစံ စိုးရိမ်ဖွယ် ရှိပါက ကျန်းမာရေးဝန်ထမ်းအား ပြပါ။ ဤသည် ရောဂါ ဖော်ထုတ်ချက် မဟုတ်ပါ။',
@@ -874,7 +874,7 @@ const GUIDES_E: SeedItem[] = [
         'Sleep does not improve in a straight line — steps backwards are normal.',
       ),
     }),
-    'Sleep amounts at 4–11 months follow WHO physical activity and sleep guidance for under-5s; safe sleep positioning, surface and room-sharing follow AAP safe sleep guidance, NHS SIDS advice and Health Canada safe sleep guidance; the value of a consistent bedtime routine follows the sleep-intervention trials in the registry.',
+    'Sleep amounts at 4–11 months follow WHO physical activity and sleep guidance for under-5s; safe sleep positioning, surface and room-sharing follow AAP safe sleep guidance, NHS SIDS advice and Health Canada safe sleep guidance. The direct bedtime-routine trial supports a calm routine at this age, while the AASM and newer systematic reviews and the age-matched Hiscock trial support behavioral help for established bedtime or night-waking problems rather than treating normal waking as illness.',
   ),
   kb(
     guide('7_9m', 'safety', {
@@ -1021,7 +1021,7 @@ const GUIDES_E: SeedItem[] = [
         'A predictable day is one of the biggest gifts of security you can give her.',
       ),
     }),
-    'The value of predictable daily rhythms and responsive care follows the WHO/UNICEF nurturing care framework and the Bright Futures preventive-care schedule; the bedtime-routine advice follows the sleep-intervention trials in the registry; the feeding-safety points follow the WHO infant and young child feeding model chapter; the drowning and fall precautions follow AAP drowning-prevention guidance; the fever advice follows NICE fever guidance; the immunisation reminder follows the CDC immunisation schedule.',
+    'Predictable daily rhythms and responsive care follow the WHO/UNICEF nurturing care framework and the Bright Futures preventive-care schedule; feeding-safety points follow the WHO infant and young child feeding model chapter; drowning and fall precautions follow AAP drowning-prevention guidance; fever advice follows NICE fever guidance; the immunisation reminder follows the CDC immunisation schedule.',
   ),
 ];
 

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { seedPayload } from '../seed';
-import { sourcesForContent } from '../../evidence/links';
+import { relatedContent, sourcesForContent } from '../../evidence/links';
 import { SOURCE_BY_ID } from '../../evidence/sources';
 import { resolveReviewStatus } from '../../evidence/types';
 import { SAMPLE_AWARENESS } from '../../data/seed/content';
@@ -547,5 +547,179 @@ describe('clinically sourced content corrections', () => {
     const dailyFaq = daily.faq as Array<{ a: { mm: string; en: string } }>;
     expect(dailyFaq[1].a.en).toContain('five days or longer');
     expect(dailyFaq[1].a.en).not.toContain('under three months');
+  });
+
+  it('keeps every infant sleep space free of loose blankets and covers', () => {
+    for (const slug of [
+      'gd_3_4m_sleep',
+      'gd_5_6m_sleep',
+      'gd_7_9m_sleep',
+      'gd_10_12m_sleep',
+    ]) {
+      const materials = dataFor(slug).materials as { mm: string; en: string };
+      expect(materials.en, slug).toContain('only a fitted sheet');
+      expect(materials.en, slug).not.toMatch(/light (blanket|cover)/i);
+      expect(materials.mm, slug).toContain('အိပ်ရာခင်းတစ်ထည်သာ');
+      expect(materials.mm, slug).not.toMatch(/ပါးလွှာသော (စောင်|အဝတ်)/);
+    }
+    expect((dataFor('gd_10_12m_sleep').materials as { en: string }).en)
+      .toContain('Keep the book outside the sleep space');
+    for (const slug of ['gd_3_4m_sleep', 'gd_5_6m_sleep', 'gd_7_9m_sleep']) {
+      const lowCost = dataFor(slug).lowCost as Array<{ mm: string; en: string }>;
+      expect(JSON.stringify(lowCost), slug).toContain('meets safety standards');
+      expect(JSON.stringify(lowCost), slug).toContain('only a fitted sheet');
+    }
+    for (const slug of [
+      'gd_3_4m_sleep',
+      'gd_5_6m_sleep',
+      'gd_7_9m_sleep',
+      'gd_10_12m_sleep',
+    ]) {
+      const safety = dataFor(slug).safety as { mm: string; en: string };
+      expect(safety.en, slug).toContain('loose blankets');
+      expect(safety.mm, slug).toContain('လွတ်နေသော စောင်');
+      expect(safety.en, slug).not.toMatch(/thick (covers|bedding|quilts)/i);
+    }
+    expect((dataFor('gd_10_12m_sleep').safety as { mm: string }).mm)
+      .toContain('အိမ်ကို ဆေးလိပ်ငွေ့ကင်းစင်စွာ ထားပါ');
+  });
+
+  it('requires rolling both ways before leaving an infant in the sleep position reached', () => {
+    const threeToFourFaq = dataFor('gd_3_4m_sleep').faq as Array<{
+      a: { mm: string; en: string };
+    }>;
+    expect(threeToFourFaq[0].a.en).toContain('roll both ways on her own');
+    expect(threeToFourFaq[0].a.en).toContain(
+      'If she cannot yet roll both ways, return her to her back',
+    );
+
+    for (const slug of ['gd_5_6m_sleep', 'gd_7_9m_sleep', 'gd_10_12m_sleep']) {
+      const safety = dataFor(slug).safety as { mm: string; en: string };
+      expect(safety.en, slug).toContain('roll both ways on her own');
+      expect(safety.mm, slug).toContain('ဘက်နှစ်ဖက်စလုံး ကိုယ်တိုင် လှိမ့်နိုင်');
+    }
+    const sevenToNineFaq = dataFor('gd_7_9m_sleep').faq as Array<{
+      a: { mm: string; en: string };
+    }>;
+    expect(sevenToNineFaq[1].a.en).toContain(
+      'If she cannot yet roll both ways, return her to her back',
+    );
+  });
+
+  it('keeps infant sleep escalation cautious without false reassurance or fever over-triage', () => {
+    const fiveToSixFaq = dataFor('gd_5_6m_sleep').faq as Array<{
+      a: { mm: string; en: string };
+    }>;
+    expect(fiveToSixFaq[2].a.en).toContain('usually not an emergency');
+    expect(fiveToSixFaq[2].a.en).toContain('if breathing is abnormal');
+    expect(fiveToSixFaq[2].a.en).toContain('sleep is seriously affecting the family');
+    expect(fiveToSixFaq[2].a.en).not.toContain('no cause for concern');
+
+    const sevenToNineFlags = dataFor('gd_7_9m_sleep').redFlags as Array<{
+      mm: string; en: string;
+    }>;
+    expect(sevenToNineFlags[2].en).toContain('rash that does not fade under pressure');
+    expect(sevenToNineFlags[2].en).toContain(
+      'fever with difficulty breathing or being hard to wake',
+    );
+    expect(sevenToNineFlags[2].mm).toContain('ဖိကြည့်လျှင် မပျောက်သော အနီကွက်များ');
+    expect(sevenToNineFlags[2].en).not.toContain('high fever');
+  });
+
+  it('presents bedtime strategies as optional and responsive rather than guaranteed', () => {
+    const lesson = dataFor('lsn_healthy_sleep');
+    expect((lesson.takeaway as { en: string }).en).toBe('A steady bedtime routine may help.');
+    expect((lesson.actionToday as { en: string }).en).toBe(
+      'Try one short, calm bedtime routine tonight.',
+    );
+    expect(JSON.stringify(lesson)).not.toContain('15 minutes earlier');
+
+    const sleep = dataFor('gd_10_12m_sleep');
+    expect(JSON.stringify(sleep.commonMistakes)).toContain('respond to your baby’s cues');
+    expect(JSON.stringify(sleep.parentTips)).toContain('this may help her practise settling to sleep');
+    expect(JSON.stringify(sleep)).not.toContain('so she learns to fall asleep herself');
+    expect((sleep.why as { en: string }).en).toContain(
+      'transition commonly happens gradually around 12–18 months',
+    );
+    expect((sleep.encouragement as { en: string }).en).toContain('may help over time');
+    expect((lesson.body as { en: string }).en).toContain('may help sleep');
+  });
+
+  it('keeps sleep-source metadata exact, current to the audit date, and non-approved', () => {
+    expect(SOURCE_BY_ID.get('jr-aasm-bedtime-2006')).toMatchObject({
+      pmid: '17068979',
+      doi: null,
+      evidenceLevel: 'systematic_review',
+      ageMonthsMin: 0,
+      ageMonthsMax: 59,
+      verifiedOn: '2026-08-18',
+    });
+    expect(SOURCE_BY_ID.get('jr-hiscock-sleep-rct-2002')).toMatchObject({
+      pmid: '11991909',
+      doi: '10.1136/bmj.324.7345.1062',
+      evidenceLevel: 'rct',
+      ageMonthsMin: 6,
+      ageMonthsMax: 12,
+      verifiedOn: '2026-08-18',
+    });
+    expect(SOURCE_BY_ID.get('jr-lecuelle-behavioral-insomnia-review-2024')).toMatchObject({
+      pmid: '38394890',
+      doi: '10.1016/j.smrv.2024.101909',
+      evidenceLevel: 'systematic_review',
+      ageMonthsMin: 2,
+      ageMonthsMax: 72,
+    });
+    expect(SOURCE_BY_ID.get('jr-mindell-bedtime-routine-rct-2009')).toMatchObject({
+      pmid: '19480226',
+      doi: '10.1093/sleep/32.5.599',
+      evidenceLevel: 'rct',
+      ageMonthsMin: 7,
+      ageMonthsMax: 36,
+    });
+    expect(SOURCE_BY_ID.get('jr-mindell-bedtime-routine-rct-2009')?.verifiedNote)
+      .toContain('Johnson & Johnson');
+    for (const id of [
+      'jr-lecuelle-behavioral-insomnia-review-2024',
+      'jr-mindell-bedtime-routine-rct-2009',
+    ]) {
+      expect(resolveReviewStatus(SOURCE_BY_ID.get(id)!), id).not.toBe('approved');
+    }
+  });
+
+  it('limits AASM and Hiscock links to the exact claims and ages they studied', () => {
+    expect(relatedContent('jr-aasm-bedtime-2006').guide.sort()).toEqual([
+      'gd_10_12m_sleep',
+      'gd_13_18m_sleep',
+      'gd_19_24m_sleep',
+      'gd_2_5y_sleep',
+      'gd_2y_sleep',
+      'gd_3_5y_sleep',
+      'gd_3y_sleep',
+      'gd_4_5y_sleep',
+      'gd_4y_sleep',
+      'gd_7_9m_sleep',
+    ]);
+    expect(relatedContent('jr-aasm-bedtime-2006').lesson).toEqual(['lsn_healthy_sleep']);
+    expect(relatedContent('jr-aasm-bedtime-2006').milestone).toEqual([]);
+    expect(relatedContent('jr-aasm-bedtime-2006').activity).toEqual([]);
+    expect(sourcesForContent('gd_5y_sleep', 'guide')).not.toContain('jr-aasm-bedtime-2006');
+
+    const hiscock = relatedContent('jr-hiscock-sleep-rct-2002');
+    expect(hiscock.guide.sort()).toEqual(['gd_10_12m_sleep', 'gd_7_9m_sleep']);
+    for (const kind of ['activity', 'lesson', 'milestone', 'printable'] as const) {
+      expect(hiscock[kind]).toEqual([]);
+    }
+    for (const slug of ['gd_7_9m_sleep', 'gd_10_12m_sleep']) {
+      expect(sourcesForContent(slug, 'guide')).toEqual(expect.arrayContaining([
+        'jr-lecuelle-behavioral-insomnia-review-2024',
+        'jr-mindell-bedtime-routine-rct-2009',
+      ]));
+    }
+    expect(sourcesForContent('gd_3_4m_sleep', 'guide'))
+      .not.toContain('jr-lecuelle-behavioral-insomnia-review-2024');
+    expect(relatedContent('jr-lecuelle-behavioral-insomnia-review-2024').milestone)
+      .toEqual([]);
+    expect(relatedContent('jr-mindell-bedtime-routine-rct-2009').milestone)
+      .toEqual(['ms_19_24m_sleep_1']);
   });
 });
