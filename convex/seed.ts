@@ -38,6 +38,12 @@ import {
   BURMESE_COPY_AUDIT_TARGETS,
   type BurmeseCopyAuditTarget,
 } from './lib/burmeseCopyAuditRelease';
+import {
+  CLINICAL_REVIEW_COPY_PAYLOAD_SHA256,
+  CLINICAL_REVIEW_COPY_RELEASE_ID,
+  CLINICAL_REVIEW_COPY_TARGETS,
+  type ClinicalReviewCopyTarget,
+} from './lib/clinicalReviewCopyRelease';
 
 const GRANTABLE_ROLES = [
   'owner',
@@ -262,37 +268,66 @@ const burmeseCopyAuditRowValidator = v.object({
 function releasePathValue(value: unknown, path: string): unknown {
   let current = value;
   for (const part of path.split('.')) {
-    if (!current || typeof current !== 'object' || Array.isArray(current)) return undefined;
-    current = (current as Record<string, unknown>)[part];
+    if (!current || typeof current !== 'object') return undefined;
+    if (Array.isArray(current)) {
+      const index = Number(part);
+      if (!Number.isInteger(index) || index < 0) return undefined;
+      current = current[index];
+    } else {
+      current = (current as Record<string, unknown>)[part];
+    }
   }
   return current;
 }
 
-function seedMatchesBurmeseCopyRelease(target: BurmeseCopyAuditTarget, desired: Item): boolean {
+type CopyPatchTarget = {
+  slug: string;
+  patches: readonly { path: string; value: string }[];
+};
+
+function seedMatchesBurmeseCopyRelease(target: CopyPatchTarget, desired: Item): boolean {
   return target.patches.every((patch) =>
     releasePathValue(desired, patch.path) === patch.value);
 }
 
 function rowPatchValuesMatchBurmeseCopyRelease(
-  target: BurmeseCopyAuditTarget,
+  target: CopyPatchTarget,
   row: Doc<'libraryContent'>,
 ): boolean {
   return target.patches.every((patch) =>
     releasePathValue(row, patch.path) === patch.value);
 }
 
-function setNestedString(root: Record<string, unknown>, path: string[], value: string) {
+function setNestedString(root: unknown, path: string[], value: string) {
   let current = root;
   for (const part of path.slice(0, -1)) {
-    const next = current[part];
-    if (!next || typeof next !== 'object' || Array.isArray(next)) {
-      throw new Error(`Burmese copy patch path is not an object: ${path.join('.')}`);
+    if (!current || typeof current !== 'object') {
+      throw new Error(`Burmese copy patch path is not traversable: ${path.join('.')}`);
     }
-    current = next as Record<string, unknown>;
+    if (Array.isArray(current)) {
+      const index = Number(part);
+      if (!Number.isInteger(index) || index < 0 || index >= current.length) {
+        throw new Error(`Burmese copy patch array index is invalid: ${path.join('.')}`);
+      }
+      current = current[index];
+    } else {
+      current = (current as Record<string, unknown>)[part];
+    }
   }
   const leaf = path.at(-1);
   if (!leaf) throw new Error('Burmese copy patch path is empty');
-  current[leaf] = value;
+  if (!current || typeof current !== 'object') {
+    throw new Error(`Burmese copy patch parent is not traversable: ${path.join('.')}`);
+  }
+  if (Array.isArray(current)) {
+    const index = Number(leaf);
+    if (!Number.isInteger(index) || index < 0 || index >= current.length) {
+      throw new Error(`Burmese copy patch array index is invalid: ${path.join('.')}`);
+    }
+    current[index] = value;
+  } else {
+    (current as Record<string, unknown>)[leaf] = value;
+  }
 }
 
 function collectSearchStrings(value: unknown, out: string[]): void {
@@ -330,7 +365,7 @@ function searchTextForLibraryRow(row: {
 }
 
 function burmeseCopyPatchForRow(
-  target: BurmeseCopyAuditTarget,
+  target: CopyPatchTarget,
   row: Doc<'libraryContent'>,
 ) {
   let titleMm = row.titleMm;
@@ -358,11 +393,7 @@ function burmeseCopyPatchForRow(
     if (!data || typeof data !== 'object' || Array.isArray(data)) {
       throw new Error(`Burmese copy data is not patchable: ${target.slug}`);
     }
-    setNestedString(
-      data as Record<string, unknown>,
-      patch.path.slice('data.'.length).split('.'),
-      patch.value,
-    );
+    setNestedString(data, patch.path.slice('data.'.length).split('.'), patch.value);
   }
 
   const update: Record<string, unknown> = {};
@@ -381,7 +412,7 @@ function burmeseCopyPatchForRow(
 }
 
 function rowMatchesBurmeseCopyRelease(
-  target: BurmeseCopyAuditTarget,
+  target: CopyPatchTarget,
   row: Doc<'libraryContent'>,
 ): boolean {
   if (!rowPatchValuesMatchBurmeseCopyRelease(target, row)) return false;
@@ -563,6 +594,228 @@ export const applyBurmeseCopyAuditRelease = internalMutation({
       total: validated.length,
       held: BURMESE_COPY_AUDIT_HELD_SLUGS.length,
     };
+  },
+});
+
+const clinicalReviewCopyActionValidator = v.union(
+  v.literal('ready'),
+  v.literal('already_current'),
+  v.literal('already_applied'),
+  v.literal('seed_mismatch'),
+  v.literal('missing_seed'),
+  v.literal('missing_row'),
+  v.literal('unexpected_status'),
+  v.literal('stale_state'),
+  v.literal('before_mismatch'),
+);
+
+const clinicalReviewCopyRowValidator = v.object({
+  slug: v.string(),
+  found: v.boolean(),
+  clinicalStatus: v.union(v.string(), v.null()),
+  reviewRevision: v.union(v.number(), v.null()),
+  updatedAt: v.union(v.number(), v.null()),
+  expectedClinicalStatus: v.string(),
+  expectedReviewRevision: v.number(),
+  expectedUpdatedAt: v.number(),
+  seedMatchesRelease: v.boolean(),
+  currentMatchesExpected: v.boolean(),
+  desiredMatches: v.boolean(),
+  action: clinicalReviewCopyActionValidator,
+});
+
+function rowMatchesExpectedClinicalReviewCopy(
+  target: ClinicalReviewCopyTarget,
+  row: Doc<'libraryContent'>,
+): boolean {
+  return target.patches.every((patch) =>
+    releasePathValue(row, patch.path) === patch.before);
+}
+
+async function clinicalReviewCopyReleaseApplied(ctx: Pick<QueryCtx, 'db'>) {
+  const rows = await ctx.db
+    .query('auditLogs')
+    .withIndex('by_action', (q) => q.eq('action', 'library.clinical_review_copy.release'))
+    .take(100);
+  return rows.some((row) => row.summary === CLINICAL_REVIEW_COPY_RELEASE_ID);
+}
+
+/**
+ * Read-only exact-state preflight for the two reviewed Burmese corrections.
+ * A caller should run this against production after deployment and apply only
+ * when every action is `ready`.
+ */
+export const preflightClinicalReviewCopyRelease = internalQuery({
+  args: { releaseId: v.literal(CLINICAL_REVIEW_COPY_RELEASE_ID) },
+  returns: v.object({
+    releaseApplied: v.boolean(),
+    payloadSha256: v.string(),
+    targets: v.array(clinicalReviewCopyRowValidator),
+  }),
+  handler: async (ctx) => {
+    const releaseApplied = await clinicalReviewCopyReleaseApplied(ctx);
+    const desiredBySlug = new Map((seedData as unknown as Item[]).map((item) => [item.slug, item]));
+    const targets = [];
+    for (const target of CLINICAL_REVIEW_COPY_TARGETS) {
+      const desired = desiredBySlug.get(target.slug);
+      const row = await ctx.db
+        .query('libraryContent')
+        .withIndex('by_slug', (q) => q.eq('slug', target.slug))
+        .unique();
+      const seedMatchesRelease = Boolean(desired && seedMatchesBurmeseCopyRelease(target, desired));
+      const currentMatchesExpected = Boolean(row && rowMatchesExpectedClinicalReviewCopy(target, row));
+      const desiredMatches = Boolean(row && rowMatchesBurmeseCopyRelease(target, row));
+      let action: 'ready' | 'already_current' | 'already_applied' | 'seed_mismatch'
+        | 'missing_seed' | 'missing_row' | 'unexpected_status' | 'stale_state'
+        | 'before_mismatch';
+      if (releaseApplied) action = 'already_applied';
+      else if (!desired) action = 'missing_seed';
+      else if (!seedMatchesRelease) action = 'seed_mismatch';
+      else if (!row) action = 'missing_row';
+      else if (row.clinicalStatus !== target.expectedClinicalStatus) action = 'unexpected_status';
+      else if (
+        (row.reviewRevision ?? 1) !== target.expectedReviewRevision
+        || row.updatedAt !== target.expectedUpdatedAt
+      ) action = 'stale_state';
+      else if (desiredMatches) action = 'already_current';
+      else if (!currentMatchesExpected) action = 'before_mismatch';
+      else action = 'ready';
+      targets.push({
+        slug: target.slug,
+        found: row !== null,
+        clinicalStatus: row?.clinicalStatus ?? null,
+        reviewRevision: row ? (row.reviewRevision ?? 1) : null,
+        updatedAt: row?.updatedAt ?? null,
+        expectedClinicalStatus: target.expectedClinicalStatus,
+        expectedReviewRevision: target.expectedReviewRevision,
+        expectedUpdatedAt: target.expectedUpdatedAt,
+        seedMatchesRelease,
+        currentMatchesExpected,
+        desiredMatches,
+        action,
+      });
+    }
+    return {
+      releaseApplied,
+      payloadSha256: CLINICAL_REVIEW_COPY_PAYLOAD_SHA256,
+      targets,
+    };
+  },
+});
+
+/**
+ * Apply exactly two review-queue copy corrections. Every target is validated
+ * before the first write, only allowlisted Burmese paths and the derived
+ * search index are patched, and prior review decisions are invalidated by a
+ * review-revision increment while the row remains in clinical review.
+ */
+export const applyClinicalReviewCopyRelease = internalMutation({
+  args: { releaseId: v.literal(CLINICAL_REVIEW_COPY_RELEASE_ID) },
+  returns: v.object({
+    alreadyApplied: v.boolean(),
+    updated: v.number(),
+    total: v.number(),
+  }),
+  handler: async (ctx) => {
+    if (await clinicalReviewCopyReleaseApplied(ctx)) {
+      return { alreadyApplied: true, updated: 0, total: 0 };
+    }
+
+    const desiredBySlug = new Map((seedData as unknown as Item[]).map((item) => [item.slug, item]));
+    const validated: Array<{
+      row: Doc<'libraryContent'>;
+      target: ClinicalReviewCopyTarget;
+    }> = [];
+    for (const target of CLINICAL_REVIEW_COPY_TARGETS) {
+      const desired = desiredBySlug.get(target.slug);
+      const row = await ctx.db
+        .query('libraryContent')
+        .withIndex('by_slug', (q) => q.eq('slug', target.slug))
+        .unique();
+      if (!desired) throw new Error(`Clinical-review copy target missing from seed: ${target.slug}`);
+      if (!seedMatchesBurmeseCopyRelease(target, desired)) {
+        throw new Error(`Clinical-review copy seed does not match immutable release: ${target.slug}`);
+      }
+      if (!row) throw new Error(`Clinical-review copy target missing from production: ${target.slug}`);
+      if (row.clinicalStatus !== target.expectedClinicalStatus) {
+        throw new Error(`Clinical-review copy target has unexpected status: ${target.slug}`);
+      }
+      if (
+        (row.reviewRevision ?? 1) !== target.expectedReviewRevision
+        || row.updatedAt !== target.expectedUpdatedAt
+      ) {
+        throw new Error(`Clinical-review copy target changed after preflight: ${target.slug}`);
+      }
+      if (!rowMatchesExpectedClinicalReviewCopy(target, row)) {
+        throw new Error(`Clinical-review copy target no longer matches expected text: ${target.slug}`);
+      }
+      validated.push({ target, row });
+    }
+
+    const now = Date.now();
+    for (const { target, row } of validated) {
+      const rowUpdate = burmeseCopyPatchForRow(target, row);
+      const reviewRevision = (row.reviewRevision ?? 1) + 1;
+      const changes: Array<{ path: string; before: unknown; after: unknown }> =
+        target.patches.map((patch) => ({
+          path: patch.path,
+          before: patch.before,
+          after: patch.value,
+        }));
+      if (row.searchText !== rowUpdate.searchText) {
+        changes.push({ path: 'searchText', before: row.searchText, after: rowUpdate.searchText });
+      }
+      await ctx.db.patch(row._id, {
+        ...rowUpdate,
+        reviewRevision,
+        clinicalStatus: 'clinical_review',
+        reviewerId: undefined,
+        reviewerQualification: undefined,
+        reviewerDisplayName: undefined,
+        reviewScope: undefined,
+        reviewedAt: undefined,
+        nextReviewAt: undefined,
+        reviewNote: undefined,
+        updatedAt: now,
+      });
+      await logAudit(
+        ctx,
+        null,
+        'library.clinical_review_copy.updated',
+        'libraryContent',
+        row._id,
+        `${CLINICAL_REVIEW_COPY_RELEASE_ID} · ${row.slug}`,
+        {
+          before: JSON.stringify({
+            clinicalStatus: row.clinicalStatus,
+            reviewRevision: row.reviewRevision ?? 1,
+            updatedAt: row.updatedAt,
+          }),
+          after: JSON.stringify({
+            clinicalStatus: 'clinical_review',
+            reviewRevision,
+            updatedAt: now,
+            changes,
+          }),
+        },
+      );
+    }
+    await logAudit(
+      ctx,
+      null,
+      'library.clinical_review_copy.release',
+      'libraryContent',
+      undefined,
+      CLINICAL_REVIEW_COPY_RELEASE_ID,
+      {
+        after: JSON.stringify({
+          payloadSha256: CLINICAL_REVIEW_COPY_PAYLOAD_SHA256,
+          updated: validated.length,
+          total: validated.length,
+        }),
+      },
+    );
+    return { alreadyApplied: false, updated: validated.length, total: validated.length };
   },
 });
 
