@@ -1022,8 +1022,8 @@ const ACTIVITIES: SeedItem[] = [
   kb(
     activity({
       slug: 'board_book_point',
-      title: b('ထူထပ်စာအုပ် လက်ညှိုးထိုး ကစားခြင်း', 'Board book pointing'),
-      summary: b('ထူထပ်သော ပုံစာအုပ်ကို အတူဖတ်ရင်း ပုံများကို လက်ညှိုးထိုး အမည်ခေါ်ခြင်း။', 'Share a board book, point at the pictures and name them.'),
+      title: b('စာမျက်နှာထူ ရုပ်ပုံစာအုပ်ဖြင့် လက်ညှိုးထိုးကစားခြင်း', 'Board book pointing'),
+      summary: b('စာမျက်နှာထူ ရုပ်ပုံစာအုပ်ကို အတူကြည့်ရင်း ပုံများကို လက်ညှိုးထိုး၍ အမည်ခေါ်ပေးခြင်း။', 'Share a board book, point at the pictures and name them.'),
       ageGroupKey: '5_6m',
       domains: ['language', 'cognitive', 'social'],
       difficulty: 'easy',
