@@ -54,13 +54,13 @@ const MILESTONES: SeedItem[] = [
   ),
   kb(
     milestone('7_9m', 'social', 2, {
-      title: b('မိဘနှင့် ခွဲခွာရသည်ကို စိုးရိမ်လာခြင်း', 'Showing separation anxiety'),
+      title: b('မိဘခွာချိန် စိတ်မသက်မသာဖြစ်ခြင်း', 'Shows distress when a caregiver leaves'),
       observe: b('မိဘ ခွာသွားလျှင် ငိုပါသလား။ အသိမဟုတ်သူ ချီလျှင် တွန့်ဆုတ်ပါသလား။', 'Does she cry when you leave, or hold back from unfamiliar people?'),
-      why: b('၈ လမှ ၁၀ လကြားတွင် ခွဲခွာမှု စိုးရိမ်ခြင်းသည် အများဆုံး ဖြစ်တတ်သည်။ ၎င်းသည် ပြဿနာ မဟုတ်ဘဲ ကလေးက မိဘကို အထူးပုဂ္ဂိုလ်အဖြစ် မှတ်မိလာပြီ ဟူသော ကျန်းမာသည့် အချက်ပြမှု ဖြစ်သည်။', 'Separation anxiety usually peaks between about 8 and 10 months. It is not a problem — it is a healthy sign that she now knows you are someone special.'),
+      why: b('ဤအရွယ်တွင် မိဘခွာသွားသောအခါ စိတ်မသက်မသာဖြစ်ခြင်း သို့မဟုတ် မရင်းနှီးသူများကို သတိထားခြင်းသည် တွေ့ရလေ့ရှိပြီး ကလေးတစ်ဦးနှင့်တစ်ဦး ကွာခြားနိုင်ပါသည်။', 'Distress when a caregiver leaves and wariness of unfamiliar people are common at this age, but vary from child to child.'),
       red: b('မည်သူ့ကိုမျှ အထူးမတွယ်တာခြင်း၊ မိဘကို လုံးဝ မဂရုစိုက်ခြင်းကို ကျန်းမာရေးဝန်ထမ်းအား ပြသင့်သည်။', 'No particular attachment to anyone, or no interest in a parent at all, is worth checking.'),
       encouragement: b('ကလေး၏ ငိုသံသည် သင့်ကို ချစ်ကြောင်း ပြောနေခြင်း ဖြစ်သည်။', 'Her tears are telling you that you matter.'),
     }),
-    'Separation anxiety peaking around 8–10 months follows CDC and AAP milestone guidance and NICE social and emotional wellbeing guidance, with the attachment framing taken from the developmental-behavioural paediatrics references in the registry.',
+    'Distress when a caregiver leaves and wariness of unfamiliar people at this age follow CDC and AAP milestone guidance, with normal variation described in the developmental-behavioural paediatrics references in the registry.',
   ),
   kb(
     milestone('7_9m', 'cognitive', 1, {
@@ -507,8 +507,8 @@ const GUIDES_C: SeedItem[] = [
     guide('7_9m', 'social', {
       title: b('၇ – ၉ လ — လူမှုဆက်ဆံရေး လမ်းညွှန်', '7–9 months — Social guide'),
       why: b(
-        'ဤအရွယ်တွင် ကလေးသည် အသိမျက်နှာနှင့် အသစ်ကို ရှင်းရှင်းလင်းလင်း ခွဲခြားတတ်ပြီဖြစ်ရာ၊ မိဘ ခွာသွားလျှင် ငိုခြင်း၊ အသိမဟုတ်သူကို တွန့်ဆုတ်ခြင်းများ ဖြစ်လာသည်။ ၎င်းသည် ပြဿနာ မဟုတ်ဘဲ ကျန်းမာသော တွယ်တာမှု၏ လက္ခဏာ ဖြစ်သည်။ ငြိမ်းချမ်းစွာ တုံ့ပြန်ပေးခြင်းက ကလေးအား လုံခြုံမှု ခံစားစေသည်။',
-        'She now clearly tells familiar people from strangers, so she may cry when you leave and hold back from new faces. This is not a problem — it is a sign of healthy attachment. Calm, predictable responses help her feel safe.',
+        'ဤအရွယ်တွင် ကလေးသည် ရင်းနှီးသူနှင့် မရင်းနှီးသူကို ပိုမို ခွဲခြားတတ်လာပြီး မိဘခွာသွားလျှင် ငိုခြင်း သို့မဟုတ် လူအသစ်ကို တွေ့လျှင် တွန့်ဆုတ်ခြင်း ရှိနိုင်ပါသည်။ ဤတုံ့ပြန်မှုများသည် တွေ့ရလေ့ရှိသော်လည်း ကလေးတစ်ဦးနှင့်တစ်ဦး ကွာခြားနိုင်ပါသည်။ ငြိမ်သက်ပြီး ခန့်မှန်းနိုင်သော တုံ့ပြန်မှုက ကလေးကို လုံခြုံသည်ဟု ခံစားရရန် ကူညီနိုင်ပါသည်။',
+        'At this age, babies increasingly distinguish familiar from unfamiliar people and may cry when a caregiver leaves or hold back from new faces. These responses are common but vary between children. Calm, predictable responses can help the child feel safe.',
       ),
       observationQuestions: [
         b('အသိမျက်နှာကို မြင်လျှင် ပြုံးပါသလား။', 'Does she smile at familiar faces?'),
@@ -543,7 +543,7 @@ const GUIDES_C: SeedItem[] = [
       ),
       commonMistakes: [
         b('ခွဲခွာမှု စိုးရိမ်ခြင်းကို "အလိုလိုက်လွန်းလို့" ဟု ထင်ခြင်း။', 'Treating separation anxiety as a sign of spoiling.'),
-        b('တိတ်တဆိတ် ထွက်သွားခြင်း — ကလေး၏ ယုံကြည်မှုကို လျော့နည်းစေသည်။', 'Sneaking away, which weakens her trust.'),
+        b('တိတ်တဆိတ် ထွက်သွားခြင်း — ခွဲခွာချိန်ကို ကလေးအတွက် ပိုမို မခန့်မှန်းနိုင်ဖြစ်စေနိုင်သည်။', 'Sneaking away can make separations less predictable for the child.'),
       ],
       parentTips: [
         b('နှုတ်ဆက်ခြင်းကို တိုတိုနှင့် ငြိမ်းချမ်းစွာ လုပ်ပါ။', 'Keep goodbyes short and calm.'),
@@ -552,7 +552,7 @@ const GUIDES_C: SeedItem[] = [
       faq: [
         {
           q: b('ကလေးက ကျွန်မကိုပဲ လိုချင်တယ်၊ ဒါ ပုံမှန်လား။', 'She only wants me — is that normal?'),
-          a: b('ပုံမှန် ဖြစ်ပါသည်။ ၈ လမှ ၁၀ လကြားတွင် အများဆုံး ဖြစ်တတ်ပြီး တဖြည်းဖြည်း လျော့သွားပါသည်။ အခြားသူများနှင့် တဖြည်းဖြည်း အချိန်ပေးခြင်းက ကူညီသည်။', 'Yes. It usually peaks between 8 and 10 months and eases over time. Gradual time with other trusted people helps.'),
+          a: b('ဤအရွယ်တွင် တွေ့ရလေ့ရှိပြီး ကလေးတစ်ဦးနှင့်တစ်ဦး ကွာခြားပါသည်။ အချိန်ကြာလာသည်နှင့် လျော့နည်းတတ်ပြီး ယုံကြည်ရသူများနှင့် ဖြည်းဖြည်း အချိန်ပေးခြင်းက ကူညီနိုင်ပါသည်။', 'This is common at this age and varies between children. It often eases over time, and gradual time with other trusted people can help.'),
         },
         {
           q: b('ကလေးထိန်း အပ်ရင် ထိခိုက်မလား။', 'Will using a childminder harm her?'),
@@ -560,7 +560,7 @@ const GUIDES_C: SeedItem[] = [
         },
       ],
       redFlags: [
-        b('မည်သူ့ကိုမျှ အထူး မတွယ်တာခြင်း။', 'No particular attachment to anyone.'),
+        b('ရင်းနှီးသော ပြုစုစောင့်ရှောက်သူနှင့် မရင်းနှီးသူကို တုံ့ပြန်ပုံ လုံးဝ မကွာခြားခြင်း။', 'No difference at all in response to a familiar caregiver versus an unfamiliar person.'),
         b('မိဘအား လုံးဝ မပြုံးပြခြင်း၊ တုံ့ပြန်မှု မရှိခြင်း။', 'No smiling at or responding to a parent at all.'),
         b('ယခင်က ရှိခဲ့သော လူမှုဆက်ဆံမှုများ ဆုံးရှုံးသွားခြင်း။', 'Loss of social contact she used to have.'),
       ],
@@ -573,14 +573,14 @@ const GUIDES_C: SeedItem[] = [
         'Her looking for you is proof of how much you matter.',
       ),
     }),
-    'Familiar-versus-unfamiliar discrimination and separation anxiety at 7–9 months follow CDC and AAP milestone guidance, the WHO/UNICEF nurturing care framework, NICE social and emotional wellbeing guidance and AAP guidance on the power of play.',
+    'Familiar-versus-unfamiliar discrimination and separation distress at 7–9 months follow CDC and AAP milestone guidance, the WHO/UNICEF nurturing care framework, the Head Start early-learning framework and AAP guidance on the power of play.',
   ),
   kb(
     guide('7_9m', 'emotional', {
       title: b('၇ – ၉ လ — စိတ်ခံစားမှု လမ်းညွှန်', '7–9 months — Emotional guide'),
       why: b(
-        'ဤအရွယ်တွင် ကလေး၏ ခံစားမှုများသည် ပိုမို ရှင်းလင်းလာသည် — ပျော်ရွှင်ခြင်း၊ ကြောက်ရွံ့ခြင်း၊ စိတ်ပျက်ခြင်းတို့ကို မျက်နှာနှင့် အသံဖြင့် ပြသည်။ ကလေးသည် ကိုယ်တိုင် စိတ်ကို ငြိမ်းအောင် မလုပ်နိုင်သေးဘဲ လူကြီး၏ ငြိမ်းချမ်းမှုကို မှီခိုသည်။ မိဘ၏ စိတ်ကျန်းမာရေးသည် ဤနေရာတွင် အလွန် အရေးကြီးသည်။',
-        'Her feelings are clearer now — delight, fear and frustration all show on her face and in her voice. She cannot calm herself yet and borrows calm from adults, which is why your own wellbeing matters so much here.',
+        'ဤအရွယ်တွင် ကလေး၏ ခံစားမှုများသည် ပိုမို ရှင်းလင်းလာသည် — ပျော်ရွှင်ခြင်း၊ ကြောက်ရွံ့ခြင်း၊ စိတ်ပျက်ခြင်းတို့ကို မျက်နှာနှင့် အသံဖြင့် ပြသည်။ ကလေးသည် စိတ်ပြန်တည်ငြိမ်ရန် လူကြီး၏ အကူအညီကို မကြာခဏ လိုအပ်သေးသည်။ မိဘ၏ စိတ်ကျန်းမာရေးသည် ဤနေရာတွင် အရေးကြီးပါသည်။',
+        'Her feelings are clearer now — delight, fear and frustration all show on her face and in her voice. She still often needs an adult’s help to settle, which is why caregiver wellbeing matters.',
       ),
       observationQuestions: [
         b('စိတ်ဆိုးလျှင် သင် ငြိမ်းအောင် လုပ်ပေးနိုင်ပါသလား။', 'Can you settle her when she is upset?'),
@@ -618,7 +618,7 @@ const GUIDES_C: SeedItem[] = [
         b('ကလေး၏ ငိုသံကို "ဆိုးလို့" ဟု အဓိပ္ပာယ် ကောက်ခြင်း။', 'Reading her crying as bad behaviour.'),
       ],
       parentTips: [
-        b('သင် ငြိမ်းချမ်းလျှင် ကလေးလည်း ငြိမ်းချမ်းသည်။', 'When you are calm, she borrows that calm.'),
+        b('သင် တည်ငြိမ်နေခြင်းက ကလေး စိတ်ပြန်တည်ငြိမ်ရန် အထောက်အကူပြုနိုင်သည်။', 'Your calm can help her settle.'),
         b('အကူအညီ တောင်းခြင်းသည် အားနည်းချက် မဟုတ်ပါ။', 'Asking for help is not a weakness.'),
       ],
       faq: [
@@ -646,7 +646,7 @@ const GUIDES_C: SeedItem[] = [
         'Caring for yourself while caring for her is part of doing this well.',
       ),
     }),
-    'The link between responsive caregiving, parental mental health and early emotional development follows AAP guidance on toxic stress, the WHO/UNICEF nurturing care framework, NICE postnatal care guidance, NICE social and emotional wellbeing guidance and standard paediatric references in the registry.',
+    'The link between responsive caregiving, parental mental health and early emotional development follows AAP guidance on toxic stress, the WHO/UNICEF nurturing care framework, NICE postnatal care guidance, the Head Start early-learning framework and standard paediatric references in the registry.',
   ),
 ];
 

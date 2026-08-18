@@ -4,6 +4,7 @@ import { relatedContent, sourcesForContent } from '../../evidence/links';
 import { SOURCE_BY_ID } from '../../evidence/sources';
 import { resolveReviewStatus } from '../../evidence/types';
 import { SAMPLE_AWARENESS } from '../../data/seed/content';
+import { SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_TARGETS } from '../../../convex/lib/contentRetirements';
 
 const rows = new Map(seedPayload().map((row) => [row.slug, row]));
 
@@ -820,5 +821,77 @@ describe('clinically sourced content corrections', () => {
       .toEqual([]);
     expect(relatedContent('jr-mindell-bedtime-routine-rct-2009').milestone)
       .toEqual(['ms_19_24m_sleep_1']);
+  });
+
+  it('keeps NICE PH40 as an unlinked service-level source, not milestone evidence', () => {
+    expect(SOURCE_BY_ID.get('nice-ph40-social-emotional-2012')).toMatchObject({
+      edition: 'PH40',
+      ageMonthsMin: 0,
+      ageMonthsMax: 59,
+      verifiedOn: '2026-08-18',
+    });
+    expect(SOURCE_BY_ID.get('nice-ph40-social-emotional-2012')?.verifiedNote)
+      .toContain('vulnerable children under 5');
+    for (const slugs of Object.values(relatedContent('nice-ph40-social-emotional-2012'))) {
+      expect(slugs).toEqual([]);
+    }
+
+    expect(SOURCE_BY_ID.get('us-hhs-head-start-elof-2015')).toMatchObject({
+      year: 2015,
+      ageMonthsMin: 0,
+      ageMonthsMax: 60,
+      reviewStatus: 'awaiting_review',
+    });
+    expect(SOURCE_BY_ID.get('hc-mental-emotional-development-2026')).toMatchObject({
+      year: 2026,
+      reviewStatus: 'awaiting_review',
+      verifiedOn: '2026-08-18',
+    });
+  });
+
+  it('removes unsupported social-emotional checkpoints and narrows the retained ones', () => {
+    for (const target of SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_TARGETS) {
+      expect(rows.has(target.slug), target.slug).toBe(false);
+    }
+
+    expect(rowFor('ms_birth_2m_social_1')).toMatchObject({
+      titleEn: 'Looks at faces',
+      titleMm: 'မျက်နှာကို ကြည့်ခြင်း',
+    });
+    expect((dataFor('ms_birth_2m_social_1').whyEn as string))
+      .toBe('Looking at faces is one part of early connection.');
+    expect((dataFor('ms_7_9m_social_2').whyEn as string)).toContain(
+      'vary from child to child',
+    );
+    expect((dataFor('ms_10_12m_emotional_1').whyEn as string)).toContain(
+      'may still often need an adult’s help to settle',
+    );
+  });
+
+  it('uses a safe infant sleep space and symptom-based parent mental-health escalation', () => {
+    const emotional = dataFor('gd_10_12m_emotional');
+    const safety = emotional.safety as { mm: string; en: string };
+    expect(safety.en).toContain('safety-approved infant sleep space');
+    expect(safety.en).toContain('firm, flat mattress with only a fitted sheet');
+    expect(safety.en).toContain('persists, is severe, worsens, or affects daily life');
+    expect(safety.en).not.toContain('more than two weeks');
+
+    const faq = emotional.faq as Array<{ a: { mm: string; en: string } }>;
+    expect(faq[1].a.en).toContain('seek help immediately');
+    expect(faq[1].a.en).not.toContain('two weeks');
+  });
+
+  it('describes preschool readiness without ranking one developmental domain above all others', () => {
+    const lesson = dataFor('lsn_prepare_preschool');
+    expect((lesson.body as { en: string }).en).toContain(
+      'includes early learning as well as managing brief separation',
+    );
+    expect((lesson.takeaway as { en: string }).en).toBe(
+      'Social-emotional and self-help skills are important parts of preschool readiness.',
+    );
+    expect(JSON.stringify(lesson)).not.toContain('matter most');
+    expect(sourcesForContent('lsn_prepare_preschool', 'lesson')).toContain(
+      'us-hhs-head-start-elof-2015',
+    );
   });
 });

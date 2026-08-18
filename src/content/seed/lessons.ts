@@ -118,7 +118,7 @@ export const LESSONS: SeedItem[] = [
     readingMinutes: 3,
     body: b('ကလေးများသည် ခံစားမှုကို ထိန်းရန် လေ့ကျင့်နေဆဲဖြစ်သည်။ ခံစားမှုကို အမည်တပ်ပေးပါ (“စိတ်ဆိုးနေတယ်နော်”)၊ တည်ငြိမ်စွာ ရှိနေပါ၊ ဘေးကင်းစေပါ။ ခံစားမှုကို “မဖြစ်သင့်” ဟု မဆိုပါနှင့် — အသိအမှတ်ပြုခြင်းက ကလေးကို ငြိမ်သက်စေသည်။', 'Children are still learning to manage feelings. Name the feeling, stay calm, keep them safe. Don’t dismiss feelings — acknowledging them helps a child settle.'),
     quiz: [q('ကလေး စိတ်တိုနေရင် အရင်ဆုံး —', 'When a child is upset, first —', [['ခံစားမှုကို အမည်တပ်၍ တည်ငြိမ်စွာနေ', 'name it and stay calm'], ['ချက်ချင်း ပြစ်တင်', 'scold immediately']], 0)],
-    takeaway: b('သင်၏ တည်ငြိမ်မှုက ကလေးကို ငြိမ်သက်ရန် သင်ပေးသည်။', 'Your calm teaches their calm.'),
+    takeaway: b('သင်၏ တည်ငြိမ်မှုက ကလေး စိတ်ပြန်တည်ငြိမ်ရန် အထောက်အကူပြုနိုင်သည်။', 'Your calm can help your child settle.'),
     actionToday: b('ယနေ့ ကလေး၏ ခံစားမှုတစ်ခုကို အမည်တပ်ပေးပါ။', 'Name one of your child’s feelings today.'),
   }),
   lesson({
@@ -129,7 +129,7 @@ export const LESSONS: SeedItem[] = [
     readingMinutes: 3,
     body: b('လူမှုကျွမ်းကျင်မှုများသည် ကစားရင်း တဖြည်းဖြည်း သင်ယူရသည်။ အလှည့်ကျ ကစားနည်းများ၊ နမူနာပြခြင်းနှင့် ကောင်းသောအပြုအမူကို ချီးမွမ်းခြင်းဖြင့် သင်ကြားပါ။ ဝေမျှခြင်းကို အတင်းအကျပ် မခိုင်းပါနှင့် — အချိန်ပေးပါ။', 'Social skills are learned gradually through play. Teach with turn-taking games, modeling, and praise. Don’t force sharing — give it time.'),
     quiz: [q('ဝေမျှခြင်းကို —', 'Sharing is best —', [['အတင်းအကျပ် ခိုင်း', 'forced'], ['နမူနာပြ၍ အားပေး', 'modeled and encouraged']], 1)],
-    takeaway: b('နမူနာပြခြင်းက အကောင်းဆုံး သင်ကြားနည်းဖြစ်သည်။', 'Modeling is the best teacher.'),
+    takeaway: b('အားပေးလိုသော လူမှုအပြုအမူကို ကိုယ်တိုင် နမူနာပြပါ။', 'Model the social behavior you want to encourage.'),
     actionToday: b('ယနေ့ အလှည့်ကျ ကစားနည်းတစ်ခု ကစားပါ။', 'Play one turn-taking game today.'),
   }),
   lesson({
@@ -182,9 +182,9 @@ export const LESSONS: SeedItem[] = [
     summary: b('ခွဲနေခြင်း၊ လုပ်ရိုးလုပ်စဉ်နှင့် ကိုယ်တိုင်လုပ်နိုင်မှု လေ့ကျင့်ခြင်း။', 'Practice separation, routines, and self-help.'),
     objectives: [b('မူကြိုအသင့်ဖြစ်မှု အခြေခံ သိရှိရန်။', 'Know preschool readiness basics.')],
     readingMinutes: 3,
-    body: b('မူကြိုအတွက် အသင့်ဖြစ်မှုသည် စာတတ်မှုထက် — ခဏခွဲနေနိုင်ခြင်း၊ လုပ်ရိုးလုပ်စဉ် လိုက်နာနိုင်ခြင်းနှင့် ကိုယ်တိုင် အခြေခံ လုပ်နိုင်ခြင်းက ပို၍ အရေးကြီးသည်။ မူကြိုအကြောင်း အပြုသဘော စကားဖြင့် ပြောပါ။', 'Preschool readiness is less about academics and more about brief separation, following routines, and basic self-help. Talk about preschool positively.'),
-    quiz: [q('မူကြိုအသင့်ဖြစ်မှုတွင် အရေးကြီးဆုံး —', 'Most important for readiness —', [['လူမှု/ကိုယ်တိုင်လုပ်နိုင်မှု', 'social/self-help skills'], ['အက္ခရာ အားလုံးတတ်', 'knowing all letters']], 0)],
-    takeaway: b('လူမှု/ခံစားမှု ကျွမ်းကျင်မှုက အဓိကဖြစ်သည်။', 'Social-emotional skills matter most.'),
+    body: b('မူကြိုအသင့်ဖြစ်မှုတွင် အစောပိုင်း သင်ယူမှုအပြင် ခဏခွဲနေနိုင်ခြင်း၊ လုပ်ရိုးလုပ်စဉ် လိုက်နာခြင်း၊ လူမှု-စိတ်ခံစားမှုနှင့် ကိုယ်တိုင်လုပ်ဆောင်နိုင်မှုများလည်း ပါဝင်ပါသည်။ မူကြိုအကြောင်း အပြုသဘောဖြင့် ပြောပြီး လုပ်ရိုးလုပ်စဉ်များကို ကြိုတင် လေ့ကျင့်ပေးပါ။', 'Preschool readiness includes early learning as well as managing brief separation, following routines, social-emotional skills, and basic self-help. Talk positively about preschool and practise routines in advance.'),
+    quiz: [q('မူကြိုအသင့်ဖြစ်မှုတွင် ပါဝင်သော အချက်တစ်ခုမှာ —', 'One part of preschool readiness is —', [['လူမှု-စိတ်ခံစားမှုနှင့် ကိုယ်တိုင်လုပ်ဆောင်နိုင်မှု', 'social-emotional and self-help skills'], ['မစတက်မီ အက္ခရာအားလုံး တတ်ထားရမည်', 'knowing every letter before starting']], 0)],
+    takeaway: b('လူမှု-စိတ်ခံစားမှုနှင့် ကိုယ်တိုင်လုပ်ဆောင်နိုင်မှုများသည် မူကြိုအသင့်ဖြစ်မှု၏ အရေးကြီးသော အစိတ်အပိုင်းများ ဖြစ်သည်။', 'Social-emotional and self-help skills are important parts of preschool readiness.'),
     actionToday: b('ယနေ့ ကလေးကို ကိုယ်တိုင် ဖိနပ်ဝတ်စေပါ။', 'Let your child put on their own shoes today.'),
   }),
   lesson({

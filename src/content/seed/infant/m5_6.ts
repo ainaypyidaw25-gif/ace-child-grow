@@ -60,7 +60,7 @@ const MILESTONES: SeedItem[] = [
       red: b('လူများနှင့် လုံးဝ မဆက်သွယ်ခြင်း၊ မျက်လုံးချင်း လုံးဝ မဆုံခြင်း၊ ယခင် တုံ့ပြန်မှုများ ပျောက်သွားခြင်းကို ပြပါ။', 'No social engagement at all, no eye contact, or loss of skills she had should be checked.'),
       encouragement: b('အသစ်တွေ့သူများနှင့် တဖြည်းဖြည်း မိတ်ဆက်ပေးပါ — အလျင်စလို မလုပ်ပါနှင့်။', 'Introduce new people slowly — no need to rush.'),
     }),
-    'Familiar-versus-unfamiliar discrimination and early attachment at 5–6 months follow CDC and AAP milestone guidance, NICE social and emotional wellbeing guidance and the developmental-behavioural paediatrics references in the registry.',
+    'Familiar-versus-unfamiliar discrimination at 5–6 months follows CDC and AAP milestone guidance and the developmental-behavioural paediatrics references in the registry.',
   ),
   kb(
     milestone('5_6m', 'cognitive', 2, {
@@ -473,8 +473,8 @@ const GUIDES_C: SeedItem[] = [
     guide('5_6m', 'social', {
       title: b('၅ – ၆ လ — လူမှုဆက်ဆံရေး လမ်းညွှန်', '5–6 months — Social guide'),
       why: b(
-        'ဤအရွယ်တွင် ကလေးသည် ရင်းနှီးသူနှင့် မရင်းနှီးသူကို ခွဲခြားတတ်လာသည်။ မိဘကို မြင်လျှင် ပိုပျော်ပြီး မရင်းနှီးသူကို မြင်လျှင် ခေါင်းလှည့်ခြင်း သို့မဟုတ် ငိုခြင်း ရှိတတ်သည်။ ယင်းသည် ရှက်တတ်ခြင်းကြောင့် မဟုတ်ဘဲ ပြုစုစောင့်ရှောက်သူနှင့် စိတ်ချလုံခြုံစွာ ချိတ်ဆက်မှု ဖွံ့ဖြိုးလာခြင်း ဖြစ်သည်။',
-        'She now tells familiar people from strangers. She may light up for you and turn away or cry with someone new. This is not shyness to be corrected — it is healthy attachment developing.',
+        'ဤအရွယ်တွင် ကလေးသည် ရင်းနှီးသူနှင့် မရင်းနှီးသူကို ခွဲခြားတတ်လာပြီး လူအသစ်ကို တွေ့လျှင် ခေါင်းလှည့်ခြင်း သို့မဟုတ် ငိုခြင်း ရှိနိုင်ပါသည်။ ယင်းသည် ပြုပြင်ရမည့် ရှက်ကြောက်မှု မဟုတ်ဘဲ ရင်းနှီးသူနှင့် မရင်းနှီးသူကို ခွဲခြားသိလာခြင်း၏ ပုံမှန် အစိတ်အပိုင်း ဖြစ်နိုင်ပါသည်။',
+        'At this age, babies increasingly distinguish familiar from unfamiliar people and may turn away or cry with someone new. This is not shyness to correct; it can be a normal part of learning who is familiar and who is not.',
       ),
       observationQuestions: [
         b('မိဘကို မြင်လျှင် မျက်နှာ ပြောင်းလဲသွားပါသလား။', 'Does her face change when she sees you?'),
@@ -509,16 +509,16 @@ const GUIDES_C: SeedItem[] = [
       ),
       commonMistakes: [
         b('သူစိမ်းကို ကြောက်သည်ဟု အရှက်ရသလို ခံစားခြင်း — ဤသည် ပုံမှန် ဖွံ့ဖြိုးမှု ဖြစ်သည်။', 'Feeling embarrassed by stranger wariness — it is normal development.'),
-        b('ငိုသံကို လျစ်လျူရှုခြင်း — ယုံကြည်မှု တည်ဆောက်ရေးကို နှောင့်နှေးစေသည်။', 'Ignoring crying — it slows the building of trust.'),
+        b('ငိုသံကို အမြဲ လျစ်လျူရှုခြင်း — ကလေး၏ လိုအပ်ချက်ကို တုံ့ပြန်ဆက်သွယ်ရန် အခွင့်အရေးများ လွတ်သွားနိုင်သည်။', 'Consistently ignoring cries can miss opportunities for responsive connection.'),
       ],
       parentTips: [
-        b('ကလေး ကြောက်လျှင် သင်၏ ငြိမ်သက်သော အသံနှင့် ပွေ့ဖက်မှုသည် အကောင်းဆုံး ဆေး ဖြစ်သည်။', 'When she is afraid, your calm voice and arms are the best medicine.'),
+        b('ကလေး ကြောက်လျှင် သင်၏ ငြိမ်သက်သော အသံနှင့် ပွေ့ဖက်မှုက လုံခြုံသည်ဟု ခံစားရရန် အထောက်အကူပြုနိုင်ပါသည်။', 'When she is afraid, your calm voice and arms can help her feel safe.'),
         b('အခြားသူတစ်ဦးအား ချီခွင့်ပေးမည်ဆိုပါက ဖြည်းဖြည်းချင်း လုပ်ပြီး မိဘက အနီးတွင် ရှိနေပါ။', 'When handing her to someone else, do it slowly and stay nearby.'),
       ],
       faq: [
         {
           q: b('သူစိမ်းတွေ့ရင် ငိုတယ်။ ပြဿနာလား။', 'She cries with strangers. Is that a problem?'),
-          a: b('မဟုတ်ပါ။ ဤအရွယ်တွင် အသိနှင့် သူစိမ်း ခွဲခြားတတ်လာခြင်းသည် ကျန်းမာသော ဖွံ့ဖြိုးမှု လက္ခဏာ ဖြစ်သည်။ တဖြည်းဖြည်း မိတ်ဆက်ပေးပါ။', 'No. Telling familiar people from strangers is a healthy sign at this age. Introduce people gradually.'),
+          a: b('ဤအရွယ်တွင် မရင်းနှီးသူကို သတိထားခြင်းသည် တွေ့ရလေ့ရှိသော်လည်း ကလေးတစ်ဦးနှင့်တစ်ဦး ကွာခြားနိုင်ပါသည်။ တဖြည်းဖြည်း မိတ်ဆက်ပေးပြီး ကလေးကို အချိန်ပေးပါ။', 'Wariness of unfamiliar people is common at this age but varies between children. Introduce people gradually and give her time.'),
         },
         {
           q: b('အဖွား/အဒေါ်ကို အပ်ရင် ငိုတယ်။ ဘယ်လိုလုပ်ရမလဲ။', 'She cries when I hand her to her grandmother. What can I do?'),
@@ -539,14 +539,14 @@ const GUIDES_C: SeedItem[] = [
         'When she chooses you, that is the trust you built showing itself.',
       ),
     }),
-    'Recognising familiar people and early stranger wariness at 5–6 months follow CDC and AAP milestone guidance, the WHO/UNICEF nurturing care framework, NICE social and emotional wellbeing guidance, and AAP guidance on the power of play.',
+    'Recognising familiar people and early stranger wariness at 5–6 months follow CDC and AAP milestone guidance, the WHO/UNICEF nurturing care framework, the Head Start early-learning framework and AAP guidance on the power of play.',
   ),
   kb(
     guide('5_6m', 'emotional', {
       title: b('၅ – ၆ လ — စိတ်ခံစားမှု လမ်းညွှန်', '5–6 months — Emotional guide'),
       why: b(
-        'ကလေးသည် ပျော်ရွှင်ခြင်း၊ စိတ်ဆိုးခြင်း၊ အံ့သြခြင်းကို ပိုမို ရှင်းလင်းစွာ ပြသတတ်လာသည်။ မိဘက ငြိမ်သက်စွာ တုံ့ပြန်ပေးခြင်းသည် ကလေး၏ စိတ်ခံစားမှုကို ကိုယ်တိုင် ထိန်းညှိတတ်လာစေရန် အခြေခံ ဖြစ်သည်။ မိဘ၏ စိတ်ကျန်းမာရေးသည် ကလေး၏ ဖွံ့ဖြိုးမှုနှင့် တိုက်ရိုက် ဆက်စပ်နေသဖြင့် မိဘကိုယ်တိုင် ကူညီမှု ရယူခြင်းသည်လည်း ကလေးအတွက် စောင့်ရှောက်မှု ဖြစ်သည်။',
-        'She now shows joy, frustration and surprise more clearly. Your calm response is what teaches her to settle her own feelings later. A parent’s own mental health is directly linked to a child’s development, so getting support for yourself is also care for her.',
+        'ကလေးသည် ပျော်ရွှင်ခြင်း၊ စိတ်ဆိုးခြင်း၊ အံ့သြခြင်းကို ပိုမို ရှင်းလင်းစွာ ပြသတတ်လာသည်။ မိဘက ငြိမ်သက်စွာ တုံ့ပြန်ပေးခြင်းက ကလေးသည် နောက်ပိုင်းတွင် စိတ်ကို တဖြည်းဖြည်း ပြန်တည်ငြိမ်စေရန် သင်ယူရာ၌ အထောက်အကူပြုနိုင်ပါသည်။ မိဘ၏ စိတ်ကျန်းမာရေးသည် ကလေး၏ ဖွံ့ဖြိုးမှုနှင့် ဆက်စပ်နေသဖြင့် မိမိအတွက် အကူအညီရယူခြင်းသည်လည်း ကလေးကို စောင့်ရှောက်ခြင်းဖြစ်ပါသည်။',
+        'She now shows joy, frustration and surprise more clearly. Calm, responsive care can help her gradually learn to settle her feelings. Parental mental health is associated with child development, so getting support for yourself is also care for her.',
       ),
       observationQuestions: [
         b('ကလေး၏ ခံစားချက် အမျိုးမျိုးကို ခွဲခြား မြင်နိုင်ပါသလား။', 'Can you tell her different feelings apart?'),
@@ -572,7 +572,7 @@ const GUIDES_C: SeedItem[] = [
         b('အရိပ်တွင် ဖြည်းညှင်းစွာ လမ်းလျှောက်ခြင်း — မိဘအတွက်လည်း ကောင်းသည်။', 'A gentle walk in the shade — good for you as well as her.'),
       ],
       lowCost: [
-        b('ပွေ့ဖက်ခြင်းနှင့် အသံသည် ကုန်ကျစရိတ် မရှိသော အကောင်းဆုံး ကုထုံး ဖြစ်သည်။', 'Holding and your voice are the best and cheapest comfort there is.'),
+        b('ပွေ့ဖက်ခြင်းနှင့် နူးညံ့သော အသံသည် ကုန်ကျစရိတ်မရှိဘဲ နှစ်သိမ့်ပေးနိုင်သည့် နည်းလမ်းများ ဖြစ်သည်။', 'Holding and a gentle voice are free ways to offer comfort.'),
       ],
       materials: b('မလိုအပ်ပါ', 'Nothing needed'),
       safety: b(
@@ -580,7 +580,7 @@ const GUIDES_C: SeedItem[] = [
         'Never shake a baby — it can cause brain injury and death. If you feel at the end of your patience, put her on her back in a safe cot, step away for a few minutes, then come back, and call someone to help. If you have persistent low mood or heavy anxiety, tell a health worker — this is treatable. If you ever have thoughts of harming yourself or your baby, seek help immediately.',
       ),
       commonMistakes: [
-        b('မိဘ၏ ခံစားချက်ကို လျစ်လျူရှုခြင်း — မိဘ ကောင်းမှ ကလေး ကောင်းသည်။', 'Ignoring your own feelings — she does best when you are supported too.'),
+        b('မိဘ၏ ခံစားချက်ကို လျစ်လျူရှုခြင်း — မိဘကို ပံ့ပိုးကူညီပေးခြင်းက ကလေးအတွက်လည်း အထောက်အကူဖြစ်သည်။', 'Ignoring your own feelings — support for you can help your baby too.'),
         b('ငိုသံကို "ခံနိုင်ရည် သင်ပေးရမည်" ဟုဆိုကာ လျစ်လျူရှုခြင်း။', 'Leaving her to cry in the belief it "teaches toughness".'),
       ],
       parentTips: [
@@ -611,7 +611,7 @@ const GUIDES_C: SeedItem[] = [
         'Every calm response teaches her: I am safe here.',
       ),
     }),
-    'The link between responsive caregiving, parental mental health and early emotional development follows AAP guidance on toxic stress, the WHO/UNICEF nurturing care framework, NICE postnatal care guidance, NICE social and emotional wellbeing guidance and standard paediatric references in the registry.',
+    'The link between responsive caregiving, parental mental health and early emotional development follows AAP guidance on toxic stress, the WHO/UNICEF nurturing care framework, NICE postnatal care guidance, the Head Start early-learning framework and standard paediatric references in the registry.',
   ),
 ];
 

@@ -181,16 +181,16 @@ export const GUIDES: SeedItem[] = [
     materials: b('ဘောလုံး၊ အရုပ်။', 'Ball, dolls.'),
     safety: b("ကစားစဉ် ကြီးကြပ်၍ ဘေးကင်းစေပါ။ အစာတစ်ဆို့ခြင်း အန္တရာယ်သည် အသက် ၄ နှစ်အထိ ဆက်ရှိပါသည် — လမ်းလျှောက်တတ်၊ စကားပြောတတ်ပြီဆိုသော်လည်း အန္တရာယ် မကုန်သေးပါ။ စပျစ်သီးနှင့် ချယ်ရီခရမ်းချဉ်သီးများကို အလျားလိုက် လေးစိတ် ခွဲပေးပါ။ အခွံမာသီး အလုံးလိုက်၊ ပြောင်းဖူးပေါက်ပေါက်၊ မာကျောသော သကြားလုံး၊ အစေ့အဆန်များနှင့် မုန်လာဥနီ အစိမ်းများကို အသက် ၄ နှစ်အောက် ကလေးများအား မပေးပါနှင့်။ အမြဲ ထိုင်၍ စားခိုင်းပြီး စားနေစဉ် အနားတွင် ရှိပါ။", "Supervise group play for safety. Choking remains a risk until about age 4 — walking and talking do not end it. Cut grapes and cherry tomatoes into quarters lengthwise. Do not give whole nuts, popcorn, hard sweets, seeds or raw carrot to a child under 4. Always have your child sit to eat, and stay with them while they eat."),
     commonMistakes: [b('ဝေမျှခြင်းကို အတင်းအကျပ် ခိုင်းခြင်း — နမူနာပြခြင်းက ပိုကောင်းသည်။', 'Forcing sharing — modeling works better.')],
-    parentTips: [b('ကောင်းသော အပြုအမူကို ချီးမွမ်း၍ အားပေးပါ။', 'Praise kind behavior specifically.')],
+    parentTips: [b('ကြင်နာသော အပြုအမူကို တိတိကျကျ ချီးမွမ်း၍ အားပေးပါ။', 'Praise kind behavior specifically.')],
     faq: [{ q: b('တစ်ယောက်တည်း ကစားရင် ပြဿနာလား။', 'Is solo play a problem?'), a: b('မဟုတ်ပါ — တစ်ယောက်တည်း ကစားခြင်းသည်လည်း ကျန်းမာသော ဖွံ့ဖြိုးမှုဖြစ်သည်။', 'No — solo play is also healthy.') }],
-    redFlags: [b('၃ နှစ်တွင် အခြားသူများကို လုံးဝ စိတ်မဝင်စားခြင်း သို့မဟုတ် မျက်လုံးချင်းဆုံမှု အလွန်နည်းခြင်း။', 'By 3 years: no interest in others, or very limited eye contact.')],
+    redFlags: [b('၃ နှစ်အရွယ်တွင် အခြားကလေးများကို သတိမပြုခြင်း သို့မဟုတ် ၎င်းတို့နှင့် ကစားရန် လုံးဝ မပါဝင်ခြင်း။', 'By 3 years: does not notice other children or join them to play.')],
     referral: b('လူမှုဆက်ဆံရေး စိုးရိမ်စရာ တွေ့ပါက ကလေးကျန်းမာရေးဆရာဝန်နှင့် တိုင်ပင်ပါ။', 'If concerned about social development, consult a pediatrician.'),
     encouragement: b('လူမှုကျွမ်းကျင်မှုသည် ကစားရင်း တဖြည်းဖြည်း သင်ယူရသော ကျွမ်းကျင်မှုဖြစ်သည်။', 'Social skills are learned gradually through play.'),
   }),
 
   guide('2_5y', 'emotional', {
     title: b('၂ နှစ်ခွဲ — စိတ်ခံစားမှု', '2.5 years — Emotional'),
-    why: b('မိမိခံစားချက်ကို စကားလုံးဖြင့် ဖော်ပြပြီး ထိန်းညှိနည်း သင်ယူခြင်းသည် စိတ်ကျန်းမာရေးအတွက် အရေးကြီးသည်။', 'Naming and coping with feelings is the base of emotional health.'),
+    why: b('ခံစားချက်ကို စကားလုံးဖြင့် ဖော်ပြပြီး ထိန်းညှိနည်း သင်ယူခြင်းသည် စိတ်ခံစားမှု ကျန်းမာရေးအတွက် အရေးကြီးပါသည်။', 'Learning to name and cope with feelings is important for emotional health.'),
     observationQuestions: [
       b('ခံစားမှု အနည်းငယ်ကို စကားဖြင့် ပြောပါသလား။', 'Names a few feelings?'),
       b('စိတ်တိုငိုပြီးနောက် ပြန်ငြိမ်နိုင်ပါသလား။', 'Calms down after a tantrum?'),
@@ -200,7 +200,7 @@ export const GUIDES: SeedItem[] = [
     outdoor: [b('စွမ်းအင်ထုတ်ရန် ပြေးခုန် ကစားစေပါ။', 'Let them run to release energy.')],
     lowCost: [b('မျက်နှာ ပုံ ၄ မျိုးကို ကိုယ်တိုင်ဆွဲ၍ ကစားပါ။', 'Draw four feeling faces to play with.')],
     materials: b('ခံစားမှု ကတ်ပြား/ပုံ။', 'Feeling cards or drawings.'),
-    safety: b('ကလေးစိတ်တိုစဉ် ဘေးကင်းသော နေရာတွင် ငြိမ်စေပါ။', 'Keep the child safe during big feelings.'),
+    safety: b('ကလေး စိတ်ခံစားမှု ပြင်းထန်နေစဉ် ဘေးကင်းအောင် ထားပါ။', 'Keep the child safe during big feelings.'),
     commonMistakes: [b('ခံစားမှုကို “မဖြစ်သင့်” ဟု ဆိုခြင်း — ခံစားမှုကို အသိအမှတ်ပြုပါ။', 'Dismissing feelings — acknowledge them instead.')],
     parentTips: [b('တည်ငြိမ်စွာ ရှိနေခြင်းက ကလေးကို ငြိမ်သက်ရန် သင်ပေးသည်။', 'Your calm teaches their calm.')],
     faq: [{ q: b('ကလေး စိတ်တိုပြီး ငိုကြွေးတတ်ခြင်းသည် ပုံမှန်လား။', 'Are tantrums normal?'), a: b('ဤအရွယ်တွင် မကြာခဏ တွေ့ရတတ်ပါသည်။ ကလေးသည် မိမိခံစားချက်ကို ထိန်းညှိနိုင်ရန် သင်ယူနေဆဲ ဖြစ်သည်။', 'Yes, at this age — they are practicing self-control.') }],

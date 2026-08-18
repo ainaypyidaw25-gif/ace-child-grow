@@ -144,15 +144,15 @@ const MILESTONES: SeedItem[] = [
         'Playing the same game over and over lets her predict what comes next, and that builds trust.',
       ),
     }),
-    'Imitation of gestures and enjoyment of repetitive social games near the end of the first year follow CDC and AAP milestone guidance, the NICE social and emotional wellbeing guidance and the developmental-behavioural paediatrics textbook in the registry.',
+    'Imitation of gestures and enjoyment of repetitive social games near the end of the first year follow CDC and AAP milestone guidance and the developmental-behavioural paediatrics textbook in the registry.',
   ),
   kb(
     milestone('10_12m', 'emotional', 1, {
       title: b('စိမ်းသူကို သတိထားခြင်းနှင့် ခွဲခွာချိန် ခံစားမှု', 'Stranger awareness and separation feelings'),
       observe: b('ကလေးသည် မသိသောသူကို တွေ့လျှင် သင့်ထံ ကပ်လာပါသလား။ သင် ထွက်သွားလျှင် ငိုပါသလား။', 'Does she cling to you around unfamiliar people, or cry when you leave?'),
       why: b(
-        'ဤအရွယ်တွင် စိမ်းသူကို သတိထားခြင်းနှင့် ခွဲခွာမှု စိုးရိမ်ခြင်းသည် အထွတ်အထိပ် ရောက်တတ်သည်။ ၎င်းသည် ပြဿနာ မဟုတ်ဘဲ ကလေးက သင့်ကို အထူး ယုံကြည်နေပြီဟု ပြသသော ကျန်းမာသည့် လက္ခဏာ ဖြစ်သည်။ ကလေးသည် မိမိကိုယ်ကို ငြိမ်းအောင် မလုပ်နိုင်သေး၍ လူကြီး၏ အကူအညီဖြင့် စိတ်ကို ပြန်တည်ငြိမ်စေသည်။',
-        'Stranger awareness and separation anxiety often peak now. This is not a problem — it shows she has formed a strong attachment to you. She cannot calm herself yet; she borrows an adult’s calm.',
+        'ဤအရွယ်တွင် မရင်းနှီးသူများကို သတိထားခြင်းနှင့် မိဘခွာချိန် စိတ်မသက်မသာဖြစ်ခြင်းကို တွေ့ရလေ့ရှိသော်လည်း ကလေးတစ်ဦးနှင့်တစ်ဦး ကွာခြားနိုင်ပါသည်။ ကလေးသည် စိတ်ပြန်တည်ငြိမ်ရန် လူကြီး၏ အကူအညီကို မကြာခဏ လိုအပ်သေးသည်။',
+        'Wariness of unfamiliar people and distress when a caregiver leaves are common at this age, but vary from child to child. The child may still often need an adult’s help to settle.',
       ),
       red: b(
         'နှစ်သိမ့်၍ လုံးဝ မရနိုင်အောင် ကြာရှည် ငိုခြင်း၊ လူကြီးများနှင့် ဆက်သွယ်မှု လုံးဝ မရှိခြင်း၊ သို့မဟုတ် မိဘ၏ စိတ်ဓာတ် ကျဆင်းမှုသည် နေ့စဉ်ဘဝကို ထိခိုက်နေခြင်းကို ကျန်းမာရေးဝန်ထမ်းနှင့် ဆွေးနွေးပါ။ မိဘ၏ စိတ်ကျန်းမာရေးသည်လည်း အရေးကြီးပါသည်။',
@@ -163,7 +163,7 @@ const MILESTONES: SeedItem[] = [
         'A short, predictable goodbye makes separations easier over time — slipping away quietly usually makes them harder.',
       ),
     }),
-    'Stranger awareness, peak separation anxiety and co-regulation with a caregiver at this age follow CDC and AAP milestone guidance, the AAP report on early relational health and toxic stress, the NICE social and emotional wellbeing guidance and the general paediatrics textbook in the registry.',
+    'Wariness of unfamiliar people, separation distress and caregiver-supported settling at this age follow CDC and AAP milestone guidance, the AAP report on early relational health and toxic stress and the general paediatrics textbook in the registry.',
   ),
   kb(
     milestone('10_12m', 'gross_motor', 3, {
@@ -695,7 +695,7 @@ const GUIDES_C: SeedItem[] = [
       faq: [
         {
           q: b('စိမ်းသူတွေ့ရင် အလွန် ငိုတယ် — ပြဿနာလား။', 'She cries a lot around strangers — is something wrong?'),
-          a: b('မဟုတ်ပါ။ ဤအရွယ်တွင် စိမ်းသူကို သတိထားခြင်းသည် ပုံမှန်ဖြစ်ပြီး မိဘနှင့် ခိုင်မာသော ချစ်ခင်မှု ရှိကြောင်း ပြသသည်။ အချိန်ပေးပါ၊ အနီးတွင် ရှိပေးပါ။', 'No. Stranger wariness is normal now and reflects a strong attachment to you. Give it time and stay close.'),
+          a: b('မရင်းနှီးသူကို သတိထားခြင်းသည် ဤအရွယ်တွင် တွေ့ရလေ့ရှိပြီး ရင်းနှီးသူနှင့် မရင်းနှီးသူကို ခွဲခြားသိလာခြင်းကို ပြနိုင်ပါသည်။ ကလေးတစ်ဦးနှင့်တစ်ဦး ကွာခြားသဖြင့် အချိန်ပေးပြီး အနီးတွင် ရှိပေးပါ။', 'Wariness of unfamiliar people is common at this age and may show growing recognition of familiar versus unfamiliar people. It varies between children, so give her time and stay close.'),
         },
         {
           q: b('လက်ပြခြင်း မလုပ်တတ်သေးဘူး — စိုးရိမ်ရလား။', 'She does not wave yet — should I be worried?'),
@@ -716,7 +716,7 @@ const GUIDES_C: SeedItem[] = [
         'Every time she looks back at you, she is saying that you matter to her.',
       ),
     }),
-    'Imitation, waving, turn-taking games and shared attention at 10–12 months follow CDC and AAP milestone guidance, the Nurturing Care Framework, the NICE social and emotional wellbeing guidance and AAP guidance on the power of play in the registry.',
+    'Imitation, waving, turn-taking games and shared attention at 10–12 months follow CDC and AAP milestone guidance, the Nurturing Care Framework, the Head Start early-learning framework and AAP guidance on the power of play in the registry.',
   ),
 ];
 
@@ -725,8 +725,8 @@ const GUIDES_D: SeedItem[] = [
     guide('10_12m', 'emotional', {
       title: b('၁၀ – ၁၂ လ — စိတ်ခံစားမှု ဖွံ့ဖြိုးမှု လမ်းညွှန်', '10–12 months — Emotional guide'),
       why: b(
-        'ဤအရွယ်တွင် ကလေး၏ ခံစားချက်များ ပိုမိုပြင်းထန်လာပြီး မိဘနှင့် ခွဲခွာရမည်ကို စိုးရိမ်မှုလည်း များလာတတ်သည်။ ကလေးသည် မိမိကိုယ်ကို အပြည့်အဝ မတည်ငြိမ်စေနိုင်သေးသဖြင့် ပြုစုစောင့်ရှောက်သူက ပွေ့ဖက်ခြင်း၊ နူးညံ့စွာ ပြောခြင်းနှင့် အနီးတွင် ရှိပေးခြင်းတို့ဖြင့် ကူညီပေးရသည်။ နွေးထွေးပြီး တည်ငြိမ်စွာ တုံ့ပြန်ပေးသည့် ပြုစုစောင့်ရှောက်မှုသည် ကလေး၏ စိတ်ခံစားမှု ဖွံ့ဖြိုးရေးအတွက် အရေးကြီးသည်။',
-        'Feelings run stronger now and separation anxiety often peaks. She cannot calm herself yet — she borrows an adult’s steadiness to settle, which is called co-regulation. Warm, predictable, responsive care is what builds her emotional foundation.',
+        'ကလေးသည် စိတ်ပြန်တည်ငြိမ်ရန် ပြုစုစောင့်ရှောက်သူ၏ အကူအညီကို မကြာခဏ လိုအပ်သေးသည်။ နွေးထွေးပြီး တည်ငြိမ်စွာ တုံ့ပြန်ပေးသည့် စောင့်ရှောက်မှုက စိတ်ခံစားမှု ဖွံ့ဖြိုးရေးကို အထောက်အကူပြုပါသည်။',
+        'She still often needs a caregiver’s help to settle. Warm, predictable, responsive care supports emotional development.',
       ),
       observationQuestions: [
         b('စိတ်ဆိုးလျှင် သင့်ထံ လာပြီး နှစ်သိမ့်မှု ရှာပါသလား။', 'Does she come to you for comfort when upset?'),
@@ -755,8 +755,8 @@ const GUIDES_D: SeedItem[] = [
       ],
       materials: b('မလို', 'None'),
       safety: b(
-        'ကလေးအား လှုပ်ခါခြင်းကို လုံးဝ မလုပ်ပါနှင့် — ဦးနှောက် ထိခိုက်နိုင်ပြီး အသက်အန္တရာယ် ရှိသည်။ ငိုသံ မရပ်၍ သင် အလွန် ပင်ပန်းလျှင် ကလေးကို လုံခြုံသော နေရာ (ခုတင် သို့မဟုတ် ကလေးအိပ်ရာ) တွင် ပက်လက် ချထားပြီး ခဏ ထွက်၍ အသက်ရှူပါ — ပြီးမှ ပြန်လာပါ။ မိဘ၏ စိတ်ဓာတ်ကျခြင်း သို့မဟုတ် စိုးရိမ်ပူပန်မှုသည် နှစ်ပတ်ထက် ကြာနေလျှင် ကျန်းမာရေးဝန်ထမ်းနှင့် ဆွေးနွေးပါ — ကုသမှု ရနိုင်ပါသည်။',
-        'Never shake a baby — it can cause serious brain injury and death. If crying overwhelms you, put her down safely on her back in a cot or bed, step away and breathe, then come back. If low mood or anxiety in a parent lasts more than two weeks, talk to a health worker — support and treatment are available.',
+        'ကလေးအား လုံးဝ မလှုပ်ခါပါနှင့် — ဦးနှောက် ပြင်းထန်စွာ ထိခိုက်နိုင်ပြီး သေဆုံးနိုင်သည်။ ငိုသံကြောင့် သင် အလွန် စိတ်ဖိစီးလာပါက ကလေးကို ဘေးကင်းရေးစံနှုန်းနှင့် ကိုက်ညီသော ကလေးအိပ်ရာထဲရှိ မာပြီး ပြားညီသော မွေ့ရာပေါ်တွင် ပက်လက်ချထားပါ။ တင်းကျပ်စွာ ခင်းထားသော အိပ်ရာခင်းမှလွဲ၍ အခြားအရာ မထားပါနှင့်။ ခဏခွာ၍ အသက်ရှူပြီး စိတ်တည်ငြိမ်လာသောအခါ ပြန်လာပါ။ မိဘ၏ စိတ်ဓာတ်ကျခြင်း သို့မဟုတ် စိုးရိမ်ပူပန်မှုသည် ဆက်လက်ရှိနေခြင်း၊ ပြင်းထန်ခြင်း၊ ပိုဆိုးလာခြင်း သို့မဟုတ် နေ့စဉ်ဘဝကို ထိခိုက်ခြင်း ရှိပါက ကျန်းမာရေးဝန်ထမ်းနှင့် ဆွေးနွေးပါ။',
+        'Never shake a baby—it can cause serious brain injury and death. If crying overwhelms you, place the baby on their back in a safety-approved infant sleep space on a firm, flat mattress with only a fitted sheet. Step away briefly, breathe, and return when calmer. If a parent’s low mood or anxiety persists, is severe, worsens, or affects daily life, talk to a health worker.',
       ),
       commonMistakes: [
         b('ငိုသံကို "အလိုလိုက်လွန်းမှာစိုးလို့" ဟု လျစ်လျူရှုခြင်း — ဤအရွယ်တွင် နှစ်သိမ့်ပေးခြင်းက အလိုလိုက်ခြင်း မဟုတ်ပါ။', 'Ignoring cries for fear of spoiling — comforting a baby this age is not spoiling.'),
@@ -773,13 +773,13 @@ const GUIDES_D: SeedItem[] = [
         },
         {
           q: b('မိဘဖြစ်တဲ့ ကျွန်မ ကိုယ်တိုင် စိတ်ဓာတ်ကျနေရင် ဘယ်လိုလုပ်ရမလဲ။', 'What if I as a parent feel low?'),
-          a: b('မိဘ၏ စိတ်ကျန်းမာရေးသည် ကလေး၏ ဖွံ့ဖြိုးမှုအတွက် အလွန် အရေးကြီးပါသည်။ ခံစားချက်များ နှစ်ပတ်ထက် ကြာနေလျှင် ကျန်းမာရေးဝန်ထမ်းနှင့် ဆွေးနွေးပါ။ ဤသည် အားနည်းချက် မဟုတ်ပါ — အကူအညီ ရနိုင်ပါသည်။', 'Parent mental health matters a great deal for a child’s development. If feelings last more than two weeks, talk to a health worker. This is not a weakness — help is available.'),
+          a: b('မိဘ၏ စိတ်ကျန်းမာရေးသည် ကလေး၏ ဖွံ့ဖြိုးမှုအတွက် အရေးကြီးပါသည်။ စိတ်ဓာတ်ကျခြင်း သို့မဟုတ် စိုးရိမ်ပူပန်မှုသည် ဆက်လက်ရှိနေခြင်း၊ ပြင်းထန်ခြင်း၊ ပိုဆိုးလာခြင်း သို့မဟုတ် နေ့စဉ်ဘဝကို ထိခိုက်ခြင်း ရှိပါက ကျန်းမာရေးဝန်ထမ်းနှင့် ဆွေးနွေးပါ။ ကိုယ့်ကိုယ်ကို သို့မဟုတ် ကလေးကို ထိခိုက်စေလိုသော အတွေး ရှိပါက ချက်ချင်း အကူအညီ ရယူပါ။', 'Parental mental health matters for child development. If low mood or anxiety persists, is severe, worsens, or affects daily life, talk to a health worker. If there are thoughts of harming yourself or the baby, seek help immediately.'),
         },
       ],
       redFlags: [
         b('နှစ်သိမ့်၍ လုံးဝ မရနိုင်အောင် ကြာရှည် ငိုခြင်း။', 'Crying that cannot be soothed at all.'),
         b('လူကြီးများနှင့် ဆက်သွယ်မှု လုံးဝ မရှိခြင်း သို့မဟုတ် ခံစားချက် လုံးဝ မပြသခြင်း။', 'No interest in connecting with adults, or no expressed feelings at all.'),
-        b('မိဘ၏ စိတ်ဓာတ်ကျမှု သို့မဟုတ် ကလေးအား ထိခိုက်စေမည့် အတွေးများ ပေါ်လာခြင်း။', 'A parent’s low mood, or thoughts of harming themselves or the baby.'),
+        b('မိဘ၏ စိတ်ဓာတ်ကျခြင်း သို့မဟုတ် စိုးရိမ်ပူပန်မှု ဆက်လက်ရှိနေခြင်း သို့မဟုတ် ကိုယ့်ကိုယ်ကို/ကလေးကို ထိခိုက်စေလိုသော အတွေးများ ပေါ်လာခြင်း။', 'Persistent parental low mood or anxiety, or thoughts of harming themselves or the baby.'),
       ],
       referral: b(
         'ဤအချက်များကို ကျန်းမာရေးဝန်ထမ်းနှင့် အမြန်ဆုံး ဆွေးနွေးပါ။ မိမိကိုယ်ကို သို့မဟုတ် ကလေးအား ထိခိုက်စေမည့် အတွေးများ ရှိပါက ချက်ချင်း အကူအညီ တောင်းပါ။ ဤသည် ရောဂါ ဖော်ထုတ်ချက် မဟုတ်ပါ။',
@@ -790,7 +790,7 @@ const GUIDES_D: SeedItem[] = [
         'Your steady presence is the strongest emotional protection she has.',
       ),
     }),
-    'Co-regulation, peak separation anxiety and the place of responsive care follow the AAP report on early relational health and toxic stress, the Nurturing Care Framework, the NICE postnatal care guideline, the NICE social and emotional wellbeing guidance and the general paediatrics textbook in the registry.',
+    'Caregiver-supported settling and responsive care follow the AAP report on early relational health and toxic stress, the Nurturing Care Framework, the NICE postnatal care guideline, the Head Start early-learning framework and the general paediatrics textbook in the registry.',
   ),
   kb(
     guide('10_12m', 'self_help', {

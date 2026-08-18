@@ -1,11 +1,15 @@
 import { describe, expect, it, vi } from 'vitest';
 import {
   preflightDuplicateMilestoneRetirement,
+  preflightSocialEmotionalMilestoneRetirement,
   retireDuplicateMilestones,
+  retireSocialEmotionalMilestones,
 } from '../../../convex/seed';
 import {
   DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID,
   DUPLICATE_MILESTONE_SLUGS,
+  SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_RELEASE_ID,
+  SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_TARGETS,
 } from '../../../convex/lib/contentRetirements';
 
 type Row = Record<string, unknown> & { _id: string };
@@ -153,5 +157,123 @@ describe('duplicate milestone retirement release', () => {
     });
     expect(context.db.patch).not.toHaveBeenCalled();
     expect(context.db.insert).not.toHaveBeenCalled();
+  });
+});
+
+function socialEmotionalRows(overrides: Partial<Row> = {}): Row[] {
+  return SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_TARGETS.map((target, index) => ({
+    _id: `social-emotional-${index + 1}`,
+    slug: target.slug,
+    titleEn: target.slug,
+    clinicalStatus: target.expectedClinicalStatus,
+    reviewRevision: target.expectedReviewRevision,
+    ...overrides,
+  }));
+}
+
+describe('social-emotional milestone retirement release', () => {
+  it('preflights only the four fixed production preimages without writing', async () => {
+    const rows = socialEmotionalRows();
+    const firstSlug = SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_TARGETS[0].slug;
+    const context = retirementContext({
+      libraryContent: rows,
+      libraryMedia: [{ _id: 'social-media-1', contentSlug: firstSlug }],
+      evidenceLinks: [{ _id: 'social-link-1', slug: firstSlug }],
+    });
+    const result = await handler(preflightSocialEmotionalMilestoneRetirement)(context, {
+      releaseId: SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_RELEASE_ID,
+    }) as Array<Record<string, unknown>>;
+
+    expect(result.map((row) => row.slug)).toEqual(
+      SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_TARGETS.map((target) => target.slug),
+    );
+    expect(result.map((row) => row.clinicalStatus)).toEqual([
+      'published',
+      'clinical_review',
+      'clinical_review',
+      'clinical_review',
+    ]);
+    expect(result.map((row) => row.reviewRevision)).toEqual([1, 2, 2, 1]);
+    expect(result.every((row) => row.exactState === true)).toBe(true);
+    expect(result[0]).toMatchObject({ mediaRows: 1, evidenceLinkRows: 1 });
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalled();
+  });
+
+  it('archives the exact four rows atomically and audits each status transition', async () => {
+    const context = retirementContext({ libraryContent: socialEmotionalRows() });
+    await expect(handler(retireSocialEmotionalMilestones)(context, {
+      releaseId: SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_RELEASE_ID,
+    })).resolves.toEqual({
+      retired: 4,
+      alreadyRetired: 0,
+      publishedWithdrawn: 1,
+      unpublishedArchived: 3,
+      total: 4,
+    });
+
+    expect(context.db.patch).toHaveBeenCalledTimes(4);
+    expect(context.db.insert).toHaveBeenCalledTimes(4);
+    for (const [index, target] of SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_TARGETS.entries()) {
+      expect(context.db.patch).toHaveBeenCalledWith(`social-emotional-${index + 1}`, expect.objectContaining({
+        clinicalStatus: 'archived',
+        reviewerId: undefined,
+        reviewNote: `Retired by ${SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_RELEASE_ID}`,
+      }));
+      expect(context.db.insert).toHaveBeenCalledWith('auditLogs', expect.objectContaining({
+        action: 'library.social_emotional_milestone.retired',
+        summary: `${SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_RELEASE_ID} · ${target.slug}`,
+      }));
+    }
+  });
+
+  it('aborts before every write when a target revision or status changed', async () => {
+    const staleRevision = socialEmotionalRows();
+    staleRevision[3] = { ...staleRevision[3], reviewRevision: 9 };
+    const revisionContext = retirementContext({ libraryContent: staleRevision });
+    await expect(handler(retireSocialEmotionalMilestones)(revisionContext, {
+      releaseId: SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_RELEASE_ID,
+    })).rejects.toThrow('newer review revision');
+    expect(revisionContext.db.patch).not.toHaveBeenCalled();
+    expect(revisionContext.db.insert).not.toHaveBeenCalled();
+
+    const changedStatus = socialEmotionalRows();
+    changedStatus[1] = { ...changedStatus[1], clinicalStatus: 'published' };
+    const statusContext = retirementContext({ libraryContent: changedStatus });
+    await expect(handler(retireSocialEmotionalMilestones)(statusContext, {
+      releaseId: SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_RELEASE_ID,
+    })).rejects.toThrow('unexpected status');
+    expect(statusContext.db.patch).not.toHaveBeenCalled();
+    expect(statusContext.db.insert).not.toHaveBeenCalled();
+  });
+
+  it('accepts only this release archive as an idempotent replay', async () => {
+    const correctRows = socialEmotionalRows({
+      clinicalStatus: 'archived',
+      reviewNote: `Retired by ${SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_RELEASE_ID}`,
+    });
+    const context = retirementContext({ libraryContent: correctRows });
+    await expect(handler(retireSocialEmotionalMilestones)(context, {
+      releaseId: SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_RELEASE_ID,
+    })).resolves.toEqual({
+      retired: 0,
+      alreadyRetired: 4,
+      publishedWithdrawn: 0,
+      unpublishedArchived: 0,
+      total: 4,
+    });
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalled();
+
+    const foreignRows = socialEmotionalRows({
+      clinicalStatus: 'archived',
+      reviewNote: 'Retired by another release',
+    });
+    const foreignContext = retirementContext({ libraryContent: foreignRows });
+    await expect(handler(retireSocialEmotionalMilestones)(foreignContext, {
+      releaseId: SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_RELEASE_ID,
+    })).rejects.toThrow('archived outside this release');
+    expect(foreignContext.db.patch).not.toHaveBeenCalled();
+    expect(foreignContext.db.insert).not.toHaveBeenCalled();
   });
 });

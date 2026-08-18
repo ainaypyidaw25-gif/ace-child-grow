@@ -122,7 +122,7 @@ const MILESTONES: SeedItem[] = [
         'Use skin-to-skin daily, and ask for help so you get rest too.',
       ),
     }),
-    'Early soothing and responsive caregiving at this age follow CDC and AAP milestone guidance, the AAP developmental-surveillance report, NICE guidance on social and emotional wellbeing and the AAP report on early relationships and toxic stress in the registry; the "cannot be roused / floppy" wording is kept deliberately conservative and directs parents to a health worker rather than describing a diagnosis.',
+    'Early soothing and responsive caregiving at this age follow CDC and AAP milestone guidance, the AAP developmental-surveillance report and the AAP report on early relationships and toxic stress in the registry; the "cannot be roused / floppy" wording is kept deliberately conservative and directs parents to a health worker rather than describing a diagnosis.',
   ),
   kb(
     milestone('birth_2m', 'play', 1, {
@@ -453,7 +453,7 @@ const GUIDES_B: SeedItem[] = [
       ),
       encouragement: b('သင်နှင့် ကလေး၏ ဆက်ဆံရေးသည် အကောင်းဆုံး သင်ခန်းစာ ဖြစ်သည်။', 'Your relationship is your baby’s best classroom.'),
     }),
-    'Face preference, the timing range for a social smile and postnatal parental mental-health support follow CDC milestone guidance, the WHO nurturing care framework, NICE postnatal care guidance and NICE guidance on social and emotional wellbeing in the registry.',
+    'Face preference, the timing range for a social smile and postnatal parental mental-health support follow CDC milestone guidance, the WHO nurturing care framework, NICE postnatal care guidance and the Head Start early-learning framework in the registry.',
   ),
 ];
 

@@ -479,6 +479,32 @@ export const WHO_UNICEF_SOURCES: EvidenceSource[] = [
 ];
 
 // ---------------------------------------------------------------------------
+// Government early-childhood frameworks.
+// ---------------------------------------------------------------------------
+
+export const GOVERNMENT_SOURCES: EvidenceSource[] = [
+  s({
+    id: 'us-hhs-head-start-elof-2015',
+    org: 'U.S. Department of Health and Human Services, Administration for Children and Families, Office of Head Start',
+    orgKey: 'GOV',
+    title: 'Head Start Early Learning Outcomes Framework: Ages Birth to Five',
+    authors:
+      'U.S. Department of Health and Human Services, Administration for Children and Families, Office of Head Start',
+    year: 2015,
+    country: 'United States',
+    url: 'https://headstart.gov/sites/default/files/pdf/elof-ohs-framework.pdf',
+    evidenceLevel: 'expert_consensus',
+    keywords: ['early learning outcomes', 'social development', 'emotional development', 'school readiness'],
+    topics: ['milestones', 'social_emotional', 'parenting', 'school_readiness', 'play'],
+    ageMonthsMin: 0,
+    ageMonthsMax: 60,
+    verifiedOn: '2026-08-18',
+    verifiedNote:
+      'The official Head Start PDF cover prints this title, 2015 and the Office of Head Start corporate body. The framework describes overlapping developmental progressions from birth through 60 months and explicitly says it is not an assessment tool or checklist and must not be used to conclude that a child has failed or is not ready.',
+  }),
+];
+
+// ---------------------------------------------------------------------------
 // American Academy of Pediatrics — policy statements and clinical reports.
 // Every DOI and PMID below was read from the PubMed record at the recorded URL.
 // ---------------------------------------------------------------------------
@@ -1161,6 +1187,23 @@ export const CDC_SOURCES: EvidenceSource[] = [
 
 export const HEALTHYCHILDREN_SOURCES: EvidenceSource[] = [
   s({
+    id: 'hc-mental-emotional-development-2026',
+    org: 'HealthyChildren.org (American Academy of Pediatrics)',
+    orgKey: 'HealthyChildren',
+    title: 'Healthy Mental & Emotional Development: 4 Key Building Blocks',
+    year: 2026,
+    country: 'United States',
+    url: 'https://www.healthychildren.org/English/healthy-living/emotional-wellness/Building-Resilience/Pages/healthy-mental-and-emotional-development-in-children-key-building-blocks.aspx',
+    evidenceLevel: 'parent_education',
+    keywords: ['emotional development', 'naming feelings', 'validation', 'friendship', 'self-regulation'],
+    topics: ['social_emotional', 'mental_health', 'parenting'],
+    ageMonthsMin: null,
+    ageMonthsMax: null,
+    verifiedOn: '2026-08-18',
+    verifiedNote:
+      'HealthyChildren.org page prints this title, “Last Updated 4/27/2026” and “Source: American Academy of Pediatrics.” It describes naming and validating feelings, calming skills, empathy and supportive relationships, with examples spanning young children through adolescence.',
+  }),
+  s({
     id: 'hc-safe-sleep-2026',
     org: 'HealthyChildren.org (American Academy of Pediatrics)',
     orgKey: 'HealthyChildren',
@@ -1452,9 +1495,10 @@ export const NICE_SOURCES: EvidenceSource[] = [
     keywords: ['social wellbeing', 'emotional wellbeing', 'early years', 'home visiting'],
     topics: ['social_emotional', 'mental_health', 'parenting'],
     ageMonthsMin: 0,
-    ageMonthsMax: 60,
+    ageMonthsMax: 59,
+    verifiedOn: '2026-08-18',
     verifiedNote:
-      'NICE page for PH40 prints this title and "Published: 24 October 2012". The page prints no "Last updated" field; it prints a separate "Last reviewed: 21 December 2017" line, which is not recorded as an update.',
+      'NICE overview page prints the title, “Public health guideline”, “Reference number: PH40”, “Published: 24 October 2012”, and “Last reviewed: 21 December 2017”. It states that no new evidence affects the recommendations and that review will occur if new evidence is likely to change them. The overview scopes the guideline to supporting the social and emotional wellbeing of vulnerable children under 5 through home visiting, childcare and early education.',
   }),
 ];
 
@@ -2621,6 +2665,7 @@ export const ASSOCIATION_SOURCES: EvidenceSource[] = [
 
 export const EVIDENCE_SOURCES: EvidenceSource[] = [
   ...WHO_UNICEF_SOURCES,
+  ...GOVERNMENT_SOURCES,
   ...AAP_SOURCES,
   ...CDC_SOURCES,
   ...HEALTHYCHILDREN_SOURCES,

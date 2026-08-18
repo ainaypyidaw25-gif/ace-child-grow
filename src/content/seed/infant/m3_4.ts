@@ -89,24 +89,6 @@ const MILESTONES: SeedItem[] = [
     }),
     'Sleep amounts at 4–11 months follow WHO physical activity and sleep guidance for under-5s; the safe-sleep points follow AAP safe-sleep guidance and NHS guidance on reducing the risk of sudden infant death in the registry, and the urgent-symptom wording is kept conservative and directs parents to a health worker.',
   ),
-  kb(
-    milestone('3_4m', 'social', 2, {
-      title: b('ရိုးရှင်းသော မျက်နှာအမူအရာများကို လိုက်လံ အတုယူပြုမူခြင်း', 'Mimics simple facial expressions'),
-      observe: b(
-        'မိဘက လျှာထုတ်ပြသည့်အခါ သို့မဟုတ် ပါးစပ်ကို အကျယ်ကြီး ဖွင့်ပြသည့်အခါ ကလေးငယ်က လိုက်လံ အတုယူလုပ်ဆောင်ရန် ကြိုးစားပါသလား။',
-        'If you stick out your tongue or open your mouth wide, does your baby try to copy it?',
-      ),
-      why: b(
-        'မျက်နှာအမူအရာကို အတုယူခြင်းသည် မိဘနှင့် အာရုံစိုက်မှုကို အတူတကွ မျှဝေနိုင်စွမ်းနှင့် အပြန်အလှန် ဆက်သွယ်ပြောဆိုမှု၏ အစောပိုင်း လက္ခဏာတစ်ခု ဖြစ်ပါသည်။',
-        'Imitating a face is an early sign of shared attention and back-and-forth communication with a caregiver.',
-      ),
-      encouragement: b(
-        'ကလေးငယ်၏ မျက်နှာအနီးတွင် ရိုးရှင်းသော မျက်နှာအမူအရာလေးများကို ဖြည်းဖြည်းချင်း ပြသပေးပြီး ကလေးငယ်က မည်သို့ တုံ့ပြန်အတုယူသည်ကို စိတ်ရှည်စွာ စောင့်ကြည့်ပါ။',
-        'Make slow, simple faces close to your baby and pause to see if they try to copy you.',
-      ),
-    }),
-    'Early face imitation in infants is described in the WHO Care for Child Development counselling materials and the responsive-caregiving research in the registry.',
-  ),
 ];
 
 // --- Guides ----------------------------------------------------------------
@@ -334,7 +316,7 @@ const GUIDES_B: SeedItem[] = [
       title: b('၃ – ၄ လ — လူမှုဆက်ဆံရေး လမ်းညွှန်', '3–4 months — Social guide'),
       why: b(
         'ဤအရွယ်တွင် ကလေးသည် လူတစ်ဦး၏ မျက်နှာနှင့်အသံကို တုံ့ပြန်ပြီး ပြုံးတတ်လာသည်။ ရင်းနှီးသောမျက်နှာများကို ပိုမိုမှတ်မိလာပြီး လူများနှင့် အတူနေရသည်ကို နှစ်သက်တတ်သည်။ တစ်ယောက်တည်း ကျန်ခဲ့လျှင် ငိုခြင်းသည် အလိုလိုက်လွန်းခြင်းကြောင့် မဟုတ်ဘဲ ပြုစုစောင့်ရှောက်သူနှင့် ချိတ်ဆက်မှု ဖွံ့ဖြိုးနေခြင်းကြောင့် ဖြစ်နိုင်သည်။',
-        'Babies now smile at people — the social smile. They recognise familiar faces and enjoy company. Crying when left alone is not spoiling; it is attachment developing.',
+        'Babies now smile at people — the social smile. They recognise familiar faces and enjoy company. Crying when left alone is not spoiling; it may reflect developing attachment to a caregiver.',
       ),
       observationQuestions: [
         b('သင့်မျက်နှာကို မြင်လျှင် ပြုံးပါသလား။', 'Does she smile when she sees your face?'),
