@@ -22,8 +22,15 @@ import { v, type Infer } from 'convex/values';
 import type { Id } from './_generated/dataModel';
 import { getAuthUserId } from '@convex-dev/auth/server';
 import { hasStaffRole, requireEvidenceEditor, requireProfessionalPublisher } from './lib/auth';
-import { isPubliclyReadableStatus } from './library';
 import { logAudit } from './audit';
+import {
+  evidenceDateValidationProblem,
+  evidenceIsExpired,
+  evidenceIsOutdated,
+  todayIsoUtc,
+} from './lib/evidenceFreshness';
+import { publicationEvidenceIsCurrent } from './lib/evidencePublicationGate';
+import { contentIsParentReadable } from './lib/publicationVisibility';
 
 const REVIEW_STATUSES = [
   'evidence_required',
@@ -32,38 +39,6 @@ const REVIEW_STATUSES = [
   'approved',
   'retired',
 ] as const;
-
-// Staleness rules, mirrored from src/evidence/types.ts so the live integrity
-// probe classifies a stored row exactly as the local reports classify the same
-// record. They are duplicated rather than imported because a Convex function
-// bundle should not reach into the browser source tree; a test compares the two
-// tables field by field, so a change on either side fails CI rather than
-// producing two different answers to "is this reference expired".
-const REVIEW_CADENCE_MONTHS: Record<string, number> = {
-  guideline: 24,
-  parent_education: 24,
-  expert_consensus: 36,
-  systematic_review: 48,
-  rct: 60,
-  cohort: 60,
-  textbook: 60,
-};
-const OUTDATED_AFTER_YEARS: Record<string, number> = {
-  guideline: 8,
-  parent_education: 5,
-  expert_consensus: 10,
-  systematic_review: 10,
-  rct: 20,
-  cohort: 20,
-  textbook: 12,
-};
-
-function addMonthsIso(isoDate: string, months: number): string {
-  const d = new Date(`${isoDate}T00:00:00Z`);
-  if (Number.isNaN(d.getTime())) return isoDate;
-  d.setUTCMonth(d.getUTCMonth() + months);
-  return d.toISOString().slice(0, 10);
-}
 
 const sourceValidator = v.object({
   id: v.string(),
@@ -165,20 +140,34 @@ function sameSource(existing: Record<string, unknown>, next: Record<string, unkn
 export function publishedSlugsWithoutApprovedEvidence(
   publishedSlugs: readonly string[],
   links: readonly { slug: string; sourceIds: readonly string[] }[],
-  sources: readonly { sourceId: string; reviewStatus: string }[],
+  sources: readonly {
+    sourceId: string;
+    reviewStatus: string;
+    evidenceLevel: string;
+    year: number | null;
+    reviewDate?: string | null;
+    nextReviewDate: string | null;
+    verifiedOn: string | null;
+  }[],
+  todayIso: string,
 ): string[] {
-  const approvedSourceIds = new Set(
-    sources
-      .filter((source) => source.reviewStatus === 'approved')
-      .map((source) => source.sourceId),
-  );
-  const approvedSlugs = new Set(
-    links
-      .filter((link) => link.sourceIds.some((sourceId) => approvedSourceIds.has(sourceId)))
-      .map((link) => link.slug),
-  );
+  const sourceById = new Map(sources.map((source) => [source.sourceId, source]));
   return [...publishedSlugs]
-    .filter((slug) => !approvedSlugs.has(slug))
+    .filter((slug) => {
+      const sourceIds = [...new Set(
+        links.filter((link) => link.slug === slug).flatMap((link) => [...link.sourceIds]),
+      )];
+      if (sourceIds.length === 0) return true;
+      let currentApproved = 0;
+      for (const sourceId of sourceIds) {
+        const source = sourceById.get(sourceId);
+        if (!source || source.reviewStatus === 'retired') return true;
+        if (source.reviewStatus !== 'approved') continue;
+        if (!publicationEvidenceIsCurrent(source, todayIso)) return true;
+        currentApproved += 1;
+      }
+      return currentApproved === 0;
+    })
     .sort((a, b) => a.localeCompare(b));
 }
 
@@ -319,7 +308,7 @@ export const forContent = query({
         .query('libraryContent')
         .withIndex('by_slug', (qq) => qq.eq('slug', args.slug))
         .unique();
-      if (content && !isPubliclyReadableStatus(content.clinicalStatus)) {
+      if (content && !(await contentIsParentReadable(ctx, content))) {
         return { allowed: true as const, sources: [] };
       }
     }
@@ -336,7 +325,11 @@ export const forContent = query({
         .withIndex('by_source_id', (qq) => qq.eq('sourceId', id))
         .unique();
       // Parents only ever see a citation that a human approved.
-      if (src && src.reviewStatus === 'approved') {
+      if (
+        src
+        && src.reviewStatus === 'approved'
+        && (staff || publicationEvidenceIsCurrent(src, todayIsoUtc()))
+      ) {
         const {
           sourceId, org, title, authors, year, edition, country, language,
           url, doi, isbn, pmid, evidenceLevel,
@@ -431,6 +424,8 @@ async function applySources(
     seen.add(id);
 
     try {
+      const incomingDateProblem = evidenceDateValidationProblem(rest, todayIsoUtc());
+      if (incomingDateProblem) throw new Error(`Invalid evidence dates: ${incomingDateProblem}`);
       const existing = await ctx.db
         .query('evidenceSources')
         .withIndex('by_source_id', (qq) => qq.eq('sourceId', id))
@@ -452,6 +447,10 @@ async function applySources(
           reviewScope: existing.reviewScope,
           searchText,
         };
+        const preservedDateProblem = evidenceDateValidationProblem(next, todayIsoUtc());
+        if (preservedDateProblem) {
+          throw new Error(`Invalid preserved evidence dates: ${preservedDateProblem}`);
+        }
         // 'updated' should mean something changed. Counting an identical
         // re-import as an update makes an idempotent run look like a rewrite
         // of all 90 records, which is exactly the thing an operator is
@@ -664,8 +663,16 @@ export function reviewRefusal(
     reviewer: string;
     reviewerQualification: string;
     reviewDate: string;
+    nextReviewDate?: string;
   },
-  row: { reviewStatus: string } | null,
+  row: {
+    reviewStatus: string;
+    evidenceLevel?: string;
+    year?: number | null;
+    verifiedOn?: string | null;
+    reviewDate?: string | null;
+    nextReviewDate?: string | null;
+  } | null,
 ): { code: string; message: string } | null {
   if (!(REVIEW_STATUSES as readonly string[]).includes(args.status)) {
     return { code: 'unknown_status', message: `Unknown review status: ${args.status}` };
@@ -681,6 +688,23 @@ export function reviewRefusal(
   if (!args.reviewDate.trim()) {
     return { code: 'review_date_required', message: 'A review date is required' };
   }
+  const dateProblem = evidenceDateValidationProblem({
+    verifiedOn: null,
+    reviewDate: args.reviewDate,
+    nextReviewDate: args.nextReviewDate ?? null,
+  }, todayIsoUtc());
+  if (dateProblem === 'review_date_invalid') {
+    return { code: dateProblem, message: 'Review date must be a real date in YYYY-MM-DD format' };
+  }
+  if (dateProblem === 'review_date_future') {
+    return { code: dateProblem, message: 'Review date cannot be in the future' };
+  }
+  if (dateProblem === 'next_review_date_invalid') {
+    return { code: dateProblem, message: 'Next review date must be a real date in YYYY-MM-DD format' };
+  }
+  if (dateProblem === 'next_review_date_before_anchor') {
+    return { code: dateProblem, message: 'Next review date cannot be before the review date' };
+  }
   if (!row) {
     return { code: 'not_found', message: 'Reference not found' };
   }
@@ -690,6 +714,47 @@ export function reviewRefusal(
       message:
         'This reference is marked evidence_required: its metadata could not be verified against the publisher page. Fix and re-import before approving.',
     };
+  }
+  if (args.status === 'approved') {
+    if (!row.verifiedOn || !row.evidenceLevel || row.year === undefined) {
+      return {
+        code: 'source_metadata_incomplete',
+        message: 'Reference verification metadata is incomplete; re-import a verified source before approving',
+      };
+    }
+    const storedDateProblem = evidenceDateValidationProblem({
+      verifiedOn: row.verifiedOn,
+      reviewDate: row.reviewDate ?? null,
+      nextReviewDate: row.nextReviewDate ?? null,
+    }, todayIsoUtc());
+    if (storedDateProblem) {
+      return {
+        code: 'source_date_invalid',
+        message: `Reference date metadata is invalid: ${storedDateProblem}`,
+      };
+    }
+    if (row.nextReviewDate && row.nextReviewDate < todayIsoUtc()) {
+      return {
+        code: 'source_review_overdue',
+        message: 'The publisher or prior review date is overdue; refresh the source metadata before approving',
+      };
+    }
+    if (evidenceIsOutdated({ evidenceLevel: row.evidenceLevel, year: row.year }, todayIsoUtc())) {
+      return {
+        code: 'source_outdated',
+        message: 'The source is outside the current evidence-age policy; find or verify a newer source',
+      };
+    }
+    if (
+      row.nextReviewDate
+      && args.nextReviewDate
+      && args.nextReviewDate > row.nextReviewDate
+    ) {
+      return {
+        code: 'next_review_exceeds_source_due',
+        message: 'A reviewer cannot extend the publisher or existing source review deadline',
+      };
+    }
   }
   return null;
 }
@@ -756,7 +821,7 @@ export const setReview = mutation({
       reviewer: reviewArgs.reviewer.trim(),
       reviewerQualification: reviewArgs.reviewerQualification.trim(),
       reviewDate: args.reviewDate,
-      nextReviewDate: args.nextReviewDate ?? row.nextReviewDate,
+      nextReviewDate: row.nextReviewDate ?? args.nextReviewDate ?? null,
       reviewNote: args.note,
       reviewerId: userId,
       reviewScope: approval?.scope,
@@ -807,6 +872,7 @@ export const reviewGate = internalQuery({
     reviewer: v.string(),
     reviewerQualification: v.string(),
     reviewDate: v.string(),
+    nextReviewDate: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const row = await ctx.db
@@ -950,6 +1016,7 @@ export const integrity = internalQuery({
       publishedContent.map((content) => content.slug),
       links,
       sources,
+      today,
     );
 
     // A reference nothing cites is either a link that was never made or a
@@ -986,18 +1053,9 @@ export const integrity = internalQuery({
     // because it is old.
     const expired: string[] = [];
     const outdated: string[] = [];
-    const thisYear = Number(today.slice(0, 4));
     for (const s of sources) {
-      const due =
-        s.nextReviewDate ??
-        ((s.reviewDate ?? s.verifiedOn)
-          ? addMonthsIso(
-              (s.reviewDate ?? s.verifiedOn) as string,
-              REVIEW_CADENCE_MONTHS[s.evidenceLevel] ?? 24,
-            )
-          : null);
-      if (!due || due < today) expired.push(s.sourceId);
-      if (s.year === null || thisYear - s.year > (OUTDATED_AFTER_YEARS[s.evidenceLevel] ?? 8)) {
+      if (evidenceIsExpired(s, today)) expired.push(s.sourceId);
+      if (evidenceIsOutdated(s, today)) {
         outdated.push(s.sourceId);
       }
     }

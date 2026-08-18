@@ -2,6 +2,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 const librarySource = readFileSync('convex/library.ts', 'utf8');
+const visibilitySource = readFileSync('convex/lib/publicationVisibility.ts', 'utf8');
 const workflowSource = readFileSync('convex/content.ts', 'utf8');
 const releaseSource = readFileSync('convex/release.ts', 'utf8');
 const libraryAdminSource = readFileSync('src/screens/LibraryAdmin.tsx', 'utf8');
@@ -14,6 +15,21 @@ describe('risk-scoped publication gate', () => {
     expect(librarySource).toContain('specialist review limited to emergency wording');
     expect(librarySource).toContain('await requireProfessionalPublisher(ctx)');
     expect(librarySource).toContain('await requireClinicalPublisher(ctx)');
+  });
+
+  it('requires the latest decision for every current-revision dimension', () => {
+    expect(librarySource).toContain("withIndex('by_content_dimension_version'");
+    expect(librarySource).toContain('.take(1)');
+    expect(librarySource).toContain("latestDecision?.decision !== 'approved'");
+    expect(librarySource).not.toContain(".filter((row) => row.contentVersion === revision && row.decision === 'approved')");
+  });
+
+  it('requires a current approved evidence source and rejects broken evidence links', () => {
+    expect(visibilitySource).toContain("withIndex('by_kind_slug'");
+    expect(visibilitySource).toContain("withIndex('by_source_id'");
+    expect(visibilitySource).toContain('evaluatePublicationEvidence(');
+    expect(librarySource).toContain('publicationEvidenceForContent(ctx, item)');
+    expect(librarySource).toContain('Evidence is not ready for publication');
   });
 
   it('applies the same risk scope to the legacy workflow', () => {
@@ -47,9 +63,9 @@ describe('risk-scoped publication gate', () => {
   });
 
   it('shows only published library rows to parents while staff can inspect review states', () => {
-    expect(librarySource).toContain("return status === 'published'");
-    expect(librarySource).toContain('isPubliclyReadableStatus(r.clinicalStatus)');
-    expect(librarySource).toContain('!isPubliclyReadableStatus(item.clinicalStatus)');
+    expect(visibilitySource).toContain("return status === 'published'");
+    expect(librarySource).toContain('filterParentReadableContent(ctx, rows)');
+    expect(librarySource).toContain('contentIsParentReadable(ctx, item)');
   });
 
   it('automatically withdraws offline rows and media from a complete live publication manifest', () => {
@@ -69,7 +85,7 @@ describe('risk-scoped publication gate', () => {
 
   it('does not allow parents to complete an unpublished activity', () => {
     const activitiesSource = readFileSync('convex/activities.ts', 'utf8');
-    expect(activitiesSource).toContain("content.clinicalStatus !== 'published'");
+    expect(activitiesSource).toContain('contentIsParentReadable(ctx, content)');
   });
 
   it('keeps the retired bulk-publication endpoints retired across every convex module', () => {

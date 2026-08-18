@@ -386,7 +386,7 @@ export function ContentDetail() {
             {L('ဤအက်ပ်သည် ရောဂါ မဖော်ထုတ်ပါ။ စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။',
                'This app does not diagnose. If concerned, consult a professional.')}
           </div>
-          {list('strengths').length > 0 && <Section title={L('အားသာချက်များ', 'Strengths')}><Bullets items={list('strengths')} /></Section>}
+          {list('strengths').length > 0 && <Section title={L('ကလေးတစ်ဦးချင်းအလိုက် တွေ့နိုင်သော အားသာချက်များ (ကလေးတိုင်းတွင် တူညီမည် မဟုတ်ပါ)', 'Possible individual strengths (not shared by every child)')}><Bullets items={list('strengths')} /></Section>}
           {list('possibleSigns').length > 0 && <Section title={L('သတိပြုမိနိုင်သည့် အချက်များ (ရောဂါသတ်မှတ်ချက် မဟုတ်ပါ)', 'Possible signs (not a diagnosis)')}><Bullets items={list('possibleSigns')} /></Section>}
           {Array.isArray(d.myths) && (d.myths as { myth: BL; fact: BL }[]).length > 0 && (
             <Section title={L('အယူအဆမှားနှင့် အမှန်', 'Myths vs Facts')}>

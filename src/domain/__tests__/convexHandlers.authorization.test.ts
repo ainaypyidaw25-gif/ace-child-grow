@@ -32,23 +32,25 @@ function ctx(options: {
     : table === 'activityCompletions' ? 'completion-1' : 'insert-1');
   const query = vi.fn((table: string) => {
     const rows = options.rows?.[table] ?? [];
+    const clauses: Array<[string, unknown]> = [];
+    const matching = () => rows.filter((row) =>
+      clauses.every(([field, value]) => row[field] === value));
     const terminal: {
       collect: () => Promise<Row[]>;
       take: (count: number) => Promise<Row[]>;
       unique: () => Promise<Row | null>;
       order?: (direction: 'asc' | 'desc') => unknown;
     } = {
-      collect: async () => rows,
-      take: async (count: number) => rows.slice(0, count),
-      unique: async () => table === 'parentProfiles' ? options.profile ?? null : rows[0] ?? null,
+      collect: async () => matching(),
+      take: async (count: number) => matching().slice(0, count),
+      unique: async () => table === 'parentProfiles' ? options.profile ?? null : matching()[0] ?? null,
     };
     terminal.order = () => terminal;
     return {
       ...terminal,
       withIndex: (_name: string, callback: (q: { eq: (field: string, value: unknown) => unknown }) => unknown) => {
         const q = { eq: (field: string, value: unknown): unknown => {
-          void field;
-          void value;
+          clauses.push([field, value]);
           return q;
         } };
         callback(q);
@@ -65,6 +67,17 @@ function ctx(options: {
       insert,
     },
     storage: {},
+  };
+}
+
+function approvedEvidenceRows(slug: string, kind = 'guide'): Record<string, Row[]> {
+  return {
+    evidenceLinks: [{ kind, slug, sourceIds: ['approved-current-source'] }],
+    evidenceSources: [{
+      _id: 'evidence-1', sourceId: 'approved-current-source', reviewStatus: 'approved',
+      evidenceLevel: 'guideline', year: 2025, reviewDate: '2026-08-01',
+      nextReviewDate: '2028-08-01', verifiedOn: '2026-08-01',
+    }],
   };
 }
 
@@ -123,7 +136,10 @@ describe('Convex registered handlers enforce authorization', () => {
     };
     const context = ctx({
       profile: { userId: 'user-1', isStaff: false },
-      rows: { libraryContent: [published, reviewPending, archived] },
+      rows: {
+        libraryContent: [published, reviewPending, archived],
+        ...approvedEvidenceRows('safe-public', 'activity'),
+      },
     });
     const result = await handler(listByType)(context, { type: 'activity' });
     expect(result).toEqual({ staff: false, items: [published] });
@@ -223,10 +239,11 @@ describe('Convex registered handlers enforce authorization', () => {
         staffQualification: 'MEd Early Childhood Education', displayName: 'Education Owner',
       },
       rows: {
-        libraryContent: [{ _id: 'content-1', slug: 'ordinary-parent-guide', titleEn: 'Play together', reviewRevision: 1 }],
+        libraryContent: [{ _id: 'content-1', type: 'guide', slug: 'ordinary-parent-guide', titleEn: 'Play together', reviewRevision: 1 }],
         contentReviews: ['english', 'native_myanmar', 'evidence', 'safety'].map((dimension) => ({
           contentSlug: 'ordinary-parent-guide', contentVersion: 1, dimension, decision: 'approved',
         })),
+        ...approvedEvidenceRows('ordinary-parent-guide'),
       },
     });
     await expect(handler(setLibraryReview)(context, {
@@ -245,10 +262,11 @@ describe('Convex registered handlers enforce authorization', () => {
         staffQualification: 'MBBS, MMedSc (Paediatrics)', displayName: 'Clinical Reviewer',
       },
       rows: {
-        libraryContent: [{ _id: 'content-1', slug: 'ordinary-parent-guide', titleEn: 'Play together', reviewRevision: 1 }],
+        libraryContent: [{ _id: 'content-1', type: 'guide', slug: 'ordinary-parent-guide', titleEn: 'Play together', reviewRevision: 1 }],
         contentReviews: ['english', 'native_myanmar', 'evidence', 'safety'].map((dimension) => ({
           contentSlug: 'ordinary-parent-guide', contentVersion: 1, dimension, decision: 'approved',
         })),
+        ...approvedEvidenceRows('ordinary-parent-guide'),
       },
     });
     await expect(handler(setLibraryReview)(context, {
@@ -257,6 +275,65 @@ describe('Convex registered handlers enforce authorization', () => {
     expect(context.db.patch).toHaveBeenCalledWith('content-1', expect.objectContaining({
       clinicalStatus: 'published', reviewScope: 'education', reviewerDisplayName: 'Clinical Reviewer',
     }));
+  });
+
+  it('does not reuse an older approval after the latest decision requests changes', async () => {
+    authState.userId = 'owner-1';
+    const context = ctx({
+      profile: {
+        userId: 'owner-1', isStaff: true, staffRole: 'owner',
+        staffQualification: 'MEd Early Childhood Education', displayName: 'Education Owner',
+      },
+      rows: {
+        libraryContent: [{
+          _id: 'content-1', type: 'guide', slug: 'ordinary-parent-guide',
+          titleEn: 'Play together', reviewRevision: 1,
+        }],
+        contentReviews: [
+          { contentSlug: 'ordinary-parent-guide', contentVersion: 1, dimension: 'native_myanmar', decision: 'changes_requested' },
+          { contentSlug: 'ordinary-parent-guide', contentVersion: 1, dimension: 'native_myanmar', decision: 'approved' },
+          ...['english', 'evidence', 'safety'].map((dimension) => ({
+            contentSlug: 'ordinary-parent-guide', contentVersion: 1, dimension, decision: 'approved',
+          })),
+        ],
+        ...approvedEvidenceRows('ordinary-parent-guide'),
+      },
+    });
+    await expect(handler(setLibraryReview)(context, {
+      slug: 'ordinary-parent-guide', clinicalStatus: 'published',
+    })).rejects.toThrow('missing review approvals: native_myanmar');
+    expect(context.db.patch).not.toHaveBeenCalled();
+  });
+
+  it('blocks publication when the content has no current approved evidence source', async () => {
+    authState.userId = 'owner-1';
+    const context = ctx({
+      profile: {
+        userId: 'owner-1', isStaff: true, staffRole: 'owner',
+        staffQualification: 'MEd Early Childhood Education', displayName: 'Education Owner',
+      },
+      rows: {
+        libraryContent: [{
+          _id: 'content-1', type: 'guide', slug: 'ordinary-parent-guide',
+          titleEn: 'Play together', reviewRevision: 1,
+        }],
+        contentReviews: ['english', 'native_myanmar', 'evidence', 'safety'].map((dimension) => ({
+          contentSlug: 'ordinary-parent-guide', contentVersion: 1, dimension, decision: 'approved',
+        })),
+        evidenceLinks: [{
+          kind: 'guide', slug: 'ordinary-parent-guide', sourceIds: ['awaiting-source'],
+        }],
+        evidenceSources: [{
+          sourceId: 'awaiting-source', reviewStatus: 'awaiting_review',
+          evidenceLevel: 'guideline', year: 2025, reviewDate: null,
+          nextReviewDate: null, verifiedOn: '2026-08-01',
+        }],
+      },
+    });
+    await expect(handler(setLibraryReview)(context, {
+      slug: 'ordinary-parent-guide', clinicalStatus: 'published',
+    })).rejects.toThrow('no current approved source');
+    expect(context.db.patch).not.toHaveBeenCalled();
   });
 
   it('a qualified education owner can publish preview-only printable metadata without a clinical record', async () => {
@@ -276,6 +353,7 @@ describe('Convex registered handlers enforce authorization', () => {
         contentReviews: ['english', 'native_myanmar', 'evidence', 'safety'].map((dimension) => ({
           contentSlug: 'prt_preview_only', contentVersion: 1, dimension, decision: 'approved',
         })),
+        ...approvedEvidenceRows('prt_preview_only', 'printable'),
       },
     });
     await expect(handler(setLibraryReview)(context, {
@@ -327,12 +405,13 @@ describe('Convex registered handlers enforce authorization', () => {
       },
       rows: {
         libraryContent: [{
-          _id: 'content-1', slug: 'future-bed-sharing-guide', titleEn: 'Infant sleep', reviewRevision: 3,
+          _id: 'content-1', type: 'guide', slug: 'future-bed-sharing-guide', titleEn: 'Infant sleep', reviewRevision: 3,
           data: { safety: { en: 'How to bed-share with a baby.' } },
         }],
         contentReviews: ['english', 'native_myanmar', 'evidence', 'safety', 'clinical'].map((dimension) => ({
           contentSlug: 'future-bed-sharing-guide', contentVersion: 3, dimension, decision: 'approved',
         })),
+        ...approvedEvidenceRows('future-bed-sharing-guide'),
       },
     });
     await expect(handler(setLibraryReview)(context, {
@@ -373,10 +452,11 @@ describe('Convex registered handlers enforce authorization', () => {
         staffQualification: 'MBBS, MMedSc (Paediatrics)', displayName: 'Clinical Reviewer',
       },
       rows: {
-        libraryContent: [{ _id: 'content-1', slug: 'gd_7_9m_safety', titleEn: 'Safety guide', reviewRevision: 1 }],
+        libraryContent: [{ _id: 'content-1', type: 'guide', slug: 'gd_7_9m_safety', titleEn: 'Safety guide', reviewRevision: 1 }],
         contentReviews: ['english', 'native_myanmar', 'evidence', 'safety', 'clinical'].map((dimension) => ({
           contentSlug: 'gd_7_9m_safety', contentVersion: 1, dimension, decision: 'approved',
         })),
+        ...approvedEvidenceRows('gd_7_9m_safety'),
       },
     });
     await expect(handler(setLibraryReview)(context, {
@@ -637,8 +717,9 @@ describe('Convex registered handlers enforce authorization', () => {
         staffQualification: 'MBBS', displayName: 'Clinical Reviewer',
       },
       rows: {
-        libraryContent: [{ _id: 'content-1', slug: 'item-1', titleEn: 'Item', reviewRevision: 2 }],
+        libraryContent: [{ _id: 'content-1', type: 'guide', slug: 'item-1', titleEn: 'Item', reviewRevision: 2 }],
         contentReviews: [{ contentSlug: 'item-1', contentVersion: 2, dimension: 'clinical', decision: 'approved' }],
+        ...approvedEvidenceRows('item-1'),
       },
     });
     await expect(handler(setLibraryReview)(context, {
@@ -656,6 +737,7 @@ describe('Convex registered handlers enforce authorization', () => {
         authors: null, year: 2024, edition: null, country: null, language: 'en',
         url: 'https://example.test/source', doi: null, isbn: null, pmid: null,
         evidenceLevel: 'guideline', reviewStatus: 'approved', reviewer: 'Private Reviewer',
+        verifiedOn: '2026-08-01', reviewDate: '2026-08-01', nextReviewDate: '2028-08-01',
         reviewerId: 'reviewer-1', reviewerQualification: 'Private qualification',
         verifiedNote: 'Internal note', reviewNote: 'Internal review note', searchText: 'internal',
         createdAt: 1, updatedAt: 2,

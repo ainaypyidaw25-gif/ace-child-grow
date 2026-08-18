@@ -17,6 +17,7 @@ export const EVIDENCE_LEVELS = [
   'systematic_review',
   'rct',
   'cohort',
+  'narrative_review',
   'expert_consensus',
   'textbook',
   'parent_education',
@@ -29,9 +30,10 @@ export const EVIDENCE_LEVEL_RANK: Record<EvidenceLevel, number> = {
   systematic_review: 2,
   rct: 3,
   cohort: 4,
-  expert_consensus: 5,
-  textbook: 6,
-  parent_education: 7,
+  narrative_review: 5,
+  expert_consensus: 6,
+  textbook: 7,
+  parent_education: 8,
 };
 
 export const EVIDENCE_REVIEW_STATUSES = [
@@ -67,6 +69,7 @@ export const EVIDENCE_ORG_KEYS = [
   'TEXTBOOK',
   'ASHA',
   'AOTA',
+  'IDA',
 ] as const;
 export type EvidenceOrgKey = (typeof EVIDENCE_ORG_KEYS)[number];
 
@@ -196,6 +199,7 @@ export const REVIEW_CADENCE_MONTHS: Record<EvidenceLevel, number> = {
   guideline: 24,
   parent_education: 24,
   expert_consensus: 36,
+  narrative_review: 36,
   systematic_review: 48,
   rct: 60,
   cohort: 60,
@@ -211,6 +215,7 @@ export const OUTDATED_AFTER_YEARS: Record<EvidenceLevel, number> = {
   guideline: 8,
   parent_education: 5,
   expert_consensus: 10,
+  narrative_review: 10,
   systematic_review: 10,
   rct: 20,
   cohort: 20,
@@ -218,22 +223,31 @@ export const OUTDATED_AFTER_YEARS: Record<EvidenceLevel, number> = {
 };
 
 export function addMonthsIso(isoDate: string, months: number): string {
+  if (!isStrictIsoDate(isoDate)) return '';
   const d = new Date(`${isoDate}T00:00:00Z`);
-  if (Number.isNaN(d.getTime())) return isoDate;
   d.setUTCMonth(d.getUTCMonth() + months);
   return d.toISOString().slice(0, 10);
 }
 
+export function isStrictIsoDate(value: string): boolean {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const parsed = new Date(`${value}T00:00:00Z`);
+  return !Number.isNaN(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value;
+}
+
 /** The date this record is due for re-checking. Explicit value wins. */
 export function effectiveNextReview(src: EvidenceSource): string | null {
-  if (src.nextReviewDate) return src.nextReviewDate;
+  if (src.nextReviewDate) return isStrictIsoDate(src.nextReviewDate) ? src.nextReviewDate : null;
   const anchor = src.reviewDate ?? src.verifiedOn;
-  if (!anchor) return null;
+  if (!anchor || !isStrictIsoDate(anchor)) return null;
   return addMonthsIso(anchor, REVIEW_CADENCE_MONTHS[src.evidenceLevel]);
 }
 
 /** Our review of the reference has lapsed. */
 export function isExpired(src: EvidenceSource, todayIso: string): boolean {
+  if (!isStrictIsoDate(todayIso)) return true;
+  if (src.verifiedOn && (!isStrictIsoDate(src.verifiedOn) || src.verifiedOn > todayIso)) return true;
+  if (src.reviewDate && (!isStrictIsoDate(src.reviewDate) || src.reviewDate > todayIso)) return true;
   const due = effectiveNextReview(src);
   if (!due) return true; // never checked => treat as due
   return due < todayIso;
@@ -241,8 +255,9 @@ export function isExpired(src: EvidenceSource, todayIso: string): boolean {
 
 /** The document itself is old enough that a newer edition should be sought. */
 export function isOutdated(src: EvidenceSource, todayIso: string): boolean {
-  if (src.year === null) return true; // unknown age cannot be defended
+  if (!isStrictIsoDate(todayIso) || src.year === null || !Number.isInteger(src.year)) return true;
   const thisYear = Number(todayIso.slice(0, 4));
+  if (src.year > thisYear) return true;
   return thisYear - src.year > OUTDATED_AFTER_YEARS[src.evidenceLevel];
 }
 
@@ -255,6 +270,13 @@ export function verificationProblems(src: EvidenceSource): string[] {
   if (!src.title.trim()) out.push('missing title');
   if (!isHttpsUrl(src.url)) out.push('missing or non-https url');
   if (!src.verifiedOn) out.push('never verified against the publisher page');
+  else if (!isStrictIsoDate(src.verifiedOn)) out.push(`malformed verified date: ${src.verifiedOn}`);
+  if (src.reviewDate !== null && !isStrictIsoDate(src.reviewDate)) {
+    out.push(`malformed review date: ${src.reviewDate}`);
+  }
+  if (src.nextReviewDate !== null && !isStrictIsoDate(src.nextReviewDate)) {
+    out.push(`malformed next review date: ${src.nextReviewDate}`);
+  }
   if (!src.verifiedNote.trim()) out.push('no verification note');
   if (src.year === null) out.push('publication year not printed on the source page');
   if (src.doi !== null && !isDoiShapeValid(src.doi)) out.push(`malformed doi: ${src.doi}`);
