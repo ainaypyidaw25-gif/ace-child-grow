@@ -391,8 +391,8 @@ const GUIDES_B: SeedItem[] = [
       ],
       materials: b('မလိုအပ်ပါ — သင်၏ မျက်နှာ၊ အသံနှင့် အဝတ်စ တစ်ထည်', 'Nothing needed — your face, your voice and a cloth'),
       safety: b(
-        'မျက်နှာဖုံးရန် သုံးသော အဝတ်ကို ကလေးမျက်နှာပေါ် ချန်မထားပါနှင့် — အသက်ရှူ ပိတ်နိုင်သည်။ ဤအရွယ်တွင် ဖန်သားပြင် ကြည့်ခြင်းကို အကြံမပြုပါ၊ မိသားစုနှင့် ဗီဒီယိုခေါ်ဆိုခြင်းသာ ခြွင်းချက် ဖြစ်သည်။ ကလေးကို ဆွဲငင်၍ မကစားပါနှင့်။ ကလေးအား လုံးဝ မလှုပ်ရှားနိုင်အောင် မဖိထားပါနှင့်။',
-        'Never leave a cloth lying over her face — it can block breathing. Screens are not recommended at this age; a family video call is the exception. Never play by jerking or pulling her, and never hold her down so she cannot move.',
+        'မျက်နှာဖုံးရန် သုံးသော အဝတ်ကို ကလေးမျက်နှာပေါ် ချန်မထားပါနှင့် — အသက်ရှူ ပိတ်နိုင်သည်။ ဤအရွယ်တွင် ဖန်သားပြင်အသုံးပြုမှုကို အလွန်ကန့်သတ်ပြီး မျက်နှာချင်းဆိုင် အပြန်အလှန်ဆက်သွယ်မှုကို အစားမထိုးစေပါနှင့်။ ကလေးကို ဆွဲငင်၍ မကစားပါနှင့်။ ကလေးအား လုံးဝ မလှုပ်ရှားနိုင်အောင် မဖိထားပါနှင့်။',
+        'Never leave a cloth lying over her face—it can block breathing. Keep screen use very limited at this age, and do not let it replace face-to-face interaction. Never play by jerking or pulling her, and never hold her down so she cannot move.',
       ),
       commonMistakes: [
         b('ကလေး မတောင်းဆိုမီ အားလုံး ကြိုပေးထားခြင်း — တောင်းဆိုရန် အခွင့်အရေး ဆုံးရှုံးစေသည်။', 'Giving everything before she asks — she loses the chance to communicate.'),

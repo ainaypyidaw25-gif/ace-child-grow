@@ -389,7 +389,7 @@ const GUIDES_B: SeedItem[] = [
         },
         {
           q: b('ဖုန်းထဲက ကလေးသီချင်းတွေ ဖွင့်ပေးလို့ ရလား။', 'Can I play baby songs on a phone?'),
-          a: b('ဤအရွယ်တွင် ဖန်သားပြင် အသုံးပြုခြင်းကို မလိုအပ်ပါ — တိုက်ရိုက် လူချင်း စကားပြောခြင်း၊ သီချင်းဆိုခြင်းက ပိုအကျိုးရှိသည်။', 'Screens are not needed at this age — live talking and singing help far more.'),
+          a: b('ဤအရွယ်တွင် ဖန်သားပြင် အသုံးပြုခြင်းကို မလိုအပ်ပါ — တိုက်ရိုက် လူချင်း စကားပြောခြင်းနှင့် သီချင်းဆိုခြင်းက အစောပိုင်း သင်ယူမှုနှင့် ဆက်ဆံရေးကို ပိုမို အထောက်အကူပြုပါသည်။', 'Screens are not needed at this age—live talking and singing are more supportive of early learning and connection.'),
         },
       ],
       redFlags: [
@@ -402,7 +402,7 @@ const GUIDES_B: SeedItem[] = [
       ),
       encouragement: b('သင်ပြောသော စကားလုံးတိုင်း ကလေး၏ ဦးနှောက်ကို တည်ဆောက်ပေးနေပါသည်။', 'Every word you say is building your baby’s brain.'),
     }),
-    'Responsive talk, early hearing concerns and avoiding screens for infants follow NHS learn-to-talk guidance, AAP media guidance for young minds and the responsive-caregiving evidence in the registry.',
+    'Responsive talk, early hearing concerns and infant screen guidance follow NHS learn-to-talk guidance, the 2026 AAP digital-ecosystems technical report and the responsive-caregiving evidence in the registry.',
   ),
   kb(
     guide('birth_2m', 'social', {
@@ -693,8 +693,8 @@ const GUIDES_D: SeedItem[] = [
       ],
       indoor: [b('ကလေးအိပ်ရာကို မိဘအခန်းထဲတွင် ထားပါ — အိပ်ရာမတူဘဲ အခန်းတူ။', 'Keep the baby’s cot in the parents’ room — room-share, do not bed-share.')],
       outdoor: [b('တိုက်ရိုက် နေရောင်မှ ကာကွယ်ပါ။ ကားစီးလျှင် သတ်မှတ်ချက်ပြည့်မီသော ကလေးထိုင်ခုံ သုံးပါ။', 'Keep out of direct sun. In a vehicle, use an appropriate infant car seat.')],
-      lowCost: [b('ဘေးကင်းသော အိပ်စက်မှုသည် ကုန်ကျစရိတ် မရှိပါ — ပြားပြီး မာသော မျက်နှာပြင်နှင့် ပျော့ပျောင်းသောအရာများ မထားရှိခြင်းသာ ဖြစ်သည်။', 'Safe sleep costs nothing — a firm flat surface and nothing soft in it.')],
-      materials: b('ပြားပြီး မာသော အိပ်ရာ၊ ပါးလွှာသော အဝတ်', 'A firm flat sleep surface and light bedding'),
+      lowCost: [b('ဘေးကင်းရေးစံနှုန်းနှင့် ကိုက်ညီသော ကလေးအိပ်ရာ၊ မာပြီး ပြားညီသော မွေ့ရာနှင့် တင်းကျပ်စွာ ခင်းထားသော အိပ်ရာခင်းတစ်ထည်သာ အသုံးပြုပါ။ ဈေးနှုန်းထက် ဘေးကင်းရေးစံနှုန်းကို ဦးစားပေးပါ။', 'Use an infant sleep space that meets safety standards, with a firm, flat mattress and only a fitted sheet. Prioritize safety standards rather than price.')],
+      materials: b('ဘေးကင်းရေးစံနှုန်းနှင့် ကိုက်ညီသော ကလေးအိပ်ရာ၊ မာပြီး ပြားညီသော မွေ့ရာနှင့် တင်းကျပ်စွာ ခင်းထားသော အိပ်ရာခင်းတစ်ထည်သာ', 'An infant sleep space that meets safety standards, with a firm, flat mattress and only a fitted sheet'),
       safety: b(
         'အဓိက စည်းမျဉ်းများ — အိပ်တိုင်း ပက်လက်၊ ပြားပြီး မာသော မျက်နှာပြင်၊ အိပ်ရာထဲ ဘာမှ မထား၊ အခန်းတူ အိပ်ရာမတူ၊ ဆေးလိပ်မီးခိုး လုံးဝ မထိစေရ၊ ကလေးကို ဘယ်တော့မှ မလှုပ်ခါရ၊ ရေချိုးစဉ် တစ်စက္ကန့်မျှ မခွာရ၊ မြင့်သောနေရာတွင် တစ်ယောက်တည်း မထားရ။',
         'The core rules — back to sleep every sleep; firm flat surface; nothing in the cot; room-share but do not bed-share; no smoke exposure at all; never shake a baby; never leave a baby alone in or near water; never leave a baby alone on a high surface.',

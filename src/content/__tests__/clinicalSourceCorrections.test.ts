@@ -141,6 +141,55 @@ describe('clinically sourced content corrections', () => {
   });
 
   it('uses current media evidence and preserves the responsive video-call exception', () => {
+    const screenLesson = dataFor('lsn_screen_time');
+    expect((screenLesson.body as { en: string }).en).toContain(
+      'does not crowd out sleep, movement, reading, play, or face-to-face interaction',
+    );
+    expect((screenLesson.body as { en: string }).en).not.toContain('far better');
+    expect((screenLesson.takeaway as { en: string }).en).toBe(
+      'Look beyond minutes alone: consider the child, the content, co-use, and what media may crowd out.',
+    );
+    expect((screenLesson.actionToday as { en: string }).en).toContain(
+      'co-use and talk about it',
+    );
+    const screenQuiz = (screenLesson.quiz as Array<{
+      q: { mm: string; en: string };
+      options: Array<{ mm: string; en: string }>;
+    }>)[0];
+    expect(screenQuiz.q.en).toContain('sedentary screen time');
+    expect(screenQuiz.q.mm).toContain('အထိုင်လုပ်ဆောင်သည့် ဖန်သားပြင်ကြည့်ချိန်');
+    expect(screenQuiz.options[0].en).toBe('not recommended');
+
+    const newbornCommunication = dataFor('gd_birth_2m_communication');
+    const newbornFaq = newbornCommunication.faq as Array<{ a: { mm: string; en: string } }>;
+    expect(newbornFaq[1].a.en).toContain('more supportive of early learning and connection');
+    expect(newbornFaq[1].a.en).not.toContain('far more');
+    expect(newbornCommunication.evidenceSummary).toContain(
+      '2026 AAP digital-ecosystems technical report',
+    );
+    expect(newbornCommunication.evidenceSummary).not.toContain('young minds');
+
+    const threeToFour = dataFor('gd_3_4m_cognitive');
+    const threeToFourFaq = threeToFour.faq as Array<{ a: { mm: string; en: string } }>;
+    expect(threeToFourFaq[0].a.en).toContain('more supportive of learning');
+    expect(threeToFourFaq[0].a.en).not.toContain('far more');
+
+    const fiveToSixCommunication = dataFor('gd_5_6m_communication');
+    expect((fiveToSixCommunication.safety as { en: string }).en).toContain(
+      'Keep screen use very limited',
+    );
+    expect((fiveToSixCommunication.safety as { en: string }).en).toContain(
+      'do not let it replace face-to-face interaction',
+    );
+
+    const sevenToNineCommunication = dataFor('gd_7_9m_communication');
+    expect((sevenToNineCommunication.safety as { en: string }).en).toContain(
+      'Keep screen use very limited',
+    );
+    expect((sevenToNineCommunication.safety as { en: string }).en).toContain(
+      'do not let it replace face-to-face interaction',
+    );
+
     const faq = dataFor('gd_5_6m_play').faq as Array<{ a: { mm: string; en: string } }>;
     expect(faq[0].a.en).toContain('live video call with family');
     expect(faq[0].a.en).toContain('when an adult helps the baby take part');
@@ -166,10 +215,53 @@ describe('clinically sourced content corrections', () => {
     const tenToTwelveFaq = dataFor('gd_10_12m_cognitive').faq as Array<{
       a: { mm: string; en: string };
     }>;
+    const tenToTwelveSafety = dataFor('gd_10_12m_cognitive').safety as {
+      mm: string; en: string;
+    };
+    expect(tenToTwelveSafety.en).toContain(
+      'WHO guidance does not recommend sedentary screen time at this age',
+    );
+    expect(tenToTwelveSafety.en).toContain(
+      'A live video call with family can be an interactive experience different from solo viewing',
+    );
+    expect(tenToTwelveSafety.en).not.toContain('WHO guidance advises no screen time');
     expect(tenToTwelveFaq[1].a.en).toContain(
       'less likely to learn from screen media than from live, responsive interaction',
     );
     expect(tenToTwelveFaq[1].a.en).not.toContain('learn very little from screens');
+    expect(dataFor('gd_10_12m_cognitive').evidenceSummary).toContain(
+      'HealthyChildren.org infant media guidance',
+    );
+    expect(dataFor('gd_10_12m_cognitive').evidenceSummary).not.toContain('Health Canada');
+
+    for (const [slug, kind] of [
+      ['gd_birth_2m_communication', 'guide'],
+      ['gd_birth_2m_cognitive', 'guide'],
+      ['gd_3_4m_cognitive', 'guide'],
+      ['act_picture_book_naming', 'activity'],
+      ['gd_5_6m_communication', 'guide'],
+      ['gd_5_6m_cognitive', 'guide'],
+      ['gd_7_9m_communication', 'guide'],
+      ['gd_7_9m_cognitive', 'guide'],
+    ] as const) {
+      expect(sourcesForContent(slug, kind)).toContain('hc-screen-time-5cs-infants-2024');
+    }
+    expect(sourcesForContent('gd_10_12m_cognitive', 'guide')).not.toContain(
+      'hc-screen-time-5cs-2024',
+    );
+    expect(sourcesForContent('lsn_screen_time', 'lesson')).toContain(
+      'hc-screen-time-5cs-overview-2026',
+    );
+    expect(SOURCE_BY_ID.get('hc-screen-time-5cs-2024')).toMatchObject({
+      ageMonthsMin: 24,
+      ageMonthsMax: 59,
+      verifiedOn: '2026-08-18',
+    });
+    expect(SOURCE_BY_ID.get('hc-screen-time-5cs-infants-2024')).toMatchObject({
+      ageMonthsMin: 0,
+      ageMonthsMax: 18,
+      verifiedOn: '2026-08-18',
+    });
   });
 
   it('replaces string-tied cupboards with reliable poison prevention and scoped urgency', () => {
@@ -358,6 +450,7 @@ describe('clinically sourced content corrections', () => {
       'aap-gdd-genetic-evaluation-2025',
       'aap-digital-ecosystems-policy-2026',
       'aap-digital-ecosystems-technical-2026',
+      'hc-screen-time-5cs-overview-2026',
       'cdc-adhd-clinical-care-2026',
       'cdc-introduce-solid-foods-2026',
       'cdc-cows-milk-2026',
@@ -582,6 +675,12 @@ describe('clinically sourced content corrections', () => {
     }
     expect((dataFor('gd_10_12m_sleep').safety as { mm: string }).mm)
       .toContain('အိမ်ကို ဆေးလိပ်ငွေ့ကင်းစင်စွာ ထားပါ');
+
+    const newbornSafety = dataFor('gd_birth_2m_safety');
+    expect((newbornSafety.materials as { en: string }).en).toContain('only a fitted sheet');
+    expect((newbornSafety.materials as { en: string }).en).not.toContain('light bedding');
+    expect((newbornSafety.materials as { mm: string }).mm).not.toContain('ပါးလွှာသော အဝတ်');
+    expect(JSON.stringify(newbornSafety.lowCost)).toContain('meets safety standards');
   });
 
   it('requires rolling both ways before leaving an infant in the sleep position reached', () => {

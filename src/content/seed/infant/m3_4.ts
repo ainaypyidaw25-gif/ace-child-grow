@@ -522,7 +522,7 @@ const GUIDES_C: SeedItem[] = [
       faq: [
         {
           q: b('တီဗွီ ဖွင့်ပေးလို့ ရလား။', 'Can I put the TV on for her?'),
-          a: b('ဤအရွယ်တွင် ဖန်သားပြင် ကြည့်ခြင်းကို အကြံမပြုပါ။ လူနှင့် တိုက်ရိုက် ဆက်သွယ်ခြင်းက ပိုအကျိုးရှိသည်။', 'Screen time is not recommended at this age; direct interaction with people teaches far more.'),
+          a: b('ဤအရွယ်တွင် ဖန်သားပြင် ကြည့်ခြင်းကို အကြံမပြုပါ။ လူနှင့် တိုက်ရိုက် အပြန်အလှန်ဆက်သွယ်ခြင်းက သင်ယူမှုကို ပိုမို အထောက်အကူပြုပါသည်။', 'Screen time is not recommended at this age; direct interaction with people is more supportive of learning.'),
         },
         {
           q: b('မျက်လုံး တစ်ခါတစ်ရံ စောင်းသွားတယ်။', 'Her eyes sometimes cross.'),

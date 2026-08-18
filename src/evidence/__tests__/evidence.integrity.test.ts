@@ -211,11 +211,24 @@ describe('content links', () => {
     expect(SOURCE_BY_ID.get('hc-screen-time-5cs-2024')?.url).toBe(
       'https://www.healthychildren.org/English/family-life/Media/Pages/kids-and-screen-time-5-cs-questions-for-toddlers-and-preschoolers.aspx',
     );
+    expect(SOURCE_BY_ID.get('hc-screen-time-5cs-2024')).toMatchObject({
+      ageMonthsMin: 24,
+      ageMonthsMax: 59,
+      verifiedOn: '2026-08-18',
+    });
+    expect(SOURCE_BY_ID.get('hc-screen-time-5cs-overview-2026')).toMatchObject({
+      year: 2026,
+      ageMonthsMin: 0,
+      ageMonthsMax: 216,
+      reviewStatus: 'awaiting_review',
+      verifiedOn: '2026-08-18',
+    });
     expect(sourcesForContent('st_little_seed')).toContain('hc-choking-prevention-2026');
     expect(sourcesForContent('lsn_screen_time')).toContain('hc-screen-time-5cs-infants-2024');
     expect(sourcesForContent('lsn_screen_time')).toEqual(expect.arrayContaining([
       'aap-digital-ecosystems-policy-2026',
       'aap-digital-ecosystems-technical-2026',
+      'hc-screen-time-5cs-overview-2026',
     ]));
     expect(sourcesForContent('lsn_screen_time')).not.toContain('aap-media-young-minds-2016');
     expect(SOURCE_BY_ID.get('aap-media-young-minds-2016')?.reviewStatus).toBe('retired');

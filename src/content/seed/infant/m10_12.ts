@@ -610,8 +610,8 @@ const GUIDES_C: SeedItem[] = [
       ],
       materials: b('အဝတ်စ၊ ဗလာခွက် သို့မဟုတ် ဗူး ၂–၃ လုံး၊ ကစားစရာ တစ်ခု', 'A cloth, two or three cups or containers, one toy'),
       safety: b(
-        'ဝှက်ကစားရာတွင် သုံးသော ပစ္စည်းများသည် ပါးစပ်ထဲ မဝင်နိုင်လောက်အောင် ကြီးရမည်။ ပလတ်စတစ်အိတ်ဖြင့် ဝှက်ခြင်းကို လုံးဝ မလုပ်ပါနှင့် (အသက်ရှူ ပိတ်နိုင်သည်)။ ဖန်သားပြင် အသုံးပြုမှုနှင့် ပတ်သက်၍ ကမ္ဘာ့ကျန်းမာရေးအဖွဲ့၏ လမ်းညွှန်ချက်အရ ၁ နှစ်အောက် ကလေးများအတွက် ဖန်သားပြင် ကြည့်ရှုခြင်းကို အကြံမပြုပါ — ဗီဒီယိုဖြင့် ဆွေမျိုးများနှင့် စကားပြောခြင်းသည် ခြွင်းချက် ဖြစ်သည်။ ဤအရွယ်တွင် တိုက်ရိုက် ကစားခြင်းက အလွန် ပိုအကျိုးရှိသည်။',
-        'Anything used for hiding games must be too large to fit in her mouth. Never hide things under a plastic bag — it is a suffocation risk. On screens, WHO guidance advises no screen time for children under one year, with video calls to family a reasonable exception. At this age live play is far more useful.',
+        'ဝှက်ကစားရာတွင် သုံးသော ပစ္စည်းများသည် ပါးစပ်ထဲ မဝင်နိုင်လောက်အောင် ကြီးရမည်။ ပလတ်စတစ်အိတ်ဖြင့် ဝှက်ခြင်းကို လုံးဝ မလုပ်ပါနှင့် (အသက်ရှူ ပိတ်နိုင်သည်)။ ကမ္ဘာ့ကျန်းမာရေးအဖွဲ့၏ လမ်းညွှန်ချက်အရ ဤအသက်အရွယ်တွင် အထိုင်လုပ်ဆောင်သည့် ဖန်သားပြင်ကြည့်ချိန်ကို အကြံမပြုပါ။ မိသားစုနှင့် တိုက်ရိုက် ဗီဒီယိုခေါ်ဆိုမှုကို လူကြီးတစ်ဦးက ကလေး ပါဝင်ဆက်သွယ်နိုင်အောင် ကူညီပေးလျှင် သာမန် တစ်ယောက်တည်းကြည့်ရှုမှုနှင့် ကွာခြားသော အပြန်အလှန်ဆက်သွယ်မှု ဖြစ်နိုင်ပါသည်။ ဤအရွယ်တွင် တိုက်ရိုက် ကစားခြင်းကို ဦးစားပေးပါ။',
+        'Anything used for hiding games must be too large to fit in her mouth. Never hide things under a plastic bag — it is a suffocation risk. WHO guidance does not recommend sedentary screen time at this age. A live video call with family can be an interactive experience different from solo viewing when an adult helps the child take part. Prioritize live play at this age.',
       ),
       commonMistakes: [
         b('ပစ္စည်းကို အလွန် ခက်ခဲစွာ ဝှက်ခြင်း — မြင်နိုင်သော အစိတ်အပိုင်း ချန်ထားပါ။', 'Hiding things too well — leave part of the object visible.'),
@@ -645,7 +645,7 @@ const GUIDES_C: SeedItem[] = [
         'She runs hundreds of little experiments a day — your spoon is her laboratory equipment.',
       ),
     }),
-    'Object permanence, hide-and-find play and cause-and-effect exploration at this age follow CDC milestone checklists, AAP milestone guidance, AAP guidance on the power of play and the developmental-behavioural paediatrics textbook, with the screen guidance taken from the AAP media and young minds statement, the Health Canada screen-time guidance and the research on screen use and early language in the registry.',
+    'Object permanence, hide-and-find play and cause-and-effect exploration at this age follow CDC milestone checklists, AAP milestone guidance, AAP guidance on the power of play and the developmental-behavioural paediatrics textbook; the screen guidance follows the 2026 AAP digital-ecosystems technical report, WHO under-5 guidance, HealthyChildren.org infant media guidance and the research on screen use and early language in the registry.',
   ),
   kb(
     guide('10_12m', 'social', {
