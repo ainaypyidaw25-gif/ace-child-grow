@@ -764,7 +764,7 @@ const GUIDES_D: SeedItem[] = [
       ),
       commonMistakes: [
         b('မွေးကင်းစတွင် တင်းကျပ်သော အချိန်ဇယား ချမှတ်ရန် ကြိုးစားခြင်း။', 'Trying to impose a strict schedule on a newborn.'),
-        b('နေ့အိပ်ချိန်ကို လုံးဝ ဖျက်ခြင်း — ညအိပ်ပိုကောင်းအောင် မလုပ်နိုင်ပါ။', 'Cutting out day sleep to "make night sleep better" — it does not work.'),
+        b('ညအိပ်ချိန် ပိုကောင်းစေရန် နေ့အိပ်ချိန်ကို အတင်းအကျပ် ဖျက်ခြင်း — ကလေးကို ပင်ပန်းလွန်စေပြီး အိပ်ရာဝင်ရန် ပိုခက်စေနိုင်ပါသည်။', 'Forcing out daytime sleep to improve nights — overtiredness can make settling and sleep harder.'),
       ],
       parentTips: [
         b('ကလေး အိပ်ချိန်တွင် သင်လည်း အိပ်ပါ။', 'Sleep when your baby sleeps.'),
@@ -777,10 +777,10 @@ const GUIDES_D: SeedItem[] = [
         },
       ],
       redFlags: [
-        b('တစ်ရက်လုံး နို့စို့ရန် မနိုးခြင်း။', 'Not waking to feed across the day.'),
+        b('နို့စို့ရန် နိုးရခက်ခြင်း သို့မဟုတ် နိုးပေးထားသော်လည်း မစို့နိုင်ခြင်း။', 'Being difficult to wake for feeds, or unable to feed when roused.'),
         b('နိုးနေချိန် လုံးဝ မရှိခြင်း သို့မဟုတ် အမြဲ ငိုနေခြင်း။', 'No calm awake time at all, or crying almost constantly.'),
       ],
-      referral: b('ဤအခြေအနေများကို ကျန်းမာရေးဝန်ထမ်းအား ပြပါ။ ရောဂါ ဖော်ထုတ်ချက် မဟုတ်ပါ။', 'Raise these with a health worker. This is not a diagnosis.'),
+      referral: b('ကလေး နိုးရခက်ခြင်း၊ အလွန်အားနည်းခြင်း သို့မဟုတ် နို့မစို့နိုင်ခြင်းရှိပါက ချက်ချင်း ဆေးကုသမှု ရယူပါ။ အခြားစိုးရိမ်ချက်များကိုလည်း ကျန်းမာရေးဝန်ထမ်းနှင့် ဆွေးနွေးပါ။ ဤသည် ရောဂါဖော်ထုတ်ချက် မဟုတ်ပါ။', 'If the baby is difficult to wake, unusually weak, or unable to feed, seek medical care immediately. Discuss other concerns with a health worker. This is not a diagnosis.'),
       encouragement: b('ပုံစံမကျသေးခြင်းသည် ပုံမှန် ဖြစ်သည် — တဖြည်းဖြည်း ပေါ်လာပါလိမ့်မည်။', 'Having no pattern yet is normal — it will come.'),
     }),
     'Day–night light and sound cues, avoiding rigid newborn schedules, and moving a sleeping baby to a safe sleep surface follow AAP safe sleep guidance, WHO sleep guidance for under-5s and Bright Futures preventive-care guidance in the registry.',

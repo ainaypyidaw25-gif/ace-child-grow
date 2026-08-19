@@ -1,11 +1,15 @@
 import { describe, expect, it, vi } from 'vitest';
 import {
+  preflightBrightFuturesDuplicateMilestoneRetirement,
   preflightDuplicateMilestoneRetirement,
   preflightSocialEmotionalMilestoneRetirement,
+  retireBrightFuturesDuplicateMilestone,
   retireDuplicateMilestones,
   retireSocialEmotionalMilestones,
 } from '../../../convex/seed';
 import {
+  BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID,
+  BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_TARGET,
   DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID,
   DUPLICATE_MILESTONE_SLUGS,
   SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_RELEASE_ID,
@@ -275,5 +279,99 @@ describe('social-emotional milestone retirement release', () => {
     })).rejects.toThrow('archived outside this release');
     expect(foreignContext.db.patch).not.toHaveBeenCalled();
     expect(foreignContext.db.insert).not.toHaveBeenCalled();
+  });
+});
+
+function brightFuturesDuplicateRow(overrides: Partial<Row> = {}): Row {
+  return {
+    _id: 'bright-futures-duplicate',
+    slug: BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_TARGET.slug,
+    titleEn: 'Follows rules and takes turns',
+    clinicalStatus: BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_TARGET.expectedClinicalStatus,
+    reviewRevision: BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_TARGET.expectedReviewRevision,
+    ...overrides,
+  };
+}
+
+describe('Bright Futures duplicate milestone retirement release', () => {
+  it('preflights the fixed production preimage without writing', async () => {
+    const slug = BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_TARGET.slug;
+    const context = retirementContext({
+      libraryContent: [brightFuturesDuplicateRow()],
+      libraryMedia: [{ _id: 'bright-futures-media', contentSlug: slug }],
+      evidenceLinks: [{ _id: 'bright-futures-link', slug }],
+    });
+    await expect(handler(preflightBrightFuturesDuplicateMilestoneRetirement)(context, {
+      releaseId: BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID,
+    })).resolves.toEqual({
+      slug,
+      found: true,
+      clinicalStatus: 'clinical_review',
+      reviewRevision: 5,
+      expectedClinicalStatus: 'clinical_review',
+      expectedReviewRevision: 5,
+      exactState: true,
+      mediaRows: 1,
+      evidenceLinkRows: 1,
+    });
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalled();
+  });
+
+  it('archives and audits only the exact stale-state target', async () => {
+    const context = retirementContext({ libraryContent: [brightFuturesDuplicateRow()] });
+    await expect(handler(retireBrightFuturesDuplicateMilestone)(context, {
+      releaseId: BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID,
+    })).resolves.toEqual({
+      retired: 1,
+      alreadyRetired: 0,
+      publishedWithdrawn: 0,
+      unpublishedArchived: 1,
+      total: 1,
+    });
+    expect(context.db.patch).toHaveBeenCalledWith('bright-futures-duplicate', expect.objectContaining({
+      clinicalStatus: 'archived',
+      reviewerId: undefined,
+      reviewNote: `Retired by ${BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID}`,
+    }));
+    expect(context.db.insert).toHaveBeenCalledWith('auditLogs', expect.objectContaining({
+      action: 'library.bright_futures_duplicate_milestone.retired',
+      summary: `${BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID} · ms_5y_self_help_2`,
+    }));
+  });
+
+  it('fails closed on status/revision drift and foreign archives', async () => {
+    for (const [row, message] of [
+      [brightFuturesDuplicateRow({ reviewRevision: 6 }), 'newer review revision'],
+      [brightFuturesDuplicateRow({ clinicalStatus: 'published' }), 'unexpected status'],
+      [brightFuturesDuplicateRow({ clinicalStatus: 'archived', reviewNote: 'Retired elsewhere' }), 'archived outside this release'],
+    ] as const) {
+      const context = retirementContext({ libraryContent: [row] });
+      await expect(handler(retireBrightFuturesDuplicateMilestone)(context, {
+        releaseId: BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID,
+      })).rejects.toThrow(message);
+      expect(context.db.patch).not.toHaveBeenCalled();
+      expect(context.db.insert).not.toHaveBeenCalled();
+    }
+  });
+
+  it('is idempotent only after this exact release archived the row', async () => {
+    const context = retirementContext({
+      libraryContent: [brightFuturesDuplicateRow({
+        clinicalStatus: 'archived',
+        reviewNote: `Retired by ${BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID}`,
+      })],
+    });
+    await expect(handler(retireBrightFuturesDuplicateMilestone)(context, {
+      releaseId: BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID,
+    })).resolves.toEqual({
+      retired: 0,
+      alreadyRetired: 1,
+      publishedWithdrawn: 0,
+      unpublishedArchived: 0,
+      total: 1,
+    });
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalled();
   });
 });

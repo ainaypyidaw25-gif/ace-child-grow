@@ -257,7 +257,7 @@ const MILESTONES: SeedItem[] = [
         'Pause for a moment during dressing and invite your baby to help, rather than doing every step for them.',
       ),
     }),
-    'Early cooperative dressing as a self-help precursor is described in paediatric occupational-therapy references (Case-Smith) and Bright Futures guidance in the registry.',
+    'Early cooperative dressing as a self-help precursor is described in the paediatric occupational-therapy reference (Case-Smith) in the registry.',
   ),
   kb(
     milestone('10_12m', 'play', 1, {
@@ -1253,7 +1253,7 @@ const ACTIVITIES: SeedItem[] = [
       difficulty: 'medium',
       durationMinutes: 10,
       materials: b('ခိုင်ခံ့သော ဆိုဖာ သို့မဟုတ် နိမ့်သော စားပွဲ၊ ကစားစရာ တစ်ခု', 'A stable sofa or low table, and one toy'),
-      setup: b('ပရိဘောဂ ဘေးပတ်လည်ကို ရှင်းလင်းပြီး ကြမ်းပြင်ပေါ် ဖျာ သို့မဟုတ် ပျော့သော အခင်း ခင်းပါ။', 'Clear the floor around the furniture and lay a mat or soft covering.'),
+      setup: b('ပရိဘောဂဘေးပတ်လည်မှ ပစ္စည်းများကို ရှင်းပြီး ချော်မရွေ့သည့် ကြမ်းပြင် သို့မဟုတ် ခိုင်စွာထားသော ချော်မရွေ့ဖျာကို သုံးပါ။', 'Clear the floor around the furniture and use a firm, non-slip surface or a securely fixed non-slip mat.'),
       instructions: [
         b('ကလေးအား ပရိဘောဂကို ကိုင်၍ ရပ်စေပါ။', 'Help her stand holding the furniture.'),
         b('ကစားစရာကို လက်တစ်လှမ်း ဘေးတွင် တင်ထားပါ။', 'Place the toy one arm-length to the side.'),
@@ -1272,7 +1272,7 @@ const ACTIVITIES: SeedItem[] = [
         b('ကိုယ်တိုင် ရွေ့လျားနိုင်မှုအပေါ် ယုံကြည်မှု တိုးလာသည်။', 'Growing confidence in moving herself.'),
       ],
       variations: [
-        b('ပရိဘောဂ နှစ်ခုကို တစ်လှမ်းစာ ကွာအောင် ထားပေးပါ။', 'Place two stable items one step apart.'),
+        b('ခိုင်ခံ့စွာ တွယ်ထားသော ပရိဘောဂနှစ်ခုကို ကလေးလက်လှမ်းမီအကွာတွင် ထားပြီး လူကြီးက လက်လှမ်းမီအနီးမှ ကြီးကြပ်ပါ။', 'Place two stable, anchored items within the child’s reach and supervise within arm’s reach.'),
         b('သီချင်း ဆိုရင်း လှမ်းစေပါ။', 'Sing while she steps.'),
       ],
       lowCost: true,

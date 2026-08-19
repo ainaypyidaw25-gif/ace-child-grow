@@ -224,8 +224,8 @@ export const GUIDES: SeedItem[] = [
     safety: b('ကလေး စားနေစဉ် အမြဲ အနီးကပ်ကြီးကြပ်ပါ။ အစားအစာကြောင့် အသက်ရှူလမ်းကြောင်း ပိတ်ဆို့နိုင်သည့် အန္တရာယ်ကို သတိပြုပါ။', 'Always supervise eating (choking risk).'),
     commonMistakes: [b('အမြန်/သန့်ရှင်းစေရန် အားလုံး ကိုယ်တိုင်လုပ်ပေးခြင်း။', 'Doing everything for them to save time/mess.')],
     parentTips: [b('အချိန်ပို ၅ မိနစ် ပေးပြီး ကိုယ်တိုင် ကြိုးစားစေပါ။', 'Allow an extra 5 minutes for them to try.')],
-    faq: [{ q: b('အိမ်သာသင်ခြင်း ဘယ်တော့ စရမလဲ။', 'When to start toilet training?'), a: b('များသောအားဖြင့် ၂ နှစ်ခန့်၊ ကလေး၏ အသင့်ဖြစ်မှု လက္ခဏာများကို လိုက်ပါ။', 'Usually around 2 years; follow readiness signs.') }],
-    redFlags: [b('ကိုယ်တိုင်လုပ်ရန် လုံးဝ စိတ်မဝင်စားခြင်း သို့မဟုတ် စွမ်းရည် ဆုတ်ယုတ်ခြင်း။', 'No interest in trying at all, or loss of skills.')],
+    faq: [{ q: b('အိမ်သာသင်ခြင်း ဘယ်တော့ စရမလဲ။', 'When to start toilet training?'), a: b('အသက်တစ်ခုတည်းကို မူတည်မထားဘဲ ကလေး၏ ကိုယ်ခန္ဓာ၊ အပြုအမူနှင့် ဆက်သွယ်မှုဆိုင်ရာ အသင့်ဖြစ်မှု လက္ခဏာများ ပေါ်လာသည့်အခါ ဖိအားမပေးဘဲ စတင်ပါ။', 'Start without pressure when the child shows physical, behavioral, and communication readiness signs rather than using one fixed age.') }],
+    redFlags: [b('ယခင်က ပြုလုပ်နိုင်ခဲ့သော ကိုယ်တိုင်လုပ်ဆောင်မှု ကျွမ်းကျင်မှု ပျောက်ဆုံးခြင်း သို့မဟုတ် အစာစား/မျိုရာတွင် ဆက်တိုက်ခက်ခဲခြင်း။', 'Loss of previously acquired self-help skills, or persistent difficulty eating or swallowing.')],
     referral: b('စိုးရိမ်ပါက ကလေးကျန်းမာရေးဆရာဝန်နှင့် တိုင်ပင်ပါ။', 'If concerned, consult a pediatrician.'),
     encouragement: b('“ကိုယ်တိုင်လုပ်မယ်” ဆိုသည့် စိတ်ကို အားပေးပါ — ဤသည်မှာ ကြီးထွားမှုဖြစ်သည်။', 'Encourage the “I can do it” spirit — that is growth.'),
   }),
@@ -317,7 +317,7 @@ export const GUIDES: SeedItem[] = [
 
   guide('10_12m', 'safety', {
     title: b('၁၀–၁၂ လ — ဘေးကင်းလုံခြုံရေး', '10–12 months — Safety'),
-    why: b('ကလေးရွေ့လျားလာသည်နှင့်အမျှ အိမ်ကို ဘေးကင်းအောင် ပြင်ဆင်ခြင်းက ထိခိုက်မှုများကို ကာကွယ်သည်။', 'As babies get mobile, baby-proofing prevents injuries.'),
+    why: b('ကလေး ရွေ့လျားလာသည်နှင့်အမျှ အိမ်ကို ဘေးကင်းအောင် ပြင်ဆင်ခြင်းက ထိခိုက်ဒဏ်ရာရနိုင်ခြေကို လျှော့ချရန် အထောက်အကူပြုပါသည်။', 'As babies become mobile, preparing a safer home helps reduce the risk of injury.'),
     observationQuestions: [
       b('ပရိဘောဂကိုကိုင်၍ ရွေ့လျား/ရပ်ပါသလား။', 'Pulls up and moves along furniture?'),
       b('ပစ္စည်းငယ်များကို ကောက်၍ ပါးစပ်သို့ ယူပါသလား။', 'Picks up small items and mouths them?'),
@@ -338,7 +338,7 @@ export const GUIDES: SeedItem[] = [
 
   guide('2y', 'daily_routine', {
     title: b('၂ နှစ် — နေ့စဉ် လုပ်ရိုးလုပ်စဉ်', '2 years — Daily Routine'),
-    why: b('ပုံမှန် လုပ်ရိုးလုပ်စဉ်သည် ကလေးကို လုံခြုံစိတ်ချစေ၍ အပြုအမူကို ပိုမိုကောင်းစေသည်။', 'Predictable routines help children feel secure and behave better.'),
+    why: b('ကြိုတင်ခန့်မှန်းနိုင်သော နေ့စဉ်လုပ်ရိုးလုပ်စဉ်များက ကလေးကို လုံခြုံစိတ်ချစေပြီး နေ့စဉ်အကူးအပြောင်းများတွင် ပူးပေါင်းပါဝင်ရန် အထောက်အကူပြုနိုင်ပါသည်။', 'Predictable routines can help children feel secure and support cooperation during daily transitions.'),
     observationQuestions: [
       b('နေ့စဉ်လုပ်ငန်း အစီအစဉ်ကို သိရှိ/မျှော်လင့်ပါသလား။', 'Anticipates what comes next in the day?'),
       b('အိပ်ချိန်/စားချိန် ပုံမှန် ရှိပါသလား။', 'Has fairly regular sleep and meal times?'),

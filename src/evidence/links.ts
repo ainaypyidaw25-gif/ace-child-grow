@@ -65,8 +65,46 @@ export const MILESTONE_DOMAIN_SOURCES: Record<string, string[]> = {
   school_readiness: ['hc-early-literacy-2023', 'tb-handbook-ecse-2016'],
 };
 
+/**
+ * Bright Futures is a broad preventive-care guideline, but it is not evidence
+ * for every present or future self-help/safety milestone. Keep the original
+ * domain-array position (so unchanged links do not churn revisions) while
+ * allowing the source through only for these exact claim-reviewed slugs.
+ */
+export const BRIGHT_FUTURES_MILESTONE_SLUGS = [
+  'ms_7_9m_self_help_1',
+  'ms_10_12m_self_help_1',
+  'ms_13_18m_self_help_1',
+  'ms_19_24m_self_help_1',
+  'ms_2y_self_help_1',
+  'ms_2y_self_help_2',
+  'ms_2_5y_self_help_2',
+  'ms_2_5y_self_help_3',
+  'ms_2_5y_self_help_4',
+  'ms_2_5y_self_help_5',
+  'ms_3y_self_help_2',
+  'ms_3y_self_help_3',
+  'ms_3_5y_self_help_2',
+  'ms_4y_self_help_2',
+  'ms_4y_self_help_3',
+  'ms_4y_self_help_4',
+  'ms_4_5y_self_help_2',
+  'ms_4_5y_self_help_3',
+  'ms_5y_self_help_1',
+  'ms_13_18m_safety_1',
+  'ms_19_24m_safety_1',
+  'ms_2y_safety_1',
+  'ms_4_5y_safety_1',
+  'ms_2y_daily_routine_1',
+  'ms_4_5y_daily_routine_1',
+] as const;
+
+const brightFuturesMilestoneSlugs = new Set<string>(BRIGHT_FUTURES_MILESTONE_SLUGS);
+
 /** Sources supporting a claim that is intentionally specific to one slug. */
 export const MILESTONE_SLUG_SOURCES: Record<string, string[]> = {
+  ms_7_9m_self_help_1: ['hc-choking-prevention-2026', 'asha-pediatric-feeding-swallowing'],
+  ms_4y_self_help_3: ['aap-oral-health-2023'],
   ms_19_24m_sleep_1: ['jr-mindell-bedtime-routine-rct-2009'],
   ms_4y_gross_motor_1: ['nhs-beds-4y-milestones-2024'],
 };
@@ -279,7 +317,7 @@ export const EXPLICIT_CONTENT_SOURCES: Record<string, string[]> = {
   st_when_i_feel_angry: ['aap-toxic-stress-2021', 'us-hhs-head-start-elof-2015', 'hc-mental-emotional-development-2026'],
   st_taking_turns: ['aap-power-of-play-2018', 'us-hhs-head-start-elof-2015', 'hc-mental-emotional-development-2026'],
   st_goodnight_moon_friend: ['who-pa-sleep-under5-2019', 'jr-dowdall-bookreading-2020'],
-  st_waiting_at_clinic: ['tb-bright-futures-4e-2017', 'nhs-baby-reviews-2023'],
+  st_waiting_at_clinic: ['nhs-baby-reviews-2023'],
   st_visit_to_doctor: ['tb-bright-futures-4e-2017', 'cdc-monitoring-screening-2026'],
   st_first_day_school: ['tb-handbook-ecse-2016', 'us-hhs-head-start-elof-2015'],
   st_sharing_mango: ['aap-power-of-play-2018'],
@@ -395,7 +433,10 @@ export function buildEvidenceLinks(): EvidenceLinkBuild {
       }
       push(kind, item.slug, [
         ...MILESTONE_BASE_SOURCES,
-        ...(domainIds ?? []),
+        ...(domainIds ?? []).filter(
+          (sourceId) => sourceId !== 'tb-bright-futures-4e-2017'
+            || brightFuturesMilestoneSlugs.has(item.slug),
+        ),
         ...(MILESTONE_SLUG_SOURCES[item.slug] ?? []),
       ]);
       continue;

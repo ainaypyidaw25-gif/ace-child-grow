@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { seedPayload } from '../seed';
-import { relatedContent, sourcesForContent } from '../../evidence/links';
+import {
+  BRIGHT_FUTURES_MILESTONE_SLUGS,
+  relatedContent,
+  sourcesForContent,
+} from '../../evidence/links';
 import { SOURCE_BY_ID } from '../../evidence/sources';
 import { resolveReviewStatus } from '../../evidence/types';
 import { SAMPLE_AWARENESS } from '../../data/seed/content';
@@ -1135,6 +1139,137 @@ describe('clinically sourced content corrections', () => {
     );
     expect((dataFor('lsn_power_of_play').takeaway as { en: string }).en).toBe(
       'Playing with you is valuable learning time for your child.',
+    );
+  });
+
+  it('keeps Bright Futures metadata current and limits it to claim-direct content', () => {
+    expect(SOURCE_BY_ID.get('tb-bright-futures-4e-2017')).toMatchObject({
+      authors: 'Hagan JF Jr, Shaw JS, Duncan PM (eds)',
+      year: 2017,
+      topics: expect.arrayContaining(['milestones', 'growth', 'motor', 'play', 'parenting']),
+      ageMonthsMin: 0,
+      ageMonthsMax: 252,
+      verifiedOn: '2026-08-19',
+      reviewStatus: 'awaiting_review',
+    });
+
+    const related = relatedContent('tb-bright-futures-4e-2017');
+    expect(Object.values(related).flat()).toHaveLength(84);
+    expect(related.milestone).toHaveLength(25);
+    expect(related.guide).toHaveLength(43);
+    expect(related.story).toEqual(['st_visit_to_doctor']);
+    expect(related.printable).toHaveLength(12);
+    expect(BRIGHT_FUTURES_MILESTONE_SLUGS).toHaveLength(25);
+
+    for (const slug of [
+      'ms_10_12m_self_help_2',
+      'ms_2_5y_safety_1',
+      'ms_3y_safety_1',
+      'ms_3_5y_safety_1',
+      'ms_4y_safety_1',
+      'ms_5y_safety_1',
+      'ms_3y_self_help_4',
+      'ms_5y_safety_2',
+      'ms_5y_safety_3',
+      'st_waiting_at_clinic',
+    ]) {
+      expect(Object.values(related).flat(), slug).not.toContain(slug);
+    }
+
+    expect(rows.has('ms_5y_self_help_2')).toBe(false);
+    expect(rows.has('ms_5y_social_2')).toBe(true);
+    expect(sourcesForContent('ms_7_9m_self_help_1', 'milestone')).toEqual(
+      expect.arrayContaining([
+        'tb-bright-futures-4e-2017',
+        'hc-choking-prevention-2026',
+        'asha-pediatric-feeding-swallowing',
+      ]),
+    );
+    expect(sourcesForContent('ms_4y_self_help_3', 'milestone')).toContain(
+      'aap-oral-health-2023',
+    );
+
+    for (const slug of [
+      'ms_13_18m_safety_1',
+      'ms_19_24m_safety_1',
+      'ms_2y_safety_1',
+      'ms_4_5y_safety_1',
+    ]) {
+      const ids = sourcesForContent(slug, 'milestone');
+      expect(ids.indexOf('tb-bright-futures-4e-2017'), slug)
+        .toBeLessThan(ids.indexOf('nhs-child-accident-2025'));
+    }
+
+    for (const slug of [
+      'ms_19_24m_nutrition_1',
+      'ms_2y_nutrition_1',
+      'ms_2_5y_nutrition_1',
+      'ms_3y_nutrition_1',
+      'ms_3_5y_nutrition_1',
+      'ms_4y_nutrition_1',
+      'ms_4_5y_nutrition_1',
+      'ms_5y_nutrition_1',
+      'ms_5y_sleep_1',
+    ]) {
+      expect(dataFor(slug).evidenceSummary, slug).not.toContain('Bright Futures');
+    }
+  });
+
+  it('applies the Bright Futures safety and bilingual-copy corrections', () => {
+    const toothbrushing = dataFor('ms_4y_self_help_3');
+    expect(toothbrushing.observeEn).toContain('adult helping to clean all tooth surfaces');
+    expect(toothbrushing.whyEn).toContain('still need adult help and supervision');
+
+    const choking = dataFor('ms_7_9m_self_help_1');
+    expect(choking.redEn).toContain('call emergency help immediately');
+    expect(choking.redMm).toContain('အရေးပေါ်အကူအညီ');
+
+    const newbornRoutine = dataFor('gd_birth_2m_daily_routine');
+    expect((newbornRoutine.redFlags as Array<{ en: string }>)[0].en).toContain(
+      'unable to feed when roused',
+    );
+    expect((newbornRoutine.referral as { en: string }).en).toContain(
+      'seek medical care immediately',
+    );
+    expect((newbornRoutine.commonMistakes as Array<{ en: string }>)[1].en).toContain(
+      'overtiredness',
+    );
+
+    const infantSafety = dataFor('gd_3_4m_safety');
+    const restraintAnswer = (infantSafety.faq as Array<{ a: { en: string } }>)[0].a.en;
+    expect(restraintAnswer).toContain('On every trip');
+    expect(restraintAnswer).not.toContain('if one is available');
+    expect((infantSafety.outdoor as Array<{ en: string }>)[0].en).toContain('On every trip');
+
+    expect((dataFor('gd_19_24m_safety').why as { en: string }).en).toContain(
+      'operable window guards or stops',
+    );
+    expect((dataFor('gd_10_12m_safety').why as { en: string }).en).toContain(
+      'helps reduce the risk of injury',
+    );
+    expect((dataFor('gd_2y_daily_routine').why as { en: string }).en).toContain(
+      'support cooperation during daily transitions',
+    );
+
+    for (const slug of ['gd_5_6m_safety', 'gd_5_6m_daily_routine']) {
+      expect((dataFor(slug).safety as { en: string }).en).toContain(
+        'Keep the home and car completely smoke- and vape-free',
+      );
+    }
+
+    expect((dataFor('lsn_home_safety').body as { en: string }).en).toContain(
+      'child-resistant, non-choking covers',
+    );
+    expect((dataFor('act_cruise_along_the_sofa').setup as { en: string }).en).toContain(
+      'securely fixed non-slip mat',
+    );
+    expect((dataFor('act_cruise_along_the_sofa').variations as Array<{ en: string }>)[0].en)
+      .toContain('supervise within arm’s reach');
+    expect(rowFor('st_waiting_at_clinic').data).toMatchObject({
+      vocabulary: expect.arrayContaining([{ mm: 'စိတ်ရှည်', en: 'patient' }]),
+    });
+    expect((dataFor('st_visit_to_doctor').body as { en: string }).en).not.toContain(
+      'It does not hurt',
     );
   });
 });

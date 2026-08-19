@@ -71,9 +71,32 @@ export type SocialEmotionalMilestoneRetirementSlug =
 export const SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_SLUGS =
   SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_TARGETS.map((target) => target.slug) as readonly SocialEmotionalMilestoneRetirementSlug[];
 
+/**
+ * Exact withdrawal found by the Bright Futures claim-scope audit. The authored
+ * preschool template accidentally emitted the 5-year social skill "follows
+ * rules and takes turns" as a self-help milestone, duplicating the valid
+ * `ms_5y_social_2` row and attaching a false self-care explanation.
+ *
+ * The production preimage was read on 2026-08-19. Seed and evidence imports are
+ * upsert-only, so this explicit archive transition is required in addition to
+ * filtering the slug out of every future seed payload.
+ */
+export const BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID =
+  '2026-08-19-bright-futures-duplicate-milestone' as const;
+
+export const BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_TARGET = {
+  slug: 'ms_5y_self_help_2',
+  expectedClinicalStatus: 'clinical_review',
+  expectedReviewRevision: 5,
+} as const;
+
+export type BrightFuturesDuplicateMilestoneRetirementSlug =
+  typeof BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_TARGET.slug;
+
 const retiredMilestoneSlugs = new Set<string>([
   ...DUPLICATE_MILESTONE_SLUGS,
   ...SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_SLUGS,
+  BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_TARGET.slug,
 ]);
 
 /** Central guard used by seed generation to prevent any retired slug returning. */

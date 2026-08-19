@@ -15,10 +15,13 @@ import {
   seedMediaIsProtected,
 } from './lib/seedPolicy';
 import {
+  BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID,
+  BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_TARGET,
   DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID,
   DUPLICATE_MILESTONE_SLUGS,
   SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_RELEASE_ID,
   SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_TARGETS,
+  type BrightFuturesDuplicateMilestoneRetirementSlug,
   type DuplicateMilestoneSlug,
   type SocialEmotionalMilestoneRetirementSlug,
 } from './lib/contentRetirements';
@@ -1638,6 +1641,147 @@ export const retireSocialEmotionalMilestones = internalMutation({
       publishedWithdrawn,
       unpublishedArchived,
       total: SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_TARGETS.length,
+    };
+  },
+});
+
+const brightFuturesDuplicateMilestoneSlugValidator =
+  v.literal('ms_5y_self_help_2');
+
+const brightFuturesDuplicateMilestonePreflightRowValidator = v.object({
+  slug: brightFuturesDuplicateMilestoneSlugValidator,
+  found: v.boolean(),
+  clinicalStatus: v.union(v.string(), v.null()),
+  reviewRevision: v.union(v.number(), v.null()),
+  expectedClinicalStatus: v.literal('clinical_review'),
+  expectedReviewRevision: v.number(),
+  exactState: v.boolean(),
+  mediaRows: v.number(),
+  evidenceLinkRows: v.number(),
+});
+
+/**
+ * Read-only production preflight for the one invalid Bright Futures template
+ * row. The expected status and revision are code-versioned; operators cannot
+ * supply a newer preimage to bypass the stale-state guard.
+ */
+export const preflightBrightFuturesDuplicateMilestoneRetirement = internalQuery({
+  args: {
+    releaseId: v.literal(BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID),
+  },
+  returns: brightFuturesDuplicateMilestonePreflightRowValidator,
+  handler: async (ctx) => {
+    const target = BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_TARGET;
+    const content = await ctx.db
+      .query('libraryContent')
+      .withIndex('by_slug', (q) => q.eq('slug', target.slug))
+      .unique();
+    const mediaRows = await ctx.db
+      .query('libraryMedia')
+      .withIndex('by_content', (q) => q.eq('contentSlug', target.slug))
+      .take(100);
+    const evidenceLinkRows = await ctx.db
+      .query('evidenceLinks')
+      .withIndex('by_slug', (q) => q.eq('slug', target.slug))
+      .take(20);
+    const reviewRevision = content ? (content.reviewRevision ?? 1) : null;
+    const alreadyRetiredByRelease = content?.clinicalStatus === 'archived'
+      && content.reviewNote === `Retired by ${BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID}`;
+
+    return {
+      slug: target.slug as BrightFuturesDuplicateMilestoneRetirementSlug,
+      found: content !== null,
+      clinicalStatus: content?.clinicalStatus ?? null,
+      reviewRevision,
+      expectedClinicalStatus: target.expectedClinicalStatus,
+      expectedReviewRevision: target.expectedReviewRevision,
+      exactState: reviewRevision === target.expectedReviewRevision
+        && (content?.clinicalStatus === target.expectedClinicalStatus || alreadyRetiredByRelease),
+      mediaRows: mediaRows.length,
+      evidenceLinkRows: evidenceLinkRows.length,
+    };
+  },
+});
+
+/**
+ * Atomically archives the exact invalid 5-year self-help row while preserving
+ * its media, evidence links and review history for staff audit. An archived
+ * replay is idempotent only when this release's note is present.
+ */
+export const retireBrightFuturesDuplicateMilestone = internalMutation({
+  args: {
+    releaseId: v.literal(BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID),
+  },
+  returns: v.object({
+    retired: v.number(),
+    alreadyRetired: v.number(),
+    publishedWithdrawn: v.number(),
+    unpublishedArchived: v.number(),
+    total: v.number(),
+  }),
+  handler: async (ctx) => {
+    const target = BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_TARGET;
+    const content = await ctx.db
+      .query('libraryContent')
+      .withIndex('by_slug', (q) => q.eq('slug', target.slug))
+      .unique();
+    if (!content) throw new Error(`Retirement target missing: ${target.slug}`);
+    if ((content.reviewRevision ?? 1) !== target.expectedReviewRevision) {
+      throw new Error(`Retirement target has a newer review revision: ${target.slug}`);
+    }
+    if (content.clinicalStatus === 'archived') {
+      if (content.reviewNote !== `Retired by ${BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID}`) {
+        throw new Error(`Retirement target was archived outside this release: ${target.slug}`);
+      }
+      return {
+        retired: 0,
+        alreadyRetired: 1,
+        publishedWithdrawn: 0,
+        unpublishedArchived: 0,
+        total: 1,
+      };
+    }
+    if (content.clinicalStatus !== target.expectedClinicalStatus) {
+      throw new Error(`Retirement target has an unexpected status: ${target.slug}`);
+    }
+
+    const now = Date.now();
+    await ctx.db.patch(content._id, {
+      clinicalStatus: 'archived',
+      reviewerId: undefined,
+      reviewerQualification: undefined,
+      reviewerDisplayName: undefined,
+      reviewScope: undefined,
+      reviewedAt: undefined,
+      nextReviewAt: undefined,
+      reviewNote: `Retired by ${BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID}`,
+      updatedAt: now,
+    });
+    await logAudit(
+      ctx,
+      null,
+      'library.bright_futures_duplicate_milestone.retired',
+      'libraryContent',
+      content._id,
+      `${BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID} · ${content.slug}`,
+      {
+        before: JSON.stringify({
+          clinicalStatus: target.expectedClinicalStatus,
+          reviewRevision: target.expectedReviewRevision,
+        }),
+        after: JSON.stringify({
+          clinicalStatus: 'archived',
+          reviewRevision: target.expectedReviewRevision,
+        }),
+      },
+    );
+
+    return {
+      retired: 1,
+      alreadyRetired: 0,
+      publishedWithdrawn: 0,
+      unpublishedArchived: 1,
+      total: 1,
     };
   },
 });

@@ -770,7 +770,7 @@ const GUIDES_E: SeedItem[] = [
         b('ကြမ်းပြင်ပေါ် အဝတ်ခင်း၍ ကစားခြင်းက ကုတင်ထက် ပိုဘေးကင်းသည်။', 'Floor play on a cloth is safer than a bed.'),
       ],
       outdoor: [
-        b('ကားစီးစဉ် သက်ဆိုင်ရာ ကလေးထိုင်ခုံ ရှိပါက နောက်ဘက်တွင် အသုံးပြုပါ။', 'If a car seat is available, use it in the back seat.'),
+        b('ခရီးတိုင်းတွင် ကလေး၏ အသက်နှင့် ကိုယ်အရွယ်အစားနှင့် ကိုက်ညီပြီး မှန်ကန်စွာ တပ်ဆင်ထားသော နောက်ဘက်မျက်နှာမူ ကလေးထိုင်ခုံကို သုံးပါ။', 'On every trip, use a correctly installed rear-facing child restraint appropriate for the baby’s age and size.'),
         b('တိုက်ရိုက် နေရောင်နှင့် အပူချိန်မြင့်မှုမှ ကာကွယ်ပါ။', 'Protect from direct sun and heat.'),
       ],
       lowCost: [
@@ -793,7 +793,7 @@ const GUIDES_E: SeedItem[] = [
       faq: [
         {
           q: b('ကလေးကို ကားစီးစဉ် ပွေ့ချီထားလို့ ရလား။', 'Can I hold her in my lap in a car?'),
-          a: b('မရပါ။ ပွေ့ချီထားခြင်းက ကာကွယ်မှု မပေးနိုင်ပါ။ ကလေးထိုင်ခုံ ရှိပါက အသုံးပြုပါ။', 'No. Holding gives no protection in a crash. Use a child restraint if one is available.'),
+          a: b('မရပါ။ ယာဉ်တိုက်မှုတွင် ပွေ့ချီထားခြင်းက ကာကွယ်မပေးနိုင်ပါ။ ခရီးတိုင်းတွင် ကလေး၏ အသက်နှင့် ကိုယ်အရွယ်အစားနှင့် ကိုက်ညီပြီး မှန်ကန်စွာ တပ်ဆင်ထားသော နောက်ဘက်မျက်နှာမူ ကလေးထိုင်ခုံကို သုံးပါ။', 'No. Holding a baby provides no protection in a crash. On every trip, use a correctly installed rear-facing child restraint appropriate for the baby’s age and size.'),
         },
         {
           q: b('အရေးပေါ် ဖြစ်ရင် ဘယ်လက္ခဏာတွေက ချက်ချင်း ပြရမလဲ။', 'Which signs mean go straight for help?'),

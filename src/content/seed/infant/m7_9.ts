@@ -87,10 +87,10 @@ const MILESTONES: SeedItem[] = [
       title: b('လက်ဖြင့် ကိုယ်တိုင် စားနိုင်လာခြင်း', 'Starting to feed herself with her hands'),
       observe: b('ကလေးသည် ပျော့သော အစာတုံးများကို ကိုယ်တိုင် ကောက်စားပါသလား။ ခွက်ကို ကိုင်ကြည့်ပါသလား။', 'Does she pick up soft finger foods herself, or hold a cup?'),
       why: b('၈ လဝန်းကျင်တွင် ပျော့သော အစာတုံးများကို ကိုယ်တိုင် ကောက်စားနိုင်လာသည်။ ကိုယ်တိုင် စားခြင်းသည် လက်ကြွက်သားများနှင့် အစားအစာ လက်ခံမှုကို တစ်ပြိုင်နက် လေ့ကျင့်ပေးသည်။', 'Around 8 months many babies can pick up soft finger foods. Self-feeding builds hand skills and food acceptance at the same time.'),
-      red: b('အစာကို ပါးစပ်သို့ လုံးဝ မယူတတ်ခြင်း၊ စားတိုင်း ချောင်းဆိုးခြင်း၊ လည်ချောင်း ပိတ်ခြင်းကို ပြသင့်သည်။', 'Never bringing food to the mouth, or coughing and choking at every meal, is worth checking.'),
+      red: b('အစာစားတိုင်း ချောင်းဆိုးခြင်း သို့မဟုတ် မကြာခဏ တစ်ဆို့ခြင်းရှိပါက ကျန်းမာရေးဝန်ထမ်းထံ အမြန်ဆုံး စစ်ဆေးပါ။ ယခုလက်ရှိ အသက်မရှူနိုင်၊ အသံမထွက်နိုင် သို့မဟုတ် ထိရောက်စွာ မချောင်းဆိုးနိုင်ပါက အရေးပေါ်အကူအညီ ချက်ချင်းခေါ်ပါ။', 'If coughing occurs at every meal or choking happens repeatedly, seek prompt assessment from a health professional. If the child cannot breathe, make a sound, or cough effectively now, call emergency help immediately.'),
       encouragement: b('ပက်ကျံခြင်းသည် အမှား မဟုတ်ဘဲ သင်ယူမှု၏ တစ်စိတ်တစ်ပိုင်း ဖြစ်သည်။', 'Mess is not a mistake — it is part of learning.'),
     }),
-    'Self-feeding with soft finger foods around 8 months follows CDC and AAP milestone guidance, the paediatric occupational-therapy references in the registry and the Bright Futures preventive-care schedule.',
+    'Self-feeding with soft finger foods around 8 months follows CDC and AAP milestone guidance, paediatric occupational-therapy references and the Bright Futures preventive-care schedule; recurring mealtime cough or choking follows ASHA feeding-and-swallowing guidance, while acute airway-emergency signs follow HealthyChildren choking guidance.',
   ),
   kb(
     milestone('7_9m', 'gross_motor', 3, {
