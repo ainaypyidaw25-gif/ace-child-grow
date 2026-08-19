@@ -15,9 +15,9 @@ export const MILESTONES: SeedItem[] = [
     encouragement: { mm: 'ကလေးနိုးနေချိန် လူကြီးက အနီးကပ်ကြီးကြပ်၍ နေ့စဉ် မှောက်လျက်ကစားချိန် အနည်းငယ်စီ ပေးပါ။ အိပ်ချိန်တွင် ကျောပေါ်လှန်အိပ်စေပါ။', en: 'Offer short tummy-time moments each day only while the baby is awake and closely supervised. Place the baby on the back for sleep.' },
   }),
   m('birth_2m', 'social', 1, {
-    title: { mm: 'မျက်လုံးချင်းဆုံ ကြည့်ခြင်း', en: 'Makes eye contact' },
-    observe: { mm: 'သင့်မျက်နှာကို ကြည့်ပြီး မျက်လုံးချင်း ဆုံပါသလား။', en: 'Looks at your face and meets your eyes?' },
-    why: { mm: 'မျက်လုံးချင်းဆုံခြင်းသည် ဆက်သွယ်မှု၏ ပထမဆုံး အခြေခံဖြစ်သည်။', en: 'Eye contact is the first foundation of connection.' },
+    title: { mm: 'မျက်နှာကို ကြည့်ခြင်း', en: 'Looks at faces' },
+    observe: { mm: 'သင့်မျက်နှာကို ကြည့်ပါသလား။', en: 'Does your baby look at your face?' },
+    why: { mm: 'လူမျက်နှာကို ကြည့်ခြင်းသည် အစောပိုင်း ဆက်သွယ်မှု၏ အစိတ်အပိုင်းတစ်ခု ဖြစ်သည်။', en: 'Looking at faces is one part of early connection.' },
   }),
   m('birth_2m', 'communication', 1, {
     title: { mm: 'အသံကြားလျှင် တုံ့ပြန်ခြင်း', en: 'Responds to sound' },

@@ -13,9 +13,10 @@
  * because the counts were never read back.
  *
  * SAFETY
- *   - Additive only. It pushes schema and functions and imports references.
- *     It never resets data, never deletes a row, never approves and never
- *     publishes. Approval is a human act performed through the admin screen.
+ *   - It never deletes a row, approves a source or publishes content. When
+ *     source metadata or link dependencies change, it deliberately clears the
+ *     affected approvals and returns dependent content to clinical_review.
+ *     Approval is a human act performed through the admin screen.
  *   - Idempotent. Re-running is expected and safe; the import distinguishes
  *     created / updated / unchanged / skipped / failed so a second run visibly
  *     changes nothing.
@@ -169,17 +170,32 @@ function runFunction(name, argsObject, key) {
  * rather than as an obvious "too big", and a batch that fails names the batch.
  */
 function importBatched(name, key, items, wrap, batchSize) {
-  const totals = { created: 0, updated: 0, unchanged: 0, skipped: 0, failed: 0, failedIds: [] };
+  const totals = {
+    created: 0,
+    updated: 0,
+    unchanged: 0,
+    reviewReset: 0,
+    reviewResetIds: [],
+    invalidatedContentKeys: [],
+    skipped: 0,
+    failed: 0,
+    failedIds: [],
+  };
   for (let i = 0; i < items.length; i += batchSize) {
     const slice = items.slice(i, i + batchSize);
     const res = runFunction(name, wrap(slice), key).value;
     totals.created += res.created;
     totals.updated += res.updated;
     totals.unchanged += res.unchanged;
+    totals.reviewReset += res.reviewReset ?? 0;
+    totals.reviewResetIds.push(...(res.reviewResetIds ?? []));
+    totals.invalidatedContentKeys.push(...(res.invalidatedContentKeys ?? []));
     totals.skipped += res.skipped;
     totals.failed += res.failed;
     totals.failedIds.push(...(res.failedIds ?? res.failedKeys ?? []));
   }
+  totals.reviewResetIds = [...new Set(totals.reviewResetIds)].sort();
+  totals.invalidatedContentKeys = [...new Set(totals.invalidatedContentKeys)].sort();
   return totals;
 }
 
@@ -246,9 +262,22 @@ if (!VERIFY_ONLY) {
     );
     say(
       `     references: created ${sourceResult.created}, updated ${sourceResult.updated}, ` +
-        `unchanged ${sourceResult.unchanged}, skipped ${sourceResult.skipped}, failed ${sourceResult.failed}`,
+        `unchanged ${sourceResult.unchanged}, review-reset ${sourceResult.reviewReset}, ` +
+        `content-invalidated ${sourceResult.invalidatedContentKeys.length}, ` +
+        `skipped ${sourceResult.skipped}, failed ${sourceResult.failed}`,
     );
-    if (sourceResult.failed > 0) say(`     failed ids: ${sourceResult.failedIds.join(', ')}`);
+    if (sourceResult.reviewReset > 0) {
+      say(`     reset source ids: ${sourceResult.reviewResetIds.join(', ')}`);
+    }
+    if (sourceResult.invalidatedContentKeys.length > 0) {
+      say(`     invalidated content: ${sourceResult.invalidatedContentKeys.join(', ')}`);
+    }
+    if (sourceResult.failed > 0) {
+      fail(
+        `reference import partially failed; link import was NOT started. Failed ids: ` +
+          sourceResult.failedIds.join(', '),
+      );
+    }
   } catch (err) {
     fail(`the reference import failed:\n${String(err.stderr ?? err).slice(0, 1200)}`);
   }
@@ -263,9 +292,15 @@ if (!VERIFY_ONLY) {
     );
     say(
       `     links:      created ${linkResult.created}, updated ${linkResult.updated}, ` +
-        `unchanged ${linkResult.unchanged}, skipped ${linkResult.skipped}, failed ${linkResult.failed}`,
+        `unchanged ${linkResult.unchanged}, content-invalidated ${linkResult.invalidatedContentKeys.length}, ` +
+        `skipped ${linkResult.skipped}, failed ${linkResult.failed}`,
     );
-    if (linkResult.failed > 0) say(`     failed keys: ${linkResult.failedKeys.join(', ')}`);
+    if (linkResult.invalidatedContentKeys.length > 0) {
+      say(`     invalidated content: ${linkResult.invalidatedContentKeys.join(', ')}`);
+    }
+    if (linkResult.failed > 0) {
+      fail(`link import partially failed. Failed keys: ${linkResult.failedIds.join(', ')}`);
+    }
   } catch (err) {
     fail(`the link import failed:\n${String(err.stderr ?? err).slice(0, 1200)}`);
   }

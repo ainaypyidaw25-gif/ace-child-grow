@@ -361,6 +361,12 @@ export default defineSchema({
     reviewedAt: v.optional(v.number()),
     nextReviewAt: v.optional(v.number()),
     reviewNote: v.optional(v.string()),
+    // Agent-assisted publication is a separate, explicitly disclosed lane.
+    // These fields never substitute for reviewerId/reviewerQualification or
+    // rows in contentReviews; they bind the visible item to an append-only AI
+    // audit run while preserving the human review history unchanged.
+    aiPublicationReleaseId: v.optional(v.string()),
+    aiPublishedAt: v.optional(v.number()),
     // ------------------------------------------------------------------
     // Owner-priority governance (all OPTIONAL and additive — existing rows,
     // including every Production row, remain valid without them). These fields
@@ -470,6 +476,131 @@ export default defineSchema({
     .index('by_content_dimension_version', ['contentSlug', 'dimension', 'contentVersion'])
     .index('by_content', ['contentSlug'])
     .index('by_reviewer', ['reviewerId']),
+
+  // ------------------------------------------------------------------
+  // Advisory AI audit provenance. These append-only records are deliberately
+  // separate from human review decisions and can never represent clinical or
+  // evidence approval. A narrowly allowlisted AI-publication lane may read
+  // them, but only when every exact content/link/source snapshot still matches.
+  // ------------------------------------------------------------------
+  aiAuditRuns: defineTable({
+    runId: v.string(),
+    releaseId: v.string(),
+    status: v.union(v.literal('completed'), v.literal('failed')),
+    provider: v.string(),
+    model: v.string(),
+    modelVersion: v.optional(v.string()),
+    policyVersion: v.string(),
+    gitCommit: v.string(),
+    targetCount: v.number(),
+    summary: v.string(),
+    limitations: v.array(v.string()),
+    startedAt: v.number(),
+    completedAt: v.number(),
+    outputHash: v.string(),
+  })
+    .index('by_run_id', ['runId'])
+    .index('by_release_id', ['releaseId'])
+    .index('by_status', ['status']),
+
+  aiEvidenceAudits: defineTable({
+    runId: v.string(),
+    sourceId: v.string(),
+    sourceUpdatedAt: v.number(),
+    sourceSnapshotHash: v.string(),
+    verdict: v.union(
+      v.literal('pass'),
+      v.literal('needs_changes'),
+      v.literal('insufficient_evidence'),
+      v.literal('blocked'),
+    ),
+    claimScope: v.string(),
+    urlsChecked: v.array(v.string()),
+    findings: v.array(v.string()),
+    limitations: v.array(v.string()),
+    auditedAt: v.number(),
+    nextAuditDate: v.string(),
+    outputHash: v.string(),
+  })
+    .index('by_run_id', ['runId'])
+    .index('by_source_and_updated_at', ['sourceId', 'sourceUpdatedAt']),
+
+  aiContentAudits: defineTable({
+    runId: v.string(),
+    contentSlug: v.string(),
+    contentType: v.string(),
+    reviewRevision: v.number(),
+    contentUpdatedAt: v.number(),
+    contentSnapshotHash: v.string(),
+    evidenceLinkUpdatedAt: v.number(),
+    evidenceLinkSnapshotHash: v.string(),
+    sourceIds: v.array(v.string()),
+    verdict: v.union(
+      v.literal('pass'),
+      v.literal('needs_changes'),
+      v.literal('insufficient_evidence'),
+      v.literal('blocked'),
+    ),
+    checks: v.array(v.string()),
+    limitations: v.array(v.string()),
+    auditedAt: v.number(),
+    nextAuditDate: v.string(),
+    outputHash: v.string(),
+  })
+    .index('by_run_id', ['runId'])
+    .index('by_content_revision_and_updated_at', [
+      'contentSlug',
+      'reviewRevision',
+      'contentUpdatedAt',
+    ]),
+
+  // Default-off operational switch. Both this singleton and the server-side
+  // environment flag must be enabled before an AI-audited release is visible.
+  // Configuration can disable releases but cannot extend the compile-time
+  // three-item allowlist.
+  aiPublicationConfig: defineTable({
+    key: v.literal('global'),
+    enabled: v.boolean(),
+    generation: v.number(),
+    reason: v.string(),
+    operator: v.string(),
+    updatedAt: v.number(),
+  }).index('by_key', ['key']),
+
+  // Immutable release snapshots for the separate AI-audited parent lane.
+  // Revocation appends state to the release row; it never rewrites an AI audit
+  // into a human approval or changes contentReviews/evidenceSources decisions.
+  aiPublicationReleases: defineTable({
+    releaseId: v.string(),
+    targetKey: v.string(),
+    contentId: v.id('libraryContent'),
+    contentType: v.string(),
+    contentSlug: v.string(),
+    status: v.union(v.literal('active'), v.literal('revoked')),
+    reviewRevision: v.number(),
+    contentUpdatedAt: v.number(),
+    contentSnapshotHash: v.string(),
+    evidenceLinkUpdatedAt: v.number(),
+    evidenceLinkSnapshotHash: v.string(),
+    sourceSnapshots: v.array(v.object({
+      sourceId: v.string(),
+      sourceUpdatedAt: v.number(),
+      sourceSnapshotHash: v.string(),
+      evidenceAuditRunId: v.string(),
+    })),
+    contentAuditRunId: v.string(),
+    auditArtifactHash: v.string(),
+    policyVersion: v.string(),
+    gitCommit: v.string(),
+    operator: v.string(),
+    createdAt: v.number(),
+    expiresAt: v.number(),
+    revokedAt: v.optional(v.number()),
+    revokeReason: v.optional(v.string()),
+  })
+    .index('by_release_id', ['releaseId'])
+    .index('by_target_key', ['targetKey'])
+    .index('by_status', ['status']),
 
   // Append-only field-level edit history for the reviewer workspace. Full
   // content snapshots can exceed Convex's document limit, so each row stores a

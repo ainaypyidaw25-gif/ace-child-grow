@@ -5,7 +5,18 @@
 // the guarantees they protect are server-side. A hidden button is not a
 // control; the mutation refusing the write is the control.
 import { describe, it, expect } from 'vitest';
-import { OUTDATED_AFTER_YEARS, REVIEW_CADENCE_MONTHS } from '../types';
+import {
+  OUTDATED_AFTER_YEARS as LOCAL_OUTDATED_AFTER_YEARS,
+  REVIEW_CADENCE_MONTHS as LOCAL_REVIEW_CADENCE_MONTHS,
+} from '../types';
+import {
+  OUTDATED_AFTER_YEARS as SERVER_OUTDATED_AFTER_YEARS,
+  REVIEW_CADENCE_MONTHS as SERVER_REVIEW_CADENCE_MONTHS,
+} from '../../../convex/lib/evidenceFreshness';
+import {
+  evidenceDependencyInvalidationPatch,
+  reviewRefusal as reviewRefusalPolicy,
+} from '../../../convex/evidence';
 
 const raw = (glob: Record<string, string>) => Object.values(glob)[0] ?? '';
 
@@ -74,8 +85,13 @@ describe('invalid review transitions', () => {
     ['an approval with no named reviewer', 'reviewer_required'],
     ['an approval with no stated qualification', 'qualification_required'],
     ['a decision with no review date', 'review_date_required'],
+    ['a decision with a malformed review date', 'review_date_invalid'],
+    ['a decision with a future review date', 'review_date_future'],
+    ['a decision with a malformed next review date', 'next_review_date_invalid'],
     ['a decision on a reference that does not exist', 'not_found'],
     ['approving a record held at evidence_required', 'evidence_required'],
+    ['approving an old source without a justification note', 'outdated_note_required'],
+    ['recording an overlong reviewer note', 'note_too_long'],
   ] as const;
 
   it.each(refusals)('refuses %s', (_case, code) => {
@@ -123,7 +139,71 @@ describe('invalid review transitions', () => {
 
   it('records the review date and supports a next review date', () => {
     expect(setReview).toContain('reviewDate: args.reviewDate');
-    expect(setReview).toContain('nextReviewDate: args.nextReviewDate ?? row.nextReviewDate');
+    expect(setReview).toContain('nextReviewDate: row.nextReviewDate ?? args.nextReviewDate ?? null');
+  });
+
+  it('rejects invalid, future and reversed review dates in the executable policy', () => {
+    const row = {
+      reviewStatus: 'awaiting_review',
+      evidenceLevel: 'guideline',
+      year: 2025,
+      verifiedOn: '2026-08-01',
+      reviewDate: null,
+      nextReviewDate: null,
+    };
+    const base = {
+      status: 'approved',
+      reviewer: 'Dr Reviewer',
+      reviewerQualification: 'MBBS',
+      reviewDate: '2026-08-18',
+    };
+    expect(reviewRefusalPolicy({ ...base, reviewDate: 'not-a-date' }, row)?.code)
+      .toBe('review_date_invalid');
+    expect(reviewRefusalPolicy({ ...base, reviewDate: '2099-01-01' }, row)?.code)
+      .toBe('review_date_future');
+    expect(reviewRefusalPolicy({ ...base, nextReviewDate: '2026-02-30' }, row)?.code)
+      .toBe('next_review_date_invalid');
+    expect(reviewRefusalPolicy({ ...base, nextReviewDate: '2026-08-17' }, row)?.code)
+      .toBe('next_review_date_before_anchor');
+  });
+
+  it('does not allow a reviewer to revive an overdue publisher source', () => {
+    expect(reviewRefusalPolicy({
+      status: 'approved', reviewer: 'Dr Reviewer', reviewerQualification: 'MBBS',
+      reviewDate: '2026-08-18', nextReviewDate: '2028-01-01',
+    }, {
+      reviewStatus: 'awaiting_review', evidenceLevel: 'parent_education', year: 2023,
+      verifiedOn: '2026-08-18', reviewDate: null, nextReviewDate: '2026-02-17',
+    })?.code).toBe('source_review_overdue');
+  });
+
+  it('requires an auditable note for old evidence but does not reject age alone', () => {
+    const row = {
+      reviewStatus: 'awaiting_review', evidenceLevel: 'guideline', year: 2017,
+      verifiedOn: '2026-08-18', reviewDate: null, nextReviewDate: '2027-08-18',
+    };
+    const args = {
+      status: 'approved', reviewer: 'Dr Reviewer', reviewerQualification: 'MBBS',
+      reviewDate: '2026-08-18', nextReviewDate: '2027-08-18',
+    };
+    expect(reviewRefusalPolicy(args, row)?.code).toBe('outdated_note_required');
+    expect(reviewRefusalPolicy({
+      ...args,
+      note: 'Publisher confirms this remains the current standard; no replacement edition exists.',
+    }, row)).toBeNull();
+    expect(reviewRefusalPolicy({ ...args, note: 'x'.repeat(2_001) }, row)?.code)
+      .toBe('note_too_long');
+  });
+
+  it('passes reviewer notes through the UI and preserves them in append-only audit details', () => {
+    const admin = raw(
+      import.meta.glob('../../screens/EvidenceAdmin.tsx', {
+        query: '?raw', import: 'default', eager: true,
+      }) as Record<string, string>,
+    );
+    expect(admin).toContain('reviewerNote.trim()');
+    expect(admin).toContain("res.code === 'outdated_note_required'");
+    expect(functionBody(evidenceSrc, 'setReview')).toContain('` / note: ${reviewNote}`');
   });
 
   it('makes the caller check the outcome instead of assuming success', () => {
@@ -234,19 +314,49 @@ describe('import result reporting', () => {
     expect(importLinks).toContain('unchanged += 1');
   });
 
-  it('never lets an import assert approval or wipe a review decision', () => {
+  it('never lets an import assert approval and invalidates review on changed evidence', () => {
     expect(importSources).toContain("rest.reviewStatus === 'approved' ? 'awaiting_review'");
-    for (const field of [
-      'reviewStatus',
-      'reviewer',
-      'reviewerQualification',
-      'reviewDate',
-      'reviewNote',
-    ]) {
-      expect(importSources, `${field} is not preserved on re-import`).toContain(
-        `${field}: existing.${field}`,
-      );
-    }
+    expect(importSources).toContain('evidenceImportReviewPolicy(');
+    expect(importSources).toContain('evidenceImportReviewFields(');
+    expect(importSources).toContain('reviewReset += 1');
+  });
+
+  it('makes retired source rows immutable and invalidates dependent content revisions', () => {
+    expect(importSources).toContain("if (existing.reviewStatus === 'retired')");
+    expect(importSources).toContain('invalidateDependentContentReviews(');
+    expect(importLinks).toContain('invalidateDependentContentReviews(');
+    expect(evidenceDependencyInvalidationPatch(7, 123)).toEqual({
+      reviewRevision: 8,
+      clinicalStatus: 'clinical_review',
+      reviewerId: undefined,
+      reviewerQualification: undefined,
+      reviewerDisplayName: undefined,
+      reviewScope: undefined,
+      reviewedAt: undefined,
+      nextReviewAt: undefined,
+      reviewNote: undefined,
+      updatedAt: 123,
+    });
+  });
+
+  it('validates import statuses and declares the expanded result contract', () => {
+    expect(evidenceSrc).toContain("v.literal('evidence_required')");
+    expect(evidenceSrc).toContain("v.literal('awaiting_review')");
+    expect(evidenceSrc).toContain('returns: sourceImportResultValidator');
+    expect(evidenceSrc).toContain('returns: linkImportResultValidator');
+  });
+
+  it('shows approval resets and stops links after a source-import failure', () => {
+    const admin = raw(
+      import.meta.glob('../../screens/EvidenceAdmin.tsx', {
+        query: '?raw',
+        import: 'default',
+        eager: true,
+      }) as Record<string, string>,
+    );
+    expect(admin).toContain('src.reviewResetIds.join');
+    expect(admin).toContain('if (src.failed > 0)');
+    expect(admin.indexOf('if (src.failed > 0)')).toBeLessThan(admin.indexOf('await importLinks'));
   });
 });
 
@@ -255,29 +365,16 @@ describe('import result reporting', () => {
 // two different answers to "is this reference expired" depending on where they
 // looked — so the duplication is allowed, but only under this test.
 describe('staleness rules match between the server and the local reports', () => {
-  const table = (name: string): Record<string, number> => {
-    const m = evidenceSrc.match(
-      new RegExp(`const ${name}: Record<string, number> = \\{([^}]*)\\}`),
-    );
-    expect(m, `${name} is not defined in convex/evidence.ts`).toBeTruthy();
-    const out: Record<string, number> = {};
-    for (const line of m![1].split('\n')) {
-      const kv = line.match(/(\w+):\s*(\d+)/);
-      if (kv) out[kv[1]] = Number(kv[2]);
-    }
-    return out;
-  };
-
   it('uses the same review cadence', () => {
-    expect(table('REVIEW_CADENCE_MONTHS')).toEqual(REVIEW_CADENCE_MONTHS);
+    expect(SERVER_REVIEW_CADENCE_MONTHS).toEqual(LOCAL_REVIEW_CADENCE_MONTHS);
   });
 
   it('uses the same outdated-after thresholds', () => {
-    expect(table('OUTDATED_AFTER_YEARS')).toEqual(OUTDATED_AFTER_YEARS);
+    expect(SERVER_OUTDATED_AFTER_YEARS).toEqual(LOCAL_OUTDATED_AFTER_YEARS);
   });
 
   it('treats a record with no review anchor as due, not as fresh', () => {
-    expect(functionBody(evidenceSrc, 'integrity')).toContain('if (!due || due < today)');
+    expect(functionBody(evidenceSrc, 'integrity')).toContain('evidenceIsExpired(s, today)');
   });
 
   it('reports outdated separately from expired, and neither as an error', () => {
@@ -471,6 +568,15 @@ describe('activation script safety', () => {
   it('reads the live counts back instead of reporting what it submitted', () => {
     expect(activateSrc).toContain("runFunction('evidence:integrity'");
     expect(activateSrc).toContain('LIVE COUNTS (queried from the deployment, not assumed)');
+  });
+
+  it('reports reset ids and refuses to continue after a partial source import', () => {
+    expect(activateSrc).toContain('reviewResetIds');
+    expect(activateSrc).toContain('invalidatedContentKeys');
+    expect(activateSrc).toContain('link import was NOT started');
+    expect(activateSrc).toContain(
+      "link import partially failed. Failed keys: ${linkResult.failedIds.join(', ')}",
+    );
   });
 });
 

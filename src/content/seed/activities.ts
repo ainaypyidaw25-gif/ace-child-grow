@@ -31,7 +31,7 @@ export const ACTIVITIES: SeedItem[] = [
   }),
   activity({
     slug: 'peekaboo', title: b('“ဘယ်မှာလဲ၊ ဒီမှာပါ” ကစားခြင်း', 'Peek-a-boo'),
-    summary: b('မျက်နှာကို ခဏဖုံးပြီး ပြန်ဖော်ပြကာ မမြင်ရသော်လည်း ရှိနေဆဲဖြစ်ကြောင်း ကလေး နားလည်လာစေရန် ကစားခြင်း။', 'Teach object permanence through hide-and-reveal.'),
+    summary: b('မျက်နှာကို ခဏဖုံးပြီး ပြန်ဖော်ပြကာ မမြင်ရသော်လည်း လူနှင့်ပစ္စည်းများ ရှိနေဆဲဖြစ်ကြောင်း စူးစမ်းကစားခြင်း။', 'Use hide-and-reveal play to explore that people and objects still exist when out of sight.'),
     ageGroupKey: '7_9m', domains: ['social', 'cognitive'], difficulty: 'easy', durationMinutes: 5,
     materials: b('စောင်/ပဝါ တစ်ထည်။', 'A cloth or scarf.'),
     setup: b('မျက်နှာချင်းဆိုင် ထိုင်ပါ။', 'Sit face-to-face.'),

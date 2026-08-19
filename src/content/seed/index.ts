@@ -11,7 +11,7 @@ import { STORIES } from './stories';
 import { PRINTABLES } from './printables';
 import { INFANT_CONTENT } from './infant';
 import { OLDER_AUTHORED_CONTENT } from './older';
-import { isDuplicateMilestoneSlug } from '../../../convex/lib/contentRetirements';
+import { isRetiredMilestoneSlug } from '../../../convex/lib/contentRetirements';
 
 const AUTHORED_SEED: SeedItem[] = [
   ...MILESTONES,
@@ -25,11 +25,10 @@ const AUTHORED_SEED: SeedItem[] = [
   ...OLDER_AUTHORED_CONTENT,
 ];
 
-// The authored rows remain in source history until the coordinated production
-// withdrawal is complete, but they are absent from every new seed/import. This
-// prevents a later import from recreating a retired exact slug.
+// Every code-reviewed retirement remains absent from new seed/import payloads,
+// even if an old authored row is accidentally restored during a later edit.
 export const RAW_SEED: SeedItem[] = AUTHORED_SEED.filter(
-  (item) => !isDuplicateMilestoneSlug(item.slug),
+  (item) => !isRetiredMilestoneSlug(item.slug),
 );
 
 export const CONTENT_SEED: NormalizedItem[] = RAW_SEED.map(normalize);

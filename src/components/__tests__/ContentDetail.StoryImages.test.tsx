@@ -25,7 +25,8 @@ vi.mock('convex/react', () => {
         summaryEn: `EN ${slug}`,
         type: 'story',
         category: 'story',
-        clinicalStatus: 'published',
+        clinicalStatus: slug === 'st_first_day_school' ? 'clinical_review' : 'published',
+        publicationLane: slug === 'st_first_day_school' ? 'ai_audited' : 'human_reviewed',
         reviewScope: 'education',
         source: 'Production Convex',
         data: {
@@ -93,4 +94,15 @@ describe('ContentDetail published story illustrations', () => {
       expect(screen.getByTestId('story-illustration')).toHaveAttribute('alt', titleEn);
     },
   );
+
+  it('shows the prominent non-human-review disclosure on the AI-audited story', () => {
+    localStorage.setItem('ace-locale', 'en');
+    renderStory('st_first_day_school');
+    expect(screen.getByTestId('ai-publication-disclosure')).toHaveTextContent(
+      'AI-reviewed — not approved by a human specialist',
+    );
+    expect(screen.getByTestId('ai-publication-disclosure')).toHaveTextContent(
+      'not medical advice, developmental screening, or diagnosis',
+    );
+  });
 });

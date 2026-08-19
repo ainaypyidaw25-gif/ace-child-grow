@@ -14,6 +14,7 @@ import { printableIllustration } from '../content/printableIllustrations';
 import { storyIllustration } from '../content/storyIllustrations';
 import { approvedPrintablePayload } from '../domain/content/printableAvailability';
 import { isAppleAppStoreBuild } from '../app/platform';
+import { AI_BADGE, AI_DISCLOSURE, AI_PUBLICATION_LANE } from '../domain/content/aiPublication';
 
 type BL = { mm: string; en: string };
 
@@ -142,6 +143,20 @@ export function ContentDetail() {
             {L('← စာကြည့်တိုက်', '← Library')}
           </Link>
         </div>
+        {item.publicationLane === AI_PUBLICATION_LANE && (
+          <div
+            role="note"
+            className="mt-3 rounded-card border border-state-orange/40 bg-pastel-yellow/60 p-3 text-sm leading-6 text-ink"
+            data-testid="ai-publication-disclosure"
+          >
+            <p className="font-semibold text-state-orange-deep">
+              {locale === 'mm' ? AI_BADGE.mm : AI_BADGE.en}
+            </p>
+            <p className="mt-1 text-xs text-ink-soft">
+              {locale === 'mm' ? AI_DISCLOSURE.mm : AI_DISCLOSURE.en}
+            </p>
+          </div>
+        )}
         <h1 className="mt-1 text-xl font-bold text-sky-deep">{locale === 'mm' ? item.titleMm : item.titleEn}</h1>
         {(item.summaryMm || item.summaryEn) && (
           <p className="mt-1 text-ink-soft">{locale === 'mm' ? item.summaryMm : item.summaryEn}</p>
@@ -386,7 +401,7 @@ export function ContentDetail() {
             {L('ဤအက်ပ်သည် ရောဂါ မဖော်ထုတ်ပါ။ စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။',
                'This app does not diagnose. If concerned, consult a professional.')}
           </div>
-          {list('strengths').length > 0 && <Section title={L('အားသာချက်များ', 'Strengths')}><Bullets items={list('strengths')} /></Section>}
+          {list('strengths').length > 0 && <Section title={L('ကလေးတစ်ဦးချင်းအလိုက် တွေ့နိုင်သော အားသာချက်များ (ကလေးတိုင်းတွင် တူညီမည် မဟုတ်ပါ)', 'Possible individual strengths (not shared by every child)')}><Bullets items={list('strengths')} /></Section>}
           {list('possibleSigns').length > 0 && <Section title={L('သတိပြုမိနိုင်သည့် အချက်များ (ရောဂါသတ်မှတ်ချက် မဟုတ်ပါ)', 'Possible signs (not a diagnosis)')}><Bullets items={list('possibleSigns')} /></Section>}
           {Array.isArray(d.myths) && (d.myths as { myth: BL; fact: BL }[]).length > 0 && (
             <Section title={L('အယူအဆမှားနှင့် အမှန်', 'Myths vs Facts')}>
@@ -443,7 +458,9 @@ export function ContentDetail() {
       )}
 
       <p className="rounded-lg bg-pastel-yellow/50 px-3 py-2 text-[11px] leading-relaxed text-ink-soft">
-        {locale === 'mm'
+        {item.publicationLane === AI_PUBLICATION_LANE
+          ? locale === 'mm' ? AI_DISCLOSURE.mm : AI_DISCLOSURE.en
+          : locale === 'mm'
           ? item.reviewScope === 'education'
             ? 'သုံးသပ်မှုမှတ်တမ်း — ဤသာမန်ပညာပေးအကြောင်းအရာသည် လက်ရှိယုံကြည်ရသော ကိုးကားချက်များနှင့် ကိုက်ညီပြီး ပညာရေး၊ မြန်မာဘာသာ၊ အထောက်အထားနှင့် ဘေးကင်းရေးသုံးသပ်မှု ပြီးစီးထားပါသည်။ တစ်ဦးချင်းဆေးဘက်ဆိုင်ရာ အကြံဉာဏ် မဟုတ်ပါ။ စိုးရိမ်စရာရှိပါက သက်ဆိုင်ရာ ကျန်းမာရေးပညာရှင်နှင့် တိုင်ပင်ပါ။'
             : 'မှတ်ချက် — ဤအကြောင်းအရာသည် ယုံကြည်ရသော ကိုးကားချက်များအပေါ် အခြေခံထားသည့် အထွေထွေ မိဘလမ်းညွှန် ဖြစ်ပါသည်။ ဆေးဘက်ဆိုင်ရာ အကြံဉာဏ်အဖြစ် မယူဆသင့်ပါ။'

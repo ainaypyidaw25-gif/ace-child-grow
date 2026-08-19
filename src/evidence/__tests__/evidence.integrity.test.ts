@@ -170,10 +170,23 @@ describe('content links', () => {
     expect(sourcesForContent('does_not_exist')).toEqual([]);
   });
 
-  it('cites every reference it carries', () => {
-    // A working registry entry nothing links to is dead weight a reviewer must
-    // justify. Retired rows remain only as an audit trail and are exempt.
-    expect(unusedSourceIds()).toEqual([]);
+  it('keeps unlinked reference records non-citable until a direct claim needs them', () => {
+    // Valid publisher records may remain in the registry after a claim-scope
+    // cleanup. They must not be approved or parent-citable merely to satisfy a
+    // link-count invariant.
+    const unused = unusedSourceIds();
+    expect(unused).toEqual([
+      'aota-early-intervention',
+      'asha-speech-sound-disorders',
+      'asha-spoken-language-disorders',
+      'nice-ph40-social-emotional-2012',
+      'tb-swaiman-7e-2025',
+    ]);
+    for (const id of unused) {
+      expect(['evidence_required', 'awaiting_review', 'retired']).toContain(
+        resolveReviewStatus(SOURCE_BY_ID.get(id)!),
+      );
+    }
   });
 
   it('keeps known-dead and retired sources out of every active safety rule', () => {
@@ -192,15 +205,34 @@ describe('content links', () => {
 
   it('binds the corrected safety and screen-time claims to current public pages', () => {
     expect(SAFETY_RULE_SOURCES.sudden_weakness).toContain('cdc-afm-signs-2024');
-    expect(SOURCE_BY_ID.get('tb-swaiman-7e-2025')?.reviewStatus).toBe('evidence_required');
+    expect(SOURCE_BY_ID.get('tb-swaiman-7e-2025')?.reviewStatus).toBe('awaiting_review');
     expect(SOURCE_BY_ID.get('nhs-sids-2025')?.url).toBe(
       'https://www.nhs.uk/baby/caring-for-a-newborn/sudden-infant-death-syndrome-sids/',
     );
     expect(SOURCE_BY_ID.get('hc-screen-time-5cs-2024')?.url).toBe(
       'https://www.healthychildren.org/English/family-life/Media/Pages/kids-and-screen-time-5-cs-questions-for-toddlers-and-preschoolers.aspx',
     );
+    expect(SOURCE_BY_ID.get('hc-screen-time-5cs-2024')).toMatchObject({
+      ageMonthsMin: 24,
+      ageMonthsMax: 59,
+      verifiedOn: '2026-08-18',
+    });
+    expect(SOURCE_BY_ID.get('hc-screen-time-5cs-overview-2026')).toMatchObject({
+      year: 2026,
+      ageMonthsMin: 0,
+      ageMonthsMax: 216,
+      reviewStatus: 'awaiting_review',
+      verifiedOn: '2026-08-18',
+    });
     expect(sourcesForContent('st_little_seed')).toContain('hc-choking-prevention-2026');
     expect(sourcesForContent('lsn_screen_time')).toContain('hc-screen-time-5cs-infants-2024');
+    expect(sourcesForContent('lsn_screen_time')).toEqual(expect.arrayContaining([
+      'aap-digital-ecosystems-policy-2026',
+      'aap-digital-ecosystems-technical-2026',
+      'hc-screen-time-5cs-overview-2026',
+    ]));
+    expect(sourcesForContent('lsn_screen_time')).not.toContain('aap-media-young-minds-2016');
+    expect(SOURCE_BY_ID.get('aap-media-young-minds-2016')?.reviewStatus).toBe('retired');
   });
 
   it('links only to ids present in the registry map', () => {
@@ -327,9 +359,10 @@ describe('convex/evidence.ts authorization', () => {
   });
 
   // Re-importing publisher metadata must not quietly wipe the qualification a
-  // reviewer signed with, or an audited approval degrades into an anonymous one.
-  it('preserves the reviewer qualification across a re-import', () => {
-    expect(src).toContain('reviewerQualification: existing.reviewerQualification');
+  // An identical re-import must retain the qualification the reviewer signed
+  // with; a changed evidence payload must clear it alongside the stale review.
+  it('preserves reviewer qualification only while the evidence payload is unchanged', () => {
+    expect(src).toContain('const reviewFields = evidenceImportReviewFields(');
   });
 
   // The integrity probe returns live counts, dangling links and the identities

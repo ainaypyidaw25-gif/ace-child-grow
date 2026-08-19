@@ -48,7 +48,8 @@ function handler(fn: unknown): (c: ReturnType<typeof ctx>, a: Record<string, unk
 const approvedSource: Row = {
   sourceId: 's1', org: 'WHO', title: 'Reference', authors: null, year: 2020, edition: null,
   country: null, language: 'en', url: 'https://who.int', doi: null, isbn: null, pmid: null,
-  evidenceLevel: 'guideline', reviewStatus: 'approved',
+  evidenceLevel: 'guideline', reviewStatus: 'approved', verifiedOn: '2026-08-01',
+  reviewDate: '2026-08-01', nextReviewDate: '2028-08-01',
 };
 
 describe('ACG-GATE-001 — media.listForContent gates unpublished content', () => {
@@ -68,6 +69,19 @@ describe('ACG-GATE-001 — media.listForContent gates unpublished content', () =
   it('returns [] for a parent when no content row exists for the slug', async () => {
     const context = ctx({ profile: null, rows: { libraryContent: [], libraryMedia: [{ _id: 'm1', reviewStatus: 'approved', placeholder: false }] } });
     await expect(handler(listMedia)(context, { contentSlug: 'ghost' })).resolves.toEqual([]);
+  });
+
+  it('returns [] after a published item\'s only evidence expires', async () => {
+    const context = ctx({
+      profile: null,
+      rows: {
+        libraryContent: [{ slug: 'guide_x', type: 'guide', clinicalStatus: 'published' }],
+        evidenceLinks: [{ kind: 'guide', slug: 'guide_x', sourceIds: ['s1'] }],
+        evidenceSources: [{ ...approvedSource, nextReviewDate: '2026-08-17' }],
+        libraryMedia: [{ _id: 'm1', kind: 'illustration', reviewStatus: 'approved', placeholder: false, accessLevel: 'free_sample' }],
+      },
+    });
+    await expect(handler(listMedia)(context, { contentSlug: 'guide_x' })).resolves.toEqual([]);
   });
 
   it('rejects an unauthenticated caller', async () => {
@@ -116,6 +130,19 @@ describe('ACG-GATE-002 — evidence.forContent gates unpublished content', () =>
     });
     const result = await handler(evidenceForContent)(context, { slug: 'guide_x' }) as { allowed: boolean; sources: unknown[] };
     expect(result.sources).toHaveLength(1);
+  });
+
+  it('does not expose a stale approved citation to a parent', async () => {
+    const context = ctx({
+      profile: null,
+      rows: {
+        libraryContent: [{ slug: 'guide_x', type: 'guide', clinicalStatus: 'published' }],
+        evidenceLinks: [{ kind: 'guide', slug: 'guide_x', sourceIds: ['s1'] }],
+        evidenceSources: [{ ...approvedSource, nextReviewDate: '2026-08-17' }],
+      },
+    });
+    await expect(handler(evidenceForContent)(context, { slug: 'guide_x' }))
+      .resolves.toEqual({ allowed: true, sources: [] });
   });
 
   it('returns { allowed: false } for an unauthenticated caller', async () => {
