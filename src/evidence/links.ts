@@ -275,7 +275,10 @@ export const EXPLICIT_CONTENT_SOURCES: Record<string, string[]> = {
   lsn_screen_time: ['aap-digital-ecosystems-policy-2026', 'aap-digital-ecosystems-technical-2026', 'jr-madigan-screen-language-2020', 'who-pa-sleep-under5-2019', 'hc-screen-time-5cs-2024', 'hc-screen-time-5cs-infants-2024', 'hc-screen-time-5cs-overview-2026', 'jr-madigan-screen-asq-2019'],
   lsn_big_feelings: ['aap-toxic-stress-2021', 'us-hhs-head-start-elof-2015', 'hc-mental-emotional-development-2026'],
   lsn_making_friends: ['aap-power-of-play-2018', 'us-hhs-head-start-elof-2015', 'hc-mental-emotional-development-2026'],
-  lsn_early_math: ['aap-power-of-play-2018', 'tb-handbook-ecse-2016'],
+  // The AI-audited educational preview uses one exact, government-authored
+  // early-mathematics framework so its release can avoid mutating the widely
+  // shared AAP Power of Play source record in production.
+  lsn_early_math: ['us-hhs-head-start-elof-2015'],
   lsn_creativity: ['aap-power-of-play-2018'],
   lsn_problem_solving_parenting: ['jr-plosmed-parenting-2021', 'cdc-positive-parenting-toddlers-2026', 'jr-pakistan-lhw-2014'],
   lsn_special_needs_awareness: ['who-unicef-developmental-disabilities-2023', 'unicef-seen-counted-included-2022', 'aap-surveillance-2020', 'tb-ccitsn-3e-2004'],
@@ -317,9 +320,9 @@ export const EXPLICIT_CONTENT_SOURCES: Record<string, string[]> = {
   st_when_i_feel_angry: ['aap-toxic-stress-2021', 'us-hhs-head-start-elof-2015', 'hc-mental-emotional-development-2026'],
   st_taking_turns: ['aap-power-of-play-2018', 'us-hhs-head-start-elof-2015', 'hc-mental-emotional-development-2026'],
   st_goodnight_moon_friend: ['who-pa-sleep-under5-2019', 'jr-dowdall-bookreading-2020'],
-  st_waiting_at_clinic: ['nhs-baby-reviews-2023'],
+  st_waiting_at_clinic: ['nhs-alder-hey-outpatient-2023'],
   st_visit_to_doctor: ['tb-bright-futures-4e-2017', 'cdc-monitoring-screening-2026'],
-  st_first_day_school: ['tb-handbook-ecse-2016', 'us-hhs-head-start-elof-2015'],
+  st_first_day_school: ['us-hhs-head-start-first-day-jitters-2024'],
   st_sharing_mango: ['aap-power-of-play-2018'],
 
   // --- Printables ------------------------------------------------------------

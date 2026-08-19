@@ -405,14 +405,19 @@ export const forContent = query({
     // no libraryContent row (safety_rule, hope_topic) are inherently public
     // safety references and remain visible. Mirrors library.getBySlug.
     const staff = await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'language_reviewer', 'evidence_reviewer', 'clinical_reviewer']);
-    if (!staff) {
-      const content = await ctx.db
-        .query('libraryContent')
-        .withIndex('by_slug', (qq) => qq.eq('slug', args.slug))
-        .unique();
-      if (content && !(await contentIsParentReadable(ctx, content))) {
-        return { allowed: true as const, sources: [] };
-      }
+    const content = await ctx.db
+      .query('libraryContent')
+      .withIndex('by_slug', (qq) => qq.eq('slug', args.slug))
+      .unique();
+    const contentReadable = content ? await contentIsParentReadable(ctx, content) : false;
+    const aiAuditedContent = Boolean(
+      content
+      && content.clinicalStatus === 'clinical_review'
+      && content.aiPublicationReleaseId
+      && contentReadable,
+    );
+    if (!staff && content && !contentReadable) {
+      return { allowed: true as const, sources: [] };
     }
     const links = await ctx.db
       .query('evidenceLinks')
@@ -426,11 +431,18 @@ export const forContent = query({
         .query('evidenceSources')
         .withIndex('by_source_id', (qq) => qq.eq('sourceId', id))
         .unique();
-      // Parents only ever see a citation that a human approved.
+      // Conventional publications expose only human-approved citations. The
+      // separate AI-audited educational lane may expose its exact linked source
+      // snapshots after the shared fail-closed AI gate validates every one.
       if (
         src
-        && src.reviewStatus === 'approved'
-        && (staff || publicationEvidenceIsEligible(src, todayIsoUtc()))
+        && (
+          aiAuditedContent
+          || (
+            src.reviewStatus === 'approved'
+            && (staff || publicationEvidenceIsEligible(src, todayIsoUtc()))
+          )
+        )
       ) {
         const {
           sourceId, org, title, authors, year, edition, country, language,

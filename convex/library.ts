@@ -28,6 +28,7 @@ import {
   parentReadableContentResult,
   publicationEvidenceForContent,
 } from './lib/publicationVisibility';
+import { activeAiParentReadableContent } from './lib/aiPublicationVisibility';
 
 export { isPubliclyReadableStatus } from './lib/publicationVisibility';
 
@@ -84,6 +85,12 @@ function mergeEditableContentData(current: unknown, proposed: unknown): Record<s
   return mergeEditableContentValue(current, proposed) as Record<string, unknown>;
 }
 
+function parentPublicationFields(item: { aiPublicationReleaseId?: string }) {
+  return item.aiPublicationReleaseId
+    ? { publicationLane: 'ai_audited' as const }
+    : { publicationLane: 'human_reviewed' as const };
+}
+
 // List content by type, optionally filtered by age/domain/category and a query.
 // Non-staff receive published rows with current approved evidence only; staff
 // receive every workflow status.
@@ -105,10 +112,19 @@ export const publicationManifest = query({
   handler: async (ctx) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) return { complete: false, slugs: [] };
-    const rows = await ctx.db
-      .query('libraryContent')
-      .withIndex('by_status', (q) => q.eq('clinicalStatus', 'published'))
-      .take(PUBLICATION_MANIFEST_LIMIT + 1);
+    const [publishedRows, aiRows] = await Promise.all([
+      ctx.db
+        .query('libraryContent')
+        .withIndex('by_status', (q) => q.eq('clinicalStatus', 'published'))
+        .take(PUBLICATION_MANIFEST_LIMIT + 1),
+      activeAiParentReadableContent(ctx),
+    ]);
+    if (publishedRows.length > PUBLICATION_MANIFEST_LIMIT || !aiRows.complete) {
+      return { complete: false, slugs: [] };
+    }
+    const rows = [...new Map(
+      [...publishedRows, ...aiRows.rows].map((row) => [row.slug, row]),
+    ).values()];
     if (rows.length > PUBLICATION_MANIFEST_LIMIT) return { complete: false, slugs: [] };
     const visibility = await parentReadableContentResult(ctx, rows);
     if (!visibility.complete) return { complete: false, slugs: [] };
@@ -164,7 +180,10 @@ export const listByType = query({
     }
     // Stable ordering: age order not stored here, so order by slug for determinism.
     rows.sort((a, b) => a.slug.localeCompare(b.slug));
-    return { staff: parentAudience ? false : staff, items: rows };
+    return {
+      staff: parentAudience ? false : staff,
+      items: rows.map((item) => ({ ...item, ...parentPublicationFields(item) })),
+    };
   },
 });
 
@@ -199,7 +218,11 @@ export const getBySlug = query({
       ...row,
       url: row.storageId ? await ctx.storage.getUrl(row.storageId) : row.url,
     })));
-    return { item, media, staff: parentAudience ? false : staff };
+    return {
+      item: { ...item, ...parentPublicationFields(item) },
+      media,
+      staff: parentAudience ? false : staff,
+    };
   },
 });
 
@@ -395,7 +418,15 @@ export const search = query({
     return rows
       .filter((r) => r.searchText.includes(needle))
       .slice(0, 50)
-      .map((r) => ({ _id: r._id, slug: r.slug, type: r.type, titleMm: r.titleMm, titleEn: r.titleEn, clinicalStatus: r.clinicalStatus }));
+      .map((r) => ({
+        _id: r._id,
+        slug: r.slug,
+        type: r.type,
+        titleMm: r.titleMm,
+        titleEn: r.titleEn,
+        clinicalStatus: r.clinicalStatus,
+        ...parentPublicationFields(r),
+      }));
   },
 });
 
@@ -551,7 +582,7 @@ export const importSeed = mutation({
         .unique();
       const { media, ...content } = it;
       if (existing) {
-        if (!seedMayUpdateExisting(existing.clinicalStatus)) {
+        if (!seedMayUpdateExisting(existing.clinicalStatus, Boolean(existing.aiPublicationReleaseId))) {
           skippedApproved += 1;
           continue;
         }
@@ -683,6 +714,8 @@ export const updateDraft = mutation({
       reviewedAt: undefined,
       nextReviewAt: undefined,
       reviewNote: undefined,
+      aiPublicationReleaseId: undefined,
+      aiPublishedAt: undefined,
       updatedAt: now,
     });
     await ctx.db.insert('contentEditLogs', {
@@ -795,6 +828,11 @@ export const setReview = mutation({
       reviewedAt: now,
       nextReviewAt: args.nextReviewAt,
       reviewNote: args.reviewNote,
+      // Any human workflow transition supersedes the separate AI release
+      // binding. The append-only AI release/audits remain as history, but can
+      // no longer label or authorize this changed workflow state.
+      aiPublicationReleaseId: undefined,
+      aiPublishedAt: undefined,
       updatedAt: now,
     });
     const auditSummary = specialistReason === 'focused_emergency_wording'

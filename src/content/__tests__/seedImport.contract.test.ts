@@ -70,7 +70,7 @@ describe('seed generation', () => {
     expect(SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_RELEASE_ID)
       .toBe('2026-08-18-social-emotional-milestones');
     expect(SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_TARGETS).toEqual([
-      { slug: 'ms_3_4m_social_2', expectedClinicalStatus: 'published', expectedReviewRevision: 1 },
+      { slug: 'ms_3_4m_social_2', expectedClinicalStatus: 'clinical_review', expectedReviewRevision: 1 },
       { slug: 'ms_2_5y_social_3', expectedClinicalStatus: 'clinical_review', expectedReviewRevision: 2 },
       { slug: 'ms_13_18m_emotional_1', expectedClinicalStatus: 'clinical_review', expectedReviewRevision: 2 },
       { slug: 'ms_5y_emotional_1', expectedClinicalStatus: 'clinical_review', expectedReviewRevision: 1 },

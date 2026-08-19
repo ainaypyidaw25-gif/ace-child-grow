@@ -4804,23 +4804,23 @@
       ],
       "readingMinutes": 3,
       "body": {
-        "mm": "သင်္ချာသည် စာအုပ်ထဲသာ မဟုတ်ပါ။ လှေကားထစ် ရေတွက်ခြင်း၊ ပန်းကန် ခွဲဝေခြင်း၊ “ပိုကြီး/ပိုငယ်” နှိုင်းယှဉ်ခြင်းဖြင့် နေ့စဉ်ဘဝထဲ သင်္ချာ သင်ပေးနိုင်သည်။",
-        "en": "Math is not only in books. Count stairs, share out plates, compare “bigger/smaller” — teach math in daily life."
+        "mm": "AI စစ်ဆေးမှု အသိပေးချက် — ဤအကြောင်းအရာကို AI ဖြင့် စစ်ဆေးထားသော်လည်း ဆေးဘက်ပညာရှင် သို့မဟုတ် မြန်မာဘာသာကို မိခင်ဘာသာစကားအဖြစ် အသုံးပြုသော စာတည်းဖြတ်သူက အတည်ပြုထားခြင်း မရှိပါ။ အထွေထွေပညာပေးအတွက်သာ ဖြစ်ပြီး ဆေးဘက်ဆိုင်ရာ အကြံပြုချက်၊ ကလေးဖွံ့ဖြိုးမှု စစ်ဆေးချက် သို့မဟုတ် ရောဂါဖော်ထုတ်ချက် မဟုတ်ပါ။\n\nသင်္ချာသည် စာအုပ်ထဲသာ မဟုတ်ပါ။ နေ့စဉ်တွေ့ရသော အရာများကို အတူရေတွက်ခြင်း၊ ပုံသဏ္ဌာန်များကို ရှာဖွေခြင်း၊ “ပိုကြီး/ပိုငယ်” ဟု နှိုင်းယှဉ်ခြင်းဖြင့် အစောပိုင်း သင်္ချာအယူအဆများကို အတူလေ့ကျင့်နိုင်ပါသည်။",
+        "en": "AI review notice — This content was reviewed by AI but has not been approved by a clinician or native Myanmar-language editor. It is for general education only and is not medical advice, developmental screening, or diagnosis.\n\nMath is not only in books. Count everyday things together, look for shapes, and compare “bigger/smaller” to practise early math ideas."
       },
       "quiz": [
         {
           "q": {
-            "mm": "ကလေးကို သင်္ချာအခြေခံ သင်ပေးရန် အကောင်းဆုံးနည်းမှာ —",
-            "en": "Early math is best taught —"
+            "mm": "နေ့စဉ်ဘဝတွင် အစောပိုင်း သင်္ချာကို အတူလေ့ကျင့်နိုင်သည့် ရိုးရှင်းသော နည်းတစ်ခုမှာ —",
+            "en": "One simple way to practise early math in daily life is —"
           },
           "options": [
             {
-              "mm": "နေ့စဉ်ဘဝထဲတွင် ရေတွက်ကစားခြင်း",
-              "en": "in daily life"
+              "mm": "နေ့စဉ်တွေ့ရသော အရာများကို အတူရေတွက်ခြင်း",
+              "en": "counting everyday things together"
             },
             {
               "mm": "ရုပ်ပုံကတ်များကိုသာ အလွတ်ကျက်စေခြင်း",
-              "en": "only with flashcards"
+              "en": "using only memorized flashcards"
             }
           ],
           "answerIndex": 0
@@ -4849,7 +4849,7 @@
     "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
     "version": 1,
     "clinicalStatus": "clinical_review",
-    "searchText": "အစောပိုင်း သင်္ချာ everyday early math နေ့စဉ်ဘဝထဲ ရေတွက်ခြင်း၊ ပုံသဏ္ဌာန်၊ နှိုင်းယှဉ်ခြင်း။ counting, shapes, and comparing in daily life. early_mathematics lesson နေ့စဉ်ဘဝ သင်္ချာ နည်းလမ်းများ သိရှိရန်။ learn everyday math moments. သင်္ချာသည် စာအုပ်ထဲသာ မဟုတ်ပါ။ လှေကားထစ် ရေတွက်ခြင်း၊ ပန်းကန် ခွဲဝေခြင်း၊ “ပိုကြီး/ပိုငယ်” နှိုင်းယှဉ်ခြင်းဖြင့် နေ့စဉ်ဘဝထဲ သင်္ချာ သင်ပေးနိုင်သည်။ math is not only in books. count stairs, share out plates, compare “bigger/smaller” — teach math in daily life. ကလေးကို သင်္ချာအခြေခံ သင်ပေးရန် အကောင်းဆုံးနည်းမှာ — early math is best taught — နေ့စဉ်ဘဝထဲတွင် ရေတွက်ကစားခြင်း in daily life ရုပ်ပုံကတ်များကိုသာ အလွတ်ကျက်စေခြင်း only with flashcards ရေတွက်ခြင်းကို နေ့စဉ်ဘဝထဲ ထည့်ပါ။ weave counting into your day. ယနေ့ ကလေးနှင့်အတူ အရာ ၅ ခု ရေတွက်ပါ။ count five things together today."
+    "searchText": "အစောပိုင်း သင်္ချာ everyday early math နေ့စဉ်ဘဝထဲ ရေတွက်ခြင်း၊ ပုံသဏ္ဌာန်၊ နှိုင်းယှဉ်ခြင်း။ counting, shapes, and comparing in daily life. early_mathematics lesson နေ့စဉ်ဘဝ သင်္ချာ နည်းလမ်းများ သိရှိရန်။ learn everyday math moments. ai စစ်ဆေးမှု အသိပေးချက် — ဤအကြောင်းအရာကို ai ဖြင့် စစ်ဆေးထားသော်လည်း ဆေးဘက်ပညာရှင် သို့မဟုတ် မြန်မာဘာသာကို မိခင်ဘာသာစကားအဖြစ် အသုံးပြုသော စာတည်းဖြတ်သူက အတည်ပြုထားခြင်း မရှိပါ။ အထွေထွေပညာပေးအတွက်သာ ဖြစ်ပြီး ဆေးဘက်ဆိုင်ရာ အကြံပြုချက်၊ ကလေးဖွံ့ဖြိုးမှု စစ်ဆေးချက် သို့မဟုတ် ရောဂါဖော်ထုတ်ချက် မဟုတ်ပါ။\n\nသင်္ချာသည် စာအုပ်ထဲသာ မဟုတ်ပါ။ နေ့စဉ်တွေ့ရသော အရာများကို အတူရေတွက်ခြင်း၊ ပုံသဏ္ဌာန်များကို ရှာဖွေခြင်း၊ “ပိုကြီး/ပိုငယ်” ဟု နှိုင်းယှဉ်ခြင်းဖြင့် အစောပိုင်း သင်္ချာအယူအဆများကို အတူလေ့ကျင့်နိုင်ပါသည်။ ai review notice — this content was reviewed by ai but has not been approved by a clinician or native myanmar-language editor. it is for general education only and is not medical advice, developmental screening, or diagnosis.\n\nmath is not only in books. count everyday things together, look for shapes, and compare “bigger/smaller” to practise early math ideas. နေ့စဉ်ဘဝတွင် အစောပိုင်း သင်္ချာကို အတူလေ့ကျင့်နိုင်သည့် ရိုးရှင်းသော နည်းတစ်ခုမှာ — one simple way to practise early math in daily life is — နေ့စဉ်တွေ့ရသော အရာများကို အတူရေတွက်ခြင်း counting everyday things together ရုပ်ပုံကတ်များကိုသာ အလွတ်ကျက်စေခြင်း using only memorized flashcards ရေတွက်ခြင်းကို နေ့စဉ်ဘဝထဲ ထည့်ပါ။ weave counting into your day. ယနေ့ ကလေးနှင့်အတူ အရာ ၅ ခု ရေတွက်ပါ။ count five things together today."
   },
   {
     "category": "creativity",
@@ -7324,8 +7324,8 @@
   {
     "category": "waiting",
     "ageGroupKey": "3y",
-    "summaryMm": "စောင့်ဆိုင်းရချိန်ကို ငြိမ်သက်စွာ ဖြတ်သန်းနည်း။",
-    "summaryEn": "Ways to pass a waiting time calmly.",
+    "summaryMm": "စိတ်ကူးယဉ်ပုံပြင် — ဆေးခန်းတွင် စောင့်နေစဉ် လက်ချောင်းများကို ရေတွက်ပြီး မိဘနှင့် တိုးတိုးစကားပြောသည့် ကလေးတစ်ဦးအကြောင်း။",
+    "summaryEn": "A fictional story about one child counting fingers and talking quietly with a parent while waiting at a clinic.",
     "durationMinutes": 3,
     "tags": [
       "waiting",
@@ -7349,8 +7349,8 @@
         }
       ],
       "body": {
-        "mm": "တီတီတို့ ဆေးခန်းမှာ စောင့်နေရတယ်။ ရှည်လျားတဲ့ တန်းလေးပါ။ တီတီက လက်ချောင်းလေးတွေ ရေတွက်တယ်။ ပြီးတော့ မေမေနဲ့ တိုးတိုးလေး စကားပြောတယ်။ စောင့်ရတာ ရှည်ပေမယ့် ကစားစရာ ရှာတတ်ရင် အချိန်လေး မြန်သွားတယ်။",
-        "en": "Ti-Ti waits at the clinic. It is a long line. Ti-Ti counts her fingers. Then she whispers with Mommy. Waiting is long, but finding little games makes the time pass."
+        "mm": "AI စစ်ဆေးမှု အသိပေးချက် — ဤအကြောင်းအရာကို AI ဖြင့် စစ်ဆေးထားသော်လည်း ဆေးဘက်ပညာရှင် သို့မဟုတ် မြန်မာဘာသာကို မိခင်ဘာသာစကားအဖြစ် အသုံးပြုသော စာတည်းဖြတ်သူက အတည်ပြုထားခြင်း မရှိပါ။ အထွေထွေပညာပေးအတွက်သာ ဖြစ်ပြီး ဆေးဘက်ဆိုင်ရာ အကြံပြုချက်၊ ကလေးဖွံ့ဖြိုးမှု စစ်ဆေးချက် သို့မဟုတ် ရောဂါဖော်ထုတ်ချက် မဟုတ်ပါ။\n\nစိတ်ကူးယဉ်ပုံပြင် — ဤပုံပြင်တွင် ဖော်ပြထားသော ခံစားချက်နှင့် တုံ့ပြန်မှုများသည် ကလေးတစ်ဦး၏ ဇာတ်လမ်းသာ ဖြစ်ပြီး ကလေးတိုင်း အလားတူ ခံစားမည် သို့မဟုတ် တုံ့ပြန်မည်ဟု မဆိုလိုပါ။\n\nတီတီတို့ ဆေးခန်းမှာ စောင့်နေရတယ်။ ရှည်လျားတဲ့ တန်းလေးပါ။ တီတီက လက်ချောင်းလေးတွေ ရေတွက်တယ်။ ပြီးတော့ မေမေနဲ့ တိုးတိုးလေး စကားပြောတယ်။ စောင့်ရတာ ရှည်ပေမယ့် ကစားနည်းလေးတစ်ခု ရှာတွေ့တော့ အချိန်ကုန်မှန်း သတိမပြုမိဘူး။",
+        "en": "AI review notice — This content was reviewed by AI but has not been approved by a clinician or native Myanmar-language editor. It is for general education only and is not medical advice, developmental screening, or diagnosis.\n\nFictional story — The feelings and responses described belong to one character and do not imply that every child will feel or respond in the same way.\n\nTi-Ti waits at the clinic. It is a long line. Ti-Ti counts her fingers. Then she whispers with Mommy. Waiting is long, but when she finds a little game, she does not notice the time passing."
       },
       "questions": [
         {
@@ -7388,7 +7388,7 @@
     "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
     "version": 1,
     "clinicalStatus": "clinical_review",
-    "searchText": "စောင့်ဆိုင်းရတဲ့အခါ while we wait စောင့်ဆိုင်းရချိန်ကို ငြိမ်သက်စွာ ဖြတ်သန်းနည်း။ ways to pass a waiting time calmly. waiting story beginner စောင့် wait တန်းစီ queue စိတ်ရှည် patient တီတီတို့ ဆေးခန်းမှာ စောင့်နေရတယ်။ ရှည်လျားတဲ့ တန်းလေးပါ။ တီတီက လက်ချောင်းလေးတွေ ရေတွက်တယ်။ ပြီးတော့ မေမေနဲ့ တိုးတိုးလေး စကားပြောတယ်။ စောင့်ရတာ ရှည်ပေမယ့် ကစားစရာ ရှာတတ်ရင် အချိန်လေး မြန်သွားတယ်။ ti-ti waits at the clinic. it is a long line. ti-ti counts her fingers. then she whispers with mommy. waiting is long, but finding little games makes the time pass. စောင့်ရင်း တီတီ ဘာတွေ လုပ်လဲ။ what did ti-ti do while waiting? စောင့်ရချိန်တွင် ရေတွက်/ရှာဖွေ ကစားနည်းများ ကစားပါ။ play counting/find-it games while waiting."
+    "searchText": "စောင့်ဆိုင်းရတဲ့အခါ while we wait စိတ်ကူးယဉ်ပုံပြင် — ဆေးခန်းတွင် စောင့်နေစဉ် လက်ချောင်းများကို ရေတွက်ပြီး မိဘနှင့် တိုးတိုးစကားပြောသည့် ကလေးတစ်ဦးအကြောင်း။ a fictional story about one child counting fingers and talking quietly with a parent while waiting at a clinic. waiting story beginner စောင့် wait တန်းစီ queue စိတ်ရှည် patient ai စစ်ဆေးမှု အသိပေးချက် — ဤအကြောင်းအရာကို ai ဖြင့် စစ်ဆေးထားသော်လည်း ဆေးဘက်ပညာရှင် သို့မဟုတ် မြန်မာဘာသာကို မိခင်ဘာသာစကားအဖြစ် အသုံးပြုသော စာတည်းဖြတ်သူက အတည်ပြုထားခြင်း မရှိပါ။ အထွေထွေပညာပေးအတွက်သာ ဖြစ်ပြီး ဆေးဘက်ဆိုင်ရာ အကြံပြုချက်၊ ကလေးဖွံ့ဖြိုးမှု စစ်ဆေးချက် သို့မဟုတ် ရောဂါဖော်ထုတ်ချက် မဟုတ်ပါ။\n\nစိတ်ကူးယဉ်ပုံပြင် — ဤပုံပြင်တွင် ဖော်ပြထားသော ခံစားချက်နှင့် တုံ့ပြန်မှုများသည် ကလေးတစ်ဦး၏ ဇာတ်လမ်းသာ ဖြစ်ပြီး ကလေးတိုင်း အလားတူ ခံစားမည် သို့မဟုတ် တုံ့ပြန်မည်ဟု မဆိုလိုပါ။\n\nတီတီတို့ ဆေးခန်းမှာ စောင့်နေရတယ်။ ရှည်လျားတဲ့ တန်းလေးပါ။ တီတီက လက်ချောင်းလေးတွေ ရေတွက်တယ်။ ပြီးတော့ မေမေနဲ့ တိုးတိုးလေး စကားပြောတယ်။ စောင့်ရတာ ရှည်ပေမယ့် ကစားနည်းလေးတစ်ခု ရှာတွေ့တော့ အချိန်ကုန်မှန်း သတိမပြုမိဘူး။ ai review notice — this content was reviewed by ai but has not been approved by a clinician or native myanmar-language editor. it is for general education only and is not medical advice, developmental screening, or diagnosis.\n\nfictional story — the feelings and responses described belong to one character and do not imply that every child will feel or respond in the same way.\n\nti-ti waits at the clinic. it is a long line. ti-ti counts her fingers. then she whispers with mommy. waiting is long, but when she finds a little game, she does not notice the time passing. စောင့်ရင်း တီတီ ဘာတွေ လုပ်လဲ။ what did ti-ti do while waiting? စောင့်ရချိန်တွင် ရေတွက်/ရှာဖွေ ကစားနည်းများ ကစားပါ။ play counting/find-it games while waiting."
   },
   {
     "category": "hospital",
@@ -7462,8 +7462,8 @@
   {
     "category": "school",
     "ageGroupKey": "4y",
-    "summaryMm": "ကျောင်းစတက်သည့် ပထမဆုံးနေ့ စိုးရိမ်ပူပန်မှုကို နွေးထွေးစွာ ဖြေလျှော့ပေးသည့် ပုံပြင်လေး။",
-    "summaryEn": "Easing first-day nerves with warmth.",
+    "summaryMm": "စိတ်ကူးယဉ်ပုံပြင် — ကလေးတစ်ဦး၏ ကျောင်းစတက်သည့် ပထမဆုံးနေ့အကြောင်း။",
+    "summaryEn": "A fictional story about one child’s first day at school.",
     "durationMinutes": 3,
     "tags": [
       "school",
@@ -7487,8 +7487,8 @@
         }
       ],
       "body": {
-        "mm": "ယနေ့ ဆုဆုရဲ့ ကျောင်း ပထမနေ့ပါ။ အနည်းငယ် ကြောက်တယ်။ ဆရာမက ပြုံး၍ ကြိုဆိုတယ်။ သူငယ်ချင်းအသစ်လေးနဲ့ အတူ ပုံဆွဲကြတယ်။ နေ့လယ်ရောက်တော့ ဆုဆု ပျော်နေပြီ။ မေမေ ပြန်လာခေါ်တော့ “မနက်ဖြန် ထပ်လာမယ်” လို့ ဆိုတယ်။",
-        "en": "Today is Su-Su’s first day at school. She feels a little scared. The teacher smiles and welcomes her. She draws with a new friend. By noon, Su-Su is happy. When Mommy comes, she says, “I’ll come again tomorrow.”"
+        "mm": "AI စစ်ဆေးမှု အသိပေးချက် — ဤအကြောင်းအရာကို AI ဖြင့် စစ်ဆေးထားသော်လည်း ဆေးဘက်ပညာရှင် သို့မဟုတ် မြန်မာဘာသာကို မိခင်ဘာသာစကားအဖြစ် အသုံးပြုသော စာတည်းဖြတ်သူက အတည်ပြုထားခြင်း မရှိပါ။ အထွေထွေပညာပေးအတွက်သာ ဖြစ်ပြီး ဆေးဘက်ဆိုင်ရာ အကြံပြုချက်၊ ကလေးဖွံ့ဖြိုးမှု စစ်ဆေးချက် သို့မဟုတ် ရောဂါဖော်ထုတ်ချက် မဟုတ်ပါ။\n\nစိတ်ကူးယဉ်ပုံပြင် — ဤပုံပြင်တွင် ဖော်ပြထားသော ခံစားချက်နှင့် တုံ့ပြန်မှုများသည် ကလေးတစ်ဦး၏ ဇာတ်လမ်းသာ ဖြစ်ပြီး ကလေးတိုင်း အလားတူ ခံစားမည် သို့မဟုတ် တုံ့ပြန်မည်ဟု မဆိုလိုပါ။\n\nယနေ့ ဆုဆုရဲ့ ကျောင်းစတက်သည့် ပထမဆုံးနေ့ပါ။ အနည်းငယ် ကြောက်တယ်။ ဆရာမက ပြုံး၍ ကြိုဆိုတယ်။ သူငယ်ချင်းအသစ်လေးနဲ့ အတူ ပုံဆွဲကြတယ်။ နေ့လယ်ရောက်တော့ ဆုဆု ပျော်နေပြီ။ မေမေ ပြန်လာခေါ်တော့ “မနက်ဖြန် ထပ်လာမယ်” လို့ ဆိုတယ်။",
+        "en": "AI review notice — This content was reviewed by AI but has not been approved by a clinician or native Myanmar-language editor. It is for general education only and is not medical advice, developmental screening, or diagnosis.\n\nFictional story — The feelings and responses described belong to one character and do not imply that every child will feel or respond in the same way.\n\nToday is Su-Su’s first day at school. She feels a little scared. The teacher smiles and welcomes her. She draws with a new friend. By noon, Su-Su is happy. When Mommy comes, she says, “I’ll come again tomorrow.”"
       },
       "questions": [
         {
@@ -7498,8 +7498,8 @@
       ],
       "activities": [
         {
-          "mm": "ကျောင်းအကြောင်း အပြုသဘော စကားပြောပါ။",
-          "en": "Talk about school in a positive way."
+          "mm": "ကျောင်းအကြောင်း အတူစကားပြောပြီး ကလေး၏ ခံစားချက်များကို မေးမြန်းနားထောင်ပါ။",
+          "en": "Talk about school together and invite the child to share any feelings."
         }
       ]
     },
@@ -7526,7 +7526,7 @@
     "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
     "version": 1,
     "clinicalStatus": "clinical_review",
-    "searchText": "ကျောင်းစတက်သည့် ပထမဆုံးနေ့ my first day at school ကျောင်းစတက်သည့် ပထမဆုံးနေ့ စိုးရိမ်ပူပန်မှုကို နွေးထွေးစွာ ဖြေလျှော့ပေးသည့် ပုံပြင်လေး။ easing first-day nerves with warmth. school story beginner ကျောင်း school ဆရာမ teacher သူငယ်ချင်း friend ယနေ့ ဆုဆုရဲ့ ကျောင်း ပထမနေ့ပါ။ အနည်းငယ် ကြောက်တယ်။ ဆရာမက ပြုံး၍ ကြိုဆိုတယ်။ သူငယ်ချင်းအသစ်လေးနဲ့ အတူ ပုံဆွဲကြတယ်။ နေ့လယ်ရောက်တော့ ဆုဆု ပျော်နေပြီ။ မေမေ ပြန်လာခေါ်တော့ “မနက်ဖြန် ထပ်လာမယ်” လို့ ဆိုတယ်။ today is su-su’s first day at school. she feels a little scared. the teacher smiles and welcomes her. she draws with a new friend. by noon, su-su is happy. when mommy comes, she says, “i’ll come again tomorrow.” ဆုဆု ကျောင်းမှာ ဘာလုပ်လဲ။ what did su-su do at school? ကျောင်းအကြောင်း အပြုသဘော စကားပြောပါ။ talk about school in a positive way."
+    "searchText": "ကျောင်းစတက်သည့် ပထမဆုံးနေ့ my first day at school စိတ်ကူးယဉ်ပုံပြင် — ကလေးတစ်ဦး၏ ကျောင်းစတက်သည့် ပထမဆုံးနေ့အကြောင်း။ a fictional story about one child’s first day at school. school story beginner ကျောင်း school ဆရာမ teacher သူငယ်ချင်း friend ai စစ်ဆေးမှု အသိပေးချက် — ဤအကြောင်းအရာကို ai ဖြင့် စစ်ဆေးထားသော်လည်း ဆေးဘက်ပညာရှင် သို့မဟုတ် မြန်မာဘာသာကို မိခင်ဘာသာစကားအဖြစ် အသုံးပြုသော စာတည်းဖြတ်သူက အတည်ပြုထားခြင်း မရှိပါ။ အထွေထွေပညာပေးအတွက်သာ ဖြစ်ပြီး ဆေးဘက်ဆိုင်ရာ အကြံပြုချက်၊ ကလေးဖွံ့ဖြိုးမှု စစ်ဆေးချက် သို့မဟုတ် ရောဂါဖော်ထုတ်ချက် မဟုတ်ပါ။\n\nစိတ်ကူးယဉ်ပုံပြင် — ဤပုံပြင်တွင် ဖော်ပြထားသော ခံစားချက်နှင့် တုံ့ပြန်မှုများသည် ကလေးတစ်ဦး၏ ဇာတ်လမ်းသာ ဖြစ်ပြီး ကလေးတိုင်း အလားတူ ခံစားမည် သို့မဟုတ် တုံ့ပြန်မည်ဟု မဆိုလိုပါ။\n\nယနေ့ ဆုဆုရဲ့ ကျောင်းစတက်သည့် ပထမဆုံးနေ့ပါ။ အနည်းငယ် ကြောက်တယ်။ ဆရာမက ပြုံး၍ ကြိုဆိုတယ်။ သူငယ်ချင်းအသစ်လေးနဲ့ အတူ ပုံဆွဲကြတယ်။ နေ့လယ်ရောက်တော့ ဆုဆု ပျော်နေပြီ။ မေမေ ပြန်လာခေါ်တော့ “မနက်ဖြန် ထပ်လာမယ်” လို့ ဆိုတယ်။ ai review notice — this content was reviewed by ai but has not been approved by a clinician or native myanmar-language editor. it is for general education only and is not medical advice, developmental screening, or diagnosis.\n\nfictional story — the feelings and responses described belong to one character and do not imply that every child will feel or respond in the same way.\n\ntoday is su-su’s first day at school. she feels a little scared. the teacher smiles and welcomes her. she draws with a new friend. by noon, su-su is happy. when mommy comes, she says, “i’ll come again tomorrow.” ဆုဆု ကျောင်းမှာ ဘာလုပ်လဲ။ what did su-su do at school? ကျောင်းအကြောင်း အတူစကားပြောပြီး ကလေး၏ ခံစားချက်များကို မေးမြန်းနားထောင်ပါ။ talk about school together and invite the child to share any feelings."
   },
   {
     "category": "sharing",

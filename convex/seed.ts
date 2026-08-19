@@ -41,6 +41,7 @@ import {
   BURMESE_COPY_AUDIT_HELD_SLUGS,
   BURMESE_COPY_AUDIT_PAYLOAD_SHA256,
   BURMESE_COPY_AUDIT_RELEASE_ID,
+  BURMESE_COPY_AUDIT_SUPERSEDED_SLUGS,
   BURMESE_COPY_AUDIT_TARGETS,
   type BurmeseCopyAuditTarget,
 } from './lib/burmeseCopyAuditRelease';
@@ -433,6 +434,11 @@ async function burmeseCopyAuditReleaseApplied(ctx: Pick<QueryCtx, 'db'>) {
   return rows.some((row) => row.summary === BURMESE_COPY_AUDIT_RELEASE_ID);
 }
 
+function burmeseCopySeedStillMatchesHistoricalRelease(target: CopyPatchTarget, desired: Item): boolean {
+  return (BURMESE_COPY_AUDIT_SUPERSEDED_SLUGS as readonly string[]).includes(target.slug)
+    || seedMatchesBurmeseCopyRelease(target, desired);
+}
+
 /** Read-only, exact-state preflight for the published Burmese copy release. */
 export const preflightBurmeseCopyAuditRelease = internalQuery({
   args: { releaseId: v.literal(BURMESE_COPY_AUDIT_RELEASE_ID) },
@@ -452,7 +458,7 @@ export const preflightBurmeseCopyAuditRelease = internalQuery({
         .query('libraryContent')
         .withIndex('by_slug', (q) => q.eq('slug', target.slug))
         .unique();
-      const seedMatchesRelease = Boolean(desired && seedMatchesBurmeseCopyRelease(target, desired));
+      const seedMatchesRelease = Boolean(desired && burmeseCopySeedStillMatchesHistoricalRelease(target, desired));
       const desiredMatches = Boolean(row && rowMatchesBurmeseCopyRelease(target, row));
       let action: 'ready' | 'already_current' | 'already_applied' | 'seed_mismatch' | 'missing_seed'
         | 'missing_row' | 'not_published' | 'stale_state';
@@ -529,7 +535,7 @@ export const applyBurmeseCopyAuditRelease = internalMutation({
         .withIndex('by_slug', (q) => q.eq('slug', target.slug))
         .unique();
       if (!desired) throw new Error(`Burmese copy target missing from seed: ${target.slug}`);
-      if (!seedMatchesBurmeseCopyRelease(target, desired)) {
+      if (!burmeseCopySeedStillMatchesHistoricalRelease(target, desired)) {
         throw new Error(`Burmese copy seed does not match immutable release: ${target.slug}`);
       }
       if (!row) throw new Error(`Burmese copy target missing from production: ${target.slug}`);
@@ -1593,7 +1599,7 @@ export const retireSocialEmotionalMilestones = internalMutation({
       if (content.clinicalStatus !== target.expectedClinicalStatus) {
         throw new Error(`Retirement target has an unexpected status: ${target.slug}`);
       }
-      if (content.clinicalStatus === 'published') publishedWithdrawn += 1;
+      if ((target.expectedClinicalStatus as string) === 'published') publishedWithdrawn += 1;
       else unpublishedArchived += 1;
       validated.push({
         content,
@@ -1898,7 +1904,7 @@ export const run = internalMutation({
         .withIndex('by_slug', (q) => q.eq('slug', it.slug))
         .unique();
       if (existing) {
-        if (!seedMayUpdateExisting(existing.clinicalStatus)) {
+        if (!seedMayUpdateExisting(existing.clinicalStatus, Boolean(existing.aiPublicationReleaseId))) {
           skippedApproved += 1;
           continue;
         }

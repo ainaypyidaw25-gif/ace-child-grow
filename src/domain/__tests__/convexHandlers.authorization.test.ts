@@ -142,7 +142,10 @@ describe('Convex registered handlers enforce authorization', () => {
       },
     });
     const result = await handler(listByType)(context, { type: 'activity' });
-    expect(result).toEqual({ staff: false, items: [published] });
+    expect(result).toEqual({
+      staff: false,
+      items: [{ ...published, publicationLane: 'human_reviewed' }],
+    });
     expect(JSON.stringify(result)).not.toMatch(/childId|birthDate|nickname|userId/);
   });
 

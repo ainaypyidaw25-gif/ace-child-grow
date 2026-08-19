@@ -4,6 +4,8 @@ import {
   type PublicationEvidenceSource,
 } from './evidencePublicationGate';
 import { todayIsoUtc } from './evidenceFreshness';
+import { contentIsAiParentReadable } from './aiPublicationVisibility';
+import type { Doc } from '../_generated/dataModel';
 
 type DatabaseContext = Pick<QueryCtx, 'db'> | Pick<MutationCtx, 'db'>;
 
@@ -60,9 +62,12 @@ export async function contentIsParentReadable(
   ctx: DatabaseContext,
   content: PublicationContentIdentity,
   todayIso = todayIsoUtc(),
+  now = Date.now(),
 ): Promise<boolean> {
-  if (!isPubliclyReadableStatus(content.clinicalStatus)) return false;
-  return (await publicationEvidenceForContent(ctx, content, todayIso)).allowed;
+  if (isPubliclyReadableStatus(content.clinicalStatus)) {
+    return (await publicationEvidenceForContent(ctx, content, todayIso)).allowed;
+  }
+  return await contentIsAiParentReadable(ctx, content as Doc<'libraryContent'>, now, todayIso);
 }
 
 /**
@@ -146,8 +151,9 @@ export async function filterParentReadableContent<T extends PublicationContentId
   ctx: DatabaseContext,
   rows: readonly T[],
   todayIso = todayIsoUtc(),
+  now = Date.now(),
 ): Promise<T[]> {
-  return (await parentReadableContentResult(ctx, rows, todayIso)).rows;
+  return (await parentReadableContentResult(ctx, rows, todayIso, now)).rows;
 }
 
 /**
@@ -159,12 +165,17 @@ export async function parentReadableContentResult<T extends PublicationContentId
   ctx: DatabaseContext,
   rows: readonly T[],
   todayIso = todayIsoUtc(),
+  now = Date.now(),
 ): Promise<{ complete: boolean; rows: T[] }> {
   const snapshot = await publicationEvidenceSnapshot(ctx, rows, todayIso);
+  if (!snapshot.complete) return { complete: false, rows: [] };
+  const visibility = await Promise.all(rows.map(async (row) => (
+    isPubliclyReadableStatus(row.clinicalStatus)
+      ? contentIsParentReadableFromSnapshot(row, snapshot)
+      : await contentIsAiParentReadable(ctx, row as unknown as Doc<'libraryContent'>, now, todayIso)
+  )));
   return {
-    complete: snapshot.complete,
-    rows: snapshot.complete
-      ? rows.filter((row) => contentIsParentReadableFromSnapshot(row, snapshot))
-      : [],
+    complete: true,
+    rows: rows.filter((_, index) => visibility[index]),
   };
 }

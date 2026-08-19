@@ -16,7 +16,7 @@ present rows; it never archives a production row missing from the payload.
 
 Archive, never delete, these exact rows:
 
-- `ms_3_4m_social_2` — expected production preimage: `published`, revision 1
+- `ms_3_4m_social_2` — refreshed production preimage (2026-08-19): `clinical_review`, revision 1
 - `ms_2_5y_social_3` — expected production preimage: `clinical_review`, revision 2
 - `ms_13_18m_emotional_1` — expected production preimage: `clinical_review`, revision 2
 - `ms_5y_emotional_1` — expected production preimage: `clinical_review`, revision 1

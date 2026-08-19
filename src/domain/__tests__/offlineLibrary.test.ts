@@ -39,6 +39,17 @@ describe('what may be stored offline', () => {
     expect(isDownloadable(row())).toBe(true);
   });
 
+  it('accepts only server-gated rows explicitly labelled as AI audited', () => {
+    const candidate = row({
+      slug: 'lsn_early_math',
+      type: 'lesson',
+      clinicalStatus: 'clinical_review',
+      publicationLane: 'ai_audited',
+    });
+    expect(isDownloadable(candidate)).toBe(true);
+    expect(toOfflineRecord(candidate, 42).publicationLane).toBe('ai_audited');
+  });
+
   it.each(['draft', 'clinical_review', 'archived'])('refuses %s content', (status) => {
     expect(isDownloadable(row({ clinicalStatus: status }))).toBe(false);
   });

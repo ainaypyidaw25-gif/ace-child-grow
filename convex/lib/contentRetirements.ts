@@ -33,8 +33,8 @@ export function isDuplicateMilestoneSlug(slug: string): slug is DuplicateMilesto
  * removing them from the authored seed is insufficient because seed imports do
  * not archive production rows that disappear from the payload.
  *
- * The expected status and revision are the read-only production snapshot from
- * 2026-08-18. Keeping that preimage in code makes the production mutation fail
+ * The expected status and revision are the refreshed read-only production
+ * snapshot from 2026-08-19. Keeping that preimage in code makes the mutation fail
  * closed if any target is reviewed or republished before the release runs.
  */
 export const SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_RELEASE_ID =
@@ -43,7 +43,7 @@ export const SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_RELEASE_ID =
 export const SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_TARGETS = [
   {
     slug: 'ms_3_4m_social_2',
-    expectedClinicalStatus: 'published',
+    expectedClinicalStatus: 'clinical_review',
     expectedReviewRevision: 1,
   },
   {

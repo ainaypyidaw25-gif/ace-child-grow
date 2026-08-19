@@ -5,8 +5,13 @@
  * exact body, evidence summary, source, or media that a reviewer approved.
  * Moving a protected row back into review is an explicit CMS action.
  */
-export function seedMayUpdateExisting(clinicalStatus: string): boolean {
-  return clinicalStatus !== 'approved' && clinicalStatus !== 'published';
+export function seedMayUpdateExisting(
+  clinicalStatus: string,
+  hasAiPublicationRelease = false,
+): boolean {
+  return !hasAiPublicationRelease
+    && clinicalStatus !== 'approved'
+    && clinicalStatus !== 'published';
 }
 
 /**

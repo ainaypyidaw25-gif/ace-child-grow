@@ -192,7 +192,7 @@ describe('social-emotional milestone retirement release', () => {
       SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_TARGETS.map((target) => target.slug),
     );
     expect(result.map((row) => row.clinicalStatus)).toEqual([
-      'published',
+      'clinical_review',
       'clinical_review',
       'clinical_review',
       'clinical_review',
@@ -211,8 +211,8 @@ describe('social-emotional milestone retirement release', () => {
     })).resolves.toEqual({
       retired: 4,
       alreadyRetired: 0,
-      publishedWithdrawn: 1,
-      unpublishedArchived: 3,
+      publishedWithdrawn: 0,
+      unpublishedArchived: 4,
       total: 4,
     });
 

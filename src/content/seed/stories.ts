@@ -59,10 +59,10 @@ export const STORIES: SeedItem[] = [
   story({
     slug: 'waiting_at_clinic', storyType: 'waiting', ageGroupKey: '3y',
     title: b('စောင့်ဆိုင်းရတဲ့အခါ', 'While We Wait'),
-    summary: b('စောင့်ဆိုင်းရချိန်ကို ငြိမ်သက်စွာ ဖြတ်သန်းနည်း။', 'Ways to pass a waiting time calmly.'),
+    summary: b('စိတ်ကူးယဉ်ပုံပြင် — ဆေးခန်းတွင် စောင့်နေစဉ် လက်ချောင်းများကို ရေတွက်ပြီး မိဘနှင့် တိုးတိုးစကားပြောသည့် ကလေးတစ်ဦးအကြောင်း။', 'A fictional story about one child counting fingers and talking quietly with a parent while waiting at a clinic.'),
     readingLevel: 'Beginner', readingMinutes: 3,
     vocabulary: [b('စောင့်', 'wait'), b('တန်းစီ', 'queue'), b('စိတ်ရှည်', 'patient')],
-    body: b('တီတီတို့ ဆေးခန်းမှာ စောင့်နေရတယ်။ ရှည်လျားတဲ့ တန်းလေးပါ။ တီတီက လက်ချောင်းလေးတွေ ရေတွက်တယ်။ ပြီးတော့ မေမေနဲ့ တိုးတိုးလေး စကားပြောတယ်။ စောင့်ရတာ ရှည်ပေမယ့် ကစားစရာ ရှာတတ်ရင် အချိန်လေး မြန်သွားတယ်။', 'Ti-Ti waits at the clinic. It is a long line. Ti-Ti counts her fingers. Then she whispers with Mommy. Waiting is long, but finding little games makes the time pass.'),
+    body: b('AI စစ်ဆေးမှု အသိပေးချက် — ဤအကြောင်းအရာကို AI ဖြင့် စစ်ဆေးထားသော်လည်း ဆေးဘက်ပညာရှင် သို့မဟုတ် မြန်မာဘာသာကို မိခင်ဘာသာစကားအဖြစ် အသုံးပြုသော စာတည်းဖြတ်သူက အတည်ပြုထားခြင်း မရှိပါ။ အထွေထွေပညာပေးအတွက်သာ ဖြစ်ပြီး ဆေးဘက်ဆိုင်ရာ အကြံပြုချက်၊ ကလေးဖွံ့ဖြိုးမှု စစ်ဆေးချက် သို့မဟုတ် ရောဂါဖော်ထုတ်ချက် မဟုတ်ပါ။\n\nစိတ်ကူးယဉ်ပုံပြင် — ဤပုံပြင်တွင် ဖော်ပြထားသော ခံစားချက်နှင့် တုံ့ပြန်မှုများသည် ကလေးတစ်ဦး၏ ဇာတ်လမ်းသာ ဖြစ်ပြီး ကလေးတိုင်း အလားတူ ခံစားမည် သို့မဟုတ် တုံ့ပြန်မည်ဟု မဆိုလိုပါ။\n\nတီတီတို့ ဆေးခန်းမှာ စောင့်နေရတယ်။ ရှည်လျားတဲ့ တန်းလေးပါ။ တီတီက လက်ချောင်းလေးတွေ ရေတွက်တယ်။ ပြီးတော့ မေမေနဲ့ တိုးတိုးလေး စကားပြောတယ်။ စောင့်ရတာ ရှည်ပေမယ့် ကစားနည်းလေးတစ်ခု ရှာတွေ့တော့ အချိန်ကုန်မှန်း သတိမပြုမိဘူး။', 'AI review notice — This content was reviewed by AI but has not been approved by a clinician or native Myanmar-language editor. It is for general education only and is not medical advice, developmental screening, or diagnosis.\n\nFictional story — The feelings and responses described belong to one character and do not imply that every child will feel or respond in the same way.\n\nTi-Ti waits at the clinic. It is a long line. Ti-Ti counts her fingers. Then she whispers with Mommy. Waiting is long, but when she finds a little game, she does not notice the time passing.'),
     questions: [b('စောင့်ရင်း တီတီ ဘာတွေ လုပ်လဲ။', 'What did Ti-Ti do while waiting?')],
     activities: [b('စောင့်ရချိန်တွင် ရေတွက်/ရှာဖွေ ကစားနည်းများ ကစားပါ။', 'Play counting/find-it games while waiting.')],
   }),
@@ -79,12 +79,12 @@ export const STORIES: SeedItem[] = [
   story({
     slug: 'first_day_school', storyType: 'school', ageGroupKey: '4y',
     title: b('ကျောင်းစတက်သည့် ပထမဆုံးနေ့', 'My First Day at School'),
-    summary: b('ကျောင်းစတက်သည့် ပထမဆုံးနေ့ စိုးရိမ်ပူပန်မှုကို နွေးထွေးစွာ ဖြေလျှော့ပေးသည့် ပုံပြင်လေး။', 'Easing first-day nerves with warmth.'),
+    summary: b('စိတ်ကူးယဉ်ပုံပြင် — ကလေးတစ်ဦး၏ ကျောင်းစတက်သည့် ပထမဆုံးနေ့အကြောင်း။', 'A fictional story about one child’s first day at school.'),
     readingLevel: 'Beginner', readingMinutes: 3,
     vocabulary: [b('ကျောင်း', 'school'), b('ဆရာမ', 'teacher'), b('သူငယ်ချင်း', 'friend')],
-    body: b('ယနေ့ ဆုဆုရဲ့ ကျောင်း ပထမနေ့ပါ။ အနည်းငယ် ကြောက်တယ်။ ဆရာမက ပြုံး၍ ကြိုဆိုတယ်။ သူငယ်ချင်းအသစ်လေးနဲ့ အတူ ပုံဆွဲကြတယ်။ နေ့လယ်ရောက်တော့ ဆုဆု ပျော်နေပြီ။ မေမေ ပြန်လာခေါ်တော့ “မနက်ဖြန် ထပ်လာမယ်” လို့ ဆိုတယ်။', 'Today is Su-Su’s first day at school. She feels a little scared. The teacher smiles and welcomes her. She draws with a new friend. By noon, Su-Su is happy. When Mommy comes, she says, “I’ll come again tomorrow.”'),
+    body: b('AI စစ်ဆေးမှု အသိပေးချက် — ဤအကြောင်းအရာကို AI ဖြင့် စစ်ဆေးထားသော်လည်း ဆေးဘက်ပညာရှင် သို့မဟုတ် မြန်မာဘာသာကို မိခင်ဘာသာစကားအဖြစ် အသုံးပြုသော စာတည်းဖြတ်သူက အတည်ပြုထားခြင်း မရှိပါ။ အထွေထွေပညာပေးအတွက်သာ ဖြစ်ပြီး ဆေးဘက်ဆိုင်ရာ အကြံပြုချက်၊ ကလေးဖွံ့ဖြိုးမှု စစ်ဆေးချက် သို့မဟုတ် ရောဂါဖော်ထုတ်ချက် မဟုတ်ပါ။\n\nစိတ်ကူးယဉ်ပုံပြင် — ဤပုံပြင်တွင် ဖော်ပြထားသော ခံစားချက်နှင့် တုံ့ပြန်မှုများသည် ကလေးတစ်ဦး၏ ဇာတ်လမ်းသာ ဖြစ်ပြီး ကလေးတိုင်း အလားတူ ခံစားမည် သို့မဟုတ် တုံ့ပြန်မည်ဟု မဆိုလိုပါ။\n\nယနေ့ ဆုဆုရဲ့ ကျောင်းစတက်သည့် ပထမဆုံးနေ့ပါ။ အနည်းငယ် ကြောက်တယ်။ ဆရာမက ပြုံး၍ ကြိုဆိုတယ်။ သူငယ်ချင်းအသစ်လေးနဲ့ အတူ ပုံဆွဲကြတယ်။ နေ့လယ်ရောက်တော့ ဆုဆု ပျော်နေပြီ။ မေမေ ပြန်လာခေါ်တော့ “မနက်ဖြန် ထပ်လာမယ်” လို့ ဆိုတယ်။', 'AI review notice — This content was reviewed by AI but has not been approved by a clinician or native Myanmar-language editor. It is for general education only and is not medical advice, developmental screening, or diagnosis.\n\nFictional story — The feelings and responses described belong to one character and do not imply that every child will feel or respond in the same way.\n\nToday is Su-Su’s first day at school. She feels a little scared. The teacher smiles and welcomes her. She draws with a new friend. By noon, Su-Su is happy. When Mommy comes, she says, “I’ll come again tomorrow.”'),
     questions: [b('ဆုဆု ကျောင်းမှာ ဘာလုပ်လဲ။', 'What did Su-Su do at school?')],
-    activities: [b('ကျောင်းအကြောင်း အပြုသဘော စကားပြောပါ။', 'Talk about school in a positive way.')],
+    activities: [b('ကျောင်းအကြောင်း အတူစကားပြောပြီး ကလေး၏ ခံစားချက်များကို မေးမြန်းနားထောင်ပါ။', 'Talk about school together and invite the child to share any feelings.')],
   }),
   story({
     slug: 'sharing_mango', storyType: 'sharing', ageGroupKey: '3_5y',
