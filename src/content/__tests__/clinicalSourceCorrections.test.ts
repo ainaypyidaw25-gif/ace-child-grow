@@ -476,6 +476,10 @@ describe('clinically sourced content corrections', () => {
       'asha-aac',
       'who-imci-sick-young-infant-2019',
       'who-child-growth-standards-qa-2025',
+      'hc-safe-toys-2024',
+      'hc-safety-birth-6m-2017',
+      'cpsc-childproofing-home-2023',
+      'cpsc-window-coverings-cordless-2021',
     ]) {
       expect(resolveReviewStatus(SOURCE_BY_ID.get(id)!), id).not.toBe('approved');
     }
@@ -1022,9 +1026,8 @@ describe('clinically sourced content corrections', () => {
     expect((birthPlay.observationQuestions as Array<{ mm: string }>)[1].mm).toContain(
       'သမ်းဝေခြင်း၊ ဂျီကျခြင်း',
     );
-    expect(birthPlay.evidenceSummary).toBe(
-      'Play as interaction and reading infant engagement and disengagement cues follow AAP power-of-play guidance, WHO Care for Child Development materials, and UNICEF early-childhood guidance in the registry.',
-    );
+    expect(birthPlay.evidenceSummary).toContain('UNICEF Early Moments Matter report');
+    expect(birthPlay.evidenceSummary).toContain('two-month response checks follow CDC');
 
     const birthCognitive = dataFor('gd_birth_2m_cognitive');
     expect((birthCognitive.encouragement as { mm: string; en: string })).toEqual({
@@ -1098,7 +1101,7 @@ describe('clinically sourced content corrections', () => {
       'gentle holding or rocking, and responsive soothing',
     );
     expect(dataFor('gd_3_4m_play').evidenceSummary).toContain(
-      'WHO/UNICEF Care for Child Development recommendations',
+      'WHO/UNICEF Care for Child Development package',
     );
     expect(dataFor('act_rhythm_and_rock').evidenceSummary).toContain(
       'responsive communication follow WHO Care for Child Development materials',
@@ -1126,7 +1129,7 @@ describe('clinically sourced content corrections', () => {
       'A few focused minutes of shared play each day are valuable; expensive toys are not needed.',
     );
     expect((dataFor('gd_10_12m_play').commonMistakes as Array<{ en: string }>)[0].en).toContain(
-      'remove hazards and prepare a safe space to explore',
+      'reduce hazards and prepare an exploration space',
     );
     expect(rowFor('act_hide_and_find_toy').summaryEn).toBe(
       'Hide a toy under a cloth and explore together that things still exist when out of sight.',
@@ -1139,6 +1142,73 @@ describe('clinically sourced content corrections', () => {
     );
     expect((dataFor('lsn_power_of_play').takeaway as { en: string }).en).toBe(
       'Playing with you is valuable learning time for your child.',
+    );
+  });
+
+  it('scopes UNICEF Early Moments Matter to responsive play and direct safety sources', () => {
+    expect(SOURCE_BY_ID.get('unicef-early-moments-2017')).toMatchObject({
+      authors: 'UNICEF',
+      year: 2017,
+      evidenceLevel: 'expert_consensus',
+      ageMonthsMin: 0,
+      ageMonthsMax: 60,
+      verifiedOn: '2026-08-19',
+    });
+    const related = relatedContent('unicef-early-moments-2017');
+    expect(Object.values(related).flat()).toHaveLength(4);
+    expect(related.guide.sort()).toEqual([
+      'gd_10_12m_play',
+      'gd_3_4m_play',
+      'gd_birth_2m_play',
+    ]);
+    expect(related.lesson).toEqual(['lsn_what_is_development']);
+
+    const lessonAction = dataFor('lsn_what_is_development').actionToday as {
+      mm: string; en: string;
+    };
+    expect(lessonAction.en).toContain('following your child’s cues and interests');
+    expect(lessonAction.en).not.toContain('10');
+
+    const newbornPlay = dataFor('gd_birth_2m_play');
+    expect((newbornPlay.redFlags as Array<{ en: string }>)[0].en).toContain(
+      'By around 2 months',
+    );
+    expect((newbornPlay.safety as { en: string }).en).toContain(
+      'Always support the head and neck',
+    );
+    expect(sourcesForContent('gd_birth_2m_play', 'guide')).toContain(
+      'cdc-milestones-2026',
+    );
+
+    const threeToFourPlay = dataFor('gd_3_4m_play');
+    expect((threeToFourPlay.materials as { en: string }).en).toContain(
+      'shatter-resistant baby mirror',
+    );
+    expect(JSON.stringify(threeToFourPlay.lowCost)).not.toContain('sealed tin with rice');
+    expect(sourcesForContent('gd_3_4m_play', 'guide')).toEqual(
+      expect.arrayContaining(['hc-safe-toys-2024', 'hc-safety-birth-6m-2017']),
+    );
+    expect(sourcesForContent('gd_3_4m_play', 'guide')).not.toContain('aap-safe-sleep-2022');
+
+    const tenToTwelvePlay = dataFor('gd_10_12m_play');
+    const homeSafety = (tenToTwelvePlay.safety as { en: string }).en;
+    expect(homeSafety).toContain('hardware-mounted gate at the top');
+    expect(homeSafety).toContain('Use cordless window coverings');
+    expect(homeSafety).toContain('store them upside down out of reach');
+    expect(homeSafety).not.toContain('Tie blind cords high');
+    expect((tenToTwelvePlay.parentTips as Array<{ en: string }>)[1].en).toContain(
+      'lower-hazard play space',
+    );
+    expect(sourcesForContent('gd_10_12m_play', 'guide')).toEqual(
+      expect.arrayContaining([
+        'cpsc-childproofing-home-2023',
+        'cpsc-window-coverings-cordless-2021',
+        'hc-choking-prevention-2026',
+        'hc-poison-prevention-2026',
+      ]),
+    );
+    expect(sourcesForContent('gd_10_12m_play', 'guide')).not.toContain(
+      'aap-safe-sleep-2022',
     );
   });
 

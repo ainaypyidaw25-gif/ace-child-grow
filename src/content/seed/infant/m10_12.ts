@@ -890,7 +890,7 @@ const GUIDES_E: SeedItem[] = [
         b('ကစားစရာများကို လှည့်ပြောင်း ပေးပါ — အသစ်လို ခံစားရသည်။', 'Rotate the toys so they feel new again.'),
       ],
       indoor: [
-        b('ခေါင်းအုံးဖြင့် တွားကျော်ရန် လမ်းကြောင်း ဖန်တီးခြင်း။', 'A pillow path to crawl over.'),
+        b('နိုးနေချိန်တွင် လူကြီးအနီးကပ်ကြီးကြပ်၍ ရှင်းလင်းထားသော ကြမ်းပြင်ပေါ်ရှိ ဘေးကင်းသော ကစားစရာဆီ တွားသွားစေပါ။', 'During awake time and with close adult supervision, let the baby crawl across a clear floor toward a safe toy.'),
         b('ဗူးထဲ ပစ္စည်း ထည့်-ထုတ် ကစားခြင်း။', 'In-and-out container play.'),
       ],
       outdoor: [
@@ -902,16 +902,16 @@ const GUIDES_E: SeedItem[] = [
       ],
       materials: b('ဖျာ၊ ဗူးခွံ၊ ခွက်၊ အဝတ်စ၊ ပျော့သော ဘောလုံး', 'A mat, empty containers, cups, cloths, a soft ball'),
       safety: b(
-        'အိမ်တွင်း ဘေးကင်းရေး စစ်ဆေးရန် — လှေကား အထက်နှင့် အောက်တွင် တံခါးကာ တပ်ပါ။ မှီ၍ လဲနိုင်သော စင်၊ စားပွဲ၊ တီဗီများကို နံရံနှင့် တွယ်ထားပါ။ ပြတင်းပေါက်များကို ပိတ်ထားပါ သို့မဟုတ် ကာရံပါ၊ ပြတင်းပေါက်အောက်တွင် တက်နိုင်သော ပရိဘောဂ မထားပါနှင့်။ လိုက်ကာကြိုးများကို အမြင့်တွင် ချည်ပါ။ မီးပလပ်ပေါက်များကို ပိတ်ပါ၊ မီးကြိုးများကို ဖုံးထားပါ။ ရေပုံး၊ ရေချိုးကန်၊ ရေအိုးများကို ဗလာထားပါ သို့မဟုတ် အဖုံးပိတ်ပါ — ရေနည်းနည်းဖြင့်ပင် ရေနစ်နိုင်သည်၊ ရေအနီးတွင် ကလေးအား ခဏမျှ တစ်ယောက်တည်း မထားပါနှင့်။ မီးဖို၊ ရေနွေး၊ မီးပူ၊ ဖယောင်းတိုင်များကို အလှမ်းမမီ ထားပါ၊ ပူသော အရည်များကို စားပွဲအစွန်းတွင် မထားပါနှင့်။ ဆေးများ၊ ဓာတုပစ္စည်းများ၊ ဆေးလိပ်၊ အရက်များကို သော့ခတ် သိမ်းပါ။ ဒင်္ဂါးပြား၊ ကြယ်သီး၊ ခလုတ်ဘက်ထရီ၊ သံလိုက်လုံးများကို ဖယ်ရှားပါ။ ပလတ်စတစ်အိတ်နှင့် ပူဖောင်းများကို ဝေးဝေးထားပါ။',
-        'Home-safety check — fit gates at the top and bottom of stairs. Anchor shelves, tables and TVs that could tip. Keep windows closed or guarded and move climbable furniture away from them. Tie blind cords high. Cover sockets and tuck away electrical cords. Empty buckets, basins and tubs or keep them covered — a child can drown in very little water, and never leave her alone near water even for a moment. Keep the stove, hot drinks, irons and candles out of reach and hot liquids away from table edges. Lock away medicines, cleaning products, tobacco and alcohol. Remove coins, buttons, button batteries and small magnets. Keep plastic bags and balloons well away.',
+        'အိမ်တွင်း ဘေးကင်းရေး စစ်ဆေးပါ — လှေကားအပေါ်နှင့် အောက်တွင် အသက်အရွယ်သင့် တံခါးကာများ တပ်ပြီး လှေကားအပေါ်ဘက်တွင် နံရံနှင့်ဝက်အူဖြင့် တပ်ဆင်သည့် တံခါးကာကို သုံးပါ။ လဲကျနိုင်သော စင်၊ စားပွဲနှင့် တီဗီများကို နံရံတွင် ခိုင်ခံ့စွာ တွယ်ထားပါ။ ပြတင်းပေါက်တွင် လူကြီးဖွင့်နိုင်သော ကာရံ သို့မဟုတ် အဖွင့်ကန့်သတ်ကိရိယာ တပ်ပြီး တက်နိုင်သော ပရိဘောဂများကို ဝေးရာရွှေ့ပါ။ ကြိုးမပါသော ပြတင်းပေါက်လိုက်ကာများကို သုံးပါ။ မပြောင်းလဲနိုင်သေးပါက တွဲလောင်းကျနေသော ဆွဲကြိုးများကို ကလေးလက်လှမ်းမမီအောင် တိုစေပြီး အဆက်မပြတ်ကြိုးကွင်းများကို တင်းအားထိန်းကိရိယာဖြင့် နံရံ သို့မဟုတ် ကြမ်းပြင်တွင် ခိုင်ခန့်စွာ တပ်ထားပါ။ အသုံးမပြုသည့် မီးပလပ်ပေါက်များတွင် ကလေးမဖြုတ်နိုင်၊ မျိုမချနိုင်သော အဖုံးကို တပ်ပါ။ ရေပုံး၊ ရေအိုးနှင့် ရေချိုးကန်များကို သုံးပြီးတိုင်း ချက်ချင်း ဗလာလုပ်ပြီး ကလေးလက်လှမ်းမမီရာတွင် မှောက်ထားပါ။ ရေအနီးတွင် ကလေးကို လက်တစ်ကမ်းအတွင်း အမြဲကြီးကြပ်ပါ။ မီးဖို၊ ရေနွေး၊ မီးပူ၊ ဖယောင်းတိုင်နှင့် ပူသောအရည်များကို လက်လှမ်းမမီအောင်ထားပါ။ ဆေးဝါး၊ သန့်ရှင်းရေးပစ္စည်း၊ ဆေးလိပ်နှင့် အရက်ကို မမြင်နိုင်၊ လက်လှမ်းမမီသော သော့ခတ်ထားသည့်နေရာတွင် သိမ်းပါ။ ဒင်္ဂါးပြား၊ ကြယ်သီး၊ ခလုတ်ဘက်ထရီ၊ သံလိုက်လုံး၊ ပလတ်စတစ်အိတ်နှင့် ပူဖောင်းများကို ဖယ်ရှားထားပါ။',
+        'Home-safety check: install age-appropriate gates at the top and bottom of stairs, using a hardware-mounted gate at the top. Anchor shelves, tables, and TVs that could tip. Fit adult-operable window guards or stops and move climbable furniture away from windows. Use cordless window coverings. If they cannot yet be replaced, shorten dangling pull cords out of reach and secure continuous-loop cords to the wall or floor with a tension device. Fit child-resistant, non-choking covers to unused outlets. Empty buckets, basins, and tubs immediately after use and store them upside down out of reach; keep the baby within arm’s reach whenever near water. Keep stoves, hot drinks, irons, candles, and hot liquids out of reach. Store medicines, cleaning products, tobacco, and alcohol locked, out of sight and reach. Remove coins, buttons, button batteries, small magnets, plastic bags, and balloons.',
       ),
       commonMistakes: [
-        b('ကလေးကို အမြဲ တားမြစ်ခြင်း — အန္တရာယ်များကို ဖယ်ရှားပြီး ဘေးကင်းသော စူးစမ်းနေရာ ပြင်ဆင်ပေးပါ။', 'Constantly stopping the child — remove hazards and prepare a safe space to explore.'),
+        b('ကလေးကို အမြဲ တားမြစ်ခြင်း — အန္တရာယ်များကို လျှော့ချပြီး လူကြီးအနီးကပ်ကြီးကြပ်နိုင်သော စူးစမ်းနေရာ ပြင်ဆင်ပေးပါ။', 'Constantly stopping the child — reduce hazards and prepare an exploration space that can be closely supervised by an adult.'),
         b('"ခဏလေးပဲ" ဟု ထင်၍ ရေအနီးတွင် ချန်ထားခြင်း။', 'Leaving her near water "just for a second".'),
       ],
       parentTips: [
         b('ကလေး၏ အမြင့်အထိ ဒူးထောက်၍ အခန်းကို ကြည့်ပါ — မမြင်ခဲ့သော အန္တရာယ်များ ပေါ်လာလိမ့်မည်။', 'Kneel to her height and look around the room — you will see hazards you missed.'),
-        b('အခန်းတစ်ခန်းကို လုံးဝ လုံခြုံအောင် ပြင်ထားပါ — "ဟုတ်တယ်" လို့ ပြောနိုင်တဲ့ နေရာ ဖြစ်စေပါ။', 'Make one room completely safe — a place where the answer can be yes.'),
+        b('အခန်းတစ်ခန်းကို အန္တရာယ်လျှော့ချထားသော ကစားနေရာအဖြစ် ပြင်ပြီး လူကြီးအနီးကပ်ကြီးကြပ်မှုဖြင့် စူးစမ်းခွင့်ပေးပါ။', 'Prepare one room as a lower-hazard play space and let the baby explore with close adult supervision.'),
       ],
       faq: [
         {
@@ -933,11 +933,11 @@ const GUIDES_E: SeedItem[] = [
         'After a fall with any of those signs, or with any suspected poisoning, seek medical care immediately. A swallowed button battery or magnet is an emergency and must not wait.',
       ),
       encouragement: b(
-        'အခန်းတစ်ခန်းကို လုံခြုံအောင် ပြင်လိုက်ခြင်းက မိဘအတွက်လည်း စိတ်အေးစေပြီး ကလေးအတွက်လည်း လွတ်လပ်စွာ လေ့လာခွင့် ပေးပါသည်။',
-        'Making one room safe gives you calm and gives her freedom to explore.',
+        'အန္တရာယ်များကို လျှော့ချထားသော ကစားနေရာနှင့် အနီးကပ်ကြီးကြပ်မှုက မိဘကို စိတ်အေးစေပြီး ကလေးကို ပိုမိုလွတ်လပ်စွာ စူးစမ်းခွင့်ပေးနိုင်ပါသည်။',
+        'A lower-hazard play space with close supervision can give caregivers more confidence and allow the baby to explore more freely.',
       ),
     }),
-    'The value of caregiver-supported play and a prepared environment follows AAP guidance on the power of play, the WHO Care for Child Development package, the UNICEF early-moments report and the Bright Futures preventive-care schedule, with the water-safety points drawn from the AAP drowning-prevention policy and the sleep-environment points from the AAP safe-sleep recommendations in the registry.',
+    'Caregiver-supported, responsive play follows AAP power-of-play guidance, the WHO/UNICEF Care for Child Development package and the UNICEF Early Moments Matter report; detailed home-safety controls follow CPSC childproofing and window-cord guidance, water supervision follows AAP drowning-prevention guidance, and small-object and poison controls follow HealthyChildren guidance.',
   ),
 ];
 

@@ -586,8 +586,8 @@ const GUIDES_C: SeedItem[] = [
       lowCost: [b('အခမဲ့ ကစားနည်းများသာ ဖြစ်သည်။', 'Every idea here is free.')],
       materials: b('မလိုအပ်ပါ', 'None'),
       safety: b(
-        'ကလေးကို မြင့်သော နေရာ (ခုတင်၊ စားပွဲ) ပေါ်တွင် တစ်စက္ကန့်မျှ တစ်ယောက်တည်း မထားပါနှင့်။ လေထဲသို့ ပစ်ချီခြင်း၊ ပြင်းထန်စွာ ယိမ်းခြင်း မလုပ်ပါနှင့်။',
-        'Never leave your baby alone on a high surface. Never throw a baby in the air or rock roughly.',
+        'ကလေးကို ခုတင်၊ စားပွဲကဲ့သို့ မြင့်သောနေရာတွင် တစ်ယောက်တည်း မထားပါနှင့်။ ကလေး၏ ဦးခေါင်းနှင့် လည်ပင်းကို အမြဲ ထောက်ပံ့ပြီး ဖြည်းညင်းနူးညံ့စွာ လှုပ်ရှားပါ။ ကလေးကို လုံးဝ မလှုပ်ခါ၊ မပစ်ချီပါနှင့်။',
+        'Never leave your baby alone on a high surface such as a bed or table. Always support the head and neck and use slow, gentle movement. Never shake or throw a baby.',
       ),
       commonMistakes: [
         b('ကစားချိန် ရှည်လွန်းခြင်း။', 'Play sessions that go on too long.'),
@@ -600,11 +600,11 @@ const GUIDES_C: SeedItem[] = [
           a: b('မလိုအပ်ပါ။ ဤအရွယ်တွင် သင့်မျက်နှာ၊ အသံနှင့် နူးညံ့သော တုံ့ပြန်မှုများက ကစားခြင်းနှင့် သင်ယူမှုကို အထောက်အကူပြုပါသည်။', 'Not necessarily. At this age, your face, voice, and gentle responses support play and learning.'),
         },
       ],
-      redFlags: [b('မည်သည့် ဆက်ဆံမှုကိုမျှ လုံးဝ တုံ့ပြန်မှု မရှိခြင်း။', 'No response at all to any interaction.')],
-      referral: b('စဉ်ဆက်မပြတ် တုံ့ပြန်မှု မရှိပါက ကျန်းမာရေးဝန်ထမ်းအား ပြပါ။', 'Persistent lack of response should be checked by a health worker.'),
+      redFlags: [b('အသက် ၂ လနီးပါးတွင် မျက်နှာကို မကြည့်ခြင်း၊ ကျယ်သောအသံကို မတုံ့ပြန်ခြင်း သို့မဟုတ် ယခင်တုံ့ပြန်မှု ပျောက်ဆုံးခြင်း။', 'By around 2 months, not looking at faces, not reacting to loud sounds, or losing a response the baby previously had.')],
+      referral: b('ဤအချက်များရှိပါက မစောင့်ဘဲ ကျန်းမာရေးဝန်ထမ်းနှင့် ဆွေးနွေးပါ။ ဤသည်မှာ ရောဂါဖော်ထုတ်ချက် မဟုတ်ပါ။', 'If any of these apply, talk with a health worker without waiting. This is not a diagnosis.'),
       encouragement: b('သင်သည် ကလေး၏ ပထမဆုံး ကစားဖော် ဖြစ်ပါသည်။', 'You are your baby’s first playmate.'),
     }),
-    'Play as interaction and reading infant engagement and disengagement cues follow AAP power-of-play guidance, WHO Care for Child Development materials, and UNICEF early-childhood guidance in the registry.',
+    'Responsive play from the newborn period—talking, singing and responding to the baby—follows the UNICEF Early Moments Matter report; the age-specific engagement and disengagement cues and activity details follow AAP power-of-play guidance and the WHO/UNICEF Care for Child Development package, while the two-month response checks follow CDC milestone guidance.',
   ),
 ];
 

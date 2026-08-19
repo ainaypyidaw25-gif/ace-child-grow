@@ -557,13 +557,13 @@ const GUIDES_C: SeedItem[] = [
         b('အရိပ်ရှိသော ကွင်းပြင်တွင် အဝတ်ခင်း၍ ကြမ်းပြင်ကစားခြင်း။', 'Floor play on a cloth in a shaded outdoor spot.'),
       ],
       lowCost: [
-        b('သတ္တုပန်းကန်၊ သစ်သားဇွန်း၊ အဝတ်စ — အိမ်တွင်း ပစ္စည်းများဖြင့် ကစားနိုင်သည်။', 'A metal plate, a wooden spoon, cloth strips — household items work.'),
-        b('ဆန်ထည့်ထားသော ပိတ်ဗူးကို အသံမြည်ဗူးအဖြစ် သုံးပါ။', 'A sealed tin with rice as a rattle.'),
+        b('သန့်ရှင်းသော ပလတ်စတစ်ခွက်ကြီး သို့မဟုတ် သစ်သားဇွန်းကို အက်ကွဲမှု၊ အစွန်းချွန်နှင့် ဖြုတ်ထွက်နိုင်သော အစိတ်အပိုင်း မရှိကြောင်း စစ်ပြီး လူကြီးအနီးကပ်ကြီးကြပ်မှုဖြင့် ကစားစေပါ။', 'Use a clean large plastic cup or wooden spoon only after checking for cracks, sharp edges, and detachable parts, with close adult supervision.'),
+        b('အသံကစားရန် အသက်အရွယ်နှင့်ကိုက်ညီသော စံချိန်မီ အသံမြည်ကစားစရာကိုသာ သုံးပါ။', 'For sound play, use only a standards-compliant, age-rated rattle.'),
       ],
-      materials: b('အဝတ်ခင်း၊ အဝတ်စများ၊ အသံမြည်ဗူး၊ မှန်', 'A floor cloth, fabric pieces, a rattle, a mirror'),
+      materials: b('အခင်း၊ အသက်အရွယ်သင့် အဝတ်စာအုပ် သို့မဟုတ် ကြီးမားသော အဝတ်စတစ်ထည်၊ စံချိန်မီ အသံမြည်ကစားစရာနှင့် မကွဲနိုင်သော ကလေးသုံးမှန်', 'A floor mat, an age-rated cloth book or one large cloth, a standards-compliant rattle, and a shatter-resistant baby mirror'),
       safety: b(
-        'ကလေးပါးစပ်ထဲ ဝင်နိုင်သော ပစ္စည်းများ မပေးပါနှင့် — လည်ချောင်းပိတ် နိုင်သည်။ ဆံပင်ကြိုး၊ ကြိုးရှည်၊ ပလတ်စတစ်အိတ်များကို ဖယ်ပါ။ ကစားစဉ် တစ်ယောက်တည်း မထားပါနှင့်။ မြင့်သောနေရာပေါ်တွင် မထားပါနှင့်။',
-        'Nothing small enough to fit in the mouth — it can choke. Remove hair ties, long cords and plastic bags. Never leave her alone during play, and never on a high surface.',
+        'ကလေးပါးစပ်ထဲ ဝင်နိုင်သော သို့မဟုတ် ဖြုတ်ထွက်နိုင်သော အစိတ်အပိုင်းငယ်များ၊ အက်ကွဲ/အစွန်းချွန်ပစ္စည်းများ၊ ဆံပင်ကြိုး၊ ကြိုးရှည်နှင့် ပလတ်စတစ်အိတ်များကို မသုံးပါနှင့်။ ကစားစရာများ၏ အသက်အရွယ်ညွှန်ကြားချက်ကို လိုက်နာပြီး ကစားစဉ် အမြဲ အနီးကပ်ကြီးကြပ်ပါ။ ကလေးကို မြင့်သောနေရာပေါ်တွင် မကစားစေပါနှင့်။',
+        'Do not use anything small enough to enter the baby’s mouth, any detachable small part, cracked or sharp-edged item, hair tie, long cord, or plastic bag. Follow toy age ratings and supervise closely throughout play. Do not play with the baby on a high surface.',
       ),
       commonMistakes: [
         b('ကစားချိန်ကို ရှည်လျားလွန်းစေခြင်း — ကလေး မောသွားတတ်သည်။', 'Making sessions too long — babies tire.'),
@@ -597,7 +597,7 @@ const GUIDES_C: SeedItem[] = [
         'You are an important play partner for your baby.',
       ),
     }),
-    'Play as looking, listening, touching, and reaching at 3–4 months follows WHO/UNICEF Care for Child Development recommendations and CDC and AAP milestone guidance; choking and strangulation precautions follow AAP safe-sleep and play guidance.',
+    'Responsive caregiver play and following the infant’s interests follow the WHO/UNICEF Care for Child Development package and UNICEF’s Early Moments Matter report; age-specific looking, listening, touching and reaching follow CDC and AAP developmental guidance. Small-object, string and toy-selection precautions follow HealthyChildren toy-safety guidance, while high-surface and plastic-bag precautions follow its birth-to-6-month safety guidance.',
   ),
 ];
 

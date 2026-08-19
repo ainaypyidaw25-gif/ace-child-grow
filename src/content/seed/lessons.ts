@@ -20,7 +20,7 @@ export const LESSONS: SeedItem[] = [
     body: b('ကလေးဖွံ့ဖြိုးမှုဆိုသည်မှာ ကိုယ်လက်လှုပ်ရှားမှု၊ ဘာသာစကား၊ စဉ်းစားတွေးခေါ်မှု၊ စိတ်ခံစားမှုနှင့် လူမှုဆက်ဆံရေးတို့ တဖြည်းဖြည်း တိုးတက်လာခြင်း ဖြစ်သည်။ ကလေးတစ်ဦးနှင့်တစ်ဦး ဖွံ့ဖြိုးသည့်အချိန်နှင့် အရှိန် ကွာခြားနိုင်သည်။ ဖွံ့ဖြိုးမှုအဆင့်များသည် ယေဘုယျလမ်းညွှန်ချက်များသာဖြစ်ပြီး အောင်မြင်၊ မအောင်မြင် ဆုံးဖြတ်သည့် စာမေးပွဲ မဟုတ်ပါ။', 'Child development is steady growth in movement, language, thinking, feelings, and social skills. Every child grows at their own pace. Milestones are guides, not a strict test.'),
     quiz: [q('မှတ်တိုင်များသည် —', 'Milestones are —', [['တင်းကျပ်သော စာမေးပွဲ', 'a strict test'], ['လမ်းညွှန်များ', 'general guides']], 1)],
     takeaway: b('ကလေး၏ ကိုယ်ပိုင်အရှိန်ကို လေးစားပါ။', 'Respect your child’s own pace.'),
-    actionToday: b('ယနေ့ ကလေးနှင့် ၁၀ မိနစ် အာရုံစိုက်၍ ကစားပါ။', 'Spend 10 focused minutes playing today.'),
+    actionToday: b('ယနေ့ ကလေး၏ အချက်ပြမှုနှင့် စိတ်ဝင်စားမှုကို လိုက်၍ အာရုံစိုက်ကစားချိန် အနည်းငယ် ပေးပါ။', 'Spend some focused play time following your child’s cues and interests today.'),
   }),
   lesson({
     slug: 'power_of_play', category: 'learning_through_play',

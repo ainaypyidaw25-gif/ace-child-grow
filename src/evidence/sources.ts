@@ -417,16 +417,18 @@ export const WHO_UNICEF_SOURCES: EvidenceSource[] = [
     org: 'UNICEF',
     orgKey: 'UNICEF',
     title: 'Early Moments Matter for Every Child',
+    authors: 'UNICEF',
     year: 2017,
     isbn: '978-92-806-4901-7',
     url: 'https://www.unicef.org/reports/early-moments-matter-every-child',
-    evidenceLevel: 'parent_education',
-    keywords: ['early moments', 'brain development', 'first 1000 days'],
-    topics: ['parenting', 'play', 'milestones'],
+    evidenceLevel: 'expert_consensus',
+    keywords: ['early moments', 'early childhood development', 'responsive stimulation', 'brain development'],
+    topics: ['parenting', 'play', 'cognitive', 'social_emotional', 'nutrition', 'safety'],
     ageMonthsMin: 0,
-    ageMonthsMax: 36,
+    ageMonthsMax: 60,
+    verifiedOn: '2026-08-19',
     verifiedNote:
-      'UNICEF report page shows the title, the September 2017 publication date and ISBN 978-92-806-4901-7.',
+      'UNICEF landing page prints the exact title, Author(s) UNICEF, publication date September 2017, languages English/French/Spanish and ISBN 978-92-806-4901-7. The English report linked from that page states its scope from conception to the start of school and acknowledges H&M Foundation support.',
   }),
   s({
     id: 'unicef-seen-counted-included-2022',
@@ -503,6 +505,40 @@ export const WHO_UNICEF_SOURCES: EvidenceSource[] = [
 // ---------------------------------------------------------------------------
 
 export const GOVERNMENT_SOURCES: EvidenceSource[] = [
+  s({
+    id: 'cpsc-childproofing-home-2023',
+    org: 'U.S. Consumer Product Safety Commission',
+    orgKey: 'GOV',
+    title:
+      'Childproofing Your Home: Several Safety Devices to Help Protect Your Children from Home Hazards',
+    year: 2023,
+    edition: 'Publication #252 • 032023',
+    country: 'United States',
+    url: 'https://www.cpsc.gov/s3fs-public/252ChildproofingYourHome32123.pdf',
+    evidenceLevel: 'parent_education',
+    keywords: ['childproofing', 'safety gates', 'window guards', 'furniture tip-over', 'outlet covers', 'poison prevention'],
+    topics: ['safety', 'parenting'],
+    verifiedOn: '2026-08-19',
+    verifiedNote:
+      'Official CPSC PDF prints this title and “Publication #252 • 032023.” It recommends cordless window coverings, window guards, furniture and appliance anchors, locked cabinets, close bathing supervision, stair gates, outlet covers and other safety devices for young children.',
+  }),
+  s({
+    id: 'cpsc-window-coverings-cordless-2021',
+    org: 'U.S. Consumer Product Safety Commission',
+    orgKey: 'GOV',
+    title:
+      'CPSC to Consumers: The Safest Window Coverings When Young Children Are Present Are Cordless',
+    year: 2021,
+    country: 'United States',
+    url: 'https://www.cpsc.gov/Newsroom/News-Releases/2022/CPSC-to-Consumers-The-Safest-Window-Coverings-When-Young-Children-Are-Present-Are-Cordless',
+    evidenceLevel: 'parent_education',
+    keywords: ['window coverings', 'cord strangulation', 'cordless blinds'],
+    topics: ['safety', 'parenting'],
+    ageMonthsMin: 0,
+    verifiedOn: '2026-08-19',
+    verifiedNote:
+      'CPSC page prints this title and “Release Date: October 05, 2021.” It says cordless window coverings are the safest option for young children and advises shortening dangling pull cords and keeping all window-covering cords out of reach when replacement is not yet possible.',
+  }),
   s({
     id: 'us-hhs-head-start-elof-2015',
     org: 'U.S. Department of Health and Human Services, Administration for Children and Families, Office of Head Start',
@@ -1206,6 +1242,39 @@ export const CDC_SOURCES: EvidenceSource[] = [
 // ---------------------------------------------------------------------------
 
 export const HEALTHYCHILDREN_SOURCES: EvidenceSource[] = [
+  s({
+    id: 'hc-safe-toys-2024',
+    org: 'HealthyChildren.org (American Academy of Pediatrics)',
+    orgKey: 'HealthyChildren',
+    title: 'How to Buy Safe Toys',
+    year: 2024,
+    country: 'United States',
+    url: 'https://www.healthychildren.org/English/safety-prevention/at-home/Pages/how-to-buy-safe-toys.aspx',
+    evidenceLevel: 'parent_education',
+    keywords: ['toy safety', 'choking', 'strings', 'button batteries', 'magnets'],
+    topics: ['safety', 'play', 'parenting'],
+    ageMonthsMin: 0,
+    verifiedOn: '2026-08-19',
+    verifiedNote:
+      'HealthyChildren.org page prints this title, “Last Updated 12/19/2024” and “Source: Adapted from A Parent’s Guide to Toy Safety (Copyright © 2021 American Academy of Pediatrics).” It recommends toys and parts larger than the child’s mouth, removing loose ribbons or strings, checking age labels, and avoiding loose small batteries and high-powered magnets.',
+  }),
+  s({
+    id: 'hc-safety-birth-6m-2017',
+    org: 'HealthyChildren.org (American Academy of Pediatrics)',
+    orgKey: 'HealthyChildren',
+    title: 'Safety for Your Child: Birth to 6 Months',
+    year: 2017,
+    country: 'United States',
+    url: 'https://www.healthychildren.org/English/ages-stages/baby/Pages/Safety-for-Your-Child-Birth-to-6-Months.aspx',
+    evidenceLevel: 'parent_education',
+    keywords: ['infant safety', 'falls', 'choking', 'plastic bags'],
+    topics: ['safety', 'parenting'],
+    ageMonthsMin: 0,
+    ageMonthsMax: 6,
+    verifiedOn: '2026-08-19',
+    verifiedNote:
+      'HealthyChildren.org page prints this title, “Last Updated 12/18/2017” and “Source: TIPP: The Injury Prevention Program (Copyright © 1994 American Academy of Pediatrics, Updated 11/2012).” It warns against leaving an infant on changing tables, beds, sofas or chairs and says to keep small objects, plastic wrappers and bags away.',
+  }),
   s({
     id: 'hc-baby-walkers-danger-2022',
     org: 'HealthyChildren.org (American Academy of Pediatrics)',
