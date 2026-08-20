@@ -175,6 +175,8 @@ function runQuery(name: string, args: Record<string, unknown>): unknown {
       return { isStaff: false, role: null, qualification: null, displayName: null };
     case 'subscriptions:mine':
       return FREE_SUBSCRIPTION;
+    case 'referrals:mine':
+      return { code: null, referredCount: 0, referredBy: null };
     case 'library:listByType':
       return listByType(args as ListArgs);
     case 'library:publicationManifest':

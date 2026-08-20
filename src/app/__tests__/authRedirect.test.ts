@@ -3,6 +3,8 @@ import { describe, expect, it } from 'vitest';
 import {
   createNativeAuthCallbackHandler,
   createNativeUrlRelay,
+  getOAuthVerifierStorageKey,
+  launchNativeOAuth,
   parseNativeAuthCallback,
   resolveAuthRedirectUrl,
 } from '../platform';
@@ -33,8 +35,59 @@ describe('native authentication redirects', () => {
   it('keeps SignIn from sending native OAuth back to window.location.origin', () => {
     const signInSource = readFileSync('src/screens/SignIn.tsx', 'utf8');
     expect(signInSource).toContain('redirectTo: getAuthRedirectUrl()');
-    expect(signInSource).toContain('redirectTo: getAuthRedirectUrl(redirectPath)');
+    expect(signInSource).toContain('getAuthRedirectUrl(redirectPath)');
+    expect(signInSource).toContain('startOAuthSignIn(');
     expect(signInSource).not.toContain('redirectTo: window.location.origin');
+  });
+
+  it('uses the same namespaced verifier key as Convex Auth', () => {
+    expect(getOAuthVerifierStorageKey('https://kind-otter-123.convex.cloud')).toBe(
+      '__convexAuthOAuthVerifier_httpskindotter123convexcloud',
+    );
+  });
+
+  it('stores the one-time verifier before opening OAuth in the in-app browser', async () => {
+    const events: string[] = [];
+    const values = new Map<string, string>();
+    await launchNativeOAuth({
+      provider: 'apple',
+      redirectTo: 'https://child.acegroup.com.mm/profile',
+      storageNamespace: 'https://kind-otter-123.convex.cloud',
+      storage: {
+        setItem(key, value) { events.push(`store:${key}`); values.set(key, value); },
+        removeItem(key) { events.push(`remove:${key}`); values.delete(key); },
+      },
+      requestOAuth: async (provider, params) => {
+        expect(provider).toBe('apple');
+        expect(params).toEqual({ redirectTo: 'https://child.acegroup.com.mm/profile' });
+        return { redirect: 'https://appleid.apple.com/auth', verifier: 'one-time-verifier' };
+      },
+      openBrowser: async (url) => { events.push(`open:${url}`); },
+    });
+
+    const key = '__convexAuthOAuthVerifier_httpskindotter123convexcloud';
+    expect(values.get(key)).toBe('one-time-verifier');
+    expect(events).toEqual([
+      `remove:${key}`,
+      `store:${key}`,
+      'open:https://appleid.apple.com/auth',
+    ]);
+  });
+
+  it('clears the verifier when the native browser cannot open', async () => {
+    const values = new Map<string, string>();
+    await expect(launchNativeOAuth({
+      provider: 'google',
+      redirectTo: 'https://child.acegroup.com.mm',
+      storageNamespace: 'convex',
+      storage: {
+        setItem(key, value) { values.set(key, value); },
+        removeItem(key) { values.delete(key); },
+      },
+      requestOAuth: async () => ({ redirect: 'https://accounts.google.com', verifier: 'verifier' }),
+      openBrowser: async () => { throw new Error('unavailable'); },
+    })).rejects.toThrow('unavailable');
+    expect(values.size).toBe(0);
   });
 
   it('presents equivalent Apple and Google options and keeps PIN/password behind a fallback', () => {
@@ -61,9 +114,11 @@ describe('native authentication redirects', () => {
   it('exchanges a callback once and preserves path, query, and hash', async () => {
     const calls: Array<[string | undefined, { code: string }]> = [];
     const locations: string[] = [];
+    const events: string[] = [];
     const handle = createNativeAuthCallbackHandler({
-      signInWithCode: async (provider, params) => { calls.push([provider, params]); },
-      replaceLocation: (relativeUrl) => { locations.push(relativeUrl); },
+      signInWithCode: async (provider, params) => { events.push('sign-in'); calls.push([provider, params]); },
+      replaceLocation: (relativeUrl) => { events.push('navigate'); locations.push(relativeUrl); },
+      closeBrowser: async () => { events.push('close-browser'); },
     });
 
     const url = 'https://child.acegroup.com.mm/admin/accept-invite?invite=abc&code=one-time#review';
@@ -71,6 +126,7 @@ describe('native authentication redirects', () => {
     await expect(handle(url)).resolves.toBe('duplicate');
     expect(calls).toEqual([[undefined, { code: 'one-time' }]]);
     expect(locations).toEqual(['/admin/accept-invite?invite=abc#review']);
+    expect(events).toEqual(['close-browser', 'navigate', 'sign-in']);
   });
 
   it('routes a trusted App Link without attempting code exchange', async () => {

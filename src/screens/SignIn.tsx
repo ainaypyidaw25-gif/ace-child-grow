@@ -13,7 +13,14 @@ import {
   type AccountPasswordKind,
 } from '../domain/auth/passwordPolicy';
 import { captureReferralFromSearch } from '../domain/referrals/referralCapture';
-import { getAuthRedirectUrl, isAppleAppStoreBuild, NATIVE_AUTH_CALLBACK_ERROR_EVENT } from '../app/platform';
+import { api } from '../../convex/_generated/api';
+import { convex, convexDeploymentUrl } from '../lib/convexClient';
+import {
+  getAuthRedirectUrl,
+  isAppleAppStoreBuild,
+  NATIVE_AUTH_CALLBACK_ERROR_EVENT,
+  startOAuthSignIn,
+} from '../app/platform';
 
 type AuthFlow = 'signIn' | 'signUp' | 'reset' | 'resetVerification';
 type OAuthProvider = 'apple' | 'google';
@@ -157,9 +164,19 @@ export function SignIn() {
       const redirectPath = isStaffInvite
         ? `${window.location.pathname}${window.location.search}${window.location.hash}`
         : '';
-      await signIn(provider, {
-        redirectTo: getAuthRedirectUrl(redirectPath),
-      });
+      await startOAuthSignIn(
+        provider,
+        getAuthRedirectUrl(redirectPath),
+        signIn,
+        {
+          storageNamespace: convexDeploymentUrl,
+          requestOAuth: async (selectedProvider, params) => convex.action(api.auth.signIn, {
+            provider: selectedProvider,
+            params,
+            calledBy: 'capacitor-in-app-browser',
+          }),
+        },
+      );
     } catch {
       clearPortalMode();
       setError(
@@ -176,7 +193,7 @@ export function SignIn() {
   }
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-md flex-col justify-center gap-6 px-5 py-8">
+    <div className="mx-auto flex min-h-screen min-h-[100dvh] max-w-md flex-col justify-center gap-6 px-5 py-[calc(2rem+env(safe-area-inset-top,0px))] max-[430px]:justify-start">
       <div className="text-center">
         <div aria-hidden className="text-5xl">🌱</div>
         <h1 className="mt-2 text-xl font-bold text-sky-deep">{t('app.name')}</h1>

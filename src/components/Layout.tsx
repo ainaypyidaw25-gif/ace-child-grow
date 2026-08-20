@@ -22,7 +22,7 @@ export function Layout({ children, showNav = true }: { children: ReactNode; show
   // and makes the five parent destinations look like reviewer actions.
   const showPrimaryNav = showNav && !inStaffWorkspace;
   return (
-    <div className="app-ambient min-h-screen bg-canvas">
+    <div className="app-ambient min-h-screen min-h-[100dvh] bg-canvas">
       {/* index.html sets viewport-fit=cover, so the header must clear the status
           bar itself: without these insets it renders under the iOS notch /
           Dynamic Island and Android display cutouts in installed (standalone)
@@ -84,8 +84,9 @@ export function Layout({ children, showNav = true }: { children: ReactNode; show
         {showPrimaryNav && <DesktopNav />}
         <main
           data-testid="app-main"
-          className={`min-w-0 flex-1 py-5 sm:py-7 ${showPrimaryNav ? 'pb-28 lg:pb-12' : 'pb-8'}`}
-          style={!showPrimaryNav ? { paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 2rem)' } : undefined}
+          className={`min-w-0 flex-1 pt-5 sm:pt-7 ${showPrimaryNav
+            ? 'pb-[calc(8rem+env(safe-area-inset-bottom,0px))] scroll-pb-[calc(8rem+env(safe-area-inset-bottom,0px))] lg:pb-12 lg:scroll-pb-12'
+            : 'pb-[calc(2rem+env(safe-area-inset-bottom,0px))] scroll-pb-[calc(2rem+env(safe-area-inset-bottom,0px))]'}`}
         >
           {children}
         </main>

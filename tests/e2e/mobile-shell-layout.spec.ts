@@ -105,3 +105,35 @@ for (const width of [320, 360, 412]) {
     }
   });
 }
+
+test('Profile privacy controls remain fully reachable above the fixed navigation on iPad', async ({ page }) => {
+  const pageErrors: string[] = [];
+  page.on('pageerror', (error) => pageErrors.push(error.message));
+  page.on('console', (message) => {
+    if (message.type() === 'error') pageErrors.push(message.text());
+  });
+  await page.setViewportSize({ width: 820, height: 1180 });
+  const app = await onboardParent(page);
+  await app.getByTestId('bottom-nav').locator('a[href="/profile"]').click();
+  await page.waitForTimeout(500);
+  expect(pageErrors).toEqual([]);
+  await expect(app.getByRole('heading', { name: /ကိုယ်ရေး|Profile/ }).first()).toBeVisible();
+
+  await app.evaluate((root) => { root.scrollTop = root.scrollHeight; });
+  const metrics = await app.evaluate((root) => {
+    const main = root.querySelector<HTMLElement>('[data-testid="app-main"]');
+    const nav = root.querySelector<HTMLElement>('[data-testid="bottom-nav"]');
+    const sections = [...root.querySelectorAll<HTMLElement>('main section')];
+    const privacy = sections[sections.length - 1];
+    return {
+      mainPaddingBottom: main ? Number.parseFloat(window.getComputedStyle(main).paddingBottom) : 0,
+      navHeight: nav?.getBoundingClientRect().height ?? 0,
+      navTop: nav?.getBoundingClientRect().top ?? 0,
+      privacyBottom: privacy?.getBoundingClientRect().bottom ?? Number.POSITIVE_INFINITY,
+    };
+  });
+
+  expect(metrics.mainPaddingBottom, 'main content reserves more space than the fixed navigation').toBeGreaterThan(metrics.navHeight);
+  expect(metrics.privacyBottom, 'account deletion controls can scroll completely above the navigation').toBeLessThanOrEqual(metrics.navTop);
+  await app.screenshot({ path: 'test-results/ipad-820-profile-safe-area.png' });
+});

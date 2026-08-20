@@ -45,8 +45,13 @@ describe('mobile safe-area contract', () => {
     expect(layout).toContain('{showPrimaryNav && <BottomNav />}');
   });
 
-  it('keeps staff content clear of the bottom safe area without a fixed nav', () => {
-    expect(layout).toContain("paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 2rem)'");
+  it('keeps every page clear of the fixed navigation and bottom safe area', () => {
+    expect(layout).toContain('pt-5 sm:pt-7');
+    expect(layout).not.toContain('py-5 sm:py-7');
+    expect(layout).toContain('pb-[calc(8rem+env(safe-area-inset-bottom,0px))]');
+    expect(layout).toContain('scroll-pb-[calc(8rem+env(safe-area-inset-bottom,0px))]');
+    expect(layout).toContain('pb-[calc(2rem+env(safe-area-inset-bottom,0px))]');
+    expect(bottomNav).toContain('min-h-[4.75rem]');
   });
 
   it('keeps narrow headers and bottom labels from overflowing', () => {

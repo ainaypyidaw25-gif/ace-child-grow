@@ -18,7 +18,7 @@ export function BottomNav() {
       data-testid="bottom-nav"
       aria-label={t('nav.primary')}
       className="fixed inset-x-0 bottom-0 z-20 border-t border-line bg-white/95 backdrop-blur
-                 pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)]
+                 min-h-[4.75rem] pb-[env(safe-area-inset-bottom)] pl-[env(safe-area-inset-left)]
                  pr-[env(safe-area-inset-right)] lg:hidden"
     >
       <ul className="mx-auto flex max-w-lg items-stretch justify-between px-1 min-[360px]:px-2">
