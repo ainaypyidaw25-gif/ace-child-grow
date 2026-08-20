@@ -28,6 +28,7 @@ export interface OfflineRecord {
   difficulty?: string;
   durationMinutes?: number;
   clinicalStatus: string;
+  publicationLane?: 'human_reviewed' | 'ai_audited';
   reviewScope?: string;
   source?: string;
   /** The bilingual payload the reading screens render. */
@@ -94,6 +95,7 @@ export interface LibraryRowLike {
   slug: string;
   type: string;
   clinicalStatus: string;
+  publicationLane?: 'human_reviewed' | 'ai_audited';
   titleMm: string;
   titleEn: string;
   summaryMm?: string;
@@ -110,7 +112,7 @@ export interface LibraryRowLike {
 }
 
 export function isDownloadable(row: LibraryRowLike): boolean {
-  return row.clinicalStatus === 'published';
+  return row.clinicalStatus === 'published' || row.publicationLane === 'ai_audited';
 }
 
 export function toOfflineRecord(row: LibraryRowLike, savedAt: number): OfflineRecord {
@@ -129,6 +131,7 @@ export function toOfflineRecord(row: LibraryRowLike, savedAt: number): OfflineRe
     difficulty: row.difficulty,
     durationMinutes: row.durationMinutes,
     clinicalStatus: row.clinicalStatus,
+    publicationLane: row.publicationLane,
     reviewScope: row.reviewScope,
     source: row.source,
     data: row.data ?? {},

@@ -105,7 +105,7 @@ describe('clinical-review Burmese copy release', () => {
       .digest('hex')).toBe(CLINICAL_REVIEW_COPY_PAYLOAD_SHA256);
   });
 
-  it('preflights both exact production states as ready without writing', async () => {
+  it('reports the applied release payload as superseded when current seed copy moves on', async () => {
     const context = releaseContext({ libraryContent: clinicalReviewRows(), auditLogs: [] });
     const result = await handler(preflightClinicalReviewCopyRelease)(context, {
       releaseId: CLINICAL_REVIEW_COPY_RELEASE_ID,
@@ -118,73 +118,30 @@ describe('clinical-review Burmese copy release', () => {
     expect(result.releaseApplied).toBe(false);
     expect(result.payloadSha256).toBe(CLINICAL_REVIEW_COPY_PAYLOAD_SHA256);
     expect(result.targets).toHaveLength(2);
-    expect(result.targets.every((target) => target.action === 'ready')).toBe(true);
-    expect(result.targets.every((target) => target.seedMatchesRelease === true)).toBe(true);
+    expect(result.targets.find((target) => target.slug === 'act_board_book_point')).toMatchObject({
+      action: 'ready',
+      seedMatchesRelease: true,
+    });
+    expect(result.targets.find((target) => target.slug === 'sn_selective_mutism')).toMatchObject({
+      action: 'seed_mismatch',
+      seedMatchesRelease: false,
+    });
     expect(result.targets.every((target) => target.currentMatchesExpected === true)).toBe(true);
     expect(result.targets.every((target) => target.desiredMatches === false)).toBe(true);
     expect(context.db.patch).not.toHaveBeenCalled();
     expect(context.db.insert).not.toHaveBeenCalled();
   });
 
-  it('patches only allowlisted copy, derived search text, and review metadata', async () => {
+  it('refuses to reuse the superseded release id without writing', async () => {
     const rows = clinicalReviewRows();
     (rows[1].data as Record<string, unknown>).cmsOnlyField = 'preserve me';
     const context = releaseContext({ libraryContent: rows, auditLogs: [] });
 
     await expect(handler(applyClinicalReviewCopyRelease)(context, {
       releaseId: CLINICAL_REVIEW_COPY_RELEASE_ID,
-    })).resolves.toEqual({ alreadyApplied: false, updated: 2, total: 2 });
-
-    expect(context.db.patch).toHaveBeenCalledTimes(2);
-    const boardUpdate = context.db.patch.mock.calls[0]?.[1] as Record<string, unknown>;
-    expect(boardUpdate).toMatchObject({
-      titleMm: CLINICAL_REVIEW_COPY_TARGETS[0].patches[0].value,
-      summaryMm: CLINICAL_REVIEW_COPY_TARGETS[0].patches[1].value,
-      clinicalStatus: 'clinical_review',
-      reviewRevision: 5,
-    });
-    expect(boardUpdate).not.toHaveProperty('data');
-    expect(boardUpdate).not.toHaveProperty('titleEn');
-    expect(boardUpdate).not.toHaveProperty('summaryEn');
-    expect(boardUpdate).not.toHaveProperty('tags');
-    expect(boardUpdate).not.toHaveProperty('source');
-    expect(boardUpdate).not.toHaveProperty('version');
-    expect(boardUpdate).not.toHaveProperty('media');
-
-    const specialistUpdate = context.db.patch.mock.calls[1]?.[1] as Record<string, unknown>;
-    expect(specialistUpdate).toMatchObject({
-      titleMm: CLINICAL_REVIEW_COPY_TARGETS[1].patches[0].value,
-      clinicalStatus: 'clinical_review',
-      reviewRevision: 4,
-      data: expect.objectContaining({ cmsOnlyField: 'preserve me' }),
-    });
-    expect(specialistUpdate).not.toHaveProperty('titleEn');
-    expect(specialistUpdate).not.toHaveProperty('summaryEn');
-    expect(specialistUpdate).not.toHaveProperty('tags');
-    expect(specialistUpdate).not.toHaveProperty('source');
-    expect(specialistUpdate).not.toHaveProperty('version');
-    expect(specialistUpdate).not.toHaveProperty('media');
-    expect(specialistUpdate.reviewerId).toBeUndefined();
-    expect(specialistUpdate.reviewerQualification).toBeUndefined();
-    expect(specialistUpdate.reviewerDisplayName).toBeUndefined();
-    expect(specialistUpdate.reviewScope).toBeUndefined();
-    expect(specialistUpdate.reviewedAt).toBeUndefined();
-    expect(specialistUpdate.nextReviewAt).toBeUndefined();
-    expect(specialistUpdate.reviewNote).toBeUndefined();
-    expect(specialistUpdate.searchText).not.toBe(rows[1].searchText);
-
-    const updatedData = specialistUpdate.data as {
-      possibleSigns: Array<{ mm: string }>;
-      professionalSupport: Array<{ mm: string }>;
-    };
-    expect(updatedData.possibleSigns[2].mm).toBe(CLINICAL_REVIEW_COPY_TARGETS[1].patches[1].value);
-    expect(updatedData.professionalSupport[0].mm).toBe(CLINICAL_REVIEW_COPY_TARGETS[1].patches[2].value);
-    expect(context.db.insert).toHaveBeenCalledTimes(3);
-    expect(context.db.insert).toHaveBeenLastCalledWith('auditLogs', expect.objectContaining({
-      action: 'library.clinical_review_copy.release',
-      summary: CLINICAL_REVIEW_COPY_RELEASE_ID,
-      after: expect.stringContaining(CLINICAL_REVIEW_COPY_PAYLOAD_SHA256),
-    }));
+    })).rejects.toThrow('Clinical-review copy seed does not match immutable release: sn_selective_mutism');
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalled();
   });
 
   it.each([

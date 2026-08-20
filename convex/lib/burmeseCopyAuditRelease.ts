@@ -121,4 +121,14 @@ export const BURMESE_COPY_AUDIT_HELD_SLUGS = [
   'ms_birth_2m_sleep_1',
 ] as const;
 
+/**
+ * This story's seed moved on in the later exact-state AI educational-preview
+ * release. The historical language release remains bound to its immutable
+ * production preimage and payload, but must not mistake the later authored
+ * wording for corruption of that old release.
+ */
+export const BURMESE_COPY_AUDIT_SUPERSEDED_SLUGS = [
+  'st_first_day_school',
+] as const;
+
 export type BurmeseCopyAuditTarget = (typeof BURMESE_COPY_AUDIT_TARGETS)[number];

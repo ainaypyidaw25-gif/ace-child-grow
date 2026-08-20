@@ -54,13 +54,13 @@ const MILESTONES: SeedItem[] = [
   ),
   kb(
     milestone('7_9m', 'social', 2, {
-      title: b('မိဘနှင့် ခွဲခွာရသည်ကို စိုးရိမ်လာခြင်း', 'Showing separation anxiety'),
+      title: b('မိဘခွာချိန် စိတ်မသက်မသာဖြစ်ခြင်း', 'Shows distress when a caregiver leaves'),
       observe: b('မိဘ ခွာသွားလျှင် ငိုပါသလား။ အသိမဟုတ်သူ ချီလျှင် တွန့်ဆုတ်ပါသလား။', 'Does she cry when you leave, or hold back from unfamiliar people?'),
-      why: b('၈ လမှ ၁၀ လကြားတွင် ခွဲခွာမှု စိုးရိမ်ခြင်းသည် အများဆုံး ဖြစ်တတ်သည်။ ၎င်းသည် ပြဿနာ မဟုတ်ဘဲ ကလေးက မိဘကို အထူးပုဂ္ဂိုလ်အဖြစ် မှတ်မိလာပြီ ဟူသော ကျန်းမာသည့် အချက်ပြမှု ဖြစ်သည်။', 'Separation anxiety usually peaks between about 8 and 10 months. It is not a problem — it is a healthy sign that she now knows you are someone special.'),
+      why: b('ဤအရွယ်တွင် မိဘခွာသွားသောအခါ စိတ်မသက်မသာဖြစ်ခြင်း သို့မဟုတ် မရင်းနှီးသူများကို သတိထားခြင်းသည် တွေ့ရလေ့ရှိပြီး ကလေးတစ်ဦးနှင့်တစ်ဦး ကွာခြားနိုင်ပါသည်။', 'Distress when a caregiver leaves and wariness of unfamiliar people are common at this age, but vary from child to child.'),
       red: b('မည်သူ့ကိုမျှ အထူးမတွယ်တာခြင်း၊ မိဘကို လုံးဝ မဂရုစိုက်ခြင်းကို ကျန်းမာရေးဝန်ထမ်းအား ပြသင့်သည်။', 'No particular attachment to anyone, or no interest in a parent at all, is worth checking.'),
       encouragement: b('ကလေး၏ ငိုသံသည် သင့်ကို ချစ်ကြောင်း ပြောနေခြင်း ဖြစ်သည်။', 'Her tears are telling you that you matter.'),
     }),
-    'Separation anxiety peaking around 8–10 months follows CDC and AAP milestone guidance and NICE social and emotional wellbeing guidance, with the attachment framing taken from the developmental-behavioural paediatrics references in the registry.',
+    'Distress when a caregiver leaves and wariness of unfamiliar people at this age follow CDC and AAP milestone guidance, with normal variation described in the developmental-behavioural paediatrics references in the registry.',
   ),
   kb(
     milestone('7_9m', 'cognitive', 1, {
@@ -87,10 +87,10 @@ const MILESTONES: SeedItem[] = [
       title: b('လက်ဖြင့် ကိုယ်တိုင် စားနိုင်လာခြင်း', 'Starting to feed herself with her hands'),
       observe: b('ကလေးသည် ပျော့သော အစာတုံးများကို ကိုယ်တိုင် ကောက်စားပါသလား။ ခွက်ကို ကိုင်ကြည့်ပါသလား။', 'Does she pick up soft finger foods herself, or hold a cup?'),
       why: b('၈ လဝန်းကျင်တွင် ပျော့သော အစာတုံးများကို ကိုယ်တိုင် ကောက်စားနိုင်လာသည်။ ကိုယ်တိုင် စားခြင်းသည် လက်ကြွက်သားများနှင့် အစားအစာ လက်ခံမှုကို တစ်ပြိုင်နက် လေ့ကျင့်ပေးသည်။', 'Around 8 months many babies can pick up soft finger foods. Self-feeding builds hand skills and food acceptance at the same time.'),
-      red: b('အစာကို ပါးစပ်သို့ လုံးဝ မယူတတ်ခြင်း၊ စားတိုင်း ချောင်းဆိုးခြင်း၊ လည်ချောင်း ပိတ်ခြင်းကို ပြသင့်သည်။', 'Never bringing food to the mouth, or coughing and choking at every meal, is worth checking.'),
+      red: b('အစာစားတိုင်း ချောင်းဆိုးခြင်း သို့မဟုတ် မကြာခဏ တစ်ဆို့ခြင်းရှိပါက ကျန်းမာရေးဝန်ထမ်းထံ အမြန်ဆုံး စစ်ဆေးပါ။ ယခုလက်ရှိ အသက်မရှူနိုင်၊ အသံမထွက်နိုင် သို့မဟုတ် ထိရောက်စွာ မချောင်းဆိုးနိုင်ပါက အရေးပေါ်အကူအညီ ချက်ချင်းခေါ်ပါ။', 'If coughing occurs at every meal or choking happens repeatedly, seek prompt assessment from a health professional. If the child cannot breathe, make a sound, or cough effectively now, call emergency help immediately.'),
       encouragement: b('ပက်ကျံခြင်းသည် အမှား မဟုတ်ဘဲ သင်ယူမှု၏ တစ်စိတ်တစ်ပိုင်း ဖြစ်သည်။', 'Mess is not a mistake — it is part of learning.'),
     }),
-    'Self-feeding with soft finger foods around 8 months follows CDC and AAP milestone guidance, the paediatric occupational-therapy references in the registry and the Bright Futures preventive-care schedule.',
+    'Self-feeding with soft finger foods around 8 months follows CDC and AAP milestone guidance, paediatric occupational-therapy references and the Bright Futures preventive-care schedule; recurring mealtime cough or choking follows ASHA feeding-and-swallowing guidance, while acute airway-emergency signs follow HealthyChildren choking guidance.',
   ),
   kb(
     milestone('7_9m', 'gross_motor', 3, {
@@ -130,7 +130,7 @@ const MILESTONES: SeedItem[] = [
         'Work short peek-a-boo moments into everyday routines like dressing and playtime.',
       ),
     }),
-    'Peekaboo as an early marker of object permanence and turn-taking is described in the AAP Power of Play guidance and WHO Care for Child Development materials in the registry.',
+    'Peekaboo as an early marker of object permanence and turn-taking is described in AAP Power of Play guidance in the registry.',
   ),
 ];
 
@@ -360,8 +360,8 @@ const GUIDES_B: SeedItem[] = [
     guide('7_9m', 'communication', {
       title: b('၇ – ၉ လ — ဆက်သွယ်ပြောဆိုမှု လမ်းညွှန်', '7–9 months — Communication guide'),
       why: b(
-        'ဤအရွယ်တွင် ကလေးသည် စကားလုံး မသုံးဘဲ ရည်ရွယ်ချက်ဖြင့် ဆက်သွယ်တတ်လာသည် — လိုချင်သည့်ဘက်သို့ လက်လှမ်းခြင်း၊ မိဘမျက်နှာကို ကြည့်ပြီး ပစ္စည်းကို ပြန်ကြည့်ခြင်း၊ လက်ကို မြှောက်ပြခြင်း တို့ဖြင့် ဖြစ်သည်။ ဤအချက်ပြမှုများကို မိဘက စကားဖြင့် ပြန်ပြောပေးခြင်းသည် ဆက်သွယ်မှု စွမ်းရည်ကို အခိုင်မာဆုံး တည်ဆောက်ပေးသည်။',
-        'She now communicates on purpose without words — reaching for what she wants, looking from your face to an object and back, lifting her arms to be picked up. Putting those signals into words is what builds communication most strongly.',
+        'ဤအရွယ်တွင် ကလေးသည် စကားလုံး မသုံးဘဲ ရည်ရွယ်ချက်ဖြင့် ဆက်သွယ်တတ်လာသည် — လိုချင်သည့်ဘက်သို့ လက်လှမ်းခြင်း၊ မိဘမျက်နှာကို ကြည့်ပြီး ပစ္စည်းကို ပြန်ကြည့်ခြင်း၊ လက်ကို မြှောက်ပြခြင်း တို့ဖြင့် ဖြစ်သည်။ မိဘက ဤအချက်ပြမှုများကို စကားလုံးဖြင့် ပြန်ဖော်ပြပြီး တုံ့ပြန်ပေးခြင်းက အစောပိုင်း ဆက်သွယ်မှုနှင့် ဘာသာစကား သင်ယူမှုကို အထောက်အကူပြုပါသည်။',
+        'She now communicates on purpose without words — reaching for what she wants, looking from your face to an object and back, lifting her arms to be picked up. Putting these signals into words and responding to them supports early communication and language learning.',
       ),
       observationQuestions: [
         b('လိုချင်သည့် ပစ္စည်းဘက်သို့ လက်လှမ်းပါသလား။', 'Does she reach towards what she wants?'),
@@ -386,16 +386,16 @@ const GUIDES_B: SeedItem[] = [
         b('အပြင်တွင် တွေ့ရသည်များကို လက်ညှိုးထိုးပြ၍ အတူကြည့်ခြင်း။', 'Pointing at things outside and looking together.'),
       ],
       lowCost: [
-        b('သင်၏ မျက်နှာနှင့် လက်များသည် အကောင်းဆုံး ကိရိယာ ဖြစ်သည်။', 'Your face and hands are the best tools.'),
+        b('သင်၏ မျက်နှာ၊ အသံနှင့် လက်ဟန်များဖြင့် အခမဲ့ ဆက်သွယ်ကစားနိုင်ပါသည်။', 'You can use your face, voice, and gestures for communication play at no cost.'),
         b('အဝတ်စ တစ်ထည်ဖြင့် ကစားနည်း များစွာ လုပ်နိုင်သည်။', 'One cloth is enough for many games.'),
       ],
       materials: b('မလိုအပ်ပါ — သင်၏ မျက်နှာ၊ အသံနှင့် အဝတ်စ တစ်ထည်', 'Nothing needed — your face, your voice and a cloth'),
       safety: b(
-        'မျက်နှာဖုံးရန် သုံးသော အဝတ်ကို ကလေးမျက်နှာပေါ် ချန်မထားပါနှင့် — အသက်ရှူ ပိတ်နိုင်သည်။ ဤအရွယ်တွင် ဖန်သားပြင် ကြည့်ခြင်းကို အကြံမပြုပါ၊ မိသားစုနှင့် ဗီဒီယိုခေါ်ဆိုခြင်းသာ ခြွင်းချက် ဖြစ်သည်။ ကလေးကို ဆွဲငင်၍ မကစားပါနှင့်။ ကလေးအား လုံးဝ မလှုပ်ရှားနိုင်အောင် မဖိထားပါနှင့်။',
-        'Never leave a cloth lying over her face — it can block breathing. Screens are not recommended at this age; a family video call is the exception. Never play by jerking or pulling her, and never hold her down so she cannot move.',
+        'မျက်နှာဖုံးရန် သုံးသော အဝတ်ကို ကလေးမျက်နှာပေါ် ချန်မထားပါနှင့် — အသက်ရှူ ပိတ်နိုင်သည်။ ဤအရွယ်တွင် ဖန်သားပြင်အသုံးပြုမှုကို အလွန်ကန့်သတ်ပြီး မျက်နှာချင်းဆိုင် အပြန်အလှန်ဆက်သွယ်မှုကို အစားမထိုးစေပါနှင့်။ ကလေးကို ဆွဲငင်၍ မကစားပါနှင့်။ ကလေးအား လုံးဝ မလှုပ်ရှားနိုင်အောင် မဖိထားပါနှင့်။',
+        'Never leave a cloth lying over her face—it can block breathing. Keep screen use very limited at this age, and do not let it replace face-to-face interaction. Never play by jerking or pulling her, and never hold her down so she cannot move.',
       ),
       commonMistakes: [
-        b('ကလေး မတောင်းဆိုမီ အားလုံး ကြိုပေးထားခြင်း — တောင်းဆိုရန် အခွင့်အရေး ဆုံးရှုံးစေသည်။', 'Giving everything before she asks — she loses the chance to communicate.'),
+        b('ကလေး၏ အချက်ပြမှုကို မစောင့်ဘဲ အားလုံး ကြိုပေးခြင်း — ရွေးချယ်မှု သို့မဟုတ် တောင်းဆိုမှုကို ပြသရန် အခွင့်အရေး နည်းသွားနိုင်သည်။', 'Anticipating every need before a signal — this can reduce opportunities to show a choice or request.'),
         b('ကလေး မျက်နှာလွှဲသော်လည်း ဆက်လက် ကစားရန် တိုက်တွန်းခြင်း။', 'Pushing on with play when she has turned away.'),
       ],
       parentTips: [
@@ -422,8 +422,8 @@ const GUIDES_B: SeedItem[] = [
         'Raise these with a health worker. This is a prompt to check, not a diagnosis.',
       ),
       encouragement: b(
-        'ကလေးက စကားမပြောနိုင်သေးသော်လည်း သင့်ကို နေ့စဉ် စကားပြောနေပါသည် — ကြည့်လိုက်ရုံသာ လိုပါသည်။',
-        'She talks to you every day without words — you only have to look.',
+        'ကလေးက စကားမပြောနိုင်သေးသော်လည်း အသံ၊ အမူအရာနှင့် အခြားအချက်ပြမှုများဖြင့် နေ့စဉ် ဆက်သွယ်နေပါသည်။',
+        'Although your baby cannot yet use words, they communicate each day through sounds, gestures, and other signals.',
       ),
     }),
     'Reading and answering a baby’s intentional signals at 7–9 months follows the WHO Care for Child Development approach, CDC milestone guidance and NHS learn-to-talk advice, with the conversational-turns research in the registry and AAP media guidance for the screen advice.',
@@ -484,7 +484,7 @@ const GUIDES_C: SeedItem[] = [
         },
         {
           q: b('ပညာပေး ဗီဒီယိုတွေက ဦးနှောက် ဖွံ့ဖြိုးမှုကို ကူညီလား။', 'Do educational videos help her brain?'),
-          a: b('ဤအရွယ်တွင် အထောက်အကူ ပြုသည်ဟု အထောက်အထား မရှိပါ။ လက်တွေ့ ကစားခြင်းနှင့် လူနှင့် ဆက်ဆံခြင်းကသာ အထိရောက်ဆုံး ဖြစ်သည်။', 'There is no evidence they help at this age. Hands-on play and interaction with people work best.'),
+          a: b('ဤအရွယ်တွင် ဖန်သားပြင်အကြောင်းအရာအများစုမှ သင်ယူနိုင်မှုမှာ အကန့်အသတ်ရှိပါသည်။ လက်တွေ့ ကစားခြင်းနှင့် လူနှင့် တိုက်ရိုက် အပြန်အလှန်ဆက်သွယ်ခြင်းကို ဦးစားပေးပါ။ လူကြီးတစ်ဦးက ကလေး ပါဝင်နိုင်အောင် ကူညီပေးသည့် မိသားစုနှင့် တိုက်ရိုက် ဗီဒီယိုခေါ်ဆိုမှုမှာ အပြန်အလှန်ဆက်သွယ်မှု ဖြစ်နိုင်ပါသည်။', 'Learning from most screen media is limited at this age. Prioritize hands-on play and live interaction with people. A live family video call can be interactive when an adult helps the baby take part.'),
         },
       ],
       redFlags: [
@@ -507,8 +507,8 @@ const GUIDES_C: SeedItem[] = [
     guide('7_9m', 'social', {
       title: b('၇ – ၉ လ — လူမှုဆက်ဆံရေး လမ်းညွှန်', '7–9 months — Social guide'),
       why: b(
-        'ဤအရွယ်တွင် ကလေးသည် အသိမျက်နှာနှင့် အသစ်ကို ရှင်းရှင်းလင်းလင်း ခွဲခြားတတ်ပြီဖြစ်ရာ၊ မိဘ ခွာသွားလျှင် ငိုခြင်း၊ အသိမဟုတ်သူကို တွန့်ဆုတ်ခြင်းများ ဖြစ်လာသည်။ ၎င်းသည် ပြဿနာ မဟုတ်ဘဲ ကျန်းမာသော တွယ်တာမှု၏ လက္ခဏာ ဖြစ်သည်။ ငြိမ်းချမ်းစွာ တုံ့ပြန်ပေးခြင်းက ကလေးအား လုံခြုံမှု ခံစားစေသည်။',
-        'She now clearly tells familiar people from strangers, so she may cry when you leave and hold back from new faces. This is not a problem — it is a sign of healthy attachment. Calm, predictable responses help her feel safe.',
+        'ဤအရွယ်တွင် ကလေးသည် ရင်းနှီးသူနှင့် မရင်းနှီးသူကို ပိုမို ခွဲခြားတတ်လာပြီး မိဘခွာသွားလျှင် ငိုခြင်း သို့မဟုတ် လူအသစ်ကို တွေ့လျှင် တွန့်ဆုတ်ခြင်း ရှိနိုင်ပါသည်။ ဤတုံ့ပြန်မှုများသည် တွေ့ရလေ့ရှိသော်လည်း ကလေးတစ်ဦးနှင့်တစ်ဦး ကွာခြားနိုင်ပါသည်။ ငြိမ်သက်ပြီး ခန့်မှန်းနိုင်သော တုံ့ပြန်မှုက ကလေးကို လုံခြုံသည်ဟု ခံစားရရန် ကူညီနိုင်ပါသည်။',
+        'At this age, babies increasingly distinguish familiar from unfamiliar people and may cry when a caregiver leaves or hold back from new faces. These responses are common but vary between children. Calm, predictable responses can help the child feel safe.',
       ),
       observationQuestions: [
         b('အသိမျက်နှာကို မြင်လျှင် ပြုံးပါသလား။', 'Does she smile at familiar faces?'),
@@ -543,7 +543,7 @@ const GUIDES_C: SeedItem[] = [
       ),
       commonMistakes: [
         b('ခွဲခွာမှု စိုးရိမ်ခြင်းကို "အလိုလိုက်လွန်းလို့" ဟု ထင်ခြင်း။', 'Treating separation anxiety as a sign of spoiling.'),
-        b('တိတ်တဆိတ် ထွက်သွားခြင်း — ကလေး၏ ယုံကြည်မှုကို လျော့နည်းစေသည်။', 'Sneaking away, which weakens her trust.'),
+        b('တိတ်တဆိတ် ထွက်သွားခြင်း — ခွဲခွာချိန်ကို ကလေးအတွက် ပိုမို မခန့်မှန်းနိုင်ဖြစ်စေနိုင်သည်။', 'Sneaking away can make separations less predictable for the child.'),
       ],
       parentTips: [
         b('နှုတ်ဆက်ခြင်းကို တိုတိုနှင့် ငြိမ်းချမ်းစွာ လုပ်ပါ။', 'Keep goodbyes short and calm.'),
@@ -552,7 +552,7 @@ const GUIDES_C: SeedItem[] = [
       faq: [
         {
           q: b('ကလေးက ကျွန်မကိုပဲ လိုချင်တယ်၊ ဒါ ပုံမှန်လား။', 'She only wants me — is that normal?'),
-          a: b('ပုံမှန် ဖြစ်ပါသည်။ ၈ လမှ ၁၀ လကြားတွင် အများဆုံး ဖြစ်တတ်ပြီး တဖြည်းဖြည်း လျော့သွားပါသည်။ အခြားသူများနှင့် တဖြည်းဖြည်း အချိန်ပေးခြင်းက ကူညီသည်။', 'Yes. It usually peaks between 8 and 10 months and eases over time. Gradual time with other trusted people helps.'),
+          a: b('ဤအရွယ်တွင် တွေ့ရလေ့ရှိပြီး ကလေးတစ်ဦးနှင့်တစ်ဦး ကွာခြားပါသည်။ အချိန်ကြာလာသည်နှင့် လျော့နည်းတတ်ပြီး ယုံကြည်ရသူများနှင့် ဖြည်းဖြည်း အချိန်ပေးခြင်းက ကူညီနိုင်ပါသည်။', 'This is common at this age and varies between children. It often eases over time, and gradual time with other trusted people can help.'),
         },
         {
           q: b('ကလေးထိန်း အပ်ရင် ထိခိုက်မလား။', 'Will using a childminder harm her?'),
@@ -560,7 +560,7 @@ const GUIDES_C: SeedItem[] = [
         },
       ],
       redFlags: [
-        b('မည်သူ့ကိုမျှ အထူး မတွယ်တာခြင်း။', 'No particular attachment to anyone.'),
+        b('ရင်းနှီးသော ပြုစုစောင့်ရှောက်သူနှင့် မရင်းနှီးသူကို တုံ့ပြန်ပုံ လုံးဝ မကွာခြားခြင်း။', 'No difference at all in response to a familiar caregiver versus an unfamiliar person.'),
         b('မိဘအား လုံးဝ မပြုံးပြခြင်း၊ တုံ့ပြန်မှု မရှိခြင်း။', 'No smiling at or responding to a parent at all.'),
         b('ယခင်က ရှိခဲ့သော လူမှုဆက်ဆံမှုများ ဆုံးရှုံးသွားခြင်း။', 'Loss of social contact she used to have.'),
       ],
@@ -573,14 +573,14 @@ const GUIDES_C: SeedItem[] = [
         'Her looking for you is proof of how much you matter.',
       ),
     }),
-    'Familiar-versus-unfamiliar discrimination and separation anxiety at 7–9 months follow CDC and AAP milestone guidance, the WHO/UNICEF nurturing care framework, NICE social and emotional wellbeing guidance and AAP guidance on the power of play.',
+    'Familiar-versus-unfamiliar discrimination and separation distress at 7–9 months follow CDC and AAP milestone guidance, the WHO/UNICEF nurturing care framework, the Head Start early-learning framework and AAP guidance on the power of play.',
   ),
   kb(
     guide('7_9m', 'emotional', {
       title: b('၇ – ၉ လ — စိတ်ခံစားမှု လမ်းညွှန်', '7–9 months — Emotional guide'),
       why: b(
-        'ဤအရွယ်တွင် ကလေး၏ ခံစားမှုများသည် ပိုမို ရှင်းလင်းလာသည် — ပျော်ရွှင်ခြင်း၊ ကြောက်ရွံ့ခြင်း၊ စိတ်ပျက်ခြင်းတို့ကို မျက်နှာနှင့် အသံဖြင့် ပြသည်။ ကလေးသည် ကိုယ်တိုင် စိတ်ကို ငြိမ်းအောင် မလုပ်နိုင်သေးဘဲ လူကြီး၏ ငြိမ်းချမ်းမှုကို မှီခိုသည်။ မိဘ၏ စိတ်ကျန်းမာရေးသည် ဤနေရာတွင် အလွန် အရေးကြီးသည်။',
-        'Her feelings are clearer now — delight, fear and frustration all show on her face and in her voice. She cannot calm herself yet and borrows calm from adults, which is why your own wellbeing matters so much here.',
+        'ဤအရွယ်တွင် ကလေး၏ ခံစားမှုများသည် ပိုမို ရှင်းလင်းလာသည် — ပျော်ရွှင်ခြင်း၊ ကြောက်ရွံ့ခြင်း၊ စိတ်ပျက်ခြင်းတို့ကို မျက်နှာနှင့် အသံဖြင့် ပြသည်။ ကလေးသည် စိတ်ပြန်တည်ငြိမ်ရန် လူကြီး၏ အကူအညီကို မကြာခဏ လိုအပ်သေးသည်။ မိဘ၏ စိတ်ကျန်းမာရေးသည် ဤနေရာတွင် အရေးကြီးပါသည်။',
+        'Her feelings are clearer now — delight, fear and frustration all show on her face and in her voice. She still often needs an adult’s help to settle, which is why caregiver wellbeing matters.',
       ),
       observationQuestions: [
         b('စိတ်ဆိုးလျှင် သင် ငြိမ်းအောင် လုပ်ပေးနိုင်ပါသလား။', 'Can you settle her when she is upset?'),
@@ -618,7 +618,7 @@ const GUIDES_C: SeedItem[] = [
         b('ကလေး၏ ငိုသံကို "ဆိုးလို့" ဟု အဓိပ္ပာယ် ကောက်ခြင်း။', 'Reading her crying as bad behaviour.'),
       ],
       parentTips: [
-        b('သင် ငြိမ်းချမ်းလျှင် ကလေးလည်း ငြိမ်းချမ်းသည်။', 'When you are calm, she borrows that calm.'),
+        b('သင် တည်ငြိမ်နေခြင်းက ကလေး စိတ်ပြန်တည်ငြိမ်ရန် အထောက်အကူပြုနိုင်သည်။', 'Your calm can help her settle.'),
         b('အကူအညီ တောင်းခြင်းသည် အားနည်းချက် မဟုတ်ပါ။', 'Asking for help is not a weakness.'),
       ],
       faq: [
@@ -646,7 +646,7 @@ const GUIDES_C: SeedItem[] = [
         'Caring for yourself while caring for her is part of doing this well.',
       ),
     }),
-    'The link between responsive caregiving, parental mental health and early emotional development follows AAP guidance on toxic stress, the WHO/UNICEF nurturing care framework, NICE postnatal care guidance, NICE social and emotional wellbeing guidance and standard paediatric references in the registry.',
+    'The link between responsive caregiving, parental mental health and early emotional development follows AAP guidance on toxic stress, the WHO/UNICEF nurturing care framework, NICE postnatal care guidance, the Head Start early-learning framework and standard paediatric references in the registry.',
   ),
 ];
 
@@ -709,7 +709,7 @@ const GUIDES_D: SeedItem[] = [
         },
         {
           q: b('ဓာတ်မတည့်တတ်သော အစားအစာများကို ရှောင်သင့်သလား။', 'Should I avoid foods that commonly cause allergy?'),
-          a: b('ရှောင်ရန် မလိုပါ။ ဥ၊ ငါး၊ မြေပဲထောပတ် (ချောမွေ့အောင် ဖျော်ထားသော)၊ နို့ထွက်ပစ္စည်း စသည်တို့ကို ခြောက်လအရွယ်မှစ၍ တစ်မျိုးချင်း၊ အနည်းငယ်စီ စတင်ပေးနိုင်ပါသည်။ တစ်မျိုးပေးပြီးနောက် နှစ်ရက်ခန့် စောင့်ကြည့်ပါ။ အရေပြားယားယံ၊ ဖုထစ်ပေါ်ခြင်း၊ အော့အန်ခြင်း ဖြစ်လျှင် ရပ်ပြီး ကျန်းမာရေးဝန်ထမ်းနှင့် ဆွေးနွေးပါ။ နှုတ်ခမ်း/မျက်နှာ ရောင်ခြင်း သို့မဟုတ် အသက်ရှူ ခက်ခြင်း ဖြစ်လျှင် ချက်ချင်း အရေးပေါ် ဆေးကုသမှု ရယူပါ။ မိသားစုတွင် ဓာတ်မတည့်မှု သမိုင်း ရှိပါက အရင်ဆုံး ကျန်းမာရေးဝန်ထမ်းနှင့် တိုင်ပင်ပါ။', 'There is no need to avoid them. Egg, fish, smooth peanut paste and dairy can be introduced from around six months, one at a time and in small amounts. Wait about two days after each new food. If you see a rash, hives or vomiting, stop and talk to a health worker. If the lips or face swell or breathing becomes difficult, seek emergency care immediately. If allergy runs in your family, discuss it with a health worker first.'),
+          a: b('ရှောင်ရန် မလိုပါ။ ဥ၊ ငါး၊ ချောမွေ့အောင် ဖျော်ထားသော မြေပဲထောပတ်နှင့် နို့ထွက်ပစ္စည်းများကို ခြောက်လခန့်မှစ၍ တစ်မျိုးချင်း အနည်းငယ်စီ စတင်ပေးနိုင်ပါသည်။ အစားအစာအသစ် တစ်မျိုးနှင့်တစ်မျိုးကြား ၃ ရက်မှ ၅ ရက် စောင့်ကြည့်ပါ။ အရေပြားယားယံခြင်း၊ အဖုအပိန့်ထွက်ခြင်း သို့မဟုတ် အော့အန်ခြင်း ဖြစ်ပါက ဆက်မပေးဘဲ ကျန်းမာရေးဝန်ထမ်းနှင့် တိုင်ပင်ပါ။ နှုတ်ခမ်း သို့မဟုတ် မျက်နှာရောင်ခြင်း၊ အသက်ရှူခက်ခြင်း ဖြစ်ပါက အရေးပေါ် ဆေးကုသမှု ချက်ချင်းခံယူပါ။ ကလေးတွင် ပြင်းထန်သော အရေပြားရောင်ရမ်းနာ သို့မဟုတ် ဥနှင့် ဓာတ်မတည့်မှု ရှိပါက မြေပဲမစတင်မီ ဆရာဝန်နှင့် တိုင်ပင်ပါ။ သိရှိထားသော အစားအစာဓာတ်မတည့်မှု သို့မဟုတ် ယခင်က တုံ့ပြန်မှုရှိပါက ထိုအစားအစာကို ဘေးကင်းစွာ မိတ်ဆက်ပုံကို ဆရာဝန်အား မေးမြန်းပါ။', 'There is no need to avoid them. Egg, fish, smooth peanut paste and dairy can be introduced from around six months, one at a time and in small amounts. Wait 3 to 5 days between each new food. If you see a rash, hives or vomiting, stop and talk to a health worker. If the lips or face swell or breathing becomes difficult, seek emergency care immediately. If your child has severe eczema or egg allergy, talk with a doctor before introducing peanut. If your child has a known food allergy or has previously reacted to a food, ask a doctor how to introduce that food safely.'),
         },
       ],
       redFlags: [
@@ -799,7 +799,7 @@ const GUIDES_D: SeedItem[] = [
         'Every time you let her try, her confidence grows a step.',
       ),
     }),
-    'Self-feeding, cup holding and cooperation in dressing at 7–9 months follow the paediatric occupational-therapy references in the registry, the Bright Futures preventive-care schedule, the WHO infant and young child feeding model chapter, CDC guidance on foods for 6–24 months and the early-intervention occupational-therapy guidance in the registry.',
+    'Self-feeding, cup holding and cooperation in dressing at 7–9 months follow the paediatric occupational-therapy reference in the registry, the Bright Futures preventive-care schedule, the WHO infant and young child feeding model chapter and CDC guidance on foods for 6–24 months.',
   ),
 ];
 
@@ -834,11 +834,11 @@ const GUIDES_E: SeedItem[] = [
         b('နေ့လယ်ပိုင်းတွင် အပြင်ထွက်ခြင်းသည် ညအိပ်ချိန်ကို ကူညီသည်။', 'Time outdoors in the day supports night sleep.'),
       ],
       lowCost: [
-        b('တူညီသော အစီအစဉ်သည် အခမဲ့ဖြစ်ပြီး အထိရောက်ဆုံး ဖြစ်သည်။', 'A consistent routine is free and works best.'),
-        b('မာပြီး ပြားသော အိပ်ရာသည် စျေးကြီးရန် မလိုပါ။', 'A firm flat surface does not need to be expensive.'),
+        b('တူညီသော အိပ်ရာဝင်လုပ်ရိုးလုပ်စဉ်သည် အခမဲ့ဖြစ်ပြီး အထောက်အကူပြုနိုင်သည်။', 'A consistent bedtime routine is free and may help.'),
+        b('ဘေးကင်းရေးစံနှုန်းနှင့် ကိုက်ညီသော ကလေးအိပ်ရာ၊ မာပြီး ပြားညီသော မွေ့ရာနှင့် တင်းကျပ်စွာ ခင်းထားသော အိပ်ရာခင်းတစ်ထည်သာ အသုံးပြုပါ။', 'Use an infant sleep space that meets safety standards, with a firm, flat mattress and only a fitted sheet.'),
       ],
-      materials: b('မာပြီး ပြားသော အိပ်ရာ၊ ပါးလွှာသော စောင်', 'A firm flat sleep surface and a light blanket'),
-      safety: b("အိပ်ချိန်တိုင်း ကလေးကို ပက်လက် အိပ်စေပါ — မာပြီး ပြားသော၊ အပေါ်တွင် ဘာမျှ မရှိသော နေရာတွင် ဖြစ်ရမည်။ ကလေး ကိုယ်တိုင် လှိမ့်နိုင်ပါက ပြန်လှန်ပေးရန် မလိုသော်လည်း အိပ်ရာဝင်ချိန်တွင် အမြဲ ပက်လက်မှ စတင်ပါ။ ခေါင်းအုံး၊ ပျော့ပျောင်းသော အရုပ်များ၊ ထူထဲသော စောင်များကို အိပ်ရာထဲ မထားပါနှင့်။ တစ်ခန်းတည်း အိပ်ပါ — အိပ်ရာတူ မအိပ်ပါနှင့်။ ဆေးလိပ်၊ အရက် သို့မဟုတ် အိပ်ဆေး သောက်ထားပါက ကလေးနှင့် အတူ လုံးဝ မအိပ်ပါနှင့်။ ဆိုဖာ သို့မဟုတ် ကုလားထိုင်ပေါ်တွင် ကလေးနှင့် အတူ မအိပ်ပါနှင့်။ ကလေး၏ မျက်နှာကို မဖုံးပါနှင့်။ ကလေး လှုပ်ရှားနိုင်ပြီ ဖြစ်၍ အိပ်ရာအနီးရှိ ကြိုးများ၊ လိုက်ကာကြိုးများကို ဖယ်ရှားပါ။ အိပ်ချိန်နှင့် ညအိပ်ချိန်တွင် နို့သီးခေါင်း ပေးကြည့်နိုင်ပါသည် — ရုတ်တရက် သေဆုံးမှု အန္တရာယ် လျော့ကျစေကြောင်း တွေ့ရှိထားပါသည်။ နို့တိုက်နေပါက နို့တိုက်ခြင်း အသားကျပြီးမှ စတင်ပေးပါ။", "Put her on her back for every sleep, on a firm flat surface with nothing on it. If she rolls herself you do not need to turn her back, but always start her on her back. Keep pillows, soft toys and thick bedding out of the sleep space. Room-share, do not bed-share. Never sleep with her after smoking, alcohol or sedating medicine, and never on a sofa or armchair. Never cover her face. Now that she can move, remove cords and blind pulls from near the bed. You can try offering a pacifier at nap time and bedtime — it is associated with a lower risk of SIDS. If you are breastfeeding, wait until feeding is well established before offering one."),
+      materials: b('မာပြီး ပြားညီသော ကလေးအိပ်ရာနှင့် တင်းကျပ်စွာ ခင်းထားသော အိပ်ရာခင်းတစ်ထည်သာ', 'A firm, flat infant sleep surface with only a fitted sheet'),
+      safety: b("အိပ်ချိန်တိုင်း ကလေးကို ပက်လက် အိပ်စေပါ — မာပြီး ပြားသော၊ အပေါ်တွင် ဘာမျှ မရှိသော နေရာတွင် ဖြစ်ရမည်။ ကလေးသည် ပက်လက်မှ မှောက်နှင့် မှောက်မှ ပက်လက် ဘက်နှစ်ဖက်စလုံး ကိုယ်တိုင် လှိမ့်နိုင်ပြီဆိုလျှင် ပြန်လှည့်ပေးရန် မလိုပါ — သို့သော် အိပ်ရာဝင်ချိန်တွင် အမြဲ ပက်လက်မှ စတင်ပါ။ အိပ်ရာထဲတွင် ခေါင်းအုံး၊ ပျော့ပျောင်းသော အရုပ်၊ လွတ်နေသော စောင်၊ အိပ်ရာခင်း၊ အဝတ် သို့မဟုတ် ကြိုး မထားပါနှင့်။ တစ်ခန်းတည်း အိပ်ပါ — အိပ်ရာတူ မအိပ်ပါနှင့်။ ဆေးလိပ်၊ အရက် သို့မဟုတ် အိပ်ဆေး သောက်ထားပါက ကလေးနှင့် အတူ လုံးဝ မအိပ်ပါနှင့်။ ဆိုဖာ သို့မဟုတ် ကုလားထိုင်ပေါ်တွင် ကလေးနှင့် အတူ မအိပ်ပါနှင့်။ ကလေး၏ မျက်နှာကို မဖုံးပါနှင့်။ ကလေး လှုပ်ရှားနိုင်ပြီ ဖြစ်၍ အိပ်ရာအနီးရှိ ကြိုးများ၊ လိုက်ကာကြိုးများကို ဖယ်ရှားပါ။ အိပ်ချိန်နှင့် ညအိပ်ချိန်တွင် နို့သီးခေါင်း ပေးကြည့်နိုင်ပါသည် — ရုတ်တရက် သေဆုံးမှု အန္တရာယ် လျော့ကျစေကြောင်း တွေ့ရှိထားပါသည်။ နို့တိုက်နေပါက နို့တိုက်ခြင်း အသားကျပြီးမှ စတင်ပေးပါ။", "Put her on her back for every sleep, on a firm flat surface with nothing on it. Once she can roll both ways on her own, you do not need to turn her back, but always start her on her back. Keep pillows, soft toys, loose blankets, bedding, cloths, and cords out of the sleep space. Room-share, do not bed-share. Never sleep with her after smoking, alcohol or sedating medicine, and never on a sofa or armchair. Never cover her face. Now that she can move, remove cords and blind pulls from near the bed. You can try offering a pacifier at nap time and bedtime — it is associated with a lower risk of SIDS. If you are breastfeeding, wait until feeding is well established before offering one."),
       commonMistakes: [
         b('နေ့ခင်း အိပ်ချိန်ကို လုံးဝ ဖြတ်၍ ညအိပ် ကောင်းစေရန် ကြိုးစားခြင်း — ပိုဆိုးစေတတ်သည်။', 'Cutting naps to improve night sleep, which usually backfires.'),
         b('အိပ်ရာထဲတွင် နူးညံ့သော ပစ္စည်းများ ထည့်ပေးခြင်း။', 'Adding soft items to the sleep space.'),
@@ -856,14 +856,14 @@ const GUIDES_E: SeedItem[] = [
         },
         {
           q: b('ကလေးက မှောက်အိပ်နေရင် ပြန်လှန်ပေးရမလား။', 'She rolls onto her tummy in her sleep — should I turn her back?'),
-          a: b('ကိုယ်တိုင် လှိမ့်နိုင်ပြီဆိုပါက ပြန်လှန်ပေးရန် မလိုပါ။ သို့သော် အိပ်ရာဝင်ချိန်တွင် အမြဲ ပက်လက်မှ စတင်ပြီး အိပ်ရာပေါ်တွင် ဘာမျှ မရှိစေရပါ။', 'If she rolls herself, you do not need to turn her back. Always start her on her back, and keep the surface clear.'),
+          a: b('ကလေးသည် ပက်လက်မှ မှောက်နှင့် မှောက်မှ ပက်လက် ဘက်နှစ်ဖက်စလုံး ကိုယ်တိုင် လှိမ့်နိုင်ပြီဆိုလျှင် ပြန်လှည့်ပေးရန် မလိုပါ။ ဘက်နှစ်ဖက်စလုံး မလှိမ့်နိုင်သေးပါက ပက်လက်အနေအထားသို့ ပြန်လှည့်ပေးပါ။ အိပ်ရာဝင်ချိန်တွင် အမြဲ ပက်လက်မှ စတင်ပြီး အိပ်ရာပေါ်တွင် ဘာမျှ မရှိစေရပါ။', 'Once she can roll both ways on her own, you do not need to turn her back. If she cannot yet roll both ways, return her to her back. Always start her on her back, and keep the surface clear.'),
         },
         { q: b("ဘယ်အပူချိန် ရောက်ရင် ဆေးရုံ သွားရမလဲ။", "What temperature means we should seek care?"), a: b("အပူချိန် တိုင်းပါ။ အသက် ၃ လအောက် ကလေး ၃၈°C (၁၀၀.၄°F) နှင့်အထက် ဖျားပါက — ကလေး ပုံမှန်လို ထင်ရလျှင်ပင် ချက်ချင်း ပြသပါ။ အသက် ၃ လမှ ၆ လကြား ၃၉°C (၁၀၂.၂°F) နှင့်အထက် ဖျားပါက အမြန် ပြသပါ။ အသက် ၆ လကျော်လျှင် အပူချိန် ကိန်းဂဏန်းတစ်ခုတည်းက အဖြေ မပေးပါ — ကလေး၏ ပုံစံနှင့် အပြုအမူကို ကြည့်ပါ။ ဖျားချိန် ၅ ရက်နှင့်အထက် ကြာလျှင်၊ ရေ/နို့ မသောက်နိုင်လျှင် သို့မဟုတ် ပုံမှန်လို တုံ့ပြန်မှု မရှိတော့လျှင် ပြသပါ။ အသက်မရွေး — ဖျားခြင်းနှင့်အတူ အသက်ရှူခက်ခြင်း၊ နှိပ်လျှင် မပျောက်သော အနီစက်၊ လည်ပင်း တောင့်တင်းခြင်း သို့မဟုတ် နိုးရခက်ခြင်း ပါလာပါက ချက်ချင်း ပြသပါ။ အပူချိန်တိုင်းကိရိယာ မရှိပါက — ကလေး ပူနေပြီး အထက်ပါ လက္ခဏာများ ပါလျှင် မစောင့်ဘဲ ပြသပါ။", "Take the temperature. Under 3 months, 38°C (100.4°F) or above: seek care straight away, even if the baby otherwise seems well. Between 3 and 6 months, 39°C (102.2°F) or above: seek care promptly. Over 6 months, the number alone does not decide — go by how she looks and behaves. Seek advice if the fever lasts 5 days or more, if she will not drink, or if she is much less responsive than usual. At any age, fever together with difficulty breathing, a rash that does not fade under pressure, a stiff neck, or being hard to wake: seek care immediately. If you have no thermometer, and the child feels hot and has any of those signs, do not wait.") },
       ],
       redFlags: [
         b('အသက်ရှူရ ခက်ခဲခြင်း၊ အသက်ရှူသံ မြည်ခြင်း၊ နှုတ်ခမ်း ညိုခြင်း — ချက်ချင်း ဆေးကုသမှု ခံယူပါ။', 'Difficulty breathing, noisy breathing or blue lips — get medical help immediately.'),
         b('နှိုးရ မရခြင်း၊ အလွန် အိပ်ငိုက်နေခြင်း — ချက်ချင်း ဆေးကုသမှု ခံယူပါ။', 'Very hard to wake or unusually drowsy — get medical help immediately.'),
-        b('ကြက်သွေးရောင် အဖုအပိန့်များ ပေါ်ခြင်း၊ ပြင်းထန်စွာ ဖျားခြင်း — ချက်ချင်း ဆေးကုသမှု ခံယူပါ။', 'A rash that does not fade, or a high fever — get medical help immediately.'),
+        b('ဖိကြည့်လျှင် မပျောက်သော အနီကွက်များ၊ သို့မဟုတ် အဖျားနှင့်အတူ အသက်ရှူခက်ခြင်း/နိုးရခက်ခြင်း — ချက်ချင်း ဆေးကုသမှု ခံယူပါ။', 'A rash that does not fade under pressure, or fever with difficulty breathing or being hard to wake — get medical help immediately.'),
       ],
       referral: b(
         'အထက်ပါ အရေးပေါ် လက္ခဏာများ တွေ့ပါက ချက်ချင်း ဆေးကုသမှု ခံယူပါ။ အိပ်စက်မှု ပုံစံ စိုးရိမ်ဖွယ် ရှိပါက ကျန်းမာရေးဝန်ထမ်းအား ပြပါ။ ဤသည် ရောဂါ ဖော်ထုတ်ချက် မဟုတ်ပါ။',
@@ -874,7 +874,7 @@ const GUIDES_E: SeedItem[] = [
         'Sleep does not improve in a straight line — steps backwards are normal.',
       ),
     }),
-    'Sleep amounts at 4–11 months follow WHO physical activity and sleep guidance for under-5s; safe sleep positioning, surface and room-sharing follow AAP safe sleep guidance, NHS SIDS advice and Health Canada safe sleep guidance; the value of a consistent bedtime routine follows the sleep-intervention trials in the registry.',
+    'Sleep amounts at 4–11 months follow WHO physical activity and sleep guidance for under-5s; safe sleep positioning, surface and room-sharing follow AAP safe sleep guidance, NHS SIDS advice and Health Canada safe sleep guidance. The direct bedtime-routine trial supports a calm routine at this age, while the AASM and newer systematic reviews and the age-matched Hiscock trial support behavioral help for established bedtime or night-waking problems rather than treating normal waking as illness.',
   ),
   kb(
     guide('7_9m', 'safety', {
@@ -929,7 +929,7 @@ const GUIDES_E: SeedItem[] = [
         },
         {
           q: b('ဘယ်အချိန်မှာ ချက်ချင်း ဆေးရုံသွားရမလဲ။', 'When should I go to hospital immediately?'),
-          a: b('အသက်ရှူရ ခက်ခဲခြင်း၊ တက်ခြင်း၊ နှိုးရ မရခြင်း၊ ဆက်တိုက် အန်ခြင်း၊ ဖိကြည့်လျှင် အရောင်မပျောက်သော အဖုအပိန့်များ ပေါ်ခြင်း၊ ခလုတ်ဘက်ထရီ သို့မဟုတ် ဓာတုပစ္စည်း မျိုမိခြင်း — ချက်ချင်း ဆေးကုသမှု ခံယူပါ။', 'Difficulty breathing, a fit, being very hard to wake, repeated vomiting, a rash that does not fade under pressure, or swallowing a button battery or chemical — get medical help immediately.'),
+          a: b('အသက်ရှူရ ခက်ခဲခြင်း၊ တက်ခြင်း၊ နှိုးရ မရခြင်း၊ တိုက်ကျွေးသမျှ အန်ထွက်ခြင်း သို့မဟုတ် အရည်ကို မထိန်းထားနိုင်ခြင်း၊ ဖိကြည့်လျှင် အရောင်မပျောက်သော အဖုအပိန့်များ ပေါ်ခြင်း၊ ခလုတ်ဘက်ထရီ သို့မဟုတ် ဓာတုပစ္စည်း မျိုမိခြင်း — ချက်ချင်း ဆေးကုသမှု ခံယူပါ။', 'Difficulty breathing, a fit, being very hard to wake, vomiting everything or being unable to keep fluids down, a rash that does not fade under pressure, or swallowing a button battery or chemical — get medical help immediately.'),
         },
         { q: b("ဘယ်အပူချိန် ရောက်ရင် ဆေးရုံ သွားရမလဲ။", "What temperature means we should seek care?"), a: b("အပူချိန် တိုင်းပါ။ အသက် ၃ လအောက် ကလေး ၃၈°C (၁၀၀.၄°F) နှင့်အထက် ဖျားပါက — ကလေး ပုံမှန်လို ထင်ရလျှင်ပင် ချက်ချင်း ပြသပါ။ အသက် ၃ လမှ ၆ လကြား ၃၉°C (၁၀၂.၂°F) နှင့်အထက် ဖျားပါက အမြန် ပြသပါ။ အသက် ၆ လကျော်လျှင် အပူချိန် ကိန်းဂဏန်းတစ်ခုတည်းက အဖြေ မပေးပါ — ကလေး၏ ပုံစံနှင့် အပြုအမူကို ကြည့်ပါ။ ဖျားချိန် ၅ ရက်နှင့်အထက် ကြာလျှင်၊ ရေ/နို့ မသောက်နိုင်လျှင် သို့မဟုတ် ပုံမှန်လို တုံ့ပြန်မှု မရှိတော့လျှင် ပြသပါ။ အသက်မရွေး — ဖျားခြင်းနှင့်အတူ အသက်ရှူခက်ခြင်း၊ နှိပ်လျှင် မပျောက်သော အနီစက်၊ လည်ပင်း တောင့်တင်းခြင်း သို့မဟုတ် နိုးရခက်ခြင်း ပါလာပါက ချက်ချင်း ပြသပါ။ အပူချိန်တိုင်းကိရိယာ မရှိပါက — ကလေး ပူနေပြီး အထက်ပါ လက္ခဏာများ ပါလျှင် မစောင့်ဘဲ ပြသပါ။", "Take the temperature. Under 3 months, 38°C (100.4°F) or above: seek care straight away, even if the baby otherwise seems well. Between 3 and 6 months, 39°C (102.2°F) or above: seek care promptly. Over 6 months, the number alone does not decide — go by how she looks and behaves. Seek advice if the fever lasts 5 days or more, if she will not drink, or if she is much less responsive than usual. At any age, fever together with difficulty breathing, a rash that does not fade under pressure, a stiff neck, or being hard to wake: seek care immediately. If you have no thermometer, and the child feels hot and has any of those signs, do not wait.") },
       ],
@@ -1021,7 +1021,7 @@ const GUIDES_E: SeedItem[] = [
         'A predictable day is one of the biggest gifts of security you can give her.',
       ),
     }),
-    'The value of predictable daily rhythms and responsive care follows the WHO/UNICEF nurturing care framework and the Bright Futures preventive-care schedule; the bedtime-routine advice follows the sleep-intervention trials in the registry; the feeding-safety points follow the WHO infant and young child feeding model chapter; the drowning and fall precautions follow AAP drowning-prevention guidance; the fever advice follows NICE fever guidance; the immunisation reminder follows the CDC immunisation schedule.',
+    'Predictable daily rhythms and responsive care follow the WHO/UNICEF nurturing care framework and the Bright Futures preventive-care schedule; feeding-safety points follow the WHO infant and young child feeding model chapter; drowning and fall precautions follow AAP drowning-prevention guidance; fever advice follows NICE fever guidance; the immunisation reminder follows the CDC immunisation schedule.',
   ),
 ];
 
@@ -1109,7 +1109,7 @@ const ACTIVITIES: SeedItem[] = [
         b('နေ့စဉ် တူညီသော စကားလုံးနှင့် အမူအရာကို သုံးပါ။', 'Use the same words and gesture every day.'),
         b('ကလေး လက်ပြရန် အချိန် ရက်သတ္တပတ် များစွာ ကြာနိုင်သည် — စောင့်ပေးပါ။', 'It may take many weeks before she waves back — keep waiting patiently.'),
       ],
-      safety: b('ခွဲခွာချိန်တွင် ကလေး ငိုလျှင် ချီပွေ့ နှစ်သိမ့်ပေးပါ — ဤသည် ကျန်းမာသော တွယ်တာမှု ဖြစ်သည်။ ကလေးကို လုံးဝ မလှုပ်ခါပါနှင့်။', 'If she cries at separation, hold and comfort her — this is healthy attachment. Never shake a baby.'),
+      safety: b('ခွဲခွာချိန်တွင် ကလေး ငိုလျှင် ပွေ့ဖက်နှစ်သိမ့်ပေးပါ။ ဤတုံ့ပြန်မှုသည် ဤအရွယ်တွင် တွေ့ရလေ့ရှိသော်လည်း ကလေးတစ်ဦးနှင့်တစ်ဦး ကွာခြားနိုင်ပါသည်။ ကလေးကို လုံးဝ မလှုပ်ခါပါနှင့်။', 'If she cries at separation, hold and comfort her. This response is common at this age but varies between children. Never shake a baby.'),
       indoor: true, outdoor: true, oneChild: true, group: true, parentChild: true,
       outcomes: [
         b('ပထမဆုံး ဆက်သွယ်ရေး အမူအရာကို အားပေးရန်။', 'Learning objective — to encourage a first communication gesture.'),
@@ -1120,7 +1120,7 @@ const ACTIVITIES: SeedItem[] = [
       offline: true,
       tags: ['social_activity', 'daily'],
     }),
-    'Gesture use such as waving at this age follows CDC milestone guidance and AAP milestone guidance, and the responsive-caregiving approach follows the WHO Care for Child Development counselling materials and the AAP power-of-play report.',
+    'Gesture use such as waving near the end of the first year follows CDC and AAP milestone guidance; modelling gestures and responding to the child follows AAP play guidance.',
   ),
 ];
 
@@ -1172,7 +1172,7 @@ const ACTIVITIES_B: SeedItem[] = [
         b('ဇွန်းဖြင့် ခွက်ကို ဖြေးညှင်းစွာ သုံးချက် ရိုက်ပါ။', 'Tap the bowl gently three times.'),
         b('ရပ်၍ ကလေးကို ကြည့်ပါ — ၅ စက္ကန့် စောင့်ပါ။', 'Stop, look at her, and wait five seconds.'),
         b('ကလေး ရိုက်လျှင် သို့မဟုတ် အသံထွက်လျှင် ချီးကျူးပြီး ပြန်ရိုက်ပါ။', 'If she taps or makes a sound, praise her and tap back.'),
-        b('အသံ ကျယ်လိုက် တိုးလိုက် ပြောင်းပြပါ။', 'Show her a loud beat and a soft beat.'),
+        b('အသံမကျယ်စေဘဲ ဖြည်းသောစည်းချက်နှင့် အနည်းငယ်မြန်သောစည်းချက်ကို ပြောင်းပြပါ။', 'Keeping the sound soft, alternate a slow beat with a slightly faster beat.'),
         b('သီချင်း တစ်ပုဒ်ကို တူညီသော အချိန်တွင် ဆိုပေးပါ — အမြဲ တူညီသော သီချင်း ဖြစ်စေပါ။', 'Sing the same short song each time so it becomes familiar.'),
         b('ကလေး မောလျှင် ရပ်ပါ။', 'Stop when she tires.'),
       ],
@@ -1180,7 +1180,7 @@ const ACTIVITIES_B: SeedItem[] = [
       indoor: true, outdoor: true, oneChild: true, group: true, parentChild: true,
       outcomes: [
         b('အကြောင်းနှင့် အကျိုး နားလည်မှုနှင့် အလှည့်ကျမှုကို အားပေးရန်။', 'Learning objective — to build cause-and-effect understanding and turn-taking.'),
-        b('အသံနှင့် စည်းချက်ကို အာရုံစိုက်နိုင်မှု တိုးတက်ခြင်း။', 'Better attention to sound and rhythm.'),
+        b('အသံနှင့် စည်းချက်ကို အာရုံစိုက်ကစားခြင်း။', 'Practise attending to sound and rhythm.'),
       ],
       variations: [b('မိသားစုဝင် အသီးသီးက အလှည့်ကျ ရိုက်ပြပါ။', 'Let each family member take a turn with the beat.')],
       lowCost: true,
@@ -1198,12 +1198,12 @@ const ACTIVITIES_B: SeedItem[] = [
       domains: ['self_help', 'nutrition', 'fine_motor'],
       difficulty: 'easy',
       durationMinutes: 15,
-      materials: b('ကလေး၏ ဇွန်း နှစ်ချောင်း၊ ချောမွေ့သော အစားအစာ တစ်မျိုး (ဥပမာ ဆန်ပြုတ်) နှင့် ပျော့ပြီး တုံးငယ် အစားအစာ တစ်မျိုး (ဥပမာ ချက်ပြုတ်ထားသော ကန်စွန်းဥ)။', 'Two baby spoons, one smooth food such as thick porridge, and one soft lumpy food such as cooked sweet potato.'),
+      materials: b('ကလေး၏ ဇွန်း နှစ်ချောင်း၊ ချောမွေ့သော အစားအစာ တစ်မျိုး (ဥပမာ ဆန်ပြုတ်) နှင့် အသက်အရွယ်နှင့် ကိုက်ညီသော ပုံသဏ္ဌာန်၊ အရွယ်အစားဖြင့် ပြင်ဆင်ထားသည့် နူးညံ့သော လက်ဖြင့်ကိုင်စားနိုင်သည့် အစားအစာ တစ်မျိုး။', 'Two baby spoons, one smooth food such as thick porridge, and one soft finger food prepared in an age-appropriate shape and size.'),
       setup: b('လက်ဆေးပါ။ ကလေးကို မတ်မတ် ထိုင်စေပါ။ ကြမ်းပြင်တွင် သတင်းစာ ခင်းထားနိုင်သည်။', 'Wash hands. Seat her upright. Spread paper on the floor if you like.'),
       instructions: [
         b('ကလေး၏ လက်ထဲသို့ ဇွန်း တစ်ချောင်း ပေးပါ — သင် နောက်တစ်ချောင်းဖြင့် ကျွေးပါ။', 'Give her one spoon to hold while you feed with the other.'),
         b('ချောမွေ့သော အစားအစာကို အနည်းငယ် ကျွေးပါ။', 'Offer a little of the smooth food.'),
-        b('ပျော့သော တုံးငယ် အစားအစာကို ခင်းပေါ်တွင် ချထား၍ ကိုင်ခွင့် ပေးပါ။', 'Put a little of the soft lumpy food in front of her to pick up.'),
+        b('အသက်အရွယ်နှင့် ကိုက်ညီသော ပုံသဏ္ဌာန်နှင့် အရွယ်အစားဖြင့် ပြင်ဆင်ထားသည့် လက်ဖြင့်ကိုင်စားနိုင်သော နူးညံ့သည့် အစားအစာတစ်ပိုင်းကို ကလေးရှေ့တွင် ချထား၍ ကိုင်စားခွင့်ပေးပါ။', 'Place one piece of soft finger food prepared in an age-appropriate shape and size in front of the child to pick up.'),
         b('ဖိတ်စင်ခြင်း၊ ပွတ်သပ်ခြင်းကို ခွင့်ပြုပါ — ဤသည် သင်ယူမှု ဖြစ်သည်။', 'Allow mess and squeezing — that is how she learns.'),
         b('ကလေး မျက်နှာလွှဲလျှင် သို့မဟုတ် ခေါင်းလှည့်လျှင် ရပ်ပါ — အတင်း မကျွေးပါနှင့်။', 'Stop when she turns her head away — never force a feed.'),
         b('အစားအစာ အသစ် တစ်မျိုးကို အကြိမ်ပေါင်း များစွာ ပြန်ပေးရနိုင်သည်။', 'A new food may need to be offered many times before she takes it.'),
@@ -1219,7 +1219,7 @@ const ACTIVITIES_B: SeedItem[] = [
       offline: true,
       tags: ['sensory_activity', 'feeding'],
     }),
-    'Responsive self-feeding and progression to lumpy and finger foods in this period follow the WHO infant and young child feeding model chapter, CDC guidance on foods for children aged 6–24 months, the paediatric occupational-therapy textbook and the ASHA pediatric feeding and swallowing materials in the registry.',
+    'Responsive self-feeding and progression to lumpy and finger foods in this period follow the WHO infant and young child feeding model chapter, CDC guidance on foods for children aged 6–24 months and the paediatric occupational-therapy textbook in the registry.',
   ),
 ];
 

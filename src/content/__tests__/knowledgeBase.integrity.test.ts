@@ -3,7 +3,7 @@ import { INFANT_CONTENT } from '../seed/infant';
 import { CONTENT_SEED } from '../seed';
 import { AUTHORABLE_EDITORIAL_STATUSES } from '../seed/infant/editorial';
 import { sourcesForContent } from '../../evidence/links';
-import { isDuplicateMilestoneSlug } from '../../../convex/lib/contentRetirements';
+import { isRetiredMilestoneSlug } from '../../../convex/lib/contentRetirements';
 
 // Gates for the 0–12 month knowledge base.
 //
@@ -13,7 +13,7 @@ import { isDuplicateMilestoneSlug } from '../../../convex/lib/contentRetirements
 
 const BANDS_SHIPPED = ['birth_2m', '3_4m', '5_6m', '7_9m', '10_12m'];
 const ACTIVE_INFANT_CONTENT = INFANT_CONTENT.filter(
-  (item) => !isDuplicateMilestoneSlug(item.slug),
+  (item) => !isRetiredMilestoneSlug(item.slug),
 );
 
 describe('knowledge base — 0–12 months', () => {

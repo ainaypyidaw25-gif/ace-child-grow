@@ -38,14 +38,35 @@ const GUIDE_SAFETY: Record<string, Bilingual> = {
 };
 
 const GUIDE_SOURCES: Record<string, string[]> = {
-  nutrition: ['tb-bright-futures-4e-2017', 'tb-caring-birth-to-5-8e-2024', 'who-growth-standards-2006'],
-  sleep: ['who-pa-sleep-under5-2019', 'jr-aasm-bedtime-2006', 'tb-caring-birth-to-5-8e-2024'],
+  nutrition: ['tb-bright-futures-4e-2017', 'tb-caring-birth-to-5-8e-2024', 'who-growth-standards-2006', 'who-child-growth-standards-qa-2025'],
+  sleep: ['who-pa-sleep-under5-2019', 'jr-aasm-bedtime-2006', 'jr-lecuelle-behavioral-insomnia-review-2024', 'tb-caring-birth-to-5-8e-2024'],
   safety: ['aap-drowning-2021', 'tb-bright-futures-4e-2017', 'cdc-positive-parenting-toddlers-2026'],
-  daily_routine: ['tb-bright-futures-4e-2017', 'aap-oral-health-2023', 'jr-aasm-bedtime-2006'],
+  daily_routine: ['tb-bright-futures-4e-2017', 'aap-oral-health-2023'],
   play: ['aap-power-of-play-2018', 'who-care-for-child-development-2012', 'tb-caring-birth-to-5-8e-2024'],
 };
 
-const ACTIVITY_SOURCES = ['aap-power-of-play-2018', 'who-care-for-child-development-2012', 'cdc-milestones-2026'];
+const BEDTIME_ROUTINE_RCT_BANDS = new Set(['13_18m', '19_24m', '2y', '2_5y']);
+
+const ACTIVITY_SOURCES = ['aap-power-of-play-2018', 'cdc-milestones-2026'];
+
+// WHO/UNICEF CCD gives exact age-banded play/communication recommendations;
+// it is not a generic source for every generated activity.
+const CCD_OLDER_ACTIVITY_SLUGS = new Set([
+  'act_posting_big_shapes_13_18m',
+  'act_point_name_13_18m',
+  'act_tower_crash_2y',
+  'act_action_song_2y',
+  'act_large_puzzle_2y',
+  'act_picture_story_2_5y',
+  'act_helper_sort_2_5y',
+  'act_picture_story_3y',
+  'act_helper_sort_3y',
+  'act_picture_story_3_5y',
+  'act_helper_sort_3_5y',
+  'act_picture_story_4y',
+  'act_picture_story_4_5y',
+  'act_helper_sort_4_5y',
+]);
 
 const GUIDE_EDITORIAL: Record<string, GuideEditorial> = {
   nutrition: {
@@ -91,7 +112,7 @@ const GUIDE_EDITORIAL: Record<string, GuideEditorial> = {
     faq: { q: b('ကလေးက တစ်မျိုးတည်းကို ထပ်ခါကစားလျှင် အဆင်ပြေလား။', 'Is repeated play with the same thing okay?'), a: b('ထပ်ခါကစားခြင်းက သင်ယူမှုကို အားပေးနိုင်သည်။ ကလေးစိတ်ဝင်စားမှုနောက်လိုက်ပြီး အဆင့်သေးသေးတစ်ခု သို့မဟုတ် စကားအသစ်တစ်လုံး ထည့်ပေးပါ။', 'Repetition can support learning. Follow the child’s interest and add one small step or new word.') },
     redFlag: b('လူများ သို့မဟုတ် ကစားစရာများကို ဆက်တိုက် စိတ်မဝင်စားခြင်း၊ ယခင်ကရှိသည့် ကစား/ဆက်သွယ်အရည်အချင်း ပျောက်ဆုံးခြင်း။', 'Persistent lack of interest in people or play, or loss of previously acquired play or communication skills.'),
     referral: b('ကစားခြင်း၊ ဆက်သွယ်ခြင်း သို့မဟုတ် အရည်အချင်းပျောက်ဆုံးမှု စိုးရိမ်ပါက ကလေးဆရာဝန် သို့မဟုတ် ဖွံ့ဖြိုးမှုဆိုင်ရာပညာရှင်နှင့် ဆွေးနွေးပါ။', 'Discuss concerns about play, communication, or lost skills with a paediatrician or developmental professional.'),
-    encouragement: b('နေ့စဉ် မိနစ်အနည်းငယ် အာရုံစိုက်ပြီး အတူကစားခြင်းက ဈေးကြီးသော ကစားစရာများထက် ပိုအရေးကြီးသည်။', 'A few focused minutes of shared play each day matter more than expensive toys.'),
+    encouragement: b('နေ့စဉ် မိနစ်အနည်းငယ် အာရုံစိုက်၍ အတူကစားခြင်းသည် အဖိုးတန်ပါသည်။ ဈေးကြီးသော ကစားစရာ မလိုပါ။', 'A few focused minutes of shared play each day are valuable; expensive toys are not needed.'),
   },
 };
 
@@ -155,7 +176,7 @@ const bands: Band[] = [
     ['daily_routine', b('စားချိန်၊ ကစားချိန်နှင့် အိပ်ချိန်ကို နေ့စဉ် ခန့်မှန်းနိုင်အောင် စီစဉ်ပါ။', 'Keep meals, play, and sleep reasonably predictable.'), b('ရိုးရှင်းသော ရွေးချယ်စရာနှစ်ခု ပေးပါ။', 'Offer two simple choices.')],
   ], play: [
     ['posting_big_shapes_13_18m', b('အပေါက်ထဲ ပုံသဏ္ဌာန်ကြီး ထည့်ကစားခြင်း', 'Post large shapes'), b('လက်ထိန်းချုပ်မှုနှင့် အကြောင်းအကျိုး နားလည်မှု', 'Hand control and cause-and-effect'), b('ဘူးကြီးနှင့် မျိုမချနိုင်သော အရာကြီးများ', 'A container and non-swallowable large objects'), b('အရာတစ်ခုစီကို အပေါက်ထဲထည့်ပြီး ပြန်ထုတ်ခိုင်းပါ။', 'Post each object, then empty the container together.'), b('အရာအားလုံးကို ကလေးပါးစပ်ထက် ကြီးစေရန် စစ်ပါ။', 'Ensure every object is larger than the child’s mouth.'), ['fine_motor', 'cognitive']],
-    ['push_pull_walk_13_18m', b('တွန်းဆွဲ လမ်းလျှောက်ကစားခြင်း', 'Push-and-pull walk'), b('ဟန်ချက်နှင့် လမ်းလျှောက်ယုံကြည်မှု', 'Balance and walking confidence'), b('ခိုင်ခံ့သော တွန်းကစားစရာ', 'A stable push toy'), b('ပြားသောနေရာတွင် ဖြည်းဖြည်း တွန်းသွားစေပါ။', 'Let the child push slowly on a level surface.'), b('ဘီးပါလမ်းလျှောက်ကူကိရိယာ မသုံးဘဲ အနီးကပ်စောင့်ကြည့်ပါ။', 'Avoid seated baby walkers and supervise closely.'), ['gross_motor', 'play']],
+    ['push_pull_walk_13_18m', b('တွန်းဆွဲ လမ်းလျှောက်ကစားခြင်း', 'Push-and-pull walk'), b('ဟန်ချက်နှင့် လမ်းလျှောက်ယုံကြည်မှု', 'Balance and walking confidence'), b('ခိုင်ခံ့သော တွန်းကစားစရာ', 'A stable push toy'), b('ပြားသောနေရာတွင် ဖြည်းဖြည်း တွန်းသွားစေပါ။', 'Let the child push slowly on a level surface.'), b('ထိုင်ခုံပါသော ဘီးတပ် ကလေးလမ်းလျှောက်ကူကိရိယာကို မသုံးပါနှင့်။ ခိုင်ခံ့သော တွန်းကစားစရာကို အသုံးပြုစဉ် အနီးကပ် စောင့်ကြည့်ပါ။', 'Do not use seated baby walkers. Supervise closely when using a stable push toy.'), ['gross_motor', 'play']],
     ['point_name_13_18m', b('ညွှန်ပြပြီး အမည်ပြောကစားခြင်း', 'Point and name'), b('စကားနားလည်မှုနှင့် ပူးတွဲအာရုံစိုက်မှု', 'Language and shared attention'), b('ပုံစာအုပ်', 'A picture book'), b('ကလေးညွှန်ပြသောပုံကို အမည်တိုတို ပြောပေးပါ။', 'Name each picture the child points to.'), b('ကလေးကို စကားပြောရန် ဖိအားမပေးပါနှင့်။', 'Do not pressure the child to repeat words.'), ['language', 'communication']],
   ]},
   { key: '19_24m', mm: '၁၉–၂၄ လ', en: '19–24 months', skills: [
@@ -166,7 +187,7 @@ const bands: Band[] = [
   ], guides: [
     ['nutrition', b('အစားအစာအုပ်စုစုံကို အရွယ်သင့်အပိုင်းဖြင့် ပေးပြီး ကိုယ်တိုင်စားခွင့်ပေးပါ။', 'Offer varied foods in safe sizes and support self-feeding.'), b('မိသားစုနှင့်အတူ ထိုင်စားပြီး ဆာလောင်/ဝပြီ အချက်ပြမှုကို လေးစားပါ။', 'Eat together and respect hunger and fullness cues.')],
     ['sleep', b('နေ့ခင်းအိပ်ချိန်တစ်ကြိမ်နှင့် ညအိပ်ချိန်ကို ပုံမှန်နီးပါး ထားပါ။', 'Keep a broadly consistent nap and bedtime.'), b('အိပ်မီ မျက်နှာပြင်ပိတ်ပြီး ငြိမ်သက်သော လုပ်ရိုးလုပ်စဉ်သုံးပါ။', 'Turn screens off and use a calm bedtime routine.')],
-    ['safety', b('တက်တတ်၊ ဖွင့်တတ်လာသောကလေးအတွက် ပြတင်းပေါက်၊ ဆေးနှင့် သန့်ရှင်းရေးပစ္စည်းကို သော့ခတ်ပါ။', 'Lock windows, medicines, and cleaning products as climbing increases.'), b('ပရိဘောဂကြီးများကို နံရံတွင် ခိုင်ခံ့စွာ တပ်ပါ။', 'Anchor heavy furniture securely to the wall.')],
+    ['safety', b('ပြတင်းပေါက်တွင် လူကြီးသာ ဖွင့်နိုင်သော ကာရံ/အဖွင့်ကန့်သတ်ကိရိယာ တပ်ပြီး တက်နိုင်သော ပရိဘောဂများကို ဝေးရာရွှေ့ပါ။ ဆေးဝါးနှင့် သန့်ရှင်းရေးပစ္စည်းများကို သော့ခတ်သိမ်းပါ။', 'Fit operable window guards or stops, move climbable furniture away, and lock medicines and cleaning products away.'), b('ပရိဘောဂကြီးများကို နံရံတွင် ခိုင်ခံ့စွာ တပ်ပါ။', 'Anchor heavy furniture securely to the wall.')],
     ['daily_routine', b('သန့်ရှင်းရေးနှင့် ပစ္စည်းသိမ်းခြင်းကို တစ်ဆင့်ချင်း အတူလုပ်ပါ။', 'Include the child in one-step tidy-up and care routines.'), b('“အရုပ်ကို ဘူးထဲထည့်ပါ” ကဲ့သို့ တစ်ဆင့်ညွှန်ကြားချက်ပေးပါ။', 'Use one-step directions such as “put the toy in the box.”')],
   ], play: [
     ['roll_kick_ball_19_24m', b('ဘောလုံး လှိမ့်ကန်ကစားခြင်း', 'Roll and kick a ball'), b('ဟန်ချက်နှင့် အလှည့်ကျကစားမှု', 'Balance and turn-taking'), b('ပျော့သော ဘောလုံးကြီး', 'A large soft ball'), b('အပြန်အလှန် လှိမ့်ပြီး နောက်မှ ကန်ကြည့်ပါ။', 'Roll it back and forth, then try gentle kicks.'), b('လှေကားနှင့် လမ်းမအနီး မကစားပါနှင့်။', 'Play away from stairs and traffic.'), ['gross_motor', 'social']],
@@ -182,7 +203,7 @@ const bands: Band[] = [
     ['nutrition', b('ပုံမှန်စားချိန်ထားပြီး အုပ်စုစုံပေးကာ မည်မျှစားမည်ကို ကလေးဆုံးဖြတ်ခွင့်ပေးပါ။', 'Keep regular meals, offer variety, and let the child decide how much to eat.'), b('အချိုရည်အစား ရေနှင့် သင့်တော်သော နို့ကိုပေးပါ။', 'Offer water and suitable milk instead of sugary drinks.')],
     ['sleep', b('ညအိပ်ချိန်မတိုင်မီ တူညီသော အဆင့်တိုများ အသုံးပြုပါ။', 'Use the same short sequence before bed.'), b('ရေချိုး၊ သွားတိုက်၊ စာဖတ်၊ အိပ် ဟူသောအစီအစဉ်ကို လိုက်နာပါ။', 'Follow a bath, brush, book, bed sequence.')],
     ['safety', b('ပြေးတတ်လာသောကလေးအတွက် လမ်းမ၊ ရေကန်နှင့် မီးဖိုအန္တရာယ်ကို ကြိုကာကွယ်ပါ။', 'Plan ahead for traffic, water, and burn hazards as running begins.'), b('အပြင်ထွက်တိုင်း လူကြီးလက်ကိုင်ခြင်းကို လေ့ကျင့်ပါ။', 'Practise holding an adult’s hand outdoors.')],
-    ['play', b('အတုယူကစားခြင်း၊ ကစားတုံးနှင့် ပုံစာအုပ်ကို နေ့စဉ် အလှည့်ကျကစားပါ။', 'Rotate pretend play, blocks, and picture books each day.'), b('ကလေးဦးဆောင်သော ကစားချိန် ဆယ်မိနစ်ပေးပါ။', 'Give ten minutes of child-led play.')],
+    ['play', b('အတုယူကစားခြင်း၊ ကစားတုံးနှင့် ပုံစာအုပ်ကို နေ့စဉ် အလှည့်ကျကစားပါ။', 'Rotate pretend play, blocks, and picture books each day.'), b('နေ့စဉ် ကလေးဦးဆောင်သော ကစားချိန် အနည်းငယ် ပေးပါ။', 'Set aside a little child-led play time each day.')],
   ], play: [
     ['tower_crash_2y', b('မျှော်စင်တည်ပြီး ဖြိုကစားခြင်း', 'Build and tumble'), b('လက်ထိန်းချုပ်မှုနှင့် ပြဿနာဖြေရှင်းမှု', 'Hand control and problem-solving'), b('ကစားတုံးကြီးများ', 'Large blocks'), b('မျှော်စင်တည်ပြီး အတူရေတွက်ကာ ဖြိုပါ။', 'Build a tower, count, and knock it down together.'), b('မာကျောလေးလံသောတုံး မသုံးပါနှင့်။', 'Avoid hard or heavy blocks.'), ['fine_motor', 'problem_solving']],
     ['action_song_2y', b('လှုပ်ရှားသီချင်း ကစားခြင်း', 'Action-song play'), b('စကားနားလည်မှုနှင့် ကိုယ်လက်ညှိနှိုင်းမှု', 'Language and coordination'), b('သီချင်းတစ်ပုဒ်', 'A familiar song'), b('လက်ခုပ်တီး၊ ခြေထောက်ဆောင့် စသည့် လှုပ်ရှားမှုကို အတူလုပ်ပါ။', 'Add clapping and stamping actions to the song.'), b('မလဲကျနိုင်သော နေရာလွတ်တွင် ကစားပါ။', 'Use a clear, non-slip space.'), ['communication', 'gross_motor']],
@@ -204,7 +225,9 @@ const preschool: Band[] = [
     ['gross_motor', b(m1, e1), b(`${m1}ကို ကစားရင်း ကြိုးစားပါသလား။`, `Tries this skill during play: ${e1.toLowerCase()}?`)],
     ['communication', b(m2, e2), b(`${m2}ကို နေ့စဉ်အခြေအနေတွင် ပြုလုပ်ပါသလား။`, `Does this in everyday situations: ${e2.toLowerCase()}?`)],
     ['cognitive', b(m3, e3), b(`${m3}ကို အကူအညီအနည်းငယ်ဖြင့် လုပ်ပါသလား။`, `Does this with little help: ${e3.toLowerCase()}?`)],
-    ['self_help', b(m4, e4), b(`${m4}ကို ကိုယ်တိုင် ကြိုးစားပါသလား။`, `Tries this independently: ${e4.toLowerCase()}?`)],
+    ...(key === '5y'
+      ? []
+      : [['self_help', b(m4, e4), b(`${m4}ကို ကိုယ်တိုင် ကြိုးစားပါသလား။`, `Tries this independently: ${e4.toLowerCase()}?`)] as Skill]),
     ['social', PRESCHOOL_SOCIAL[key][0], PRESCHOOL_SOCIAL[key][1]],
   ],
   guides: [
@@ -227,6 +250,18 @@ for (const band of bands) {
   }
   for (const [domain, focus, daily] of band.guides) {
     const editorial = GUIDE_EDITORIAL[domain] ?? GUIDE_EDITORIAL.daily_routine;
+    let guideSources = [...GUIDE_SOURCES[domain]];
+    if (domain === 'nutrition' && band.key === '5y') {
+      guideSources = guideSources.filter((sourceId) =>
+        sourceId !== 'who-growth-standards-2006'
+        && sourceId !== 'who-child-growth-standards-qa-2025');
+    }
+    if (domain === 'sleep' && band.key === '5y') {
+      guideSources = guideSources.filter((sourceId) => sourceId !== 'jr-aasm-bedtime-2006');
+    }
+    if (domain === 'sleep' && BEDTIME_ROUTINE_RCT_BANDS.has(band.key)) {
+      guideSources.push('jr-mindell-bedtime-routine-rct-2009');
+    }
     authored.push(linked(guide(band.key, domain, {
       title: b(`${band.mm} — ${domain === 'nutrition' ? 'အာဟာရ' : domain === 'sleep' ? 'အိပ်စက်ခြင်း' : domain === 'safety' ? 'ဘေးကင်းလုံခြုံရေး' : domain === 'play' ? 'ကစားခြင်း' : 'နေ့စဉ်လုပ်ရိုးလုပ်စဉ်'} လမ်းညွှန်`, `${band.en} — ${domain.replace('_', ' ')} guide`),
       why: focus,
@@ -240,15 +275,22 @@ for (const band of bands) {
       redFlags: [editorial.redFlag],
       referral: editorial.referral,
       encouragement: editorial.encouragement,
-    }), `Registered ${domain.replace('_', ' ')} references support this conservative parent guide for ${band.en}.`, GUIDE_SOURCES[domain]));
+    }), `Registered ${domain.replace('_', ' ')} references support this conservative parent guide for ${band.en}.`, guideSources));
   }
   for (const [slug, title, goal, materials, step, safety, domains] of band.play) {
-    authored.push(linked(activity({ slug, title, summary: goal, ageGroupKey: band.key, domains, difficulty: 'easy', durationMinutes: 10,
+    const activityItem = activity({ slug, title, summary: goal, ageGroupKey: band.key, domains, difficulty: 'easy', durationMinutes: 10,
       materials, setup: b('ဘေးကင်းပြီး နေရာလွတ်ရှိသောနေရာကို ရွေးပါ။', 'Choose a safe, clear space.'), instructions: [step], safety,
       indoor: true, outdoor: true, oneChild: true, group: true, parentChild: true,
       outcomes: [goal], variations: [b('ကလေးပင်ပန်းလျှင် အဆင့်ကို လျှော့ပြီး ရပ်နားပါ။', 'Simplify or stop when the child is tired.')],
       evidenceSummary: `Play and developmental references support this age-adapted activity for ${band.en}.`,
-    }), `Play and developmental references support this age-adapted activity for ${band.en}.`, ACTIVITY_SOURCES));
+    });
+    const activitySources = [...ACTIVITY_SOURCES];
+    if (CCD_OLDER_ACTIVITY_SLUGS.has(activityItem.slug)) {
+      activitySources.push('who-care-for-child-development-2012');
+    }
+    authored.push(linked(activityItem,
+      `Play and developmental references support this age-adapted activity for ${band.en}.`,
+      activitySources));
   }
   const checklist = { ...printable({ key: `checklist_${band.key}`, format: 'A4 PDF',
     title: b(`${band.mm} — မိဘမှတ်သားစာရင်း`, `${band.en} — Parent observation sheet`),
@@ -377,7 +419,7 @@ const NUTRITION_SLEEP_SAFETY: NutritionSleepSafety[] = [
   ['4y', 'safety',
     b('စည်းမျဉ်းက ဘာကြောင့် ဘေးကင်းစေသည်ကို ရှင်းပြနိုင်ခြင်း', 'Explains why a rule keeps them safe'),
     b('"ဘာကြောင့် လမ်းမနားမှာ လက်ကိုင်ထားရသလဲ" ဟုမေးလျှင် အကြောင်းပြချက် အနည်းငယ် ပြောနိုင်ပါသလား။', 'If asked "why do we hold hands near the road?", can your child give a simple reason?'),
-    b('စည်းမျဉ်းနောက်ကွယ်ရှိ အကြောင်းရင်းကို နားလည်ခြင်းက စည်းမျဉ်းကို ကိုယ်တိုင် လက်ခံနိုင်မှု ပိုကောင်းစေသည်။', 'Understanding the reason behind a rule helps a child accept and internalise it.'),
+    b('ကလေးသည် ဘေးကင်းရေးစည်းမျဉ်း၏ ရိုးရှင်းသော အကြောင်းရင်းကို စတင်နားလည်နိုင်သော်လည်း လမ်းမအနီးတွင် ကလေး၏ အပြုအမူကို အားမကိုးရသေးပါ။ လူကြီးက အနီးကပ်ကြီးကြပ်၍ လက်ကိုင်ထားရပါမည်။', 'A child may begin to understand a simple reason for a safety rule, but adults must not rely on the child’s behavior near traffic; close supervision and hand-holding are still needed.'),
     b('စည်းမျဉ်းချရုံသက်သက်မဟုတ်ဘဲ "ဘာလို့" ဆိုတာကို အမြဲ ရှင်းပြပါ။', 'Always explain the "why," not just the rule itself.')],
 
   ['4_5y', 'nutrition',
@@ -408,7 +450,7 @@ const NUTRITION_SLEEP_SAFETY: NutritionSleepSafety[] = [
     b('ညအိပ်ချိန်ကို ကျောင်းရက်နှင့် အားလပ်ရက် နီးစပ်အောင် ထားပါ။', 'Keep bedtime reasonably consistent between school days and days off.')],
   ['5y', 'safety',
     b('ကိုယ်ပိုင်အမည်ကို ပြောနိုင်ပြီး လမ်းပျောက်လျှင် ယုံကြည်ရသူထံ အကူအညီတောင်းခြင်း', 'States own name and asks a trusted adult for help if lost'),
-    b('မိမိအမည်ကို ရှင်းရှင်းလင်းလင်း ပြောနိုင်ပါသလား။ လမ်းပျောက်လျှင် ဘယ်သူ့ဆီအကူအညီ တောင်းရမည်ကို သိရှိပါသလား (ဥပမာ- စတိုးဝန်ထမ်း၊ မိဘရဲ့ရဲ)။', 'Can your child clearly say their own name? Do they know who to ask for help if lost — like a shop worker or a police officer?'),
+    b('မိမိအမည်ကို ရှင်းရှင်းလင်းလင်း ပြောနိုင်ပါသလား။ လမ်းပျောက်လျှင် ဘယ်သူ့ဆီ အကူအညီတောင်းရမည်ကို သိရှိပါသလား (ဥပမာ — စတိုးဝန်ထမ်း သို့မဟုတ် ရဲအရာရှိ)။', 'Can your child clearly say their own name? Do they know who to ask for help if lost — like a shop worker or a police officer?'),
     b('ကိုယ်ပိုင်အချက်အလက်ကို သိရှိပြီး ယုံကြည်ရသူကို ခွဲခြားနိုင်မှုသည် ကျောင်းအရွယ်မတိုင်မီ အရေးကြီးသော ဘေးကင်းရေး ကျွမ်းကျင်မှု ဖြစ်သည်။', 'Knowing personal information and recognising a trustworthy adult is an important pre-school safety skill.'),
     b('လမ်းပျောက်လျှင် ဘယ်သူ့ဆီ အကူအညီတောင်းရမလဲ ဆိုတာကို ရိုးရှင်းသော ဇာတ်လမ်းဖြင့် လေ့ကျင့်ပြပါ။', 'Practise "what to do if lost" through a simple, calm role-play, not a scary one.')],
 ];
@@ -417,29 +459,29 @@ const NUTRITION_SLEEP_SAFETY_EVIDENCE: Record<string, string> = {
   '13_18m:nutrition': 'The transition from purees to chopped family foods and open-cup drinking around this age follows WHO complementary-feeding guidance and NHS first-foods guidance in the registry.',
   '13_18m:sleep': 'The transition from two naps to one around 12-18 months follows WHO physical activity and sleep guidance for under-5s in the registry.',
   '13_18m:safety': 'Early, unreliable response to danger words and the ongoing need for close supervision at this age follow AAP positive-parenting guidance and Bright Futures guidance in the registry.',
-  '19_24m:nutrition': 'Improving spoon and open-cup competence around 18-24 months is described in the Bright Futures preventive-care schedule and paediatric occupational-therapy references in the registry.',
-  '19_24m:sleep': 'Consistent bedtime routines supporting settling around this age follow AASM behavioural sleep guidance and WHO sleep guidance for under-5s in the registry.',
+  '19_24m:nutrition': 'Improving spoon and open-cup competence around 18–24 months follows CDC and AAP developmental-surveillance guidance in the registry.',
+  '19_24m:sleep': 'A direct bedtime-routine trial and WHO sleep guidance support this conservative observation without treating normal night waking as illness.',
   '19_24m:safety': 'Repetition and consistent labelling as the basis for early hazard recognition follow AAP positive-parenting guidance in the registry.',
-  '2y:nutrition': 'Normal picky eating and growing food independence at 2 years follow the Bright Futures preventive-care schedule and WHO complementary-feeding guidance in the registry.',
-  '2y:sleep': 'Lengthening night sleep with brief self-settling around 2 years follows WHO sleep guidance for under-5s and AASM behavioural sleep guidance in the registry.',
+  '2y:nutrition': 'Normal variation in food preferences and growing food independence at age 2 follow CDC and AAP developmental-surveillance guidance in the registry.',
+  '2y:sleep': 'WHO sleep guidance and a direct bedtime-routine trial support this conservative observation without setting a diagnostic threshold.',
   '2y:safety': 'Early, inconsistent rule-following around 2 years and the value of simple consistent rules follow AAP positive-parenting guidance in the registry.',
-  '2_5y:nutrition': 'The need for repeated, pressure-free exposure to accept new foods is described in Bright Futures guidance and WHO complementary-feeding guidance in the registry.',
-  '2_5y:sleep': 'Common bedtime resistance during the push for independence around this age follows AASM behavioural sleep guidance in the registry.',
+  '2_5y:nutrition': 'This non-diagnostic caregiver observation is framed by CDC and AAP developmental-surveillance guidance in the registry; normal food acceptance varies between children.',
+  '2_5y:sleep': 'A direct bedtime-routine trial and the newer systematic review of behavioral insomnia support this conservative observation.',
   '2_5y:safety': 'Growing verbal hazard-naming as a precursor to rule understanding follows AAP positive-parenting guidance and developmental-behavioral paediatrics references in the registry.',
-  '3y:nutrition': 'Utensil competence by around 3 years is described in the Bright Futures preventive-care schedule and paediatric occupational-therapy references in the registry.',
+  '3y:nutrition': 'Utensil use as an everyday functional skill around age 3 follows CDC and AAP developmental-surveillance guidance in the registry.',
   '3y:sleep': 'The typical transition away from napping around age 3, and the importance of a stable bedtime through it, follows WHO sleep guidance for under-5s in the registry.',
   '3y:safety': 'More reliable rule-following by age 3 while supervision remains essential follows AAP positive-parenting guidance in the registry.',
-  '3_5y:nutrition': 'Growing ability to sit through family meals is described in Bright Futures guidance and general paediatric developmental references in the registry.',
-  '3_5y:sleep': 'Predictable, child-anticipated bedtime routines are described in AASM behavioural sleep guidance in the registry.',
+  '3_5y:nutrition': 'This family-mealtime prompt is a non-diagnostic observation framed by CDC and AAP developmental-surveillance guidance in the registry.',
+  '3_5y:sleep': 'The newer systematic review of behavioral insomnia and general developmental-surveillance references support this conservative observation.',
   '3_5y:safety': 'Teaching young children to seek a trusted adult when unsafe is described in AAP positive-parenting guidance in the registry.',
-  '4y:nutrition': 'Supervised self-serving as a self-help and fine-motor skill around 4 years is described in paediatric occupational-therapy references and Bright Futures guidance in the registry.',
-  '4y:sleep': 'Sleep consolidation and common nighttime fears around age 4 are described in the general paediatrics and AASM behavioural sleep references in the registry.',
+  '4y:nutrition': 'This supervised self-serving prompt is a non-diagnostic functional observation framed by CDC and AAP developmental-surveillance guidance in the registry.',
+  '4y:sleep': 'Sleep consolidation and common nighttime fears around age 4 are described in the general paediatrics and newer sleep-review references in the registry.',
   '4y:safety': 'Understanding the reasoning behind safety rules around age 4 is described in AAP positive-parenting guidance and developmental-behavioral paediatrics references in the registry.',
-  '4_5y:nutrition': 'Early food knowledge and supervised kitchen participation are described in the Bright Futures preventive-care schedule and WHO nutrition-education guidance in the registry.',
-  '4_5y:sleep': 'Growing independent nighttime self-settling around this age follows AASM behavioural sleep guidance in the registry.',
+  '4_5y:nutrition': 'This supervised kitchen-participation prompt is a non-diagnostic functional observation framed by CDC and AAP developmental-surveillance guidance in the registry.',
+  '4_5y:sleep': 'The newer systematic review of behavioral insomnia and general developmental-surveillance references support this conservative observation.',
   '4_5y:safety': 'Structured road-safety habit-building at this age follows AAP positive-parenting guidance and Bright Futures guidance in the registry.',
-  '5y:nutrition': 'Food variety and household task participation as school-readiness self-help skills are described in the Bright Futures preventive-care schedule in the registry.',
-  '5y:sleep': 'Independent bedtime-routine management as a school-readiness skill is described in the Bright Futures preventive-care schedule in the registry.',
+  '5y:nutrition': 'This food-variety and household-participation prompt is a non-diagnostic functional observation framed by CDC and AAP developmental-surveillance guidance in the registry.',
+  '5y:sleep': 'This bedtime-routine prompt is a non-diagnostic functional observation framed by CDC and AAP developmental-surveillance guidance in the registry.',
   '5y:safety': 'Teaching personal information and trusted-adult recognition as a pre-kindergarten safety skill is described in AAP positive-parenting guidance in the registry.',
 };
 
@@ -494,12 +536,7 @@ const GAP_FILL: GapFill[] = [
     b('ကိုယ်တိုင် လက်ဆေးခြင်းနှင့် လက်သုတ်ခြင်း ပြုလုပ်နိုင်ခြင်း', 'Washes and dries own hands'),
     b('လက်ဆေးကန်တွင် လူကြီး၏ အကူအညီ အနည်းငယ်ဖြင့် ကလေးငယ်က မိမိလက်ကို ကိုယ်တိုင် ဆေးကြောပြီး သုတ်ပါသလား။', 'With a little help, does your child wash and dry their own hands at the sink?'),
     b('လက်ဆေးခြင်း အဆင့်ဆင့်ကို ကိုယ်တိုင် လုပ်ဆောင်နိုင်ခြင်းသည် တစ်ကိုယ်ရေ သန့်ရှင်းရေးနှင့် ကျန်းမာရေး အလေ့အထကောင်းများကို စောစီးစွာ တည်ဆောက်ပေးပါသည်။', 'Managing the hand-washing sequence themselves builds an early health habit.'),
-    b('ဘေစင်အနီးတွင် ကလေးရပ်ရန် ခြေနင်းခုံလေး ထားပေးပြီး လက်ဆေးသည့် အဆင့်များကို ရိုးရှင်းစွာ စံပြလုပ်ဆောင်ပြသပေးပါ။', 'Provide a step stool and show the steps in a simple, repeatable order.')],
-  ['2_5y', 'social', 3,
-    b('အခြား ကလေးများနှင့် ဘေးချင်းယှဉ် ကစားရုံသာမက အတူတကွ ပူးပေါင်းကစားတတ်လာခြင်း', 'Plays cooperatively with other children, not just alongside them'),
-    b('အခြား ကလေးများနှင့် ကစားတုံး ဝေမျှကစားခြင်း သို့မဟုတ် အတူတကွ တည်ဆောက်ကစားခြင်းကဲ့သို့ ပူးပေါင်းပါဝင် ကစားပါသလား (ဘေးချင်းယှဉ်၍ သီးခြားစီ ကစားရုံသာ မဟုတ်ဘဲ)။', 'Does your child actually take part with other children — sharing a toy or building together — rather than just playing near them?'),
-    b('ဘေးချင်းယှဉ် ကစားခြင်း (Parallel play) မှသည် အတူတကွ ပူးပေါင်းကစားခြင်း (Cooperative play) သို့ ကူးပြောင်းလာခြင်းသည် ကလေးငယ်၏ လူမှုဆက်ဆံရေး စွမ်းရည်တွင် အရေးပါသော တိုးတက်မှုတစ်ခု ဖြစ်ပါသည်။', 'Moving from parallel play to cooperative play is an important social development step.'),
-    b('ကလေးနှစ်ဦး အတူတကွ ကစားနိုင်သော ရိုးရှင်းသည့် ကစားနည်းများ (ဥပမာ — ဘောလုံး အပြန်အလှန် လှိမ့်ပေးခြင်း) ကို အားပေးကစားစေပါ။', 'Encourage simple two-child games, like rolling a ball back and forth.')],
+    b('ချော်မရွေ့သော ခိုင်ခံ့သည့် ခြေနင်းခုံကို လူကြီးအနီးကပ်ကြီးကြပ်မှုဖြင့်သာ သုံးစေပြီး လက်ဆေးသည့် အဆင့်များကို ရိုးရှင်းစွာ စံပြလုပ်ဆောင်ပြပါ။', 'Use a stable, non-slip step stool only with close adult supervision, and show the hand-washing steps in a simple, repeatable order.')],
   ['2_5y', 'play', 1,
     b('ဟန်ဆောင်ကစားရာတွင် ပစ္စည်းတစ်ခုကို အခြားအရာတစ်ခုအဖြစ် စိတ်ကူးဖြင့် အစားထိုးကစားခြင်း', 'Uses one object to stand for another in pretend play'),
     b('ကစားတုံးကို ဖုန်းအဖြစ် သို့မဟုတ် ဇွန်းကို ကားစတီယာရင်ဘီးအဖြစ် စိတ်ကူးယဉ်၍ အစားထိုး ကစားတတ်ပါသလား။', 'Does your child pretend a block is a phone, or a spoon is a steering wheel?'),
@@ -527,9 +564,9 @@ const GAP_FILL: GapFill[] = [
     b('ကလေး၏ စိတ်ကူးကို လေးစားစွာ လက်ခံပြီး စိတ်ကူးဇာတ်လမ်းထဲ ပါဝင်ကစားနိုင်ပါသည်။', 'Respect your child’s imagination, and feel free to join their imaginative story.')],
   ['4y', 'self_help', 3,
     b('ကိုယ်တိုင် သွားတိုက်ခြင်း', 'Brushes own teeth'),
-    b('သွားတိုက်တံကို ကိုင်ပြီး သွားများကို အားလုံး ကိုယ်တိုင် တိုက်ကြည့်ပါသလား (လူကြီးက စစ်ဆေးပေးရန် လိုသေးသည်)။', 'Can your child hold the brush and clean their teeth mostly independently, even though you still check afterward?'),
-    b('လက်ကျွမ်းကျင်မှု တိုးတက်လာသဖြင့် ဒီအရွယ်တွင် သွားတိုက်ခြင်းကို ပိုမိုကိုယ်တိုင် လုပ်နိုင်လာသည်။', 'Growing hand skill lets most 4-year-olds manage more of toothbrushing themselves.'),
-    b('ကလေးတိုက်ပြီးနောက် လူကြီးက အနည်းငယ် ထပ်စစ်ပေးပါ — အထူးသဖြင့် နောက်ဖက်သွားများ။', 'After your child brushes, do a quick adult check, especially the back teeth.')],
+    b('ကလေးက ကိုယ်တိုင် သွားတိုက်စမ်းပြီးနောက် လူကြီးက သွားမျက်နှာပြင်အားလုံးကို ပြောင်စင်အောင် ကူညီတိုက်ပေးပါသလား။', 'Does your child try brushing, followed by an adult helping to clean all tooth surfaces thoroughly?'),
+    b('၄ နှစ်အရွယ်ကလေးသည် ကိုယ်တိုင် စမ်းတိုက်နိုင်သော်လည်း သွားများကို သေချာသန့်စင်ရန် လူကြီး၏ အကူအညီနှင့် ကြီးကြပ်မှု လိုအပ်နေဆဲ ဖြစ်ပါသည်။', 'At age 4, children can practise brushing but still need adult help and supervision to clean their teeth thoroughly.'),
+    b('ကလေးကို ဦးစွာ စမ်းတိုက်ခွင့်ပေးပြီးနောက် လူကြီးက သွားမျက်နှာပြင်အားလုံးကို ပြန်ကူညီတိုက်ပေးပါ။', 'Let the child try first, then have an adult help brush every tooth surface.')],
   ['4y', 'self_help', 4,
     b('ခလုတ်ချုပ်ကြိုးထက် အခြားအဝတ်အစားများကို ကိုယ်တိုင် ဝတ်၊ချွတ်နိုင်ခြင်း', 'Dresses and undresses with little help, except shoelaces'),
     b('အင်္ကျီ၊ ဘောင်းဘီများကို ကိုယ်တိုင် ဝတ်၊ချွတ်နိုင်ပါသလား (ဖိနပ်ကြိုးချည်ရုံသာ အကူအညီလိုသေးသည်)။', 'Can your child put on and take off shirts and trousers mostly alone, needing help mainly with shoelaces?'),
@@ -545,14 +582,9 @@ const GAP_FILL: GapFill[] = [
     b('အိမ်မွေးတိရစ္ဆာန်ကို အစာကျွေးခြင်း ဒါမှမဟုတ် အဝတ်လျှော်ရာတွင် ရိုးရှင်းသော အလုပ်တစ်ခုကို ပုံမှန် ကူညီပါသလား။', 'Does your child regularly help with something like feeding a pet or a simple laundry task?'),
     b('ပုံမှန် အိမ်မှုတာဝန် တစ်ခုတွင် ပါဝင်ခြင်းသည် တာဝန်ယူမှုနှင့် မိသားစု၏ တစ်စိတ်တစ်ပိုင်း ဖြစ်ကြောင်း ခံစားမှုကို တည်ဆောက်ပေးသည်။', 'Taking part in a regular household task builds responsibility and a sense of belonging to the family.'),
     b('အသက်အရွယ်နှင့် ကိုက်ညီသော တာဝန်တစ်ခုတည်းကို ပုံမှန် ပေးထားပြီး ကလေးကိုယ်တိုင် တာဝန်ယူသည်ဟု ခံစားစေပါ။', 'Give one consistent, age-appropriate job so your child feels real ownership of it.')],
-  ['5y', 'emotional', 1,
-    b('အခြားသူများကို နားလည်စာနာပြီး မှန်/မှား ကွဲပြားမှုကို နားလည်ခြင်း', 'Shows empathy and understands right from wrong'),
-    b('အခြားသူတစ်ဦး ထိခိုက်နာကျင်ရင် ဝမ်းနည်းဟန်ပြပါသလား။ လုပ်ရပ်တစ်ခုက ဘာကြောင့် "မှား" သည်ကို ရှင်းပြနိုင်ပါသလား။', 'Does your child show sadness when another person is hurt? Can they explain why an action is "wrong"?'),
-    b('နားလည်စာနာမှုနှင့် မှန်/မှား ခွဲခြားနိုင်မှုသည် ကျောင်းအရွယ်မတိုင်မီ လူမှု/ခံစားမှု ဖွံ့ဖြိုးမှု၏ အရေးကြီးသော အဆင့်ဖြစ်သည်။', 'Empathy and a sense of right and wrong are important pre-school social-emotional milestones.'),
-    b('ဇာတ်လမ်းများကို အတူဖတ်ပြီး "ဒီဇာတ်ကောင်က ဘာကြောင့် ဒီလိုလုပ်တာလဲ" ဟု ဆွေးနွေးပါ။', 'Read stories together and discuss why a character acted the way they did.')],
   ['5y', 'safety', 2,
     b('ကိုယ်ပိုင်နေရပ်လိပ်စာနှင့် ဖုန်းနံပါတ်ကို သိရှိခြင်း', 'Knows own address and phone number'),
-    b('နေရပ်လိပ်စာ သို့မဟုတ် မိဘဖုန်းနံပါတ်ကို (အကြမ်းဖျင်းသော်လည်း) ပြောနိုင်ပါသလား။', 'Can your child say their home address or a parent’s phone number, even roughly?'),
+    b('နေရပ်လိပ်စာ သို့မဟုတ် မိဘ/ပြုစုစောင့်ရှောက်သူ၏ ဖုန်းနံပါတ်ကို မှန်ကန်စွာ ပြောနိုင်ပါသလား။', 'Can your child accurately say their home address or a parent or caregiver’s phone number?'),
     b('ကိုယ်ပိုင်အချက်အလက်များကို သိရှိခြင်းသည် ကျောင်းသွားရန် အသင့်ဖြစ်ချိန်တွင် အရေးကြီးသော ဘေးကင်းရေး ကျွမ်းကျင်မှုတစ်ခု ဖြစ်သည်။', 'Knowing this personal information is an important safety skill going into school.'),
     b('သီချင်း သို့မဟုတ် ထပ်ခါထပ်ခါ ရွတ်ဆိုပြီး လိပ်စာ/ဖုန်းနံပါတ်ကို ကစားရင်း လေ့ကျင့်ပေးနိုင်ပါသည်။', 'Turn the address or phone number into a simple song or repeated game to help it stick.')],
   ['5y', 'safety', 3,
@@ -566,21 +598,19 @@ const GAP_FILL_EVIDENCE: Record<string, string> = {
   '2y:self_help:1': 'Growing task-participation and independence around age 2 follow the Bright Futures preventive-care schedule and paediatric occupational-therapy references in the registry.',
   '2y:self_help:2': 'Early signs of toilet-training readiness are described in Bright Futures guidance and AAP developmental references in the registry.',
   '2y:cognitive:1': 'Following two-step directions around age 2 is described in CDC milestone checklists and developmental-behavioral paediatrics references in the registry.',
-  '19_24m:social:1': 'Growing interest in peers and early parallel play around this age follow the NICE social and emotional wellbeing guidance and developmental-behavioral paediatrics references in the registry.',
+  '19_24m:social:1': 'Growing interest in peers and early parallel play around this age follow CDC and AAP milestone guidance and developmental-behavioral paediatrics references in the registry.',
   '2_5y:self_help:3': 'Typical toilet-training progress and the normalcy of accidents follow Bright Futures guidance in the registry.',
   '2_5y:self_help:4': 'Emerging, adult-assisted toothbrushing around this age is described in AAP oral-health guidance in the registry.',
   '2_5y:self_help:5': 'Independent hand-washing as an early self-care habit is described in the Bright Futures preventive-care schedule in the registry.',
-  '2_5y:social:3': 'The shift from parallel to cooperative play is described in the NICE social and emotional wellbeing guidance and developmental-behavioral paediatrics references in the registry.',
   '2_5y:play:1': 'Symbolic (object-substitution) pretend play as a cognitive milestone is described in the AAP Power of Play guidance in the registry.',
   '3y:self_help:3': 'Early tidying and household participation are described in the Bright Futures preventive-care schedule in the registry.',
   '3y:self_help:4': 'Simple table-help tasks as self-help and fine-motor skills are described in paediatric occupational-therapy references in the registry.',
-  '3y:emotional:1': 'A widening emotional vocabulary and expression around age 3 follow the NICE social and emotional wellbeing guidance in the registry.',
+  '3y:emotional:1': 'A widening emotional vocabulary and expression around age 3 follow CDC and AAP milestone guidance and the early-childhood development references in the registry.',
   '3y:play:1': 'Imaginary friends as a normal feature of preschool imaginative play are described in developmental-behavioral paediatrics references in the registry.',
-  '4y:self_help:3': 'Increasingly independent toothbrushing around age 4 is described in AAP oral-health guidance in the registry.',
+  '4y:self_help:3': 'Bright Futures lists toothbrushing as an emerging 4-year self-help skill, while AAP oral-health guidance says young children still need adult help and supervision to clean their teeth thoroughly.',
   '4y:self_help:4': 'Largely independent dressing except fine tasks like fasteners and laces is described in paediatric occupational-therapy references and Bright Futures guidance in the registry.',
-  '4y:emotional:1': 'Emerging empathy and concern for others around age 4 follow the NICE social and emotional wellbeing guidance in the registry.',
+  '4y:emotional:1': 'Emerging empathy and concern for others around age 4 follow CDC and AAP milestone guidance and the early-childhood development references in the registry.',
   '4_5y:self_help:3': 'Regular participation in a household task as a self-help and responsibility skill is described in the Bright Futures preventive-care schedule in the registry.',
-  '5y:emotional:1': 'Empathy and an emerging sense of right and wrong as pre-kindergarten social-emotional skills follow the NICE social and emotional wellbeing guidance in the registry.',
   '5y:safety:2': 'Knowing personal safety information (address, phone number) as a pre-kindergarten skill is described in AAP positive-parenting guidance in the registry.',
   '5y:safety:3': 'Knowing how to seek help in an emergency as a pre-kindergarten safety skill is described in AAP positive-parenting guidance in the registry.',
 };
@@ -608,17 +638,11 @@ const UNICEF_GAP_FILL: GapFill[] = [
     b('လက်ညှိုးထိုးပြခြင်း သို့မဟုတ် လက်ဟန်ပြခြင်း မပါဘဲ "ဒီကိုလာပါ" သို့မဟုတ် "ထိုင်ပါ" ကဲ့သို့သော စကားလုံးသက်သက်ဖြင့် ပေးသည့် ညွှန်ကြားချက်ကို ကလေးငယ်က လိုက်နာနိုင်ပါသလား။', 'Can your child follow a simple word-only instruction like "come here" or "sit down," without you pointing or gesturing?'),
     b('လက်ဟန်ခြေဟန် အကူအညီမပါဘဲ စကားသံသက်သက်ကို နားလည်နိုင်ခြင်းသည် ဘာသာစကား နားလည်သဘောပေါက်နိုင်စွမ်း ပိုမိုခိုင်မာတိုးတက်လာကြောင်း ဖော်ပြသည်။', 'Understanding words alone, without a gesture as a hint, shows more genuine language comprehension.'),
     b('ရိုးရှင်းသော ညွှန်ကြားချက်များ ပေးသည့်အခါ လက်ဟန်မပြမီ စကားလုံးသက်သက်ဖြင့် ဦးစွာ ပြောပြပြီး စောင့်ကြည့်ပါ။', 'Try giving a simple instruction with words alone first, before adding a gesture.')],
-  ['13_18m', 'emotional', 1,
-    b('စိတ်တိုင်းမကျသည့်အခါ ဂျီကျဒေါသထွက်တတ်ခြင်း', 'Has temper tantrums when frustrated'),
-    b('မိမိလိုလားချက်ကို စကားဖြင့် မဖော်ပြနိုင်သေးသည့်အခါ ကလေးငယ်က ပြင်းပြင်းထန်ထန် ငိုကြွေးခြင်း သို့မဟုတ် ကြမ်းပြင်ပေါ် လှဲချခြင်းကဲ့သို့ စိတ်တိုင်းမကျမှုကို ဖော်ပြတတ်ပါသလား။', 'When unable to express a need in words, does your child show intense frustration — crying hard, or dropping to the floor?'),
-    b('ဤအရွယ်တွင် ကလေး၏ စိတ်ဆန္ဒနှင့် စကားဖြင့် ဖော်ပြနိုင်စွမ်းအကြား ကွာဟချက် ရှိနေသေးသဖြင့် စိတ်ဆိုးဒေါသထွက်ခြင်းသည် အလွန်ပုံမှန်ဖြစ်သော ဖွံ့ဖြိုးမှုအပိုင်းအခြားတစ်ခုဖြစ်ပြီး ကလေး၏ အကျင့်စာရိတ္တ မကောင်းခြင်း မဟုတ်ပါ။', 'A mismatch between wants and words makes tantrums very normal at this age — not a sign of poor character.'),
-    b('ကလေး ဒေါသထွက်နေချိန်တွင် မိဘက တည်ငြိမ်စွာ အနားတွင် နေပေးပါ။ ဘေးကင်းအောင် ထိန်းသိမ်းပေးပြီး ကလေး၏ ခံစားချက်ကို အသိအမှတ်ပြု နားလည်ပေးပါ (ဥပမာ — "သမီး/သား စိတ်တိုင်းမကျဖြစ်နေတာ မေမေ/ဖေဖေ သိပါတယ်")။', 'Stay calm and nearby, keep your child safe, and name the feeling ("I see you\'re frustrated").')],
 ];
 
 const UNICEF_GAP_FILL_EVIDENCE: Record<string, string> = {
   '13_18m:cognitive:2': 'Naming/pointing to body parts as a receptive-language and body-awareness milestone around this age is described in CDC and AAP milestone guidance in the registry.',
   '13_18m:cognitive:3': 'Following a one-step instruction without an accompanying gesture is described in CDC and AAP milestone guidance in the registry.',
-  '13_18m:emotional:1': 'Temper tantrums around this age, driven by the gap between wants and expressive language, are described in the NICE social and emotional wellbeing guidance and AAP positive-parenting guidance in the registry.',
 };
 
 for (const [ageGroupKey, domain, n, title, observe, why, encouragement] of UNICEF_GAP_FILL) {

@@ -2,7 +2,7 @@ import { v } from 'convex/values';
 import { query } from './_generated/server';
 import { requireUser, hasStaffRole } from './lib/auth';
 import { resolveEntitlements } from './lib/entitlements';
-import { isPubliclyReadableStatus } from './library';
+import { contentIsParentReadable } from './lib/publicationVisibility';
 
 export const listForContent = query({
   args: { contentSlug: v.string() },
@@ -36,7 +36,7 @@ export const listForContent = query({
         .query('libraryContent')
         .withIndex('by_slug', (q) => q.eq('slug', contentSlug))
         .unique();
-      if (!content || !isPubliclyReadableStatus(content.clinicalStatus)) return [];
+      if (!content || !(await contentIsParentReadable(ctx, content))) return [];
     }
     const entitlements = await resolveEntitlements(ctx, userId);
     const canViewPremium = entitlements.features.includes('premium_media');

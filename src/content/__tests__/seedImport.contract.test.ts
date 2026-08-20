@@ -15,8 +15,12 @@ import {
 import { importSeed } from '../../../convex/library';
 import { run as seedRun } from '../../../convex/seed';
 import {
+  BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID,
+  BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_TARGET,
   DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID,
   DUPLICATE_MILESTONE_SLUGS,
+  SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_RELEASE_ID,
+  SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_TARGETS,
 } from '../../../convex/lib/contentRetirements';
 import {
   BURMESE_COPY_AUDIT_HELD_SLUGS,
@@ -60,6 +64,34 @@ describe('seed generation', () => {
     expect(DUPLICATE_MILESTONE_SLUGS).toHaveLength(6);
     const slugs = new Set(seedPayload().map((item) => item.slug));
     for (const slug of DUPLICATE_MILESTONE_SLUGS) expect(slugs.has(slug), slug).toBe(false);
+  });
+
+  it('excludes the exact PH40-scope milestone retirement release', () => {
+    expect(SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_RELEASE_ID)
+      .toBe('2026-08-18-social-emotional-milestones');
+    expect(SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_TARGETS).toEqual([
+      { slug: 'ms_3_4m_social_2', expectedClinicalStatus: 'clinical_review', expectedReviewRevision: 1 },
+      { slug: 'ms_2_5y_social_3', expectedClinicalStatus: 'clinical_review', expectedReviewRevision: 2 },
+      { slug: 'ms_13_18m_emotional_1', expectedClinicalStatus: 'clinical_review', expectedReviewRevision: 2 },
+      { slug: 'ms_5y_emotional_1', expectedClinicalStatus: 'clinical_review', expectedReviewRevision: 1 },
+    ]);
+    const slugs = new Set(seedPayload().map((item) => item.slug));
+    for (const target of SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_TARGETS) {
+      expect(slugs.has(target.slug), target.slug).toBe(false);
+    }
+  });
+
+  it('excludes the exact Bright Futures template duplicate retirement release', () => {
+    expect(BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID)
+      .toBe('2026-08-19-bright-futures-duplicate-milestone');
+    expect(BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_TARGET).toEqual({
+      slug: 'ms_5y_self_help_2',
+      expectedClinicalStatus: 'clinical_review',
+      expectedReviewRevision: 5,
+    });
+    expect(seedPayload().some(
+      (item) => item.slug === BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_TARGET.slug,
+    )).toBe(false);
   });
 
   it('keeps published errata narrow and code-versioned', () => {

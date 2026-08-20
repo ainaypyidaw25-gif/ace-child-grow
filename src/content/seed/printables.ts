@@ -14,7 +14,7 @@ export const PRINTABLES: SeedItem[] = [
     description: b('ခံစားချက်များကို စကားလုံးဖြင့် ဖော်ပြပြီး အတူဆွေးနွေးရန် အသုံးပြုနိုင်သော မျက်နှာပုံကတ်များ။', 'Feeling-face cards to name and discuss emotions.') }),
   printable({ key: 'communication_cards', format: 'A4 PDF',
     title: b('ဆက်သွယ်ရေး ကတ်များ', 'Communication Cards'),
-    description: b('စကားမပြောနိုင်သေးသော ကလေးများအတွက် ညွှန်ပြ ဆက်သွယ်ကတ်များ။', 'Point-to-communicate cards for pre-verbal children.') }),
+    description: b('လိုအပ်ချက်များ၊ ရွေးချယ်မှုများနှင့် ခံစားချက်များကို ပုံများညွှန်ပြ၍ ဆက်သွယ်ရာတွင် အထောက်အကူပြုသော ကတ်များ။', 'Point-to-communicate cards that support children in expressing needs, choices, and feelings.') }),
   printable({ key: 'routine_chart', format: 'A4 PDF',
     title: b('နေ့စဉ် လုပ်ရိုးလုပ်စဉ် ဇယား', 'Routine Chart'),
     description: b('နေ့စဉ် အစီအစဉ်ကို ပုံရိပ်ဖြင့် ပြသော ဇယား။', 'A picture chart of the daily routine.') }),

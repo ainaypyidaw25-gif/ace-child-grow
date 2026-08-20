@@ -122,7 +122,7 @@ const MILESTONES: SeedItem[] = [
         'Use skin-to-skin daily, and ask for help so you get rest too.',
       ),
     }),
-    'Early soothing and responsive caregiving at this age follow CDC and AAP milestone guidance, the AAP developmental-surveillance report, NICE guidance on social and emotional wellbeing and the AAP report on early relationships and toxic stress in the registry; the "cannot be roused / floppy" wording is kept deliberately conservative and directs parents to a health worker rather than describing a diagnosis.',
+    'Early soothing and responsive caregiving at this age follow CDC and AAP milestone guidance, the AAP developmental-surveillance report and the AAP report on early relationships and toxic stress in the registry; the "cannot be roused / floppy" wording is kept deliberately conservative and directs parents to a health worker rather than describing a diagnosis.',
   ),
   kb(
     milestone('birth_2m', 'play', 1, {
@@ -140,7 +140,7 @@ const MILESTONES: SeedItem[] = [
         'Keep each turn to 2–3 minutes and stop when your baby looks tired.',
       ),
     }),
-    'Play as looking/listening at this age and reading infant engagement cues are described in the AAP play guidance and the WHO Care for Child Development counselling materials in the registry.',
+    'Play as looking and listening at this age and reading infant engagement cues are described in AAP play and milestone guidance in the registry.',
   ),
   kb(
     milestone('birth_2m', 'nutrition', 1, {
@@ -206,7 +206,7 @@ const MILESTONES: SeedItem[] = [
         'Dress your baby in loose clothing and give room to kick freely.',
       ),
     }),
-    'General limb movement in early infancy is described in the WHO Care for Child Development materials and paediatric physical-therapy references in the registry, alongside the AAP milestone guidance in the corpus.',
+    'General limb movement in early infancy is described in paediatric physical-therapy references and AAP milestone guidance in the registry.',
   ),
 ];
 
@@ -349,8 +349,8 @@ const GUIDES_B: SeedItem[] = [
     guide('birth_2m', 'communication', {
       title: b('မွေးကင်း – ၂ လ — ဆက်သွယ်ပြောဆိုမှု လမ်းညွှန်', 'Birth–2 months — Communication guide'),
       why: b(
-        'ကလေးသည် စကားမပြောနိုင်သေးသော်လည်း ဆက်သွယ်နေပါသည်။ ငိုသံ၊ မျက်လုံးချင်းဆိုင်မှု၊ နူးညံ့သော အသံငယ်များဖြင့် ပြောနေခြင်း ဖြစ်သည်။ မိဘက ချက်ချင်း တုံ့ပြန်ပေးခြင်းသည် ဘာသာစကား ဖွံ့ဖြိုးမှု၏ အခြေခံ ဖြစ်သည်။',
-        'Your baby is already communicating — through cries, eye contact and soft sounds. Responding promptly is the foundation of later language.',
+        'ကလေးသည် စကားမပြောနိုင်သေးသော်လည်း ငိုသံ၊ မျက်နှာကြည့်ခြင်းနှင့် နူးညံ့သော အသံငယ်များဖြင့် ဆက်သွယ်နေပါသည်။ ကလေး၏ အချက်ပြမှုကို သတိပြုပြီး တုံ့ပြန်ပေးခြင်းသည် အစောပိုင်း ဆက်သွယ်မှုနှင့် ဘာသာစကား ဖွံ့ဖြိုးရေးကို အထောက်အကူပြုပါသည်။',
+        'Although your baby cannot yet use words, they communicate through cries, looking at faces, and soft sounds. Noticing and responding to the baby’s signals supports early communication and language development.',
       ),
       observationQuestions: [
         b('ငိုသံများ အခြေအနေအလိုက် ကွာခြားပါသလား။', 'Do the cries differ depending on the need?'),
@@ -368,7 +368,7 @@ const GUIDES_B: SeedItem[] = [
       ],
       indoor: [b('တိတ်ဆိတ်သော အခန်းတွင် မျက်နှာချင်းဆိုင် စကားပြောပါ။', 'Face-to-face talking in a quiet room.')],
       outdoor: [b('အပြင်ထွက်စဉ် ကြားရသော အသံများအကြောင်း ကလေးကို ပြောပြပေးပါ။', 'Name the sounds you hear when outside.')],
-      lowCost: [b('စကားပြောခြင်း၊ သီချင်းဆိုခြင်းသည် အခမဲ့ဖြစ်ပြီး အထိရောက်ဆုံး ဖြစ်သည်။', 'Talking and singing are free and the most effective of all.')],
+      lowCost: [b('စကားပြောခြင်းနှင့် သီချင်းဆိုခြင်းသည် အခမဲ့ဖြစ်ပြီး အစောပိုင်း ဆက်သွယ်မှုကို အထောက်အကူပြုနိုင်ပါသည်။', 'Talking and singing are free ways to support early communication.')],
       materials: b('မလိုအပ်ပါ — သင့်အသံသာ လိုသည်။', 'None — your voice is enough.'),
       safety: b(
         'အသံ အလွန်ကျယ်လောင်ခြင်းကို ရှောင်ပါ။ ကလေးအနီးတွင် ဆေးလိပ်သောက်ခြင်းကို လုံးဝ ရှောင်ပါ။',
@@ -379,8 +379,8 @@ const GUIDES_B: SeedItem[] = [
         b('ဖန်သားပြင် (ဖုန်း/တီဗွီ) ဖြင့် ဖျော်ဖြေရန် ကြိုးစားခြင်း။', 'Using a screen to entertain the baby.'),
       ],
       parentTips: [
-        b('နှေးနှေး၊ မြင့်သော အသံဖြင့် ပြောပါ — ကလေး ပိုနှစ်သက်သည်။', 'Speak slowly in a warm, sing-song voice — babies prefer it.'),
-        b('မိခင်ဘာသာစကားဖြင့် ပြောပါ — အကောင်းဆုံး ဖြစ်သည်။', 'Use your own mother tongue — it is the best choice.'),
+        b('ကလေးနှင့် နှေးနှေး၊ နွေးထွေးပြီး နူးညံ့သောအသံဖြင့် ပြောပါ။', 'Speak slowly to your baby in a warm, gentle voice.'),
+        b('သင် အဆင်ပြေဆုံး ဘာသာစကားဖြင့် သဘာဝကျစွာ ပြောပါ။', 'Speak naturally in the language you know best.'),
       ],
       faq: [
         {
@@ -389,7 +389,7 @@ const GUIDES_B: SeedItem[] = [
         },
         {
           q: b('ဖုန်းထဲက ကလေးသီချင်းတွေ ဖွင့်ပေးလို့ ရလား။', 'Can I play baby songs on a phone?'),
-          a: b('ဤအရွယ်တွင် ဖန်သားပြင် အသုံးပြုခြင်းကို မလိုအပ်ပါ — တိုက်ရိုက် လူချင်း စကားပြောခြင်း၊ သီချင်းဆိုခြင်းက ပိုအကျိုးရှိသည်။', 'Screens are not needed at this age — live talking and singing help far more.'),
+          a: b('ဤအရွယ်တွင် ဖန်သားပြင် အသုံးပြုခြင်းကို မလိုအပ်ပါ — တိုက်ရိုက် လူချင်း စကားပြောခြင်းနှင့် သီချင်းဆိုခြင်းက အစောပိုင်း သင်ယူမှုနှင့် ဆက်ဆံရေးကို ပိုမို အထောက်အကူပြုပါသည်။', 'Screens are not needed at this age—live talking and singing are more supportive of early learning and connection.'),
         },
       ],
       redFlags: [
@@ -400,9 +400,9 @@ const GUIDES_B: SeedItem[] = [
         'နားကြား သံသယရှိပါက နှောင့်နှေးမနေဘဲ နားကြားစမ်းသပ်မှု တောင်းခံပါ။ ဤသည် ရောဂါဖော်ထုတ်ချက် မဟုတ်ပါ။',
         'If you have any concern about hearing, ask for a hearing check without delay. This is not a diagnosis.',
       ),
-      encouragement: b('သင်ပြောသော စကားလုံးတိုင်း ကလေး၏ ဦးနှောက်ကို တည်ဆောက်ပေးနေပါသည်။', 'Every word you say is building your baby’s brain.'),
+      encouragement: b('ကလေးနှင့် စကားပြောပြီး တုံ့ပြန်ပေးသည့် အချိန်တိုင်းသည် အစောပိုင်း သင်ယူမှုနှင့် ဆက်ဆံရေးကို အထောက်အကူပြုပါသည်။', 'Talking and responding to your baby supports early learning and connection.'),
     }),
-    'Responsive talk, early hearing concerns and avoiding screens for infants follow NHS learn-to-talk guidance, AAP media guidance for young minds and the responsive-caregiving evidence in the registry.',
+    'Responsive talk, early hearing concerns and infant screen guidance follow NHS learn-to-talk guidance, the 2026 AAP digital-ecosystems technical report and the responsive-caregiving evidence in the registry.',
   ),
   kb(
     guide('birth_2m', 'social', {
@@ -453,7 +453,7 @@ const GUIDES_B: SeedItem[] = [
       ),
       encouragement: b('သင်နှင့် ကလေး၏ ဆက်ဆံရေးသည် အကောင်းဆုံး သင်ခန်းစာ ဖြစ်သည်။', 'Your relationship is your baby’s best classroom.'),
     }),
-    'Face preference, the timing range for a social smile and postnatal parental mental-health support follow CDC milestone guidance, the WHO nurturing care framework, NICE postnatal care guidance and NICE guidance on social and emotional wellbeing in the registry.',
+    'Face preference, the timing range for a social smile and postnatal parental mental-health support follow CDC milestone guidance, the WHO nurturing care framework, NICE postnatal care guidance and the Head Start early-learning framework in the registry.',
   ),
 ];
 
@@ -519,8 +519,8 @@ const GUIDES_C: SeedItem[] = [
     guide('birth_2m', 'cognitive', {
       title: b('မွေးကင်း – ၂ လ — အသိဉာဏ် ဖွံ့ဖြိုးမှု လမ်းညွှန်', 'Birth–2 months — Early thinking guide'),
       why: b(
-        'ဤအရွယ်တွင် သင်ယူခြင်းသည် အာရုံခံစားမှုမှတစ်ဆင့် ဖြစ်သည် — ကြည့်၊ နားထောင်၊ ထိတွေ့။ ထပ်ခါထပ်ခါ တူညီသော အတွေ့အကြုံများက ဦးနှောက် ချိတ်ဆက်မှုကို တည်ဆောက်သည်။',
-        'Learning happens through the senses now — looking, listening, touching. Repeated, predictable experiences build brain connections.',
+        'ဤအရွယ်တွင် ကလေးသည် ကြည့်ခြင်း၊ နားထောင်ခြင်းနှင့် ထိတွေ့ခြင်းကဲ့သို့သော အာရုံခံစားမှုများမှတစ်ဆင့် သင်ယူပါသည်။ နူးညံ့ပြီး ထပ်တလဲလဲ ကြုံတွေ့ရသော အတွေ့အကြုံများက အစောပိုင်း သင်ယူမှုကို အထောက်အကူပြုနိုင်ပါသည်။',
+        'At this age, babies learn through sensory experiences such as looking, listening, and touch. Gentle, repeated experiences can support early learning.',
       ),
       observationQuestions: [
         b('ရွေ့လျားနေသော အရာကို မျက်လုံးဖြင့် လိုက်ကြည့်ပါသလား။', 'Do the eyes follow a slowly moving object?'),
@@ -529,7 +529,7 @@ const GUIDES_C: SeedItem[] = [
       ],
       dailyActivities: [
         b('မျက်နှာမှ ၂၀–၃၀ စင်တီမီတာ အကွာတွင် ပစ္စည်းတစ်ခုကို ဖြည်းညှင်းစွာ ရွှေ့ပြပါ။', 'Move an object slowly, about 20–30 cm from the face.'),
-        b('နေ့စဉ် အစီအစဉ်ကို တူညီစွာ ထားပါ — ကြိုတင်မှန်းဆနိုင်မှုက သင်ယူမှုကို ကူညီသည်။', 'Keep daily routines similar — predictability supports learning.'),
+        b('နေ့စဉ်လုပ်ရိုးလုပ်စဉ်များအတွင်း ကလေး ကြည့်၊ နားထောင်ပြီး ထိတွေ့စူးစမ်းနိုင်ရန် အချိန်ပေးပါ။', 'During daily routines, give your baby time to look, listen, and explore through touch.'),
       ],
       weeklyActivities: [b('အသံ အမျိုးမျိုး (ခေါင်းလောင်း၊ လက်ခုပ်) ကို ဖြည်းညှင်းစွာ မိတ်ဆက်ပါ။', 'Introduce different gentle sounds through the week.')],
       indoor: [b('အနက်/အဖြူ ပုံစံများကို ကြည့်စေခြင်း။', 'Looking at bold black-and-white patterns.')],
@@ -561,9 +561,9 @@ const GUIDES_C: SeedItem[] = [
         'မျက်စိ သို့မဟုတ် နားကြားနှင့် ပတ်သက်၍ သံသယရှိပါက ကျန်းမာရေးဝန်ထမ်းထံ ချက်ချင်း ပြပါ။ ဤသည် ရောဂါ ဖော်ထုတ်ချက် မဟုတ်ပါ။',
         'Any concern about vision or hearing should be checked promptly. This is not a diagnosis.',
       ),
-      encouragement: b('ရိုးရှင်းသော နေ့စဉ် ဆက်ဆံမှုများသည် အကောင်းဆုံး ဦးနှောက် လေ့ကျင့်ခန်း ဖြစ်သည်။', 'Simple everyday interaction is the best brain exercise there is.'),
+      encouragement: b('ရိုးရှင်းသော နေ့စဉ် အပြန်အလှန် ဆက်ဆံမှုများက ကလေး၏ အစောပိုင်း သင်ယူမှုကို အထောက်အကူပြုနိုင်ပါသည်။', 'Simple everyday interactions can support your baby’s early learning.'),
     }),
-    'Early sensory learning, close-range vision and the value of predictable routines follow the developmental-behavioural paediatrics textbook, AAP guidance on the power of play, the WHO Care for Child Development counselling materials and AAP media guidance on screens for infants in the registry.',
+    'Early sensory learning and close-range vision follow the developmental-behavioural paediatrics textbook, AAP play guidance, WHO Care for Child Development materials, and AAP infant media guidance in the registry.',
   ),
   kb(
     guide('birth_2m', 'play', {
@@ -574,7 +574,7 @@ const GUIDES_C: SeedItem[] = [
       ),
       observationQuestions: [
         b('ကလေး ကစားရန် အသင့်ဖြစ်နေသည့် လက္ခဏာ (မျက်လုံး ကြည်လင်၊ ငြိမ်သက်) ကို သတိထားမိပါသလား။', 'Can you spot the "ready to play" cues — bright eyes, calm alert state?'),
-        b('မောလာသည့် လက္ခဏာ (မျက်နှာလွှဲ၊ သင်းကွဲ၊ ငို) ကို သိပါသလား။', 'Can you spot the "I have had enough" cues — looking away, yawning, fussing?'),
+        b('မောလာသည့် လက္ခဏာ (မျက်နှာလွှဲခြင်း၊ သမ်းဝေခြင်း၊ ဂျီကျခြင်း) ကို သိပါသလား။', 'Can you spot the "I have had enough" cues — looking away, yawning, fussing?'),
       ],
       dailyActivities: [
         b('မျက်နှာချင်းဆိုင် ပြုံးပြခြင်း၊ လျှာထုတ်ပြခြင်း။', 'Face-to-face smiling and gentle tongue-poking games.'),
@@ -586,25 +586,25 @@ const GUIDES_C: SeedItem[] = [
       lowCost: [b('အခမဲ့ ကစားနည်းများသာ ဖြစ်သည်။', 'Every idea here is free.')],
       materials: b('မလိုအပ်ပါ', 'None'),
       safety: b(
-        'ကလေးကို မြင့်သော နေရာ (ခုတင်၊ စားပွဲ) ပေါ်တွင် တစ်စက္ကန့်မျှ တစ်ယောက်တည်း မထားပါနှင့်။ လေထဲသို့ ပစ်ချီခြင်း၊ ပြင်းထန်စွာ ယိမ်းခြင်း မလုပ်ပါနှင့်။',
-        'Never leave your baby alone on a high surface. Never throw a baby in the air or rock roughly.',
+        'ကလေးကို ခုတင်၊ စားပွဲကဲ့သို့ မြင့်သောနေရာတွင် တစ်ယောက်တည်း မထားပါနှင့်။ ကလေး၏ ဦးခေါင်းနှင့် လည်ပင်းကို အမြဲ ထောက်ပံ့ပြီး ဖြည်းညင်းနူးညံ့စွာ လှုပ်ရှားပါ။ ကလေးကို လုံးဝ မလှုပ်ခါ၊ မပစ်ချီပါနှင့်။',
+        'Never leave your baby alone on a high surface such as a bed or table. Always support the head and neck and use slow, gentle movement. Never shake or throw a baby.',
       ),
       commonMistakes: [
         b('ကစားချိန် ရှည်လွန်းခြင်း။', 'Play sessions that go on too long.'),
-        b('ကလေး ငိုသည်ကို "ကစားမကောင်းလို့" ဟု ယူဆခြင်း — မောသည့် လက္ခဏာသာ ဖြစ်တတ်သည်။', 'Reading crying as "bad play" — usually it just means tired.'),
+        b('ကလေးငိုခြင်းကို “ကစားမကောင်းလို့” ဟု ယူဆခြင်း — မောခြင်း၊ ဆာခြင်း သို့မဟုတ် အခြားလိုအပ်ချက်တစ်ခု ရှိနိုင်သဖြင့် ရပ်ပြီး အချက်ပြမှုကို စစ်ဆေးပါ။', 'Reading crying as “bad play” — pause and check whether the baby is tired, hungry, or needs something else.'),
       ],
       parentTips: [b('တစ်ရက်လျှင် အကြိမ်များစွာ၊ တစ်ကြိမ်လျှင် တိုတိုသာ ကစားပါ။', 'Play often, but keep each turn short.')],
       faq: [
         {
           q: b('ကစားစရာ ဝယ်ပေးသင့်လား။', 'Should I buy toys?'),
-          a: b('မလိုအပ်ပါ။ ဤအရွယ်တွင် သင့်မျက်နှာ၊ သင့်အသံသည် အကောင်းဆုံး ကစားစရာ ဖြစ်သည်။', 'Not needed. At this age your face and your voice are the best toys.'),
+          a: b('မလိုအပ်ပါ။ ဤအရွယ်တွင် သင့်မျက်နှာ၊ အသံနှင့် နူးညံ့သော တုံ့ပြန်မှုများက ကစားခြင်းနှင့် သင်ယူမှုကို အထောက်အကူပြုပါသည်။', 'Not necessarily. At this age, your face, voice, and gentle responses support play and learning.'),
         },
       ],
-      redFlags: [b('မည်သည့် ဆက်ဆံမှုကိုမျှ လုံးဝ တုံ့ပြန်မှု မရှိခြင်း။', 'No response at all to any interaction.')],
-      referral: b('စဉ်ဆက်မပြတ် တုံ့ပြန်မှု မရှိပါက ကျန်းမာရေးဝန်ထမ်းအား ပြပါ။', 'Persistent lack of response should be checked by a health worker.'),
+      redFlags: [b('အသက် ၂ လနီးပါးတွင် မျက်နှာကို မကြည့်ခြင်း၊ ကျယ်သောအသံကို မတုံ့ပြန်ခြင်း သို့မဟုတ် ယခင်တုံ့ပြန်မှု ပျောက်ဆုံးခြင်း။', 'By around 2 months, not looking at faces, not reacting to loud sounds, or losing a response the baby previously had.')],
+      referral: b('ဤအချက်များရှိပါက မစောင့်ဘဲ ကျန်းမာရေးဝန်ထမ်းနှင့် ဆွေးနွေးပါ။ ဤသည်မှာ ရောဂါဖော်ထုတ်ချက် မဟုတ်ပါ။', 'If any of these apply, talk with a health worker without waiting. This is not a diagnosis.'),
       encouragement: b('သင်သည် ကလေး၏ ပထမဆုံး ကစားဖော် ဖြစ်ပါသည်။', 'You are your baby’s first playmate.'),
     }),
-    'Play as interaction, reading infant engagement and disengagement cues, and the never-shake caution follow AAP power-of-play guidance and the WHO Care for Child Development materials.',
+    'Responsive play from the newborn period—talking, singing and responding to the baby—follows the UNICEF Early Moments Matter report; the age-specific engagement and disengagement cues and activity details follow AAP power-of-play guidance and the WHO/UNICEF Care for Child Development package, while the two-month response checks follow CDC milestone guidance.',
   ),
 ];
 
@@ -635,7 +635,7 @@ const GUIDES_D: SeedItem[] = [
       lowCost: [b('မိခင်နို့သည် အခမဲ့ဖြစ်ပြီး ဘေးကင်းသည်။', 'Breast milk is free and safe.')],
       materials: b('မလိုအပ်ပါ — နို့ပုလင်းသုံးပါက ကျန်းမာရေးဝန်ထမ်း၏ လမ်းညွှန်ဖြင့် သန့်ရှင်းစွာ ပြင်ဆင်ပါ။', 'None — if bottles are used, prepare them hygienically following health-worker guidance.'),
       safety: b(
-        'နို့ပုလင်းကို ထောက်ထားပြီး ကလေးကို တစ်ယောက်တည်း မထားပါနှင့် — နို့တစ်ဆို့နိုင်သည်။ အသက် ၆ လအောက် ကလေးအား ပျားရည် မကျွေးပါနှင့်။ နွားနို့အစစ်ကို ပင်မ အစားအစာအဖြစ် ၁၂ လအောက်တွင် မကျွေးပါနှင့်။',
+        'နို့ပုလင်းကို ထောက်ထားပြီး ကလေးကို တစ်ယောက်တည်း မထားပါနှင့် — နို့တစ်ဆို့နိုင်သည်။ အသက် ၁၂ လအောက် ကလေးအား ပျားရည် မကျွေးပါနှင့်။ နွားနို့အစစ်ကို ပင်မ အစားအစာအဖြစ် ၁၂ လအောက်တွင် မကျွေးပါနှင့်။',
         'Never prop a bottle and leave your baby — it is a choking risk. Do not give honey under 12 months. Do not use fresh cow’s milk as the main drink under 12 months.',
       ),
       commonMistakes: [
@@ -693,8 +693,8 @@ const GUIDES_D: SeedItem[] = [
       ],
       indoor: [b('ကလေးအိပ်ရာကို မိဘအခန်းထဲတွင် ထားပါ — အိပ်ရာမတူဘဲ အခန်းတူ။', 'Keep the baby’s cot in the parents’ room — room-share, do not bed-share.')],
       outdoor: [b('တိုက်ရိုက် နေရောင်မှ ကာကွယ်ပါ။ ကားစီးလျှင် သတ်မှတ်ချက်ပြည့်မီသော ကလေးထိုင်ခုံ သုံးပါ။', 'Keep out of direct sun. In a vehicle, use an appropriate infant car seat.')],
-      lowCost: [b('ဘေးကင်းသော အိပ်စက်မှုသည် ကုန်ကျစရိတ် မရှိပါ — ပြားပြီး မာသော မျက်နှာပြင်နှင့် ပျော့ပျောင်းသောအရာများ မထားရှိခြင်းသာ ဖြစ်သည်။', 'Safe sleep costs nothing — a firm flat surface and nothing soft in it.')],
-      materials: b('ပြားပြီး မာသော အိပ်ရာ၊ ပါးလွှာသော အဝတ်', 'A firm flat sleep surface and light bedding'),
+      lowCost: [b('ဘေးကင်းရေးစံနှုန်းနှင့် ကိုက်ညီသော ကလေးအိပ်ရာ၊ မာပြီး ပြားညီသော မွေ့ရာနှင့် တင်းကျပ်စွာ ခင်းထားသော အိပ်ရာခင်းတစ်ထည်သာ အသုံးပြုပါ။ ဈေးနှုန်းထက် ဘေးကင်းရေးစံနှုန်းကို ဦးစားပေးပါ။', 'Use an infant sleep space that meets safety standards, with a firm, flat mattress and only a fitted sheet. Prioritize safety standards rather than price.')],
+      materials: b('ဘေးကင်းရေးစံနှုန်းနှင့် ကိုက်ညီသော ကလေးအိပ်ရာ၊ မာပြီး ပြားညီသော မွေ့ရာနှင့် တင်းကျပ်စွာ ခင်းထားသော အိပ်ရာခင်းတစ်ထည်သာ', 'An infant sleep space that meets safety standards, with a firm, flat mattress and only a fitted sheet'),
       safety: b(
         'အဓိက စည်းမျဉ်းများ — အိပ်တိုင်း ပက်လက်၊ ပြားပြီး မာသော မျက်နှာပြင်၊ အိပ်ရာထဲ ဘာမှ မထား၊ အခန်းတူ အိပ်ရာမတူ၊ ဆေးလိပ်မီးခိုး လုံးဝ မထိစေရ၊ ကလေးကို ဘယ်တော့မှ မလှုပ်ခါရ၊ ရေချိုးစဉ် တစ်စက္ကန့်မျှ မခွာရ၊ မြင့်သောနေရာတွင် တစ်ယောက်တည်း မထားရ။',
         'The core rules — back to sleep every sleep; firm flat surface; nothing in the cot; room-share but do not bed-share; no smoke exposure at all; never shake a baby; never leave a baby alone in or near water; never leave a baby alone on a high surface.',
@@ -764,7 +764,7 @@ const GUIDES_D: SeedItem[] = [
       ),
       commonMistakes: [
         b('မွေးကင်းစတွင် တင်းကျပ်သော အချိန်ဇယား ချမှတ်ရန် ကြိုးစားခြင်း။', 'Trying to impose a strict schedule on a newborn.'),
-        b('နေ့အိပ်ချိန်ကို လုံးဝ ဖျက်ခြင်း — ညအိပ်ပိုကောင်းအောင် မလုပ်နိုင်ပါ။', 'Cutting out day sleep to "make night sleep better" — it does not work.'),
+        b('ညအိပ်ချိန် ပိုကောင်းစေရန် နေ့အိပ်ချိန်ကို အတင်းအကျပ် ဖျက်ခြင်း — ကလေးကို ပင်ပန်းလွန်စေပြီး အိပ်ရာဝင်ရန် ပိုခက်စေနိုင်ပါသည်။', 'Forcing out daytime sleep to improve nights — overtiredness can make settling and sleep harder.'),
       ],
       parentTips: [
         b('ကလေး အိပ်ချိန်တွင် သင်လည်း အိပ်ပါ။', 'Sleep when your baby sleeps.'),
@@ -777,13 +777,13 @@ const GUIDES_D: SeedItem[] = [
         },
       ],
       redFlags: [
-        b('တစ်ရက်လုံး နို့စို့ရန် မနိုးခြင်း။', 'Not waking to feed across the day.'),
+        b('နို့စို့ရန် နိုးရခက်ခြင်း သို့မဟုတ် နိုးပေးထားသော်လည်း မစို့နိုင်ခြင်း။', 'Being difficult to wake for feeds, or unable to feed when roused.'),
         b('နိုးနေချိန် လုံးဝ မရှိခြင်း သို့မဟုတ် အမြဲ ငိုနေခြင်း။', 'No calm awake time at all, or crying almost constantly.'),
       ],
-      referral: b('ဤအခြေအနေများကို ကျန်းမာရေးဝန်ထမ်းအား ပြပါ။ ရောဂါ ဖော်ထုတ်ချက် မဟုတ်ပါ။', 'Raise these with a health worker. This is not a diagnosis.'),
+      referral: b('ကလေး နိုးရခက်ခြင်း၊ အလွန်အားနည်းခြင်း သို့မဟုတ် နို့မစို့နိုင်ခြင်းရှိပါက ချက်ချင်း ဆေးကုသမှု ရယူပါ။ အခြားစိုးရိမ်ချက်များကိုလည်း ကျန်းမာရေးဝန်ထမ်းနှင့် ဆွေးနွေးပါ။ ဤသည် ရောဂါဖော်ထုတ်ချက် မဟုတ်ပါ။', 'If the baby is difficult to wake, unusually weak, or unable to feed, seek medical care immediately. Discuss other concerns with a health worker. This is not a diagnosis.'),
       encouragement: b('ပုံစံမကျသေးခြင်းသည် ပုံမှန် ဖြစ်သည် — တဖြည်းဖြည်း ပေါ်လာပါလိမ့်မည်။', 'Having no pattern yet is normal — it will come.'),
     }),
-    'Day–night light and sound cues, avoiding rigid newborn schedules, and moving a sleeping baby to a safe sleep surface follow AAP safe sleep guidance, WHO sleep guidance for under-5s and the AASM/behavioural sleep literature in the registry.',
+    'Day–night light and sound cues, avoiding rigid newborn schedules, and moving a sleeping baby to a safe sleep surface follow AAP safe sleep guidance, WHO sleep guidance for under-5s and Bright Futures preventive-care guidance in the registry.',
   ),
 ];
 
@@ -814,7 +814,7 @@ const ACTIVITIES: SeedItem[] = [
       indoor: true, outdoor: true, oneChild: true, group: false, parentChild: true,
       outcomes: [
         b('အလှည့်ကျ ဆက်သွယ်ခြင်းကို စတင် ခံစားစေရန်။', 'Learning objective — to experience early turn-taking in communication.'),
-        b('မျက်လုံးချင်းဆိုင်မှုနှင့် အာရုံစိုက်မှု တိုးတက်ခြင်း။', 'More eye contact and shared attention.'),
+        b('မျက်လုံးချင်းဆိုင်မှုနှင့် ပူးတွဲအာရုံစိုက်မှု တိုးလာခြင်း။', 'More eye contact and shared attention.'),
       ],
       variations: [b('နို့တိုက်ပြီးချိန်၊ အဝတ်လဲပြီးချိန်တွင် လုပ်ပါ။', 'Do it after a feed or a nappy change.')],
       tags: ['speech_activity', 'daily'],
@@ -846,7 +846,7 @@ const ACTIVITIES: SeedItem[] = [
       ],
       tags: ['motor_activity', 'daily'],
     }),
-    'Gentle handling and infant movement play at nappy changes are described in the WHO Care for Child Development materials and paediatric physical-therapy references in the registry.',
+    'Gentle infant movement during nappy changes is described in paediatric physical-therapy references in the registry.',
   ),
   kb(
     activity({
@@ -909,7 +909,7 @@ const ACTIVITIES: SeedItem[] = [
     activity({
       slug: 'lullaby_and_rock',
       title: b('ကလေးချော့သိပ်သီချင်းဆို၍ ညင်သာစွာ ယိမ်းပေးခြင်း', 'Lullaby and gentle rocking'),
-      summary: b('ကလေးချော့သိပ်သီချင်းတစ်ပုဒ်ကို တိုးတိုးဆိုပြီး ကလေးကို ညင်သာစွာ ယိမ်းပေးပါ။', 'Sing the same song each day while rocking slowly.'),
+      summary: b('နေ့တိုင်း တူညီသော ကလေးချော့သိပ်သီချင်းကို တိုးတိုးဆိုပြီး ကလေးကို ညင်သာစွာ ယိမ်းပေးပါ။', 'Sing the same song each day while rocking slowly.'),
       ageGroupKey: 'birth_2m',
       domains: ['play', 'emotional', 'communication'],
       difficulty: 'easy',
@@ -928,12 +928,12 @@ const ACTIVITIES: SeedItem[] = [
       ),
       indoor: true, outdoor: false, oneChild: true, group: false, parentChild: true,
       outcomes: [
-        b('သီချင်း၏ စည်းချက်ကို ခံစားရင်း ငြိမ်သက်လာစေခြင်း။', 'Learning objective — experience rhythm and learn to settle.'),
-        b('မှန်မှန်လုပ်ပေးပါက အိပ်ရာဝင်ချိန် အလေ့အထကောင်းတစ်ခု ဖြစ်လာစေခြင်း။', 'Builds a bedtime routine.'),
+        b('သီချင်း၏ စည်းချက်နှင့် ညင်သာသော ယိမ်းလှုပ်မှုကို ခံစားခြင်း။', 'Experience rhythm and gentle movement.'),
+        b('နေ့စဉ် တူညီသည့် သီချင်းကို အသုံးပြုခြင်းဖြင့် ရင်းနှီးသော အိပ်ရာဝင် အချက်ပြမှုတစ်ခု ဖြစ်စေနိုင်ခြင်း။', 'Using the same song each day can provide a familiar bedtime cue.'),
       ],
       tags: ['music_activity', 'bedtime'],
     }),
-    'Singing, rhythm and consistent bedtime routines follow WHO Care for Child Development materials and the behavioural bedtime-routine sleep literature in the registry; safe-sleep transfer follows AAP safe sleep guidance.',
+    'Talking or singing during care, gentle holding or rocking, and responsive soothing follow WHO Care for Child Development materials; safe-sleep transfer follows AAP safe-sleep guidance.',
   ),
   kb(
     activity({

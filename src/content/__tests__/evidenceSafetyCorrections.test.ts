@@ -120,8 +120,8 @@ describe('evidence and child-safety content corrections', () => {
     const screenTime = JSON.stringify(bySlug('lsn_screen_time').data);
     expect(screenTime).toContain('အသက် ၂ နှစ်မှ ၄ နှစ်အထိ');
     expect(screenTime).toContain('တစ်နေ့ ၁ နာရီထက် မကျော်');
-    expect(screenTime).toContain('For ages 2 to 4');
-    expect(screenTime).toContain('no more than 1 hour a day; less is better');
+    expect(screenTime).toContain('from ages 2 to 4');
+    expect(screenTime).toContain('no more than 1 hour a day');
   });
 
   it('removes stale pending-clinical metadata from every known parent-facing slug', () => {
