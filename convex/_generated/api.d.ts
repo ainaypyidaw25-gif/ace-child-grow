@@ -61,6 +61,7 @@ import type * as lib_reviewSearch from "../lib/reviewSearch.js";
 import type * as lib_seedPolicy from "../lib/seedPolicy.js";
 import type * as lib_swaimanCerebralPalsyLinkCasData from "../lib/swaimanCerebralPalsyLinkCasData.js";
 import type * as lib_swaimanSeizureLinkCasData from "../lib/swaimanSeizureLinkCasData.js";
+import type * as lib_swaimanSuddenWeaknessCasData from "../lib/swaimanSuddenWeaknessCasData.js";
 import type * as library from "../library.js";
 import type * as media from "../media.js";
 import type * as milestones from "../milestones.js";
@@ -79,6 +80,7 @@ import type * as sleep from "../sleep.js";
 import type * as subscriptions from "../subscriptions.js";
 import type * as swaimanCerebralPalsyLinkCas from "../swaimanCerebralPalsyLinkCas.js";
 import type * as swaimanSeizureLinkCas from "../swaimanSeizureLinkCas.js";
+import type * as swaimanSuddenWeaknessCas from "../swaimanSuddenWeaknessCas.js";
 
 import type {
   ApiFromModules,
@@ -140,6 +142,7 @@ declare const fullApi: ApiFromModules<{
   "lib/seedPolicy": typeof lib_seedPolicy;
   "lib/swaimanCerebralPalsyLinkCasData": typeof lib_swaimanCerebralPalsyLinkCasData;
   "lib/swaimanSeizureLinkCasData": typeof lib_swaimanSeizureLinkCasData;
+  "lib/swaimanSuddenWeaknessCasData": typeof lib_swaimanSuddenWeaknessCasData;
   library: typeof library;
   media: typeof media;
   milestones: typeof milestones;
@@ -158,6 +161,7 @@ declare const fullApi: ApiFromModules<{
   subscriptions: typeof subscriptions;
   swaimanCerebralPalsyLinkCas: typeof swaimanCerebralPalsyLinkCas;
   swaimanSeizureLinkCas: typeof swaimanSeizureLinkCas;
+  swaimanSuddenWeaknessCas: typeof swaimanSuddenWeaknessCas;
 }>;
 
 /**

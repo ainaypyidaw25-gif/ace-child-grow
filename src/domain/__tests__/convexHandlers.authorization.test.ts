@@ -16,6 +16,7 @@ import { activity as reviewerActivity, listForContent as listContentReviews, sav
 import {
   forContent as evidenceForContent,
   importLinks,
+  importSources,
   setReview as setEvidenceReview,
 } from '../../../convex/evidence';
 import { transition as transitionContent } from '../../../convex/content';
@@ -46,6 +47,10 @@ import {
 import {
   ASQ_DOCTOR_VISITS_TARGET,
 } from '../../../convex/lib/asqDoctorVisitsLinkCasData';
+import {
+  SWAIMAN_SUDDEN_WEAKNESS_SOURCE_ID,
+  SWAIMAN_SUDDEN_WEAKNESS_TARGET,
+} from '../../../convex/lib/swaimanSuddenWeaknessCasData';
 
 const RETIRED_SERVER_GUARD_ITEMS = [
   ...[
@@ -492,6 +497,68 @@ describe('Convex registered handlers enforce authorization', () => {
     expect(context.db.query).not.toHaveBeenCalledWith('evidenceLinks');
     expect(context.db.patch).not.toHaveBeenCalled();
     expect(context.db.insert).not.toHaveBeenCalledWith('evidenceLinks', expect.anything());
+  });
+
+  it('the evidence boundary reserves sudden-weakness link and source rows for exact CAS only', async () => {
+    authState.userId = 'editor-1';
+    const context = ctx({
+      profile: { userId: 'editor-1', isStaff: true, staffRole: 'content_editor' },
+      rows: { evidenceSources: [] },
+    });
+    const linkResult = await handler(importLinks)(context, {
+      links: [{
+        kind: SWAIMAN_SUDDEN_WEAKNESS_TARGET.kind,
+        slug: SWAIMAN_SUDDEN_WEAKNESS_TARGET.slug,
+        sourceIds: ['stale-or-unknown-source'],
+      }],
+    }) as Record<string, unknown>;
+    const sourceResult = await handler(importSources)(context, {
+      sources: [{
+        id: SWAIMAN_SUDDEN_WEAKNESS_SOURCE_ID,
+        org: 'Elsevier',
+        orgKey: 'TEXTBOOK',
+        title: "Swaiman's Pediatric Neurology",
+        authors: null,
+        year: 2025,
+        edition: '7th Edition',
+        country: null,
+        language: 'en',
+        url: 'https://example.invalid/stale',
+        doi: null,
+        isbn: '9780443109447',
+        pmid: null,
+        evidenceLevel: 'textbook',
+        reviewStatus: 'awaiting_review',
+        reviewer: null,
+        reviewDate: null,
+        nextReviewDate: null,
+        keywords: [],
+        topics: [],
+        ageMonthsMin: 0,
+        ageMonthsMax: 60,
+        verifiedOn: '2026-08-21',
+        verifiedNote: 'stale generic import must be skipped',
+      }],
+    }) as Record<string, unknown>;
+
+    expect(linkResult).toMatchObject({
+      created: 0,
+      updated: 0,
+      skipped: 1,
+      failed: 0,
+    });
+    expect(sourceResult).toMatchObject({
+      created: 0,
+      updated: 0,
+      unchanged: 0,
+      reviewReset: 0,
+      skipped: 1,
+      failed: 0,
+    });
+    expect(context.db.query).not.toHaveBeenCalledWith('evidenceLinks');
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalledWith('evidenceLinks', expect.anything());
+    expect(context.db.insert).not.toHaveBeenCalledWith('evidenceSources', expect.anything());
   });
 
   it('normal users cannot mutate evidence review state', async () => {
