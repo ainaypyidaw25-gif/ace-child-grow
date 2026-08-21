@@ -44,6 +44,10 @@ import { isInherentPublicLinkCasTarget } from './lib/inherentPublicLinkCasData';
 import { isSwaimanSeizureLinkCasTarget } from './lib/swaimanSeizureLinkCasData';
 import { isSwaimanCerebralPalsyLinkCasTarget } from './lib/swaimanCerebralPalsyLinkCasData';
 import { isAsqDoctorVisitsLinkCasTarget } from './lib/asqDoctorVisitsLinkCasData';
+import {
+  isSwaimanSuddenWeaknessLinkCasTarget,
+  isSwaimanSuddenWeaknessSourceCasTarget,
+} from './lib/swaimanSuddenWeaknessCasData';
 
 const REVIEW_STATUSES = [
   'evidence_required',
@@ -541,6 +545,10 @@ async function applySources(
 
   for (const src of sources) {
     const { id, ...rest } = src;
+    if (isSwaimanSuddenWeaknessSourceCasTarget(id)) {
+      skipped += 1;
+      continue;
+    }
     if (seen.has(id)) {
       skipped += 1;
       continue;
@@ -747,7 +755,8 @@ async function applyLinks(
       && !isInherentPublicLinkCasTarget(link.kind, link.slug)
       && !isSwaimanSeizureLinkCasTarget(link.kind, link.slug)
       && !isSwaimanCerebralPalsyLinkCasTarget(link.kind, link.slug)
-      && !isAsqDoctorVisitsLinkCasTarget(link.kind, link.slug)) return true;
+      && !isAsqDoctorVisitsLinkCasTarget(link.kind, link.slug)
+      && !isSwaimanSuddenWeaknessLinkCasTarget(link.kind, link.slug)) return true;
     skipped += 1;
     return false;
   });
