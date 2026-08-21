@@ -37,6 +37,9 @@ import {
 import {
   INHERENT_PUBLIC_LINK_CAS_TARGETS,
 } from '../../../convex/lib/inherentPublicLinkCasData';
+import {
+  SWAIMAN_SEIZURE_LINK_CAS_TARGET,
+} from '../../../convex/lib/swaimanSeizureLinkCasData';
 
 const RETIRED_SERVER_GUARD_ITEMS = [
   ...[
@@ -392,6 +395,34 @@ describe('Convex registered handlers enforce authorization', () => {
       updated: 0,
       unchanged: 0,
       skipped: 4,
+      failed: 0,
+      failedKeys: [],
+      invalidatedContentKeys: [],
+    });
+    expect(context.db.query).not.toHaveBeenCalledWith('evidenceLinks');
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalledWith('evidenceLinks', expect.anything());
+  });
+
+  it('the evidence boundary reserves the seizure row for its exact CAS only', async () => {
+    authState.userId = 'editor-1';
+    const context = ctx({
+      profile: { userId: 'editor-1', isStaff: true, staffRole: 'content_editor' },
+      rows: { evidenceSources: [] },
+    });
+    const result = await handler(importLinks)(context, {
+      links: [{
+        kind: SWAIMAN_SEIZURE_LINK_CAS_TARGET.kind,
+        slug: SWAIMAN_SEIZURE_LINK_CAS_TARGET.slug,
+        sourceIds: ['stale-or-unknown-source'],
+      }],
+    }) as Record<string, unknown>;
+
+    expect(result).toMatchObject({
+      created: 0,
+      updated: 0,
+      unchanged: 0,
+      skipped: 1,
       failed: 0,
       failedKeys: [],
       invalidatedContentKeys: [],
