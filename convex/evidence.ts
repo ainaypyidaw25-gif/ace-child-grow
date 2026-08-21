@@ -43,6 +43,7 @@ import { unprotectedCitationGapKeys } from './lib/evidenceImportSafety';
 import { isInherentPublicLinkCasTarget } from './lib/inherentPublicLinkCasData';
 import { isSwaimanSeizureLinkCasTarget } from './lib/swaimanSeizureLinkCasData';
 import { isSwaimanCerebralPalsyLinkCasTarget } from './lib/swaimanCerebralPalsyLinkCasData';
+import { isAsqDoctorVisitsLinkCasTarget } from './lib/asqDoctorVisitsLinkCasData';
 
 const REVIEW_STATUSES = [
   'evidence_required',
@@ -745,7 +746,8 @@ async function applyLinks(
     if (!isRetiredContentSlug(link.slug)
       && !isInherentPublicLinkCasTarget(link.kind, link.slug)
       && !isSwaimanSeizureLinkCasTarget(link.kind, link.slug)
-      && !isSwaimanCerebralPalsyLinkCasTarget(link.kind, link.slug)) return true;
+      && !isSwaimanCerebralPalsyLinkCasTarget(link.kind, link.slug)
+      && !isAsqDoctorVisitsLinkCasTarget(link.kind, link.slug)) return true;
     skipped += 1;
     return false;
   });

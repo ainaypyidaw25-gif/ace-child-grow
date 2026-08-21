@@ -284,7 +284,7 @@ export const EXPLICIT_CONTENT_SOURCES: Record<string, string[]> = {
   lsn_special_needs_awareness: ['who-unicef-developmental-disabilities-2023', 'unicef-seen-counted-included-2022', 'aap-surveillance-2020', 'tb-ccitsn-3e-2004'],
   lsn_prepare_preschool: ['tb-handbook-ecse-2016', 'us-hhs-head-start-elof-2015'],
   lsn_prepare_school: ['hc-early-literacy-2023', 'tb-handbook-ecse-2016', 'aap-literacy-2024'],
-  lsn_doctor_visits: ['tb-bright-futures-4e-2017', 'nhs-baby-reviews-2023', 'cdc-monitoring-screening-2026', 'nhs-vaccinations-2023', 'cdc-immunization-schedule-2025', 'who-ia2030-2020', 'jr-asq3-argentina-2018', 'myanmar-nsp-newborn-child-2015'],
+  lsn_doctor_visits: ['tb-bright-futures-4e-2017', 'nhs-baby-reviews-2023', 'cdc-monitoring-screening-2026', 'nhs-vaccinations-2023', 'cdc-immunization-schedule-2025', 'who-ia2030-2020', 'myanmar-nsp-newborn-child-2015'],
   lsn_parent_wellbeing: ['nice-ng194-postnatal-2021', 'aap-toxic-stress-2021'],
   lsn_language_rich_home: ['jr-weisleder-2013', 'jr-dowdall-bookreading-2020', 'aap-literacy-2024'],
 
