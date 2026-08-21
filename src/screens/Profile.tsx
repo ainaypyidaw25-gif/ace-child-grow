@@ -228,6 +228,10 @@ export function Profile() {
       {/* Privacy controls */}
       <section className="rounded-card border border-line bg-white p-4 shadow-card">
         <h2 className="mb-2 font-semibold text-ink">{locale === 'mm' ? 'ကိုယ်ရေးလုံခြုံမှု' : 'Privacy'}</h2>
+        <Link to="/content-policy" className="flex items-center justify-between py-2 text-sky-deep">
+          <span>Content Policy</span>
+          <span aria-hidden>→</span>
+        </Link>
         <Link to="/terms" className="flex items-center justify-between py-2 text-sky-deep">
           <span>{locale === 'mm' ? 'ဝန်ဆောင်မှုစည်းမျဉ်းများ' : 'Terms of Service'}</span>
           <span aria-hidden>→</span>
