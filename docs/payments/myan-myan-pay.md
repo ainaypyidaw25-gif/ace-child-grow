@@ -72,13 +72,14 @@ MMPAY_SANDBOX_API_BASE_URL=...
 MMPAY_PRODUCTION_APP_ID=...
 MMPAY_PRODUCTION_PUBLISHABLE_KEY=...
 MMPAY_PRODUCTION_SECRET_KEY=...
-MMPAY_PRODUCTION_API_BASE_URL=https://xxapi.myanmyanpay.com
+MMPAY_PRODUCTION_API_BASE_URL=https://ezapi.myanmyanpay.com
 ```
 
-The production host above matches the API origin currently used by the
-Myan Myan Pay developer console. Do not substitute the retired
-`api.myanmyanpay.com` hostname: it has no DNS record and causes server-side
-`fetch failed` errors during payment creation.
+The production host above matches the payment API origin currently shown in
+the authenticated Myan Myan Pay developer documentation. The SDK selects
+sandbox or LIVE behavior from the credential type. Do not substitute either
+the retired `api.myanmyanpay.com` hostname (no DNS record) or the developer
+dashboard's `xxapi.myanmyanpay.com` origin (no `/payments/create` route).
 
 The sandbox create → signed callback → automatic subscription activation flow
 has passed. After Myan Myan Pay grants LIVE approval, set the production
