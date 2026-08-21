@@ -100,7 +100,7 @@ describe('placeholder printable production release', () => {
     expect(context.db.patch).not.toHaveBeenCalled();
   });
 
-  it('stages all 12 rows with preview-only wording at a fresh review revision', async () => {
+  it('fails closed when a historical target has since been retired from the seed', async () => {
     const context = releaseContext({
       libraryContent: printableRows(),
       libraryMedia: placeholderMedia(),
@@ -109,23 +109,10 @@ describe('placeholder printable production release', () => {
     await expect(handler(applyPrintablePayloadRelease)(context, {
       releaseId: PRINTABLE_PAYLOAD_RELEASE_ID,
       targets: exactTargets(),
-    })).resolves.toEqual({ alreadyApplied: false, staged: 12, total: 12 });
+    })).rejects.toThrow('Printable preview-only seed is not ready: prt_flash_cards');
 
-    expect(context.db.patch).toHaveBeenCalledTimes(12);
-    expect(context.db.patch).toHaveBeenCalledWith('content-prt_behavior_chart', expect.objectContaining({
-      clinicalStatus: 'clinical_review',
-      reviewRevision: 2,
-      data: expect.objectContaining({
-        format: 'Preview only — bilingual PDF not yet available',
-        availability: 'preview_only',
-      }),
-      reviewerId: undefined,
-    }));
-    expect(context.db.insert).toHaveBeenCalledTimes(13);
-    expect(context.db.insert).toHaveBeenCalledWith('auditLogs', expect.objectContaining({
-      action: 'library.printable_payload.release',
-      summary: PRINTABLE_PAYLOAD_RELEASE_ID,
-    }));
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalled();
   });
 
   it('aborts before every write on a stale revision or an approved PDF payload', async () => {

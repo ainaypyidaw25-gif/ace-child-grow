@@ -56,10 +56,11 @@ describe('knowledge base — 0–12 months', () => {
   it('each shipped band covers milestones, guides, activities and a checklist', () => {
     for (const band of BANDS_SHIPPED) {
       const inBand = CONTENT_SEED.filter((i) => i.ageGroupKey === band);
-      // The reviewed 5–6 month catalogue intentionally contains seven unique
-      // milestones after five duplicate/early claims were retired. A duplicate
-      // must never be counted as domain coverage merely to satisfy a quota.
-      const minimumMilestones = band === '5_6m' ? 7 : 8;
+      // The reviewed 5–6 month catalogue intentionally contains five active
+      // milestones after duplicate, early and pseudo-milestone claims were
+      // retired. A retired row must never be restored merely to satisfy a
+      // catalogue-size quota.
+      const minimumMilestones = band === '5_6m' ? 5 : 8;
       expect(inBand.filter((i) => i.type === 'milestone').length, `${band} milestones`)
         .toBeGreaterThanOrEqual(minimumMilestones);
       expect(inBand.filter((i) => i.type === 'guide').length, `${band} guides`).toBeGreaterThanOrEqual(8);

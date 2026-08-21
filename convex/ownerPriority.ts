@@ -4,6 +4,7 @@ import type { QueryCtx } from './_generated/server';
 import type { Doc } from './_generated/dataModel';
 import { logAudit } from './audit';
 import { getStaffAccess, requireUser, type StaffAccess } from './lib/auth';
+import { isRetiredContentSlug } from './lib/contentRetirements';
 import {
   coerceOwnerPriority,
   coercePriorityStatus,
@@ -529,6 +530,15 @@ export const setGovernance = mutation({
         messageMm: 'ဦးစားပေး စီမံခန့်ခွဲမှုကို ပိုင်ရှင် သို့မဟုတ် စစ်ဆေးရေးမန်နေဂျာသာ ပြောင်းလဲနိုင်သည်။',
       };
     }
+    if (isRetiredContentSlug(args.slug)) {
+      await logAudit(ctx, userId, 'ownerPriority.setGovernance', 'libraryContent', undefined, `${args.slug} · refused: retired_content`, { result: 'rejected' });
+      return {
+        ok: false as const,
+        code: 'retired_content',
+        message: 'Retired content is immutable and cannot receive governance changes.',
+        messageMm: 'ရပ်ဆိုင်းထားသော အကြောင်းအရာကို မပြောင်းလဲနိုင်သဖြင့် စီမံခန့်ခွဲမှုအချက်အလက်များ ပြင်ဆင်၍ မရပါ။',
+      };
+    }
     const item = await ctx.db
       .query('libraryContent')
       .withIndex('by_slug', (q) => q.eq('slug', args.slug))
@@ -665,6 +675,15 @@ export const requestReviews = mutation({
         code: 'not_authorized',
         message: 'Only an owner, review manager or content editor can request reviews.',
         messageMm: 'စစ်ဆေးမှု တောင်းဆိုခြင်းကို ပိုင်ရှင်၊ စစ်ဆေးရေးမန်နေဂျာ သို့မဟုတ် အကြောင်းအရာ တည်းဖြတ်သူသာ လုပ်နိုင်သည်။',
+      };
+    }
+    if (isRetiredContentSlug(args.slug)) {
+      await logAudit(ctx, userId, 'ownerPriority.requestReviews', 'libraryContent', undefined, `${args.slug} · refused: retired_content`, { result: 'rejected' });
+      return {
+        ok: false as const,
+        code: 'retired_content',
+        message: 'Retired content is immutable and cannot receive new review requests.',
+        messageMm: 'ရပ်ဆိုင်းထားသော အကြောင်းအရာကို မပြောင်းလဲနိုင်သဖြင့် သုံးသပ်ချက်အသစ် တောင်းဆို၍ မရပါ။',
       };
     }
     const invalid = args.dimensions.filter((dimension) => !(REVIEW_DIMENSION_IDS as readonly string[]).includes(dimension));

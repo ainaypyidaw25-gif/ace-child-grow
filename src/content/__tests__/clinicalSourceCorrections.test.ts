@@ -8,7 +8,10 @@ import {
 import { SOURCE_BY_ID } from '../../evidence/sources';
 import { resolveReviewStatus } from '../../evidence/types';
 import { SAMPLE_AWARENESS } from '../../data/seed/content';
-import { SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_TARGETS } from '../../../convex/lib/contentRetirements';
+import {
+  SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_TARGETS,
+  isRetiredMilestoneSlug,
+} from '../../../convex/lib/contentRetirements';
 
 const rows = new Map(seedPayload().map((row) => [row.slug, row]));
 
@@ -828,7 +831,8 @@ describe('clinically sourced content corrections', () => {
     expect(relatedContent('jr-lecuelle-behavioral-insomnia-review-2024').milestone)
       .toEqual([]);
     expect(relatedContent('jr-mindell-bedtime-routine-rct-2009').milestone)
-      .toEqual(['ms_19_24m_sleep_1']);
+      .toEqual([]);
+    expect(sourcesForContent('ms_19_24m_sleep_1', 'milestone')).toEqual([]);
   });
 
   it('keeps NICE PH40 as an unlinked service-level source, not milestone evidence', () => {
@@ -1224,8 +1228,10 @@ describe('clinically sourced content corrections', () => {
     });
 
     const related = relatedContent('tb-bright-futures-4e-2017');
-    expect(Object.values(related).flat()).toHaveLength(84);
-    expect(related.milestone).toHaveLength(25);
+    const activeBrightFuturesMilestones = BRIGHT_FUTURES_MILESTONE_SLUGS
+      .filter((slug) => rows.has(slug));
+    expect(activeBrightFuturesMilestones).toHaveLength(16);
+    expect([...related.milestone].sort()).toEqual([...activeBrightFuturesMilestones].sort());
     expect(related.guide).toHaveLength(43);
     expect(related.story).toEqual(['st_visit_to_doctor']);
     expect(related.printable).toHaveLength(12);
@@ -1265,9 +1271,8 @@ describe('clinically sourced content corrections', () => {
       'ms_2y_safety_1',
       'ms_4_5y_safety_1',
     ]) {
-      const ids = sourcesForContent(slug, 'milestone');
-      expect(ids.indexOf('tb-bright-futures-4e-2017'), slug)
-        .toBeLessThan(ids.indexOf('nhs-child-accident-2025'));
+      expect(rows.has(slug), slug).toBe(false);
+      expect(sourcesForContent(slug, 'milestone'), slug).toEqual([]);
     }
 
     for (const slug of [
@@ -1281,6 +1286,10 @@ describe('clinically sourced content corrections', () => {
       'ms_5y_nutrition_1',
       'ms_5y_sleep_1',
     ]) {
+      if (isRetiredMilestoneSlug(slug)) {
+        expect(rows.has(slug), slug).toBe(false);
+        continue;
+      }
       expect(dataFor(slug).evidenceSummary, slug).not.toContain('Bright Futures');
     }
   });

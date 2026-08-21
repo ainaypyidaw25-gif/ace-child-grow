@@ -60,6 +60,7 @@ export type ReviewRefusalCode =
   | 'qualification_required'
   | 'note_required'
   | 'content_not_found'
+  | 'retired_content'
   | 'stale_revision';
 
 export type ReviewRefusal = { code: ReviewRefusalCode; message: string };
@@ -147,6 +148,10 @@ export const REVIEW_REFUSAL_LABELS: Record<ReviewRefusalCode, { mm: string; en: 
   content_not_found: {
     mm: 'ဤအကြောင်းအရာကို ရှာမတွေ့ပါ။',
     en: 'This content item no longer exists.',
+  },
+  retired_content: {
+    mm: 'မပြောင်းလဲနိုင်သော ထုတ်ဝေမှုမှတ်တမ်းဖြင့် ရပ်ဆိုင်းထားသော ဤအကြောင်းအရာတွင် သုံးသပ်ဆုံးဖြတ်ချက်အသစ် မထည့်နိုင်ပါ။',
+    en: 'This content was retired by an immutable release and cannot receive new review decisions.',
   },
   stale_revision: {
     mm: 'သင်ဖတ်ရှုပြီးနောက် ဤအကြောင်းအရာ ပြောင်းလဲသွားပါပြီ။ မူကွဲအသစ်ကို ပြန်လည်စစ်ဆေးပြီးမှ ဆုံးဖြတ်ပါ။',

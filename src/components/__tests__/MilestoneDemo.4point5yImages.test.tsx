@@ -3,8 +3,9 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { LocaleProvider } from '../../app/LocaleContext';
 import { MilestoneDemo } from '../../screens/MilestoneDemo';
+import { isRetiredMilestoneSlug } from '../../../convex/lib/contentRetirements';
 
-const milestoneItems = [
+const milestoneItems = ([
   {
     slug: 'ms_4_5y_cognitive_1',
     domainKey: 'cognitive',
@@ -29,7 +30,7 @@ const milestoneItems = [
     observeMm: 'ကလေးကတ်ကြေးဖြင့် စက္ကူကို မျဉ်းအတိုင်း ဖြတ်ပါသလား။',
     observeEn: 'Cuts along a line with safe scissors?',
   },
-] as const;
+] as const).filter((item) => !isRetiredMilestoneSlug(item.slug));
 
 const slugs = milestoneItems.map((item) => item.slug);
 
@@ -89,7 +90,7 @@ describe('MilestoneDemo 4.5 year illustration navigation', () => {
 
     expect(new Set(seenSources).size).toBe(slugs.length);
     fireEvent.click(screen.getByText('နောက်သို့'));
-    expect(screen.getByTestId('milestone-illustration')).toHaveAttribute('src', seenSources[1]);
+    expect(screen.getByTestId('milestone-illustration')).toHaveAttribute('src', seenSources.at(-2));
   });
 
   it('renders the exact published English title and observation with the same mapped image', () => {

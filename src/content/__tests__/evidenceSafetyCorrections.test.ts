@@ -8,7 +8,11 @@ import {
   requiresSpecialistReview,
   specialistReviewReason,
 } from '../../../convex/lib/contentReviewRequirements';
-import { DUPLICATE_MILESTONE_SLUGS } from '../../../convex/lib/contentRetirements';
+import {
+  DUPLICATE_MILESTONE_SLUGS,
+  FLASH_CARDS_PRINTABLE_RETIREMENT_SLUG,
+  isRetiredMilestoneSlug,
+} from '../../../convex/lib/contentRetirements';
 
 const rows = seedPayload();
 const bySlug = (slug: string) => {
@@ -21,11 +25,13 @@ describe('evidence and child-safety content corrections', () => {
   it('routes all seven named records for focused emergency-wording review', () => {
     const routed = new Set(rows.filter(requiresSpecialistReview).map((row) => row.slug));
     expect(FOCUSED_SPECIALIST_REVIEW_SLUGS).toHaveLength(7);
-    for (const slug of FOCUSED_SPECIALIST_REVIEW_SLUGS) expect(routed.has(slug), slug).toBe(true);
+    for (const slug of FOCUSED_SPECIALIST_REVIEW_SLUGS) {
+      expect(routed.has(slug), slug).toBe(!isRetiredMilestoneSlug(slug));
+    }
   });
 
   it('uses the corrected age-specific English milestone claims', () => {
-    expect(bySlug('ms_5_6m_cognitive_2').titleEn).toBe('Explores cause and effect in play');
+    expect(rows.some((row) => row.slug === 'ms_5_6m_cognitive_2')).toBe(false);
     expect(bySlug('ms_5_6m_gross_motor_2').titleEn).toBe('Rolls from tummy to back');
     expect(bySlug('ms_5_6m_speech_2').titleEn).toContain('consonant sounds');
     expect(bySlug('ms_7_9m_fine_motor_1').titleEn).toBe('Passes objects hand to hand');
@@ -35,7 +41,7 @@ describe('evidence and child-safety content corrections', () => {
     expect(bySlug('ms_2y_gross_motor_1').titleEn).toBe('Runs');
     expect(bySlug('ms_2_5y_gross_motor_2').titleEn).toBe('Jumps off the ground with both feet');
     expect(bySlug('ms_3y_cognitive_1').titleEn).toBe('Shows they know at least one color');
-    expect(bySlug('ms_4y_gross_motor_1').titleEn).toBe('Hops on one foot');
+    expect(rows.some((row) => row.slug === 'ms_4y_gross_motor_1')).toBe(false);
     expect(bySlug('ms_4y_school_readiness_1').titleEn).toBe('Recognizes their written name');
     expect(bySlug('ms_5y_school_readiness_1').titleEn).toBe('Writes some letters in their name');
     expect(bySlug('ms_2_5y_fine_motor_1').titleEn).toBe('Turns book pages one at a time');
@@ -127,14 +133,20 @@ describe('evidence and child-safety content corrections', () => {
   it('removes stale pending-clinical metadata from every known parent-facing slug', () => {
     expect(publishedSlugs.length).toBeGreaterThanOrEqual(110);
     for (const slug of publishedSlugs) {
-      if ((DUPLICATE_MILESTONE_SLUGS as readonly string[]).includes(slug)) continue;
+      if (isRetiredMilestoneSlug(slug) || slug === FLASH_CARDS_PRINTABLE_RETIREMENT_SLUG) {
+        expect(rows.some((row) => row.slug === slug), slug).toBe(false);
+        continue;
+      }
       expect(bySlug(slug).source, slug).not.toMatch(/pending native-Myanmar and clinical review/i);
     }
   });
 
   it('marks every known printable catalogue record as preview-only without fake PDFs', () => {
-    const printables = publishedSlugs.filter((slug) => slug.startsWith('prt_')).map(bySlug);
+    const printables = publishedSlugs
+      .filter((slug) => slug.startsWith('prt_') && slug !== FLASH_CARDS_PRINTABLE_RETIREMENT_SLUG)
+      .map(bySlug);
     expect(printables.length).toBeGreaterThanOrEqual(15);
+    expect(rows.some((row) => row.slug === FLASH_CARDS_PRINTABLE_RETIREMENT_SLUG)).toBe(false);
     for (const item of printables) {
       expect(item.data).toMatchObject({
         format: 'Preview only — bilingual PDF not yet available',

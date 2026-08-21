@@ -34,6 +34,7 @@ import {
   publicationEvidenceIsEligible,
 } from './lib/evidencePublicationGate';
 import { contentIsParentReadable } from './lib/publicationVisibility';
+import { isRetiredContentSlug } from './lib/contentRetirements';
 import {
   evidenceImportReviewFields,
   evidenceImportReviewPolicy,
@@ -732,17 +733,26 @@ async function applyLinks(
 ) {
   const userId = actorId;
   const now = Date.now();
+  let skipped = 0;
+  // Historical production links remain preserved by the exact retirement
+  // mutation, but stale clients may not recreate or mutate active edges for a
+  // retired item. Filter before validation and before any link write.
+  const activeLinks = links.filter((link) => {
+    if (!isRetiredContentSlug(link.slug)) return true;
+    skipped += 1;
+    return false;
+  });
   const sourceSnapshot = await ctx.db.query('evidenceSources').take(2_001);
   if (sourceSnapshot.length > 2_000) {
     throw new Error('Evidence link import exceeded the 2,000-source safety bound');
   }
   const known = new Set(sourceSnapshot.map((r) => r.sourceId));
 
-  const unknown = [...new Set(links.flatMap((l) => l.sourceIds).filter((id) => !known.has(id)))];
+  const unknown = [...new Set(activeLinks.flatMap((l) => l.sourceIds).filter((id) => !known.has(id)))];
   if (unknown.length > 0) {
     throw new Error(`Unknown reference ids: ${unknown.slice(0, 10).join(', ')}`);
   }
-  const empty = links.filter((l) => l.sourceIds.length === 0);
+  const empty = activeLinks.filter((l) => l.sourceIds.length === 0);
   if (empty.length > 0) {
     throw new Error(
       `Orphan content rejected: ${empty
@@ -755,12 +765,11 @@ async function applyLinks(
   let created = 0;
   let updated = 0;
   let unchanged = 0;
-  let skipped = 0;
   const failed: string[] = [];
   const changedLinks: EvidenceDependency[] = [];
   const seen = new Set<string>();
 
-  for (const link of links) {
+  for (const link of activeLinks) {
     const key = `${link.kind}:${link.slug}`;
     if (seen.has(key)) {
       skipped += 1;

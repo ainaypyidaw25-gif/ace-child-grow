@@ -6,6 +6,7 @@ import {
 import { todayIsoUtc } from './evidenceFreshness';
 import { contentIsAiParentReadable } from './aiPublicationVisibility';
 import type { Doc } from '../_generated/dataModel';
+import { isRetiredContentSlug } from './contentRetirements';
 
 type DatabaseContext = Pick<QueryCtx, 'db'> | Pick<MutationCtx, 'db'>;
 
@@ -64,6 +65,7 @@ export async function contentIsParentReadable(
   todayIso = todayIsoUtc(),
   now = Date.now(),
 ): Promise<boolean> {
+  if (isRetiredContentSlug(content.slug)) return false;
   if (isPubliclyReadableStatus(content.clinicalStatus)) {
     return (await publicationEvidenceForContent(ctx, content, todayIso)).allowed;
   }
@@ -138,6 +140,7 @@ function contentIsParentReadableFromSnapshot(
   content: PublicationContentIdentity,
   snapshot: PublicationEvidenceSnapshot,
 ): boolean {
+  if (isRetiredContentSlug(content.slug)) return false;
   if (!isPubliclyReadableStatus(content.clinicalStatus) || !snapshot.complete) return false;
   const linkedSourceIds = snapshot.linkSourceIdsByContent.get(contentKey(content)) ?? [];
   const sources = linkedSourceIds.flatMap((sourceId) => {
@@ -167,15 +170,16 @@ export async function parentReadableContentResult<T extends PublicationContentId
   todayIso = todayIsoUtc(),
   now = Date.now(),
 ): Promise<{ complete: boolean; rows: T[] }> {
-  const snapshot = await publicationEvidenceSnapshot(ctx, rows, todayIso);
+  const activeRows = rows.filter((row) => !isRetiredContentSlug(row.slug));
+  const snapshot = await publicationEvidenceSnapshot(ctx, activeRows, todayIso);
   if (!snapshot.complete) return { complete: false, rows: [] };
-  const visibility = await Promise.all(rows.map(async (row) => (
+  const visibility = await Promise.all(activeRows.map(async (row) => (
     isPubliclyReadableStatus(row.clinicalStatus)
       ? contentIsParentReadableFromSnapshot(row, snapshot)
       : await contentIsAiParentReadable(ctx, row as unknown as Doc<'libraryContent'>, now, todayIso)
   )));
   return {
     complete: true,
-    rows: rows.filter((_, index) => visibility[index]),
+    rows: activeRows.filter((_, index) => visibility[index]),
   };
 }

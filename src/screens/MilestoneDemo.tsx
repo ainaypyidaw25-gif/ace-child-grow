@@ -12,6 +12,7 @@ import { developmentalAgeMonths } from '../domain/age/age';
 import { resolveAgeGroup } from '../content/taxonomy';
 import { milestoneIllustration } from '../content/milestoneIllustrations';
 import { NoChild } from './Growth';
+import { isRetiredMilestoneSlug } from '../../convex/lib/contentRetirements';
 import {
   ACUTE_URGENT_SYMPTOMS,
   ACUTE_URGENT_SYMPTOM_LABELS,
@@ -76,12 +77,13 @@ export function MilestoneDemo() {
 
   const items = useMemo(() => {
     const rows = data?.items ?? [];
+    const activeRows = rows.filter((item) => !isRetiredMilestoneSlug(item.slug));
     // Staff library queries intentionally include every workflow status, but
     // the parent journey must remain a published-only experience even when a
     // staff member previews it with their own child profile.
     return data?.staff
-      ? rows.filter((item) => item.clinicalStatus === 'published')
-      : rows;
+      ? activeRows.filter((item) => item.clinicalStatus === 'published')
+      : activeRows;
   }, [data]);
   const current = items[step];
   const answered = Object.keys(answers).length;

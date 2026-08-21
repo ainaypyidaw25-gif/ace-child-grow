@@ -19,6 +19,7 @@ import {
   BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_TARGET,
   DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID,
   DUPLICATE_MILESTONE_SLUGS,
+  isRetiredMilestoneSlug,
   SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_RELEASE_ID,
   SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_TARGETS,
 } from '../../../convex/lib/contentRetirements';
@@ -115,7 +116,8 @@ describe('seed generation', () => {
     expect(new Set(BURMESE_COPY_AUDIT_TARGETS.map((target) => target.slug)).size).toBe(25);
     expect(BURMESE_COPY_AUDIT_HELD_SLUGS).toEqual(['ms_birth_2m_sleep_1']);
     for (const target of BURMESE_COPY_AUDIT_TARGETS) {
-      expect(seedPayload().some((item) => item.slug === target.slug), target.slug).toBe(true);
+      expect(seedPayload().some((item) => item.slug === target.slug), target.slug)
+        .toBe(!isRetiredMilestoneSlug(target.slug));
       expect(target.expectedReviewRevision).toBeGreaterThan(0);
       expect(target.expectedUpdatedAt).toBeGreaterThan(0);
     }

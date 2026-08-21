@@ -21,6 +21,7 @@ import {
   DUPLICATE_MILESTONE_SLUGS,
   SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_RELEASE_ID,
   SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_TARGETS,
+  isRetiredContentSlug,
   type BrightFuturesDuplicateMilestoneRetirementSlug,
   type DuplicateMilestoneSlug,
   type SocialEmotionalMilestoneRetirementSlug,
@@ -182,6 +183,11 @@ type Item = {
   difficulty?: string; durationMinutes?: number; offline?: boolean; source: string;
   version: number; clinicalStatus: string; data: unknown; media: Media[]; searchText: string;
 };
+
+/** Server-side fail-closed guard for stale or hand-built CLI seed artifacts. */
+export function seedRunSkipsItem(item: Pick<Item, 'type' | 'slug'>): boolean {
+  return isRetiredContentSlug(item.slug);
+}
 
 const PUBLISHED_RELEASE_LIMIT = 5_000;
 
@@ -434,9 +440,14 @@ async function burmeseCopyAuditReleaseApplied(ctx: Pick<QueryCtx, 'db'>) {
   return rows.some((row) => row.summary === BURMESE_COPY_AUDIT_RELEASE_ID);
 }
 
-function burmeseCopySeedStillMatchesHistoricalRelease(target: CopyPatchTarget, desired: Item): boolean {
-  return (BURMESE_COPY_AUDIT_SUPERSEDED_SLUGS as readonly string[]).includes(target.slug)
-    || seedMatchesBurmeseCopyRelease(target, desired);
+function burmeseCopySeedStillMatchesHistoricalRelease(
+  target: CopyPatchTarget,
+  desired: Item | undefined,
+): boolean {
+  if ((BURMESE_COPY_AUDIT_SUPERSEDED_SLUGS as readonly string[]).includes(target.slug)) {
+    return desired !== undefined || isRetiredContentSlug(target.slug);
+  }
+  return desired !== undefined && seedMatchesBurmeseCopyRelease(target, desired);
 }
 
 /** Read-only, exact-state preflight for the published Burmese copy release. */
@@ -458,12 +469,12 @@ export const preflightBurmeseCopyAuditRelease = internalQuery({
         .query('libraryContent')
         .withIndex('by_slug', (q) => q.eq('slug', target.slug))
         .unique();
-      const seedMatchesRelease = Boolean(desired && burmeseCopySeedStillMatchesHistoricalRelease(target, desired));
+      const seedMatchesRelease = burmeseCopySeedStillMatchesHistoricalRelease(target, desired);
       const desiredMatches = Boolean(row && rowMatchesBurmeseCopyRelease(target, row));
       let action: 'ready' | 'already_current' | 'already_applied' | 'seed_mismatch' | 'missing_seed'
         | 'missing_row' | 'not_published' | 'stale_state';
       if (releaseApplied) action = 'already_applied';
-      else if (!desired) action = 'missing_seed';
+      else if (!desired && !seedMatchesRelease) action = 'missing_seed';
       else if (!seedMatchesRelease) action = 'seed_mismatch';
       else if (!row) action = 'missing_row';
       else if (row.clinicalStatus !== 'published') action = 'not_published';
@@ -534,9 +545,10 @@ export const applyBurmeseCopyAuditRelease = internalMutation({
         .query('libraryContent')
         .withIndex('by_slug', (q) => q.eq('slug', target.slug))
         .unique();
-      if (!desired) throw new Error(`Burmese copy target missing from seed: ${target.slug}`);
       if (!burmeseCopySeedStillMatchesHistoricalRelease(target, desired)) {
-        throw new Error(`Burmese copy seed does not match immutable release: ${target.slug}`);
+        throw new Error(desired
+          ? `Burmese copy seed does not match immutable release: ${target.slug}`
+          : `Burmese copy target missing from seed: ${target.slug}`);
       }
       if (!row) throw new Error(`Burmese copy target missing from production: ${target.slug}`);
       if (row.clinicalStatus !== 'published') {
@@ -1898,6 +1910,10 @@ export const run = internalMutation({
     let updated = 0;
     let skippedApproved = 0;
     for (const it of items) {
+      if (seedRunSkipsItem(it)) {
+        skippedApproved += 1;
+        continue;
+      }
       const { media, ...content } = it;
       const existing = await ctx.db
         .query('libraryContent')
