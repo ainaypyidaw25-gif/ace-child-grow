@@ -181,6 +181,8 @@ describe('content links', () => {
       'asha-spoken-language-disorders',
       'jr-mchat-rf-2014',
       'nhs-beds-4y-milestones-2024',
+      'nhs-cerebral-palsy-symptoms-2023',
+      'nhs-cerebral-palsy-treatment-2023',
       'nice-ph40-social-emotional-2012',
       'tb-swaiman-7e-2025',
     ]);

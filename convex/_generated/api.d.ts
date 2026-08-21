@@ -57,6 +57,7 @@ import type * as lib_remainingPseudoMilestoneRetirementData from "../lib/remaini
 import type * as lib_reviewPolicy from "../lib/reviewPolicy.js";
 import type * as lib_reviewSearch from "../lib/reviewSearch.js";
 import type * as lib_seedPolicy from "../lib/seedPolicy.js";
+import type * as lib_swaimanCerebralPalsyLinkCasData from "../lib/swaimanCerebralPalsyLinkCasData.js";
 import type * as lib_swaimanSeizureLinkCasData from "../lib/swaimanSeizureLinkCasData.js";
 import type * as library from "../library.js";
 import type * as media from "../media.js";
@@ -74,6 +75,7 @@ import type * as reports from "../reports.js";
 import type * as seed from "../seed.js";
 import type * as sleep from "../sleep.js";
 import type * as subscriptions from "../subscriptions.js";
+import type * as swaimanCerebralPalsyLinkCas from "../swaimanCerebralPalsyLinkCas.js";
 import type * as swaimanSeizureLinkCas from "../swaimanSeizureLinkCas.js";
 
 import type {
@@ -132,6 +134,7 @@ declare const fullApi: ApiFromModules<{
   "lib/reviewPolicy": typeof lib_reviewPolicy;
   "lib/reviewSearch": typeof lib_reviewSearch;
   "lib/seedPolicy": typeof lib_seedPolicy;
+  "lib/swaimanCerebralPalsyLinkCasData": typeof lib_swaimanCerebralPalsyLinkCasData;
   "lib/swaimanSeizureLinkCasData": typeof lib_swaimanSeizureLinkCasData;
   library: typeof library;
   media: typeof media;
@@ -149,6 +152,7 @@ declare const fullApi: ApiFromModules<{
   seed: typeof seed;
   sleep: typeof sleep;
   subscriptions: typeof subscriptions;
+  swaimanCerebralPalsyLinkCas: typeof swaimanCerebralPalsyLinkCas;
   swaimanSeizureLinkCas: typeof swaimanSeizureLinkCas;
 }>;
 
