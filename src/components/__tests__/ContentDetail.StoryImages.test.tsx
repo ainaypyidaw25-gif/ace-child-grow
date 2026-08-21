@@ -95,14 +95,11 @@ describe('ContentDetail published story illustrations', () => {
     },
   );
 
-  it('shows the prominent non-human-review disclosure on the AI-audited story', () => {
+  it('does not repeat AI provenance on an AI-audited public story', () => {
     localStorage.setItem('ace-locale', 'en');
     renderStory('st_first_day_school');
-    expect(screen.getByTestId('ai-publication-disclosure')).toHaveTextContent(
-      'AI-reviewed — not approved by a human specialist',
-    );
-    expect(screen.getByTestId('ai-publication-disclosure')).toHaveTextContent(
-      'not medical advice, developmental screening, or diagnosis',
-    );
+    expect(screen.queryByTestId('ai-publication-disclosure')).not.toBeInTheDocument();
+    expect(screen.queryByText(/AI-reviewed|AI review notice/i)).not.toBeInTheDocument();
+    expect(screen.getByText('Story st_first_day_school')).toBeVisible();
   });
 });

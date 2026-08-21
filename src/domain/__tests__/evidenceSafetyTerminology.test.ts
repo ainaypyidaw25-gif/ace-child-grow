@@ -35,15 +35,15 @@ describe('evidence-and-safety review terminology', () => {
     }
   });
 
-  it('uses specialist safety language for the legacy clinical dimension', () => {
+  it('uses specialist safety language internally without repeating review claims publicly', () => {
     const workspace = repoFile('src/screens/ContentReviewWorkspace.tsx');
     const team = repoFile('src/screens/AdminTeam.tsx');
     const parentDetail = repoFile('src/screens/ContentDetail.tsx');
 
     expect(workspace).toContain("en: 'Specialist safety review'");
     expect(team).toContain("en: 'Specialist safety reviewer'");
-    expect(parentDetail).toContain('has completed English, Myanmar, evidence and safety review');
-    expect(parentDetail).toContain('not individualized medical advice');
+    expect(parentDetail).not.toContain('has completed English, Myanmar, evidence and safety review');
+    expect(parentDetail).not.toContain('ai-publication-disclosure');
     expect(parentDetail).not.toContain('reviewerDisplayName');
   });
 

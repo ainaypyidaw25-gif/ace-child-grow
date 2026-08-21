@@ -14,7 +14,8 @@ import { printableIllustration } from '../content/printableIllustrations';
 import { storyIllustration } from '../content/storyIllustrations';
 import { approvedPrintablePayload } from '../domain/content/printableAvailability';
 import { isAppleAppStoreBuild } from '../app/platform';
-import { AI_BADGE, AI_DISCLOSURE, AI_PUBLICATION_LANE } from '../domain/content/aiPublication';
+import { ContentReferences } from '../components/ContentReferences';
+import { publicContentCopy } from '../domain/content/publicContentCopy';
 
 type BL = { mm: string; en: string };
 
@@ -22,6 +23,7 @@ export function ContentDetail() {
   const { slug = '' } = useParams();
   const { locale } = useLocale();
   const remote = useQuery(api.library.getBySlug, { slug, audience: 'parent' });
+  const evidence = useQuery(api.evidence.forContent, { slug });
   const { records, loaded } = useDownloadedLibrary();
   const offlineRecord = useMemo(
     () => records.find((record) => record.slug === slug),
@@ -66,6 +68,7 @@ export function ContentDetail() {
     : offlineFallback as Exclude<typeof remote, undefined> | undefined;
 
   const T = (o?: BL) => (o ? (locale === 'mm' ? o.mm : o.en) : '');
+  const publicBody = (o?: BL) => publicContentCopy(T(o));
 
   if (res === undefined) return <p className="text-ink-soft">…</p>;
   if (res === null) {
@@ -143,20 +146,6 @@ export function ContentDetail() {
             {L('← စာကြည့်တိုက်', '← Library')}
           </Link>
         </div>
-        {item.publicationLane === AI_PUBLICATION_LANE && (
-          <div
-            role="note"
-            className="mt-3 rounded-card border border-state-orange/40 bg-pastel-yellow/60 p-3 text-sm leading-6 text-ink"
-            data-testid="ai-publication-disclosure"
-          >
-            <p className="font-semibold text-state-orange-deep">
-              {locale === 'mm' ? AI_BADGE.mm : AI_BADGE.en}
-            </p>
-            <p className="mt-1 text-xs text-ink-soft">
-              {locale === 'mm' ? AI_DISCLOSURE.mm : AI_DISCLOSURE.en}
-            </p>
-          </div>
-        )}
         <h1 className="mt-1 text-xl font-bold text-sky-deep">{locale === 'mm' ? item.titleMm : item.titleEn}</h1>
         {(item.summaryMm || item.summaryEn) && (
           <p className="mt-1 text-ink-soft">{locale === 'mm' ? item.summaryMm : item.summaryEn}</p>
@@ -388,7 +377,7 @@ export function ContentDetail() {
       {item.type === 'lesson' && (
         <>
           {list('objectives').length > 0 && <Section title={L('ဒီသင်ခန်းစာမှ သိရှိနိုင်မည့်အချက်', 'Learning objectives')}><Bullets items={list('objectives')} /></Section>}
-          {bl('body') && <Section title={L('သင်ခန်းစာ', 'Lesson')}><p className="whitespace-pre-line text-sm text-ink-soft">{T(bl('body'))}</p></Section>}
+          {bl('body') && <Section title={L('သင်ခန်းစာ', 'Lesson')}><p className="whitespace-pre-line text-sm text-ink-soft">{publicBody(bl('body'))}</p></Section>}
           {bl('takeaway') && <div className="rounded-card bg-mint-soft p-4 text-sm text-ink">💡 {T(bl('takeaway'))}</div>}
           {bl('actionToday') && <Section title={L('ယနေ့ စမ်းလုပ်ကြည့်ရန်', 'Action today')}><p className="text-sm text-ink-soft">{T(bl('actionToday'))}</p></Section>}
         </>
@@ -434,7 +423,7 @@ export function ContentDetail() {
       {/* Story */}
       {item.type === 'story' && (
         <>
-          {bl('body') && <Section title={L('ပုံပြင်', 'Story')}><p className="whitespace-pre-line text-sm text-ink-soft">{T(bl('body'))}</p></Section>}
+          {bl('body') && <Section title={L('ပုံပြင်', 'Story')}><p className="whitespace-pre-line text-sm text-ink-soft">{publicBody(bl('body'))}</p></Section>}
           {list('vocabulary').length > 0 && <Section title={L('ဝေါဟာရ', 'Vocabulary')}><Bullets items={list('vocabulary')} /></Section>}
           {list('questions').length > 0 && <Section title={L('မေးခွန်းများ', 'Questions')}><Bullets items={list('questions')} /></Section>}
           {list('activities').length > 0 && <Section title={L('လှုပ်ရှားမှုများ', 'Activities')}><Bullets items={list('activities')} /></Section>}
@@ -457,17 +446,9 @@ export function ContentDetail() {
         </Section>
       )}
 
-      <p className="rounded-lg bg-pastel-yellow/50 px-3 py-2 text-[11px] leading-relaxed text-ink-soft">
-        {item.publicationLane === AI_PUBLICATION_LANE
-          ? locale === 'mm' ? AI_DISCLOSURE.mm : AI_DISCLOSURE.en
-          : locale === 'mm'
-          ? item.reviewScope === 'education'
-            ? 'သုံးသပ်မှုမှတ်တမ်း — ဤသာမန်ပညာပေးအကြောင်းအရာသည် လက်ရှိယုံကြည်ရသော ကိုးကားချက်များနှင့် ကိုက်ညီပြီး ပညာရေး၊ မြန်မာဘာသာ၊ အထောက်အထားနှင့် ဘေးကင်းရေးသုံးသပ်မှု ပြီးစီးထားပါသည်။ တစ်ဦးချင်းဆေးဘက်ဆိုင်ရာ အကြံဉာဏ် မဟုတ်ပါ။ စိုးရိမ်စရာရှိပါက သက်ဆိုင်ရာ ကျန်းမာရေးပညာရှင်နှင့် တိုင်ပင်ပါ။'
-            : 'မှတ်ချက် — ဤအကြောင်းအရာသည် ယုံကြည်ရသော ကိုးကားချက်များအပေါ် အခြေခံထားသည့် အထွေထွေ မိဘလမ်းညွှန် ဖြစ်ပါသည်။ ဆေးဘက်ဆိုင်ရာ အကြံဉာဏ်အဖြစ် မယူဆသင့်ပါ။'
-          : item.reviewScope === 'education'
-            ? 'Review record: this general educational content aligns with current authoritative sources and has completed English, Myanmar, evidence and safety review. It is not individualized medical advice. Consult an appropriate health professional if concerned.'
-            : `General evidence-based parent guidance, not medical advice. Source: ${item.source}`}
-      </p>
+      <ContentReferences
+        sources={evidence?.allowed && Array.isArray(evidence.sources) ? evidence.sources : []}
+      />
     </div>
   );
 }

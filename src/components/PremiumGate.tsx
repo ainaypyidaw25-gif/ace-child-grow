@@ -42,7 +42,7 @@ export function PremiumGate({
           {locale === 'mm' ? 'အခမဲ့ စမ်းသုံးမည်' : 'Start free trial'}
         </Link>
         <p className="mt-3 text-center text-xs text-ink-soft">
-          {locale === 'mm' ? 'Premium — တစ်လ ၅,၉၀၀ ကျပ်မှ စတင်သည်' : 'Premium starts at 5,900 MMK/month'}
+          {locale === 'mm' ? 'Premium — တစ်လ ၆,၉၀၀ ကျပ်မှ စတင်သည်' : 'Premium starts at 6,900 MMK/month'}
         </p>
       </div>}
     </section>

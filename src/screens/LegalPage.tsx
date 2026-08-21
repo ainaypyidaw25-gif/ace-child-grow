@@ -4,7 +4,7 @@ import type { Locale } from '../domain/types';
 
 const APP_STORE_DISTRIBUTION = import.meta.env.VITE_DISTRIBUTION === 'app-store';
 
-type LegalPageProps = { kind: 'privacy' | 'account-deletion' | 'terms' | 'support' };
+type LegalPageProps = { kind: 'privacy' | 'account-deletion' | 'terms' | 'support' | 'content-policy' };
 
 const supportEmail = 'admin-ace@acegroup.com.mm';
 
@@ -15,6 +15,24 @@ const supportEmail = 'admin-ace@acegroup.com.mm';
 // regardless of the visitor's saved language choice.
 export function LegalPage({ kind }: LegalPageProps) {
   const { locale, setLocale } = useLocale();
+
+  if (kind === 'content-policy') {
+    return (
+      <PublicLegalShell title="Content Policy" locale={locale} setLocale={setLocale}>
+        {locale === 'mm' ? (
+          <>
+            <p>ACE Child Grow ရှိ အကြောင်းအရာများကို ယုံကြည်ရသော ကျန်းမာရေးနှင့် ကလေးဖွံ့ဖြိုးမှုဆိုင်ရာ ရင်းမြစ်များအပေါ် အခြေခံ၍ နည်းပညာအကူအညီဖြင့် ပြုစုထားပါသည်။</p>
+            <p>ဤအချက်အလက်များသည် အထွေထွေပညာပေးအတွက်သာဖြစ်ပြီး ဆေးဘက်ဆိုင်ရာ ရောဂါရှာဖွေခြင်း၊ ကုသခြင်း သို့မဟုတ် ကျွမ်းကျင်သူ၏ အကြံပြုချက်ကို အစားထိုးခြင်းမဟုတ်ပါ။ ကလေး၏ ကျန်းမာရေး သို့မဟုတ် ဖွံ့ဖြိုးမှုနှင့်ပတ်သက်၍ စိုးရိမ်မှုရှိပါက သက်ဆိုင်ရာကျွမ်းကျင်သူနှင့် တိုင်ပင်ပါ။</p>
+          </>
+        ) : (
+          <>
+            <p>ACE Child Grow content is prepared with technology assistance and is based on trusted health and child-development sources.</p>
+            <p>This information is for general education only. It does not replace medical diagnosis, treatment, or advice from a qualified professional. If you are concerned about a child&rsquo;s health or development, consult an appropriate professional.</p>
+          </>
+        )}
+      </PublicLegalShell>
+    );
+  }
 
   if (kind === 'support') {
     return (
