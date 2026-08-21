@@ -226,9 +226,26 @@ export const refreshPayment = action({
     }
     const config = getConfig();
     const response = await sdk(config).get({ orderId, nonce: crypto.randomUUID() });
-    const parsed = parseResponse(response, orderId, payment.amount);
-    await ctx.runMutation(internal.mmpayData.applyProviderUpdate, parsed);
-    return parsed;
+    try {
+      const parsed = parseResponse(response, orderId, payment.amount);
+      await ctx.runMutation(internal.mmpayData.applyProviderUpdate, parsed);
+      return parsed;
+    } catch (error) {
+      // MyanMyanPay's LIVE create endpoint can return a valid PENDING payment
+      // while its LIVE get endpoint briefly responds with "Order Not Found".
+      // The signed webhook remains authoritative, so keep the locally persisted
+      // payment pending instead of turning a transient provider inconsistency
+      // into a client-visible failure on every poll.
+      if (/order not found/i.test(providerError(error))) {
+        return {
+          orderId: payment.orderId,
+          amount: payment.amount,
+          currency: 'MMK' as const,
+          status: 'PENDING',
+        };
+      }
+      throw error;
+    }
   },
 });
 

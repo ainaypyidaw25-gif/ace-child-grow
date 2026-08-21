@@ -6,10 +6,10 @@ import {
 } from '../PaymentStatus';
 
 describe('MyanMyanPay QR countdown', () => {
-  it('starts at fifteen minutes and survives page reloads using the persisted creation time', () => {
+  it('uses a four-minute safety window and survives page reloads using the persisted creation time', () => {
     const createdAt = 1_000_000;
     expect(paymentQrRemainingMs(createdAt, createdAt)).toBe(MMQR_VALIDITY_MS);
-    expect(paymentQrRemainingMs(createdAt, createdAt + 5 * 60_000)).toBe(10 * 60_000);
+    expect(paymentQrRemainingMs(createdAt, createdAt + 60_000)).toBe(3 * 60_000);
   });
 
   it('never displays a negative remaining time', () => {
@@ -18,7 +18,7 @@ describe('MyanMyanPay QR countdown', () => {
   });
 
   it('formats the countdown as stable tabular minutes and seconds', () => {
-    expect(formatPaymentCountdown(15 * 60_000)).toBe('15:00');
+    expect(formatPaymentCountdown(4 * 60_000)).toBe('04:00');
     expect(formatPaymentCountdown(61_000)).toBe('01:01');
     expect(formatPaymentCountdown(1)).toBe('00:01');
     expect(formatPaymentCountdown(0)).toBe('00:00');

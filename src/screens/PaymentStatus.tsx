@@ -9,7 +9,10 @@ import { ConfirmDialog } from '../components/ConfirmDialog';
 type View = 'status' | 'success' | 'cancel';
 
 const TERMINAL = new Set(['SUCCESS', 'FAILED', 'REFUNDED', 'CANCELLED', 'EXPIRED']);
-export const MMQR_VALIDITY_MS = 15 * 60 * 1_000;
+// Production observations show the wallet rejecting MyanMyanPay MMQR payloads
+// at about five minutes. Hide the QR one minute earlier so a parent never sees
+// a code that can expire while the wallet is completing the scan.
+export const MMQR_VALIDITY_MS = 4 * 60 * 1_000;
 
 export function paymentQrRemainingMs(createdAt: number, now: number) {
   return Math.max(0, createdAt + MMQR_VALIDITY_MS - now);
@@ -54,7 +57,7 @@ export function PaymentStatus({ view = 'status' }: { view?: View }) {
     if (!payment || TERMINAL.has(payment.status)) return;
     const timer = window.setInterval(() => {
       void refresh({ orderId: payment.orderId }).catch(() => undefined);
-    }, 5_000);
+    }, 15_000);
     return () => window.clearInterval(timer);
   }, [payment, refresh]);
 
@@ -106,13 +109,14 @@ export function PaymentStatus({ view = 'status' }: { view?: View }) {
             <div className="rounded-2xl border border-pastel-yellow bg-pastel-yellow/30 px-4 py-3 text-center" role="timer" aria-live="polite">
               <p className="text-sm font-semibold text-ink-soft">{L('MMQR သက်တမ်းကုန်ရန် ကျန်ချိန်', 'MMQR expires in')}</p>
               <p className="mt-1 font-mono text-2xl font-bold tabular-nums text-state-red-deep">{formatPaymentCountdown(qrRemainingMs)}</p>
+              <p className="mt-1 text-xs font-semibold text-state-red-deep">{L('QR ဖန်တီးပြီး ချက်ချင်း scan လုပ်ပါ။', 'Scan immediately after generating the QR.')}</p>
             </div>
           )}
 
           {pending && qrCountdownExpired && (
             <div className="rounded-2xl border border-pastel-yellow bg-pastel-yellow/40 p-4 text-center text-ink" role="status">
-              <p className="font-bold">{L('ဤ MMQR ၏ ၁၅ မိနစ် အချိန်ကန့်သတ်ချက် ပြည့်သွားပါပြီ။', 'This MMQR has reached its 15-minute time limit.')}</p>
-              <p className="mt-2 text-sm text-ink-soft">{L('အခြေအနေကို ပြန်စစ်ပါ။ ငွေမပေးရသေးပါက ပယ်ဖျက်ပြီး QR အသစ်ဖန်တီးနိုင်ပါသည်။', 'Refresh the status. If it was not paid, cancel it and create a new QR.')}</p>
+              <p className="font-bold">{L('ဤ MMQR ကို wallet က လက်မခံနိုင်တော့ပါ။', 'This MMQR may no longer be accepted by the wallet.')}</p>
+              <p className="mt-2 text-sm text-ink-soft">{L('ငွေမပေးရသေးပါက ပယ်ဖျက်ပြီး QR အသစ်ဖန်တီးကာ ၄ မိနစ်အတွင်း scan လုပ်ပါ။', 'If it was not paid, cancel it, generate a new QR, and scan it within four minutes.')}</p>
             </div>
           )}
 
