@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import process from 'node:process';
 import { CONTENT_SEED } from '../seed';
+import { isRetiredMilestoneSlug } from '../../../convex/lib/contentRetirements';
 
 const BANNED_MYANMAR_FRAGMENTS = [
   'ကလ်း',
@@ -102,6 +103,10 @@ describe('Myanmar copy quality', () => {
 
     for (const [slug, titleMm] of expectedTitles) {
       const item = CONTENT_SEED.find((entry) => entry.slug === slug);
+      if (isRetiredMilestoneSlug(slug)) {
+        expect(item, slug + ' must remain retired from the seed').toBeUndefined();
+        continue;
+      }
       expect(item, slug + ' must remain in the seed').toBeDefined();
       expect(item?.titleMm, slug).toBe(titleMm);
       expect(item?.searchText, slug + ' searchText').toContain(titleMm.toLowerCase());
@@ -137,6 +142,10 @@ describe('Myanmar copy quality', () => {
 
     for (const [slug, titleMm] of expectedTitles) {
       const item = CONTENT_SEED.find((entry) => entry.slug === slug);
+      if (isRetiredMilestoneSlug(slug)) {
+        expect(item, slug + ' must remain retired from the seed').toBeUndefined();
+        continue;
+      }
       expect(item, slug + ' must remain in the seed').toBeDefined();
       expect(item?.titleMm, slug).toBe(titleMm);
       expect(item?.searchText, slug + ' searchText').toContain(titleMm.toLowerCase());

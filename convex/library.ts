@@ -29,6 +29,7 @@ import {
   publicationEvidenceForContent,
 } from './lib/publicationVisibility';
 import { activeAiParentReadableContent } from './lib/aiPublicationVisibility';
+import { isRetiredContentSlug } from './lib/contentRetirements';
 
 export { isPubliclyReadableStatus } from './lib/publicationVisibility';
 
@@ -264,6 +265,9 @@ export const attachUploadedMedia = mutation({
   returns: v.object({ ok: v.literal(true) }),
   handler: async (ctx, args) => {
     const userId = await requireContentEditor(ctx);
+    if (isRetiredContentSlug(args.contentSlug)) {
+      throw new Error('Retired content is immutable');
+    }
     const content = await ctx.db
       .query('libraryContent')
       .withIndex('by_slug', (q) => q.eq('slug', args.contentSlug))
@@ -340,6 +344,9 @@ export const approveMedia = mutation({
     const approval = await requireProfessionalPublisher(ctx);
     const media = await ctx.db.get(args.mediaId);
     if (!media || media.placeholder || (!media.storageId && !media.url)) throw new Error('Media asset not found');
+    if (isRetiredContentSlug(media.contentSlug)) {
+      throw new Error('Retired content is immutable');
+    }
     if (!media.rightsOwner?.trim() || !media.licenseType?.trim()) {
       throw new Error('Rights owner and license type are required');
     }
@@ -370,6 +377,7 @@ export const createStarterAnimationQueue = mutation({
     let created = 0;
     let existing = 0;
     for (const [sortOrder, contentSlug] of STARTER_ANIMATION_SLUGS.entries()) {
+      if (isRetiredContentSlug(contentSlug)) continue;
       const content = await ctx.db
         .query('libraryContent')
         .withIndex('by_slug', (q) => q.eq('slug', contentSlug))
@@ -576,6 +584,13 @@ export const importSeed = mutation({
     let updated = 0;
     let skippedApproved = 0;
     for (const it of items) {
+      // Fail closed at the server boundary as well as in local seed generation:
+      // a stale or hand-built client must never recreate or mutate an archived
+      // catalogue row. Reuse the existing skip counter to preserve the API.
+      if (isRetiredContentSlug(it.slug)) {
+        skippedApproved += 1;
+        continue;
+      }
       const existing = await ctx.db
         .query('libraryContent')
         .withIndex('by_slug', (qq) => qq.eq('slug', it.slug))
@@ -663,6 +678,9 @@ export const updateDraft = mutation({
     // creates a fresh review revision below, so the editor cannot reuse a
     // previous reviewer sign-off for changed text.
     const { userId, access } = await requireReviewEditor(ctx);
+    if (isRetiredContentSlug(args.slug)) {
+      throw new Error('Retired content is immutable');
+    }
     const item = await ctx.db
       .query('libraryContent')
       .withIndex('by_slug', (q) => q.eq('slug', args.slug))
@@ -769,6 +787,9 @@ export const setReview = mutation({
       .withIndex('by_slug', (qq) => qq.eq('slug', args.slug))
       .unique();
     if (!item) throw new Error('Not found');
+    if (isRetiredContentSlug(item.slug)) {
+      throw new Error('Retired content is immutable');
+    }
     const specialistReason = args.clinicalStatus === 'published'
       ? specialistReviewReason(item)
       : null;

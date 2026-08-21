@@ -13,11 +13,41 @@ vi.mock('@convex-dev/auth/server', async (importOriginal) => {
 import { list as listChildren, update as updateChild } from '../../../convex/children';
 import { importSeed, listByType, setReview as setLibraryReview, updateDraft } from '../../../convex/library';
 import { activity as reviewerActivity, listForContent as listContentReviews, saveDecision } from '../../../convex/contentReviews';
-import { forContent as evidenceForContent, setReview as setEvidenceReview } from '../../../convex/evidence';
+import {
+  forContent as evidenceForContent,
+  importLinks,
+  setReview as setEvidenceReview,
+} from '../../../convex/evidence';
 import { transition as transitionContent } from '../../../convex/content';
 import { listSessions, recordSession } from '../../../convex/milestones';
 import { complete as completeActivity, list as listActivities } from '../../../convex/activities';
 import { claimInvite, createInvite, setOwnDisplayName } from '../../../convex/admin';
+import { seedRunSkipsItem } from '../../../convex/seed';
+import {
+  BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_TARGET,
+  DUPLICATE_MILESTONE_SLUGS,
+  FLASH_CARDS_PRINTABLE_RETIREMENT_SLUG,
+  MOTOR_PSEUDO_MILESTONE_RETIREMENT_SLUGS,
+  NUTRITION_PSEUDO_MILESTONE_RETIREMENT_SLUGS,
+  PLAY_PSEUDO_MILESTONE_RETIREMENT_SLUGS,
+  REMAINING_PSEUDO_MILESTONE_RETIREMENT_SLUGS,
+  SLEEP_PSEUDO_MILESTONE_RETIREMENT_SLUGS,
+  SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_SLUGS,
+} from '../../../convex/lib/contentRetirements';
+
+const RETIRED_SERVER_GUARD_ITEMS = [
+  ...[
+    ...DUPLICATE_MILESTONE_SLUGS,
+    ...SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_SLUGS,
+    BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_TARGET.slug,
+    ...PLAY_PSEUDO_MILESTONE_RETIREMENT_SLUGS,
+    ...NUTRITION_PSEUDO_MILESTONE_RETIREMENT_SLUGS,
+    ...SLEEP_PSEUDO_MILESTONE_RETIREMENT_SLUGS,
+    ...MOTOR_PSEUDO_MILESTONE_RETIREMENT_SLUGS,
+    ...REMAINING_PSEUDO_MILESTONE_RETIREMENT_SLUGS,
+  ].map((slug) => ({ type: 'milestone', slug })),
+  { type: 'printable', slug: FLASH_CARDS_PRINTABLE_RETIREMENT_SLUG },
+] as const;
 
 type Row = Record<string, unknown> & { _id?: string };
 
@@ -209,6 +239,135 @@ describe('Convex registered handlers enforce authorization', () => {
     expect(context.db.patch).toHaveBeenCalledWith('content-1', expect.objectContaining({
       reviewRevision: 8, reviewerDisplayName: undefined, reviewScope: undefined,
     }));
+  });
+
+  it('the server seed boundary skips retired content before any catalogue or media write', async () => {
+    authState.userId = 'editor-1';
+    const context = ctx({
+      profile: { userId: 'editor-1', isStaff: true, staffRole: 'content_editor' },
+    });
+    const result = await handler(importSeed)(context, { items:
+      RETIRED_SERVER_GUARD_ITEMS.map(({ type, slug }) => ({
+        type,
+        slug,
+        titleMm: 'retired',
+        titleEn: 'retired',
+        tags: [],
+        source: 'stale client',
+        version: 1,
+        clinicalStatus: 'clinical_review',
+        data: {},
+        media: [{ kind: 'illustration' }],
+        searchText: 'retired',
+      })),
+    }) as Record<string, number>;
+
+    expect(RETIRED_SERVER_GUARD_ITEMS).toHaveLength(57);
+    expect(result).toEqual({ created: 0, updated: 0, skippedApproved: 57, total: 57 });
+    expect(context.db.query).not.toHaveBeenCalledWith('libraryContent');
+    expect(context.db.query).not.toHaveBeenCalledWith('libraryMedia');
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalledWith(
+      'libraryContent', expect.anything(),
+    );
+    expect(context.db.insert).not.toHaveBeenCalledWith(
+      'libraryMedia', expect.anything(),
+    );
+  });
+
+  it('the server seed boundary rejects retired slugs even when a stale client lies about type', async () => {
+    authState.userId = 'editor-1';
+    const context = ctx({
+      profile: { userId: 'editor-1', isStaff: true, staffRole: 'content_editor' },
+    });
+    const result = await handler(importSeed)(context, { items: [{
+      type: 'guide',
+      slug: REMAINING_PSEUDO_MILESTONE_RETIREMENT_SLUGS[0],
+      titleMm: 'retired',
+      titleEn: 'retired',
+      tags: [],
+      source: 'stale client with wrong type',
+      version: 1,
+      clinicalStatus: 'clinical_review',
+      data: {},
+      media: [{ kind: 'illustration' }],
+      searchText: 'retired',
+    }] }) as Record<string, number>;
+
+    expect(result).toEqual({ created: 0, updated: 0, skippedApproved: 1, total: 1 });
+    expect(context.db.query).not.toHaveBeenCalledWith('libraryContent');
+    expect(context.db.query).not.toHaveBeenCalledWith('libraryMedia');
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalledWith('libraryContent', expect.anything());
+    expect(context.db.insert).not.toHaveBeenCalledWith('libraryMedia', expect.anything());
+  });
+
+  it('the internal CLI seed path applies the same all-57 server guard', () => {
+    expect(RETIRED_SERVER_GUARD_ITEMS).toHaveLength(57);
+    for (const item of RETIRED_SERVER_GUARD_ITEMS) {
+      expect(seedRunSkipsItem(item), `${item.type}:${item.slug}`).toBe(true);
+    }
+    expect(seedRunSkipsItem({
+      type: 'guide',
+      slug: REMAINING_PSEUDO_MILESTONE_RETIREMENT_SLUGS[0],
+    })).toBe(true);
+    expect(seedRunSkipsItem({ type: 'guide', slug: 'gd_active_example' })).toBe(false);
+  });
+
+  it('the server evidence-link boundary skips retired keys without link writes', async () => {
+    authState.userId = 'editor-1';
+    const context = ctx({
+      profile: { userId: 'editor-1', isStaff: true, staffRole: 'content_editor' },
+      rows: { evidenceSources: [] },
+    });
+    const result = await handler(importLinks)(context, { links:
+      RETIRED_SERVER_GUARD_ITEMS.map(({ type, slug }, index) => ({
+        kind: type,
+        slug,
+        sourceIds: index % 2 === 0 ? ['stale-unknown-source'] : [],
+      })),
+    }) as Record<string, unknown>;
+
+    expect(result).toMatchObject({
+      created: 0,
+      updated: 0,
+      unchanged: 0,
+      skipped: 57,
+      failed: 0,
+      failedKeys: [],
+      invalidatedContentKeys: [],
+    });
+    expect(context.db.query).not.toHaveBeenCalledWith('evidenceLinks');
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalledWith(
+      'evidenceLinks', expect.anything(),
+    );
+  });
+
+  it('the evidence boundary also rejects a retired slug submitted under the wrong kind', async () => {
+    authState.userId = 'editor-1';
+    const context = ctx({
+      profile: { userId: 'editor-1', isStaff: true, staffRole: 'content_editor' },
+      rows: { evidenceSources: [] },
+    });
+    const result = await handler(importLinks)(context, { links: [{
+      kind: 'guide',
+      slug: REMAINING_PSEUDO_MILESTONE_RETIREMENT_SLUGS[0],
+      sourceIds: ['stale-unknown-source'],
+    }] }) as Record<string, unknown>;
+
+    expect(result).toMatchObject({
+      created: 0,
+      updated: 0,
+      unchanged: 0,
+      skipped: 1,
+      failed: 0,
+      failedKeys: [],
+      invalidatedContentKeys: [],
+    });
+    expect(context.db.query).not.toHaveBeenCalledWith('evidenceLinks');
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalledWith('evidenceLinks', expect.anything());
   });
 
   it('normal users cannot mutate evidence review state', async () => {

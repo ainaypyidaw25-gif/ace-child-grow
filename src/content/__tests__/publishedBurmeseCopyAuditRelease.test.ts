@@ -1,6 +1,10 @@
 import { describe, expect, it, vi } from 'vitest';
 import { createHash } from 'node:crypto';
 import seedData from '../../../convex/seedData.json';
+import { normalize } from '../types';
+import { MILESTONES } from '../seed/milestones';
+import { INFANT_CONTENT } from '../seed/infant';
+import { OLDER_AUTHORED_CONTENT } from '../seed/older';
 import {
   applyBurmeseCopyAuditRelease,
   preflightBurmeseCopyAuditRelease,
@@ -9,6 +13,7 @@ import {
   BURMESE_COPY_AUDIT_HELD_SLUGS,
   BURMESE_COPY_AUDIT_PAYLOAD_SHA256,
   BURMESE_COPY_AUDIT_RELEASE_ID,
+  BURMESE_COPY_AUDIT_SUPERSEDED_SLUGS,
   BURMESE_COPY_AUDIT_TARGETS,
 } from '../../../convex/lib/burmeseCopyAuditRelease';
 
@@ -53,6 +58,11 @@ function publishedRows(): Row[] {
   const desiredBySlug = new Map(
     (seedData as Array<Record<string, unknown> & { slug: string }>).map((item) => [item.slug, item]),
   );
+  for (const item of [...MILESTONES, ...INFANT_CONTENT, ...OLDER_AUTHORED_CONTENT]) {
+    if (!desiredBySlug.has(item.slug)) {
+      desiredBySlug.set(item.slug, normalize(item) as unknown as Record<string, unknown> & { slug: string });
+    }
+  }
   return BURMESE_COPY_AUDIT_TARGETS.map((target, index) => {
     const desired = desiredBySlug.get(target.slug);
     if (!desired) throw new Error(`Fixture seed missing: ${target.slug}`);
@@ -82,6 +92,10 @@ describe('published Burmese copy audit release', () => {
     expect(BURMESE_COPY_AUDIT_TARGETS).toHaveLength(25);
     expect(new Set(BURMESE_COPY_AUDIT_TARGETS.map((target) => target.slug)).size).toBe(25);
     expect(BURMESE_COPY_AUDIT_HELD_SLUGS).toEqual(['ms_birth_2m_sleep_1']);
+    expect(BURMESE_COPY_AUDIT_SUPERSEDED_SLUGS).toEqual([
+      'ms_4y_problem_solving_1',
+      'st_first_day_school',
+    ]);
     const releaseSlugs = new Set<string>(BURMESE_COPY_AUDIT_TARGETS.map((target) => target.slug));
     expect(releaseSlugs.has(BURMESE_COPY_AUDIT_HELD_SLUGS[0])).toBe(false);
     expect(BURMESE_COPY_AUDIT_TARGETS.map((target) => target.slug)).toEqual([

@@ -4,6 +4,7 @@ import {
   AGE_GROUP_KEYS, DOMAIN_KEYS, CONTENT_TYPES, LESSON_CATEGORIES,
   SPECIAL_NEEDS_KEYS, STORY_TYPES, PRINTABLE_TYPES, CLINICAL_STATUSES,
 } from '../taxonomy';
+import { FLASH_CARDS_PRINTABLE_RETIREMENT_SLUG } from '../../../convex/lib/contentRetirements';
 
 // Acceptance criteria for the content platform (mirrors the milestone brief):
 // every age/domain has content, no orphan records, no duplicate IDs, everything
@@ -131,7 +132,12 @@ describe('content library integrity', () => {
 
   it('every printable type is present', () => {
     const types = new Set(byType('printable').map((p) => p.category));
-    for (const t of PRINTABLE_TYPES) expect(types, `printable ${t}`).toContain(t);
+    for (const t of PRINTABLE_TYPES.filter((type) => type !== 'flash_cards')) {
+      expect(types, `printable ${t}`).toContain(t);
+    }
+    expect(types).not.toContain('flash_cards');
+    expect(CONTENT_SEED.some((item) => item.slug === FLASH_CARDS_PRINTABLE_RETIREMENT_SLUG))
+      .toBe(false);
   });
 
   it('activities carry the required structured fields', () => {

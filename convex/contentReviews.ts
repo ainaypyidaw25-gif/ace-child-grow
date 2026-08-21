@@ -3,6 +3,7 @@ import { mutation, query } from './_generated/server';
 import type { Id } from './_generated/dataModel';
 import { logAudit } from './audit';
 import { getStaffAccess, requireUser, type StaffRole } from './lib/auth';
+import { isRetiredContentSlug } from './lib/contentRetirements';
 import { reviewRefusal, type ReviewDimension } from './lib/reviewPolicy';
 
 const dimensionValidator = v.union(
@@ -280,6 +281,20 @@ export const saveDecision = mutation({
         { result: 'rejected' },
       );
       return { ok: false as const, code: refusal.code, message: refusal.message };
+    }
+
+    if (isRetiredContentSlug(args.contentSlug)) {
+      const message = 'This content was retired by an immutable release and cannot receive new review decisions.';
+      await logAudit(
+        ctx,
+        userId,
+        `contentReview.${args.dimension}.${args.decision}`,
+        'libraryContent',
+        content?._id,
+        `${args.contentSlug} · refused: retired_content`,
+        { result: 'rejected' },
+      );
+      return { ok: false as const, code: 'retired_content', message };
     }
 
     // reviewRefusal has already established these.

@@ -128,6 +128,7 @@ export const BURMESE_COPY_AUDIT_HELD_SLUGS = [
  * wording for corruption of that old release.
  */
 export const BURMESE_COPY_AUDIT_SUPERSEDED_SLUGS = [
+  'ms_4y_problem_solving_1',
   'st_first_day_school',
 ] as const;
 

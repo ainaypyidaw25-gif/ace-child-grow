@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { LocaleProvider } from '../../app/LocaleContext';
 import { MilestoneDemo } from '../../screens/MilestoneDemo';
@@ -34,7 +34,7 @@ vi.mock('../../app/AppState', () => ({
 }));
 
 describe('MilestoneDemo 10–12 month illustration navigation', () => {
-  it('changes to a unique exact-slug image with next and returns with previous', () => {
+  it('shows only the active exact-slug image after retirement filtering', () => {
     render(
       <MemoryRouter>
         <LocaleProvider>
@@ -48,16 +48,7 @@ describe('MilestoneDemo 10–12 month illustration navigation', () => {
     expect(firstSrc).toContain(`/${slugs[0]}.`);
     expect(firstSrc).toMatch(/\.[a-f0-9]{10}\.webp$/);
 
-    fireEvent.click(screen.getByText('လုပ်နိုင်ပြီ'));
-    fireEvent.click(screen.getByText('ရှေ့သို့'));
-
-    const secondImage = screen.getByTestId('milestone-illustration');
-    const secondSrc = secondImage.getAttribute('src') ?? '';
-    expect(secondSrc).toContain(`/${slugs[1]}.`);
-    expect(secondSrc).toMatch(/\.[a-f0-9]{10}\.webp$/);
-    expect(secondSrc).not.toBe(firstSrc);
-
-    fireEvent.click(screen.getByText('နောက်သို့'));
-    expect(screen.getByTestId('milestone-illustration')).toHaveAttribute('src', firstSrc);
+    expect(screen.getByText('1 / 1')).toBeInTheDocument();
+    expect(screen.queryByText(slugs[1])).not.toBeInTheDocument();
   });
 });

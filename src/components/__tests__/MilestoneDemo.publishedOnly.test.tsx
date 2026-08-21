@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { LocaleProvider } from '../../app/LocaleContext';
@@ -28,12 +28,33 @@ const unpublished = {
   data: { observeMm: 'ဤမေးခွန်းကို မပြရပါ။', observeEn: 'This question must not be shown.' },
 };
 
+const retired = {
+  _id: 'retired-item',
+  slug: 'ms_13_18m_safety_1',
+  domainKey: 'safety',
+  clinicalStatus: 'published',
+  titleMm: 'အမှတ်ပေးရာတွင် မပါရမည့် သင်ကြားရေးအချက်',
+  titleEn: 'Retired caregiver teaching prompt',
+  summaryMm: undefined,
+  summaryEn: undefined,
+  data: {
+    observeMm: 'ဤမေးခွန်းကို အမှတ်ပေးရာတွင် မပြရပါ။',
+    observeEn: 'This retired prompt must not be scored.',
+  },
+};
+
 let queryItems = [unpublished, published];
+let queryStaff = true;
 
 vi.mock('convex/react', () => ({
-  useQuery: () => ({ staff: true, items: queryItems }),
+  useQuery: () => ({ staff: queryStaff, items: queryItems }),
   useMutation: () => vi.fn(),
 }));
+
+beforeEach(() => {
+  queryItems = [unpublished, published];
+  queryStaff = true;
+});
 
 vi.mock('../../app/AppState', () => ({
   useAppState: () => ({
@@ -77,6 +98,22 @@ describe('MilestoneDemo published-only staff preview', () => {
 
     expect(screen.getByText('ဤအသက်အရွယ်နှင့် ကိုက်ညီသော ဖွံ့ဖြိုးမှုမှတ်တိုင် မတွေ့ပါ')).toBeInTheDocument();
     expect(screen.queryByText(/မွေးကင်းမှ ၁၂ လအထိ/)).not.toBeInTheDocument();
-    queryItems = [unpublished, published];
+  });
+
+  it('keeps centrally retired published rows out of parent checklist scoring', () => {
+    queryItems = [retired, published];
+    queryStaff = false;
+    render(
+      <MemoryRouter>
+        <LocaleProvider>
+          <MilestoneDemo />
+        </LocaleProvider>
+      </MemoryRouter>,
+    );
+
+    expect(screen.getByText('1 / 1')).toBeInTheDocument();
+    expect(screen.queryByText(retired.titleMm)).not.toBeInTheDocument();
+    expect(screen.queryByText(retired.data.observeMm)).not.toBeInTheDocument();
+    expect(screen.getByText(published.data.observeMm)).toBeInTheDocument();
   });
 });

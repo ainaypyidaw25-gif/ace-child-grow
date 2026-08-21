@@ -48,7 +48,7 @@ function publishedRows(): Row[] {
   return [
     {
       _id: 'correction-1',
-      slug: 'ms_5_6m_cognitive_2',
+      slug: 'ms_5_6m_gross_motor_2',
       clinicalStatus: 'published',
       source: LEGACY_PENDING_REVIEW_SOURCE,
       titleMm: 'old',
@@ -87,7 +87,7 @@ function libraryRows(): Row[] {
 
 function exactTargets() {
   return [
-    { slug: 'ms_5_6m_cognitive_2', expectedReviewRevision: 1 },
+    { slug: 'ms_5_6m_gross_motor_2', expectedReviewRevision: 1 },
     { slug: 'ms_birth_2m_emotional_1', expectedReviewRevision: 4 },
     { slug: 'ms_birth_2m_gross_motor_1', expectedReviewRevision: 1 },
   ];
@@ -114,7 +114,7 @@ describe('published evidence/safety release', () => {
 
     expect(result.releaseApplied).toBe(false);
     expect(result.published).toEqual([
-      expect.objectContaining({ slug: 'ms_5_6m_cognitive_2', action: 'correction_to_review' }),
+      expect.objectContaining({ slug: 'ms_5_6m_gross_motor_2', action: 'correction_to_review' }),
       expect.objectContaining({ slug: 'ms_birth_2m_emotional_1', action: 'specialist_to_review' }),
       expect.objectContaining({ slug: 'ms_birth_2m_gross_motor_1', action: 'metadata_only' }),
     ]);
