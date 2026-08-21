@@ -359,20 +359,20 @@ export const SAFETY_RULE_SOURCES: Record<string, string[]> = {
   sudden_weakness: ['cdc-afm-signs-2024'],
   serious_injury: ['aap-drowning-2021', 'nhs-child-accident-2025', 'hc-child-ems-2026'],
   severe_dehydration: ['who-imci-chart-2014', 'who-imci-sick-young-infant-2019', 'hc-child-ems-2026', 'tb-nelson-22e-2024'],
-  loss_of_acquired_skills: ['aap-surveillance-2020', 'cdc-autism-signs-2024', 'aap-asd-2020'],
+  loss_of_acquired_skills: ['aap-surveillance-2020', 'cdc-milestones-2026'],
   /** The standing skill-loss question asked alongside every milestone check. */
-  skill_loss_question: ['aap-surveillance-2020', 'aap-asd-2020', 'cdc-monitoring-screening-2026'],
+  skill_loss_question: ['aap-surveillance-2020', 'cdc-milestones-2026'],
   /** The fixed emergency wording shown when any urgent rule fires. */
   emergency_message: ['nhs-child-accident-2025', 'hc-child-ems-2026', 'who-imci-chart-2014', 'who-imci-sick-young-infant-2019'],
 };
 
 /** References behind each Hope Center (awareness) topic. */
 export const HOPE_TOPIC_SOURCES: Record<string, string[]> = {
-  'autism-spectrum': ['aap-asd-2020', 'cdc-autism-signs-2024', 'nice-cg128-autism-2011', 'jr-mchat-rf-2014'],
+  'autism-spectrum': ['aap-asd-2020', 'cdc-autism-signs-2024'],
   'speech-language-delay': ['asha-late-language-emergence', 'tb-paul-language-6e-2024', 'nhs-learn-to-talk-2023'],
   adhd: ['nice-ng87-adhd-2018', 'tb-dbp-5e-2022'],
   'hearing-loss': ['cdc-hearing-treatment-2024', 'asha-language-communication-dhh', 'tb-nelson-22e-2024', 'who-unicef-developmental-disabilities-2023'],
-  'cerebral-palsy': ['nice-ng62-cerebral-palsy-2017', 'nhs-cerebral-palsy-symptoms-2023', 'nhs-cerebral-palsy-treatment-2023', 'tb-campbell-pt-6e-2022'],
+  'cerebral-palsy': ['nice-ng62-cerebral-palsy-2017'],
 };
 
 // ---------------------------------------------------------------------------

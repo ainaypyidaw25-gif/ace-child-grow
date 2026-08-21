@@ -40,6 +40,7 @@ import {
   evidenceImportReviewPolicy,
 } from './lib/evidenceImportPolicy';
 import { unprotectedCitationGapKeys } from './lib/evidenceImportSafety';
+import { isInherentPublicLinkCasTarget } from './lib/inherentPublicLinkCasData';
 
 const REVIEW_STATUSES = [
   'evidence_required',
@@ -734,11 +735,13 @@ async function applyLinks(
   const userId = actorId;
   const now = Date.now();
   let skipped = 0;
-  // Historical production links remain preserved by the exact retirement
-  // mutation, but stale clients may not recreate or mutate active edges for a
-  // retired item. Filter before validation and before any link write.
+  // Historical production links remain preserved by exact releases. Stale or
+  // generic clients may neither recreate retired edges nor mutate the four
+  // inherently public rows reserved for their bounded atomic CAS. Filter
+  // before validation and before any link write.
   const activeLinks = links.filter((link) => {
-    if (!isRetiredContentSlug(link.slug)) return true;
+    if (!isRetiredContentSlug(link.slug)
+      && !isInherentPublicLinkCasTarget(link.kind, link.slug)) return true;
     skipped += 1;
     return false;
   });
