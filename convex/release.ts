@@ -169,3 +169,43 @@ export const approvalStatus = internalQuery({
     };
   },
 });
+
+/** One-time, idempotent production pricing release for the 2026-08-21 launch. */
+export const setPremiumYearlyPrice20260821 = internalMutation({
+  args: {},
+  returns: v.object({ previousAmount: v.number(), amount: v.number(), changed: v.boolean() }),
+  handler: async (ctx) => {
+    const staff = await ctx.db
+      .query('parentProfiles')
+      .withIndex('by_is_staff', (q) => q.eq('isStaff', true))
+      .take(20);
+    const ownerMatches = staff.filter((row) =>
+      (row.staffRole ?? 'owner') === 'owner' && row.staffQualification === OWNER_QUALIFICATION
+    );
+    if (ownerMatches.length !== 1) {
+      throw new Error(`Expected exactly one qualified owner; found ${ownerMatches.length}`);
+    }
+    const owner = ownerMatches[0];
+    const plan = await ctx.db
+      .query('subscriptionPlans')
+      .withIndex('by_plan_key_interval', (q) => q.eq('planKey', 'premium').eq('interval', 'year'))
+      .unique();
+    if (!plan) throw new Error('Premium yearly plan not found');
+    if (plan.amount !== 59_000 && plan.amount !== 69_000) {
+      throw new Error(`Unexpected Premium yearly amount: ${plan.amount}`);
+    }
+    if (plan.amount === 69_000) {
+      return { previousAmount: plan.amount, amount: plan.amount, changed: false };
+    }
+    await ctx.db.patch(plan._id, { amount: 69_000, updatedAt: Date.now() });
+    await logAudit(
+      ctx,
+      owner.userId,
+      'billing.plan.priceRelease',
+      'subscriptionPlans',
+      plan._id,
+      'Premium Yearly: 59,000 MMK → 69,000 MMK',
+    );
+    return { previousAmount: plan.amount, amount: 69_000, changed: true };
+  },
+});

@@ -21,7 +21,7 @@ falls back to Free automatically.
 ## Pricing
 
 - Premium monthly: 6,900 MMK
-- Premium yearly: 59,000 MMK
+- Premium yearly: 69,000 MMK
 - Family monthly: 9,900 MMK
 - Family yearly: 99,000 MMK
 

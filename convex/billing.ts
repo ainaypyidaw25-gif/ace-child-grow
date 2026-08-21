@@ -266,7 +266,7 @@ export const installRecommendedPlans = mutation({
     const now = Date.now();
     const templates = [
       { planKey: 'premium' as const, interval: 'month' as const, amount: 6_900, sortOrder: 1, nameMm: 'Premium လစဉ်', nameEn: 'Premium Monthly' },
-      { planKey: 'premium' as const, interval: 'year' as const, amount: 59_000, sortOrder: 2, nameMm: 'Premium နှစ်စဉ်', nameEn: 'Premium Yearly' },
+      { planKey: 'premium' as const, interval: 'year' as const, amount: 69_000, sortOrder: 2, nameMm: 'Premium နှစ်စဉ်', nameEn: 'Premium Yearly' },
       { planKey: 'family' as const, interval: 'month' as const, amount: 9_900, sortOrder: 3, nameMm: 'Family လစဉ်', nameEn: 'Family Monthly' },
       { planKey: 'family' as const, interval: 'year' as const, amount: 99_000, sortOrder: 4, nameMm: 'Family နှစ်စဉ်', nameEn: 'Family Yearly' },
     ];
