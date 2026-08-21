@@ -55,9 +55,8 @@ describe('clinically sourced content corrections', () => {
     expect(home[0].en).toContain("agreed with your child’s physiotherapist");
     expect(home[1].en).toContain('continue safe play and physical activity');
     expect(JSON.stringify(home)).not.toContain('avoid strengthening exercises');
-    expect(sourcesForContent('sn_cerebral_palsy', 'special_need')).toContain(
-      'nhs-cerebral-palsy-treatment-2023',
-    );
+    expect(sourcesForContent('sn_cerebral_palsy', 'special_need'))
+      .toEqual(['nice-ng62-cerebral-palsy-2017']);
   });
 
   it('supports early dyslexia risk identification without waiting for school failure', () => {
@@ -533,7 +532,7 @@ describe('clinically sourced content corrections', () => {
 
   it('maps each changed clinical claim to its direct topic source', () => {
     expect(sourcesForContent('sn_cerebral_palsy', 'special_need'))
-      .toContain('nhs-cerebral-palsy-symptoms-2023');
+      .toEqual(['nice-ng62-cerebral-palsy-2017']);
     expect(sourcesForContent('sn_hearing_loss', 'special_need'))
       .toEqual(expect.arrayContaining(['cdc-ehdi-toolkit-2024', 'cdc-hearing-treatment-2024']));
     expect(sourcesForContent('sn_learning_disability', 'special_need'))

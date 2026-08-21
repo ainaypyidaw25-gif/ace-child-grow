@@ -296,7 +296,10 @@ export const EXPLICIT_CONTENT_SOURCES: Record<string, string[]> = {
   sn_speech_delay: ['cdc-milestones-2026', 'asha-late-language-emergence', 'tb-paul-language-6e-2024', 'nhs-learn-to-talk-2023'],
   sn_adhd: ['aap-adhd-guideline-2019', 'cdc-adhd-clinical-care-2026', 'nice-ng87-adhd-2018', 'tb-dbp-5e-2022'],
   sn_down_syndrome: ['aap-down-syndrome-supervision-2022', 'tb-nelson-22e-2024', 'who-unicef-developmental-disabilities-2023', 'tb-dbp-5e-2022'],
-  sn_cerebral_palsy: ['nice-ng62-cerebral-palsy-2017', 'nhs-cerebral-palsy-symptoms-2023', 'nhs-cerebral-palsy-treatment-2023', 'tb-campbell-pt-6e-2022'],
+  // NICE NG62 directly supports the recognition, referral, multidisciplinary
+  // care and swallowing claims. The two NHS pages are publisher-overdue and
+  // absent from Production; textbook catalogue pages are not claim-direct.
+  sn_cerebral_palsy: ['nice-ng62-cerebral-palsy-2017'],
   sn_hearing_loss: ['cdc-ehdi-toolkit-2024', 'cdc-hearing-treatment-2024', 'tb-nelson-22e-2024', 'asha-language-communication-dhh', 'who-unicef-developmental-disabilities-2023'],
   sn_visual_impairment: ['aap-visual-system-assessment-2016', 'aap-visual-system-procedures-2016', 'tb-nelson-22e-2024', 'who-unicef-developmental-disabilities-2023'],
   sn_global_developmental_delay: ['aap-gdd-genetic-evaluation-2025', 'aap-gdd-evaluation-2014', 'aap-surveillance-2020', 'tb-dbp-5e-2022', 'who-unicef-developmental-disabilities-2023', 'tb-bayley-4-2019', 'nice-ng72-preterm-2017', 'tb-ccitsn-3e-2004'],
