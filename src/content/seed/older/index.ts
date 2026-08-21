@@ -37,6 +37,20 @@ const GUIDE_SAFETY: Record<string, Bilingual> = {
   play: b('အသက်အရွယ်သင့် ကစားစရာကိုသာ သုံးပြီး အစိတ်အပိုင်းငယ်များ မရှိကြောင်း စစ်ပါ။', 'Use age-appropriate toys and check for detachable small parts.'),
 };
 
+const UNDER_FOUR_CHOKING_GUIDE_BANDS = new Set([
+  '13_18m',
+  '19_24m',
+  '2y',
+  '2_5y',
+  '3y',
+  '3_5y',
+]);
+
+const UNDER_FOUR_NUTRITION_SAFETY = b(
+  'အစာတစ်ဆို့ခြင်း အန္တရာယ်သည် အသက် ၄ နှစ်အောက်အထိ ဆက်ရှိနိုင်ပါသည်။ စပျစ်သီးနှင့် ချယ်ရီခရမ်းချဉ်သီးများကို အလျားလိုက် လေးစိတ်ခွဲပါ။ ဝက်အူချောင်းကို အလျားလိုက်ခွဲပြီး အပိုင်းငယ်များ ဖြတ်ပါ။ အခွံမာသီးအလုံးလိုက်၊ ပြောင်းဖူးပေါက်ပေါက်၊ မာကျောသော သကြားလုံး၊ အစေ့အဆန်နှင့် မုန်လာဥနီအစိမ်းတုံးများ မပေးပါနှင့်။ ကလေးကို မတ်မတ်ထိုင်၍ စားစေပြီး လမ်းလျှောက်ရင်း၊ ပြေးရင်း သို့မဟုတ် ရွေ့လျားနေသောကားထဲတွင် မစားပါစေနှင့်။ စားနေစဉ် လူကြီးက အနီးတွင် အမြဲရှိပါ။',
+  'Choking remains a risk for children under 4. Quarter grapes and cherry tomatoes lengthways. Split sausages lengthways, then cut them into small pieces. Do not offer whole nuts, popcorn, hard sweets, seeds, or chunks of raw carrot. Have the child sit upright to eat; do not let them eat while walking, running, or riding in a moving vehicle. An adult should always stay nearby while the child eats.',
+);
+
 const GUIDE_SOURCES: Record<string, string[]> = {
   nutrition: ['tb-bright-futures-4e-2017', 'tb-caring-birth-to-5-8e-2024', 'who-growth-standards-2006', 'who-child-growth-standards-qa-2025'],
   sleep: ['who-pa-sleep-under5-2019', 'jr-aasm-bedtime-2006', 'jr-lecuelle-behavioral-insomnia-review-2024', 'tb-caring-birth-to-5-8e-2024'],
@@ -256,6 +270,9 @@ for (const band of bands) {
         sourceId !== 'who-growth-standards-2006'
         && sourceId !== 'who-child-growth-standards-qa-2025');
     }
+    if (domain === 'nutrition' && UNDER_FOUR_CHOKING_GUIDE_BANDS.has(band.key)) {
+      guideSources.push('hc-choking-prevention-2026');
+    }
     if (domain === 'sleep' && band.key === '5y') {
       guideSources = guideSources.filter((sourceId) => sourceId !== 'jr-aasm-bedtime-2006');
     }
@@ -269,7 +286,9 @@ for (const band of bands) {
       dailyActivities: [daily],
       weeklyActivities: [editorial.weekly],
       indoor: [daily], outdoor: domain === 'safety' || domain === 'play' ? [daily] : [],
-      safety: GUIDE_SAFETY[domain] ?? GUIDE_SAFETY.daily_routine,
+      safety: domain === 'nutrition' && UNDER_FOUR_CHOKING_GUIDE_BANDS.has(band.key)
+        ? UNDER_FOUR_NUTRITION_SAFETY
+        : GUIDE_SAFETY[domain] ?? GUIDE_SAFETY.daily_routine,
       parentTips: [editorial.tip],
       faq: [editorial.faq],
       redFlags: [editorial.redFlag],

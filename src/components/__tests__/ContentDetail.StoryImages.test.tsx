@@ -81,6 +81,7 @@ describe('ContentDetail published story illustrations', () => {
       const myanmarView = renderStory(slug);
 
       expect(screen.getByRole('heading', { name: titleMm })).toBeVisible();
+      expect(screen.getByTestId('story-use-note')).toHaveTextContent(/ဘာသာစကား/);
       expect(screen.getByTestId('story-illustration')).toHaveAttribute('src', asset);
       expect(screen.getByTestId('story-illustration')).toHaveAttribute('alt', titleMm);
       expect(document.querySelector('img[src="/legacy-shared-story.webp"]')).toBeNull();
@@ -90,6 +91,7 @@ describe('ContentDetail published story illustrations', () => {
       renderStory(slug);
 
       expect(screen.getByRole('heading', { name: titleEn })).toBeVisible();
+      expect(screen.getByTestId('story-use-note')).toHaveTextContent(/learning and entertainment/i);
       expect(screen.getByTestId('story-illustration')).toHaveAttribute('src', asset);
       expect(screen.getByTestId('story-illustration')).toHaveAttribute('alt', titleEn);
     },

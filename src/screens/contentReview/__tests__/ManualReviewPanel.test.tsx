@@ -7,13 +7,14 @@ vi.mock('../../../app/LocaleContext', () => ({
 }));
 
 describe('ManualReviewPanel', () => {
-  it('renders the 13 unresolved Batch 4 findings as review prompts', () => {
+  it('renders the 13 accepted Batch 4 findings with their exact resolution mapping', () => {
     render(<ManualReviewPanel onSearchContent={() => undefined} />);
 
-    expect(screen.getByText('မပြီးသေး 13 ခု')).toBeInTheDocument();
+    expect(screen.getByText('အတည်ပြု၍ ဖြေရှင်းပြီး 13 ခု')).toBeInTheDocument();
     expect(screen.getByTestId('manual-review-78')).toBeInTheDocument();
     expect(screen.getByTestId('manual-review-90')).toBeInTheDocument();
-    expect(screen.getByText(/အတည်ပြုချက်၊ ဆေးဘက်ဆိုင်ရာ ခွင့်ပြုချက်/)).toBeInTheDocument();
+    expect(screen.getByTestId('manual-review-resolution-78')).toBeInTheDocument();
+    expect(screen.getByText(/ဆေးဘက်ဆိုင်ရာ credential/)).toBeInTheDocument();
   });
 
   it('searches the manual queue and hands the related query to the normal content search', () => {

@@ -78,6 +78,7 @@ describe('MilestoneDemo published-only staff preview', () => {
     );
 
     expect(screen.getByText('1 / 1')).toBeInTheDocument();
+    expect(screen.getByTestId('milestone-use-note')).toHaveTextContent(/ရောဂါဖော်ထုတ်ချက် မဟုတ်/);
     expect(screen.queryByText(unpublished.titleMm)).not.toBeInTheDocument();
     expect(screen.queryByText(unpublished.data.observeMm)).not.toBeInTheDocument();
     expect(screen.getByTestId('milestone-illustration')).toHaveAttribute(

@@ -17,11 +17,10 @@ export type ReviewerManualQueueItem = {
 const SOURCE = 'ACE-clinical-review-sheet-all-3.pdf / ACE-clinical-review-sheet-all.html';
 
 /**
- * Batch 4 report items 78–90 do not identify an exact content record. They are
- * shown to staff as unresolved review prompts only — never as content, an
- * assignment, a review decision, or an approval. A reviewer must first find
- * the exact target record(s), verify the evidence and then use the normal
- * revision-bound review workflow.
+ * Batch 4 report items 78–90 did not identify exact content records. This list
+ * preserves the original prompts for audit. Owner-authorized implementation
+ * mappings live in reviewerManualResolutions.ts; those mappings are not
+ * clinical credentials, evidence-source approvals, or publication decisions.
  */
 export const REVIEWER_MANUAL_QUEUE: ReviewerManualQueueItem[] = [
   {

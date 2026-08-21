@@ -215,6 +215,15 @@ export function MilestoneDemo() {
         <div className="h-full rounded-full bg-sky transition-all" style={{ width: `${((step + 1) / items.length) * 100}%` }} />
       </div>
 
+      <p
+        className="rounded-xl border border-line bg-canvas p-3 text-sm leading-6 text-ink-soft"
+        data-testid="milestone-use-note"
+      >
+        {locale === 'mm'
+          ? 'ဤ milestone စာရင်းသည် အိမ်တွင် စောင့်ကြည့်ရန်သာ ဖြစ်ပြီး အောင်/ရှုံး သတ်မှတ်ချက် သို့မဟုတ် ရောဂါဖော်ထုတ်ချက် မဟုတ်ပါ။ ယခင်တတ်မြောက်ပြီးသော စွမ်းရည် ပျောက်ဆုံးခြင်း သို့မဟုတ် ဖွံ့ဖြိုးမှုအပေါ် စိုးရိမ်ချက်ရှိပါက ကျန်းမာရေးဝန်ထမ်းနှင့် အမြန်တိုင်ပင်ပါ။'
+          : 'This milestone list is for observation at home, not pass/fail criteria or a diagnosis. If your child loses a skill they previously had, or you are concerned about development, talk with a health worker promptly.'}
+      </p>
+
       <section className="rounded-[30px] border border-line bg-white p-6 shadow-card">
         {illustration && (
           <img

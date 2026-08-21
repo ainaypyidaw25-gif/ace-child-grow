@@ -294,6 +294,15 @@ export function ContentDetail() {
       {/* Milestone */}
       {item.type === 'milestone' && (
         <>
+          <div
+            className="rounded-card border border-line bg-canvas p-4 text-sm leading-6 text-ink-soft"
+            data-testid="milestone-use-note"
+          >
+            {L(
+              'အသက်အလိုက် milestone များသည် အိမ်တွင် စောင့်ကြည့်ရန် အချက်များသာ ဖြစ်ပြီး အောင်/ရှုံး သတ်မှတ်ချက် သို့မဟုတ် ရောဂါဖော်ထုတ်ချက် မဟုတ်ပါ။ ယခင်တတ်မြောက်ပြီးသော စွမ်းရည် ပျောက်ဆုံးခြင်း သို့မဟုတ် ဖွံ့ဖြိုးမှုအပေါ် စိုးရိမ်ချက်ရှိပါက ကျန်းမာရေးဝန်ထမ်းနှင့် အမြန်တိုင်ပင်ပါ။',
+              'Age-based milestones are observations for home use, not pass/fail criteria or a diagnosis. If a child loses a skill they previously had, or you are concerned about development, talk with a health worker promptly.',
+            )}
+          </div>
           <Section title={L('ဘာကို ကြည့်ရမလဲ', 'What to observe')}>
             <p className="text-sm text-ink-soft">{T(bl('observeMm') ?? { mm: String(d.observeMm ?? ''), en: String(d.observeEn ?? '') })}</p>
           </Section>
@@ -423,6 +432,15 @@ export function ContentDetail() {
       {/* Story */}
       {item.type === 'story' && (
         <>
+          <div
+            className="rounded-card border border-line bg-canvas p-4 text-sm leading-6 text-ink-soft"
+            data-testid="story-use-note"
+          >
+            {L(
+              'ဤပုံပြင်များသည် ကလေး၏ ဘာသာစကား၊ စိတ်ကူးဉာဏ်နှင့် မိဘ–ကလေး အတူတကွဆက်သွယ်မှုကို အားပေးရန် ဖန်တီးထားသော သင်ယူရေးနှင့် ဖျော်ဖြေရေး အကြောင်းအရာများ ဖြစ်သည်။',
+              'These stories are learning and entertainment content created to support language, imagination, and shared caregiver-child connection.',
+            )}
+          </div>
           {bl('body') && <Section title={L('ပုံပြင်', 'Story')}><p className="whitespace-pre-line text-sm text-ink-soft">{publicBody(bl('body'))}</p></Section>}
           {list('vocabulary').length > 0 && <Section title={L('ဝေါဟာရ', 'Vocabulary')}><Bullets items={list('vocabulary')} /></Section>}
           {list('questions').length > 0 && <Section title={L('မေးခွန်းများ', 'Questions')}><Bullets items={list('questions')} /></Section>}
@@ -434,6 +452,15 @@ export function ContentDetail() {
       {item.type === 'printable' && (
         <Section title={L('ပုံနှိပ်အသုံးပြုနိုင်သော စာရွက်', 'Printable resource')}>
           <p className="text-sm text-ink-soft">{locale === 'mm' ? item.summaryMm : item.summaryEn}</p>
+          <p
+            className="mt-3 rounded-xl border border-line bg-canvas p-3 text-sm leading-6 text-ink-soft"
+            data-testid="printable-use-note"
+          >
+            {L(
+              'ဤစစ်ဆေးလွှာနှင့် မှတ်တမ်းစာရွက်များသည် အိမ်တွင် စောင့်ကြည့်မှတ်သားရန်သာ ဖြစ်ပြီး ဆေးဘက်ဆိုင်ရာ ရောဂါဖော်ထုတ်ချက် မဟုတ်ပါ။ လိုအပ်ပါက ကျန်းမာရေးဝန်ထမ်းနှင့် တိုင်ပင်ရာတွင် အထောက်အကူပြု မှတ်တမ်းအဖြစ် အသုံးပြုပါ။',
+              'These checklists and logs are for observation at home and are not a medical diagnosis. Use them as supporting notes when talking with a health worker if needed.',
+            )}
+          </p>
           {printablePayload?.url ? (
             <a className="mt-3 inline-block text-sm text-sky-deep underline" href={printablePayload.url} download>
               {L('သုံးသပ်ပြီးသော ဖိုင်ကို ဒေါင်းလုဒ်လုပ်ရန်', 'Download reviewed printable')}
