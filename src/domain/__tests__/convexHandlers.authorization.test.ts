@@ -34,6 +34,9 @@ import {
   SLEEP_PSEUDO_MILESTONE_RETIREMENT_SLUGS,
   SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_SLUGS,
 } from '../../../convex/lib/contentRetirements';
+import {
+  INHERENT_PUBLIC_LINK_CAS_TARGETS,
+} from '../../../convex/lib/inherentPublicLinkCasData';
 
 const RETIRED_SERVER_GUARD_ITEMS = [
   ...[
@@ -361,6 +364,34 @@ describe('Convex registered handlers enforce authorization', () => {
       updated: 0,
       unchanged: 0,
       skipped: 1,
+      failed: 0,
+      failedKeys: [],
+      invalidatedContentKeys: [],
+    });
+    expect(context.db.query).not.toHaveBeenCalledWith('evidenceLinks');
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalledWith('evidenceLinks', expect.anything());
+  });
+
+  it('the evidence boundary reserves the four inherent-public rows for exact CAS only', async () => {
+    authState.userId = 'editor-1';
+    const context = ctx({
+      profile: { userId: 'editor-1', isStaff: true, staffRole: 'content_editor' },
+      rows: { evidenceSources: [] },
+    });
+    const result = await handler(importLinks)(context, { links:
+      INHERENT_PUBLIC_LINK_CAS_TARGETS.map(({ kind, slug }) => ({
+        kind,
+        slug,
+        sourceIds: ['stale-or-unknown-source'],
+      })),
+    }) as Record<string, unknown>;
+
+    expect(result).toMatchObject({
+      created: 0,
+      updated: 0,
+      unchanged: 0,
+      skipped: 4,
       failed: 0,
       failedKeys: [],
       invalidatedContentKeys: [],

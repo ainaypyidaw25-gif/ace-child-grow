@@ -179,6 +179,7 @@ describe('content links', () => {
       'aota-early-intervention',
       'asha-speech-sound-disorders',
       'asha-spoken-language-disorders',
+      'jr-mchat-rf-2014',
       'nhs-beds-4y-milestones-2024',
       'nice-ph40-social-emotional-2012',
       'tb-swaiman-7e-2025',
