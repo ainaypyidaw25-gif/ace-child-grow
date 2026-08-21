@@ -5,6 +5,7 @@ import {
   type ReviewerManualQueueGroup,
   type ReviewerManualQueueItem,
 } from '../../content/reviewerManualQueue';
+import { REVIEWER_MANUAL_RESOLUTION_BY_REPORT } from '../../content/reviewerManualResolutions';
 import { matchesSearchQuery } from '../../domain/search';
 
 const GROUP_LABELS: Record<ReviewerManualQueueGroup, { mm: string; en: string }> = {
@@ -26,16 +27,23 @@ export function filterReviewerManualQueue(
 ): ReviewerManualQueueItem[] {
   return items.filter((item) => (
     (group === 'all' || item.group === group)
-    && matchesSearchQuery(query, [
-      item.reportItem,
-      item.claimId,
-      item.titleMm,
-      item.titleEn,
-      item.problemMm,
-      item.problemEn,
-      item.suggestedMm,
-      item.searchQuery,
-    ])
+    && (() => {
+      const resolution = REVIEWER_MANUAL_RESOLUTION_BY_REPORT.get(item.reportItem);
+      return matchesSearchQuery(query, [
+        item.reportItem,
+        item.claimId,
+        item.titleMm,
+        item.titleEn,
+        item.problemMm,
+        item.problemEn,
+        item.suggestedMm,
+        item.searchQuery,
+        resolution?.resolutionMm,
+        resolution?.resolutionEn,
+        ...(resolution?.targets ?? []),
+        ...(resolution?.evidenceSourceIds ?? []),
+      ]);
+    })()
   ));
 }
 
@@ -64,20 +72,20 @@ export function ManualReviewPanel({ onSearchContent }: { onSearchContent: (query
       <header className="space-y-2">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h2 className="text-xl font-bold text-sky-deep">{L('လူကိုယ်တိုင် စစ်ဆေးရန် စာရင်း', 'Manual review list')}</h2>
-          <span className="rounded-pill bg-orange-100 px-3 py-1 text-sm font-semibold text-orange-800">
-            {L(`မပြီးသေး ${REVIEWER_MANUAL_QUEUE.length} ခု`, `${REVIEWER_MANUAL_QUEUE.length} unresolved`)}
+          <span className="rounded-pill bg-mint-soft px-3 py-1 text-sm font-semibold text-sky-deep">
+            {L(`အတည်ပြု၍ ဖြေရှင်းပြီး ${REVIEWER_MANUAL_QUEUE.length} ခု`, `${REVIEWER_MANUAL_QUEUE.length} accepted and resolved`)}
           </span>
         </div>
         <p className="max-w-4xl text-sm leading-7 text-ink-soft">
           {L(
-            'ဤစာရင်းသည် Batch 4 report ထဲမှ exact record မသတ်မှတ်ထားသော အချက်များ ဖြစ်သည်။ အောက်ကစာသားများကို အလိုအလျောက် မထည့်ထားပါ။ သက်ဆိုင်သော record နှင့် field ကို ရှာဖွေအတည်ပြုပြီး ပုံမှန် revision-bound review workflow ဖြင့်သာ ပြင်ဆင်ဆုံးဖြတ်ပါ။',
-            'These Batch 4 findings do not identify exact records. None of the suggested copy is applied automatically. Find and confirm the target record and field, then use the normal revision-bound review workflow.',
+            'Batch 4 report မှ အချက် ၁၃ ခုကို ၂၀၂၆-၀၈-၂၁ ရက်နေ့တွင် အကောင်အထည်ဖော်ရန် အတည်ပြုထားပြီး exact record/field သို့ ချိတ်ဆက်ဖြေရှင်းထားသည်။ အောက်တွင် target နှင့် evidence mapping ကို စစ်ဆေးနိုင်သည်။',
+            'All 13 Batch 4 findings were accepted for implementation on 2026-08-21 and resolved to exact record or UI targets. The target and evidence mapping remains visible below for audit.',
           )}
         </p>
-        <p className="rounded-xl border border-orange-300 bg-orange-50 px-3 py-2 text-xs font-semibold leading-5 text-orange-900">
+        <p className="rounded-xl border border-line bg-canvas px-3 py-2 text-xs font-semibold leading-5 text-ink-soft">
           {L(
-            '⚠ ဤနေရာရှိ စာသားသည် အတည်ပြုချက်၊ ဆေးဘက်ဆိုင်ရာ ခွင့်ပြုချက် သို့မဟုတ် ထုတ်ဝေရန် ဆုံးဖြတ်ချက် မဟုတ်ပါ။',
-            '⚠ Copy shown here is not an approval, clinical clearance, or publication decision.',
+            'ဤ owner decision သည် အကောင်အထည်ဖော်ရန် အတည်ပြုချက်သာ ဖြစ်ပြီး ဆေးဘက်ဆိုင်ရာ credential၊ evidence-source approval သို့မဟုတ် အလိုအလျောက် ထုတ်ဝေရန် ဆုံးဖြတ်ချက် မဟုတ်ပါ။ Source eligibility နှင့် revision-bound review gate များ ဆက်လက်သက်ရောက်သည်။',
+            'This owner decision authorizes implementation; it is not a clinical credential, evidence-source approval, or automatic publication decision. Source eligibility and revision-bound review gates still apply.',
           )}
         </p>
       </header>
@@ -106,7 +114,9 @@ export function ManualReviewPanel({ onSearchContent }: { onSearchContent: (query
       <p className="text-xs text-ink-soft">{L(`ပြထားသည် ${filtered.length} / ${REVIEWER_MANUAL_QUEUE.length}`, `Showing ${filtered.length} of ${REVIEWER_MANUAL_QUEUE.length}`)}</p>
 
       <div className="space-y-3">
-        {filtered.map((item) => (
+        {filtered.map((item) => {
+          const resolution = REVIEWER_MANUAL_RESOLUTION_BY_REPORT.get(item.reportItem);
+          return (
           <article key={item.reportItem} className="rounded-card border border-line bg-white p-4 shadow-card" data-testid={`manual-review-${item.reportItem}`}>
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div className="min-w-0 space-y-1">
@@ -118,6 +128,30 @@ export function ManualReviewPanel({ onSearchContent }: { onSearchContent: (query
                 {GROUP_LABELS[item.group][locale]}
               </span>
             </div>
+
+            {resolution && (
+              <div className="mt-3 rounded-xl border border-mint bg-mint-soft/40 p-3" data-testid={`manual-review-resolution-${item.reportItem}`}>
+                <p className="text-xs font-bold uppercase tracking-wide text-sky-deep">
+                  {L('အကောင်အထည်ဖော်ရန် အတည်ပြုပြီး · ၂၀၂၆-၀၈-၂၁', 'Accepted for implementation · 2026-08-21')}
+                </p>
+                <p className="mt-2 text-sm leading-6 text-ink">
+                  {locale === 'mm' ? resolution.resolutionMm : resolution.resolutionEn}
+                </p>
+                <details className="mt-2 text-xs text-ink-soft">
+                  <summary className="cursor-pointer font-semibold text-sky-deep">
+                    {L('Exact target နှင့် evidence mapping', 'Exact target and evidence mapping')}
+                  </summary>
+                  <ul className="mt-2 list-disc space-y-1 pl-5">
+                    {resolution.targets.map((target) => <li key={target}>{target}</li>)}
+                  </ul>
+                  {resolution.evidenceSourceIds.length > 0 && (
+                    <p className="mt-2 break-words">
+                      {L('Evidence source IDs', 'Evidence source IDs')}: {resolution.evidenceSourceIds.join(', ')}
+                    </p>
+                  )}
+                </details>
+              </div>
+            )}
 
             <div className="mt-3 flex flex-wrap gap-2">
               {item.suggestedDimensions.map((dimension) => (
@@ -142,7 +176,8 @@ export function ManualReviewPanel({ onSearchContent }: { onSearchContent: (query
               </button>
             </div>
           </article>
-        ))}
+          );
+        })}
       </div>
 
       {filtered.length === 0 && (

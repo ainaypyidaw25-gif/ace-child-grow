@@ -87,6 +87,7 @@ describe('ContentDetail published printable illustrations', () => {
       const myanmarView = renderPrintable(slug);
 
       expect(screen.getByRole('heading', { name: titleMm })).toBeVisible();
+      expect(screen.getByTestId('printable-use-note')).toHaveTextContent(/ရောဂါဖော်ထုတ်ချက် မဟုတ်/);
       expect(screen.getByTestId('printable-illustration')).toHaveAttribute('src', asset);
       expect(screen.getByTestId('printable-illustration')).toHaveAttribute('alt', titleMm);
       expect(screen.queryByRole('img', { name: titleMm })).toBeVisible();
@@ -97,6 +98,7 @@ describe('ContentDetail published printable illustrations', () => {
       renderPrintable(slug);
 
       expect(screen.getByRole('heading', { name: titleEn })).toBeVisible();
+      expect(screen.getByTestId('printable-use-note')).toHaveTextContent(/not a medical diagnosis/i);
       expect(screen.getByTestId('printable-illustration')).toHaveAttribute('src', asset);
       expect(screen.getByTestId('printable-illustration')).toHaveAttribute('alt', titleEn);
     },
