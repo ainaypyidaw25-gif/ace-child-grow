@@ -14,6 +14,7 @@ import type * as admin from "../admin.js";
 import type * as aiPublication from "../aiPublication.js";
 import type * as animationPlan from "../animationPlan.js";
 import type * as appointments from "../appointments.js";
+import type * as asqDoctorVisitsLinkCas from "../asqDoctorVisitsLinkCas.js";
 import type * as audit from "../audit.js";
 import type * as auth from "../auth.js";
 import type * as billing from "../billing.js";
@@ -35,6 +36,7 @@ import type * as lib_aiPublicationAuditArtifact from "../lib/aiPublicationAuditA
 import type * as lib_aiPublicationPolicy from "../lib/aiPublicationPolicy.js";
 import type * as lib_aiPublicationReleaseData from "../lib/aiPublicationReleaseData.js";
 import type * as lib_aiPublicationVisibility from "../lib/aiPublicationVisibility.js";
+import type * as lib_asqDoctorVisitsLinkCasData from "../lib/asqDoctorVisitsLinkCasData.js";
 import type * as lib_auth from "../lib/auth.js";
 import type * as lib_burmeseCopyAuditRelease from "../lib/burmeseCopyAuditRelease.js";
 import type * as lib_classificationImport from "../lib/classificationImport.js";
@@ -91,6 +93,7 @@ declare const fullApi: ApiFromModules<{
   aiPublication: typeof aiPublication;
   animationPlan: typeof animationPlan;
   appointments: typeof appointments;
+  asqDoctorVisitsLinkCas: typeof asqDoctorVisitsLinkCas;
   audit: typeof audit;
   auth: typeof auth;
   billing: typeof billing;
@@ -112,6 +115,7 @@ declare const fullApi: ApiFromModules<{
   "lib/aiPublicationPolicy": typeof lib_aiPublicationPolicy;
   "lib/aiPublicationReleaseData": typeof lib_aiPublicationReleaseData;
   "lib/aiPublicationVisibility": typeof lib_aiPublicationVisibility;
+  "lib/asqDoctorVisitsLinkCasData": typeof lib_asqDoctorVisitsLinkCasData;
   "lib/auth": typeof lib_auth;
   "lib/burmeseCopyAuditRelease": typeof lib_burmeseCopyAuditRelease;
   "lib/classificationImport": typeof lib_classificationImport;

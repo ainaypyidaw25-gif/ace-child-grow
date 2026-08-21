@@ -43,6 +43,9 @@ import {
 import {
   SWAIMAN_CEREBRAL_PALSY_TARGET,
 } from '../../../convex/lib/swaimanCerebralPalsyLinkCasData';
+import {
+  ASQ_DOCTOR_VISITS_TARGET,
+} from '../../../convex/lib/asqDoctorVisitsLinkCasData';
 
 const RETIRED_SERVER_GUARD_ITEMS = [
   ...[
@@ -445,6 +448,34 @@ describe('Convex registered handlers enforce authorization', () => {
       links: [{
         kind: SWAIMAN_CEREBRAL_PALSY_TARGET.kind,
         slug: SWAIMAN_CEREBRAL_PALSY_TARGET.slug,
+        sourceIds: ['stale-or-unknown-source'],
+      }],
+    }) as Record<string, unknown>;
+
+    expect(result).toMatchObject({
+      created: 0,
+      updated: 0,
+      unchanged: 0,
+      skipped: 1,
+      failed: 0,
+      failedKeys: [],
+      invalidatedContentKeys: [],
+    });
+    expect(context.db.query).not.toHaveBeenCalledWith('evidenceLinks');
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalledWith('evidenceLinks', expect.anything());
+  });
+
+  it('the evidence boundary reserves the doctor-visits row for its exact CAS only', async () => {
+    authState.userId = 'editor-1';
+    const context = ctx({
+      profile: { userId: 'editor-1', isStaff: true, staffRole: 'content_editor' },
+      rows: { evidenceSources: [] },
+    });
+    const result = await handler(importLinks)(context, {
+      links: [{
+        kind: ASQ_DOCTOR_VISITS_TARGET.kind,
+        slug: ASQ_DOCTOR_VISITS_TARGET.slug,
         sourceIds: ['stale-or-unknown-source'],
       }],
     }) as Record<string, unknown>;
