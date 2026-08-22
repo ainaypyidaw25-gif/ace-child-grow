@@ -18,8 +18,8 @@ describe('birth-to-2-month gross-motor correction proposal', () => {
     expect(item?.type).toBe('milestone');
     expect(item?.clinicalStatus).toBe('clinical_review');
     expect(item?.data).toMatchObject({
-      observeEn: 'Briefly lifts the head during awake, supervised tummy time?',
-      whyEn: 'Lifting the head during awake tummy time is an observation on the CDC 2-month checklist.',
+      observeEn: 'Holds the head up during awake, supervised tummy time?',
+      whyEn: 'Holding the head up during awake tummy time is an observation on the CDC 2-month checklist.',
       encouragementEn: expect.stringContaining('Place the baby on the back for sleep.'),
       evidenceSummary: expect.stringContaining('exact CDC 2-month checklist'),
       editorialStatus: 'reference_verified',
