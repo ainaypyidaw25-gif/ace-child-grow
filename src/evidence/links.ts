@@ -103,6 +103,12 @@ const brightFuturesMilestoneSlugs = new Set<string>(BRIGHT_FUTURES_MILESTONE_SLU
 
 /** Sources supporting a claim that is intentionally specific to one slug. */
 export const MILESTONE_SLUG_SOURCES: Record<string, string[]> = {
+  ms_birth_2m_nutrition_1: [
+    'who-iycf-model-chapter-2025',
+    'nice-ng194-postnatal-2021',
+    'nice-ng247-maternal-child-nutrition-2025',
+    'nice-ng75-faltering-growth-2017',
+  ],
   ms_7_9m_self_help_1: ['hc-choking-prevention-2026', 'asha-pediatric-feeding-swallowing'],
   ms_4y_self_help_3: ['aap-oral-health-2023'],
   ms_19_24m_sleep_1: ['jr-mindell-bedtime-routine-rct-2009'],
@@ -431,6 +437,11 @@ export function buildEvidenceLinks(): EvidenceLinkBuild {
       continue;
     }
     if (kind === 'milestone') {
+      const exactSources = MILESTONE_SLUG_SOURCES[item.slug];
+      if (item.slug === 'ms_birth_2m_nutrition_1') {
+        push(kind, item.slug, exactSources ?? []);
+        continue;
+      }
       const domain = item.domainKey ?? '';
       const domainIds = MILESTONE_DOMAIN_SOURCES[domain];
       if (!domainIds) {
@@ -443,7 +454,7 @@ export function buildEvidenceLinks(): EvidenceLinkBuild {
           (sourceId) => sourceId !== 'tb-bright-futures-4e-2017'
             || brightFuturesMilestoneSlugs.has(item.slug),
         ),
-        ...(MILESTONE_SLUG_SOURCES[item.slug] ?? []),
+        ...(exactSources ?? []),
       ]);
       continue;
     }

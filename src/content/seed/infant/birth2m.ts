@@ -146,23 +146,23 @@ const MILESTONES: SeedItem[] = [
     milestone('birth_2m', 'nutrition', 1, {
       title: b('ဆာလောင်မှု လက္ခဏာများ ပြသ၍ မကြာခဏ နို့စို့ခြင်း', 'Shows feeding cues and feeds often'),
       observe: b(
-        'ငိုမည့်အရင် ပါးစပ်လှုပ်ခြင်း၊ လက်ကို စုပ်ခြင်း၊ ရင်ဘတ်ဘက် လှည့်ရှာခြင်း ရှိပါသလား။ တစ်ရက်လျှင် အကြိမ် ၈ ကြိမ်ခန့် သို့မဟုတ် ထို့ထက်ပို၍ စို့ပါသလား။',
-        'Before crying, does your baby mouth, suck hands, or turn to root? Does she feed about 8 or more times in 24 hours?',
+        'ငိုမည့်အရင် ပါးစပ်လှုပ်ခြင်း၊ လက်ကို စုပ်ခြင်း၊ ရင်ဘတ်ဘက် လှည့်ရှာခြင်း ရှိပါသလား။ မွေးပြီး ပထမ ၂၄ နာရီ ကျော်လွန်ပြီးနောက်၊ မိခင်နို့တိုက်ကျွေးနေသော ပထမရက်သတ္တပတ်များတွင် ၂၄ နာရီအတွင်း အများအားဖြင့် အနည်းဆုံး ၈ ကြိမ် နို့စို့ပါသလား။',
+        'Before crying, does your baby mouth, suck hands, or turn to root? After the first day, if breastfeeding in the early weeks, does your baby usually feed at least 8 times in 24 hours?',
       ),
       why: b(
         'မွေးကင်းစကလေးများသည် အစာအိမ် သေးငယ်သဖြင့် မကြာခဏ စို့ရသည်။ ဆာလောင်လက္ခဏာအလိုက် တိုက်ကျွေးခြင်းက နို့ထွက်မှုကို ကူညီပြီး နှစ်ဦးစလုံးအတွက် လွယ်ကူစေသည်။',
         'Newborn stomachs are small, so feeds are frequent. Feeding on cue supports milk supply and makes feeding easier for both of you.',
       ),
       red: b(
-        'တစ်ရက်လျှင် အညစ်အကြေး/ဆီးသေး အရေအတွက် သိသိသာသာ လျော့နည်းခြင်း၊ နို့စို့ရန် အားနည်းခြင်း၊ ကိုယ်အလေးချိန် ပြန်မတက်ခြင်းကို ကျန်းမာရေးဝန်ထမ်းအား ချက်ချင်း ပြပါ။',
-        'Markedly fewer wet nappies, weak feeding, or not regaining birth weight should be checked by a health worker promptly.',
+        'ဆီးစိုသော အနှီး သိသိသာသာ လျော့နည်းခြင်း သို့မဟုတ် နို့စို့အားနည်းလာခြင်းရှိပါက ကျန်းမာရေးဝန်ထမ်းထံ အမြန်ဆုံး စစ်ဆေးမှုခံယူပါ။ မွေးပြီးနောက် အစောပိုင်းရက်များတွင် မွေးချိန်ကိုယ်အလေးချိန်၏ ၁၀% ကျော် လျော့ခြင်း သို့မဟုတ် အသက် ၃ ပတ်အထိ မွေးချိန်ကိုယ်အလေးချိန် ပြန်မရခြင်းကိုလည်း ကျန်းမာရေးဝန်ထမ်းက စစ်ဆေးသင့်ပါသည်။',
+        'If wet nappies are markedly fewer or feeding becomes weak, seek prompt assessment by a health worker. Weight loss of more than 10% of birth weight in the early days after birth, or not regaining birth weight by 3 weeks, should also be assessed by a health worker.',
       ),
       encouragement: b(
         'အသက် ၆ လအထိ မိခင်နို့တစ်မျိုးတည်း တိုက်ကျွေးရန် အကြံပြုထားသည်။ အခက်အခဲရှိပါက နို့တိုက်အကြံပေး အကူအညီ ရယူပါ။',
         'Exclusive breastfeeding is recommended for about the first 6 months; ask for breastfeeding counselling support if it is hard.',
       ),
     }),
-    'Feeding cues, frequency and exclusive breastfeeding for about the first six months follow WHO infant and young child feeding guidance, WHO breastfeeding counselling guidance and NHS breastfeeding advice for the first days.',
+    'WHO’s 2025 infant-feeding chapter supports early feeding cues, responsive breastfeeding and frequent breastfeeding in the early weeks, while noting that feeding can be less frequent in the first day or two. NICE NG194 supports feeding assessment including feed frequency, wet nappies and weight change. NICE NG247 supports reassessment after loss of more than 10% of birth weight in the early days; NICE NG75 directly supports clinical assessment at that threshold and review when birth weight has not been regained by 3 weeks.',
   ),
   kb(
     milestone('birth_2m', 'sleep', 1, {

@@ -44,6 +44,7 @@ import { isInherentPublicLinkCasTarget } from './lib/inherentPublicLinkCasData';
 import { isSwaimanSeizureLinkCasTarget } from './lib/swaimanSeizureLinkCasData';
 import { isSwaimanCerebralPalsyLinkCasTarget } from './lib/swaimanCerebralPalsyLinkCasData';
 import { isAsqDoctorVisitsLinkCasTarget } from './lib/asqDoctorVisitsLinkCasData';
+import { isBirth2mNutritionCasTarget } from './lib/birth2mNutritionCasData';
 import { isManualReviewEvidenceLinkCasTarget } from './lib/manualReviewEvidenceLinkCasData';
 import {
   isSwaimanSuddenWeaknessLinkCasTarget,
@@ -757,6 +758,7 @@ async function applyLinks(
       && !isSwaimanSeizureLinkCasTarget(link.kind, link.slug)
       && !isSwaimanCerebralPalsyLinkCasTarget(link.kind, link.slug)
       && !isAsqDoctorVisitsLinkCasTarget(link.kind, link.slug)
+      && !isBirth2mNutritionCasTarget(link.kind, link.slug)
       && !isManualReviewEvidenceLinkCasTarget(link.kind, link.slug)
       && !isSwaimanSuddenWeaknessLinkCasTarget(link.kind, link.slug)) return true;
     skipped += 1;
