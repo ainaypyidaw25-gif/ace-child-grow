@@ -35,6 +35,18 @@ export type SpecialistReviewReason =
   | 'bed_sharing_wording'
   | 'risk_wording';
 
+function specialistSearchText(value: unknown): string {
+  try {
+    return JSON.stringify(value, (_key, entry) =>
+      typeof entry === 'bigint' ? entry.toString() : entry) ?? '';
+  } catch {
+    // A malformed value must never crash the publication gate or the complete
+    // priority queue. Fail closed: uninspectable wording requires specialist
+    // review instead of being silently treated as ordinary education.
+    return 'seek emergency care immediately';
+  }
+}
+
 /** Specialist review is based on medical decision risk, not parent visibility. */
 export function specialistReviewReason(item: ReviewableContent): SpecialistReviewReason | null {
   // These seven records are routed only for their emergency-decision wording.
@@ -53,7 +65,7 @@ export function specialistReviewReason(item: ReviewableContent): SpecialistRevie
     : null;
   if (item.type === 'printable' && data?.availability === 'preview_only') return null;
 
-  const text = `${item.titleEn ?? ''} ${item.summaryEn ?? ''} ${JSON.stringify(item.data ?? {})}`
+  const text = `${item.titleEn ?? ''} ${item.summaryEn ?? ''} ${specialistSearchText(item.data ?? {})}`
     .toLowerCase()
     .replace(/\bnon[- ]diagnostic\b/g, '')
     .replace(/\bnot (?:a )?diagnostic (?:checklist|screen|tool)\b/g, '')

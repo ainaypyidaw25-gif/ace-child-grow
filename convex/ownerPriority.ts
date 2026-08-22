@@ -4,6 +4,7 @@ import type { QueryCtx } from './_generated/server';
 import type { Doc } from './_generated/dataModel';
 import { logAudit } from './audit';
 import { getStaffAccess, requireUser, type StaffAccess } from './lib/auth';
+import { specialistReviewReason } from './lib/contentReviewRequirements';
 import { isRetiredContentSlug } from './lib/contentRetirements';
 import {
   coerceOwnerPriority,
@@ -326,13 +327,22 @@ async function buildQueueResult(ctx: QueryCtx, level: string, role: string | und
         storedStatus === 'assigned' && !hasActiveAssignment ? 'review_requested' : storedStatus;
 
       const warnings: string[] = [];
+      // Class C is deliberately broader than the specialist publication gate:
+      // a guide with a neutral redFlags/referral block belongs in the high-risk
+      // work queue, but ordinary education may still be published with an
+      // education-scoped professional decision. Only the canonical specialist
+      // policy (diagnosis/treatment/emergency/bed-sharing or an explicit
+      // clinical requirement) may demand a clinical-scope publication.
+      const specialistReason = specialistReviewReason(item);
       if (workflowBlocker) warnings.push(workflowBlocker);
       if (item.clinicalStatus === 'published'
-        && result.riskClass === 'C'
+        && specialistReason !== null
         && (item.reviewScope !== 'clinical' || !approvedSet.has('clinical'))) {
         warnings.push('parent-visible high-risk wording lacks a current clinical-scope publication decision');
       }
-      if (item.reviewScope === 'education') warnings.push('education-scoped review covers general education only, not a specialist safety decision');
+      if (item.reviewScope === 'education' && specialistReason !== null) {
+        warnings.push('education-scoped review covers general education only, not a specialist safety decision');
+      }
       if (!linkedSlugs.has(item.slug)) warnings.push('no evidence link recorded on this deployment');
       if (result.provisional) warnings.push('classification is provisional (in-app rules) — not yet owner-confirmed');
       if (triageRequired) warnings.push('manual triage required: a manager must confirm the required review dimensions');
