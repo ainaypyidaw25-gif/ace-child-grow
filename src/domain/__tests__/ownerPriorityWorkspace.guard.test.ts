@@ -111,6 +111,13 @@ describe('role permissions on review areas', () => {
     expect(roleMayReview('language_reviewer', 'safety')).toBe(false);
     expect(roleMayReview('evidence_reviewer', 'clinical')).toBe(false);
   });
+  it('makes the queue child-development requirement recordable by qualified reviewers', () => {
+    expect(roleMayReview('clinical_reviewer', 'child_development')).toBe(true);
+    expect(roleMayReview('owner', 'child_development')).toBe(false);
+    expect(roleMayReview('content_editor', 'child_development')).toBe(false);
+    expect(roleMayReview('evidence_reviewer', 'child_development')).toBe(false);
+    expect(roleMayReview('language_reviewer', 'child_development')).toBe(false);
+  });
   it('only clinical reviewers hold the clinical dimension', () => {
     expect(roleMayReview('clinical_reviewer', 'clinical')).toBe(true);
     expect(roleMayReview('clinical_reviewer', 'safety')).toBe(true);

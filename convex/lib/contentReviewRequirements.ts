@@ -3,6 +3,7 @@ import type { ReviewDimension } from './reviewPolicy';
 export const EDUCATION_REVIEW_DIMENSIONS = [
   'english',
   'native_myanmar',
+  'child_development',
   'evidence',
   'safety',
 ] as const satisfies readonly ReviewDimension[];

@@ -78,7 +78,7 @@ export function mayRequestReviews(role: string | null | undefined): boolean {
 export function scopedDimensionsForRole(role: string | null | undefined): string[] {
   if (role === 'language_reviewer') return ['native_myanmar', 'english'];
   if (role === 'evidence_reviewer') return ['evidence'];
-  if (role === 'clinical_reviewer') return ['clinical', 'safety'];
+  if (role === 'clinical_reviewer') return ['child_development', 'clinical', 'safety'];
   return [];
 }
 

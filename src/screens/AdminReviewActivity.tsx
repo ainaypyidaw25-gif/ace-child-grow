@@ -11,12 +11,13 @@ import { useLocale } from '../app/LocaleContext';
 // returns { allowed:false } to anyone who is not owner/content_editor, so this
 // is not client-side hiding.
 
-type Dimension = 'english' | 'native_myanmar' | 'evidence' | 'safety' | 'clinical';
+type Dimension = 'english' | 'native_myanmar' | 'child_development' | 'evidence' | 'safety' | 'clinical';
 type Decision = 'in_review' | 'approved' | 'changes_requested' | 'not_applicable';
 
 const DIMENSION_LABELS: Record<Dimension, { mm: string; en: string }> = {
   english: { mm: 'အင်္ဂလိပ်စာ', en: 'English' },
   native_myanmar: { mm: 'မြန်မာစာ', en: 'Native Myanmar' },
+  child_development: { mm: 'ကလေးဖွံ့ဖြိုးမှု', en: 'Child development' },
   evidence: { mm: 'ကိုးကားချက်', en: 'Evidence' },
   safety: { mm: 'ဘေးကင်းလုံခြုံရေး', en: 'Safety' },
   clinical: { mm: 'အထူးကျွမ်းကျင်သူ ဘေးကင်းရေး', en: 'Specialist safety' },

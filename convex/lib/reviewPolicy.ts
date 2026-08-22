@@ -15,7 +15,13 @@
  * bundle can use it.
  */
 
-export type ReviewDimension = 'english' | 'native_myanmar' | 'evidence' | 'safety' | 'clinical';
+export type ReviewDimension =
+  | 'english'
+  | 'native_myanmar'
+  | 'child_development'
+  | 'evidence'
+  | 'safety'
+  | 'clinical';
 export type ReviewDecision = 'in_review' | 'approved' | 'changes_requested' | 'not_applicable';
 export type ReviewerRole =
   | 'owner'
@@ -36,6 +42,10 @@ export function roleMayReview(role: string | null | undefined, dimension: Review
   // qualified reviewer holds the reviewer role as well, and signs under that.
   if (role === 'review_manager') return false;
   if (dimension === 'clinical') return role === 'clinical_reviewer';
+  // Child-development sign-off is a professional decision. Until a dedicated
+  // child-development reviewer role exists, keep this least-privilege and use
+  // the already qualification-gated clinical reviewer role only.
+  if (dimension === 'child_development') return role === 'clinical_reviewer';
   if (dimension === 'safety') {
     return ['owner', 'content_editor', 'evidence_reviewer', 'clinical_reviewer'].includes(role);
   }
@@ -50,7 +60,10 @@ export function roleMayReview(role: string | null | undefined, dimension: Review
  * qualification. A safety decision is never represented as a personal endorsement.
  */
 export function approvalNeedsQualification(dimension: ReviewDimension): boolean {
-  return dimension === 'clinical' || dimension === 'safety' || dimension === 'evidence';
+  return dimension === 'clinical'
+    || dimension === 'safety'
+    || dimension === 'evidence'
+    || dimension === 'child_development';
 }
 
 export type ReviewRefusalCode =

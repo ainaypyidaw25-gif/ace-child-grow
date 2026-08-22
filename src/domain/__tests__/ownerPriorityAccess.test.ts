@@ -52,7 +52,8 @@ describe('queue access policy', () => {
 
   it('scopes reviewer roles to their own dimensions', () => {
     expect(scopedDimensionsForRole('language_reviewer')).toEqual(['native_myanmar', 'english']);
-    expect(scopedDimensionsForRole('clinical_reviewer')).toEqual(['clinical', 'safety']);
+    expect(scopedDimensionsForRole('evidence_reviewer')).toEqual(['evidence']);
+    expect(scopedDimensionsForRole('clinical_reviewer')).toEqual(['child_development', 'clinical', 'safety']);
     expect(scopedDimensionsForRole('owner')).toEqual([]);
   });
 
@@ -332,7 +333,7 @@ describe('review_manager powers and limits', () => {
 
   it('CANNOT record a decision in any review dimension', async () => {
     const { roleMayReview } = await import('../../../convex/lib/reviewPolicy');
-    for (const dimension of ['english', 'native_myanmar', 'evidence', 'safety', 'clinical'] as const) {
+    for (const dimension of ['english', 'native_myanmar', 'child_development', 'evidence', 'safety', 'clinical'] as const) {
       expect(roleMayReview('review_manager', dimension), `must not review ${dimension}`).toBe(false);
     }
   });
