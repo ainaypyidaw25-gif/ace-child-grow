@@ -61,4 +61,12 @@ describe('risk-scoped content review requirements', () => {
       requiredReviewDimensions: ['clinical'],
     })).toBe(true);
   });
+
+  it('handles int64-like values and fails closed for uninspectable data', () => {
+    expect(requiresSpecialistReview({ slug: 'ordinary-int64', data: { count: 12n } })).toBe(false);
+
+    const cyclic: Record<string, unknown> = {};
+    cyclic.self = cyclic;
+    expect(requiresSpecialistReview({ slug: 'malformed-data', data: cyclic })).toBe(true);
+  });
 });

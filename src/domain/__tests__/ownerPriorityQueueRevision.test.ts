@@ -15,7 +15,13 @@ type Review = {
 
 const handler = (queuesSelfTest as unknown as {
   _handler: (ctx: ReturnType<typeof context>, args: Record<string, never>) => Promise<{
-    rows: Array<{ priority: string; priorityReasons: string[]; warnings: string[]; latestDecisionAt: number | null }>;
+    rows: Array<{
+      priority: string;
+      priorityReasons: string[];
+      riskClass: string;
+      warnings: string[];
+      latestDecisionAt: number | null;
+    }>;
     counts: { p0Remaining: number };
   }>;
 })._handler;
@@ -132,15 +138,38 @@ describe('owner-priority queue duplicate review integrity', () => {
     ]);
   });
 
-  it('keeps the warning when a published Class C row lacks clinical scope', async () => {
+  it('keeps the warning when published specialist-risk wording lacks clinical scope', async () => {
     const result = await handler(context([], {
       clinicalStatus: 'published',
       reviewScope: 'education',
-      data: { note: { mm: 'အဖျား ရှိလျှင်', en: 'If fever appears' } },
+      data: { referral: { mm: 'အရေးပေါ်ကုသမှု ချက်ချင်း ရယူပါ', en: 'Seek emergency care immediately' } },
     }), {});
 
     expect(result.rows[0].warnings).toContain(
       'parent-visible high-risk wording lacks a current clinical-scope publication decision',
+    );
+    expect(result.rows[0].warnings).toContain(
+      'education-scoped review covers general education only, not a specialist safety decision',
+    );
+  });
+
+  it('does not mislabel an ordinary education-scoped Class C guide as a specialist decision', async () => {
+    const result = await handler(context([], {
+      type: 'guide',
+      clinicalStatus: 'published',
+      reviewScope: 'education',
+      data: {
+        redFlags: { mm: 'စိုးရိမ်ပါက ကျန်းမာရေးဝန်ထမ်းနှင့် တိုင်ပင်ပါ', en: 'Speak with a health worker if concerned' },
+        referral: { mm: 'လိုအပ်ပါက စစ်ဆေးမှုခံယူပါ', en: 'Arrange an assessment if needed' },
+      },
+    }), {});
+
+    expect(result.rows[0].riskClass).toBe('C');
+    expect(result.rows[0].warnings).not.toContain(
+      'parent-visible high-risk wording lacks a current clinical-scope publication decision',
+    );
+    expect(result.rows[0].warnings).not.toContain(
+      'education-scoped review covers general education only, not a specialist safety decision',
     );
   });
 });
