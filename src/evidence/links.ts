@@ -103,6 +103,10 @@ const brightFuturesMilestoneSlugs = new Set<string>(BRIGHT_FUTURES_MILESTONE_SLU
 
 /** Sources supporting a claim that is intentionally specific to one slug. */
 export const MILESTONE_SLUG_SOURCES: Record<string, string[]> = {
+  ms_birth_2m_gross_motor_1: [
+    'cdc-milestones-2m-2026',
+    'aap-safe-sleep-2022',
+  ],
   ms_birth_2m_nutrition_1: [
     'who-iycf-model-chapter-2025',
     'nice-ng194-postnatal-2021',
@@ -438,7 +442,8 @@ export function buildEvidenceLinks(): EvidenceLinkBuild {
     }
     if (kind === 'milestone') {
       const exactSources = MILESTONE_SLUG_SOURCES[item.slug];
-      if (item.slug === 'ms_birth_2m_nutrition_1') {
+      if (item.slug === 'ms_birth_2m_nutrition_1'
+        || item.slug === 'ms_birth_2m_gross_motor_1') {
         push(kind, item.slug, exactSources ?? []);
         continue;
       }

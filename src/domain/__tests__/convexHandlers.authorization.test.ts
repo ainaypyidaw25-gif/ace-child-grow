@@ -51,6 +51,9 @@ import {
   BIRTH2M_NUTRITION_TARGET,
 } from '../../../convex/lib/birth2mNutritionCasData';
 import {
+  BIRTH2M_GROSS_MOTOR_CORRECTION_TARGET,
+} from '../../../convex/lib/birth2mGrossMotorCorrection';
+import {
   SWAIMAN_SUDDEN_WEAKNESS_SOURCE_ID,
   SWAIMAN_SUDDEN_WEAKNESS_TARGET,
 } from '../../../convex/lib/swaimanSuddenWeaknessCasData';
@@ -322,6 +325,88 @@ describe('Convex registered handlers enforce authorization', () => {
     expect(context.db.query).not.toHaveBeenCalledWith('libraryContent');
     expect(context.db.patch).not.toHaveBeenCalled();
     expect(context.db.insert).not.toHaveBeenCalledWith('libraryContent', expect.anything());
+  });
+
+  it('reserves the birth-to-2-month gross-motor correction at every broad import boundary', async () => {
+    authState.userId = 'editor-1';
+    const context = ctx({
+      profile: { userId: 'editor-1', isStaff: true, staffRole: 'content_editor' },
+      rows: { evidenceSources: [] },
+    });
+    const stale = {
+      type: BIRTH2M_GROSS_MOTOR_CORRECTION_TARGET.kind,
+      slug: BIRTH2M_GROSS_MOTOR_CORRECTION_TARGET.slug,
+      titleMm: 'stale',
+      titleEn: 'stale',
+      tags: [],
+      source: 'stale broad seed',
+      version: 1,
+      clinicalStatus: 'clinical_review',
+      data: {},
+      media: [{ kind: 'illustration' }],
+      searchText: 'stale',
+    };
+
+    await expect(handler(importSeed)(context, { items: [stale] })).resolves.toEqual({
+      created: 0,
+      updated: 0,
+      skippedApproved: 1,
+      total: 1,
+    });
+    expect(seedRunSkipsItem(stale)).toBe(true);
+
+    await expect(handler(importLinks)(context, { links: [{
+      kind: BIRTH2M_GROSS_MOTOR_CORRECTION_TARGET.kind,
+      slug: BIRTH2M_GROSS_MOTOR_CORRECTION_TARGET.slug,
+      sourceIds: ['stale-or-unknown-source'],
+    }] })).resolves.toMatchObject({
+      created: 0,
+      updated: 0,
+      unchanged: 0,
+      skipped: 1,
+      failed: 0,
+    });
+
+    await expect(handler(importSources)(context, { sources: [{
+      id: BIRTH2M_GROSS_MOTOR_CORRECTION_TARGET.exactSourceId,
+      org: 'Centers for Disease Control and Prevention',
+      orgKey: 'CDC',
+      title: 'stale',
+      authors: null,
+      year: 2026,
+      edition: null,
+      country: 'United States',
+      language: 'en',
+      url: 'https://example.invalid/stale',
+      doi: null,
+      isbn: null,
+      pmid: null,
+      evidenceLevel: 'parent_education',
+      reviewStatus: 'awaiting_review',
+      reviewer: null,
+      reviewDate: null,
+      nextReviewDate: null,
+      keywords: [],
+      topics: [],
+      ageMonthsMin: 2,
+      ageMonthsMax: 2,
+      verifiedOn: '2026-08-22',
+      verifiedNote: 'stale generic import must be skipped',
+    }] })).resolves.toMatchObject({
+      created: 0,
+      updated: 0,
+      unchanged: 0,
+      reviewReset: 0,
+      skipped: 1,
+      failed: 0,
+    });
+
+    expect(context.db.query).not.toHaveBeenCalledWith('libraryContent');
+    expect(context.db.query).not.toHaveBeenCalledWith('evidenceLinks');
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalledWith('libraryContent', expect.anything());
+    expect(context.db.insert).not.toHaveBeenCalledWith('evidenceLinks', expect.anything());
+    expect(context.db.insert).not.toHaveBeenCalledWith('evidenceSources', expect.anything());
   });
 
   it('the server seed boundary skips retired content before any catalogue or media write', async () => {

@@ -3,17 +3,37 @@
 // emerging skills; they are NOT a pass/fail test and never diagnose. Ranges vary
 // widely between healthy children.
 import { milestone, type SeedItem } from '../types';
+import { kb } from './infant/editorial';
 
 const m = milestone;
 
 export const MILESTONES: SeedItem[] = [
   // ---- Birth–2 months ----
-  m('birth_2m', 'gross_motor', 1, {
-    title: { mm: 'နိုးနေချိန် မှောက်လျက်ထားစဉ် ခေါင်းမော့ခြင်း', en: 'Lifts head during awake tummy time' },
-    observe: { mm: 'နိုးနေချိန် လူကြီးကြီးကြပ်၍ မှောက်လျက်ထားစဉ် ခေါင်းကို ခဏတာ မော့နိုင်ပါသလား။', en: 'Briefly lifts the head during awake, supervised tummy time?' },
-    why: { mm: 'လည်ပင်းကြွက်သား ခိုင်မာမှုသည် နောင်ထိုင်ခြင်း၊ တွားခြင်းအတွက် အခြေခံဖြစ်သည်။', en: 'Neck strength is the base for later sitting and crawling.' },
-    encouragement: { mm: 'ကလေးနိုးနေချိန် လူကြီးက အနီးကပ်ကြီးကြပ်၍ နေ့စဉ် မှောက်လျက်ကစားချိန် အနည်းငယ်စီ ပေးပါ။ အိပ်ချိန်တွင် ကျောပေါ်လှန်အိပ်စေပါ။', en: 'Offer short tummy-time moments each day only while the baby is awake and closely supervised. Place the baby on the back for sleep.' },
-  }),
+  kb(
+    m('birth_2m', 'gross_motor', 1, {
+      title: {
+        mm: 'နိုးနေချိန် မှောက်လျက်ထားစဉ် ခေါင်းမော့ခြင်း',
+        en: 'Lifts head during awake tummy time',
+      },
+      observe: {
+        mm: 'နိုးနေချိန် လူကြီးကြီးကြပ်၍ မှောက်လျက်ထားစဉ် ခေါင်းကို ခဏတာ မော့နိုင်ပါသလား။',
+        en: 'Briefly lifts the head during awake, supervised tummy time?',
+      },
+      why: {
+        mm: 'နိုးနေချိန် လူကြီးကြီးကြပ်၍ မှောက်လျက်ထားစဉ် ခေါင်းမော့ခြင်းသည် CDC ၂ လ စာရင်းတွင် ပါဝင်သော ကြည့်ရှုနိုင်သည့်အချက် ဖြစ်သည်။',
+        en: 'Lifting the head during awake tummy time is an observation on the CDC 2-month checklist.',
+      },
+      red: {
+        mm: 'အသက် ၂ လတွင် မှောက်လျက်ထားစဉ် ခေါင်းမော့ခြင်း မတွေ့သေးပါက၊ ယခင်တတ်ခဲ့သော ကျွမ်းကျင်မှု ပျောက်ဆုံးပါက သို့မဟုတ် ဖွံ့ဖြိုးမှုအတွက် စိုးရိမ်ပါက ကျန်းမာရေးဝန်ထမ်းနှင့် အမြန်တိုင်ပင်ပါ။ ဤအချက်သည် အောင်/မအောင် စစ်ဆေးချက် သို့မဟုတ် ရောဂါဖော်ထုတ်ချက် မဟုတ်ပါ။',
+        en: 'If your baby is not yet holding the head up during tummy time by 2 months, has lost a skill, or you have a developmental concern, speak promptly with a health professional. This is not a pass/fail test or a diagnosis.',
+      },
+      encouragement: {
+        mm: 'ကလေးနိုးနေချိန် လူကြီးက အနီးကပ်ကြီးကြပ်၍ နေ့စဉ် မှောက်လျက်ကစားချိန် အနည်းငယ်စီ ပေးပါ။ အိပ်ချိန်တွင် ကျောပေါ်လှန်အိပ်စေပါ။',
+        en: 'Offer short tummy-time moments each day only while the baby is awake and closely supervised. Place the baby on the back for sleep.',
+      },
+    }),
+    'The exact CDC 2-month checklist directly lists holding the head up during tummy time and advises acting early for a missed milestone, skill loss, or another concern. The AAP safe-sleep source supports awake supervision and back-to-sleep; this row is not a screening test.',
+  ),
   m('birth_2m', 'social', 1, {
     title: { mm: 'မျက်နှာကို ကြည့်ခြင်း', en: 'Looks at faces' },
     observe: { mm: 'သင့်မျက်နှာကို ကြည့်ပါသလား။', en: 'Does your baby look at your face?' },

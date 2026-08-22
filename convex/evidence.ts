@@ -47,6 +47,10 @@ import { isAsqDoctorVisitsLinkCasTarget } from './lib/asqDoctorVisitsLinkCasData
 import { isBirth2mNutritionCasTarget } from './lib/birth2mNutritionCasData';
 import { isManualReviewEvidenceLinkCasTarget } from './lib/manualReviewEvidenceLinkCasData';
 import {
+  isBirth2mGrossMotorCorrectionLink,
+  isBirth2mGrossMotorCorrectionSource,
+} from './lib/birth2mGrossMotorCorrection';
+import {
   isSwaimanSuddenWeaknessLinkCasTarget,
   isSwaimanSuddenWeaknessSourceCasTarget,
 } from './lib/swaimanSuddenWeaknessCasData';
@@ -547,7 +551,8 @@ async function applySources(
 
   for (const src of sources) {
     const { id, ...rest } = src;
-    if (isSwaimanSuddenWeaknessSourceCasTarget(id)) {
+    if (isSwaimanSuddenWeaknessSourceCasTarget(id)
+      || isBirth2mGrossMotorCorrectionSource(id)) {
       skipped += 1;
       continue;
     }
@@ -759,6 +764,7 @@ async function applyLinks(
       && !isSwaimanCerebralPalsyLinkCasTarget(link.kind, link.slug)
       && !isAsqDoctorVisitsLinkCasTarget(link.kind, link.slug)
       && !isBirth2mNutritionCasTarget(link.kind, link.slug)
+      && !isBirth2mGrossMotorCorrectionLink(link.kind, link.slug)
       && !isManualReviewEvidenceLinkCasTarget(link.kind, link.slug)
       && !isSwaimanSuddenWeaknessLinkCasTarget(link.kind, link.slug)) return true;
     skipped += 1;

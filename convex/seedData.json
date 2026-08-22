@@ -9,10 +9,14 @@
     "data": {
       "observeMm": "နိုးနေချိန် လူကြီးကြီးကြပ်၍ မှောက်လျက်ထားစဉ် ခေါင်းကို ခဏတာ မော့နိုင်ပါသလား။",
       "observeEn": "Briefly lifts the head during awake, supervised tummy time?",
-      "whyMm": "လည်ပင်းကြွက်သား ခိုင်မာမှုသည် နောင်ထိုင်ခြင်း၊ တွားခြင်းအတွက် အခြေခံဖြစ်သည်။",
-      "whyEn": "Neck strength is the base for later sitting and crawling.",
+      "whyMm": "နိုးနေချိန် လူကြီးကြီးကြပ်၍ မှောက်လျက်ထားစဉ် ခေါင်းမော့ခြင်းသည် CDC ၂ လ စာရင်းတွင် ပါဝင်သော ကြည့်ရှုနိုင်သည့်အချက် ဖြစ်သည်။",
+      "whyEn": "Lifting the head during awake tummy time is an observation on the CDC 2-month checklist.",
+      "redMm": "အသက် ၂ လတွင် မှောက်လျက်ထားစဉ် ခေါင်းမော့ခြင်း မတွေ့သေးပါက၊ ယခင်တတ်ခဲ့သော ကျွမ်းကျင်မှု ပျောက်ဆုံးပါက သို့မဟုတ် ဖွံ့ဖြိုးမှုအတွက် စိုးရိမ်ပါက ကျန်းမာရေးဝန်ထမ်းနှင့် အမြန်တိုင်ပင်ပါ။ ဤအချက်သည် အောင်/မအောင် စစ်ဆေးချက် သို့မဟုတ် ရောဂါဖော်ထုတ်ချက် မဟုတ်ပါ။",
+      "redEn": "If your baby is not yet holding the head up during tummy time by 2 months, has lost a skill, or you have a developmental concern, speak promptly with a health professional. This is not a pass/fail test or a diagnosis.",
       "encouragementMm": "ကလေးနိုးနေချိန် လူကြီးက အနီးကပ်ကြီးကြပ်၍ နေ့စဉ် မှောက်လျက်ကစားချိန် အနည်းငယ်စီ ပေးပါ။ အိပ်ချိန်တွင် ကျောပေါ်လှန်အိပ်စေပါ။",
-      "encouragementEn": "Offer short tummy-time moments each day only while the baby is awake and closely supervised. Place the baby on the back for sleep."
+      "encouragementEn": "Offer short tummy-time moments each day only while the baby is awake and closely supervised. Place the baby on the back for sleep.",
+      "editorialStatus": "reference_verified",
+      "evidenceSummary": "The exact CDC 2-month checklist directly lists holding the head up during tummy time and advises acting early for a missed milestone, skill loss, or another concern. The AAP safe-sleep source supports awake supervision and back-to-sleep; this row is not a screening test."
     },
     "type": "milestone",
     "slug": "ms_birth_2m_gross_motor_1",
@@ -22,7 +26,7 @@
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "နိုးနေချိန် မှောက်လျက်ထားစဉ် ခေါင်းမော့ခြင်း lifts head during awake tummy time   gross_motor birth_2m နိုးနေချိန် လူကြီးကြီးကြပ်၍ မှောက်လျက်ထားစဉ် ခေါင်းကို ခဏတာ မော့နိုင်ပါသလား။ briefly lifts the head during awake, supervised tummy time? လည်ပင်းကြွက်သား ခိုင်မာမှုသည် နောင်ထိုင်ခြင်း၊ တွားခြင်းအတွက် အခြေခံဖြစ်သည်။ neck strength is the base for later sitting and crawling. ကလေးနိုးနေချိန် လူကြီးက အနီးကပ်ကြီးကြပ်၍ နေ့စဉ် မှောက်လျက်ကစားချိန် အနည်းငယ်စီ ပေးပါ။ အိပ်ချိန်တွင် ကျောပေါ်လှန်အိပ်စေပါ။ offer short tummy-time moments each day only while the baby is awake and closely supervised. place the baby on the back for sleep."
+    "searchText": "နိုးနေချိန် မှောက်လျက်ထားစဉ် ခေါင်းမော့ခြင်း lifts head during awake tummy time   gross_motor birth_2m နိုးနေချိန် လူကြီးကြီးကြပ်၍ မှောက်လျက်ထားစဉ် ခေါင်းကို ခဏတာ မော့နိုင်ပါသလား။ briefly lifts the head during awake, supervised tummy time? နိုးနေချိန် လူကြီးကြီးကြပ်၍ မှောက်လျက်ထားစဉ် ခေါင်းမော့ခြင်းသည် cdc ၂ လ စာရင်းတွင် ပါဝင်သော ကြည့်ရှုနိုင်သည့်အချက် ဖြစ်သည်။ lifting the head during awake tummy time is an observation on the cdc 2-month checklist. အသက် ၂ လတွင် မှောက်လျက်ထားစဉ် ခေါင်းမော့ခြင်း မတွေ့သေးပါက၊ ယခင်တတ်ခဲ့သော ကျွမ်းကျင်မှု ပျောက်ဆုံးပါက သို့မဟုတ် ဖွံ့ဖြိုးမှုအတွက် စိုးရိမ်ပါက ကျန်းမာရေးဝန်ထမ်းနှင့် အမြန်တိုင်ပင်ပါ။ ဤအချက်သည် အောင်/မအောင် စစ်ဆေးချက် သို့မဟုတ် ရောဂါဖော်ထုတ်ချက် မဟုတ်ပါ။ if your baby is not yet holding the head up during tummy time by 2 months, has lost a skill, or you have a developmental concern, speak promptly with a health professional. this is not a pass/fail test or a diagnosis. ကလေးနိုးနေချိန် လူကြီးက အနီးကပ်ကြီးကြပ်၍ နေ့စဉ် မှောက်လျက်ကစားချိန် အနည်းငယ်စီ ပေးပါ။ အိပ်ချိန်တွင် ကျောပေါ်လှန်အိပ်စေပါ။ offer short tummy-time moments each day only while the baby is awake and closely supervised. place the baby on the back for sleep. reference_verified the exact cdc 2-month checklist directly lists holding the head up during tummy time and advises acting early for a missed milestone, skill loss, or another concern. the aap safe-sleep source supports awake supervision and back-to-sleep; this row is not a screening test."
   },
   {
     "ageGroupKey": "birth_2m",
