@@ -53,6 +53,7 @@ import {
   type ClinicalReviewCopyTarget,
 } from './lib/clinicalReviewCopyRelease';
 import { isManualReviewContentCasTargetSlug } from './lib/manualReviewContentCasData';
+import { isBirth2mNutritionCasTargetSlug } from './lib/birth2mNutritionCasData';
 
 const GRANTABLE_ROLES = [
   'owner',
@@ -188,7 +189,8 @@ type Item = {
 /** Server-side fail-closed guard for stale or hand-built CLI seed artifacts. */
 export function seedRunSkipsItem(item: Pick<Item, 'type' | 'slug'>): boolean {
   return isRetiredContentSlug(item.slug)
-    || isManualReviewContentCasTargetSlug(item.slug);
+    || isManualReviewContentCasTargetSlug(item.slug)
+    || isBirth2mNutritionCasTargetSlug(item.slug);
 }
 
 const PUBLISHED_RELEASE_LIMIT = 5_000;

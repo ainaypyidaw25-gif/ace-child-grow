@@ -48,6 +48,9 @@ import {
   ASQ_DOCTOR_VISITS_TARGET,
 } from '../../../convex/lib/asqDoctorVisitsLinkCasData';
 import {
+  BIRTH2M_NUTRITION_TARGET,
+} from '../../../convex/lib/birth2mNutritionCasData';
+import {
   SWAIMAN_SUDDEN_WEAKNESS_SOURCE_ID,
   SWAIMAN_SUDDEN_WEAKNESS_TARGET,
 } from '../../../convex/lib/swaimanSuddenWeaknessCasData';
@@ -290,6 +293,37 @@ describe('Convex registered handlers enforce authorization', () => {
     for (const item of items) expect(seedRunSkipsItem(item)).toBe(true);
   });
 
+  it('broad staff and CLI seed paths reserve the nutrition correction for exact CAS only', async () => {
+    authState.userId = 'editor-1';
+    const context = ctx({
+      profile: { userId: 'editor-1', isStaff: true, staffRole: 'content_editor' },
+    });
+    const stale = {
+      type: BIRTH2M_NUTRITION_TARGET.kind,
+      slug: BIRTH2M_NUTRITION_TARGET.slug,
+      titleMm: 'stale',
+      titleEn: 'stale',
+      tags: [],
+      source: 'stale broad seed',
+      version: 1,
+      clinicalStatus: 'clinical_review',
+      data: {},
+      media: [{ kind: 'illustration' }],
+      searchText: 'stale',
+    };
+
+    await expect(handler(importSeed)(context, { items: [stale] })).resolves.toEqual({
+      created: 0,
+      updated: 0,
+      skippedApproved: 1,
+      total: 1,
+    });
+    expect(seedRunSkipsItem(stale)).toBe(true);
+    expect(context.db.query).not.toHaveBeenCalledWith('libraryContent');
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalledWith('libraryContent', expect.anything());
+  });
+
   it('the server seed boundary skips retired content before any catalogue or media write', async () => {
     authState.userId = 'editor-1';
     const context = ctx({
@@ -513,6 +547,34 @@ describe('Convex registered handlers enforce authorization', () => {
       links: [{
         kind: ASQ_DOCTOR_VISITS_TARGET.kind,
         slug: ASQ_DOCTOR_VISITS_TARGET.slug,
+        sourceIds: ['stale-or-unknown-source'],
+      }],
+    }) as Record<string, unknown>;
+
+    expect(result).toMatchObject({
+      created: 0,
+      updated: 0,
+      unchanged: 0,
+      skipped: 1,
+      failed: 0,
+      failedKeys: [],
+      invalidatedContentKeys: [],
+    });
+    expect(context.db.query).not.toHaveBeenCalledWith('evidenceLinks');
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalledWith('evidenceLinks', expect.anything());
+  });
+
+  it('the evidence boundary reserves the nutrition row for its exact CAS only', async () => {
+    authState.userId = 'editor-1';
+    const context = ctx({
+      profile: { userId: 'editor-1', isStaff: true, staffRole: 'content_editor' },
+      rows: { evidenceSources: [] },
+    });
+    const result = await handler(importLinks)(context, {
+      links: [{
+        kind: BIRTH2M_NUTRITION_TARGET.kind,
+        slug: BIRTH2M_NUTRITION_TARGET.slug,
         sourceIds: ['stale-or-unknown-source'],
       }],
     }) as Record<string, unknown>;
