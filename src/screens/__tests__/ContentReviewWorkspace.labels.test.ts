@@ -177,6 +177,7 @@ describe('reviewer content field labels', () => {
     expect(source).toContain('You have unsaved changes. Change items without saving?');
     expect(source).toContain('mayEditContent(access.role)');
     expect(source).toContain('You may correct wording directly while reviewing.');
+    expect(source).toContain('ဘာသာစကား၊ ကလေးဖွံ့ဖြိုးမှု၊ ကိုးကားချက်၊ ဘေးကင်းရေး');
     expect(source).toContain('disabled={busy}');
     expect(source).toContain('overflow-x-auto');
     expect(source).toContain("L('ခွဲခြားမှု အကြိုစစ်ဆေးရန်', 'Import preview')");

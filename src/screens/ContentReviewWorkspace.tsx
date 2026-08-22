@@ -677,7 +677,7 @@ export function ContentReviewWorkspace() {
         <h1 className="text-xl font-bold leading-[1.65] text-sky-deep sm:text-2xl sm:leading-[1.5]">{L('အကြောင်းအရာ သုံးသပ်ရေးနေရာ', 'Content review workspace')}</h1>
         <p className="max-w-3xl text-sm leading-7 text-ink-soft">
           {L(
-            'အကြောင်းအရာကို ပြင်ဆင်ပြီး ဘာသာစကား၊ ကိုးကားချက်၊ ဘေးကင်းရေးနှင့် ဆေးဘက်ဆိုင်ရာ သုံးသပ်ချက်များကို သီးခြားမှတ်တမ်းတင်နိုင်ပါသည်။ မည်သည့်ဆုံးဖြတ်ချက်ကိုမျှ အလိုအလျောက် မဖြည့်ပါ။',
+            'အကြောင်းအရာကို ပြင်ဆင်ပြီး ဘာသာစကား၊ ကလေးဖွံ့ဖြိုးမှု၊ ကိုးကားချက်၊ ဘေးကင်းရေးနှင့် ဆေးဘက်ဆိုင်ရာ သုံးသပ်ချက်များကို သီးခြားမှတ်တမ်းတင်နိုင်ပါသည်။ မည်သည့်ဆုံးဖြတ်ချက်ကိုမျှ အလိုအလျောက် မဖြည့်ပါ။',
             'Edit content and record language, child-development, evidence, safety, and clinical decisions separately. No decision is filled automatically.',
           )}
         </p>
