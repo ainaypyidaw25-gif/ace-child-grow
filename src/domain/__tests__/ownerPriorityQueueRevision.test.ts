@@ -15,12 +15,12 @@ type Review = {
 
 const handler = (queuesSelfTest as unknown as {
   _handler: (ctx: ReturnType<typeof context>, args: Record<string, never>) => Promise<{
-    rows: Array<{ priority: string; warnings: string[]; latestDecisionAt: number | null }>;
+    rows: Array<{ priority: string; priorityReasons: string[]; warnings: string[]; latestDecisionAt: number | null }>;
     counts: { p0Remaining: number };
   }>;
 })._handler;
 
-function context(reviews: Review[]) {
+function context(reviews: Review[], contentOverrides: Record<string, unknown> = {}) {
   const content = [{
     _id: 'content-1',
     _creationTime: 1,
@@ -37,6 +37,7 @@ function context(reviews: Review[]) {
     searchText: 'balanced meals',
     createdAt: 1,
     updatedAt: 2,
+    ...contentOverrides,
   }];
   const links = [{
     _id: 'link-1',
@@ -106,5 +107,40 @@ describe('owner-priority queue duplicate review integrity', () => {
     expect(result.rows[0].priority).toBe('P0');
     expect(result.rows[0].warnings).toContain('duplicate identical review decisions recorded');
     expect(result.counts.p0Remaining).toBe(1);
+  });
+
+  it('does not show a legacy education-scope warning after a current clinical publication decision', async () => {
+    const clinicalApproval: Review = {
+      ...legacyDecision(300),
+      dimension: 'clinical',
+      decision: 'approved',
+      contentVersion: 12,
+      reviewRevision: 12,
+    };
+    const result = await handler(context([clinicalApproval], {
+      clinicalStatus: 'published',
+      reviewScope: 'clinical',
+      priorityStatus: 'completed',
+      data: { note: { mm: 'အဖျား ရှိလျှင်', en: 'If fever appears' } },
+    }), {});
+
+    expect(result.rows[0].warnings).not.toContain(
+      'parent-visible high-risk wording lacks a current clinical-scope publication decision',
+    );
+    expect(result.rows[0].priorityReasons).toEqual([
+      'parent-visible high-risk record with required reviews completed',
+    ]);
+  });
+
+  it('keeps the warning when a published Class C row lacks clinical scope', async () => {
+    const result = await handler(context([], {
+      clinicalStatus: 'published',
+      reviewScope: 'education',
+      data: { note: { mm: 'အဖျား ရှိလျှင်', en: 'If fever appears' } },
+    }), {});
+
+    expect(result.rows[0].warnings).toContain(
+      'parent-visible high-risk wording lacks a current clinical-scope publication decision',
+    );
   });
 });
