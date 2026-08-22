@@ -22,7 +22,6 @@ import {
   RISK_CLASSES,
   suggestedDimensionsFor,
   type PriorityStatus,
-  type RiskClass,
 } from './lib/ownerPriority';
 import {
   mayManageGovernance,
@@ -197,6 +196,38 @@ function fallbackQueueRow(item: Doc<'libraryContent'>, error: unknown) {
   };
 }
 
+/**
+ * Build the single policy input used by both the queue and governance writes.
+ * Completion must never use a narrower risk interpretation than the row the
+ * owner sees in the queue; otherwise an unconfirmed/provisional row can appear
+ * to require reviews in the UI while the mutation treats its requirement set
+ * as empty and accepts `completed`.
+ */
+function priorityForLibraryItem(
+  item: Doc<'libraryContent'>,
+  workflowBlocker: string | null = null,
+) {
+  return computePriority({
+    slug: item.slug,
+    type: item.type,
+    category: item.category ?? null,
+    ageGroupKey: item.ageGroupKey ?? null,
+    domainKey: item.domainKey ?? null,
+    titleMm: item.titleMm,
+    titleEn: item.titleEn,
+    summaryMm: item.summaryMm ?? null,
+    summaryEn: item.summaryEn ?? null,
+    tags: item.tags,
+    data: item.data,
+    clinicalStatus: item.clinicalStatus,
+    riskClassification: coerceRiskClass(item.riskClassification),
+    ownerPriority: coerceOwnerPriority(item.ownerPriority),
+    riskReasons: item.riskReasons ?? null,
+    priorityStatus: item.priorityStatus ?? null,
+    workflowBlocker,
+  });
+}
+
 const queueResultValidator = v.object({
   allowed: v.boolean(),
   accessLevel: v.string(),
@@ -267,29 +298,10 @@ async function buildQueueResult(ctx: QueryCtx, level: string, role: string | und
       const { currentByDimension, latestDecisionAt, workflowBlocker } =
         projectReviewDecisionsForRevision(slugDecisions, revision);
 
-      const result = computePriority({
-        slug: item.slug,
-        type: item.type,
-        category: item.category ?? null,
-        ageGroupKey: item.ageGroupKey ?? null,
-        domainKey: item.domainKey ?? null,
-        titleMm: item.titleMm,
-        titleEn: item.titleEn,
-        summaryMm: item.summaryMm ?? null,
-        summaryEn: item.summaryEn ?? null,
-        tags: item.tags,
-        data: item.data,
-        clinicalStatus: item.clinicalStatus,
-        // Coerce stored governance strings to known enum members. A legacy value
-        // from an earlier schema would otherwise flow into the return-validated
-        // riskClass/priority fields and make this whole query throw, crashing
-        // the review workspace for every staff user.
-        riskClassification: coerceRiskClass(item.riskClassification),
-        ownerPriority: coerceOwnerPriority(item.ownerPriority),
-        riskReasons: item.riskReasons ?? null,
-        priorityStatus: item.priorityStatus ?? null,
-        workflowBlocker,
-      });
+      // The exact same mapping is used by the completion mutation below. A
+      // legacy stored enum is coerced here so one malformed value cannot crash
+      // the full return-validated workspace.
+      const result = priorityForLibraryItem(item, workflowBlocker);
 
       // Confirmed requirements are ONLY what a human stored, or what policy
       // allows for A/B/C. Untriaged D/E carry none, so nothing about them can
@@ -568,14 +580,17 @@ export const setGovernance = mutation({
               && row.decision === 'approved')
             .map((row) => row.dimension),
         )];
-        const riskClass = (item.riskClassification ?? null) as RiskClass | null;
+        // Stored classification wins when present; otherwise use the same
+        // conservative provisional classifier as the queue. An absent stored
+        // classification never means "zero required reviews".
+        const riskClass = priorityForLibraryItem(item).riskClass;
         const confirmed = (patch.requiredReviewDimensions as string[] | undefined)
           ?? item.requiredReviewDimensions
-          ?? (riskClass ? requiredDimensionsFor(riskClass) : []);
+          ?? requiredDimensionsFor(riskClass);
         const refusal = completionRefusal({
           confirmedRequiredDimensions: confirmed,
           approvedDimensionsAtCurrentRevision: approvedDimensions,
-          needsManualTriage: riskClass ? needsManualTriage(riskClass) : false,
+          needsManualTriage: needsManualTriage(riskClass),
           dataComplete: reviewsResult.complete,
         });
         if (refusal) {

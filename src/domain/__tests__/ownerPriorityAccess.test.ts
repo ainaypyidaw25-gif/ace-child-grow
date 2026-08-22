@@ -255,6 +255,27 @@ describe('direct-handler authorization — governance mutations', () => {
     expect(patched).toEqual([]);
   });
 
+  it('does not treat an absent stored classification as zero required reviews', async () => {
+    const { ctx, patched } = makeCtx({ staffRole: 'owner' }, {
+      content: {
+        _id: 'content1', slug: 'act_story_sequence', type: 'activity', titleMm: 'က', titleEn: 'Story sequence', data: {},
+        clinicalStatus: 'clinical_review', reviewRevision: 2, tags: [],
+      },
+    });
+    const result = await handler<{
+      ok: boolean;
+      code?: string;
+      outstanding?: string[];
+    }>(setGovernance)(ctx, {
+      slug: 'act_story_sequence', expectedReviewRevision: 2, priorityStatus: 'completed',
+    });
+
+    expect(result.ok).toBe(false);
+    expect(result.code).toBe('outstanding_dimensions');
+    expect(result.outstanding).toEqual(['native_myanmar', 'english', 'child_development', 'evidence']);
+    expect(patched).toEqual([]);
+  });
+
   it('refuses completion on an untriaged D/E record', async () => {
     const { ctx, patched } = makeCtx({ staffRole: 'owner' }, {
       content: {
