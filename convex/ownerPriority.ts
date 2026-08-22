@@ -16,6 +16,7 @@ import {
   needsManualTriage,
   OWNER_PRIORITIES,
   PRIORITY_STATUSES,
+  projectReviewDecisionsForRevision,
   requiredDimensionsFor,
   REVIEW_DIMENSION_IDS,
   RISK_CLASSES,
@@ -263,18 +264,8 @@ async function buildQueueResult(ctx: QueryCtx, level: string, role: string | und
       try {
       const revision = item.reviewRevision ?? 1;
       const slugDecisions = decisionsBySlug.get(item.slug) ?? [];
-      const currentByDimension = new Map<string, ReviewRow>();
-      let latestDecisionAt: number | null = null;
-      let workflowBlocker: string | null = null;
-      const duplicateKeys = new Set<string>();
-      for (const decision of slugDecisions) {
-        if (latestDecisionAt === null || decision.reviewedAt > latestDecisionAt) latestDecisionAt = decision.reviewedAt;
-        const identityKey = [decision.dimension, decision.decision, String(decision.reviewerId), decision.contentVersion, decision.note ?? ''].join('|');
-        if (duplicateKeys.has(identityKey)) workflowBlocker = 'duplicate identical review decisions recorded';
-        duplicateKeys.add(identityKey);
-        if ((decision.reviewRevision ?? decision.contentVersion) !== revision) continue;
-        if (!currentByDimension.has(decision.dimension)) currentByDimension.set(decision.dimension, decision);
-      }
+      const { currentByDimension, latestDecisionAt, workflowBlocker } =
+        projectReviewDecisionsForRevision(slugDecisions, revision);
 
       const result = computePriority({
         slug: item.slug,
