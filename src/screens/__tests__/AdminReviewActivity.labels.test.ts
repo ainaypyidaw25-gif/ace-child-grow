@@ -14,7 +14,7 @@ const source = readFileSync(SCREEN, 'utf8');
 
 describe('reviewer activity screen', () => {
   it('labels every review dimension and decision in both languages', () => {
-    for (const dimension of ['english', 'native_myanmar', 'evidence', 'safety', 'clinical']) {
+    for (const dimension of ['english', 'native_myanmar', 'child_development', 'evidence', 'safety', 'clinical']) {
       expect(source, `dimension ${dimension}`).toContain(`${dimension}: {`);
     }
     for (const decision of ['in_review', 'approved', 'changes_requested', 'not_applicable']) {

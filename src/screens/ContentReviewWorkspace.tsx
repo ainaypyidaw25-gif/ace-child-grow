@@ -21,7 +21,7 @@ import { BulkReplacePanel } from './contentReview/BulkReplacePanel';
 import { ManualReviewPanel } from './contentReview/ManualReviewPanel';
 import { matchesSearchQuery, normalizeSearchText } from '../domain/search';
 
-const DIMENSIONS = ['english', 'native_myanmar', 'evidence', 'safety', 'clinical'] as const;
+const DIMENSIONS = ['english', 'native_myanmar', 'child_development', 'evidence', 'safety', 'clinical'] as const;
 const DECISIONS = ['in_review', 'approved', 'changes_requested', 'not_applicable'] as const;
 type Dimension = (typeof DIMENSIONS)[number];
 type Decision = (typeof DECISIONS)[number];
@@ -30,6 +30,7 @@ type StaffRole = 'owner' | 'content_editor' | 'language_reviewer' | 'evidence_re
 const DIMENSION_LABELS: Record<Dimension, { mm: string; en: string }> = {
   english: { mm: 'အင်္ဂလိပ်စာနှင့် အကြောင်းအရာ', en: 'English copy and content' },
   native_myanmar: { mm: 'သဘာဝကျသော မြန်မာအသုံးအနှုန်း', en: 'Native Myanmar language' },
+  child_development: { mm: 'ကလေးဖွံ့ဖြိုးမှုဆိုင်ရာ အကြောင်းအရာ', en: 'Child-development content' },
   evidence: { mm: 'ကိုးကားအထောက်အထား', en: 'Evidence' },
   safety: { mm: 'ဘေးကင်းရေး', en: 'Safety' },
   clinical: { mm: 'အထူးကျွမ်းကျင်သူ ဘေးကင်းရေးသုံးသပ်မှု', en: 'Specialist safety review' },
@@ -677,7 +678,7 @@ export function ContentReviewWorkspace() {
         <p className="max-w-3xl text-sm leading-7 text-ink-soft">
           {L(
             'အကြောင်းအရာကို ပြင်ဆင်ပြီး ဘာသာစကား၊ ကိုးကားချက်၊ ဘေးကင်းရေးနှင့် ဆေးဘက်ဆိုင်ရာ သုံးသပ်ချက်များကို သီးခြားမှတ်တမ်းတင်နိုင်ပါသည်။ မည်သည့်ဆုံးဖြတ်ချက်ကိုမျှ အလိုအလျောက် မဖြည့်ပါ။',
-            'Edit content and record language, evidence, safety, and clinical decisions separately. No decision is filled automatically.',
+            'Edit content and record language, child-development, evidence, safety, and clinical decisions separately. No decision is filled automatically.',
           )}
         </p>
       </header>

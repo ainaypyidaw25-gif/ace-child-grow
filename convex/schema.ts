@@ -440,6 +440,7 @@ export default defineSchema({
     dimension: v.union(
       v.literal('english'),
       v.literal('native_myanmar'),
+      v.literal('child_development'),
       v.literal('evidence'),
       v.literal('safety'),
       v.literal('clinical'),

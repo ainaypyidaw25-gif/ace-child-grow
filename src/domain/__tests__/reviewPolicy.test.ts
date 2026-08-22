@@ -39,6 +39,13 @@ describe('review permission matrix', () => {
     }
   });
 
+  it('limits qualified child-development decisions to the specialist reviewer role', () => {
+    const allowed = new Set(['clinical_reviewer']);
+    for (const role of ROLES) {
+      expect(roleMayReview(role, 'child_development'), role).toBe(allowed.has(role));
+    }
+  });
+
   it('lets owner, content editor and language reviewers decide language areas', () => {
     const allowed = new Set(['owner', 'content_editor', 'language_reviewer']);
     for (const dimension of ['english', 'native_myanmar'] as ReviewDimension[]) {
@@ -49,7 +56,7 @@ describe('review permission matrix', () => {
   });
 
   it('never grants review rights to support or to a missing role', () => {
-    for (const dimension of ['english', 'native_myanmar', 'evidence', 'safety', 'clinical'] as ReviewDimension[]) {
+    for (const dimension of ['english', 'native_myanmar', 'child_development', 'evidence', 'safety', 'clinical'] as ReviewDimension[]) {
       expect(roleMayReview('support', dimension)).toBe(false);
       expect(roleMayReview(null, dimension)).toBe(false);
       expect(roleMayReview(undefined, dimension)).toBe(false);
@@ -61,6 +68,7 @@ describe('review permission matrix', () => {
     expect(approvalNeedsQualification('clinical')).toBe(true);
     expect(approvalNeedsQualification('safety')).toBe(true);
     expect(approvalNeedsQualification('evidence')).toBe(true);
+    expect(approvalNeedsQualification('child_development')).toBe(true);
     expect(approvalNeedsQualification('english')).toBe(false);
     expect(approvalNeedsQualification('native_myanmar')).toBe(false);
   });

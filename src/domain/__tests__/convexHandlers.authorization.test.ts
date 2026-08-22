@@ -625,7 +625,7 @@ describe('Convex registered handlers enforce authorization', () => {
       },
       rows: {
         libraryContent: [{ _id: 'content-1', type: 'guide', slug: 'ordinary-parent-guide', titleEn: 'Play together', reviewRevision: 1 }],
-        contentReviews: ['english', 'native_myanmar', 'evidence', 'safety'].map((dimension) => ({
+        contentReviews: ['english', 'native_myanmar', 'child_development', 'evidence', 'safety'].map((dimension) => ({
           contentSlug: 'ordinary-parent-guide', contentVersion: 1, dimension, decision: 'approved',
         })),
         ...approvedEvidenceRows('ordinary-parent-guide'),
@@ -648,7 +648,7 @@ describe('Convex registered handlers enforce authorization', () => {
       },
       rows: {
         libraryContent: [{ _id: 'content-1', type: 'guide', slug: 'ordinary-parent-guide', titleEn: 'Play together', reviewRevision: 1 }],
-        contentReviews: ['english', 'native_myanmar', 'evidence', 'safety'].map((dimension) => ({
+        contentReviews: ['english', 'native_myanmar', 'child_development', 'evidence', 'safety'].map((dimension) => ({
           contentSlug: 'ordinary-parent-guide', contentVersion: 1, dimension, decision: 'approved',
         })),
         ...approvedEvidenceRows('ordinary-parent-guide'),
@@ -677,7 +677,7 @@ describe('Convex registered handlers enforce authorization', () => {
         contentReviews: [
           { contentSlug: 'ordinary-parent-guide', contentVersion: 1, dimension: 'native_myanmar', decision: 'changes_requested' },
           { contentSlug: 'ordinary-parent-guide', contentVersion: 1, dimension: 'native_myanmar', decision: 'approved' },
-          ...['english', 'evidence', 'safety'].map((dimension) => ({
+          ...['english', 'child_development', 'evidence', 'safety'].map((dimension) => ({
             contentSlug: 'ordinary-parent-guide', contentVersion: 1, dimension, decision: 'approved',
           })),
         ],
@@ -702,7 +702,7 @@ describe('Convex registered handlers enforce authorization', () => {
           _id: 'content-1', type: 'guide', slug: 'ordinary-parent-guide',
           titleEn: 'Play together', reviewRevision: 1,
         }],
-        contentReviews: ['english', 'native_myanmar', 'evidence', 'safety'].map((dimension) => ({
+        contentReviews: ['english', 'native_myanmar', 'child_development', 'evidence', 'safety'].map((dimension) => ({
           contentSlug: 'ordinary-parent-guide', contentVersion: 1, dimension, decision: 'approved',
         })),
         evidenceLinks: [{
@@ -735,7 +735,7 @@ describe('Convex registered handlers enforce authorization', () => {
           summaryEn: 'Catalogue preview: the future PDF will cover medicine safety and emergency signs.',
           data: { availability: 'preview_only' },
         }],
-        contentReviews: ['english', 'native_myanmar', 'evidence', 'safety'].map((dimension) => ({
+        contentReviews: ['english', 'native_myanmar', 'child_development', 'evidence', 'safety'].map((dimension) => ({
           contentSlug: 'prt_preview_only', contentVersion: 1, dimension, decision: 'approved',
         })),
         ...approvedEvidenceRows('prt_preview_only', 'printable'),
@@ -793,7 +793,7 @@ describe('Convex registered handlers enforce authorization', () => {
           _id: 'content-1', type: 'guide', slug: 'future-bed-sharing-guide', titleEn: 'Infant sleep', reviewRevision: 3,
           data: { safety: { en: 'How to bed-share with a baby.' } },
         }],
-        contentReviews: ['english', 'native_myanmar', 'evidence', 'safety', 'clinical'].map((dimension) => ({
+        contentReviews: ['english', 'native_myanmar', 'child_development', 'evidence', 'safety', 'clinical'].map((dimension) => ({
           contentSlug: 'future-bed-sharing-guide', contentVersion: 3, dimension, decision: 'approved',
         })),
         ...approvedEvidenceRows('future-bed-sharing-guide'),
@@ -838,7 +838,7 @@ describe('Convex registered handlers enforce authorization', () => {
       },
       rows: {
         libraryContent: [{ _id: 'content-1', type: 'guide', slug: 'gd_7_9m_safety', titleEn: 'Safety guide', reviewRevision: 1 }],
-        contentReviews: ['english', 'native_myanmar', 'evidence', 'safety', 'clinical'].map((dimension) => ({
+        contentReviews: ['english', 'native_myanmar', 'child_development', 'evidence', 'safety', 'clinical'].map((dimension) => ({
           contentSlug: 'gd_7_9m_safety', contentVersion: 1, dimension, decision: 'approved',
         })),
         ...approvedEvidenceRows('gd_7_9m_safety'),
@@ -954,6 +954,25 @@ describe('Convex registered handlers enforce authorization', () => {
     expect(context.db.insert).toHaveBeenCalledWith('contentReviews', expect.objectContaining({
       contentSlug: 'item-1', contentVersion: 3, dimension: 'safety', decision: 'approved',
       reviewerDisplayName: 'Dr Reviewer', reviewerQualification: 'MBBS',
+    }));
+  });
+
+  it('a qualified clinical reviewer can record the revision-bound child-development decision required by the queue', async () => {
+    authState.userId = 'clinical-1';
+    const context = ctx({
+      profile: {
+        userId: 'clinical-1', isStaff: true, staffRole: 'clinical_reviewer',
+        displayName: 'Dr Reviewer', staffQualification: 'MBBS',
+      },
+      rows: { libraryContent: [{ _id: 'content-1', slug: 'item-1', version: 1, reviewRevision: 3 }] },
+    });
+    await expect(handler(saveDecision)(context, {
+      contentSlug: 'item-1', dimension: 'child_development', decision: 'approved',
+      note: 'Developmental wording checked', expectedReviewRevision: 3,
+    })).resolves.toEqual({ ok: true, contentVersion: 3 });
+    expect(context.db.insert).toHaveBeenCalledWith('contentReviews', expect.objectContaining({
+      contentSlug: 'item-1', contentVersion: 3, dimension: 'child_development', decision: 'approved',
+      reviewerDisplayName: 'Dr Reviewer', reviewerQualification: 'MBBS', reviewerRole: 'clinical_reviewer',
     }));
   });
 

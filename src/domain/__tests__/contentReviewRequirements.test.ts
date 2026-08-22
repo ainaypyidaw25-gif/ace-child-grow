@@ -8,6 +8,10 @@ import {
 } from '../../../convex/lib/contentReviewRequirements';
 
 describe('risk-scoped content review requirements', () => {
+  it('always requires an explicit child-development decision before publication', () => {
+    expect(EDUCATION_REVIEW_DIMENSIONS).toContain('child_development');
+  });
+
   it('does not require clinical approval for ordinary parent education', () => {
     expect(requiredPublicationReviews({ slug: 'act_story_sequence', data: { safety: { en: 'None specific.' } } }))
       .toEqual(EDUCATION_REVIEW_DIMENSIONS);
