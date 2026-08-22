@@ -54,6 +54,7 @@ import {
 } from './lib/clinicalReviewCopyRelease';
 import { isManualReviewContentCasTargetSlug } from './lib/manualReviewContentCasData';
 import { isBirth2mNutritionCasTargetSlug } from './lib/birth2mNutritionCasData';
+import { isBirth2mGrossMotorCorrectionSlug } from './lib/birth2mGrossMotorCorrection';
 
 const GRANTABLE_ROLES = [
   'owner',
@@ -190,7 +191,8 @@ type Item = {
 export function seedRunSkipsItem(item: Pick<Item, 'type' | 'slug'>): boolean {
   return isRetiredContentSlug(item.slug)
     || isManualReviewContentCasTargetSlug(item.slug)
-    || isBirth2mNutritionCasTargetSlug(item.slug);
+    || isBirth2mNutritionCasTargetSlug(item.slug)
+    || isBirth2mGrossMotorCorrectionSlug(item.slug);
 }
 
 const PUBLISHED_RELEASE_LIMIT = 5_000;

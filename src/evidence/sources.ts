@@ -1024,6 +1024,38 @@ export const AAP_SOURCES: EvidenceSource[] = [
 
 export const CDC_SOURCES: EvidenceSource[] = [
   s({
+    id: 'cdc-milestones-2m-2026',
+    org: 'Centers for Disease Control and Prevention',
+    orgKey: 'CDC',
+    title: 'Milestones by 2 Months',
+    year: 2026,
+    country: 'United States',
+    url: 'https://www.cdc.gov/act-early/milestones/2-months.html',
+    evidenceLevel: 'parent_education',
+    keywords: [
+      '2 months',
+      'developmental milestones',
+      'responsive care',
+      'free kicking',
+      'infant safety',
+    ],
+    topics: [
+      'milestones',
+      'motor',
+      'speech_language',
+      'cognitive',
+      'social_emotional',
+      'play',
+      'parenting',
+      'safety',
+    ],
+    ageMonthsMin: 2,
+    ageMonthsMax: 2,
+    verifiedOn: '2026-08-22',
+    verifiedNote:
+      'The CDC page prints this exact title and May 15, 2026 and names NCBDDD as Content Source. It defines milestones as things most children (75% or more) can do by 2 months, lists age-specific items and parent activities, and states that Learn the Signs. Act Early. materials are not substitutes for standardized, validated developmental screening tools. It directly includes holding the head up when on the tummy. These are by-2-month observations, not newborn expectations, and not a diagnostic or pass/fail standard.',
+  }),
+  s({
     id: 'cdc-adhd-clinical-care-2026',
     org: 'Centers for Disease Control and Prevention',
     orgKey: 'CDC',

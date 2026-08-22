@@ -32,6 +32,7 @@ import { activeAiParentReadableContent } from './lib/aiPublicationVisibility';
 import { isRetiredContentSlug } from './lib/contentRetirements';
 import { isManualReviewContentCasTargetSlug } from './lib/manualReviewContentCasData';
 import { isBirth2mNutritionCasTargetSlug } from './lib/birth2mNutritionCasData';
+import { isBirth2mGrossMotorCorrectionSlug } from './lib/birth2mGrossMotorCorrection';
 
 export { isPubliclyReadableStatus } from './lib/publicationVisibility';
 
@@ -591,7 +592,8 @@ export const importSeed = mutation({
       // catalogue row. Reuse the existing skip counter to preserve the API.
       if (isRetiredContentSlug(it.slug)
         || isManualReviewContentCasTargetSlug(it.slug)
-        || isBirth2mNutritionCasTargetSlug(it.slug)) {
+        || isBirth2mNutritionCasTargetSlug(it.slug)
+        || isBirth2mGrossMotorCorrectionSlug(it.slug)) {
         skippedApproved += 1;
         continue;
       }
