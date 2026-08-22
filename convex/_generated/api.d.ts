@@ -51,6 +51,7 @@ import type * as lib_evidenceImportSafety from "../lib/evidenceImportSafety.js";
 import type * as lib_evidencePublicationGate from "../lib/evidencePublicationGate.js";
 import type * as lib_evidenceSafetyRelease from "../lib/evidenceSafetyRelease.js";
 import type * as lib_inherentPublicLinkCasData from "../lib/inherentPublicLinkCasData.js";
+import type * as lib_manualReviewContentCasData from "../lib/manualReviewContentCasData.js";
 import type * as lib_ownerPriority from "../lib/ownerPriority.js";
 import type * as lib_ownerPriorityAccess from "../lib/ownerPriorityAccess.js";
 import type * as lib_printablePayloadRelease from "../lib/printablePayloadRelease.js";
@@ -63,6 +64,7 @@ import type * as lib_swaimanCerebralPalsyLinkCasData from "../lib/swaimanCerebra
 import type * as lib_swaimanSeizureLinkCasData from "../lib/swaimanSeizureLinkCasData.js";
 import type * as lib_swaimanSuddenWeaknessCasData from "../lib/swaimanSuddenWeaknessCasData.js";
 import type * as library from "../library.js";
+import type * as manualReviewContentCas from "../manualReviewContentCas.js";
 import type * as media from "../media.js";
 import type * as milestones from "../milestones.js";
 import type * as mmpay from "../mmpay.js";
@@ -132,6 +134,7 @@ declare const fullApi: ApiFromModules<{
   "lib/evidencePublicationGate": typeof lib_evidencePublicationGate;
   "lib/evidenceSafetyRelease": typeof lib_evidenceSafetyRelease;
   "lib/inherentPublicLinkCasData": typeof lib_inherentPublicLinkCasData;
+  "lib/manualReviewContentCasData": typeof lib_manualReviewContentCasData;
   "lib/ownerPriority": typeof lib_ownerPriority;
   "lib/ownerPriorityAccess": typeof lib_ownerPriorityAccess;
   "lib/printablePayloadRelease": typeof lib_printablePayloadRelease;
@@ -144,6 +147,7 @@ declare const fullApi: ApiFromModules<{
   "lib/swaimanSeizureLinkCasData": typeof lib_swaimanSeizureLinkCasData;
   "lib/swaimanSuddenWeaknessCasData": typeof lib_swaimanSuddenWeaknessCasData;
   library: typeof library;
+  manualReviewContentCas: typeof manualReviewContentCas;
   media: typeof media;
   milestones: typeof milestones;
   mmpay: typeof mmpay;
