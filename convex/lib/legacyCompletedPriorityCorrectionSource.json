@@ -1,0 +1,46 @@
+{
+  "_creationTime": 1785024282947.196,
+  "_id": "kx70f2hmd5esn68tf0hkw176sd8b8nvq",
+  "ageGroupKey": "4y",
+  "clinicalStatus": "clinical_review",
+  "createdAt": 1785024282947,
+  "data": {
+    "domains": ["language", "cognitive"],
+    "group": true,
+    "indoor": true,
+    "instructions": [
+      {
+        "en": "Ask “what happened first, then?” in order.",
+        "mm": "“ပထမ ဘာဖြစ်လဲ၊ ပြီးတော့” ဟု အစီအစဉ်ဖြင့် မေးပါ။"
+      }
+    ],
+    "lowCost": true,
+    "materials": { "en": "A story book.", "mm": "ပုံပြင်စာအုပ်။" },
+    "oneChild": true,
+    "outcomes": [
+      { "en": "Language and sequencing.", "mm": "ဘာသာစကား၊ အစီအစဉ် တွေးခေါ်မှု။" }
+    ],
+    "outdoor": false,
+    "parentChild": true,
+    "safety": { "en": "None specific.", "mm": "အထူးသတိပြုရန် မရှိပါ။" },
+    "setup": { "en": "Read a story together.", "mm": "ပုံပြင်တစ်ပုဒ် အတူဖတ်ပါ။" },
+    "variations": []
+  },
+  "difficulty": "medium",
+  "domainKey": "language",
+  "durationMinutes": 15,
+  "offline": true,
+  "priorityStatus": "completed",
+  "reviewRevision": 2,
+  "searchText": "ဇာတ်လမ်း အစီအစဉ် ပြန်ပြောကစားခြင်း story-sequence retelling ဖတ်ပြီးသော ပုံပြင်ကို အစီအစဉ်တကျ ပြန်ပြောစေခြင်း။ retell a story in order to build language and memory. language cognitive 4y language cognitive ပုံပြင်စာအုပ်။ a story book. ပုံပြင်တစ်ပုဒ် အတူဖတ်ပါ။ read a story together. “ပထမ ဘာဖြစ်လဲ၊ ပြီးတော့” ဟု အစီအစဉ်ဖြင့် မေးပါ။ ask “what happened first, then?” in order. အထူးသတိပြုရန် မရှိပါ။ none specific. ဘာသာစကား၊ အစီအစဉ် တွေးခေါ်မှု။ language and sequencing.",
+  "slug": "act_story_sequence",
+  "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
+  "summaryEn": "Retell a story in order to build language and memory.",
+  "summaryMm": "ဖတ်ပြီးသော ပုံပြင်ကို အစီအစဉ်တကျ ပြန်ပြောစေခြင်း။",
+  "tags": ["language", "cognitive", "4y"],
+  "titleEn": "Story-sequence retelling",
+  "titleMm": "ဇာတ်လမ်း အစီအစဉ် ပြန်ပြောကစားခြင်း",
+  "type": "activity",
+  "updatedAt": 1786433535701,
+  "version": 1
+}
