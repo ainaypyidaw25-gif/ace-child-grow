@@ -51,6 +51,9 @@ import {
   SWAIMAN_SUDDEN_WEAKNESS_SOURCE_ID,
   SWAIMAN_SUDDEN_WEAKNESS_TARGET,
 } from '../../../convex/lib/swaimanSuddenWeaknessCasData';
+import {
+  MANUAL_REVIEW_CONTENT_TARGETS,
+} from '../../../convex/lib/manualReviewContentCasData';
 
 const RETIRED_SERVER_GUARD_ITEMS = [
   ...[
@@ -256,6 +259,35 @@ describe('Convex registered handlers enforce authorization', () => {
     expect(context.db.patch).toHaveBeenCalledWith('content-1', expect.objectContaining({
       reviewRevision: 8, reviewerDisplayName: undefined, reviewScope: undefined,
     }));
+  });
+
+  it('broad staff and CLI seed paths skip the eight exact manual-review CAS targets', async () => {
+    authState.userId = 'editor-1';
+    const context = ctx({
+      profile: { userId: 'editor-1', isStaff: true, staffRole: 'content_editor' },
+    });
+    const items = MANUAL_REVIEW_CONTENT_TARGETS.map((target) => ({
+      type: target.type,
+      slug: target.slug,
+      titleMm: 'stale',
+      titleEn: 'stale',
+      tags: [],
+      source: 'stale broad seed',
+      version: 1,
+      clinicalStatus: 'clinical_review',
+      data: {},
+      media: [{ kind: 'illustration' }],
+      searchText: 'stale',
+    }));
+
+    const result = await handler(importSeed)(context, { items }) as Record<string, number>;
+    expect(result).toEqual({ created: 0, updated: 0, skippedApproved: 8, total: 8 });
+    expect(context.db.query).not.toHaveBeenCalledWith('libraryContent');
+    expect(context.db.query).not.toHaveBeenCalledWith('libraryMedia');
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalledWith('libraryContent', expect.anything());
+    expect(context.db.insert).not.toHaveBeenCalledWith('libraryMedia', expect.anything());
+    for (const item of items) expect(seedRunSkipsItem(item)).toBe(true);
   });
 
   it('the server seed boundary skips retired content before any catalogue or media write', async () => {

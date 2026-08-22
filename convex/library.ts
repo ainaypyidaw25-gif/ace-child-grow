@@ -30,6 +30,7 @@ import {
 } from './lib/publicationVisibility';
 import { activeAiParentReadableContent } from './lib/aiPublicationVisibility';
 import { isRetiredContentSlug } from './lib/contentRetirements';
+import { isManualReviewContentCasTargetSlug } from './lib/manualReviewContentCasData';
 
 export { isPubliclyReadableStatus } from './lib/publicationVisibility';
 
@@ -587,7 +588,7 @@ export const importSeed = mutation({
       // Fail closed at the server boundary as well as in local seed generation:
       // a stale or hand-built client must never recreate or mutate an archived
       // catalogue row. Reuse the existing skip counter to preserve the API.
-      if (isRetiredContentSlug(it.slug)) {
+      if (isRetiredContentSlug(it.slug) || isManualReviewContentCasTargetSlug(it.slug)) {
         skippedApproved += 1;
         continue;
       }

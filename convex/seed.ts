@@ -52,6 +52,7 @@ import {
   CLINICAL_REVIEW_COPY_TARGETS,
   type ClinicalReviewCopyTarget,
 } from './lib/clinicalReviewCopyRelease';
+import { isManualReviewContentCasTargetSlug } from './lib/manualReviewContentCasData';
 
 const GRANTABLE_ROLES = [
   'owner',
@@ -186,7 +187,8 @@ type Item = {
 
 /** Server-side fail-closed guard for stale or hand-built CLI seed artifacts. */
 export function seedRunSkipsItem(item: Pick<Item, 'type' | 'slug'>): boolean {
-  return isRetiredContentSlug(item.slug);
+  return isRetiredContentSlug(item.slug)
+    || isManualReviewContentCasTargetSlug(item.slug);
 }
 
 const PUBLISHED_RELEASE_LIMIT = 5_000;
