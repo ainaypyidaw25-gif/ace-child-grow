@@ -11,6 +11,7 @@ import {
   findBilingualConflicts,
   isParentVisible,
   needsManualTriage,
+  projectReviewDecisionsForRevision,
   requiredDimensionsFor,
   safeStringify,
   suggestedDimensionsFor,
@@ -49,6 +50,58 @@ describe('governance value coercion (keeps the review queue from throwing on leg
     expect(coerceOwnerPriority('P0')).toBe('P0');
     expect(coerceOwnerPriority('P9')).toBeNull();
     expect(coerceOwnerPriority(undefined)).toBeNull();
+  });
+});
+
+describe('revision-bound duplicate review projection', () => {
+  const decision = (overrides: Partial<{
+    dimension: string;
+    decision: string;
+    reviewerId: string;
+    contentVersion: number;
+    reviewRevision: number;
+    note: string;
+    reviewedAt: number;
+  }> = {}) => ({
+    dimension: 'native_myanmar',
+    decision: 'in_review',
+    reviewerId: 'reviewer-1',
+    contentVersion: 7,
+    note: '',
+    reviewedAt: 100,
+    ...overrides,
+  });
+
+  it('keeps duplicate legacy history visible without raising a current-revision P0 blocker', () => {
+    const result = projectReviewDecisionsForRevision([
+      decision({ reviewedAt: 300 }),
+      decision({ reviewedAt: 200 }),
+      decision({ reviewedAt: 100 }),
+    ], 12);
+
+    expect(result.workflowBlocker).toBeNull();
+    expect(result.currentByDimension.size).toBe(0);
+    expect(result.latestDecisionAt).toBe(300);
+  });
+
+  it('still fails closed on identical decisions bound to the current revision', () => {
+    const result = projectReviewDecisionsForRevision([
+      decision({ contentVersion: 12, reviewRevision: 12, reviewedAt: 300 }),
+      decision({ contentVersion: 12, reviewRevision: 12, reviewedAt: 200 }),
+    ], 12);
+
+    expect(result.workflowBlocker).toBe('duplicate identical review decisions recorded');
+    expect(result.currentByDimension.get('native_myanmar')?.reviewedAt).toBe(300);
+  });
+
+  it('uses explicit reviewRevision as the canonical binding for migrated rows', () => {
+    const result = projectReviewDecisionsForRevision([
+      decision({ contentVersion: 7, reviewRevision: 12, reviewedAt: 300 }),
+      decision({ contentVersion: 7, reviewRevision: 12, reviewedAt: 200 }),
+    ], 12);
+
+    expect(result.workflowBlocker).toBe('duplicate identical review decisions recorded');
+    expect(result.currentByDimension.get('native_myanmar')?.reviewedAt).toBe(300);
   });
 });
 
