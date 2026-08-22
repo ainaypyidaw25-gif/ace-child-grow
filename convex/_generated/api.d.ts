@@ -18,6 +18,7 @@ import type * as asqDoctorVisitsLinkCas from "../asqDoctorVisitsLinkCas.js";
 import type * as audit from "../audit.js";
 import type * as auth from "../auth.js";
 import type * as billing from "../billing.js";
+import type * as birth2mGrossMotorCas from "../birth2mGrossMotorCas.js";
 import type * as birth2mNutritionCas from "../birth2mNutritionCas.js";
 import type * as children from "../children.js";
 import type * as content from "../content.js";
@@ -40,6 +41,8 @@ import type * as lib_aiPublicationReleaseData from "../lib/aiPublicationReleaseD
 import type * as lib_aiPublicationVisibility from "../lib/aiPublicationVisibility.js";
 import type * as lib_asqDoctorVisitsLinkCasData from "../lib/asqDoctorVisitsLinkCasData.js";
 import type * as lib_auth from "../lib/auth.js";
+import type * as lib_birth2mGrossMotorCasData from "../lib/birth2mGrossMotorCasData.js";
+import type * as lib_birth2mGrossMotorCorrection from "../lib/birth2mGrossMotorCorrection.js";
 import type * as lib_birth2mNutritionCasData from "../lib/birth2mNutritionCasData.js";
 import type * as lib_burmeseCopyAuditRelease from "../lib/burmeseCopyAuditRelease.js";
 import type * as lib_classificationImport from "../lib/classificationImport.js";
@@ -107,6 +110,7 @@ declare const fullApi: ApiFromModules<{
   audit: typeof audit;
   auth: typeof auth;
   billing: typeof billing;
+  birth2mGrossMotorCas: typeof birth2mGrossMotorCas;
   birth2mNutritionCas: typeof birth2mNutritionCas;
   children: typeof children;
   content: typeof content;
@@ -129,6 +133,8 @@ declare const fullApi: ApiFromModules<{
   "lib/aiPublicationVisibility": typeof lib_aiPublicationVisibility;
   "lib/asqDoctorVisitsLinkCasData": typeof lib_asqDoctorVisitsLinkCasData;
   "lib/auth": typeof lib_auth;
+  "lib/birth2mGrossMotorCasData": typeof lib_birth2mGrossMotorCasData;
+  "lib/birth2mGrossMotorCorrection": typeof lib_birth2mGrossMotorCorrection;
   "lib/birth2mNutritionCasData": typeof lib_birth2mNutritionCasData;
   "lib/burmeseCopyAuditRelease": typeof lib_burmeseCopyAuditRelease;
   "lib/classificationImport": typeof lib_classificationImport;

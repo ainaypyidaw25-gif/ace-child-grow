@@ -12,16 +12,16 @@ export const MILESTONES: SeedItem[] = [
   kb(
     m('birth_2m', 'gross_motor', 1, {
       title: {
-        mm: 'နိုးနေချိန် မှောက်လျက်ထားစဉ် ခေါင်းမော့ခြင်း',
-        en: 'Lifts head during awake tummy time',
+        mm: 'နိုးနေချိန် မှောက်လျက်ထားစဉ် ခေါင်းမော့ထားနိုင်ခြင်း',
+        en: 'Holds head up during awake tummy time',
       },
       observe: {
-        mm: 'နိုးနေချိန် လူကြီးကြီးကြပ်၍ မှောက်လျက်ထားစဉ် ခေါင်းကို ခဏတာ မော့နိုင်ပါသလား။',
-        en: 'Briefly lifts the head during awake, supervised tummy time?',
+        mm: 'နိုးနေချိန် လူကြီးကြီးကြပ်၍ မှောက်လျက်ထားစဉ် ခေါင်းကို မော့ထားနိုင်ပါသလား။',
+        en: 'Holds the head up during awake, supervised tummy time?',
       },
       why: {
-        mm: 'နိုးနေချိန် လူကြီးကြီးကြပ်၍ မှောက်လျက်ထားစဉ် ခေါင်းမော့ခြင်းသည် CDC ၂ လ စာရင်းတွင် ပါဝင်သော ကြည့်ရှုနိုင်သည့်အချက် ဖြစ်သည်။',
-        en: 'Lifting the head during awake tummy time is an observation on the CDC 2-month checklist.',
+        mm: 'နိုးနေချိန် လူကြီးကြီးကြပ်၍ မှောက်လျက်ထားစဉ် ခေါင်းကို မော့ထားနိုင်ခြင်းသည် CDC ၂ လ စာရင်းတွင် ပါဝင်သော ကြည့်ရှုနိုင်သည့်အချက် ဖြစ်သည်။',
+        en: 'Holding the head up during awake tummy time is an observation on the CDC 2-month checklist.',
       },
       red: {
         mm: 'အသက် ၂ လတွင် မှောက်လျက်ထားစဉ် ခေါင်းမော့ခြင်း မတွေ့သေးပါက၊ ယခင်တတ်ခဲ့သော ကျွမ်းကျင်မှု ပျောက်ဆုံးပါက သို့မဟုတ် ဖွံ့ဖြိုးမှုအတွက် စိုးရိမ်ပါက ကျန်းမာရေးဝန်ထမ်းနှင့် အမြန်တိုင်ပင်ပါ။ ဤအချက်သည် အောင်/မအောင် စစ်ဆေးချက် သို့မဟုတ် ရောဂါဖော်ထုတ်ချက် မဟုတ်ပါ။',
