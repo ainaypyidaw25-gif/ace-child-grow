@@ -327,8 +327,10 @@ async function buildQueueResult(ctx: QueryCtx, level: string, role: string | und
 
       const warnings: string[] = [];
       if (workflowBlocker) warnings.push(workflowBlocker);
-      if (item.clinicalStatus === 'published' && result.riskClass === 'C') {
-        warnings.push('parent-visible high-risk wording has only an education-scoped legacy publication record');
+      if (item.clinicalStatus === 'published'
+        && result.riskClass === 'C'
+        && (item.reviewScope !== 'clinical' || !approvedSet.has('clinical'))) {
+        warnings.push('parent-visible high-risk wording lacks a current clinical-scope publication decision');
       }
       if (item.reviewScope === 'education') warnings.push('education-scoped review covers general education only, not a specialist safety decision');
       if (!linkedSlugs.has(item.slug)) warnings.push('no evidence link recorded on this deployment');

@@ -223,6 +223,19 @@ describe('P0–P3 priority policy', () => {
     expect(hidden.priority).toBe('P2');
   });
 
+  it('does not describe a completed Class C review as still awaiting specialist review', () => {
+    const result = computePriority(base({
+      clinicalStatus: 'published',
+      priorityStatus: 'completed',
+      data: { note: { mm: 'အဖျား ရှိလျှင်', en: 'If fever appears' } },
+    }));
+
+    expect(result.priority).toBe('P1');
+    expect(result.priorityReasons).toEqual([
+      'parent-visible high-risk record with required reviews completed',
+    ]);
+  });
+
   it('sends Class A and B to P3', () => {
     expect(computePriority(base({})).priority).toBe('P3');
     expect(computePriority(base({ type: 'milestone', data: {} })).priority).toBe('P3');

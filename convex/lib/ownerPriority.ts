@@ -437,9 +437,14 @@ export function computePriority(record: ClassifiableRecord): PriorityResult {
   if (!priority) {
     if (riskClass === 'C' || riskClass === 'D' || riskClass === 'E') {
       priority = visible ? 'P1' : 'P2';
-      reasons.push(visible
-        ? 'parent-visible high-risk record awaiting specialist safety review'
-        : 'unpublished high-risk record awaiting specialist safety review');
+      const completed = record.priorityStatus === 'completed';
+      reasons.push(completed
+        ? visible
+          ? 'parent-visible high-risk record with required reviews completed'
+          : 'unpublished high-risk record with required reviews completed'
+        : visible
+          ? 'parent-visible high-risk record awaiting specialist safety review'
+          : 'unpublished high-risk record awaiting specialist safety review');
     } else {
       priority = 'P3';
       reasons.push('standard review (Class A/B)');
