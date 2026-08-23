@@ -471,12 +471,18 @@ export default defineSchema({
     // mismatch in audits. New rows record both, identically; old rows stay
     // valid without it. A decision NEVER applies to any other revision.
     reviewRevision: v.optional(v.number()),
+    // Optional/additive: deterministic idempotency for bounded clinical-review
+    // batches. Historical rows remain valid and carry neither field.
+    decisionKey: v.optional(v.string()),
+    clinicalReviewBatchId: v.optional(v.string()),
     createdAt: v.number(),
     updatedAt: v.number(),
   })
     .index('by_content_dimension_version', ['contentSlug', 'dimension', 'contentVersion'])
     .index('by_content', ['contentSlug'])
-    .index('by_reviewer', ['reviewerId']),
+    .index('by_reviewer', ['reviewerId'])
+    .index('by_decision_key', ['decisionKey'])
+    .index('by_clinical_review_batch_and_content', ['clinicalReviewBatchId', 'contentSlug']),
 
   // ------------------------------------------------------------------
   // Advisory AI audit provenance. These append-only records are deliberately

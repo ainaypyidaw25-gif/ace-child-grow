@@ -74,6 +74,7 @@ export type ReviewRefusalCode =
   | 'note_required'
   | 'content_not_found'
   | 'retired_content'
+  | 'assignment_required'
   | 'stale_revision';
 
 export type ReviewRefusal = { code: ReviewRefusalCode; message: string };
@@ -165,6 +166,10 @@ export const REVIEW_REFUSAL_LABELS: Record<ReviewRefusalCode, { mm: string; en: 
   retired_content: {
     mm: 'မပြောင်းလဲနိုင်သော ထုတ်ဝေမှုမှတ်တမ်းဖြင့် ရပ်ဆိုင်းထားသော ဤအကြောင်းအရာတွင် သုံးသပ်ဆုံးဖြတ်ချက်အသစ် မထည့်နိုင်ပါ။',
     en: 'This content was retired by an immutable release and cannot receive new review decisions.',
+  },
+  assignment_required: {
+    mm: 'Clinical reviewer ဆုံးဖြတ်ချက်ကို သတ်မှတ်ထားသော frozen batch ထဲမှသာ မှတ်တမ်းတင်နိုင်ပါသည်။',
+    en: 'Clinical reviewer decisions must be recorded through the assigned frozen batch.',
   },
   stale_revision: {
     mm: 'သင်ဖတ်ရှုပြီးနောက် ဤအကြောင်းအရာ ပြောင်းလဲသွားပါပြီ။ မူကွဲအသစ်ကို ပြန်လည်စစ်ဆေးပြီးမှ ဆုံးဖြတ်ပါ။',

@@ -1039,10 +1039,10 @@ describe('Convex registered handlers enforce authorization', () => {
         code: 'display_name_required',
       },
       {
-        name: 'approval without a stated qualification',
+        name: 'clinical reviewer without an exact assignment',
         profile: { userId: 'u-1', isStaff: true, staffRole: 'clinical_reviewer', displayName: 'Dr Someone' },
         args: { contentSlug: 'item-1', dimension: 'clinical', decision: 'approved', expectedReviewRevision: 1 },
-        code: 'qualification_required',
+        code: 'assignment_required',
       },
       {
         name: 'changes requested with no note',
@@ -1086,7 +1086,7 @@ describe('Convex registered handlers enforce authorization', () => {
     });
   });
 
-  it('a qualified clinical reviewer can record a version-bound safety decision', async () => {
+  it('a qualified clinical reviewer cannot bypass the frozen assignment for a safety decision', async () => {
     authState.userId = 'clinical-1';
     const context = ctx({
       profile: {
@@ -1097,14 +1097,15 @@ describe('Convex registered handlers enforce authorization', () => {
     });
     await expect(handler(saveDecision)(context, {
       contentSlug: 'item-1', dimension: 'safety', decision: 'approved', note: 'Checked', expectedReviewRevision: 3,
-    })).resolves.toEqual({ ok: true, contentVersion: 3 });
-    expect(context.db.insert).toHaveBeenCalledWith('contentReviews', expect.objectContaining({
-      contentSlug: 'item-1', contentVersion: 3, dimension: 'safety', decision: 'approved',
-      reviewerDisplayName: 'Dr Reviewer', reviewerQualification: 'MBBS',
-    }));
+    })).resolves.toEqual({
+      ok: false,
+      code: 'assignment_required',
+      message: 'Clinical reviewer decisions must be recorded through the assigned frozen batch.',
+    });
+    expect(context.db.insert).not.toHaveBeenCalledWith('contentReviews', expect.anything());
   });
 
-  it('a qualified clinical reviewer can record the revision-bound child-development decision required by the queue', async () => {
+  it('a qualified clinical reviewer cannot bypass the frozen assignment for child development', async () => {
     authState.userId = 'clinical-1';
     const context = ctx({
       profile: {
@@ -1116,14 +1117,15 @@ describe('Convex registered handlers enforce authorization', () => {
     await expect(handler(saveDecision)(context, {
       contentSlug: 'item-1', dimension: 'child_development', decision: 'approved',
       note: 'Developmental wording checked', expectedReviewRevision: 3,
-    })).resolves.toEqual({ ok: true, contentVersion: 3 });
-    expect(context.db.insert).toHaveBeenCalledWith('contentReviews', expect.objectContaining({
-      contentSlug: 'item-1', contentVersion: 3, dimension: 'child_development', decision: 'approved',
-      reviewerDisplayName: 'Dr Reviewer', reviewerQualification: 'MBBS', reviewerRole: 'clinical_reviewer',
-    }));
+    })).resolves.toEqual({
+      ok: false,
+      code: 'assignment_required',
+      message: 'Clinical reviewer decisions must be recorded through the assigned frozen batch.',
+    });
+    expect(context.db.insert).not.toHaveBeenCalledWith('contentReviews', expect.anything());
   });
 
-  it('appends repeated review decisions and reports only the latest decision per dimension as current', async () => {
+  it('keeps clinical review history behind the exact assignment boundary', async () => {
     authState.userId = 'clinical-1';
     const existingRows = [
       { _id: 'review-3', contentSlug: 'item-1', contentVersion: 2, dimension: 'clinical', decision: 'changes_requested' },
@@ -1141,10 +1143,10 @@ describe('Convex registered handlers enforce authorization', () => {
       },
     });
     await expect(handler(listContentReviews)(listContext, { contentSlug: 'item-1' })).resolves.toEqual({
-      allowed: true,
-      contentVersion: 2,
-      current: [existingRows[0], existingRows[1]],
-      history: existingRows,
+      allowed: false,
+      contentVersion: null,
+      current: [],
+      history: [],
     });
 
     const saveContext = ctx({
@@ -1159,10 +1161,12 @@ describe('Convex registered handlers enforce authorization', () => {
     });
     await expect(handler(saveDecision)(saveContext, {
       contentSlug: 'item-1', dimension: 'clinical', decision: 'approved', note: 'Re-approved after changes', expectedReviewRevision: 2,
-    })).resolves.toEqual({ ok: true, contentVersion: 2 });
-    expect(saveContext.db.insert).toHaveBeenCalledWith('contentReviews', expect.objectContaining({
-      contentSlug: 'item-1', contentVersion: 2, dimension: 'clinical', decision: 'approved',
-    }));
+    })).resolves.toEqual({
+      ok: false,
+      code: 'assignment_required',
+      message: 'Clinical reviewer decisions must be recorded through the assigned frozen batch.',
+    });
+    expect(saveContext.db.insert).not.toHaveBeenCalledWith('contentReviews', expect.anything());
     expect(saveContext.db.patch).not.toHaveBeenCalled();
   });
 
