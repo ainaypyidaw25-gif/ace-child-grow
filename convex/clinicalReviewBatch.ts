@@ -1,6 +1,6 @@
 import { v } from 'convex/values';
 import type { Doc, Id } from './_generated/dataModel';
-import { mutation, query, type MutationCtx, type QueryCtx } from './_generated/server';
+import { internalQuery, mutation, type MutationCtx, type QueryCtx } from './_generated/server';
 import { logAudit } from './audit';
 import { sha256Canonical } from './lib/aiAuditHash';
 import {
@@ -14,12 +14,21 @@ import {
   CLINICAL_REVIEW_BATCH_REVIEWER,
   type ClinicalReviewBatchItem,
 } from './lib/clinicalReviewBatchData';
+import {
+  CLINICAL_REVIEW_BATCH_CONTRACT as CONTRACT,
+  CLINICAL_REVIEW_BATCH_CONTRACT_VERSION as CONTRACT_VERSION,
+  CLINICAL_REVIEW_BATCH_DIMENSION as DIMENSION,
+  clinicalReviewBatchResultValidator,
+  clinicalReviewDecisionValidator as decisionValidator,
+  clinicalReviewHandoffValidator as handoffValidator,
+  clinicalReviewReceiptValidator as receiptValidator,
+  type ClinicalReviewDecision as ReviewDecision,
+} from './lib/clinicalReviewBatchContract';
 import { todayIsoUtc } from './lib/evidenceFreshness';
 import { evaluatePublicationEvidence } from './lib/evidencePublicationGate';
 import { requireUser } from './lib/auth';
 
 type DatabaseContext = Pick<QueryCtx, 'db'> | Pick<MutationCtx, 'db'>;
-type ReviewDecision = 'approved' | 'changes_requested' | 'not_applicable';
 type SnapshotField = {
   path: string;
   labelMm: string;
@@ -35,54 +44,9 @@ type SnapshotSource = {
   url: string;
 };
 
-const CONTRACT = 'ace.clinical-frozen-batch' as const;
-const CONTRACT_VERSION = 1 as const;
-const DIMENSION = 'clinical' as const;
 const MAX_RELATED_ROWS = 50;
 const MAX_SNAPSHOT_FIELDS = 12;
 const MAX_SNAPSHOT_FIELD_CHARACTERS = 12_000;
-
-const nullableStringValidator = v.union(v.string(), v.null());
-const decisionValidator = v.union(v.literal('approved'), v.literal('changes_requested'), v.literal('not_applicable'));
-const receiptValidator = v.object({
-  decision: decisionValidator,
-  note: nullableStringValidator,
-  reviewedAt: v.number(),
-  receiptId: v.string(),
-});
-const snapshotFieldValidator = v.object({
-  path: v.string(), labelMm: v.string(), labelEn: v.string(),
-  valueMm: nullableStringValidator, valueEn: nullableStringValidator,
-});
-const snapshotSourceValidator = v.object({
-  sourceId: v.string(), org: v.string(), title: v.string(),
-  year: v.union(v.number(), v.null()), url: v.string(),
-});
-const snapshotValidator = v.object({
-  digest: v.string(), titleMm: v.string(), titleEn: v.string(),
-  summaryMm: nullableStringValidator, summaryEn: nullableStringValidator,
-  sources: v.array(snapshotSourceValidator), fields: v.array(snapshotFieldValidator),
-});
-const handoffValidator = v.object({
-  batchId: v.string(), decisionCount: v.number(), completedAt: v.number(),
-  digest: v.string(), receiptDigest: v.string(),
-});
-const itemValidator = v.object({
-  assignmentId: v.string(), slug: v.string(), type: v.string(), dimension: v.literal(DIMENSION),
-  reviewRevision: v.number(), liveReviewRevision: v.number(), snapshot: snapshotValidator,
-  decision: v.union(receiptValidator, v.null()),
-});
-const reviewerValidator = v.object({
-  profileId: v.string(), userId: v.string(), displayName: v.string(), qualification: v.string(),
-  role: v.literal('clinical_reviewer'),
-});
-const batchResultValidator = v.object({
-  contract: v.literal(CONTRACT), contractVersion: v.literal(CONTRACT_VERSION),
-  scope: v.literal('authenticated_assignee'), batchId: v.literal(CLINICAL_REVIEW_BATCH_ID),
-  lane: v.literal('clinical'), assignedRole: v.literal('clinical_reviewer'), frozenAt: v.number(),
-  freezeDigest: v.string(), freezeReceiptDigest: v.string(), reviewer: reviewerValidator,
-  items: v.array(itemValidator), handoff: v.union(handoffValidator, v.null()),
-});
 
 type DecisionReceipt = {
   decision: ReviewDecision;
@@ -219,7 +183,7 @@ function receiptFor(row: Doc<'contentReviews'>): DecisionReceipt | null {
   return { decision: row.decision, note: row.note?.trim() || null, reviewedAt: row.reviewedAt, receiptId: String(row._id) };
 }
 
-async function inspectItem(ctx: DatabaseContext, item: ClinicalReviewBatchItem) {
+async function inspectItem(ctx: DatabaseContext, item: ClinicalReviewBatchItem, todayIso: string) {
   const blockers: string[] = [];
   const contentRows = await ctx.db.query('libraryContent').withIndex('by_slug', (q) => q.eq('slug', item.slug)).take(2);
   const linkRows = await ctx.db.query('evidenceLinks').withIndex('by_kind_slug', (q) => q.eq('kind', item.kind).eq('slug', item.slug)).take(2);
@@ -245,7 +209,7 @@ async function inspectItem(ctx: DatabaseContext, item: ClinicalReviewBatchItem) 
     if (rows.length !== 1) blockers.push(`source_not_unique:${sourceId}`); else sourceRows.push(rows[0]);
   }
   if (sourceRows.length !== item.sourceCount || await sha256Canonical(sourceRows) !== item.sourcesCanonicalSha256) blockers.push('source_preimage_drift');
-  if (link && !evaluatePublicationEvidence(link.sourceIds, sourceRows, todayIsoUtc()).allowed) blockers.push('citation_eligibility_drift');
+  if (link && !evaluatePublicationEvidence(link.sourceIds, sourceRows, todayIso).allowed) blockers.push('citation_eligibility_drift');
 
   const mediaPage = await ctx.db.query('libraryMedia').withIndex('by_content', (q) => q.eq('contentSlug', item.slug)).take(MAX_RELATED_ROWS + 1);
   if (mediaPage.length > MAX_RELATED_ROWS) blockers.push('media_bound_exceeded');
@@ -301,9 +265,9 @@ async function inspectItem(ctx: DatabaseContext, item: ClinicalReviewBatchItem) 
 
 type InspectedItem = Awaited<ReturnType<typeof inspectItem>>;
 
-async function inspectBatch(ctx: DatabaseContext): Promise<InspectedItem[]> {
+async function inspectBatch(ctx: DatabaseContext, todayIso: string): Promise<InspectedItem[]> {
   const states: InspectedItem[] = [];
-  for (const item of CLINICAL_REVIEW_BATCH_ITEMS) states.push(await inspectItem(ctx, item));
+  for (const item of CLINICAL_REVIEW_BATCH_ITEMS) states.push(await inspectItem(ctx, item, todayIso));
   return states;
 }
 
@@ -334,16 +298,24 @@ function assertVerifiedStates(states: InspectedItem[]): asserts states is Array<
   if (states.some((state) => state.blockers.length > 0 || !state.snapshot)) throw new Error('Frozen clinical-review batch preflight failed');
 }
 
-export const getAssignedBatch = query({
-  args: {},
-  returns: batchResultValidator,
-  handler: async (ctx) => {
+/**
+ * Deterministic database half of the assigned-batch read. The public action
+ * supplies its server clock as arguments, so Convex never caches a query whose
+ * result silently depends on Date.now(). The action is also the only public
+ * caller; browser-provided timestamps are never accepted.
+ */
+export const readAssignedBatchState = internalQuery({
+  args: { nowMs: v.number(), todayIso: v.string() },
+  returns: clinicalReviewBatchResultValidator,
+  handler: async (ctx, args) => {
     const userId = await requireUser(ctx);
     const identityBlockers = await assignedReviewerBlockers(ctx, userId);
     if (identityBlockers.length > 0) throw new Error('Frozen clinical-review batch is not assigned to this account');
-    if (Date.now() >= CLINICAL_REVIEW_BATCH_EXPIRES_AT) throw new Error('Frozen clinical-review batch has expired');
+    if (!Number.isFinite(args.nowMs) || args.nowMs < CLINICAL_REVIEW_BATCH_FROZEN_AT) throw new Error('Frozen clinical-review batch clock is invalid');
+    if (new Date(args.nowMs).toISOString().slice(0, 10) !== args.todayIso) throw new Error('Frozen clinical-review batch date is invalid');
+    if (args.nowMs >= CLINICAL_REVIEW_BATCH_EXPIRES_AT) throw new Error('Frozen clinical-review batch has expired');
     if (await sha256Canonical(CLINICAL_REVIEW_BATCH_MANIFEST) !== CLINICAL_REVIEW_BATCH_HASH) throw new Error('Frozen clinical-review batch manifest failed verification');
-    const states = await inspectBatch(ctx);
+    const states = await inspectBatch(ctx, args.todayIso);
     assertVerifiedStates(states);
     const freezeReceipt = await freezeReceiptDigest();
     return {
@@ -427,7 +399,7 @@ export const saveAssignedDecision = mutation({
     const note = args.note?.trim();
     if (args.decision === 'changes_requested' && !note) return await refuse(ctx, userId, 'note_required', `${item.slug} · refused: changes_requested requires note`, item.contentId);
 
-    const batchStates = await inspectBatch(ctx);
+    const batchStates = await inspectBatch(ctx, todayIsoUtc());
     const state = batchStates.find((candidate) => candidate.item.slug === item.slug);
     if (!state) return await refuse(ctx, userId, 'assignment_not_found', `${item.slug} · refused: assignment state missing`, item.contentId);
     const blockedState = batchStates.find((candidate) => candidate.blockers.length > 0 || !candidate.snapshot);

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type FormEvent } from 'react';
-import { useMutation, useQuery } from 'convex/react';
+import { useAction, useMutation, useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
 import { useUnsavedChangesGuard } from '../app/useUnsavedChangesGuard';
@@ -534,10 +534,23 @@ export function ContentReviewWorkspace() {
   const { locale } = useLocale();
   const L = (mm: string, en: string) => locale === 'mm' ? mm : en;
   const access = useQuery(api.admin.myAccess);
-  const assignedClinicalBatch = useQuery(
-    api.clinicalReviewBatch.getAssignedBatch,
-    isClinicalBatchReviewerRole(access?.role) ? {} : 'skip',
-  );
+  const loadAssignedClinicalBatch = useAction(api.clinicalReviewBatchActions.getAssignedBatch);
+  const [assignedClinicalBatch, setAssignedClinicalBatch] = useState<unknown>(undefined);
+  useEffect(() => {
+    if (!isClinicalBatchReviewerRole(access?.role)) {
+      setAssignedClinicalBatch(undefined);
+      return;
+    }
+    let cancelled = false;
+    setAssignedClinicalBatch(undefined);
+    void loadAssignedClinicalBatch({})
+      .then((result) => { if (!cancelled) setAssignedClinicalBatch(result); })
+      .catch((error) => {
+        console.error(error);
+        if (!cancelled) setAssignedClinicalBatch(null);
+      });
+    return () => { cancelled = true; };
+  }, [access?.role, loadAssignedClinicalBatch]);
   const saveAssignedClinicalDecision = useMutation(api.clinicalReviewBatch.saveAssignedDecision);
   const [tab, setTab] = useState<WorkspaceTab>('priority');
   const [type, setType] = useState('milestone');

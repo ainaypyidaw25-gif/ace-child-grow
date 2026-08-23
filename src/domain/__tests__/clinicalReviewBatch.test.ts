@@ -24,7 +24,8 @@ vi.mock('../../../convex/lib/aiAuditHash', async (importOriginal) => {
   };
 });
 
-import { getAssignedBatch, saveAssignedDecision } from '../../../convex/clinicalReviewBatch';
+import { readAssignedBatchState, saveAssignedDecision } from '../../../convex/clinicalReviewBatch';
+import { getAssignedBatch } from '../../../convex/clinicalReviewBatchActions';
 import { sha256Canonical } from '../../../convex/lib/aiAuditHash';
 import {
   CLINICAL_REVIEW_BATCH_COUNT,
@@ -232,6 +233,14 @@ function handler(fn: unknown) {
   return (fn as { _handler: (ctx: ReturnType<typeof context>, args: Record<string, unknown>) => Promise<unknown> })._handler;
 }
 
+async function readBatch(ctx: ReturnType<typeof context>) {
+  const nowMs = Date.now();
+  return await handler(readAssignedBatchState)(ctx, {
+    nowMs,
+    todayIso: new Date(nowMs).toISOString().slice(0, 10),
+  });
+}
+
 function inputFrom(item: Record<string, unknown>) {
   return {
     batchId: CLINICAL_REVIEW_BATCH_ID,
@@ -258,7 +267,7 @@ describe('frozen clinical-review batch UI contract', () => {
   });
 
   it('returns the exact ace.clinical-frozen-batch v1 snapshot contract after preflight', async () => {
-    const result = await handler(getAssignedBatch)(context(), {}) as Record<string, unknown>;
+    const result = await readBatch(context()) as Record<string, unknown>;
     expect(result).toMatchObject({
       contract: 'ace.clinical-frozen-batch',
       contractVersion: 1,
@@ -287,7 +296,7 @@ describe('frozen clinical-review batch UI contract', () => {
 
   it('saves one decision and returns the same receipt for an idempotent replay', async () => {
     const ctx = context();
-    const batch = await handler(getAssignedBatch)(ctx, {}) as { items: Array<Record<string, unknown>> };
+    const batch = await readBatch(ctx) as { items: Array<Record<string, unknown>> };
     const args = inputFrom(batch.items[0]);
     const first = await handler(saveAssignedDecision)(ctx, args) as Record<string, unknown>;
     expect(first).toMatchObject({ ok: true, duplicate: false, receipt: { decision: 'approved', note: null } });
@@ -299,7 +308,7 @@ describe('frozen clinical-review batch UI contract', () => {
 
   it('fails closed with the live revision when content changes after the freeze', async () => {
     const ctx = context();
-    const batch = await handler(getAssignedBatch)(ctx, {}) as { items: Array<Record<string, unknown>> };
+    const batch = await readBatch(ctx) as { items: Array<Record<string, unknown>> };
     ctx.tables.libraryContent[0].reviewRevision = 2;
     const result = await handler(saveAssignedDecision)(ctx, inputFrom(batch.items[0]));
     expect(result).toMatchObject({ ok: false, code: 'stale_revision', currentReviewRevision: 2 });
@@ -308,7 +317,7 @@ describe('frozen clinical-review batch UI contract', () => {
 
   it('refuses an expired assignment before any clinical decision write', async () => {
     const ctx = context();
-    const batch = await handler(getAssignedBatch)(ctx, {}) as { items: Array<Record<string, unknown>> };
+    const batch = await readBatch(ctx) as { items: Array<Record<string, unknown>> };
     vi.spyOn(Date, 'now').mockReturnValue(CLINICAL_REVIEW_BATCH_EXPIRES_AT);
     const result = await handler(saveAssignedDecision)(ctx, inputFrom(batch.items[0]));
     expect(result).toMatchObject({ ok: false, code: 'assignment_expired' });
@@ -317,7 +326,7 @@ describe('frozen clinical-review batch UI contract', () => {
 
   it('returns a server-issued handoff receipt only after both exact assignments are approved', async () => {
     const ctx = context();
-    const batch = await handler(getAssignedBatch)(ctx, {}) as { items: Array<Record<string, unknown>> };
+    const batch = await readBatch(ctx) as { items: Array<Record<string, unknown>> };
     await handler(saveAssignedDecision)(ctx, inputFrom(batch.items[0]));
     const completed = await handler(saveAssignedDecision)(ctx, inputFrom(batch.items[1])) as Record<string, unknown>;
     expect(completed).toMatchObject({
@@ -332,7 +341,7 @@ describe('frozen clinical-review batch UI contract', () => {
 
   it('does not authorize lane handoff while a requested change remains', async () => {
     const ctx = context();
-    const batch = await handler(getAssignedBatch)(ctx, {}) as { items: Array<Record<string, unknown>> };
+    const batch = await readBatch(ctx) as { items: Array<Record<string, unknown>> };
     await handler(saveAssignedDecision)(ctx, inputFrom(batch.items[0]));
     const secondInput = { ...inputFrom(batch.items[1]), decision: 'changes_requested', note: 'Correct and refreeze.' };
     const completed = await handler(saveAssignedDecision)(ctx, secondInput) as Record<string, unknown>;
@@ -345,13 +354,29 @@ describe('frozen clinical-review batch UI contract', () => {
     const ctx = context();
     ctx.tables.parentProfiles[0].preferredLocale = 'en';
     ctx.tables.parentProfiles[0].parentTourCompletedVersion = 99;
-    const batch = await handler(getAssignedBatch)(ctx, {}) as { items: Array<Record<string, unknown>> };
+    const batch = await readBatch(ctx) as { items: Array<Record<string, unknown>> };
     expect(batch.items).toHaveLength(2);
   });
 
   it('blocks the frozen assignment when reviewer qualification identity drifts', async () => {
     const ctx = context();
     ctx.tables.parentProfiles[0].staffQualification = 'Different qualification';
-    await expect(handler(getAssignedBatch)(ctx, {})).rejects.toThrow('not assigned');
+    await expect(readBatch(ctx)).rejects.toThrow('not assigned');
+  });
+
+  it('derives the deterministic read clock inside a non-cached public action', async () => {
+    const runQuery = vi.fn(async (_reference: unknown, args: unknown) => args);
+    const actionHandler = (getAssignedBatch as unknown as {
+      _handler: (
+        ctx: { auth: { getUserIdentity: () => Promise<object | null> }; runQuery: typeof runQuery },
+        args: Record<string, never>,
+      ) => Promise<unknown>;
+    })._handler;
+    const result = await actionHandler({
+      auth: { getUserIdentity: async () => ({ subject: CLINICAL_REVIEW_BATCH_REVIEWER.userId }) },
+      runQuery,
+    }, {}) as { nowMs: number; todayIso: string };
+    expect(result).toEqual({ nowMs: 1787500000000, todayIso: '2026-08-23' });
+    expect(runQuery).toHaveBeenCalledTimes(1);
   });
 });

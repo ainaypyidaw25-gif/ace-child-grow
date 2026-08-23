@@ -125,7 +125,11 @@ function ClinicalBatchSession({
       setDecision(null);
       setNote('');
       if (result.handoff) {
+        const allExactRowsApproved = batch.items.every(
+          (item) => nextRecorded.get(item.assignmentId)?.decision === 'approved',
+        );
         if (
+          !allExactRowsApproved ||
           result.handoff.batchId !== batch.batchId ||
           result.handoff.decisionCount !== batch.items.length ||
           !result.handoff.digest.trim() || !result.handoff.receiptDigest.trim()
@@ -342,7 +346,7 @@ function ClinicalBatchSession({
       </div>
 
       {complete && (
-        handoff ? (
+        handoff && clinicalClearanceComplete ? (
           <section data-testid="clinical-handoff-receipt" className="rounded-card border border-mint bg-mint-soft p-4 shadow-card sm:p-5">
             <h2 className="font-bold text-mint-deep">{L('Clinical handoff receipt', 'Clinical handoff receipt')}</h2>
             <dl className="mt-3 grid gap-3 text-sm sm:grid-cols-2">

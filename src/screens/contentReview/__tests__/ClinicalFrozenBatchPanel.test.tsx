@@ -183,6 +183,49 @@ describe('ClinicalFrozenBatchPanel', () => {
     expect(screen.queryByTestId('clinical-handoff-receipt')).not.toBeInTheDocument();
   });
 
+  it('rejects a final handoff response when an earlier exact row was not approved', async () => {
+    const recordDecision = vi.fn<RecordClinicalBatchDecision>()
+      .mockResolvedValueOnce({
+        ok: true,
+        receipt: {
+          decision: 'changes_requested',
+          note: 'Correct and refreeze this row.',
+          reviewedAt: 1_787_500_010_000,
+          receiptId: 'receipt-1',
+        },
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        receipt: { decision: 'approved', note: null, reviewedAt: 1_787_500_020_000, receiptId: 'receipt-2' },
+        handoff: {
+          batchId: 'clinical-batch-1',
+          decisionCount: 2,
+          completedAt: 1_787_500_020_000,
+          digest: 'malformed-handoff',
+          receiptDigest: 'malformed-receipt',
+        },
+      });
+    render(
+      <ClinicalFrozenBatchPanel
+        state={{ kind: 'ready', batch: batch() }}
+        reviewer={{ displayName: 'Dr Reviewer', qualification: 'MBBS' }}
+        recordDecision={recordDecision}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole('radio', { name: 'Request changes' }));
+    fireEvent.change(screen.getByRole('textbox', { name: /Review note/ }), {
+      target: { value: 'Correct and refreeze this row.' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'Record this item decision' }));
+    expect(await screen.findByRole('heading', { name: 'ဒုတိယအကြောင်းအရာ' })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('radio', { name: 'Approve this exact revision' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Record this item decision' }));
+    expect(await screen.findByTestId('clinical-batch-refreeze-required')).toHaveTextContent('does not cover this complete batch');
+    expect(screen.queryByTestId('clinical-handoff-receipt')).not.toBeInTheDocument();
+  });
+
   it('stops the batch and disables further recording when the server reports a stale revision', async () => {
     const recordDecision = vi.fn<RecordClinicalBatchDecision>().mockResolvedValue({
       ok: false,

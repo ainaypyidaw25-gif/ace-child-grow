@@ -23,7 +23,7 @@ describe('clinical batch workspace boundary', () => {
     expect(boundary).not.toContain('api.contentReviews.saveDecision');
     expect(boundary).toContain('adaptFrozenClinicalBatch(raw');
     expect(boundary).toContain('clinical decision response was invalid');
-    expect(workspace).toContain('api.clinicalReviewBatch.getAssignedBatch');
+    expect(workspace).toContain('useAction(api.clinicalReviewBatchActions.getAssignedBatch)');
     expect(workspace).toContain('api.clinicalReviewBatch.saveAssignedDecision');
     expect(workspace).not.toContain('clinicalBatchBackend.recordDecision');
   });
