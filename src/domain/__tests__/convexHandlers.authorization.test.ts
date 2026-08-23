@@ -64,6 +64,10 @@ import {
   OLDER_SAFETY_2026_STAGED_SOURCES,
   OLDER_SAFETY_2026_TARGETS,
 } from '../../../convex/lib/olderSafety2026CasData';
+import {
+  CLINICAL_TWO_SMALL_SOURCE_PREIMAGES,
+  CLINICAL_TWO_SMALL_TARGETS,
+} from '../../../convex/lib/clinicalTwoSmallCasData';
 
 const RETIRED_SERVER_GUARD_ITEMS = [
   ...[
@@ -432,7 +436,6 @@ describe('Convex registered handlers enforce authorization', () => {
       media: [{ kind: 'illustration' }],
       searchText: 'stale',
     }));
-
     await expect(handler(importSeed)(context, { items })).resolves.toEqual({
       created: 0,
       updated: 0,
@@ -474,6 +477,80 @@ describe('Convex registered handlers enforce authorization', () => {
 
     expect(context.db.query).not.toHaveBeenCalledWith('libraryContent');
     expect(context.db.query).not.toHaveBeenCalledWith('evidenceLinks');
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalledWith('libraryContent', expect.anything());
+    expect(context.db.insert).not.toHaveBeenCalledWith('evidenceLinks', expect.anything());
+    expect(context.db.insert).not.toHaveBeenCalledWith('evidenceSources', expect.anything());
+  });
+
+  it('reserves both clinical two-small postimages and all six sources at broad boundaries', async () => {
+    authState.userId = 'editor-1';
+    const context = ctx({
+      profile: { userId: 'editor-1', isStaff: true, staffRole: 'content_editor' },
+      rows: { evidenceSources: [] },
+    });
+    const staleItems = CLINICAL_TWO_SMALL_TARGETS.map((target) => ({
+      type: target.kind,
+      slug: target.slug,
+      titleMm: 'stale',
+      titleEn: 'stale',
+      tags: [],
+      source: 'stale broad seed',
+      version: 1,
+      clinicalStatus: 'clinical_review',
+      data: {},
+      media: [{ kind: 'illustration' }],
+      searchText: 'stale',
+    }));
+
+    await expect(handler(importSeed)(context, { items: staleItems })).resolves.toEqual({
+      created: 0,
+      updated: 0,
+      skippedApproved: 2,
+      total: 2,
+    });
+    for (const item of staleItems) expect(seedRunSkipsItem(item)).toBe(true);
+
+    await expect(handler(importLinks)(context, { links: CLINICAL_TWO_SMALL_TARGETS.map(
+      (target) => ({ kind: target.kind, slug: target.slug, sourceIds: ['unknown-stale'] }),
+    ) })).resolves.toMatchObject({ created: 0, updated: 0, unchanged: 0, skipped: 2, failed: 0 });
+
+    await expect(handler(importSources)(context, {
+      sources: CLINICAL_TWO_SMALL_SOURCE_PREIMAGES.map((source) => ({
+        id: source.sourceId,
+        org: 'stale',
+        orgKey: 'STALE',
+        title: 'stale',
+        authors: null,
+        year: 2026,
+        edition: null,
+        country: null,
+        language: 'en',
+        url: 'https://example.invalid/stale',
+        doi: null,
+        isbn: null,
+        pmid: null,
+        evidenceLevel: 'guideline',
+        reviewStatus: 'awaiting_review',
+        reviewer: null,
+        reviewDate: null,
+        nextReviewDate: null,
+        keywords: [],
+        topics: [],
+        ageMonthsMin: 0,
+        ageMonthsMax: 60,
+        verifiedOn: '2026-08-23',
+        verifiedNote: 'stale generic import must be skipped',
+      })),
+    })).resolves.toMatchObject({
+      created: 0,
+      updated: 0,
+      unchanged: 0,
+      reviewReset: 0,
+      skipped: 6,
+      failed: 0,
+    });
+
     expect(context.db.patch).not.toHaveBeenCalled();
     expect(context.db.insert).not.toHaveBeenCalledWith('libraryContent', expect.anything());
     expect(context.db.insert).not.toHaveBeenCalledWith('evidenceLinks', expect.anything());
