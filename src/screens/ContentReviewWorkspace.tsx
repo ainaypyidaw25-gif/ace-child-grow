@@ -20,8 +20,14 @@ import { OwnerActionsPanel, SecuritySummaryPanel } from './ownerPriority/OwnerAc
 import { BulkReplacePanel } from './contentReview/BulkReplacePanel';
 import { ManualReviewPanel } from './contentReview/ManualReviewPanel';
 import { ClinicalFrozenBatchPanel } from './contentReview/ClinicalFrozenBatchPanel';
-import { clinicalBatchBackend } from './contentReview/clinicalBatchBackend';
-import { isClinicalBatchReviewerRole } from '../domain/content/clinicalFrozenBatch';
+import {
+  normalizeClinicalBatchDecisionResult,
+  readAssignedClinicalBatch,
+} from './contentReview/clinicalBatchBackend';
+import {
+  isClinicalBatchReviewerRole,
+  type RecordClinicalBatchDecision,
+} from '../domain/content/clinicalFrozenBatch';
 import { matchesSearchQuery, normalizeSearchText } from '../domain/search';
 
 const DIMENSIONS = ['english', 'native_myanmar', 'child_development', 'evidence', 'safety', 'clinical'] as const;
@@ -528,6 +534,11 @@ export function ContentReviewWorkspace() {
   const { locale } = useLocale();
   const L = (mm: string, en: string) => locale === 'mm' ? mm : en;
   const access = useQuery(api.admin.myAccess);
+  const assignedClinicalBatch = useQuery(
+    api.clinicalReviewBatch.getAssignedBatch,
+    isClinicalBatchReviewerRole(access?.role) ? {} : 'skip',
+  );
+  const saveAssignedClinicalDecision = useMutation(api.clinicalReviewBatch.saveAssignedDecision);
   const [tab, setTab] = useState<WorkspaceTab>('priority');
   const [type, setType] = useState('milestone');
   const [selectedSlug, setSelectedSlug] = useState('');
@@ -644,6 +655,19 @@ export function ContentReviewWorkspace() {
   const item = detail && 'item' in detail ? detail.item : null;
   const isOwner = access.role === 'owner';
   const isClinicalReviewer = isClinicalBatchReviewerRole(access.role);
+  const clinicalBatchState = readAssignedClinicalBatch(assignedClinicalBatch, access.role);
+  const recordClinicalBatchDecision: RecordClinicalBatchDecision = async (input) => {
+    try {
+      return normalizeClinicalBatchDecisionResult(await saveAssignedClinicalDecision(input));
+    } catch (error) {
+      console.error(error);
+      return {
+        ok: false,
+        code: 'backend_unavailable',
+        message: 'The signed clinical decision service is unavailable.',
+      };
+    }
+  };
   const activeTab: WorkspaceTab = isClinicalReviewer ? 'clinicalBatch' : tab;
   const openItemFromQueue = (row: QueueRowView) => {
     requestSelectionChange(() => {
@@ -735,9 +759,9 @@ export function ContentReviewWorkspace() {
 
       {activeTab === 'clinicalBatch' && isClinicalReviewer && (
         <ClinicalFrozenBatchPanel
-          state={clinicalBatchBackend.readAssignedBatch(access.role)}
+          state={clinicalBatchState}
           reviewer={{ displayName: access.displayName, qualification: access.qualification }}
-          recordDecision={clinicalBatchBackend.recordDecision}
+          recordDecision={recordClinicalBatchDecision}
         />
       )}
       {activeTab === 'priority' && <OwnerPriorityContainer onOpenItem={openItemFromQueue} />}

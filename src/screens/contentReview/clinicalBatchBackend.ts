@@ -1,29 +1,97 @@
 import {
   adaptFrozenClinicalBatch,
   type ClinicalBatchLoadState,
-  type RecordClinicalBatchDecision,
+  type RecordClinicalBatchDecisionResult,
 } from '../../domain/content/clinicalFrozenBatch';
 
-export interface ClinicalBatchBackendBoundary {
-  readAssignedBatch(currentRole: string | null | undefined): ClinicalBatchLoadState;
-  recordDecision: RecordClinicalBatchDecision;
+const REFUSAL_CODES = new Set([
+  'backend_unavailable',
+  'stale_revision',
+  'assignment_expired',
+  'assignment_not_found',
+  'role_may_not_review_area',
+  'qualification_required',
+  'display_name_required',
+  'note_required',
+  'unknown',
+]);
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
 
 /**
- * Deliberately fail-closed until the server exposes a session-scoped frozen
- * batch query and an assignment-bound decision mutation. The existing
- * ownerPriority queue and saveDecision mutation are not substituted: neither
- * binds a decision to an assignment, snapshot digest or freeze signature.
+ * Adapts only the session-scoped frozen-batch query. The broad ownerPriority
+ * queue is never accepted as an assignment source.
  */
-export const clinicalBatchBackend: ClinicalBatchBackendBoundary = {
-  readAssignedBatch(currentRole) {
-    return adaptFrozenClinicalBatch(null, currentRole);
-  },
-  async recordDecision() {
+export function readAssignedClinicalBatch(
+  raw: unknown,
+  currentRole: string | null | undefined,
+): ClinicalBatchLoadState {
+  return adaptFrozenClinicalBatch(raw, currentRole);
+}
+
+/**
+ * Treats every malformed or unexpected mutation response as a refusal. This
+ * keeps the reviewer UI fail-closed even if a deployment returns a stale
+ * contract shape.
+ */
+export function normalizeClinicalBatchDecisionResult(raw: unknown): RecordClinicalBatchDecisionResult {
+  if (!isRecord(raw) || typeof raw.ok !== 'boolean') {
+    return { ok: false, code: 'unknown', message: 'The signed clinical decision response was invalid.' };
+  }
+  if (raw.ok === false) {
+    const code = typeof raw.code === 'string' && REFUSAL_CODES.has(raw.code) ? raw.code : 'unknown';
     return {
       ok: false,
-      code: 'backend_unavailable',
-      message: 'The signed clinical batch backend is not available on this deployment.',
+      code: code as Exclude<RecordClinicalBatchDecisionResult, { ok: true }>['code'],
+      message: typeof raw.message === 'string' && raw.message.trim()
+        ? raw.message
+        : 'The signed clinical decision was refused.',
+      ...(typeof raw.currentReviewRevision === 'number'
+        ? { currentReviewRevision: raw.currentReviewRevision }
+        : {}),
     };
-  },
-};
+  }
+
+  const receipt = raw.receipt;
+  if (!isRecord(receipt)
+    || !['approved', 'changes_requested', 'not_applicable'].includes(String(receipt.decision))
+    || (receipt.note !== null && typeof receipt.note !== 'string')
+    || typeof receipt.reviewedAt !== 'number'
+    || typeof receipt.receiptId !== 'string'
+    || !receipt.receiptId.trim()
+  ) {
+    return { ok: false, code: 'unknown', message: 'The signed clinical decision receipt was invalid.' };
+  }
+
+  const handoff = raw.handoff;
+  if (handoff !== undefined && (!isRecord(handoff)
+    || typeof handoff.batchId !== 'string'
+    || typeof handoff.decisionCount !== 'number'
+    || typeof handoff.completedAt !== 'number'
+    || typeof handoff.digest !== 'string'
+    || typeof handoff.signature !== 'string'
+  )) {
+    return { ok: false, code: 'unknown', message: 'The signed clinical handoff receipt was invalid.' };
+  }
+
+  return {
+    ok: true,
+    receipt: {
+      decision: receipt.decision as 'approved' | 'changes_requested' | 'not_applicable',
+      note: receipt.note as string | null,
+      reviewedAt: receipt.reviewedAt,
+      receiptId: receipt.receiptId,
+    },
+    ...(isRecord(handoff) ? {
+      handoff: {
+        batchId: handoff.batchId as string,
+        decisionCount: handoff.decisionCount as number,
+        completedAt: handoff.completedAt as number,
+        digest: handoff.digest as string,
+        signature: handoff.signature as string,
+      },
+    } : {}),
+  };
+}
