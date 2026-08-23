@@ -566,12 +566,18 @@ async function applySources(
 
   for (const src of sources) {
     const { id, ...rest } = src;
-    if (await isPersistedReleaseGovernedSource(ctx, id)
-      || isRegisteredReleaseSourceId(id)
+    // Compile-time exact-CAS exclusions must short-circuit before any database
+    // read. Besides keeping stale imports harmless, this lets bounded release
+    // handlers prove that protected sources cannot even reach source lookup.
+    if (isRegisteredReleaseSourceId(id)
       || isSwaimanSuddenWeaknessSourceCasTarget(id)
       || isOlderSafety2026SourceTarget(id)
       || isBirth2mGrossMotorCorrectionSource(id)
       || isClinicalBlockerCasSource(id)) {
+      skipped += 1;
+      continue;
+    }
+    if (await isPersistedReleaseGovernedSource(ctx, id)) {
       skipped += 1;
       continue;
     }
