@@ -46,6 +46,8 @@ const reviewValidator = v.object({
   reviewerRole: roleValidator,
   reviewedAt: v.number(),
   reviewRevision: v.optional(v.number()),
+  decisionKey: v.optional(v.string()),
+  clinicalReviewBatchId: v.optional(v.string()),
   createdAt: v.number(),
   updatedAt: v.number(),
 });
