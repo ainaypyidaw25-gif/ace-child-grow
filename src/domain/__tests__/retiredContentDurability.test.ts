@@ -208,6 +208,7 @@ describe('retired library content durability', () => {
     await expect(handler(setReview)(state, {
       slug: RETIRED_SLUG,
       clinicalStatus,
+      expectedReviewRevision: 1,
     })).rejects.toThrow('Retired content is immutable');
     expect(state.patch).not.toHaveBeenCalled();
     expect(state.query.mock.calls.some(([table]) => table === 'contentReviews')).toBe(false);

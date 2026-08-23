@@ -83,10 +83,12 @@ export const CLINICAL_REVIEW_BATCH_MANIFEST = {
 } as const;
 
 /**
- * Exact read-only candidate exported by the 2026-08-23 Production inventory.
- * Registration is inert: it creates no database row and grants no assignment
- * until the owner separately materializes and activates it with the exact
- * registry and predecessor-receipt CAS values.
+ * QUARANTINED audit artifact only — deliberately absent from the registry.
+ * A later primary-source audit found the linked AAP 2021 drowning policy had
+ * been superseded by the 2026 policy. These constants preserve the exact audit
+ * record for reconciliation, but cannot be materialized, assigned, activated,
+ * reviewed, or used for publication. A new exact source/link/content CAS and a
+ * newly frozen manifest are required before any safety batch may be registered.
  */
 export const CLINICAL_SAFETY_BATCH_ID = 'clinical-safety-13m-4_5y-2026-08-23-v1' as const;
 export const CLINICAL_SAFETY_BATCH_FROZEN_AT = 1787491407528 as const;
@@ -204,7 +206,7 @@ export type ClinicalReviewBatchReviewer = {
   readonly userId: string;
   readonly displayName: string;
   readonly qualification: string;
-  readonly role: 'clinical_reviewer';
+  readonly role: 'clinical_reviewer' | 'evidence_reviewer';
   readonly identityCanonicalSha256: string;
 };
 
@@ -227,6 +229,9 @@ export type ClinicalReviewBatchItem = {
   readonly mediaCount: number;
   readonly mediaCanonicalSha256: string;
   readonly aiCanonicalSha256: string;
+  readonly currentClinicalReviewCount?: number;
+  readonly currentClinicalReviewsCanonicalSha256?: string;
+  readonly allClinicalReviewHistoryCanonicalSha256?: string;
   readonly upstreamReviewDigests?: readonly {
     readonly dimension: string;
     readonly digest: string;

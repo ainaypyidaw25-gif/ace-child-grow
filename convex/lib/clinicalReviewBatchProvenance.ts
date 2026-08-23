@@ -29,6 +29,21 @@ export function isRegisteredClinicalReviewTarget(contentSlug: string, reviewRevi
   return registeredClinicalReviewTargets(contentSlug, reviewRevision).length > 0;
 }
 
+/** Generic import/edit lanes may not mutate any compile-frozen release input. */
+export function isRegisteredReleaseContentTarget(kind: string, contentSlug: string): boolean {
+  const registrations: readonly ClinicalReviewBatchRegistration[] = CLINICAL_REVIEW_BATCH_REGISTRY;
+  return registrations.some((registration) =>
+    registration.authority === 'release'
+      && registration.manifest.items.some((item) => item.kind === kind && item.slug === contentSlug));
+}
+
+export function isRegisteredReleaseSourceId(sourceId: string): boolean {
+  const registrations: readonly ClinicalReviewBatchRegistration[] = CLINICAL_REVIEW_BATCH_REGISTRY;
+  return registrations.some((registration) =>
+    registration.authority === 'release'
+      && registration.manifest.items.some((item) => item.sourceIds.some((id) => id === sourceId)));
+}
+
 export async function frozenClinicalDecisionKey(
   registration: ClinicalReviewBatchRegistration,
   item: ClinicalReviewBatchItem,
@@ -61,20 +76,20 @@ function exactApprovedDecision(
     && String(row.reviewerId) === registration.manifest.reviewer.userId;
 }
 
-function exactHandoffReceipt(
+export function exactHandoffReceipt(
   row: Doc<'clinicalReviewBatchReceipts'>,
   registration: ClinicalReviewBatchRegistration,
 ): boolean {
   return row.batchId === registration.manifest.batchId
     && row.freezeDigest === registration.freezeDigest
-    && row.authority === 'release'
+    && row.authority === registration.authority
     && row.decisionCount === registration.manifest.count
     && String(row.reviewerId) === registration.manifest.reviewer.userId
     && /^[a-f0-9]{64}$/.test(row.digest)
     && /^[a-f0-9]{64}$/.test(row.receiptDigest);
 }
 
-function exactPersistedReleaseBatch(
+export function exactPersistedBatchRegistration(
   row: Doc<'clinicalReviewBatches'>,
   registration: ClinicalReviewBatchRegistration,
 ): boolean {
@@ -84,8 +99,7 @@ function exactPersistedReleaseBatch(
     && row.sequence === registration.sequence
     && row.laneGraphVersion === registration.laneGraphVersion
     && row.dimension === registration.dimension
-    && row.authority === 'release'
-    && row.status === 'completed'
+    && row.authority === registration.authority
     && row.freezeDigest === registration.freezeDigest
     && row.routingDigest === registration.routingCanonicalSha256
     && row.itemCount === registration.manifest.count
@@ -100,13 +114,59 @@ function exactPersistedReleaseBatch(
       ? undefined
       : activation.kind === 'after_handoff'
         ? activation.expectedPreviousFreezeDigest
-        : activation.expectedDecisionSetDigest)
-    && (activation.kind === 'after_handoff'
-      ? !!row.consumedUpstreamReceiptDigest && /^[a-f0-9]{64}$/.test(row.consumedUpstreamReceiptDigest)
-      : row.consumedUpstreamReceiptDigest === undefined);
+        : activation.expectedDecisionSetDigest);
 }
 
-function exactPersistedAssignment(
+function exactCompletedReleaseBatch(
+  row: Doc<'clinicalReviewBatches'>,
+  registration: ClinicalReviewBatchRegistration,
+): boolean {
+  return exactPersistedBatchRegistration(row, registration)
+    && row.status === 'completed'
+    && (registration.activation.kind === 'initial'
+      ? row.consumedUpstreamReceiptDigest === undefined
+      : !!row.consumedUpstreamReceiptDigest
+        && /^[a-f0-9]{64}$/.test(row.consumedUpstreamReceiptDigest));
+}
+
+async function exactUpstreamChain(
+  ctx: DatabaseContext,
+  registration: ClinicalReviewBatchRegistration,
+  row: Doc<'clinicalReviewBatches'>,
+  seen = new Set<string>(),
+): Promise<boolean> {
+  if (seen.size >= 32 || seen.has(registration.manifest.batchId)) return false;
+  seen.add(registration.manifest.batchId);
+  const activation = registration.activation;
+  if (activation.kind === 'initial') return row.consumedUpstreamReceiptDigest === undefined;
+  const predecessor = CLINICAL_REVIEW_BATCH_REGISTRY.find(
+    (candidate) => candidate.manifest.batchId === activation.previousBatchId,
+  ) as ClinicalReviewBatchRegistration | undefined;
+  if (!predecessor) return false;
+  const predecessorRows = await ctx.db.query('clinicalReviewBatches')
+    .withIndex('by_batch_id', (q) => q.eq('batchId', predecessor.manifest.batchId)).take(2);
+  if (predecessor.authority === 'release') {
+    if (predecessorRows.length !== 1
+      || predecessorRows[0].status === 'invalidated'
+      || (activation.kind === 'after_handoff' && predecessorRows[0].status !== 'completed')
+      || !exactPersistedBatchRegistration(predecessorRows[0], predecessor)
+      || !await exactUpstreamChain(ctx, predecessor, predecessorRows[0], seen)) return false;
+  } else if (predecessorRows.some((candidate) => candidate.status === 'invalidated')) {
+    return false;
+  }
+  if (activation.kind === 'after_changes_requested_refreeze') {
+    return row.consumedUpstreamReceiptDigest === activation.expectedDecisionSetDigest
+      && predecessorRows.length === 1
+      && predecessorRows[0].status === 'stopped_changes_requested';
+  }
+  const receipts = await ctx.db.query('clinicalReviewBatchReceipts')
+    .withIndex('by_batch_id', (q) => q.eq('batchId', predecessor.manifest.batchId)).take(2);
+  return receipts.length === 1
+    && exactHandoffReceipt(receipts[0], predecessor)
+    && row.consumedUpstreamReceiptDigest === receipts[0].receiptDigest;
+}
+
+export function exactPersistedAssignment(
   row: Doc<'clinicalReviewAssignments'>,
   registration: ClinicalReviewBatchRegistration,
   item: ClinicalReviewBatchItem,
@@ -132,6 +192,9 @@ function exactPersistedAssignment(
     && row.mediaCount === item.mediaCount
     && row.mediaCanonicalSha256 === item.mediaCanonicalSha256
     && row.aiCanonicalSha256 === item.aiCanonicalSha256
+    && row.currentClinicalReviewCount === item.currentClinicalReviewCount
+    && row.currentClinicalReviewsCanonicalSha256 === item.currentClinicalReviewsCanonicalSha256
+    && row.allClinicalReviewHistoryCanonicalSha256 === item.allClinicalReviewHistoryCanonicalSha256
     && row.sourceIds.length === item.sourceIds.length
     && row.sourceIds.every((sourceId, index) => sourceId === item.sourceIds[index])
     && JSON.stringify(row.upstreamReviewDigests) === JSON.stringify(item.upstreamReviewDigests ?? []);
@@ -154,6 +217,36 @@ export async function frozenClinicalPublicationApproval(
 }> {
   const reviewRevision = content.reviewRevision ?? content.version ?? 1;
   const targets = registeredClinicalReviewTargets(content.slug, reviewRevision);
+  const registrations: readonly ClinicalReviewBatchRegistration[] = CLINICAL_REVIEW_BATCH_REGISTRY;
+  const registeredReleaseTargetsForSlug = registrations.flatMap((registration) =>
+    registration.authority === 'release'
+      ? registration.manifest.items
+        .filter((item) => item.slug === content.slug)
+        .map((item) => ({ registration: registration as ClinicalReviewBatchRegistration, item }))
+      : [],
+  );
+  const exactReleaseTargetExists = registeredReleaseTargetsForSlug.some(
+    ({ item }) => item.reviewRevision === reviewRevision,
+  );
+  if (!exactReleaseTargetExists && registeredReleaseTargetsForSlug.length > 0) {
+    const governedDimensions = new Set<string>();
+    for (const { registration } of registeredReleaseTargetsForSlug) {
+      const rows = await ctx.db.query('clinicalReviewBatches')
+        .withIndex('by_batch_id', (q) => q.eq('batchId', registration.manifest.batchId)).take(2);
+      if (rows.some((row) => row.authority === 'release'
+        && exactPersistedBatchRegistration(row, registration))) {
+        governedDimensions.add(registration.dimension);
+      }
+    }
+    if (governedDimensions.size > 0) {
+      return {
+        required: true,
+        allowed: false,
+        missing: [...governedDimensions].map((dimension) => `${dimension}:registered_revision_mismatch`),
+        governedDimensions: [...governedDimensions],
+      };
+    }
+  }
   if (targets.length === 0) {
     return { required: false, allowed: true, missing: [], governedDimensions: [] };
   }
@@ -173,8 +266,12 @@ export async function frozenClinicalPublicationApproval(
     if (batchRows.length === 0 || batchRows.every((row) => row.authority === 'pilot')) continue;
     governed = true;
     governedDimensions.add(registration.dimension);
-    if (batchRows.length !== 1 || !exactPersistedReleaseBatch(batchRows[0], registration)) {
+    if (batchRows.length !== 1 || !exactCompletedReleaseBatch(batchRows[0], registration)) {
       missing.push(`${registration.dimension}:persisted_batch`);
+      continue;
+    }
+    if (!await exactUpstreamChain(ctx, registration, batchRows[0])) {
+      missing.push(`${registration.dimension}:upstream_chain`);
       continue;
     }
 

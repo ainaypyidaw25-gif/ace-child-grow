@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const authState = vi.hoisted(() => ({ userId: null as string | null }));
 
@@ -25,17 +25,25 @@ vi.mock('../../../convex/lib/aiAuditHash', async (importOriginal) => {
 });
 
 import { readAssignedBatchState, saveAssignedDecision } from '../../../convex/clinicalReviewBatch';
+import { activateRegisteredBatch } from '../../../convex/clinicalReviewRegistry';
 import { getAssignedBatch } from '../../../convex/clinicalReviewBatchActions';
 import { sha256Canonical } from '../../../convex/lib/aiAuditHash';
 import {
   CLINICAL_REVIEW_BATCH_COUNT,
   CLINICAL_REVIEW_BATCH_EXPIRES_AT,
+  CLINICAL_REVIEW_BATCH_FROZEN_AT,
   CLINICAL_REVIEW_BATCH_HASH,
   CLINICAL_REVIEW_BATCH_ID,
   CLINICAL_REVIEW_BATCH_ITEMS,
   CLINICAL_REVIEW_BATCH_MANIFEST,
+  CLINICAL_REVIEW_BATCH_REGISTRY,
   CLINICAL_REVIEW_BATCH_REVIEWER,
+  clinicalReviewBatchRoutingPayload,
+  type ClinicalReviewBatchRegistration,
 } from '../../../convex/lib/clinicalReviewBatchData';
+import { frozenClinicalDecisionKey } from '../../../convex/lib/clinicalReviewBatchProvenance';
+
+const originalPilotRegistration = CLINICAL_REVIEW_BATCH_REGISTRY[0] as ClinicalReviewBatchRegistration;
 
 const frozenProfile = {
   _creationTime: 1785417794053.964,
@@ -209,6 +217,11 @@ function context() {
     const builder = (filters: Array<[string, unknown]>) => {
       const terminal = {
         take: async (count: number) => tables[table].filter((row) => filters.every(([field, value]) => row[field] === value)).slice(0, count),
+        unique: async () => {
+          const rows = tables[table].filter((row) => filters.every(([field, value]) => row[field] === value));
+          if (rows.length > 1) throw new Error('not unique');
+          return rows[0] ?? null;
+        },
         order: () => terminal,
       };
       return {
@@ -229,7 +242,76 @@ function context() {
     tables[table].push({ _id: id, _creationTime: Date.now(), ...value });
     return id;
   });
-  return { auth: {}, db: { query, insert }, storage: {}, tables };
+  const patch = vi.fn(async (id: string, value: Row) => {
+    for (const rows of Object.values(tables)) {
+      const row = rows.find((candidate) => candidate._id === id);
+      if (row) {
+        Object.assign(row, value);
+        return;
+      }
+    }
+    throw new Error(`Missing row ${id}`);
+  });
+  return { auth: {}, db: { query, insert, patch }, storage: {}, tables };
+}
+
+async function makePilotReleaseActive(ctx: ReturnType<typeof context>) {
+  const emptyReviewHash = '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945';
+  const manifest = {
+    ...originalPilotRegistration.manifest,
+    items: originalPilotRegistration.manifest.items.map((item) => ({
+      ...item,
+      currentClinicalReviewCount: 0,
+      currentClinicalReviewsCanonicalSha256: emptyReviewHash,
+      allClinicalReviewHistoryCanonicalSha256: emptyReviewHash,
+    })),
+  };
+  const pending = {
+    ...originalPilotRegistration,
+    authority: 'release' as const,
+    manifest,
+    freezeDigest: await sha256Canonical(manifest),
+  };
+  const registration: ClinicalReviewBatchRegistration = {
+    ...pending,
+    routingCanonicalSha256: await sha256Canonical(clinicalReviewBatchRoutingPayload(pending)),
+  };
+  (CLINICAL_REVIEW_BATCH_REGISTRY as unknown as ClinicalReviewBatchRegistration[])[0] = registration;
+  ctx.tables.clinicalReviewBatches.push({
+    _id: 'release-batch', _creationTime: 1,
+    batchId: registration.manifest.batchId, sequence: registration.sequence,
+    laneGraphVersion: registration.laneGraphVersion, dimension: registration.dimension,
+    authority: registration.authority, status: 'active', freezeDigest: registration.freezeDigest,
+    routingDigest: registration.routingCanonicalSha256, itemCount: registration.manifest.count,
+    frozenAt: registration.frozenAt, expiresAt: registration.expiresAt,
+    reviewerProfileId: registration.manifest.reviewer.profileId,
+    reviewerId: registration.manifest.reviewer.userId,
+    reviewerDisplayName: registration.manifest.reviewer.displayName,
+    reviewerQualification: registration.manifest.reviewer.qualification,
+    reviewerRole: registration.manifest.reviewer.role,
+    reviewerIdentityDigest: registration.manifest.reviewer.identityCanonicalSha256,
+    activationKind: 'initial', createdAt: registration.frozenAt,
+  });
+  for (const item of registration.manifest.items) {
+    const assignmentId = await frozenClinicalDecisionKey(registration, item);
+    ctx.tables.clinicalReviewAssignments.push({
+      _id: `assignment-${item.ordinal}`, _creationTime: item.ordinal,
+      batchId: registration.manifest.batchId, assignmentId, ordinal: item.ordinal,
+      dimension: registration.dimension, kind: item.kind, contentSlug: item.slug,
+      reviewRevision: item.reviewRevision, contentId: item.contentId,
+      contentCreationTime: item.contentCreationTime, contentUpdatedAt: item.contentUpdatedAt,
+      contentCanonicalSha256: item.contentCanonicalSha256, linkId: item.linkId,
+      linkCreationTime: item.linkCreationTime, linkUpdatedAt: item.linkUpdatedAt,
+      linkCanonicalSha256: item.linkCanonicalSha256, sourceIds: [...item.sourceIds],
+      sourceCount: item.sourceCount, sourcesCanonicalSha256: item.sourcesCanonicalSha256,
+      mediaCount: item.mediaCount, mediaCanonicalSha256: item.mediaCanonicalSha256,
+      aiCanonicalSha256: item.aiCanonicalSha256, upstreamReviewDigests: [],
+      currentClinicalReviewCount: item.currentClinicalReviewCount,
+      currentClinicalReviewsCanonicalSha256: item.currentClinicalReviewsCanonicalSha256,
+      allClinicalReviewHistoryCanonicalSha256: item.allClinicalReviewHistoryCanonicalSha256,
+      createdAt: registration.frozenAt,
+    });
+  }
 }
 
 function handler(fn: unknown) {
@@ -245,6 +327,7 @@ async function readBatch(ctx: ReturnType<typeof context>) {
 }
 
 function inputFrom(item: Record<string, unknown>) {
+  const registration = (CLINICAL_REVIEW_BATCH_REGISTRY as readonly ClinicalReviewBatchRegistration[])[0];
   return {
     batchId: CLINICAL_REVIEW_BATCH_ID,
     assignmentId: item.assignmentId,
@@ -253,7 +336,7 @@ function inputFrom(item: Record<string, unknown>) {
     decision: 'approved',
     expectedReviewRevision: item.reviewRevision,
     expectedSnapshotDigest: (item.snapshot as { digest: string }).digest,
-    expectedFreezeDigest: CLINICAL_REVIEW_BATCH_HASH,
+    expectedFreezeDigest: registration.freezeDigest,
   };
 }
 
@@ -261,6 +344,12 @@ describe('frozen clinical-review batch UI contract', () => {
   beforeEach(() => {
     authState.userId = CLINICAL_REVIEW_BATCH_REVIEWER.userId;
     vi.spyOn(Date, 'now').mockReturnValue(1787500000000);
+  });
+
+  afterEach(() => {
+    const registry = CLINICAL_REVIEW_BATCH_REGISTRY as unknown as ClinicalReviewBatchRegistration[];
+    registry.splice(0, registry.length, originalPilotRegistration);
+    vi.restoreAllMocks();
   });
 
   it('keeps the manifest hash and exact Phyo Ko Ko assignment immutable', async () => {
@@ -348,6 +437,118 @@ describe('frozen clinical-review batch UI contract', () => {
     });
   });
 
+  it('atomically completes a persisted release batch with its unanimous handoff', async () => {
+    const ctx = context();
+    await makePilotReleaseActive(ctx);
+    const batch = await readBatch(ctx) as { items: Array<Record<string, unknown>> };
+    await handler(saveAssignedDecision)(ctx, inputFrom(batch.items[0]));
+    const finalArgs = inputFrom(batch.items[1]);
+    const final = await handler(saveAssignedDecision)(ctx, finalArgs) as Record<string, unknown>;
+    expect(ctx.tables.clinicalReviewBatches[0]).toMatchObject({
+      status: 'completed',
+      completedAt: 1787500000000,
+    });
+    expect(ctx.tables.clinicalReviewBatchReceipts).toHaveLength(1);
+    expect(ctx.tables.clinicalReviewBatchReceipts[0]).toMatchObject({ authority: 'release' });
+    const replay = await handler(saveAssignedDecision)(ctx, finalArgs);
+    expect(replay).toMatchObject({ ok: true, duplicate: true, handoff: final.handoff });
+    expect(ctx.tables.contentReviews).toHaveLength(2);
+    expect(ctx.tables.clinicalReviewBatchReceipts).toHaveLength(1);
+    const closedRead = await readBatch(ctx);
+    expect(closedRead).toMatchObject({ handoff: final.handoff });
+  });
+
+  it('activates the first release as an initial root without a fabricated pilot receipt', async () => {
+    const ctx = context();
+    ctx.tables.parentProfiles.push({
+      _id: 'owner-profile', _creationTime: 2, userId: 'owner-user', isStaff: true,
+      staffRole: 'owner', displayName: 'Owner', staffQualification: 'MEd',
+    });
+    const emptyReviewHash = '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945';
+    const manifest = {
+      batchId: 'first-release-root', count: 1, reviewer: CLINICAL_REVIEW_BATCH_REVIEWER,
+      items: [{
+        ...CLINICAL_REVIEW_BATCH_ITEMS[0], ordinal: 1,
+        currentClinicalReviewCount: 0,
+        currentClinicalReviewsCanonicalSha256: emptyReviewHash,
+        allClinicalReviewHistoryCanonicalSha256: emptyReviewHash,
+      }],
+    };
+    const pending: ClinicalReviewBatchRegistration = {
+      sequence: 2, laneGraphVersion: 1, dimension: 'safety', authority: 'release',
+      activation: { kind: 'initial' }, routingCanonicalSha256: '',
+      freezeDigest: await sha256Canonical(manifest),
+      frozenAt: CLINICAL_REVIEW_BATCH_FROZEN_AT,
+      expiresAt: CLINICAL_REVIEW_BATCH_EXPIRES_AT,
+      manifest,
+    };
+    const registration = {
+      ...pending,
+      routingCanonicalSha256: await sha256Canonical(clinicalReviewBatchRoutingPayload(pending)),
+    };
+    (CLINICAL_REVIEW_BATCH_REGISTRY as unknown as ClinicalReviewBatchRegistration[]).push(registration);
+    ctx.tables.clinicalReviewBatches.push({
+      _id: 'first-release-row', _creationTime: 2,
+      batchId: registration.manifest.batchId, sequence: registration.sequence,
+      laneGraphVersion: 1, dimension: registration.dimension, authority: 'release', status: 'frozen',
+      freezeDigest: registration.freezeDigest, routingDigest: registration.routingCanonicalSha256,
+      itemCount: 1, frozenAt: registration.frozenAt, expiresAt: registration.expiresAt,
+      reviewerProfileId: registration.manifest.reviewer.profileId,
+      reviewerId: registration.manifest.reviewer.userId,
+      reviewerDisplayName: registration.manifest.reviewer.displayName,
+      reviewerQualification: registration.manifest.reviewer.qualification,
+      reviewerRole: registration.manifest.reviewer.role,
+      reviewerIdentityDigest: registration.manifest.reviewer.identityCanonicalSha256,
+      activationKind: 'initial', createdAt: registration.frozenAt,
+    });
+    const item = registration.manifest.items[0];
+    const assignmentId = await frozenClinicalDecisionKey(registration, item);
+    ctx.tables.clinicalReviewAssignments.push({
+      _id: 'first-release-assignment', _creationTime: 3,
+      batchId: registration.manifest.batchId, assignmentId, ordinal: 1,
+      dimension: registration.dimension, kind: item.kind, contentSlug: item.slug,
+      reviewRevision: item.reviewRevision, contentId: item.contentId,
+      contentCreationTime: item.contentCreationTime, contentUpdatedAt: item.contentUpdatedAt,
+      contentCanonicalSha256: item.contentCanonicalSha256, linkId: item.linkId,
+      linkCreationTime: item.linkCreationTime, linkUpdatedAt: item.linkUpdatedAt,
+      linkCanonicalSha256: item.linkCanonicalSha256, sourceIds: [...item.sourceIds],
+      sourceCount: item.sourceCount, sourcesCanonicalSha256: item.sourcesCanonicalSha256,
+      mediaCount: item.mediaCount, mediaCanonicalSha256: item.mediaCanonicalSha256,
+      aiCanonicalSha256: item.aiCanonicalSha256, upstreamReviewDigests: [],
+      currentClinicalReviewCount: 0,
+      currentClinicalReviewsCanonicalSha256: emptyReviewHash,
+      allClinicalReviewHistoryCanonicalSha256: emptyReviewHash,
+      createdAt: registration.frozenAt,
+    });
+    authState.userId = 'owner-user';
+    const result = await handler(activateRegisteredBatch)(ctx, {
+      batchId: registration.manifest.batchId,
+      expectedFreezeDigest: registration.freezeDigest,
+    });
+    expect(result).toMatchObject({ ok: true, code: 'activated', batchId: 'first-release-root' });
+    expect(ctx.tables.clinicalReviewBatches[0]).toMatchObject({ status: 'active' });
+    expect(ctx.tables.clinicalReviewBatchReceipts).toHaveLength(0);
+    (CLINICAL_REVIEW_BATCH_REGISTRY as unknown as ClinicalReviewBatchRegistration[]).pop();
+  });
+
+  it('stops a persisted release batch immediately when changes are requested', async () => {
+    const ctx = context();
+    await makePilotReleaseActive(ctx);
+    const batch = await readBatch(ctx) as { items: Array<Record<string, unknown>> };
+    const args = {
+      ...inputFrom(batch.items[0]),
+      decision: 'changes_requested',
+      note: 'Correct the exact frozen row and refreeze it.',
+    };
+    const result = await handler(saveAssignedDecision)(ctx, args) as Record<string, unknown>;
+    expect(result).toMatchObject({ ok: true, receipt: { decision: 'changes_requested' } });
+    expect(ctx.tables.clinicalReviewBatches[0]).toMatchObject({ status: 'stopped_changes_requested' });
+    expect(ctx.tables.clinicalReviewBatchReceipts).toHaveLength(0);
+    const replay = await handler(saveAssignedDecision)(ctx, args);
+    expect(replay).toMatchObject({ ok: true, duplicate: true, receipt: result.receipt });
+    expect(ctx.tables.contentReviews).toHaveLength(1);
+  });
+
   it('does not authorize lane handoff while a requested change remains', async () => {
     const ctx = context();
     const batch = await readBatch(ctx) as { items: Array<Record<string, unknown>> };
@@ -374,7 +575,7 @@ describe('frozen clinical-review batch UI contract', () => {
     await expect(readBatch(ctx)).resolves.toEqual({
       status: 'refused',
       code: 'not_assigned_reviewer',
-      message: 'Use the assigned clinical reviewer account.',
+      message: 'Use the assigned frozen-batch reviewer account.',
     });
   });
 

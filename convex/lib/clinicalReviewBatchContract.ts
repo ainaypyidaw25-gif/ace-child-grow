@@ -49,7 +49,7 @@ const itemValidator = v.object({
 });
 const reviewerValidator = v.object({
   profileId: v.string(), userId: v.string(), displayName: v.string(), qualification: v.string(),
-  role: v.literal('clinical_reviewer'),
+  role: v.union(v.literal('clinical_reviewer'), v.literal('evidence_reviewer')),
 });
 
 export const clinicalReviewBatchResultValidator = v.object({
@@ -57,8 +57,8 @@ export const clinicalReviewBatchResultValidator = v.object({
   contractVersion: v.literal(CLINICAL_REVIEW_BATCH_CONTRACT_VERSION),
   scope: v.literal('authenticated_assignee'),
   batchId: v.string(),
-  lane: v.literal('clinical'),
-  assignedRole: v.literal('clinical_reviewer'),
+  lane: clinicalReviewBatchDimensionValidator,
+  assignedRole: v.union(v.literal('clinical_reviewer'), v.literal('evidence_reviewer')),
   frozenAt: v.number(),
   freezeDigest: v.string(),
   freezeReceiptDigest: v.string(),

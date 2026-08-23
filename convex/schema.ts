@@ -271,9 +271,11 @@ export default defineSchema({
   // authenticated user only when 'published'; staff see all and can transition.
   contentItems: defineTable({
     kind: v.string(), // milestone | activity | awareness | lesson
+    slug: v.optional(v.string()),
     titleMm: v.string(),
     titleEn: v.string(),
     reviewStatus: v.string(), // matches src/domain/content/workflow.ts states
+    reviewRevision: v.optional(v.number()),
     // Optional translation-review fields (side-by-side en/mm editing).
     bodyMm: v.optional(v.string()),
     bodyEn: v.optional(v.string()),
@@ -507,12 +509,12 @@ export default defineSchema({
     itemCount: v.number(),
     frozenAt: v.number(),
     expiresAt: v.number(),
-    reviewerProfileId: v.string(),
-    reviewerId: v.id('users'),
-    reviewerDisplayName: v.string(),
-    reviewerQualification: v.string(),
-    reviewerRole: v.literal('clinical_reviewer'),
-    reviewerIdentityDigest: v.string(),
+    reviewerProfileId: v.optional(v.string()),
+    reviewerId: v.optional(v.id('users')),
+    reviewerDisplayName: v.optional(v.string()),
+    reviewerQualification: v.optional(v.string()),
+    reviewerRole: v.optional(v.union(v.literal('clinical_reviewer'), v.literal('evidence_reviewer'))),
+    reviewerIdentityDigest: v.optional(v.string()),
     activationKind: v.union(
       v.literal('initial'),
       v.literal('after_handoff'),
@@ -530,6 +532,7 @@ export default defineSchema({
     .index('by_batch_id', ['batchId'])
     .index('by_sequence', ['sequence'])
     .index('by_status', ['status'])
+    .index('by_reviewer', ['reviewerId'])
     .index('by_reviewer_and_status', ['reviewerId', 'status'])
     .index('by_predecessor_batch_id', ['predecessorBatchId']),
 
@@ -559,6 +562,9 @@ export default defineSchema({
     mediaCount: v.number(),
     mediaCanonicalSha256: v.string(),
     aiCanonicalSha256: v.string(),
+    currentClinicalReviewCount: v.number(),
+    currentClinicalReviewsCanonicalSha256: v.string(),
+    allClinicalReviewHistoryCanonicalSha256: v.string(),
     upstreamReviewDigests: v.array(v.object({
       dimension: v.string(),
       digest: v.string(),

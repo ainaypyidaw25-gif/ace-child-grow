@@ -250,6 +250,34 @@ describe('account deletion pipeline', () => {
     }));
   });
 
+  it('invalidates a deleted reviewer batch and every downstream reviewer batch', async () => {
+    const predecessor: Row = {
+      _id: 'clinical-batch-a', batchId: 'batch-a', reviewerId: 'user-1', status: 'completed',
+      reviewerProfileId: 'profile-a', reviewerDisplayName: 'Parent Name',
+      reviewerQualification: 'MBBS', reviewerRole: 'clinical_reviewer', reviewerIdentityDigest: 'identity-a',
+    };
+    const successor: Row = {
+      _id: 'clinical-batch-b', batchId: 'batch-b', predecessorBatchId: 'batch-a',
+      reviewerId: 'reviewer-b', status: 'completed', reviewerDisplayName: 'Reviewer B',
+    };
+    const ctx = context({
+      documents: { 'user-1': { _id: 'user-1', email: 'parent@example.com' } },
+      rows: { clinicalReviewBatches: [predecessor, successor] },
+    });
+
+    await handler(deleteMineBatch)(ctx, batchArgs);
+
+    expect(predecessor).toMatchObject({
+      status: 'invalidated', invalidationReason: 'assigned_reviewer_account_erased',
+      reviewerId: undefined, reviewerDisplayName: undefined, reviewerQualification: undefined,
+    });
+    expect(successor).toMatchObject({
+      status: 'invalidated', invalidationReason: 'assigned_reviewer_account_erased',
+      reviewerId: 'reviewer-b', reviewerDisplayName: 'Reviewer B',
+    });
+    expect(predecessor.invalidatedAt).toBe(successor.invalidatedAt);
+  });
+
   it('deletes the user in the final no-work pass after the access-token grace period', async () => {
     const ctx = context({
       documents: { 'user-1': { _id: 'user-1', email: 'parent@example.com' } },

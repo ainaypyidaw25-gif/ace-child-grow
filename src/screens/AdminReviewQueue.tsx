@@ -29,10 +29,10 @@ export function AdminReviewQueue() {
 
   const seedItems = useMemo(
     () => [
-      ...SAMPLE_MILESTONES.map((m) => ({ kind: 'milestone', titleMm: m.titleMm, titleEn: m.titleEn })),
-      ...SAMPLE_ACTIVITIES.map((a) => ({ kind: 'activity', titleMm: a.titleMm, titleEn: a.titleEn })),
-      ...SAMPLE_AWARENESS.map((a) => ({ kind: 'awareness', titleMm: a.titleMm, titleEn: a.titleEn })),
-      ...SAMPLE_LESSONS.map((l) => ({ kind: 'lesson', titleMm: l.titleMm, titleEn: l.titleEn })),
+      ...SAMPLE_MILESTONES.map((m, index) => ({ kind: 'milestone', slug: `legacy-milestone-${index + 1}`, titleMm: m.titleMm, titleEn: m.titleEn })),
+      ...SAMPLE_ACTIVITIES.map((a, index) => ({ kind: 'activity', slug: `legacy-activity-${index + 1}`, titleMm: a.titleMm, titleEn: a.titleEn })),
+      ...SAMPLE_AWARENESS.map((a) => ({ kind: 'awareness', slug: a.slug, titleMm: a.titleMm, titleEn: a.titleEn })),
+      ...SAMPLE_LESSONS.map((l, index) => ({ kind: 'lesson', slug: `legacy-lesson-${index + 1}`, titleMm: l.titleMm, titleEn: l.titleEn })),
     ],
     [],
   );
@@ -169,7 +169,7 @@ export function AdminReviewQueue() {
                     onClick={async () => {
                       if (busyId) return;
                       setBusyId(it._id);
-                      try { await transition({ id: it._id, to }); } finally { setBusyId(null); }
+                      try { await transition({ id: it._id, to, expectedReviewRevision: it.reviewRevision ?? 1 }); } finally { setBusyId(null); }
                     }}
                     className="min-h-touch rounded-pill bg-sky px-3 py-1 text-xs font-semibold text-white disabled:opacity-50">
                     → {to}

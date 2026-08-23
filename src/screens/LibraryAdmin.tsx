@@ -145,11 +145,11 @@ export function LibraryAdmin() {
     } finally { setBusy(false); }
   };
 
-  const transition = async (slug: string, clinicalStatus: string) => {
+  const transition = async (slug: string, clinicalStatus: string, expectedReviewRevision: number) => {
     if (pending) return; // guard against double-clicks
     setPending(slug);
     try {
-      await setReview({ slug, clinicalStatus });
+      await setReview({ slug, clinicalStatus, expectedReviewRevision });
     } finally {
       setPending(null);
     }
@@ -237,7 +237,7 @@ export function LibraryAdmin() {
                 </div>
                 <div className="mt-1 flex flex-wrap gap-1.5">
                   {['draft', 'clinical_review', 'published'].map((s) => (
-                    <button key={s} type="button" onClick={() => transition(it.slug, s)}
+                    <button key={s} type="button" onClick={() => transition(it.slug, s, it.reviewRevision ?? 1)}
                       disabled={
                         it.clinicalStatus === s ||
                         pending === it.slug ||

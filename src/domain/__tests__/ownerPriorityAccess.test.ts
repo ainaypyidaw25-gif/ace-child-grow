@@ -381,7 +381,8 @@ describe('review_manager powers and limits', () => {
       authSource.indexOf('export async function requireProfessionalPublisher'),
       authSource.indexOf('export async function requireProfessionalPublisher') + 400,
     );
-    expect(block).toContain("requireOneOf(ctx, ['owner', 'clinical_reviewer'])");
+    expect(block).toContain("requireOneOf(ctx, ['owner'])");
+    expect(block).not.toContain('clinical_reviewer');
     expect(block).not.toContain('review_manager');
   });
 

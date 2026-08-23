@@ -58,6 +58,10 @@ import {
   isOlderSafety2026LinkTarget,
   isOlderSafety2026SourceTarget,
 } from './lib/olderSafety2026CasData';
+import {
+  isRegisteredReleaseContentTarget,
+  isRegisteredReleaseSourceId,
+} from './lib/clinicalReviewBatchProvenance';
 
 const REVIEW_STATUSES = [
   'evidence_required',
@@ -555,7 +559,8 @@ async function applySources(
 
   for (const src of sources) {
     const { id, ...rest } = src;
-    if (isSwaimanSuddenWeaknessSourceCasTarget(id)
+    if (isRegisteredReleaseSourceId(id)
+      || isSwaimanSuddenWeaknessSourceCasTarget(id)
       || isOlderSafety2026SourceTarget(id)
       || isBirth2mGrossMotorCorrectionSource(id)) {
       skipped += 1;
@@ -763,7 +768,8 @@ async function applyLinks(
   // public rows reserved for bounded atomic CAS releases. Filter
   // before validation and before any link write.
   const activeLinks = links.filter((link) => {
-    if (!isRetiredContentSlug(link.slug)
+    if (!isRegisteredReleaseContentTarget(link.kind, link.slug)
+      && !isRetiredContentSlug(link.slug)
       && !isInherentPublicLinkCasTarget(link.kind, link.slug)
       && !isSwaimanSeizureLinkCasTarget(link.kind, link.slug)
       && !isSwaimanCerebralPalsyLinkCasTarget(link.kind, link.slug)

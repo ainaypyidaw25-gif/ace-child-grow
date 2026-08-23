@@ -36,6 +36,7 @@ import { isBirth2mGrossMotorCorrectionSlug } from './lib/birth2mGrossMotorCorrec
 import { isOlderSafety2026ContentTargetSlug } from './lib/olderSafety2026CasData';
 import {
   frozenClinicalPublicationApproval,
+  isRegisteredReleaseContentTarget,
 } from './lib/clinicalReviewBatchProvenance';
 
 export { isPubliclyReadableStatus } from './lib/publicationVisibility';
@@ -594,7 +595,8 @@ export const importSeed = mutation({
       // Fail closed at the server boundary as well as in local seed generation:
       // a stale or hand-built client must never recreate or mutate an archived
       // catalogue row. Reuse the existing skip counter to preserve the API.
-      if (isRetiredContentSlug(it.slug)
+      if (isRegisteredReleaseContentTarget(it.type, it.slug)
+        || isRetiredContentSlug(it.slug)
         || isManualReviewContentCasTargetSlug(it.slug)
         || isBirth2mNutritionCasTargetSlug(it.slug)
         || isBirth2mGrossMotorCorrectionSlug(it.slug)
@@ -683,8 +685,9 @@ export const updateDraft = mutation({
   },
   returns: v.object({ ok: v.literal(true), reviewRevision: v.number() }),
   handler: async (ctx, args) => {
-    // All reviewer roles may correct parent-facing wording directly from the
-    // review workspace. This deliberately does not grant publishing, team,
+    // Editorial reviewer roles may correct parent-facing wording directly from
+    // the review workspace. Assigned clinical decisions remain immutable and
+    // use only the frozen-batch path. This does not grant publishing, team,
     // billing, evidence-registry or other owner-only permissions. Every save
     // creates a fresh review revision below, so the editor cannot reuse a
     // previous reviewer sign-off for changed text.
@@ -697,6 +700,9 @@ export const updateDraft = mutation({
       .withIndex('by_slug', (q) => q.eq('slug', args.slug))
       .unique();
     if (!item) throw new Error('Content not found');
+    if (isRegisteredReleaseContentTarget(item.type, item.slug)) {
+      throw new Error('Frozen release content requires an owner-controlled correction and refreeze.');
+    }
     const currentReviewRevision = item.reviewRevision ?? 1;
     if (args.expectedReviewRevision !== currentReviewRevision) {
       throw new Error('This item has newer changes. Refresh before saving.');
@@ -781,6 +787,7 @@ export const setReview = mutation({
   args: {
     slug: v.string(),
     clinicalStatus: v.string(),
+    expectedReviewRevision: v.number(),
     reviewerQualification: v.optional(v.string()),
     reviewNote: v.optional(v.string()),
     nextReviewAt: v.optional(v.number()),
@@ -802,6 +809,9 @@ export const setReview = mutation({
       throw new Error('Retired content is immutable');
     }
     const revision = item.reviewRevision ?? 1;
+    if (args.expectedReviewRevision !== revision) {
+      throw new Error('This item has newer changes. Refresh before changing publication status.');
+    }
     const frozenApproval = args.clinicalStatus === 'published'
       ? await frozenClinicalPublicationApproval(ctx, item)
       : { required: false, allowed: true, missing: [], governedDimensions: [] };
@@ -866,7 +876,11 @@ export const setReview = mutation({
       reviewerId: userId,
       reviewerQualification: approval?.qualification ?? args.reviewerQualification?.trim(),
       reviewerDisplayName: approval?.reviewerName,
-      reviewScope: approval ? (specialistReason ? 'clinical' : approval.scope) : undefined,
+      // This is the final owner publication receipt, not a clinical decision.
+      // Specialist provenance remains on the exact frozen contentReviews row
+      // and batch handoff receipt; never relabel the education owner as the
+      // clinical reviewer of the content.
+      reviewScope: approval?.scope,
       reviewedAt: now,
       nextReviewAt: args.nextReviewAt,
       reviewNote: args.reviewNote,
@@ -885,7 +899,7 @@ export const setReview = mutation({
     await logAudit(ctx, userId, `library.${args.clinicalStatus}`, 'libraryContent', item._id, auditSummary);
     return {
       ok: true as const,
-      reviewScope: approval ? (specialistReason ? 'clinical' : approval.scope) : null,
+      reviewScope: approval?.scope ?? null,
     };
   },
 });

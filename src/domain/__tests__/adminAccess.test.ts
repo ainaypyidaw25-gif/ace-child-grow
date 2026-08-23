@@ -54,7 +54,12 @@ describe('admin team and subscription security', () => {
   it('records qualified owner publishing as education scope, never clinical scope', () => {
     expect(auth).toContain("scope: 'education'");
     expect(auth).toContain("scope: 'clinical'");
-    expect(auth).toContain("requireOneOf(ctx, ['owner', 'clinical_reviewer'])");
+    const publisher = auth.slice(
+      auth.indexOf('export async function requireProfessionalPublisher'),
+      auth.indexOf('export async function requireClinicalPublisher'),
+    );
+    expect(publisher).toContain("requireOneOf(ctx, ['owner'])");
+    expect(publisher).not.toContain('clinical_reviewer');
   });
 
   it('keeps provider subscription updates internal', () => {

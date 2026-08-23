@@ -101,7 +101,7 @@ describe('Convex authorization helpers (runtime)', () => {
     await expect(requireProfessionalPublisher(ctx)).resolves.toMatchObject({ scope: 'education' });
   });
 
-  it('a clinical reviewer also receives education scope on the ordinary-content path', async () => {
+  it('a clinical reviewer cannot perform the owner-only final publication step', async () => {
     authState.userId = 'reviewer-1';
     const ctx = context({
       profile: {
@@ -112,6 +112,6 @@ describe('Convex authorization helpers (runtime)', () => {
         displayName: 'Clinical Reviewer',
       },
     });
-    await expect(requireProfessionalPublisher(ctx)).resolves.toMatchObject({ scope: 'education' });
+    await expect(requireProfessionalPublisher(ctx)).rejects.toThrow('Insufficient staff permission');
   });
 });
