@@ -7,6 +7,8 @@
  */
 export const CLINICAL_REVIEW_BATCH_ID = 'clinical-first-p1-2026-08-23-v1' as const;
 export const CLINICAL_REVIEW_BATCH_HASH = 'e2817684bfd83049aa495a652845a1ca4716b00889605485187808f62f1f3642' as const;
+export const CLINICAL_REVIEW_BATCH_FROZEN_AT = 1787443200000 as const;
+export const CLINICAL_REVIEW_BATCH_EXPIRES_AT = 1816560000000 as const;
 
 export const CLINICAL_REVIEW_BATCH_REVIEWER = {
   profileId: 'md79ghw3fm2a09pvhgs63c754n8bgnpy',
