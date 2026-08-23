@@ -181,6 +181,66 @@ describe('persisted clinical review registry', () => {
     expect(ctx.db.insert).not.toHaveBeenCalled();
   });
 
+  it.each([
+    ['reviewerDisplayName', 'Drifted reviewer'],
+    ['reviewerQualification', 'Drifted qualification'],
+    ['reviewerRole', 'evidence_reviewer'],
+    ['createdAt', 999],
+  ] as const)('rejects persisted batch %s drift before any replay write', async (field, value) => {
+    const release = await releaseRegistration('release-1', 'release_slug_1');
+    (CLINICAL_REVIEW_BATCH_REGISTRY as unknown as ClinicalReviewBatchRegistration[]).push(release);
+    const ctx = context();
+    await handler(materializeRegisteredReleaseBatches)(ctx, {
+      expectedRegistryDigest: await registryDigest(),
+    });
+    ctx.tables.clinicalReviewBatches[0][field] = value;
+    ctx.db.insert.mockClear();
+    const replay = await handler(materializeRegisteredReleaseBatches)(ctx, {
+      expectedRegistryDigest: await registryDigest(),
+    });
+    expect(replay).toMatchObject({
+      ok: false, code: 'persisted_batch_preimage_mismatch', createdBatches: 0, createdAssignments: 0,
+    });
+    expect(ctx.db.insert).not.toHaveBeenCalled();
+  });
+
+  it('rejects persisted assignment createdAt drift before any replay write', async () => {
+    const release = await releaseRegistration('release-1', 'release_slug_1');
+    (CLINICAL_REVIEW_BATCH_REGISTRY as unknown as ClinicalReviewBatchRegistration[]).push(release);
+    const ctx = context();
+    await handler(materializeRegisteredReleaseBatches)(ctx, {
+      expectedRegistryDigest: await registryDigest(),
+    });
+    ctx.tables.clinicalReviewAssignments[0].createdAt = 999;
+    ctx.db.insert.mockClear();
+    const replay = await handler(materializeRegisteredReleaseBatches)(ctx, {
+      expectedRegistryDigest: await registryDigest(),
+    });
+    expect(replay).toMatchObject({ ok: false, code: 'persisted_assignment_preimage_mismatch' });
+    expect(ctx.db.insert).not.toHaveBeenCalled();
+  });
+
+  it('always checks the exact target even when the assignment id already exists', async () => {
+    const release = await releaseRegistration('release-1', 'release_slug_1');
+    (CLINICAL_REVIEW_BATCH_REGISTRY as unknown as ClinicalReviewBatchRegistration[]).push(release);
+    const ctx = context();
+    await handler(materializeRegisteredReleaseBatches)(ctx, {
+      expectedRegistryDigest: await registryDigest(),
+    });
+    ctx.tables.clinicalReviewAssignments.push({
+      ...ctx.tables.clinicalReviewAssignments[0],
+      _id: 'colliding-target-row',
+      assignmentId: 'different-assignment-id',
+      batchId: 'different-batch',
+    });
+    ctx.db.insert.mockClear();
+    const replay = await handler(materializeRegisteredReleaseBatches)(ctx, {
+      expectedRegistryDigest: await registryDigest(),
+    });
+    expect(replay).toMatchObject({ ok: false, code: 'persisted_target_collision' });
+    expect(ctx.db.insert).not.toHaveBeenCalled();
+  });
+
   it('treats pilot history as non-authoritative and materializes an initial release root', async () => {
     const firstRelease = await releaseRegistration('release-root', 'release_root_slug');
     const registry = CLINICAL_REVIEW_BATCH_REGISTRY as unknown as ClinicalReviewBatchRegistration[];

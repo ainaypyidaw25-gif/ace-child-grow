@@ -27,6 +27,7 @@ import {
   filterParentReadableContent,
   parentReadableContentResult,
   publicationEvidenceForContent,
+  governancePublicationApproval,
 } from './lib/publicationVisibility';
 import { activeAiParentReadableContent } from './lib/aiPublicationVisibility';
 import { isRetiredContentSlug } from './lib/contentRetirements';
@@ -36,6 +37,7 @@ import { isBirth2mGrossMotorCorrectionSlug } from './lib/birth2mGrossMotorCorrec
 import { isOlderSafety2026ContentTargetSlug } from './lib/olderSafety2026CasData';
 import {
   frozenClinicalPublicationApproval,
+  isPersistedReleaseGovernedContent,
   isRegisteredReleaseContentTarget,
 } from './lib/clinicalReviewBatchProvenance';
 import {
@@ -285,6 +287,9 @@ export const attachUploadedMedia = mutation({
       .withIndex('by_slug', (q) => q.eq('slug', args.contentSlug))
       .unique();
     if (!content) throw new Error('Content not found');
+    if (await isPersistedReleaseGovernedContent(ctx, args.contentSlug)) {
+      throw new Error('Frozen release media requires an owner-controlled invalidation and refreeze.');
+    }
 
     const metadata = await ctx.db.system.get(args.storageId);
     if (!metadata) throw new Error('Uploaded file not found');
@@ -356,6 +361,9 @@ export const approveMedia = mutation({
     const approval = await requireProfessionalPublisher(ctx);
     const media = await ctx.db.get(args.mediaId);
     if (!media || media.placeholder || (!media.storageId && !media.url)) throw new Error('Media asset not found');
+    if (await isPersistedReleaseGovernedContent(ctx, media.contentSlug)) {
+      throw new Error('Frozen release media requires an owner-controlled invalidation and refreeze.');
+    }
     if (isRetiredContentSlug(media.contentSlug)) {
       throw new Error('Retired content is immutable');
     }
@@ -386,6 +394,13 @@ export const createStarterAnimationQueue = mutation({
   returns: v.object({ created: v.number(), existing: v.number() }),
   handler: async (ctx) => {
     const userId = await requireContentEditor(ctx);
+    // Preflight the complete bounded starter set before the first insert so a
+    // governed target cannot cause a partially-created queue.
+    for (const contentSlug of STARTER_ANIMATION_SLUGS) {
+      if (await isPersistedReleaseGovernedContent(ctx, contentSlug)) {
+        throw new Error('Frozen release media requires an owner-controlled invalidation and refreeze.');
+      }
+    }
     let created = 0;
     let existing = 0;
     for (const [sortOrder, contentSlug] of STARTER_ANIMATION_SLUGS.entries()) {
@@ -599,7 +614,8 @@ export const importSeed = mutation({
       // Fail closed at the server boundary as well as in local seed generation:
       // a stale or hand-built client must never recreate or mutate an archived
       // catalogue row. Reuse the existing skip counter to preserve the API.
-      if (isRegisteredReleaseContentTarget(it.type, it.slug)
+      if (await isPersistedReleaseGovernedContent(ctx, it.slug)
+        || isRegisteredReleaseContentTarget(it.type, it.slug)
         || isRetiredContentSlug(it.slug)
         || isManualReviewContentCasTargetSlug(it.slug)
         || isBirth2mNutritionCasTargetSlug(it.slug)
@@ -706,7 +722,8 @@ export const updateDraft = mutation({
       .withIndex('by_slug', (q) => q.eq('slug', args.slug))
       .unique();
     if (!item) throw new Error('Content not found');
-    if (isRegisteredReleaseContentTarget(item.type, item.slug)) {
+    if (await isPersistedReleaseGovernedContent(ctx, item.slug)
+      || isRegisteredReleaseContentTarget(item.type, item.slug)) {
       throw new Error('Frozen release content requires an owner-controlled correction and refreeze.');
     }
     const currentReviewRevision = item.reviewRevision ?? 1;
@@ -852,6 +869,11 @@ export const setReview = mutation({
 
       if (!frozenApproval.allowed) {
         throw new Error(`Current revision is missing frozen review provenance: ${frozenApproval.missing.join(', ')}`);
+      }
+
+      const governanceApproval = await governancePublicationApproval(ctx, item);
+      if (!governanceApproval.allowed) {
+        throw new Error(`Current revision is missing owner-confirmed review approvals: ${governanceApproval.missing.join(', ')}`);
       }
 
       const evidenceGate = await publicationEvidenceForContent(ctx, item);

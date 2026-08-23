@@ -2,6 +2,10 @@ import type { Doc } from '../_generated/dataModel';
 import type { MutationCtx, QueryCtx } from '../_generated/server';
 import { sha256Canonical } from './aiAuditHash';
 import {
+  CLINICAL_REVIEW_BATCH_CONTRACT,
+  CLINICAL_REVIEW_BATCH_CONTRACT_VERSION,
+} from './clinicalReviewBatchContract';
+import {
   CLINICAL_REVIEW_BATCH_REGISTRY,
   type ClinicalReviewBatchItem,
   type ClinicalReviewBatchRegistration,
@@ -31,10 +35,13 @@ export function isRegisteredClinicalReviewTarget(contentSlug: string, reviewRevi
 
 /** Generic import/edit lanes may not mutate any compile-frozen release input. */
 export function isRegisteredReleaseContentTarget(kind: string, contentSlug: string): boolean {
+  // Slug is the immutable catalogue identity. Ignore the caller-supplied kind
+  // so a wrong-type seed/import cannot evade a frozen release registration.
+  void kind;
   const registrations: readonly ClinicalReviewBatchRegistration[] = CLINICAL_REVIEW_BATCH_REGISTRY;
   return registrations.some((registration) =>
     registration.authority === 'release'
-      && registration.manifest.items.some((item) => item.kind === kind && item.slug === contentSlug));
+      && registration.manifest.items.some((item) => item.slug === contentSlug));
 }
 
 export function isRegisteredReleaseSourceId(sourceId: string): boolean {
@@ -73,20 +80,87 @@ function exactApprovedDecision(
     && row.reviewRevision === item.reviewRevision
     && row.dimension === registration.dimension
     && row.decision === 'approved'
-    && String(row.reviewerId) === registration.manifest.reviewer.userId;
+    && String(row.reviewerId) === registration.manifest.reviewer.userId
+    && row.reviewerDisplayName === registration.manifest.reviewer.displayName
+    && row.reviewerQualification === registration.manifest.reviewer.qualification
+    && row.reviewerRole === registration.manifest.reviewer.role
+    && row.createdAt === row.reviewedAt
+    && row.updatedAt === row.reviewedAt
+    && (row.note === undefined || (row.note.trim().length > 0 && row.note === row.note.trim()));
 }
 
-export function exactHandoffReceipt(
+async function expectedHandoffReceipt(
+  ctx: DatabaseContext,
+  registration: ClinicalReviewBatchRegistration,
+) {
+  if (registration.authority !== 'release') return null;
+  const decisions = [];
+  for (const item of registration.manifest.items) {
+    const assignmentId = await frozenClinicalDecisionKey(registration, item);
+    const rows = await ctx.db.query('contentReviews')
+      .withIndex('by_decision_key', (q) => q.eq('decisionKey', assignmentId)).take(2);
+    if (rows.length !== 1 || !exactApprovedDecision(rows[0], registration, item, assignmentId)) {
+      return null;
+    }
+    decisions.push({
+      assignmentId,
+      slug: item.slug,
+      reviewRevision: item.reviewRevision,
+      receipt: {
+        decision: rows[0].decision,
+        note: rows[0].note?.trim() || null,
+        reviewedAt: rows[0].reviewedAt,
+        receiptId: String(rows[0]._id),
+      },
+    });
+  }
+  if (decisions.length !== registration.manifest.count) return null;
+  const completedAt = Math.max(...decisions.map((entry) => entry.receipt.reviewedAt));
+  const digest = await sha256Canonical({
+    contract: `${CLINICAL_REVIEW_BATCH_CONTRACT}.handoff`,
+    contractVersion: CLINICAL_REVIEW_BATCH_CONTRACT_VERSION,
+    batchId: registration.manifest.batchId,
+    freezeDigest: registration.freezeDigest,
+    decisionCount: decisions.length,
+    completedAt,
+    decisions,
+  });
+  const freezeReceiptDigest = await sha256Canonical({
+    contract: CLINICAL_REVIEW_BATCH_CONTRACT,
+    contractVersion: CLINICAL_REVIEW_BATCH_CONTRACT_VERSION,
+    batchId: registration.manifest.batchId,
+    freezeDigest: registration.freezeDigest,
+    frozenAt: registration.frozenAt,
+    expiresAt: registration.expiresAt,
+    reviewer: registration.manifest.reviewer,
+  });
+  return {
+    completedAt,
+    digest,
+    receiptDigest: await sha256Canonical({
+      digest,
+      freezeReceiptDigest,
+      reviewerUserId: registration.manifest.reviewer.userId,
+    }),
+  };
+}
+
+export async function exactHandoffReceipt(
+  ctx: DatabaseContext,
   row: Doc<'clinicalReviewBatchReceipts'>,
   registration: ClinicalReviewBatchRegistration,
-): boolean {
-  return row.batchId === registration.manifest.batchId
+): Promise<boolean> {
+  const expected = await expectedHandoffReceipt(ctx, registration);
+  return expected !== null
+    && row.batchId === registration.manifest.batchId
     && row.freezeDigest === registration.freezeDigest
     && row.authority === registration.authority
     && row.decisionCount === registration.manifest.count
     && String(row.reviewerId) === registration.manifest.reviewer.userId
-    && /^[a-f0-9]{64}$/.test(row.digest)
-    && /^[a-f0-9]{64}$/.test(row.receiptDigest);
+    && row.completedAt === expected.completedAt
+    && row.createdAt === expected.completedAt
+    && row.digest === expected.digest
+    && row.receiptDigest === expected.receiptDigest;
 }
 
 export function exactPersistedBatchRegistration(
@@ -107,7 +181,11 @@ export function exactPersistedBatchRegistration(
     && row.expiresAt === registration.expiresAt
     && row.reviewerProfileId === registration.manifest.reviewer.profileId
     && String(row.reviewerId) === registration.manifest.reviewer.userId
+    && row.reviewerDisplayName === registration.manifest.reviewer.displayName
+    && row.reviewerQualification === registration.manifest.reviewer.qualification
+    && row.reviewerRole === registration.manifest.reviewer.role
     && row.reviewerIdentityDigest === registration.manifest.reviewer.identityCanonicalSha256
+    && row.createdAt === registration.frozenAt
     && row.activationKind === activation.kind
     && row.predecessorBatchId === (activation.kind === 'initial' ? undefined : activation.previousBatchId)
     && row.expectedUpstreamStateDigest === (activation.kind === 'initial'
@@ -162,7 +240,8 @@ async function exactUpstreamChain(
   const receipts = await ctx.db.query('clinicalReviewBatchReceipts')
     .withIndex('by_batch_id', (q) => q.eq('batchId', predecessor.manifest.batchId)).take(2);
   return receipts.length === 1
-    && exactHandoffReceipt(receipts[0], predecessor)
+    && await exactHandoffReceipt(ctx, receipts[0], predecessor)
+    && predecessorRows[0].completedAt === receipts[0].completedAt
     && row.consumedUpstreamReceiptDigest === receipts[0].receiptDigest;
 }
 
@@ -195,9 +274,85 @@ export function exactPersistedAssignment(
     && row.currentClinicalReviewCount === item.currentClinicalReviewCount
     && row.currentClinicalReviewsCanonicalSha256 === item.currentClinicalReviewsCanonicalSha256
     && row.allClinicalReviewHistoryCanonicalSha256 === item.allClinicalReviewHistoryCanonicalSha256
+    && row.createdAt === registration.frozenAt
     && row.sourceIds.length === item.sourceIds.length
     && row.sourceIds.every((sourceId, index) => sourceId === item.sourceIds[index])
     && JSON.stringify(row.upstreamReviewDigests) === JSON.stringify(item.upstreamReviewDigests ?? []);
+}
+
+/**
+ * Database-authoritative release-governance lookup. The content slug is the
+ * immutable identity: a caller cannot evade the guard by presenting a wrong
+ * or newly changed content type. Any persisted release batch keeps the target
+ * on the controlled correction/refreeze path, including after invalidation.
+ */
+export async function isPersistedReleaseGovernedContent(
+  ctx: DatabaseContext,
+  contentSlug: string,
+): Promise<boolean> {
+  const assignments = await ctx.db.query('clinicalReviewAssignments')
+    .withIndex('by_exact_target', (q) => q.eq('contentSlug', contentSlug))
+    .take(33);
+  if (assignments.length > 32) return true;
+  for (const batchId of new Set(assignments.map((row) => row.batchId))) {
+    const batches = await ctx.db.query('clinicalReviewBatches')
+      .withIndex('by_batch_id', (q) => q.eq('batchId', batchId)).take(2);
+    if (batches.length !== 1 || batches[0].authority === 'release') return true;
+  }
+  return false;
+}
+
+/** Bounded batch-operation snapshot: read governed assignments, not the catalogue. */
+async function persistedReleaseGovernedAssignments(
+  ctx: DatabaseContext,
+): Promise<Doc<'clinicalReviewAssignments'>[]> {
+  const statuses: readonly Doc<'clinicalReviewBatches'>['status'][] = [
+    'frozen',
+    'active',
+    'completed',
+    'stopped_changes_requested',
+    'invalidated',
+  ];
+  const batches = (await Promise.all(statuses.map(async (status) =>
+    await ctx.db.query('clinicalReviewBatches')
+      .withIndex('by_status', (q) => q.eq('status', status)).take(33),
+  ))).flat();
+  if (batches.length > 32) throw new Error('Clinical release batch governance bound exceeded');
+  const assignments: Doc<'clinicalReviewAssignments'>[] = [];
+  for (const batch of batches.filter((row) => row.authority === 'release')) {
+    const batchAssignments = await ctx.db.query('clinicalReviewAssignments')
+      .withIndex('by_batch_id_and_ordinal', (q) => q.eq('batchId', batch.batchId)).take(26);
+    if (batchAssignments.length > 25) throw new Error('Clinical release assignment governance bound exceeded');
+    assignments.push(...batchAssignments);
+  }
+  return assignments;
+}
+
+export async function persistedReleaseGovernedContentSlugs(
+  ctx: DatabaseContext,
+): Promise<Set<string>> {
+  return new Set((await persistedReleaseGovernedAssignments(ctx))
+    .map((assignment) => assignment.contentSlug));
+}
+
+export async function assertNoPersistedReleaseGovernedContent(
+  ctx: DatabaseContext,
+  slugs: Iterable<string>,
+): Promise<void> {
+  const governed = await persistedReleaseGovernedContentSlugs(ctx);
+  const overlap = [...new Set(slugs)].filter((slug) => governed.has(slug));
+  if (overlap.length > 0) {
+    throw new Error(`Frozen release targets require invalidation and refreeze: ${overlap.join(', ')}`);
+  }
+}
+
+/** Sources are compile-frozen inputs; their persisted target batch must exist. */
+export async function isPersistedReleaseGovernedSource(
+  ctx: DatabaseContext,
+  sourceId: string,
+): Promise<boolean> {
+  return (await persistedReleaseGovernedAssignments(ctx))
+    .some((assignment) => assignment.sourceIds.includes(sourceId));
 }
 
 /**
@@ -301,8 +456,10 @@ export async function frozenClinicalPublicationApproval(
       receipt = rows.length === 1 ? rows[0] : null;
       receiptByBatch.set(registration.manifest.batchId, receipt);
     }
-    if (!receipt || !exactHandoffReceipt(receipt, registration)) {
+    if (!receipt || !await exactHandoffReceipt(ctx, receipt, registration)) {
       missing.push(`${registration.dimension}:batch_handoff`);
+    } else if (batchRows[0].completedAt !== receipt.completedAt) {
+      missing.push(`${registration.dimension}:batch_completion_timestamp`);
     }
   }
 

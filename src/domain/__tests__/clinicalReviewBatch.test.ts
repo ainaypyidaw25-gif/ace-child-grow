@@ -418,25 +418,17 @@ describe('frozen clinical-review batch UI contract', () => {
     expect(ctx.tables.contentReviews).toHaveLength(0);
   });
 
-  it('returns a server-issued handoff receipt only after both exact assignments are approved', async () => {
+  it('keeps unanimous pilot decisions readable but never issues release handoff authority', async () => {
     const ctx = context();
     const batch = await readBatch(ctx) as { items: Array<Record<string, unknown>> };
     await handler(saveAssignedDecision)(ctx, inputFrom(batch.items[0]));
     const completed = await handler(saveAssignedDecision)(ctx, inputFrom(batch.items[1])) as Record<string, unknown>;
-    expect(completed).toMatchObject({
-      ok: true,
-      duplicate: false,
-      handoff: { batchId: CLINICAL_REVIEW_BATCH_ID, decisionCount: 2, completedAt: 1787500000000 },
-    });
-    expect((completed.handoff as { digest: string }).digest).toMatch(/^[a-f0-9]{64}$/);
-    expect((completed.handoff as { receiptDigest: string }).receiptDigest).toMatch(/^[a-f0-9]{64}$/);
+    expect(completed).toMatchObject({ ok: true, duplicate: false });
+    expect(completed).not.toHaveProperty('handoff');
     expect(ctx.tables.contentReviews).toHaveLength(2);
-    expect(ctx.tables.clinicalReviewBatchReceipts).toHaveLength(1);
-    expect(ctx.tables.clinicalReviewBatchReceipts[0]).toMatchObject({
-      batchId: CLINICAL_REVIEW_BATCH_ID,
-      authority: 'pilot',
-      decisionCount: 2,
-    });
+    expect(ctx.tables.clinicalReviewBatchReceipts).toHaveLength(0);
+    const closedRead = await readBatch(ctx) as Record<string, unknown>;
+    expect(closedRead.handoff).toBeNull();
   });
 
   it('atomically completes a persisted release batch with its unanimous handoff', async () => {
@@ -458,6 +450,33 @@ describe('frozen clinical-review batch UI contract', () => {
     expect(ctx.tables.clinicalReviewBatchReceipts).toHaveLength(1);
     const closedRead = await readBatch(ctx);
     expect(closedRead).toMatchObject({ handoff: final.handoff });
+  });
+
+  it('recomputes decision, receipt, digest, and completion timestamps on every closed read', async () => {
+    const ctx = context();
+    await makePilotReleaseActive(ctx);
+    const batch = await readBatch(ctx) as { items: Array<Record<string, unknown>> };
+    await handler(saveAssignedDecision)(ctx, inputFrom(batch.items[0]));
+    await handler(saveAssignedDecision)(ctx, inputFrom(batch.items[1]));
+
+    const receipt = ctx.tables.clinicalReviewBatchReceipts[0];
+    const originalReceipt = { ...receipt };
+    receipt.digest = '0'.repeat(64);
+    await expect(readBatch(ctx)).resolves.toMatchObject({ status: 'refused', code: 'batch_preflight_failed' });
+    Object.assign(receipt, originalReceipt);
+
+    receipt.createdAt = Number(receipt.createdAt) + 1;
+    await expect(readBatch(ctx)).resolves.toMatchObject({ status: 'refused', code: 'batch_preflight_failed' });
+    Object.assign(receipt, originalReceipt);
+
+    const decision = ctx.tables.contentReviews[0];
+    const originalRole = decision.reviewerRole;
+    decision.reviewerRole = 'evidence_reviewer';
+    await expect(readBatch(ctx)).resolves.toMatchObject({ status: 'refused', code: 'batch_preflight_failed' });
+    decision.reviewerRole = originalRole;
+
+    ctx.tables.clinicalReviewBatches[0].completedAt = Number(originalReceipt.completedAt) + 1;
+    await expect(readBatch(ctx)).resolves.toMatchObject({ status: 'refused', code: 'batch_preflight_failed' });
   });
 
   it('activates the first release as an initial root without a fabricated pilot receipt', async () => {

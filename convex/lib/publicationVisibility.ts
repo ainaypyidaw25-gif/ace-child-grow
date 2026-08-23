@@ -20,6 +20,7 @@ export type PublicationContentIdentity = {
   clinicalStatus: string;
   version?: number;
   reviewRevision?: number;
+  requiredReviewDimensions?: readonly string[];
 };
 
 type PublicationEvidenceSnapshot = {
@@ -58,6 +59,28 @@ export async function publicationEvidenceForContent(
   return evaluatePublicationEvidence(link?.sourceIds ?? [], linkedSources, todayIso);
 }
 
+/** Stored owner governance remains a continuous publication requirement. */
+export async function governancePublicationApproval(
+  ctx: DatabaseContext,
+  content: Pick<PublicationContentIdentity, 'slug' | 'reviewRevision' | 'version' | 'requiredReviewDimensions'>,
+): Promise<{ allowed: boolean; missing: string[] }> {
+  const dimensions = [...new Set(content.requiredReviewDimensions ?? [])];
+  if (dimensions.length === 0) return { allowed: true, missing: [] };
+  const revision = content.reviewRevision ?? content.version ?? 1;
+  const missing: string[] = [];
+  for (const dimension of dimensions) {
+    const rows = await ctx.db.query('contentReviews')
+      .withIndex('by_content_dimension_version', (q) => q
+        .eq('contentSlug', content.slug)
+        .eq('dimension', dimension as Doc<'contentReviews'>['dimension'])
+        .eq('contentVersion', revision))
+      .order('desc')
+      .take(1);
+    if (rows[0]?.decision !== 'approved') missing.push(dimension);
+  }
+  return { allowed: missing.length === 0, missing };
+}
+
 /**
  * Parent visibility is continuously dependent on current evidence, not only
  * on the historical moment at which the content was published.
@@ -70,11 +93,12 @@ export async function contentIsParentReadable(
 ): Promise<boolean> {
   if (isRetiredContentSlug(content.slug)) return false;
   if (isPubliclyReadableStatus(content.clinicalStatus)) {
-    const [evidence, frozenApproval] = await Promise.all([
+    const [evidence, frozenApproval, governanceApproval] = await Promise.all([
       publicationEvidenceForContent(ctx, content, todayIso),
       frozenClinicalPublicationApproval(ctx, content),
+      governancePublicationApproval(ctx, content),
     ]);
-    return evidence.allowed && frozenApproval.allowed;
+    return evidence.allowed && frozenApproval.allowed && governanceApproval.allowed;
   }
   return await contentIsAiParentReadable(ctx, content as Doc<'libraryContent'>, now, todayIso);
 }
@@ -184,6 +208,7 @@ export async function parentReadableContentResult<T extends PublicationContentId
     isPubliclyReadableStatus(row.clinicalStatus)
       ? contentIsParentReadableFromSnapshot(row, snapshot)
         && (await frozenClinicalPublicationApproval(ctx, row)).allowed
+        && (await governancePublicationApproval(ctx, row)).allowed
       : await contentIsAiParentReadable(ctx, row as unknown as Doc<'libraryContent'>, now, todayIso)
   )));
   return {

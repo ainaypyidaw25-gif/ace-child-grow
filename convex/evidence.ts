@@ -61,6 +61,8 @@ import {
 import {
   isRegisteredReleaseContentTarget,
   isRegisteredReleaseSourceId,
+  isPersistedReleaseGovernedContent,
+  isPersistedReleaseGovernedSource,
 } from './lib/clinicalReviewBatchProvenance';
 import {
   isClinicalBlockerCasSource,
@@ -564,7 +566,8 @@ async function applySources(
 
   for (const src of sources) {
     const { id, ...rest } = src;
-    if (isRegisteredReleaseSourceId(id)
+    if (await isPersistedReleaseGovernedSource(ctx, id)
+      || isRegisteredReleaseSourceId(id)
       || isSwaimanSuddenWeaknessSourceCasTarget(id)
       || isOlderSafety2026SourceTarget(id)
       || isBirth2mGrossMotorCorrectionSource(id)
@@ -773,8 +776,10 @@ async function applyLinks(
   // generic clients may neither recreate retired edges nor mutate inherently
   // public rows reserved for bounded atomic CAS releases. Filter
   // before validation and before any link write.
-  const activeLinks = links.filter((link) => {
-    if (!isRegisteredReleaseContentTarget(link.kind, link.slug)
+  const activeLinks: Infer<typeof linkValidator>[] = [];
+  for (const link of links) {
+    if (!await isPersistedReleaseGovernedContent(ctx, link.slug)
+      && !isRegisteredReleaseContentTarget(link.kind, link.slug)
       && !isRetiredContentSlug(link.slug)
       && !isInherentPublicLinkCasTarget(link.kind, link.slug)
       && !isSwaimanSeizureLinkCasTarget(link.kind, link.slug)
@@ -786,10 +791,12 @@ async function applyLinks(
       && !isSwaimanSuddenWeaknessLinkCasTarget(link.kind, link.slug)
       && !isOlderSafety2026LinkTarget(link.kind, link.slug)
       && !isGdBirth2mEmotionalCasLink(link.kind, link.slug)
-      && !isUnicefSeenCountedConsumer(link.kind, link.slug)) return true;
-    skipped += 1;
-    return false;
-  });
+      && !isUnicefSeenCountedConsumer(link.kind, link.slug)) {
+      activeLinks.push(link);
+    } else {
+      skipped += 1;
+    }
+  }
   const sourceSnapshot = await ctx.db.query('evidenceSources').take(2_001);
   if (sourceSnapshot.length > 2_000) {
     throw new Error('Evidence link import exceeded the 2,000-source safety bound');
@@ -1077,6 +1084,14 @@ export const setReview = mutation({
       .query('evidenceSources')
       .withIndex('by_source_id', (qq) => qq.eq('sourceId', args.sourceId))
       .unique();
+
+    if (await isPersistedReleaseGovernedSource(ctx, args.sourceId)) {
+      return refuse(
+        'frozen_release_governed',
+        'This source belongs to a frozen release. Invalidate and refreeze the exact batch before changing it.',
+        row ? `${row.reviewStatus} / ${row.reviewer ?? 'no reviewer'}` : 'unchanged',
+      );
+    }
 
     // One policy, evaluated once. See reviewRefusal.
     const refusal = reviewRefusal(reviewArgs, row);

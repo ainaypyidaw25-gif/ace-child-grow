@@ -7,6 +7,7 @@ import {
   type QueryCtx,
 } from './_generated/server';
 import { sha256Canonical } from './lib/aiAuditHash';
+import { assertNoPersistedReleaseGovernedContent } from './lib/clinicalReviewBatchProvenance';
 import {
   LEGACY_COMPLETED_PRIORITY_CORRECTION_ACTION,
   LEGACY_COMPLETED_PRIORITY_CORRECTION_RELEASE_ID,
@@ -235,6 +236,10 @@ export const apply = internalMutation({
     state: stateValidator,
   }),
   handler: async (ctx) => {
+    await assertNoPersistedReleaseGovernedContent(
+      ctx,
+      [LEGACY_COMPLETED_PRIORITY_CORRECTION_TARGET.slug],
+    );
     const before = await snapshotState(ctx);
     if (before.phase === 'applied') {
       return { applied: false, alreadyApplied: true, updatedAt: before.updatedAt, state: before };

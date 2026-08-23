@@ -56,7 +56,11 @@ function handler(fn: unknown) {
 
 describe('internal seed.run retirement boundary', () => {
   it('skips retired slugs before every catalogue or media read and write', async () => {
-    const query = vi.fn(() => {
+    const query = vi.fn((table: string) => {
+      if (table === 'clinicalReviewBatches') {
+        const terminal = { take: async () => [] as unknown[] };
+        return { withIndex: () => terminal };
+      }
       throw new Error('retired item reached a database read');
     });
     const insert = vi.fn(async () => 'audit-1');
@@ -78,7 +82,8 @@ describe('internal seed.run retirement boundary', () => {
       total: retiredSeedFixture.length,
     });
 
-    expect(query).not.toHaveBeenCalled();
+    expect(query).toHaveBeenCalledTimes(5);
+    expect(query.mock.calls.every(([table]) => table === 'clinicalReviewBatches')).toBe(true);
     expect(patch).not.toHaveBeenCalled();
     expect(remove).not.toHaveBeenCalled();
     expect(insert).toHaveBeenCalledTimes(1);

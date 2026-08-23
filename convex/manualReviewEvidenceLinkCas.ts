@@ -8,6 +8,7 @@ import {
 } from './_generated/server';
 import { logAudit } from './audit';
 import { sha256Canonical } from './lib/aiAuditHash';
+import { assertNoPersistedReleaseGovernedContent } from './lib/clinicalReviewBatchProvenance';
 import { todayIsoUtc } from './lib/evidenceFreshness';
 import { evaluatePublicationEvidence, publicationEvidenceIsEligible } from './lib/evidencePublicationGate';
 import {
@@ -238,6 +239,10 @@ export const apply = internalMutation({
     citationsEligible: v.boolean(), updatedAt: v.number(),
   }),
   handler: async (ctx) => {
+    await assertNoPersistedReleaseGovernedContent(
+      ctx,
+      MANUAL_REVIEW_EVIDENCE_LINK_CAS_TARGETS.map((target) => target.slug),
+    );
     const now = Date.now();
     const before = await preflightState(ctx, now);
     if (before.phase === 'applied') {

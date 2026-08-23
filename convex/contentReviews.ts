@@ -5,6 +5,7 @@ import { logAudit } from './audit';
 import { getStaffAccess, requireUser, type StaffRole } from './lib/auth';
 import { isRetiredContentSlug } from './lib/contentRetirements';
 import { reviewRefusal, type ReviewDimension } from './lib/reviewPolicy';
+import { isPersistedReleaseGovernedContent } from './lib/clinicalReviewBatchProvenance';
 
 const dimensionValidator = v.union(
   v.literal('english'),
@@ -255,6 +256,27 @@ export const saveDecision = mutation({
   handler: async (ctx, args) => {
     const userId = await requireUser(ctx);
     const access = await getStaffAccess(ctx, userId);
+
+    // Once a release assignment is materialized, every dimension and every
+    // staff role is bound to its exact assignment lane. A generic decision
+    // would change the frozen review-history preimage even if its role would
+    // normally be permitted for that dimension.
+    if (await isPersistedReleaseGovernedContent(ctx, args.contentSlug)) {
+      await logAudit(
+        ctx,
+        userId,
+        `contentReview.${args.dimension}.${args.decision}`,
+        'libraryContent',
+        undefined,
+        `${args.contentSlug} · refused: frozen_release_assignment_required`,
+        { result: 'rejected' },
+      );
+      return {
+        ok: false as const,
+        code: 'assignment_required',
+        message: 'Frozen release decisions must be recorded through the exact assigned batch.',
+      };
+    }
 
     // Clinical reviewer authority is assignment-scoped. The frozen batch
     // mutation validates the exact row/revision/snapshot and is the sole path

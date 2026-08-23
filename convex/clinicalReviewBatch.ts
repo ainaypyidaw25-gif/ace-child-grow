@@ -24,6 +24,7 @@ import { evaluatePublicationEvidence } from './lib/evidencePublicationGate';
 import { requireUser } from './lib/auth';
 import { roleMayReview } from './lib/reviewPolicy';
 import {
+  exactHandoffReceipt,
   exactPersistedAssignment,
   exactPersistedBatchRegistration,
   frozenClinicalDecisionKey,
@@ -342,6 +343,12 @@ async function inspectItem(
     existing.clinicalReviewBatchId !== registration.manifest.batchId || existing.contentSlug !== item.slug
     || existing.contentVersion !== item.reviewRevision || existing.reviewRevision !== item.reviewRevision
     || existing.dimension !== registration.dimension || String(existing.reviewerId) !== registration.manifest.reviewer.userId
+    || existing.reviewerDisplayName !== registration.manifest.reviewer.displayName
+    || existing.reviewerQualification !== registration.manifest.reviewer.qualification
+    || existing.reviewerRole !== registration.manifest.reviewer.role
+    || existing.createdAt !== existing.reviewedAt || existing.updatedAt !== existing.reviewedAt
+    || (existing.note !== undefined
+      && (existing.note.trim().length === 0 || existing.note !== existing.note.trim()))
     || !receiptFor(existing)
   )) blockers.push('existing_decision_preimage_drift');
 
@@ -522,6 +529,9 @@ async function storedHandoffReceipt(
   ctx: DatabaseContext,
   registration: ClinicalReviewBatchRegistration,
 ) {
+  if (registration.authority !== 'release') {
+    return { receipt: null, blockers: [] as string[] };
+  }
   const rows = await ctx.db
     .query('clinicalReviewBatchReceipts')
     .withIndex('by_batch_id', (q) => q.eq('batchId', registration.manifest.batchId))
@@ -529,12 +539,7 @@ async function storedHandoffReceipt(
   if (rows.length === 0) return { receipt: null, blockers: [] as string[] };
   if (rows.length !== 1) return { receipt: null, blockers: ['duplicate_handoff_receipt'] };
   const receipt = rows[0];
-  if (receipt.freezeDigest !== registration.freezeDigest
-    || receipt.authority !== registration.authority
-    || receipt.decisionCount !== registration.manifest.count
-    || String(receipt.reviewerId) !== registration.manifest.reviewer.userId
-    || !/^[a-f0-9]{64}$/.test(receipt.digest)
-    || !/^[a-f0-9]{64}$/.test(receipt.receiptDigest)) {
+  if (!await exactHandoffReceipt(ctx, receipt, registration)) {
     return { receipt: null, blockers: ['handoff_receipt_preimage_drift'] };
   }
   return { receipt, blockers: [] as string[] };
@@ -552,6 +557,7 @@ async function exactPersistedRegistrationSelection(
     return {
       active: registration ?? CLINICAL_REVIEW_BATCH_REGISTRY[0] as ClinicalReviewBatchRegistration,
       persistedStatus: row.status,
+      persistedCompletedAt: row.completedAt,
       blockers: ['persisted_batch_preimage_drift'],
     };
   }
@@ -571,7 +577,12 @@ async function exactPersistedRegistrationSelection(
       assignmentBlockers.push(`persisted_assignment_preimage_drift:${item.slug}`);
     }
   }
-  return { active: registration, persistedStatus: row.status, blockers: assignmentBlockers };
+  return {
+    active: registration,
+    persistedStatus: row.status,
+    persistedCompletedAt: row.completedAt,
+    blockers: assignmentBlockers,
+  };
 }
 
 async function activeRegistration(ctx: DatabaseContext, requestedBatchId?: string) {
@@ -582,6 +593,7 @@ async function activeRegistration(ctx: DatabaseContext, requestedBatchId?: strin
       return {
         active: CLINICAL_REVIEW_BATCH_REGISTRY[0] as ClinicalReviewBatchRegistration,
         persistedStatus: undefined,
+        persistedCompletedAt: undefined,
         blockers: ['duplicate_requested_batch'],
       };
     }
@@ -595,6 +607,7 @@ async function activeRegistration(ctx: DatabaseContext, requestedBatchId?: strin
     return {
       active: CLINICAL_REVIEW_BATCH_REGISTRY[0] as ClinicalReviewBatchRegistration,
       persistedStatus: undefined,
+      persistedCompletedAt: undefined,
       blockers: ['multiple_active_batches'],
     };
   }
@@ -614,6 +627,7 @@ async function activeRegistration(ctx: DatabaseContext, requestedBatchId?: strin
   return {
     active: CLINICAL_REVIEW_BATCH_REGISTRY[0] as ClinicalReviewBatchRegistration,
     persistedStatus: undefined,
+    persistedCompletedAt: undefined,
     blockers: [] as string[],
   };
 }
@@ -623,7 +637,7 @@ async function persistHandoffReceipt(
   registration: ClinicalReviewBatchRegistration,
   handoff: Awaited<ReturnType<typeof completionHandoff>>,
 ) {
-  if (!handoff) return;
+  if (!handoff || registration.authority !== 'release') return;
   const stored = await storedHandoffReceipt(ctx, registration);
   if (stored.blockers.length > 0) {
     throw new Error(`Handoff receipt preimage failed: ${stored.blockers.join(',')}`);
@@ -664,7 +678,12 @@ async function closePersistedReleaseBatch(
     // receipt inserts. Returning a refusal here would commit a partial release.
     throw new Error('Active release batch lifecycle preimage failed');
   }
-  if (rows[0].status === 'completed' && handoff) return;
+  if (rows[0].status === 'completed' && handoff) {
+    if (rows[0].completedAt !== handoff.completedAt) {
+      throw new Error('Completed release batch timestamp preimage failed');
+    }
+    return;
+  }
   if (rows[0].status === 'stopped_changes_requested' && decision === 'changes_requested') return;
   if (rows[0].status !== 'active') throw new Error('Release batch lifecycle is closed');
   if (decision === 'changes_requested') {
@@ -696,7 +715,12 @@ export const readAssignedBatchState = internalQuery({
     const staticBlockers = await registryBlockers();
     const selected = staticBlockers.length === 0
       ? await activeRegistration(ctx)
-      : { active: CLINICAL_REVIEW_BATCH_REGISTRY[0] as ClinicalReviewBatchRegistration, blockers: staticBlockers };
+      : {
+          active: CLINICAL_REVIEW_BATCH_REGISTRY[0] as ClinicalReviewBatchRegistration,
+          persistedStatus: undefined,
+          persistedCompletedAt: undefined,
+          blockers: staticBlockers,
+        };
     if (selected.blockers.length > 0) {
       return {
         status: 'refused' as const,
@@ -739,12 +763,21 @@ export const readAssignedBatchState = internalQuery({
       };
     }
     const freezeReceipt = await freezeReceiptDigest(registration);
-    const computedHandoff = await completionHandoff(registration, states, freezeReceipt);
-    const storedHandoff = await storedHandoffReceipt(ctx, registration);
+    // Pilot history remains readable but is deliberately non-authoritative:
+    // it never produces, consumes, or depends on a persisted release receipt.
+    const computedHandoff = registration.authority === 'release'
+      ? await completionHandoff(registration, states, freezeReceipt)
+      : null;
+    const storedHandoff = registration.authority === 'release'
+      ? await storedHandoffReceipt(ctx, registration)
+      : { receipt: null, blockers: [] as string[] };
     if (storedHandoff.blockers.length > 0
       || (computedHandoff && (!storedHandoff.receipt
         || storedHandoff.receipt.digest !== computedHandoff.digest
-        || storedHandoff.receipt.receiptDigest !== computedHandoff.receiptDigest))) {
+        || storedHandoff.receipt.receiptDigest !== computedHandoff.receiptDigest))
+      || (registration.authority === 'release'
+        && selected.persistedStatus === 'completed'
+        && (!computedHandoff || selected.persistedCompletedAt !== computedHandoff.completedAt))) {
       return {
         status: 'refused' as const,
         code: 'batch_preflight_failed' as const,
@@ -859,11 +892,13 @@ export const saveAssignedDecision = mutation({
     if (state.decision) {
       const identical = state.decision.decision === args.decision && (state.decision.note ?? '') === (note ?? '');
       if (!identical) return await refuse(ctx, userId, 'assignment_expired', `${item.slug} · refused: decision receipt conflict`, item.contentId);
-      const handoff = await completionHandoff(
-        registration,
-        batchStates,
-        await freezeReceiptDigest(registration),
-      );
+      const handoff = registration.authority === 'release'
+        ? await completionHandoff(
+          registration,
+          batchStates,
+          await freezeReceiptDigest(registration),
+        )
+        : null;
       await persistHandoffReceipt(ctx, registration, handoff);
       await closePersistedReleaseBatch(ctx, registration, state.decision.decision, handoff);
       return { ok: true as const, decisionKey: state.assignmentId, duplicate: true, receipt: state.decision, ...(handoff ? { handoff } : {}) };
@@ -894,11 +929,13 @@ export const saveAssignedDecision = mutation({
     const completedStates = batchStates.map((candidate) => candidate.item.slug === item.slug
       ? { ...candidate, decision: receipt }
       : candidate);
-    const handoff = await completionHandoff(
-      registration,
-      completedStates,
-      await freezeReceiptDigest(registration),
-    );
+    const handoff = registration.authority === 'release'
+      ? await completionHandoff(
+        registration,
+        completedStates,
+        await freezeReceiptDigest(registration),
+      )
+      : null;
     await persistHandoffReceipt(ctx, registration, handoff);
     await closePersistedReleaseBatch(ctx, registration, receipt.decision, handoff);
     return { ok: true as const, decisionKey: state.assignmentId, duplicate: false, receipt, ...(handoff ? { handoff } : {}) };

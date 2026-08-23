@@ -212,12 +212,9 @@ export const materializeRegisteredReleaseBatches = mutation({
         if (existingById.length > 1) {
           return { ok: false, code: 'duplicate_assignment_id', batchId: registration.manifest.batchId, createdBatches: 0, createdAssignments: 0 };
         }
-        if (existingById.length === 1) {
-          if (!exactPersistedAssignment(existingById[0], registration, item, assignment.assignmentId)) {
-            return { ok: false, code: 'persisted_assignment_preimage_mismatch', batchId: registration.manifest.batchId, createdBatches: 0, createdAssignments: 0 };
-          }
-          continue;
-        }
+        // Always query the semantic identity as well as the hash-derived id.
+        // A matching assignmentId must not hide a second row occupying the
+        // same slug/dimension/revision tuple in another batch.
         const targetRows = await ctx.db
           .query('clinicalReviewAssignments')
           .withIndex('by_exact_target', (q) => q
@@ -225,6 +222,15 @@ export const materializeRegisteredReleaseBatches = mutation({
             .eq('dimension', registration.dimension)
             .eq('reviewRevision', item.reviewRevision))
           .take(2);
+        if (existingById.length === 1) {
+          if (!exactPersistedAssignment(existingById[0], registration, item, assignment.assignmentId)) {
+            return { ok: false, code: 'persisted_assignment_preimage_mismatch', batchId: registration.manifest.batchId, createdBatches: 0, createdAssignments: 0 };
+          }
+          if (targetRows.length !== 1 || targetRows[0]._id !== existingById[0]._id) {
+            return { ok: false, code: 'persisted_target_collision', batchId: registration.manifest.batchId, createdBatches: 0, createdAssignments: 0 };
+          }
+          continue;
+        }
         if (targetRows.length > 0) {
           return { ok: false, code: 'persisted_target_collision', batchId: registration.manifest.batchId, createdBatches: 0, createdAssignments: 0 };
         }
@@ -305,7 +311,7 @@ export const activateRegisteredBatch = mutation({
         || !exactPersistedBatchRegistration(predecessorRows[0], predecessor)
         || !args.expectedUpstreamReceiptDigest
         || receipts.length !== 1
-        || !exactHandoffReceipt(receipts[0], predecessor)
+        || !await exactHandoffReceipt(ctx, receipts[0], predecessor)
         || receipts[0].receiptDigest !== args.expectedUpstreamReceiptDigest) {
         return { ok: false, code: 'upstream_handoff_missing', batchId: args.batchId, createdBatches: 0, createdAssignments: 0 };
       }

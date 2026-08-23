@@ -8,6 +8,7 @@ import {
 } from './_generated/server';
 import { logAudit } from './audit';
 import { sha256Canonical } from './lib/aiAuditHash';
+import { assertNoPersistedReleaseGovernedContent } from './lib/clinicalReviewBatchProvenance';
 import {
   MANUAL_REVIEW_CONTENT_CAS_RELEASE_ID,
   MANUAL_REVIEW_CONTENT_TARGETS,
@@ -335,6 +336,10 @@ export const apply = internalMutation({
     updatedAt: v.number(),
   }),
   handler: async (ctx) => {
+    await assertNoPersistedReleaseGovernedContent(
+      ctx,
+      MANUAL_REVIEW_CONTENT_TARGETS.map((target) => target.slug),
+    );
     const now = Date.now();
     const before = await preflightState(ctx);
     if (before.phase === 'applied') {

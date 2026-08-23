@@ -34,6 +34,7 @@ import {
   type AiReleaseTargetData,
 } from './lib/aiPublicationReleaseData';
 import { aiReleaseMatchesCurrentState } from './lib/aiPublicationVisibility';
+import { assertNoPersistedReleaseGovernedContent } from './lib/clinicalReviewBatchProvenance';
 import { todayIsoUtc } from './lib/evidenceFreshness';
 
 type DatabaseContext = Pick<QueryCtx, 'db'> | Pick<MutationCtx, 'db'>;
@@ -381,6 +382,10 @@ export const apply = internalMutation({
   },
   returns: applyResultValidator,
   handler: async (ctx, args) => {
+    await assertNoPersistedReleaseGovernedContent(
+      ctx,
+      AI_PUBLICATION_RELEASE_TARGETS.map((target) => target.slug),
+    );
     const operator = boundedText(args.operator, 'operator', 160);
     if (!/^[a-f0-9]{40}$/.test(args.gitCommit)) throw new Error('gitCommit must be a 40-character lowercase SHA');
     const now = Date.now();
