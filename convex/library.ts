@@ -33,6 +33,7 @@ import { isRetiredContentSlug } from './lib/contentRetirements';
 import { isManualReviewContentCasTargetSlug } from './lib/manualReviewContentCasData';
 import { isBirth2mNutritionCasTargetSlug } from './lib/birth2mNutritionCasData';
 import { isBirth2mGrossMotorCorrectionSlug } from './lib/birth2mGrossMotorCorrection';
+import { isOlderSafety2026ContentTargetSlug } from './lib/olderSafety2026CasData';
 
 export { isPubliclyReadableStatus } from './lib/publicationVisibility';
 
@@ -593,7 +594,8 @@ export const importSeed = mutation({
       if (isRetiredContentSlug(it.slug)
         || isManualReviewContentCasTargetSlug(it.slug)
         || isBirth2mNutritionCasTargetSlug(it.slug)
-        || isBirth2mGrossMotorCorrectionSlug(it.slug)) {
+        || isBirth2mGrossMotorCorrectionSlug(it.slug)
+        || isOlderSafety2026ContentTargetSlug(it.slug)) {
         skippedApproved += 1;
         continue;
       }

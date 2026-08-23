@@ -60,6 +60,10 @@ import {
 import {
   MANUAL_REVIEW_CONTENT_TARGETS,
 } from '../../../convex/lib/manualReviewContentCasData';
+import {
+  OLDER_SAFETY_2026_STAGED_SOURCES,
+  OLDER_SAFETY_2026_TARGETS,
+} from '../../../convex/lib/olderSafety2026CasData';
 
 const RETIRED_SERVER_GUARD_ITEMS = [
   ...[
@@ -398,6 +402,73 @@ describe('Convex registered handlers enforce authorization', () => {
       unchanged: 0,
       reviewReset: 0,
       skipped: 1,
+      failed: 0,
+    });
+
+    expect(context.db.query).not.toHaveBeenCalledWith('libraryContent');
+    expect(context.db.query).not.toHaveBeenCalledWith('evidenceLinks');
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalledWith('libraryContent', expect.anything());
+    expect(context.db.insert).not.toHaveBeenCalledWith('evidenceLinks', expect.anything());
+    expect(context.db.insert).not.toHaveBeenCalledWith('evidenceSources', expect.anything());
+  });
+
+  it('reserves all nine older-safety rows and three source records for exact CAS only', async () => {
+    authState.userId = 'editor-1';
+    const context = ctx({
+      profile: { userId: 'editor-1', isStaff: true, staffRole: 'content_editor' },
+      rows: { evidenceSources: [] },
+    });
+    const items = OLDER_SAFETY_2026_TARGETS.map((target) => ({
+      type: target.kind,
+      slug: target.slug,
+      titleMm: 'stale',
+      titleEn: 'stale',
+      tags: [],
+      source: 'stale broad seed',
+      version: 1,
+      clinicalStatus: 'clinical_review',
+      data: {},
+      media: [{ kind: 'illustration' }],
+      searchText: 'stale',
+    }));
+
+    await expect(handler(importSeed)(context, { items })).resolves.toEqual({
+      created: 0,
+      updated: 0,
+      skippedApproved: 9,
+      total: 9,
+    });
+    await expect(handler(importLinks)(context, { links:
+      OLDER_SAFETY_2026_TARGETS.map((target) => ({
+        kind: target.kind,
+        slug: target.slug,
+        sourceIds: ['stale-or-unknown-source'],
+      })),
+    })).resolves.toMatchObject({
+      created: 0,
+      updated: 0,
+      unchanged: 0,
+      skipped: 9,
+      failed: 0,
+    });
+    await expect(handler(importSources)(context, { sources:
+      OLDER_SAFETY_2026_STAGED_SOURCES.map((source) => ({
+        ...source,
+        id: source.sourceId,
+        reviewStatus: 'awaiting_review',
+        reviewer: null,
+        reviewDate: null,
+        nextReviewDate: null,
+        keywords: [...source.keywords],
+        topics: [...source.topics],
+      })),
+    })).resolves.toMatchObject({
+      created: 0,
+      updated: 0,
+      unchanged: 0,
+      reviewReset: 0,
+      skipped: 3,
       failed: 0,
     });
 

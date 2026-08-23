@@ -55,6 +55,7 @@ import {
 import { isManualReviewContentCasTargetSlug } from './lib/manualReviewContentCasData';
 import { isBirth2mNutritionCasTargetSlug } from './lib/birth2mNutritionCasData';
 import { isBirth2mGrossMotorCorrectionSlug } from './lib/birth2mGrossMotorCorrection';
+import { isOlderSafety2026ContentTargetSlug } from './lib/olderSafety2026CasData';
 
 const GRANTABLE_ROLES = [
   'owner',
@@ -192,7 +193,8 @@ export function seedRunSkipsItem(item: Pick<Item, 'type' | 'slug'>): boolean {
   return isRetiredContentSlug(item.slug)
     || isManualReviewContentCasTargetSlug(item.slug)
     || isBirth2mNutritionCasTargetSlug(item.slug)
-    || isBirth2mGrossMotorCorrectionSlug(item.slug);
+    || isBirth2mGrossMotorCorrectionSlug(item.slug)
+    || isOlderSafety2026ContentTargetSlug(item.slug);
 }
 
 const PUBLISHED_RELEASE_LIMIT = 5_000;

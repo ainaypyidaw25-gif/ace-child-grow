@@ -54,6 +54,10 @@ import {
   isSwaimanSuddenWeaknessLinkCasTarget,
   isSwaimanSuddenWeaknessSourceCasTarget,
 } from './lib/swaimanSuddenWeaknessCasData';
+import {
+  isOlderSafety2026LinkTarget,
+  isOlderSafety2026SourceTarget,
+} from './lib/olderSafety2026CasData';
 
 const REVIEW_STATUSES = [
   'evidence_required',
@@ -552,6 +556,7 @@ async function applySources(
   for (const src of sources) {
     const { id, ...rest } = src;
     if (isSwaimanSuddenWeaknessSourceCasTarget(id)
+      || isOlderSafety2026SourceTarget(id)
       || isBirth2mGrossMotorCorrectionSource(id)) {
       skipped += 1;
       continue;
@@ -766,7 +771,8 @@ async function applyLinks(
       && !isBirth2mNutritionCasTarget(link.kind, link.slug)
       && !isBirth2mGrossMotorCorrectionLink(link.kind, link.slug)
       && !isManualReviewEvidenceLinkCasTarget(link.kind, link.slug)
-      && !isSwaimanSuddenWeaknessLinkCasTarget(link.kind, link.slug)) return true;
+      && !isSwaimanSuddenWeaknessLinkCasTarget(link.kind, link.slug)
+      && !isOlderSafety2026LinkTarget(link.kind, link.slug)) return true;
     skipped += 1;
     return false;
   });

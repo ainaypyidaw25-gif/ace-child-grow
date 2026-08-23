@@ -516,11 +516,11 @@ export const GOVERNMENT_SOURCES: EvidenceSource[] = [
     country: 'United States',
     url: 'https://www.cpsc.gov/s3fs-public/252ChildproofingYourHome32123.pdf',
     evidenceLevel: 'parent_education',
-    keywords: ['childproofing', 'safety gates', 'window guards', 'furniture tip-over', 'outlet covers', 'poison prevention'],
+    keywords: ['childproofing', 'window guards', 'window opening limit', 'fire escape', 'furniture anchors', 'cabinet locks'],
     topics: ['safety', 'parenting'],
-    verifiedOn: '2026-08-19',
+    verifiedOn: '2026-08-23',
     verifiedNote:
-      'Official CPSC PDF prints this title and “Publication #252 • 032023.” It recommends cordless window coverings, window guards, furniture and appliance anchors, locked cabinets, close bathing supervision, stair gates, outlet covers and other safety devices for young children.',
+      'The official CPSC PDF prints this title and “Publication #252 • 032023.” It says window guards/safety netting should limit openings to four inches or less while at least one window in each room remains easy to use for fire escape; it also recommends furniture anchors and locks that keep medicines and cleaners out of reach.',
   }),
   s({
     id: 'cpsc-window-coverings-cordless-2021',
@@ -1015,6 +1015,32 @@ export const AAP_SOURCES: EvidenceSource[] = [
     verifiedNote:
       'PubMed record 34253571 shows the title, the 2021 Pediatrics publication and DOI 10.1542/peds.2021-052227.',
   }),
+  s({
+    id: 'aap-drowning-2026',
+    org: 'American Academy of Pediatrics',
+    orgKey: 'AAP',
+    title: 'Prevention of Drowning: Policy Statement',
+    authors:
+      'Rohit P Shenoi; Tracy McCallin; Caitlin Farrell; Shabana Yusuf; Sadiqa Kendi; Julie Gilchrist; Linda Quan; Council on Injury, Violence, and Poison Prevention',
+    year: 2026,
+    edition: 'Pediatrics. 2026 Jul 1;158(1):e2026077410',
+    country: 'United States',
+    url:
+      'https://publications.aap.org/pediatrics/article/doi/10.1542/peds.2026-077410/207630/Prevention-of-Drowning-Policy-Statement',
+    doi: '10.1542/peds.2026-077410',
+    pmid: '42144630',
+    evidenceLevel: 'guideline',
+    keywords: [
+      'drowning prevention', 'water safety', 'supervision', 'barriers',
+      'life jackets', 'water competency',
+    ],
+    topics: ['safety'],
+    ageMonthsMin: 0,
+    ageMonthsMax: null,
+    verifiedOn: '2026-08-23',
+    verifiedNote:
+      'The final AAP publisher page/PDF and PubMed record 42144630 print this title, the seven named authors and AAP council, Pediatrics 2026;158(1):e2026077410, DOI 10.1542/peds.2026-077410 and PMID 42144630. The policy calls for close, constant, attentive and competent adult supervision, multiple prevention layers, age-based anticipatory guidance and water competency for children of all ages. The 2021 statement is superseded and is not reset or retired by this release.',
+  }),
 ];
 
 // ---------------------------------------------------------------------------
@@ -1269,6 +1295,26 @@ export const CDC_SOURCES: EvidenceSource[] = [
     ageMonthsMax: 36,
     verifiedNote:
       'CDC child development page shows the title and a 2026 "last reviewed" date; `year` records that reviewed year.',
+  }),
+  s({
+    id: 'cdc-positive-parenting-preschoolers-2026',
+    org: 'Centers for Disease Control and Prevention',
+    orgKey: 'CDC',
+    title: 'Positive Parenting Tips: Preschoolers (3–5 years old)',
+    year: 2026,
+    country: 'United States',
+    url:
+      'https://www.cdc.gov/child-development/positive-parenting-tips/preschooler-3-5-years.html',
+    evidenceLevel: 'parent_education',
+    keywords: [
+      'positive parenting', 'preschooler', 'traffic safety', 'water safety', 'supervision',
+    ],
+    topics: ['parenting', 'safety', 'social_emotional'],
+    ageMonthsMin: 36,
+    ageMonthsMax: 71,
+    verifiedOn: '2026-08-23',
+    verifiedNote:
+      'The CDC page prints this exact title and “Feb. 20, 2026.” Its Child safety first section says to keep children out of traffic, watch them at all times outside, and watch them at all times in or around any body of water. The printed 3–5-year scope covers ACE bands 36–66 months.',
   }),
   s({
     id: 'cdc-immunization-schedule-2025',

@@ -54,7 +54,7 @@ const UNDER_FOUR_NUTRITION_SAFETY = b(
 const GUIDE_SOURCES: Record<string, string[]> = {
   nutrition: ['tb-bright-futures-4e-2017', 'tb-caring-birth-to-5-8e-2024', 'who-growth-standards-2006', 'who-child-growth-standards-qa-2025'],
   sleep: ['who-pa-sleep-under5-2019', 'jr-aasm-bedtime-2006', 'jr-lecuelle-behavioral-insomnia-review-2024', 'tb-caring-birth-to-5-8e-2024'],
-  safety: ['aap-drowning-2021', 'tb-bright-futures-4e-2017', 'cdc-positive-parenting-toddlers-2026'],
+  safety: ['aap-drowning-2026', 'tb-bright-futures-4e-2017', 'cdc-positive-parenting-toddlers-2026'],
   daily_routine: ['tb-bright-futures-4e-2017', 'aap-oral-health-2023'],
   play: ['aap-power-of-play-2018', 'who-care-for-child-development-2012', 'tb-caring-birth-to-5-8e-2024'],
 };
@@ -201,7 +201,10 @@ const bands: Band[] = [
   ], guides: [
     ['nutrition', b('အစားအစာအုပ်စုစုံကို အရွယ်သင့်အပိုင်းဖြင့် ပေးပြီး ကိုယ်တိုင်စားခွင့်ပေးပါ။', 'Offer varied foods in safe sizes and support self-feeding.'), b('မိသားစုနှင့်အတူ ထိုင်စားပြီး ဆာလောင်/ဝပြီ အချက်ပြမှုကို လေးစားပါ။', 'Eat together and respect hunger and fullness cues.')],
     ['sleep', b('နေ့ခင်းအိပ်ချိန်တစ်ကြိမ်နှင့် ညအိပ်ချိန်ကို ပုံမှန်နီးပါး ထားပါ။', 'Keep a broadly consistent nap and bedtime.'), b('အိပ်မီ မျက်နှာပြင်ပိတ်ပြီး ငြိမ်သက်သော လုပ်ရိုးလုပ်စဉ်သုံးပါ။', 'Turn screens off and use a calm bedtime routine.')],
-    ['safety', b('ပြတင်းပေါက်တွင် လူကြီးသာ ဖွင့်နိုင်သော ကာရံ/အဖွင့်ကန့်သတ်ကိရိယာ တပ်ပြီး တက်နိုင်သော ပရိဘောဂများကို ဝေးရာရွှေ့ပါ။ ဆေးဝါးနှင့် သန့်ရှင်းရေးပစ္စည်းများကို သော့ခတ်သိမ်းပါ။', 'Fit operable window guards or stops, move climbable furniture away, and lock medicines and cleaning products away.'), b('ပရိဘောဂကြီးများကို နံရံတွင် ခိုင်ခံ့စွာ တပ်ပါ။', 'Anchor heavy furniture securely to the wall.')],
+    ['safety', b(
+      'ပြတင်းပေါက်တွင် အကာအရံ သို့မဟုတ် အဖွင့်ကန့်သတ်ကိရိယာ တပ်၍ ၄ လက်မထက် ပိုမဖွင့်နိုင်အောင် ထားပါ။ မီးဘေးဖြစ်ပါက ထွက်ပြေးနိုင်ရန် အခန်းတိုင်းတွင် အနည်းဆုံး ပြတင်းပေါက်တစ်ပေါက်ကို လွယ်ကူစွာ ဖွင့်နိုင်အောင် ထားပါ။ တက်နိုင်သော ပရိဘောဂများကို ဝေးရာရွှေ့ပြီး ဆေးဝါးနှင့် သန့်ရှင်းရေးပစ္စည်းများကို ကလေးမမီသော နေရာတွင် သော့ခတ်သိမ်းပါ။',
+      'Fit operable window guards or stops so windows open no more than four inches; keep at least one window in each room easy to open for fire escape. Move climbable furniture away, and lock medicines and cleaning products out of reach.',
+    ), b('ပရိဘောဂကြီးများကို နံရံတွင် ခိုင်ခံ့စွာ တပ်ပါ။', 'Anchor heavy furniture securely to the wall.')],
     ['daily_routine', b('သန့်ရှင်းရေးနှင့် ပစ္စည်းသိမ်းခြင်းကို တစ်ဆင့်ချင်း အတူလုပ်ပါ။', 'Include the child in one-step tidy-up and care routines.'), b('“အရုပ်ကို ဘူးထဲထည့်ပါ” ကဲ့သို့ တစ်ဆင့်ညွှန်ကြားချက်ပေးပါ။', 'Use one-step directions such as “put the toy in the box.”')],
   ], play: [
     ['roll_kick_ball_19_24m', b('ဘောလုံး လှိမ့်ကန်ကစားခြင်း', 'Roll and kick a ball'), b('ဟန်ချက်နှင့် အလှည့်ကျကစားမှု', 'Balance and turn-taking'), b('ပျော့သော ဘောလုံးကြီး', 'A large soft ball'), b('အပြန်အလှန် လှိမ့်ပြီး နောက်မှ ကန်ကြည့်ပါ။', 'Roll it back and forth, then try gentle kicks.'), b('လှေကားနှင့် လမ်းမအနီး မကစားပါနှင့်။', 'Play away from stairs and traffic.'), ['gross_motor', 'social']],
@@ -265,6 +268,15 @@ for (const band of bands) {
   for (const [domain, focus, daily] of band.guides) {
     const editorial = GUIDE_EDITORIAL[domain] ?? GUIDE_EDITORIAL.daily_routine;
     let guideSources = [...GUIDE_SOURCES[domain]];
+    if (domain === 'safety' && ['3y', '3_5y', '4y', '4_5y', '5y'].includes(band.key)) {
+      guideSources = guideSources.map((sourceId) =>
+        sourceId === 'cdc-positive-parenting-toddlers-2026'
+          ? 'cdc-positive-parenting-preschoolers-2026'
+          : sourceId);
+    }
+    if (domain === 'safety' && band.key === '19_24m') {
+      guideSources.push('cpsc-childproofing-home-2023');
+    }
     if (domain === 'nutrition' && band.key === '5y') {
       guideSources = guideSources.filter((sourceId) =>
         sourceId !== 'who-growth-standards-2006'
@@ -279,6 +291,9 @@ for (const band of bands) {
     if (domain === 'sleep' && BEDTIME_ROUTINE_RCT_BANDS.has(band.key)) {
       guideSources.push('jr-mindell-bedtime-routine-rct-2009');
     }
+    const guideEvidenceSummary = domain === 'safety' && band.key === '19_24m'
+      ? 'The 2023 CPSC childproofing guide directly supports window guards/opening limits, preserving one operable fire-escape window per room, furniture anchoring and locked medicines/cleaners. Current AAP and age-matched CDC guidance support layered water, traffic and supervision precautions.'
+      : `Registered ${domain.replace('_', ' ')} references support this conservative parent guide for ${band.en}.`;
     authored.push(linked(guide(band.key, domain, {
       title: b(`${band.mm} — ${domain === 'nutrition' ? 'အာဟာရ' : domain === 'sleep' ? 'အိပ်စက်ခြင်း' : domain === 'safety' ? 'ဘေးကင်းလုံခြုံရေး' : domain === 'play' ? 'ကစားခြင်း' : 'နေ့စဉ်လုပ်ရိုးလုပ်စဉ်'} လမ်းညွှန်`, `${band.en} — ${domain.replace('_', ' ')} guide`),
       why: focus,
@@ -294,7 +309,7 @@ for (const band of bands) {
       redFlags: [editorial.redFlag],
       referral: editorial.referral,
       encouragement: editorial.encouragement,
-    }), `Registered ${domain.replace('_', ' ')} references support this conservative parent guide for ${band.en}.`, guideSources));
+    }), guideEvidenceSummary, guideSources));
   }
   for (const [slug, title, goal, materials, step, safety, domains] of band.play) {
     const activityItem = activity({ slug, title, summary: goal, ageGroupKey: band.key, domains, difficulty: 'easy', durationMinutes: 10,
