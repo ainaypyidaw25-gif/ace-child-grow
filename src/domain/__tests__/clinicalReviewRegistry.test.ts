@@ -122,7 +122,11 @@ async function registryDigest() {
 }
 
 describe('persisted clinical review registry', () => {
-  beforeEach(() => { authState.userId = 'owner-user'; });
+  beforeEach(() => {
+    authState.userId = 'owner-user';
+    const registry = CLINICAL_REVIEW_BATCH_REGISTRY as unknown as ClinicalReviewBatchRegistration[];
+    registry.splice(0, registry.length, originalRegistry[0]);
+  });
   afterEach(() => {
     const registry = CLINICAL_REVIEW_BATCH_REGISTRY as unknown as ClinicalReviewBatchRegistration[];
     registry.splice(0, registry.length, ...originalRegistry);

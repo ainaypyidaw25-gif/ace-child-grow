@@ -343,6 +343,8 @@ function inputFrom(item: Record<string, unknown>) {
 describe('frozen clinical-review batch UI contract', () => {
   beforeEach(() => {
     authState.userId = CLINICAL_REVIEW_BATCH_REVIEWER.userId;
+    const registry = CLINICAL_REVIEW_BATCH_REGISTRY as unknown as ClinicalReviewBatchRegistration[];
+    registry.splice(0, registry.length, originalPilotRegistration);
     vi.spyOn(Date, 'now').mockReturnValue(1787500000000);
   });
 

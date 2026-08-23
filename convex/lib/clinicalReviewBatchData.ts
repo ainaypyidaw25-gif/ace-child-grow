@@ -232,6 +232,15 @@ export type ClinicalReviewBatchItem = {
   readonly currentClinicalReviewCount?: number;
   readonly currentClinicalReviewsCanonicalSha256?: string;
   readonly allClinicalReviewHistoryCanonicalSha256?: string;
+  /**
+   * Digest-bound reviewer guidance for a claim whose applicability needs an
+   * explicit human judgment. It is displayed inside the frozen snapshot and
+   * is not itself a review decision or approval.
+   */
+  readonly reviewerAdvisory?: {
+    readonly mm: string;
+    readonly en: string;
+  };
   readonly upstreamReviewDigests?: readonly {
     readonly dimension: string;
     readonly digest: string;
@@ -283,6 +292,95 @@ export type ClinicalReviewBatchRegistration = {
 };
 
 /**
+ * First release-authoritative clinical lane root.
+ *
+ * Frozen from a fresh, read-only Production preflight on 2026-08-23 against
+ * graceful-possum-566. The historical pilot remains append-only context but
+ * supplies no release receipt and is not a predecessor of this release root.
+ * This manifest creates assignments only; it records no decision and grants no
+ * publication authority until the exact persisted batch completes unanimously.
+ */
+export const CLINICAL_INITIAL_RELEASE_BATCH_ID = 'clinical-newborn-skin-sleep-2026-08-23-v1' as const;
+export const CLINICAL_INITIAL_RELEASE_BATCH_FROZEN_AT = 1787500569000 as const;
+export const CLINICAL_INITIAL_RELEASE_BATCH_EXPIRES_AT = 1788710169000 as const;
+
+export const CLINICAL_INITIAL_RELEASE_BATCH_ITEMS = [
+  {
+    ordinal: 1,
+    kind: 'activity',
+    slug: 'act_skin_to_skin_calm',
+    reviewRevision: 2,
+    contentId: 'kx790c9ywv0bge727jh2765w9s8b82wx',
+    contentCreationTime: 1785024282947.2336,
+    contentUpdatedAt: 1786432330925,
+    contentCanonicalSha256: '37ed3052cd3d2716908ae7bd5b9d30f6922e7d90fa134f52ab85bd8bd1d3a15d',
+    linkId: 'k9789fvkr23qt48e09s91j8pzn8b8sbp',
+    linkCreationTime: 1785024331625.8394,
+    linkUpdatedAt: 1785024331625,
+    linkCanonicalSha256: '25928df256c29b1805aece1e1113a873986fc01a4385fb78c69c7474e64622d0',
+    sourceIds: [
+      'who-bfhi-2017',
+      'who-bf-counselling-2018',
+      'aap-safe-sleep-2022',
+      'nhs-sids-2025',
+    ],
+    sourceCount: 4,
+    sourcesCanonicalSha256: '79747ef319b64b9741932234009b43c89c4a1661137f240ece656fb6244c4c29',
+    mediaCount: 2,
+    mediaCanonicalSha256: '8e6c1e03eb4899f3ae7ed1e4c6dbcbbf08696db305b462fbbd254bc004def6ba',
+    aiCanonicalSha256: 'e0c04573de4314ddde597477c374bafd25b400663d593e0a0244afe3f73c1d0d',
+    currentClinicalReviewCount: 0,
+    currentClinicalReviewsCanonicalSha256: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945',
+    allClinicalReviewHistoryCanonicalSha256: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945',
+    reviewerAdvisory: {
+      mm: 'WHO ရင်းမြစ်များတွင် ဖော်ပြထားသော ချက်ချင်းနှင့် ကျန်းမာရေးဌာနအတွင်း skin-to-skin အကျိုးကျေးဇူးများကို အိမ်တွင် ထပ်ခါတလဲလဲ စိတ်ငြိမ်စေရန် အသုံးပြုခြင်းနှင့် “နို့တိုက်ကျွေးမှုကို ပိုမိုလွယ်ကူစေခြင်း” ဟူသောစာသားအထိ ချဲ့ထွင်ဖော်ပြနိုင်ခြင်းရှိ/မရှိကို အတည်ပြုပါ။',
+      en: 'Confirm whether the linked WHO evidence supports extrapolating immediate and facility-based skin-to-skin benefits to repeated at-home calming and the statement “Feeding often becomes easier.”',
+    },
+  },
+  {
+    ordinal: 2,
+    kind: 'guide',
+    slug: 'gd_birth_2m_sleep',
+    reviewRevision: 3,
+    contentId: 'kx76vp3r2pnfyy5tgs9shn20bd8b8zha',
+    contentCreationTime: 1785024282947.1877,
+    contentUpdatedAt: 1786432330925,
+    contentCanonicalSha256: '42ec191e63b612456223bd101bcfdca908629f68266a0125ab465e8bda55d58a',
+    linkId: 'k97epd1tn83dm0apk7xkby7zjd8b8y86',
+    linkCreationTime: 1785024331625.8176,
+    linkUpdatedAt: 1787359998883,
+    linkCanonicalSha256: 'f25350f857aa6a65eaab152e87aa9782fa697c1784b4b1c81f775a7de3d2d6f8',
+    sourceIds: [
+      'aap-safe-sleep-2022',
+      'nhs-sids-2025',
+      'who-pa-sleep-under5-2019',
+      'hc-safe-sleep-2026',
+      'nice-ng143-fever-2019',
+      'hc-child-ems-2026',
+    ],
+    sourceCount: 6,
+    sourcesCanonicalSha256: '9c0beb0c6824f3a33273f7e37a34b6e90e4d16efcf8438e1d3eb71397de0572a',
+    mediaCount: 0,
+    mediaCanonicalSha256: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945',
+    aiCanonicalSha256: 'e0c04573de4314ddde597477c374bafd25b400663d593e0a0244afe3f73c1d0d',
+    currentClinicalReviewCount: 0,
+    currentClinicalReviewsCanonicalSha256: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945',
+    allClinicalReviewHistoryCanonicalSha256: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945',
+  },
+] as const satisfies readonly ClinicalReviewBatchItem[];
+
+export const CLINICAL_INITIAL_RELEASE_BATCH_MANIFEST = {
+  batchId: CLINICAL_INITIAL_RELEASE_BATCH_ID,
+  count: CLINICAL_INITIAL_RELEASE_BATCH_ITEMS.length,
+  reviewer: CLINICAL_REVIEW_BATCH_REVIEWER,
+  items: CLINICAL_INITIAL_RELEASE_BATCH_ITEMS,
+} as const satisfies ClinicalReviewBatchFreezeManifest;
+
+// Regenerated with sha256Canonical after every manifest/routing edit.
+export const CLINICAL_INITIAL_RELEASE_BATCH_HASH = 'db3036076969eb8934acc46b8ce7ef3ec85036c4a737606cea96d9cadeb0aa7d' as const;
+export const CLINICAL_INITIAL_RELEASE_BATCH_ROUTING_HASH = '784e270d8507b7976b7bbcb452bb9c60e7190ded9f9f80565488fceef0b30d18' as const;
+
+/**
  * Compile-time allowlist of immutable clinical batches, in strict sequence.
  * Keep this registry explicit: it must never be populated from the catalogue,
  * owner-priority queues, search results, or generic review requests.
@@ -302,6 +400,18 @@ export const CLINICAL_REVIEW_BATCH_REGISTRY = [
     frozenAt: CLINICAL_REVIEW_BATCH_FROZEN_AT,
     expiresAt: CLINICAL_REVIEW_BATCH_EXPIRES_AT,
     manifest: CLINICAL_REVIEW_BATCH_MANIFEST,
+  },
+  {
+    sequence: 2,
+    laneGraphVersion: 1,
+    dimension: 'clinical',
+    authority: 'release',
+    activation: { kind: 'initial' },
+    routingCanonicalSha256: CLINICAL_INITIAL_RELEASE_BATCH_ROUTING_HASH,
+    freezeDigest: CLINICAL_INITIAL_RELEASE_BATCH_HASH,
+    frozenAt: CLINICAL_INITIAL_RELEASE_BATCH_FROZEN_AT,
+    expiresAt: CLINICAL_INITIAL_RELEASE_BATCH_EXPIRES_AT,
+    manifest: CLINICAL_INITIAL_RELEASE_BATCH_MANIFEST,
   },
 ] as const satisfies readonly ClinicalReviewBatchRegistration[];
 

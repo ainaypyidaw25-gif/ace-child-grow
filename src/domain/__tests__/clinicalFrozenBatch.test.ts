@@ -30,6 +30,7 @@ function contract(overrides: Record<string, unknown> = {}) {
           titleEn: 'Safe sleep',
           summaryMm: 'Frozen Myanmar copy',
           summaryEn: 'Frozen English copy',
+          reviewerAdvisory: null,
           sources: [{
             sourceId: 'aap-safe-sleep-2022',
             org: 'AAP',
@@ -88,6 +89,23 @@ describe('frozen clinical batch adapter', () => {
         snapshot: expect.objectContaining({ digest: 'sha256:snapshot-a' }),
       }),
     ]);
+  });
+
+  it('preserves a complete digest-bound reviewer advisory and rejects a partial one', () => {
+    const raw = contract();
+    const snapshot = (raw.items as Array<Record<string, unknown>>)[0].snapshot as Record<string, unknown>;
+    snapshot.reviewerAdvisory = { mm: 'သီးခြားစစ်ဆေးရန်', en: 'Check this applicability explicitly.' };
+    const accepted = adaptFrozenClinicalBatch(raw, 'clinical_reviewer');
+    expect(accepted.kind).toBe('ready');
+    if (accepted.kind === 'ready') {
+      expect(accepted.batch.items[0].snapshot.reviewerAdvisory).toEqual(snapshot.reviewerAdvisory);
+    }
+
+    snapshot.reviewerAdvisory = { mm: 'သီးခြားစစ်ဆေးရန်' };
+    expect(adaptFrozenClinicalBatch(raw, 'clinical_reviewer')).toEqual({
+      kind: 'invalid',
+      reason: 'invalid_batch_item',
+    });
   });
 
   it('accepts the qualification-gated child-development dimension in the clinical lane', () => {

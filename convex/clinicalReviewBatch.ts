@@ -44,6 +44,10 @@ type SnapshotSource = {
   year: number | null;
   url: string;
 };
+type SnapshotAdvisory = {
+  mm: string;
+  en: string;
+};
 
 const MAX_RELATED_ROWS = 50;
 const MAX_SNAPSHOT_FIELDS = 12;
@@ -124,6 +128,23 @@ function bilingualList(value: unknown): { mm: string | null; en: string | null }
   };
 }
 
+function bilingualFaq(value: unknown): { mm: string | null; en: string | null } {
+  if (!Array.isArray(value) || value.length === 0 || value.length > MAX_RELATED_ROWS) {
+    return { mm: null, en: null };
+  }
+  const rows = value.map((entry) => {
+    const record = asRecord(entry);
+    return { question: bilingualObject(record?.q), answer: bilingualObject(record?.a) };
+  });
+  if (rows.some((row) => !row.question.mm || !row.question.en || !row.answer.mm || !row.answer.en)) {
+    return { mm: null, en: null };
+  }
+  return {
+    mm: rows.map((row, index) => `${index + 1}. ${row.question.mm}\n   ${row.answer.mm}`).join('\n'),
+    en: rows.map((row, index) => `${index + 1}. ${row.question.en}\n   ${row.answer.en}`).join('\n'),
+  };
+}
+
 function snapshotFields(content: Doc<'libraryContent'>): { fields: SnapshotField[]; blockers: string[] } {
   const data = asRecord(content.data);
   const fields: SnapshotField[] = [];
@@ -151,12 +172,44 @@ function snapshotFields(content: Doc<'libraryContent'>): { fields: SnapshotField
     add('data.instructions', 'လုပ်ဆောင်ပုံ', 'Instructions', instructions.mm, instructions.en);
     add('data.safety', 'ဘေးကင်းရေး', 'Safety', safety.mm, safety.en);
     add('data.outcomes', 'မျှော်မှန်းရလဒ်', 'Expected outcomes', outcomes.mm, outcomes.en);
+  } else if (content.type === 'guide') {
+    const why = bilingualObject(data.why);
+    const materials = bilingualObject(data.materials);
+    const observations = bilingualList(data.observationQuestions);
+    const dailyActivities = bilingualList(data.dailyActivities);
+    const settings = bilingualList([
+      ...(Array.isArray(data.indoor) ? data.indoor : []),
+      ...(Array.isArray(data.lowCost) ? data.lowCost : []),
+    ]);
+    const safety = bilingualObject(data.safety);
+    const commonMistakes = bilingualList(data.commonMistakes);
+    const parentTips = bilingualList(data.parentTips);
+    const faq = bilingualFaq(data.faq);
+    const redFlags = bilingualList(data.redFlags);
+    const referral = bilingualObject(data.referral);
+    const encouragement = bilingualObject(data.encouragement);
+    add('data.why', 'အရေးပါပုံ', 'Why it matters', why.mm, why.en);
+    add('data.materials', 'လိုအပ်သောပစ္စည်း', 'Materials', materials.mm, materials.en);
+    add('data.observationQuestions', 'စောင့်ကြည့်ရန်', 'What to observe', observations.mm, observations.en);
+    add('data.dailyActivities', 'နေ့စဉ်လုပ်ဆောင်ရန်', 'Daily activities', dailyActivities.mm, dailyActivities.en);
+    add('data.indoor+lowCost', 'အိမ်တွင်းနှင့် ကုန်ကျစရိတ်နည်း အကြံပြုချက်များ', 'Indoor and low-cost suggestions', settings.mm, settings.en);
+    add('data.safety', 'ဘေးကင်းရေး', 'Safety', safety.mm, safety.en);
+    add('data.commonMistakes', 'ရှောင်ရန်အမှားများ', 'Common mistakes', commonMistakes.mm, commonMistakes.en);
+    add('data.parentTips', 'မိဘအတွက်အကြံပြုချက်', 'Parent tips', parentTips.mm, parentTips.en);
+    add('data.faq', 'မေးလေ့ရှိသောမေးခွန်း', 'Frequently asked question', faq.mm, faq.en);
+    add('data.redFlags', 'အရေးပေါ်သတိပေးလက္ခဏာများ', 'Urgent warning signs', redFlags.mm, redFlags.en);
+    add('data.referral', 'အရေးပေါ်လုပ်ဆောင်ရန်', 'Urgent action', referral.mm, referral.en);
+    add('data.encouragement', 'အားပေးစကား', 'Encouragement', encouragement.mm, encouragement.en);
   } else blockers.push('snapshot_type_not_supported');
   if (fields.length === 0 || fields.length > MAX_SNAPSHOT_FIELDS) blockers.push('snapshot_field_count_invalid');
   return { fields, blockers };
 }
 
-async function buildSnapshot(content: Doc<'libraryContent'>, sourceRows: Doc<'evidenceSources'>[]) {
+async function buildSnapshot(
+  content: Doc<'libraryContent'>,
+  sourceRows: Doc<'evidenceSources'>[],
+  reviewerAdvisory?: SnapshotAdvisory,
+) {
   const extracted = snapshotFields(content);
   const sources: SnapshotSource[] = sourceRows.map((source) => ({
     sourceId: source.sourceId,
@@ -174,9 +227,18 @@ async function buildSnapshot(content: Doc<'libraryContent'>, sourceRows: Doc<'ev
       return true;
     }
   })) extracted.blockers.push('snapshot_source_invalid');
+  const advisory = reviewerAdvisory
+    ? { mm: reviewerAdvisory.mm.trim(), en: reviewerAdvisory.en.trim() }
+    : null;
+  if (reviewerAdvisory && (!advisory?.mm || !advisory.en
+    || advisory.mm.length > MAX_SNAPSHOT_FIELD_CHARACTERS
+    || advisory.en.length > MAX_SNAPSHOT_FIELD_CHARACTERS)) {
+    extracted.blockers.push('snapshot_reviewer_advisory_invalid');
+  }
   const body = {
     titleMm: content.titleMm, titleEn: content.titleEn,
     summaryMm: content.summaryMm ?? null, summaryEn: content.summaryEn ?? null,
+    reviewerAdvisory: advisory,
     sources, fields: extracted.fields,
   };
   return { snapshot: { digest: await sha256Canonical(body), ...body }, blockers: extracted.blockers };
@@ -283,7 +345,7 @@ async function inspectItem(
     || !receiptFor(existing)
   )) blockers.push('existing_decision_preimage_drift');
 
-  const built = content ? await buildSnapshot(content, sourceRows) : null;
+  const built = content ? await buildSnapshot(content, sourceRows, item.reviewerAdvisory) : null;
   if (!built) blockers.push('snapshot_content_missing'); else blockers.push(...built.blockers);
   return {
     item, assignmentId: decisionKey, liveReviewRevision: content?.reviewRevision ?? content?.version ?? 0,

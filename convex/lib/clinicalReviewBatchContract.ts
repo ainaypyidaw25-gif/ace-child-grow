@@ -32,9 +32,11 @@ const snapshotSourceValidator = v.object({
   sourceId: v.string(), org: v.string(), title: v.string(),
   year: v.union(v.number(), v.null()), url: v.string(),
 });
+const snapshotAdvisoryValidator = v.object({ mm: v.string(), en: v.string() });
 const snapshotValidator = v.object({
   digest: v.string(), titleMm: v.string(), titleEn: v.string(),
   summaryMm: nullableStringValidator, summaryEn: nullableStringValidator,
+  reviewerAdvisory: v.union(snapshotAdvisoryValidator, v.null()),
   sources: v.array(snapshotSourceValidator), fields: v.array(snapshotFieldValidator),
 });
 export const clinicalReviewHandoffValidator = v.object({
