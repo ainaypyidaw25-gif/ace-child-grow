@@ -8,6 +8,7 @@ import {
 } from './_generated/server';
 import { logAudit } from './audit';
 import { canonicalJson, sha256Canonical } from './lib/aiAuditHash';
+import { assertNoPersistedReleaseGovernedContent } from './lib/clinicalReviewBatchProvenance';
 import { todayIsoUtc } from './lib/evidenceFreshness';
 import {
   evaluatePublicationEvidence,
@@ -552,6 +553,7 @@ export const apply = internalMutation({
     updatedAt: v.number(),
   }),
   handler: async (ctx) => {
+    await assertNoPersistedReleaseGovernedContent(ctx, [BIRTH2M_GROSS_MOTOR_TARGET.slug]);
     const now = Date.now();
     const before = await preflightState(ctx, now);
     if (before.phase === 'applied') {

@@ -1,9 +1,9 @@
 import { query, mutation } from './_generated/server';
 import { v } from 'convex/values';
 import { getAuthUserId } from '@convex-dev/auth/server';
-import { hasStaffRole, requireClinicalPublisher, requireContentEditor, requireProfessionalPublisher, requireReviewEditor } from './lib/auth';
+import { hasStaffRole, requireContentEditor, requireProfessionalPublisher, requireReviewEditor } from './lib/auth';
+import { frozenClinicalPublicationApproval } from './lib/clinicalReviewBatchProvenance';
 import { logAudit } from './audit';
-import { requiresSpecialistReview } from './lib/contentReviewRequirements';
 
 // Mirror of src/domain/content/workflow.ts (convex functions can't import src/).
 const TRANSITIONS: Record<string, string[]> = {
@@ -37,14 +37,14 @@ export const list = query({
 // starts in review (never published without the review workflow below).
 export const seedIfEmpty = mutation({
   args: {
-    items: v.array(v.object({ kind: v.string(), titleMm: v.string(), titleEn: v.string() })),
+    items: v.array(v.object({ kind: v.string(), slug: v.string(), titleMm: v.string(), titleEn: v.string() })),
   },
   handler: async (ctx, { items }) => {
     await requireContentEditor(ctx);
     const existing = await ctx.db.query('contentItems').take(1);
     if (existing.length > 0) return;
     for (const it of items) {
-      await ctx.db.insert('contentItems', { ...it, reviewStatus: 'clinical_review' });
+      await ctx.db.insert('contentItems', { ...it, reviewStatus: 'clinical_review', reviewRevision: 1 });
     }
   },
 });
@@ -53,21 +53,29 @@ export const transition = mutation({
   args: {
     id: v.id('contentItems'),
     to: v.string(),
+    expectedReviewRevision: v.number(),
     reviewerQualification: v.optional(v.string()),
   },
-  handler: async (ctx, { id, to, reviewerQualification }) => {
+  handler: async (ctx, { id, to, reviewerQualification, expectedReviewRevision }) => {
     const editor = await requireReviewEditor(ctx);
     const item = await ctx.db.get(id);
     if (!item) throw new Error('Not found');
+    const reviewRevision = item.reviewRevision ?? 1;
+    if (expectedReviewRevision !== reviewRevision) {
+      throw new Error('This item has newer changes. Refresh before changing publication status.');
+    }
     const approval = ['approved', 'published'].includes(to)
-      ? requiresSpecialistReview({
-          slug: String(id),
-          titleEn: item.titleEn,
-          data: { kind: item.kind, bodyEn: item.bodyEn },
-        })
-        ? await requireClinicalPublisher(ctx)
-        : await requireProfessionalPublisher(ctx)
+      ? await requireProfessionalPublisher(ctx)
       : null;
+    if (['approved', 'published'].includes(to) && !item.slug?.trim()) {
+      throw new Error('Legacy content requires a stable slug before approval or publication.');
+    }
+    const frozenApproval = ['approved', 'published'].includes(to)
+      ? await frozenClinicalPublicationApproval(ctx, { slug: item.slug!, reviewRevision })
+      : { allowed: true, missing: [] as string[] };
+    if (!frozenApproval.allowed) {
+      throw new Error(`Current revision is missing frozen review provenance: ${frozenApproval.missing.join(', ')}`);
+    }
     const userId = approval?.userId ?? editor.userId;
     const allowed = TRANSITIONS[item.reviewStatus] ?? [];
     if (!allowed.includes(to)) throw new Error(`Invalid transition ${item.reviewStatus} -> ${to}`);

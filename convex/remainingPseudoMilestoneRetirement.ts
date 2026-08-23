@@ -9,6 +9,7 @@ import type { Doc } from './_generated/dataModel';
 import seedData from './seedData.json';
 import { logAudit } from './audit';
 import { aiPublicationTargetKey } from './lib/aiPublicationPolicy';
+import { assertNoPersistedReleaseGovernedContent } from './lib/clinicalReviewBatchProvenance';
 import {
   REMAINING_PSEUDO_MILESTONE_RETIREMENT_RELEASE_ID,
   REMAINING_PSEUDO_MILESTONE_RETIREMENT_TARGETS,
@@ -274,6 +275,10 @@ export const apply = internalMutation({
     reviewRowsPreserved: v.number(),
   }),
   handler: async (ctx) => {
+    await assertNoPersistedReleaseGovernedContent(
+      ctx,
+      REMAINING_PSEUDO_MILESTONE_RETIREMENT_TARGETS.map((target) => target.slug),
+    );
     const before = await preflightState(ctx);
     if (before.phase === 'applied') {
       return {

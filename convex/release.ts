@@ -3,6 +3,7 @@ import { v } from 'convex/values';
 import type { MutationCtx } from './_generated/server';
 import type { Id } from './_generated/dataModel';
 import { logAudit } from './audit';
+import { isPersistedReleaseGovernedSource } from './lib/clinicalReviewBatchProvenance';
 
 const OWNER_QUALIFICATION = 'MEd (Early Childhood and Special Education)';
 const OWNER_REVIEWER_LABEL = 'ACE Child Grow Owner / Education Reviewer';
@@ -91,6 +92,11 @@ export const approveEvidenceEducationReviewed = internalMutation({
   handler: async (ctx) => {
     const owner = await qualifiedOwner(ctx);
     const rows = await ctx.db.query('evidenceSources').take(500);
+    for (const row of rows) {
+      if (await isPersistedReleaseGovernedSource(ctx, row.sourceId)) {
+        throw new Error(`Frozen release source requires invalidation and refreeze: ${row.sourceId}`);
+      }
+    }
     const now = Date.now();
     let approved = 0;
     let alreadyApproved = 0;

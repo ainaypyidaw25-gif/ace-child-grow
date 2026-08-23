@@ -12,12 +12,15 @@ const aiReleaseDataSource = readFileSync('convex/lib/aiPublicationReleaseData.ts
 const aiVisibilitySource = readFileSync('convex/lib/aiPublicationVisibility.ts', 'utf8');
 
 describe('risk-scoped publication gate', () => {
-  it('uses education review for ordinary content and specialist review for medical-decision wording', () => {
+  it('keeps final publication owner-scoped while preserving specialist provenance separately', () => {
     expect(librarySource).toContain("args.clinicalStatus === 'published'");
     expect(librarySource).toContain('specialistReviewReason(item)');
     expect(librarySource).toContain('specialist review limited to emergency wording');
     expect(librarySource).toContain('await requireProfessionalPublisher(ctx)');
-    expect(librarySource).toContain('await requireClinicalPublisher(ctx)');
+    expect(librarySource).toContain('frozenClinicalPublicationApproval(ctx, item)');
+    expect(librarySource).toContain('reviewScope: approval?.scope');
+    expect(librarySource).toContain('isRegisteredReleaseContentTarget');
+    expect(librarySource).not.toContain('await requireClinicalPublisher(ctx)');
   });
 
   it('requires the latest decision for every current-revision dimension', () => {
@@ -35,11 +38,11 @@ describe('risk-scoped publication gate', () => {
     expect(librarySource).toContain('Evidence is not ready for publication');
   });
 
-  it('applies the same risk scope to the legacy workflow', () => {
+  it('applies owner-only publication and the frozen provenance gate to the legacy workflow', () => {
     expect(workflowSource).toContain("['approved', 'published'].includes(to)");
-    expect(workflowSource).toContain('requiresSpecialistReview({');
     expect(workflowSource).toContain('await requireProfessionalPublisher(ctx)');
-    expect(workflowSource).toContain('await requireClinicalPublisher(ctx)');
+    expect(workflowSource).toContain('frozenClinicalPublicationApproval(ctx, { slug: item.slug!, reviewRevision })');
+    expect(workflowSource).not.toContain('await requireClinicalPublisher(ctx)');
   });
 
   it('keeps review-pending static samples out of parent screens', () => {

@@ -498,7 +498,7 @@ const GUIDES_C: SeedItem[] = [
         },
         {
           q: b('ညနေတိုင်း ငိုတယ်။ ပုံမှန်လား။', 'She cries every evening. Is that normal?'),
-          a: b('ပထမလများတွင် ငိုချိန် များခြင်းသည် တွေ့ရလေ့ရှိသည်။ သို့သော် ငိုသံနှင့်အတူ ဖျားခြင်း၊ အန်ခြင်း၊ နို့မစို့ခြင်း၊ ပျော့ခွေခြင်း ပါလျှင် ချက်ချင်း ဆေးကုသမှု ခံယူပါ။', 'Increased crying in the early months is common. But if crying comes with fever, vomiting, refusing feeds or floppiness, seek care immediately.'),
+          a: b('ပထမလများတွင် ငိုချိန် များခြင်းသည် တွေ့ရလေ့ရှိသည်။ ကလေး နို့မစို့လိုပါက၊ အဆက်မပြတ် ငိုပြီး နှစ်သိမ့်၍ သို့မဟုတ် အာရုံလွှဲ၍ မရပါက၊ သို့မဟုတ် ငိုသံသည် ပုံမှန်ငိုသံနှင့် မတူပါက အကြံဉာဏ်ရယူရန် ကျန်းမာရေးဝန်ထမ်းထံ ဆက်သွယ်ပါ။ ကလေး ပျော့ခွေခြင်း သို့မဟုတ် နိုးရခက်ခြင်း၊ အသက်ရှူခက်ခြင်း၊ အသားအရေ သို့မဟုတ် နှုတ်ခမ်း အပြာရောင်၊ မီးခိုးရောင်၊ ဖြူဖျော့ရောင် သို့မဟုတ် အစက်အပြောက် ဖြစ်ခြင်း၊ တက်ခြင်း သို့မဟုတ် အပြင်းအထန် ပန်းထွက်အန်ခြင်း များစွာ ဖြစ်ပါက အရေးပေါ်ဝန်ဆောင်မှုကို ချက်ချင်း ခေါ်ပါ။', 'Increased crying in the early months is common. If your baby is not interested in feeding, is crying constantly and cannot be consoled or distracted, or their cry does not sound normal, contact a health professional for advice. Call emergency services now if your baby is floppy or hard to wake, has difficulty breathing, has blue, grey, pale or blotchy skin or lips, has a seizure, or is being violently sick a lot (projectile vomiting).'),
         },
         { q: b("ဘယ်အပူချိန် ရောက်ရင် ဆေးရုံ သွားရမလဲ။", "What temperature means we should seek care?"), a: b("အပူချိန် တိုင်းပါ။ အသက် ၃ လအောက် ကလေး ၃၈°C (၁၀၀.၄°F) နှင့်အထက် ဖျားပါက — ကလေး ပုံမှန်လို ထင်ရလျှင်ပင် ချက်ချင်း ပြသပါ။ အသက် ၃ လမှ ၆ လကြား ၃၉°C (၁၀၂.၂°F) နှင့်အထက် ဖျားပါက အမြန် ပြသပါ။ အသက်မရွေး — ဖျားခြင်းနှင့်အတူ အသက်ရှူခက်ခြင်း၊ နှိပ်လျှင် မပျောက်သော အနီစက်၊ လည်ပင်း တောင့်တင်းခြင်း သို့မဟုတ် နိုးရခက်ခြင်း ပါလာပါက ချက်ချင်း ပြသပါ။ အပူချိန်တိုင်းကိရိယာ မရှိပါက — ကလေး ပူနေပြီး အထက်ပါ လက္ခဏာများ ပါလျှင် မစောင့်ဘဲ ပြသပါ။", "Take the temperature. Under 3 months, 38°C (100.4°F) or above: seek care straight away, even if the baby otherwise seems well. Between 3 and 6 months, 39°C (102.2°F) or above: seek care promptly. At any age, fever together with difficulty breathing, a rash that does not fade under pressure, a stiff neck, or being hard to wake: seek care immediately. If you have no thermometer, and the child feels hot and has any of those signs, do not wait.") },
       ],
@@ -513,7 +513,7 @@ const GUIDES_C: SeedItem[] = [
       ),
       encouragement: b('သင် တုံ့ပြန်ပေးတိုင်း ကလေးသည် "ငါ ဘေးကင်းတယ်" ဟု သင်ယူနေပါသည်။', 'Every time you respond, your baby learns "I am safe".'),
     }),
-    'Responsive soothing and the never-shake message follow the WHO nurturing care framework and AAP toxic-stress guidance; the urgent-symptom list (floppy, hard to rouse, fever under 3 months) follows NHS advice on spotting a seriously ill infant and NICE fever guidance.',
+    'Responsive soothing follows the WHO nurturing care framework and AAP relational-health guidance. The NHS “Soothing a crying baby” page supports the never-shake message, advice to contact a health professional for constant, inconsolable or unusual crying or not being interested in feeding, and emergency action for floppiness, difficulty waking, breathing difficulty, abnormal colour, seizures or being violently sick a lot (projectile vomiting). NICE NG143 supports urgent face-to-face assessment when a baby under 3 months has a temperature of 38°C or above.',
   ),
   kb(
     guide('birth_2m', 'cognitive', {

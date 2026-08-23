@@ -26,7 +26,11 @@ function registeredHandler(fn: unknown) {
 
 describe('birth-to-2-month gross-motor CLI seed boundary', () => {
   it('skips the protected target before every catalogue/media read or write', async () => {
-    const query = vi.fn(() => {
+    const query = vi.fn((table: string) => {
+      if (table === 'clinicalReviewBatches') {
+        const terminal = { take: async () => [] as unknown[] };
+        return { withIndex: () => terminal };
+      }
       throw new Error('protected gross-motor item reached a database read');
     });
     const insert = vi.fn(async () => 'audit-1');
@@ -40,7 +44,8 @@ describe('birth-to-2-month gross-motor CLI seed boundary', () => {
       skippedApproved: 1,
       total: 1,
     });
-    expect(query).not.toHaveBeenCalled();
+    expect(query).toHaveBeenCalledTimes(5);
+    expect(query.mock.calls.every(([table]) => table === 'clinicalReviewBatches')).toBe(true);
     expect(patch).not.toHaveBeenCalled();
     expect(remove).not.toHaveBeenCalled();
     expect(insert).toHaveBeenCalledTimes(1);

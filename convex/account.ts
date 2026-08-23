@@ -258,7 +258,7 @@ export const deleteMineBatch = internalMutation({
 
     // Global editorial/reconciliation rows remain useful, but their reviewer
     // link and known display-name metadata must not survive account erasure.
-    const [contentItems, facilities, libraryItems, classificationConfirmed, contentReviews, contentEdits, media, evidenceSources] = await Promise.all([
+    const [contentItems, facilities, libraryItems, classificationConfirmed, contentReviews, clinicalBatches, clinicalBatchReceipts, contentEdits, media, evidenceSources] = await Promise.all([
       ctx.db.query('contentItems').withIndex('by_reviewer', (q) => q.eq('reviewerId', userId)).take(ROOT_BATCH_SIZE),
       ctx.db.query('healthcareFacilities').withIndex('by_verified_by', (q) => q.eq('verifiedBy', userId)).take(ROOT_BATCH_SIZE),
       ctx.db.query('libraryContent').withIndex('by_reviewer', (q) => q.eq('reviewerId', userId)).take(ROOT_BATCH_SIZE),
@@ -266,6 +266,8 @@ export const deleteMineBatch = internalMutation({
         .withIndex('by_classification_confirmed_by', (q) => q.eq('classificationConfirmedBy', userId))
         .take(ROOT_BATCH_SIZE),
       ctx.db.query('contentReviews').withIndex('by_reviewer', (q) => q.eq('reviewerId', userId)).take(ROOT_BATCH_SIZE),
+      ctx.db.query('clinicalReviewBatches').withIndex('by_reviewer', (q) => q.eq('reviewerId', userId)).take(ROOT_BATCH_SIZE),
+      ctx.db.query('clinicalReviewBatchReceipts').withIndex('by_reviewer', (q) => q.eq('reviewerId', userId)).take(ROOT_BATCH_SIZE),
       ctx.db.query('contentEditLogs').withIndex('by_editor', (q) => q.eq('editorId', userId)).take(ROOT_BATCH_SIZE),
       ctx.db.query('libraryMedia').withIndex('by_reviewed_by', (q) => q.eq('reviewedBy', userId)).take(ROOT_BATCH_SIZE),
       ctx.db.query('evidenceSources').withIndex('by_reviewer', (q) => q.eq('reviewerId', userId)).take(ROOT_BATCH_SIZE),
@@ -303,7 +305,41 @@ export const deleteMineBatch = internalMutation({
       });
       hadWork = true;
     }
-    if (await deleteRows(ctx, [...contentReviews, ...contentEdits])) hadWork = true;
+    // Resolve the complete bounded downstream chain before patching. A receipt
+    // from reviewer B must not remain publication-authoritative after its
+    // reviewer-A predecessor is erased.
+    const registryRows = [...clinicalBatches];
+    const seenRegistryIds = new Set(registryRows.map((row) => String(row._id)));
+    for (let index = 0; index < registryRows.length && registryRows.length <= 32; index += 1) {
+      const downstream = await ctx.db.query('clinicalReviewBatches')
+        .withIndex('by_predecessor_batch_id', (q) => q.eq('predecessorBatchId', registryRows[index].batchId))
+        .take(2);
+      if (downstream.length > 1) throw new Error('Clinical review registry downstream fork');
+      if (downstream.length === 1 && !seenRegistryIds.has(String(downstream[0]._id))) {
+        seenRegistryIds.add(String(downstream[0]._id));
+        registryRows.push(downstream[0]);
+      }
+    }
+    if (registryRows.length > 32) throw new Error('Clinical review registry invalidation bound exceeded');
+    const registryInvalidatedAt = Date.now();
+    for (const row of registryRows) {
+      const assignedToErasedReviewer = row.reviewerId === userId;
+      await ctx.db.patch(row._id, {
+        status: 'invalidated',
+        invalidatedAt: registryInvalidatedAt,
+        invalidationReason: 'assigned_reviewer_account_erased',
+        ...(assignedToErasedReviewer ? {
+          reviewerProfileId: undefined,
+          reviewerId: undefined,
+          reviewerDisplayName: undefined,
+          reviewerQualification: undefined,
+          reviewerRole: undefined,
+          reviewerIdentityDigest: undefined,
+        } : {}),
+      });
+      hadWork = true;
+    }
+    if (await deleteRows(ctx, [...contentReviews, ...clinicalBatchReceipts, ...contentEdits])) hadWork = true;
     for (const row of media) {
       await ctx.db.patch(row._id, {
         reviewedBy: undefined,

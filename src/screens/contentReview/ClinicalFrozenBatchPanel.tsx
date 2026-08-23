@@ -256,6 +256,15 @@ function ClinicalBatchSession({
             </div>
             {activeItem.snapshot.summaryMm && <p className="mt-3 whitespace-pre-wrap text-sm leading-7 text-ink">{activeItem.snapshot.summaryMm}</p>}
             {activeItem.snapshot.summaryEn && <p className="mt-2 whitespace-pre-wrap text-sm leading-7 text-ink-soft">{activeItem.snapshot.summaryEn}</p>}
+            {activeItem.snapshot.reviewerAdvisory && (
+              <div className="mt-4 rounded-xl border border-amber-300 bg-pastel-yellow/70 p-3" data-testid="clinical-reviewer-advisory">
+                <p className="text-xs font-bold uppercase tracking-wide text-amber-800">
+                  {L('ဤမူကွဲအတွက် အထူးစစ်ဆေးရန်', 'Advisory for this exact revision')}
+                </p>
+                <p className="mt-2 whitespace-pre-wrap text-sm leading-7 text-ink">{activeItem.snapshot.reviewerAdvisory.mm}</p>
+                <p className="mt-2 whitespace-pre-wrap text-sm leading-7 text-ink-soft">{activeItem.snapshot.reviewerAdvisory.en}</p>
+              </div>
+            )}
             <div className="mt-4">
               <p className="text-xs font-bold uppercase tracking-wide text-ink-soft">{L('ကိုးကားရင်းမြစ်များ', 'Evidence sources')}</p>
               {activeItem.snapshot.sources.length > 0 ? (

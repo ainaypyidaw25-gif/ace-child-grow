@@ -126,8 +126,10 @@ describe('role permissions on review areas', () => {
 
 describe('language/development reviewers cannot publish', () => {
   const librarySource = readFileSync('convex/library.ts', 'utf8');
-  it('publication still requires the clinical publisher gate and full approvals', () => {
-    expect(librarySource).toContain('requireClinicalPublisher');
+  it('publication still requires the owner publisher and frozen specialist provenance gates', () => {
+    expect(librarySource).toContain('requireProfessionalPublisher');
+    expect(librarySource).toContain('frozenClinicalPublicationApproval');
+    expect(librarySource).not.toContain('await requireClinicalPublisher');
     expect(librarySource).toContain('missing review approvals');
   });
 });

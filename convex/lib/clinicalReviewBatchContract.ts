@@ -1,9 +1,16 @@
 import { v, type Infer } from 'convex/values';
-import { CLINICAL_REVIEW_BATCH_ID } from './clinicalReviewBatchData';
 
 export const CLINICAL_REVIEW_BATCH_CONTRACT = 'ace.clinical-frozen-batch' as const;
 export const CLINICAL_REVIEW_BATCH_CONTRACT_VERSION = 1 as const;
+// Backward-compatible pilot default. Every registry entry now declares its
+// dimension explicitly and the server returns that registered value.
 export const CLINICAL_REVIEW_BATCH_DIMENSION = 'clinical' as const;
+export const clinicalReviewBatchDimensionValidator = v.union(
+  v.literal('clinical'),
+  v.literal('child_development'),
+  v.literal('evidence'),
+  v.literal('safety'),
+);
 
 const nullableStringValidator = v.union(v.string(), v.null());
 export const clinicalReviewDecisionValidator = v.union(
@@ -25,9 +32,11 @@ const snapshotSourceValidator = v.object({
   sourceId: v.string(), org: v.string(), title: v.string(),
   year: v.union(v.number(), v.null()), url: v.string(),
 });
+const snapshotAdvisoryValidator = v.object({ mm: v.string(), en: v.string() });
 const snapshotValidator = v.object({
   digest: v.string(), titleMm: v.string(), titleEn: v.string(),
   summaryMm: nullableStringValidator, summaryEn: nullableStringValidator,
+  reviewerAdvisory: v.union(snapshotAdvisoryValidator, v.null()),
   sources: v.array(snapshotSourceValidator), fields: v.array(snapshotFieldValidator),
 });
 export const clinicalReviewHandoffValidator = v.object({
@@ -36,22 +45,22 @@ export const clinicalReviewHandoffValidator = v.object({
 });
 const itemValidator = v.object({
   assignmentId: v.string(), slug: v.string(), type: v.string(),
-  dimension: v.literal(CLINICAL_REVIEW_BATCH_DIMENSION),
+  dimension: clinicalReviewBatchDimensionValidator,
   reviewRevision: v.number(), liveReviewRevision: v.number(), snapshot: snapshotValidator,
   decision: v.union(clinicalReviewReceiptValidator, v.null()),
 });
 const reviewerValidator = v.object({
   profileId: v.string(), userId: v.string(), displayName: v.string(), qualification: v.string(),
-  role: v.literal('clinical_reviewer'),
+  role: v.union(v.literal('clinical_reviewer'), v.literal('evidence_reviewer')),
 });
 
 export const clinicalReviewBatchResultValidator = v.object({
   contract: v.literal(CLINICAL_REVIEW_BATCH_CONTRACT),
   contractVersion: v.literal(CLINICAL_REVIEW_BATCH_CONTRACT_VERSION),
   scope: v.literal('authenticated_assignee'),
-  batchId: v.literal(CLINICAL_REVIEW_BATCH_ID),
-  lane: v.literal('clinical'),
-  assignedRole: v.literal('clinical_reviewer'),
+  batchId: v.string(),
+  lane: clinicalReviewBatchDimensionValidator,
+  assignedRole: v.union(v.literal('clinical_reviewer'), v.literal('evidence_reviewer')),
   frozenAt: v.number(),
   freezeDigest: v.string(),
   freezeReceiptDigest: v.string(),

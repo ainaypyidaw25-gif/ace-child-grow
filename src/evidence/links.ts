@@ -149,7 +149,7 @@ export const EXPLICIT_CONTENT_SOURCES: Record<string, string[]> = {
   gd_birth_2m_fine_motor: ['tb-case-smith-9e-2025', 'aap-milestones-2022', 'cdc-milestone-checklists-2025'],
   gd_birth_2m_communication: ['nhs-learn-to-talk-2023', 'aap-digital-ecosystems-technical-2026', 'hc-screen-time-5cs-infants-2024', 'who-care-for-child-development-2012', 'jr-weisleder-2013'],
   gd_birth_2m_social: ['nice-ng194-postnatal-2021', 'who-nurturing-care-2018', 'cdc-milestones-2026', 'us-hhs-head-start-elof-2015'],
-  gd_birth_2m_emotional: ['aap-toxic-stress-2021', 'who-nurturing-care-2018', 'nhs-child-accident-2025', 'nice-ng143-fever-2019'],
+  gd_birth_2m_emotional: ['aap-toxic-stress-2021', 'who-nurturing-care-2018', 'nhs-soothing-crying-baby-2026', 'nice-ng143-fever-2019'],
   gd_birth_2m_cognitive: ['tb-dbp-5e-2022', 'aap-power-of-play-2018', 'who-care-for-child-development-2012', 'aap-digital-ecosystems-technical-2026', 'hc-screen-time-5cs-infants-2024'],
   gd_birth_2m_play: ['aap-power-of-play-2018', 'who-care-for-child-development-2012', 'unicef-early-moments-2017', 'cdc-milestones-2026'],
   gd_birth_2m_nutrition: ['who-iycf-model-chapter-2025', 'who-bf-counselling-2018', 'nhs-breastfeeding-first-days-2023', 'who-unicef-iycf-strategy-2003', 'nice-ng75-faltering-growth-2017', 'who-growth-standards-2006', 'who-child-growth-standards-qa-2025', 'cdc-foods-avoid-limit-2026'],

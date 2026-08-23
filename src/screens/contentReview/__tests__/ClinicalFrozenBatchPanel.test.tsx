@@ -39,6 +39,10 @@ function batch(): FrozenClinicalBatch {
           titleEn: 'First assigned item',
           summaryMm: 'ပထမ frozen summary',
           summaryEn: 'First frozen summary',
+          reviewerAdvisory: {
+            mm: 'အထောက်အထား၏ အသုံးချနိုင်မှုကို အတည်ပြုပါ။',
+            en: 'Confirm the applicability of the linked evidence.',
+          },
           sources: [{
             sourceId: 'source-one',
             org: 'CDC',
@@ -63,6 +67,7 @@ function batch(): FrozenClinicalBatch {
           titleEn: 'Second assigned item',
           summaryMm: 'ဒုတိယ frozen summary',
           summaryEn: 'Second frozen summary',
+          reviewerAdvisory: null,
           sources: [{
             sourceId: 'source-two',
             org: 'NHS',
@@ -118,6 +123,9 @@ describe('ClinicalFrozenBatchPanel', () => {
     );
 
     expect(screen.getByRole('link', { name: /Source One/ })).toHaveAttribute('href', 'https://example.test/source-one');
+    expect(screen.getByTestId('clinical-reviewer-advisory')).toHaveTextContent(
+      'Confirm the applicability of the linked evidence.',
+    );
 
     fireEvent.click(screen.getByRole('radio', { name: 'Approve this exact revision' }));
     fireEvent.click(screen.getByRole('button', { name: 'Record this item decision' }));

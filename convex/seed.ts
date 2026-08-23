@@ -55,6 +55,12 @@ import {
 import { isManualReviewContentCasTargetSlug } from './lib/manualReviewContentCasData';
 import { isBirth2mNutritionCasTargetSlug } from './lib/birth2mNutritionCasData';
 import { isBirth2mGrossMotorCorrectionSlug } from './lib/birth2mGrossMotorCorrection';
+import { isOlderSafety2026ContentTargetSlug } from './lib/olderSafety2026CasData';
+import {
+  isGdBirth2mEmotionalCasContentSlug,
+  isUnicefSeenCountedConsumerSlug,
+} from './lib/clinicalBlockerCasData';
+import { assertNoPersistedReleaseGovernedContent } from './lib/clinicalReviewBatchProvenance';
 
 const GRANTABLE_ROLES = [
   'owner',
@@ -192,7 +198,10 @@ export function seedRunSkipsItem(item: Pick<Item, 'type' | 'slug'>): boolean {
   return isRetiredContentSlug(item.slug)
     || isManualReviewContentCasTargetSlug(item.slug)
     || isBirth2mNutritionCasTargetSlug(item.slug)
-    || isBirth2mGrossMotorCorrectionSlug(item.slug);
+    || isBirth2mGrossMotorCorrectionSlug(item.slug)
+    || isOlderSafety2026ContentTargetSlug(item.slug)
+    || isGdBirth2mEmotionalCasContentSlug(item.slug)
+    || isUnicefSeenCountedConsumerSlug(item.slug);
 }
 
 const PUBLISHED_RELEASE_LIMIT = 5_000;
@@ -539,6 +548,8 @@ export const applyBurmeseCopyAuditRelease = internalMutation({
       };
     }
 
+    await assertNoPersistedReleaseGovernedContent(ctx, BURMESE_COPY_AUDIT_TARGETS.map((target) => target.slug));
+
     const desiredBySlug = new Map((seedData as unknown as Item[]).map((item) => [item.slug, item]));
     const validated: Array<{
       row: Doc<'libraryContent'>;
@@ -751,6 +762,8 @@ export const applyClinicalReviewCopyRelease = internalMutation({
       return { alreadyApplied: true, updated: 0, total: 0 };
     }
 
+    await assertNoPersistedReleaseGovernedContent(ctx, CLINICAL_REVIEW_COPY_TARGETS.map((target) => target.slug));
+
     const desiredBySlug = new Map((seedData as unknown as Item[]).map((item) => [item.slug, item]));
     const validated: Array<{
       row: Doc<'libraryContent'>;
@@ -941,6 +954,11 @@ export const applyPublishedEvidenceSafetyRelease = internalMutation({
         total: 0,
       };
     }
+
+    await assertNoPersistedReleaseGovernedContent(ctx, [
+      ...args.publishedTargets.map((target) => target.slug),
+      ...args.specialistTargets.map((target) => target.slug),
+    ]);
 
     const publishedRows = await ctx.db
       .query('libraryContent')
@@ -1208,6 +1226,8 @@ export const applyPrintablePayloadRelease = internalMutation({
       return { alreadyApplied: true, staged: 0, total: 0 };
     }
 
+    await assertNoPersistedReleaseGovernedContent(ctx, args.targets.map((target) => target.slug));
+
     const expectedSlugs = new Set<string>(PLACEHOLDER_PRINTABLE_SLUGS);
     const suppliedSlugs = new Set(args.targets.map((target) => target.slug));
     if (
@@ -1409,6 +1429,7 @@ export const retireDuplicateMilestones = internalMutation({
     total: v.number(),
   }),
   handler: async (ctx, args) => {
+    await assertNoPersistedReleaseGovernedContent(ctx, args.targets.map((target) => target.slug));
     const expectedSlugs = new Set<string>(DUPLICATE_MILESTONE_SLUGS);
     const suppliedSlugs = new Set<string>(args.targets.map((target) => target.slug));
     if (
@@ -1589,6 +1610,10 @@ export const retireSocialEmotionalMilestones = internalMutation({
     total: v.number(),
   }),
   handler: async (ctx) => {
+    await assertNoPersistedReleaseGovernedContent(
+      ctx,
+      SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_TARGETS.map((target) => target.slug),
+    );
     const validated: Array<{
       content: Doc<'libraryContent'>;
       expectedClinicalStatus: 'published' | 'clinical_review';
@@ -1745,6 +1770,7 @@ export const retireBrightFuturesDuplicateMilestone = internalMutation({
   }),
   handler: async (ctx) => {
     const target = BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_TARGET;
+    await assertNoPersistedReleaseGovernedContent(ctx, [target.slug]);
     const content = await ctx.db
       .query('libraryContent')
       .withIndex('by_slug', (q) => q.eq('slug', target.slug))
@@ -1831,6 +1857,7 @@ export const applyPublishedErrata = internalMutation({
   }),
   handler: async (ctx, { releaseId }) => {
     const slugs = publishedErrataSlugs(releaseId) ?? [];
+    await assertNoPersistedReleaseGovernedContent(ctx, slugs);
     const items = seedData as unknown as Item[];
     const desiredBySlug = new Map(items.map((item) => [item.slug, item]));
     const priorErrata = await ctx.db
@@ -1911,6 +1938,7 @@ export const run = internalMutation({
   }),
   handler: async (ctx) => {
     const items = seedData as unknown as Item[];
+    await assertNoPersistedReleaseGovernedContent(ctx, items.map((item) => item.slug));
     const now = Date.now();
     let created = 0;
     let updated = 0;

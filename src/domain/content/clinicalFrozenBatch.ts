@@ -26,6 +26,7 @@ export interface FrozenClinicalSnapshot {
   titleEn: string;
   summaryMm: string | null;
   summaryEn: string | null;
+  reviewerAdvisory: { mm: string; en: string } | null;
   sources: FrozenClinicalSource[];
   fields: FrozenClinicalSnapshotField[];
 }
@@ -170,6 +171,18 @@ function parseSnapshot(value: unknown): FrozenClinicalSnapshot | null {
   const titleEn = requiredString(value, 'titleEn');
   const summaryMm = nullableString(value.summaryMm);
   const summaryEn = nullableString(value.summaryEn);
+  const rawAdvisory = value.reviewerAdvisory;
+  let reviewerAdvisory: FrozenClinicalSnapshot['reviewerAdvisory'];
+  if (rawAdvisory === null) {
+    reviewerAdvisory = null;
+  } else if (isRecord(rawAdvisory)) {
+    const mm = requiredString(rawAdvisory, 'mm');
+    const en = requiredString(rawAdvisory, 'en');
+    if (!mm || !en) return null;
+    reviewerAdvisory = { mm, en };
+  } else {
+    return null;
+  }
   const rawSources = value.sources;
   const rawFields = value.fields;
   if (
@@ -210,7 +223,7 @@ function parseSnapshot(value: unknown): FrozenClinicalSnapshot | null {
     seenPaths.add(path);
     fields.push({ path, labelMm, labelEn, valueMm, valueEn });
   }
-  return { digest, titleMm, titleEn, summaryMm, summaryEn, sources, fields };
+  return { digest, titleMm, titleEn, summaryMm, summaryEn, reviewerAdvisory, sources, fields };
 }
 
 function parseItem(value: unknown): FrozenClinicalBatchItem | null {

@@ -54,6 +54,21 @@ import {
   isSwaimanSuddenWeaknessLinkCasTarget,
   isSwaimanSuddenWeaknessSourceCasTarget,
 } from './lib/swaimanSuddenWeaknessCasData';
+import {
+  isOlderSafety2026LinkTarget,
+  isOlderSafety2026SourceTarget,
+} from './lib/olderSafety2026CasData';
+import {
+  isRegisteredReleaseContentTarget,
+  isRegisteredReleaseSourceId,
+  isPersistedReleaseGovernedContent,
+  isPersistedReleaseGovernedSource,
+} from './lib/clinicalReviewBatchProvenance';
+import {
+  isClinicalBlockerCasSource,
+  isGdBirth2mEmotionalCasLink,
+  isUnicefSeenCountedConsumer,
+} from './lib/clinicalBlockerCasData';
 
 const REVIEW_STATUSES = [
   'evidence_required',
@@ -551,8 +566,18 @@ async function applySources(
 
   for (const src of sources) {
     const { id, ...rest } = src;
-    if (isSwaimanSuddenWeaknessSourceCasTarget(id)
-      || isBirth2mGrossMotorCorrectionSource(id)) {
+    // Compile-time exact-CAS exclusions must short-circuit before any database
+    // read. Besides keeping stale imports harmless, this lets bounded release
+    // handlers prove that protected sources cannot even reach source lookup.
+    if (isRegisteredReleaseSourceId(id)
+      || isSwaimanSuddenWeaknessSourceCasTarget(id)
+      || isOlderSafety2026SourceTarget(id)
+      || isBirth2mGrossMotorCorrectionSource(id)
+      || isClinicalBlockerCasSource(id)) {
+      skipped += 1;
+      continue;
+    }
+    if (await isPersistedReleaseGovernedSource(ctx, id)) {
       skipped += 1;
       continue;
     }
@@ -757,8 +782,11 @@ async function applyLinks(
   // generic clients may neither recreate retired edges nor mutate inherently
   // public rows reserved for bounded atomic CAS releases. Filter
   // before validation and before any link write.
-  const activeLinks = links.filter((link) => {
-    if (!isRetiredContentSlug(link.slug)
+  const activeLinks: Infer<typeof linkValidator>[] = [];
+  for (const link of links) {
+    if (!await isPersistedReleaseGovernedContent(ctx, link.slug)
+      && !isRegisteredReleaseContentTarget(link.kind, link.slug)
+      && !isRetiredContentSlug(link.slug)
       && !isInherentPublicLinkCasTarget(link.kind, link.slug)
       && !isSwaimanSeizureLinkCasTarget(link.kind, link.slug)
       && !isSwaimanCerebralPalsyLinkCasTarget(link.kind, link.slug)
@@ -766,10 +794,15 @@ async function applyLinks(
       && !isBirth2mNutritionCasTarget(link.kind, link.slug)
       && !isBirth2mGrossMotorCorrectionLink(link.kind, link.slug)
       && !isManualReviewEvidenceLinkCasTarget(link.kind, link.slug)
-      && !isSwaimanSuddenWeaknessLinkCasTarget(link.kind, link.slug)) return true;
-    skipped += 1;
-    return false;
-  });
+      && !isSwaimanSuddenWeaknessLinkCasTarget(link.kind, link.slug)
+      && !isOlderSafety2026LinkTarget(link.kind, link.slug)
+      && !isGdBirth2mEmotionalCasLink(link.kind, link.slug)
+      && !isUnicefSeenCountedConsumer(link.kind, link.slug)) {
+      activeLinks.push(link);
+    } else {
+      skipped += 1;
+    }
+  }
   const sourceSnapshot = await ctx.db.query('evidenceSources').take(2_001);
   if (sourceSnapshot.length > 2_000) {
     throw new Error('Evidence link import exceeded the 2,000-source safety bound');
@@ -1057,6 +1090,14 @@ export const setReview = mutation({
       .query('evidenceSources')
       .withIndex('by_source_id', (qq) => qq.eq('sourceId', args.sourceId))
       .unique();
+
+    if (await isPersistedReleaseGovernedSource(ctx, args.sourceId)) {
+      return refuse(
+        'frozen_release_governed',
+        'This source belongs to a frozen release. Invalidate and refreeze the exact batch before changing it.',
+        row ? `${row.reviewStatus} / ${row.reviewer ?? 'no reviewer'}` : 'unchanged',
+      );
+    }
 
     // One policy, evaluated once. See reviewRefusal.
     const refusal = reviewRefusal(reviewArgs, row);

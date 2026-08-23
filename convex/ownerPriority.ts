@@ -6,6 +6,7 @@ import { logAudit } from './audit';
 import { getStaffAccess, requireUser, type StaffAccess } from './lib/auth';
 import { specialistReviewReason } from './lib/contentReviewRequirements';
 import { isRetiredContentSlug } from './lib/contentRetirements';
+import { isPersistedReleaseGovernedContent } from './lib/clinicalReviewBatchProvenance';
 import {
   coerceOwnerPriority,
   coercePriorityStatus,
@@ -559,6 +560,15 @@ export const setGovernance = mutation({
       .withIndex('by_slug', (q) => q.eq('slug', args.slug))
       .unique();
     if (!item) return { ok: false as const, code: 'content_not_found', message: 'This content item no longer exists.' };
+    if (await isPersistedReleaseGovernedContent(ctx, args.slug)) {
+      await logAudit(ctx, userId, 'ownerPriority.setGovernance', 'libraryContent', item._id,
+        `${args.slug} · refused: frozen_release_governed`, { result: 'rejected' });
+      return {
+        ok: false as const,
+        code: 'frozen_release_governed',
+        message: 'Invalidate and refreeze the exact release batch before changing governance.',
+      };
+    }
     if ((item.reviewRevision ?? 1) !== args.expectedReviewRevision) {
       await logAudit(ctx, userId, 'ownerPriority.setGovernance', 'libraryContent', item._id, `${args.slug} · refused: stale_revision`, { result: 'rejected' });
       return { ok: false as const, code: 'stale_revision', message: 'This item has newer changes. Refresh before saving.' };
@@ -713,6 +723,15 @@ export const requestReviews = mutation({
       .withIndex('by_slug', (q) => q.eq('slug', args.slug))
       .unique();
     if (!item) return { ok: false as const, code: 'content_not_found', message: 'This content item no longer exists.' };
+    if (await isPersistedReleaseGovernedContent(ctx, args.slug)) {
+      await logAudit(ctx, userId, 'ownerPriority.requestReviews', 'libraryContent', item._id,
+        `${args.slug} · refused: frozen_release_governed`, { result: 'rejected' });
+      return {
+        ok: false as const,
+        code: 'frozen_release_governed',
+        message: 'Invalidate and refreeze the exact release batch before changing review requests.',
+      };
+    }
     if ((item.reviewRevision ?? 1) !== args.expectedReviewRevision) {
       return { ok: false as const, code: 'stale_revision', message: 'This item has newer changes. Refresh before saving.' };
     }

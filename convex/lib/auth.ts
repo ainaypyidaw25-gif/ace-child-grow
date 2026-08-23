@@ -96,7 +96,7 @@ export async function requireContentEditor(ctx: Ctx): Promise<Id<'users'>> {
 }
 
 export async function requireEvidenceEditor(ctx: Ctx): Promise<Id<'users'>> {
-  return (await requireOneOf(ctx, ['owner', 'content_editor', 'evidence_reviewer', 'clinical_reviewer'])).userId;
+  return (await requireOneOf(ctx, ['owner', 'content_editor', 'evidence_reviewer'])).userId;
 }
 
 /** Staff who may edit a review draft. Publishing remains a separate permission. */
@@ -108,7 +108,6 @@ export async function requireReviewEditor(
     'content_editor',
     'language_reviewer',
     'evidence_reviewer',
-    'clinical_reviewer',
     // A review manager may correct wording as part of running corrections.
     // This grants no publishing authority and no review decision.
     'review_manager',
@@ -126,23 +125,13 @@ export async function requireClinicalReviewer(
 
 /**
  * Publishing authority for ordinary educational material. The resulting
- * decision is always education-scoped, including when the qualified publisher
- * happens to hold the legacy `clinical_reviewer` role. The legacy clinical
- * scope value is reserved for the
- * explicit specialist-risk path in requireClinicalPublisher.
+ * decision is education-scoped. Final publication is owner-only; specialist
+ * reviewers record their exact decisions through frozen assignments and never
+ * publish directly.
  */
 export async function requireProfessionalPublisher(ctx: Ctx): Promise<ProfessionalApproval> {
-  const { userId, access } = await requireOneOf(ctx, ['owner', 'clinical_reviewer']);
+  const { userId, access } = await requireOneOf(ctx, ['owner']);
   if (!access.qualification) throw new Error('Professional qualification is required');
-  if (access.role === 'clinical_reviewer') {
-    if (!access.displayName) throw new Error('Specialist safety reviewer audit identity is required');
-    return {
-      userId,
-      qualification: access.qualification,
-      reviewerName: access.displayName,
-      scope: 'education',
-    };
-  }
   return {
     userId,
     qualification: access.qualification,

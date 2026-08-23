@@ -4,20 +4,15 @@ import { internalQuery, mutation, type MutationCtx, type QueryCtx } from './_gen
 import { logAudit } from './audit';
 import { sha256Canonical } from './lib/aiAuditHash';
 import {
-  CLINICAL_REVIEW_BATCH_COUNT,
-  CLINICAL_REVIEW_BATCH_EXPIRES_AT,
-  CLINICAL_REVIEW_BATCH_FROZEN_AT,
-  CLINICAL_REVIEW_BATCH_HASH,
-  CLINICAL_REVIEW_BATCH_ID,
-  CLINICAL_REVIEW_BATCH_ITEMS,
-  CLINICAL_REVIEW_BATCH_MANIFEST,
-  CLINICAL_REVIEW_BATCH_REVIEWER,
+  CLINICAL_REVIEW_BATCH_REGISTRY,
+  clinicalReviewBatchRoutingPayload,
+  type ClinicalReviewBatchRegistration,
+  type ClinicalReviewBatchReviewer,
   type ClinicalReviewBatchItem,
 } from './lib/clinicalReviewBatchData';
 import {
   CLINICAL_REVIEW_BATCH_CONTRACT as CONTRACT,
   CLINICAL_REVIEW_BATCH_CONTRACT_VERSION as CONTRACT_VERSION,
-  CLINICAL_REVIEW_BATCH_DIMENSION as DIMENSION,
   clinicalReviewBatchLoadResultValidator,
   clinicalReviewDecisionValidator as decisionValidator,
   clinicalReviewHandoffValidator as handoffValidator,
@@ -27,6 +22,13 @@ import {
 import { todayIsoUtc } from './lib/evidenceFreshness';
 import { evaluatePublicationEvidence } from './lib/evidencePublicationGate';
 import { requireUser } from './lib/auth';
+import { roleMayReview } from './lib/reviewPolicy';
+import {
+  exactHandoffReceipt,
+  exactPersistedAssignment,
+  exactPersistedBatchRegistration,
+  frozenClinicalDecisionKey,
+} from './lib/clinicalReviewBatchProvenance';
 
 type DatabaseContext = Pick<QueryCtx, 'db'> | Pick<MutationCtx, 'db'>;
 type SnapshotField = {
@@ -43,6 +45,10 @@ type SnapshotSource = {
   year: number | null;
   url: string;
 };
+type SnapshotAdvisory = {
+  mm: string;
+  en: string;
+};
 
 const MAX_RELATED_ROWS = 50;
 const MAX_SNAPSHOT_FIELDS = 12;
@@ -55,41 +61,44 @@ type DecisionReceipt = {
   receiptId: string;
 };
 
-async function assignedReviewerBlockers(ctx: DatabaseContext, userId: Id<'users'>): Promise<string[]> {
+async function assignedReviewerBlockers(
+  ctx: DatabaseContext,
+  userId: Id<'users'>,
+  reviewer: ClinicalReviewBatchReviewer,
+): Promise<string[]> {
   const rows = await ctx.db.query('parentProfiles').withIndex('by_user', (q) => q.eq('userId', userId)).take(2);
-  if (String(userId) !== CLINICAL_REVIEW_BATCH_REVIEWER.userId) return ['not_assigned_reviewer'];
+  if (String(userId) !== reviewer.userId) return ['not_assigned_reviewer'];
   if (rows.length !== 1) return ['assigned_reviewer_profile_not_unique'];
   const profile = rows[0];
   const blockers: string[] = [];
-  if (String(profile._id) !== CLINICAL_REVIEW_BATCH_REVIEWER.profileId) blockers.push('assigned_reviewer_profile_id_drift');
+  if (String(profile._id) !== reviewer.profileId) blockers.push('assigned_reviewer_profile_id_drift');
   if (profile.isStaff !== true) blockers.push('assigned_reviewer_not_staff');
-  if (profile.staffRole !== CLINICAL_REVIEW_BATCH_REVIEWER.role) blockers.push('assigned_reviewer_role_drift');
-  if ((profile.displayName ?? '').trim() !== CLINICAL_REVIEW_BATCH_REVIEWER.displayName) blockers.push('assigned_reviewer_name_drift');
-  if ((profile.staffQualification ?? '').trim() !== CLINICAL_REVIEW_BATCH_REVIEWER.qualification) blockers.push('assigned_reviewer_qualification_drift');
+  if (profile.staffRole !== reviewer.role) blockers.push('assigned_reviewer_role_drift');
+  if ((profile.displayName ?? '').trim() !== reviewer.displayName) blockers.push('assigned_reviewer_name_drift');
+  if ((profile.staffQualification ?? '').trim() !== reviewer.qualification) blockers.push('assigned_reviewer_qualification_drift');
   const stableIdentity = {
     profileId: String(profile._id), userId: String(profile.userId), isStaff: profile.isStaff === true,
     displayName: (profile.displayName ?? '').trim(), qualification: (profile.staffQualification ?? '').trim(),
     role: profile.staffRole ?? null,
   };
-  if (await sha256Canonical(stableIdentity) !== CLINICAL_REVIEW_BATCH_REVIEWER.identityCanonicalSha256) {
+  if (await sha256Canonical(stableIdentity) !== reviewer.identityCanonicalSha256) {
     blockers.push('assigned_reviewer_identity_drift');
   }
   return blockers;
 }
 
-async function decisionKeyFor(item: ClinicalReviewBatchItem): Promise<string> {
-  return await sha256Canonical({
-    batchId: CLINICAL_REVIEW_BATCH_ID, batchHash: CLINICAL_REVIEW_BATCH_HASH,
-    ordinal: item.ordinal, kind: item.kind, slug: item.slug, reviewRevision: item.reviewRevision,
-    dimension: DIMENSION, reviewerUserId: CLINICAL_REVIEW_BATCH_REVIEWER.userId,
-  });
+async function decisionKeyFor(
+  registration: ClinicalReviewBatchRegistration,
+  item: ClinicalReviewBatchItem,
+): Promise<string> {
+  return await frozenClinicalDecisionKey(registration, item);
 }
 
-async function freezeReceiptDigest(): Promise<string> {
+async function freezeReceiptDigest(registration: ClinicalReviewBatchRegistration): Promise<string> {
   return await sha256Canonical({
-    contract: CONTRACT, contractVersion: CONTRACT_VERSION, batchId: CLINICAL_REVIEW_BATCH_ID,
-    freezeDigest: CLINICAL_REVIEW_BATCH_HASH, frozenAt: CLINICAL_REVIEW_BATCH_FROZEN_AT,
-    expiresAt: CLINICAL_REVIEW_BATCH_EXPIRES_AT, reviewer: CLINICAL_REVIEW_BATCH_REVIEWER,
+    contract: CONTRACT, contractVersion: CONTRACT_VERSION, batchId: registration.manifest.batchId,
+    freezeDigest: registration.freezeDigest, frozenAt: registration.frozenAt,
+    expiresAt: registration.expiresAt, reviewer: registration.manifest.reviewer,
   });
 }
 
@@ -120,6 +129,23 @@ function bilingualList(value: unknown): { mm: string | null; en: string | null }
   };
 }
 
+function bilingualFaq(value: unknown): { mm: string | null; en: string | null } {
+  if (!Array.isArray(value) || value.length === 0 || value.length > MAX_RELATED_ROWS) {
+    return { mm: null, en: null };
+  }
+  const rows = value.map((entry) => {
+    const record = asRecord(entry);
+    return { question: bilingualObject(record?.q), answer: bilingualObject(record?.a) };
+  });
+  if (rows.some((row) => !row.question.mm || !row.question.en || !row.answer.mm || !row.answer.en)) {
+    return { mm: null, en: null };
+  }
+  return {
+    mm: rows.map((row, index) => `${index + 1}. ${row.question.mm}\n   ${row.answer.mm}`).join('\n'),
+    en: rows.map((row, index) => `${index + 1}. ${row.question.en}\n   ${row.answer.en}`).join('\n'),
+  };
+}
+
 function snapshotFields(content: Doc<'libraryContent'>): { fields: SnapshotField[]; blockers: string[] } {
   const data = asRecord(content.data);
   const fields: SnapshotField[] = [];
@@ -147,12 +173,44 @@ function snapshotFields(content: Doc<'libraryContent'>): { fields: SnapshotField
     add('data.instructions', 'လုပ်ဆောင်ပုံ', 'Instructions', instructions.mm, instructions.en);
     add('data.safety', 'ဘေးကင်းရေး', 'Safety', safety.mm, safety.en);
     add('data.outcomes', 'မျှော်မှန်းရလဒ်', 'Expected outcomes', outcomes.mm, outcomes.en);
+  } else if (content.type === 'guide') {
+    const why = bilingualObject(data.why);
+    const materials = bilingualObject(data.materials);
+    const observations = bilingualList(data.observationQuestions);
+    const dailyActivities = bilingualList(data.dailyActivities);
+    const settings = bilingualList([
+      ...(Array.isArray(data.indoor) ? data.indoor : []),
+      ...(Array.isArray(data.lowCost) ? data.lowCost : []),
+    ]);
+    const safety = bilingualObject(data.safety);
+    const commonMistakes = bilingualList(data.commonMistakes);
+    const parentTips = bilingualList(data.parentTips);
+    const faq = bilingualFaq(data.faq);
+    const redFlags = bilingualList(data.redFlags);
+    const referral = bilingualObject(data.referral);
+    const encouragement = bilingualObject(data.encouragement);
+    add('data.why', 'အရေးပါပုံ', 'Why it matters', why.mm, why.en);
+    add('data.materials', 'လိုအပ်သောပစ္စည်း', 'Materials', materials.mm, materials.en);
+    add('data.observationQuestions', 'စောင့်ကြည့်ရန်', 'What to observe', observations.mm, observations.en);
+    add('data.dailyActivities', 'နေ့စဉ်လုပ်ဆောင်ရန်', 'Daily activities', dailyActivities.mm, dailyActivities.en);
+    add('data.indoor+lowCost', 'အိမ်တွင်းနှင့် ကုန်ကျစရိတ်နည်း အကြံပြုချက်များ', 'Indoor and low-cost suggestions', settings.mm, settings.en);
+    add('data.safety', 'ဘေးကင်းရေး', 'Safety', safety.mm, safety.en);
+    add('data.commonMistakes', 'ရှောင်ရန်အမှားများ', 'Common mistakes', commonMistakes.mm, commonMistakes.en);
+    add('data.parentTips', 'မိဘအတွက်အကြံပြုချက်', 'Parent tips', parentTips.mm, parentTips.en);
+    add('data.faq', 'မေးလေ့ရှိသောမေးခွန်း', 'Frequently asked question', faq.mm, faq.en);
+    add('data.redFlags', 'အရေးပေါ်သတိပေးလက္ခဏာများ', 'Urgent warning signs', redFlags.mm, redFlags.en);
+    add('data.referral', 'အရေးပေါ်လုပ်ဆောင်ရန်', 'Urgent action', referral.mm, referral.en);
+    add('data.encouragement', 'အားပေးစကား', 'Encouragement', encouragement.mm, encouragement.en);
   } else blockers.push('snapshot_type_not_supported');
   if (fields.length === 0 || fields.length > MAX_SNAPSHOT_FIELDS) blockers.push('snapshot_field_count_invalid');
   return { fields, blockers };
 }
 
-async function buildSnapshot(content: Doc<'libraryContent'>, sourceRows: Doc<'evidenceSources'>[]) {
+async function buildSnapshot(
+  content: Doc<'libraryContent'>,
+  sourceRows: Doc<'evidenceSources'>[],
+  reviewerAdvisory?: SnapshotAdvisory,
+) {
   const extracted = snapshotFields(content);
   const sources: SnapshotSource[] = sourceRows.map((source) => ({
     sourceId: source.sourceId,
@@ -170,9 +228,18 @@ async function buildSnapshot(content: Doc<'libraryContent'>, sourceRows: Doc<'ev
       return true;
     }
   })) extracted.blockers.push('snapshot_source_invalid');
+  const advisory = reviewerAdvisory
+    ? { mm: reviewerAdvisory.mm.trim(), en: reviewerAdvisory.en.trim() }
+    : null;
+  if (reviewerAdvisory && (!advisory?.mm || !advisory.en
+    || advisory.mm.length > MAX_SNAPSHOT_FIELD_CHARACTERS
+    || advisory.en.length > MAX_SNAPSHOT_FIELD_CHARACTERS)) {
+    extracted.blockers.push('snapshot_reviewer_advisory_invalid');
+  }
   const body = {
     titleMm: content.titleMm, titleEn: content.titleEn,
     summaryMm: content.summaryMm ?? null, summaryEn: content.summaryEn ?? null,
+    reviewerAdvisory: advisory,
     sources, fields: extracted.fields,
   };
   return { snapshot: { digest: await sha256Canonical(body), ...body }, blockers: extracted.blockers };
@@ -183,7 +250,12 @@ function receiptFor(row: Doc<'contentReviews'>): DecisionReceipt | null {
   return { decision: row.decision, note: row.note?.trim() || null, reviewedAt: row.reviewedAt, receiptId: String(row._id) };
 }
 
-async function inspectItem(ctx: DatabaseContext, item: ClinicalReviewBatchItem, todayIso: string) {
+async function inspectItem(
+  ctx: DatabaseContext,
+  registration: ClinicalReviewBatchRegistration,
+  item: ClinicalReviewBatchItem,
+  todayIso: string,
+) {
   const blockers: string[] = [];
   const contentRows = await ctx.db.query('libraryContent').withIndex('by_slug', (q) => q.eq('slug', item.slug)).take(2);
   const linkRows = await ctx.db.query('evidenceLinks').withIndex('by_kind_slug', (q) => q.eq('kind', item.kind).eq('slug', item.slug)).take(2);
@@ -239,23 +311,48 @@ async function inspectItem(ctx: DatabaseContext, item: ClinicalReviewBatchItem, 
   };
   if (await sha256Canonical(aiSnapshot) !== item.aiCanonicalSha256) blockers.push('ai_snapshot_drift');
 
-  const decisionKey = await decisionKeyFor(item);
+  const decisionKey = await decisionKeyFor(registration, item);
   const existingByKey = await ctx.db.query('contentReviews').withIndex('by_decision_key', (q) => q.eq('decisionKey', decisionKey)).take(2);
   if (existingByKey.length > 1) blockers.push('duplicate_decision_key');
   const currentClinical = await ctx.db.query('contentReviews').withIndex('by_content_dimension_version', (q) =>
-    q.eq('contentSlug', item.slug).eq('dimension', DIMENSION).eq('contentVersion', item.reviewRevision),
+    q.eq('contentSlug', item.slug).eq('dimension', registration.dimension).eq('contentVersion', item.reviewRevision),
   ).order('desc').take(MAX_RELATED_ROWS + 1);
   if (currentClinical.length > MAX_RELATED_ROWS) blockers.push('clinical_history_bound_exceeded');
+  const allClinicalPage = await ctx.db.query('contentReviews')
+    .withIndex('by_content', (q) => q.eq('contentSlug', item.slug)).take(MAX_RELATED_ROWS + 1);
+  const allClinical = sortById(allClinicalPage
+    .slice(0, MAX_RELATED_ROWS)
+    .filter((row) => row.dimension === 'clinical'
+      && row.clinicalReviewBatchId !== registration.manifest.batchId));
+  const currentClinicalPreimage = allClinical.filter(
+    (row) => row.contentVersion === item.reviewRevision || row.reviewRevision === item.reviewRevision,
+  );
+  if (allClinicalPage.length > MAX_RELATED_ROWS) blockers.push('all_clinical_history_bound_exceeded');
+  if (registration.authority === 'release') {
+    if (currentClinicalPreimage.length !== item.currentClinicalReviewCount
+      || await sha256Canonical(currentClinicalPreimage) !== item.currentClinicalReviewsCanonicalSha256) {
+      blockers.push('current_clinical_review_preimage_drift');
+    }
+    if (await sha256Canonical(allClinical) !== item.allClinicalReviewHistoryCanonicalSha256) {
+      blockers.push('all_clinical_review_history_preimage_drift');
+    }
+  }
   if (currentClinical.some((row) => row.decisionKey !== decisionKey)) blockers.push('unfrozen_clinical_decision_exists');
   const existing = existingByKey[0] ?? null;
   if (existing && (
-    existing.clinicalReviewBatchId !== CLINICAL_REVIEW_BATCH_ID || existing.contentSlug !== item.slug
+    existing.clinicalReviewBatchId !== registration.manifest.batchId || existing.contentSlug !== item.slug
     || existing.contentVersion !== item.reviewRevision || existing.reviewRevision !== item.reviewRevision
-    || existing.dimension !== DIMENSION || String(existing.reviewerId) !== CLINICAL_REVIEW_BATCH_REVIEWER.userId
+    || existing.dimension !== registration.dimension || String(existing.reviewerId) !== registration.manifest.reviewer.userId
+    || existing.reviewerDisplayName !== registration.manifest.reviewer.displayName
+    || existing.reviewerQualification !== registration.manifest.reviewer.qualification
+    || existing.reviewerRole !== registration.manifest.reviewer.role
+    || existing.createdAt !== existing.reviewedAt || existing.updatedAt !== existing.reviewedAt
+    || (existing.note !== undefined
+      && (existing.note.trim().length === 0 || existing.note !== existing.note.trim()))
     || !receiptFor(existing)
   )) blockers.push('existing_decision_preimage_drift');
 
-  const built = content ? await buildSnapshot(content, sourceRows) : null;
+  const built = content ? await buildSnapshot(content, sourceRows, item.reviewerAdvisory) : null;
   if (!built) blockers.push('snapshot_content_missing'); else blockers.push(...built.blockers);
   return {
     item, assignmentId: decisionKey, liveReviewRevision: content?.reviewRevision ?? content?.version ?? 0,
@@ -265,18 +362,48 @@ async function inspectItem(ctx: DatabaseContext, item: ClinicalReviewBatchItem, 
 
 type InspectedItem = Awaited<ReturnType<typeof inspectItem>>;
 
-async function inspectBatch(ctx: DatabaseContext, todayIso: string): Promise<InspectedItem[]> {
+async function inspectBatch(
+  ctx: DatabaseContext,
+  registration: ClinicalReviewBatchRegistration,
+  todayIso: string,
+): Promise<InspectedItem[]> {
   const states: InspectedItem[] = [];
-  for (const item of CLINICAL_REVIEW_BATCH_ITEMS) states.push(await inspectItem(ctx, item, todayIso));
+  for (const item of registration.manifest.items) {
+    states.push(await inspectItem(ctx, registration, item, todayIso));
+  }
   return states;
 }
 
-async function completionHandoff(states: InspectedItem[], freezeReceipt: string) {
+/** Read-only exact live preflight reused by the owner activation CAS. */
+export async function registeredBatchActivationBlockers(
+  ctx: DatabaseContext,
+  registration: ClinicalReviewBatchRegistration,
+  todayIso: string,
+): Promise<string[]> {
+  const blockers = await assignedReviewerBlockers(
+    ctx,
+    registration.manifest.reviewer.userId as Id<'users'>,
+    registration.manifest.reviewer,
+  );
+  const states = await inspectBatch(ctx, registration, todayIso);
+  for (const state of states) {
+    blockers.push(...state.blockers.map((blocker) => `${state.item.slug}:${blocker}`));
+    if (!state.snapshot) blockers.push(`${state.item.slug}:snapshot_missing`);
+    if (state.decision) blockers.push(`${state.item.slug}:preexisting_decision`);
+  }
+  return [...new Set(blockers)];
+}
+
+async function completionHandoff(
+  registration: ClinicalReviewBatchRegistration,
+  states: InspectedItem[],
+  freezeReceipt: string,
+) {
   // A server-issued integrity receipt authorizes the workflow to leave the clinical lane. A
   // recorded request for changes (or N/A) is still a clinical follow-up, not a
   // completed clearance, so only unanimous exact-revision approvals qualify.
   if (
-    states.length !== CLINICAL_REVIEW_BATCH_COUNT ||
+    states.length !== registration.manifest.count ||
     states.some((state) => state.decision?.decision !== 'approved')
   ) return null;
   const decisions = states.map((state) => ({
@@ -285,12 +412,16 @@ async function completionHandoff(states: InspectedItem[], freezeReceipt: string)
   }));
   const completedAt = Math.max(...decisions.map((entry) => entry.receipt.reviewedAt));
   const digest = await sha256Canonical({
-    contract: `${CONTRACT}.handoff`, contractVersion: CONTRACT_VERSION, batchId: CLINICAL_REVIEW_BATCH_ID,
-    freezeDigest: CLINICAL_REVIEW_BATCH_HASH, decisionCount: decisions.length, completedAt, decisions,
+    contract: `${CONTRACT}.handoff`, contractVersion: CONTRACT_VERSION, batchId: registration.manifest.batchId,
+    freezeDigest: registration.freezeDigest, decisionCount: decisions.length, completedAt, decisions,
   });
   return {
-    batchId: CLINICAL_REVIEW_BATCH_ID, decisionCount: decisions.length, completedAt, digest,
-    receiptDigest: await sha256Canonical({ digest, freezeReceiptDigest: freezeReceipt, reviewerUserId: CLINICAL_REVIEW_BATCH_REVIEWER.userId }),
+    batchId: registration.manifest.batchId, decisionCount: decisions.length, completedAt, digest,
+    receiptDigest: await sha256Canonical({
+      digest,
+      freezeReceiptDigest: freezeReceipt,
+      reviewerUserId: registration.manifest.reviewer.userId,
+    }),
   };
 }
 
@@ -298,6 +429,281 @@ function statesAreVerified(
   states: InspectedItem[],
 ): states is Array<InspectedItem & { snapshot: NonNullable<InspectedItem['snapshot']> }> {
   return states.every((state) => state.blockers.length === 0 && state.snapshot !== null);
+}
+
+const MAX_REGISTERED_BATCHES = 32;
+const MAX_ITEMS_PER_BATCH = 25;
+
+async function registryBlockers(): Promise<string[]> {
+  const blockers: string[] = [];
+  const registrations: readonly ClinicalReviewBatchRegistration[] = CLINICAL_REVIEW_BATCH_REGISTRY;
+  if (registrations.length === 0 || registrations.length > MAX_REGISTERED_BATCHES) {
+    return ['registry_batch_count_invalid'];
+  }
+  const batchIds = new Set<string>();
+  const globalExactTargets = new Set<string>();
+  let previousRelease: ClinicalReviewBatchRegistration | null = null;
+  for (let index = 0; index < registrations.length; index += 1) {
+    const registration = registrations[index];
+    const { manifest } = registration;
+    if (!manifest.batchId.trim() || batchIds.has(manifest.batchId)) blockers.push('registry_batch_id_invalid');
+    batchIds.add(manifest.batchId);
+    if (registration.sequence !== index + 1) blockers.push(`registry_sequence_invalid:${manifest.batchId}`);
+    if (registration.authority === 'pilot') {
+      if (registration.activation.kind !== 'initial' || previousRelease) {
+        blockers.push(`registry_pilot_history_invalid:${manifest.batchId}`);
+      }
+    } else if (!previousRelease) {
+      if (registration.activation.kind !== 'initial') {
+        blockers.push(`registry_release_root_invalid:${manifest.batchId}`);
+      }
+      previousRelease = registration;
+    } else {
+      if (registration.activation.kind === 'initial'
+        || registration.activation.previousBatchId !== previousRelease.manifest.batchId) {
+        blockers.push(`registry_predecessor_invalid:${manifest.batchId}`);
+      }
+      previousRelease = registration;
+    }
+    if (!Number.isFinite(registration.frozenAt) || !Number.isFinite(registration.expiresAt)
+      || registration.frozenAt >= registration.expiresAt) {
+      blockers.push(`registry_time_window_invalid:${manifest.batchId}`);
+    }
+    if (manifest.count !== manifest.items.length || manifest.count < 1
+      || manifest.count > MAX_ITEMS_PER_BATCH) {
+      blockers.push(`registry_item_count_invalid:${manifest.batchId}`);
+    }
+    if (!roleMayReview(manifest.reviewer.role, registration.dimension)
+      || (registration.dimension !== 'evidence' && manifest.reviewer.role !== 'clinical_reviewer')) {
+      blockers.push(`registry_reviewer_role_invalid:${manifest.batchId}`);
+    }
+    const ordinals = new Set<number>();
+    const exactTargets = new Set<string>();
+    for (const item of manifest.items) {
+      if (registration.authority === 'release'
+        && (!Number.isInteger(item.currentClinicalReviewCount)
+          || item.currentClinicalReviewCount! < 0
+          || !/^[a-f0-9]{64}$/.test(item.currentClinicalReviewsCanonicalSha256 ?? '')
+          || !/^[a-f0-9]{64}$/.test(item.allClinicalReviewHistoryCanonicalSha256 ?? ''))) {
+        blockers.push(`registry_review_preimage_invalid:${manifest.batchId}`);
+      }
+      const target = `${item.kind}:${item.slug}:r${item.reviewRevision}`;
+      const globalTarget = `${registration.dimension}:${target}`;
+      if (!Number.isInteger(item.ordinal) || item.ordinal < 1 || ordinals.has(item.ordinal)) {
+        blockers.push(`registry_ordinal_invalid:${manifest.batchId}`);
+      }
+      ordinals.add(item.ordinal);
+      if (!item.kind.trim() || !item.slug.trim() || !Number.isInteger(item.reviewRevision)
+        || item.reviewRevision < 1 || exactTargets.has(target)) {
+        blockers.push(`registry_target_invalid:${manifest.batchId}`);
+      }
+      exactTargets.add(target);
+      if (globalExactTargets.has(globalTarget)) {
+        blockers.push(`registry_global_target_collision:${manifest.batchId}`);
+      }
+      globalExactTargets.add(globalTarget);
+    }
+    if (manifest.items.some((item, itemIndex) => item.ordinal !== itemIndex + 1)) {
+      blockers.push(`registry_ordinal_order_invalid:${manifest.batchId}`);
+    }
+    if (await sha256Canonical(manifest) !== registration.freezeDigest) {
+      blockers.push(`registry_freeze_digest_invalid:${manifest.batchId}`);
+    }
+    if (await sha256Canonical(clinicalReviewBatchRoutingPayload(registration))
+      !== registration.routingCanonicalSha256) {
+      blockers.push(`registry_routing_digest_invalid:${manifest.batchId}`);
+    }
+    if (registration.activation.kind === 'after_handoff'
+      && !/^[a-f0-9]{64}$/.test(registration.activation.expectedPreviousFreezeDigest)) {
+      blockers.push(`registry_handoff_gate_invalid:${manifest.batchId}`);
+    }
+    if (registration.activation.kind === 'after_changes_requested_refreeze'
+      && !/^[a-f0-9]{64}$/.test(registration.activation.expectedDecisionSetDigest)) {
+      blockers.push(`registry_refreeze_gate_invalid:${manifest.batchId}`);
+    }
+  }
+  return blockers;
+}
+
+async function storedHandoffReceipt(
+  ctx: DatabaseContext,
+  registration: ClinicalReviewBatchRegistration,
+) {
+  if (registration.authority !== 'release') {
+    return { receipt: null, blockers: [] as string[] };
+  }
+  const rows = await ctx.db
+    .query('clinicalReviewBatchReceipts')
+    .withIndex('by_batch_id', (q) => q.eq('batchId', registration.manifest.batchId))
+    .take(2);
+  if (rows.length === 0) return { receipt: null, blockers: [] as string[] };
+  if (rows.length !== 1) return { receipt: null, blockers: ['duplicate_handoff_receipt'] };
+  const receipt = rows[0];
+  if (!await exactHandoffReceipt(ctx, receipt, registration)) {
+    return { receipt: null, blockers: ['handoff_receipt_preimage_drift'] };
+  }
+  return { receipt, blockers: [] as string[] };
+}
+
+async function exactPersistedRegistrationSelection(
+  ctx: DatabaseContext,
+  row: Doc<'clinicalReviewBatches'>,
+) {
+  const registration = CLINICAL_REVIEW_BATCH_REGISTRY.find(
+    (candidate) => candidate.manifest.batchId === row.batchId,
+  ) as ClinicalReviewBatchRegistration | undefined;
+  if (!registration || registration.authority !== 'release'
+    || !exactPersistedBatchRegistration(row, registration)) {
+    return {
+      active: registration ?? CLINICAL_REVIEW_BATCH_REGISTRY[0] as ClinicalReviewBatchRegistration,
+      persistedStatus: row.status,
+      persistedCompletedAt: row.completedAt,
+      blockers: ['persisted_batch_preimage_drift'],
+    };
+  }
+  const assignmentBlockers: string[] = [];
+  const persistedAssignments = await ctx.db
+    .query('clinicalReviewAssignments')
+    .withIndex('by_batch_id_and_ordinal', (q) => q.eq('batchId', registration.manifest.batchId))
+    .take(MAX_ITEMS_PER_BATCH + 1);
+  if (persistedAssignments.length !== registration.manifest.count) {
+    assignmentBlockers.push('persisted_assignment_count_mismatch');
+  }
+  for (const item of registration.manifest.items) {
+    const assignmentId = await decisionKeyFor(registration, item);
+    const matches = persistedAssignments.filter((assignment) => assignment.assignmentId === assignmentId);
+    if (matches.length !== 1
+      || !exactPersistedAssignment(matches[0], registration, item, assignmentId)) {
+      assignmentBlockers.push(`persisted_assignment_preimage_drift:${item.slug}`);
+    }
+  }
+  return {
+    active: registration,
+    persistedStatus: row.status,
+    persistedCompletedAt: row.completedAt,
+    blockers: assignmentBlockers,
+  };
+}
+
+async function activeRegistration(ctx: DatabaseContext, requestedBatchId?: string) {
+  if (requestedBatchId) {
+    const requested = await ctx.db.query('clinicalReviewBatches')
+      .withIndex('by_batch_id', (q) => q.eq('batchId', requestedBatchId)).take(2);
+    if (requested.length > 1) {
+      return {
+        active: CLINICAL_REVIEW_BATCH_REGISTRY[0] as ClinicalReviewBatchRegistration,
+        persistedStatus: undefined,
+        persistedCompletedAt: undefined,
+        blockers: ['duplicate_requested_batch'],
+      };
+    }
+    if (requested.length === 1) return await exactPersistedRegistrationSelection(ctx, requested[0]);
+  }
+  const persistedActive = await ctx.db
+    .query('clinicalReviewBatches')
+    .withIndex('by_status', (q) => q.eq('status', 'active'))
+    .take(2);
+  if (persistedActive.length > 1) {
+    return {
+      active: CLINICAL_REVIEW_BATCH_REGISTRY[0] as ClinicalReviewBatchRegistration,
+      persistedStatus: undefined,
+      persistedCompletedAt: undefined,
+      blockers: ['multiple_active_batches'],
+    };
+  }
+  if (persistedActive.length === 1) {
+    return await exactPersistedRegistrationSelection(ctx, persistedActive[0]);
+  }
+
+  const closed = [
+    ...await ctx.db.query('clinicalReviewBatches').withIndex('by_status', (q) => q.eq('status', 'completed')).take(MAX_REGISTERED_BATCHES),
+    ...await ctx.db.query('clinicalReviewBatches').withIndex('by_status', (q) => q.eq('status', 'stopped_changes_requested')).take(MAX_REGISTERED_BATCHES),
+  ].sort((left, right) => right.sequence - left.sequence);
+  if (closed.length > 0) return await exactPersistedRegistrationSelection(ctx, closed[0]);
+
+  // Backward-compatible pilot lane. Registered release batches never become
+  // active merely because a receipt exists; only the persisted owner CAS
+  // transition in clinicalReviewRegistry may select one.
+  return {
+    active: CLINICAL_REVIEW_BATCH_REGISTRY[0] as ClinicalReviewBatchRegistration,
+    persistedStatus: undefined,
+    persistedCompletedAt: undefined,
+    blockers: [] as string[],
+  };
+}
+
+async function persistHandoffReceipt(
+  ctx: MutationCtx,
+  registration: ClinicalReviewBatchRegistration,
+  handoff: Awaited<ReturnType<typeof completionHandoff>>,
+) {
+  if (!handoff || registration.authority !== 'release') return;
+  const stored = await storedHandoffReceipt(ctx, registration);
+  if (stored.blockers.length > 0) {
+    throw new Error(`Handoff receipt preimage failed: ${stored.blockers.join(',')}`);
+  }
+  if (stored.receipt) {
+    const identical = stored.receipt.completedAt === handoff.completedAt
+      && stored.receipt.digest === handoff.digest
+      && stored.receipt.receiptDigest === handoff.receiptDigest;
+    if (!identical) throw new Error('Handoff receipt conflict');
+    return;
+  }
+  await ctx.db.insert('clinicalReviewBatchReceipts', {
+    batchId: registration.manifest.batchId,
+    freezeDigest: registration.freezeDigest,
+    reviewerId: registration.manifest.reviewer.userId as Id<'users'>,
+    decisionCount: handoff.decisionCount,
+    completedAt: handoff.completedAt,
+    digest: handoff.digest,
+    receiptDigest: handoff.receiptDigest,
+    authority: registration.authority,
+    createdAt: handoff.completedAt,
+  });
+}
+
+async function closePersistedReleaseBatch(
+  ctx: MutationCtx,
+  registration: ClinicalReviewBatchRegistration,
+  decision: DecisionReceipt['decision'],
+  handoff: Awaited<ReturnType<typeof completionHandoff>>,
+  duplicate: boolean,
+) {
+  if (registration.authority !== 'release') return;
+  const rows = await ctx.db
+    .query('clinicalReviewBatches')
+    .withIndex('by_batch_id', (q) => q.eq('batchId', registration.manifest.batchId))
+    .take(2);
+  if (rows.length !== 1 || !exactPersistedBatchRegistration(rows[0], registration)) {
+    // Throwing rolls the whole Convex mutation back, including the decision and
+    // receipt inserts. Returning a refusal here would commit a partial release.
+    throw new Error('Active release batch lifecycle preimage failed');
+  }
+  if (rows[0].status === 'completed' && handoff) {
+    if (rows[0].completedAt !== handoff.completedAt) {
+      throw new Error('Completed release batch timestamp preimage failed');
+    }
+    return;
+  }
+  if (rows[0].status === 'stopped_changes_requested' && decision === 'changes_requested') return;
+  // A release may have stopped after this exact decision was first recorded.
+  // Replaying that earlier receipt is a read-only idempotent operation: it must
+  // return the existing receipt without trying to transition the closed batch.
+  if (rows[0].status === 'stopped_changes_requested' && duplicate && !handoff) return;
+  if (rows[0].status !== 'active') throw new Error('Release batch lifecycle is closed');
+  if (decision === 'changes_requested') {
+    await ctx.db.patch(rows[0]._id, {
+      status: 'stopped_changes_requested',
+      completedAt: undefined,
+    });
+    return;
+  }
+  if (handoff) {
+    await ctx.db.patch(rows[0]._id, {
+      status: 'completed',
+      completedAt: handoff.completedAt,
+    });
+  }
 }
 
 /**
@@ -311,17 +717,34 @@ export const readAssignedBatchState = internalQuery({
   returns: clinicalReviewBatchLoadResultValidator,
   handler: async (ctx, args) => {
     const userId = await requireUser(ctx);
-    const identityBlockers = await assignedReviewerBlockers(ctx, userId);
+    const staticBlockers = await registryBlockers();
+    const selected = staticBlockers.length === 0
+      ? await activeRegistration(ctx)
+      : {
+          active: CLINICAL_REVIEW_BATCH_REGISTRY[0] as ClinicalReviewBatchRegistration,
+          persistedStatus: undefined,
+          persistedCompletedAt: undefined,
+          blockers: staticBlockers,
+        };
+    if (selected.blockers.length > 0) {
+      return {
+        status: 'refused' as const,
+        code: 'batch_preflight_failed' as const,
+        message: 'The frozen clinical-review registry failed verification.',
+      };
+    }
+    const registration = selected.active;
+    const reviewer = registration.manifest.reviewer;
+    const identityBlockers = await assignedReviewerBlockers(ctx, userId, reviewer);
     if (identityBlockers.length > 0) {
       return {
         status: 'refused' as const,
         code: 'not_assigned_reviewer' as const,
-        message: 'Use the assigned clinical reviewer account.',
+        message: 'Use the assigned frozen-batch reviewer account.',
       };
     }
-    if (!Number.isFinite(args.nowMs) || args.nowMs < CLINICAL_REVIEW_BATCH_FROZEN_AT
+    if (!Number.isFinite(args.nowMs) || args.nowMs < registration.frozenAt
       || new Date(args.nowMs).toISOString().slice(0, 10) !== args.todayIso
-      || await sha256Canonical(CLINICAL_REVIEW_BATCH_MANIFEST) !== CLINICAL_REVIEW_BATCH_HASH
     ) {
       return {
         status: 'refused' as const,
@@ -329,14 +752,14 @@ export const readAssignedBatchState = internalQuery({
         message: 'The frozen clinical-review batch failed verification.',
       };
     }
-    if (args.nowMs >= CLINICAL_REVIEW_BATCH_EXPIRES_AT) {
+    if (args.nowMs >= registration.expiresAt) {
       return {
         status: 'refused' as const,
         code: 'assignment_expired' as const,
         message: 'The frozen clinical-review batch has expired and must be refrozen.',
       };
     }
-    const states = await inspectBatch(ctx, args.todayIso);
+    const states = await inspectBatch(ctx, registration, args.todayIso);
     if (!statesAreVerified(states)) {
       return {
         status: 'refused' as const,
@@ -344,23 +767,45 @@ export const readAssignedBatchState = internalQuery({
         message: 'The frozen clinical-review batch failed live preflight.',
       };
     }
-    const freezeReceipt = await freezeReceiptDigest();
+    const freezeReceipt = await freezeReceiptDigest(registration);
+    // Pilot history remains readable but is deliberately non-authoritative:
+    // it never produces, consumes, or depends on a persisted release receipt.
+    const computedHandoff = registration.authority === 'release'
+      ? await completionHandoff(registration, states, freezeReceipt)
+      : null;
+    const storedHandoff = registration.authority === 'release'
+      ? await storedHandoffReceipt(ctx, registration)
+      : { receipt: null, blockers: [] as string[] };
+    if (storedHandoff.blockers.length > 0
+      || (computedHandoff && (!storedHandoff.receipt
+        || storedHandoff.receipt.digest !== computedHandoff.digest
+        || storedHandoff.receipt.receiptDigest !== computedHandoff.receiptDigest))
+      || (registration.authority === 'release'
+        && selected.persistedStatus === 'completed'
+        && (!computedHandoff || selected.persistedCompletedAt !== computedHandoff.completedAt))) {
+      return {
+        status: 'refused' as const,
+        code: 'batch_preflight_failed' as const,
+        message: 'The frozen clinical-review handoff failed verification.',
+      };
+    }
     return {
       contract: CONTRACT, contractVersion: CONTRACT_VERSION, scope: 'authenticated_assignee' as const,
-      batchId: CLINICAL_REVIEW_BATCH_ID, lane: 'clinical' as const, assignedRole: 'clinical_reviewer' as const,
-      frozenAt: CLINICAL_REVIEW_BATCH_FROZEN_AT, freezeDigest: CLINICAL_REVIEW_BATCH_HASH,
+      batchId: registration.manifest.batchId, lane: registration.dimension, assignedRole: reviewer.role,
+      frozenAt: registration.frozenAt, freezeDigest: registration.freezeDigest,
       freezeReceiptDigest: freezeReceipt,
       reviewer: {
-        profileId: CLINICAL_REVIEW_BATCH_REVIEWER.profileId, userId: CLINICAL_REVIEW_BATCH_REVIEWER.userId,
-        displayName: CLINICAL_REVIEW_BATCH_REVIEWER.displayName, qualification: CLINICAL_REVIEW_BATCH_REVIEWER.qualification,
-        role: CLINICAL_REVIEW_BATCH_REVIEWER.role,
+        profileId: reviewer.profileId, userId: reviewer.userId,
+        displayName: reviewer.displayName, qualification: reviewer.qualification,
+        role: reviewer.role,
       },
       items: states.map((state) => ({
-        assignmentId: state.assignmentId, slug: state.item.slug, type: state.item.kind, dimension: DIMENSION,
+        assignmentId: state.assignmentId, slug: state.item.slug, type: state.item.kind,
+        dimension: registration.dimension,
         reviewRevision: state.item.reviewRevision, liveReviewRevision: state.liveReviewRevision,
         snapshot: state.snapshot, decision: state.decision,
       })),
-      handoff: await completionHandoff(states, freezeReceipt),
+      handoff: computedHandoff,
     };
   },
 });
@@ -386,7 +831,9 @@ function identityRefusalCode(blockers: string[]): RefusalCode {
 export const saveAssignedDecision = mutation({
   args: {
     batchId: v.string(), assignmentId: v.string(), contentSlug: v.string(),
-    dimension: v.union(v.literal('clinical'), v.literal('child_development'), v.literal('safety')),
+    dimension: v.union(
+      v.literal('clinical'), v.literal('child_development'), v.literal('evidence'), v.literal('safety'),
+    ),
     expectedSnapshotDigest: v.string(),
     expectedFreezeDigest: v.string(), expectedReviewRevision: v.number(),
     decision: decisionValidator, note: v.optional(v.string()),
@@ -402,22 +849,31 @@ export const saveAssignedDecision = mutation({
   ),
   handler: async (ctx, args) => {
     const userId = await requireUser(ctx);
-    const identityBlockers = await assignedReviewerBlockers(ctx, userId);
     const requestedSlug = args.contentSlug;
+    const staticBlockers = await registryBlockers();
+    if (staticBlockers.length > 0) {
+      return await refuse(ctx, userId, 'assignment_expired', `${requestedSlug} · refused: ${staticBlockers.join(',')}`);
+    }
+    const selected = await activeRegistration(ctx, args.batchId);
+    if (selected.blockers.length > 0) {
+      return await refuse(ctx, userId, 'assignment_expired', `${requestedSlug} · refused: ${selected.blockers.join(',')}`);
+    }
+    const registration = selected.active;
+    const reviewer = registration.manifest.reviewer;
+    const identityBlockers = await assignedReviewerBlockers(ctx, userId, reviewer);
     if (identityBlockers.length > 0) return await refuse(ctx, userId, identityRefusalCode(identityBlockers), `${requestedSlug} · refused: ${identityBlockers.join(',')}`);
-    if (Date.now() >= CLINICAL_REVIEW_BATCH_EXPIRES_AT) return await refuse(ctx, userId, 'assignment_expired', `${requestedSlug} · refused: assignment expired`);
-    if (args.batchId !== CLINICAL_REVIEW_BATCH_ID
-      || args.expectedFreezeDigest !== CLINICAL_REVIEW_BATCH_HASH) {
+    if (Date.now() >= registration.expiresAt) return await refuse(ctx, userId, 'assignment_expired', `${requestedSlug} · refused: assignment expired`);
+    if (args.batchId !== registration.manifest.batchId
+      || args.expectedFreezeDigest !== registration.freezeDigest) {
       return await refuse(ctx, userId, 'assignment_expired', `${requestedSlug} · refused: frozen batch mismatch`);
     }
-    if (await sha256Canonical(CLINICAL_REVIEW_BATCH_MANIFEST) !== CLINICAL_REVIEW_BATCH_HASH) return await refuse(ctx, userId, 'assignment_expired', `${requestedSlug} · refused: manifest hash mismatch`);
 
     let item: ClinicalReviewBatchItem | undefined;
-    for (const candidate of CLINICAL_REVIEW_BATCH_ITEMS) {
-      if (await decisionKeyFor(candidate) === args.assignmentId) { item = candidate; break; }
+    for (const candidate of registration.manifest.items) {
+      if (await decisionKeyFor(registration, candidate) === args.assignmentId) { item = candidate; break; }
     }
     if (!item) return await refuse(ctx, userId, 'assignment_not_found', `${requestedSlug} · refused: assignment not found`);
-    if (args.contentSlug !== item.slug || args.dimension !== DIMENSION) {
+    if (args.contentSlug !== item.slug || args.dimension !== registration.dimension) {
       return await refuse(ctx, userId, 'assignment_not_found', `${requestedSlug} · refused: assignment tuple mismatch`, item.contentId);
     }
     if (args.expectedReviewRevision !== item.reviewRevision) {
@@ -426,7 +882,7 @@ export const saveAssignedDecision = mutation({
     const note = args.note?.trim();
     if (args.decision === 'changes_requested' && !note) return await refuse(ctx, userId, 'note_required', `${item.slug} · refused: changes_requested requires note`, item.contentId);
 
-    const batchStates = await inspectBatch(ctx, todayIsoUtc());
+    const batchStates = await inspectBatch(ctx, registration, todayIsoUtc());
     const state = batchStates.find((candidate) => candidate.item.slug === item.slug);
     if (!state) return await refuse(ctx, userId, 'assignment_not_found', `${item.slug} · refused: assignment state missing`, item.contentId);
     const blockedState = batchStates.find((candidate) => candidate.blockers.length > 0 || !candidate.snapshot);
@@ -441,17 +897,29 @@ export const saveAssignedDecision = mutation({
     if (state.decision) {
       const identical = state.decision.decision === args.decision && (state.decision.note ?? '') === (note ?? '');
       if (!identical) return await refuse(ctx, userId, 'assignment_expired', `${item.slug} · refused: decision receipt conflict`, item.contentId);
-      const handoff = await completionHandoff(batchStates, await freezeReceiptDigest());
+      const handoff = registration.authority === 'release'
+        ? await completionHandoff(
+          registration,
+          batchStates,
+          await freezeReceiptDigest(registration),
+        )
+        : null;
+      await persistHandoffReceipt(ctx, registration, handoff);
+      await closePersistedReleaseBatch(ctx, registration, state.decision.decision, handoff, true);
       return { ok: true as const, decisionKey: state.assignmentId, duplicate: true, receipt: state.decision, ...(handoff ? { handoff } : {}) };
+    }
+
+    if (selected.persistedStatus && selected.persistedStatus !== 'active') {
+      return await refuse(ctx, userId, 'assignment_expired', `${item.slug} · refused: release batch is closed`, item.contentId);
     }
 
     const now = Date.now();
     const reviewId = await ctx.db.insert('contentReviews', {
       contentSlug: item.slug, contentVersion: item.reviewRevision, reviewRevision: item.reviewRevision,
-      dimension: DIMENSION, decision: args.decision, note: note || undefined, reviewerId: userId,
-      reviewerDisplayName: CLINICAL_REVIEW_BATCH_REVIEWER.displayName,
-      reviewerQualification: CLINICAL_REVIEW_BATCH_REVIEWER.qualification, reviewerRole: 'clinical_reviewer',
-      reviewedAt: now, decisionKey: state.assignmentId, clinicalReviewBatchId: CLINICAL_REVIEW_BATCH_ID,
+      dimension: registration.dimension, decision: args.decision, note: note || undefined, reviewerId: userId,
+      reviewerDisplayName: reviewer.displayName,
+      reviewerQualification: reviewer.qualification, reviewerRole: reviewer.role,
+      reviewedAt: now, decisionKey: state.assignmentId, clinicalReviewBatchId: registration.manifest.batchId,
       createdAt: now, updatedAt: now,
     });
     const receipt: DecisionReceipt = { decision: args.decision, note: note || null, reviewedAt: now, receiptId: String(reviewId) };
@@ -459,14 +927,22 @@ export const saveAssignedDecision = mutation({
       `${item.kind}:${item.slug} · revision ${item.reviewRevision} · ${args.decision} · ${state.assignmentId}`,
       {
         result: 'ok',
-        before: JSON.stringify({ batchId: CLINICAL_REVIEW_BATCH_ID, freezeDigest: CLINICAL_REVIEW_BATCH_HASH, assignmentId: state.assignmentId, snapshotDigest: snapshot.digest }),
+        before: JSON.stringify({ batchId: registration.manifest.batchId, freezeDigest: registration.freezeDigest, assignmentId: state.assignmentId, snapshotDigest: snapshot.digest }),
         after: JSON.stringify(receipt),
       },
     );
     const completedStates = batchStates.map((candidate) => candidate.item.slug === item.slug
       ? { ...candidate, decision: receipt }
       : candidate);
-    const handoff = await completionHandoff(completedStates, await freezeReceiptDigest());
+    const handoff = registration.authority === 'release'
+      ? await completionHandoff(
+        registration,
+        completedStates,
+        await freezeReceiptDigest(registration),
+      )
+      : null;
+    await persistHandoffReceipt(ctx, registration, handoff);
+    await closePersistedReleaseBatch(ctx, registration, receipt.decision, handoff, false);
     return { ok: true as const, decisionKey: state.assignmentId, duplicate: false, receipt, ...(handoff ? { handoff } : {}) };
   },
 });

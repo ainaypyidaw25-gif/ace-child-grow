@@ -271,9 +271,11 @@ export default defineSchema({
   // authenticated user only when 'published'; staff see all and can transition.
   contentItems: defineTable({
     kind: v.string(), // milestone | activity | awareness | lesson
+    slug: v.optional(v.string()),
     titleMm: v.string(),
     titleEn: v.string(),
     reviewStatus: v.string(), // matches src/domain/content/workflow.ts states
+    reviewRevision: v.optional(v.number()),
     // Optional translation-review fields (side-by-side en/mm editing).
     bodyMm: v.optional(v.string()),
     bodyEn: v.optional(v.string()),
@@ -483,6 +485,114 @@ export default defineSchema({
     .index('by_reviewer', ['reviewerId'])
     .index('by_decision_key', ['decisionKey'])
     .index('by_clinical_review_batch_and_content', ['clinicalReviewBatchId', 'contentSlug']),
+
+  // Server-authoritative frozen clinical lane registry. Manifest identity and
+  // assignee fields are immutable after insert; only the lifecycle fields move
+  // monotonically through frozen -> active -> completed/stopped/invalidated.
+  clinicalReviewBatches: defineTable({
+    batchId: v.string(),
+    sequence: v.number(),
+    laneGraphVersion: v.literal(1),
+    dimension: v.union(
+      v.literal('clinical'), v.literal('child_development'), v.literal('evidence'), v.literal('safety'),
+    ),
+    authority: v.union(v.literal('pilot'), v.literal('release')),
+    status: v.union(
+      v.literal('frozen'),
+      v.literal('active'),
+      v.literal('stopped_changes_requested'),
+      v.literal('completed'),
+      v.literal('invalidated'),
+    ),
+    freezeDigest: v.string(),
+    routingDigest: v.string(),
+    itemCount: v.number(),
+    frozenAt: v.number(),
+    expiresAt: v.number(),
+    reviewerProfileId: v.optional(v.string()),
+    reviewerId: v.optional(v.id('users')),
+    reviewerDisplayName: v.optional(v.string()),
+    reviewerQualification: v.optional(v.string()),
+    reviewerRole: v.optional(v.union(v.literal('clinical_reviewer'), v.literal('evidence_reviewer'))),
+    reviewerIdentityDigest: v.optional(v.string()),
+    activationKind: v.union(
+      v.literal('initial'),
+      v.literal('after_handoff'),
+      v.literal('after_changes_requested_refreeze'),
+    ),
+    predecessorBatchId: v.optional(v.string()),
+    expectedUpstreamStateDigest: v.optional(v.string()),
+    consumedUpstreamReceiptDigest: v.optional(v.string()),
+    activatedAt: v.optional(v.number()),
+    completedAt: v.optional(v.number()),
+    invalidatedAt: v.optional(v.number()),
+    invalidationReason: v.optional(v.string()),
+    createdAt: v.number(),
+  })
+    .index('by_batch_id', ['batchId'])
+    .index('by_sequence', ['sequence'])
+    .index('by_status', ['status'])
+    .index('by_reviewer', ['reviewerId'])
+    .index('by_reviewer_and_status', ['reviewerId', 'status'])
+    .index('by_predecessor_batch_id', ['predecessorBatchId']),
+
+  // Exact preimages for each registered assignment. Rows are insert-only;
+  // decisions and lifecycle state live in separate append-only/monotonic rows.
+  clinicalReviewAssignments: defineTable({
+    batchId: v.string(),
+    assignmentId: v.string(),
+    ordinal: v.number(),
+    dimension: v.union(
+      v.literal('clinical'), v.literal('child_development'), v.literal('evidence'), v.literal('safety'),
+    ),
+    kind: v.string(),
+    contentSlug: v.string(),
+    reviewRevision: v.number(),
+    contentId: v.id('libraryContent'),
+    contentCreationTime: v.number(),
+    contentUpdatedAt: v.number(),
+    contentCanonicalSha256: v.string(),
+    linkId: v.id('evidenceLinks'),
+    linkCreationTime: v.number(),
+    linkUpdatedAt: v.number(),
+    linkCanonicalSha256: v.string(),
+    sourceIds: v.array(v.string()),
+    sourceCount: v.number(),
+    sourcesCanonicalSha256: v.string(),
+    mediaCount: v.number(),
+    mediaCanonicalSha256: v.string(),
+    aiCanonicalSha256: v.string(),
+    currentClinicalReviewCount: v.number(),
+    currentClinicalReviewsCanonicalSha256: v.string(),
+    allClinicalReviewHistoryCanonicalSha256: v.string(),
+    upstreamReviewDigests: v.array(v.object({
+      dimension: v.string(),
+      digest: v.string(),
+    })),
+    createdAt: v.number(),
+  })
+    .index('by_batch_id_and_ordinal', ['batchId', 'ordinal'])
+    .index('by_assignment_id', ['assignmentId'])
+    .index('by_exact_target', ['contentSlug', 'dimension', 'reviewRevision']),
+
+  // Immutable completion receipts for exact frozen clinical-review batches.
+  // A receipt is inserted atomically with the final per-item approval; it does
+  // not approve content by itself. Publication and later batch activation use
+  // it only together with the exact registered manifest and decision rows.
+  clinicalReviewBatchReceipts: defineTable({
+    batchId: v.string(),
+    freezeDigest: v.string(),
+    reviewerId: v.id('users'),
+    decisionCount: v.number(),
+    completedAt: v.number(),
+    digest: v.string(),
+    receiptDigest: v.string(),
+    authority: v.union(v.literal('pilot'), v.literal('release')),
+    createdAt: v.number(),
+  })
+    .index('by_batch_id', ['batchId'])
+    .index('by_receipt_digest', ['receiptDigest'])
+    .index('by_reviewer', ['reviewerId']),
 
   // ------------------------------------------------------------------
   // Advisory AI audit provenance. These append-only records are deliberately
