@@ -1112,7 +1112,7 @@ export const CDC_SOURCES: EvidenceSource[] = [
     topics: ['nutrition', 'safety'],
     ageMonthsMin: 4,
     ageMonthsMax: 12,
-    verifiedOn: '2026-08-24',
+    verifiedOn: '2026-08-23',
     verifiedNote:
       'CDC page prints the title and “Apr. 14, 2026”; it says to introduce single-ingredient foods one at a time and wait 3 to 5 days, not to offer cow’s milk as a drink before 12 months, and to discuss peanut introduction with a doctor or nurse for severe eczema or egg allergy.',
   }),
@@ -2114,7 +2114,7 @@ export const JOURNAL_SOURCES: EvidenceSource[] = [
     topics: ['nutrition', 'safety'],
     ageMonthsMin: 4,
     ageMonthsMax: 12,
-    verifiedOn: '2026-08-24',
+    verifiedOn: '2026-08-23',
     verifiedNote:
       'PubMed record 28065278 prints the full title, author group, “J Allergy Clin Immunol. 2017 Jan;139(1):29-44”, DOI 10.1016/j.jaci.2016.10.010 and PMID 28065278; the NIAID-sponsored guideline identifies severe eczema and/or egg allergy as the high-risk criteria for clinician-directed peanut introduction.',
   }),

@@ -169,16 +169,17 @@ async function humanReviewAudits(
   sources: readonly Doc<'evidenceSources'>[],
   todayIso: string,
 ): Promise<Map<string, HumanReviewAudit>> {
-  const rows = await ctx.db.query('auditLogs')
-    .withIndex('by_action', (q) => q.eq('action', 'evidence.setReview')).take(5_001);
-  if (rows.length > 5_000) throw new Error('Nutrition guide human-review audit scan exceeded 5,000 rows');
   const result = new Map<string, HumanReviewAudit>();
   for (const source of sources) {
-    const successful = rows.filter((row) => (
-      row.entityTable === 'evidenceSources'
-      && row.entityId === source.sourceId
-      && row.result === 'ok'
-    ));
+    // A take(2) on the exact audit identity is sufficient to prove uniqueness,
+    // while unrelated evidence-review history cannot exhaust this release gate.
+    const successful = await ctx.db.query('auditLogs')
+      .withIndex('by_action_and_entity_table_and_entity_id_and_result', (q) => q
+        .eq('action', 'evidence.setReview')
+        .eq('entityTable', 'evidenceSources')
+        .eq('entityId', source.sourceId)
+        .eq('result', 'ok'))
+      .take(2);
     const outdated = evidenceIsOutdated(
       { evidenceLevel: source.evidenceLevel ?? '', year: source.year ?? null },
       todayIso,

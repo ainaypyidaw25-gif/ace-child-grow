@@ -67,7 +67,7 @@ describe('nutrition guide exact two-phase CAS data', () => {
         reviewDate: null,
         nextReviewDate: null,
       });
-      expect(expected.verifiedOn).toBe('2026-08-24');
+      expect(expected.verifiedOn).toBe('2026-08-23');
     }
   });
 

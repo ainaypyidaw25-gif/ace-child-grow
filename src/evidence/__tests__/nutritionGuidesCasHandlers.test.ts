@@ -341,6 +341,46 @@ describe('nutrition guide two-phase exact CAS handlers', () => {
     expect(state.insert).toHaveBeenCalledTimes(insertCalls);
   });
 
+  it('ignores more than 5,000 unrelated review audits while requiring unique exact target audits', async () => {
+    vi.spyOn(Date, 'now').mockReturnValue(Date.UTC(2026, 7, 24, 12));
+    const state = exactContext();
+    await handler(stageSources)(state.ctx, {
+      releaseId: NUTRITION_GUIDES_SOURCE_STAGE_RELEASE_ID,
+    });
+    state.tables.auditLogs.push(...Array.from({ length: 5_001 }, (_, index) => ({
+      _id: `unrelated-audit-${index}`,
+      _creationTime: index + 1,
+      actorId: 'unrelated-reviewer',
+      action: 'evidence.setReview',
+      entityTable: 'evidenceSources',
+      entityId: `unrelated-source-${index}`,
+      result: 'ok',
+    })));
+    await approveStagedSources(state);
+
+    await expect(handler(preflight)(state.ctx, {
+      releaseId: NUTRITION_GUIDES_CAS_RELEASE_ID,
+    })).resolves.toMatchObject({ phase: 'ready', eligibleNewSources: 2, blockers: [] });
+
+    const sourceId = NUTRITION_GUIDES_NEW_SOURCE_IDS[0];
+    const exactAudit = state.tables.auditLogs.find((row) => (
+      row.action === 'evidence.setReview'
+      && row.entityId === sourceId
+      && row.result === 'ok'
+    ));
+    if (!exactAudit) throw new Error(`missing exact audit for ${sourceId}`);
+    state.tables.auditLogs.push({
+      ...exactAudit,
+      _id: 'duplicate-target-review-audit',
+      _creationTime: Number(exactAudit._creationTime) + 1,
+    });
+    const ambiguous = await handler(preflight)(state.ctx, {
+      releaseId: NUTRITION_GUIDES_CAS_RELEASE_ID,
+    }) as Record<string, unknown>;
+    expect(ambiguous).toMatchObject({ phase: 'blocked' });
+    expect(ambiguous.blockers).toContain(`human evidence review audit missing or drifted: ${sourceId}`);
+  });
+
   it('blocks approved source rows without exact professional review audits and on source AI drift', async () => {
     vi.spyOn(Date, 'now').mockReturnValue(Date.UTC(2026, 7, 24, 12));
     const state = exactContext();
