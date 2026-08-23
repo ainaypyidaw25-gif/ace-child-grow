@@ -45,6 +45,10 @@ import { isSwaimanSeizureLinkCasTarget } from './lib/swaimanSeizureLinkCasData';
 import { isSwaimanCerebralPalsyLinkCasTarget } from './lib/swaimanCerebralPalsyLinkCasData';
 import { isAsqDoctorVisitsLinkCasTarget } from './lib/asqDoctorVisitsLinkCasData';
 import { isBirth2mNutritionCasTarget } from './lib/birth2mNutritionCasData';
+import {
+  isClinicalTwoSmallCasSource,
+  isClinicalTwoSmallCasTarget,
+} from './lib/clinicalTwoSmallCasGuard';
 import { isManualReviewEvidenceLinkCasTarget } from './lib/manualReviewEvidenceLinkCasData';
 import {
   isBirth2mGrossMotorCorrectionLink,
@@ -573,7 +577,8 @@ async function applySources(
       || isSwaimanSuddenWeaknessSourceCasTarget(id)
       || isOlderSafety2026SourceTarget(id)
       || isBirth2mGrossMotorCorrectionSource(id)
-      || isClinicalBlockerCasSource(id)) {
+      || isClinicalBlockerCasSource(id)
+      || isClinicalTwoSmallCasSource(id)) {
       skipped += 1;
       continue;
     }
@@ -792,6 +797,7 @@ async function applyLinks(
       && !isSwaimanCerebralPalsyLinkCasTarget(link.kind, link.slug)
       && !isAsqDoctorVisitsLinkCasTarget(link.kind, link.slug)
       && !isBirth2mNutritionCasTarget(link.kind, link.slug)
+      && !isClinicalTwoSmallCasTarget(link.kind, link.slug)
       && !isBirth2mGrossMotorCorrectionLink(link.kind, link.slug)
       && !isManualReviewEvidenceLinkCasTarget(link.kind, link.slug)
       && !isSwaimanSuddenWeaknessLinkCasTarget(link.kind, link.slug)

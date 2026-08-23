@@ -33,6 +33,7 @@ import { activeAiParentReadableContent } from './lib/aiPublicationVisibility';
 import { isRetiredContentSlug } from './lib/contentRetirements';
 import { isManualReviewContentCasTargetSlug } from './lib/manualReviewContentCasData';
 import { isBirth2mNutritionCasTargetSlug } from './lib/birth2mNutritionCasData';
+import { isClinicalTwoSmallCasTargetSlug } from './lib/clinicalTwoSmallCasGuard';
 import { isBirth2mGrossMotorCorrectionSlug } from './lib/birth2mGrossMotorCorrection';
 import { isOlderSafety2026ContentTargetSlug } from './lib/olderSafety2026CasData';
 import {
@@ -622,7 +623,8 @@ export const importSeed = mutation({
         || isBirth2mGrossMotorCorrectionSlug(it.slug)
         || isOlderSafety2026ContentTargetSlug(it.slug)
         || isGdBirth2mEmotionalCasContentSlug(it.slug)
-        || isUnicefSeenCountedConsumerSlug(it.slug)) {
+        || isUnicefSeenCountedConsumerSlug(it.slug)
+        || isClinicalTwoSmallCasTargetSlug(it.slug)) {
         skippedApproved += 1;
         continue;
       }

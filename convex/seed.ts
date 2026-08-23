@@ -54,6 +54,7 @@ import {
 } from './lib/clinicalReviewCopyRelease';
 import { isManualReviewContentCasTargetSlug } from './lib/manualReviewContentCasData';
 import { isBirth2mNutritionCasTargetSlug } from './lib/birth2mNutritionCasData';
+import { isClinicalTwoSmallCasTargetSlug } from './lib/clinicalTwoSmallCasGuard';
 import { isBirth2mGrossMotorCorrectionSlug } from './lib/birth2mGrossMotorCorrection';
 import { isOlderSafety2026ContentTargetSlug } from './lib/olderSafety2026CasData';
 import {
@@ -201,7 +202,8 @@ export function seedRunSkipsItem(item: Pick<Item, 'type' | 'slug'>): boolean {
     || isBirth2mGrossMotorCorrectionSlug(item.slug)
     || isOlderSafety2026ContentTargetSlug(item.slug)
     || isGdBirth2mEmotionalCasContentSlug(item.slug)
-    || isUnicefSeenCountedConsumerSlug(item.slug);
+    || isUnicefSeenCountedConsumerSlug(item.slug)
+    || isClinicalTwoSmallCasTargetSlug(item.slug);
 }
 
 const PUBLISHED_RELEASE_LIMIT = 5_000;
@@ -1872,6 +1874,10 @@ export const applyPublishedErrata = internalMutation({
     let notPublished = 0;
 
     for (const slug of slugs) {
+      if (isClinicalTwoSmallCasTargetSlug(slug)) {
+        unchanged += 1;
+        continue;
+      }
       const auditSummary = `${releaseId} · ${slug}`;
       if (appliedSummaries.has(auditSummary)) {
         unchanged += 1;
