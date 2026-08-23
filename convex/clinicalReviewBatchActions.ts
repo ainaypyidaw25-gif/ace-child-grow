@@ -2,8 +2,8 @@ import { getAuthUserId } from '@convex-dev/auth/server';
 import { internal } from './_generated/api';
 import { action } from './_generated/server';
 import {
-  clinicalReviewBatchResultValidator,
-  type ClinicalReviewBatchResult,
+  clinicalReviewBatchLoadResultValidator,
+  type ClinicalReviewBatchLoadResult,
 } from './lib/clinicalReviewBatchContract';
 
 /**
@@ -16,9 +16,15 @@ import {
  */
 export const getAssignedBatch = action({
   args: {},
-  returns: clinicalReviewBatchResultValidator,
-  handler: async (ctx): Promise<ClinicalReviewBatchResult> => {
-    if (!(await getAuthUserId(ctx))) throw new Error('Not authenticated');
+  returns: clinicalReviewBatchLoadResultValidator,
+  handler: async (ctx): Promise<ClinicalReviewBatchLoadResult> => {
+    if (!(await getAuthUserId(ctx))) {
+      return {
+        status: 'refused',
+        code: 'not_authenticated',
+        message: 'Sign in with the assigned clinical reviewer account.',
+      };
+    }
     const nowMs = Date.now();
     return await ctx.runQuery(internal.clinicalReviewBatch.readAssignedBatchState, {
       nowMs,

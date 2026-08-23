@@ -102,4 +102,23 @@ describe('clinical batch frontend boundary', () => {
       reason: 'contract_identity_mismatch',
     });
   });
+
+  it('preserves in-band assignment refusals instead of reporting a backend outage', () => {
+    expect(readAssignedClinicalBatch({
+      status: 'refused',
+      code: 'not_assigned_reviewer',
+      message: 'Use the assigned clinical reviewer account.',
+    }, 'clinical_reviewer')).toEqual({
+      kind: 'unauthorized',
+      reason: 'clinical_reviewer_required',
+    });
+    expect(readAssignedClinicalBatch({
+      status: 'refused',
+      code: 'assignment_expired',
+      message: 'Refreeze the assignment.',
+    }, 'clinical_reviewer')).toEqual({
+      kind: 'invalid',
+      reason: 'assignment_expired',
+    });
+  });
 });

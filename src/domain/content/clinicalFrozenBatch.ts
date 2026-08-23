@@ -274,6 +274,15 @@ export function adaptFrozenClinicalBatch(
   if (raw === undefined) return { kind: 'loading' };
   if (raw === null) return { kind: 'unavailable', reason: 'backend_contract_missing' };
   if (!isRecord(raw)) return { kind: 'invalid', reason: 'contract_not_an_object' };
+  if (raw.status === 'refused') {
+    if (raw.code === 'not_authenticated' || raw.code === 'not_assigned_reviewer') {
+      return { kind: 'unauthorized', reason: 'clinical_reviewer_required' };
+    }
+    if (raw.code === 'assignment_expired') {
+      return { kind: 'invalid', reason: 'assignment_expired' };
+    }
+    return { kind: 'invalid', reason: 'batch_preflight_failed' };
+  }
   if (
     raw.contract !== CLINICAL_BATCH_CONTRACT ||
     raw.contractVersion !== CLINICAL_BATCH_CONTRACT_VERSION ||

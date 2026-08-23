@@ -18,7 +18,7 @@ import {
   CLINICAL_REVIEW_BATCH_CONTRACT as CONTRACT,
   CLINICAL_REVIEW_BATCH_CONTRACT_VERSION as CONTRACT_VERSION,
   CLINICAL_REVIEW_BATCH_DIMENSION as DIMENSION,
-  clinicalReviewBatchResultValidator,
+  clinicalReviewBatchLoadResultValidator,
   clinicalReviewDecisionValidator as decisionValidator,
   clinicalReviewHandoffValidator as handoffValidator,
   clinicalReviewReceiptValidator as receiptValidator,
@@ -294,8 +294,10 @@ async function completionHandoff(states: InspectedItem[], freezeReceipt: string)
   };
 }
 
-function assertVerifiedStates(states: InspectedItem[]): asserts states is Array<InspectedItem & { snapshot: NonNullable<InspectedItem['snapshot']> }> {
-  if (states.some((state) => state.blockers.length > 0 || !state.snapshot)) throw new Error('Frozen clinical-review batch preflight failed');
+function statesAreVerified(
+  states: InspectedItem[],
+): states is Array<InspectedItem & { snapshot: NonNullable<InspectedItem['snapshot']> }> {
+  return states.every((state) => state.blockers.length === 0 && state.snapshot !== null);
 }
 
 /**
@@ -306,17 +308,42 @@ function assertVerifiedStates(states: InspectedItem[]): asserts states is Array<
  */
 export const readAssignedBatchState = internalQuery({
   args: { nowMs: v.number(), todayIso: v.string() },
-  returns: clinicalReviewBatchResultValidator,
+  returns: clinicalReviewBatchLoadResultValidator,
   handler: async (ctx, args) => {
     const userId = await requireUser(ctx);
     const identityBlockers = await assignedReviewerBlockers(ctx, userId);
-    if (identityBlockers.length > 0) throw new Error('Frozen clinical-review batch is not assigned to this account');
-    if (!Number.isFinite(args.nowMs) || args.nowMs < CLINICAL_REVIEW_BATCH_FROZEN_AT) throw new Error('Frozen clinical-review batch clock is invalid');
-    if (new Date(args.nowMs).toISOString().slice(0, 10) !== args.todayIso) throw new Error('Frozen clinical-review batch date is invalid');
-    if (args.nowMs >= CLINICAL_REVIEW_BATCH_EXPIRES_AT) throw new Error('Frozen clinical-review batch has expired');
-    if (await sha256Canonical(CLINICAL_REVIEW_BATCH_MANIFEST) !== CLINICAL_REVIEW_BATCH_HASH) throw new Error('Frozen clinical-review batch manifest failed verification');
+    if (identityBlockers.length > 0) {
+      return {
+        status: 'refused' as const,
+        code: 'not_assigned_reviewer' as const,
+        message: 'Use the assigned clinical reviewer account.',
+      };
+    }
+    if (!Number.isFinite(args.nowMs) || args.nowMs < CLINICAL_REVIEW_BATCH_FROZEN_AT
+      || new Date(args.nowMs).toISOString().slice(0, 10) !== args.todayIso
+      || await sha256Canonical(CLINICAL_REVIEW_BATCH_MANIFEST) !== CLINICAL_REVIEW_BATCH_HASH
+    ) {
+      return {
+        status: 'refused' as const,
+        code: 'batch_preflight_failed' as const,
+        message: 'The frozen clinical-review batch failed verification.',
+      };
+    }
+    if (args.nowMs >= CLINICAL_REVIEW_BATCH_EXPIRES_AT) {
+      return {
+        status: 'refused' as const,
+        code: 'assignment_expired' as const,
+        message: 'The frozen clinical-review batch has expired and must be refrozen.',
+      };
+    }
     const states = await inspectBatch(ctx, args.todayIso);
-    assertVerifiedStates(states);
+    if (!statesAreVerified(states)) {
+      return {
+        status: 'refused' as const,
+        code: 'batch_preflight_failed' as const,
+        message: 'The frozen clinical-review batch failed live preflight.',
+      };
+    }
     const freezeReceipt = await freezeReceiptDigest();
     return {
       contract: CONTRACT, contractVersion: CONTRACT_VERSION, scope: 'authenticated_assignee' as const,

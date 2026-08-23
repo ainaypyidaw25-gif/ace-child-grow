@@ -361,7 +361,11 @@ describe('frozen clinical-review batch UI contract', () => {
   it('blocks the frozen assignment when reviewer qualification identity drifts', async () => {
     const ctx = context();
     ctx.tables.parentProfiles[0].staffQualification = 'Different qualification';
-    await expect(readBatch(ctx)).rejects.toThrow('not assigned');
+    await expect(readBatch(ctx)).resolves.toEqual({
+      status: 'refused',
+      code: 'not_assigned_reviewer',
+      message: 'Use the assigned clinical reviewer account.',
+    });
   });
 
   it('derives the deterministic read clock inside a non-cached public action', async () => {
@@ -378,5 +382,25 @@ describe('frozen clinical-review batch UI contract', () => {
     }, {}) as { nowMs: number; todayIso: string };
     expect(result).toEqual({ nowMs: 1787500000000, todayIso: '2026-08-23' });
     expect(runQuery).toHaveBeenCalledTimes(1);
+  });
+
+  it('returns an in-band refusal before querying when the action is unauthenticated', async () => {
+    authState.userId = null;
+    const runQuery = vi.fn();
+    const actionHandler = (getAssignedBatch as unknown as {
+      _handler: (
+        ctx: { auth: { getUserIdentity: () => Promise<object | null> }; runQuery: typeof runQuery },
+        args: Record<string, never>,
+      ) => Promise<unknown>;
+    })._handler;
+    await expect(actionHandler({
+      auth: { getUserIdentity: async () => null },
+      runQuery,
+    }, {})).resolves.toEqual({
+      status: 'refused',
+      code: 'not_authenticated',
+      message: 'Sign in with the assigned clinical reviewer account.',
+    });
+    expect(runQuery).not.toHaveBeenCalled();
   });
 });

@@ -60,5 +60,22 @@ export const clinicalReviewBatchResultValidator = v.object({
   handoff: v.union(clinicalReviewHandoffValidator, v.null()),
 });
 
+export const clinicalReviewBatchLoadRefusalValidator = v.object({
+  status: v.literal('refused'),
+  code: v.union(
+    v.literal('not_authenticated'),
+    v.literal('not_assigned_reviewer'),
+    v.literal('assignment_expired'),
+    v.literal('batch_preflight_failed'),
+  ),
+  message: v.string(),
+});
+
+export const clinicalReviewBatchLoadResultValidator = v.union(
+  clinicalReviewBatchResultValidator,
+  clinicalReviewBatchLoadRefusalValidator,
+);
+
 export type ClinicalReviewBatchResult = Infer<typeof clinicalReviewBatchResultValidator>;
+export type ClinicalReviewBatchLoadResult = Infer<typeof clinicalReviewBatchLoadResultValidator>;
 export type ClinicalReviewDecision = Infer<typeof clinicalReviewDecisionValidator>;
