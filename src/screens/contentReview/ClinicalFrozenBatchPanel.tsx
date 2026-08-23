@@ -6,7 +6,7 @@ import {
   type FrozenClinicalBatch,
   type FrozenClinicalDecision,
   type RecordClinicalBatchDecision,
-  type SignedClinicalHandoff,
+  type ClinicalHandoffReceipt,
 } from '../../domain/content/clinicalFrozenBatch';
 
 export interface ClinicalReviewerIdentity {
@@ -71,11 +71,13 @@ function ClinicalBatchSession({
   const submittingRef = useRef(false);
   const [message, setMessage] = useState('');
   const [refreezeReason, setRefreezeReason] = useState<string | null>(null);
-  const [handoff, setHandoff] = useState<SignedClinicalHandoff | null>(batch.handoff);
+  const [handoff, setHandoff] = useState<ClinicalHandoffReceipt | null>(batch.handoff);
 
   const activeItem = batch.items.find((item) => item.assignmentId === activeAssignmentId) ?? batch.items[0];
   const completedCount = recorded.size;
   const complete = completedCount === batch.items.length;
+  const clinicalClearanceComplete = complete
+    && batch.items.every((item) => recorded.get(item.assignmentId)?.decision === 'approved');
   const activeReceipt = recorded.get(activeItem.assignmentId);
 
   const submit = async (event: FormEvent) => {
@@ -126,9 +128,9 @@ function ClinicalBatchSession({
         if (
           result.handoff.batchId !== batch.batchId ||
           result.handoff.decisionCount !== batch.items.length ||
-          !result.handoff.digest.trim() || !result.handoff.signature.trim()
+          !result.handoff.digest.trim() || !result.handoff.receiptDigest.trim()
         ) {
-          setRefreezeReason(L('Signed handoff receipt သည် ဤ batch အပြည့်အစုံနှင့် မကိုက်ညီပါ။', 'The signed handoff receipt does not cover this complete batch.'));
+          setRefreezeReason(L('Server-issued handoff receipt သည် ဤ batch အပြည့်အစုံနှင့် မကိုက်ညီပါ။', 'The server-issued handoff receipt does not cover this complete batch.'));
           return;
         }
         setHandoff(result.handoff);
@@ -140,8 +142,8 @@ function ClinicalBatchSession({
         setMessage(L('ဆုံးဖြတ်ချက် မှတ်တမ်းတင်ပြီး နောက်အကြောင်းအရာသို့ ရွှေ့ပြီးပါပြီ။', 'Decision recorded. Moved to the next assigned item.'));
       } else {
         setMessage(result.handoff
-          ? L('Batch ပြီးဆုံးပြီး signed handoff receipt ရရှိပါပြီ။', 'Batch complete. Signed handoff receipt received.')
-          : L('ဆုံးဖြတ်ချက်အားလုံး မှတ်တမ်းတင်ပြီးပါပြီ။ Signed handoff receipt ကို စောင့်နေသည်။', 'All decisions are recorded. Waiting for the signed handoff receipt.'));
+          ? L('Batch ပြီးဆုံးပြီး server-issued handoff receipt ရရှိပါပြီ။', 'Batch complete. Server-issued handoff receipt received.')
+          : L('ဆုံးဖြတ်ချက်အားလုံး မှတ်တမ်းတင်ပြီးပါပြီ။ Server-issued handoff receipt ကို စောင့်နေသည်။', 'All decisions are recorded. Waiting for the server-issued handoff receipt.'));
       }
     } catch (error) {
       console.error(error);
@@ -181,8 +183,8 @@ function ClinicalBatchSession({
             <dd className="mt-1 break-all font-mono text-xs text-ink">{shortDigest(batch.freezeDigest)}</dd>
           </div>
           <div className="rounded-xl bg-canvas p-3">
-            <dt className="text-xs text-ink-soft">{L('Freeze signature', 'Freeze signature')}</dt>
-            <dd className="mt-1 break-all font-mono text-xs text-ink">{shortDigest(batch.freezeSignature)}</dd>
+            <dt className="text-xs text-ink-soft">{L('Freeze receipt digest', 'Freeze receipt digest')}</dt>
+            <dd className="mt-1 break-all font-mono text-xs text-ink">{shortDigest(batch.freezeReceiptDigest)}</dd>
           </div>
         </dl>
         <p className="mt-3 text-xs leading-6 text-ink-soft">
@@ -251,13 +253,25 @@ function ClinicalBatchSession({
             {activeItem.snapshot.summaryMm && <p className="mt-3 whitespace-pre-wrap text-sm leading-7 text-ink">{activeItem.snapshot.summaryMm}</p>}
             {activeItem.snapshot.summaryEn && <p className="mt-2 whitespace-pre-wrap text-sm leading-7 text-ink-soft">{activeItem.snapshot.summaryEn}</p>}
             <div className="mt-4">
-              <p className="text-xs font-bold uppercase tracking-wide text-ink-soft">{L('Source titles', 'Source titles')}</p>
-              {activeItem.snapshot.sourceTitles.length > 0 ? (
+              <p className="text-xs font-bold uppercase tracking-wide text-ink-soft">{L('ကိုးကားရင်းမြစ်များ', 'Evidence sources')}</p>
+              {activeItem.snapshot.sources.length > 0 ? (
                 <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-ink">
-                  {activeItem.snapshot.sourceTitles.map((title) => <li key={title}>{title}</li>)}
+                  {activeItem.snapshot.sources.map((source) => (
+                    <li key={source.sourceId}>
+                      <a
+                        href={source.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="font-medium text-sky-deep underline decoration-line underline-offset-4 hover:decoration-sky"
+                      >
+                        {source.org} — {source.title}{source.year === null ? '' : ` (${source.year})`}
+                      </a>
+                      <span className="ml-2 font-mono text-[11px] text-ink-soft">{source.sourceId}</span>
+                    </li>
+                  ))}
                 </ul>
               ) : (
-                <p className="mt-2 text-sm font-medium text-amber-700">{L('ဤ frozen snapshot တွင် source title မရှိပါ။', 'No source title is present in this frozen snapshot.')}</p>
+                <p className="mt-2 text-sm font-medium text-amber-700">{L('ဤ frozen snapshot တွင် ဖွင့်ကြည့်နိုင်သော ရင်းမြစ်မရှိပါ။', 'No openable evidence source is present in this frozen snapshot.')}</p>
               )}
             </div>
           </div>
@@ -329,20 +343,29 @@ function ClinicalBatchSession({
 
       {complete && (
         handoff ? (
-          <section data-testid="clinical-signed-handoff" className="rounded-card border border-mint bg-mint-soft p-4 shadow-card sm:p-5">
-            <h2 className="font-bold text-mint-deep">{L('Signed handoff summary', 'Signed handoff summary')}</h2>
+          <section data-testid="clinical-handoff-receipt" className="rounded-card border border-mint bg-mint-soft p-4 shadow-card sm:p-5">
+            <h2 className="font-bold text-mint-deep">{L('Clinical handoff receipt', 'Clinical handoff receipt')}</h2>
             <dl className="mt-3 grid gap-3 text-sm sm:grid-cols-2">
               <div><dt className="text-xs text-ink-soft">Batch</dt><dd className="mt-1 font-medium text-ink">{handoff.batchId}</dd></div>
               <div><dt className="text-xs text-ink-soft">{L('ဆုံးဖြတ်ချက်အရေအတွက်', 'Decision count')}</dt><dd className="mt-1 font-medium text-ink">{handoff.decisionCount}</dd></div>
               <div><dt className="text-xs text-ink-soft">Digest</dt><dd className="mt-1 break-all font-mono text-xs text-ink">{handoff.digest}</dd></div>
-              <div><dt className="text-xs text-ink-soft">Signature</dt><dd className="mt-1 break-all font-mono text-xs text-ink">{handoff.signature}</dd></div>
+              <div><dt className="text-xs text-ink-soft">Receipt digest</dt><dd className="mt-1 break-all font-mono text-xs text-ink">{handoff.receiptDigest}</dd></div>
             </dl>
           </section>
-        ) : (
+        ) : clinicalClearanceComplete ? (
           <BlockedCard
             testId="clinical-handoff-pending"
             title={L('ဆုံးဖြတ်ချက်များ ပြီးပါပြီ', 'Decisions complete')}
-            body={L('Account မပြောင်းမီ server-signed handoff receipt ရရှိရန် စောင့်ပါ။', 'Wait for the server-signed handoff receipt before changing accounts.')}
+            body={L('Account မပြောင်းမီ server-issued handoff receipt ရရှိရန် စောင့်ပါ။', 'Wait for the server-issued handoff receipt before changing accounts.')}
+          />
+        ) : (
+          <BlockedCard
+            testId="clinical-followup-required"
+            title={L('Clinical lane မပြီးသေးပါ', 'Clinical follow-up is still required')}
+            body={L(
+              'ပြင်ဆင်ရန်တောင်းဆိုထားသော သို့မဟုတ် မသက်ဆိုင်ဟု ဆုံးဖြတ်ထားသော row ရှိပါသည်။ ပြင်ဆင်ပြီး exact revision အသစ်ကို refreeze/re-review မလုပ်မချင်း အခြား reviewer lane သို့ မပြောင်းပါနှင့်။',
+              'At least one row requested changes or was marked not applicable. Do not switch reviewer lanes until it is corrected and a new exact revision is refrozen and reviewed.',
+            )}
           />
         )
       )}
@@ -359,7 +382,7 @@ export function ClinicalFrozenBatchPanel({ state, reviewer, recordDecision }: Cl
     return <BlockedCard testId="clinical-batch-unauthorized" title={L('Clinical reviewer account လိုအပ်သည်', 'Clinical reviewer account required')} body={L('ပုံမှန် sign out / sign in ဖြင့် သတ်မှတ်ထားသော clinical reviewer account ကို သုံးပါ။', 'Use normal sign out / sign in with the assigned clinical reviewer account.')} />;
   }
   if (state.kind === 'unavailable') {
-    return <BlockedCard testId="clinical-batch-backend-missing" title={L('Signed batch backend မရသေးပါ', 'Signed batch backend unavailable')} body={L('Exact assignment၊ frozen snapshot နှင့် server signature ပါသော contract မရသေးသဖြင့် မည်သည့် row ကိုမျှ အတည်မပြုနိုင်ပါ။ Broad queue ကို assignment အဖြစ် မယူပါ။', 'No row can be decided until the server returns an exact assignment, frozen snapshot, and signature. The broad queue is never treated as an assignment.')} />;
+    return <BlockedCard testId="clinical-batch-backend-missing" title={L('Exact batch backend မရသေးပါ', 'Exact batch backend unavailable')} body={L('Exact assignment၊ frozen snapshot နှင့် server-issued receipt ပါသော contract မရသေးသဖြင့် မည်သည့် row ကိုမျှ အတည်မပြုနိုင်ပါ။ Broad queue ကို assignment အဖြစ် မယူပါ။', 'No row can be decided until the server returns an exact assignment, frozen snapshot, and server-issued receipt. The broad queue is never treated as an assignment.')} />;
   }
   if (state.kind === 'invalid') {
     return <BlockedCard testId="clinical-batch-invalid" title={L('Batch contract မမှန်ပါ', 'Invalid batch contract')} body={`${L('လုပ်ဆောင်မှု ရပ်ထားသည်။ Refreeze လုပ်ပြီး contract အသစ်ထုတ်ပါ။', 'Work is stopped. Refreeze and issue a new contract.')} (${state.reason})`} />;

@@ -22,7 +22,7 @@ function batch(): FrozenClinicalBatch {
     assignedRole: 'clinical_reviewer',
     frozenAt: 1_787_500_000_000,
     freezeDigest: 'sha256:freeze-1',
-    freezeSignature: 'freeze-signature-1',
+    freezeReceiptDigest: 'freeze-receipt-1',
     handoff: null,
     items: [
       {
@@ -39,7 +39,13 @@ function batch(): FrozenClinicalBatch {
           titleEn: 'First assigned item',
           summaryMm: 'ပထမ frozen summary',
           summaryEn: 'First frozen summary',
-          sourceTitles: ['Source One'],
+          sources: [{
+            sourceId: 'source-one',
+            org: 'CDC',
+            title: 'Source One',
+            year: 2026,
+            url: 'https://example.test/source-one',
+          }],
           fields: [{ path: 'data.body', labelMm: 'အကြောင်းအရာ', labelEn: 'Content', valueMm: 'ပထမ body', valueEn: 'First body' }],
         },
       },
@@ -57,7 +63,13 @@ function batch(): FrozenClinicalBatch {
           titleEn: 'Second assigned item',
           summaryMm: 'ဒုတိယ frozen summary',
           summaryEn: 'Second frozen summary',
-          sourceTitles: [],
+          sources: [{
+            sourceId: 'source-two',
+            org: 'NHS',
+            title: 'Source Two',
+            year: 2026,
+            url: 'https://example.test/source-two',
+          }],
           fields: [{ path: 'data.safety', labelMm: 'ဘေးကင်းရေး', labelEn: 'Safety', valueMm: 'ဒုတိယ safety', valueEn: 'Second safety' }],
         },
       },
@@ -66,7 +78,7 @@ function batch(): FrozenClinicalBatch {
 }
 
 describe('ClinicalFrozenBatchPanel', () => {
-  it('shows a fail-closed message and no decision controls without a signed backend contract', () => {
+  it('shows a fail-closed message and no decision controls without an exact backend contract', () => {
     render(
       <ClinicalFrozenBatchPanel
         state={{ kind: 'unavailable', reason: 'backend_contract_missing' }}
@@ -79,7 +91,7 @@ describe('ClinicalFrozenBatchPanel', () => {
     expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
   });
 
-  it('records one exact row at a time, requires a change note, auto-advances, and renders the signed handoff', async () => {
+  it('records one exact row at a time, auto-advances, and renders the handoff receipt after unanimous approval', async () => {
     const recordDecision = vi.fn<RecordClinicalBatchDecision>()
       .mockResolvedValueOnce({
         ok: true,
@@ -87,13 +99,13 @@ describe('ClinicalFrozenBatchPanel', () => {
       })
       .mockResolvedValueOnce({
         ok: true,
-        receipt: { decision: 'changes_requested', note: 'Add a direct source.', reviewedAt: 1_787_500_020_000, receiptId: 'receipt-2' },
+        receipt: { decision: 'approved', note: null, reviewedAt: 1_787_500_020_000, receiptId: 'receipt-2' },
         handoff: {
           batchId: 'clinical-batch-1',
           decisionCount: 2,
           completedAt: 1_787_500_020_000,
           digest: 'sha256:handoff-1',
-          signature: 'handoff-signature-1',
+          receiptDigest: 'handoff-receipt-1',
         },
       });
 
@@ -104,6 +116,8 @@ describe('ClinicalFrozenBatchPanel', () => {
         recordDecision={recordDecision}
       />,
     );
+
+    expect(screen.getByRole('link', { name: /Source One/ })).toHaveAttribute('href', 'https://example.test/source-one');
 
     fireEvent.click(screen.getByRole('radio', { name: 'Approve this exact revision' }));
     fireEvent.click(screen.getByRole('button', { name: 'Record this item decision' }));
@@ -121,12 +135,7 @@ describe('ClinicalFrozenBatchPanel', () => {
     });
     expect(await screen.findByRole('heading', { name: 'ဒုတိယအကြောင်းအရာ' })).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('radio', { name: 'Request changes' }));
-    fireEvent.submit(screen.getByTestId('clinical-item-decision-form'));
-    expect(recordDecision).toHaveBeenCalledTimes(1);
-    expect(screen.getByRole('status')).toHaveTextContent('Write a note explaining what must change.');
-
-    fireEvent.change(screen.getByRole('textbox', { name: /Review note/ }), { target: { value: 'Add a direct source.' } });
+    fireEvent.click(screen.getByRole('radio', { name: 'Approve this exact revision' }));
     fireEvent.click(screen.getByRole('button', { name: 'Record this item decision' }));
     await waitFor(() => expect(recordDecision).toHaveBeenCalledTimes(2));
     expect(recordDecision).toHaveBeenNthCalledWith(2, expect.objectContaining({
@@ -137,8 +146,41 @@ describe('ClinicalFrozenBatchPanel', () => {
       expectedSnapshotDigest: 'sha256:snapshot-2',
       expectedFreezeDigest: 'sha256:freeze-1',
     }));
-    expect(await screen.findByTestId('clinical-signed-handoff')).toHaveTextContent('handoff-signature-1');
+    expect(await screen.findByTestId('clinical-handoff-receipt')).toHaveTextContent('handoff-receipt-1');
     expect(screen.queryByText(/approve all/i)).not.toBeInTheDocument();
+  });
+
+  it('requires a change note and blocks lane handoff when follow-up remains', async () => {
+    const existing = batch();
+    existing.items[0].decision = {
+      decision: 'approved', note: null, reviewedAt: 1_787_500_010_000, receiptId: 'receipt-1',
+    };
+    const recordDecision = vi.fn<RecordClinicalBatchDecision>().mockResolvedValue({
+      ok: true,
+      receipt: {
+        decision: 'changes_requested',
+        note: 'Add a direct source.',
+        reviewedAt: 1_787_500_020_000,
+        receiptId: 'receipt-2',
+      },
+    });
+    render(
+      <ClinicalFrozenBatchPanel
+        state={{ kind: 'ready', batch: existing }}
+        reviewer={{ displayName: 'Dr Reviewer', qualification: 'MBBS' }}
+        recordDecision={recordDecision}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole('radio', { name: 'Request changes' }));
+    fireEvent.submit(screen.getByTestId('clinical-item-decision-form'));
+    expect(recordDecision).not.toHaveBeenCalled();
+    expect(screen.getByRole('status')).toHaveTextContent('Write a note explaining what must change.');
+
+    fireEvent.change(screen.getByRole('textbox', { name: /Review note/ }), { target: { value: 'Add a direct source.' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Record this item decision' }));
+    expect(await screen.findByTestId('clinical-followup-required')).toHaveTextContent('Do not switch reviewer lanes');
+    expect(screen.queryByTestId('clinical-handoff-receipt')).not.toBeInTheDocument();
   });
 
   it('stops the batch and disables further recording when the server reports a stale revision', async () => {

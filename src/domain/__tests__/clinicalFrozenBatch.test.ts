@@ -15,7 +15,7 @@ function contract(overrides: Record<string, unknown> = {}) {
     assignedRole: 'clinical_reviewer',
     frozenAt: 1_787_500_000_000,
     freezeDigest: 'sha256:freeze-a',
-    freezeSignature: 'server-signature-a',
+    freezeReceiptDigest: 'server-receipt-a',
     items: [
       {
         assignmentId: 'assignment-a',
@@ -30,7 +30,13 @@ function contract(overrides: Record<string, unknown> = {}) {
           titleEn: 'Safe sleep',
           summaryMm: 'Frozen Myanmar copy',
           summaryEn: 'Frozen English copy',
-          sourceTitles: ['AAP Safe Sleep Recommendations'],
+          sources: [{
+            sourceId: 'aap-safe-sleep-2022',
+            org: 'AAP',
+            title: 'Safe Sleep Recommendations',
+            year: 2022,
+            url: 'https://example.test/aap-safe-sleep-2022',
+          }],
           fields: [{
             path: 'data.body',
             labelMm: 'အကြောင်းအရာ',
@@ -117,8 +123,25 @@ describe('frozen clinical batch adapter', () => {
         decisionCount: 1,
         completedAt: 1_787_500_100_000,
         digest: 'sha256:handoff',
-        signature: 'handoff-signature',
+        receiptDigest: 'handoff-receipt',
       },
     }), 'clinical_reviewer')).toEqual({ kind: 'invalid', reason: 'handoff_does_not_cover_batch' });
+  });
+
+  it('rejects missing or non-openable evidence sources', () => {
+    const emptySources = contract();
+    ((emptySources.items as Array<Record<string, unknown>>)[0].snapshot as Record<string, unknown>).sources = [];
+    expect(adaptFrozenClinicalBatch(emptySources, 'clinical_reviewer')).toEqual({
+      kind: 'invalid',
+      reason: 'invalid_batch_item',
+    });
+
+    const badUrl = contract();
+    const source = ((((badUrl.items as Array<Record<string, unknown>>)[0].snapshot as Record<string, unknown>).sources as Array<Record<string, unknown>>)[0]);
+    source.url = 'javascript:alert(1)';
+    expect(adaptFrozenClinicalBatch(badUrl, 'clinical_reviewer')).toEqual({
+      kind: 'invalid',
+      reason: 'invalid_batch_item',
+    });
   });
 });

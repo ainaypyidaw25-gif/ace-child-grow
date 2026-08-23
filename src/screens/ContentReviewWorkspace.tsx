@@ -664,7 +664,7 @@ export function ContentReviewWorkspace() {
       return {
         ok: false,
         code: 'backend_unavailable',
-        message: 'The signed clinical decision service is unavailable.',
+        message: 'The exact clinical decision service is unavailable.',
       };
     }
   };

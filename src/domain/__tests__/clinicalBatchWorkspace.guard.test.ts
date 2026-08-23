@@ -16,13 +16,13 @@ describe('clinical batch workspace boundary', () => {
     expect(workspace).toContain("activeTab: WorkspaceTab = isClinicalReviewer ? 'clinicalBatch' : tab");
   });
 
-  it('does not substitute the broad queue or generic decision mutation for the signed batch backend', () => {
+  it('does not substitute the broad queue or generic decision mutation for the exact batch backend', () => {
     const boundary = source('src/screens/contentReview/clinicalBatchBackend.ts');
     const workspace = source('src/screens/ContentReviewWorkspace.tsx');
     expect(boundary).not.toContain('api.ownerPriority');
     expect(boundary).not.toContain('api.contentReviews.saveDecision');
     expect(boundary).toContain('adaptFrozenClinicalBatch(raw');
-    expect(boundary).toContain('signed clinical decision response was invalid');
+    expect(boundary).toContain('clinical decision response was invalid');
     expect(workspace).toContain('api.clinicalReviewBatch.getAssignedBatch');
     expect(workspace).toContain('api.clinicalReviewBatch.saveAssignedDecision');
     expect(workspace).not.toContain('clinicalBatchBackend.recordDecision');

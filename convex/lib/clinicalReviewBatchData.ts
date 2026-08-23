@@ -6,7 +6,7 @@
  * assigned reviewer may decide one at a time.
  */
 export const CLINICAL_REVIEW_BATCH_ID = 'clinical-first-p1-2026-08-23-v1' as const;
-export const CLINICAL_REVIEW_BATCH_HASH = 'e2817684bfd83049aa495a652845a1ca4716b00889605485187808f62f1f3642' as const;
+export const CLINICAL_REVIEW_BATCH_HASH = '3419907959d16a30c031df3c3bff8f1708304807cad2f0c8813644ae98f3f6b2' as const;
 export const CLINICAL_REVIEW_BATCH_FROZEN_AT = 1787443200000 as const;
 export const CLINICAL_REVIEW_BATCH_EXPIRES_AT = 1816560000000 as const;
 
@@ -16,7 +16,7 @@ export const CLINICAL_REVIEW_BATCH_REVIEWER = {
   displayName: 'Phyo Ko Ko',
   qualification: 'MBBS',
   role: 'clinical_reviewer',
-  profileCanonicalSha256: 'd171a5985467ee4d0507c8226f5b43d74c7a47b56d701f460465e91ea72e8818',
+  identityCanonicalSha256: 'a0863d6008b7680ef5ebcb5290974f3fbbe3ea7a4e7bdf38a295a60ba888e9d3',
 } as const;
 
 export const CLINICAL_REVIEW_BATCH_ITEMS = [

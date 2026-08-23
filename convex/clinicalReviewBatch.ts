@@ -27,6 +27,13 @@ type SnapshotField = {
   valueMm: string | null;
   valueEn: string | null;
 };
+type SnapshotSource = {
+  sourceId: string;
+  org: string;
+  title: string;
+  year: number | null;
+  url: string;
+};
 
 const CONTRACT = 'ace.clinical-frozen-batch' as const;
 const CONTRACT_VERSION = 1 as const;
@@ -47,14 +54,18 @@ const snapshotFieldValidator = v.object({
   path: v.string(), labelMm: v.string(), labelEn: v.string(),
   valueMm: nullableStringValidator, valueEn: nullableStringValidator,
 });
+const snapshotSourceValidator = v.object({
+  sourceId: v.string(), org: v.string(), title: v.string(),
+  year: v.union(v.number(), v.null()), url: v.string(),
+});
 const snapshotValidator = v.object({
   digest: v.string(), titleMm: v.string(), titleEn: v.string(),
   summaryMm: nullableStringValidator, summaryEn: nullableStringValidator,
-  sourceTitles: v.array(v.string()), fields: v.array(snapshotFieldValidator),
+  sources: v.array(snapshotSourceValidator), fields: v.array(snapshotFieldValidator),
 });
 const handoffValidator = v.object({
   batchId: v.string(), decisionCount: v.number(), completedAt: v.number(),
-  digest: v.string(), signature: v.string(),
+  digest: v.string(), receiptDigest: v.string(),
 });
 const itemValidator = v.object({
   assignmentId: v.string(), slug: v.string(), type: v.string(), dimension: v.literal(DIMENSION),
@@ -69,7 +80,7 @@ const batchResultValidator = v.object({
   contract: v.literal(CONTRACT), contractVersion: v.literal(CONTRACT_VERSION),
   scope: v.literal('authenticated_assignee'), batchId: v.literal(CLINICAL_REVIEW_BATCH_ID),
   lane: v.literal('clinical'), assignedRole: v.literal('clinical_reviewer'), frozenAt: v.number(),
-  freezeDigest: v.string(), freezeSignature: v.string(), reviewer: reviewerValidator,
+  freezeDigest: v.string(), freezeReceiptDigest: v.string(), reviewer: reviewerValidator,
   items: v.array(itemValidator), handoff: v.union(handoffValidator, v.null()),
 });
 
@@ -91,7 +102,14 @@ async function assignedReviewerBlockers(ctx: DatabaseContext, userId: Id<'users'
   if (profile.staffRole !== CLINICAL_REVIEW_BATCH_REVIEWER.role) blockers.push('assigned_reviewer_role_drift');
   if ((profile.displayName ?? '').trim() !== CLINICAL_REVIEW_BATCH_REVIEWER.displayName) blockers.push('assigned_reviewer_name_drift');
   if ((profile.staffQualification ?? '').trim() !== CLINICAL_REVIEW_BATCH_REVIEWER.qualification) blockers.push('assigned_reviewer_qualification_drift');
-  if (await sha256Canonical(profile) !== CLINICAL_REVIEW_BATCH_REVIEWER.profileCanonicalSha256) blockers.push('assigned_reviewer_profile_preimage_drift');
+  const stableIdentity = {
+    profileId: String(profile._id), userId: String(profile.userId), isStaff: profile.isStaff === true,
+    displayName: (profile.displayName ?? '').trim(), qualification: (profile.staffQualification ?? '').trim(),
+    role: profile.staffRole ?? null,
+  };
+  if (await sha256Canonical(stableIdentity) !== CLINICAL_REVIEW_BATCH_REVIEWER.identityCanonicalSha256) {
+    blockers.push('assigned_reviewer_identity_drift');
+  }
   return blockers;
 }
 
@@ -103,7 +121,7 @@ async function decisionKeyFor(item: ClinicalReviewBatchItem): Promise<string> {
   });
 }
 
-async function freezeSignature(): Promise<string> {
+async function freezeReceiptDigest(): Promise<string> {
   return await sha256Canonical({
     contract: CONTRACT, contractVersion: CONTRACT_VERSION, batchId: CLINICAL_REVIEW_BATCH_ID,
     freezeDigest: CLINICAL_REVIEW_BATCH_HASH, frozenAt: CLINICAL_REVIEW_BATCH_FROZEN_AT,
@@ -172,12 +190,26 @@ function snapshotFields(content: Doc<'libraryContent'>): { fields: SnapshotField
 
 async function buildSnapshot(content: Doc<'libraryContent'>, sourceRows: Doc<'evidenceSources'>[]) {
   const extracted = snapshotFields(content);
-  const sourceTitles = sourceRows.map((source) => `${source.org} — ${source.title}${source.year === null ? '' : ` (${source.year})`}`);
-  if (sourceTitles.some((title) => !title.trim())) extracted.blockers.push('snapshot_source_title_invalid');
+  const sources: SnapshotSource[] = sourceRows.map((source) => ({
+    sourceId: source.sourceId,
+    org: source.org,
+    title: source.title,
+    year: source.year,
+    url: source.url,
+  }));
+  if (sources.some((source) => {
+    if (!source.sourceId.trim() || !source.org.trim() || !source.title.trim()) return true;
+    try {
+      const url = new URL(source.url);
+      return url.protocol !== 'https:' && url.protocol !== 'http:';
+    } catch {
+      return true;
+    }
+  })) extracted.blockers.push('snapshot_source_invalid');
   const body = {
     titleMm: content.titleMm, titleEn: content.titleEn,
     summaryMm: content.summaryMm ?? null, summaryEn: content.summaryEn ?? null,
-    sourceTitles, fields: extracted.fields,
+    sources, fields: extracted.fields,
   };
   return { snapshot: { digest: await sha256Canonical(body), ...body }, blockers: extracted.blockers };
 }
@@ -275,8 +307,14 @@ async function inspectBatch(ctx: DatabaseContext): Promise<InspectedItem[]> {
   return states;
 }
 
-async function completionHandoff(states: InspectedItem[], signature: string) {
-  if (states.length !== CLINICAL_REVIEW_BATCH_COUNT || states.some((state) => !state.decision)) return null;
+async function completionHandoff(states: InspectedItem[], freezeReceipt: string) {
+  // A server-issued integrity receipt authorizes the workflow to leave the clinical lane. A
+  // recorded request for changes (or N/A) is still a clinical follow-up, not a
+  // completed clearance, so only unanimous exact-revision approvals qualify.
+  if (
+    states.length !== CLINICAL_REVIEW_BATCH_COUNT ||
+    states.some((state) => state.decision?.decision !== 'approved')
+  ) return null;
   const decisions = states.map((state) => ({
     assignmentId: state.assignmentId, slug: state.item.slug, reviewRevision: state.item.reviewRevision,
     receipt: state.decision as DecisionReceipt,
@@ -288,7 +326,7 @@ async function completionHandoff(states: InspectedItem[], signature: string) {
   });
   return {
     batchId: CLINICAL_REVIEW_BATCH_ID, decisionCount: decisions.length, completedAt, digest,
-    signature: await sha256Canonical({ digest, freezeSignature: signature, reviewerUserId: CLINICAL_REVIEW_BATCH_REVIEWER.userId }),
+    receiptDigest: await sha256Canonical({ digest, freezeReceiptDigest: freezeReceipt, reviewerUserId: CLINICAL_REVIEW_BATCH_REVIEWER.userId }),
   };
 }
 
@@ -307,12 +345,12 @@ export const getAssignedBatch = query({
     if (await sha256Canonical(CLINICAL_REVIEW_BATCH_MANIFEST) !== CLINICAL_REVIEW_BATCH_HASH) throw new Error('Frozen clinical-review batch manifest failed verification');
     const states = await inspectBatch(ctx);
     assertVerifiedStates(states);
-    const signature = await freezeSignature();
+    const freezeReceipt = await freezeReceiptDigest();
     return {
       contract: CONTRACT, contractVersion: CONTRACT_VERSION, scope: 'authenticated_assignee' as const,
       batchId: CLINICAL_REVIEW_BATCH_ID, lane: 'clinical' as const, assignedRole: 'clinical_reviewer' as const,
       frozenAt: CLINICAL_REVIEW_BATCH_FROZEN_AT, freezeDigest: CLINICAL_REVIEW_BATCH_HASH,
-      freezeSignature: signature,
+      freezeReceiptDigest: freezeReceipt,
       reviewer: {
         profileId: CLINICAL_REVIEW_BATCH_REVIEWER.profileId, userId: CLINICAL_REVIEW_BATCH_REVIEWER.userId,
         displayName: CLINICAL_REVIEW_BATCH_REVIEWER.displayName, qualification: CLINICAL_REVIEW_BATCH_REVIEWER.qualification,
@@ -323,7 +361,7 @@ export const getAssignedBatch = query({
         reviewRevision: state.item.reviewRevision, liveReviewRevision: state.liveReviewRevision,
         snapshot: state.snapshot, decision: state.decision,
       })),
-      handoff: await completionHandoff(states, signature),
+      handoff: await completionHandoff(states, freezeReceipt),
     };
   },
 });
@@ -348,13 +386,11 @@ function identityRefusalCode(blockers: string[]): RefusalCode {
 
 export const saveAssignedDecision = mutation({
   args: {
-    batchId: v.string(), assignmentId: v.optional(v.string()), contentSlug: v.optional(v.string()),
-    dimension: v.optional(v.string()), expectedSnapshotDigest: v.optional(v.string()),
-    expectedFreezeDigest: v.optional(v.string()), expectedReviewRevision: v.number(),
+    batchId: v.string(), assignmentId: v.string(), contentSlug: v.string(),
+    dimension: v.union(v.literal('clinical'), v.literal('child_development'), v.literal('safety')),
+    expectedSnapshotDigest: v.string(),
+    expectedFreezeDigest: v.string(), expectedReviewRevision: v.number(),
     decision: decisionValidator, note: v.optional(v.string()),
-    // Legacy exact tuple remains accepted for the first backend-only client.
-    batchHash: v.optional(v.string()), count: v.optional(v.number()), ordinal: v.optional(v.number()),
-    kind: v.optional(v.string()), slug: v.optional(v.string()),
   },
   returns: v.union(
     v.object({
@@ -368,37 +404,21 @@ export const saveAssignedDecision = mutation({
   handler: async (ctx, args) => {
     const userId = await requireUser(ctx);
     const identityBlockers = await assignedReviewerBlockers(ctx, userId);
-    const requestedSlug = args.contentSlug ?? args.slug ?? 'unknown';
+    const requestedSlug = args.contentSlug;
     if (identityBlockers.length > 0) return await refuse(ctx, userId, identityRefusalCode(identityBlockers), `${requestedSlug} · refused: ${identityBlockers.join(',')}`);
     if (Date.now() >= CLINICAL_REVIEW_BATCH_EXPIRES_AT) return await refuse(ctx, userId, 'assignment_expired', `${requestedSlug} · refused: assignment expired`);
     if (args.batchId !== CLINICAL_REVIEW_BATCH_ID
-      || (args.batchHash !== undefined && args.batchHash !== CLINICAL_REVIEW_BATCH_HASH)
-      || (args.count !== undefined && args.count !== CLINICAL_REVIEW_BATCH_COUNT)
-      || (args.expectedFreezeDigest !== undefined && args.expectedFreezeDigest !== CLINICAL_REVIEW_BATCH_HASH)) {
+      || args.expectedFreezeDigest !== CLINICAL_REVIEW_BATCH_HASH) {
       return await refuse(ctx, userId, 'assignment_expired', `${requestedSlug} · refused: frozen batch mismatch`);
     }
     if (await sha256Canonical(CLINICAL_REVIEW_BATCH_MANIFEST) !== CLINICAL_REVIEW_BATCH_HASH) return await refuse(ctx, userId, 'assignment_expired', `${requestedSlug} · refused: manifest hash mismatch`);
 
-    const newBindings = [args.assignmentId, args.contentSlug, args.dimension, args.expectedSnapshotDigest, args.expectedFreezeDigest];
-    const hasNewBindings = newBindings.some((value) => value !== undefined);
-    if (hasNewBindings && newBindings.some((value) => value === undefined)) return await refuse(ctx, userId, 'assignment_not_found', `${requestedSlug} · refused: incomplete assignment binding`);
-
     let item: ClinicalReviewBatchItem | undefined;
-    if (hasNewBindings) {
-      for (const candidate of CLINICAL_REVIEW_BATCH_ITEMS) {
-        if (await decisionKeyFor(candidate) === args.assignmentId) { item = candidate; break; }
-      }
-    } else {
-      item = CLINICAL_REVIEW_BATCH_ITEMS.find((candidate) =>
-        candidate.ordinal === args.ordinal && candidate.kind === args.kind && candidate.slug === args.slug,
-      );
+    for (const candidate of CLINICAL_REVIEW_BATCH_ITEMS) {
+      if (await decisionKeyFor(candidate) === args.assignmentId) { item = candidate; break; }
     }
     if (!item) return await refuse(ctx, userId, 'assignment_not_found', `${requestedSlug} · refused: assignment not found`);
-    if ((args.ordinal !== undefined && args.ordinal !== item.ordinal)
-      || (args.kind !== undefined && args.kind !== item.kind)
-      || (args.slug !== undefined && args.slug !== item.slug)
-      || (args.contentSlug !== undefined && args.contentSlug !== item.slug)
-      || (args.dimension !== undefined && args.dimension !== DIMENSION)) {
+    if (args.contentSlug !== item.slug || args.dimension !== DIMENSION) {
       return await refuse(ctx, userId, 'assignment_not_found', `${requestedSlug} · refused: assignment tuple mismatch`, item.contentId);
     }
     if (args.expectedReviewRevision !== item.reviewRevision) {
@@ -418,11 +438,11 @@ export const saveAssignedDecision = mutation({
     }
     if (!state.snapshot) return await refuse(ctx, userId, 'assignment_expired', `${item.slug} · refused: snapshot missing`, item.contentId);
     const snapshot = state.snapshot;
-    if (args.expectedSnapshotDigest !== undefined && args.expectedSnapshotDigest !== snapshot.digest) return await refuse(ctx, userId, 'assignment_expired', `${item.slug} · refused: snapshot digest mismatch`, item.contentId);
+    if (args.expectedSnapshotDigest !== snapshot.digest) return await refuse(ctx, userId, 'assignment_expired', `${item.slug} · refused: snapshot digest mismatch`, item.contentId);
     if (state.decision) {
       const identical = state.decision.decision === args.decision && (state.decision.note ?? '') === (note ?? '');
       if (!identical) return await refuse(ctx, userId, 'assignment_expired', `${item.slug} · refused: decision receipt conflict`, item.contentId);
-      const handoff = await completionHandoff(batchStates, await freezeSignature());
+      const handoff = await completionHandoff(batchStates, await freezeReceiptDigest());
       return { ok: true as const, decisionKey: state.assignmentId, duplicate: true, receipt: state.decision, ...(handoff ? { handoff } : {}) };
     }
 
@@ -447,7 +467,7 @@ export const saveAssignedDecision = mutation({
     const completedStates = batchStates.map((candidate) => candidate.item.slug === item.slug
       ? { ...candidate, decision: receipt }
       : candidate);
-    const handoff = await completionHandoff(completedStates, await freezeSignature());
+    const handoff = await completionHandoff(completedStates, await freezeReceiptDigest());
     return { ok: true as const, decisionKey: state.assignmentId, duplicate: false, receipt, ...(handoff ? { handoff } : {}) };
   },
 });

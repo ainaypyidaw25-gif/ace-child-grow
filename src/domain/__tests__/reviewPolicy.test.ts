@@ -119,6 +119,7 @@ describe('review refusal', () => {
     const codes = [
       'not_staff', 'role_may_not_review_area', 'display_name_required',
       'qualification_required', 'note_required', 'content_not_found',
+      'retired_content', 'assignment_required', 'stale_revision',
     ] as const;
     for (const code of codes) {
       expect(REVIEW_REFUSAL_LABELS[code]?.mm, code).toBeTruthy();

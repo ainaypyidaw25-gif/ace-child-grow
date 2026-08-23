@@ -9,16 +9,16 @@ describe('clinical batch frontend boundary', () => {
     expect(normalizeClinicalBatchDecisionResult(null)).toEqual({
       ok: false,
       code: 'unknown',
-      message: 'The signed clinical decision response was invalid.',
+      message: 'The clinical decision response was invalid.',
     });
     expect(normalizeClinicalBatchDecisionResult({ ok: true, receipt: {} })).toEqual({
       ok: false,
       code: 'unknown',
-      message: 'The signed clinical decision receipt was invalid.',
+      message: 'The clinical decision receipt was invalid.',
     });
   });
 
-  it('preserves a valid receipt and signed handoff', () => {
+  it('preserves a valid decision receipt and server-issued handoff receipt', () => {
     expect(normalizeClinicalBatchDecisionResult({
       ok: true,
       receipt: {
@@ -32,7 +32,7 @@ describe('clinical batch frontend boundary', () => {
         decisionCount: 2,
         completedAt: 2,
         digest: 'digest',
-        signature: 'signature',
+        receiptDigest: 'receipt-digest',
       },
     })).toEqual({
       ok: true,
@@ -47,8 +47,47 @@ describe('clinical batch frontend boundary', () => {
         decisionCount: 2,
         completedAt: 2,
         digest: 'digest',
-        signature: 'signature',
+        receiptDigest: 'receipt-digest',
       },
+    });
+  });
+
+  it('rejects a changes-requested receipt without its required note', () => {
+    expect(normalizeClinicalBatchDecisionResult({
+      ok: true,
+      receipt: {
+        decision: 'changes_requested',
+        note: '',
+        reviewedAt: 1,
+        receiptId: 'review-1',
+      },
+    })).toEqual({
+      ok: false,
+      code: 'unknown',
+      message: 'The clinical decision receipt was invalid.',
+    });
+  });
+
+  it('rejects a handoff attached to a non-approval decision', () => {
+    expect(normalizeClinicalBatchDecisionResult({
+      ok: true,
+      receipt: {
+        decision: 'changes_requested',
+        note: 'Correct the threshold.',
+        reviewedAt: 1,
+        receiptId: 'review-1',
+      },
+      handoff: {
+        batchId: 'batch-1',
+        decisionCount: 2,
+        completedAt: 2,
+        digest: 'digest',
+        receiptDigest: 'receipt-digest',
+      },
+    })).toEqual({
+      ok: false,
+      code: 'unknown',
+      message: 'The clinical handoff receipt was invalid.',
     });
   });
 

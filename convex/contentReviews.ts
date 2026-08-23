@@ -63,7 +63,7 @@ export const listForContent = query({
   handler: async (ctx, args) => {
     const userId = await requireUser(ctx);
     const access = await getStaffAccess(ctx, userId);
-    if (!access || access.role === 'support') {
+    if (!access || access.role === 'support' || access.role === 'clinical_reviewer') {
       return { allowed: false, contentVersion: null, current: [], history: [] };
     }
     const content = await ctx.db
@@ -255,6 +255,26 @@ export const saveDecision = mutation({
   handler: async (ctx, args) => {
     const userId = await requireUser(ctx);
     const access = await getStaffAccess(ctx, userId);
+
+    // Clinical reviewer authority is assignment-scoped. The frozen batch
+    // mutation validates the exact row/revision/snapshot and is the sole path
+    // for that role; this broad mutation must never be a scope escape.
+    if (access?.role === 'clinical_reviewer') {
+      await logAudit(
+        ctx,
+        userId,
+        `contentReview.${args.dimension}.${args.decision}`,
+        'libraryContent',
+        undefined,
+        `${args.contentSlug} · refused: assignment_required`,
+        { result: 'rejected' },
+      );
+      return {
+        ok: false as const,
+        code: 'assignment_required',
+        message: 'Clinical reviewer decisions must be recorded through the assigned frozen batch.',
+      };
+    }
 
     const content = await ctx.db
       .query('libraryContent')

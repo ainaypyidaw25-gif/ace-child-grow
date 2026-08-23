@@ -50,6 +50,15 @@ const frozenProfile = {
   userId: 'mn726081xpgg24y4z4tq9ncw098bh6t1',
 };
 
+const stableReviewerIdentity = {
+  profileId: CLINICAL_REVIEW_BATCH_REVIEWER.profileId,
+  userId: CLINICAL_REVIEW_BATCH_REVIEWER.userId,
+  isStaff: true,
+  displayName: CLINICAL_REVIEW_BATCH_REVIEWER.displayName,
+  qualification: CLINICAL_REVIEW_BATCH_REVIEWER.qualification,
+  role: CLINICAL_REVIEW_BATCH_REVIEWER.role,
+};
+
 const milestone = CLINICAL_REVIEW_BATCH_ITEMS[0];
 const activity = CLINICAL_REVIEW_BATCH_ITEMS[1];
 
@@ -245,7 +254,7 @@ describe('frozen clinical-review batch UI contract', () => {
   it('keeps the manifest hash and exact Phyo Ko Ko assignment immutable', async () => {
     expect(await sha256Canonical(CLINICAL_REVIEW_BATCH_MANIFEST)).toBe(CLINICAL_REVIEW_BATCH_HASH);
     expect(CLINICAL_REVIEW_BATCH_COUNT).toBe(2);
-    expect(await sha256Canonical(frozenProfile)).toBe(CLINICAL_REVIEW_BATCH_REVIEWER.profileCanonicalSha256);
+    expect(await sha256Canonical(stableReviewerIdentity)).toBe(CLINICAL_REVIEW_BATCH_REVIEWER.identityCanonicalSha256);
   });
 
   it('returns the exact ace.clinical-frozen-batch v1 snapshot contract after preflight', async () => {
@@ -269,8 +278,10 @@ describe('frozen clinical-review batch UI contract', () => {
       liveReviewRevision: 1,
       decision: null,
     });
-    expect((items[0].snapshot as { fields: unknown[]; sourceTitles: unknown[] }).fields).toHaveLength(3);
-    expect((items[0].snapshot as { sourceTitles: string[] }).sourceTitles).toHaveLength(milestone.sourceCount);
+    expect((items[0].snapshot as { fields: unknown[]; sources: unknown[] }).fields).toHaveLength(3);
+    const sources = (items[0].snapshot as { sources: Array<Record<string, unknown>> }).sources;
+    expect(sources).toHaveLength(milestone.sourceCount);
+    expect(sources[0]).toEqual(expect.objectContaining({ sourceId: milestone.sourceIds[0], url: expect.stringMatching(/^https:/) }));
     expect((items[1].snapshot as { fields: unknown[] }).fields).toHaveLength(5);
   });
 
@@ -296,23 +307,15 @@ describe('frozen clinical-review batch UI contract', () => {
   });
 
   it('refuses an expired assignment before any clinical decision write', async () => {
-    vi.spyOn(Date, 'now').mockReturnValue(CLINICAL_REVIEW_BATCH_EXPIRES_AT);
     const ctx = context();
-    const result = await handler(saveAssignedDecision)(ctx, {
-      batchId: CLINICAL_REVIEW_BATCH_ID,
-      batchHash: CLINICAL_REVIEW_BATCH_HASH,
-      count: CLINICAL_REVIEW_BATCH_COUNT,
-      ordinal: milestone.ordinal,
-      kind: milestone.kind,
-      slug: milestone.slug,
-      expectedReviewRevision: milestone.reviewRevision,
-      decision: 'approved',
-    });
+    const batch = await handler(getAssignedBatch)(ctx, {}) as { items: Array<Record<string, unknown>> };
+    vi.spyOn(Date, 'now').mockReturnValue(CLINICAL_REVIEW_BATCH_EXPIRES_AT);
+    const result = await handler(saveAssignedDecision)(ctx, inputFrom(batch.items[0]));
     expect(result).toMatchObject({ ok: false, code: 'assignment_expired' });
     expect(ctx.tables.contentReviews).toHaveLength(0);
   });
 
-  it('returns a signed handoff only after both exact assignments have receipts', async () => {
+  it('returns a server-issued handoff receipt only after both exact assignments are approved', async () => {
     const ctx = context();
     const batch = await handler(getAssignedBatch)(ctx, {}) as { items: Array<Record<string, unknown>> };
     await handler(saveAssignedDecision)(ctx, inputFrom(batch.items[0]));
@@ -323,7 +326,32 @@ describe('frozen clinical-review batch UI contract', () => {
       handoff: { batchId: CLINICAL_REVIEW_BATCH_ID, decisionCount: 2, completedAt: 1787500000000 },
     });
     expect((completed.handoff as { digest: string }).digest).toMatch(/^[a-f0-9]{64}$/);
-    expect((completed.handoff as { signature: string }).signature).toMatch(/^[a-f0-9]{64}$/);
+    expect((completed.handoff as { receiptDigest: string }).receiptDigest).toMatch(/^[a-f0-9]{64}$/);
     expect(ctx.tables.contentReviews).toHaveLength(2);
+  });
+
+  it('does not authorize lane handoff while a requested change remains', async () => {
+    const ctx = context();
+    const batch = await handler(getAssignedBatch)(ctx, {}) as { items: Array<Record<string, unknown>> };
+    await handler(saveAssignedDecision)(ctx, inputFrom(batch.items[0]));
+    const secondInput = { ...inputFrom(batch.items[1]), decision: 'changes_requested', note: 'Correct and refreeze.' };
+    const completed = await handler(saveAssignedDecision)(ctx, secondInput) as Record<string, unknown>;
+    expect(completed).toMatchObject({ ok: true, duplicate: false, receipt: { decision: 'changes_requested' } });
+    expect(completed).not.toHaveProperty('handoff');
+    expect(ctx.tables.contentReviews).toHaveLength(2);
+  });
+
+  it('keeps the frozen assignment valid when unrelated profile preferences change', async () => {
+    const ctx = context();
+    ctx.tables.parentProfiles[0].preferredLocale = 'en';
+    ctx.tables.parentProfiles[0].parentTourCompletedVersion = 99;
+    const batch = await handler(getAssignedBatch)(ctx, {}) as { items: Array<Record<string, unknown>> };
+    expect(batch.items).toHaveLength(2);
+  });
+
+  it('blocks the frozen assignment when reviewer qualification identity drifts', async () => {
+    const ctx = context();
+    ctx.tables.parentProfiles[0].staffQualification = 'Different qualification';
+    await expect(handler(getAssignedBatch)(ctx, {})).rejects.toThrow('not assigned');
   });
 });

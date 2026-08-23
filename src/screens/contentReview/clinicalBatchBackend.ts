@@ -38,7 +38,7 @@ export function readAssignedClinicalBatch(
  */
 export function normalizeClinicalBatchDecisionResult(raw: unknown): RecordClinicalBatchDecisionResult {
   if (!isRecord(raw) || typeof raw.ok !== 'boolean') {
-    return { ok: false, code: 'unknown', message: 'The signed clinical decision response was invalid.' };
+    return { ok: false, code: 'unknown', message: 'The clinical decision response was invalid.' };
   }
   if (raw.ok === false) {
     const code = typeof raw.code === 'string' && REFUSAL_CODES.has(raw.code) ? raw.code : 'unknown';
@@ -47,7 +47,7 @@ export function normalizeClinicalBatchDecisionResult(raw: unknown): RecordClinic
       code: code as Exclude<RecordClinicalBatchDecisionResult, { ok: true }>['code'],
       message: typeof raw.message === 'string' && raw.message.trim()
         ? raw.message
-        : 'The signed clinical decision was refused.',
+        : 'The clinical decision was refused.',
       ...(typeof raw.currentReviewRevision === 'number'
         ? { currentReviewRevision: raw.currentReviewRevision }
         : {}),
@@ -61,19 +61,21 @@ export function normalizeClinicalBatchDecisionResult(raw: unknown): RecordClinic
     || typeof receipt.reviewedAt !== 'number'
     || typeof receipt.receiptId !== 'string'
     || !receipt.receiptId.trim()
+    || (receipt.decision === 'changes_requested' && (typeof receipt.note !== 'string' || !receipt.note.trim()))
   ) {
-    return { ok: false, code: 'unknown', message: 'The signed clinical decision receipt was invalid.' };
+    return { ok: false, code: 'unknown', message: 'The clinical decision receipt was invalid.' };
   }
 
   const handoff = raw.handoff;
   if (handoff !== undefined && (!isRecord(handoff)
-    || typeof handoff.batchId !== 'string'
-    || typeof handoff.decisionCount !== 'number'
-    || typeof handoff.completedAt !== 'number'
-    || typeof handoff.digest !== 'string'
-    || typeof handoff.signature !== 'string'
+    || typeof handoff.batchId !== 'string' || !handoff.batchId.trim()
+    || typeof handoff.decisionCount !== 'number' || !Number.isInteger(handoff.decisionCount) || handoff.decisionCount < 1
+    || typeof handoff.completedAt !== 'number' || !Number.isFinite(handoff.completedAt)
+    || typeof handoff.digest !== 'string' || !handoff.digest.trim()
+    || typeof handoff.receiptDigest !== 'string' || !handoff.receiptDigest.trim()
+    || receipt.decision !== 'approved'
   )) {
-    return { ok: false, code: 'unknown', message: 'The signed clinical handoff receipt was invalid.' };
+    return { ok: false, code: 'unknown', message: 'The clinical handoff receipt was invalid.' };
   }
 
   return {
@@ -90,7 +92,7 @@ export function normalizeClinicalBatchDecisionResult(raw: unknown): RecordClinic
         decisionCount: handoff.decisionCount as number,
         completedAt: handoff.completedAt as number,
         digest: handoff.digest as string,
-        signature: handoff.signature as string,
+        receiptDigest: handoff.receiptDigest as string,
       },
     } : {}),
   };

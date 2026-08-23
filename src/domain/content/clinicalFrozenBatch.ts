@@ -12,13 +12,21 @@ export interface FrozenClinicalSnapshotField {
   valueEn: string | null;
 }
 
+export interface FrozenClinicalSource {
+  sourceId: string;
+  org: string;
+  title: string;
+  year: number | null;
+  url: string;
+}
+
 export interface FrozenClinicalSnapshot {
   digest: string;
   titleMm: string;
   titleEn: string;
   summaryMm: string | null;
   summaryEn: string | null;
-  sourceTitles: string[];
+  sources: FrozenClinicalSource[];
   fields: FrozenClinicalSnapshotField[];
 }
 
@@ -40,12 +48,12 @@ export interface FrozenClinicalBatchItem {
   decision: FrozenClinicalDecision | null;
 }
 
-export interface SignedClinicalHandoff {
+export interface ClinicalHandoffReceipt {
   batchId: string;
   decisionCount: number;
   completedAt: number;
   digest: string;
-  signature: string;
+  receiptDigest: string;
 }
 
 export interface FrozenClinicalBatch {
@@ -57,9 +65,9 @@ export interface FrozenClinicalBatch {
   assignedRole: 'clinical_reviewer';
   frozenAt: number;
   freezeDigest: string;
-  freezeSignature: string;
+  freezeReceiptDigest: string;
   items: FrozenClinicalBatchItem[];
-  handoff: SignedClinicalHandoff | null;
+  handoff: ClinicalHandoffReceipt | null;
 }
 
 export type ClinicalBatchLoadState =
@@ -86,7 +94,7 @@ export type RecordClinicalBatchDecisionResult =
   | {
       ok: true;
       receipt: FrozenClinicalDecision;
-      handoff?: SignedClinicalHandoff;
+      handoff?: ClinicalHandoffReceipt;
     }
   | {
       ok: false;
@@ -131,6 +139,15 @@ function nullableString(value: unknown): string | null | undefined {
   return typeof value === 'string' ? value : undefined;
 }
 
+function isOpenableSourceUrl(value: string): boolean {
+  try {
+    const url = new URL(value);
+    return url.protocol === 'https:' || url.protocol === 'http:';
+  } catch {
+    return false;
+  }
+}
+
 function parseDecision(value: unknown): FrozenClinicalDecision | null | undefined {
   if (value === null || value === undefined) return null;
   if (!isRecord(value)) return undefined;
@@ -153,13 +170,30 @@ function parseSnapshot(value: unknown): FrozenClinicalSnapshot | null {
   const titleEn = requiredString(value, 'titleEn');
   const summaryMm = nullableString(value.summaryMm);
   const summaryEn = nullableString(value.summaryEn);
-  const sourceTitles = value.sourceTitles;
+  const rawSources = value.sources;
   const rawFields = value.fields;
   if (
     !digest || !titleMm || !titleEn || summaryMm === undefined || summaryEn === undefined ||
-    !Array.isArray(sourceTitles) || !sourceTitles.every((entry) => typeof entry === 'string' && entry.trim()) ||
+    !Array.isArray(rawSources) || rawSources.length === 0 ||
     !Array.isArray(rawFields) || rawFields.length === 0
   ) return null;
+  const sources: FrozenClinicalSource[] = [];
+  const seenSourceIds = new Set<string>();
+  for (const rawSource of rawSources) {
+    if (!isRecord(rawSource)) return null;
+    const sourceId = requiredString(rawSource, 'sourceId');
+    const org = requiredString(rawSource, 'org');
+    const title = requiredString(rawSource, 'title');
+    const url = requiredString(rawSource, 'url');
+    const year = rawSource.year;
+    if (
+      !sourceId || !org || !title || !url || !isOpenableSourceUrl(url) ||
+      (year !== null && (typeof year !== 'number' || !Number.isInteger(year))) ||
+      seenSourceIds.has(sourceId)
+    ) return null;
+    seenSourceIds.add(sourceId);
+    sources.push({ sourceId, org, title, year: year as number | null, url });
+  }
   const fields: FrozenClinicalSnapshotField[] = [];
   const seenPaths = new Set<string>();
   for (const rawField of rawFields) {
@@ -176,7 +210,7 @@ function parseSnapshot(value: unknown): FrozenClinicalSnapshot | null {
     seenPaths.add(path);
     fields.push({ path, labelMm, labelEn, valueMm, valueEn });
   }
-  return { digest, titleMm, titleEn, summaryMm, summaryEn, sourceTitles: [...sourceTitles], fields };
+  return { digest, titleMm, titleEn, summaryMm, summaryEn, sources, fields };
 }
 
 function parseItem(value: unknown): FrozenClinicalBatchItem | null {
@@ -208,26 +242,27 @@ function parseItem(value: unknown): FrozenClinicalBatchItem | null {
   };
 }
 
-function parseHandoff(value: unknown): SignedClinicalHandoff | null | undefined {
+function parseHandoff(value: unknown): ClinicalHandoffReceipt | null | undefined {
   if (value === null || value === undefined) return null;
   if (!isRecord(value)) return undefined;
   const batchId = requiredString(value, 'batchId');
   const decisionCount = requiredNumber(value, 'decisionCount');
   const completedAt = requiredNumber(value, 'completedAt');
   const digest = requiredString(value, 'digest');
-  const signature = requiredString(value, 'signature');
+  const receiptDigest = requiredString(value, 'receiptDigest');
   if (
     !batchId || decisionCount === null || decisionCount < 0 || !Number.isInteger(decisionCount) ||
-    completedAt === null || !digest || !signature
+    completedAt === null || !digest || !receiptDigest
   ) return undefined;
-  return { batchId, decisionCount, completedAt, digest, signature };
+  return { batchId, decisionCount, completedAt, digest, receiptDigest };
 }
 
 /**
  * Converts the future server response into the only shape the clinical UI may
  * render. It deliberately refuses to derive assignments from the broad owner
  * priority queue: review requests, matching dimensions and catalogue rows are
- * not assignments and do not contain a frozen snapshot or server signature.
+ * not assignments and do not contain a frozen snapshot or server-issued
+ * integrity receipt.
  */
 export function adaptFrozenClinicalBatch(
   raw: unknown,
@@ -250,8 +285,8 @@ export function adaptFrozenClinicalBatch(
   const batchId = requiredString(raw, 'batchId');
   const frozenAt = requiredNumber(raw, 'frozenAt');
   const freezeDigest = requiredString(raw, 'freezeDigest');
-  const freezeSignature = requiredString(raw, 'freezeSignature');
-  if (!batchId || frozenAt === null || !freezeDigest || !freezeSignature || !Array.isArray(raw.items) || raw.items.length === 0) {
+  const freezeReceiptDigest = requiredString(raw, 'freezeReceiptDigest');
+  if (!batchId || frozenAt === null || !freezeDigest || !freezeReceiptDigest || !Array.isArray(raw.items) || raw.items.length === 0) {
     return { kind: 'invalid', reason: 'incomplete_freeze_manifest' };
   }
 
@@ -273,7 +308,7 @@ export function adaptFrozenClinicalBatch(
   if (handoff === undefined) return { kind: 'invalid', reason: 'invalid_handoff' };
   if (handoff && (
     handoff.batchId !== batchId || handoff.decisionCount !== items.length ||
-    items.some((item) => item.decision === null)
+    items.some((item) => item.decision?.decision !== 'approved')
   )) return { kind: 'invalid', reason: 'handoff_does_not_cover_batch' };
 
   const batch: FrozenClinicalBatch = {
@@ -285,7 +320,7 @@ export function adaptFrozenClinicalBatch(
     assignedRole: 'clinical_reviewer',
     frozenAt,
     freezeDigest,
-    freezeSignature,
+    freezeReceiptDigest,
     items,
     handoff,
   };
