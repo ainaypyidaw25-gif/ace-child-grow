@@ -126,12 +126,12 @@ export const NHS_SOOTHING_CRYING_BABY_DESIRED = {
 } as const;
 
 export const GD_BIRTH2M_EMOTIONAL_DESIRED_SECOND_FAQ_ANSWER = {
-  mm: 'ပထမလများတွင် ငိုချိန် များခြင်းသည် တွေ့ရလေ့ရှိသည်။ ကလေး အန်ခြင်း သို့မဟုတ် နို့မစို့လိုခြင်း ရှိပါက ကျန်းမာရေးဝန်ထမ်းထံ အမြန် ဆက်သွယ်ပါ။ ကလေး ပျော့ခွေခြင်း သို့မဟုတ် နိုးရခက်ခြင်း၊ အသက်ရှူခက်ခြင်း၊ အသားအရေ သို့မဟုတ် နှုတ်ခမ်း အပြာရောင်၊ မီးခိုးရောင်၊ ဖြူဖျော့ရောင် သို့မဟုတ် အစက်အပြောက် ဖြစ်ခြင်း၊ တက်ခြင်း သို့မဟုတ် အပြင်းအထန် ပန်းထွက်အန်ခြင်း ထပ်ခါတလဲလဲ ဖြစ်ပါက အရေးပေါ်ဝန်ဆောင်မှုကို ချက်ချင်း ခေါ်ပါ။',
-  en: 'Increased crying in the early months is common. If your baby is vomiting or not interested in feeding, contact a health professional urgently. Call emergency services now if your baby is floppy or hard to wake, has difficulty breathing, has blue, grey, pale or blotchy skin or lips, has a seizure, or is repeatedly projectile vomiting.',
+  mm: 'ပထမလများတွင် ငိုချိန် များခြင်းသည် တွေ့ရလေ့ရှိသည်။ ကလေး နို့မစို့လိုပါက၊ အဆက်မပြတ် ငိုပြီး နှစ်သိမ့်၍ သို့မဟုတ် အာရုံလွှဲ၍ မရပါက၊ သို့မဟုတ် ငိုသံသည် ပုံမှန်ငိုသံနှင့် မတူပါက အကြံဉာဏ်ရယူရန် ကျန်းမာရေးဝန်ထမ်းထံ ဆက်သွယ်ပါ။ ကလေး ပျော့ခွေခြင်း သို့မဟုတ် နိုးရခက်ခြင်း၊ အသက်ရှူခက်ခြင်း၊ အသားအရေ သို့မဟုတ် နှုတ်ခမ်း အပြာရောင်၊ မီးခိုးရောင်၊ ဖြူဖျော့ရောင် သို့မဟုတ် အစက်အပြောက် ဖြစ်ခြင်း၊ တက်ခြင်း သို့မဟုတ် အပြင်းအထန် ပန်းထွက်အန်ခြင်း များစွာ ဖြစ်ပါက အရေးပေါ်ဝန်ဆောင်မှုကို ချက်ချင်း ခေါ်ပါ။',
+  en: 'Increased crying in the early months is common. If your baby is not interested in feeding, is crying constantly and cannot be consoled or distracted, or their cry does not sound normal, contact a health professional for advice. Call emergency services now if your baby is floppy or hard to wake, has difficulty breathing, has blue, grey, pale or blotchy skin or lips, has a seizure, or is being violently sick a lot (projectile vomiting).',
 } as const;
 
 export const GD_BIRTH2M_EMOTIONAL_DESIRED_EVIDENCE_SUMMARY =
-  'Responsive soothing follows the WHO nurturing care framework and AAP relational-health guidance. The NHS “Soothing a crying baby” page supports the never-shake message, urgent professional advice for vomiting or not being interested in feeding, and emergency action for floppiness, difficulty waking, breathing difficulty, abnormal colour, seizures or repeated projectile vomiting. NICE NG143 supports immediate assessment when a baby under 3 months has a temperature of 38°C or above.' as const;
+  'Responsive soothing follows the WHO nurturing care framework and AAP relational-health guidance. The NHS “Soothing a crying baby” page supports the never-shake message, advice to contact a health professional for constant, inconsolable or unusual crying or not being interested in feeding, and emergency action for floppiness, difficulty waking, breathing difficulty, abnormal colour, seizures or being violently sick a lot (projectile vomiting). NICE NG143 supports urgent face-to-face assessment when a baby under 3 months has a temperature of 38°C or above.' as const;
 
 function desiredGdData(): Record<string, unknown> {
   const data = gd.content.data;

@@ -82,12 +82,12 @@ describe('clinical blocker exact CAS data', () => {
     const faq = GD_BIRTH2M_EMOTIONAL_DESIRED_DATA.faq as Array<{
       a: { en: string; mm: string };
     }>;
-    expect(faq[1].a.en).toContain('contact a health professional urgently');
+    expect(faq[1].a.en).toContain('contact a health professional for advice');
     expect(faq[1].a.en).toContain('Call emergency services now if');
-    expect(faq[1].a.en).toContain('repeatedly projectile vomiting');
-    expect(faq[1].a.en).not.toContain(
-      'vomiting or not interested in feeding, call emergency services',
-    );
+    expect(faq[1].a.en).toContain('is crying constantly and cannot be consoled or distracted');
+    expect(faq[1].a.en).toContain('being violently sick a lot (projectile vomiting)');
+    expect(faq[1].a.en).not.toContain('If your baby is vomiting');
+    expect(faq[1].a.mm).not.toContain('ကလေး အန်ခြင်း သို့မဟုတ်');
     const item = CONTENT_SEED.find((candidate) =>
       candidate.slug === GD_BIRTH2M_EMOTIONAL_TARGET.slug)!;
     expect(new Set(requiredPublicationReviews(item))).toEqual(
