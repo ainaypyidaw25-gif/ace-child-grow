@@ -19,6 +19,9 @@ import { ClassificationImportPreview } from './ownerPriority/ClassificationImpor
 import { OwnerActionsPanel, SecuritySummaryPanel } from './ownerPriority/OwnerActionsPanel';
 import { BulkReplacePanel } from './contentReview/BulkReplacePanel';
 import { ManualReviewPanel } from './contentReview/ManualReviewPanel';
+import { ClinicalFrozenBatchPanel } from './contentReview/ClinicalFrozenBatchPanel';
+import { clinicalBatchBackend } from './contentReview/clinicalBatchBackend';
+import { isClinicalBatchReviewerRole } from '../domain/content/clinicalFrozenBatch';
 import { matchesSearchQuery, normalizeSearchText } from '../domain/search';
 
 const DIMENSIONS = ['english', 'native_myanmar', 'child_development', 'evidence', 'safety', 'clinical'] as const;
@@ -498,7 +501,7 @@ function ContentEditor({ item, role, targetFieldPath, onDirtyChange }: { item: {
   );
 }
 
-type WorkspaceTab = 'priority' | 'manual' | 'item' | 'bulkReplace' | 'import' | 'security';
+type WorkspaceTab = 'clinicalBatch' | 'priority' | 'manual' | 'item' | 'bulkReplace' | 'import' | 'security';
 
 /** Live Owner Priority tab: server queues + the shared presentational view. */
 function OwnerPriorityContainer({ onOpenItem }: { onOpenItem: (row: QueueRowView) => void }) {
@@ -530,9 +533,13 @@ export function ContentReviewWorkspace() {
   const [selectedSlug, setSelectedSlug] = useState('');
   const [itemQuery, setItemQuery] = useState('');
   const [targetFieldPath, setTargetFieldPath] = useState<string | null>(null);
-  const list = useQuery(api.library.listByType, { type });
-  const detail = useQuery(api.library.getBySlug, selectedSlug ? { slug: selectedSlug } : 'skip');
-  const reviews = useQuery(api.contentReviews.listForContent, selectedSlug ? { contentSlug: selectedSlug } : 'skip');
+  // A specialist account must receive only a server-scoped frozen assignment.
+  // Do not even issue catalogue/detail queries for that role: hiding broad rows
+  // in JSX would still deliver them to the browser over the network.
+  const standardWorkspaceEnabled = access !== undefined && !isClinicalBatchReviewerRole(access?.role);
+  const list = useQuery(api.library.listByType, standardWorkspaceEnabled ? { type } : 'skip');
+  const detail = useQuery(api.library.getBySlug, standardWorkspaceEnabled && selectedSlug ? { slug: selectedSlug } : 'skip');
+  const reviews = useQuery(api.contentReviews.listForContent, standardWorkspaceEnabled && selectedSlug ? { contentSlug: selectedSlug } : 'skip');
   const saveDecision = useMutation(api.contentReviews.saveDecision);
   const [dimension, setDimension] = useState<Dimension>('native_myanmar');
   const [decision, setDecision] = useState<Decision>('in_review');
@@ -543,8 +550,8 @@ export function ContentReviewWorkspace() {
   const [needsName, setNeedsName] = useState(false);
   // The queue is the single source of what remains outstanding for this row,
   // so the item screen and the queue can never disagree about completion.
-  const queueState = useQuery(api.ownerPriority.queues);
-  const reviewLookupResults = useQuery(api.library.reviewSearch, itemQuery.trim() ? { q: itemQuery } : 'skip');
+  const queueState = useQuery(api.ownerPriority.queues, standardWorkspaceEnabled ? {} : 'skip');
+  const reviewLookupResults = useQuery(api.library.reviewSearch, standardWorkspaceEnabled && itemQuery.trim() ? { q: itemQuery } : 'skip');
   const queueRow = queueState?.rows.find((row) => row.slug === selectedSlug);
 
   const [pendingSelectionChange, setPendingSelectionChange] = useState<(() => void) | null>(null);
@@ -636,6 +643,8 @@ export function ContentReviewWorkspace() {
 
   const item = detail && 'item' in detail ? detail.item : null;
   const isOwner = access.role === 'owner';
+  const isClinicalReviewer = isClinicalBatchReviewerRole(access.role);
+  const activeTab: WorkspaceTab = isClinicalReviewer ? 'clinicalBatch' : tab;
   const openItemFromQueue = (row: QueueRowView) => {
     requestSelectionChange(() => {
       setEditorDirty(false);
@@ -662,14 +671,16 @@ export function ContentReviewWorkspace() {
     setTargetFieldPath(null);
     setTab('item');
   };
-  const tabs: Array<{ key: WorkspaceTab; label: string; visible: boolean }> = [
-    { key: 'priority', label: L('ဦးစားပေးစစ်ဆေးရန်', 'Owner Priority'), visible: true },
-    { key: 'manual', label: L('လူကိုယ်တိုင် စစ်ဆေးရန်', 'Manual review'), visible: true },
-    { key: 'item', label: L('အကြောင်းအရာ စစ်ဆေးရန်', 'Review item'), visible: true },
-    { key: 'bulkReplace', label: L('ရှာပြီး အစားထိုးရန်', 'Find and replace'), visible: mayEditContent(access.role) },
-    { key: 'import', label: L('ခွဲခြားမှု အကြိုစစ်ဆေးရန်', 'Import preview'), visible: isOwner },
-    { key: 'security', label: L('လုံခြုံရေး', 'Security'), visible: isOwner },
-  ];
+  const tabs: Array<{ key: WorkspaceTab; label: string; visible: boolean }> = isClinicalReviewer
+    ? [{ key: 'clinicalBatch', label: L('Clinical batch စစ်ဆေးရန်', 'Clinical batch'), visible: true }]
+    : [
+        { key: 'priority', label: L('ဦးစားပေးစစ်ဆေးရန်', 'Owner Priority'), visible: true },
+        { key: 'manual', label: L('လူကိုယ်တိုင် စစ်ဆေးရန်', 'Manual review'), visible: true },
+        { key: 'item', label: L('အကြောင်းအရာ စစ်ဆေးရန်', 'Review item'), visible: true },
+        { key: 'bulkReplace', label: L('ရှာပြီး အစားထိုးရန်', 'Find and replace'), visible: mayEditContent(access.role) },
+        { key: 'import', label: L('ခွဲခြားမှု အကြိုစစ်ဆေးရန်', 'Import preview'), visible: isOwner },
+        { key: 'security', label: L('လုံခြုံရေး', 'Security'), visible: isOwner },
+      ];
   return (
     <div className="space-y-4 pb-4 sm:space-y-5 sm:pb-8">
       <header className="space-y-2">
@@ -712,9 +723,9 @@ export function ContentReviewWorkspace() {
               };
               if (entry.key !== tab) requestSelectionChange(apply); else apply();
             }}
-            aria-current={tab === entry.key ? 'page' : undefined}
+            aria-current={activeTab === entry.key ? 'page' : undefined}
             className={`shrink-0 rounded-pill px-3 py-2.5 text-xs font-semibold leading-6 transition sm:px-4 sm:py-2 sm:text-sm ${
-              tab === entry.key ? 'bg-sky text-white' : 'border border-line bg-white text-ink hover:border-sky'
+              activeTab === entry.key ? 'bg-sky text-white' : 'border border-line bg-white text-ink hover:border-sky'
             }`}
           >
             {entry.label}
@@ -722,13 +733,20 @@ export function ContentReviewWorkspace() {
         ))}
       </nav>
 
-      {tab === 'priority' && <OwnerPriorityContainer onOpenItem={openItemFromQueue} />}
-      {tab === 'manual' && <ManualReviewPanel onSearchContent={searchContentFromManualReview} />}
-      {tab === 'bulkReplace' && <BulkReplacePanel canEdit={mayEditContent(access.role)} />}
-      {tab === 'import' && isOwner && <ClassificationImportPreview />}
-      {tab === 'security' && isOwner && <SecuritySummaryPanel />}
+      {activeTab === 'clinicalBatch' && isClinicalReviewer && (
+        <ClinicalFrozenBatchPanel
+          state={clinicalBatchBackend.readAssignedBatch(access.role)}
+          reviewer={{ displayName: access.displayName, qualification: access.qualification }}
+          recordDecision={clinicalBatchBackend.recordDecision}
+        />
+      )}
+      {activeTab === 'priority' && <OwnerPriorityContainer onOpenItem={openItemFromQueue} />}
+      {activeTab === 'manual' && <ManualReviewPanel onSearchContent={searchContentFromManualReview} />}
+      {activeTab === 'bulkReplace' && <BulkReplacePanel canEdit={mayEditContent(access.role)} />}
+      {activeTab === 'import' && isOwner && <ClassificationImportPreview />}
+      {activeTab === 'security' && isOwner && <SecuritySummaryPanel />}
 
-      {tab === 'item' && (<>
+      {activeTab === 'item' && (<>
       <section className="grid gap-3 rounded-card border border-line bg-white p-3 shadow-card sm:grid-cols-[180px_1fr] sm:p-4">
         <label className="space-y-1.5 text-sm font-medium leading-6 text-ink">
           <span>{L('အမျိုးအစား', 'Content type')}</span>
