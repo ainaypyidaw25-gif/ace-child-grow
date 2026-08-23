@@ -1,9 +1,8 @@
 import { query, mutation } from './_generated/server';
 import { v } from 'convex/values';
 import { getAuthUserId } from '@convex-dev/auth/server';
-import { hasStaffRole, requireClinicalPublisher, requireContentEditor, requireProfessionalPublisher, requireReviewEditor } from './lib/auth';
+import { hasStaffRole, requireContentEditor, requireProfessionalPublisher, requireReviewEditor } from './lib/auth';
 import { logAudit } from './audit';
-import { requiresSpecialistReview } from './lib/contentReviewRequirements';
 
 // Mirror of src/domain/content/workflow.ts (convex functions can't import src/).
 const TRANSITIONS: Record<string, string[]> = {
@@ -60,13 +59,7 @@ export const transition = mutation({
     const item = await ctx.db.get(id);
     if (!item) throw new Error('Not found');
     const approval = ['approved', 'published'].includes(to)
-      ? requiresSpecialistReview({
-          slug: String(id),
-          titleEn: item.titleEn,
-          data: { kind: item.kind, bodyEn: item.bodyEn },
-        })
-        ? await requireClinicalPublisher(ctx)
-        : await requireProfessionalPublisher(ctx)
+      ? await requireProfessionalPublisher(ctx)
       : null;
     const userId = approval?.userId ?? editor.userId;
     const allowed = TRANSITIONS[item.reviewStatus] ?? [];

@@ -258,7 +258,7 @@ export const deleteMineBatch = internalMutation({
 
     // Global editorial/reconciliation rows remain useful, but their reviewer
     // link and known display-name metadata must not survive account erasure.
-    const [contentItems, facilities, libraryItems, classificationConfirmed, contentReviews, contentEdits, media, evidenceSources] = await Promise.all([
+    const [contentItems, facilities, libraryItems, classificationConfirmed, contentReviews, clinicalBatchReceipts, contentEdits, media, evidenceSources] = await Promise.all([
       ctx.db.query('contentItems').withIndex('by_reviewer', (q) => q.eq('reviewerId', userId)).take(ROOT_BATCH_SIZE),
       ctx.db.query('healthcareFacilities').withIndex('by_verified_by', (q) => q.eq('verifiedBy', userId)).take(ROOT_BATCH_SIZE),
       ctx.db.query('libraryContent').withIndex('by_reviewer', (q) => q.eq('reviewerId', userId)).take(ROOT_BATCH_SIZE),
@@ -266,6 +266,7 @@ export const deleteMineBatch = internalMutation({
         .withIndex('by_classification_confirmed_by', (q) => q.eq('classificationConfirmedBy', userId))
         .take(ROOT_BATCH_SIZE),
       ctx.db.query('contentReviews').withIndex('by_reviewer', (q) => q.eq('reviewerId', userId)).take(ROOT_BATCH_SIZE),
+      ctx.db.query('clinicalReviewBatchReceipts').withIndex('by_reviewer', (q) => q.eq('reviewerId', userId)).take(ROOT_BATCH_SIZE),
       ctx.db.query('contentEditLogs').withIndex('by_editor', (q) => q.eq('editorId', userId)).take(ROOT_BATCH_SIZE),
       ctx.db.query('libraryMedia').withIndex('by_reviewed_by', (q) => q.eq('reviewedBy', userId)).take(ROOT_BATCH_SIZE),
       ctx.db.query('evidenceSources').withIndex('by_reviewer', (q) => q.eq('reviewerId', userId)).take(ROOT_BATCH_SIZE),
@@ -303,7 +304,7 @@ export const deleteMineBatch = internalMutation({
       });
       hadWork = true;
     }
-    if (await deleteRows(ctx, [...contentReviews, ...contentEdits])) hadWork = true;
+    if (await deleteRows(ctx, [...contentReviews, ...clinicalBatchReceipts, ...contentEdits])) hadWork = true;
     for (const row of media) {
       await ctx.db.patch(row._id, {
         reviewedBy: undefined,

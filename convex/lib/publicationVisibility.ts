@@ -7,6 +7,7 @@ import { todayIsoUtc } from './evidenceFreshness';
 import { contentIsAiParentReadable } from './aiPublicationVisibility';
 import type { Doc } from '../_generated/dataModel';
 import { isRetiredContentSlug } from './contentRetirements';
+import { frozenClinicalPublicationApproval } from './clinicalReviewBatchProvenance';
 
 type DatabaseContext = Pick<QueryCtx, 'db'> | Pick<MutationCtx, 'db'>;
 
@@ -17,6 +18,8 @@ export type PublicationContentIdentity = {
   type: string;
   slug: string;
   clinicalStatus: string;
+  version?: number;
+  reviewRevision?: number;
 };
 
 type PublicationEvidenceSnapshot = {
@@ -67,7 +70,11 @@ export async function contentIsParentReadable(
 ): Promise<boolean> {
   if (isRetiredContentSlug(content.slug)) return false;
   if (isPubliclyReadableStatus(content.clinicalStatus)) {
-    return (await publicationEvidenceForContent(ctx, content, todayIso)).allowed;
+    const [evidence, frozenApproval] = await Promise.all([
+      publicationEvidenceForContent(ctx, content, todayIso),
+      frozenClinicalPublicationApproval(ctx, content),
+    ]);
+    return evidence.allowed && frozenApproval.allowed;
   }
   return await contentIsAiParentReadable(ctx, content as Doc<'libraryContent'>, now, todayIso);
 }
@@ -176,6 +183,7 @@ export async function parentReadableContentResult<T extends PublicationContentId
   const visibility = await Promise.all(activeRows.map(async (row) => (
     isPubliclyReadableStatus(row.clinicalStatus)
       ? contentIsParentReadableFromSnapshot(row, snapshot)
+        && (await frozenClinicalPublicationApproval(ctx, row)).allowed
       : await contentIsAiParentReadable(ctx, row as unknown as Doc<'libraryContent'>, now, todayIso)
   )));
   return {

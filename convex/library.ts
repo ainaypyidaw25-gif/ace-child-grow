@@ -10,7 +10,6 @@ import { v } from 'convex/values';
 import { getAuthUserId } from '@convex-dev/auth/server';
 import {
   hasStaffRole,
-  requireClinicalPublisher,
   requireContentEditor,
   requireProfessionalPublisher,
   requireReviewEditor,
@@ -22,6 +21,7 @@ import { diffEditableContent } from './lib/contentEditDiff';
 import { seedAuditSummary, seedMayUpdateExisting, seedMediaIsProtected } from './lib/seedPolicy';
 import { findReviewContentMatches } from './lib/reviewSearch';
 import { requiredPublicationReviews, specialistReviewReason } from './lib/contentReviewRequirements';
+import type { ReviewDimension } from './lib/reviewPolicy';
 import {
   contentIsParentReadable,
   filterParentReadableContent,
@@ -34,6 +34,9 @@ import { isManualReviewContentCasTargetSlug } from './lib/manualReviewContentCas
 import { isBirth2mNutritionCasTargetSlug } from './lib/birth2mNutritionCasData';
 import { isBirth2mGrossMotorCorrectionSlug } from './lib/birth2mGrossMotorCorrection';
 import { isOlderSafety2026ContentTargetSlug } from './lib/olderSafety2026CasData';
+import {
+  frozenClinicalPublicationApproval,
+} from './lib/clinicalReviewBatchProvenance';
 
 export { isPubliclyReadableStatus } from './lib/publicationVisibility';
 
@@ -798,18 +801,24 @@ export const setReview = mutation({
     if (isRetiredContentSlug(item.slug)) {
       throw new Error('Retired content is immutable');
     }
+    const revision = item.reviewRevision ?? 1;
+    const frozenApproval = args.clinicalStatus === 'published'
+      ? await frozenClinicalPublicationApproval(ctx, item)
+      : { required: false, allowed: true, missing: [], governedDimensions: [] };
+    const frozenClinicalRequired = frozenApproval.governedDimensions.includes('clinical');
     const specialistReason = args.clinicalStatus === 'published'
       ? specialistReviewReason(item)
+        ?? (frozenClinicalRequired ? 'explicit_clinical_requirement' : null)
       : null;
     const approval = args.clinicalStatus === 'published'
-      ? specialistReason
-        ? await requireClinicalPublisher(ctx)
-        : await requireProfessionalPublisher(ctx)
+      ? await requireProfessionalPublisher(ctx)
       : null;
     const userId = approval?.userId ?? await requireContentEditor(ctx);
     if (args.clinicalStatus === 'published') {
-      const revision = item.reviewRevision ?? 1;
-      const required = requiredPublicationReviews(item);
+      const required: ReviewDimension[] = [...new Set<ReviewDimension>([
+        ...requiredPublicationReviews(item),
+        ...frozenApproval.governedDimensions as ReviewDimension[],
+      ])];
       const missing: string[] = [];
       for (const dimension of required) {
         const [latestDecision] = await ctx.db
@@ -823,6 +832,10 @@ export const setReview = mutation({
       }
       if (missing.length > 0) {
         throw new Error(`Current revision is missing review approvals: ${missing.join(', ')}`);
+      }
+
+      if (!frozenApproval.allowed) {
+        throw new Error(`Current revision is missing frozen review provenance: ${frozenApproval.missing.join(', ')}`);
       }
 
       const evidenceGate = await publicationEvidenceForContent(ctx, item);
@@ -853,7 +866,7 @@ export const setReview = mutation({
       reviewerId: userId,
       reviewerQualification: approval?.qualification ?? args.reviewerQualification?.trim(),
       reviewerDisplayName: approval?.reviewerName,
-      reviewScope: approval?.scope,
+      reviewScope: approval ? (specialistReason ? 'clinical' : approval.scope) : undefined,
       reviewedAt: now,
       nextReviewAt: args.nextReviewAt,
       reviewNote: args.reviewNote,
@@ -870,6 +883,9 @@ export const setReview = mutation({
         ? `${item.titleEn} · specialist review required for bed-sharing wording`
         : item.titleEn;
     await logAudit(ctx, userId, `library.${args.clinicalStatus}`, 'libraryContent', item._id, auditSummary);
-    return { ok: true as const, reviewScope: approval?.scope ?? null };
+    return {
+      ok: true as const,
+      reviewScope: approval ? (specialistReason ? 'clinical' : approval.scope) : null,
+    };
   },
 });

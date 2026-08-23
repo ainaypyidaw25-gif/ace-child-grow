@@ -199,6 +199,9 @@ function context() {
     aiEvidenceAudits: [],
     aiPublicationReleases: [],
     contentReviews: [],
+    clinicalReviewBatches: [],
+    clinicalReviewAssignments: [],
+    clinicalReviewBatchReceipts: [],
     auditLogs: [],
   };
   let insertCount = 0;
@@ -337,6 +340,12 @@ describe('frozen clinical-review batch UI contract', () => {
     expect((completed.handoff as { digest: string }).digest).toMatch(/^[a-f0-9]{64}$/);
     expect((completed.handoff as { receiptDigest: string }).receiptDigest).toMatch(/^[a-f0-9]{64}$/);
     expect(ctx.tables.contentReviews).toHaveLength(2);
+    expect(ctx.tables.clinicalReviewBatchReceipts).toHaveLength(1);
+    expect(ctx.tables.clinicalReviewBatchReceipts[0]).toMatchObject({
+      batchId: CLINICAL_REVIEW_BATCH_ID,
+      authority: 'pilot',
+      decisionCount: 2,
+    });
   });
 
   it('does not authorize lane handoff while a requested change remains', async () => {
@@ -348,6 +357,7 @@ describe('frozen clinical-review batch UI contract', () => {
     expect(completed).toMatchObject({ ok: true, duplicate: false, receipt: { decision: 'changes_requested' } });
     expect(completed).not.toHaveProperty('handoff');
     expect(ctx.tables.contentReviews).toHaveLength(2);
+    expect(ctx.tables.clinicalReviewBatchReceipts).toHaveLength(0);
   });
 
   it('keeps the frozen assignment valid when unrelated profile preferences change', async () => {

@@ -1,9 +1,16 @@
 import { v, type Infer } from 'convex/values';
-import { CLINICAL_REVIEW_BATCH_ID } from './clinicalReviewBatchData';
 
 export const CLINICAL_REVIEW_BATCH_CONTRACT = 'ace.clinical-frozen-batch' as const;
 export const CLINICAL_REVIEW_BATCH_CONTRACT_VERSION = 1 as const;
+// Backward-compatible pilot default. Every registry entry now declares its
+// dimension explicitly and the server returns that registered value.
 export const CLINICAL_REVIEW_BATCH_DIMENSION = 'clinical' as const;
+export const clinicalReviewBatchDimensionValidator = v.union(
+  v.literal('clinical'),
+  v.literal('child_development'),
+  v.literal('evidence'),
+  v.literal('safety'),
+);
 
 const nullableStringValidator = v.union(v.string(), v.null());
 export const clinicalReviewDecisionValidator = v.union(
@@ -36,7 +43,7 @@ export const clinicalReviewHandoffValidator = v.object({
 });
 const itemValidator = v.object({
   assignmentId: v.string(), slug: v.string(), type: v.string(),
-  dimension: v.literal(CLINICAL_REVIEW_BATCH_DIMENSION),
+  dimension: clinicalReviewBatchDimensionValidator,
   reviewRevision: v.number(), liveReviewRevision: v.number(), snapshot: snapshotValidator,
   decision: v.union(clinicalReviewReceiptValidator, v.null()),
 });
@@ -49,7 +56,7 @@ export const clinicalReviewBatchResultValidator = v.object({
   contract: v.literal(CLINICAL_REVIEW_BATCH_CONTRACT),
   contractVersion: v.literal(CLINICAL_REVIEW_BATCH_CONTRACT_VERSION),
   scope: v.literal('authenticated_assignee'),
-  batchId: v.literal(CLINICAL_REVIEW_BATCH_ID),
+  batchId: v.string(),
   lane: v.literal('clinical'),
   assignedRole: v.literal('clinical_reviewer'),
   frozenAt: v.number(),
