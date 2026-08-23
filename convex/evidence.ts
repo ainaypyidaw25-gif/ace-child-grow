@@ -59,6 +59,10 @@ import {
   isSwaimanSuddenWeaknessSourceCasTarget,
 } from './lib/swaimanSuddenWeaknessCasData';
 import {
+  isNutritionGuidesCasSource,
+  isNutritionGuidesCasTarget,
+} from './lib/nutritionGuidesCasData';
+import {
   isOlderSafety2026LinkTarget,
   isOlderSafety2026SourceTarget,
 } from './lib/olderSafety2026CasData';
@@ -578,7 +582,8 @@ async function applySources(
       || isOlderSafety2026SourceTarget(id)
       || isBirth2mGrossMotorCorrectionSource(id)
       || isClinicalBlockerCasSource(id)
-      || isClinicalTwoSmallCasSource(id)) {
+      || isClinicalTwoSmallCasSource(id)
+      || isNutritionGuidesCasSource(id)) {
       skipped += 1;
       continue;
     }
@@ -803,7 +808,8 @@ async function applyLinks(
       && !isSwaimanSuddenWeaknessLinkCasTarget(link.kind, link.slug)
       && !isOlderSafety2026LinkTarget(link.kind, link.slug)
       && !isGdBirth2mEmotionalCasLink(link.kind, link.slug)
-      && !isUnicefSeenCountedConsumer(link.kind, link.slug)) {
+      && !isUnicefSeenCountedConsumer(link.kind, link.slug)
+      && !isNutritionGuidesCasTarget(link.kind, link.slug)) {
       activeLinks.push(link);
     } else {
       skipped += 1;

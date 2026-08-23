@@ -61,6 +61,10 @@ import {
   MANUAL_REVIEW_CONTENT_TARGETS,
 } from '../../../convex/lib/manualReviewContentCasData';
 import {
+  NUTRITION_GUIDES_CAS_TARGETS,
+  NUTRITION_GUIDES_NEW_SOURCE_IDS,
+} from '../../../convex/lib/nutritionGuidesCasData';
+import {
   OLDER_SAFETY_2026_STAGED_SOURCES,
   OLDER_SAFETY_2026_TARGETS,
 } from '../../../convex/lib/olderSafety2026CasData';
@@ -333,6 +337,50 @@ describe('Convex registered handlers enforce authorization', () => {
     expect(context.db.query).not.toHaveBeenCalledWith('libraryContent');
     expect(context.db.patch).not.toHaveBeenCalled();
     expect(context.db.insert).not.toHaveBeenCalledWith('libraryContent', expect.anything());
+  });
+
+  it('reserves the three nutrition guides and two source rows at every broad import boundary', async () => {
+    authState.userId = 'editor-1';
+    const context = ctx({
+      profile: { userId: 'editor-1', isStaff: true, staffRole: 'content_editor' },
+      rows: { evidenceSources: [] },
+    });
+    const items = NUTRITION_GUIDES_CAS_TARGETS.map((target) => ({
+      type: target.kind,
+      slug: target.slug,
+      titleMm: 'stale',
+      titleEn: 'stale',
+      tags: [],
+      source: 'stale broad seed',
+      version: 1,
+      clinicalStatus: 'clinical_review',
+      data: {},
+      media: [],
+      searchText: 'stale',
+    }));
+    await expect(handler(importSeed)(context, { items })).resolves.toEqual({
+      created: 0,
+      updated: 0,
+      skippedApproved: 3,
+      total: 3,
+    });
+    for (const item of items) expect(seedRunSkipsItem(item)).toBe(true);
+
+    await expect(handler(importLinks)(context, { links:
+      NUTRITION_GUIDES_CAS_TARGETS.map((target) => ({
+        kind: target.kind,
+        slug: target.slug,
+        sourceIds: ['stale-or-unknown-source'],
+      })),
+    })).resolves.toMatchObject({ skipped: 3, created: 0, updated: 0, failed: 0 });
+
+    await expect(handler(importSources)(context, { sources:
+      NUTRITION_GUIDES_NEW_SOURCE_IDS.map((id) => ({ id })),
+    })).resolves.toMatchObject({ skipped: 2, created: 0, updated: 0, failed: 0 });
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalledWith('libraryContent', expect.anything());
+    expect(context.db.insert).not.toHaveBeenCalledWith('evidenceLinks', expect.anything());
+    expect(context.db.insert).not.toHaveBeenCalledWith('evidenceSources', expect.anything());
   });
 
   it('reserves the birth-to-2-month gross-motor correction at every broad import boundary', async () => {

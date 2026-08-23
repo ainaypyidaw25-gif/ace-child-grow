@@ -35,6 +35,7 @@ import { isManualReviewContentCasTargetSlug } from './lib/manualReviewContentCas
 import { isBirth2mNutritionCasTargetSlug } from './lib/birth2mNutritionCasData';
 import { isClinicalTwoSmallCasTargetSlug } from './lib/clinicalTwoSmallCasGuard';
 import { isBirth2mGrossMotorCorrectionSlug } from './lib/birth2mGrossMotorCorrection';
+import { isNutritionGuidesCasTargetSlug } from './lib/nutritionGuidesCasData';
 import { isOlderSafety2026ContentTargetSlug } from './lib/olderSafety2026CasData';
 import {
   frozenClinicalPublicationApproval,
@@ -624,7 +625,8 @@ export const importSeed = mutation({
         || isOlderSafety2026ContentTargetSlug(it.slug)
         || isGdBirth2mEmotionalCasContentSlug(it.slug)
         || isUnicefSeenCountedConsumerSlug(it.slug)
-        || isClinicalTwoSmallCasTargetSlug(it.slug)) {
+        || isClinicalTwoSmallCasTargetSlug(it.slug)
+        || isNutritionGuidesCasTargetSlug(it.slug)) {
         skippedApproved += 1;
         continue;
       }

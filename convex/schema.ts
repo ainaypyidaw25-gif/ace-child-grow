@@ -326,6 +326,12 @@ export default defineSchema({
     after: v.optional(v.string()),
   })
     .index('by_action', ['action'])
+    .index('by_action_and_entity_table_and_entity_id_and_result', [
+      'action',
+      'entityTable',
+      'entityId',
+      'result',
+    ])
     .index('by_result', ['result']),
 
   // ------------------------------------------------------------------
