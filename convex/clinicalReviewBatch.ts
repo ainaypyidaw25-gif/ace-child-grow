@@ -667,6 +667,7 @@ async function closePersistedReleaseBatch(
   registration: ClinicalReviewBatchRegistration,
   decision: DecisionReceipt['decision'],
   handoff: Awaited<ReturnType<typeof completionHandoff>>,
+  duplicate: boolean,
 ) {
   if (registration.authority !== 'release') return;
   const rows = await ctx.db
@@ -685,6 +686,10 @@ async function closePersistedReleaseBatch(
     return;
   }
   if (rows[0].status === 'stopped_changes_requested' && decision === 'changes_requested') return;
+  // A release may have stopped after this exact decision was first recorded.
+  // Replaying that earlier receipt is a read-only idempotent operation: it must
+  // return the existing receipt without trying to transition the closed batch.
+  if (rows[0].status === 'stopped_changes_requested' && duplicate && !handoff) return;
   if (rows[0].status !== 'active') throw new Error('Release batch lifecycle is closed');
   if (decision === 'changes_requested') {
     await ctx.db.patch(rows[0]._id, {
@@ -900,7 +905,7 @@ export const saveAssignedDecision = mutation({
         )
         : null;
       await persistHandoffReceipt(ctx, registration, handoff);
-      await closePersistedReleaseBatch(ctx, registration, state.decision.decision, handoff);
+      await closePersistedReleaseBatch(ctx, registration, state.decision.decision, handoff, true);
       return { ok: true as const, decisionKey: state.assignmentId, duplicate: true, receipt: state.decision, ...(handoff ? { handoff } : {}) };
     }
 
@@ -937,7 +942,7 @@ export const saveAssignedDecision = mutation({
       )
       : null;
     await persistHandoffReceipt(ctx, registration, handoff);
-    await closePersistedReleaseBatch(ctx, registration, receipt.decision, handoff);
+    await closePersistedReleaseBatch(ctx, registration, receipt.decision, handoff, false);
     return { ok: true as const, decisionKey: state.assignmentId, duplicate: false, receipt, ...(handoff ? { handoff } : {}) };
   },
 });

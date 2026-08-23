@@ -582,6 +582,26 @@ describe('frozen clinical-review batch UI contract', () => {
     expect(ctx.tables.clinicalReviewBatchReceipts).toHaveLength(0);
   });
 
+  it('replays an earlier approved receipt after a later item stops the release', async () => {
+    const ctx = context();
+    await makePilotReleaseActive(ctx);
+    const batch = await readBatch(ctx) as { items: Array<Record<string, unknown>> };
+    const firstInput = inputFrom(batch.items[0]);
+    const first = await handler(saveAssignedDecision)(ctx, firstInput) as Record<string, unknown>;
+    const secondInput = {
+      ...inputFrom(batch.items[1]),
+      decision: 'changes_requested',
+      note: 'Correct and refreeze.',
+    };
+    await handler(saveAssignedDecision)(ctx, secondInput);
+
+    const replay = await handler(saveAssignedDecision)(ctx, firstInput);
+    expect(replay).toMatchObject({ ok: true, duplicate: true, receipt: first.receipt });
+    expect(ctx.tables.clinicalReviewBatches[0]).toMatchObject({ status: 'stopped_changes_requested' });
+    expect(ctx.tables.contentReviews).toHaveLength(2);
+    expect(ctx.tables.clinicalReviewBatchReceipts).toHaveLength(0);
+  });
+
   it('keeps the frozen assignment valid when unrelated profile preferences change', async () => {
     const ctx = context();
     ctx.tables.parentProfiles[0].preferredLocale = 'en';
