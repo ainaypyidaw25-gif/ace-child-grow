@@ -56,6 +56,7 @@ import { isManualReviewContentCasTargetSlug } from './lib/manualReviewContentCas
 import { isBirth2mNutritionCasTargetSlug } from './lib/birth2mNutritionCasData';
 import { isClinicalTwoSmallCasTargetSlug } from './lib/clinicalTwoSmallCasGuard';
 import { isBirth2mGrossMotorCorrectionSlug } from './lib/birth2mGrossMotorCorrection';
+import { isNutritionGuidesCasTargetSlug } from './lib/nutritionGuidesCasData';
 import { isOlderSafety2026ContentTargetSlug } from './lib/olderSafety2026CasData';
 import {
   isGdBirth2mEmotionalCasContentSlug,
@@ -203,7 +204,8 @@ export function seedRunSkipsItem(item: Pick<Item, 'type' | 'slug'>): boolean {
     || isOlderSafety2026ContentTargetSlug(item.slug)
     || isGdBirth2mEmotionalCasContentSlug(item.slug)
     || isUnicefSeenCountedConsumerSlug(item.slug)
-    || isClinicalTwoSmallCasTargetSlug(item.slug);
+    || isClinicalTwoSmallCasTargetSlug(item.slug)
+    || isNutritionGuidesCasTargetSlug(item.slug);
 }
 
 const PUBLISHED_RELEASE_LIMIT = 5_000;

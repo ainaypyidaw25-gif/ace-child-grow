@@ -71,6 +71,7 @@ import type * as lib_inherentPublicLinkCasData from "../lib/inherentPublicLinkCa
 import type * as lib_legacyCompletedPriorityCorrectionData from "../lib/legacyCompletedPriorityCorrectionData.js";
 import type * as lib_manualReviewContentCasData from "../lib/manualReviewContentCasData.js";
 import type * as lib_manualReviewEvidenceLinkCasData from "../lib/manualReviewEvidenceLinkCasData.js";
+import type * as lib_nutritionGuidesCasData from "../lib/nutritionGuidesCasData.js";
 import type * as lib_olderSafety2026CasData from "../lib/olderSafety2026CasData.js";
 import type * as lib_ownerPriority from "../lib/ownerPriority.js";
 import type * as lib_ownerPriorityAccess from "../lib/ownerPriorityAccess.js";
@@ -91,6 +92,7 @@ import type * as milestones from "../milestones.js";
 import type * as mmpay from "../mmpay.js";
 import type * as mmpayData from "../mmpayData.js";
 import type * as notifications from "../notifications.js";
+import type * as nutritionGuidesCas from "../nutritionGuidesCas.js";
 import type * as observations from "../observations.js";
 import type * as olderSafety2026Cas from "../olderSafety2026Cas.js";
 import type * as ownerPriority from "../ownerPriority.js";
@@ -177,6 +179,7 @@ declare const fullApi: ApiFromModules<{
   "lib/legacyCompletedPriorityCorrectionData": typeof lib_legacyCompletedPriorityCorrectionData;
   "lib/manualReviewContentCasData": typeof lib_manualReviewContentCasData;
   "lib/manualReviewEvidenceLinkCasData": typeof lib_manualReviewEvidenceLinkCasData;
+  "lib/nutritionGuidesCasData": typeof lib_nutritionGuidesCasData;
   "lib/olderSafety2026CasData": typeof lib_olderSafety2026CasData;
   "lib/ownerPriority": typeof lib_ownerPriority;
   "lib/ownerPriorityAccess": typeof lib_ownerPriorityAccess;
@@ -197,6 +200,7 @@ declare const fullApi: ApiFromModules<{
   mmpay: typeof mmpay;
   mmpayData: typeof mmpayData;
   notifications: typeof notifications;
+  nutritionGuidesCas: typeof nutritionGuidesCas;
   observations: typeof observations;
   olderSafety2026Cas: typeof olderSafety2026Cas;
   ownerPriority: typeof ownerPriority;
