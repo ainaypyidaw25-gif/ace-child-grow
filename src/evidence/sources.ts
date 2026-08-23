@@ -436,7 +436,7 @@ export const WHO_UNICEF_SOURCES: EvidenceSource[] = [
     orgKey: 'UNICEF',
     title:
       'Seen, Counted, Included: Using data to shed light on the well-being of children with disabilities',
-    year: 2022,
+    year: 2021,
     isbn: null,
     url: 'https://data.unicef.org/resources/children-with-disabilities-report-2021/',
     evidenceLevel: 'expert_consensus',
@@ -444,8 +444,9 @@ export const WHO_UNICEF_SOURCES: EvidenceSource[] = [
     topics: ['special_needs'],
     ageMonthsMin: 0,
     ageMonthsMax: 60,
+    verifiedOn: '2026-08-23',
     verifiedNote:
-      'UNICEF Data page shows the title and the November 2021/2022 release. No ISBN is printed on the resource page, so isbn is null.',
+      'The UNICEF report PDF prints the title, “© United Nations Children’s Fund (UNICEF), Division of Data, Analytics, Planning and Monitoring, November 2021” and a suggested citation ending “UNICEF, New York, 2021.” No ISBN is printed on the resource page or PDF, so isbn is null. The stable legacy source id retains its 2022 suffix.',
   }),
   s({
     id: 'myanmar-nsp-newborn-child-2015',
@@ -1860,6 +1861,25 @@ export const NHS_SOURCES: EvidenceSource[] = [
     ageMonthsMax: 60,
     verifiedNote:
       'NHS page prints this title, "Page last reviewed: 18 December 2025" and "Next review due: 18 December 2028" and lists stopped or difficult breathing, seizure, unresponsiveness, blue or grey colour and severe injury as ambulance triggers.',
+  }),
+  s({
+    id: 'nhs-soothing-crying-baby-2026',
+    org: 'National Health Service (UK)',
+    orgKey: 'NHS',
+    title: 'Soothing a crying baby',
+    year: 2026,
+    verifiedOn: '2026-08-23',
+    edition: 'Page last reviewed: 22 April 2026; Next review due: 22 April 2029',
+    country: 'United Kingdom',
+    url: 'https://www.nhs.uk/baby/caring-for-a-newborn/soothing-a-crying-baby/',
+    nextReviewDate: '2029-04-22',
+    evidenceLevel: 'parent_education',
+    keywords: ['crying baby', 'feeding', 'projectile vomiting', 'floppy', 'difficulty breathing'],
+    topics: ['parenting', 'safety'],
+    ageMonthsMin: 0,
+    ageMonthsMax: 5,
+    verifiedNote:
+      'NHS page prints this title, “Page last reviewed: 22 April 2026” and “Next review due: 22 April 2029”. It advises contacting a GP or NHS 111 when a crying baby seems unwell, has a high temperature or is not interested in feeding, and calling emergency services for seizure, abnormal colour, unresponsiveness or floppiness, difficulty breathing, or repeated projectile vomiting.',
   }),
   s({
     id: 'nhs-baby-reviews-2023',

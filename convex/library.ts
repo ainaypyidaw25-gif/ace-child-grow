@@ -38,6 +38,10 @@ import {
   frozenClinicalPublicationApproval,
   isRegisteredReleaseContentTarget,
 } from './lib/clinicalReviewBatchProvenance';
+import {
+  isGdBirth2mEmotionalCasContentSlug,
+  isUnicefSeenCountedConsumerSlug,
+} from './lib/clinicalBlockerCasData';
 
 export { isPubliclyReadableStatus } from './lib/publicationVisibility';
 
@@ -600,7 +604,9 @@ export const importSeed = mutation({
         || isManualReviewContentCasTargetSlug(it.slug)
         || isBirth2mNutritionCasTargetSlug(it.slug)
         || isBirth2mGrossMotorCorrectionSlug(it.slug)
-        || isOlderSafety2026ContentTargetSlug(it.slug)) {
+        || isOlderSafety2026ContentTargetSlug(it.slug)
+        || isGdBirth2mEmotionalCasContentSlug(it.slug)
+        || isUnicefSeenCountedConsumerSlug(it.slug)) {
         skippedApproved += 1;
         continue;
       }

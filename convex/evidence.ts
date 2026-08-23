@@ -62,6 +62,11 @@ import {
   isRegisteredReleaseContentTarget,
   isRegisteredReleaseSourceId,
 } from './lib/clinicalReviewBatchProvenance';
+import {
+  isClinicalBlockerCasSource,
+  isGdBirth2mEmotionalCasLink,
+  isUnicefSeenCountedConsumer,
+} from './lib/clinicalBlockerCasData';
 
 const REVIEW_STATUSES = [
   'evidence_required',
@@ -562,7 +567,8 @@ async function applySources(
     if (isRegisteredReleaseSourceId(id)
       || isSwaimanSuddenWeaknessSourceCasTarget(id)
       || isOlderSafety2026SourceTarget(id)
-      || isBirth2mGrossMotorCorrectionSource(id)) {
+      || isBirth2mGrossMotorCorrectionSource(id)
+      || isClinicalBlockerCasSource(id)) {
       skipped += 1;
       continue;
     }
@@ -778,7 +784,9 @@ async function applyLinks(
       && !isBirth2mGrossMotorCorrectionLink(link.kind, link.slug)
       && !isManualReviewEvidenceLinkCasTarget(link.kind, link.slug)
       && !isSwaimanSuddenWeaknessLinkCasTarget(link.kind, link.slug)
-      && !isOlderSafety2026LinkTarget(link.kind, link.slug)) return true;
+      && !isOlderSafety2026LinkTarget(link.kind, link.slug)
+      && !isGdBirth2mEmotionalCasLink(link.kind, link.slug)
+      && !isUnicefSeenCountedConsumer(link.kind, link.slug)) return true;
     skipped += 1;
     return false;
   });

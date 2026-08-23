@@ -31,6 +31,7 @@ import type * as directory from "../directory.js";
 import type * as evidence from "../evidence.js";
 import type * as family from "../family.js";
 import type * as favorites from "../favorites.js";
+import type * as gdBirth2mEmotionalCas from "../gdBirth2mEmotionalCas.js";
 import type * as growth from "../growth.js";
 import type * as healthRecords from "../healthRecords.js";
 import type * as http from "../http.js";
@@ -51,6 +52,7 @@ import type * as lib_classificationImport from "../lib/classificationImport.js";
 import type * as lib_clinicalReviewBatchContract from "../lib/clinicalReviewBatchContract.js";
 import type * as lib_clinicalReviewBatchData from "../lib/clinicalReviewBatchData.js";
 import type * as lib_clinicalReviewCopyRelease from "../lib/clinicalReviewCopyRelease.js";
+import type * as lib_clinicalBlockerCasData from "../lib/clinicalBlockerCasData.js";
 import type * as lib_contentEditDiff from "../lib/contentEditDiff.js";
 import type * as lib_contentRetirements from "../lib/contentRetirements.js";
 import type * as lib_contentReviewRequirements from "../lib/contentReviewRequirements.js";
@@ -98,6 +100,7 @@ import type * as subscriptions from "../subscriptions.js";
 import type * as swaimanCerebralPalsyLinkCas from "../swaimanCerebralPalsyLinkCas.js";
 import type * as swaimanSeizureLinkCas from "../swaimanSeizureLinkCas.js";
 import type * as swaimanSuddenWeaknessCas from "../swaimanSuddenWeaknessCas.js";
+import type * as unicefSeenCountedMetadataCas from "../unicefSeenCountedMetadataCas.js";
 
 import type {
   ApiFromModules,
@@ -129,6 +132,7 @@ declare const fullApi: ApiFromModules<{
   evidence: typeof evidence;
   family: typeof family;
   favorites: typeof favorites;
+  gdBirth2mEmotionalCas: typeof gdBirth2mEmotionalCas;
   growth: typeof growth;
   healthRecords: typeof healthRecords;
   http: typeof http;
@@ -149,6 +153,7 @@ declare const fullApi: ApiFromModules<{
   "lib/clinicalReviewBatchContract": typeof lib_clinicalReviewBatchContract;
   "lib/clinicalReviewBatchData": typeof lib_clinicalReviewBatchData;
   "lib/clinicalReviewCopyRelease": typeof lib_clinicalReviewCopyRelease;
+  "lib/clinicalBlockerCasData": typeof lib_clinicalBlockerCasData;
   "lib/contentEditDiff": typeof lib_contentEditDiff;
   "lib/contentRetirements": typeof lib_contentRetirements;
   "lib/contentReviewRequirements": typeof lib_contentReviewRequirements;
@@ -196,6 +201,7 @@ declare const fullApi: ApiFromModules<{
   swaimanCerebralPalsyLinkCas: typeof swaimanCerebralPalsyLinkCas;
   swaimanSeizureLinkCas: typeof swaimanSeizureLinkCas;
   swaimanSuddenWeaknessCas: typeof swaimanSuddenWeaknessCas;
+  unicefSeenCountedMetadataCas: typeof unicefSeenCountedMetadataCas;
 }>;
 
 /**
