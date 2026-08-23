@@ -48,9 +48,9 @@ import type * as lib_birth2mGrossMotorCorrection from "../lib/birth2mGrossMotorC
 import type * as lib_birth2mNutritionCasData from "../lib/birth2mNutritionCasData.js";
 import type * as lib_burmeseCopyAuditRelease from "../lib/burmeseCopyAuditRelease.js";
 import type * as lib_classificationImport from "../lib/classificationImport.js";
-import type * as lib_clinicalReviewCopyRelease from "../lib/clinicalReviewCopyRelease.js";
-import type * as lib_clinicalReviewBatchData from "../lib/clinicalReviewBatchData.js";
 import type * as lib_clinicalReviewBatchContract from "../lib/clinicalReviewBatchContract.js";
+import type * as lib_clinicalReviewBatchData from "../lib/clinicalReviewBatchData.js";
+import type * as lib_clinicalReviewCopyRelease from "../lib/clinicalReviewCopyRelease.js";
 import type * as lib_contentEditDiff from "../lib/contentEditDiff.js";
 import type * as lib_contentRetirements from "../lib/contentRetirements.js";
 import type * as lib_contentReviewRequirements from "../lib/contentReviewRequirements.js";
@@ -144,9 +144,9 @@ declare const fullApi: ApiFromModules<{
   "lib/birth2mNutritionCasData": typeof lib_birth2mNutritionCasData;
   "lib/burmeseCopyAuditRelease": typeof lib_burmeseCopyAuditRelease;
   "lib/classificationImport": typeof lib_classificationImport;
-  "lib/clinicalReviewCopyRelease": typeof lib_clinicalReviewCopyRelease;
-  "lib/clinicalReviewBatchData": typeof lib_clinicalReviewBatchData;
   "lib/clinicalReviewBatchContract": typeof lib_clinicalReviewBatchContract;
+  "lib/clinicalReviewBatchData": typeof lib_clinicalReviewBatchData;
+  "lib/clinicalReviewCopyRelease": typeof lib_clinicalReviewCopyRelease;
   "lib/contentEditDiff": typeof lib_contentEditDiff;
   "lib/contentRetirements": typeof lib_contentRetirements;
   "lib/contentReviewRequirements": typeof lib_contentReviewRequirements;
