@@ -5,6 +5,10 @@ import {
   clinicalReviewBatchLoadResultValidator,
   type ClinicalReviewBatchLoadResult,
 } from './lib/clinicalReviewBatchContract';
+import {
+  ownerRegistryStatusValidator,
+  type OwnerRegistryStatus,
+} from './lib/clinicalReviewRegistryContract';
 
 /**
  * Public, authenticated read boundary for the frozen clinical batch.
@@ -27,6 +31,24 @@ export const getAssignedBatch = action({
     }
     const nowMs = Date.now();
     return await ctx.runQuery(internal.clinicalReviewBatch.readAssignedBatchState, {
+      nowMs,
+      todayIso: new Date(nowMs).toISOString().slice(0, 10),
+    });
+  },
+});
+
+/**
+ * Owner registry status with an action-supplied server clock. The internal
+ * query performs the owner authorization and exact database inspection; the
+ * browser never supplies a timestamp that could extend readiness.
+ */
+export const getOwnerRegistryStatus = action({
+  args: {},
+  returns: ownerRegistryStatusValidator,
+  handler: async (ctx): Promise<OwnerRegistryStatus> => {
+    if (!(await getAuthUserId(ctx))) throw new Error('Not authenticated');
+    const nowMs = Date.now();
+    return await ctx.runQuery(internal.clinicalReviewRegistry.ownerRegistryStatus, {
       nowMs,
       todayIso: new Date(nowMs).toISOString().slice(0, 10),
     });

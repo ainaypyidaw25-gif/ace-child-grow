@@ -1,12 +1,17 @@
 import { v } from 'convex/values';
 import type { Doc, Id } from './_generated/dataModel';
-import { mutation, query, type QueryCtx } from './_generated/server';
+import { internalQuery, mutation, type QueryCtx } from './_generated/server';
 import { logAudit } from './audit';
 import { registeredBatchActivationBlockers } from './clinicalReviewBatch';
 import { requireOwner } from './lib/auth';
 import { sha256Canonical } from './lib/aiAuditHash';
 import { todayIsoUtc } from './lib/evidenceFreshness';
 import { roleMayReview } from './lib/reviewPolicy';
+import {
+  CLINICAL_REVIEW_REGISTRY_MAX_ITEMS_PER_BATCH,
+  ownerRegistryStatusValidator,
+  type ActivationReadiness,
+} from './lib/clinicalReviewRegistryContract';
 import {
   CLINICAL_REVIEW_BATCH_REGISTRY,
   clinicalReviewBatchRoutingPayload,
@@ -28,99 +33,7 @@ const resultValidator = v.object({
 });
 
 const MAX_REGISTERED_RELEASES = 20;
-const MAX_ASSIGNMENTS_PER_RELEASE = 50;
-
-const persistedBatchStatusValidator = v.union(
-  v.literal('frozen'),
-  v.literal('active'),
-  v.literal('stopped_changes_requested'),
-  v.literal('completed'),
-  v.literal('invalidated'),
-);
-
-const activationReadinessValidator = v.union(
-  v.literal('not_materialized'),
-  v.literal('blocked_persisted_mismatch'),
-  v.literal('blocked_assignment_mismatch'),
-  v.literal('already_active'),
-  v.literal('already_completed'),
-  v.literal('stopped_changes_requested'),
-  v.literal('invalidated'),
-  v.literal('blocked_active_batch_exists'),
-  v.literal('blocked_expired'),
-  v.literal('awaiting_predecessor_completion'),
-  v.literal('awaiting_predecessor_receipt'),
-  v.literal('blocked_predecessor_mismatch'),
-  v.literal('blocked_upstream_receipt_consumed'),
-  v.literal('blocked_live_preflight'),
-  v.literal('blocked_refreeze_requires_exact_confirmation'),
-  v.literal('ready_initial'),
-  v.literal('ready_after_handoff'),
-);
-
-const ownerRegistryStatusValidator = v.object({
-  registryDigest: v.string(),
-  registryCode: v.union(v.literal('valid'), v.literal('invalid')),
-  materializationCode: v.union(
-    v.literal('materialization_required'),
-    v.literal('materialized_exact'),
-    v.literal('blocked_persisted_mismatch'),
-  ),
-  registeredReleaseCount: v.number(),
-  persistedBatchCount: v.number(),
-  persistedAssignmentCount: v.number(),
-  releases: v.array(v.object({
-    batchId: v.string(),
-    sequence: v.number(),
-    dimension: v.union(
-      v.literal('clinical'),
-      v.literal('child_development'),
-      v.literal('evidence'),
-      v.literal('safety'),
-    ),
-    activationKind: v.union(
-      v.literal('initial'),
-      v.literal('after_handoff'),
-      v.literal('after_changes_requested_refreeze'),
-    ),
-    freezeDigest: v.string(),
-    itemCount: v.number(),
-    expiresAt: v.number(),
-    persistedStatus: v.union(persistedBatchStatusValidator, v.null()),
-    persistedBatchRows: v.number(),
-    persistedAssignmentRows: v.number(),
-    persistedReceiptRows: v.number(),
-    registrationExact: v.boolean(),
-    assignmentsExact: v.boolean(),
-    readinessCode: activationReadinessValidator,
-  })),
-  currentActivation: v.union(v.null(), v.object({
-    batchId: v.string(),
-    freezeDigest: v.string(),
-    expectedUpstreamReceiptDigest: v.union(v.string(), v.null()),
-    confirmationText: v.string(),
-    readinessCode: v.union(v.literal('ready_initial'), v.literal('ready_after_handoff')),
-  })),
-});
-
-type ActivationReadiness =
-  | 'not_materialized'
-  | 'blocked_persisted_mismatch'
-  | 'blocked_assignment_mismatch'
-  | 'already_active'
-  | 'already_completed'
-  | 'stopped_changes_requested'
-  | 'invalidated'
-  | 'blocked_active_batch_exists'
-  | 'blocked_expired'
-  | 'awaiting_predecessor_completion'
-  | 'awaiting_predecessor_receipt'
-  | 'blocked_predecessor_mismatch'
-  | 'blocked_upstream_receipt_consumed'
-  | 'blocked_live_preflight'
-  | 'blocked_refreeze_requires_exact_confirmation'
-  | 'ready_initial'
-  | 'ready_after_handoff';
+const MAX_REGISTERED_BATCHES = MAX_REGISTERED_RELEASES + 1;
 
 function registrationById(batchId: string): ClinicalReviewBatchRegistration | null {
   return CLINICAL_REVIEW_BATCH_REGISTRY.find(
@@ -141,12 +54,25 @@ async function registryIntegrityValid(): Promise<boolean> {
   let previousRelease: ClinicalReviewBatchRegistration | null = null;
   const registrations: readonly ClinicalReviewBatchRegistration[] = CLINICAL_REVIEW_BATCH_REGISTRY;
   const releaseCount = registrations.filter((registration) => registration.authority === 'release').length;
-  if (releaseCount > MAX_REGISTERED_RELEASES) return false;
+  if (registrations.length === 0
+    || registrations.length > MAX_REGISTERED_BATCHES
+    || releaseCount > MAX_REGISTERED_RELEASES) return false;
   for (let index = 0; index < registrations.length; index += 1) {
     const registration = registrations[index];
+    if (!registration.manifest.batchId.trim()
+      || !Number.isFinite(registration.frozenAt)
+      || !Number.isFinite(registration.expiresAt)
+      || registration.frozenAt >= registration.expiresAt
+      || !registration.manifest.reviewer.profileId.trim()
+      || !registration.manifest.reviewer.userId.trim()
+      || !registration.manifest.reviewer.displayName.trim()
+      || !registration.manifest.reviewer.qualification.trim()
+      || !/^[a-f0-9]{64}$/.test(registration.manifest.reviewer.identityCanonicalSha256)
+      || !/^[a-f0-9]{64}$/.test(registration.freezeDigest)
+      || !/^[a-f0-9]{64}$/.test(registration.routingCanonicalSha256)) return false;
     if (registration.manifest.count !== registration.manifest.items.length
       || registration.manifest.count < 1
-      || registration.manifest.count > MAX_ASSIGNMENTS_PER_RELEASE) return false;
+      || registration.manifest.count > CLINICAL_REVIEW_REGISTRY_MAX_ITEMS_PER_BATCH) return false;
     if (registration.sequence !== index + 1 || batchIds.has(registration.manifest.batchId)) return false;
     batchIds.add(registration.manifest.batchId);
     if (await sha256Canonical(registration.manifest) !== registration.freezeDigest
@@ -165,13 +91,31 @@ async function registryIntegrityValid(): Promise<boolean> {
         || registration.activation.previousBatchId !== previousRelease.manifest.batchId) return false;
       previousRelease = registration;
     }
-    for (const item of registration.manifest.items) {
+    if (registration.activation.kind === 'after_handoff'
+      && !/^[a-f0-9]{64}$/.test(registration.activation.expectedPreviousFreezeDigest)) return false;
+    if (registration.activation.kind === 'after_changes_requested_refreeze'
+      && !/^[a-f0-9]{64}$/.test(registration.activation.expectedDecisionSetDigest)) return false;
+    const ordinals = new Set<number>();
+    const localTargets = new Set<string>();
+    for (let itemIndex = 0; itemIndex < registration.manifest.items.length; itemIndex += 1) {
+      const item = registration.manifest.items[itemIndex];
       if (registration.authority === 'release'
         && (!Number.isInteger(item.currentClinicalReviewCount)
           || item.currentClinicalReviewCount! < 0
           || !/^[a-f0-9]{64}$/.test(item.currentClinicalReviewsCanonicalSha256 ?? '')
           || !/^[a-f0-9]{64}$/.test(item.allClinicalReviewHistoryCanonicalSha256 ?? ''))) return false;
-      const target = `${item.kind}\u0000${item.slug}\u0000${registration.dimension}\u0000${item.reviewRevision}`;
+      if (!Number.isInteger(item.ordinal)
+        || item.ordinal !== itemIndex + 1
+        || ordinals.has(item.ordinal)
+        || !item.kind.trim()
+        || !item.slug.trim()
+        || !Number.isInteger(item.reviewRevision)
+        || item.reviewRevision < 1) return false;
+      ordinals.add(item.ordinal);
+      const localTarget = `${item.kind}\u0000${item.slug}\u0000${item.reviewRevision}`;
+      if (localTargets.has(localTarget)) return false;
+      localTargets.add(localTarget);
+      const target = `${localTarget}\u0000${registration.dimension}`;
       if (targets.has(target)) return false;
       targets.add(target);
     }
@@ -197,7 +141,7 @@ async function inspectPersistedRegistration(
     .withIndex('by_batch_id', (q) => q.eq('batchId', registration.manifest.batchId)).take(2);
   const assignments = await ctx.db.query('clinicalReviewAssignments')
     .withIndex('by_batch_id_and_ordinal', (q) => q.eq('batchId', registration.manifest.batchId))
-    .take(registration.manifest.count + 1);
+    .take(CLINICAL_REVIEW_REGISTRY_MAX_ITEMS_PER_BATCH + 1);
   const receipts = await ctx.db.query('clinicalReviewBatchReceipts')
     .withIndex('by_batch_id', (q) => q.eq('batchId', registration.manifest.batchId)).take(2);
   const expectedAssignments = await Promise.all(registration.manifest.items.map(async (item) => ({
@@ -323,11 +267,18 @@ async function assignmentInsertValue(
  * coarse readiness codes only. Exact assignments, source ids/URLs and frozen
  * content snapshots remain confined to the assignee-only batch loader.
  */
-export const ownerRegistryStatus = query({
-  args: {},
+export const ownerRegistryStatus = internalQuery({
+  args: { nowMs: v.number(), todayIso: v.string() },
   returns: ownerRegistryStatusValidator,
-  handler: async (ctx) => {
+  handler: async (ctx, args) => {
     await requireOwner(ctx);
+    const serverDate = new Date(args.nowMs);
+    if (!Number.isFinite(args.nowMs)
+      || Number.isNaN(serverDate.getTime())
+      || args.nowMs < 0
+      || serverDate.toISOString().slice(0, 10) !== args.todayIso) {
+      throw new Error('Invalid server clock');
+    }
     const exactRegistryDigest = await registryDigest();
     const registryCode = await registryIntegrityValid() ? 'valid' as const : 'invalid' as const;
     const registeredReleases = CLINICAL_REVIEW_BATCH_REGISTRY.filter(
@@ -355,8 +306,8 @@ export const ownerRegistryStatus = query({
     );
     const activeRows = await ctx.db.query('clinicalReviewBatches')
       .withIndex('by_status', (q) => q.eq('status', 'active')).take(2);
-    const now = Date.now();
-    const todayIso = todayIsoUtc();
+    const now = args.nowMs;
+    const todayIso = args.todayIso;
     const upstreamReceiptByBatchId = new Map<string, string>();
     const readinessByBatchId = new Map<string, ActivationReadiness>();
 
@@ -377,6 +328,7 @@ export const ownerRegistryStatus = query({
         else if (status === 'completed') readiness = 'already_completed';
         else if (status === 'stopped_changes_requested') readiness = 'stopped_changes_requested';
         else if (status === 'invalidated') readiness = 'invalidated';
+        else if (inspection.receipts.length > 0) readiness = 'blocked_current_receipt_present';
         else if (activeRows.length > 0) readiness = 'blocked_active_batch_exists';
         else if (now >= registration.expiresAt) readiness = 'blocked_expired';
         else if (registration.activation.kind === 'after_changes_requested_refreeze') {
@@ -401,6 +353,7 @@ export const ownerRegistryStatus = query({
               readiness = 'awaiting_predecessor_completion';
               prerequisiteReady = false;
             } else if (predecessor.receipts.length !== 1
+              || predecessor.batches[0].completedAt !== predecessor.receipts[0].completedAt
               || !await exactHandoffReceipt(ctx, predecessor.receipts[0], predecessorRegistration)) {
               readiness = 'awaiting_predecessor_receipt';
               prerequisiteReady = false;
@@ -507,6 +460,9 @@ export const materializeRegisteredReleaseBatches = mutation({
   returns: resultValidator,
   handler: async (ctx, args) => {
     const userId = await requireOwner(ctx);
+    if (!await registryIntegrityValid()) {
+      return { ok: false, code: 'registered_registry_invalid', batchId: null, createdBatches: 0, createdAssignments: 0 };
+    }
     const exactRegistryDigest = await registryDigest();
     if (args.expectedRegistryDigest !== exactRegistryDigest) {
       return { ok: false, code: 'registry_digest_mismatch', batchId: null, createdBatches: 0, createdAssignments: 0 };
@@ -650,6 +606,9 @@ export const activateRegisteredBatch = mutation({
   returns: resultValidator,
   handler: async (ctx, args) => {
     const userId = await requireOwner(ctx);
+    if (!await registryIntegrityValid()) {
+      return { ok: false, code: 'registered_registry_invalid', batchId: args.batchId, createdBatches: 0, createdAssignments: 0 };
+    }
     const registration = registrationById(args.batchId);
     if (!registration || registration.authority !== 'release'
       || registration.freezeDigest !== args.expectedFreezeDigest
@@ -662,6 +621,11 @@ export const activateRegisteredBatch = mutation({
     if (batches.length !== 1 || batches[0].status !== 'frozen'
       || !exactPersistedBatchRegistration(batches[0], registration)) {
       return { ok: false, code: 'batch_not_frozen', batchId: args.batchId, createdBatches: 0, createdAssignments: 0 };
+    }
+    const currentReceipts = await ctx.db.query('clinicalReviewBatchReceipts')
+      .withIndex('by_batch_id', (q) => q.eq('batchId', args.batchId)).take(2);
+    if (currentReceipts.length > 0) {
+      return { ok: false, code: 'current_batch_receipt_present', batchId: args.batchId, createdBatches: 0, createdAssignments: 0 };
     }
     const persistedAssignments = await ctx.db.query('clinicalReviewAssignments')
       .withIndex('by_batch_id_and_ordinal', (q) => q.eq('batchId', args.batchId))
@@ -699,6 +663,7 @@ export const activateRegisteredBatch = mutation({
         || !exactPersistedBatchRegistration(predecessorRows[0], predecessor)
         || !args.expectedUpstreamReceiptDigest
         || receipts.length !== 1
+        || predecessorRows[0].completedAt !== receipts[0].completedAt
         || !await exactHandoffReceipt(ctx, receipts[0], predecessor)
         || receipts[0].receiptDigest !== args.expectedUpstreamReceiptDigest) {
         return { ok: false, code: 'upstream_handoff_missing', batchId: args.batchId, createdBatches: 0, createdAssignments: 0 };

@@ -36,7 +36,7 @@ vi.mock('../../../convex/lib/aiAuditHash', async (importOriginal) => {
   };
 });
 
-import { readAssignedBatchState } from '../../../convex/clinicalReviewBatch';
+import { readAssignedBatchState, saveAssignedDecision } from '../../../convex/clinicalReviewBatch';
 import {
   activateRegisteredBatch,
   materializeRegisteredReleaseBatches,
@@ -60,6 +60,11 @@ import { frozenClinicalPublicationApproval } from '../../../convex/lib/clinicalR
 import { contentIsParentReadable } from '../../../convex/lib/publicationVisibility';
 
 type Row = Record<string, unknown>;
+const TEST_NOW_MS = new Date('2026-08-24T00:00:00.000Z').getTime();
+
+function ownerStatusArgs(nowMs = TEST_NOW_MS) {
+  return { nowMs, todayIso: new Date(nowMs).toISOString().slice(0, 10) };
+}
 
 const reviewerProfile = {
   _id: 'md79ghw3fm2a09pvhgs63c754n8bgnpy',
@@ -279,6 +284,28 @@ async function materializeAndActivate(ctx: ReturnType<typeof context>) {
   });
 }
 
+async function completeInitialRelease(ctx: ReturnType<typeof context>) {
+  await materializeAndActivate(ctx);
+  authState.userId = String(reviewerProfile.userId);
+  const loaded = await handler(readAssignedBatchState)(ctx, {
+    nowMs: 1787500570000,
+    todayIso: '2026-08-23',
+  }) as { items: Array<Record<string, unknown>> };
+  for (const item of loaded.items) {
+    await expect(handler(saveAssignedDecision)(ctx, {
+      batchId: CLINICAL_INITIAL_RELEASE_BATCH_ID,
+      assignmentId: item.assignmentId,
+      contentSlug: item.slug,
+      dimension: item.dimension,
+      decision: 'approved',
+      expectedReviewRevision: item.reviewRevision,
+      expectedSnapshotDigest: (item.snapshot as { digest: string }).digest,
+      expectedFreezeDigest: CLINICAL_INITIAL_RELEASE_BATCH_HASH,
+    })).resolves.toMatchObject({ ok: true });
+  }
+  authState.userId = 'owner-user';
+}
+
 describe('first release-authoritative clinical batch', () => {
   beforeEach(() => {
     authState.userId = 'owner-user';
@@ -356,7 +383,7 @@ describe('first release-authoritative clinical batch', () => {
       expectedRegistryDigest: await registryDigest(),
     })).resolves.toMatchObject({ ok: true, createdBatches: 2, createdAssignments: 5 });
 
-    const ready = await handler(ownerRegistryStatus)(ctx, {}) as Record<string, unknown>;
+    const ready = await handler(ownerRegistryStatus)(ctx, ownerStatusArgs()) as Record<string, unknown>;
     expect(ready).toMatchObject({
       registryCode: 'valid',
       materializationCode: 'materialized_exact',
@@ -378,7 +405,7 @@ describe('first release-authoritative clinical batch', () => {
       batchId: CLINICAL_INITIAL_RELEASE_BATCH_ID,
       expectedFreezeDigest: CLINICAL_INITIAL_RELEASE_BATCH_HASH,
     })).resolves.toMatchObject({ ok: true, code: 'activated' });
-    const readback = await handler(ownerRegistryStatus)(ctx, {}) as Record<string, unknown>;
+    const readback = await handler(ownerRegistryStatus)(ctx, ownerStatusArgs()) as Record<string, unknown>;
     expect(readback).toMatchObject({
       currentActivation: null,
       releases: [
@@ -386,6 +413,108 @@ describe('first release-authoritative clinical batch', () => {
         { batchId: CLINICAL_NUTRITION_RELEASE_BATCH_ID, persistedStatus: 'frozen', readinessCode: 'blocked_active_batch_exists' },
       ],
     });
+  });
+
+  it('re-evaluates readiness at the exact server-clock expiry boundary', async () => {
+    const ctx = context();
+    await expect(handler(materializeRegisteredReleaseBatches)(ctx, {
+      expectedRegistryDigest: await registryDigest(),
+    })).resolves.toMatchObject({ ok: true });
+    const rootRegistration = CLINICAL_REVIEW_BATCH_REGISTRY.find(
+      (registration) => registration.manifest.batchId === CLINICAL_INITIAL_RELEASE_BATCH_ID,
+    );
+    expect(rootRegistration).toBeDefined();
+    if (!rootRegistration) return;
+
+    await expect(handler(ownerRegistryStatus)(ctx, ownerStatusArgs(rootRegistration.expiresAt - 1)))
+      .resolves.toMatchObject({
+        currentActivation: { batchId: CLINICAL_INITIAL_RELEASE_BATCH_ID, readinessCode: 'ready_initial' },
+      });
+    await expect(handler(ownerRegistryStatus)(ctx, ownerStatusArgs(rootRegistration.expiresAt)))
+      .resolves.toMatchObject({
+        currentActivation: null,
+        releases: [
+          { batchId: CLINICAL_INITIAL_RELEASE_BATCH_ID, readinessCode: 'blocked_expired' },
+          expect.any(Object),
+        ],
+      });
+  });
+
+  it('blocks readiness and direct activation when a frozen current batch already has a receipt', async () => {
+    const ctx = context();
+    await handler(materializeRegisteredReleaseBatches)(ctx, {
+      expectedRegistryDigest: await registryDigest(),
+    });
+    ctx.tables.clinicalReviewBatchReceipts.push({
+      _id: 'stale-current-receipt',
+      _creationTime: 1,
+      batchId: CLINICAL_INITIAL_RELEASE_BATCH_ID,
+      freezeDigest: CLINICAL_INITIAL_RELEASE_BATCH_HASH,
+      reviewerId: reviewerProfile.userId,
+      decisionCount: 2,
+      completedAt: TEST_NOW_MS,
+      digest: 'd'.repeat(64),
+      receiptDigest: 'r'.repeat(64),
+      authority: 'release',
+      createdAt: TEST_NOW_MS,
+    });
+
+    await expect(handler(ownerRegistryStatus)(ctx, ownerStatusArgs())).resolves.toMatchObject({
+      currentActivation: null,
+      releases: [
+        {
+          batchId: CLINICAL_INITIAL_RELEASE_BATCH_ID,
+          persistedReceiptRows: 1,
+          readinessCode: 'blocked_current_receipt_present',
+        },
+        expect.any(Object),
+      ],
+    });
+    ctx.db.patch.mockClear();
+    await expect(handler(activateRegisteredBatch)(ctx, {
+      batchId: CLINICAL_INITIAL_RELEASE_BATCH_ID,
+      expectedFreezeDigest: CLINICAL_INITIAL_RELEASE_BATCH_HASH,
+    })).resolves.toMatchObject({
+      ok: false,
+      code: 'current_batch_receipt_present',
+      batchId: CLINICAL_INITIAL_RELEASE_BATCH_ID,
+    });
+    expect(ctx.db.patch).not.toHaveBeenCalled();
+  });
+
+  it('requires predecessor completion time to equal the exact handoff receipt', async () => {
+    const ctx = context();
+    await completeInitialRelease(ctx);
+    expect(ctx.tables.clinicalReviewBatchReceipts).toHaveLength(1);
+    const receipt = ctx.tables.clinicalReviewBatchReceipts[0];
+    const root = ctx.tables.clinicalReviewBatches.find(
+      (row) => row.batchId === CLINICAL_INITIAL_RELEASE_BATCH_ID,
+    );
+    expect(root).toMatchObject({ status: 'completed', completedAt: receipt.completedAt });
+    if (!root) return;
+    root.completedAt = Number(receipt.completedAt) + 1;
+
+    await expect(handler(ownerRegistryStatus)(ctx, ownerStatusArgs())).resolves.toMatchObject({
+      currentActivation: null,
+      releases: [
+        expect.any(Object),
+        {
+          batchId: CLINICAL_NUTRITION_RELEASE_BATCH_ID,
+          readinessCode: 'awaiting_predecessor_receipt',
+        },
+      ],
+    });
+    ctx.db.patch.mockClear();
+    await expect(handler(activateRegisteredBatch)(ctx, {
+      batchId: CLINICAL_NUTRITION_RELEASE_BATCH_ID,
+      expectedFreezeDigest: CLINICAL_NUTRITION_RELEASE_BATCH_HASH,
+      expectedUpstreamReceiptDigest: receipt.receiptDigest,
+    })).resolves.toMatchObject({
+      ok: false,
+      code: 'upstream_handoff_missing',
+      batchId: CLINICAL_NUTRITION_RELEASE_BATCH_ID,
+    });
+    expect(ctx.db.patch).not.toHaveBeenCalled();
   });
 
   it('keeps the nutrition successor frozen until the root has an exact persisted receipt', async () => {

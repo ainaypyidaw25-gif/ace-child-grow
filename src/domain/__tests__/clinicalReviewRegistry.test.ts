@@ -7,9 +7,11 @@ vi.mock('@convex-dev/auth/server', async (importOriginal) => {
 });
 
 import {
+  activateRegisteredBatch,
   materializeRegisteredReleaseBatches,
   ownerRegistryStatus,
 } from '../../../convex/clinicalReviewRegistry';
+import { getOwnerRegistryStatus } from '../../../convex/clinicalReviewBatchActions';
 import { sha256Canonical } from '../../../convex/lib/aiAuditHash';
 import {
   frozenClinicalPublicationApproval,
@@ -24,6 +26,11 @@ import {
 
 type Row = Record<string, unknown>;
 const originalRegistry = [...CLINICAL_REVIEW_BATCH_REGISTRY] as ClinicalReviewBatchRegistration[];
+const TEST_NOW_MS = new Date('2026-08-24T00:00:00.000Z').getTime();
+
+function ownerStatusArgs(nowMs = TEST_NOW_MS) {
+  return { nowMs, todayIso: new Date(nowMs).toISOString().slice(0, 10) };
+}
 
 function context() {
   const tables: Record<string, Row[]> = {
@@ -72,6 +79,15 @@ function handler(fn: unknown) {
   return (fn as { _handler: (ctx: ReturnType<typeof context>, args: Record<string, unknown>) => Promise<unknown> })._handler;
 }
 
+function actionHandler(fn: unknown) {
+  return (fn as {
+    _handler: (
+      ctx: { runQuery: (reference: unknown, args: Record<string, unknown>) => Promise<unknown> },
+      args: Record<string, unknown>,
+    ) => Promise<unknown>;
+  })._handler;
+}
+
 async function releaseRegistration(
   batchId: string,
   slug: string,
@@ -118,6 +134,28 @@ async function releaseRegistration(
   };
 }
 
+async function registrationWithItemCount(
+  release: ClinicalReviewBatchRegistration,
+  count: number,
+): Promise<ClinicalReviewBatchRegistration> {
+  const items = Array.from({ length: count }, (_, index) => ({
+    ...release.manifest.items[0],
+    ordinal: index + 1,
+    slug: `release_slug_${index + 1}`,
+  }));
+  const manifest = { ...release.manifest, count: items.length, items };
+  const pending: ClinicalReviewBatchRegistration = {
+    ...release,
+    manifest,
+    freezeDigest: await sha256Canonical(manifest),
+    routingCanonicalSha256: '',
+  };
+  return {
+    ...pending,
+    routingCanonicalSha256: await sha256Canonical(clinicalReviewBatchRoutingPayload(pending)),
+  };
+}
+
 async function registryDigest() {
   return await sha256Canonical(CLINICAL_REVIEW_BATCH_REGISTRY.map((registration) => ({
     routing: clinicalReviewBatchRoutingPayload(registration),
@@ -154,7 +192,7 @@ describe('persisted clinical review registry', () => {
     (CLINICAL_REVIEW_BATCH_REGISTRY as unknown as ClinicalReviewBatchRegistration[]).push(release);
     const ctx = context();
     authState.userId = null;
-    await expect(handler(ownerRegistryStatus)(ctx, {})).rejects.toThrow('Not authenticated');
+    await expect(handler(ownerRegistryStatus)(ctx, ownerStatusArgs())).rejects.toThrow('Not authenticated');
     expect(ctx.db.query).not.toHaveBeenCalled();
   });
 
@@ -163,33 +201,44 @@ describe('persisted clinical review registry', () => {
     (CLINICAL_REVIEW_BATCH_REGISTRY as unknown as ClinicalReviewBatchRegistration[]).push(release);
     const ctx = context();
     ctx.tables.parentProfiles[0].staffRole = 'clinical_reviewer';
-    await expect(handler(ownerRegistryStatus)(ctx, {})).rejects.toThrow('Insufficient staff permission');
+    await expect(handler(ownerRegistryStatus)(ctx, ownerStatusArgs())).rejects.toThrow('Insufficient staff permission');
     expect(ctx.db.query).toHaveBeenCalledTimes(1);
     expect(ctx.db.query).toHaveBeenCalledWith('parentProfiles');
   });
 
-  it('rejects an oversized registered release before reading operational registry tables', async () => {
+  it('injects only the server clock through the public owner-status action', async () => {
+    vi.spyOn(Date, 'now').mockReturnValue(TEST_NOW_MS);
+    const expected = { marker: 'internal-owner-status' };
+    const runQuery = vi.fn(async () => expected);
+    await expect(actionHandler(getOwnerRegistryStatus)({ runQuery }, {})).resolves.toBe(expected);
+    expect(runQuery).toHaveBeenCalledTimes(1);
+    expect(runQuery).toHaveBeenCalledWith(expect.anything(), ownerStatusArgs());
+  });
+
+  it('fails closed when the internal status clock and UTC date disagree', async () => {
+    const ctx = context();
+    await expect(handler(ownerRegistryStatus)(ctx, {
+      nowMs: TEST_NOW_MS,
+      todayIso: '2026-08-25',
+    })).rejects.toThrow('Invalid server clock');
+    expect(ctx.db.query).toHaveBeenCalledTimes(1);
+    expect(ctx.db.query).toHaveBeenCalledWith('parentProfiles');
+  });
+
+  it('rejects the public owner-status action before its internal query when unauthenticated', async () => {
+    authState.userId = null;
+    const runQuery = vi.fn();
+    await expect(actionHandler(getOwnerRegistryStatus)({ runQuery }, {})).rejects.toThrow('Not authenticated');
+    expect(runQuery).not.toHaveBeenCalled();
+  });
+
+  it('rejects a 26-item release in status and direct materialization before operational reads or writes', async () => {
     const release = await releaseRegistration('release-1', 'release_slug_1');
-    const items = Array.from({ length: 51 }, (_, index) => ({
-      ...release.manifest.items[0],
-      ordinal: index + 1,
-      slug: `release_slug_${index + 1}`,
-    }));
-    const manifest = { ...release.manifest, count: items.length, items };
-    const pending: ClinicalReviewBatchRegistration = {
-      ...release,
-      manifest,
-      freezeDigest: await sha256Canonical(manifest),
-      routingCanonicalSha256: '',
-    };
-    const oversized: ClinicalReviewBatchRegistration = {
-      ...pending,
-      routingCanonicalSha256: await sha256Canonical(clinicalReviewBatchRoutingPayload(pending)),
-    };
+    const oversized = await registrationWithItemCount(release, 26);
     (CLINICAL_REVIEW_BATCH_REGISTRY as unknown as ClinicalReviewBatchRegistration[]).push(oversized);
     const ctx = context();
 
-    await expect(handler(ownerRegistryStatus)(ctx, {})).resolves.toMatchObject({
+    await expect(handler(ownerRegistryStatus)(ctx, ownerStatusArgs())).resolves.toMatchObject({
       registryCode: 'invalid',
       materializationCode: 'blocked_persisted_mismatch',
       registeredReleaseCount: 1,
@@ -200,13 +249,62 @@ describe('persisted clinical review registry', () => {
     });
     expect(ctx.db.query).toHaveBeenCalledTimes(1);
     expect(ctx.db.query).toHaveBeenCalledWith('parentProfiles');
+
+    ctx.db.query.mockClear();
+    ctx.db.insert.mockClear();
+    await expect(handler(materializeRegisteredReleaseBatches)(ctx, {
+      expectedRegistryDigest: await registryDigest(),
+    })).resolves.toMatchObject({
+      ok: false,
+      code: 'registered_registry_invalid',
+      createdBatches: 0,
+      createdAssignments: 0,
+    });
+    expect(ctx.db.query).toHaveBeenCalledTimes(1);
+    expect(ctx.db.query).toHaveBeenCalledWith('parentProfiles');
+    expect(ctx.db.insert).not.toHaveBeenCalled();
+    expect(ctx.tables.clinicalReviewBatches).toHaveLength(0);
+    expect(ctx.tables.clinicalReviewAssignments).toHaveLength(0);
+
+    ctx.db.query.mockClear();
+    await expect(handler(activateRegisteredBatch)(ctx, {
+      batchId: oversized.manifest.batchId,
+      expectedFreezeDigest: oversized.freezeDigest,
+    })).resolves.toMatchObject({
+      ok: false,
+      code: 'registered_registry_invalid',
+      batchId: oversized.manifest.batchId,
+    });
+    expect(ctx.db.query).toHaveBeenCalledTimes(1);
+    expect(ctx.db.query).toHaveBeenCalledWith('parentProfiles');
+    expect(ctx.db.insert).not.toHaveBeenCalled();
+  });
+
+  it('accepts the shared 25-item registry boundary for status and materialization', async () => {
+    const release = await releaseRegistration('release-1', 'release_slug_1');
+    const bounded = await registrationWithItemCount(release, 25);
+    (CLINICAL_REVIEW_BATCH_REGISTRY as unknown as ClinicalReviewBatchRegistration[]).push(bounded);
+    const ctx = context();
+
+    await expect(handler(ownerRegistryStatus)(ctx, ownerStatusArgs())).resolves.toMatchObject({
+      registryCode: 'valid',
+      registeredReleaseCount: 1,
+      releases: [{ batchId: 'release-1', itemCount: 25, readinessCode: 'not_materialized' }],
+    });
+    await expect(handler(materializeRegisteredReleaseBatches)(ctx, {
+      expectedRegistryDigest: await registryDigest(),
+    })).resolves.toMatchObject({
+      ok: true,
+      createdBatches: 1,
+      createdAssignments: 25,
+    });
   });
 
   it('returns only bounded release metadata before materialization', async () => {
     const release = await releaseRegistration('release-1', 'release_slug_1');
     (CLINICAL_REVIEW_BATCH_REGISTRY as unknown as ClinicalReviewBatchRegistration[]).push(release);
     const ctx = context();
-    const result = await handler(ownerRegistryStatus)(ctx, {}) as Record<string, unknown>;
+    const result = await handler(ownerRegistryStatus)(ctx, ownerStatusArgs()) as Record<string, unknown>;
     expect(result).toMatchObject({
       registryDigest: await registryDigest(),
       registryCode: 'valid',
@@ -246,6 +344,33 @@ describe('persisted clinical review registry', () => {
     expect(ctx.tables.clinicalReviewAssignments).toHaveLength(1);
   });
 
+  it('blocks direct activation when any unrelated registered release is invalid', async () => {
+    const first = await releaseRegistration('release-1', 'release_slug_1');
+    (CLINICAL_REVIEW_BATCH_REGISTRY as unknown as ClinicalReviewBatchRegistration[]).push(first);
+    const ctx = context();
+    await expect(handler(materializeRegisteredReleaseBatches)(ctx, {
+      expectedRegistryDigest: await registryDigest(),
+    })).resolves.toMatchObject({ ok: true, createdBatches: 1, createdAssignments: 1 });
+
+    const invalidUnrelated = await releaseRegistration('release-2', 'release_slug_2', {
+      sequence: 3,
+      previous: first,
+      invalidFreeze: true,
+    });
+    (CLINICAL_REVIEW_BATCH_REGISTRY as unknown as ClinicalReviewBatchRegistration[]).push(invalidUnrelated);
+    ctx.db.insert.mockClear();
+    await expect(handler(activateRegisteredBatch)(ctx, {
+      batchId: first.manifest.batchId,
+      expectedFreezeDigest: first.freezeDigest,
+    })).resolves.toMatchObject({
+      ok: false,
+      code: 'registered_registry_invalid',
+      batchId: first.manifest.batchId,
+    });
+    expect(ctx.db.insert).not.toHaveBeenCalled();
+    expect(ctx.tables.clinicalReviewBatches[0]).toMatchObject({ status: 'frozen' });
+  });
+
   it('bounds assignment inspection at expected count plus one and blocks overflow', async () => {
     const release = await releaseRegistration('release-1', 'release_slug_1');
     (CLINICAL_REVIEW_BATCH_REGISTRY as unknown as ClinicalReviewBatchRegistration[]).push(release);
@@ -258,7 +383,7 @@ describe('persisted clinical review registry', () => {
       _id: 'overflow-assignment',
       assignmentId: 'overflow-assignment',
     });
-    const result = await handler(ownerRegistryStatus)(ctx, {}) as Record<string, unknown>;
+    const result = await handler(ownerRegistryStatus)(ctx, ownerStatusArgs()) as Record<string, unknown>;
     expect(result).toMatchObject({
       materializationCode: 'blocked_persisted_mismatch',
       persistedAssignmentCount: 2,
@@ -285,7 +410,7 @@ describe('persisted clinical review registry', () => {
       batchId: 'unregistered-batch',
     });
 
-    await expect(handler(ownerRegistryStatus)(ctx, {})).resolves.toMatchObject({
+    await expect(handler(ownerRegistryStatus)(ctx, ownerStatusArgs())).resolves.toMatchObject({
       materializationCode: 'blocked_persisted_mismatch',
       persistedAssignmentCount: 1,
       releases: [{
@@ -311,7 +436,7 @@ describe('persisted clinical review registry', () => {
     const result = await handler(materializeRegisteredReleaseBatches)(ctx, {
       expectedRegistryDigest: await registryDigest(),
     });
-    expect(result).toMatchObject({ ok: false, code: 'registered_manifest_invalid', createdBatches: 0, createdAssignments: 0 });
+    expect(result).toMatchObject({ ok: false, code: 'registered_registry_invalid', createdBatches: 0, createdAssignments: 0 });
     expect(ctx.tables.clinicalReviewBatches).toHaveLength(0);
     expect(ctx.tables.clinicalReviewAssignments).toHaveLength(0);
   });
@@ -457,7 +582,7 @@ describe('persisted clinical review registry', () => {
     const rejected = await handler(materializeRegisteredReleaseBatches)(rejectedCtx, {
       expectedRegistryDigest: await registryDigest(),
     });
-    expect(rejected).toMatchObject({ ok: false, code: 'registered_reviewer_role_mismatch' });
+    expect(rejected).toMatchObject({ ok: false, code: 'registered_registry_invalid' });
     expect(rejectedCtx.tables.clinicalReviewBatches).toHaveLength(0);
     expect(rejectedCtx.tables.clinicalReviewAssignments).toHaveLength(0);
   });
@@ -470,7 +595,7 @@ describe('persisted clinical review registry', () => {
     const result = await handler(materializeRegisteredReleaseBatches)(ctx, {
       expectedRegistryDigest: await registryDigest(),
     });
-    expect(result).toMatchObject({ ok: false, code: 'registered_target_collision' });
+    expect(result).toMatchObject({ ok: false, code: 'registered_registry_invalid' });
     expect(ctx.tables.clinicalReviewBatches).toHaveLength(0);
     expect(ctx.tables.clinicalReviewAssignments).toHaveLength(0);
   });

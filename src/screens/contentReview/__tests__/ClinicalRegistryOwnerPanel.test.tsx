@@ -1,9 +1,10 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ClinicalRegistryOwnerPanel } from '../ClinicalRegistryOwnerPanel';
 
 const registry = vi.hoisted(() => ({
   status: null as null | Record<string, unknown>,
+  loadStatus: vi.fn(),
   materialize: vi.fn(),
   activate: vi.fn(),
 }));
@@ -11,15 +12,17 @@ const registry = vi.hoisted(() => ({
 vi.mock('../../../../convex/_generated/api', () => ({
   api: {
     clinicalReviewRegistry: {
-      ownerRegistryStatus: 'ownerRegistryStatus',
       materializeRegisteredReleaseBatches: 'materializeRegisteredReleaseBatches',
       activateRegisteredBatch: 'activateRegisteredBatch',
+    },
+    clinicalReviewBatchActions: {
+      getOwnerRegistryStatus: 'getOwnerRegistryStatus',
     },
   },
 }));
 
 vi.mock('convex/react', () => ({
-  useQuery: () => registry.status,
+  useAction: () => registry.loadStatus,
   useMutation: (reference: string) => (
     reference === 'materializeRegisteredReleaseBatches' ? registry.materialize : registry.activate
   ),
@@ -66,8 +69,30 @@ function status(overrides: Record<string, unknown> = {}) {
 describe('ClinicalRegistryOwnerPanel', () => {
   beforeEach(() => {
     registry.status = status();
+    registry.loadStatus.mockReset();
+    registry.loadStatus.mockImplementation(async () => registry.status);
     registry.materialize.mockReset();
     registry.activate.mockReset();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('refreshes owner readiness from the server at least once per minute', async () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-08-24T08:00:00.000Z'));
+    render(<ClinicalRegistryOwnerPanel />);
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+    expect(registry.loadStatus).toHaveBeenCalledTimes(1);
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(60_000);
+    });
+    expect(registry.loadStatus).toHaveBeenCalledTimes(2);
   });
 
   it('requires the exact registry digest and confirms reactive materialization readback', async () => {
@@ -78,8 +103,8 @@ describe('ClinicalRegistryOwnerPanel', () => {
       createdBatches: 1,
       createdAssignments: 2,
     });
-    const view = render(<ClinicalRegistryOwnerPanel />);
-    const button = screen.getByRole('button', { name: 'Materialize exact registry' });
+    render(<ClinicalRegistryOwnerPanel />);
+    const button = await screen.findByRole('button', { name: 'Materialize exact registry' });
     expect(button).toBeDisabled();
 
     fireEvent.change(screen.getByRole('textbox', { name: 'Registry digest confirmation' }), {
@@ -115,8 +140,8 @@ describe('ClinicalRegistryOwnerPanel', () => {
         readinessCode: 'ready_initial',
       })],
     });
-    view.rerender(<ClinicalRegistryOwnerPanel />);
-    expect(screen.getByTestId('clinical-registry-readback')).toHaveTextContent('Server readback confirmed');
+    fireEvent.click(screen.getByRole('button', { name: 'Refresh status' }));
+    await waitFor(() => expect(screen.getByTestId('clinical-registry-readback')).toHaveTextContent('Server readback confirmed'));
   });
 
   it('exposes only the server-selected activation and requires its exact typed phrase', async () => {
@@ -148,8 +173,8 @@ describe('ClinicalRegistryOwnerPanel', () => {
       createdBatches: 0,
       createdAssignments: 0,
     });
-    const view = render(<ClinicalRegistryOwnerPanel />);
-    const button = screen.getByRole('button', { name: 'Activate this exact batch' });
+    render(<ClinicalRegistryOwnerPanel />);
+    const button = await screen.findByRole('button', { name: 'Activate this exact batch' });
     expect(button).toBeDisabled();
 
     fireEvent.change(screen.getByRole('textbox', { name: 'Activation confirmation' }), {
@@ -186,8 +211,8 @@ describe('ClinicalRegistryOwnerPanel', () => {
       })],
       currentActivation: null,
     });
-    view.rerender(<ClinicalRegistryOwnerPanel />);
-    expect(screen.getByTestId('clinical-registry-readback')).toHaveTextContent('Server readback confirmed');
+    fireEvent.click(screen.getByRole('button', { name: 'Refresh status' }));
+    await waitFor(() => expect(screen.getByTestId('clinical-registry-readback')).toHaveTextContent('Server readback confirmed'));
     expect(screen.getByRole('button', { name: 'Activate this exact batch' })).toBeDisabled();
   });
 });

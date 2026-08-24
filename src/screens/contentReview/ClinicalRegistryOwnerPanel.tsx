@@ -1,12 +1,16 @@
-import { useRef, useState, type FormEvent } from 'react';
-import { useMutation, useQuery } from 'convex/react';
+import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
+import { useAction, useMutation } from 'convex/react';
 import { api } from '../../../convex/_generated/api';
+import type { OwnerRegistryStatus } from '../../../convex/lib/clinicalReviewRegistryContract';
 import { useLocale } from '../../app/LocaleContext';
+
+const OWNER_REGISTRY_STATUS_REFRESH_MS = 60_000;
 
 const READINESS_LABELS: Record<string, { mm: string; en: string }> = {
   not_materialized: { mm: 'Registry row မတင်ရသေး', en: 'Registry row not materialized' },
   blocked_persisted_mismatch: { mm: 'Persisted batch မကိုက်ညီ', en: 'Persisted batch mismatch' },
   blocked_assignment_mismatch: { mm: 'Assignment မကိုက်ညီ', en: 'Assignment mismatch' },
+  blocked_current_receipt_present: { mm: 'Frozen batch တွင် receipt ရှိနေသည်', en: 'Frozen batch already has a receipt' },
   already_active: { mm: 'လက်ရှိအသုံးပြုနေသည်', en: 'Already active' },
   already_completed: { mm: 'ပြီးဆုံးပြီး', en: 'Already completed' },
   stopped_changes_requested: { mm: 'ပြင်ဆင်ရန် ရပ်ထားသည်', en: 'Stopped for requested changes' },
@@ -30,16 +34,77 @@ type LastAction =
 export function ClinicalRegistryOwnerPanel() {
   const { locale } = useLocale();
   const L = (mm: string, en: string) => locale === 'mm' ? mm : en;
-  const status = useQuery(api.clinicalReviewRegistry.ownerRegistryStatus);
+  const loadStatus = useAction(api.clinicalReviewBatchActions.getOwnerRegistryStatus);
   const materialize = useMutation(api.clinicalReviewRegistry.materializeRegisteredReleaseBatches);
   const activate = useMutation(api.clinicalReviewRegistry.activateRegisteredBatch);
+  const [status, setStatus] = useState<OwnerRegistryStatus | null | undefined>(undefined);
+  const [refreshing, setRefreshing] = useState(false);
   const [registryConfirmation, setRegistryConfirmation] = useState('');
   const [activationConfirmation, setActivationConfirmation] = useState('');
   const [busyAction, setBusyAction] = useState<'materialize' | 'activate' | null>(null);
   const [lastAction, setLastAction] = useState<LastAction | null>(null);
   const submittingRef = useRef(false);
+  const statusRequestRef = useRef(0);
+
+  const refreshStatus = useCallback(async () => {
+    const requestId = statusRequestRef.current + 1;
+    statusRequestRef.current = requestId;
+    setRefreshing(true);
+    try {
+      const next = await loadStatus({});
+      if (statusRequestRef.current === requestId) setStatus(next);
+      return next;
+    } catch (error) {
+      console.error(error);
+      if (statusRequestRef.current === requestId) setStatus(null);
+      return null;
+    } finally {
+      if (statusRequestRef.current === requestId) setRefreshing(false);
+    }
+  }, [loadStatus]);
+
+  useEffect(() => {
+    void refreshStatus();
+    return () => { statusRequestRef.current += 1; };
+  }, [refreshStatus]);
+
+  useEffect(() => {
+    if (!status) return undefined;
+    const clientNow = Date.now();
+    const nextExpiry = status.releases.reduce(
+      (next, release) => release.expiresAt > clientNow ? Math.min(next, release.expiresAt) : next,
+      Number.POSITIVE_INFINITY,
+    );
+    const date = new Date(clientNow);
+    const nextUtcDay = Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate() + 1);
+    const refreshAt = Math.min(
+      clientNow + OWNER_REGISTRY_STATUS_REFRESH_MS,
+      nextExpiry,
+      nextUtcDay,
+    );
+    const delay = Math.max(0, refreshAt - clientNow);
+    const timer = window.setTimeout(() => { void refreshStatus(); }, delay);
+    return () => window.clearTimeout(timer);
+  }, [refreshStatus, status]);
 
   if (status === undefined) return <p className="text-ink-soft" role="status">…</p>;
+  if (status === null) {
+    return (
+      <section className="rounded-card border border-line bg-white p-4 shadow-card sm:p-5" role="alert">
+        <p className="text-sm text-amber-800">
+          {L('Registry အခြေအနေကို server မှ မစစ်နိုင်သေးပါ။', 'Registry status could not be verified by the server.')}
+        </p>
+        <button
+          type="button"
+          onClick={() => { void refreshStatus(); }}
+          disabled={refreshing}
+          className="mt-3 min-h-touch rounded-pill border border-line bg-white px-4 py-2 text-sm font-semibold text-sky-deep disabled:opacity-50"
+        >
+          {L('ပြန်စစ်မည်', 'Retry status check')}
+        </button>
+      </section>
+    );
+  }
 
   const activationTarget = status.currentActivation;
   const registryConfirmed = registryConfirmation === status.registryDigest;
@@ -59,7 +124,7 @@ export function ClinicalRegistryOwnerPanel() {
 
   const submitMaterialize = async (event: FormEvent) => {
     event.preventDefault();
-    if (submittingRef.current || busyAction || materializeSubmitted || !registryConfirmed
+    if (submittingRef.current || busyAction || refreshing || materializeSubmitted || !registryConfirmed
       || status.registryCode !== 'valid'
       || status.materializationCode !== 'materialization_required') return;
     submittingRef.current = true;
@@ -73,6 +138,7 @@ export function ClinicalRegistryOwnerPanel() {
         code: result.code,
         registryDigest: status.registryDigest,
       });
+      if (result.ok) await refreshStatus();
     } catch (error) {
       console.error(error);
       setLastAction({
@@ -89,7 +155,7 @@ export function ClinicalRegistryOwnerPanel() {
 
   const submitActivation = async (event: FormEvent) => {
     event.preventDefault();
-    if (submittingRef.current || busyAction || activationSubmitted
+    if (submittingRef.current || busyAction || refreshing || activationSubmitted
       || !activationTarget || !activationConfirmed) return;
     submittingRef.current = true;
     setBusyAction('activate');
@@ -108,6 +174,7 @@ export function ClinicalRegistryOwnerPanel() {
         code: result.code,
         batchId: activationTarget.batchId,
       });
+      if (result.ok) await refreshStatus();
     } catch (error) {
       console.error(error);
       setLastAction({
@@ -132,11 +199,21 @@ export function ClinicalRegistryOwnerPanel() {
               {L('Owner လုပ်ဆောင်မှု ထိန်းချုပ်ရေး', 'Owner operational controls')}
             </h2>
           </div>
-          <span className={`rounded-pill px-3 py-1 text-xs font-semibold ${
-            status.registryCode === 'valid' ? 'bg-mint-soft text-mint-deep' : 'bg-pastel-yellow text-amber-800'
-          }`}>
-            {status.registryCode}
-          </span>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => { void refreshStatus(); }}
+              disabled={refreshing || busyAction !== null}
+              className="min-h-touch rounded-pill border border-line bg-white px-3 py-1 text-xs font-semibold text-sky-deep disabled:opacity-50"
+            >
+              {refreshing ? L('စစ်နေသည်…', 'Checking…') : L('အခြေအနေပြန်စစ်မည်', 'Refresh status')}
+            </button>
+            <span className={`rounded-pill px-3 py-1 text-xs font-semibold ${
+              status.registryCode === 'valid' ? 'bg-mint-soft text-mint-deep' : 'bg-pastel-yellow text-amber-800'
+            }`}>
+              {status.registryCode}
+            </span>
+          </div>
         </div>
         <p className="mt-3 text-sm leading-7 text-ink-soft">
           {L(
@@ -210,7 +287,7 @@ export function ClinicalRegistryOwnerPanel() {
         </label>
         <button
           type="submit"
-          disabled={busyAction !== null || materializeSubmitted || !registryConfirmed || status.registryCode !== 'valid'
+          disabled={busyAction !== null || refreshing || materializeSubmitted || !registryConfirmed || status.registryCode !== 'valid'
             || status.materializationCode !== 'materialization_required'}
           className="min-h-touch rounded-pill bg-sky px-5 py-2 text-sm font-semibold text-white disabled:opacity-50"
         >
@@ -244,7 +321,7 @@ export function ClinicalRegistryOwnerPanel() {
         </label>
         <button
           type="submit"
-          disabled={busyAction !== null || activationSubmitted || !activationConfirmed}
+          disabled={busyAction !== null || refreshing || activationSubmitted || !activationConfirmed}
           className="min-h-touch rounded-pill bg-sky px-5 py-2 text-sm font-semibold text-white disabled:opacity-50"
         >
           {busyAction === 'activate' ? L('Activate လုပ်နေသည်…', 'Activating…') : L('ဤ exact batch ကို activate လုပ်မည်', 'Activate this exact batch')}

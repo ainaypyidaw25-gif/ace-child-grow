@@ -23,6 +23,7 @@ import { todayIsoUtc } from './lib/evidenceFreshness';
 import { evaluatePublicationEvidence } from './lib/evidencePublicationGate';
 import { requireUser } from './lib/auth';
 import { roleMayReview } from './lib/reviewPolicy';
+import { CLINICAL_REVIEW_REGISTRY_MAX_ITEMS_PER_BATCH } from './lib/clinicalReviewRegistryContract';
 import {
   exactHandoffReceipt,
   exactPersistedAssignment,
@@ -472,7 +473,6 @@ function statesAreVerified(
 }
 
 const MAX_REGISTERED_BATCHES = 32;
-const MAX_ITEMS_PER_BATCH = 25;
 
 async function registryBlockers(): Promise<string[]> {
   const blockers: string[] = [];
@@ -510,7 +510,7 @@ async function registryBlockers(): Promise<string[]> {
       blockers.push(`registry_time_window_invalid:${manifest.batchId}`);
     }
     if (manifest.count !== manifest.items.length || manifest.count < 1
-      || manifest.count > MAX_ITEMS_PER_BATCH) {
+      || manifest.count > CLINICAL_REVIEW_REGISTRY_MAX_ITEMS_PER_BATCH) {
       blockers.push(`registry_item_count_invalid:${manifest.batchId}`);
     }
     if (!roleMayReview(manifest.reviewer.role, registration.dimension)
@@ -605,7 +605,7 @@ async function exactPersistedRegistrationSelection(
   const persistedAssignments = await ctx.db
     .query('clinicalReviewAssignments')
     .withIndex('by_batch_id_and_ordinal', (q) => q.eq('batchId', registration.manifest.batchId))
-    .take(MAX_ITEMS_PER_BATCH + 1);
+    .take(CLINICAL_REVIEW_REGISTRY_MAX_ITEMS_PER_BATCH + 1);
   if (persistedAssignments.length !== registration.manifest.count) {
     assignmentBlockers.push('persisted_assignment_count_mismatch');
   }
