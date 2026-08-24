@@ -10,6 +10,7 @@ import {
   formatEditorFieldReference,
   HIDDEN_SYSTEM_FIELDS,
   humanizeField,
+  mayOperateClinicalRegistry,
   reviewFieldElementId,
   updateStructuredField,
   type EditableField,
@@ -59,6 +60,14 @@ describe('reviewer content field labels', () => {
     expect(contentTypeLabel('special_need', 'mm')).toBe('အထူးလိုအပ်ချက်');
     expect(contentTypeLabel('special_need', 'en')).toBe('Special needs');
     expect(contentTypeLabel('unknown_legacy_type', 'mm')).toBe('unknown_legacy_type');
+  });
+
+  it('exposes clinical registry operations only to the owner role', () => {
+    expect(mayOperateClinicalRegistry('owner')).toBe(true);
+    expect(mayOperateClinicalRegistry('clinical_reviewer')).toBe(false);
+    expect(mayOperateClinicalRegistry('evidence_reviewer')).toBe(false);
+    expect(mayOperateClinicalRegistry('review_manager')).toBe(false);
+    expect(mayOperateClinicalRegistry(null)).toBe(false);
   });
 
   it('gives direct bilingual milestone fields clear Myanmar labels', () => {

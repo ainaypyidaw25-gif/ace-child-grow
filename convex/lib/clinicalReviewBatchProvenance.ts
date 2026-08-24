@@ -207,7 +207,7 @@ function exactCompletedReleaseBatch(
         && /^[a-f0-9]{64}$/.test(row.consumedUpstreamReceiptDigest));
 }
 
-async function exactUpstreamChain(
+export async function exactClinicalReviewUpstreamChain(
   ctx: DatabaseContext,
   registration: ClinicalReviewBatchRegistration,
   row: Doc<'clinicalReviewBatches'>,
@@ -228,7 +228,7 @@ async function exactUpstreamChain(
       || predecessorRows[0].status === 'invalidated'
       || (activation.kind === 'after_handoff' && predecessorRows[0].status !== 'completed')
       || !exactPersistedBatchRegistration(predecessorRows[0], predecessor)
-      || !await exactUpstreamChain(ctx, predecessor, predecessorRows[0], seen)) return false;
+      || !await exactClinicalReviewUpstreamChain(ctx, predecessor, predecessorRows[0], seen)) return false;
   } else if (predecessorRows.some((candidate) => candidate.status === 'invalidated')) {
     return false;
   }
@@ -425,7 +425,7 @@ export async function frozenClinicalPublicationApproval(
       missing.push(`${registration.dimension}:persisted_batch`);
       continue;
     }
-    if (!await exactUpstreamChain(ctx, registration, batchRows[0])) {
+    if (!await exactClinicalReviewUpstreamChain(ctx, registration, batchRows[0])) {
       missing.push(`${registration.dimension}:upstream_chain`);
       continue;
     }
