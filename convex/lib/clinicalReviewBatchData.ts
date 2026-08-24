@@ -381,6 +381,173 @@ export const CLINICAL_INITIAL_RELEASE_BATCH_HASH = 'db3036076969eb8934acc46b8ce7
 export const CLINICAL_INITIAL_RELEASE_BATCH_ROUTING_HASH = '784e270d8507b7976b7bbcb452bb9c60e7190ded9f9f80565488fceef0b30d18' as const;
 
 /**
+ * Exact post-CAS clinical review for the three infant nutrition guides.
+ *
+ * Frozen from bounded, read-only Production queries on 2026-08-24 after
+ * `2026-08-24-infant-nutrition-guides-evidence-v1` applied. These snapshots
+ * authorize no approval, activation, or publication. The batch is a strict
+ * `after_handoff` successor and therefore cannot activate until the release
+ * root has a persisted unanimous-approval receipt.
+ */
+export const CLINICAL_NUTRITION_RELEASE_BATCH_ID = 'clinical-infant-nutrition-2026-08-24-v1' as const;
+export const CLINICAL_NUTRITION_RELEASE_BATCH_FROZEN_AT = 1787548498943 as const;
+export const CLINICAL_NUTRITION_RELEASE_BATCH_EXPIRES_AT = 1788758098943 as const;
+
+export const CLINICAL_NUTRITION_RELEASE_BATCH_ITEMS = [
+  {
+    ordinal: 1,
+    kind: 'guide',
+    slug: 'gd_5_6m_nutrition',
+    reviewRevision: 8,
+    contentId: 'kx7bx9ekynhhsd4h402vafbc158b8v4c',
+    contentCreationTime: 1785024282947.1875,
+    contentUpdatedAt: 1787545143932,
+    contentCanonicalSha256: '61c892cd5535b1ffcd8bd4d91f3376755d2af6cbad23d4d0bc9d1ad6b7b2d011',
+    linkId: 'k97e1e8ksvz9a78k8p72krxkfd8b8dkn',
+    linkCreationTime: 1785024331625.8174,
+    linkUpdatedAt: 1787545143932,
+    linkCanonicalSha256: '018194b484275540fefe53ef0a089c2b5580c98bc78813341d96536cd215bb94',
+    sourceIds: [
+      'who-complementary-feeding-2023',
+      'nhs-first-solid-foods-2026',
+      'cdc-introduce-solid-foods-2026',
+      'cdc-cows-milk-2026',
+      'jr-niaid-peanut-prevention-2017',
+      'who-iycf-model-chapter-2025',
+      'aap-breastfeeding-2022',
+      'nhs-breastfeeding-first-days-2023',
+      'asha-pediatric-feeding-swallowing',
+      'hc-child-ems-2026',
+    ],
+    sourceCount: 10,
+    sourcesCanonicalSha256: 'ffbc256e33cd2fab6bde5b4c550b8cd25282d7d2b1dcce1bc610aa764720cdbe',
+    mediaCount: 0,
+    mediaCanonicalSha256: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945',
+    aiCanonicalSha256: 'e0c04573de4314ddde597477c374bafd25b400663d593e0a0244afe3f73c1d0d',
+    currentClinicalReviewCount: 0,
+    currentClinicalReviewsCanonicalSha256: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945',
+    allClinicalReviewHistoryCanonicalSha256: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945',
+    reviewerAdvisory: {
+      mm: 'ခြောက်လခန့်တွင် ဖြည့်စွက်အစားအစာ စတင်ရန် အဆင်သင့်ဖြစ်မှု၊ ဓာတ်မတည့်နိုင်သောအစားအစာများကို တစ်မျိုးချင်းမိတ်ဆက်ပြီး ၃–၅ ရက် စောင့်ကြည့်ရန်၊ ပြင်းထန်သော eczema/ဥဓာတ်မတည့်မှုရှိပါက မြေပဲမစတင်မီ ဆရာဝန်နှင့်တိုင်ပင်ရန်နှင့် အရေးပေါ်လက္ခဏာများအတွက် ဖော်ပြထားသော အရေးယူမှုတို့ကို ချိတ်ဆက်ထားသည့် CDC/NIAID/အရေးပေါ်ရင်းမြစ်များက တိုက်ရိုက်လုံလောက်စွာ ထောက်ခံခြင်းရှိ/မရှိကို ဆေးဘက်ဆိုင်ရာအမြင်ဖြင့် အတည်ပြုပါ။',
+      en: 'Confirm clinically that the linked CDC, NIAID, and emergency-care sources directly support the combined advice on readiness around six months, introducing allergenic foods one at a time with a 3–5 day interval, seeking medical advice before peanut for severe eczema or egg allergy, and the stated emergency response.',
+    },
+    upstreamReviewDigests: [
+      { dimension: 'all_review_history', digest: '740fc11c42ccc0cb67ab677bd1bcd2613a88c2af6b4dbac0a9359a84303bfb63' },
+      { dimension: 'all_nonclinical_history', digest: '740fc11c42ccc0cb67ab677bd1bcd2613a88c2af6b4dbac0a9359a84303bfb63' },
+      { dimension: 'english', digest: 'da891ca4a1d6cba0cb365c27906110113378d8f0d754ca1ef1e462c0afe835a3' },
+      { dimension: 'native_myanmar', digest: '664dde287ded792fbf972952abfaf32f0cfd4a49c4434c0bd7fd6d0ecee2f122' },
+      { dimension: 'child_development', digest: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945' },
+      { dimension: 'evidence', digest: '4a0b6460bdb102af2f0d5a4a980d9cd52131e97b161c2f77d09f0ceceed8987e' },
+      { dimension: 'safety', digest: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945' },
+    ],
+  },
+  {
+    ordinal: 2,
+    kind: 'guide',
+    slug: 'gd_7_9m_nutrition',
+    reviewRevision: 3,
+    contentId: 'kx71qtfeq7fys6a82hwaa49c698b9t7b',
+    contentCreationTime: 1785024282947.2598,
+    contentUpdatedAt: 1787545143932,
+    contentCanonicalSha256: 'd4cb6c862ec50380006a0dbe6805be67a44b8cad09962b2453b5f6fafbec0f09',
+    linkId: 'k97f1zqfdv1gzfkyjqh7y396518b95n4',
+    linkCreationTime: 1785024331625.857,
+    linkUpdatedAt: 1787545143932,
+    linkCanonicalSha256: 'cb261be5d79e2be1d516833f64e6a5e419ef2ece4dd7bfed7eb4e0e56ae2ba80',
+    sourceIds: [
+      'who-complementary-feeding-2023',
+      'who-iycf-model-chapter-2025',
+      'who-iycf-indicators-2021',
+      'nhs-first-solid-foods-2026',
+      'cdc-foods-6-24m-2025',
+      'cdc-introduce-solid-foods-2026',
+      'jr-niaid-peanut-prevention-2017',
+      'nice-ng247-maternal-child-nutrition-2025',
+      'asha-pediatric-feeding-swallowing',
+    ],
+    sourceCount: 9,
+    sourcesCanonicalSha256: '6ad7d63c645bb553840bccc85717f4e003f10cf5d06d76bb93803541379644ad',
+    mediaCount: 0,
+    mediaCanonicalSha256: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945',
+    aiCanonicalSha256: 'e0c04573de4314ddde597477c374bafd25b400663d593e0a0244afe3f73c1d0d',
+    currentClinicalReviewCount: 0,
+    currentClinicalReviewsCanonicalSha256: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945',
+    allClinicalReviewHistoryCanonicalSha256: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945',
+    reviewerAdvisory: {
+      mm: '၇–၉ လတွင် အစာ၏အသားအရည်ကို တဖြည်းဖြည်းတိုးခြင်း၊ နို့ကိုဆက်ပေးခြင်း၊ အစာလက်ကိုင်အတုံးများနှင့် တစ်ဆို့ခြင်းကာကွယ်မှု၊ နွားနို့ကို ၁၂ လမတိုင်မီ အဓိကသောက်စရာမလုပ်ခြင်းနှင့် ဓာတ်မတည့်နိုင်သောအစားအစာမိတ်ဆက်မှုတို့ကို ရင်းမြစ်တစ်ခုချင်း၏ အသက်အပိုင်းအခြားနှင့် claim scope အတွင်း တိတိကျကျ ဖော်ပြထားခြင်းရှိ/မရှိကို အတည်ပြုပါ။',
+      en: 'Confirm that the linked sources support, within their stated age and claim scope, the combined guidance on advancing textures at 7–9 months, continuing milk feeds, safe finger foods and choking prevention, avoiding cow milk as the main drink before 12 months, and allergen introduction.',
+    },
+    upstreamReviewDigests: [
+      { dimension: 'all_review_history', digest: '67bb8dd084651c77fd20393133eac8dfdb95c66ece485bced74f9cd769414b9e' },
+      { dimension: 'all_nonclinical_history', digest: '67bb8dd084651c77fd20393133eac8dfdb95c66ece485bced74f9cd769414b9e' },
+      { dimension: 'english', digest: 'b0645ed1e15f52cf8ec091a9c094f10698cf0c305b063efa9ee4ce6f47ee6337' },
+      { dimension: 'native_myanmar', digest: 'e79cf80105c4cb772864c5cb5b5061de1d8d490a74368995202d3b05e2cf732b' },
+      { dimension: 'child_development', digest: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945' },
+      { dimension: 'evidence', digest: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945' },
+      { dimension: 'safety', digest: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945' },
+    ],
+  },
+  {
+    ordinal: 3,
+    kind: 'guide',
+    slug: 'gd_10_12m_nutrition',
+    reviewRevision: 8,
+    contentId: 'kx74xr1h9rtms2dk7j6gkdyted8b8cfy',
+    contentCreationTime: 1785024282947.27,
+    contentUpdatedAt: 1787545143932,
+    contentCanonicalSha256: '800176ac92b89291e746aa47d5bf46a404631a49fcec892d43a395eccf48df41',
+    linkId: 'k974hsx47zp7khx4nkxj1d8drn8b8730',
+    linkCreationTime: 1785024331625.864,
+    linkUpdatedAt: 1787545143932,
+    linkCanonicalSha256: '28c67324ee72d89d7011a045c8ba17fd4e551192ac3c5cd4627cb1293d051e97',
+    sourceIds: [
+      'who-complementary-feeding-2023',
+      'who-iycf-model-chapter-2025',
+      'who-iycf-indicators-2021',
+      'nhs-first-solid-foods-2026',
+      'cdc-foods-6-24m-2025',
+      'cdc-introduce-solid-foods-2026',
+      'jr-niaid-peanut-prevention-2017',
+      'nice-ng247-maternal-child-nutrition-2025',
+      'aap-breastfeeding-2022',
+      'asha-pediatric-feeding-swallowing',
+    ],
+    sourceCount: 10,
+    sourcesCanonicalSha256: '2c9919a9f084c6201ead9801030a850135258b0763bed4caa20f4c858889dd28',
+    mediaCount: 0,
+    mediaCanonicalSha256: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945',
+    aiCanonicalSha256: 'e0c04573de4314ddde597477c374bafd25b400663d593e0a0244afe3f73c1d0d',
+    currentClinicalReviewCount: 0,
+    currentClinicalReviewsCanonicalSha256: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945',
+    allClinicalReviewHistoryCanonicalSha256: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945',
+    reviewerAdvisory: {
+      mm: '၁၀–၁၂ လအရွယ်တွင် တစ်နေ့အဓိကအစာ သုံးနပ်နှင့် အကြားစာ တစ်ကြိမ်မှနှစ်ကြိမ်ခန့်၊ အသက် ၂ နှစ်နှင့်အထက်အထိ နို့တိုက်နိုင်မှု၊ သံဓာတ်ကြွယ်ဝသောအစားအစာ၊ အစာအသားအရည်တိုးတက်မှုနှင့် အသေးစိတ်တစ်ဆို့ခြင်း/ဓာတ်မတည့်မှု အရေးပေါ်စာသားတို့ကို ချိတ်ထားသော ရင်းမြစ်များက တိုက်ရိုက်လုံလောက်စွာ ထောက်ခံခြင်းရှိ/မရှိကို အတည်ပြုပါ။',
+      en: 'Confirm direct support for the combined 10–12 month claims: about three meals plus one or two snacks daily, breastfeeding to two years and beyond, iron-rich foods, texture progression, and the detailed choking and allergy emergency wording.',
+    },
+    upstreamReviewDigests: [
+      { dimension: 'all_review_history', digest: 'f2fdccce8b11f75cb3d3d40e8c1cbc795bc40a0ea7b03e48436f0403cd7257de' },
+      { dimension: 'all_nonclinical_history', digest: 'f2fdccce8b11f75cb3d3d40e8c1cbc795bc40a0ea7b03e48436f0403cd7257de' },
+      { dimension: 'english', digest: '934da12dbae773d9524199d9d2890612e3a93b96b86f58817a9c5fb7490be8dc' },
+      { dimension: 'native_myanmar', digest: 'bab83ed8fc39bc5daf76400d7f0b839c0dc74392fd86e67376447a72a4738f4f' },
+      { dimension: 'child_development', digest: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945' },
+      { dimension: 'evidence', digest: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945' },
+      { dimension: 'safety', digest: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945' },
+    ],
+  },
+] as const satisfies readonly ClinicalReviewBatchItem[];
+
+export const CLINICAL_NUTRITION_RELEASE_BATCH_MANIFEST = {
+  batchId: CLINICAL_NUTRITION_RELEASE_BATCH_ID,
+  count: CLINICAL_NUTRITION_RELEASE_BATCH_ITEMS.length,
+  reviewer: CLINICAL_REVIEW_BATCH_REVIEWER,
+  items: CLINICAL_NUTRITION_RELEASE_BATCH_ITEMS,
+} as const satisfies ClinicalReviewBatchFreezeManifest;
+
+// Regenerated with sha256Canonical after every manifest/routing edit.
+export const CLINICAL_NUTRITION_RELEASE_BATCH_HASH = 'a31ac4dbcc5fbcbf6f43a4e57b91a8078ad266b6a57fdb09978557e306777801' as const;
+export const CLINICAL_NUTRITION_RELEASE_BATCH_ROUTING_HASH = 'aa3921695d695a746d8713b03b9e49f0a9b60e239d988ce8d0b513195ff962b7' as const;
+
+/**
  * Compile-time allowlist of immutable clinical batches, in strict sequence.
  * Keep this registry explicit: it must never be populated from the catalogue,
  * owner-priority queues, search results, or generic review requests.
@@ -412,6 +579,22 @@ export const CLINICAL_REVIEW_BATCH_REGISTRY = [
     frozenAt: CLINICAL_INITIAL_RELEASE_BATCH_FROZEN_AT,
     expiresAt: CLINICAL_INITIAL_RELEASE_BATCH_EXPIRES_AT,
     manifest: CLINICAL_INITIAL_RELEASE_BATCH_MANIFEST,
+  },
+  {
+    sequence: 3,
+    laneGraphVersion: 1,
+    dimension: 'clinical',
+    authority: 'release',
+    activation: {
+      kind: 'after_handoff',
+      previousBatchId: CLINICAL_INITIAL_RELEASE_BATCH_ID,
+      expectedPreviousFreezeDigest: CLINICAL_INITIAL_RELEASE_BATCH_HASH,
+    },
+    routingCanonicalSha256: CLINICAL_NUTRITION_RELEASE_BATCH_ROUTING_HASH,
+    freezeDigest: CLINICAL_NUTRITION_RELEASE_BATCH_HASH,
+    frozenAt: CLINICAL_NUTRITION_RELEASE_BATCH_FROZEN_AT,
+    expiresAt: CLINICAL_NUTRITION_RELEASE_BATCH_EXPIRES_AT,
+    manifest: CLINICAL_NUTRITION_RELEASE_BATCH_MANIFEST,
   },
 ] as const satisfies readonly ClinicalReviewBatchRegistration[];
 
