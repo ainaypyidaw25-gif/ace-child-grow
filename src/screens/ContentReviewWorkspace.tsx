@@ -20,6 +20,7 @@ import { OwnerActionsPanel, SecuritySummaryPanel } from './ownerPriority/OwnerAc
 import { BulkReplacePanel } from './contentReview/BulkReplacePanel';
 import { ManualReviewPanel } from './contentReview/ManualReviewPanel';
 import { ClinicalFrozenBatchPanel } from './contentReview/ClinicalFrozenBatchPanel';
+import { ClinicalRegistryOwnerPanel } from './contentReview/ClinicalRegistryOwnerPanel';
 import {
   normalizeClinicalBatchDecisionResult,
   readAssignedClinicalBatch,
@@ -126,6 +127,10 @@ export function dimensionLabel(dimension: string, locale: 'mm' | 'en'): string {
 
 function mayEditContent(role: StaffRole | null | undefined): boolean {
   return !!role && role !== 'support';
+}
+
+export function mayOperateClinicalRegistry(role: StaffRole | null | undefined): boolean {
+  return role === 'owner';
 }
 
 export type EditableField = {
@@ -507,7 +512,7 @@ function ContentEditor({ item, role, targetFieldPath, onDirtyChange }: { item: {
   );
 }
 
-type WorkspaceTab = 'clinicalBatch' | 'priority' | 'manual' | 'item' | 'bulkReplace' | 'import' | 'security';
+type WorkspaceTab = 'clinicalBatch' | 'clinicalRegistry' | 'priority' | 'manual' | 'item' | 'bulkReplace' | 'import' | 'security';
 
 /** Live Owner Priority tab: server queues + the shared presentational view. */
 function OwnerPriorityContainer({ onOpenItem }: { onOpenItem: (row: QueueRowView) => void }) {
@@ -666,7 +671,7 @@ export function ContentReviewWorkspace() {
   }
 
   const item = detail && 'item' in detail ? detail.item : null;
-  const isOwner = access.role === 'owner';
+  const isOwner = mayOperateClinicalRegistry(access.role);
   const isClinicalReviewer = isClinicalBatchReviewerRole(access.role);
   const clinicalBatchState = readAssignedClinicalBatch(assignedClinicalBatch, access.role);
   const recordClinicalBatchDecision: RecordClinicalBatchDecision = async (input) => {
@@ -711,6 +716,7 @@ export function ContentReviewWorkspace() {
   const tabs: Array<{ key: WorkspaceTab; label: string; visible: boolean }> = isClinicalReviewer
     ? [{ key: 'clinicalBatch', label: L('Clinical batch စစ်ဆေးရန်', 'Clinical batch'), visible: true }]
     : [
+        { key: 'clinicalRegistry', label: L('Clinical registry', 'Clinical registry'), visible: isOwner },
         { key: 'priority', label: L('ဦးစားပေးစစ်ဆေးရန်', 'Owner Priority'), visible: true },
         { key: 'manual', label: L('လူကိုယ်တိုင် စစ်ဆေးရန်', 'Manual review'), visible: true },
         { key: 'item', label: L('အကြောင်းအရာ စစ်ဆေးရန်', 'Review item'), visible: true },
@@ -777,6 +783,7 @@ export function ContentReviewWorkspace() {
           recordDecision={recordClinicalBatchDecision}
         />
       )}
+      {activeTab === 'clinicalRegistry' && isOwner && <ClinicalRegistryOwnerPanel />}
       {activeTab === 'priority' && <OwnerPriorityContainer onOpenItem={openItemFromQueue} />}
       {activeTab === 'manual' && <ManualReviewPanel onSearchContent={searchContentFromManualReview} />}
       {activeTab === 'bulkReplace' && <BulkReplacePanel canEdit={mayEditContent(access.role)} />}

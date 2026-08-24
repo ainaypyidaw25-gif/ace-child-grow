@@ -40,6 +40,7 @@ import { readAssignedBatchState } from '../../../convex/clinicalReviewBatch';
 import {
   activateRegisteredBatch,
   materializeRegisteredReleaseBatches,
+  ownerRegistryStatus,
 } from '../../../convex/clinicalReviewRegistry';
 import { sha256Canonical } from '../../../convex/lib/aiAuditHash';
 import {
@@ -347,6 +348,44 @@ describe('first release-authoritative clinical batch', () => {
       })),
     );
     expect(ctx.tables.clinicalReviewBatchReceipts).toHaveLength(0);
+  });
+
+  it('reports only the exact initial batch as activatable and confirms the post-action readback', async () => {
+    const ctx = context();
+    await expect(handler(materializeRegisteredReleaseBatches)(ctx, {
+      expectedRegistryDigest: await registryDigest(),
+    })).resolves.toMatchObject({ ok: true, createdBatches: 2, createdAssignments: 5 });
+
+    const ready = await handler(ownerRegistryStatus)(ctx, {}) as Record<string, unknown>;
+    expect(ready).toMatchObject({
+      registryCode: 'valid',
+      materializationCode: 'materialized_exact',
+      registeredReleaseCount: 2,
+      persistedBatchCount: 2,
+      persistedAssignmentCount: 5,
+      currentActivation: {
+        batchId: CLINICAL_INITIAL_RELEASE_BATCH_ID,
+        freezeDigest: CLINICAL_INITIAL_RELEASE_BATCH_HASH,
+        expectedUpstreamReceiptDigest: null,
+        confirmationText: `ACTIVATE ${CLINICAL_INITIAL_RELEASE_BATCH_ID}`,
+        readinessCode: 'ready_initial',
+      },
+    });
+    expect(JSON.stringify(ready)).not.toContain('sourceIds');
+    expect(JSON.stringify(ready)).not.toContain('https://');
+
+    await expect(handler(activateRegisteredBatch)(ctx, {
+      batchId: CLINICAL_INITIAL_RELEASE_BATCH_ID,
+      expectedFreezeDigest: CLINICAL_INITIAL_RELEASE_BATCH_HASH,
+    })).resolves.toMatchObject({ ok: true, code: 'activated' });
+    const readback = await handler(ownerRegistryStatus)(ctx, {}) as Record<string, unknown>;
+    expect(readback).toMatchObject({
+      currentActivation: null,
+      releases: [
+        { batchId: CLINICAL_INITIAL_RELEASE_BATCH_ID, persistedStatus: 'active', readinessCode: 'already_active' },
+        { batchId: CLINICAL_NUTRITION_RELEASE_BATCH_ID, persistedStatus: 'frozen', readinessCode: 'blocked_active_batch_exists' },
+      ],
+    });
   });
 
   it('keeps the nutrition successor frozen until the root has an exact persisted receipt', async () => {
