@@ -17,7 +17,7 @@ import {
 describe('frozen infant-nutrition clinical release batch', () => {
   it('contains only the three exact post-CAS guide revisions and regenerated digests', async () => {
     const registration = CLINICAL_REVIEW_BATCH_REGISTRY[2];
-    expect(CLINICAL_REVIEW_BATCH_REGISTRY).toHaveLength(3);
+    expect(CLINICAL_REVIEW_BATCH_REGISTRY).toHaveLength(4);
     expect(registration).toMatchObject({
       sequence: 3,
       laneGraphVersion: 1,

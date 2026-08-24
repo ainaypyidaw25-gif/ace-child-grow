@@ -48,6 +48,8 @@ import {
   CLINICAL_INITIAL_RELEASE_BATCH_ITEMS,
   CLINICAL_INITIAL_RELEASE_BATCH_MANIFEST,
   CLINICAL_INITIAL_RELEASE_BATCH_ROUTING_HASH,
+  CLINICAL_OLDER_SAFETY_RELEASE_BATCH_HASH,
+  CLINICAL_OLDER_SAFETY_RELEASE_BATCH_ID,
   CLINICAL_NUTRITION_RELEASE_BATCH_HASH,
   CLINICAL_NUTRITION_RELEASE_BATCH_ID,
   CLINICAL_REVIEW_BATCH_REGISTRY,
@@ -262,8 +264,8 @@ async function materializeAndActivate(ctx: ReturnType<typeof context>) {
   });
   expect(materialized).toMatchObject({
     ok: true,
-    createdBatches: 2,
-    createdAssignments: 5,
+    createdBatches: 3,
+    createdAssignments: 14,
   });
   const activated = await handler(activateRegisteredBatch)(ctx, {
     batchId: CLINICAL_INITIAL_RELEASE_BATCH_ID,
@@ -316,7 +318,7 @@ describe('first release-authoritative clinical batch', () => {
   it('materializes and activates the first release root without a pilot batch or receipt', async () => {
     const ctx = context();
     await materializeAndActivate(ctx);
-    expect(ctx.tables.clinicalReviewBatches).toHaveLength(2);
+    expect(ctx.tables.clinicalReviewBatches).toHaveLength(3);
     expect(ctx.tables.clinicalReviewBatches.find((row) => (
       row.batchId === CLINICAL_INITIAL_RELEASE_BATCH_ID
     ))).toMatchObject({
@@ -325,7 +327,7 @@ describe('first release-authoritative clinical batch', () => {
       activationKind: 'initial',
       status: 'active',
     });
-    expect(ctx.tables.clinicalReviewAssignments).toHaveLength(5);
+    expect(ctx.tables.clinicalReviewAssignments).toHaveLength(14);
     expect(ctx.tables.clinicalReviewAssignments.filter((row) => (
       row.batchId === CLINICAL_INITIAL_RELEASE_BATCH_ID
     ))).toEqual(
@@ -368,6 +370,38 @@ describe('first release-authoritative clinical batch', () => {
     });
     const successor = ctx.tables.clinicalReviewBatches.find((row) => (
       row.batchId === CLINICAL_NUTRITION_RELEASE_BATCH_ID
+    ));
+    expect(successor).toMatchObject({ status: 'frozen' });
+    expect(successor).not.toHaveProperty('activatedAt');
+    expect(ctx.tables.clinicalReviewBatchReceipts).toHaveLength(0);
+  });
+
+  it('keeps the older-safety successor frozen until nutrition has its exact persisted receipt', async () => {
+    const ctx = context();
+    await materializeAndActivate(ctx);
+    const root = ctx.tables.clinicalReviewBatches.find((row) => (
+      row.batchId === CLINICAL_INITIAL_RELEASE_BATCH_ID
+    ));
+    const nutrition = ctx.tables.clinicalReviewBatches.find((row) => (
+      row.batchId === CLINICAL_NUTRITION_RELEASE_BATCH_ID
+    ));
+    expect(root).toBeDefined();
+    expect(nutrition).toBeDefined();
+    if (root) root.status = 'completed';
+    if (nutrition) nutrition.status = 'completed';
+
+    const refused = await handler(activateRegisteredBatch)(ctx, {
+      batchId: CLINICAL_OLDER_SAFETY_RELEASE_BATCH_ID,
+      expectedFreezeDigest: CLINICAL_OLDER_SAFETY_RELEASE_BATCH_HASH,
+      expectedUpstreamReceiptDigest: 'e'.repeat(64),
+    });
+    expect(refused).toMatchObject({
+      ok: false,
+      code: 'upstream_handoff_missing',
+      batchId: CLINICAL_OLDER_SAFETY_RELEASE_BATCH_ID,
+    });
+    const successor = ctx.tables.clinicalReviewBatches.find((row) => (
+      row.batchId === CLINICAL_OLDER_SAFETY_RELEASE_BATCH_ID
     ));
     expect(successor).toMatchObject({ status: 'frozen' });
     expect(successor).not.toHaveProperty('activatedAt');

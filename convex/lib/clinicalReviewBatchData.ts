@@ -548,6 +548,250 @@ export const CLINICAL_NUTRITION_RELEASE_BATCH_HASH = 'a31ac4dbcc5fbcbf6f43a4e57b
 export const CLINICAL_NUTRITION_RELEASE_BATCH_ROUTING_HASH = 'aa3921695d695a746d8713b03b9e49f0a9b60e239d988ce8d0b513195ff962b7' as const;
 
 /**
+ * Exact post-v2 clinical review for the nine older-child safety guides.
+ *
+ * Frozen from complete, bounded, read-only Production table snapshots on
+ * 2026-08-24 after `2026-08-24-older-safety-current-evidence-v2` applied.
+ * Every target remained in `clinical_review` with no current or historical
+ * clinical decision, no media rows, and no AI audit/publication rows. This
+ * manifest authorizes no approval, materialization, activation, or publication.
+ */
+export const CLINICAL_OLDER_SAFETY_RELEASE_BATCH_ID = 'clinical-older-safety-2026-08-24-v1' as const;
+export const CLINICAL_OLDER_SAFETY_RELEASE_BATCH_FROZEN_AT = 1787551214485 as const;
+export const CLINICAL_OLDER_SAFETY_RELEASE_BATCH_EXPIRES_AT = 1788760814485 as const;
+
+const EMPTY_ARRAY_CANONICAL_SHA256 = '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945' as const;
+const EMPTY_AI_CANONICAL_SHA256 = 'e0c04573de4314ddde597477c374bafd25b400663d593e0a0244afe3f73c1d0d' as const;
+const EMPTY_UPSTREAM_REVIEW_DIGESTS = [
+  { dimension: 'all_review_history', digest: EMPTY_ARRAY_CANONICAL_SHA256 },
+  { dimension: 'all_nonclinical_history', digest: EMPTY_ARRAY_CANONICAL_SHA256 },
+  { dimension: 'english', digest: EMPTY_ARRAY_CANONICAL_SHA256 },
+  { dimension: 'native_myanmar', digest: EMPTY_ARRAY_CANONICAL_SHA256 },
+  { dimension: 'child_development', digest: EMPTY_ARRAY_CANONICAL_SHA256 },
+  { dimension: 'evidence', digest: EMPTY_ARRAY_CANONICAL_SHA256 },
+  { dimension: 'safety', digest: EMPTY_ARRAY_CANONICAL_SHA256 },
+] as const;
+
+type OlderSafetyFrozenItem = Omit<ClinicalReviewBatchItem,
+  | 'kind'
+  | 'mediaCount'
+  | 'mediaCanonicalSha256'
+  | 'aiCanonicalSha256'
+  | 'currentClinicalReviewCount'
+  | 'currentClinicalReviewsCanonicalSha256'
+  | 'allClinicalReviewHistoryCanonicalSha256'
+  | 'upstreamReviewDigests'
+>;
+
+function olderSafetyFrozenItem(item: OlderSafetyFrozenItem): ClinicalReviewBatchItem {
+  return {
+    ...item,
+    kind: 'guide',
+    mediaCount: 0,
+    mediaCanonicalSha256: EMPTY_ARRAY_CANONICAL_SHA256,
+    aiCanonicalSha256: EMPTY_AI_CANONICAL_SHA256,
+    currentClinicalReviewCount: 0,
+    currentClinicalReviewsCanonicalSha256: EMPTY_ARRAY_CANONICAL_SHA256,
+    allClinicalReviewHistoryCanonicalSha256: EMPTY_ARRAY_CANONICAL_SHA256,
+    upstreamReviewDigests: EMPTY_UPSTREAM_REVIEW_DIGESTS,
+  };
+}
+
+export const CLINICAL_OLDER_SAFETY_RELEASE_BATCH_ITEMS = [
+  olderSafetyFrozenItem({
+    ordinal: 1,
+    slug: 'gd_13_18m_safety',
+    reviewRevision: 7,
+    contentId: 'kx70pz9t2x95n0727d38qvwdkd8bdzb8',
+    contentCreationTime: 1785237828583.466,
+    contentUpdatedAt: 1787547270890,
+    contentCanonicalSha256: '837e6f2fe2c60c0b873086986c525b288795dc2373705935c09ad5886575fed6',
+    linkId: 'k978ctxpz373p0qagwvv64t34n8bcvpd',
+    linkCreationTime: 1785241493911.8396,
+    linkUpdatedAt: 1787547270890,
+    linkCanonicalSha256: '7305b521ce56e2213fb1b38e0af556938829939989b456ae42aa060fd94cc780',
+    sourceIds: ['aap-drowning-2026', 'tb-bright-futures-4e-2017', 'cdc-positive-parenting-toddlers-2026'],
+    sourceCount: 3,
+    sourcesCanonicalSha256: 'c02f12aa19341ad59c078609150a7f3de309d6dca096c1e8e9f5cf6e441ab39c',
+    reviewerAdvisory: {
+      mm: '၁၃–၁၈ လအရွယ်အတွက် ရေဘေးကင်းရေးနှင့် အမြဲတမ်းနီးကပ်စောင့်ကြည့်မှုကို AAP 2026 drowning source က တိုက်ရိုက်ထောက်ခံခြင်း၊ Bright Futures နှင့် CDC toddler source များ၏ အသက်အပိုင်းအခြားကို မကျော်လွန်ခြင်းနှင့် ဤ guide တွင် CPSC window/furniture source မချိတ်ထားသဖြင့် ပြတင်းပေါက်ကန့်သတ်ချက် သို့မဟုတ် ပရိဘောဂချိတ်ဆွဲမှုကို မထင်မှတ်ပေါင်းထည့်ထားခြင်းရှိ/မရှိ အတည်ပြုပါ။',
+      en: 'Confirm that AAP 2026 directly supports the water-safety and close-supervision wording for 13–18 months, that the Bright Futures and CDC toddler guidance stays within its age scope, and that no window-limit or furniture-anchoring claim is inferred because this guide has no linked CPSC source.',
+    },
+  }),
+  olderSafetyFrozenItem({
+    ordinal: 2,
+    slug: 'gd_19_24m_safety',
+    reviewRevision: 7,
+    contentId: 'kx72ka0h20jt3fccnby5q1g8918bdjxs',
+    contentCreationTime: 1785237828583.4707,
+    contentUpdatedAt: 1787547270890,
+    contentCanonicalSha256: 'd57f0d5477ac811eb069a8bce5f24ad75485eee685914048340ef29a07de813e',
+    linkId: 'k970v5cb4gwzc3m3tzd1v9ssv98bd1y7',
+    linkCreationTime: 1785241493911.8425,
+    linkUpdatedAt: 1787547270890,
+    linkCanonicalSha256: '0fb918c8485e56c0520209397b5d66e270b8934ad207562648a57828bb4190a1',
+    sourceIds: ['aap-drowning-2026', 'tb-bright-futures-4e-2017', 'cdc-positive-parenting-toddlers-2026', 'cpsc-childproofing-home-2023'],
+    sourceCount: 4,
+    sourcesCanonicalSha256: '270601bafabdadfeab2bc5f4bf384226145770e1fe499ce1dc8c504fc4532453',
+    reviewerAdvisory: {
+      mm: '၁၉–၂၄ လအရွယ်အတွက် AAP ရေဘေးကင်းရေးနှင့် CDC toddler အသက်အပိုင်းအခြားကို အတည်ပြုပြီး CPSC source က ထောက်ခံသော ပြတင်းပေါက်ဖွင့်အကျယ် ၄ လက်မအောက်ထားခြင်း၊ မီးဘေးလွတ်မြောက်ရန် ပြတင်းပေါက်တစ်ပေါက်ထားခြင်းနှင့် ပရိဘောဂကို နံရံတွင်ခိုင်စွာချိတ်ခြင်းကိုသာ တိတိကျကျ သုံးထားခြင်းရှိ/မရှိ စစ်ပါ။ CPSC source မထောက်ခံသော “တက်နိုင်သောပရိဘောဂကို ပြတင်းပေါက်မှ ဝေးရာရွှေ့” ဟူသောစာသား ပြန်မဝင်လာကြောင်းလည်း အတည်ပြုပါ။',
+      en: 'Confirm the AAP water-safety guidance and CDC toddler age scope for 19–24 months, and verify that the CPSC-backed window opening limit of four inches, one fire-escape window, and furniture anchoring are stated precisely. Also confirm that the unsupported “move climbable furniture away from windows” wording has not returned.',
+    },
+  }),
+  olderSafetyFrozenItem({
+    ordinal: 3,
+    slug: 'gd_2y_safety',
+    reviewRevision: 7,
+    contentId: 'kx73pwvtvvamn3dfx14jrg40nn8bc7kj',
+    contentCreationTime: 1785237828583.4753,
+    contentUpdatedAt: 1787547270890,
+    contentCanonicalSha256: 'd8b0335dbb07ca69c15f07a59810c19d2e88d6043d868cb4eeeaab9756df655b',
+    linkId: 'k973vc85xh8yav2fg8j4kmnabn8bd1g6',
+    linkCreationTime: 1785241493911.8455,
+    linkUpdatedAt: 1787547270890,
+    linkCanonicalSha256: 'c55c8369529154a64c3db20694b6f007251235aaed4c83e2849cf59d5b1715f3',
+    sourceIds: ['aap-drowning-2026', 'tb-bright-futures-4e-2017', 'cdc-positive-parenting-toddlers-2026'],
+    sourceCount: 3,
+    sourcesCanonicalSha256: 'c02f12aa19341ad59c078609150a7f3de309d6dca096c1e8e9f5cf6e441ab39c',
+    reviewerAdvisory: {
+      mm: '၂ နှစ်အရွယ်အတွက် AAP 2026 ရေဘေးကင်းရေးအချက်များနှင့် CDC toddler source (၁–၂ နှစ်) ၏ အသက်အပိုင်းအခြားကို တိုက်ရိုက်ကိုက်ညီစွာ အသုံးပြုထားခြင်းရှိ/မရှိ စစ်ပါ။ ဤ guide တွင် CPSC source မရှိသဖြင့် သီးခြား ပြတင်းပေါက် ၄ လက်မကန့်သတ်ချက် သို့မဟုတ် ပရိဘောဂချိတ်ဆွဲမှု claim ကို မပေါင်းထည့်ထားကြောင်း အတည်ပြုပါ။',
+      en: 'Confirm that the AAP 2026 water-safety claims and CDC toddler guidance for ages one to two are applied directly to the two-year guide. Because no CPSC source is linked here, confirm that no separate four-inch window-limit or furniture-anchoring claim is inferred.',
+    },
+  }),
+  olderSafetyFrozenItem({
+    ordinal: 4,
+    slug: 'gd_2_5y_safety',
+    reviewRevision: 7,
+    contentId: 'kx71xfbs9qjg1bz2hfvmgfc1rd8bcnfq',
+    contentCreationTime: 1785237828583.4802,
+    contentUpdatedAt: 1787547270890,
+    contentCanonicalSha256: '6f8cba9c9ca23cd6d664fb2ef6e0f5aa0853a534170d65dc2018fedf01fa566d',
+    linkId: 'k972t78ctsbmrp4gh7dhrfp0q58bdq47',
+    linkCreationTime: 1785241497141.093,
+    linkUpdatedAt: 1787547270890,
+    linkCanonicalSha256: 'c7c8bd3f1fb4d5154e47e66ff51f86e98ffb5415294af2148a50979e439ec9a9',
+    sourceIds: ['aap-drowning-2026', 'tb-bright-futures-4e-2017', 'cdc-positive-parenting-toddlers-2026'],
+    sourceCount: 3,
+    sourcesCanonicalSha256: 'c02f12aa19341ad59c078609150a7f3de309d6dca096c1e8e9f5cf6e441ab39c',
+    reviewerAdvisory: {
+      mm: '၂ နှစ်ခွဲအရွယ်တွင် AAP ရေဘေးကင်းရေး/စောင့်ကြည့်မှုနှင့် CDC toddler source ၏ ၁၂–၃၆ လ အသက်ကန့်သတ်ချက်အတွင်းသာ ဖော်ပြထားခြင်းရှိ/မရှိ စစ်ပါ။ CPSC source မချိတ်ထားသောကြောင့် ပြတင်းပေါက်ကန့်သတ်ချက်နှင့် ပရိဘောဂ anchor claim များကို အခြား guide မှ မကူးယူထားကြောင်း အတည်ပြုပါ။',
+      en: 'Confirm that the water-safety and supervision wording stays within the AAP evidence and the CDC toddler source’s 12–36 month range at two and a half years. With no CPSC source linked, confirm that window-limit and furniture-anchor claims have not been borrowed from another guide.',
+    },
+  }),
+  olderSafetyFrozenItem({
+    ordinal: 5,
+    slug: 'gd_3y_safety',
+    reviewRevision: 6,
+    contentId: 'kx75jb917chhxe4spsmp49bw918bdmcd',
+    contentCreationTime: 1785237828583.485,
+    contentUpdatedAt: 1787547270890,
+    contentCanonicalSha256: '0fb451a740b06108111d51a94feef9e6f1882aa7e450563092be1872277f4a8c',
+    linkId: 'k970wxb0d4xnxnbcr2z8yp2kbn8bca9v',
+    linkCreationTime: 1785241497141.0962,
+    linkUpdatedAt: 1787547270890,
+    linkCanonicalSha256: 'd86e4129ffc2cc8c1dfb1b37722c689d2731dad38533a4e6668309df79433c15',
+    sourceIds: ['aap-drowning-2026', 'tb-bright-futures-4e-2017', 'cdc-positive-parenting-preschoolers-2026'],
+    sourceCount: 3,
+    sourcesCanonicalSha256: '71eb92f3680c26bad32250b2e99360964ad62ed2e03f754c7568e7978a46d575',
+    reviewerAdvisory: {
+      mm: '၃ နှစ်ပြည့်အရွယ်တွင် AAP 2026 ရေဘေးကင်းရေးနှင့် CDC preschool source ၏ ၃–၅ နှစ် အသက်အစကို မှန်ကန်စွာ အသုံးပြုထားခြင်းရှိ/မရှိ စစ်ပါ။ CPSC source မရှိသဖြင့် ပြတင်းပေါက်ဖွင့်အကျယ်နှင့် ပရိဘောဂချိတ်ဆွဲမှုဆိုင်ရာ တိကျသော claim များကို မထင်မှတ်ဖော်ပြထားကြောင်း အတည်ပြုပါ။',
+      en: 'Confirm that the three-year guide uses the AAP 2026 water-safety guidance and the CDC preschool source beginning at age three within scope. Because no CPSC source is linked, verify that precise window-opening and furniture-anchoring claims are not inferred.',
+    },
+  }),
+  olderSafetyFrozenItem({
+    ordinal: 6,
+    slug: 'gd_3_5y_safety',
+    reviewRevision: 6,
+    contentId: 'kx72jqztx8ysd8w20sqwxw8gfd8bc5gj',
+    contentCreationTime: 1785237828583.49,
+    contentUpdatedAt: 1787547270890,
+    contentCanonicalSha256: '9c09bca668d9e2fb1992ec1c27072d1d593e958443bce9ac21532564b738d10d',
+    linkId: 'k97emfw1fzzdkrmbcy8emnad3s8bdz7q',
+    linkCreationTime: 1785241497141.0994,
+    linkUpdatedAt: 1787547270890,
+    linkCanonicalSha256: '10173b725cd87e2716475b105c39014774a854d3773bcda03d906f8a1c89a015',
+    sourceIds: ['aap-drowning-2026', 'tb-bright-futures-4e-2017', 'cdc-positive-parenting-preschoolers-2026'],
+    sourceCount: 3,
+    sourcesCanonicalSha256: '71eb92f3680c26bad32250b2e99360964ad62ed2e03f754c7568e7978a46d575',
+    reviewerAdvisory: {
+      mm: '၃ နှစ်ခွဲအရွယ်အတွက် ရေနားတွင် အနီးကပ်စောင့်ကြည့်ရေး claim များကို AAP 2026 နှင့် ကိုက်ညီစေပြီး CDC preschool source ၏ ၃–၅ နှစ်အတွင်းသာ အထွေထွေဘေးကင်းရေးအကြံပြုချက်ကို အသုံးပြုထားခြင်းရှိ/မရှိ စစ်ပါ။ CPSC မချိတ်ထားသဖြင့် window/anchoring အသေးစိတ်ကို မချဲ့ထွင်ထားကြောင်း အတည်ပြုပါ။',
+      en: 'Confirm that close supervision around water follows AAP 2026 and that general safety advice stays within the CDC preschool source’s three-to-five-year scope at three and a half years. With no CPSC link, verify that window or anchoring details are not expanded beyond the cited record.',
+    },
+  }),
+  olderSafetyFrozenItem({
+    ordinal: 7,
+    slug: 'gd_4y_safety',
+    reviewRevision: 6,
+    contentId: 'kx735zjgmccz25yaacwc5fhymn8bdvsb',
+    contentCreationTime: 1785237828583.4949,
+    contentUpdatedAt: 1787547270890,
+    contentCanonicalSha256: 'bcb1b7b14bacd9c8dd4dac1af81e60a05e0954fa2f5c0c6c8a0e6ef60a0843b5',
+    linkId: 'k970ex6j7yzngvenvwqbrv0ayn8bc1w3',
+    linkCreationTime: 1785241497141.1025,
+    linkUpdatedAt: 1787547270890,
+    linkCanonicalSha256: 'ce9cc2a039ba3490e0037f6f91a826f6ce79ee72914429f28326e67a8baf46d5',
+    sourceIds: ['aap-drowning-2026', 'tb-bright-futures-4e-2017', 'cdc-positive-parenting-preschoolers-2026'],
+    sourceCount: 3,
+    sourcesCanonicalSha256: '71eb92f3680c26bad32250b2e99360964ad62ed2e03f754c7568e7978a46d575',
+    reviewerAdvisory: {
+      mm: '၄ နှစ်အရွယ်အတွက် AAP drowning prevention 2026 ရေဘေးကင်းရေးအချက်များနှင့် CDC preschooler/ Bright Futures အသက်သက်ဆိုင်မှုကို တိုက်ရိုက်စစ်ပါ။ CPSC source မပါဝင်သဖြင့် ပြတင်းပေါက် ၄ လက်မကန့်သတ်ချက် သို့မဟုတ် ပရိဘောဂ anchor အသေးစိတ်ကို အထောက်အထားမဲ့ မထည့်ထားကြောင်း အတည်ပြုပါ။',
+      en: 'Confirm direct support for the four-year water-safety wording from AAP Drowning Prevention 2026 and the age applicability of CDC preschooler and Bright Futures guidance. Since no CPSC source is linked, verify that no unsupported four-inch window limit or furniture-anchor detail appears.',
+    },
+  }),
+  olderSafetyFrozenItem({
+    ordinal: 8,
+    slug: 'gd_4_5y_safety',
+    reviewRevision: 6,
+    contentId: 'kx7c0k0hq7agzphv03j863cacd8bc8wh',
+    contentCreationTime: 1785237828583.4998,
+    contentUpdatedAt: 1787547270890,
+    contentCanonicalSha256: '967bb083d8c9d220e18bfdc092dce0352a3c8f204077d3a176cb88a1e47b9f06',
+    linkId: 'k978mvw7fmmggm4m1e11x04wb98bc8b4',
+    linkCreationTime: 1785241497141.1057,
+    linkUpdatedAt: 1787547270890,
+    linkCanonicalSha256: '602ba6fe75dae0c69de680fef31f1c1dea3db79691707fea0a7c6f7878770294',
+    sourceIds: ['aap-drowning-2026', 'tb-bright-futures-4e-2017', 'cdc-positive-parenting-preschoolers-2026'],
+    sourceCount: 3,
+    sourcesCanonicalSha256: '71eb92f3680c26bad32250b2e99360964ad62ed2e03f754c7568e7978a46d575',
+    reviewerAdvisory: {
+      mm: '၄ နှစ်ခွဲအရွယ် guide တွင် ရေဘေးကင်းရေး/ကာရံမှုနှင့် အနီးကပ်စောင့်ကြည့်မှုကို AAP 2026 claim scope အတွင်းထားပြီး CDC preschool source ၃၆–၇၁ လ အသက်ကန့်သတ်ချက်နှင့် ကိုက်ညီခြင်းရှိ/မရှိ စစ်ပါ။ CPSC မရှိသဖြင့် window/anchoring အကြောင်းကို အခြား record မှ မထင်မှတ်ကူးယူထားကြောင်း အတည်ပြုပါ။',
+      en: 'Confirm that water barriers and close-supervision wording stays within the AAP 2026 claim scope and that the four-and-a-half-year guide fits the CDC preschool source’s 36–71 month range. With no CPSC source, verify that window or anchoring language is not inferred from another record.',
+    },
+  }),
+  olderSafetyFrozenItem({
+    ordinal: 9,
+    slug: 'gd_5y_safety',
+    reviewRevision: 6,
+    contentId: 'kx72cdsmasnxpdnymryyhsybvn8bcvj9',
+    contentCreationTime: 1785237828583.5046,
+    contentUpdatedAt: 1787547270890,
+    contentCanonicalSha256: '5e5838e2d0908d83f154e64cd589ec9a9d705c86cd281077e3b20b4e4a3fcd90',
+    linkId: 'k97ax2c9qpywa5c4sjm5rt4pjs8bdtk1',
+    linkCreationTime: 1785241497141.109,
+    linkUpdatedAt: 1787547270890,
+    linkCanonicalSha256: '8fd8257616a57b6ea017c34d00f518b7adefea1c0ff895d65ce339333ef9f50c',
+    sourceIds: ['aap-drowning-2026', 'tb-bright-futures-4e-2017', 'cdc-positive-parenting-preschoolers-2026'],
+    sourceCount: 3,
+    sourcesCanonicalSha256: '71eb92f3680c26bad32250b2e99360964ad62ed2e03f754c7568e7978a46d575',
+    reviewerAdvisory: {
+      mm: '၅ နှစ်အရွယ်တွင် AAP 2026 ရေဘေးကင်းရေးအချက်များနှင့် CDC preschool source ၏ အမြင့်ဆုံး ၇၁ လအထိ အသက်သက်ဆိုင်မှုကို မကျော်လွန်ကြောင်း စစ်ပါ။ Bright Futures record ၏ ၀–၆၀ လ metadata နယ်နိမိတ်နှင့် ထိစပ်နေသော claim များကို အထူးသတိပြု၍ CPSC မရှိသော window/anchoring အသေးစိတ်ကို မချဲ့ထွင်ထားကြောင်း အတည်ပြုပါ။',
+      en: 'Confirm that the five-year guide stays within AAP 2026 water-safety evidence and the CDC preschool source’s upper bound of 71 months. Pay particular attention to claims at the Bright Futures record’s 0–60 month metadata boundary, and verify that no CPSC-specific window or anchoring detail is added without a CPSC link.',
+    },
+  }),
+] as const;
+
+export const CLINICAL_OLDER_SAFETY_RELEASE_BATCH_MANIFEST = {
+  batchId: CLINICAL_OLDER_SAFETY_RELEASE_BATCH_ID,
+  count: CLINICAL_OLDER_SAFETY_RELEASE_BATCH_ITEMS.length,
+  reviewer: CLINICAL_REVIEW_BATCH_REVIEWER,
+  items: CLINICAL_OLDER_SAFETY_RELEASE_BATCH_ITEMS,
+} as const satisfies ClinicalReviewBatchFreezeManifest;
+
+// Regenerated with sha256Canonical after every manifest/routing edit.
+export const CLINICAL_OLDER_SAFETY_RELEASE_BATCH_HASH = '7b0eb14a8b694962d5b119f35f9e3ec69da39d611b26bbb0695321cd7b562c70' as const;
+export const CLINICAL_OLDER_SAFETY_RELEASE_BATCH_ROUTING_HASH = '2ec77cf490c5160b13133cb7522f5d884630a3db185a838e9cfd85edb1acff47' as const;
+
+/**
  * Compile-time allowlist of immutable clinical batches, in strict sequence.
  * Keep this registry explicit: it must never be populated from the catalogue,
  * owner-priority queues, search results, or generic review requests.
@@ -595,6 +839,22 @@ export const CLINICAL_REVIEW_BATCH_REGISTRY = [
     frozenAt: CLINICAL_NUTRITION_RELEASE_BATCH_FROZEN_AT,
     expiresAt: CLINICAL_NUTRITION_RELEASE_BATCH_EXPIRES_AT,
     manifest: CLINICAL_NUTRITION_RELEASE_BATCH_MANIFEST,
+  },
+  {
+    sequence: 4,
+    laneGraphVersion: 1,
+    dimension: 'clinical',
+    authority: 'release',
+    activation: {
+      kind: 'after_handoff',
+      previousBatchId: CLINICAL_NUTRITION_RELEASE_BATCH_ID,
+      expectedPreviousFreezeDigest: CLINICAL_NUTRITION_RELEASE_BATCH_HASH,
+    },
+    routingCanonicalSha256: CLINICAL_OLDER_SAFETY_RELEASE_BATCH_ROUTING_HASH,
+    freezeDigest: CLINICAL_OLDER_SAFETY_RELEASE_BATCH_HASH,
+    frozenAt: CLINICAL_OLDER_SAFETY_RELEASE_BATCH_FROZEN_AT,
+    expiresAt: CLINICAL_OLDER_SAFETY_RELEASE_BATCH_EXPIRES_AT,
+    manifest: CLINICAL_OLDER_SAFETY_RELEASE_BATCH_MANIFEST,
   },
 ] as const satisfies readonly ClinicalReviewBatchRegistration[];
 
