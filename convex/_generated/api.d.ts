@@ -88,6 +88,7 @@ import type * as lib_remainingPseudoMilestoneRetirementData from "../lib/remaini
 import type * as lib_reviewPolicy from "../lib/reviewPolicy.js";
 import type * as lib_reviewSearch from "../lib/reviewSearch.js";
 import type * as lib_seedPolicy from "../lib/seedPolicy.js";
+import type * as lib_skinToSkinRefreezeCorrectionData from "../lib/skinToSkinRefreezeCorrectionData.js";
 import type * as lib_swaimanCerebralPalsyLinkCasData from "../lib/swaimanCerebralPalsyLinkCasData.js";
 import type * as lib_swaimanSeizureLinkCasData from "../lib/swaimanSeizureLinkCasData.js";
 import type * as lib_swaimanSuddenWeaknessCasData from "../lib/swaimanSuddenWeaknessCasData.js";
@@ -111,6 +112,8 @@ import type * as release from "../release.js";
 import type * as remainingPseudoMilestoneRetirement from "../remainingPseudoMilestoneRetirement.js";
 import type * as reports from "../reports.js";
 import type * as seed from "../seed.js";
+import type * as skinToSkinRefreezeCorrection from "../skinToSkinRefreezeCorrection.js";
+import type * as skinToSkinRefreezeCorrectionActions from "../skinToSkinRefreezeCorrectionActions.js";
 import type * as sleep from "../sleep.js";
 import type * as subscriptions from "../subscriptions.js";
 import type * as swaimanCerebralPalsyLinkCas from "../swaimanCerebralPalsyLinkCas.js";
@@ -206,6 +209,7 @@ declare const fullApi: ApiFromModules<{
   "lib/reviewPolicy": typeof lib_reviewPolicy;
   "lib/reviewSearch": typeof lib_reviewSearch;
   "lib/seedPolicy": typeof lib_seedPolicy;
+  "lib/skinToSkinRefreezeCorrectionData": typeof lib_skinToSkinRefreezeCorrectionData;
   "lib/swaimanCerebralPalsyLinkCasData": typeof lib_swaimanCerebralPalsyLinkCasData;
   "lib/swaimanSeizureLinkCasData": typeof lib_swaimanSeizureLinkCasData;
   "lib/swaimanSuddenWeaknessCasData": typeof lib_swaimanSuddenWeaknessCasData;
@@ -229,6 +233,8 @@ declare const fullApi: ApiFromModules<{
   remainingPseudoMilestoneRetirement: typeof remainingPseudoMilestoneRetirement;
   reports: typeof reports;
   seed: typeof seed;
+  skinToSkinRefreezeCorrection: typeof skinToSkinRefreezeCorrection;
+  skinToSkinRefreezeCorrectionActions: typeof skinToSkinRefreezeCorrectionActions;
   sleep: typeof sleep;
   subscriptions: typeof subscriptions;
   swaimanCerebralPalsyLinkCas: typeof swaimanCerebralPalsyLinkCas;

@@ -851,8 +851,11 @@ const ACTIVITIES: SeedItem[] = [
   kb(
     activity({
       slug: 'skin_to_skin_calm',
-      title: b('အရေပြားချင်းထိ ပွေ့ချီခြင်း', 'Skin-to-skin calming'),
-      summary: b('ကလေးကို ရင်ဘတ်ပေါ် အရေပြားချင်းထိ ပွေ့ချီ၍ ငြိမ်သက်စေခြင်း။', 'Hold your baby skin-to-skin on your chest to settle and connect.'),
+      title: b('နိုးကြားနေချိန် အရေပြားချင်းထိ ပွေ့ချီခြင်း', 'Awake skin-to-skin closeness'),
+      summary: b(
+        'မိဘ အပြည့်အဝ နိုးကြားနေချိန်တွင် ကလေး၏ အသက်ရှူလမ်းကြောင်းကို ရှင်းလင်းစွာထားပြီး ရင်ဘတ်ပေါ် အရေပြားချင်းထိ အနီးကပ်ပွေ့ချီပါ။',
+        'While you are fully awake, hold your baby skin-to-skin on your chest for closeness and keep the airway clear.',
+      ),
       ageGroupKey: 'birth_2m',
       domains: ['emotional', 'social'],
       difficulty: 'easy',
@@ -871,12 +874,14 @@ const ACTIVITIES: SeedItem[] = [
       ),
       indoor: true, outdoor: false, oneChild: true, group: false, parentChild: true,
       outcomes: [
-        b('လုံခြုံမှုနှင့် စိတ်ငြိမ်သက်မှုကို တည်ဆောက်ရန်။', 'Learning objective — build security and help your baby settle.'),
-        b('နို့တိုက်ကျွေးမှုကို ပိုမိုလွယ်ကူစေခြင်း။', 'Feeding often becomes easier.'),
+        b(
+          'မိဘ အပြည့်အဝ နိုးကြားနေချိန်တွင် ကလေးနှင့် အေးဆေးစွာ အနီးကပ်နေချိန် ရရှိရန်။',
+          'Learning objective — spend calm, close time together while the parent is fully awake.',
+        ),
       ],
       tags: ['social_activity', 'bonding'],
     }),
-    'Skin-to-skin contact and its feeding and settling benefits follow WHO breastfeeding counselling and Baby-Friendly Hospital Initiative guidance; the sofa/armchair and drowsiness cautions follow AAP safe sleep guidance and NHS SIDS advice.',
+    'WHO guidance directly supports immediate skin-to-skin contact in maternity and newborn services and breastfeeding support; this activity makes no claim that repeated at-home use improves feeding or treats distress. The fully-awake, airway, sofa/armchair and drowsiness cautions follow AAP safe-sleep guidance and NHS SIDS advice.',
   ),
   kb(
     activity({
