@@ -536,7 +536,7 @@ describe('first release-authoritative clinical batch', () => {
       currentActivation: null,
       releases: [
         { batchId: CLINICAL_INITIAL_RELEASE_BATCH_ID, assignmentsExact: false },
-        { batchId: CLINICAL_NUTRITION_RELEASE_BATCH_ID, readinessCode: 'blocked_predecessor_mismatch' },
+        { batchId: CLINICAL_NUTRITION_RELEASE_BATCH_ID, readinessCode: 'blocked_persisted_mismatch' },
       ],
     });
     ctx.db.patch.mockClear();

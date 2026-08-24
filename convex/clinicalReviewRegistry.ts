@@ -161,6 +161,17 @@ function persistedRegistryState(inspection: ReleaseInspection): PersistedRegistr
   return 'persisted_exact';
 }
 
+function persistedRegistrySequenceBlockIndex(states: readonly PersistedRegistryState[]): number | null {
+  let sawAbsent = false;
+  for (let index = 0; index < states.length; index += 1) {
+    const state = states[index];
+    if (state === 'invalid') return index;
+    if (state === 'absent_clean') sawAbsent = true;
+    else if (state === 'persisted_exact' && sawAbsent) return index;
+  }
+  return null;
+}
+
 async function inspectPersistedRegistration(
   ctx: Pick<QueryCtx, 'db'>,
   registration: ClinicalReviewBatchRegistration,
@@ -332,6 +343,8 @@ export const ownerRegistryStatus = internalQuery({
     const inspectionByBatchId = new Map(
       inspections.map((inspection) => [inspection.registration.manifest.batchId, inspection]),
     );
+    const persistedStates = inspections.map(persistedRegistryState);
+    const persistedSequenceBlockIndex = persistedRegistrySequenceBlockIndex(persistedStates);
     const activeRows = await ctx.db.query('clinicalReviewBatches')
       .withIndex('by_status', (q) => q.eq('status', 'active')).take(2);
     const now = args.nowMs;
@@ -344,7 +357,9 @@ export const ownerRegistryStatus = internalQuery({
       const batchId = registration.manifest.batchId;
       const persistedState = persistedRegistryState(inspection);
       let readiness: ActivationReadiness = 'blocked_persisted_mismatch';
-      if (registryCode !== 'valid' || persistedState === 'invalid') {
+      if (registryCode !== 'valid'
+        || persistedState === 'invalid'
+        || persistedSequenceBlockIndex !== null) {
         if (batches.length === 1
           && batches[0].status === 'frozen'
           && inspection.registrationExact
@@ -426,9 +441,8 @@ export const ownerRegistryStatus = internalQuery({
       readinessByBatchId.set(batchId, readiness);
     }
 
-    const persistedStates = inspections.map(persistedRegistryState);
     const materializationMismatch = registryCode !== 'valid'
-      || persistedStates.some((state) => state === 'invalid');
+      || persistedSequenceBlockIndex !== null;
     const materializedExact = persistedStates.every((state) => state === 'persisted_exact');
     const materializationCode = materializationMismatch
       ? 'blocked_persisted_mismatch' as const
@@ -510,11 +524,20 @@ export const materializeRegisteredReleaseBatches = mutation({
     const releaseRegistrations = registrations.filter(
       (registration) => registration.authority === 'release',
     ) as readonly ClinicalReviewBatchRegistration[];
+    const materializationInspections: ReleaseInspection[] = [];
     for (const registration of releaseRegistrations) {
-      const inspection = await inspectPersistedRegistration(ctx, registration);
-      if (persistedRegistryState(inspection) === 'invalid') {
-        return { ok: false, code: 'persisted_registry_state_mismatch', batchId: registration.manifest.batchId, createdBatches: 0, createdAssignments: 0 };
-      }
+      materializationInspections.push(await inspectPersistedRegistration(ctx, registration));
+    }
+    const materializationStates = materializationInspections.map(persistedRegistryState);
+    const materializationBlockIndex = persistedRegistrySequenceBlockIndex(materializationStates);
+    if (materializationBlockIndex !== null) {
+      return {
+        ok: false,
+        code: 'persisted_registry_state_mismatch',
+        batchId: releaseRegistrations[materializationBlockIndex]?.manifest.batchId ?? null,
+        createdBatches: 0,
+        createdAssignments: 0,
+      };
     }
     const batchPlans: ReturnType<typeof batchInsertValue>[] = [];
     const assignmentPlans: Array<Awaited<ReturnType<typeof assignmentInsertValue>>> = [];

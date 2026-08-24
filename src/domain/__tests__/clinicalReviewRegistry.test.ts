@@ -566,6 +566,61 @@ describe('persisted clinical review registry', () => {
     },
   );
 
+  it.each(['frozen', 'active', 'completed'] as const)(
+    'rejects an orphan %s successor instead of backfilling its missing predecessor',
+    async (successorStatus) => {
+      const first = await releaseRegistration('release-1', 'release_slug_1');
+      const second = await releaseRegistration('release-2', 'release_slug_2', {
+        sequence: 3,
+        previous: first,
+      });
+      const registry = CLINICAL_REVIEW_BATCH_REGISTRY as unknown as ClinicalReviewBatchRegistration[];
+      registry.push(first, second);
+      const ctx = context();
+      await handler(materializeRegisteredReleaseBatches)(ctx, {
+        expectedRegistryDigest: await registryDigest(),
+      });
+      ctx.tables.clinicalReviewBatches.splice(0, 1);
+      ctx.tables.clinicalReviewAssignments.splice(0, 1);
+      Object.assign(ctx.tables.clinicalReviewBatches[0], {
+        status: successorStatus,
+        ...(successorStatus === 'frozen' ? {} : { activatedAt: TEST_NOW_MS - 1_000 }),
+        ...(successorStatus === 'completed' ? { completedAt: TEST_NOW_MS } : {}),
+      });
+
+      await expect(handler(ownerRegistryStatus)(ctx, ownerStatusArgs())).resolves.toMatchObject({
+        materializationCode: 'blocked_persisted_mismatch',
+        releases: [
+          { batchId: first.manifest.batchId, readinessCode: 'blocked_persisted_mismatch' },
+          { batchId: second.manifest.batchId, readinessCode: 'blocked_persisted_mismatch' },
+        ],
+        currentActivation: null,
+      });
+      ctx.db.insert.mockClear();
+      ctx.db.patch.mockClear();
+      await expect(handler(materializeRegisteredReleaseBatches)(ctx, {
+        expectedRegistryDigest: await registryDigest(),
+      })).resolves.toMatchObject({
+        ok: false,
+        code: 'persisted_registry_state_mismatch',
+        batchId: second.manifest.batchId,
+        createdBatches: 0,
+        createdAssignments: 0,
+      });
+      expect(ctx.db.insert).not.toHaveBeenCalled();
+      expect(ctx.db.patch).not.toHaveBeenCalled();
+      expect(ctx.tables.clinicalReviewBatches).toHaveLength(1);
+      expect(ctx.tables.clinicalReviewAssignments).toHaveLength(1);
+
+      await expect(handler(activateRegisteredBatch)(ctx, {
+        batchId: second.manifest.batchId,
+        expectedFreezeDigest: second.freezeDigest,
+        expectedUpstreamReceiptDigest: 'f'.repeat(64),
+      })).resolves.toMatchObject({ ok: false });
+      expect(ctx.db.patch).not.toHaveBeenCalled();
+    },
+  );
+
   it('rejects an extra batch-local assignment instead of filling its missing expected row', async () => {
     const release = await releaseRegistration('release-1', 'release_slug_1');
     (CLINICAL_REVIEW_BATCH_REGISTRY as unknown as ClinicalReviewBatchRegistration[]).push(release);
