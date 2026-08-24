@@ -26,6 +26,7 @@ const KNOWN_AUTH_CALLS = [
   'requireOwner',
   'requireContentEditor',
   'requireEvidenceEditor',
+  'requireEvidenceSourceApprover',
   'requireClinicalReviewer',
   'requireProfessionalPublisher',
   'requireReviewEditor',

@@ -184,13 +184,13 @@ function approveThroughOrdinaryReview(
     updatedAt: APPROVAL_TIME,
   });
   state.tables.parentProfiles.push({
-    _id: 'profile:qualified-owner',
+    _id: 'profile:qualified-clinical-reviewer',
     _creationTime: APPROVAL_TIME - 10,
     userId: REVIEWER_ID,
     displayName: REVIEWER_NAME,
     preferredLocale: 'en',
     isStaff: true,
-    staffRole: 'owner',
+    staffRole: 'clinical_reviewer',
     staffQualification: REVIEWER_QUALIFICATION,
   });
   state.tables.auditLogs.push({
@@ -212,21 +212,21 @@ async function approveThroughOrdinaryReviewMutation(
   spec: SuccessorSpec,
 ) {
   state.tables.parentProfiles.push({
-    _id: 'profile:qualified-owner',
+    _id: 'profile:qualified-clinical-reviewer',
     _creationTime: APPROVAL_TIME - 10,
     userId: REVIEWER_ID,
     displayName: REVIEWER_NAME,
     preferredLocale: 'en',
     isStaff: true,
-    staffRole: 'owner',
+    staffRole: 'clinical_reviewer',
     staffQualification: REVIEWER_QUALIFICATION,
   });
   const note = `Human claim-scope review for ${spec.sourceId}`;
   return await registeredHandler(setReview)(state.ctx, {
     sourceId: spec.sourceId,
     status: 'approved',
-    reviewer: 'ignored in favor of authenticated owner profile',
-    reviewerQualification: 'ignored in favor of authenticated owner profile',
+    reviewer: 'ignored in favor of authenticated reviewer profile',
+    reviewerQualification: 'ignored in favor of authenticated reviewer profile',
     reviewDate: '2026-08-24',
     nextReviewDate: spec === NHS_SOOTHING_HUMAN_REVIEW_SUCCESSOR_SPEC
       ? '2029-04-22' : '2029-08-24',

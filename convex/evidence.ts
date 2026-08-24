@@ -21,7 +21,11 @@ import {
 import { v, type Infer } from 'convex/values';
 import type { Id } from './_generated/dataModel';
 import { getAuthUserId } from '@convex-dev/auth/server';
-import { hasStaffRole, requireEvidenceEditor, requireProfessionalPublisher } from './lib/auth';
+import {
+  hasStaffRole,
+  requireEvidenceEditor,
+  requireEvidenceSourceApprover,
+} from './lib/auth';
 import { logAudit } from './audit';
 import {
   evidenceDateValidationProblem,
@@ -1080,7 +1084,7 @@ export const setReview = mutation({
   },
   handler: async (ctx, args) => {
     const approval = args.status === 'approved'
-      ? await requireProfessionalPublisher(ctx)
+      ? await requireEvidenceSourceApprover(ctx)
       : null;
     const userId = approval?.userId ?? await requireEvidenceEditor(ctx);
     const reviewArgs = approval
