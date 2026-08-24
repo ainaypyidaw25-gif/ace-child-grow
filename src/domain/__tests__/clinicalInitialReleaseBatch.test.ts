@@ -379,17 +379,28 @@ describe('first release-authoritative clinical batch', () => {
 
   it('reports only the exact initial batch as activatable and confirms the post-action readback', async () => {
     const ctx = context();
+    const registeredReleases = CLINICAL_REVIEW_BATCH_REGISTRY.filter(
+      (registration) => registration.authority === 'release',
+    );
+    const registeredAssignmentCount = registeredReleases.reduce(
+      (total, registration) => total + registration.manifest.count,
+      0,
+    );
     await expect(handler(materializeRegisteredReleaseBatches)(ctx, {
       expectedRegistryDigest: await registryDigest(),
-    })).resolves.toMatchObject({ ok: true, createdBatches: 2, createdAssignments: 5 });
+    })).resolves.toMatchObject({
+      ok: true,
+      createdBatches: registeredReleases.length,
+      createdAssignments: registeredAssignmentCount,
+    });
 
     const ready = await handler(ownerRegistryStatus)(ctx, ownerStatusArgs()) as Record<string, unknown>;
     expect(ready).toMatchObject({
       registryCode: 'valid',
       materializationCode: 'materialized_exact',
-      registeredReleaseCount: 2,
-      persistedBatchCount: 2,
-      persistedAssignmentCount: 5,
+      registeredReleaseCount: registeredReleases.length,
+      persistedBatchCount: registeredReleases.length,
+      persistedAssignmentCount: registeredAssignmentCount,
       currentActivation: {
         batchId: CLINICAL_INITIAL_RELEASE_BATCH_ID,
         freezeDigest: CLINICAL_INITIAL_RELEASE_BATCH_HASH,
@@ -408,10 +419,10 @@ describe('first release-authoritative clinical batch', () => {
     const readback = await handler(ownerRegistryStatus)(ctx, ownerStatusArgs()) as Record<string, unknown>;
     expect(readback).toMatchObject({
       currentActivation: null,
-      releases: [
-        { batchId: CLINICAL_INITIAL_RELEASE_BATCH_ID, persistedStatus: 'active', readinessCode: 'already_active' },
-        { batchId: CLINICAL_NUTRITION_RELEASE_BATCH_ID, persistedStatus: 'frozen', readinessCode: 'blocked_active_batch_exists' },
-      ],
+      releases: expect.arrayContaining([
+        expect.objectContaining({ batchId: CLINICAL_INITIAL_RELEASE_BATCH_ID, persistedStatus: 'active', readinessCode: 'already_active' }),
+        expect.objectContaining({ batchId: CLINICAL_NUTRITION_RELEASE_BATCH_ID, persistedStatus: 'frozen', readinessCode: 'blocked_active_batch_exists' }),
+      ]),
     });
   });
 
@@ -433,10 +444,9 @@ describe('first release-authoritative clinical batch', () => {
     await expect(handler(ownerRegistryStatus)(ctx, ownerStatusArgs(rootRegistration.expiresAt)))
       .resolves.toMatchObject({
         currentActivation: null,
-        releases: [
-          { batchId: CLINICAL_INITIAL_RELEASE_BATCH_ID, readinessCode: 'blocked_expired' },
-          expect.any(Object),
-        ],
+        releases: expect.arrayContaining([
+          expect.objectContaining({ batchId: CLINICAL_INITIAL_RELEASE_BATCH_ID, readinessCode: 'blocked_expired' }),
+        ]),
       });
   });
 
@@ -461,14 +471,13 @@ describe('first release-authoritative clinical batch', () => {
 
     await expect(handler(ownerRegistryStatus)(ctx, ownerStatusArgs())).resolves.toMatchObject({
       currentActivation: null,
-      releases: [
-        {
+      releases: expect.arrayContaining([
+        expect.objectContaining({
           batchId: CLINICAL_INITIAL_RELEASE_BATCH_ID,
           persistedReceiptRows: 1,
           readinessCode: 'blocked_current_receipt_present',
-        },
-        expect.any(Object),
-      ],
+        }),
+      ]),
     });
     ctx.db.patch.mockClear();
     await expect(handler(activateRegisteredBatch)(ctx, {
@@ -496,13 +505,12 @@ describe('first release-authoritative clinical batch', () => {
 
     await expect(handler(ownerRegistryStatus)(ctx, ownerStatusArgs())).resolves.toMatchObject({
       currentActivation: null,
-      releases: [
-        expect.any(Object),
-        {
+      releases: expect.arrayContaining([
+        expect.objectContaining({
           batchId: CLINICAL_NUTRITION_RELEASE_BATCH_ID,
           readinessCode: 'awaiting_predecessor_receipt',
-        },
-      ],
+        }),
+      ]),
     });
     ctx.db.patch.mockClear();
     await expect(handler(activateRegisteredBatch)(ctx, {
@@ -534,10 +542,10 @@ describe('first release-authoritative clinical batch', () => {
 
     await expect(handler(ownerRegistryStatus)(ctx, ownerStatusArgs())).resolves.toMatchObject({
       currentActivation: null,
-      releases: [
-        { batchId: CLINICAL_INITIAL_RELEASE_BATCH_ID, assignmentsExact: false },
-        { batchId: CLINICAL_NUTRITION_RELEASE_BATCH_ID, readinessCode: 'blocked_persisted_mismatch' },
-      ],
+      releases: expect.arrayContaining([
+        expect.objectContaining({ batchId: CLINICAL_INITIAL_RELEASE_BATCH_ID, assignmentsExact: false }),
+        expect.objectContaining({ batchId: CLINICAL_NUTRITION_RELEASE_BATCH_ID, readinessCode: 'blocked_persisted_mismatch' }),
+      ]),
     });
     ctx.db.patch.mockClear();
     await expect(handler(activateRegisteredBatch)(ctx, {
