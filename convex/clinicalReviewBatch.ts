@@ -106,6 +106,45 @@ function sortById<T extends { _id: unknown }>(rows: T[]): T[] {
   return [...rows].sort((left, right) => String(left._id).localeCompare(String(right._id)));
 }
 
+const UPSTREAM_REVIEW_DIGEST_DIMENSIONS = [
+  'english',
+  'native_myanmar',
+  'child_development',
+  'evidence',
+  'safety',
+] as const;
+
+export async function frozenUpstreamReviewHistoryBlockers(
+  item: ClinicalReviewBatchItem,
+  allHistory: Doc<'contentReviews'>[],
+): Promise<string[]> {
+  const expected = item.upstreamReviewDigests ?? [];
+  if (expected.length === 0) return [];
+  const blockers: string[] = [];
+  const seen = new Set<string>();
+  const sorted = sortById(allHistory);
+  const nonClinical = sorted.filter((row) => row.dimension !== 'clinical');
+  for (const entry of expected) {
+    if (seen.has(entry.dimension)) {
+      blockers.push(`upstream_review_digest_duplicate:${entry.dimension}`);
+      continue;
+    }
+    seen.add(entry.dimension);
+    let rows: Doc<'contentReviews'>[] | null = null;
+    if (entry.dimension === 'all_review_history') rows = sorted;
+    else if (entry.dimension === 'all_nonclinical_history') rows = nonClinical;
+    else if ((UPSTREAM_REVIEW_DIGEST_DIMENSIONS as readonly string[]).includes(entry.dimension)) {
+      rows = sorted.filter((row) => row.dimension === entry.dimension);
+    }
+    if (!rows) {
+      blockers.push(`upstream_review_dimension_invalid:${entry.dimension}`);
+    } else if (await sha256Canonical(rows) !== entry.digest) {
+      blockers.push(`upstream_review_history_drift:${entry.dimension}`);
+    }
+  }
+  return blockers;
+}
+
 function asRecord(value: unknown): Record<string, unknown> | null {
   return value !== null && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, unknown> : null;
 }
@@ -320,14 +359,15 @@ async function inspectItem(
   if (currentClinical.length > MAX_RELATED_ROWS) blockers.push('clinical_history_bound_exceeded');
   const allClinicalPage = await ctx.db.query('contentReviews')
     .withIndex('by_content', (q) => q.eq('contentSlug', item.slug)).take(MAX_RELATED_ROWS + 1);
-  const allClinical = sortById(allClinicalPage
+  const frozenReviewHistory = sortById(allClinicalPage
     .slice(0, MAX_RELATED_ROWS)
-    .filter((row) => row.dimension === 'clinical'
-      && row.clinicalReviewBatchId !== registration.manifest.batchId));
+    .filter((row) => row.clinicalReviewBatchId !== registration.manifest.batchId));
+  const allClinical = frozenReviewHistory.filter((row) => row.dimension === 'clinical');
   const currentClinicalPreimage = allClinical.filter(
     (row) => row.contentVersion === item.reviewRevision || row.reviewRevision === item.reviewRevision,
   );
   if (allClinicalPage.length > MAX_RELATED_ROWS) blockers.push('all_clinical_history_bound_exceeded');
+  blockers.push(...await frozenUpstreamReviewHistoryBlockers(item, frozenReviewHistory));
   if (registration.authority === 'release') {
     if (currentClinicalPreimage.length !== item.currentClinicalReviewCount
       || await sha256Canonical(currentClinicalPreimage) !== item.currentClinicalReviewsCanonicalSha256) {

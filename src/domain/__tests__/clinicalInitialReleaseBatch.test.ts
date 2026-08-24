@@ -48,6 +48,8 @@ import {
   CLINICAL_INITIAL_RELEASE_BATCH_ITEMS,
   CLINICAL_INITIAL_RELEASE_BATCH_MANIFEST,
   CLINICAL_INITIAL_RELEASE_BATCH_ROUTING_HASH,
+  CLINICAL_NUTRITION_RELEASE_BATCH_HASH,
+  CLINICAL_NUTRITION_RELEASE_BATCH_ID,
   CLINICAL_REVIEW_BATCH_REGISTRY,
   clinicalReviewBatchRoutingPayload,
 } from '../../../convex/lib/clinicalReviewBatchData';
@@ -260,8 +262,8 @@ async function materializeAndActivate(ctx: ReturnType<typeof context>) {
   });
   expect(materialized).toMatchObject({
     ok: true,
-    createdBatches: 1,
-    createdAssignments: 2,
+    createdBatches: 2,
+    createdAssignments: 5,
   });
   const activated = await handler(activateRegisteredBatch)(ctx, {
     batchId: CLINICAL_INITIAL_RELEASE_BATCH_ID,
@@ -286,7 +288,7 @@ describe('first release-authoritative clinical batch', () => {
 
   it('freezes only the two exact Production rows and regenerates both canonical digests', async () => {
     const release = CLINICAL_REVIEW_BATCH_REGISTRY[1];
-    expect(CLINICAL_REVIEW_BATCH_REGISTRY).toHaveLength(2);
+    expect(CLINICAL_REVIEW_BATCH_REGISTRY.length).toBeGreaterThanOrEqual(2);
     expect(release).toMatchObject({
       sequence: 2,
       laneGraphVersion: 1,
@@ -314,15 +316,19 @@ describe('first release-authoritative clinical batch', () => {
   it('materializes and activates the first release root without a pilot batch or receipt', async () => {
     const ctx = context();
     await materializeAndActivate(ctx);
-    expect(ctx.tables.clinicalReviewBatches).toHaveLength(1);
-    expect(ctx.tables.clinicalReviewBatches[0]).toMatchObject({
+    expect(ctx.tables.clinicalReviewBatches).toHaveLength(2);
+    expect(ctx.tables.clinicalReviewBatches.find((row) => (
+      row.batchId === CLINICAL_INITIAL_RELEASE_BATCH_ID
+    ))).toMatchObject({
       batchId: CLINICAL_INITIAL_RELEASE_BATCH_ID,
       authority: 'release',
       activationKind: 'initial',
       status: 'active',
     });
-    expect(ctx.tables.clinicalReviewAssignments).toHaveLength(2);
-    expect(ctx.tables.clinicalReviewAssignments).toEqual(
+    expect(ctx.tables.clinicalReviewAssignments).toHaveLength(5);
+    expect(ctx.tables.clinicalReviewAssignments.filter((row) => (
+      row.batchId === CLINICAL_INITIAL_RELEASE_BATCH_ID
+    ))).toEqual(
       CLINICAL_INITIAL_RELEASE_BATCH_ITEMS.map((item) => expect.objectContaining({
         batchId: CLINICAL_INITIAL_RELEASE_BATCH_ID,
         kind: item.kind,
@@ -338,6 +344,33 @@ describe('first release-authoritative clinical batch', () => {
         allClinicalReviewHistoryCanonicalSha256: item.allClinicalReviewHistoryCanonicalSha256,
       })),
     );
+    expect(ctx.tables.clinicalReviewBatchReceipts).toHaveLength(0);
+  });
+
+  it('keeps the nutrition successor frozen until the root has an exact persisted receipt', async () => {
+    const ctx = context();
+    await materializeAndActivate(ctx);
+    const root = ctx.tables.clinicalReviewBatches.find((row) => (
+      row.batchId === CLINICAL_INITIAL_RELEASE_BATCH_ID
+    ));
+    expect(root).toBeDefined();
+    if (root) root.status = 'completed';
+
+    const refused = await handler(activateRegisteredBatch)(ctx, {
+      batchId: CLINICAL_NUTRITION_RELEASE_BATCH_ID,
+      expectedFreezeDigest: CLINICAL_NUTRITION_RELEASE_BATCH_HASH,
+      expectedUpstreamReceiptDigest: 'f'.repeat(64),
+    });
+    expect(refused).toMatchObject({
+      ok: false,
+      code: 'upstream_handoff_missing',
+      batchId: CLINICAL_NUTRITION_RELEASE_BATCH_ID,
+    });
+    const successor = ctx.tables.clinicalReviewBatches.find((row) => (
+      row.batchId === CLINICAL_NUTRITION_RELEASE_BATCH_ID
+    ));
+    expect(successor).toMatchObject({ status: 'frozen' });
+    expect(successor).not.toHaveProperty('activatedAt');
     expect(ctx.tables.clinicalReviewBatchReceipts).toHaveLength(0);
   });
 
