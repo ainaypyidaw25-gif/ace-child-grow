@@ -9707,8 +9707,8 @@
   {
     "ageGroupKey": "birth_2m",
     "domainKey": "emotional",
-    "summaryMm": "ကလေးကို ရင်ဘတ်ပေါ် အရေပြားချင်းထိ ပွေ့ချီ၍ ငြိမ်သက်စေခြင်း။",
-    "summaryEn": "Hold your baby skin-to-skin on your chest to settle and connect.",
+    "summaryMm": "မိဘ အပြည့်အဝ နိုးကြားနေချိန်တွင် ကလေး၏ အသက်ရှူလမ်းကြောင်းကို ရှင်းလင်းစွာထားပြီး ရင်ဘတ်ပေါ် အရေပြားချင်းထိ အနီးကပ်ပွေ့ချီပါ။",
+    "summaryEn": "While you are fully awake, hold your baby skin-to-skin on your chest for closeness and keep the airway clear.",
     "difficulty": "easy",
     "durationMinutes": 15,
     "offline": true,
@@ -9761,17 +9761,13 @@
       "parentChild": true,
       "outcomes": [
         {
-          "mm": "လုံခြုံမှုနှင့် စိတ်ငြိမ်သက်မှုကို တည်ဆောက်ရန်။",
-          "en": "Learning objective — build security and help your baby settle."
-        },
-        {
-          "mm": "နို့တိုက်ကျွေးမှုကို ပိုမိုလွယ်ကူစေခြင်း။",
-          "en": "Feeding often becomes easier."
+          "mm": "မိဘ အပြည့်အဝ နိုးကြားနေချိန်တွင် ကလေးနှင့် အေးဆေးစွာ အနီးကပ်နေချိန် ရရှိရန်။",
+          "en": "Learning objective — spend calm, close time together while the parent is fully awake."
         }
       ],
       "variations": [],
       "lowCost": true,
-      "evidenceSummary": "Skin-to-skin contact and its feeding and settling benefits follow WHO breastfeeding counselling and Baby-Friendly Hospital Initiative guidance; the sofa/armchair and drowsiness cautions follow AAP safe sleep guidance and NHS SIDS advice.",
+      "evidenceSummary": "WHO guidance directly supports immediate skin-to-skin contact in maternity and newborn services and breastfeeding support; this activity makes no claim that repeated at-home use improves feeding or treats distress. The fully-awake, airway, sofa/armchair and drowsiness cautions follow AAP safe-sleep guidance and NHS SIDS advice.",
       "editorialStatus": "reference_verified"
     },
     "media": [
@@ -9787,12 +9783,12 @@
     ],
     "type": "activity",
     "slug": "act_skin_to_skin_calm",
-    "titleMm": "အရေပြားချင်းထိ ပွေ့ချီခြင်း",
-    "titleEn": "Skin-to-skin calming",
+    "titleMm": "နိုးကြားနေချိန် အရေပြားချင်းထိ ပွေ့ချီခြင်း",
+    "titleEn": "Awake skin-to-skin closeness",
     "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
     "version": 1,
     "clinicalStatus": "clinical_review",
-    "searchText": "အရေပြားချင်းထိ ပွေ့ချီခြင်း skin-to-skin calming ကလေးကို ရင်ဘတ်ပေါ် အရေပြားချင်းထိ ပွေ့ချီ၍ ငြိမ်သက်စေခြင်း။ hold your baby skin-to-skin on your chest to settle and connect. social_activity bonding emotional social birth_2m emotional social ပါးလွှာသော စောင် သို့မဟုတ် ပုဆိုး a light blanket or longyi သက်တောင့်သက်သာ ထိုင်ပါ။ ကလေး၏ ရင်ဘတ်ကို သင့်ရင်ဘတ်ပေါ် တင်ပါ။ ကျောပေါ်တွင် ပါးလွှာသော အဝတ် ခြုံပေးပါ။ sit comfortably, place your baby chest-to-chest with you, and cover the back with a light cloth. ကလေး၏ ခေါင်းကို ဘေးတစ်ဖက်သို့ လှည့်ထား၍ အသက်ရှူလမ်းကြောင်း ရှင်းနေစေပါ။ turn the baby’s head to one side so the airway is clear. နူးညံ့စွာ စကားပြောပါ သို့မဟုတ် သီချင်းဆိုပါ။ talk softly or hum. ကလေး၏ အသက်ရှူမှုနှင့် အရောင်ကို မကြာခဏ ကြည့်ပါ။ check your baby’s breathing and colour often. သင် အိပ်ငိုက်လာလျှင် ကလေးကို ဘေးကင်းသော အိပ်ရာသို့ ပက်လက် ရွှေ့ပါ။ if you feel sleepy, move your baby onto her back in a safe sleep space. သင် အိပ်ငိုက်နေချိန်၊ ဆေးလိပ်သောက်ပြီးချိန်၊ အရက်/မူးယစ်ဆေး သုံးထားချိန်တွင် ဤနည်းကို မလုပ်ပါနှင့်။ ဆိုဖာ သို့မဟုတ် ကုလားထိုင်ပေါ်တွင် ကလေးနှင့်အတူ လုံးဝ အိပ်မပျော်ပါစေနှင့်။ do not do this if you are drowsy, have smoked, or have used alcohol or sedating drugs. never fall asleep with your baby on a sofa or armchair. လုံခြုံမှုနှင့် စိတ်ငြိမ်သက်မှုကို တည်ဆောက်ရန်။ learning objective — build security and help your baby settle. နို့တိုက်ကျွေးမှုကို ပိုမိုလွယ်ကူစေခြင်း။ feeding often becomes easier. skin-to-skin contact and its feeding and settling benefits follow who breastfeeding counselling and baby-friendly hospital initiative guidance; the sofa/armchair and drowsiness cautions follow aap safe sleep guidance and nhs sids advice. reference_verified"
+    "searchText": "နိုးကြားနေချိန် အရေပြားချင်းထိ ပွေ့ချီခြင်း awake skin-to-skin closeness မိဘ အပြည့်အဝ နိုးကြားနေချိန်တွင် ကလေး၏ အသက်ရှူလမ်းကြောင်းကို ရှင်းလင်းစွာထားပြီး ရင်ဘတ်ပေါ် အရေပြားချင်းထိ အနီးကပ်ပွေ့ချီပါ။ while you are fully awake, hold your baby skin-to-skin on your chest for closeness and keep the airway clear. social_activity bonding emotional social birth_2m emotional social ပါးလွှာသော စောင် သို့မဟုတ် ပုဆိုး a light blanket or longyi သက်တောင့်သက်သာ ထိုင်ပါ။ ကလေး၏ ရင်ဘတ်ကို သင့်ရင်ဘတ်ပေါ် တင်ပါ။ ကျောပေါ်တွင် ပါးလွှာသော အဝတ် ခြုံပေးပါ။ sit comfortably, place your baby chest-to-chest with you, and cover the back with a light cloth. ကလေး၏ ခေါင်းကို ဘေးတစ်ဖက်သို့ လှည့်ထား၍ အသက်ရှူလမ်းကြောင်း ရှင်းနေစေပါ။ turn the baby’s head to one side so the airway is clear. နူးညံ့စွာ စကားပြောပါ သို့မဟုတ် သီချင်းဆိုပါ။ talk softly or hum. ကလေး၏ အသက်ရှူမှုနှင့် အရောင်ကို မကြာခဏ ကြည့်ပါ။ check your baby’s breathing and colour often. သင် အိပ်ငိုက်လာလျှင် ကလေးကို ဘေးကင်းသော အိပ်ရာသို့ ပက်လက် ရွှေ့ပါ။ if you feel sleepy, move your baby onto her back in a safe sleep space. သင် အိပ်ငိုက်နေချိန်၊ ဆေးလိပ်သောက်ပြီးချိန်၊ အရက်/မူးယစ်ဆေး သုံးထားချိန်တွင် ဤနည်းကို မလုပ်ပါနှင့်။ ဆိုဖာ သို့မဟုတ် ကုလားထိုင်ပေါ်တွင် ကလေးနှင့်အတူ လုံးဝ အိပ်မပျော်ပါစေနှင့်။ do not do this if you are drowsy, have smoked, or have used alcohol or sedating drugs. never fall asleep with your baby on a sofa or armchair. မိဘ အပြည့်အဝ နိုးကြားနေချိန်တွင် ကလေးနှင့် အေးဆေးစွာ အနီးကပ်နေချိန် ရရှိရန်။ learning objective — spend calm, close time together while the parent is fully awake. who guidance directly supports immediate skin-to-skin contact in maternity and newborn services and breastfeeding support; this activity makes no claim that repeated at-home use improves feeding or treats distress. the fully-awake, airway, sofa/armchair and drowsiness cautions follow aap safe-sleep guidance and nhs sids advice. reference_verified"
   },
   {
     "ageGroupKey": "birth_2m",
