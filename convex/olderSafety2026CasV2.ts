@@ -16,30 +16,23 @@ import {
   AAP_DROWNING_2021_SOURCE_ID,
   CDC_PRESCHOOL_SOURCE_ID,
   CDC_TODDLER_SOURCE_ID,
-  GD_19_24M_SAFETY_DESIRED_COPY,
+  GD_19_24M_SAFETY_V2_DESIRED_COPY,
   GD_19_24M_SAFETY_INITIAL_COPY,
-  OLDER_SAFETY_2026_RELEASE_ID,
+  OLDER_SAFETY_2026_V2_RELEASE_ID,
   OLDER_SAFETY_2026_STAGED_SOURCES,
   OLDER_SAFETY_2026_TARGETS,
   OLDER_SAFETY_EXISTING_SOURCE_PREIMAGES,
   OLDER_SAFETY_REQUIRED_REVIEW_DIMENSIONS,
   type OlderSafetyStagedSource,
   type OlderSafetyTarget,
-} from './lib/olderSafety2026CasData';
+} from './lib/olderSafety2026CasV2Data';
 
 type DatabaseContext = Pick<QueryCtx, 'db'> | Pick<MutationCtx, 'db'>;
 
-const releaseAction = 'release.older_safety_current_evidence';
-const sourceStageAction = 'release.older_safety_current_evidence.sources_staged';
+const releaseAction = 'release.older_safety_current_evidence_v2';
+const sourceStageAction = 'release.older_safety_current_evidence_v2.sources_staged';
 const maxLinkRows = 500;
 const maxRelatedRows = 50;
-const supersededByReleaseId = '2026-08-24-older-safety-current-evidence-v2' as const;
-const supersededBlocker =
-  `Release ${OLDER_SAFETY_2026_RELEASE_ID} is superseded by ${supersededByReleaseId}`;
-
-function v1ReleaseIsSuperseded(): boolean {
-  return true;
-}
 
 const phaseValidator = v.union(
   v.literal('sources_absent'),
@@ -79,7 +72,7 @@ const targetStateValidator = v.object({
 });
 
 const preflightResultValidator = v.object({
-  releaseId: v.literal(OLDER_SAFETY_2026_RELEASE_ID),
+  releaseId: v.literal(OLDER_SAFETY_2026_V2_RELEASE_ID),
   phase: phaseValidator,
   todayIso: v.string(),
   targetCount: v.literal(9),
@@ -203,24 +196,24 @@ function desiredContentPatch(
   let searchText = replaceExactlyTwice(
     row.searchText,
     GD_19_24M_SAFETY_INITIAL_COPY.mm.toLowerCase(),
-    GD_19_24M_SAFETY_DESIRED_COPY.mm.toLowerCase(),
+    GD_19_24M_SAFETY_V2_DESIRED_COPY.mm.toLowerCase(),
   );
   searchText = replaceExactlyTwice(
     searchText,
     GD_19_24M_SAFETY_INITIAL_COPY.en.toLowerCase(),
-    GD_19_24M_SAFETY_DESIRED_COPY.en.toLowerCase(),
+    GD_19_24M_SAFETY_V2_DESIRED_COPY.en.toLowerCase(),
   );
   return {
     ...common,
-    summaryMm: GD_19_24M_SAFETY_DESIRED_COPY.mm,
-    summaryEn: GD_19_24M_SAFETY_DESIRED_COPY.en,
+    summaryMm: GD_19_24M_SAFETY_V2_DESIRED_COPY.mm,
+    summaryEn: GD_19_24M_SAFETY_V2_DESIRED_COPY.en,
     data: {
       ...data,
       why: {
-        mm: GD_19_24M_SAFETY_DESIRED_COPY.mm,
-        en: GD_19_24M_SAFETY_DESIRED_COPY.en,
+        mm: GD_19_24M_SAFETY_V2_DESIRED_COPY.mm,
+        en: GD_19_24M_SAFETY_V2_DESIRED_COPY.en,
       },
-      evidenceSummary: GD_19_24M_SAFETY_DESIRED_COPY.evidenceSummary,
+      evidenceSummary: GD_19_24M_SAFETY_V2_DESIRED_COPY.evidenceSummary,
     },
     searchText,
   };
@@ -365,7 +358,7 @@ async function releaseAuditState(ctx: DatabaseContext): Promise<AuditState> {
     && row.actorId === undefined
     && row.entityTable === 'libraryContent,evidenceLinks,evidenceSources'
     && row.entityId === undefined
-    && row.summary === OLDER_SAFETY_2026_RELEASE_ID
+    && row.summary === OLDER_SAFETY_2026_V2_RELEASE_ID
     && row.result === 'ok'
     && row.before === auditBeforeJson()
     && row.after === auditAfterJson(updatedAt, targets, sources);
@@ -640,7 +633,7 @@ async function preflightState(ctx: DatabaseContext, now: number) {
   }
 
   return {
-    releaseId: OLDER_SAFETY_2026_RELEASE_ID,
+    releaseId: OLDER_SAFETY_2026_V2_RELEASE_ID,
     phase,
     todayIso,
     targetCount: 9 as const,
@@ -661,23 +654,10 @@ async function preflightState(ctx: DatabaseContext, now: number) {
 export const preflight = internalQuery({
   args: { now: v.optional(v.number()) },
   returns: preflightResultValidator,
-  handler: async (_ctx, args) => {
-    return {
-      releaseId: OLDER_SAFETY_2026_RELEASE_ID,
-      phase: 'blocked' as const,
-      todayIso: todayIsoUtc(new Date(args.now ?? Date.now())),
-      targetCount: 9 as const,
-      sourcesAbsent: 0,
-      sourcesAwaitingHumanReview: [],
-      releaseAuditRows: 0,
-      releaseAuditExact: false,
-      scannedLinkRows: 0,
-      reverseDependencyCount: 0,
-      reverseDependenciesExact: false,
-      blockers: [supersededBlocker],
-      sources: [],
-      targets: [],
-    };
+  handler: async (ctx, args) => {
+    const { _private, ...result } = await preflightState(ctx, args.now ?? Date.now());
+    void _private;
+    return result;
   },
 });
 
@@ -694,15 +674,6 @@ export const stageSources = internalMutation({
     blockers: v.array(v.string()),
   }),
   handler: async (ctx) => {
-    if (v1ReleaseIsSuperseded()) {
-      return {
-        ok: false,
-        code: 'blocked' as const,
-        inserted: 0,
-        blockers: [supersededBlocker],
-      };
-    }
-
     const rows = await Promise.all(OLDER_SAFETY_2026_STAGED_SOURCES.map(
       async (source) => ctx.db.query('evidenceSources')
         .withIndex('by_source_id', (q) => q.eq('sourceId', source.sourceId)).take(2),
@@ -758,7 +729,7 @@ export const stageSources = internalMutation({
       sourceStageAction,
       'evidenceSources',
       undefined,
-      OLDER_SAFETY_2026_RELEASE_ID,
+      OLDER_SAFETY_2026_V2_RELEASE_ID,
       {
         result: 'ok',
         before: JSON.stringify({ absentSourceIds: OLDER_SAFETY_2026_STAGED_SOURCES
@@ -783,15 +754,6 @@ export const apply = internalMutation({
     blockers: v.array(v.string()),
   }),
   handler: async (ctx) => {
-    if (v1ReleaseIsSuperseded()) {
-      return {
-        ok: false,
-        phase: 'blocked' as const,
-        updated: 0,
-        blockers: [supersededBlocker],
-      };
-    }
-
     const state = await preflightState(ctx, Date.now());
     if (state.phase === 'applied') {
       return { ok: true, phase: 'applied' as const, updated: 0, blockers: [] };
@@ -849,7 +811,7 @@ export const apply = internalMutation({
       releaseAction,
       'libraryContent,evidenceLinks,evidenceSources',
       undefined,
-      OLDER_SAFETY_2026_RELEASE_ID,
+      OLDER_SAFETY_2026_V2_RELEASE_ID,
       {
         result: 'ok',
         before: auditBeforeJson(),
