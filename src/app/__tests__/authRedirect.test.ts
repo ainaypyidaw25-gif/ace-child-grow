@@ -90,10 +90,12 @@ describe('native authentication redirects', () => {
     expect(values.size).toBe(0);
   });
 
-  it('presents equivalent Apple and Google options and keeps PIN/password behind a fallback', () => {
+  it('keeps App Store sign-in first-party while preserving web OAuth and its credential fallback', () => {
     const signInSource = readFileSync('src/screens/SignIn.tsx', 'utf8');
-    expect(signInSource).toContain("const [showCredentialForm, setShowCredentialForm] = useState(isStaffInvite)");
-    expect(signInSource).toContain("flow === 'signIn' && !showEmailCredentialFields");
+    expect(signInSource).toContain('useState(appStoreBuild || isStaffInvite)');
+    expect(signInSource).toContain('setShowCredentialForm(appStoreBuild)');
+    expect(signInSource).toContain("!appStoreBuild && (flow === 'signIn' || flow === 'signUp')");
+    expect(signInSource).toContain("!appStoreBuild && flow === 'signIn' && !showEmailCredentialFields");
     expect(signInSource).toContain("continueWithOAuth('apple')");
     expect(signInSource).toContain("continueWithOAuth('google')");
     expect(signInSource).toContain('Apple အကောင့်ဖြင့် ဆက်လုပ်မည်');

@@ -44,7 +44,11 @@ export function SignIn() {
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
   const [busy, setBusy] = useState(false);
-  const [showCredentialForm, setShowCredentialForm] = useState(isStaffInvite);
+  // The iOS App Store build uses only our first-party email + PIN/password
+  // flow. Keeping third-party OAuth out of that binary's visible sign-in flow
+  // avoids handing App Review to a browser-based OAuth session that cannot
+  // reliably return control to the native app on iPad.
+  const [showCredentialForm, setShowCredentialForm] = useState(appStoreBuild || isStaffInvite);
 
   useEffect(() => {
     try {
@@ -88,7 +92,7 @@ export function SignIn() {
     setCode('');
     setError('');
     setMessage('');
-    setShowCredentialForm(false);
+    setShowCredentialForm(appStoreBuild);
   }
 
   async function submit(e: React.FormEvent) {
@@ -241,7 +245,7 @@ export function SignIn() {
           </p>
         )}
 
-        {(flow === 'signIn' || flow === 'signUp') && (
+        {!appStoreBuild && (flow === 'signIn' || flow === 'signUp') && (
           <>
             <p className="rounded-xl bg-mint-soft px-4 py-3 text-center text-sm text-sky-deep">
               {locale === 'mm'
@@ -279,7 +283,7 @@ export function SignIn() {
         {message && <p className="rounded-xl bg-mint-soft p-3 text-sm text-sky-deep" role="status">{message}</p>}
         {error && <p className="text-sm text-state-red-deep" role="alert">⚠️ {error}</p>}
 
-        {flow === 'signIn' && !showEmailCredentialFields && (
+        {!appStoreBuild && flow === 'signIn' && !showEmailCredentialFields && (
           <button
             type="button"
             onClick={() => setShowCredentialForm(true)}

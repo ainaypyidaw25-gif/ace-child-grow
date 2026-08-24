@@ -27,7 +27,7 @@ describe('App Store review readiness contract', () => {
     expect(entitlements).toContain('com.apple.developer.applesignin');
     expect(entitlements).toContain('applinks:child.acegroup.com.mm');
     expect(project).toContain('CODE_SIGN_ENTITLEMENTS = App/App.entitlements;');
-    expect(project).toContain('CURRENT_PROJECT_VERSION = 11;');
+    expect(project).toContain('CURRENT_PROJECT_VERSION = 12;');
     expect(aasa.applinks.details).toEqual([{
       appID: 'QK8ZAZ4RHW.mm.com.acegroup.acechildgrow',
       paths: ['/'],
@@ -36,18 +36,12 @@ describe('App Store review readiness contract', () => {
     expect(vercel).toContain('application/json');
   });
 
-  it('opens native OAuth inside Safari View Controller instead of the external browser', () => {
-    const platform = read('src/app/platform.ts');
-    const packageJson = JSON.parse(read('package.json')) as {
-      dependencies: Record<string, string>;
-    };
-
-    expect(packageJson.dependencies['@capacitor/browser']).toBeTruthy();
-    expect(platform).toContain("import { Browser } from '@capacitor/browser'");
-    expect(platform).toContain('await options.openBrowser(result.redirect)');
-    expect(platform).toContain('Browser.open({');
-    expect(platform).toContain('Browser.close()');
-    expect(platform).not.toContain('window.location.href =');
+  it('uses first-party credentials only in the iOS App Store sign-in flow', () => {
+    const signIn = read('src/screens/SignIn.tsx');
+    expect(signIn).toContain('useState(appStoreBuild || isStaffInvite)');
+    expect(signIn).toContain("!appStoreBuild && (flow === 'signIn' || flow === 'signUp')");
+    expect(signIn).toContain("!appStoreBuild && flow === 'signIn' && !showEmailCredentialFields");
+    expect(signIn).toContain('setShowCredentialForm(appStoreBuild)');
   });
 
   it('forces parent screens through the parent-audience catalogue gate', () => {
