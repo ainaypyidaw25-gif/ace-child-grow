@@ -426,6 +426,58 @@ describe('first release-authoritative clinical batch', () => {
     });
   });
 
+  it.each([
+    ['nutrition', CLINICAL_NUTRITION_RELEASE_BATCH_ID],
+    ['older safety', CLINICAL_OLDER_SAFETY_RELEASE_BATCH_ID],
+  ] as const)(
+    'accepts Convex-normalized object key order for %s upstream review digests but preserves array order',
+    async (_label, batchId) => {
+      const ctx = context();
+      await expect(handler(materializeRegisteredReleaseBatches)(ctx, {
+        expectedRegistryDigest: await registryDigest(),
+      })).resolves.toMatchObject({ ok: true });
+      const assignments = ctx.tables.clinicalReviewAssignments.filter(
+        (row) => row.batchId === batchId,
+      );
+      expect(assignments.length).toBeGreaterThan(0);
+      for (const assignment of assignments) {
+        const digests = assignment.upstreamReviewDigests as Array<{
+          dimension: string;
+          digest: string;
+        }>;
+        expect(digests.length).toBeGreaterThan(1);
+        assignment.upstreamReviewDigests = digests.map(({ dimension, digest }) => ({
+          digest,
+          dimension,
+        }));
+      }
+
+      await expect(handler(ownerRegistryStatus)(ctx, ownerStatusArgs())).resolves.toMatchObject({
+        materializationCode: 'materialized_exact',
+        releases: expect.arrayContaining([
+          expect.objectContaining({ batchId, assignmentsExact: true }),
+        ]),
+      });
+
+      const firstDigests = assignments[0].upstreamReviewDigests as Array<{
+        dimension: string;
+        digest: string;
+      }>;
+      assignments[0].upstreamReviewDigests = [
+        firstDigests[1],
+        firstDigests[0],
+        ...firstDigests.slice(2),
+      ];
+      await expect(handler(ownerRegistryStatus)(ctx, ownerStatusArgs())).resolves.toMatchObject({
+        materializationCode: 'blocked_persisted_mismatch',
+        releases: expect.arrayContaining([
+          expect.objectContaining({ batchId, assignmentsExact: false }),
+        ]),
+        currentActivation: null,
+      });
+    },
+  );
+
   it('re-evaluates readiness at the exact server-clock expiry boundary', async () => {
     const ctx = context();
     await expect(handler(materializeRegisteredReleaseBatches)(ctx, {
