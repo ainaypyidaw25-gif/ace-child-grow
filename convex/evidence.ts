@@ -85,6 +85,10 @@ import {
   isEvidenceHumanReviewSuccessorSourceId,
   isEvidenceHumanReviewSuccessorTarget,
 } from './lib/evidenceHumanReviewSuccessorCasData';
+import {
+  isGd10_12mPlayV5Link,
+  isGd10_12mPlayV5Source,
+} from './lib/gd10_12mPlayV5ImportPolicy';
 
 const REVIEW_STATUSES = [
   'evidence_required',
@@ -592,7 +596,8 @@ async function applySources(
       || isClinicalBlockerCasSource(id)
       || isEvidenceHumanReviewSuccessorSourceId(id)
       || isClinicalTwoSmallCasSource(id)
-      || isNutritionGuidesCasSource(id)) {
+      || isNutritionGuidesCasSource(id)
+      || isGd10_12mPlayV5Source(id)) {
       skipped += 1;
       continue;
     }
@@ -819,7 +824,8 @@ async function applyLinks(
       && !isGdBirth2mEmotionalCasLink(link.kind, link.slug)
       && !isUnicefSeenCountedConsumer(link.kind, link.slug)
       && !isEvidenceHumanReviewSuccessorTarget(link.kind, link.slug)
-      && !isNutritionGuidesCasTarget(link.kind, link.slug)) {
+      && !isNutritionGuidesCasTarget(link.kind, link.slug)
+      && !isGd10_12mPlayV5Link(link.kind, link.slug)) {
       activeLinks.push(link);
     } else {
       skipped += 1;
