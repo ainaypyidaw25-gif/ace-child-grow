@@ -251,6 +251,7 @@ export function exactPersistedAssignment(
   item: ClinicalReviewBatchItem,
   assignmentId: string,
 ): boolean {
+  const expectedUpstreamReviewDigests = item.upstreamReviewDigests ?? [];
   return row.batchId === registration.manifest.batchId
     && row.assignmentId === assignmentId
     && row.ordinal === item.ordinal
@@ -277,7 +278,11 @@ export function exactPersistedAssignment(
     && row.createdAt === registration.frozenAt
     && row.sourceIds.length === item.sourceIds.length
     && row.sourceIds.every((sourceId, index) => sourceId === item.sourceIds[index])
-    && JSON.stringify(row.upstreamReviewDigests) === JSON.stringify(item.upstreamReviewDigests ?? []);
+    && row.upstreamReviewDigests.length === expectedUpstreamReviewDigests.length
+    && row.upstreamReviewDigests.every((entry, index) => (
+      entry.dimension === expectedUpstreamReviewDigests[index]?.dimension
+      && entry.digest === expectedUpstreamReviewDigests[index]?.digest
+    ));
 }
 
 /**
