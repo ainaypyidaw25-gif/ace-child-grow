@@ -14,6 +14,7 @@ import {
   ownChild,
   requireContentEditor,
   requireEvidenceEditor,
+  requireEvidenceSourceApprover,
   requireProfessionalPublisher,
   requireUser,
 } from '../../../convex/lib/auth';
@@ -113,5 +114,78 @@ describe('Convex authorization helpers (runtime)', () => {
       },
     });
     await expect(requireProfessionalPublisher(ctx)).rejects.toThrow('Insufficient staff permission');
+  });
+
+  it('a named qualified clinical reviewer may approve an evidence source with education scope', async () => {
+    authState.userId = 'reviewer-1';
+    const ctx = context({
+      profile: {
+        userId: 'reviewer-1',
+        isStaff: true,
+        staffRole: 'clinical_reviewer',
+        staffQualification: 'MBBS',
+        displayName: 'Phyo Ko Ko',
+      },
+    });
+    await expect(requireEvidenceSourceApprover(ctx)).resolves.toEqual({
+      userId: 'reviewer-1',
+      qualification: 'MBBS',
+      reviewerName: 'Phyo Ko Ko',
+      scope: 'education',
+    });
+  });
+
+  it('a qualified owner may still approve an evidence source with education scope', async () => {
+    authState.userId = 'owner-1';
+    const ctx = context({
+      profile: {
+        userId: 'owner-1',
+        isStaff: true,
+        staffRole: 'owner',
+        staffQualification: 'MEd',
+        displayName: 'Qualified Owner',
+      },
+    });
+    await expect(requireEvidenceSourceApprover(ctx)).resolves.toEqual({
+      userId: 'owner-1',
+      qualification: 'MEd',
+      reviewerName: 'Qualified Owner',
+      scope: 'education',
+    });
+  });
+
+  it('rejects an unqualified or unnamed clinical source approver', async () => {
+    authState.userId = 'reviewer-1';
+    await expect(requireEvidenceSourceApprover(context({
+      profile: {
+        userId: 'reviewer-1',
+        isStaff: true,
+        staffRole: 'clinical_reviewer',
+        displayName: 'Phyo Ko Ko',
+      },
+    }))).rejects.toThrow('Professional qualification is required');
+
+    await expect(requireEvidenceSourceApprover(context({
+      profile: {
+        userId: 'reviewer-1',
+        isStaff: true,
+        staffRole: 'clinical_reviewer',
+        staffQualification: 'MBBS',
+      },
+    }))).rejects.toThrow('Specialist safety reviewer audit identity is required');
+  });
+
+  it('an evidence reviewer cannot self-authorize source approval', async () => {
+    authState.userId = 'reviewer-1';
+    const ctx = context({
+      profile: {
+        userId: 'reviewer-1',
+        isStaff: true,
+        staffRole: 'evidence_reviewer',
+        staffQualification: 'MSc',
+        displayName: 'Evidence Reviewer',
+      },
+    });
+    await expect(requireEvidenceSourceApprover(ctx)).rejects.toThrow('Insufficient staff permission');
   });
 });

@@ -339,6 +339,7 @@ describe('convex/evidence.ts authorization', () => {
       const staffGated =
         fn.body.includes('requireStaff') ||
         fn.body.includes('requireEvidenceEditor') ||
+        fn.body.includes('requireEvidenceSourceApprover') ||
         fn.body.includes('requireProfessionalPublisher') ||
         fn.body.includes('hasStaffRole') ||
         fn.body.includes('isStaff(ctx');

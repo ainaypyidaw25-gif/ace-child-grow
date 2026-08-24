@@ -227,9 +227,11 @@ function reviewerProfileMatches(
   const profile = profiles[0];
   const owner = profile.staffRole === 'owner'
     || (profile.staffRole === undefined && profile.isStaff === true);
+  const clinicalReviewer = profile.staffRole === 'clinical_reviewer'
+    && Boolean(profile.displayName?.trim());
   const reviewerName = profile.displayName?.trim()
     || 'ACE Child Grow Owner / Education Reviewer';
-  return owner
+  return (owner || clinicalReviewer)
     && profile.userId === source.reviewerId
     && profile.staffQualification?.trim() === source.reviewerQualification.trim()
     && reviewerName === source.reviewer.trim();
@@ -645,7 +647,9 @@ export async function evidenceHumanReviewSuccessorPreflight(
       blockers.push('approved source state is invalid or ineligible');
     }
     if (successorAudit.rows === 0 && humanReviewAuditRows.length === 1
-      && !reviewerProfileExact) blockers.push('qualified owner reviewer profile does not match');
+      && !reviewerProfileExact) {
+      blockers.push('qualified evidence source approver profile does not match');
+    }
     if (successorAudit.rows === 1 && !successorAudit.exact) {
       blockers.push('successor audit exists but exact postimage drifted');
     }
@@ -745,7 +749,7 @@ export async function establishEvidenceHumanReviewSuccessor<
   const profiles = await ctx.db.query('parentProfiles').withIndex('by_user', (q) =>
     q.eq('userId', source.reviewerId as Id<'users'>)).take(2);
   if (!reviewerProfileMatches(source, profiles)) {
-    throw new Error('Qualified owner reviewer profile changed after preflight');
+    throw new Error('Qualified evidence source approver profile changed after preflight');
   }
   const snapshot: SuccessorSnapshot = {
     sourceHash: rechecked.sourceCanonicalSha256,

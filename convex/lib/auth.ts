@@ -124,6 +124,30 @@ export async function requireClinicalReviewer(
 }
 
 /**
+ * Qualified human authority for approving an evidence-source record.
+ *
+ * This is deliberately separate from final content publication. Owners remain
+ * the only role allowed to publish content, while a named clinical reviewer
+ * may record the source-level evidence decision that the Evidence Library UI
+ * assigns to that role. Both paths require a server-stored qualification and
+ * produce education-scoped provenance; source approval is not a clinical
+ * content sign-off and cannot publish anything by itself.
+ */
+export async function requireEvidenceSourceApprover(ctx: Ctx): Promise<ProfessionalApproval> {
+  const { userId, access } = await requireOneOf(ctx, ['owner', 'clinical_reviewer']);
+  if (!access.qualification) throw new Error('Professional qualification is required');
+  if (access.role === 'clinical_reviewer' && !access.displayName) {
+    throw new Error('Specialist safety reviewer audit identity is required');
+  }
+  return {
+    userId,
+    qualification: access.qualification,
+    reviewerName: access.displayName || 'ACE Child Grow Owner / Education Reviewer',
+    scope: 'education',
+  };
+}
+
+/**
  * Publishing authority for ordinary educational material. The resulting
  * decision is education-scoped. Final publication is owner-only; specialist
  * reviewers record their exact decisions through frozen assignments and never
