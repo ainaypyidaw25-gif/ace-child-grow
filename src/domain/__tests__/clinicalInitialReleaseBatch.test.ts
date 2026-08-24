@@ -476,7 +476,7 @@ describe('first release-authoritative clinical batch', () => {
       expectedFreezeDigest: CLINICAL_INITIAL_RELEASE_BATCH_HASH,
     })).resolves.toMatchObject({
       ok: false,
-      code: 'current_batch_receipt_present',
+      code: 'persisted_registry_state_mismatch',
       batchId: CLINICAL_INITIAL_RELEASE_BATCH_ID,
     });
     expect(ctx.db.patch).not.toHaveBeenCalled();
@@ -546,7 +546,7 @@ describe('first release-authoritative clinical batch', () => {
       expectedUpstreamReceiptDigest: receipt.receiptDigest,
     })).resolves.toMatchObject({
       ok: false,
-      code: 'upstream_handoff_missing',
+      code: 'persisted_registry_state_mismatch',
       batchId: CLINICAL_NUTRITION_RELEASE_BATCH_ID,
     });
     expect(ctx.db.patch).not.toHaveBeenCalled();

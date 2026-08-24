@@ -229,6 +229,23 @@ async function inspectPersistedRegistration(
   };
 }
 
+async function inspectPersistedReleaseRegistry(ctx: Pick<QueryCtx, 'db'>) {
+  const registrations = CLINICAL_REVIEW_BATCH_REGISTRY.filter(
+    (registration) => registration.authority === 'release',
+  ) as readonly ClinicalReviewBatchRegistration[];
+  const inspections: ReleaseInspection[] = [];
+  for (const registration of registrations) {
+    inspections.push(await inspectPersistedRegistration(ctx, registration));
+  }
+  const states = inspections.map(persistedRegistryState);
+  return {
+    registrations,
+    inspections,
+    states,
+    sequenceBlockIndex: persistedRegistrySequenceBlockIndex(states),
+  };
+}
+
 function expectedUpstreamStateDigest(registration: ClinicalReviewBatchRegistration): string | undefined {
   const activation = registration.activation;
   if (activation.kind === 'initial') return undefined;
@@ -335,16 +352,14 @@ export const ownerRegistryStatus = internalQuery({
         currentActivation: null,
       };
     }
-    const releaseRegistrations = registeredReleases;
-    const inspections: ReleaseInspection[] = [];
-    for (const registration of releaseRegistrations) {
-      inspections.push(await inspectPersistedRegistration(ctx, registration));
-    }
+    const releaseRegistry = await inspectPersistedReleaseRegistry(ctx);
+    const releaseRegistrations = releaseRegistry.registrations;
+    const inspections = releaseRegistry.inspections;
     const inspectionByBatchId = new Map(
       inspections.map((inspection) => [inspection.registration.manifest.batchId, inspection]),
     );
-    const persistedStates = inspections.map(persistedRegistryState);
-    const persistedSequenceBlockIndex = persistedRegistrySequenceBlockIndex(persistedStates);
+    const persistedStates = releaseRegistry.states;
+    const persistedSequenceBlockIndex = releaseRegistry.sequenceBlockIndex;
     const activeRows = await ctx.db.query('clinicalReviewBatches')
       .withIndex('by_status', (q) => q.eq('status', 'active')).take(2);
     const now = args.nowMs;
@@ -521,15 +536,9 @@ export const materializeRegisteredReleaseBatches = mutation({
       return { ok: false, code: 'registry_digest_mismatch', batchId: null, createdBatches: 0, createdAssignments: 0 };
     }
     const registrations: readonly ClinicalReviewBatchRegistration[] = CLINICAL_REVIEW_BATCH_REGISTRY;
-    const releaseRegistrations = registrations.filter(
-      (registration) => registration.authority === 'release',
-    ) as readonly ClinicalReviewBatchRegistration[];
-    const materializationInspections: ReleaseInspection[] = [];
-    for (const registration of releaseRegistrations) {
-      materializationInspections.push(await inspectPersistedRegistration(ctx, registration));
-    }
-    const materializationStates = materializationInspections.map(persistedRegistryState);
-    const materializationBlockIndex = persistedRegistrySequenceBlockIndex(materializationStates);
+    const releaseRegistry = await inspectPersistedReleaseRegistry(ctx);
+    const releaseRegistrations = releaseRegistry.registrations;
+    const materializationBlockIndex = releaseRegistry.sequenceBlockIndex;
     if (materializationBlockIndex !== null) {
       return {
         ok: false,
@@ -684,7 +693,16 @@ export const activateRegisteredBatch = mutation({
       || (registration.activation.kind !== 'initial' && !args.expectedUpstreamReceiptDigest)) {
       return { ok: false, code: 'registration_mismatch', batchId: args.batchId, createdBatches: 0, createdAssignments: 0 };
     }
-    const current = await inspectPersistedRegistration(ctx, registration);
+    const releaseRegistry = await inspectPersistedReleaseRegistry(ctx);
+    if (releaseRegistry.sequenceBlockIndex !== null) {
+      return { ok: false, code: 'persisted_registry_state_mismatch', batchId: args.batchId, createdBatches: 0, createdAssignments: 0 };
+    }
+    const current = releaseRegistry.inspections.find(
+      (inspection) => inspection.registration.manifest.batchId === registration.manifest.batchId,
+    );
+    if (!current) {
+      return { ok: false, code: 'registration_mismatch', batchId: args.batchId, createdBatches: 0, createdAssignments: 0 };
+    }
     if (current.batches.length !== 1 || current.batches[0].status !== 'frozen'
       || !current.registrationExact) {
       return { ok: false, code: 'batch_not_frozen', batchId: args.batchId, createdBatches: 0, createdAssignments: 0 };
