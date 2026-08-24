@@ -19,9 +19,11 @@ import {
 } from './lib/clinicalReviewBatchData';
 import {
   exactClinicalReviewUpstreamChain,
+  exactFrozenReleaseBatchLifecycle,
   exactHandoffReceipt,
   exactPersistedAssignment,
   exactPersistedBatchRegistration,
+  exactStoppedChangesRequestedReleaseBatchLifecycle,
   frozenClinicalDecisionKey,
 } from './lib/clinicalReviewBatchProvenance';
 
@@ -137,12 +139,8 @@ type ReleaseInspection = {
 type PersistedRegistryState = 'absent_clean' | 'persisted_exact' | 'invalid';
 
 function cleanFrozenLifecycle(row: Doc<'clinicalReviewBatches'>): boolean {
-  return row.status === 'frozen'
-    && row.consumedUpstreamReceiptDigest === undefined
-    && row.activatedAt === undefined
-    && row.completedAt === undefined
-    && row.invalidatedAt === undefined
-    && row.invalidationReason === undefined;
+  const registration = registrationById(row.batchId);
+  return !!registration && exactFrozenReleaseBatchLifecycle(row, registration);
 }
 
 function persistedRegistryState(inspection: ReleaseInspection): PersistedRegistryState {
@@ -759,9 +757,12 @@ export const activateRegisteredBatch = mutation({
       }
       const predecessorInspection = await inspectPersistedRegistration(ctx, predecessor);
       if (predecessorInspection.batches.length !== 1
-        || predecessorInspection.batches[0].status !== 'stopped_changes_requested'
-        || !predecessorInspection.registrationExact
+        || !exactStoppedChangesRequestedReleaseBatchLifecycle(
+          predecessorInspection.batches[0],
+          predecessor,
+        )
         || !predecessorInspection.assignmentsExact
+        || predecessorInspection.receipts.length !== 0
         || !await exactClinicalReviewUpstreamChain(
           ctx,
           predecessor,

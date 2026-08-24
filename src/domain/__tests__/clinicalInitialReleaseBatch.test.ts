@@ -270,8 +270,10 @@ async function materializeAndActivate(ctx: ReturnType<typeof context>) {
   });
   expect(materialized).toMatchObject({
     ok: true,
-    createdBatches: 3,
-    createdAssignments: 14,
+    createdBatches: CLINICAL_REVIEW_BATCH_REGISTRY.filter((row) => row.authority === 'release').length,
+    createdAssignments: CLINICAL_REVIEW_BATCH_REGISTRY
+      .filter((row) => row.authority === 'release')
+      .reduce((total, row) => total + row.manifest.count, 0),
   });
   const activated = await handler(activateRegisteredBatch)(ctx, {
     batchId: CLINICAL_INITIAL_RELEASE_BATCH_ID,
@@ -346,7 +348,9 @@ describe('first release-authoritative clinical batch', () => {
   it('materializes and activates the first release root without a pilot batch or receipt', async () => {
     const ctx = context();
     await materializeAndActivate(ctx);
-    expect(ctx.tables.clinicalReviewBatches).toHaveLength(3);
+    expect(ctx.tables.clinicalReviewBatches).toHaveLength(
+      CLINICAL_REVIEW_BATCH_REGISTRY.filter((row) => row.authority === 'release').length,
+    );
     expect(ctx.tables.clinicalReviewBatches.find((row) => (
       row.batchId === CLINICAL_INITIAL_RELEASE_BATCH_ID
     ))).toMatchObject({
@@ -355,7 +359,11 @@ describe('first release-authoritative clinical batch', () => {
       activationKind: 'initial',
       status: 'active',
     });
-    expect(ctx.tables.clinicalReviewAssignments).toHaveLength(14);
+    expect(ctx.tables.clinicalReviewAssignments).toHaveLength(
+      CLINICAL_REVIEW_BATCH_REGISTRY
+        .filter((row) => row.authority === 'release')
+        .reduce((total, row) => total + row.manifest.count, 0),
+    );
     expect(ctx.tables.clinicalReviewAssignments.filter((row) => (
       row.batchId === CLINICAL_INITIAL_RELEASE_BATCH_ID
     ))).toEqual(
@@ -543,24 +551,17 @@ describe('first release-authoritative clinical batch', () => {
     expect(ctx.db.patch).not.toHaveBeenCalled();
   });
 
-  it('requires predecessor completion time to equal the exact handoff receipt', async () => {
+  it('does not let a completed legacy root skip the registered refreeze predecessor', async () => {
     const ctx = context();
     await completeInitialRelease(ctx);
     expect(ctx.tables.clinicalReviewBatchReceipts).toHaveLength(1);
     const receipt = ctx.tables.clinicalReviewBatchReceipts[0];
-    const root = ctx.tables.clinicalReviewBatches.find(
-      (row) => row.batchId === CLINICAL_INITIAL_RELEASE_BATCH_ID,
-    );
-    expect(root).toMatchObject({ status: 'completed', completedAt: receipt.completedAt });
-    if (!root) return;
-    root.completedAt = Number(receipt.completedAt) + 1;
-
     await expect(handler(ownerRegistryStatus)(ctx, ownerStatusArgs())).resolves.toMatchObject({
       currentActivation: null,
       releases: expect.arrayContaining([
         expect.objectContaining({
           batchId: CLINICAL_NUTRITION_RELEASE_BATCH_ID,
-          readinessCode: 'awaiting_predecessor_receipt',
+          readinessCode: 'blocked_predecessor_mismatch',
         }),
       ]),
     });
