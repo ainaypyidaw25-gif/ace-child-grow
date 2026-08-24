@@ -57,6 +57,7 @@ import type * as lib_clinicalReviewBatchContract from "../lib/clinicalReviewBatc
 import type * as lib_clinicalReviewBatchData from "../lib/clinicalReviewBatchData.js";
 import type * as lib_clinicalReviewBatchProvenance from "../lib/clinicalReviewBatchProvenance.js";
 import type * as lib_clinicalReviewCopyRelease from "../lib/clinicalReviewCopyRelease.js";
+import type * as lib_clinicalReviewRegistryContract from "../lib/clinicalReviewRegistryContract.js";
 import type * as lib_clinicalTwoSmallCasData from "../lib/clinicalTwoSmallCasData.js";
 import type * as lib_clinicalTwoSmallCasGuard from "../lib/clinicalTwoSmallCasGuard.js";
 import type * as lib_contentEditDiff from "../lib/contentEditDiff.js";
@@ -174,6 +175,7 @@ declare const fullApi: ApiFromModules<{
   "lib/clinicalReviewBatchData": typeof lib_clinicalReviewBatchData;
   "lib/clinicalReviewBatchProvenance": typeof lib_clinicalReviewBatchProvenance;
   "lib/clinicalReviewCopyRelease": typeof lib_clinicalReviewCopyRelease;
+  "lib/clinicalReviewRegistryContract": typeof lib_clinicalReviewRegistryContract;
   "lib/clinicalTwoSmallCasData": typeof lib_clinicalTwoSmallCasData;
   "lib/clinicalTwoSmallCasGuard": typeof lib_clinicalTwoSmallCasGuard;
   "lib/contentEditDiff": typeof lib_contentEditDiff;
