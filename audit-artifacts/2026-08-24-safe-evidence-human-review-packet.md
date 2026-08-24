@@ -1,7 +1,7 @@
 # ACE Child Grow — staged evidence human-review packet
 
-Prepared: 2026-08-24  
-Scope: the five staged sources that the current exact release flows are designed to accept after independent human review.  
+Prepared: 2026-08-24
+Scope: the five staged sources that the current exact release flows are designed to accept after independent human review.
 Decision status: **no review decision has been made by this packet**.
 
 ## Reviewer boundary
