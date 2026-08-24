@@ -62,6 +62,7 @@ import {
   isGdBirth2mEmotionalCasContentSlug,
   isUnicefSeenCountedConsumerSlug,
 } from './lib/clinicalBlockerCasData';
+import { isEvidenceHumanReviewSuccessorContentSlug } from './lib/evidenceHumanReviewSuccessorCasData';
 import { assertNoPersistedReleaseGovernedContent } from './lib/clinicalReviewBatchProvenance';
 
 const GRANTABLE_ROLES = [
@@ -204,6 +205,7 @@ export function seedRunSkipsItem(item: Pick<Item, 'type' | 'slug'>): boolean {
     || isOlderSafety2026ContentTargetSlug(item.slug)
     || isGdBirth2mEmotionalCasContentSlug(item.slug)
     || isUnicefSeenCountedConsumerSlug(item.slug)
+    || isEvidenceHumanReviewSuccessorContentSlug(item.slug)
     || isClinicalTwoSmallCasTargetSlug(item.slug)
     || isNutritionGuidesCasTargetSlug(item.slug);
 }

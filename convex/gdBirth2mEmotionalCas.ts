@@ -111,7 +111,7 @@ function expectedNewSourcePostimage(
   };
 }
 
-function auditBeforeJson(): string {
+export function gdBirth2mEmotionalAuditBeforeJson(): string {
   return JSON.stringify({
     content: {
       rowId: GD_BIRTH2M_EMOTIONAL_TARGET.contentId,
@@ -143,7 +143,7 @@ function auditBeforeJson(): string {
   });
 }
 
-function auditAfterJson(input: {
+export function gdBirth2mEmotionalAuditAfterJson(input: {
   updatedAt: number;
   contentHash: string;
   linkHash: string;
@@ -222,7 +222,7 @@ async function releaseAuditState(ctx: DatabaseContext): Promise<AuditState> {
     };
   }
   const row = rows[0];
-  let parsed: ReturnType<typeof auditAfterJson> | null = null;
+  let parsed: ReturnType<typeof gdBirth2mEmotionalAuditAfterJson> | null = null;
   let detail: {
     content?: { canonicalSha256?: unknown; updatedAt?: unknown };
     link?: { canonicalSha256?: unknown; updatedAt?: unknown };
@@ -264,8 +264,8 @@ async function releaseAuditState(ctx: DatabaseContext): Promise<AuditState> {
     && row.entityId === undefined
     && row.summary === GD_BIRTH2M_EMOTIONAL_RELEASE_ID
     && row.result === 'ok'
-    && row.before === auditBeforeJson()
-    && parsed === auditAfterJson({
+    && row.before === gdBirth2mEmotionalAuditBeforeJson()
+    && parsed === gdBirth2mEmotionalAuditAfterJson({
       updatedAt,
       contentHash,
       linkHash,
@@ -559,8 +559,8 @@ export const apply = internalMutation({
       'libraryContent,evidenceLinks,evidenceSources', undefined,
       GD_BIRTH2M_EMOTIONAL_RELEASE_ID, {
         result: 'ok',
-        before: auditBeforeJson(),
-        after: auditAfterJson({
+        before: gdBirth2mEmotionalAuditBeforeJson(),
+        after: gdBirth2mEmotionalAuditAfterJson({
           updatedAt: now,
           contentHash,
           linkHash,

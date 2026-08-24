@@ -113,7 +113,7 @@ function preservedRowsJson(
   }));
 }
 
-function auditBeforeJson(): string {
+export function unicefSeenCountedAuditBeforeJson(): string {
   return JSON.stringify({
     source: {
       sourceId: UNICEF_SEEN_COUNTED_SOURCE_ID,
@@ -133,7 +133,10 @@ function auditBeforeJson(): string {
   });
 }
 
-function auditAfterJson(updatedAt: number, sourceHash: string): string {
+export function unicefSeenCountedAuditAfterJson(
+  updatedAt: number,
+  sourceHash: string,
+): string {
   return JSON.stringify({
     source: {
       sourceId: UNICEF_SEEN_COUNTED_SOURCE_ID,
@@ -189,8 +192,8 @@ async function releaseAuditState(ctx: DatabaseContext): Promise<AuditState> {
     && row.entityId === undefined
     && row.summary === UNICEF_SEEN_COUNTED_METADATA_RELEASE_ID
     && row.result === 'ok'
-    && row.before === auditBeforeJson()
-    && row.after === auditAfterJson(updatedAt, sourceHash);
+    && row.before === unicefSeenCountedAuditBeforeJson()
+    && row.after === unicefSeenCountedAuditAfterJson(updatedAt, sourceHash);
   return {
     rows: 1,
     exact,
@@ -376,8 +379,8 @@ export const apply = internalMutation({
     await logAudit(ctx, null, releaseAction, 'evidenceSources', undefined,
       UNICEF_SEEN_COUNTED_METADATA_RELEASE_ID, {
         result: 'ok',
-        before: auditBeforeJson(),
-        after: auditAfterJson(now, sourceHash),
+        before: unicefSeenCountedAuditBeforeJson(),
+        after: unicefSeenCountedAuditAfterJson(now, sourceHash),
       });
     const after = await preflightState(ctx, now);
     if (after.phase !== 'applied') {
