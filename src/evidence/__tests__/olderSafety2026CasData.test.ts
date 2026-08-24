@@ -120,18 +120,19 @@ describe('older-safety current-evidence exact CAS data', () => {
     }
   });
 
-  it('keeps the 19–24-month CPSC caveat exact in summary, body and evidence note', () => {
+  it('preserves the non-authoritative v1 copy only as a frozen audit artifact', () => {
     const item = CONTENT_SEED.find((candidate) => candidate.slug === 'gd_19_24m_safety')!;
     const data = item.data as Record<string, unknown>;
-    expect(item.summaryMm).toBe(GD_19_24M_SAFETY_DESIRED_COPY.mm);
-    expect(item.summaryEn).toBe(GD_19_24M_SAFETY_DESIRED_COPY.en);
-    expect(data.why).toEqual({
+    expect(item.summaryMm).not.toBe(GD_19_24M_SAFETY_DESIRED_COPY.mm);
+    expect(item.summaryEn).not.toBe(GD_19_24M_SAFETY_DESIRED_COPY.en);
+    expect(data.why).not.toEqual({
       mm: GD_19_24M_SAFETY_DESIRED_COPY.mm,
       en: GD_19_24M_SAFETY_DESIRED_COPY.en,
     });
     expect(data.evidenceSummary).toBe(GD_19_24M_SAFETY_DESIRED_COPY.evidenceSummary);
     expect(GD_19_24M_SAFETY_DESIRED_COPY.en).toContain('no more than four inches');
     expect(GD_19_24M_SAFETY_DESIRED_COPY.en).toContain('fire escape');
+    expect(GD_19_24M_SAFETY_DESIRED_COPY.en).toContain('Move climbable furniture away');
   });
 
   it('reserves only the exact source, link and seed targets for bounded release code', () => {

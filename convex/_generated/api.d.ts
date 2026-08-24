@@ -75,6 +75,7 @@ import type * as lib_manualReviewContentCasData from "../lib/manualReviewContent
 import type * as lib_manualReviewEvidenceLinkCasData from "../lib/manualReviewEvidenceLinkCasData.js";
 import type * as lib_nutritionGuidesCasData from "../lib/nutritionGuidesCasData.js";
 import type * as lib_olderSafety2026CasData from "../lib/olderSafety2026CasData.js";
+import type * as lib_olderSafety2026CasV2Data from "../lib/olderSafety2026CasV2Data.js";
 import type * as lib_ownerPriority from "../lib/ownerPriority.js";
 import type * as lib_ownerPriorityAccess from "../lib/ownerPriorityAccess.js";
 import type * as lib_printablePayloadRelease from "../lib/printablePayloadRelease.js";
@@ -98,6 +99,7 @@ import type * as notifications from "../notifications.js";
 import type * as nutritionGuidesCas from "../nutritionGuidesCas.js";
 import type * as observations from "../observations.js";
 import type * as olderSafety2026Cas from "../olderSafety2026Cas.js";
+import type * as olderSafety2026CasV2 from "../olderSafety2026CasV2.js";
 import type * as ownerPriority from "../ownerPriority.js";
 import type * as parent from "../parent.js";
 import type * as referrals from "../referrals.js";
@@ -187,6 +189,7 @@ declare const fullApi: ApiFromModules<{
   "lib/manualReviewEvidenceLinkCasData": typeof lib_manualReviewEvidenceLinkCasData;
   "lib/nutritionGuidesCasData": typeof lib_nutritionGuidesCasData;
   "lib/olderSafety2026CasData": typeof lib_olderSafety2026CasData;
+  "lib/olderSafety2026CasV2Data": typeof lib_olderSafety2026CasV2Data;
   "lib/ownerPriority": typeof lib_ownerPriority;
   "lib/ownerPriorityAccess": typeof lib_ownerPriorityAccess;
   "lib/printablePayloadRelease": typeof lib_printablePayloadRelease;
@@ -210,6 +213,7 @@ declare const fullApi: ApiFromModules<{
   nutritionGuidesCas: typeof nutritionGuidesCas;
   observations: typeof observations;
   olderSafety2026Cas: typeof olderSafety2026Cas;
+  olderSafety2026CasV2: typeof olderSafety2026CasV2;
   ownerPriority: typeof ownerPriority;
   parent: typeof parent;
   referrals: typeof referrals;

@@ -202,8 +202,8 @@ const bands: Band[] = [
     ['nutrition', b('အစားအစာအုပ်စုစုံကို အရွယ်သင့်အပိုင်းဖြင့် ပေးပြီး ကိုယ်တိုင်စားခွင့်ပေးပါ။', 'Offer varied foods in safe sizes and support self-feeding.'), b('မိသားစုနှင့်အတူ ထိုင်စားပြီး ဆာလောင်/ဝပြီ အချက်ပြမှုကို လေးစားပါ။', 'Eat together and respect hunger and fullness cues.')],
     ['sleep', b('နေ့ခင်းအိပ်ချိန်တစ်ကြိမ်နှင့် ညအိပ်ချိန်ကို ပုံမှန်နီးပါး ထားပါ။', 'Keep a broadly consistent nap and bedtime.'), b('အိပ်မီ မျက်နှာပြင်ပိတ်ပြီး ငြိမ်သက်သော လုပ်ရိုးလုပ်စဉ်သုံးပါ။', 'Turn screens off and use a calm bedtime routine.')],
     ['safety', b(
-      'ပြတင်းပေါက်တွင် အကာအရံ သို့မဟုတ် အဖွင့်ကန့်သတ်ကိရိယာ တပ်၍ ၄ လက်မထက် ပိုမဖွင့်နိုင်အောင် ထားပါ။ မီးဘေးဖြစ်ပါက ထွက်ပြေးနိုင်ရန် အခန်းတိုင်းတွင် အနည်းဆုံး ပြတင်းပေါက်တစ်ပေါက်ကို လွယ်ကူစွာ ဖွင့်နိုင်အောင် ထားပါ။ တက်နိုင်သော ပရိဘောဂများကို ဝေးရာရွှေ့ပြီး ဆေးဝါးနှင့် သန့်ရှင်းရေးပစ္စည်းများကို ကလေးမမီသော နေရာတွင် သော့ခတ်သိမ်းပါ။',
-      'Fit operable window guards or stops so windows open no more than four inches; keep at least one window in each room easy to open for fire escape. Move climbable furniture away, and lock medicines and cleaning products out of reach.',
+      'ပြတင်းပေါက်တွင် အကာအရံ သို့မဟုတ် အဖွင့်ကန့်သတ်ကိရိယာ တပ်၍ ၄ လက်မထက် ပိုမဖွင့်နိုင်အောင် ထားပါ။ မီးဘေးဖြစ်ပါက ထွက်ပြေးနိုင်ရန် အခန်းတိုင်းတွင် အနည်းဆုံး ပြတင်းပေါက်တစ်ပေါက်ကို လွယ်ကူစွာ ဖွင့်နိုင်အောင် ထားပါ။ ဆေးဝါးနှင့် သန့်ရှင်းရေးပစ္စည်းများကို ကလေးမမီသော နေရာတွင် သော့ခတ်သိမ်းပါ။',
+      'Fit operable window guards or stops so windows open no more than four inches; keep at least one window in each room easy to open for fire escape. Lock medicines and cleaning products out of reach.',
     ), b('ပရိဘောဂကြီးများကို နံရံတွင် ခိုင်ခံ့စွာ တပ်ပါ။', 'Anchor heavy furniture securely to the wall.')],
     ['daily_routine', b('သန့်ရှင်းရေးနှင့် ပစ္စည်းသိမ်းခြင်းကို တစ်ဆင့်ချင်း အတူလုပ်ပါ။', 'Include the child in one-step tidy-up and care routines.'), b('“အရုပ်ကို ဘူးထဲထည့်ပါ” ကဲ့သို့ တစ်ဆင့်ညွှန်ကြားချက်ပေးပါ။', 'Use one-step directions such as “put the toy in the box.”')],
   ], play: [
