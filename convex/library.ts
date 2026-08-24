@@ -46,6 +46,7 @@ import {
   isGdBirth2mEmotionalCasContentSlug,
   isUnicefSeenCountedConsumerSlug,
 } from './lib/clinicalBlockerCasData';
+import { isEvidenceHumanReviewSuccessorContentSlug } from './lib/evidenceHumanReviewSuccessorCasData';
 
 export { isPubliclyReadableStatus } from './lib/publicationVisibility';
 
@@ -625,6 +626,7 @@ export const importSeed = mutation({
         || isOlderSafety2026ContentTargetSlug(it.slug)
         || isGdBirth2mEmotionalCasContentSlug(it.slug)
         || isUnicefSeenCountedConsumerSlug(it.slug)
+        || isEvidenceHumanReviewSuccessorContentSlug(it.slug)
         || isClinicalTwoSmallCasTargetSlug(it.slug)
         || isNutritionGuidesCasTargetSlug(it.slug)) {
         skippedApproved += 1;

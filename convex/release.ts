@@ -4,6 +4,7 @@ import type { MutationCtx } from './_generated/server';
 import type { Id } from './_generated/dataModel';
 import { logAudit } from './audit';
 import { isPersistedReleaseGovernedSource } from './lib/clinicalReviewBatchProvenance';
+import { isEvidenceHumanReviewSuccessorSourceId } from './lib/evidenceHumanReviewSuccessorCasData';
 
 const OWNER_QUALIFICATION = 'MEd (Early Childhood and Special Education)';
 const OWNER_REVIEWER_LABEL = 'ACE Child Grow Owner / Education Reviewer';
@@ -93,6 +94,11 @@ export const approveEvidenceEducationReviewed = internalMutation({
     const owner = await qualifiedOwner(ctx);
     const rows = await ctx.db.query('evidenceSources').take(500);
     for (const row of rows) {
+      if (isEvidenceHumanReviewSuccessorSourceId(row.sourceId)) {
+        throw new Error(
+          `Human-review successor source must be reviewed individually through evidence.setReview: ${row.sourceId}`,
+        );
+      }
       if (await isPersistedReleaseGovernedSource(ctx, row.sourceId)) {
         throw new Error(`Frozen release source requires invalidation and refreeze: ${row.sourceId}`);
       }

@@ -63,6 +63,8 @@ import type * as lib_contentRetirements from "../lib/contentRetirements.js";
 import type * as lib_contentReviewRequirements from "../lib/contentReviewRequirements.js";
 import type * as lib_entitlements from "../lib/entitlements.js";
 import type * as lib_evidenceFreshness from "../lib/evidenceFreshness.js";
+import type * as lib_evidenceHumanReviewSuccessorCas from "../lib/evidenceHumanReviewSuccessorCas.js";
+import type * as lib_evidenceHumanReviewSuccessorCasData from "../lib/evidenceHumanReviewSuccessorCasData.js";
 import type * as lib_evidenceImportPolicy from "../lib/evidenceImportPolicy.js";
 import type * as lib_evidenceImportSafety from "../lib/evidenceImportSafety.js";
 import type * as lib_evidencePublicationGate from "../lib/evidencePublicationGate.js";
@@ -91,6 +93,7 @@ import type * as media from "../media.js";
 import type * as milestones from "../milestones.js";
 import type * as mmpay from "../mmpay.js";
 import type * as mmpayData from "../mmpayData.js";
+import type * as nhsSoothingHumanReviewSuccessorCas from "../nhsSoothingHumanReviewSuccessorCas.js";
 import type * as notifications from "../notifications.js";
 import type * as nutritionGuidesCas from "../nutritionGuidesCas.js";
 import type * as observations from "../observations.js";
@@ -107,6 +110,7 @@ import type * as subscriptions from "../subscriptions.js";
 import type * as swaimanCerebralPalsyLinkCas from "../swaimanCerebralPalsyLinkCas.js";
 import type * as swaimanSeizureLinkCas from "../swaimanSeizureLinkCas.js";
 import type * as swaimanSuddenWeaknessCas from "../swaimanSuddenWeaknessCas.js";
+import type * as unicefSeenCountedHumanReviewSuccessorCas from "../unicefSeenCountedHumanReviewSuccessorCas.js";
 import type * as unicefSeenCountedMetadataCas from "../unicefSeenCountedMetadataCas.js";
 
 import type {
@@ -171,6 +175,8 @@ declare const fullApi: ApiFromModules<{
   "lib/contentReviewRequirements": typeof lib_contentReviewRequirements;
   "lib/entitlements": typeof lib_entitlements;
   "lib/evidenceFreshness": typeof lib_evidenceFreshness;
+  "lib/evidenceHumanReviewSuccessorCas": typeof lib_evidenceHumanReviewSuccessorCas;
+  "lib/evidenceHumanReviewSuccessorCasData": typeof lib_evidenceHumanReviewSuccessorCasData;
   "lib/evidenceImportPolicy": typeof lib_evidenceImportPolicy;
   "lib/evidenceImportSafety": typeof lib_evidenceImportSafety;
   "lib/evidencePublicationGate": typeof lib_evidencePublicationGate;
@@ -199,6 +205,7 @@ declare const fullApi: ApiFromModules<{
   milestones: typeof milestones;
   mmpay: typeof mmpay;
   mmpayData: typeof mmpayData;
+  nhsSoothingHumanReviewSuccessorCas: typeof nhsSoothingHumanReviewSuccessorCas;
   notifications: typeof notifications;
   nutritionGuidesCas: typeof nutritionGuidesCas;
   observations: typeof observations;
@@ -215,6 +222,7 @@ declare const fullApi: ApiFromModules<{
   swaimanCerebralPalsyLinkCas: typeof swaimanCerebralPalsyLinkCas;
   swaimanSeizureLinkCas: typeof swaimanSeizureLinkCas;
   swaimanSuddenWeaknessCas: typeof swaimanSuddenWeaknessCas;
+  unicefSeenCountedHumanReviewSuccessorCas: typeof unicefSeenCountedHumanReviewSuccessorCas;
   unicefSeenCountedMetadataCas: typeof unicefSeenCountedMetadataCas;
 }>;
 
