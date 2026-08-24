@@ -23,8 +23,10 @@ const READINESS_LABELS: Record<string, { mm: string; en: string }> = {
   blocked_upstream_receipt_consumed: { mm: 'ယခင် receipt ကို အသုံးပြုပြီး', en: 'Upstream receipt already consumed' },
   blocked_live_preflight: { mm: 'Live preflight မအောင်မြင်', en: 'Live preflight blocked' },
   blocked_refreeze_requires_exact_confirmation: { mm: 'Refreeze အတည်ပြုချက် သီးခြားလိုအပ်', en: 'Refreeze needs separate exact confirmation' },
+  blocked_refreeze_precondition_mismatch: { mm: 'Refreeze precondition မကိုက်ညီ', en: 'Refreeze precondition mismatch' },
   ready_initial: { mm: 'Initial activation အဆင်သင့်', en: 'Ready for initial activation' },
   ready_after_handoff: { mm: 'Handoff activation အဆင်သင့်', en: 'Ready after handoff' },
+  ready_after_changes_requested_refreeze: { mm: 'Refreeze activation အဆင်သင့်', en: 'Ready for exact refreeze activation' },
 };
 
 type LastAction =
@@ -41,6 +43,7 @@ export function ClinicalRegistryOwnerPanel() {
   const [refreshing, setRefreshing] = useState(false);
   const [registryConfirmation, setRegistryConfirmation] = useState('');
   const [activationConfirmation, setActivationConfirmation] = useState('');
+  const [activationUpstreamDigestConfirmation, setActivationUpstreamDigestConfirmation] = useState('');
   const [busyAction, setBusyAction] = useState<'materialize' | 'activate' | null>(null);
   const [lastAction, setLastAction] = useState<LastAction | null>(null);
   const submittingRef = useRef(false);
@@ -107,9 +110,15 @@ export function ClinicalRegistryOwnerPanel() {
   }
 
   const activationTarget = status.currentActivation;
+  const refreezeActivation = activationTarget?.readinessCode
+    === 'ready_after_changes_requested_refreeze';
   const registryConfirmed = registryConfirmation === status.registryDigest;
   const activationConfirmed = !!activationTarget
-    && activationConfirmation === activationTarget.confirmationText;
+    && activationConfirmation === activationTarget.confirmationText
+    && (!refreezeActivation
+      || (!!activationTarget.expectedUpstreamReceiptDigest
+        && activationUpstreamDigestConfirmation
+          === activationTarget.expectedUpstreamReceiptDigest));
   const materializeSubmitted = lastAction?.kind === 'materialize' && lastAction.ok
     && lastAction.registryDigest === status.registryDigest;
   const activationSubmitted = lastAction?.kind === 'activate' && lastAction.ok
@@ -165,7 +174,11 @@ export function ClinicalRegistryOwnerPanel() {
         batchId: activationTarget.batchId,
         expectedFreezeDigest: activationTarget.freezeDigest,
         ...(activationTarget.expectedUpstreamReceiptDigest
-          ? { expectedUpstreamReceiptDigest: activationTarget.expectedUpstreamReceiptDigest }
+          ? {
+              expectedUpstreamReceiptDigest: refreezeActivation
+                ? activationUpstreamDigestConfirmation
+                : activationTarget.expectedUpstreamReceiptDigest,
+            }
           : {}),
       });
       setLastAction({
@@ -319,6 +332,22 @@ export function ClinicalRegistryOwnerPanel() {
             className="min-h-touch w-full rounded-xl border border-line bg-white px-3 py-2 font-mono text-sm disabled:opacity-60"
           />
         </label>
+        {refreezeActivation && activationTarget.expectedUpstreamReceiptDigest && (
+          <label className="block space-y-1.5 text-sm font-medium text-ink">
+            <span>{L('Decision-set digest အတည်ပြုချက်', 'Decision-set digest confirmation')}</span>
+            <code className="block break-all rounded-xl border border-line bg-canvas p-3 text-xs font-normal text-ink">
+              {activationTarget.expectedUpstreamReceiptDigest}
+            </code>
+            <input
+              value={activationUpstreamDigestConfirmation}
+              onChange={(event) => setActivationUpstreamDigestConfirmation(event.target.value)}
+              aria-label={L('Decision-set digest အတည်ပြုချက်', 'Decision-set digest confirmation')}
+              autoComplete="off"
+              spellCheck={false}
+              className="min-h-touch w-full rounded-xl border border-line bg-white px-3 py-2 font-mono text-sm"
+            />
+          </label>
+        )}
         <button
           type="submit"
           disabled={busyAction !== null || refreshing || activationSubmitted || !activationConfirmed}

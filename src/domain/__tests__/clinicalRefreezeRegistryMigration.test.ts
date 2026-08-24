@@ -28,7 +28,11 @@ vi.mock('../../../convex/lib/aiAuditHash', async (importOriginal) => {
 });
 
 import { apply, preflightAt } from '../../../convex/clinicalRefreezeRegistryMigration';
-import { activateRegisteredBatch } from '../../../convex/clinicalReviewRegistry';
+import { registeredBatchActivationBlockers } from '../../../convex/clinicalReviewBatch';
+import {
+  activateRegisteredBatch,
+  ownerRegistryStatus,
+} from '../../../convex/clinicalReviewRegistry';
 import { sha256Canonical } from '../../../convex/lib/aiAuditHash';
 import {
   CLINICAL_INITIAL_RELEASE_BATCH_ID,
@@ -331,6 +335,155 @@ describe('clinical refreeze registry migration', () => {
     expect(state.tables.clinicalReviewBatches.find(
       (row) => row.batchId === CLINICAL_OLDER_SAFETY_RELEASE_BATCH_ID,
     )).toMatchObject({ status: 'frozen' });
+
+    const writesAfterActivation = state.writes.length;
+    const replay = await registeredHandler(activateRegisteredBatch)(state.ctx, {
+      batchId: refreeze.manifest.batchId,
+      expectedFreezeDigest: refreeze.freezeDigest,
+      expectedUpstreamReceiptDigest: CLINICAL_NEWBORN_REFREEZE_DECISION_SET_DIGEST,
+    });
+    expect(replay).toMatchObject({ ok: false, code: 'batch_not_frozen' });
+    expect(state.writes).toHaveLength(writesAfterActivation);
+  });
+
+  it('exposes only the exact actionable refreeze tuple after migration', async () => {
+    const state = await exactContext();
+    vi.spyOn(Date, 'now').mockReturnValue(1_787_581_500_000);
+    await registeredHandler(apply)(state.ctx, {
+      releaseId: CLINICAL_REFREEZE_REGISTRY_MIGRATION_ID,
+    });
+    const refreeze = registration(CLINICAL_NEWBORN_REFREEZE_BATCH_ID);
+    const result = await registeredHandler(ownerRegistryStatus)(state.ctx, {
+      nowMs: 1_787_581_600_000,
+      todayIso: '2026-08-24',
+    }) as Record<string, unknown>;
+
+    expect(result).toMatchObject({
+      registryCode: 'valid',
+      materializationCode: 'materialized_exact',
+      currentActivation: {
+        batchId: refreeze.manifest.batchId,
+        freezeDigest: refreeze.freezeDigest,
+        expectedUpstreamReceiptDigest: CLINICAL_NEWBORN_REFREEZE_DECISION_SET_DIGEST,
+        confirmationText: `ACTIVATE ${refreeze.manifest.batchId}`,
+        readinessCode: 'ready_after_changes_requested_refreeze',
+      },
+      releases: expect.arrayContaining([expect.objectContaining({
+        batchId: refreeze.manifest.batchId,
+        readinessCode: 'ready_after_changes_requested_refreeze',
+      })]),
+    });
+    expect(JSON.stringify(result)).not.toContain('sourceIds');
+    expect(JSON.stringify(result)).not.toContain('contentCanonicalSha256');
+    expect(JSON.stringify(result)).not.toContain('"decision":');
+    expect(JSON.stringify(result)).not.toContain('reviewedAt');
+  });
+
+  it.each([
+    ['orphan predecessor receipt', (state: Awaited<ReturnType<typeof exactContext>>) => {
+      state.tables.clinicalReviewBatchReceipts.push({
+        _id: 'orphan-root-status-receipt',
+        _creationTime: 1,
+        batchId: CLINICAL_INITIAL_RELEASE_BATCH_ID,
+      });
+    }],
+    ['stale refreeze lifecycle', (state: Awaited<ReturnType<typeof exactContext>>) => {
+      const row = state.tables.clinicalReviewBatches.find(
+        (candidate) => candidate.batchId === CLINICAL_NEWBORN_REFREEZE_BATCH_ID,
+      );
+      if (row) row.activatedAt = 1_787_581_500_000;
+    }],
+    ['tampered decision preimage', (state: Awaited<ReturnType<typeof exactContext>>) => {
+      state.tables.contentReviews[0].note = 'tampered review note';
+    }],
+    ['duplicate refreeze assignment', (state: Awaited<ReturnType<typeof exactContext>>) => {
+      const row = state.tables.clinicalReviewAssignments.find(
+        (candidate) => candidate.batchId === CLINICAL_NEWBORN_REFREEZE_BATCH_ID,
+      );
+      if (row) state.tables.clinicalReviewAssignments.push({ ...structuredClone(row), _id: 'duplicate-refreeze-assignment' });
+    }],
+  ])('does not expose refreeze activation for %s', async (_label, tamper) => {
+    const state = await exactContext();
+    vi.spyOn(Date, 'now').mockReturnValue(1_787_581_500_000);
+    await registeredHandler(apply)(state.ctx, {
+      releaseId: CLINICAL_REFREEZE_REGISTRY_MIGRATION_ID,
+    });
+    tamper(state);
+    const result = await registeredHandler(ownerRegistryStatus)(state.ctx, {
+      nowMs: 1_787_581_600_000,
+      todayIso: '2026-08-24',
+    }) as { currentActivation: unknown };
+    expect(result.currentActivation).toBeNull();
+  });
+
+  it('does not expose refreeze activation when server-clock expiry or live preflight blocks it', async () => {
+    const state = await exactContext();
+    vi.spyOn(Date, 'now').mockReturnValue(1_787_581_500_000);
+    await registeredHandler(apply)(state.ctx, {
+      releaseId: CLINICAL_REFREEZE_REGISTRY_MIGRATION_ID,
+    });
+    const expired = await registeredHandler(ownerRegistryStatus)(state.ctx, {
+      nowMs: CLINICAL_NEWBORN_REFREEZE_BATCH_EXPIRES_AT,
+      todayIso: new Date(CLINICAL_NEWBORN_REFREEZE_BATCH_EXPIRES_AT).toISOString().slice(0, 10),
+    }) as { currentActivation: unknown };
+    expect(expired.currentActivation).toBeNull();
+
+    vi.mocked(registeredBatchActivationBlockers).mockResolvedValueOnce(['live_preflight_tamper']);
+    const blocked = await registeredHandler(ownerRegistryStatus)(state.ctx, {
+      nowMs: 1_787_581_600_000,
+      todayIso: '2026-08-24',
+    }) as { currentActivation: unknown };
+    expect(blocked.currentActivation).toBeNull();
+  });
+
+  it('rejects a tampered refreeze decision set before the first activation write', async () => {
+    const state = await exactContext();
+    vi.spyOn(Date, 'now').mockReturnValue(1_787_581_500_000);
+    await registeredHandler(apply)(state.ctx, {
+      releaseId: CLINICAL_REFREEZE_REGISTRY_MIGRATION_ID,
+    });
+    state.tables.contentReviews[0].note = 'tampered review note';
+    const writesBeforeActivation = state.writes.length;
+    const refreeze = registration(CLINICAL_NEWBORN_REFREEZE_BATCH_ID);
+    const result = await registeredHandler(activateRegisteredBatch)(state.ctx, {
+      batchId: refreeze.manifest.batchId,
+      expectedFreezeDigest: refreeze.freezeDigest,
+      expectedUpstreamReceiptDigest: CLINICAL_NEWBORN_REFREEZE_DECISION_SET_DIGEST,
+    });
+    expect(result).toMatchObject({ ok: false, code: 'refreeze_decision_set_mismatch' });
+    expect(state.writes).toHaveLength(writesBeforeActivation);
+    expect(state.tables.clinicalReviewBatches.find(
+      (row) => row.batchId === CLINICAL_NEWBORN_REFREEZE_BATCH_ID,
+    )).toMatchObject({ status: 'frozen' });
+  });
+
+  it('requires every registered release row to be exact before exposing or activating refreeze', async () => {
+    const state = await exactContext();
+    vi.spyOn(Date, 'now').mockReturnValue(1_787_581_500_000);
+    await registeredHandler(apply)(state.ctx, {
+      releaseId: CLINICAL_REFREEZE_REGISTRY_MIGRATION_ID,
+    });
+    state.tables.clinicalReviewBatches = state.tables.clinicalReviewBatches.filter(
+      (row) => row.batchId !== CLINICAL_OLDER_SAFETY_RELEASE_BATCH_ID,
+    );
+    state.tables.clinicalReviewAssignments = state.tables.clinicalReviewAssignments.filter(
+      (row) => row.batchId !== CLINICAL_OLDER_SAFETY_RELEASE_BATCH_ID,
+    );
+    const status = await registeredHandler(ownerRegistryStatus)(state.ctx, {
+      nowMs: 1_787_581_600_000,
+      todayIso: '2026-08-24',
+    }) as { currentActivation: unknown };
+    expect(status.currentActivation).toBeNull();
+
+    const writesBeforeActivation = state.writes.length;
+    const refreeze = registration(CLINICAL_NEWBORN_REFREEZE_BATCH_ID);
+    const result = await registeredHandler(activateRegisteredBatch)(state.ctx, {
+      batchId: refreeze.manifest.batchId,
+      expectedFreezeDigest: refreeze.freezeDigest,
+      expectedUpstreamReceiptDigest: CLINICAL_NEWBORN_REFREEZE_DECISION_SET_DIGEST,
+    });
+    expect(result).toMatchObject({ ok: false, code: 'persisted_registry_state_mismatch' });
+    expect(state.writes).toHaveLength(writesBeforeActivation);
   });
 
   it.each([

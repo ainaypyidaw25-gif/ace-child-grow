@@ -244,6 +244,93 @@ async function inspectPersistedReleaseRegistry(ctx: Pick<QueryCtx, 'db'>) {
   };
 }
 
+type RefreezePrerequisiteResult =
+  | { ok: true; digest: string }
+  | {
+      ok: false;
+      code:
+        | 'refreeze_predecessor_missing'
+        | 'refreeze_predecessor_not_stopped'
+        | 'refreeze_decision_preimage_mismatch'
+        | 'refreeze_decision_set_mismatch';
+    };
+
+/**
+ * Shared exact-state gate for both the owner status surface and the mutation.
+ * It returns only the decision-set digest needed for the owner's explicit CAS;
+ * review rows and frozen content never leave the server.
+ */
+async function exactRefreezePrerequisite(
+  ctx: Pick<QueryCtx, 'db'>,
+  registration: ClinicalReviewBatchRegistration,
+  predecessorInspection?: ReleaseInspection,
+): Promise<RefreezePrerequisiteResult> {
+  const activation = registration.activation;
+  if (activation.kind !== 'after_changes_requested_refreeze') {
+    return { ok: false, code: 'refreeze_predecessor_missing' };
+  }
+  const predecessor = registrationById(activation.previousBatchId);
+  if (!predecessor || predecessor.authority !== 'release') {
+    return { ok: false, code: 'refreeze_predecessor_missing' };
+  }
+  const inspection = predecessorInspection
+    ?? await inspectPersistedRegistration(ctx, predecessor);
+  if (inspection.registration.manifest.batchId !== predecessor.manifest.batchId
+    || inspection.batches.length !== 1
+    || !inspection.registrationExact
+    || !exactStoppedChangesRequestedReleaseBatchLifecycle(inspection.batches[0], predecessor)
+    || !inspection.assignmentsExact
+    || inspection.receipts.length !== 0
+    || !await exactClinicalReviewUpstreamChain(ctx, predecessor, inspection.batches[0])) {
+    return { ok: false, code: 'refreeze_predecessor_not_stopped' };
+  }
+
+  const decisions = [];
+  for (const item of predecessor.manifest.items) {
+    const decisionKey = await frozenClinicalDecisionKey(predecessor, item);
+    const rows = await ctx.db.query('contentReviews')
+      .withIndex('by_decision_key', (q) => q.eq('decisionKey', decisionKey)).take(2);
+    if (rows.length === 1
+      && rows[0].clinicalReviewBatchId === predecessor.manifest.batchId
+      && rows[0].contentSlug === item.slug
+      && rows[0].contentVersion === item.reviewRevision
+      && rows[0].reviewRevision === item.reviewRevision
+      && rows[0].dimension === predecessor.dimension
+      && String(rows[0].reviewerId) === predecessor.manifest.reviewer.userId) {
+      decisions.push({
+        assignmentId: decisionKey,
+        slug: item.slug,
+        kind: item.kind,
+        reviewRevision: item.reviewRevision,
+        decision: rows[0].decision,
+        note: rows[0].note?.trim() || null,
+        reviewedAt: rows[0].reviewedAt,
+        receiptId: String(rows[0]._id),
+      });
+    } else if (rows.length > 0) {
+      return { ok: false, code: 'refreeze_decision_preimage_mismatch' };
+    }
+  }
+  const changes = decisions.filter((decision) => decision.decision === 'changes_requested');
+  const digest = await sha256Canonical({
+    batchId: predecessor.manifest.batchId,
+    freezeDigest: predecessor.freezeDigest,
+    decisions,
+  });
+  const successorTargets = new Map(
+    registration.manifest.items.map((item) => [`${item.kind}:${item.slug}`, item]),
+  );
+  if (changes.length === 0
+    || digest !== activation.expectedDecisionSetDigest
+    || changes.some((decision) => {
+      const successor = successorTargets.get(`${decision.kind}:${decision.slug}`);
+      return !successor || successor.reviewRevision <= decision.reviewRevision;
+    })) {
+    return { ok: false, code: 'refreeze_decision_set_mismatch' };
+  }
+  return { ok: true, digest };
+}
+
 function expectedUpstreamStateDigest(registration: ClinicalReviewBatchRegistration): string | undefined {
   const activation = registration.activation;
   if (activation.kind === 'initial') return undefined;
@@ -358,6 +445,9 @@ export const ownerRegistryStatus = internalQuery({
     );
     const persistedStates = releaseRegistry.states;
     const persistedSequenceBlockIndex = releaseRegistry.sequenceBlockIndex;
+    const wholeRegistryPersistedExact = persistedStates.every(
+      (state) => state === 'persisted_exact',
+    );
     const activeRows = await ctx.db.query('clinicalReviewBatches')
       .withIndex('by_status', (q) => q.eq('status', 'active')).take(2);
     const now = args.nowMs;
@@ -398,9 +488,35 @@ export const ownerRegistryStatus = internalQuery({
         else if (activeRows.length > 0) readiness = 'blocked_active_batch_exists';
         else if (now >= registration.expiresAt) readiness = 'blocked_expired';
         else if (registration.activation.kind === 'after_changes_requested_refreeze') {
-          // The activation mutation retains the exact decision-set CAS. This
-          // read model never manufactures or exposes that digest.
-          readiness = 'blocked_refreeze_requires_exact_confirmation';
+          const activation = registration.activation;
+          if (!wholeRegistryPersistedExact) {
+            readiness = 'blocked_persisted_mismatch';
+          } else {
+            const prerequisite = await exactRefreezePrerequisite(
+              ctx,
+              registration,
+              inspectionByBatchId.get(activation.previousBatchId),
+            );
+            if (!prerequisite.ok) {
+              readiness = 'blocked_refreeze_precondition_mismatch';
+            } else {
+              const consumers = await ctx.db.query('clinicalReviewBatches')
+                .withIndex('by_predecessor_batch_id', (q) => q.eq('predecessorBatchId', activation.previousBatchId))
+                .take(3);
+              if (consumers.some((row) => row.batchId !== batchId
+                && (row.status === 'active' || row.status === 'completed'))) {
+                readiness = 'blocked_upstream_receipt_consumed';
+              } else {
+                const liveBlockers = await registeredBatchActivationBlockers(ctx, registration, todayIso);
+                if (liveBlockers.length > 0) {
+                  readiness = 'blocked_live_preflight';
+                } else {
+                  upstreamReceiptByBatchId.set(batchId, prerequisite.digest);
+                  readiness = 'ready_after_changes_requested_refreeze';
+                }
+              }
+            }
+          }
         } else {
           let prerequisiteReady = true;
           if (registration.activation.kind === 'after_handoff') {
@@ -490,11 +606,15 @@ export const ownerRegistryStatus = internalQuery({
       freezeDigest: string;
       expectedUpstreamReceiptDigest: string | null;
       confirmationText: string;
-      readinessCode: 'ready_initial' | 'ready_after_handoff';
+      readinessCode:
+        | 'ready_initial'
+        | 'ready_after_handoff'
+        | 'ready_after_changes_requested_refreeze';
     } | null = null;
     for (const release of releases) {
       if (release.readinessCode !== 'ready_initial'
-        && release.readinessCode !== 'ready_after_handoff') continue;
+        && release.readinessCode !== 'ready_after_handoff'
+        && release.readinessCode !== 'ready_after_changes_requested_refreeze') continue;
       currentActivation = {
         batchId: release.batchId,
         freezeDigest: release.freezeDigest,
@@ -751,65 +871,21 @@ export const activateRegisteredBatch = mutation({
         return { ok: false, code: 'upstream_handoff_missing', batchId: args.batchId, createdBatches: 0, createdAssignments: 0 };
       }
     } else if (activation.kind === 'after_changes_requested_refreeze') {
-      const predecessor = registrationById(activation.previousBatchId);
-      if (!predecessor) {
-        return { ok: false, code: 'refreeze_predecessor_missing', batchId: args.batchId, createdBatches: 0, createdAssignments: 0 };
+      if (releaseRegistry.states.some((state) => state !== 'persisted_exact')) {
+        return { ok: false, code: 'persisted_registry_state_mismatch', batchId: args.batchId, createdBatches: 0, createdAssignments: 0 };
       }
-      const predecessorInspection = await inspectPersistedRegistration(ctx, predecessor);
-      if (predecessorInspection.batches.length !== 1
-        || !exactStoppedChangesRequestedReleaseBatchLifecycle(
-          predecessorInspection.batches[0],
-          predecessor,
-        )
-        || !predecessorInspection.assignmentsExact
-        || predecessorInspection.receipts.length !== 0
-        || !await exactClinicalReviewUpstreamChain(
-          ctx,
-          predecessor,
-          predecessorInspection.batches[0],
-        )) {
-        return { ok: false, code: 'refreeze_predecessor_not_stopped', batchId: args.batchId, createdBatches: 0, createdAssignments: 0 };
+      const predecessorInspection = releaseRegistry.inspections.find(
+        (inspection) => inspection.registration.manifest.batchId === activation.previousBatchId,
+      );
+      const prerequisite = await exactRefreezePrerequisite(
+        ctx,
+        registration,
+        predecessorInspection,
+      );
+      if (!prerequisite.ok) {
+        return { ok: false, code: prerequisite.code, batchId: args.batchId, createdBatches: 0, createdAssignments: 0 };
       }
-      const decisions = [];
-      for (const item of predecessor.manifest.items) {
-        const decisionKey = await frozenClinicalDecisionKey(predecessor, item);
-        const rows = await ctx.db.query('contentReviews')
-          .withIndex('by_decision_key', (q) => q.eq('decisionKey', decisionKey)).take(2);
-        if (rows.length === 1
-          && rows[0].clinicalReviewBatchId === predecessor.manifest.batchId
-          && rows[0].contentSlug === item.slug
-          && rows[0].contentVersion === item.reviewRevision
-          && rows[0].reviewRevision === item.reviewRevision
-          && rows[0].dimension === predecessor.dimension
-          && String(rows[0].reviewerId) === predecessor.manifest.reviewer.userId) {
-          decisions.push({
-            assignmentId: decisionKey,
-            slug: item.slug,
-            kind: item.kind,
-            reviewRevision: item.reviewRevision,
-            decision: rows[0].decision,
-            note: rows[0].note?.trim() || null,
-            reviewedAt: rows[0].reviewedAt,
-            receiptId: String(rows[0]._id),
-          });
-        } else if (rows.length > 0) {
-          return { ok: false, code: 'refreeze_decision_preimage_mismatch', batchId: args.batchId, createdBatches: 0, createdAssignments: 0 };
-        }
-      }
-      const changes = decisions.filter((decision) => decision.decision === 'changes_requested');
-      const digest = await sha256Canonical({
-        batchId: predecessor.manifest.batchId,
-        freezeDigest: predecessor.freezeDigest,
-        decisions,
-      });
-      const successorTargets = new Map(registration.manifest.items.map((item) => [`${item.kind}:${item.slug}`, item]));
-      if (changes.length === 0
-        || digest !== activation.expectedDecisionSetDigest
-        || args.expectedUpstreamReceiptDigest !== digest
-        || changes.some((decision) => {
-          const successor = successorTargets.get(`${decision.kind}:${decision.slug}`);
-          return !successor || successor.reviewRevision <= decision.reviewRevision;
-        })) {
+      if (args.expectedUpstreamReceiptDigest !== prerequisite.digest) {
         return { ok: false, code: 'refreeze_decision_set_mismatch', batchId: args.batchId, createdBatches: 0, createdAssignments: 0 };
       }
     }

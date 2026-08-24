@@ -308,6 +308,21 @@ describe('persisted clinical review registry', () => {
     expect(ctx.db.query).toHaveBeenCalledWith('parentProfiles');
   });
 
+  it('rejects direct activation for a non-owner before registry reads or writes', async () => {
+    const release = await releaseRegistration('release-1', 'release_slug_1');
+    (CLINICAL_REVIEW_BATCH_REGISTRY as unknown as ClinicalReviewBatchRegistration[]).push(release);
+    const ctx = context();
+    ctx.tables.parentProfiles[0].staffRole = 'clinical_reviewer';
+    await expect(handler(activateRegisteredBatch)(ctx, {
+      batchId: release.manifest.batchId,
+      expectedFreezeDigest: release.freezeDigest,
+    })).rejects.toThrow('Insufficient staff permission');
+    expect(ctx.db.query).toHaveBeenCalledTimes(1);
+    expect(ctx.db.query).toHaveBeenCalledWith('parentProfiles');
+    expect(ctx.db.patch).not.toHaveBeenCalled();
+    expect(ctx.db.insert).not.toHaveBeenCalled();
+  });
+
   it('injects only the server clock through the public owner-status action', async () => {
     vi.spyOn(Date, 'now').mockReturnValue(TEST_NOW_MS);
     const expected = { marker: 'internal-owner-status' };

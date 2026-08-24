@@ -27,8 +27,10 @@ export const activationReadinessValidator = v.union(
   v.literal('blocked_upstream_receipt_consumed'),
   v.literal('blocked_live_preflight'),
   v.literal('blocked_refreeze_requires_exact_confirmation'),
+  v.literal('blocked_refreeze_precondition_mismatch'),
   v.literal('ready_initial'),
   v.literal('ready_after_handoff'),
+  v.literal('ready_after_changes_requested_refreeze'),
 );
 
 export const ownerRegistryStatusValidator = v.object({
@@ -72,7 +74,11 @@ export const ownerRegistryStatusValidator = v.object({
     freezeDigest: v.string(),
     expectedUpstreamReceiptDigest: v.union(v.string(), v.null()),
     confirmationText: v.string(),
-    readinessCode: v.union(v.literal('ready_initial'), v.literal('ready_after_handoff')),
+    readinessCode: v.union(
+      v.literal('ready_initial'),
+      v.literal('ready_after_handoff'),
+      v.literal('ready_after_changes_requested_refreeze'),
+    ),
   })),
 });
 

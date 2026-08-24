@@ -215,4 +215,75 @@ describe('ClinicalRegistryOwnerPanel', () => {
     await waitFor(() => expect(screen.getByTestId('clinical-registry-readback')).toHaveTextContent('Server readback confirmed'));
     expect(screen.getByRole('button', { name: 'Activate this exact batch' })).toBeDisabled();
   });
+
+  it('requires the exact refreeze phrase and decision-set digest before activating', async () => {
+    const decisionSetDigest = 'd'.repeat(64);
+    registry.status = status({
+      materializationCode: 'materialized_exact',
+      persistedBatchCount: 1,
+      persistedAssignmentCount: 2,
+      releases: [release({
+        activationKind: 'after_changes_requested_refreeze',
+        persistedStatus: 'frozen',
+        persistedBatchRows: 1,
+        persistedAssignmentRows: 2,
+        registrationExact: true,
+        assignmentsExact: true,
+        readinessCode: 'ready_after_changes_requested_refreeze',
+      })],
+      currentActivation: {
+        batchId: 'clinical-root-v1',
+        freezeDigest: 'f'.repeat(64),
+        expectedUpstreamReceiptDigest: decisionSetDigest,
+        confirmationText: 'ACTIVATE clinical-root-v1',
+        readinessCode: 'ready_after_changes_requested_refreeze',
+      },
+    });
+    registry.activate.mockResolvedValue({
+      ok: true,
+      code: 'activated',
+      batchId: 'clinical-root-v1',
+      createdBatches: 0,
+      createdAssignments: 0,
+    });
+    render(<ClinicalRegistryOwnerPanel />);
+    const button = await screen.findByRole('button', { name: 'Activate this exact batch' });
+    const phrase = screen.getByRole('textbox', { name: 'Activation confirmation' });
+    const digest = screen.getByRole('textbox', { name: 'Decision-set digest confirmation' });
+    expect(button).toBeDisabled();
+
+    fireEvent.change(phrase, { target: { value: 'ACTIVATE clinical-root-v1' } });
+    expect(button).toBeDisabled();
+    fireEvent.change(digest, { target: { value: ` ${decisionSetDigest} ` } });
+    expect(button).toBeDisabled();
+    fireEvent.change(digest, { target: { value: decisionSetDigest } });
+    expect(button).toBeEnabled();
+    fireEvent.click(button);
+
+    await waitFor(() => expect(registry.activate).toHaveBeenCalledTimes(1));
+    expect(registry.activate).toHaveBeenCalledWith({
+      batchId: 'clinical-root-v1',
+      expectedFreezeDigest: 'f'.repeat(64),
+      expectedUpstreamReceiptDigest: decisionSetDigest,
+    });
+    expect(button).toBeDisabled();
+
+    registry.status = status({
+      materializationCode: 'materialized_exact',
+      persistedBatchCount: 1,
+      persistedAssignmentCount: 2,
+      releases: [release({
+        activationKind: 'after_changes_requested_refreeze',
+        persistedStatus: 'active',
+        persistedBatchRows: 1,
+        persistedAssignmentRows: 2,
+        registrationExact: true,
+        assignmentsExact: true,
+        readinessCode: 'already_active',
+      })],
+      currentActivation: null,
+    });
+    fireEvent.click(screen.getByRole('button', { name: 'Refresh status' }));
+    await waitFor(() => expect(screen.getByTestId('clinical-registry-readback')).toHaveTextContent('Server readback confirmed'));
+  });
 });
