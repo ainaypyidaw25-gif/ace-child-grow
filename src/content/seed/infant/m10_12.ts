@@ -902,8 +902,8 @@ const GUIDES_E: SeedItem[] = [
       ],
       materials: b('ဖျာ၊ ဗူးခွံ၊ ခွက်၊ အဝတ်စ၊ ပျော့သော ဘောလုံး', 'A mat, empty containers, cups, cloths, a soft ball'),
       safety: b(
-        'အိမ်တွင်း ဘေးကင်းရေး စစ်ဆေးပါ — လှေကားအပေါ်နှင့် အောက်တွင် အသက်အရွယ်သင့် တံခါးကာများ တပ်ပြီး လှေကားအပေါ်ဘက်တွင် နံရံနှင့်ဝက်အူဖြင့် တပ်ဆင်သည့် တံခါးကာကို သုံးပါ။ လဲကျနိုင်သော စင်၊ စားပွဲနှင့် တီဗီများကို နံရံတွင် ခိုင်ခံ့စွာ တွယ်ထားပါ။ ပြတင်းပေါက်တွင် လူကြီးဖွင့်နိုင်သော ကာရံ သို့မဟုတ် အဖွင့်ကန့်သတ်ကိရိယာ တပ်ပြီး တက်နိုင်သော ပရိဘောဂများကို ဝေးရာရွှေ့ပါ။ ကြိုးမပါသော ပြတင်းပေါက်လိုက်ကာများကို သုံးပါ။ မပြောင်းလဲနိုင်သေးပါက တွဲလောင်းကျနေသော ဆွဲကြိုးများကို ကလေးလက်လှမ်းမမီအောင် တိုစေပြီး အဆက်မပြတ်ကြိုးကွင်းများကို တင်းအားထိန်းကိရိယာဖြင့် နံရံ သို့မဟုတ် ကြမ်းပြင်တွင် ခိုင်ခန့်စွာ တပ်ထားပါ။ အသုံးမပြုသည့် မီးပလပ်ပေါက်များတွင် ကလေးမဖြုတ်နိုင်၊ မျိုမချနိုင်သော အဖုံးကို တပ်ပါ။ ရေပုံး၊ ရေအိုးနှင့် ရေချိုးကန်များကို သုံးပြီးတိုင်း ချက်ချင်း ဗလာလုပ်ပြီး ကလေးလက်လှမ်းမမီရာတွင် မှောက်ထားပါ။ ရေအနီးတွင် ကလေးကို လက်တစ်ကမ်းအတွင်း အမြဲကြီးကြပ်ပါ။ မီးဖို၊ ရေနွေး၊ မီးပူ၊ ဖယောင်းတိုင်နှင့် ပူသောအရည်များကို လက်လှမ်းမမီအောင်ထားပါ။ ဆေးဝါး၊ သန့်ရှင်းရေးပစ္စည်း၊ ဆေးလိပ်နှင့် အရက်ကို မမြင်နိုင်၊ လက်လှမ်းမမီသော သော့ခတ်ထားသည့်နေရာတွင် သိမ်းပါ။ ဒင်္ဂါးပြား၊ ကြယ်သီး၊ ခလုတ်ဘက်ထရီ၊ သံလိုက်လုံး၊ ပလတ်စတစ်အိတ်နှင့် ပူဖောင်းများကို ဖယ်ရှားထားပါ။',
-        'Home-safety check: install age-appropriate gates at the top and bottom of stairs, using a hardware-mounted gate at the top. Anchor shelves, tables, and TVs that could tip. Fit adult-operable window guards or stops and move climbable furniture away from windows. Use cordless window coverings. If they cannot yet be replaced, shorten dangling pull cords out of reach and secure continuous-loop cords to the wall or floor with a tension device. Fit child-resistant, non-choking covers to unused outlets. Empty buckets, basins, and tubs immediately after use and store them upside down out of reach; keep the baby within arm’s reach whenever near water. Keep stoves, hot drinks, irons, candles, and hot liquids out of reach. Store medicines, cleaning products, tobacco, and alcohol locked, out of sight and reach. Remove coins, buttons, button batteries, small magnets, plastic bags, and balloons.',
+        'အိမ်တွင်း ဘေးကင်းရေး စစ်ဆေးပါ — လဲကျနိုင်သော ပရိဘောဂနှင့် လျှပ်စစ်ပစ္စည်းများကို ခိုင်ခံ့စွာ တွယ်ထားပါ။ ပြတင်းပေါက်တွင် လူကြီးဖွင့်နိုင်သော ကာရံ သို့မဟုတ် အဖွင့်ကန့်သတ်ကိရိယာ တပ်ပြီး တက်နိုင်သော ပရိဘောဂများကို ပြတင်းပေါက်မှ ဝေးရာရွှေ့ပါ။ ဆေးဝါး၊ သန့်ရှင်းရေးပစ္စည်းနှင့် အန္တရာယ်ရှိသော အိမ်သုံးပစ္စည်းများကို ကလေးလက်လှမ်းမမီသော သော့ခတ်ထားသည့်နေရာတွင် သိမ်းပါ။ အသက်အရွယ်နှင့် သင့်တော်သော ကစားစရာကို ရွေး၍ ကလေးအသက်ရှူလမ်းကြောင်း ပိတ်ဆို့စေနိုင်သော ပစ္စည်းငယ်နှင့် ကစားစရာအစိတ်အပိုင်းများကို လက်လှမ်းမမီအောင်ထားပြီး ချောင်နေသော သို့မဟုတ် ကျိုးနေသော အစိတ်အပိုင်း ရှိမရှိ စစ်ဆေးပါ။ ရေအနီးတွင် အနီးကပ်နေ၍ အဆက်မပြတ် အာရုံစိုက်ကြီးကြပ်ပါ။',
+        'Home-safety check: anchor furniture and appliances that could tip. Fit adult-operable window guards or stops and move climbable furniture away from windows. Store medicines, cleaning products, and hazardous household products locked and out of reach. Choose age-appropriate toys, keep small objects and toy parts that could choke a child out of reach, and check for loose or broken pieces. Near water, stay close and give constant, attentive supervision.',
       ),
       commonMistakes: [
         b('ကလေးကို အမြဲ တားမြစ်ခြင်း — အန္တရာယ်များကို လျှော့ချပြီး လူကြီးအနီးကပ်ကြီးကြပ်နိုင်သော စူးစမ်းနေရာ ပြင်ဆင်ပေးပါ။', 'Constantly stopping the child — reduce hazards and prepare an exploration space that can be closely supervised by an adult.'),
@@ -925,19 +925,18 @@ const GUIDES_E: SeedItem[] = [
       ],
       redFlags: [
         b('ကစားစရာ သို့မဟုတ် ပတ်ဝန်းကျင်ကို လုံးဝ စိတ်မဝင်စားခြင်း။', 'No interest at all in toys or surroundings.'),
-        b('လဲကျပြီးနောက် သတိလစ်ခြင်း၊ အန်ခြင်း၊ အထူး အိပ်ငိုက်ခြင်း သို့မဟုတ် ငိုသံ ထူးခြားခြင်း။', 'After a fall: loss of consciousness, vomiting, unusual drowsiness or an unusual cry.'),
-        b('ဆေး၊ ဓာတုပစ္စည်း သို့မဟုတ် ခလုတ်ဘက်ထရီ မျိုမိခြင်း ဟု သံသယ ရှိခြင်း။', 'Any suspicion that she has swallowed medicine, a chemical or a button battery.'),
+        b('ကစားနေစဉ် ဒဏ်ရာရခြင်း သို့မဟုတ် မလုံခြုံသော ပစ္စည်းတစ်ခုကို ပါးစပ်ထဲ ထည့်မိခြင်း။', 'An injury during play, or putting an unsafe object in the mouth.'),
       ],
       referral: b(
-        'လဲကျမှုနောက်ပိုင်း အထက်ပါ လက္ခဏာများ ပေါ်လျှင် သို့မဟုတ် အဆိပ်အတောက် သံသယ ရှိလျှင် ချက်ချင်း ဆေးခန်း သို့မဟုတ် ဆေးရုံသို့ သွားပါ။ ခလုတ်ဘက်ထရီ သို့မဟုတ် သံလိုက် မျိုမိပါက အရေးပေါ် ဖြစ်ပြီး စောင့်ဆိုင်း၍ မရပါ။',
-        'After a fall with any of those signs, or with any suspected poisoning, seek medical care immediately. A swallowed button battery or magnet is an emergency and must not wait.',
+        'ကစားနေစဉ် ကလေး ဒဏ်ရာရလျှင် သို့မဟုတ် မလုံခြုံသော ပစ္စည်းကို ပါးစပ်ထဲ ထည့်မိလျှင် ကစားခြင်းကို ရပ်ပြီး ဒေသရှိ ကျန်းမာရေးဝန်ထမ်း သို့မဟုတ် အရေးပေါ်ဝန်ဆောင်မှုထံမှ အကြံပြုချက် ရယူပါ။ ဤလမ်းညွှန်သည် အရေးပေါ်ကုသမှု လုပ်ဆောင်ပုံကို မသတ်မှတ်ပါ။',
+        'If the child is injured during play or puts an unsafe object in the mouth, stop the activity and get advice from a local health professional or emergency service. This guide does not specify emergency treatment steps.',
       ),
       encouragement: b(
         'အန္တရာယ်များကို လျှော့ချထားသော ကစားနေရာနှင့် အနီးကပ်ကြီးကြပ်မှုက မိဘကို စိတ်အေးစေပြီး ကလေးကို ပိုမိုလွတ်လပ်စွာ စူးစမ်းခွင့်ပေးနိုင်ပါသည်။',
         'A lower-hazard play space with close supervision can give caregivers more confidence and allow the baby to explore more freely.',
       ),
     }),
-    'Caregiver-supported, responsive play follows AAP power-of-play guidance, the WHO/UNICEF Care for Child Development package and the UNICEF Early Moments Matter report; detailed home-safety controls follow CPSC childproofing and window-cord guidance, water supervision follows AAP drowning-prevention guidance, and small-object and poison controls follow HealthyChildren guidance.',
+    'Caregiver-supported, responsive play follows AAP power-of-play guidance, the WHO/UNICEF Care for Child Development package and the UNICEF Early Moments Matter report. CPSC childproofing guidance supports furniture anchoring, adult-operable window guards or stops, and locked hazardous household products; HealthyChildren choking guidance supports age-appropriate choking-hazard prevention; and AAP drowning-prevention guidance supports close, constant, attentive water supervision. This guide provides prevention education, not emergency-treatment thresholds.',
   ),
 ];
 

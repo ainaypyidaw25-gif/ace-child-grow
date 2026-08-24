@@ -1195,21 +1195,23 @@ describe('clinically sourced content corrections', () => {
 
     const tenToTwelvePlay = dataFor('gd_10_12m_play');
     const homeSafety = (tenToTwelvePlay.safety as { en: string }).en;
-    expect(homeSafety).toContain('hardware-mounted gate at the top');
-    expect(homeSafety).toContain('Use cordless window coverings');
-    expect(homeSafety).toContain('store them upside down out of reach');
+    expect(homeSafety).toContain('anchor furniture and appliances that could tip');
+    expect(homeSafety).toContain('move climbable furniture away from windows');
+    expect(homeSafety).toContain('age-appropriate toys');
+    expect(homeSafety).toContain('constant, attentive supervision');
     expect(homeSafety).not.toContain('Tie blind cords high');
     expect((tenToTwelvePlay.parentTips as Array<{ en: string }>)[1].en).toContain(
       'lower-hazard play space',
     );
-    expect(sourcesForContent('gd_10_12m_play', 'guide')).toEqual(
-      expect.arrayContaining([
-        'cpsc-childproofing-home-2023',
-        'cpsc-window-coverings-cordless-2021',
-        'hc-choking-prevention-2026',
-        'hc-poison-prevention-2026',
-      ]),
-    );
+    expect(sourcesForContent('gd_10_12m_play', 'guide')).toEqual([
+      'aap-power-of-play-2018',
+      'who-care-for-child-development-2012',
+      'unicef-early-moments-2017',
+      'tb-bright-futures-4e-2017',
+      'aap-drowning-2021',
+      'cpsc-childproofing-home-2023',
+      'hc-choking-prevention-2026',
+    ]);
     expect(sourcesForContent('gd_10_12m_play', 'guide')).not.toContain(
       'aap-safe-sleep-2022',
     );

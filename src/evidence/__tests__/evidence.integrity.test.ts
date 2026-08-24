@@ -179,6 +179,7 @@ describe('content links', () => {
       'aota-early-intervention',
       'asha-speech-sound-disorders',
       'asha-spoken-language-disorders',
+      'cpsc-window-coverings-cordless-2021',
       'jr-asq3-argentina-2018',
       'jr-mchat-rf-2014',
       'nhs-beds-4y-milestones-2024',

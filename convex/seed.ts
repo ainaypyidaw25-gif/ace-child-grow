@@ -63,6 +63,7 @@ import {
   isUnicefSeenCountedConsumerSlug,
 } from './lib/clinicalBlockerCasData';
 import { isEvidenceHumanReviewSuccessorContentSlug } from './lib/evidenceHumanReviewSuccessorCasData';
+import { isGd10_12mPlayV5ContentSlug } from './lib/gd10_12mPlayV5ImportPolicy';
 import { assertNoPersistedReleaseGovernedContent } from './lib/clinicalReviewBatchProvenance';
 
 const GRANTABLE_ROLES = [
@@ -206,6 +207,7 @@ export function seedRunSkipsItem(item: Pick<Item, 'type' | 'slug'>): boolean {
     || isGdBirth2mEmotionalCasContentSlug(item.slug)
     || isUnicefSeenCountedConsumerSlug(item.slug)
     || isEvidenceHumanReviewSuccessorContentSlug(item.slug)
+    || isGd10_12mPlayV5ContentSlug(item.slug)
     || isClinicalTwoSmallCasTargetSlug(item.slug)
     || isNutritionGuidesCasTargetSlug(item.slug);
 }
@@ -1878,7 +1880,8 @@ export const applyPublishedErrata = internalMutation({
     let notPublished = 0;
 
     for (const slug of slugs) {
-      if (isClinicalTwoSmallCasTargetSlug(slug)) {
+      if (isClinicalTwoSmallCasTargetSlug(slug)
+        || isGd10_12mPlayV5ContentSlug(slug)) {
         unchanged += 1;
         continue;
       }

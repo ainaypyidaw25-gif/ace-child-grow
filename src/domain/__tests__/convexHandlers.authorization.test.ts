@@ -72,6 +72,10 @@ import {
   CLINICAL_TWO_SMALL_SOURCE_PREIMAGES,
   CLINICAL_TWO_SMALL_TARGETS,
 } from '../../../convex/lib/clinicalTwoSmallCasData';
+import {
+  GD10_12M_PLAY_V5_SOURCE_PREIMAGES,
+  GD10_12M_PLAY_V5_TARGET,
+} from '../../../convex/lib/gd10_12mPlayV5CasData';
 
 const RETIRED_SERVER_GUARD_ITEMS = [
   ...[
@@ -599,6 +603,90 @@ describe('Convex registered handlers enforce authorization', () => {
       failed: 0,
     });
 
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalledWith('libraryContent', expect.anything());
+    expect(context.db.insert).not.toHaveBeenCalledWith('evidenceLinks', expect.anything());
+    expect(context.db.insert).not.toHaveBeenCalledWith('evidenceSources', expect.anything());
+  });
+
+  it('reserves the play-safety v5 postimage and all eight source rows for exact CAS only', async () => {
+    authState.userId = 'editor-1';
+    const context = ctx({
+      profile: { userId: 'editor-1', isStaff: true, staffRole: 'content_editor' },
+      rows: { evidenceSources: [] },
+    });
+    const staleItem = {
+      type: GD10_12M_PLAY_V5_TARGET.kind,
+      slug: GD10_12M_PLAY_V5_TARGET.slug,
+      titleMm: 'stale',
+      titleEn: 'stale',
+      tags: [],
+      source: 'stale broad seed',
+      version: 1,
+      clinicalStatus: 'clinical_review',
+      data: {},
+      media: [{ kind: 'illustration' }],
+      searchText: 'stale',
+    };
+
+    await expect(handler(importSeed)(context, { items: [staleItem] })).resolves.toEqual({
+      created: 0,
+      updated: 0,
+      skippedApproved: 1,
+      total: 1,
+    });
+    expect(seedRunSkipsItem(staleItem)).toBe(true);
+
+    await expect(handler(importLinks)(context, { links: [{
+      kind: GD10_12M_PLAY_V5_TARGET.kind,
+      slug: GD10_12M_PLAY_V5_TARGET.slug,
+      sourceIds: ['unknown-stale'],
+    }] })).resolves.toMatchObject({
+      created: 0,
+      updated: 0,
+      unchanged: 0,
+      skipped: 1,
+      failed: 0,
+    });
+
+    await expect(handler(importSources)(context, {
+      sources: GD10_12M_PLAY_V5_SOURCE_PREIMAGES.map((source) => ({
+        id: source.sourceId,
+        org: 'stale',
+        orgKey: 'STALE',
+        title: 'stale',
+        authors: null,
+        year: 2026,
+        edition: null,
+        country: null,
+        language: 'en',
+        url: 'https://example.invalid/stale',
+        doi: null,
+        isbn: null,
+        pmid: null,
+        evidenceLevel: 'guideline',
+        reviewStatus: 'awaiting_review',
+        reviewer: null,
+        reviewDate: null,
+        nextReviewDate: null,
+        keywords: [],
+        topics: [],
+        ageMonthsMin: 0,
+        ageMonthsMax: 60,
+        verifiedOn: '2026-08-24',
+        verifiedNote: 'stale generic import must be skipped',
+      })),
+    })).resolves.toMatchObject({
+      created: 0,
+      updated: 0,
+      unchanged: 0,
+      reviewReset: 0,
+      skipped: 8,
+      failed: 0,
+    });
+
+    expect(context.db.query).not.toHaveBeenCalledWith('libraryContent');
+    expect(context.db.query).not.toHaveBeenCalledWith('evidenceLinks');
     expect(context.db.patch).not.toHaveBeenCalled();
     expect(context.db.insert).not.toHaveBeenCalledWith('libraryContent', expect.anything());
     expect(context.db.insert).not.toHaveBeenCalledWith('evidenceLinks', expect.anything());
