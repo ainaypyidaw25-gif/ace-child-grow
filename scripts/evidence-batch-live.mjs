@@ -26,6 +26,10 @@ import { execFileSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { build } from 'esbuild';
+import {
+  formatConvexOutputFailure,
+  sanitizedConvexCommandError,
+} from './lib/safe-convex-command-error.mjs';
 
 const TODAY = process.argv.find((a) => /^\d{4}-\d{2}-\d{2}$/.test(a)) ?? '2026-07-25';
 
@@ -50,14 +54,24 @@ function findDeployKey() {
 }
 
 function run(name, args, key) {
-  const raw = execFileSync('npx', ['convex', 'run', name, JSON.stringify(args)], {
-    encoding: 'utf8',
-    env: { ...process.env, CONVEX_DEPLOY_KEY: key },
-    stdio: ['ignore', 'pipe', 'pipe'],
-    maxBuffer: 64 * 1024 * 1024,
-  });
+  let raw;
+  try {
+    raw = execFileSync('npx', ['convex', 'run', name, JSON.stringify(args)], {
+      encoding: 'utf8',
+      env: { ...process.env, CONVEX_DEPLOY_KEY: key },
+      stdio: ['ignore', 'pipe', 'pipe'],
+      maxBuffer: 64 * 1024 * 1024,
+    });
+  } catch (err) {
+    throw sanitizedConvexCommandError(err, { operation: `run:${name}` });
+  }
   const at = raw.indexOf('{');
-  return at < 0 ? null : JSON.parse(raw.slice(at));
+  if (at < 0) throw new Error(formatConvexOutputFailure({ operation: `run:${name}` }));
+  try {
+    return JSON.parse(raw.slice(at));
+  } catch {
+    throw new Error(formatConvexOutputFailure({ operation: `run:${name}` }));
+  }
 }
 
 async function loadBatch() {

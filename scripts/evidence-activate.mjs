@@ -32,6 +32,10 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { build } from 'esbuild';
+import {
+  formatConvexCommandFailure,
+  formatConvexOutputFailure,
+} from './lib/safe-convex-command-error.mjs';
 
 const DRY_RUN = process.argv.includes('--dry-run');
 const VERIFY_ONLY = process.argv.includes('--verify');
@@ -160,8 +164,12 @@ function convex(args, key, { input } = {}) {
 function runFunction(name, argsObject, key) {
   const raw = convex(['run', name, JSON.stringify(argsObject)], key);
   const at = raw.indexOf('{');
-  if (at < 0) return { raw, value: null };
-  return { raw, value: JSON.parse(raw.slice(at)) };
+  if (at < 0) throw new Error(formatConvexOutputFailure({ operation: `run:${name}` }));
+  try {
+    return { value: JSON.parse(raw.slice(at)) };
+  } catch {
+    throw new Error(formatConvexOutputFailure({ operation: `run:${name}` }));
+  }
 }
 
 /**
@@ -241,7 +249,7 @@ if (!VERIFY_ONLY) {
     convex(['deploy', '--yes'], found.key);
     say('     done.');
   } catch (err) {
-    fail(`convex deploy failed:\n${String(err.stderr ?? err).slice(0, 1200)}`);
+    fail(formatConvexCommandFailure(err, { operation: 'deploy' }));
   }
 } else {
   say('1/3  skipped (--verify)');
@@ -279,7 +287,7 @@ if (!VERIFY_ONLY) {
       );
     }
   } catch (err) {
-    fail(`the reference import failed:\n${String(err.stderr ?? err).slice(0, 1200)}`);
+    fail(formatConvexCommandFailure(err, { operation: 'import:evidence-sources' }));
   }
 
   try {
@@ -302,7 +310,7 @@ if (!VERIFY_ONLY) {
       fail(`link import partially failed. Failed keys: ${linkResult.failedIds.join(', ')}`);
     }
   } catch (err) {
-    fail(`the link import failed:\n${String(err.stderr ?? err).slice(0, 1200)}`);
+    fail(formatConvexCommandFailure(err, { operation: 'import:evidence-links' }));
   }
 } else {
   say('2/3  skipped (--verify)');
@@ -314,7 +322,7 @@ let live;
 try {
   live = runFunction('evidence:integrity', {}, found.key).value;
 } catch (err) {
-  fail(`evidence:integrity failed:\n${String(err.stderr ?? err).slice(0, 1200)}`);
+  fail(formatConvexCommandFailure(err, { operation: 'run:evidence:integrity' }));
 }
 
 const row = (label, value) => say(`  ${String(label).padEnd(34)} ${value}`);
