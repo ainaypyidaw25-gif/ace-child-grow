@@ -195,6 +195,38 @@ export function exactPersistedBatchRegistration(
         : activation.expectedDecisionSetDigest);
 }
 
+export function exactFrozenReleaseBatchLifecycle(
+  row: Doc<'clinicalReviewBatches'>,
+  registration: ClinicalReviewBatchRegistration,
+): boolean {
+  return exactPersistedBatchRegistration(row, registration)
+    && row.status === 'frozen'
+    && row.consumedUpstreamReceiptDigest === undefined
+    && row.activatedAt === undefined
+    && row.completedAt === undefined
+    && row.invalidatedAt === undefined
+    && row.invalidationReason === undefined;
+}
+
+export function exactStoppedChangesRequestedReleaseBatchLifecycle(
+  row: Doc<'clinicalReviewBatches'>,
+  registration: ClinicalReviewBatchRegistration,
+): boolean {
+  const consumedDigestExact = registration.activation.kind === 'initial'
+    ? row.consumedUpstreamReceiptDigest === undefined
+    : typeof row.consumedUpstreamReceiptDigest === 'string'
+      && /^[a-f0-9]{64}$/.test(row.consumedUpstreamReceiptDigest);
+  return exactPersistedBatchRegistration(row, registration)
+    && row.status === 'stopped_changes_requested'
+    && Number.isFinite(row.activatedAt)
+    && row.activatedAt! >= registration.frozenAt
+    && row.activatedAt! < registration.expiresAt
+    && consumedDigestExact
+    && row.completedAt === undefined
+    && row.invalidatedAt === undefined
+    && row.invalidationReason === undefined;
+}
+
 function exactCompletedReleaseBatch(
   row: Doc<'clinicalReviewBatches'>,
   registration: ClinicalReviewBatchRegistration,
@@ -233,9 +265,12 @@ export async function exactClinicalReviewUpstreamChain(
     return false;
   }
   if (activation.kind === 'after_changes_requested_refreeze') {
+    const predecessorReceipts = await ctx.db.query('clinicalReviewBatchReceipts')
+      .withIndex('by_batch_id', (q) => q.eq('batchId', predecessor.manifest.batchId)).take(2);
     return row.consumedUpstreamReceiptDigest === activation.expectedDecisionSetDigest
       && predecessorRows.length === 1
-      && predecessorRows[0].status === 'stopped_changes_requested';
+      && exactStoppedChangesRequestedReleaseBatchLifecycle(predecessorRows[0], predecessor)
+      && predecessorReceipts.length === 0;
   }
   const receipts = await ctx.db.query('clinicalReviewBatchReceipts')
     .withIndex('by_batch_id', (q) => q.eq('batchId', predecessor.manifest.batchId)).take(2);

@@ -381,6 +381,122 @@ export const CLINICAL_INITIAL_RELEASE_BATCH_HASH = 'db3036076969eb8934acc46b8ce7
 export const CLINICAL_INITIAL_RELEASE_BATCH_ROUTING_HASH = '784e270d8507b7976b7bbcb452bb9c60e7190ded9f9f80565488fceef0b30d18' as const;
 
 /**
+ * Exact post-correction refreeze of the stopped newborn release root.
+ *
+ * Frozen from bounded, read-only Production snapshots after
+ * `2026-08-24-skin-to-skin-refreeze-correction-v1` applied. The predecessor
+ * decision-set digest binds this batch to the exact stopped root decisions;
+ * neither the old approval nor the requested-change row is reused at the new
+ * review revisions.
+ */
+export const CLINICAL_NEWBORN_REFREEZE_BATCH_ID =
+  'clinical-newborn-skin-sleep-refreeze-2026-08-24-v1' as const;
+export const CLINICAL_NEWBORN_REFREEZE_BATCH_FROZEN_AT = 1787581323544 as const;
+export const CLINICAL_NEWBORN_REFREEZE_BATCH_EXPIRES_AT = 1788790923544 as const;
+export const CLINICAL_NEWBORN_REFREEZE_DECISION_SET_DIGEST =
+  '8ab9e57e7f147fe1cfdc24ff3dfe84972fe4ee46aba62d267810f711d5b80d41' as const;
+
+export const CLINICAL_NEWBORN_REFREEZE_BATCH_ITEMS = [
+  {
+    ordinal: 1,
+    kind: 'activity',
+    slug: 'act_skin_to_skin_calm',
+    reviewRevision: 3,
+    contentId: 'kx790c9ywv0bge727jh2765w9s8b82wx',
+    contentCreationTime: 1785024282947.2336,
+    contentUpdatedAt: 1787580868713,
+    contentCanonicalSha256: '9561b6074315076e7fe915417f7016ec12862bf993389da4addc4cc797cb2d79',
+    linkId: 'k9789fvkr23qt48e09s91j8pzn8b8sbp',
+    linkCreationTime: 1785024331625.8394,
+    linkUpdatedAt: 1785024331625,
+    linkCanonicalSha256: '25928df256c29b1805aece1e1113a873986fc01a4385fb78c69c7474e64622d0',
+    sourceIds: [
+      'who-bfhi-2017',
+      'who-bf-counselling-2018',
+      'aap-safe-sleep-2022',
+      'nhs-sids-2025',
+    ],
+    sourceCount: 4,
+    sourcesCanonicalSha256: '79747ef319b64b9741932234009b43c89c4a1661137f240ece656fb6244c4c29',
+    mediaCount: 2,
+    mediaCanonicalSha256: '8e6c1e03eb4899f3ae7ed1e4c6dbcbbf08696db305b462fbbd254bc004def6ba',
+    aiCanonicalSha256: 'e0c04573de4314ddde597477c374bafd25b400663d593e0a0244afe3f73c1d0d',
+    currentClinicalReviewCount: 0,
+    currentClinicalReviewsCanonicalSha256: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945',
+    allClinicalReviewHistoryCanonicalSha256: 'e0536dc7c8a6a023d2567380dbb667870e78e5bb6018d07087b3d1622d0b9869',
+    reviewerAdvisory: {
+      mm: 'ပြင်ဆင်ထားသောစာသားသည် မိဘအပြည့်အဝနိုးကြားနေချိန် အရေပြားချင်းထိ အနီးကပ်ပွေ့ချီခြင်း၊ အသက်ရှူလမ်းကြောင်းရှင်းလင်းစွာထားခြင်းနှင့် အမြင်မပြတ်စောင့်ကြည့်ခြင်းအထိသာ ကန့်သတ်ထားပြီး အိမ်တွင် ထပ်ခါတလဲလဲအသုံးပြုခြင်းက နို့တိုက်ကျွေးမှုတိုးတက်စေသည် သို့မဟုတ် စိတ်မငြိမ်မှုကို ကုသသည်ဟု မဆိုထားကြောင်း အတည်ပြုပါ။',
+      en: 'Confirm that the corrected copy is limited to awake, closely supervised skin-to-skin contact with a clear airway and does not claim that repeated at-home use improves feeding or treats distress.',
+    },
+    upstreamReviewDigests: [
+      { dimension: 'all_review_history', digest: 'e0536dc7c8a6a023d2567380dbb667870e78e5bb6018d07087b3d1622d0b9869' },
+      { dimension: 'all_nonclinical_history', digest: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945' },
+      { dimension: 'english', digest: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945' },
+      { dimension: 'native_myanmar', digest: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945' },
+      { dimension: 'child_development', digest: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945' },
+      { dimension: 'evidence', digest: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945' },
+      { dimension: 'safety', digest: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945' },
+    ],
+  },
+  {
+    ordinal: 2,
+    kind: 'guide',
+    slug: 'gd_birth_2m_sleep',
+    reviewRevision: 4,
+    contentId: 'kx76vp3r2pnfyy5tgs9shn20bd8b8zha',
+    contentCreationTime: 1785024282947.1877,
+    contentUpdatedAt: 1787580868713,
+    contentCanonicalSha256: 'a5481cb9ce5f9ad709a18e4c76d289c7bcf6b6eb563d00940e3e3e78c6eed6cd',
+    linkId: 'k97epd1tn83dm0apk7xkby7zjd8b8y86',
+    linkCreationTime: 1785024331625.8176,
+    linkUpdatedAt: 1787359998883,
+    linkCanonicalSha256: 'f25350f857aa6a65eaab152e87aa9782fa697c1784b4b1c81f775a7de3d2d6f8',
+    sourceIds: [
+      'aap-safe-sleep-2022',
+      'nhs-sids-2025',
+      'who-pa-sleep-under5-2019',
+      'hc-safe-sleep-2026',
+      'nice-ng143-fever-2019',
+      'hc-child-ems-2026',
+    ],
+    sourceCount: 6,
+    sourcesCanonicalSha256: '9c0beb0c6824f3a33273f7e37a34b6e90e4d16efcf8438e1d3eb71397de0572a',
+    mediaCount: 0,
+    mediaCanonicalSha256: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945',
+    aiCanonicalSha256: 'e0c04573de4314ddde597477c374bafd25b400663d593e0a0244afe3f73c1d0d',
+    currentClinicalReviewCount: 0,
+    currentClinicalReviewsCanonicalSha256: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945',
+    allClinicalReviewHistoryCanonicalSha256: '7feaa4457c15d852d24a066eb00b67698e677a71489c1ae3972301ffa083c48b',
+    reviewerAdvisory: {
+      mm: 'မူရင်း sleep guide ၏ ရင်းမြစ်နှင့်စာသား မပြောင်းလဲကြောင်းနှင့် governance-only revision အသစ်တွင် ကျောပေါ်အိပ်စေခြင်း၊ ခိုင်မာပြန့်ပြူးသောအိပ်ရာ၊ ပျော့ပျောင်းပစ္စည်း/အလေးချိန်ပါပစ္စည်းရှောင်ခြင်းနှင့် အရေးပေါ်လက္ခဏာများကို လက်ရှိရင်းမြစ်များက ဆက်လက်တိုက်ရိုက်ထောက်ခံကြောင်း အတည်ပြုပါ။',
+      en: 'Confirm that the sleep guide is semantically unchanged at this governance-only revision and that its supine, firm-flat-surface, soft/weighted-item avoidance, and emergency-sign wording remains directly supported by the frozen sources.',
+    },
+    upstreamReviewDigests: [
+      { dimension: 'all_review_history', digest: 'c10edfd2f7fc6bb968fef18b1c027978b5ed6945e4f306b31070c6942b48377a' },
+      { dimension: 'all_nonclinical_history', digest: '22d99a8c0d6fd41e529814849e53af43bdb8d2854c8cf418a5fe8226d9f1fef7' },
+      { dimension: 'english', digest: '1512ec3f750a31194a33447c046aad113a20d88602fe9cf8d5fd8578466087df' },
+      { dimension: 'native_myanmar', digest: '21f1c287969ba72c2756d421f352ba4924486e61fb366835433a6422fc71c8f1' },
+      { dimension: 'child_development', digest: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945' },
+      { dimension: 'evidence', digest: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945' },
+      { dimension: 'safety', digest: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945' },
+    ],
+  },
+] as const satisfies readonly ClinicalReviewBatchItem[];
+
+export const CLINICAL_NEWBORN_REFREEZE_BATCH_MANIFEST = {
+  batchId: CLINICAL_NEWBORN_REFREEZE_BATCH_ID,
+  count: CLINICAL_NEWBORN_REFREEZE_BATCH_ITEMS.length,
+  reviewer: CLINICAL_REVIEW_BATCH_REVIEWER,
+  items: CLINICAL_NEWBORN_REFREEZE_BATCH_ITEMS,
+} as const satisfies ClinicalReviewBatchFreezeManifest;
+
+// Regenerated with sha256Canonical after every manifest/routing edit.
+export const CLINICAL_NEWBORN_REFREEZE_BATCH_HASH =
+  '5057ddd065fea8a3bd70f163d08134a236a38a3974291d38b7e88e9ac3ec84a2' as const;
+export const CLINICAL_NEWBORN_REFREEZE_BATCH_ROUTING_HASH =
+  'b74112492466978977acf1c8b300e553da7f7dc348f472f4c222849eaa0e8c4d' as const;
+
+/**
  * Exact post-CAS clinical review for the three infant nutrition guides.
  *
  * Frozen from bounded, read-only Production queries on 2026-08-24 after
@@ -545,7 +661,7 @@ export const CLINICAL_NUTRITION_RELEASE_BATCH_MANIFEST = {
 
 // Regenerated with sha256Canonical after every manifest/routing edit.
 export const CLINICAL_NUTRITION_RELEASE_BATCH_HASH = 'a31ac4dbcc5fbcbf6f43a4e57b91a8078ad266b6a57fdb09978557e306777801' as const;
-export const CLINICAL_NUTRITION_RELEASE_BATCH_ROUTING_HASH = 'aa3921695d695a746d8713b03b9e49f0a9b60e239d988ce8d0b513195ff962b7' as const;
+export const CLINICAL_NUTRITION_RELEASE_BATCH_ROUTING_HASH = '88e5e1158d19fddc343080811751df71ee7f77272f1144954d8ac7375fd8dfdb' as const;
 
 /**
  * Exact post-v2 clinical review for the nine older-child safety guides.
@@ -789,7 +905,7 @@ export const CLINICAL_OLDER_SAFETY_RELEASE_BATCH_MANIFEST = {
 
 // Regenerated with sha256Canonical after every manifest/routing edit.
 export const CLINICAL_OLDER_SAFETY_RELEASE_BATCH_HASH = '7b0eb14a8b694962d5b119f35f9e3ec69da39d611b26bbb0695321cd7b562c70' as const;
-export const CLINICAL_OLDER_SAFETY_RELEASE_BATCH_ROUTING_HASH = '2ec77cf490c5160b13133cb7522f5d884630a3db185a838e9cfd85edb1acff47' as const;
+export const CLINICAL_OLDER_SAFETY_RELEASE_BATCH_ROUTING_HASH = 'dfc04d608eedb486d39ea39cc81482e70af5831d8f3f41e8d0789b8b8a530a94' as const;
 
 /**
  * Compile-time allowlist of immutable clinical batches, in strict sequence.
@@ -830,9 +946,25 @@ export const CLINICAL_REVIEW_BATCH_REGISTRY = [
     dimension: 'clinical',
     authority: 'release',
     activation: {
-      kind: 'after_handoff',
+      kind: 'after_changes_requested_refreeze',
       previousBatchId: CLINICAL_INITIAL_RELEASE_BATCH_ID,
-      expectedPreviousFreezeDigest: CLINICAL_INITIAL_RELEASE_BATCH_HASH,
+      expectedDecisionSetDigest: CLINICAL_NEWBORN_REFREEZE_DECISION_SET_DIGEST,
+    },
+    routingCanonicalSha256: CLINICAL_NEWBORN_REFREEZE_BATCH_ROUTING_HASH,
+    freezeDigest: CLINICAL_NEWBORN_REFREEZE_BATCH_HASH,
+    frozenAt: CLINICAL_NEWBORN_REFREEZE_BATCH_FROZEN_AT,
+    expiresAt: CLINICAL_NEWBORN_REFREEZE_BATCH_EXPIRES_AT,
+    manifest: CLINICAL_NEWBORN_REFREEZE_BATCH_MANIFEST,
+  },
+  {
+    sequence: 4,
+    laneGraphVersion: 1,
+    dimension: 'clinical',
+    authority: 'release',
+    activation: {
+      kind: 'after_handoff',
+      previousBatchId: CLINICAL_NEWBORN_REFREEZE_BATCH_ID,
+      expectedPreviousFreezeDigest: CLINICAL_NEWBORN_REFREEZE_BATCH_HASH,
     },
     routingCanonicalSha256: CLINICAL_NUTRITION_RELEASE_BATCH_ROUTING_HASH,
     freezeDigest: CLINICAL_NUTRITION_RELEASE_BATCH_HASH,
@@ -841,7 +973,7 @@ export const CLINICAL_REVIEW_BATCH_REGISTRY = [
     manifest: CLINICAL_NUTRITION_RELEASE_BATCH_MANIFEST,
   },
   {
-    sequence: 4,
+    sequence: 5,
     laneGraphVersion: 1,
     dimension: 'clinical',
     authority: 'release',

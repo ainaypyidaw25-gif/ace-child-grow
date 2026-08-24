@@ -3,8 +3,8 @@ import { describe, expect, it } from 'vitest';
 import { frozenUpstreamReviewHistoryBlockers } from '../../../convex/clinicalReviewBatch';
 import { sha256Canonical } from '../../../convex/lib/aiAuditHash';
 import {
-  CLINICAL_INITIAL_RELEASE_BATCH_HASH,
-  CLINICAL_INITIAL_RELEASE_BATCH_ID,
+  CLINICAL_NEWBORN_REFREEZE_BATCH_HASH,
+  CLINICAL_NEWBORN_REFREEZE_BATCH_ID,
   CLINICAL_NUTRITION_RELEASE_BATCH_HASH,
   CLINICAL_NUTRITION_RELEASE_BATCH_ITEMS,
   CLINICAL_NUTRITION_RELEASE_BATCH_MANIFEST,
@@ -16,17 +16,20 @@ import {
 
 describe('frozen infant-nutrition clinical release batch', () => {
   it('contains only the three exact post-CAS guide revisions and regenerated digests', async () => {
-    const registration = CLINICAL_REVIEW_BATCH_REGISTRY[2];
-    expect(CLINICAL_REVIEW_BATCH_REGISTRY).toHaveLength(4);
+    const registration = CLINICAL_REVIEW_BATCH_REGISTRY.find(
+      (entry) => entry.manifest.batchId === CLINICAL_NUTRITION_RELEASE_BATCH_MANIFEST.batchId,
+    );
+    if (!registration) throw new Error('Missing infant-nutrition release registration');
+    expect(CLINICAL_REVIEW_BATCH_REGISTRY).toHaveLength(5);
     expect(registration).toMatchObject({
-      sequence: 3,
+      sequence: 4,
       laneGraphVersion: 1,
       dimension: 'clinical',
       authority: 'release',
       activation: {
         kind: 'after_handoff',
-        previousBatchId: CLINICAL_INITIAL_RELEASE_BATCH_ID,
-        expectedPreviousFreezeDigest: CLINICAL_INITIAL_RELEASE_BATCH_HASH,
+        previousBatchId: CLINICAL_NEWBORN_REFREEZE_BATCH_ID,
+        expectedPreviousFreezeDigest: CLINICAL_NEWBORN_REFREEZE_BATCH_HASH,
       },
     });
     expect(CLINICAL_NUTRITION_RELEASE_BATCH_ITEMS.map((item) => (

@@ -17,10 +17,13 @@ const EMPTY_AI_SHA256 = 'e0c04573de4314ddde597477c374bafd25b400663d593e0a0244afe
 
 describe('frozen older-safety clinical release batch', () => {
   it('contains only the nine exact post-CAS guide revisions and regenerated digests', async () => {
-    const registration = CLINICAL_REVIEW_BATCH_REGISTRY[3];
-    expect(CLINICAL_REVIEW_BATCH_REGISTRY).toHaveLength(4);
+    const registration = CLINICAL_REVIEW_BATCH_REGISTRY.find(
+      (entry) => entry.manifest.batchId === CLINICAL_OLDER_SAFETY_RELEASE_BATCH_MANIFEST.batchId,
+    );
+    if (!registration) throw new Error('Missing older-safety release registration');
+    expect(CLINICAL_REVIEW_BATCH_REGISTRY).toHaveLength(5);
     expect(registration).toMatchObject({
-      sequence: 4,
+      sequence: 5,
       laneGraphVersion: 1,
       dimension: 'clinical',
       authority: 'release',
