@@ -18,6 +18,7 @@ import {
   type ClinicalReviewBatchRegistration,
 } from './lib/clinicalReviewBatchData';
 import {
+  exactClinicalReviewUpstreamChain,
   exactHandoffReceipt,
   exactPersistedAssignment,
   exactPersistedBatchRegistration,
@@ -132,6 +133,33 @@ type ReleaseInspection = {
   assignmentsCompatible: boolean;
   assignmentsExact: boolean;
 };
+
+type PersistedRegistryState = 'absent_clean' | 'persisted_exact' | 'invalid';
+
+function cleanFrozenLifecycle(row: Doc<'clinicalReviewBatches'>): boolean {
+  return row.status === 'frozen'
+    && row.consumedUpstreamReceiptDigest === undefined
+    && row.activatedAt === undefined
+    && row.completedAt === undefined
+    && row.invalidatedAt === undefined
+    && row.invalidationReason === undefined;
+}
+
+function persistedRegistryState(inspection: ReleaseInspection): PersistedRegistryState {
+  if (inspection.batches.length === 0
+    && inspection.assignments.length === 0
+    && inspection.receipts.length === 0
+    && inspection.assignmentsCompatible) return 'absent_clean';
+  if (inspection.batches.length !== 1
+    || !inspection.registrationExact
+    || !inspection.assignmentsExact) return 'invalid';
+  if (inspection.batches[0].status === 'frozen') {
+    return cleanFrozenLifecycle(inspection.batches[0]) && inspection.receipts.length === 0
+      ? 'persisted_exact'
+      : 'invalid';
+  }
+  return 'persisted_exact';
+}
 
 async function inspectPersistedRegistration(
   ctx: Pick<QueryCtx, 'db'>,
@@ -314,14 +342,24 @@ export const ownerRegistryStatus = internalQuery({
     for (const inspection of inspections) {
       const { registration, batches, assignmentsCompatible, assignmentsExact } = inspection;
       const batchId = registration.manifest.batchId;
+      const persistedState = persistedRegistryState(inspection);
       let readiness: ActivationReadiness = 'blocked_persisted_mismatch';
-      if (registryCode !== 'valid' || batches.length > 1
-        || (batches.length === 1 && !inspection.registrationExact)) {
-        readiness = 'blocked_persisted_mismatch';
-      } else if (!assignmentsCompatible) {
-        readiness = 'blocked_assignment_mismatch';
-      } else if (batches.length === 0 || !assignmentsExact) {
+      if (registryCode !== 'valid' || persistedState === 'invalid') {
+        if (batches.length === 1
+          && batches[0].status === 'frozen'
+          && inspection.registrationExact
+          && assignmentsExact
+          && inspection.receipts.length > 0) {
+          readiness = 'blocked_current_receipt_present';
+        } else if (!assignmentsCompatible || (batches.length === 1 && !assignmentsExact)) {
+          readiness = 'blocked_assignment_mismatch';
+        } else {
+          readiness = 'blocked_persisted_mismatch';
+        }
+      } else if (persistedState === 'absent_clean') {
         readiness = 'not_materialized';
+      } else if (batches.length !== 1) {
+        readiness = 'blocked_persisted_mismatch';
       } else {
         const status = batches[0].status;
         if (status === 'active') readiness = 'already_active';
@@ -346,7 +384,12 @@ export const ownerRegistryStatus = internalQuery({
               || predecessorRegistration.freezeDigest !== activation.expectedPreviousFreezeDigest
               || !predecessor
               || !predecessor.registrationExact
-              || !predecessor.assignmentsExact) {
+              || !predecessor.assignmentsExact
+              || !await exactClinicalReviewUpstreamChain(
+                ctx,
+                predecessorRegistration,
+                predecessor.batches[0],
+              )) {
               readiness = 'blocked_predecessor_mismatch';
               prerequisiteReady = false;
             } else if (predecessor.batches[0].status !== 'completed') {
@@ -383,14 +426,10 @@ export const ownerRegistryStatus = internalQuery({
       readinessByBatchId.set(batchId, readiness);
     }
 
-    const materializationMismatch = registryCode !== 'valid' || inspections.some((inspection) => (
-      inspection.batches.length > 1
-      || (inspection.batches.length === 1 && !inspection.registrationExact)
-      || !inspection.assignmentsCompatible
-    ));
-    const materializedExact = inspections.every((inspection) => (
-      inspection.registrationExact && inspection.assignmentsExact
-    ));
+    const persistedStates = inspections.map(persistedRegistryState);
+    const materializationMismatch = registryCode !== 'valid'
+      || persistedStates.some((state) => state === 'invalid');
+    const materializedExact = persistedStates.every((state) => state === 'persisted_exact');
     const materializationCode = materializationMismatch
       ? 'blocked_persisted_mismatch' as const
       : materializedExact
@@ -471,6 +510,12 @@ export const materializeRegisteredReleaseBatches = mutation({
     const releaseRegistrations = registrations.filter(
       (registration) => registration.authority === 'release',
     ) as readonly ClinicalReviewBatchRegistration[];
+    for (const registration of releaseRegistrations) {
+      const inspection = await inspectPersistedRegistration(ctx, registration);
+      if (persistedRegistryState(inspection) === 'invalid') {
+        return { ok: false, code: 'persisted_registry_state_mismatch', batchId: registration.manifest.batchId, createdBatches: 0, createdAssignments: 0 };
+      }
+    }
     const batchPlans: ReturnType<typeof batchInsertValue>[] = [];
     const assignmentPlans: Array<Awaited<ReturnType<typeof assignmentInsertValue>>> = [];
     const compileTargets = new Set<string>();
@@ -616,30 +661,22 @@ export const activateRegisteredBatch = mutation({
       || (registration.activation.kind !== 'initial' && !args.expectedUpstreamReceiptDigest)) {
       return { ok: false, code: 'registration_mismatch', batchId: args.batchId, createdBatches: 0, createdAssignments: 0 };
     }
-    const batches = await ctx.db.query('clinicalReviewBatches')
-      .withIndex('by_batch_id', (q) => q.eq('batchId', args.batchId)).take(2);
-    if (batches.length !== 1 || batches[0].status !== 'frozen'
-      || !exactPersistedBatchRegistration(batches[0], registration)) {
+    const current = await inspectPersistedRegistration(ctx, registration);
+    if (current.batches.length !== 1 || current.batches[0].status !== 'frozen'
+      || !current.registrationExact) {
       return { ok: false, code: 'batch_not_frozen', batchId: args.batchId, createdBatches: 0, createdAssignments: 0 };
     }
-    const currentReceipts = await ctx.db.query('clinicalReviewBatchReceipts')
-      .withIndex('by_batch_id', (q) => q.eq('batchId', args.batchId)).take(2);
-    if (currentReceipts.length > 0) {
+    if (current.receipts.length > 0) {
       return { ok: false, code: 'current_batch_receipt_present', batchId: args.batchId, createdBatches: 0, createdAssignments: 0 };
     }
-    const persistedAssignments = await ctx.db.query('clinicalReviewAssignments')
-      .withIndex('by_batch_id_and_ordinal', (q) => q.eq('batchId', args.batchId))
-      .take(registration.manifest.count + 1);
-    if (persistedAssignments.length !== registration.manifest.count) {
+    if (current.assignments.length !== registration.manifest.count) {
       return { ok: false, code: 'assignment_count_mismatch', batchId: args.batchId, createdBatches: 0, createdAssignments: 0 };
     }
-    for (const item of registration.manifest.items) {
-      const assignmentId = await frozenClinicalDecisionKey(registration, item);
-      const matches = persistedAssignments.filter((row) => row.assignmentId === assignmentId);
-      if (matches.length !== 1
-        || !exactPersistedAssignment(matches[0], registration, item, assignmentId)) {
-        return { ok: false, code: 'assignment_preimage_mismatch', batchId: args.batchId, createdBatches: 0, createdAssignments: 0 };
-      }
+    if (!current.assignmentsExact) {
+      return { ok: false, code: 'assignment_preimage_mismatch', batchId: args.batchId, createdBatches: 0, createdAssignments: 0 };
+    }
+    if (persistedRegistryState(current) !== 'persisted_exact') {
+      return { ok: false, code: 'batch_not_frozen', batchId: args.batchId, createdBatches: 0, createdAssignments: 0 };
     }
     const active = await ctx.db.query('clinicalReviewBatches')
       .withIndex('by_status', (q) => q.eq('status', 'active')).take(2);
@@ -652,20 +689,26 @@ export const activateRegisteredBatch = mutation({
     const activation = registration.activation;
     if (activation.kind === 'after_handoff') {
       const predecessor = registrationById(activation.previousBatchId);
-      const predecessorRows = await ctx.db.query('clinicalReviewBatches')
-        .withIndex('by_batch_id', (q) => q.eq('batchId', activation.previousBatchId)).take(2);
-      const receipts = await ctx.db.query('clinicalReviewBatchReceipts')
-        .withIndex('by_batch_id', (q) => q.eq('batchId', activation.previousBatchId)).take(2);
+      const predecessorInspection = predecessor
+        ? await inspectPersistedRegistration(ctx, predecessor)
+        : null;
       if (!predecessor
         || predecessor.freezeDigest !== activation.expectedPreviousFreezeDigest
-        || predecessorRows.length !== 1
-        || predecessorRows[0].status !== 'completed'
-        || !exactPersistedBatchRegistration(predecessorRows[0], predecessor)
+        || !predecessorInspection
+        || predecessorInspection.batches.length !== 1
+        || predecessorInspection.batches[0].status !== 'completed'
+        || !predecessorInspection.registrationExact
+        || !predecessorInspection.assignmentsExact
+        || !await exactClinicalReviewUpstreamChain(
+          ctx,
+          predecessor,
+          predecessorInspection.batches[0],
+        )
         || !args.expectedUpstreamReceiptDigest
-        || receipts.length !== 1
-        || predecessorRows[0].completedAt !== receipts[0].completedAt
-        || !await exactHandoffReceipt(ctx, receipts[0], predecessor)
-        || receipts[0].receiptDigest !== args.expectedUpstreamReceiptDigest) {
+        || predecessorInspection.receipts.length !== 1
+        || predecessorInspection.batches[0].completedAt !== predecessorInspection.receipts[0].completedAt
+        || !await exactHandoffReceipt(ctx, predecessorInspection.receipts[0], predecessor)
+        || predecessorInspection.receipts[0].receiptDigest !== args.expectedUpstreamReceiptDigest) {
         return { ok: false, code: 'upstream_handoff_missing', batchId: args.batchId, createdBatches: 0, createdAssignments: 0 };
       }
     } else if (activation.kind === 'after_changes_requested_refreeze') {
@@ -673,10 +716,16 @@ export const activateRegisteredBatch = mutation({
       if (!predecessor) {
         return { ok: false, code: 'refreeze_predecessor_missing', batchId: args.batchId, createdBatches: 0, createdAssignments: 0 };
       }
-      const priorRows = await ctx.db.query('clinicalReviewBatches')
-        .withIndex('by_batch_id', (q) => q.eq('batchId', predecessor.manifest.batchId)).take(2);
-      if (priorRows.length !== 1 || priorRows[0].status !== 'stopped_changes_requested'
-        || !exactPersistedBatchRegistration(priorRows[0], predecessor)) {
+      const predecessorInspection = await inspectPersistedRegistration(ctx, predecessor);
+      if (predecessorInspection.batches.length !== 1
+        || predecessorInspection.batches[0].status !== 'stopped_changes_requested'
+        || !predecessorInspection.registrationExact
+        || !predecessorInspection.assignmentsExact
+        || !await exactClinicalReviewUpstreamChain(
+          ctx,
+          predecessor,
+          predecessorInspection.batches[0],
+        )) {
         return { ok: false, code: 'refreeze_predecessor_not_stopped', batchId: args.batchId, createdBatches: 0, createdAssignments: 0 };
       }
       const decisions = [];
@@ -735,14 +784,14 @@ export const activateRegisteredBatch = mutation({
       return { ok: false, code: `live_preflight_failed:${liveBlockers.join(',')}`, batchId: args.batchId, createdBatches: 0, createdAssignments: 0 };
     }
     const now = Date.now();
-    await ctx.db.patch(batches[0]._id, {
+    await ctx.db.patch(current.batches[0]._id, {
       status: 'active',
       activatedAt: now,
       ...(args.expectedUpstreamReceiptDigest
         ? { consumedUpstreamReceiptDigest: args.expectedUpstreamReceiptDigest }
         : {}),
     });
-    await logAudit(ctx, userId, 'clinicalReviewRegistry.activate', 'clinicalReviewBatches', String(batches[0]._id),
+    await logAudit(ctx, userId, 'clinicalReviewRegistry.activate', 'clinicalReviewBatches', String(current.batches[0]._id),
       `${args.batchId} · ${registration.freezeDigest}`);
     return { ok: true, code: 'activated', batchId: args.batchId, createdBatches: 0, createdAssignments: 0 };
   },

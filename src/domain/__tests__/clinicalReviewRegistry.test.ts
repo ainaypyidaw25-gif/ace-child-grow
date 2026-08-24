@@ -14,10 +14,15 @@ import {
 import { getOwnerRegistryStatus } from '../../../convex/clinicalReviewBatchActions';
 import { sha256Canonical } from '../../../convex/lib/aiAuditHash';
 import {
+  frozenClinicalDecisionKey,
   frozenClinicalPublicationApproval,
   isRegisteredReleaseContentTarget,
   isRegisteredReleaseSourceId,
 } from '../../../convex/lib/clinicalReviewBatchProvenance';
+import {
+  CLINICAL_REVIEW_BATCH_CONTRACT,
+  CLINICAL_REVIEW_BATCH_CONTRACT_VERSION,
+} from '../../../convex/lib/clinicalReviewBatchContract';
 import {
   CLINICAL_REVIEW_BATCH_REGISTRY,
   clinicalReviewBatchRoutingPayload,
@@ -39,7 +44,7 @@ function context() {
       staffRole: 'owner', displayName: 'Owner', staffQualification: 'MEd',
     }],
     clinicalReviewBatches: [], clinicalReviewAssignments: [],
-    clinicalReviewBatchReceipts: [], auditLogs: [],
+    clinicalReviewBatchReceipts: [], contentReviews: [], auditLogs: [],
   };
   const query = vi.fn((table: string) => {
     const builder = (filters: Array<[string, unknown]>) => {
@@ -72,7 +77,17 @@ function context() {
     tables[table].push({ _id: id, _creationTime: inserted, ...value });
     return id;
   });
-  return { auth: {}, db: { query, insert }, tables };
+  const patch = vi.fn(async (id: string, value: Row) => {
+    for (const rows of Object.values(tables)) {
+      const row = rows.find((candidate) => candidate._id === id);
+      if (row) {
+        Object.assign(row, value);
+        return;
+      }
+    }
+    throw new Error(`Missing row ${id}`);
+  });
+  return { auth: {}, db: { query, insert, patch }, tables };
 }
 
 function handler(fn: unknown) {
@@ -161,6 +176,93 @@ async function registryDigest() {
     routing: clinicalReviewBatchRoutingPayload(registration),
     routingDigest: registration.routingCanonicalSha256,
   })));
+}
+
+async function completeRegisteredRelease(
+  ctx: ReturnType<typeof context>,
+  registration: ClinicalReviewBatchRegistration,
+  completedAt: number,
+  consumedUpstreamReceiptDigest?: string,
+) {
+  const batch = ctx.tables.clinicalReviewBatches.find(
+    (row) => row.batchId === registration.manifest.batchId,
+  );
+  const assignment = ctx.tables.clinicalReviewAssignments.find(
+    (row) => row.batchId === registration.manifest.batchId,
+  );
+  expect(batch).toBeDefined();
+  expect(assignment).toBeDefined();
+  if (!batch || !assignment) throw new Error('Expected materialized release');
+  Object.assign(batch, {
+    status: 'completed',
+    activatedAt: completedAt - 1,
+    completedAt,
+    ...(consumedUpstreamReceiptDigest ? { consumedUpstreamReceiptDigest } : {}),
+  });
+  const receiptId = `review-${registration.manifest.batchId}`;
+  const item = registration.manifest.items[0];
+  const decisionKey = await frozenClinicalDecisionKey(registration, item);
+  ctx.tables.contentReviews.push({
+    _id: receiptId,
+    _creationTime: completedAt,
+    decisionKey,
+    clinicalReviewBatchId: registration.manifest.batchId,
+    contentSlug: item.slug,
+    contentVersion: item.reviewRevision,
+    reviewRevision: item.reviewRevision,
+    dimension: registration.dimension,
+    decision: 'approved',
+    reviewerId: registration.manifest.reviewer.userId,
+    reviewerDisplayName: registration.manifest.reviewer.displayName,
+    reviewerQualification: registration.manifest.reviewer.qualification,
+    reviewerRole: registration.manifest.reviewer.role,
+    reviewedAt: completedAt,
+    createdAt: completedAt,
+    updatedAt: completedAt,
+  });
+  const decisions = [{
+    assignmentId: decisionKey,
+    slug: item.slug,
+    reviewRevision: item.reviewRevision,
+    receipt: { decision: 'approved', note: null, reviewedAt: completedAt, receiptId },
+  }];
+  const digest = await sha256Canonical({
+    contract: `${CLINICAL_REVIEW_BATCH_CONTRACT}.handoff`,
+    contractVersion: CLINICAL_REVIEW_BATCH_CONTRACT_VERSION,
+    batchId: registration.manifest.batchId,
+    freezeDigest: registration.freezeDigest,
+    decisionCount: decisions.length,
+    completedAt,
+    decisions,
+  });
+  const freezeReceiptDigest = await sha256Canonical({
+    contract: CLINICAL_REVIEW_BATCH_CONTRACT,
+    contractVersion: CLINICAL_REVIEW_BATCH_CONTRACT_VERSION,
+    batchId: registration.manifest.batchId,
+    freezeDigest: registration.freezeDigest,
+    frozenAt: registration.frozenAt,
+    expiresAt: registration.expiresAt,
+    reviewer: registration.manifest.reviewer,
+  });
+  const receiptDigest = await sha256Canonical({
+    digest,
+    freezeReceiptDigest,
+    reviewerUserId: registration.manifest.reviewer.userId,
+  });
+  ctx.tables.clinicalReviewBatchReceipts.push({
+    _id: `receipt-${registration.manifest.batchId}`,
+    _creationTime: completedAt,
+    batchId: registration.manifest.batchId,
+    freezeDigest: registration.freezeDigest,
+    reviewerId: registration.manifest.reviewer.userId,
+    decisionCount: decisions.length,
+    completedAt,
+    digest,
+    receiptDigest,
+    authority: registration.authority,
+    createdAt: completedAt,
+  });
+  return receiptDigest;
 }
 
 describe('persisted clinical review registry', () => {
@@ -421,6 +523,167 @@ describe('persisted clinical review registry', () => {
       }],
       currentActivation: null,
     });
+    ctx.db.patch.mockClear();
+    await expect(handler(activateRegisteredBatch)(ctx, {
+      batchId: release.manifest.batchId,
+      expectedFreezeDigest: release.freezeDigest,
+    })).resolves.toMatchObject({
+      ok: false,
+      code: 'assignment_preimage_mismatch',
+      batchId: release.manifest.batchId,
+    });
+    expect(ctx.db.patch).not.toHaveBeenCalled();
+  });
+
+  it.each(['active', 'completed'] as const)(
+    'never fills a missing assignment after a batch becomes %s',
+    async (persistedStatus) => {
+      const release = await releaseRegistration('release-1', 'release_slug_1');
+      (CLINICAL_REVIEW_BATCH_REGISTRY as unknown as ClinicalReviewBatchRegistration[]).push(release);
+      const ctx = context();
+      await handler(materializeRegisteredReleaseBatches)(ctx, {
+        expectedRegistryDigest: await registryDigest(),
+      });
+      ctx.tables.clinicalReviewBatches[0].status = persistedStatus;
+      ctx.tables.clinicalReviewAssignments.splice(0);
+
+      await expect(handler(ownerRegistryStatus)(ctx, ownerStatusArgs())).resolves.toMatchObject({
+        materializationCode: 'blocked_persisted_mismatch',
+        releases: [{ readinessCode: 'blocked_assignment_mismatch', assignmentsExact: false }],
+        currentActivation: null,
+      });
+      ctx.db.insert.mockClear();
+      await expect(handler(materializeRegisteredReleaseBatches)(ctx, {
+        expectedRegistryDigest: await registryDigest(),
+      })).resolves.toMatchObject({
+        ok: false,
+        code: 'persisted_registry_state_mismatch',
+        createdBatches: 0,
+        createdAssignments: 0,
+      });
+      expect(ctx.db.insert).not.toHaveBeenCalled();
+      expect(ctx.tables.clinicalReviewAssignments).toHaveLength(0);
+    },
+  );
+
+  it('rejects an extra batch-local assignment instead of filling its missing expected row', async () => {
+    const release = await releaseRegistration('release-1', 'release_slug_1');
+    (CLINICAL_REVIEW_BATCH_REGISTRY as unknown as ClinicalReviewBatchRegistration[]).push(release);
+    const ctx = context();
+    await handler(materializeRegisteredReleaseBatches)(ctx, {
+      expectedRegistryDigest: await registryDigest(),
+    });
+    Object.assign(ctx.tables.clinicalReviewAssignments[0], {
+      assignmentId: 'unexpected-batch-local-assignment',
+      ordinal: 2,
+    });
+    ctx.db.insert.mockClear();
+
+    await expect(handler(materializeRegisteredReleaseBatches)(ctx, {
+      expectedRegistryDigest: await registryDigest(),
+    })).resolves.toMatchObject({
+      ok: false,
+      code: 'persisted_registry_state_mismatch',
+      createdBatches: 0,
+      createdAssignments: 0,
+    });
+    expect(ctx.db.insert).not.toHaveBeenCalled();
+    expect(ctx.tables.clinicalReviewAssignments).toHaveLength(1);
+    expect(ctx.tables.clinicalReviewAssignments[0]).toMatchObject({
+      assignmentId: 'unexpected-batch-local-assignment',
+    });
+  });
+
+  it('does not materialize a frozen batch around an orphan receipt', async () => {
+    const release = await releaseRegistration('release-1', 'release_slug_1');
+    (CLINICAL_REVIEW_BATCH_REGISTRY as unknown as ClinicalReviewBatchRegistration[]).push(release);
+    const ctx = context();
+    ctx.tables.clinicalReviewBatchReceipts.push({
+      _id: 'orphan-receipt',
+      _creationTime: 1,
+      batchId: release.manifest.batchId,
+    });
+
+    await expect(handler(ownerRegistryStatus)(ctx, ownerStatusArgs())).resolves.toMatchObject({
+      materializationCode: 'blocked_persisted_mismatch',
+      currentActivation: null,
+    });
+    ctx.db.insert.mockClear();
+    await expect(handler(materializeRegisteredReleaseBatches)(ctx, {
+      expectedRegistryDigest: await registryDigest(),
+    })).resolves.toMatchObject({
+      ok: false,
+      code: 'persisted_registry_state_mismatch',
+      createdBatches: 0,
+      createdAssignments: 0,
+    });
+    expect(ctx.db.insert).not.toHaveBeenCalled();
+    expect(ctx.tables.clinicalReviewBatches).toHaveLength(0);
+    expect(ctx.tables.clinicalReviewAssignments).toHaveLength(0);
+  });
+
+  it('requires a clean frozen lifecycle before readiness or direct activation', async () => {
+    const release = await releaseRegistration('release-1', 'release_slug_1');
+    (CLINICAL_REVIEW_BATCH_REGISTRY as unknown as ClinicalReviewBatchRegistration[]).push(release);
+    const ctx = context();
+    await handler(materializeRegisteredReleaseBatches)(ctx, {
+      expectedRegistryDigest: await registryDigest(),
+    });
+    ctx.tables.clinicalReviewBatches[0].consumedUpstreamReceiptDigest = 'f'.repeat(64);
+
+    await expect(handler(ownerRegistryStatus)(ctx, ownerStatusArgs())).resolves.toMatchObject({
+      materializationCode: 'blocked_persisted_mismatch',
+      releases: [{ readinessCode: 'blocked_persisted_mismatch' }],
+      currentActivation: null,
+    });
+    ctx.db.patch.mockClear();
+    await expect(handler(activateRegisteredBatch)(ctx, {
+      batchId: release.manifest.batchId,
+      expectedFreezeDigest: release.freezeDigest,
+    })).resolves.toMatchObject({ ok: false, code: 'batch_not_frozen' });
+    expect(ctx.db.patch).not.toHaveBeenCalled();
+  });
+
+  it('rejects a successor when the completed predecessor upstream chain was tampered', async () => {
+    const first = await releaseRegistration('release-1', 'release_slug_1');
+    const second = await releaseRegistration('release-2', 'release_slug_2', {
+      sequence: 3,
+      previous: first,
+    });
+    const third = await releaseRegistration('release-3', 'release_slug_3', {
+      sequence: 4,
+      previous: second,
+    });
+    const registry = CLINICAL_REVIEW_BATCH_REGISTRY as unknown as ClinicalReviewBatchRegistration[];
+    registry.push(first, second, third);
+    const ctx = context();
+    await expect(handler(materializeRegisteredReleaseBatches)(ctx, {
+      expectedRegistryDigest: await registryDigest(),
+    })).resolves.toMatchObject({ ok: true, createdBatches: 3, createdAssignments: 3 });
+    const firstReceipt = await completeRegisteredRelease(ctx, first, TEST_NOW_MS - 2_000);
+    const secondReceipt = await completeRegisteredRelease(ctx, second, TEST_NOW_MS - 1_000, firstReceipt);
+    const secondBatch = ctx.tables.clinicalReviewBatches.find(
+      (row) => row.batchId === second.manifest.batchId,
+    );
+    expect(secondBatch).toBeDefined();
+    if (!secondBatch) return;
+    secondBatch.consumedUpstreamReceiptDigest = '0'.repeat(64);
+
+    await expect(handler(ownerRegistryStatus)(ctx, ownerStatusArgs())).resolves.toMatchObject({
+      currentActivation: null,
+      releases: [
+        expect.any(Object),
+        expect.any(Object),
+        { batchId: third.manifest.batchId, readinessCode: 'blocked_predecessor_mismatch' },
+      ],
+    });
+    ctx.db.patch.mockClear();
+    await expect(handler(activateRegisteredBatch)(ctx, {
+      batchId: third.manifest.batchId,
+      expectedFreezeDigest: third.freezeDigest,
+      expectedUpstreamReceiptDigest: secondReceipt,
+    })).resolves.toMatchObject({ ok: false, code: 'upstream_handoff_missing' });
+    expect(ctx.db.patch).not.toHaveBeenCalled();
   });
 
   it('commits zero registry writes when a later registration is invalid', async () => {
@@ -454,7 +717,7 @@ describe('persisted clinical review registry', () => {
       expectedRegistryDigest: await registryDigest(),
     });
     expect(replay).toMatchObject({
-      ok: false, code: 'persisted_assignment_preimage_mismatch', createdBatches: 0, createdAssignments: 0,
+      ok: false, code: 'persisted_registry_state_mismatch', createdBatches: 0, createdAssignments: 0,
     });
     expect(ctx.db.insert).not.toHaveBeenCalled();
   });
@@ -477,7 +740,7 @@ describe('persisted clinical review registry', () => {
       expectedRegistryDigest: await registryDigest(),
     });
     expect(replay).toMatchObject({
-      ok: false, code: 'persisted_batch_preimage_mismatch', createdBatches: 0, createdAssignments: 0,
+      ok: false, code: 'persisted_registry_state_mismatch', createdBatches: 0, createdAssignments: 0,
     });
     expect(ctx.db.insert).not.toHaveBeenCalled();
   });
@@ -494,7 +757,7 @@ describe('persisted clinical review registry', () => {
     const replay = await handler(materializeRegisteredReleaseBatches)(ctx, {
       expectedRegistryDigest: await registryDigest(),
     });
-    expect(replay).toMatchObject({ ok: false, code: 'persisted_assignment_preimage_mismatch' });
+    expect(replay).toMatchObject({ ok: false, code: 'persisted_registry_state_mismatch' });
     expect(ctx.db.insert).not.toHaveBeenCalled();
   });
 
@@ -515,7 +778,7 @@ describe('persisted clinical review registry', () => {
     const replay = await handler(materializeRegisteredReleaseBatches)(ctx, {
       expectedRegistryDigest: await registryDigest(),
     });
-    expect(replay).toMatchObject({ ok: false, code: 'persisted_target_collision' });
+    expect(replay).toMatchObject({ ok: false, code: 'persisted_registry_state_mismatch' });
     expect(ctx.db.insert).not.toHaveBeenCalled();
   });
 

@@ -517,6 +517,41 @@ describe('first release-authoritative clinical batch', () => {
     expect(ctx.db.patch).not.toHaveBeenCalled();
   });
 
+  it('blocks direct successor activation when predecessor assignments are globally duplicated', async () => {
+    const ctx = context();
+    await completeInitialRelease(ctx);
+    const receipt = ctx.tables.clinicalReviewBatchReceipts[0];
+    const predecessorAssignment = ctx.tables.clinicalReviewAssignments.find(
+      (row) => row.batchId === CLINICAL_INITIAL_RELEASE_BATCH_ID,
+    );
+    expect(predecessorAssignment).toBeDefined();
+    if (!predecessorAssignment) return;
+    ctx.tables.clinicalReviewAssignments.push({
+      ...predecessorAssignment,
+      _id: 'duplicate-predecessor-assignment',
+      batchId: 'unregistered-batch',
+    });
+
+    await expect(handler(ownerRegistryStatus)(ctx, ownerStatusArgs())).resolves.toMatchObject({
+      currentActivation: null,
+      releases: [
+        { batchId: CLINICAL_INITIAL_RELEASE_BATCH_ID, assignmentsExact: false },
+        { batchId: CLINICAL_NUTRITION_RELEASE_BATCH_ID, readinessCode: 'blocked_predecessor_mismatch' },
+      ],
+    });
+    ctx.db.patch.mockClear();
+    await expect(handler(activateRegisteredBatch)(ctx, {
+      batchId: CLINICAL_NUTRITION_RELEASE_BATCH_ID,
+      expectedFreezeDigest: CLINICAL_NUTRITION_RELEASE_BATCH_HASH,
+      expectedUpstreamReceiptDigest: receipt.receiptDigest,
+    })).resolves.toMatchObject({
+      ok: false,
+      code: 'upstream_handoff_missing',
+      batchId: CLINICAL_NUTRITION_RELEASE_BATCH_ID,
+    });
+    expect(ctx.db.patch).not.toHaveBeenCalled();
+  });
+
   it('keeps the nutrition successor frozen until the root has an exact persisted receipt', async () => {
     const ctx = context();
     await materializeAndActivate(ctx);
