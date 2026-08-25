@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
+import seedData from '../../../convex/seedData.json';
 
+import type { Doc } from '../../../convex/_generated/dataModel';
+import { snapshotFields } from '../../../convex/clinicalReviewBatch';
 import { sha256Canonical } from '../../../convex/lib/aiAuditHash';
 import {
   CLINICAL_NUTRITION_RELEASE_BATCH_HASH,
@@ -15,7 +18,97 @@ import {
 const EMPTY_ARRAY_SHA256 = '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945';
 const EMPTY_AI_SHA256 = 'e0c04573de4314ddde597477c374bafd25b400663d593e0a0244afe3f73c1d0d';
 
+const pair = (mm: string, en: string) => ({ mm, en });
+
+function safetySnapshotContent(): Doc<'libraryContent'> {
+  return {
+    _id: 'content-safety-snapshot',
+    _creationTime: 1,
+    type: 'guide',
+    slug: 'gd_safety_snapshot',
+    domainKey: 'safety',
+    titleMm: 'ဘေးကင်းရေး လမ်းညွှန်',
+    titleEn: 'Safety guide',
+    tags: ['safety'],
+    data: {
+      why: pair('အရေးကြီးသည်။', 'It matters.'),
+      observationQuestions: [pair('စောင့်ကြည့်ပါ။', 'Observe.')],
+      dailyActivities: [pair('နေ့စဉ်စစ်ပါ။', 'Check daily.')],
+      weeklyActivities: [pair('အပတ်စဉ်စစ်ပါ။', 'Check weekly.')],
+      indoor: [pair('အိမ်တွင်းစစ်ပါ။', 'Check indoors.')],
+      outdoor: [pair('အပြင်တွင်စစ်ပါ။', 'Check outdoors.')],
+      safety: pair('အနီးကပ်စောင့်ကြည့်ပါ။', 'Supervise closely.'),
+      parentTips: [pair('အေးဆေးရှင်းပြပါ။', 'Explain calmly.')],
+      faq: [{ q: pair('ဘယ်လိုလုပ်မလဲ။', 'What should I do?'), a: pair('စစ်ဆေးပါ။', 'Check it.') }],
+      redFlags: [pair('အန္တရာယ်ရှိပါက ရပ်ပါ။', 'Stop if there is danger.')],
+      referral: pair('အရေးပေါ်အကူအညီယူပါ။', 'Get emergency help.'),
+      encouragement: pair('တဖြည်းဖြည်း လေ့ကျင့်ပါ။', 'Keep practising.'),
+    },
+    source: 'ACE Child Grow editorial content',
+    version: 1,
+    reviewRevision: 1,
+    clinicalStatus: 'clinical_review',
+    searchText: 'safety',
+    createdAt: 1,
+    updatedAt: 1,
+  } as unknown as Doc<'libraryContent'>;
+}
+
 describe('frozen older-safety clinical release batch', () => {
+  it('snapshots the complete safety-guide shape without inventing generic guide fields', () => {
+    const result = snapshotFields(safetySnapshotContent());
+
+    expect(result.blockers).toEqual([]);
+    expect(result.fields.map((field) => field.path)).toEqual([
+      'data.why',
+      'data.observationQuestions',
+      'data.dailyActivities',
+      'data.weeklyActivities',
+      'data.indoor',
+      'data.outdoor',
+      'data.safety',
+      'data.parentTips',
+      'data.faq',
+      'data.redFlags',
+      'data.referral',
+      'data.encouragement',
+    ]);
+    expect(result.fields.map((field) => field.path)).not.toContain('data.materials');
+    expect(result.fields.map((field) => field.path)).not.toContain('data.commonMistakes');
+  });
+
+  it('builds a complete 12-field snapshot for every exact older-safety seed row', () => {
+    for (const item of CLINICAL_OLDER_SAFETY_RELEASE_BATCH_ITEMS) {
+      const content = (seedData as Array<Record<string, unknown>>).find(
+        (row) => row.slug === item.slug,
+      );
+      expect(content, item.slug).toBeDefined();
+      const result = snapshotFields(content as unknown as Doc<'libraryContent'>);
+      expect(result.blockers, item.slug).toEqual([]);
+      expect(result.fields, item.slug).toHaveLength(12);
+      expect(result.fields.map((field) => field.path), item.slug).toContain('data.weeklyActivities');
+      expect(result.fields.map((field) => field.path), item.slug).toContain('data.outdoor');
+    }
+  });
+
+  it('keeps a one-language safety field fail-closed', () => {
+    const content = safetySnapshotContent();
+    const data = content.data as { outdoor: Array<{ mm: string; en: string }> };
+    data.outdoor[0].en = '';
+
+    expect(snapshotFields(content).blockers).toContain('snapshot_field_missing:data.outdoor');
+  });
+
+  it('does not weaken the required shape for non-safety guides', () => {
+    const content = safetySnapshotContent();
+    content.domainKey = 'nutrition';
+
+    expect(snapshotFields(content).blockers).toEqual(expect.arrayContaining([
+      'snapshot_field_missing:data.materials',
+      'snapshot_field_missing:data.commonMistakes',
+    ]));
+  });
+
   it('contains only the nine exact post-CAS guide revisions and regenerated digests', async () => {
     const registration = CLINICAL_REVIEW_BATCH_REGISTRY.find(
       (entry) => entry.manifest.batchId === CLINICAL_OLDER_SAFETY_RELEASE_BATCH_MANIFEST.batchId,

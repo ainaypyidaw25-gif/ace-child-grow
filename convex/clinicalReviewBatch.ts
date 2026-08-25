@@ -186,7 +186,7 @@ function bilingualFaq(value: unknown): { mm: string | null; en: string | null } 
   };
 }
 
-function snapshotFields(content: Doc<'libraryContent'>): { fields: SnapshotField[]; blockers: string[] } {
+export function snapshotFields(content: Doc<'libraryContent'>): { fields: SnapshotField[]; blockers: string[] } {
   const data = asRecord(content.data);
   const fields: SnapshotField[] = [];
   const blockers: string[] = [];
@@ -213,6 +213,35 @@ function snapshotFields(content: Doc<'libraryContent'>): { fields: SnapshotField
     add('data.instructions', 'လုပ်ဆောင်ပုံ', 'Instructions', instructions.mm, instructions.en);
     add('data.safety', 'ဘေးကင်းရေး', 'Safety', safety.mm, safety.en);
     add('data.outcomes', 'မျှော်မှန်းရလဒ်', 'Expected outcomes', outcomes.mm, outcomes.en);
+  } else if (content.type === 'guide' && content.domainKey === 'safety') {
+    // Safety guides use the older-safety editorial shape: they intentionally
+    // have no generic `materials`, `commonMistakes`, or `lowCost` fields. Keep
+    // their reviewer snapshot complete by binding every parent-facing safety
+    // field instead of failing on fields that do not exist in this schema.
+    const why = bilingualObject(data.why);
+    const observations = bilingualList(data.observationQuestions);
+    const dailyActivities = bilingualList(data.dailyActivities);
+    const weeklyActivities = bilingualList(data.weeklyActivities);
+    const indoor = bilingualList(data.indoor);
+    const outdoor = bilingualList(data.outdoor);
+    const safety = bilingualObject(data.safety);
+    const parentTips = bilingualList(data.parentTips);
+    const faq = bilingualFaq(data.faq);
+    const redFlags = bilingualList(data.redFlags);
+    const referral = bilingualObject(data.referral);
+    const encouragement = bilingualObject(data.encouragement);
+    add('data.why', 'အရေးပါပုံ', 'Why it matters', why.mm, why.en);
+    add('data.observationQuestions', 'စောင့်ကြည့်ရန်', 'What to observe', observations.mm, observations.en);
+    add('data.dailyActivities', 'နေ့စဉ်လုပ်ဆောင်ရန်', 'Daily activities', dailyActivities.mm, dailyActivities.en);
+    add('data.weeklyActivities', 'အပတ်စဉ်လုပ်ဆောင်ရန်', 'Weekly activities', weeklyActivities.mm, weeklyActivities.en);
+    add('data.indoor', 'အိမ်တွင်းအကြံပြုချက်များ', 'Indoor suggestions', indoor.mm, indoor.en);
+    add('data.outdoor', 'အပြင်ထွက်အကြံပြုချက်များ', 'Outdoor suggestions', outdoor.mm, outdoor.en);
+    add('data.safety', 'ဘေးကင်းရေး', 'Safety', safety.mm, safety.en);
+    add('data.parentTips', 'မိဘအတွက်အကြံပြုချက်', 'Parent tips', parentTips.mm, parentTips.en);
+    add('data.faq', 'မေးလေ့ရှိသောမေးခွန်း', 'Frequently asked question', faq.mm, faq.en);
+    add('data.redFlags', 'အရေးပေါ်သတိပေးလက္ခဏာများ', 'Urgent warning signs', redFlags.mm, redFlags.en);
+    add('data.referral', 'အရေးပေါ်လုပ်ဆောင်ရန်', 'Urgent action', referral.mm, referral.en);
+    add('data.encouragement', 'အားပေးစကား', 'Encouragement', encouragement.mm, encouragement.en);
   } else if (content.type === 'guide') {
     const why = bilingualObject(data.why);
     const materials = bilingualObject(data.materials);
