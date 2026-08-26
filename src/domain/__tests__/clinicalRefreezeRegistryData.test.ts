@@ -5,6 +5,7 @@ import {
   CLINICAL_NEWBORN_REFREEZE_BATCH_MANIFEST,
   CLINICAL_NEWBORN_REFREEZE_BATCH_ROUTING_HASH,
   CLINICAL_NATIVE_MYANMAR_RELEASE_BATCH_ROUTING_HASH,
+  CLINICAL_NATIVE_MYANMAR_REFREEZE_BATCH_ROUTING_HASH,
   CLINICAL_NUTRITION_RELEASE_BATCH_ROUTING_HASH,
   CLINICAL_OLDER_SAFETY_RELEASE_BATCH_ROUTING_HASH,
   CLINICAL_REVIEW_BATCH_REGISTRY,
@@ -63,6 +64,12 @@ describe('clinical newborn refreeze registry data', () => {
         activation: 'after_handoff',
         predecessor: 'clinical-older-safety-2026-08-24-v1',
       },
+      {
+        sequence: 7,
+        batchId: 'clinical-native-myanmar-refreeze-14-2026-08-26-v1',
+        activation: 'after_changes_requested_refreeze',
+        predecessor: 'clinical-native-myanmar-governed-14-2026-08-26-v1',
+      },
     ]);
 
     const expected = new Map([
@@ -70,6 +77,7 @@ describe('clinical newborn refreeze registry data', () => {
       ['clinical-infant-nutrition-2026-08-24-v1', CLINICAL_NUTRITION_RELEASE_BATCH_ROUTING_HASH],
       ['clinical-older-safety-2026-08-24-v1', CLINICAL_OLDER_SAFETY_RELEASE_BATCH_ROUTING_HASH],
       ['clinical-native-myanmar-governed-14-2026-08-26-v1', CLINICAL_NATIVE_MYANMAR_RELEASE_BATCH_ROUTING_HASH],
+      ['clinical-native-myanmar-refreeze-14-2026-08-26-v1', CLINICAL_NATIVE_MYANMAR_REFREEZE_BATCH_ROUTING_HASH],
     ]);
     for (const registration of releases.slice(1)) {
       expect(await sha256Canonical(clinicalReviewBatchRoutingPayload(registration)))

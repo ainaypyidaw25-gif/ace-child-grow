@@ -37,6 +37,7 @@ import { sha256Canonical } from '../../../convex/lib/aiAuditHash';
 import {
   CLINICAL_INITIAL_RELEASE_BATCH_ID,
   CLINICAL_NATIVE_MYANMAR_RELEASE_BATCH_ID,
+  CLINICAL_NATIVE_MYANMAR_REFREEZE_BATCH_ID,
   CLINICAL_NEWBORN_REFREEZE_BATCH_ID,
   CLINICAL_NEWBORN_REFREEZE_BATCH_EXPIRES_AT,
   CLINICAL_NEWBORN_REFREEZE_DECISION_SET_DIGEST,
@@ -259,10 +260,15 @@ async function exactContext() {
 async function materializeCurrentRegistryTail(
   state: Awaited<ReturnType<typeof exactContext>>,
 ) {
-  const tail = registration(CLINICAL_NATIVE_MYANMAR_RELEASE_BATCH_ID);
-  state.tables.clinicalReviewBatches.push(batchRow(tail));
-  for (const item of tail.manifest.items) {
-    state.tables.clinicalReviewAssignments.push(await assignmentRow(tail, item));
+  for (const batchId of [
+    CLINICAL_NATIVE_MYANMAR_RELEASE_BATCH_ID,
+    CLINICAL_NATIVE_MYANMAR_REFREEZE_BATCH_ID,
+  ]) {
+    const tail = registration(batchId);
+    state.tables.clinicalReviewBatches.push(batchRow(tail));
+    for (const item of tail.manifest.items) {
+      state.tables.clinicalReviewAssignments.push(await assignmentRow(tail, item));
+    }
   }
 }
 
