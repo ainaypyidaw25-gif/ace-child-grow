@@ -26,7 +26,7 @@ export const getAssignedBatch = action({
       return {
         status: 'refused',
         code: 'not_authenticated',
-        message: 'Sign in with the assigned clinical reviewer account.',
+        message: 'Sign in with the reviewer account assigned to this frozen batch.',
       };
     }
     const nowMs = Date.now();

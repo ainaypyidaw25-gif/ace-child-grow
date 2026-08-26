@@ -26,7 +26,7 @@ import {
   readAssignedClinicalBatch,
 } from './contentReview/clinicalBatchBackend';
 import {
-  isClinicalBatchReviewerRole,
+  isFrozenBatchReviewerRole,
   type RecordClinicalBatchDecision,
 } from '../domain/content/clinicalFrozenBatch';
 import { matchesSearchQuery, normalizeSearchText } from '../domain/search';
@@ -542,7 +542,7 @@ export function ContentReviewWorkspace() {
   const loadAssignedClinicalBatch = useAction(api.clinicalReviewBatchActions.getAssignedBatch);
   const [assignedClinicalBatch, setAssignedClinicalBatch] = useState<unknown>(undefined);
   useEffect(() => {
-    if (!isClinicalBatchReviewerRole(access?.role)) {
+    if (!isFrozenBatchReviewerRole(access?.role)) {
       setAssignedClinicalBatch(undefined);
       return;
     }
@@ -565,7 +565,7 @@ export function ContentReviewWorkspace() {
   // A specialist account must receive only a server-scoped frozen assignment.
   // Do not even issue catalogue/detail queries for that role: hiding broad rows
   // in JSX would still deliver them to the browser over the network.
-  const standardWorkspaceEnabled = access !== undefined && !isClinicalBatchReviewerRole(access?.role);
+  const standardWorkspaceEnabled = access !== undefined && !isFrozenBatchReviewerRole(access?.role);
   const list = useQuery(api.library.listByType, standardWorkspaceEnabled ? { type } : 'skip');
   const detail = useQuery(api.library.getBySlug, standardWorkspaceEnabled && selectedSlug ? { slug: selectedSlug } : 'skip');
   const reviews = useQuery(api.contentReviews.listForContent, standardWorkspaceEnabled && selectedSlug ? { contentSlug: selectedSlug } : 'skip');
@@ -672,7 +672,7 @@ export function ContentReviewWorkspace() {
 
   const item = detail && 'item' in detail ? detail.item : null;
   const isOwner = mayOperateClinicalRegistry(access.role);
-  const isClinicalReviewer = isClinicalBatchReviewerRole(access.role);
+  const isFrozenBatchReviewer = isFrozenBatchReviewerRole(access.role);
   const clinicalBatchState = readAssignedClinicalBatch(assignedClinicalBatch, access.role);
   const recordClinicalBatchDecision: RecordClinicalBatchDecision = async (input) => {
     try {
@@ -686,7 +686,7 @@ export function ContentReviewWorkspace() {
       };
     }
   };
-  const activeTab: WorkspaceTab = isClinicalReviewer ? 'clinicalBatch' : tab;
+  const activeTab: WorkspaceTab = isFrozenBatchReviewer ? 'clinicalBatch' : tab;
   const openItemFromQueue = (row: QueueRowView) => {
     requestSelectionChange(() => {
       setEditorDirty(false);
@@ -713,8 +713,8 @@ export function ContentReviewWorkspace() {
     setTargetFieldPath(null);
     setTab('item');
   };
-  const tabs: Array<{ key: WorkspaceTab; label: string; visible: boolean }> = isClinicalReviewer
-    ? [{ key: 'clinicalBatch', label: L('Clinical batch စစ်ဆေးရန်', 'Clinical batch'), visible: true }]
+  const tabs: Array<{ key: WorkspaceTab; label: string; visible: boolean }> = isFrozenBatchReviewer
+    ? [{ key: 'clinicalBatch', label: L('သတ်မှတ်ထားသော batch စစ်ဆေးရန်', 'Assigned review batch'), visible: true }]
     : [
         { key: 'clinicalRegistry', label: L('Clinical registry', 'Clinical registry'), visible: isOwner },
         { key: 'priority', label: L('ဦးစားပေးစစ်ဆေးရန်', 'Owner Priority'), visible: true },
@@ -776,7 +776,7 @@ export function ContentReviewWorkspace() {
         ))}
       </nav>
 
-      {activeTab === 'clinicalBatch' && isClinicalReviewer && (
+      {activeTab === 'clinicalBatch' && isFrozenBatchReviewer && (
         <ClinicalFrozenBatchPanel
           state={clinicalBatchState}
           reviewer={{ displayName: access.displayName, qualification: access.qualification }}

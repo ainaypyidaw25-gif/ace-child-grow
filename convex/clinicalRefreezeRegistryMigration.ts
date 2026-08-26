@@ -209,7 +209,7 @@ function batchInsertValue(registration: ClinicalReviewBatchRegistration) {
     reviewerProfileId: registration.manifest.reviewer.profileId,
     reviewerId: registration.manifest.reviewer.userId as Id<'users'>,
     reviewerDisplayName: registration.manifest.reviewer.displayName,
-    reviewerQualification: registration.manifest.reviewer.qualification,
+    reviewerQualification: registration.manifest.reviewer.qualification ?? undefined,
     reviewerRole: registration.manifest.reviewer.role,
     reviewerIdentityDigest: registration.manifest.reviewer.identityCanonicalSha256,
     activationKind: activation.kind,

@@ -82,7 +82,7 @@ function exactApprovedDecision(
     && row.decision === 'approved'
     && String(row.reviewerId) === registration.manifest.reviewer.userId
     && row.reviewerDisplayName === registration.manifest.reviewer.displayName
-    && row.reviewerQualification === registration.manifest.reviewer.qualification
+    && row.reviewerQualification === (registration.manifest.reviewer.qualification ?? undefined)
     && row.reviewerRole === registration.manifest.reviewer.role
     && row.createdAt === row.reviewedAt
     && row.updatedAt === row.reviewedAt
@@ -182,7 +182,7 @@ export function exactPersistedBatchRegistration(
     && row.reviewerProfileId === registration.manifest.reviewer.profileId
     && String(row.reviewerId) === registration.manifest.reviewer.userId
     && row.reviewerDisplayName === registration.manifest.reviewer.displayName
-    && row.reviewerQualification === registration.manifest.reviewer.qualification
+    && row.reviewerQualification === (registration.manifest.reviewer.qualification ?? undefined)
     && row.reviewerRole === registration.manifest.reviewer.role
     && row.reviewerIdentityDigest === registration.manifest.reviewer.identityCanonicalSha256
     && row.createdAt === registration.frozenAt

@@ -6,7 +6,7 @@ import { registeredBatchActivationBlockers } from './clinicalReviewBatch';
 import { requireOwner } from './lib/auth';
 import { sha256Canonical } from './lib/aiAuditHash';
 import { todayIsoUtc } from './lib/evidenceFreshness';
-import { roleMayReview } from './lib/reviewPolicy';
+import { approvalNeedsQualification, roleMayReviewFrozenBatch } from './lib/reviewPolicy';
 import {
   CLINICAL_REVIEW_REGISTRY_MAX_ITEMS_PER_BATCH,
   ownerRegistryStatusValidator,
@@ -69,7 +69,8 @@ async function registryIntegrityValid(): Promise<boolean> {
       || !registration.manifest.reviewer.profileId.trim()
       || !registration.manifest.reviewer.userId.trim()
       || !registration.manifest.reviewer.displayName.trim()
-      || !registration.manifest.reviewer.qualification.trim()
+      || (approvalNeedsQualification(registration.dimension)
+        && !registration.manifest.reviewer.qualification?.trim())
       || !/^[a-f0-9]{64}$/.test(registration.manifest.reviewer.identityCanonicalSha256)
       || !/^[a-f0-9]{64}$/.test(registration.freezeDigest)
       || !/^[a-f0-9]{64}$/.test(registration.routingCanonicalSha256)) return false;
@@ -81,9 +82,10 @@ async function registryIntegrityValid(): Promise<boolean> {
     if (await sha256Canonical(registration.manifest) !== registration.freezeDigest
       || await sha256Canonical(clinicalReviewBatchRoutingPayload(registration))
         !== registration.routingCanonicalSha256) return false;
-    if (!roleMayReview(registration.manifest.reviewer.role, registration.dimension)
-      || (registration.dimension !== 'evidence'
-        && registration.manifest.reviewer.role !== 'clinical_reviewer')) return false;
+    if (!roleMayReviewFrozenBatch(
+      registration.manifest.reviewer.role,
+      registration.dimension,
+    )) return false;
     if (registration.authority === 'pilot') {
       if (registration.activation.kind !== 'initial' || previousRelease) return false;
     } else if (!previousRelease) {
@@ -356,7 +358,7 @@ function batchInsertValue(registration: ClinicalReviewBatchRegistration) {
     reviewerProfileId: registration.manifest.reviewer.profileId,
     reviewerId: registration.manifest.reviewer.userId as Id<'users'>,
     reviewerDisplayName: registration.manifest.reviewer.displayName,
-    reviewerQualification: registration.manifest.reviewer.qualification,
+    reviewerQualification: registration.manifest.reviewer.qualification ?? undefined,
     reviewerRole: registration.manifest.reviewer.role,
     reviewerIdentityDigest: registration.manifest.reviewer.identityCanonicalSha256,
     activationKind: activation.kind,
@@ -698,9 +700,10 @@ export const materializeRegisteredReleaseBatches = mutation({
         previousRelease = registration;
       }
       compileBatchIds.add(registration.manifest.batchId);
-      if (!roleMayReview(registration.manifest.reviewer.role, registration.dimension)
-        || (registration.dimension !== 'evidence'
-          && registration.manifest.reviewer.role !== 'clinical_reviewer')) {
+      if (!roleMayReviewFrozenBatch(
+        registration.manifest.reviewer.role,
+        registration.dimension,
+      )) {
         return { ok: false, code: 'registered_reviewer_role_mismatch', batchId: registration.manifest.batchId, createdBatches: 0, createdAssignments: 0 };
       }
       for (const item of registration.manifest.items) {

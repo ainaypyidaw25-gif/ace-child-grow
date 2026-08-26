@@ -112,6 +112,7 @@ async function releaseRegistration(
     invalidFreeze?: boolean;
     dimension?: ClinicalReviewBatchRegistration['dimension'];
     reviewerRole?: ClinicalReviewBatchRegistration['manifest']['reviewer']['role'];
+    reviewerQualification?: string | null;
   } = {},
 ): Promise<ClinicalReviewBatchRegistration> {
   const pilot = originalRegistry[0];
@@ -121,7 +122,13 @@ async function releaseRegistration(
     currentClinicalReviewsCanonicalSha256: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945',
     allClinicalReviewHistoryCanonicalSha256: '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945',
   });
-  const reviewer = { ...pilot.manifest.reviewer, role: options.reviewerRole ?? pilot.manifest.reviewer.role };
+  const reviewer = {
+    ...pilot.manifest.reviewer,
+    role: options.reviewerRole ?? pilot.manifest.reviewer.role,
+    qualification: options.reviewerQualification === undefined
+      ? pilot.manifest.reviewer.qualification
+      : options.reviewerQualification,
+  };
   const manifest = { batchId, count: 1, reviewer, items: [item] };
   const freezeDigest = options.invalidFreeze ? '0'.repeat(64) : await sha256Canonical(manifest);
   const activation: ClinicalReviewBatchRegistration['activation'] = options.previous
@@ -964,6 +971,37 @@ describe('persisted clinical review registry', () => {
     expect(rejected).toMatchObject({ ok: false, code: 'registered_registry_invalid' });
     expect(rejectedCtx.tables.clinicalReviewBatches).toHaveLength(0);
     expect(rejectedCtx.tables.clinicalReviewAssignments).toHaveLength(0);
+  });
+
+  it('accepts an unqualified language reviewer only for a language dimension', async () => {
+    const language = await releaseRegistration('language-root', 'language_slug', {
+      dimension: 'native_myanmar',
+      reviewerRole: 'language_reviewer',
+      reviewerQualification: null,
+    });
+    const registry = CLINICAL_REVIEW_BATCH_REGISTRY as unknown as ClinicalReviewBatchRegistration[];
+    registry.push(language);
+    const ctx = context();
+    const accepted = await handler(materializeRegisteredReleaseBatches)(ctx, {
+      expectedRegistryDigest: await registryDigest(),
+    });
+    expect(accepted).toMatchObject({ ok: true, createdBatches: 1, createdAssignments: 1 });
+    expect(ctx.tables.clinicalReviewBatches[0]).toMatchObject({
+      dimension: 'native_myanmar', reviewerRole: 'language_reviewer',
+    });
+    expect(ctx.tables.clinicalReviewBatches[0].reviewerQualification).toBeUndefined();
+
+    registry.splice(1, 1, await releaseRegistration('language-mismatch', 'evidence_slug', {
+      dimension: 'evidence',
+      reviewerRole: 'language_reviewer',
+      reviewerQualification: null,
+    }));
+    const rejectedCtx = context();
+    const rejected = await handler(materializeRegisteredReleaseBatches)(rejectedCtx, {
+      expectedRegistryDigest: await registryDigest(),
+    });
+    expect(rejected).toMatchObject({ ok: false, code: 'registered_registry_invalid' });
+    expect(rejectedCtx.tables.clinicalReviewBatches).toHaveLength(0);
   });
 
   it('rejects a global exact-target collision before any write', async () => {

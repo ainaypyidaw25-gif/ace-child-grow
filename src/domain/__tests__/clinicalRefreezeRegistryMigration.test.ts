@@ -36,6 +36,7 @@ import {
 import { sha256Canonical } from '../../../convex/lib/aiAuditHash';
 import {
   CLINICAL_INITIAL_RELEASE_BATCH_ID,
+  CLINICAL_NATIVE_MYANMAR_RELEASE_BATCH_ID,
   CLINICAL_NEWBORN_REFREEZE_BATCH_ID,
   CLINICAL_NEWBORN_REFREEZE_BATCH_EXPIRES_AT,
   CLINICAL_NEWBORN_REFREEZE_DECISION_SET_DIGEST,
@@ -91,7 +92,7 @@ function batchRow(row: ClinicalReviewBatchRegistration): Row {
     reviewerProfileId: row.manifest.reviewer.profileId,
     reviewerId: row.manifest.reviewer.userId,
     reviewerDisplayName: row.manifest.reviewer.displayName,
-    reviewerQualification: row.manifest.reviewer.qualification,
+    reviewerQualification: row.manifest.reviewer.qualification ?? undefined,
     reviewerRole: row.manifest.reviewer.role,
     reviewerIdentityDigest: row.manifest.reviewer.identityCanonicalSha256,
     activationKind: row.activation.kind,
@@ -255,6 +256,16 @@ async function exactContext() {
   return { ctx: { db }, tables, writes };
 }
 
+async function materializeCurrentRegistryTail(
+  state: Awaited<ReturnType<typeof exactContext>>,
+) {
+  const tail = registration(CLINICAL_NATIVE_MYANMAR_RELEASE_BATCH_ID);
+  state.tables.clinicalReviewBatches.push(batchRow(tail));
+  for (const item of tail.manifest.items) {
+    state.tables.clinicalReviewAssignments.push(await assignmentRow(tail, item));
+  }
+}
+
 afterEach(() => vi.restoreAllMocks());
 
 describe('clinical refreeze registry migration', () => {
@@ -305,6 +316,7 @@ describe('clinical refreeze registry migration', () => {
     await registeredHandler(apply)(state.ctx, {
       releaseId: CLINICAL_REFREEZE_REGISTRY_MIGRATION_ID,
     });
+    await materializeCurrentRegistryTail(state);
 
     vi.spyOn(Date, 'now').mockReturnValue(1_787_581_600_000);
     const refreeze = registration(CLINICAL_NEWBORN_REFREEZE_BATCH_ID);
@@ -352,6 +364,7 @@ describe('clinical refreeze registry migration', () => {
     await registeredHandler(apply)(state.ctx, {
       releaseId: CLINICAL_REFREEZE_REGISTRY_MIGRATION_ID,
     });
+    await materializeCurrentRegistryTail(state);
     const refreeze = registration(CLINICAL_NEWBORN_REFREEZE_BATCH_ID);
     const result = await registeredHandler(ownerRegistryStatus)(state.ctx, {
       nowMs: 1_787_581_600_000,
@@ -408,6 +421,7 @@ describe('clinical refreeze registry migration', () => {
     await registeredHandler(apply)(state.ctx, {
       releaseId: CLINICAL_REFREEZE_REGISTRY_MIGRATION_ID,
     });
+    await materializeCurrentRegistryTail(state);
     tamper(state);
     const result = await registeredHandler(ownerRegistryStatus)(state.ctx, {
       nowMs: 1_787_581_600_000,
@@ -422,6 +436,7 @@ describe('clinical refreeze registry migration', () => {
     await registeredHandler(apply)(state.ctx, {
       releaseId: CLINICAL_REFREEZE_REGISTRY_MIGRATION_ID,
     });
+    await materializeCurrentRegistryTail(state);
     const expired = await registeredHandler(ownerRegistryStatus)(state.ctx, {
       nowMs: CLINICAL_NEWBORN_REFREEZE_BATCH_EXPIRES_AT,
       todayIso: new Date(CLINICAL_NEWBORN_REFREEZE_BATCH_EXPIRES_AT).toISOString().slice(0, 10),
@@ -442,6 +457,7 @@ describe('clinical refreeze registry migration', () => {
     await registeredHandler(apply)(state.ctx, {
       releaseId: CLINICAL_REFREEZE_REGISTRY_MIGRATION_ID,
     });
+    await materializeCurrentRegistryTail(state);
     state.tables.contentReviews[0].note = 'tampered review note';
     const writesBeforeActivation = state.writes.length;
     const refreeze = registration(CLINICAL_NEWBORN_REFREEZE_BATCH_ID);
@@ -463,6 +479,7 @@ describe('clinical refreeze registry migration', () => {
     await registeredHandler(apply)(state.ctx, {
       releaseId: CLINICAL_REFREEZE_REGISTRY_MIGRATION_ID,
     });
+    await materializeCurrentRegistryTail(state);
     state.tables.clinicalReviewBatches = state.tables.clinicalReviewBatches.filter(
       (row) => row.batchId !== CLINICAL_OLDER_SAFETY_RELEASE_BATCH_ID,
     );
@@ -512,6 +529,7 @@ describe('clinical refreeze registry migration', () => {
     await registeredHandler(apply)(state.ctx, {
       releaseId: CLINICAL_REFREEZE_REGISTRY_MIGRATION_ID,
     });
+    await materializeCurrentRegistryTail(state);
     tamper(state);
     const writesBeforeActivation = state.writes.length;
     const refreeze = registration(CLINICAL_NEWBORN_REFREEZE_BATCH_ID);
@@ -547,6 +565,7 @@ describe('clinical refreeze registry migration', () => {
     await registeredHandler(apply)(state.ctx, {
       releaseId: CLINICAL_REFREEZE_REGISTRY_MIGRATION_ID,
     });
+    await materializeCurrentRegistryTail(state);
     const refreeze = registration(CLINICAL_NEWBORN_REFREEZE_BATCH_ID);
     await registeredHandler(activateRegisteredBatch)(state.ctx, {
       batchId: refreeze.manifest.batchId,

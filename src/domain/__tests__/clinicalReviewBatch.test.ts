@@ -38,6 +38,7 @@ import {
   CLINICAL_REVIEW_BATCH_MANIFEST,
   CLINICAL_REVIEW_BATCH_REGISTRY,
   CLINICAL_REVIEW_BATCH_REVIEWER,
+  CLINICAL_NATIVE_MYANMAR_RELEASE_BATCH_REVIEWER,
   clinicalReviewBatchRoutingPayload,
   type ClinicalReviewBatchRegistration,
 } from '../../../convex/lib/clinicalReviewBatchData';
@@ -255,10 +256,18 @@ function context() {
   return { auth: {}, db: { query, insert, patch }, storage: {}, tables };
 }
 
-async function makePilotReleaseActive(ctx: ReturnType<typeof context>) {
+async function makePilotReleaseActive(
+  ctx: ReturnType<typeof context>,
+  options: {
+    dimension?: ClinicalReviewBatchRegistration['dimension'];
+    reviewer?: ClinicalReviewBatchRegistration['manifest']['reviewer'];
+    profile?: Row;
+  } = {},
+) {
   const emptyReviewHash = '4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945';
   const manifest = {
     ...originalPilotRegistration.manifest,
+    reviewer: options.reviewer ?? originalPilotRegistration.manifest.reviewer,
     items: originalPilotRegistration.manifest.items.map((item) => ({
       ...item,
       currentClinicalReviewCount: 0,
@@ -268,6 +277,7 @@ async function makePilotReleaseActive(ctx: ReturnType<typeof context>) {
   };
   const pending = {
     ...originalPilotRegistration,
+    dimension: options.dimension ?? originalPilotRegistration.dimension,
     authority: 'release' as const,
     manifest,
     freezeDigest: await sha256Canonical(manifest),
@@ -277,6 +287,7 @@ async function makePilotReleaseActive(ctx: ReturnType<typeof context>) {
     routingCanonicalSha256: await sha256Canonical(clinicalReviewBatchRoutingPayload(pending)),
   };
   (CLINICAL_REVIEW_BATCH_REGISTRY as unknown as ClinicalReviewBatchRegistration[])[0] = registration;
+  if (options.profile) ctx.tables.parentProfiles = [options.profile];
   ctx.tables.clinicalReviewBatches.push({
     _id: 'release-batch', _creationTime: 1,
     batchId: registration.manifest.batchId, sequence: registration.sequence,
@@ -287,7 +298,7 @@ async function makePilotReleaseActive(ctx: ReturnType<typeof context>) {
     reviewerProfileId: registration.manifest.reviewer.profileId,
     reviewerId: registration.manifest.reviewer.userId,
     reviewerDisplayName: registration.manifest.reviewer.displayName,
-    reviewerQualification: registration.manifest.reviewer.qualification,
+    reviewerQualification: registration.manifest.reviewer.qualification ?? undefined,
     reviewerRole: registration.manifest.reviewer.role,
     reviewerIdentityDigest: registration.manifest.reviewer.identityCanonicalSha256,
     activationKind: 'initial', createdAt: registration.frozenAt,
@@ -398,6 +409,40 @@ describe('frozen clinical-review batch UI contract', () => {
     const replay = await handler(saveAssignedDecision)(ctx, args) as Record<string, unknown>;
     expect(replay).toMatchObject({ ok: true, duplicate: true, receipt: first.receipt });
     expect(ctx.tables.contentReviews).toHaveLength(1);
+  });
+
+  it('saves a native-Myanmar batch decision for the exact unqualified language assignee', async () => {
+    const ctx = context();
+    authState.userId = CLINICAL_NATIVE_MYANMAR_RELEASE_BATCH_REVIEWER.userId;
+    await makePilotReleaseActive(ctx, {
+      dimension: 'native_myanmar',
+      reviewer: CLINICAL_NATIVE_MYANMAR_RELEASE_BATCH_REVIEWER,
+      profile: {
+        _id: CLINICAL_NATIVE_MYANMAR_RELEASE_BATCH_REVIEWER.profileId,
+        _creationTime: 1,
+        userId: CLINICAL_NATIVE_MYANMAR_RELEASE_BATCH_REVIEWER.userId,
+        isStaff: true,
+        displayName: CLINICAL_NATIVE_MYANMAR_RELEASE_BATCH_REVIEWER.displayName,
+        staffRole: 'language_reviewer',
+      },
+    });
+
+    const batch = await readBatch(ctx) as {
+      contract: string; lane: string; assignedRole: string; items: Row[];
+    };
+    expect(batch).toMatchObject({
+      contract: 'ace.clinical-frozen-batch',
+      lane: 'native_myanmar',
+      assignedRole: 'language_reviewer',
+    });
+    const receipt = await handler(saveAssignedDecision)(ctx, inputFrom(batch.items[0]));
+    expect(receipt).toMatchObject({ ok: true, duplicate: false, receipt: { decision: 'approved' } });
+    expect(ctx.tables.contentReviews[0]).toMatchObject({
+      dimension: 'native_myanmar',
+      reviewerId: CLINICAL_NATIVE_MYANMAR_RELEASE_BATCH_REVIEWER.userId,
+      reviewerRole: 'language_reviewer',
+    });
+    expect(ctx.tables.contentReviews[0].reviewerQualification).toBeUndefined();
   });
 
   it('fails closed with the live revision when content changes after the freeze', async () => {
@@ -651,7 +696,7 @@ describe('frozen clinical-review batch UI contract', () => {
     }, {})).resolves.toEqual({
       status: 'refused',
       code: 'not_authenticated',
-      message: 'Sign in with the assigned clinical reviewer account.',
+      message: 'Sign in with the reviewer account assigned to this frozen batch.',
     });
     expect(runQuery).not.toHaveBeenCalled();
   });
