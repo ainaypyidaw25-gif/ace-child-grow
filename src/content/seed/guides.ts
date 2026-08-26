@@ -291,13 +291,13 @@ export const GUIDES: SeedItem[] = [
     why: b('အိပ်စက်ခြင်းသည် ဦးနှောက် ဖွံ့ဖြိုးမှုနှင့် ကြီးထွားမှုအတွက် မရှိမဖြစ်ဖြစ်သည်။ ဘေးကင်းသော အိပ်ရာက အသက်ကို ကာကွယ်သည်။', 'Sleep is essential for brain growth; safe sleep protects life.'),
     observationQuestions: [
       b('တစ်ရက်လျှင် ကြိမ်ဖန်များစွာ (၁၄–၁၇ နာရီခန့်) အိပ်ပါသလား။', 'Sleeps often through the day (about 14–17 hours total)?'),
-      b('ကျောပေါ်လှန်၍ အိပ်ပါသလား။', 'Sleeps on the back?'),
+      b('ပက်လက်လှန်၍ အိပ်ပါသလား။', 'Sleeps on the back?'),
     ],
     dailyActivities: [b('နေ့/ည ကွာခြားမှုကို အလင်း/အမှောင်ဖြင့် သိစေပါ။', 'Help day/night difference with light and dark.')],
     indoor: [b('တိတ်ဆိတ်၍ အေးမြသော အိပ်ခန်း ဖန်တီးပါ။', 'Keep a calm, cool sleep space.')],
     lowCost: [b('ကလေးအတွက် လူကြီးအိပ်ရာနှင့် သီးခြားဖြစ်သော ဘေးကင်းသည့် အိပ်စက်နေရာထားပါ။ မွေ့ရာသည် ခိုင်ခံ့၊ ပြားညီပြီး မစောင်းရပါ။', 'Give the baby a safe sleep space separate from the adult bed, with a firm, flat, non-inclined mattress.')],
     materials: b('ခိုင်ခံ့သော ပြားသော မွေ့ရာ။', 'Firm flat sleep surface.'),
-    safety: b("ကျောပေါ်လှန်အိပ်ပါ။ မွေ့ရာပေါ်တွင် ခေါင်းအုံး၊ စောင်ပျော့၊ အရုပ် မထားပါနှင့်။ ဆေးလိပ်ငွေ့ ရှောင်ပါ။ ဤဘေးကင်းရေးအချက်များသည် ရုတ်တရက်သေဆုံးမှု (SIDS) အန္တရာယ်ကို လျှော့ချသည်။ အိပ်ချိန်နှင့် ညအိပ်ချိန်တွင် နို့သီးခေါင်း ပေးကြည့်နိုင်ပါသည် — ရုတ်တရက် သေဆုံးမှု အန္တရာယ် လျော့ကျစေကြောင်း တွေ့ရှိထားပါသည်။ နို့တိုက်နေပါက နို့တိုက်ခြင်း အသားကျပြီးမှ စတင်ပေးပါ။", "Back to sleep; no pillows, soft bedding, or toys in the sleep space; avoid smoke. These reduce SIDS risk. You can try offering a pacifier at nap time and bedtime — it is associated with a lower risk of SIDS. If you are breastfeeding, wait until feeding is well established before offering one."),
+    safety: b("ပက်လက်လှန် အိပ်ပါ။ မွေ့ရာပေါ်တွင် ခေါင်းအုံး၊ စောင်ပျော့၊ အရုပ် မထားပါနှင့်။ ဆေးလိပ်ငွေ့ ရှောင်ပါ။ ဤဘေးကင်းရေးအချက်များသည် ရုတ်တရက်သေဆုံးမှု (SIDS) အန္တရာယ်ကို လျှော့ချသည်။ အိပ်ချိန်နှင့် ညအိပ်ချိန်တွင် နို့သီးခေါင်း ပေးကြည့်နိုင်ပါသည် — ရုတ်တရက် သေဆုံးမှု အန္တရာယ် လျော့ကျစေကြောင်း တွေ့ရှိထားပါသည်။ နို့တိုက်နေပါက နို့တိုက်ခြင်း အသားကျပြီးမှ စတင်ပေးပါ။", "Back to sleep; no pillows, soft bedding, or toys in the sleep space; avoid smoke. These reduce SIDS risk. You can try offering a pacifier at nap time and bedtime — it is associated with a lower risk of SIDS. If you are breastfeeding, wait until feeding is well established before offering one."),
     commonMistakes: [b('ကလေးအား ဗိုက်လှန်/ဘေးစောင်း အိပ်စေခြင်း သို့မဟုတ် နူးညံ့ပစ္စည်းများ ထားခြင်း။', 'Placing baby on tummy/side or with soft items.'),
         b("အလေးချိန်ပါသော စောင်၊ အိပ်ဝတ်စုံ သို့မဟုတ် ပတ်ရစ်ပိတ်စများ သုံးခြင်း။", "Using weighted blankets, weighted sleepers or weighted swaddles."),
         b("အိမ်သုံး အသက်ရှူ/နှလုံးခုန် စောင့်ကြည့်စက်ကို ဘေးကင်းစွာ အိပ်စေခြင်း၏ အစား အားကိုးခြင်း — အန္တရာယ် လျှော့ချပေးသည်ဟု သက်သေ မရှိပါ။", "Relying on a home breathing or heart-rate monitor instead of a safe sleep space — these have not been shown to reduce the risk of SIDS."),
@@ -312,7 +312,7 @@ export const GUIDES: SeedItem[] = [
         b("အသက် ၃ လအောက် ဖျားခြင်း (၃၈°C နှင့်အထက်)။", "Any fever in a baby under 3 months (38°C / 100.4°F or above)."),
       ],
     referral: b("အထက်ပါတို့ တွေ့ပါက ချက်ချင်း အနီးဆုံး ဆေးရုံသို့ သွားပါ — စောင့်၍ မရပါ။ ဤသည်မှာ အရေးပေါ် ဖြစ်ပြီး ဤ app သည် အရေးပေါ် ဝန်ဆောင်မှု မဟုတ်ပါ။", "Go to the nearest hospital immediately if you notice any of these — do not wait. This is an emergency, and this app is not an emergency service."),
-    encouragement: b('အိပ်ရေးပုံစံသည် တဖြည်းဖြည်း တည်ငြိမ်လာမည် — သည်းခံပါ။', 'Sleep patterns settle with time — be patient with yourself.'),
+    encouragement: b('အိပ်ချိန်ပုံစံသည် တဖြည်းဖြည်း တည်ငြိမ်လာမည် — သည်းခံပါ။', 'Sleep patterns settle with time — be patient with yourself.'),
   }),
 
   guide('10_12m', 'safety', {

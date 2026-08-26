@@ -37,6 +37,34 @@ function desiredContent(slug: string): SkinToSkinRefreezeDesiredContent {
   const row = (seedData as unknown as SkinToSkinRefreezeDesiredContent[])
     .find((candidate) => candidate.slug === slug);
   if (!row) throw new Error(`Missing skin-to-skin refreeze desired seed row: ${slug}`);
+  if (slug === 'gd_birth_2m_sleep') {
+    // This release is already applied and its postimage must remain immutable
+    // when a later, separately audited correction updates the canonical seed.
+    const data = structuredClone(row.data) as {
+      safety: { mm: string };
+      observationQuestions: Array<{ mm: string }>;
+      encouragement: { mm: string };
+    };
+    const replacements = [
+      ['ပက်လက်လှန် အိပ်ပါ။', 'ကျောပေါ်လှန်အိပ်ပါ။'],
+      ['ပက်လက်လှန်၍ အိပ်ပါသလား။', 'ကျောပေါ်လှန်၍ အိပ်ပါသလား။'],
+      [
+        'အိပ်ချိန်ပုံစံသည် တဖြည်းဖြည်း တည်ငြိမ်လာမည် — သည်းခံပါ။',
+        'အိပ်ရေးပုံစံသည် တဖြည်းဖြည်း တည်ငြိမ်လာမည် — သည်းခံပါ။',
+      ],
+    ] as const;
+    data.safety.mm = data.safety.mm.replace(...replacements[0]);
+    data.observationQuestions[1].mm = replacements[1][1];
+    data.encouragement.mm = replacements[2][1];
+    return {
+      ...row,
+      data,
+      searchText: replacements.reduce(
+        (text, [nextCopy, frozenCopy]) => text.replace(nextCopy, frozenCopy),
+        row.searchText,
+      ),
+    };
+  }
   return row;
 }
 

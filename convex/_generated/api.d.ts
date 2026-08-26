@@ -80,6 +80,7 @@ import type * as lib_inherentPublicLinkCasData from "../lib/inherentPublicLinkCa
 import type * as lib_legacyCompletedPriorityCorrectionData from "../lib/legacyCompletedPriorityCorrectionData.js";
 import type * as lib_manualReviewContentCasData from "../lib/manualReviewContentCasData.js";
 import type * as lib_manualReviewEvidenceLinkCasData from "../lib/manualReviewEvidenceLinkCasData.js";
+import type * as lib_nativeMyanmarRefreezeCorrectionData from "../lib/nativeMyanmarRefreezeCorrectionData.js";
 import type * as lib_nutritionGuidesCasData from "../lib/nutritionGuidesCasData.js";
 import type * as lib_olderSafety2026CasData from "../lib/olderSafety2026CasData.js";
 import type * as lib_olderSafety2026CasV2Data from "../lib/olderSafety2026CasV2Data.js";
@@ -102,6 +103,8 @@ import type * as media from "../media.js";
 import type * as milestones from "../milestones.js";
 import type * as mmpay from "../mmpay.js";
 import type * as mmpayData from "../mmpayData.js";
+import type * as nativeMyanmarRefreezeCorrection from "../nativeMyanmarRefreezeCorrection.js";
+import type * as nativeMyanmarRefreezeCorrectionActions from "../nativeMyanmarRefreezeCorrectionActions.js";
 import type * as nhsSoothingHumanReviewSuccessorCas from "../nhsSoothingHumanReviewSuccessorCas.js";
 import type * as notifications from "../notifications.js";
 import type * as nutritionGuidesCas from "../nutritionGuidesCas.js";
@@ -204,6 +207,7 @@ declare const fullApi: ApiFromModules<{
   "lib/legacyCompletedPriorityCorrectionData": typeof lib_legacyCompletedPriorityCorrectionData;
   "lib/manualReviewContentCasData": typeof lib_manualReviewContentCasData;
   "lib/manualReviewEvidenceLinkCasData": typeof lib_manualReviewEvidenceLinkCasData;
+  "lib/nativeMyanmarRefreezeCorrectionData": typeof lib_nativeMyanmarRefreezeCorrectionData;
   "lib/nutritionGuidesCasData": typeof lib_nutritionGuidesCasData;
   "lib/olderSafety2026CasData": typeof lib_olderSafety2026CasData;
   "lib/olderSafety2026CasV2Data": typeof lib_olderSafety2026CasV2Data;
@@ -226,6 +230,8 @@ declare const fullApi: ApiFromModules<{
   milestones: typeof milestones;
   mmpay: typeof mmpay;
   mmpayData: typeof mmpayData;
+  nativeMyanmarRefreezeCorrection: typeof nativeMyanmarRefreezeCorrection;
+  nativeMyanmarRefreezeCorrectionActions: typeof nativeMyanmarRefreezeCorrectionActions;
   nhsSoothingHumanReviewSuccessorCas: typeof nhsSoothingHumanReviewSuccessorCas;
   notifications: typeof notifications;
   nutritionGuidesCas: typeof nutritionGuidesCas;
