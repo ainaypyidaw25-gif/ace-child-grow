@@ -1,0 +1,679 @@
+{
+  "frozenFrom": {
+    "deployment": "graceful-possum-566",
+    "checkedAt": "2026-08-26T12:19:10.496Z",
+    "gitBase": "06c6bab7ac6729db17b573c49361a59f7b4ecb21"
+  },
+  "batchId": "clinical-native-myanmar-refreeze-14-2026-08-26-v1",
+  "frozenAt": 1787746750496,
+  "expiresAt": 1788956350496,
+  "previousBatchId": "clinical-native-myanmar-governed-14-2026-08-26-v1",
+  "expectedDecisionSetDigest": "1ba0b69abc01cc63fa47cff67f2e6495a606531bef98d3d6073bdeb9e65af08e",
+  "reviewer": {
+    "profileId": "md7811m7fbshjb4b7marmm51p58beg2s",
+    "userId": "mn71d67gneb2fdcve4gpv7j00d8bec4c",
+    "displayName": "Daw La Pyae",
+    "qualification": null,
+    "role": "language_reviewer",
+    "identityCanonicalSha256": "da7e4078096a6a41e477b13b31eb054a75924e6df22c386754f74525dc430bbf"
+  },
+  "items": [
+    {
+      "ordinal": 1,
+      "kind": "activity",
+      "slug": "act_skin_to_skin_calm",
+      "reviewRevision": 4,
+      "contentId": "kx790c9ywv0bge727jh2765w9s8b82wx",
+      "contentCreationTime": 1785024282947.2336,
+      "contentUpdatedAt": 1787746469282,
+      "contentCanonicalSha256": "843235c98d6d6385f0a57cec46f357bcc8c51026ed9fc030d305afbe719d06cc",
+      "linkId": "k9789fvkr23qt48e09s91j8pzn8b8sbp",
+      "linkCreationTime": 1785024331625.8394,
+      "linkUpdatedAt": 1785024331625,
+      "linkCanonicalSha256": "25928df256c29b1805aece1e1113a873986fc01a4385fb78c69c7474e64622d0",
+      "sourceIds": [
+        "who-bfhi-2017",
+        "who-bf-counselling-2018",
+        "aap-safe-sleep-2022",
+        "nhs-sids-2025"
+      ],
+      "sourceCount": 4,
+      "sourcesCanonicalSha256": "79747ef319b64b9741932234009b43c89c4a1661137f240ece656fb6244c4c29",
+      "mediaCount": 2,
+      "mediaCanonicalSha256": "8e6c1e03eb4899f3ae7ed1e4c6dbcbbf08696db305b462fbbd254bc004def6ba",
+      "aiCanonicalSha256": "e0c04573de4314ddde597477c374bafd25b400663d593e0a0244afe3f73c1d0d",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "7ae67a9d60698585fe578015fd2e7a95574b250d2c8d94337eeb628fa828d3ac",
+      "reviewerAdvisory": {
+        "mm": "မြန်မာစာသည် မူရင်းအင်္ဂလိပ်အဓိပ္ပါယ်၊ အသက်အပိုင်းအခြား၊ အရေအတွက်၊ အချိန်ကာလ၊ အရေးပေါ်အဆင့်နှင့် ဘေးကင်းရေးကန့်သတ်ချက်အားလုံးကို မလျှော့မတိုးဘဲ သဘာဝကျ၊ ရှင်းလင်းပြီး မိဘနားလည်လွယ်ကြောင်း စစ်ဆေးပါ။ မူရင်းအဓိပ္ပါယ်ပြောင်းလဲစေမည့် ပြင်ဆင်ချက်လိုပါက approve မလုပ်ဘဲ changes requested ရွေးပါ။",
+        "en": "Confirm that the Myanmar copy is natural and parent-friendly while preserving every English meaning, age band, number, duration, escalation tier, and safety constraint. If a wording correction would change meaning, request changes instead of approving."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "8dc90bfe4101618ebc50cf38a90670780c1dc5fe840572ef287c3215ec6e09d2"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "58a778cdc213f00c6d5cc81c6274f3c8e11ccaeac3eaacc9dbeac199d5d55245"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "58a778cdc213f00c6d5cc81c6274f3c8e11ccaeac3eaacc9dbeac199d5d55245"
+        }
+      ]
+    },
+    {
+      "ordinal": 2,
+      "kind": "guide",
+      "slug": "gd_birth_2m_sleep",
+      "reviewRevision": 5,
+      "contentId": "kx76vp3r2pnfyy5tgs9shn20bd8b8zha",
+      "contentCreationTime": 1785024282947.1877,
+      "contentUpdatedAt": 1787746469282,
+      "contentCanonicalSha256": "9943c8ac6d1a2c2cdb1bc36a1b1489138bba5efa2a7c4ceb334bbf32218de9e2",
+      "linkId": "k97epd1tn83dm0apk7xkby7zjd8b8y86",
+      "linkCreationTime": 1785024331625.8176,
+      "linkUpdatedAt": 1787359998883,
+      "linkCanonicalSha256": "f25350f857aa6a65eaab152e87aa9782fa697c1784b4b1c81f775a7de3d2d6f8",
+      "sourceIds": [
+        "aap-safe-sleep-2022",
+        "nhs-sids-2025",
+        "who-pa-sleep-under5-2019",
+        "hc-safe-sleep-2026",
+        "nice-ng143-fever-2019",
+        "hc-child-ems-2026"
+      ],
+      "sourceCount": 6,
+      "sourcesCanonicalSha256": "9c0beb0c6824f3a33273f7e37a34b6e90e4d16efcf8438e1d3eb71397de0572a",
+      "mediaCount": 0,
+      "mediaCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "aiCanonicalSha256": "e0c04573de4314ddde597477c374bafd25b400663d593e0a0244afe3f73c1d0d",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "6507fc7bcf1ca5c713e86cc0c8e2d35e6d3dd9bf4e2bf347b154d8338369344f",
+      "reviewerAdvisory": {
+        "mm": "မြန်မာစာသည် မူရင်းအင်္ဂလိပ်အဓိပ္ပါယ်၊ အသက်အပိုင်းအခြား၊ အရေအတွက်၊ အချိန်ကာလ၊ အရေးပေါ်အဆင့်နှင့် ဘေးကင်းရေးကန့်သတ်ချက်အားလုံးကို မလျှော့မတိုးဘဲ သဘာဝကျ၊ ရှင်းလင်းပြီး မိဘနားလည်လွယ်ကြောင်း စစ်ဆေးပါ။ မူရင်းအဓိပ္ပါယ်ပြောင်းလဲစေမည့် ပြင်ဆင်ချက်လိုပါက approve မလုပ်ဘဲ changes requested ရွေးပါ။",
+        "en": "Confirm that the Myanmar copy is natural and parent-friendly while preserving every English meaning, age band, number, duration, escalation tier, and safety constraint. If a wording correction would change meaning, request changes instead of approving."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "a6542935020a3e478d039f2b09f66b6f18e96605ebef3cce8c249b34c215bb58"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "b4bd5e6569b9f3e3945b048ef189484f1daa6fb936a1b3cb2787bc5951833c36"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "52c51a07170823c7a7c32296896377ca353988f450778d39f5897d525819083a"
+        }
+      ]
+    },
+    {
+      "ordinal": 3,
+      "kind": "guide",
+      "slug": "gd_5_6m_nutrition",
+      "reviewRevision": 9,
+      "contentId": "kx7bx9ekynhhsd4h402vafbc158b8v4c",
+      "contentCreationTime": 1785024282947.1875,
+      "contentUpdatedAt": 1787746469282,
+      "contentCanonicalSha256": "52afa18ac96c9dde30304188b257ac0644c5c7adc5048712ef9ccaf51acfacb5",
+      "linkId": "k97e1e8ksvz9a78k8p72krxkfd8b8dkn",
+      "linkCreationTime": 1785024331625.8174,
+      "linkUpdatedAt": 1787545143932,
+      "linkCanonicalSha256": "018194b484275540fefe53ef0a089c2b5580c98bc78813341d96536cd215bb94",
+      "sourceIds": [
+        "who-complementary-feeding-2023",
+        "nhs-first-solid-foods-2026",
+        "cdc-introduce-solid-foods-2026",
+        "cdc-cows-milk-2026",
+        "jr-niaid-peanut-prevention-2017",
+        "who-iycf-model-chapter-2025",
+        "aap-breastfeeding-2022",
+        "nhs-breastfeeding-first-days-2023",
+        "asha-pediatric-feeding-swallowing",
+        "hc-child-ems-2026"
+      ],
+      "sourceCount": 10,
+      "sourcesCanonicalSha256": "ffbc256e33cd2fab6bde5b4c550b8cd25282d7d2b1dcce1bc610aa764720cdbe",
+      "mediaCount": 0,
+      "mediaCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "aiCanonicalSha256": "e0c04573de4314ddde597477c374bafd25b400663d593e0a0244afe3f73c1d0d",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "90d52a5f8edb7efe08964f647e3999cff8a18c64f56f084981e407a0bf85ed7f",
+      "reviewerAdvisory": {
+        "mm": "မြန်မာစာသည် မူရင်းအင်္ဂလိပ်အဓိပ္ပါယ်၊ အသက်အပိုင်းအခြား၊ အရေအတွက်၊ အချိန်ကာလ၊ အရေးပေါ်အဆင့်နှင့် ဘေးကင်းရေးကန့်သတ်ချက်အားလုံးကို မလျှော့မတိုးဘဲ သဘာဝကျ၊ ရှင်းလင်းပြီး မိဘနားလည်လွယ်ကြောင်း စစ်ဆေးပါ။ မူရင်းအဓိပ္ပါယ်ပြောင်းလဲစေမည့် ပြင်ဆင်ချက်လိုပါက approve မလုပ်ဘဲ changes requested ရွေးပါ။",
+        "en": "Confirm that the Myanmar copy is natural and parent-friendly while preserving every English meaning, age band, number, duration, escalation tier, and safety constraint. If a wording correction would change meaning, request changes instead of approving."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "013ae953dcef9c824dcef20c6ed085f1ca49bcf2bc1861acb083aecd1376dfc2"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "740fc11c42ccc0cb67ab677bd1bcd2613a88c2af6b4dbac0a9359a84303bfb63"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "664dde287ded792fbf972952abfaf32f0cfd4a49c4434c0bd7fd6d0ecee2f122"
+        }
+      ]
+    },
+    {
+      "ordinal": 4,
+      "kind": "guide",
+      "slug": "gd_7_9m_nutrition",
+      "reviewRevision": 4,
+      "contentId": "kx71qtfeq7fys6a82hwaa49c698b9t7b",
+      "contentCreationTime": 1785024282947.2598,
+      "contentUpdatedAt": 1787746469282,
+      "contentCanonicalSha256": "a52970099d733eb3ac3b6362a56d3376ae07e0680d4fe6ccdbd9cfc0941bf3d4",
+      "linkId": "k97f1zqfdv1gzfkyjqh7y396518b95n4",
+      "linkCreationTime": 1785024331625.857,
+      "linkUpdatedAt": 1787545143932,
+      "linkCanonicalSha256": "cb261be5d79e2be1d516833f64e6a5e419ef2ece4dd7bfed7eb4e0e56ae2ba80",
+      "sourceIds": [
+        "who-complementary-feeding-2023",
+        "who-iycf-model-chapter-2025",
+        "who-iycf-indicators-2021",
+        "nhs-first-solid-foods-2026",
+        "cdc-foods-6-24m-2025",
+        "cdc-introduce-solid-foods-2026",
+        "jr-niaid-peanut-prevention-2017",
+        "nice-ng247-maternal-child-nutrition-2025",
+        "asha-pediatric-feeding-swallowing"
+      ],
+      "sourceCount": 9,
+      "sourcesCanonicalSha256": "6ad7d63c645bb553840bccc85717f4e003f10cf5d06d76bb93803541379644ad",
+      "mediaCount": 0,
+      "mediaCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "aiCanonicalSha256": "e0c04573de4314ddde597477c374bafd25b400663d593e0a0244afe3f73c1d0d",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "13aa7b9d9206ee444287df85018388d5935c43cc5d34a5db52e464bee52a3764",
+      "reviewerAdvisory": {
+        "mm": "မြန်မာစာသည် မူရင်းအင်္ဂလိပ်အဓိပ္ပါယ်၊ အသက်အပိုင်းအခြား၊ အရေအတွက်၊ အချိန်ကာလ၊ အရေးပေါ်အဆင့်နှင့် ဘေးကင်းရေးကန့်သတ်ချက်အားလုံးကို မလျှော့မတိုးဘဲ သဘာဝကျ၊ ရှင်းလင်းပြီး မိဘနားလည်လွယ်ကြောင်း စစ်ဆေးပါ။ မူရင်းအဓိပ္ပါယ်ပြောင်းလဲစေမည့် ပြင်ဆင်ချက်လိုပါက approve မလုပ်ဘဲ changes requested ရွေးပါ။",
+        "en": "Confirm that the Myanmar copy is natural and parent-friendly while preserving every English meaning, age band, number, duration, escalation tier, and safety constraint. If a wording correction would change meaning, request changes instead of approving."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "2bac1e2ebaa2ca7f4f04b9a46ca1559ab51c1809f9a25be1f14e3fe89ad2f5a4"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "67bb8dd084651c77fd20393133eac8dfdb95c66ece485bced74f9cd769414b9e"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "e79cf80105c4cb772864c5cb5b5061de1d8d490a74368995202d3b05e2cf732b"
+        }
+      ]
+    },
+    {
+      "ordinal": 5,
+      "kind": "guide",
+      "slug": "gd_10_12m_nutrition",
+      "reviewRevision": 9,
+      "contentId": "kx74xr1h9rtms2dk7j6gkdyted8b8cfy",
+      "contentCreationTime": 1785024282947.27,
+      "contentUpdatedAt": 1787746469282,
+      "contentCanonicalSha256": "9d15b00fb4316efa7d8e6c70a443e26b4bcf686019c96ceeec9a941b6b22926d",
+      "linkId": "k974hsx47zp7khx4nkxj1d8drn8b8730",
+      "linkCreationTime": 1785024331625.864,
+      "linkUpdatedAt": 1787545143932,
+      "linkCanonicalSha256": "28c67324ee72d89d7011a045c8ba17fd4e551192ac3c5cd4627cb1293d051e97",
+      "sourceIds": [
+        "who-complementary-feeding-2023",
+        "who-iycf-model-chapter-2025",
+        "who-iycf-indicators-2021",
+        "nhs-first-solid-foods-2026",
+        "cdc-foods-6-24m-2025",
+        "cdc-introduce-solid-foods-2026",
+        "jr-niaid-peanut-prevention-2017",
+        "nice-ng247-maternal-child-nutrition-2025",
+        "aap-breastfeeding-2022",
+        "asha-pediatric-feeding-swallowing"
+      ],
+      "sourceCount": 10,
+      "sourcesCanonicalSha256": "2c9919a9f084c6201ead9801030a850135258b0763bed4caa20f4c858889dd28",
+      "mediaCount": 0,
+      "mediaCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "aiCanonicalSha256": "e0c04573de4314ddde597477c374bafd25b400663d593e0a0244afe3f73c1d0d",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "14c024c56a98410be380173130b8852c5d19d6fc1442a8687067b004133a698f",
+      "reviewerAdvisory": {
+        "mm": "မြန်မာစာသည် မူရင်းအင်္ဂလိပ်အဓိပ္ပါယ်၊ အသက်အပိုင်းအခြား၊ အရေအတွက်၊ အချိန်ကာလ၊ အရေးပေါ်အဆင့်နှင့် ဘေးကင်းရေးကန့်သတ်ချက်အားလုံးကို မလျှော့မတိုးဘဲ သဘာဝကျ၊ ရှင်းလင်းပြီး မိဘနားလည်လွယ်ကြောင်း စစ်ဆေးပါ။ မူရင်းအဓိပ္ပါယ်ပြောင်းလဲစေမည့် ပြင်ဆင်ချက်လိုပါက approve မလုပ်ဘဲ changes requested ရွေးပါ။",
+        "en": "Confirm that the Myanmar copy is natural and parent-friendly while preserving every English meaning, age band, number, duration, escalation tier, and safety constraint. If a wording correction would change meaning, request changes instead of approving."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "ccb7a5329081772eb40bde5e442527214721c7367db3dda0c8acfc79bb3ef711"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "f2fdccce8b11f75cb3d3d40e8c1cbc795bc40a0ea7b03e48436f0403cd7257de"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "bab83ed8fc39bc5daf76400d7f0b839c0dc74392fd86e67376447a72a4738f4f"
+        }
+      ]
+    },
+    {
+      "ordinal": 6,
+      "kind": "guide",
+      "slug": "gd_13_18m_safety",
+      "reviewRevision": 8,
+      "contentId": "kx70pz9t2x95n0727d38qvwdkd8bdzb8",
+      "contentCreationTime": 1785237828583.466,
+      "contentUpdatedAt": 1787746469282,
+      "contentCanonicalSha256": "b0b36f0e7c8e345da014a39c8bbe99e0354c051b5bd21879fa96cbdf1de3dbaa",
+      "linkId": "k978ctxpz373p0qagwvv64t34n8bcvpd",
+      "linkCreationTime": 1785241493911.8396,
+      "linkUpdatedAt": 1787547270890,
+      "linkCanonicalSha256": "7305b521ce56e2213fb1b38e0af556938829939989b456ae42aa060fd94cc780",
+      "sourceIds": [
+        "aap-drowning-2026",
+        "tb-bright-futures-4e-2017",
+        "cdc-positive-parenting-toddlers-2026"
+      ],
+      "sourceCount": 3,
+      "sourcesCanonicalSha256": "c02f12aa19341ad59c078609150a7f3de309d6dca096c1e8e9f5cf6e441ab39c",
+      "mediaCount": 0,
+      "mediaCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "aiCanonicalSha256": "e0c04573de4314ddde597477c374bafd25b400663d593e0a0244afe3f73c1d0d",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "fb40475ca116d230c98228d10cb59dbbe9558f37440f00974601da73179f5f3b",
+      "reviewerAdvisory": {
+        "mm": "မြန်မာစာသည် မူရင်းအင်္ဂလိပ်အဓိပ္ပါယ်၊ အသက်အပိုင်းအခြား၊ အရေအတွက်၊ အချိန်ကာလ၊ အရေးပေါ်အဆင့်နှင့် ဘေးကင်းရေးကန့်သတ်ချက်အားလုံးကို မလျှော့မတိုးဘဲ သဘာဝကျ၊ ရှင်းလင်းပြီး မိဘနားလည်လွယ်ကြောင်း စစ်ဆေးပါ။ မူရင်းအဓိပ္ပါယ်ပြောင်းလဲစေမည့် ပြင်ဆင်ချက်လိုပါက approve မလုပ်ဘဲ changes requested ရွေးပါ။",
+        "en": "Confirm that the Myanmar copy is natural and parent-friendly while preserving every English meaning, age band, number, duration, escalation tier, and safety constraint. If a wording correction would change meaning, request changes instead of approving."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "fb40475ca116d230c98228d10cb59dbbe9558f37440f00974601da73179f5f3b"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        }
+      ]
+    },
+    {
+      "ordinal": 7,
+      "kind": "guide",
+      "slug": "gd_19_24m_safety",
+      "reviewRevision": 8,
+      "contentId": "kx72ka0h20jt3fccnby5q1g8918bdjxs",
+      "contentCreationTime": 1785237828583.4707,
+      "contentUpdatedAt": 1787746469282,
+      "contentCanonicalSha256": "1acd603103fb89a9f0d49b9ce206f500e07ffe5ac6da5212ae6098f272d4dd22",
+      "linkId": "k970v5cb4gwzc3m3tzd1v9ssv98bd1y7",
+      "linkCreationTime": 1785241493911.8425,
+      "linkUpdatedAt": 1787547270890,
+      "linkCanonicalSha256": "0fb918c8485e56c0520209397b5d66e270b8934ad207562648a57828bb4190a1",
+      "sourceIds": [
+        "aap-drowning-2026",
+        "tb-bright-futures-4e-2017",
+        "cdc-positive-parenting-toddlers-2026",
+        "cpsc-childproofing-home-2023"
+      ],
+      "sourceCount": 4,
+      "sourcesCanonicalSha256": "270601bafabdadfeab2bc5f4bf384226145770e1fe499ce1dc8c504fc4532453",
+      "mediaCount": 0,
+      "mediaCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "aiCanonicalSha256": "e0c04573de4314ddde597477c374bafd25b400663d593e0a0244afe3f73c1d0d",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "acae21057ebd568d881ff2e1a743898949761ad9b1f4afd44668221e02df32e0",
+      "reviewerAdvisory": {
+        "mm": "မြန်မာစာသည် မူရင်းအင်္ဂလိပ်အဓိပ္ပါယ်၊ အသက်အပိုင်းအခြား၊ အရေအတွက်၊ အချိန်ကာလ၊ အရေးပေါ်အဆင့်နှင့် ဘေးကင်းရေးကန့်သတ်ချက်အားလုံးကို မလျှော့မတိုးဘဲ သဘာဝကျ၊ ရှင်းလင်းပြီး မိဘနားလည်လွယ်ကြောင်း စစ်ဆေးပါ။ မူရင်းအဓိပ္ပါယ်ပြောင်းလဲစေမည့် ပြင်ဆင်ချက်လိုပါက approve မလုပ်ဘဲ changes requested ရွေးပါ။",
+        "en": "Confirm that the Myanmar copy is natural and parent-friendly while preserving every English meaning, age band, number, duration, escalation tier, and safety constraint. If a wording correction would change meaning, request changes instead of approving."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "acae21057ebd568d881ff2e1a743898949761ad9b1f4afd44668221e02df32e0"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        }
+      ]
+    },
+    {
+      "ordinal": 8,
+      "kind": "guide",
+      "slug": "gd_2y_safety",
+      "reviewRevision": 8,
+      "contentId": "kx73pwvtvvamn3dfx14jrg40nn8bc7kj",
+      "contentCreationTime": 1785237828583.4753,
+      "contentUpdatedAt": 1787746469282,
+      "contentCanonicalSha256": "54c64e08aca1c8d129911349f61af6b5bfcad72351e06240d36c7c846a83fe14",
+      "linkId": "k973vc85xh8yav2fg8j4kmnabn8bd1g6",
+      "linkCreationTime": 1785241493911.8455,
+      "linkUpdatedAt": 1787547270890,
+      "linkCanonicalSha256": "c55c8369529154a64c3db20694b6f007251235aaed4c83e2849cf59d5b1715f3",
+      "sourceIds": [
+        "aap-drowning-2026",
+        "tb-bright-futures-4e-2017",
+        "cdc-positive-parenting-toddlers-2026"
+      ],
+      "sourceCount": 3,
+      "sourcesCanonicalSha256": "c02f12aa19341ad59c078609150a7f3de309d6dca096c1e8e9f5cf6e441ab39c",
+      "mediaCount": 0,
+      "mediaCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "aiCanonicalSha256": "e0c04573de4314ddde597477c374bafd25b400663d593e0a0244afe3f73c1d0d",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "ff50275463ef75fc3995a62a5e660277c499d65e2b1157e607ec0921747cf481",
+      "reviewerAdvisory": {
+        "mm": "မြန်မာစာသည် မူရင်းအင်္ဂလိပ်အဓိပ္ပါယ်၊ အသက်အပိုင်းအခြား၊ အရေအတွက်၊ အချိန်ကာလ၊ အရေးပေါ်အဆင့်နှင့် ဘေးကင်းရေးကန့်သတ်ချက်အားလုံးကို မလျှော့မတိုးဘဲ သဘာဝကျ၊ ရှင်းလင်းပြီး မိဘနားလည်လွယ်ကြောင်း စစ်ဆေးပါ။ မူရင်းအဓိပ္ပါယ်ပြောင်းလဲစေမည့် ပြင်ဆင်ချက်လိုပါက approve မလုပ်ဘဲ changes requested ရွေးပါ။",
+        "en": "Confirm that the Myanmar copy is natural and parent-friendly while preserving every English meaning, age band, number, duration, escalation tier, and safety constraint. If a wording correction would change meaning, request changes instead of approving."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "ff50275463ef75fc3995a62a5e660277c499d65e2b1157e607ec0921747cf481"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        }
+      ]
+    },
+    {
+      "ordinal": 9,
+      "kind": "guide",
+      "slug": "gd_2_5y_safety",
+      "reviewRevision": 8,
+      "contentId": "kx71xfbs9qjg1bz2hfvmgfc1rd8bcnfq",
+      "contentCreationTime": 1785237828583.4802,
+      "contentUpdatedAt": 1787746469282,
+      "contentCanonicalSha256": "5f658446ecc3e45c588a2146b845f5038bb19a768b9f1c0e4a32458ca15a8056",
+      "linkId": "k972t78ctsbmrp4gh7dhrfp0q58bdq47",
+      "linkCreationTime": 1785241497141.093,
+      "linkUpdatedAt": 1787547270890,
+      "linkCanonicalSha256": "c7c8bd3f1fb4d5154e47e66ff51f86e98ffb5415294af2148a50979e439ec9a9",
+      "sourceIds": [
+        "aap-drowning-2026",
+        "tb-bright-futures-4e-2017",
+        "cdc-positive-parenting-toddlers-2026"
+      ],
+      "sourceCount": 3,
+      "sourcesCanonicalSha256": "c02f12aa19341ad59c078609150a7f3de309d6dca096c1e8e9f5cf6e441ab39c",
+      "mediaCount": 0,
+      "mediaCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "aiCanonicalSha256": "e0c04573de4314ddde597477c374bafd25b400663d593e0a0244afe3f73c1d0d",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "819b35c1e69586446c47ed3e9c416035091fe83b7213ec3b61763ef35bd52576",
+      "reviewerAdvisory": {
+        "mm": "မြန်မာစာသည် မူရင်းအင်္ဂလိပ်အဓိပ္ပါယ်၊ အသက်အပိုင်းအခြား၊ အရေအတွက်၊ အချိန်ကာလ၊ အရေးပေါ်အဆင့်နှင့် ဘေးကင်းရေးကန့်သတ်ချက်အားလုံးကို မလျှော့မတိုးဘဲ သဘာဝကျ၊ ရှင်းလင်းပြီး မိဘနားလည်လွယ်ကြောင်း စစ်ဆေးပါ။ မူရင်းအဓိပ္ပါယ်ပြောင်းလဲစေမည့် ပြင်ဆင်ချက်လိုပါက approve မလုပ်ဘဲ changes requested ရွေးပါ။",
+        "en": "Confirm that the Myanmar copy is natural and parent-friendly while preserving every English meaning, age band, number, duration, escalation tier, and safety constraint. If a wording correction would change meaning, request changes instead of approving."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "819b35c1e69586446c47ed3e9c416035091fe83b7213ec3b61763ef35bd52576"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        }
+      ]
+    },
+    {
+      "ordinal": 10,
+      "kind": "guide",
+      "slug": "gd_3y_safety",
+      "reviewRevision": 7,
+      "contentId": "kx75jb917chhxe4spsmp49bw918bdmcd",
+      "contentCreationTime": 1785237828583.485,
+      "contentUpdatedAt": 1787746469282,
+      "contentCanonicalSha256": "8427322960229676c929005a22ad7032d9a39d9b3f89aebd49203713bebfc963",
+      "linkId": "k970wxb0d4xnxnbcr2z8yp2kbn8bca9v",
+      "linkCreationTime": 1785241497141.0962,
+      "linkUpdatedAt": 1787547270890,
+      "linkCanonicalSha256": "d86e4129ffc2cc8c1dfb1b37722c689d2731dad38533a4e6668309df79433c15",
+      "sourceIds": [
+        "aap-drowning-2026",
+        "tb-bright-futures-4e-2017",
+        "cdc-positive-parenting-preschoolers-2026"
+      ],
+      "sourceCount": 3,
+      "sourcesCanonicalSha256": "71eb92f3680c26bad32250b2e99360964ad62ed2e03f754c7568e7978a46d575",
+      "mediaCount": 0,
+      "mediaCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "aiCanonicalSha256": "e0c04573de4314ddde597477c374bafd25b400663d593e0a0244afe3f73c1d0d",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "790d657082ac98f01e366b964a723d759ef2d976bb352cb1781bf85d36f8f0db",
+      "reviewerAdvisory": {
+        "mm": "မြန်မာစာသည် မူရင်းအင်္ဂလိပ်အဓိပ္ပါယ်၊ အသက်အပိုင်းအခြား၊ အရေအတွက်၊ အချိန်ကာလ၊ အရေးပေါ်အဆင့်နှင့် ဘေးကင်းရေးကန့်သတ်ချက်အားလုံးကို မလျှော့မတိုးဘဲ သဘာဝကျ၊ ရှင်းလင်းပြီး မိဘနားလည်လွယ်ကြောင်း စစ်ဆေးပါ။ မူရင်းအဓိပ္ပါယ်ပြောင်းလဲစေမည့် ပြင်ဆင်ချက်လိုပါက approve မလုပ်ဘဲ changes requested ရွေးပါ။",
+        "en": "Confirm that the Myanmar copy is natural and parent-friendly while preserving every English meaning, age band, number, duration, escalation tier, and safety constraint. If a wording correction would change meaning, request changes instead of approving."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "790d657082ac98f01e366b964a723d759ef2d976bb352cb1781bf85d36f8f0db"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        }
+      ]
+    },
+    {
+      "ordinal": 11,
+      "kind": "guide",
+      "slug": "gd_3_5y_safety",
+      "reviewRevision": 7,
+      "contentId": "kx72jqztx8ysd8w20sqwxw8gfd8bc5gj",
+      "contentCreationTime": 1785237828583.49,
+      "contentUpdatedAt": 1787746469282,
+      "contentCanonicalSha256": "da88fee5ca808ae768c8e9c463724357248ca3ea653493d62eb1bd0a131abe69",
+      "linkId": "k97emfw1fzzdkrmbcy8emnad3s8bdz7q",
+      "linkCreationTime": 1785241497141.0994,
+      "linkUpdatedAt": 1787547270890,
+      "linkCanonicalSha256": "10173b725cd87e2716475b105c39014774a854d3773bcda03d906f8a1c89a015",
+      "sourceIds": [
+        "aap-drowning-2026",
+        "tb-bright-futures-4e-2017",
+        "cdc-positive-parenting-preschoolers-2026"
+      ],
+      "sourceCount": 3,
+      "sourcesCanonicalSha256": "71eb92f3680c26bad32250b2e99360964ad62ed2e03f754c7568e7978a46d575",
+      "mediaCount": 0,
+      "mediaCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "aiCanonicalSha256": "e0c04573de4314ddde597477c374bafd25b400663d593e0a0244afe3f73c1d0d",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "4f7ac35b20b740d0ad8af7eb1cfe9179d44c6b438cccd87e5e6933fb6651e29f",
+      "reviewerAdvisory": {
+        "mm": "မြန်မာစာသည် မူရင်းအင်္ဂလိပ်အဓိပ္ပါယ်၊ အသက်အပိုင်းအခြား၊ အရေအတွက်၊ အချိန်ကာလ၊ အရေးပေါ်အဆင့်နှင့် ဘေးကင်းရေးကန့်သတ်ချက်အားလုံးကို မလျှော့မတိုးဘဲ သဘာဝကျ၊ ရှင်းလင်းပြီး မိဘနားလည်လွယ်ကြောင်း စစ်ဆေးပါ။ မူရင်းအဓိပ္ပါယ်ပြောင်းလဲစေမည့် ပြင်ဆင်ချက်လိုပါက approve မလုပ်ဘဲ changes requested ရွေးပါ။",
+        "en": "Confirm that the Myanmar copy is natural and parent-friendly while preserving every English meaning, age band, number, duration, escalation tier, and safety constraint. If a wording correction would change meaning, request changes instead of approving."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "4f7ac35b20b740d0ad8af7eb1cfe9179d44c6b438cccd87e5e6933fb6651e29f"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        }
+      ]
+    },
+    {
+      "ordinal": 12,
+      "kind": "guide",
+      "slug": "gd_4y_safety",
+      "reviewRevision": 7,
+      "contentId": "kx735zjgmccz25yaacwc5fhymn8bdvsb",
+      "contentCreationTime": 1785237828583.4949,
+      "contentUpdatedAt": 1787746469282,
+      "contentCanonicalSha256": "acb41d7989ded15525d472fd85dc9f8b320b286041a8c2f0971a03aa440b61fb",
+      "linkId": "k970ex6j7yzngvenvwqbrv0ayn8bc1w3",
+      "linkCreationTime": 1785241497141.1025,
+      "linkUpdatedAt": 1787547270890,
+      "linkCanonicalSha256": "ce9cc2a039ba3490e0037f6f91a826f6ce79ee72914429f28326e67a8baf46d5",
+      "sourceIds": [
+        "aap-drowning-2026",
+        "tb-bright-futures-4e-2017",
+        "cdc-positive-parenting-preschoolers-2026"
+      ],
+      "sourceCount": 3,
+      "sourcesCanonicalSha256": "71eb92f3680c26bad32250b2e99360964ad62ed2e03f754c7568e7978a46d575",
+      "mediaCount": 0,
+      "mediaCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "aiCanonicalSha256": "e0c04573de4314ddde597477c374bafd25b400663d593e0a0244afe3f73c1d0d",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "7d3c3fedcc736fc6f5593ae49ca74357ce9f270bdf98c3fdb4422dac3618ee8a",
+      "reviewerAdvisory": {
+        "mm": "မြန်မာစာသည် မူရင်းအင်္ဂလိပ်အဓိပ္ပါယ်၊ အသက်အပိုင်းအခြား၊ အရေအတွက်၊ အချိန်ကာလ၊ အရေးပေါ်အဆင့်နှင့် ဘေးကင်းရေးကန့်သတ်ချက်အားလုံးကို မလျှော့မတိုးဘဲ သဘာဝကျ၊ ရှင်းလင်းပြီး မိဘနားလည်လွယ်ကြောင်း စစ်ဆေးပါ။ မူရင်းအဓိပ္ပါယ်ပြောင်းလဲစေမည့် ပြင်ဆင်ချက်လိုပါက approve မလုပ်ဘဲ changes requested ရွေးပါ။",
+        "en": "Confirm that the Myanmar copy is natural and parent-friendly while preserving every English meaning, age band, number, duration, escalation tier, and safety constraint. If a wording correction would change meaning, request changes instead of approving."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "7d3c3fedcc736fc6f5593ae49ca74357ce9f270bdf98c3fdb4422dac3618ee8a"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        }
+      ]
+    },
+    {
+      "ordinal": 13,
+      "kind": "guide",
+      "slug": "gd_4_5y_safety",
+      "reviewRevision": 7,
+      "contentId": "kx7c0k0hq7agzphv03j863cacd8bc8wh",
+      "contentCreationTime": 1785237828583.4998,
+      "contentUpdatedAt": 1787746469282,
+      "contentCanonicalSha256": "aac68d41efdfc3135c2b45b621733ba44cec69181ef1133cb218db75574186c6",
+      "linkId": "k978mvw7fmmggm4m1e11x04wb98bc8b4",
+      "linkCreationTime": 1785241497141.1057,
+      "linkUpdatedAt": 1787547270890,
+      "linkCanonicalSha256": "602ba6fe75dae0c69de680fef31f1c1dea3db79691707fea0a7c6f7878770294",
+      "sourceIds": [
+        "aap-drowning-2026",
+        "tb-bright-futures-4e-2017",
+        "cdc-positive-parenting-preschoolers-2026"
+      ],
+      "sourceCount": 3,
+      "sourcesCanonicalSha256": "71eb92f3680c26bad32250b2e99360964ad62ed2e03f754c7568e7978a46d575",
+      "mediaCount": 0,
+      "mediaCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "aiCanonicalSha256": "e0c04573de4314ddde597477c374bafd25b400663d593e0a0244afe3f73c1d0d",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "9c0493cf17e0a99f644001af5b47ccf4174eb68deaa43959ca60b7d0422ef8f1",
+      "reviewerAdvisory": {
+        "mm": "မြန်မာစာသည် မူရင်းအင်္ဂလိပ်အဓိပ္ပါယ်၊ အသက်အပိုင်းအခြား၊ အရေအတွက်၊ အချိန်ကာလ၊ အရေးပေါ်အဆင့်နှင့် ဘေးကင်းရေးကန့်သတ်ချက်အားလုံးကို မလျှော့မတိုးဘဲ သဘာဝကျ၊ ရှင်းလင်းပြီး မိဘနားလည်လွယ်ကြောင်း စစ်ဆေးပါ။ မူရင်းအဓိပ္ပါယ်ပြောင်းလဲစေမည့် ပြင်ဆင်ချက်လိုပါက approve မလုပ်ဘဲ changes requested ရွေးပါ။",
+        "en": "Confirm that the Myanmar copy is natural and parent-friendly while preserving every English meaning, age band, number, duration, escalation tier, and safety constraint. If a wording correction would change meaning, request changes instead of approving."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "9c0493cf17e0a99f644001af5b47ccf4174eb68deaa43959ca60b7d0422ef8f1"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        }
+      ]
+    },
+    {
+      "ordinal": 14,
+      "kind": "guide",
+      "slug": "gd_5y_safety",
+      "reviewRevision": 7,
+      "contentId": "kx72cdsmasnxpdnymryyhsybvn8bcvj9",
+      "contentCreationTime": 1785237828583.5046,
+      "contentUpdatedAt": 1787746469282,
+      "contentCanonicalSha256": "5442cf4ae37f8536edbdd2457577c2aa8b27fb97e07dd591e8d8b236a1f753ef",
+      "linkId": "k97ax2c9qpywa5c4sjm5rt4pjs8bdtk1",
+      "linkCreationTime": 1785241497141.109,
+      "linkUpdatedAt": 1787547270890,
+      "linkCanonicalSha256": "8fd8257616a57b6ea017c34d00f518b7adefea1c0ff895d65ce339333ef9f50c",
+      "sourceIds": [
+        "aap-drowning-2026",
+        "tb-bright-futures-4e-2017",
+        "cdc-positive-parenting-preschoolers-2026"
+      ],
+      "sourceCount": 3,
+      "sourcesCanonicalSha256": "71eb92f3680c26bad32250b2e99360964ad62ed2e03f754c7568e7978a46d575",
+      "mediaCount": 0,
+      "mediaCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "aiCanonicalSha256": "e0c04573de4314ddde597477c374bafd25b400663d593e0a0244afe3f73c1d0d",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "4ce03d057cfb337ebb1fc1eae1f8dbd8ab26493e8d8c19b82b88d856b272ebe6",
+      "reviewerAdvisory": {
+        "mm": "မြန်မာစာသည် မူရင်းအင်္ဂလိပ်အဓိပ္ပါယ်၊ အသက်အပိုင်းအခြား၊ အရေအတွက်၊ အချိန်ကာလ၊ အရေးပေါ်အဆင့်နှင့် ဘေးကင်းရေးကန့်သတ်ချက်အားလုံးကို မလျှော့မတိုးဘဲ သဘာဝကျ၊ ရှင်းလင်းပြီး မိဘနားလည်လွယ်ကြောင်း စစ်ဆေးပါ။ မူရင်းအဓိပ္ပါယ်ပြောင်းလဲစေမည့် ပြင်ဆင်ချက်လိုပါက approve မလုပ်ဘဲ changes requested ရွေးပါ။",
+        "en": "Confirm that the Myanmar copy is natural and parent-friendly while preserving every English meaning, age band, number, duration, escalation tier, and safety constraint. If a wording correction would change meaning, request changes instead of approving."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "4ce03d057cfb337ebb1fc1eae1f8dbd8ab26493e8d8c19b82b88d856b272ebe6"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        }
+      ]
+    }
+  ],
+  "freezeDigest": "eed6398428a631f0e83c80d871bca9eb832a6ce5e787c9decbab5736bf8676f6",
+  "routingDigest": "845622f6451df565a79349f0432b5847abe2316b854953afb026b88178088490"
+}
