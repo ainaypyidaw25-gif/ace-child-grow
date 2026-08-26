@@ -13,6 +13,7 @@ const REFUSAL_CODES = new Set([
   'qualification_required',
   'display_name_required',
   'note_required',
+  'decision_not_allowed',
   'unknown',
 ]);
 

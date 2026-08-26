@@ -21,8 +21,6 @@ interface ClinicalFrozenBatchPanelProps {
   recordDecision: RecordClinicalBatchDecision;
 }
 
-const DECISIONS: ClinicalBatchDecision[] = ['approved', 'changes_requested', 'not_applicable'];
-
 const DECISION_LABELS: Record<ClinicalBatchDecision, { mm: string; en: string }> = {
   approved: { mm: 'ဤမူကွဲကို အတည်ပြုသည်', en: 'Approve this exact revision' },
   changes_requested: { mm: 'ပြင်ဆင်ရန် တောင်းဆိုသည်', en: 'Request changes' },
@@ -86,7 +84,8 @@ function ClinicalBatchSession({
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
-    if (submittingRef.current || busy || refreezeReason || complete || !decision) return;
+    if (submittingRef.current || busy || refreezeReason || complete || !decision
+      || !batch.allowedDecisions.includes(decision)) return;
     if (decision === 'changes_requested' && !note.trim()) {
       setMessage(L('ပြင်ဆင်ရမည့်အချက်ကို မှတ်ချက်တွင် ရေးပါ။', 'Write a note explaining what must change.'));
       return;
@@ -318,7 +317,7 @@ function ClinicalBatchSession({
               <fieldset disabled={busy || !!refreezeReason || complete}>
                 <legend className="text-sm font-bold text-ink">{L('ဤစာရင်းတစ်ခုအတွက် ဆုံးဖြတ်ချက်ရွေးပါ', 'Choose a decision for this item')}</legend>
                 <div className="mt-3 grid gap-2 sm:grid-cols-3">
-                  {DECISIONS.map((value) => (
+                  {batch.allowedDecisions.map((value) => (
                     <label key={value} className={`flex cursor-pointer items-start gap-2 rounded-xl border bg-white p-3 text-sm ${decision === value ? 'border-sky' : 'border-line'}`}>
                       <input
                         type="radio"
@@ -349,7 +348,8 @@ function ClinicalBatchSession({
               </label>
               <button
                 type="submit"
-                disabled={busy || !!refreezeReason || !decision}
+                disabled={busy || !!refreezeReason || !decision
+                  || !batch.allowedDecisions.includes(decision)}
                 className="min-h-touch rounded-pill bg-sky px-5 py-2 text-sm font-semibold text-white disabled:opacity-50"
               >
                 {busy ? L('မှတ်တမ်းတင်နေသည်…', 'Recording…') : L('ဤတစ်ခု၏ ဆုံးဖြတ်ချက်ကို မှတ်တမ်းတင်မည်', 'Record this item decision')}

@@ -16,6 +16,7 @@ function contract(overrides: Record<string, unknown> = {}) {
     frozenAt: 1_787_500_000_000,
     freezeDigest: 'sha256:freeze-a',
     freezeReceiptDigest: 'server-receipt-a',
+    allowedDecisions: ['approved', 'changes_requested'],
     items: [
       {
         assignmentId: 'assignment-a',
@@ -79,6 +80,7 @@ describe('frozen clinical batch adapter', () => {
     const state = adaptFrozenClinicalBatch(contract(), 'clinical_reviewer');
     expect(state.kind).toBe('ready');
     if (state.kind !== 'ready') return;
+    expect(state.batch.allowedDecisions).toEqual(['approved', 'changes_requested']);
     expect(state.batch.items).toEqual([
       expect.objectContaining({
         assignmentId: 'assignment-a',
@@ -89,6 +91,32 @@ describe('frozen clinical batch adapter', () => {
         snapshot: expect.objectContaining({ digest: 'sha256:snapshot-a' }),
       }),
     ]);
+  });
+
+  it('accepts the server-authoritative pilot decision set and rejects malformed sets', () => {
+    const pilot = adaptFrozenClinicalBatch(contract({
+      allowedDecisions: ['approved', 'changes_requested', 'not_applicable'],
+    }), 'clinical_reviewer');
+    expect(pilot).toEqual(expect.objectContaining({
+      kind: 'ready',
+      batch: expect.objectContaining({
+        allowedDecisions: ['approved', 'changes_requested', 'not_applicable'],
+      }),
+    }));
+
+    for (const allowedDecisions of [
+      undefined,
+      [],
+      ['approved'],
+      ['approved', 'not_applicable'],
+      ['approved', 'changes_requested', 'not_applicable', 'unknown'],
+      ['approved', 'changes_requested', 'changes_requested'],
+    ]) {
+      expect(adaptFrozenClinicalBatch(contract({ allowedDecisions }), 'clinical_reviewer')).toEqual({
+        kind: 'invalid',
+        reason: 'incomplete_freeze_manifest',
+      });
+    }
   });
 
   it('preserves a complete digest-bound reviewer advisory and rejects a partial one', () => {

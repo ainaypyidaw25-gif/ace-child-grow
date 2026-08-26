@@ -13,6 +13,7 @@ import {
 import {
   CLINICAL_REVIEW_BATCH_CONTRACT as CONTRACT,
   CLINICAL_REVIEW_BATCH_CONTRACT_VERSION as CONTRACT_VERSION,
+  clinicalReviewAllowedDecisionsForAuthority,
   clinicalReviewBatchLoadResultValidator,
   clinicalReviewDecisionValidator as decisionValidator,
   clinicalReviewHandoffValidator as handoffValidator,
@@ -863,6 +864,7 @@ export const readAssignedBatchState = internalQuery({
       batchId: registration.manifest.batchId, lane: registration.dimension, assignedRole: reviewer.role,
       frozenAt: registration.frozenAt, freezeDigest: registration.freezeDigest,
       freezeReceiptDigest: freezeReceipt,
+      allowedDecisions: clinicalReviewAllowedDecisionsForAuthority(registration.authority),
       reviewer: {
         profileId: reviewer.profileId, userId: reviewer.userId,
         displayName: reviewer.displayName, qualification: reviewer.qualification,
@@ -880,7 +882,8 @@ export const readAssignedBatchState = internalQuery({
 });
 
 type RefusalCode = 'stale_revision' | 'assignment_expired' | 'assignment_not_found'
-  | 'role_may_not_review_area' | 'qualification_required' | 'display_name_required' | 'note_required' | 'unknown';
+  | 'role_may_not_review_area' | 'qualification_required' | 'display_name_required'
+  | 'note_required' | 'decision_not_allowed' | 'unknown';
 
 async function refuse(
   ctx: MutationCtx, userId: Id<'users'>, code: RefusalCode, summary: string,
@@ -964,6 +967,20 @@ export const saveAssignedDecision = mutation({
     if (!state.snapshot) return await refuse(ctx, userId, 'assignment_expired', `${item.slug} · refused: snapshot missing`, item.contentId);
     const snapshot = state.snapshot;
     if (args.expectedSnapshotDigest !== snapshot.digest) return await refuse(ctx, userId, 'assignment_expired', `${item.slug} · refused: snapshot digest mismatch`, item.contentId);
+    // A compile-frozen release assignment is necessarily applicable to its
+    // registered dimension. Accepting N/A would create a decision that can
+    // neither produce a unanimous handoff nor enter the changes-requested
+    // refreeze lifecycle, leaving the release active with no recovery path.
+    // Return before any insert, lifecycle patch, receipt, or audit write.
+    // Historical pilot/non-release semantics remain unchanged.
+    const allowedDecisions = clinicalReviewAllowedDecisionsForAuthority(registration.authority);
+    if (!allowedDecisions.includes(args.decision)) {
+      return {
+        ok: false as const,
+        code: 'decision_not_allowed',
+        message: 'Not applicable is not a valid decision for an exact frozen release assignment.',
+      };
+    }
     if (state.decision) {
       const identical = state.decision.decision === args.decision && (state.decision.note ?? '') === (note ?? '');
       if (!identical) return await refuse(ctx, userId, 'assignment_expired', `${item.slug} · refused: decision receipt conflict`, item.contentId);
