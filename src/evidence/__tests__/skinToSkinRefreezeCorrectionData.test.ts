@@ -39,5 +39,14 @@ describe('skin-to-skin refreeze correction data', () => {
     expect(target.initialAuthoredSha256).toBe(target.desiredAuthoredSha256);
     expect(target.sourceIds).toHaveLength(6);
     expect(target.mediaCount).toBe(0);
+    const data = target.desiredContent.data as {
+      safety: { mm: string };
+      observationQuestions: Array<{ mm: string }>;
+      encouragement: { mm: string };
+    };
+    expect(data.safety.mm).toMatch(/^ကျောပေါ်လှန်အိပ်ပါ။/);
+    expect(data.observationQuestions[1].mm).toBe('ကျောပေါ်လှန်၍ အိပ်ပါသလား။');
+    expect(data.encouragement.mm)
+      .toBe('အိပ်ရေးပုံစံသည် တဖြည်းဖြည်း တည်ငြိမ်လာမည် — သည်းခံပါ။');
   });
 });
