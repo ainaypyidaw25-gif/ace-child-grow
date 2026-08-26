@@ -48,6 +48,8 @@ export const ownerRegistryStatusValidator = v.object({
     batchId: v.string(),
     sequence: v.number(),
     dimension: v.union(
+      v.literal('english'),
+      v.literal('native_myanmar'),
       v.literal('clinical'),
       v.literal('child_development'),
       v.literal('evidence'),

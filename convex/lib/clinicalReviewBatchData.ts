@@ -205,8 +205,8 @@ export type ClinicalReviewBatchReviewer = {
   readonly profileId: string;
   readonly userId: string;
   readonly displayName: string;
-  readonly qualification: string;
-  readonly role: 'clinical_reviewer' | 'evidence_reviewer';
+  readonly qualification: string | null;
+  readonly role: 'language_reviewer' | 'evidence_reviewer' | 'clinical_reviewer';
   readonly identityCanonicalSha256: string;
 };
 
@@ -281,7 +281,7 @@ export type ClinicalReviewBatchActivation =
 export type ClinicalReviewBatchRegistration = {
   readonly sequence: number;
   readonly laneGraphVersion: 1;
-  readonly dimension: 'clinical' | 'child_development' | 'evidence' | 'safety';
+  readonly dimension: 'english' | 'native_myanmar' | 'child_development' | 'evidence' | 'safety' | 'clinical';
   readonly authority: 'pilot' | 'release';
   readonly activation: ClinicalReviewBatchActivation;
   readonly routingCanonicalSha256: string;
@@ -908,6 +908,192 @@ export const CLINICAL_OLDER_SAFETY_RELEASE_BATCH_HASH = '7b0eb14a8b694962d5b119f
 export const CLINICAL_OLDER_SAFETY_RELEASE_BATCH_ROUTING_HASH = 'dfc04d608eedb486d39ea39cc81482e70af5831d8f3f41e8d0789b8b8a530a94' as const;
 
 /**
+ * First release-authoritative native-Myanmar lane for the 14 rows whose exact
+ * clinical receipts are already complete. Historical, provenance-less review
+ * rows remain append-only and are digest-bound below; only the decision keyed
+ * to this exact batch can satisfy the release gate.
+ *
+ * Frozen from a read-only Production snapshot on 2026-08-26. This registration
+ * is code-only/default-off until an owner separately materializes and activates
+ * it after the exact Older Safety handoff.
+ */
+export const CLINICAL_NATIVE_MYANMAR_RELEASE_BATCH_ID =
+  'clinical-native-myanmar-governed-14-2026-08-26-v1' as const;
+export const CLINICAL_NATIVE_MYANMAR_RELEASE_BATCH_FROZEN_AT = 1787735319022 as const;
+export const CLINICAL_NATIVE_MYANMAR_RELEASE_BATCH_EXPIRES_AT = 1788944919022 as const;
+
+export const CLINICAL_NATIVE_MYANMAR_RELEASE_BATCH_REVIEWER = {
+  profileId: 'md7811m7fbshjb4b7marmm51p58beg2s',
+  userId: 'mn71d67gneb2fdcve4gpv7j00d8bec4c',
+  displayName: 'Daw La Pyae',
+  qualification: null,
+  role: 'language_reviewer',
+  identityCanonicalSha256: 'da7e4078096a6a41e477b13b31eb054a75924e6df22c386754f74525dc430bbf',
+} as const satisfies ClinicalReviewBatchReviewer;
+
+const NATIVE_MYANMAR_REVIEW_ADVISORY = {
+  mm: 'မြန်မာစာသည် မူရင်းအင်္ဂလိပ်အဓိပ္ပါယ်၊ အသက်အပိုင်းအခြား၊ အရေအတွက်၊ အချိန်ကာလ၊ အရေးပေါ်အဆင့်နှင့် ဘေးကင်းရေးကန့်သတ်ချက်အားလုံးကို မလျှော့မတိုးဘဲ သဘာဝကျ၊ ရှင်းလင်းပြီး မိဘနားလည်လွယ်ကြောင်း စစ်ဆေးပါ။ မူရင်းအဓိပ္ပါယ်ပြောင်းလဲစေမည့် ပြင်ဆင်ချက်လိုပါက approve မလုပ်ဘဲ changes requested ရွေးပါ။',
+  en: 'Confirm that the Myanmar copy is natural and parent-friendly while preserving every English meaning, age band, number, duration, escalation tier, and safety constraint. If a wording correction would change meaning, request changes instead of approving.',
+} as const;
+
+const NATIVE_MYANMAR_REVIEW_HISTORY = {
+  act_skin_to_skin_calm: {
+    currentClinicalReviewCount: 1,
+    currentClinicalReviewsCanonicalSha256: '7b21982afe4af6dd704527126e0626bbf97d1b281286c92ad15ac24d4141098d',
+    allClinicalReviewHistoryCanonicalSha256: '7ae67a9d60698585fe578015fd2e7a95574b250d2c8d94337eeb628fa828d3ac',
+    allReviewHistoryCanonicalSha256: '7ae67a9d60698585fe578015fd2e7a95574b250d2c8d94337eeb628fa828d3ac',
+    allNonclinicalHistoryCanonicalSha256: EMPTY_ARRAY_CANONICAL_SHA256,
+    nativeMyanmarHistoryCanonicalSha256: EMPTY_ARRAY_CANONICAL_SHA256,
+  },
+  gd_birth_2m_sleep: {
+    currentClinicalReviewCount: 1,
+    currentClinicalReviewsCanonicalSha256: '52d4a205f33da989bdb8984d7b765964bc9bfe35105e5bedfe91df5082568d13',
+    allClinicalReviewHistoryCanonicalSha256: '6507fc7bcf1ca5c713e86cc0c8e2d35e6d3dd9bf4e2bf347b154d8338369344f',
+    allReviewHistoryCanonicalSha256: 'd3b633633ee3c51c8416f931a43bc557654ac938d890ed93f4833b7be571461e',
+    allNonclinicalHistoryCanonicalSha256: '22d99a8c0d6fd41e529814849e53af43bdb8d2854c8cf418a5fe8226d9f1fef7',
+    nativeMyanmarHistoryCanonicalSha256: '21f1c287969ba72c2756d421f352ba4924486e61fb366835433a6422fc71c8f1',
+  },
+  gd_5_6m_nutrition: {
+    currentClinicalReviewCount: 1,
+    currentClinicalReviewsCanonicalSha256: '90d52a5f8edb7efe08964f647e3999cff8a18c64f56f084981e407a0bf85ed7f',
+    allClinicalReviewHistoryCanonicalSha256: '90d52a5f8edb7efe08964f647e3999cff8a18c64f56f084981e407a0bf85ed7f',
+    allReviewHistoryCanonicalSha256: '013ae953dcef9c824dcef20c6ed085f1ca49bcf2bc1861acb083aecd1376dfc2',
+    allNonclinicalHistoryCanonicalSha256: '740fc11c42ccc0cb67ab677bd1bcd2613a88c2af6b4dbac0a9359a84303bfb63',
+    nativeMyanmarHistoryCanonicalSha256: '664dde287ded792fbf972952abfaf32f0cfd4a49c4434c0bd7fd6d0ecee2f122',
+  },
+  gd_7_9m_nutrition: {
+    currentClinicalReviewCount: 1,
+    currentClinicalReviewsCanonicalSha256: '13aa7b9d9206ee444287df85018388d5935c43cc5d34a5db52e464bee52a3764',
+    allClinicalReviewHistoryCanonicalSha256: '13aa7b9d9206ee444287df85018388d5935c43cc5d34a5db52e464bee52a3764',
+    allReviewHistoryCanonicalSha256: '2bac1e2ebaa2ca7f4f04b9a46ca1559ab51c1809f9a25be1f14e3fe89ad2f5a4',
+    allNonclinicalHistoryCanonicalSha256: '67bb8dd084651c77fd20393133eac8dfdb95c66ece485bced74f9cd769414b9e',
+    nativeMyanmarHistoryCanonicalSha256: 'e79cf80105c4cb772864c5cb5b5061de1d8d490a74368995202d3b05e2cf732b',
+  },
+  gd_10_12m_nutrition: {
+    currentClinicalReviewCount: 1,
+    currentClinicalReviewsCanonicalSha256: '14c024c56a98410be380173130b8852c5d19d6fc1442a8687067b004133a698f',
+    allClinicalReviewHistoryCanonicalSha256: '14c024c56a98410be380173130b8852c5d19d6fc1442a8687067b004133a698f',
+    allReviewHistoryCanonicalSha256: 'ccb7a5329081772eb40bde5e442527214721c7367db3dda0c8acfc79bb3ef711',
+    allNonclinicalHistoryCanonicalSha256: 'f2fdccce8b11f75cb3d3d40e8c1cbc795bc40a0ea7b03e48436f0403cd7257de',
+    nativeMyanmarHistoryCanonicalSha256: 'bab83ed8fc39bc5daf76400d7f0b839c0dc74392fd86e67376447a72a4738f4f',
+  },
+  gd_13_18m_safety: {
+    currentClinicalReviewCount: 1,
+    currentClinicalReviewsCanonicalSha256: 'fb40475ca116d230c98228d10cb59dbbe9558f37440f00974601da73179f5f3b',
+    allClinicalReviewHistoryCanonicalSha256: 'fb40475ca116d230c98228d10cb59dbbe9558f37440f00974601da73179f5f3b',
+    allReviewHistoryCanonicalSha256: 'fb40475ca116d230c98228d10cb59dbbe9558f37440f00974601da73179f5f3b',
+    allNonclinicalHistoryCanonicalSha256: EMPTY_ARRAY_CANONICAL_SHA256,
+    nativeMyanmarHistoryCanonicalSha256: EMPTY_ARRAY_CANONICAL_SHA256,
+  },
+  gd_19_24m_safety: {
+    currentClinicalReviewCount: 1,
+    currentClinicalReviewsCanonicalSha256: 'acae21057ebd568d881ff2e1a743898949761ad9b1f4afd44668221e02df32e0',
+    allClinicalReviewHistoryCanonicalSha256: 'acae21057ebd568d881ff2e1a743898949761ad9b1f4afd44668221e02df32e0',
+    allReviewHistoryCanonicalSha256: 'acae21057ebd568d881ff2e1a743898949761ad9b1f4afd44668221e02df32e0',
+    allNonclinicalHistoryCanonicalSha256: EMPTY_ARRAY_CANONICAL_SHA256,
+    nativeMyanmarHistoryCanonicalSha256: EMPTY_ARRAY_CANONICAL_SHA256,
+  },
+  gd_2y_safety: {
+    currentClinicalReviewCount: 1,
+    currentClinicalReviewsCanonicalSha256: 'ff50275463ef75fc3995a62a5e660277c499d65e2b1157e607ec0921747cf481',
+    allClinicalReviewHistoryCanonicalSha256: 'ff50275463ef75fc3995a62a5e660277c499d65e2b1157e607ec0921747cf481',
+    allReviewHistoryCanonicalSha256: 'ff50275463ef75fc3995a62a5e660277c499d65e2b1157e607ec0921747cf481',
+    allNonclinicalHistoryCanonicalSha256: EMPTY_ARRAY_CANONICAL_SHA256,
+    nativeMyanmarHistoryCanonicalSha256: EMPTY_ARRAY_CANONICAL_SHA256,
+  },
+  gd_2_5y_safety: {
+    currentClinicalReviewCount: 1,
+    currentClinicalReviewsCanonicalSha256: '819b35c1e69586446c47ed3e9c416035091fe83b7213ec3b61763ef35bd52576',
+    allClinicalReviewHistoryCanonicalSha256: '819b35c1e69586446c47ed3e9c416035091fe83b7213ec3b61763ef35bd52576',
+    allReviewHistoryCanonicalSha256: '819b35c1e69586446c47ed3e9c416035091fe83b7213ec3b61763ef35bd52576',
+    allNonclinicalHistoryCanonicalSha256: EMPTY_ARRAY_CANONICAL_SHA256,
+    nativeMyanmarHistoryCanonicalSha256: EMPTY_ARRAY_CANONICAL_SHA256,
+  },
+  gd_3y_safety: {
+    currentClinicalReviewCount: 1,
+    currentClinicalReviewsCanonicalSha256: '790d657082ac98f01e366b964a723d759ef2d976bb352cb1781bf85d36f8f0db',
+    allClinicalReviewHistoryCanonicalSha256: '790d657082ac98f01e366b964a723d759ef2d976bb352cb1781bf85d36f8f0db',
+    allReviewHistoryCanonicalSha256: '790d657082ac98f01e366b964a723d759ef2d976bb352cb1781bf85d36f8f0db',
+    allNonclinicalHistoryCanonicalSha256: EMPTY_ARRAY_CANONICAL_SHA256,
+    nativeMyanmarHistoryCanonicalSha256: EMPTY_ARRAY_CANONICAL_SHA256,
+  },
+  gd_3_5y_safety: {
+    currentClinicalReviewCount: 1,
+    currentClinicalReviewsCanonicalSha256: '4f7ac35b20b740d0ad8af7eb1cfe9179d44c6b438cccd87e5e6933fb6651e29f',
+    allClinicalReviewHistoryCanonicalSha256: '4f7ac35b20b740d0ad8af7eb1cfe9179d44c6b438cccd87e5e6933fb6651e29f',
+    allReviewHistoryCanonicalSha256: '4f7ac35b20b740d0ad8af7eb1cfe9179d44c6b438cccd87e5e6933fb6651e29f',
+    allNonclinicalHistoryCanonicalSha256: EMPTY_ARRAY_CANONICAL_SHA256,
+    nativeMyanmarHistoryCanonicalSha256: EMPTY_ARRAY_CANONICAL_SHA256,
+  },
+  gd_4y_safety: {
+    currentClinicalReviewCount: 1,
+    currentClinicalReviewsCanonicalSha256: '7d3c3fedcc736fc6f5593ae49ca74357ce9f270bdf98c3fdb4422dac3618ee8a',
+    allClinicalReviewHistoryCanonicalSha256: '7d3c3fedcc736fc6f5593ae49ca74357ce9f270bdf98c3fdb4422dac3618ee8a',
+    allReviewHistoryCanonicalSha256: '7d3c3fedcc736fc6f5593ae49ca74357ce9f270bdf98c3fdb4422dac3618ee8a',
+    allNonclinicalHistoryCanonicalSha256: EMPTY_ARRAY_CANONICAL_SHA256,
+    nativeMyanmarHistoryCanonicalSha256: EMPTY_ARRAY_CANONICAL_SHA256,
+  },
+  gd_4_5y_safety: {
+    currentClinicalReviewCount: 1,
+    currentClinicalReviewsCanonicalSha256: '9c0493cf17e0a99f644001af5b47ccf4174eb68deaa43959ca60b7d0422ef8f1',
+    allClinicalReviewHistoryCanonicalSha256: '9c0493cf17e0a99f644001af5b47ccf4174eb68deaa43959ca60b7d0422ef8f1',
+    allReviewHistoryCanonicalSha256: '9c0493cf17e0a99f644001af5b47ccf4174eb68deaa43959ca60b7d0422ef8f1',
+    allNonclinicalHistoryCanonicalSha256: EMPTY_ARRAY_CANONICAL_SHA256,
+    nativeMyanmarHistoryCanonicalSha256: EMPTY_ARRAY_CANONICAL_SHA256,
+  },
+  gd_5y_safety: {
+    currentClinicalReviewCount: 1,
+    currentClinicalReviewsCanonicalSha256: '4ce03d057cfb337ebb1fc1eae1f8dbd8ab26493e8d8c19b82b88d856b272ebe6',
+    allClinicalReviewHistoryCanonicalSha256: '4ce03d057cfb337ebb1fc1eae1f8dbd8ab26493e8d8c19b82b88d856b272ebe6',
+    allReviewHistoryCanonicalSha256: '4ce03d057cfb337ebb1fc1eae1f8dbd8ab26493e8d8c19b82b88d856b272ebe6',
+    allNonclinicalHistoryCanonicalSha256: EMPTY_ARRAY_CANONICAL_SHA256,
+    nativeMyanmarHistoryCanonicalSha256: EMPTY_ARRAY_CANONICAL_SHA256,
+  },
+} as const;
+
+function nativeMyanmarFrozenItem(
+  item: ClinicalReviewBatchItem,
+  ordinal: number,
+): ClinicalReviewBatchItem {
+  const history = NATIVE_MYANMAR_REVIEW_HISTORY[
+    item.slug as keyof typeof NATIVE_MYANMAR_REVIEW_HISTORY
+  ];
+  if (!history) throw new Error(`Missing native-Myanmar history for ${item.slug}`);
+  return {
+    ...item,
+    ordinal,
+    currentClinicalReviewCount: history.currentClinicalReviewCount,
+    currentClinicalReviewsCanonicalSha256: history.currentClinicalReviewsCanonicalSha256,
+    allClinicalReviewHistoryCanonicalSha256: history.allClinicalReviewHistoryCanonicalSha256,
+    reviewerAdvisory: NATIVE_MYANMAR_REVIEW_ADVISORY,
+    upstreamReviewDigests: [
+      { dimension: 'all_review_history', digest: history.allReviewHistoryCanonicalSha256 },
+      { dimension: 'all_nonclinical_history', digest: history.allNonclinicalHistoryCanonicalSha256 },
+      { dimension: 'native_myanmar', digest: history.nativeMyanmarHistoryCanonicalSha256 },
+    ],
+  };
+}
+
+export const CLINICAL_NATIVE_MYANMAR_RELEASE_BATCH_ITEMS = [
+  ...CLINICAL_NEWBORN_REFREEZE_BATCH_ITEMS,
+  ...CLINICAL_NUTRITION_RELEASE_BATCH_ITEMS,
+  ...CLINICAL_OLDER_SAFETY_RELEASE_BATCH_ITEMS,
+].map((item, index) => nativeMyanmarFrozenItem(item, index + 1));
+
+export const CLINICAL_NATIVE_MYANMAR_RELEASE_BATCH_MANIFEST = {
+  batchId: CLINICAL_NATIVE_MYANMAR_RELEASE_BATCH_ID,
+  count: CLINICAL_NATIVE_MYANMAR_RELEASE_BATCH_ITEMS.length,
+  reviewer: CLINICAL_NATIVE_MYANMAR_RELEASE_BATCH_REVIEWER,
+  items: CLINICAL_NATIVE_MYANMAR_RELEASE_BATCH_ITEMS,
+} as const satisfies ClinicalReviewBatchFreezeManifest;
+
+// Regenerated with sha256Canonical after every manifest/routing edit.
+export const CLINICAL_NATIVE_MYANMAR_RELEASE_BATCH_HASH =
+  '029b8fbbfaf58770d0aea767cd76c86302480ab75fe6980b74f5cb7ce142a59a' as const;
+export const CLINICAL_NATIVE_MYANMAR_RELEASE_BATCH_ROUTING_HASH =
+  'd4ddd07c58f6f0a4b42f5b34adece3fd31d557aed5c1226d77a33d6e4cf12c78' as const;
+
+/**
  * Compile-time allowlist of immutable clinical batches, in strict sequence.
  * Keep this registry explicit: it must never be populated from the catalogue,
  * owner-priority queues, search results, or generic review requests.
@@ -987,6 +1173,22 @@ export const CLINICAL_REVIEW_BATCH_REGISTRY = [
     frozenAt: CLINICAL_OLDER_SAFETY_RELEASE_BATCH_FROZEN_AT,
     expiresAt: CLINICAL_OLDER_SAFETY_RELEASE_BATCH_EXPIRES_AT,
     manifest: CLINICAL_OLDER_SAFETY_RELEASE_BATCH_MANIFEST,
+  },
+  {
+    sequence: 6,
+    laneGraphVersion: 1,
+    dimension: 'native_myanmar',
+    authority: 'release',
+    activation: {
+      kind: 'after_handoff',
+      previousBatchId: CLINICAL_OLDER_SAFETY_RELEASE_BATCH_ID,
+      expectedPreviousFreezeDigest: CLINICAL_OLDER_SAFETY_RELEASE_BATCH_HASH,
+    },
+    routingCanonicalSha256: CLINICAL_NATIVE_MYANMAR_RELEASE_BATCH_ROUTING_HASH,
+    freezeDigest: CLINICAL_NATIVE_MYANMAR_RELEASE_BATCH_HASH,
+    frozenAt: CLINICAL_NATIVE_MYANMAR_RELEASE_BATCH_FROZEN_AT,
+    expiresAt: CLINICAL_NATIVE_MYANMAR_RELEASE_BATCH_EXPIRES_AT,
+    manifest: CLINICAL_NATIVE_MYANMAR_RELEASE_BATCH_MANIFEST,
   },
 ] as const satisfies readonly ClinicalReviewBatchRegistration[];
 

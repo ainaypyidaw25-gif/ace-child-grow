@@ -56,6 +56,25 @@ export function roleMayReview(role: string | null | undefined, dimension: Review
 }
 
 /**
+ * Frozen release batches use a narrower assignee set than the broad reviewer
+ * workspace. Owners and content editors may make ordinary review decisions,
+ * but they cannot be substituted for the named specialist/language assignee
+ * whose exact identity is frozen into a release receipt.
+ */
+export function roleMayReviewFrozenBatch(
+  role: string | null | undefined,
+  dimension: ReviewDimension,
+): boolean {
+  if (dimension === 'english' || dimension === 'native_myanmar') {
+    return role === 'language_reviewer';
+  }
+  if (dimension === 'evidence') {
+    return role === 'evidence_reviewer' || role === 'clinical_reviewer';
+  }
+  return role === 'clinical_reviewer';
+}
+
+/**
  * Clinical, child-safety and evidence decisions record the reviewer's stated
  * qualification. A safety decision is never represented as a personal endorsement.
  */

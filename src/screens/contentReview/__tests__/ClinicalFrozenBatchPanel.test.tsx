@@ -57,7 +57,7 @@ function batch(): FrozenClinicalBatch {
         assignmentId: 'assignment-2',
         slug: 'nutrition-two',
         type: 'lesson',
-        dimension: 'child_development',
+        dimension: 'clinical',
         reviewRevision: 7,
         liveReviewRevision: 7,
         decision: null,
@@ -94,6 +94,25 @@ describe('ClinicalFrozenBatchPanel', () => {
     expect(screen.getByTestId('clinical-batch-backend-missing')).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /Record this item decision/ })).not.toBeInTheDocument();
     expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
+  });
+
+  it('permits a language approval without inventing a professional qualification', () => {
+    const languageBatch = batch();
+    languageBatch.lane = 'native_myanmar';
+    languageBatch.assignedRole = 'language_reviewer';
+    languageBatch.items = languageBatch.items.map((item) => ({
+      ...item,
+      dimension: 'native_myanmar' as const,
+    }));
+    render(
+      <ClinicalFrozenBatchPanel
+        state={{ kind: 'ready', batch: languageBatch }}
+        reviewer={{ displayName: 'Daw Language Reviewer', qualification: null }}
+        recordDecision={vi.fn()}
+      />,
+    );
+    expect(screen.getByText('language_reviewer')).toBeInTheDocument();
+    expect(screen.getByRole('radio', { name: 'Approve this exact revision' })).toBeEnabled();
   });
 
   it('records one exact row at a time, auto-advances, and renders the handoff receipt after unanimous approval', async () => {
@@ -149,7 +168,7 @@ describe('ClinicalFrozenBatchPanel', () => {
     expect(recordDecision).toHaveBeenNthCalledWith(2, expect.objectContaining({
       assignmentId: 'assignment-2',
       contentSlug: 'nutrition-two',
-      dimension: 'child_development',
+      dimension: 'clinical',
       expectedReviewRevision: 7,
       expectedSnapshotDigest: 'sha256:snapshot-2',
       expectedFreezeDigest: 'sha256:freeze-1',

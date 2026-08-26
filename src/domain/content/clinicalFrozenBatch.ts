@@ -1,7 +1,14 @@
 export const CLINICAL_BATCH_CONTRACT = 'ace.clinical-frozen-batch' as const;
 export const CLINICAL_BATCH_CONTRACT_VERSION = 1 as const;
 
-export type ClinicalBatchDimension = 'clinical' | 'child_development' | 'safety';
+export type ClinicalBatchDimension =
+  | 'english'
+  | 'native_myanmar'
+  | 'child_development'
+  | 'evidence'
+  | 'safety'
+  | 'clinical';
+export type FrozenBatchReviewerRole = 'language_reviewer' | 'evidence_reviewer' | 'clinical_reviewer';
 export type ClinicalBatchDecision = 'approved' | 'changes_requested' | 'not_applicable';
 
 export interface FrozenClinicalSnapshotField {
@@ -62,8 +69,8 @@ export interface FrozenClinicalBatch {
   contractVersion: typeof CLINICAL_BATCH_CONTRACT_VERSION;
   scope: 'authenticated_assignee';
   batchId: string;
-  lane: 'clinical';
-  assignedRole: 'clinical_reviewer';
+  lane: ClinicalBatchDimension;
+  assignedRole: FrozenBatchReviewerRole;
   frozenAt: number;
   freezeDigest: string;
   freezeReceiptDigest: string;
@@ -74,7 +81,7 @@ export interface FrozenClinicalBatch {
 export type ClinicalBatchLoadState =
   | { kind: 'loading' }
   | { kind: 'unavailable'; reason: 'backend_contract_missing' }
-  | { kind: 'unauthorized'; reason: 'clinical_reviewer_required' }
+  | { kind: 'unauthorized'; reason: 'assigned_reviewer_required' }
   | { kind: 'invalid'; reason: string }
   | { kind: 'stale'; batch: FrozenClinicalBatch; assignmentIds: string[] }
   | { kind: 'ready'; batch: FrozenClinicalBatch };
@@ -117,8 +124,10 @@ export type RecordClinicalBatchDecision = (
   input: RecordClinicalBatchDecisionInput,
 ) => Promise<RecordClinicalBatchDecisionResult>;
 
-export function isClinicalBatchReviewerRole(role: string | null | undefined): role is 'clinical_reviewer' {
-  return role === 'clinical_reviewer';
+export function isFrozenBatchReviewerRole(
+  role: string | null | undefined,
+): role is FrozenBatchReviewerRole {
+  return role === 'language_reviewer' || role === 'evidence_reviewer' || role === 'clinical_reviewer';
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -238,7 +247,8 @@ function parseItem(value: unknown): FrozenClinicalBatchItem | null {
   const decision = parseDecision(value.decision);
   if (
     !assignmentId || !slug || !type ||
-    !['clinical', 'child_development', 'safety'].includes(String(dimension)) ||
+    !['english', 'native_myanmar', 'child_development', 'evidence', 'safety', 'clinical']
+      .includes(String(dimension)) ||
     reviewRevision === null || reviewRevision < 1 || !Number.isInteger(reviewRevision) ||
     liveReviewRevision === null || liveReviewRevision < 1 || !Number.isInteger(liveReviewRevision) ||
     !snapshot || decision === undefined
@@ -281,15 +291,15 @@ export function adaptFrozenClinicalBatch(
   raw: unknown,
   currentRole: string | null | undefined,
 ): ClinicalBatchLoadState {
-  if (!isClinicalBatchReviewerRole(currentRole)) {
-    return { kind: 'unauthorized', reason: 'clinical_reviewer_required' };
+  if (!isFrozenBatchReviewerRole(currentRole)) {
+    return { kind: 'unauthorized', reason: 'assigned_reviewer_required' };
   }
   if (raw === undefined) return { kind: 'loading' };
   if (raw === null) return { kind: 'unavailable', reason: 'backend_contract_missing' };
   if (!isRecord(raw)) return { kind: 'invalid', reason: 'contract_not_an_object' };
   if (raw.status === 'refused') {
     if (raw.code === 'not_authenticated' || raw.code === 'not_assigned_reviewer') {
-      return { kind: 'unauthorized', reason: 'clinical_reviewer_required' };
+      return { kind: 'unauthorized', reason: 'assigned_reviewer_required' };
     }
     if (raw.code === 'assignment_expired') {
       return { kind: 'invalid', reason: 'assignment_expired' };
@@ -300,8 +310,10 @@ export function adaptFrozenClinicalBatch(
     raw.contract !== CLINICAL_BATCH_CONTRACT ||
     raw.contractVersion !== CLINICAL_BATCH_CONTRACT_VERSION ||
     raw.scope !== 'authenticated_assignee' ||
-    raw.lane !== 'clinical' ||
-    raw.assignedRole !== 'clinical_reviewer'
+    !['english', 'native_myanmar', 'child_development', 'evidence', 'safety', 'clinical']
+      .includes(String(raw.lane)) ||
+    !isFrozenBatchReviewerRole(String(raw.assignedRole)) ||
+    raw.assignedRole !== currentRole
   ) return { kind: 'invalid', reason: 'contract_identity_mismatch' };
 
   const batchId = requiredString(raw, 'batchId');
@@ -318,6 +330,7 @@ export function adaptFrozenClinicalBatch(
   const assignmentIds = new Set<string>();
   const exactTargets = new Set<string>();
   for (const item of items) {
+    if (item.dimension !== raw.lane) return { kind: 'invalid', reason: 'mixed_batch_dimensions' };
     const exactTarget = `${item.slug}:${item.dimension}:r${item.reviewRevision}`;
     if (assignmentIds.has(item.assignmentId) || exactTargets.has(exactTarget)) {
       return { kind: 'invalid', reason: 'duplicate_exact_target' };
@@ -338,8 +351,8 @@ export function adaptFrozenClinicalBatch(
     contractVersion: CLINICAL_BATCH_CONTRACT_VERSION,
     scope: 'authenticated_assignee',
     batchId,
-    lane: 'clinical',
-    assignedRole: 'clinical_reviewer',
+    lane: raw.lane as ClinicalBatchDimension,
+    assignedRole: raw.assignedRole as FrozenBatchReviewerRole,
     frozenAt,
     freezeDigest,
     freezeReceiptDigest,

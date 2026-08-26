@@ -62,7 +62,7 @@ describe('frozen clinical batch adapter', () => {
     });
     expect(adaptFrozenClinicalBatch(contract(), 'owner')).toEqual({
       kind: 'unauthorized',
-      reason: 'clinical_reviewer_required',
+      reason: 'assigned_reviewer_required',
     });
   });
 
@@ -110,10 +110,26 @@ describe('frozen clinical batch adapter', () => {
 
   it('accepts the qualification-gated child-development dimension in the clinical lane', () => {
     const raw = contract();
+    raw.lane = 'child_development';
     (raw.items as Array<Record<string, unknown>>)[0].dimension = 'child_development';
     const state = adaptFrozenClinicalBatch(raw, 'clinical_reviewer');
     expect(state.kind).toBe('ready');
     if (state.kind === 'ready') expect(state.batch.items[0].dimension).toBe('child_development');
+  });
+
+  it('accepts a dimension-matched language-reviewer batch and rejects role mismatch', () => {
+    const raw = contract({
+      lane: 'native_myanmar',
+      assignedRole: 'language_reviewer',
+    });
+    (raw.items as Array<Record<string, unknown>>)[0].dimension = 'native_myanmar';
+    expect(adaptFrozenClinicalBatch(raw, 'language_reviewer')).toEqual(
+      expect.objectContaining({ kind: 'ready' }),
+    );
+    expect(adaptFrozenClinicalBatch(raw, 'clinical_reviewer')).toEqual({
+      kind: 'invalid',
+      reason: 'contract_identity_mismatch',
+    });
   });
 
   it('stops the whole batch when any live revision differs from its frozen revision', () => {

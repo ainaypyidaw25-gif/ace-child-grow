@@ -9,11 +9,11 @@ function source(path: string): string {
 describe('clinical batch workspace boundary', () => {
   it('suppresses broad catalogue, detail, search and queue queries for clinical accounts', () => {
     const workspace = source('src/screens/ContentReviewWorkspace.tsx');
-    expect(workspace).toContain('!isClinicalBatchReviewerRole(access?.role)');
+    expect(workspace).toContain('!isFrozenBatchReviewerRole(access?.role)');
     expect(workspace).toContain("standardWorkspaceEnabled ? { type } : 'skip'");
     expect(workspace).toContain("standardWorkspaceEnabled && selectedSlug ? { slug: selectedSlug } : 'skip'");
     expect(workspace).toContain("standardWorkspaceEnabled ? {} : 'skip'");
-    expect(workspace).toContain("activeTab: WorkspaceTab = isClinicalReviewer ? 'clinicalBatch' : tab");
+    expect(workspace).toContain("activeTab: WorkspaceTab = isFrozenBatchReviewer ? 'clinicalBatch' : tab");
   });
 
   it('does not substitute the broad queue or generic decision mutation for the exact batch backend', () => {

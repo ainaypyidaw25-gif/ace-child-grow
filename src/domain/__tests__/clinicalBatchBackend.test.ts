@@ -110,7 +110,7 @@ describe('clinical batch frontend boundary', () => {
       message: 'Use the assigned clinical reviewer account.',
     }, 'clinical_reviewer')).toEqual({
       kind: 'unauthorized',
-      reason: 'clinical_reviewer_required',
+      reason: 'assigned_reviewer_required',
     });
     expect(readAssignedClinicalBatch({
       status: 'refused',

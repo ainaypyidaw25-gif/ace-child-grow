@@ -6,6 +6,8 @@ export const CLINICAL_REVIEW_BATCH_CONTRACT_VERSION = 1 as const;
 // dimension explicitly and the server returns that registered value.
 export const CLINICAL_REVIEW_BATCH_DIMENSION = 'clinical' as const;
 export const clinicalReviewBatchDimensionValidator = v.union(
+  v.literal('english'),
+  v.literal('native_myanmar'),
   v.literal('clinical'),
   v.literal('child_development'),
   v.literal('evidence'),
@@ -50,8 +52,10 @@ const itemValidator = v.object({
   decision: v.union(clinicalReviewReceiptValidator, v.null()),
 });
 const reviewerValidator = v.object({
-  profileId: v.string(), userId: v.string(), displayName: v.string(), qualification: v.string(),
-  role: v.union(v.literal('clinical_reviewer'), v.literal('evidence_reviewer')),
+  profileId: v.string(), userId: v.string(), displayName: v.string(), qualification: nullableStringValidator,
+  role: v.union(
+    v.literal('language_reviewer'), v.literal('evidence_reviewer'), v.literal('clinical_reviewer'),
+  ),
 });
 
 export const clinicalReviewBatchResultValidator = v.object({
@@ -60,7 +64,9 @@ export const clinicalReviewBatchResultValidator = v.object({
   scope: v.literal('authenticated_assignee'),
   batchId: v.string(),
   lane: clinicalReviewBatchDimensionValidator,
-  assignedRole: v.union(v.literal('clinical_reviewer'), v.literal('evidence_reviewer')),
+  assignedRole: v.union(
+    v.literal('language_reviewer'), v.literal('evidence_reviewer'), v.literal('clinical_reviewer'),
+  ),
   frozenAt: v.number(),
   freezeDigest: v.string(),
   freezeReceiptDigest: v.string(),

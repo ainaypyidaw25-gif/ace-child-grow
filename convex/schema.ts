@@ -500,7 +500,8 @@ export default defineSchema({
     sequence: v.number(),
     laneGraphVersion: v.literal(1),
     dimension: v.union(
-      v.literal('clinical'), v.literal('child_development'), v.literal('evidence'), v.literal('safety'),
+      v.literal('english'), v.literal('native_myanmar'), v.literal('child_development'),
+      v.literal('evidence'), v.literal('safety'), v.literal('clinical'),
     ),
     authority: v.union(v.literal('pilot'), v.literal('release')),
     status: v.union(
@@ -519,7 +520,9 @@ export default defineSchema({
     reviewerId: v.optional(v.id('users')),
     reviewerDisplayName: v.optional(v.string()),
     reviewerQualification: v.optional(v.string()),
-    reviewerRole: v.optional(v.union(v.literal('clinical_reviewer'), v.literal('evidence_reviewer'))),
+    reviewerRole: v.optional(v.union(
+      v.literal('language_reviewer'), v.literal('evidence_reviewer'), v.literal('clinical_reviewer'),
+    )),
     reviewerIdentityDigest: v.optional(v.string()),
     activationKind: v.union(
       v.literal('initial'),
@@ -549,7 +552,8 @@ export default defineSchema({
     assignmentId: v.string(),
     ordinal: v.number(),
     dimension: v.union(
-      v.literal('clinical'), v.literal('child_development'), v.literal('evidence'), v.literal('safety'),
+      v.literal('english'), v.literal('native_myanmar'), v.literal('child_development'),
+      v.literal('evidence'), v.literal('safety'), v.literal('clinical'),
     ),
     kind: v.string(),
     contentSlug: v.string(),

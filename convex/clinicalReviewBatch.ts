@@ -22,7 +22,7 @@ import {
 import { todayIsoUtc } from './lib/evidenceFreshness';
 import { evaluatePublicationEvidence } from './lib/evidencePublicationGate';
 import { requireUser } from './lib/auth';
-import { roleMayReview } from './lib/reviewPolicy';
+import { roleMayReviewFrozenBatch } from './lib/reviewPolicy';
 import { CLINICAL_REVIEW_REGISTRY_MAX_ITEMS_PER_BATCH } from './lib/clinicalReviewRegistryContract';
 import {
   exactHandoffReceipt,
@@ -76,10 +76,11 @@ async function assignedReviewerBlockers(
   if (profile.isStaff !== true) blockers.push('assigned_reviewer_not_staff');
   if (profile.staffRole !== reviewer.role) blockers.push('assigned_reviewer_role_drift');
   if ((profile.displayName ?? '').trim() !== reviewer.displayName) blockers.push('assigned_reviewer_name_drift');
-  if ((profile.staffQualification ?? '').trim() !== reviewer.qualification) blockers.push('assigned_reviewer_qualification_drift');
+  const profileQualification = (profile.staffQualification ?? '').trim() || null;
+  if (profileQualification !== reviewer.qualification) blockers.push('assigned_reviewer_qualification_drift');
   const stableIdentity = {
     profileId: String(profile._id), userId: String(profile.userId), isStaff: profile.isStaff === true,
-    displayName: (profile.displayName ?? '').trim(), qualification: (profile.staffQualification ?? '').trim(),
+    displayName: (profile.displayName ?? '').trim(), qualification: profileQualification ?? '',
     role: profile.staffRole ?? null,
   };
   if (await sha256Canonical(stableIdentity) !== reviewer.identityCanonicalSha256) {
@@ -414,7 +415,7 @@ async function inspectItem(
     || existing.contentVersion !== item.reviewRevision || existing.reviewRevision !== item.reviewRevision
     || existing.dimension !== registration.dimension || String(existing.reviewerId) !== registration.manifest.reviewer.userId
     || existing.reviewerDisplayName !== registration.manifest.reviewer.displayName
-    || existing.reviewerQualification !== registration.manifest.reviewer.qualification
+    || existing.reviewerQualification !== (registration.manifest.reviewer.qualification ?? undefined)
     || existing.reviewerRole !== registration.manifest.reviewer.role
     || existing.createdAt !== existing.reviewedAt || existing.updatedAt !== existing.reviewedAt
     || (existing.note !== undefined
@@ -542,8 +543,7 @@ async function registryBlockers(): Promise<string[]> {
       || manifest.count > CLINICAL_REVIEW_REGISTRY_MAX_ITEMS_PER_BATCH) {
       blockers.push(`registry_item_count_invalid:${manifest.batchId}`);
     }
-    if (!roleMayReview(manifest.reviewer.role, registration.dimension)
-      || (registration.dimension !== 'evidence' && manifest.reviewer.role !== 'clinical_reviewer')) {
+    if (!roleMayReviewFrozenBatch(manifest.reviewer.role, registration.dimension)) {
       blockers.push(`registry_reviewer_role_invalid:${manifest.batchId}`);
     }
     const ordinals = new Set<number>();
@@ -901,7 +901,8 @@ export const saveAssignedDecision = mutation({
   args: {
     batchId: v.string(), assignmentId: v.string(), contentSlug: v.string(),
     dimension: v.union(
-      v.literal('clinical'), v.literal('child_development'), v.literal('evidence'), v.literal('safety'),
+      v.literal('english'), v.literal('native_myanmar'), v.literal('child_development'),
+      v.literal('evidence'), v.literal('safety'), v.literal('clinical'),
     ),
     expectedSnapshotDigest: v.string(),
     expectedFreezeDigest: v.string(), expectedReviewRevision: v.number(),
@@ -987,7 +988,7 @@ export const saveAssignedDecision = mutation({
       contentSlug: item.slug, contentVersion: item.reviewRevision, reviewRevision: item.reviewRevision,
       dimension: registration.dimension, decision: args.decision, note: note || undefined, reviewerId: userId,
       reviewerDisplayName: reviewer.displayName,
-      reviewerQualification: reviewer.qualification, reviewerRole: reviewer.role,
+      reviewerQualification: reviewer.qualification ?? undefined, reviewerRole: reviewer.role,
       reviewedAt: now, decisionKey: state.assignmentId, clinicalReviewBatchId: registration.manifest.batchId,
       createdAt: now, updatedAt: now,
     });

@@ -8,6 +8,7 @@ import {
   type RecordClinicalBatchDecision,
   type ClinicalHandoffReceipt,
 } from '../../domain/content/clinicalFrozenBatch';
+import { approvalNeedsQualification } from '../../../convex/lib/reviewPolicy';
 
 export interface ClinicalReviewerIdentity {
   displayName: string | null;
@@ -29,8 +30,11 @@ const DECISION_LABELS: Record<ClinicalBatchDecision, { mm: string; en: string }>
 };
 
 const DIMENSION_LABELS = {
+  english: { mm: 'အင်္ဂလိပ်စာ', en: 'English' },
+  native_myanmar: { mm: 'သဘာဝကျသော မြန်မာစာ', en: 'Native Myanmar' },
   clinical: { mm: 'အထူးကျွမ်းကျင်သူ ဘေးကင်းရေး', en: 'Specialist safety' },
   child_development: { mm: 'ကလေးဖွံ့ဖြိုးမှု', en: 'Child development' },
+  evidence: { mm: 'ကိုးကားအထောက်အထား', en: 'Evidence' },
   safety: { mm: 'ဘေးကင်းရေး', en: 'Safety' },
 } as const;
 
@@ -76,7 +80,7 @@ function ClinicalBatchSession({
   const activeItem = batch.items.find((item) => item.assignmentId === activeAssignmentId) ?? batch.items[0];
   const completedCount = recorded.size;
   const complete = completedCount === batch.items.length;
-  const clinicalClearanceComplete = complete
+  const batchClearanceComplete = complete
     && batch.items.every((item) => recorded.get(item.assignmentId)?.decision === 'approved');
   const activeReceipt = recorded.get(activeItem.assignmentId);
 
@@ -87,7 +91,8 @@ function ClinicalBatchSession({
       setMessage(L('ပြင်ဆင်ရမည့်အချက်ကို မှတ်ချက်တွင် ရေးပါ။', 'Write a note explaining what must change.'));
       return;
     }
-    if (decision === 'approved' && !reviewer.qualification?.trim()) {
+    if (decision === 'approved' && approvalNeedsQualification(activeItem.dimension)
+      && !reviewer.qualification?.trim()) {
       setMessage(L('အတည်ပြုရန် သင့်အကောင့်တွင် သက်ဆိုင်ရာ အရည်အချင်း မှတ်တမ်းရှိရပါမည်။', 'A recorded professional qualification is required to approve.'));
       return;
     }
@@ -165,7 +170,7 @@ function ClinicalBatchSession({
       <section className="rounded-card border border-line bg-white p-4 shadow-card sm:p-5">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-mint-deep">{L('Clinical lane', 'Clinical lane')}</p>
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-mint-deep">{DIMENSION_LABELS[batch.lane][locale]}</p>
             <h2 className="mt-1 text-lg font-bold text-sky-deep">{L('Exact frozen batch', 'Exact frozen batch')}</h2>
             <p className="mt-1 text-sm text-ink-soft">{batch.batchId}</p>
           </div>
@@ -180,7 +185,7 @@ function ClinicalBatchSession({
           </div>
           <div className="rounded-xl bg-canvas p-3">
             <dt className="text-xs text-ink-soft">{L('အခန်းကဏ္ဍ', 'Role')}</dt>
-            <dd className="mt-1 font-semibold text-ink">clinical_reviewer</dd>
+            <dd className="mt-1 font-semibold text-ink">{batch.assignedRole}</dd>
           </div>
           <div className="rounded-xl bg-canvas p-3">
             <dt className="text-xs text-ink-soft">{L('Freeze digest', 'Freeze digest')}</dt>
@@ -321,7 +326,8 @@ function ClinicalBatchSession({
                         value={value}
                         checked={decision === value}
                         onChange={() => { setDecision(value); setMessage(''); }}
-                        disabled={value === 'approved' && !reviewer.qualification?.trim()}
+                        disabled={value === 'approved' && approvalNeedsQualification(activeItem.dimension)
+                          && !reviewer.qualification?.trim()}
                         className="mt-1"
                       />
                       <span className="font-semibold leading-6 text-ink">{DECISION_LABELS[value][locale]}</span>
@@ -355,9 +361,9 @@ function ClinicalBatchSession({
       </div>
 
       {complete && (
-        handoff && clinicalClearanceComplete ? (
+        handoff && batchClearanceComplete ? (
           <section data-testid="clinical-handoff-receipt" className="rounded-card border border-mint bg-mint-soft p-4 shadow-card sm:p-5">
-            <h2 className="font-bold text-mint-deep">{L('Clinical handoff receipt', 'Clinical handoff receipt')}</h2>
+            <h2 className="font-bold text-mint-deep">{L('သုံးသပ်ရေး handoff receipt', 'Review handoff receipt')}</h2>
             <dl className="mt-3 grid gap-3 text-sm sm:grid-cols-2">
               <div><dt className="text-xs text-ink-soft">Batch</dt><dd className="mt-1 font-medium text-ink">{handoff.batchId}</dd></div>
               <div><dt className="text-xs text-ink-soft">{L('ဆုံးဖြတ်ချက်အရေအတွက်', 'Decision count')}</dt><dd className="mt-1 font-medium text-ink">{handoff.decisionCount}</dd></div>
@@ -365,7 +371,7 @@ function ClinicalBatchSession({
               <div><dt className="text-xs text-ink-soft">Receipt digest</dt><dd className="mt-1 break-all font-mono text-xs text-ink">{handoff.receiptDigest}</dd></div>
             </dl>
           </section>
-        ) : clinicalClearanceComplete ? (
+        ) : batchClearanceComplete ? (
           <BlockedCard
             testId="clinical-handoff-pending"
             title={L('ဆုံးဖြတ်ချက်များ ပြီးပါပြီ', 'Decisions complete')}
@@ -374,7 +380,7 @@ function ClinicalBatchSession({
         ) : (
           <BlockedCard
             testId="clinical-followup-required"
-            title={L('Clinical lane မပြီးသေးပါ', 'Clinical follow-up is still required')}
+            title={L('သုံးသပ်ရေး lane မပြီးသေးပါ', 'Review follow-up is still required')}
             body={L(
               'ပြင်ဆင်ရန်တောင်းဆိုထားသော သို့မဟုတ် မသက်ဆိုင်ဟု ဆုံးဖြတ်ထားသော row ရှိပါသည်။ ပြင်ဆင်ပြီး exact revision အသစ်ကို refreeze/re-review မလုပ်မချင်း အခြား reviewer lane သို့ မပြောင်းပါနှင့်။',
               'At least one row requested changes or was marked not applicable. Do not switch reviewer lanes until it is corrected and a new exact revision is refrozen and reviewed.',
@@ -392,7 +398,7 @@ export function ClinicalFrozenBatchPanel({ state, reviewer, recordDecision }: Cl
 
   if (state.kind === 'loading') return <p className="text-ink-soft" role="status">…</p>;
   if (state.kind === 'unauthorized') {
-    return <BlockedCard testId="clinical-batch-unauthorized" title={L('Clinical reviewer account လိုအပ်သည်', 'Clinical reviewer account required')} body={L('ပုံမှန် sign out / sign in ဖြင့် သတ်မှတ်ထားသော clinical reviewer account ကို သုံးပါ။', 'Use normal sign out / sign in with the assigned clinical reviewer account.')} />;
+    return <BlockedCard testId="clinical-batch-unauthorized" title={L('သတ်မှတ်ထားသော reviewer account လိုအပ်သည်', 'Assigned reviewer account required')} body={L('ပုံမှန် sign out / sign in ဖြင့် ဤ frozen batch အတွက် သတ်မှတ်ထားသော reviewer account ကို သုံးပါ။', 'Use normal sign out / sign in with the reviewer account assigned to this frozen batch.')} />;
   }
   if (state.kind === 'unavailable') {
     return <BlockedCard testId="clinical-batch-backend-missing" title={L('Exact batch backend မရသေးပါ', 'Exact batch backend unavailable')} body={L('Exact assignment၊ frozen snapshot နှင့် server-issued receipt ပါသော contract မရသေးသဖြင့် မည်သည့် row ကိုမျှ အတည်မပြုနိုင်ပါ။ Broad queue ကို assignment အဖြစ် မယူပါ။', 'No row can be decided until the server returns an exact assignment, frozen snapshot, and server-issued receipt. The broad queue is never treated as an assignment.')} />;
