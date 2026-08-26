@@ -20,6 +20,22 @@ export const clinicalReviewDecisionValidator = v.union(
   v.literal('changes_requested'),
   v.literal('not_applicable'),
 );
+export const CLINICAL_REVIEW_RELEASE_ALLOWED_DECISIONS = [
+  'approved',
+  'changes_requested',
+] as const;
+export const CLINICAL_REVIEW_PILOT_ALLOWED_DECISIONS = [
+  ...CLINICAL_REVIEW_RELEASE_ALLOWED_DECISIONS,
+  'not_applicable',
+] as const;
+
+export function clinicalReviewAllowedDecisionsForAuthority(
+  authority: 'pilot' | 'release',
+) {
+  return authority === 'release'
+    ? [...CLINICAL_REVIEW_RELEASE_ALLOWED_DECISIONS]
+    : [...CLINICAL_REVIEW_PILOT_ALLOWED_DECISIONS];
+}
 export const clinicalReviewReceiptValidator = v.object({
   decision: clinicalReviewDecisionValidator,
   note: nullableStringValidator,
@@ -70,6 +86,7 @@ export const clinicalReviewBatchResultValidator = v.object({
   frozenAt: v.number(),
   freezeDigest: v.string(),
   freezeReceiptDigest: v.string(),
+  allowedDecisions: v.array(clinicalReviewDecisionValidator),
   reviewer: reviewerValidator,
   items: v.array(itemValidator),
   handoff: v.union(clinicalReviewHandoffValidator, v.null()),

@@ -23,6 +23,7 @@ function batch(): FrozenClinicalBatch {
     frozenAt: 1_787_500_000_000,
     freezeDigest: 'sha256:freeze-1',
     freezeReceiptDigest: 'freeze-receipt-1',
+    allowedDecisions: ['approved', 'changes_requested'],
     handoff: null,
     items: [
       {
@@ -113,6 +114,51 @@ describe('ClinicalFrozenBatchPanel', () => {
     );
     expect(screen.getByText('language_reviewer')).toBeInTheDocument();
     expect(screen.getByRole('radio', { name: 'Approve this exact revision' })).toBeEnabled();
+  });
+
+  it('offers only recoverable release decisions and never renders not applicable', () => {
+    render(
+      <ClinicalFrozenBatchPanel
+        state={{ kind: 'ready', batch: batch() }}
+        reviewer={{ displayName: 'Dr Reviewer', qualification: 'MBBS' }}
+        recordDecision={vi.fn()}
+      />,
+    );
+
+    expect(screen.getByRole('radio', { name: 'Approve this exact revision' })).toBeInTheDocument();
+    expect(screen.getByRole('radio', { name: 'Request changes' })).toBeInTheDocument();
+    expect(screen.queryByRole('radio', { name: 'Not applicable' })).not.toBeInTheDocument();
+  });
+
+  it('renders and records not applicable when the server-authoritative pilot contract allows it', async () => {
+    const pilotBatch = batch();
+    pilotBatch.allowedDecisions = ['approved', 'changes_requested', 'not_applicable'];
+    const recordDecision = vi.fn<RecordClinicalBatchDecision>().mockResolvedValue({
+      ok: true,
+      receipt: {
+        decision: 'not_applicable',
+        note: null,
+        reviewedAt: 1_787_500_010_000,
+        receiptId: 'pilot-receipt-1',
+      },
+    });
+    render(
+      <ClinicalFrozenBatchPanel
+        state={{ kind: 'ready', batch: pilotBatch }}
+        reviewer={{ displayName: 'Dr Reviewer', qualification: 'MBBS' }}
+        recordDecision={recordDecision}
+      />,
+    );
+
+    expect(screen.getByRole('radio', { name: 'Approve this exact revision' })).toBeInTheDocument();
+    expect(screen.getByRole('radio', { name: 'Request changes' })).toBeInTheDocument();
+    expect(screen.getByRole('radio', { name: 'Not applicable' })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('radio', { name: 'Not applicable' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Record this item decision' }));
+    await waitFor(() => expect(recordDecision).toHaveBeenCalledWith(expect.objectContaining({
+      assignmentId: 'assignment-1',
+      decision: 'not_applicable',
+    })));
   });
 
   it('records one exact row at a time, auto-advances, and renders the handoff receipt after unanimous approval', async () => {

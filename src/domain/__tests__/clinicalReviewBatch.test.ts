@@ -380,6 +380,7 @@ describe('frozen clinical-review batch UI contract', () => {
       lane: 'clinical',
       assignedRole: 'clinical_reviewer',
       freezeDigest: CLINICAL_REVIEW_BATCH_HASH,
+      allowedDecisions: ['approved', 'changes_requested', 'not_applicable'],
       handoff: null,
     });
     const items = result.items as Array<Record<string, unknown>>;
@@ -476,10 +477,30 @@ describe('frozen clinical-review batch UI contract', () => {
     expect(closedRead.handoff).toBeNull();
   });
 
+  it('preserves not-applicable history for the non-release pilot lane', async () => {
+    const ctx = context();
+    const batch = await readBatch(ctx) as { items: Array<Record<string, unknown>> };
+    const result = await handler(saveAssignedDecision)(ctx, {
+      ...inputFrom(batch.items[0]),
+      decision: 'not_applicable',
+    });
+
+    expect(result).toMatchObject({
+      ok: true,
+      duplicate: false,
+      receipt: { decision: 'not_applicable' },
+    });
+    expect(ctx.tables.contentReviews).toHaveLength(1);
+    expect(ctx.tables.clinicalReviewBatchReceipts).toHaveLength(0);
+  });
+
   it('atomically completes a persisted release batch with its unanimous handoff', async () => {
     const ctx = context();
     await makePilotReleaseActive(ctx);
-    const batch = await readBatch(ctx) as { items: Array<Record<string, unknown>> };
+    const batch = await readBatch(ctx) as {
+      allowedDecisions: string[]; items: Array<Record<string, unknown>>;
+    };
+    expect(batch.allowedDecisions).toEqual(['approved', 'changes_requested']);
     await handler(saveAssignedDecision)(ctx, inputFrom(batch.items[0]));
     const finalArgs = inputFrom(batch.items[1]);
     const final = await handler(saveAssignedDecision)(ctx, finalArgs) as Record<string, unknown>;
@@ -495,6 +516,29 @@ describe('frozen clinical-review batch UI contract', () => {
     expect(ctx.tables.clinicalReviewBatchReceipts).toHaveLength(1);
     const closedRead = await readBatch(ctx);
     expect(closedRead).toMatchObject({ handoff: final.handoff });
+  });
+
+  it('refuses not-applicable on a persisted release with zero writes', async () => {
+    const ctx = context();
+    await makePilotReleaseActive(ctx);
+    const batch = await readBatch(ctx) as { items: Array<Record<string, unknown>> };
+
+    const result = await handler(saveAssignedDecision)(ctx, {
+      ...inputFrom(batch.items[0]),
+      decision: 'not_applicable',
+    });
+
+    expect(result).toEqual({
+      ok: false,
+      code: 'decision_not_allowed',
+      message: 'Not applicable is not a valid decision for an exact frozen release assignment.',
+    });
+    expect(ctx.db.insert).not.toHaveBeenCalled();
+    expect(ctx.db.patch).not.toHaveBeenCalled();
+    expect(ctx.tables.contentReviews).toHaveLength(0);
+    expect(ctx.tables.clinicalReviewBatchReceipts).toHaveLength(0);
+    expect(ctx.tables.auditLogs).toHaveLength(0);
+    expect(ctx.tables.clinicalReviewBatches[0]).toMatchObject({ status: 'active' });
   });
 
   it('recomputes decision, receipt, digest, and completion timestamps on every closed read', async () => {

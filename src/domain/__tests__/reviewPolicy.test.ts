@@ -89,6 +89,10 @@ describe('review refusal', () => {
     expect(reviewRefusal(base)).toBeNull();
   });
 
+  it('preserves not-applicable for the generic non-release review workflow', () => {
+    expect(reviewRefusal({ ...base, decision: 'not_applicable' })).toBeNull();
+  });
+
   it('names each refusal reason with a code the UI can translate', () => {
     expect(reviewRefusal({ ...base, role: 'support' })?.code).toBe('not_staff');
     expect(reviewRefusal({ ...base, role: null })?.code).toBe('not_staff');

@@ -74,6 +74,7 @@ export interface FrozenClinicalBatch {
   frozenAt: number;
   freezeDigest: string;
   freezeReceiptDigest: string;
+  allowedDecisions: ClinicalBatchDecision[];
   items: FrozenClinicalBatchItem[];
   handoff: ClinicalHandoffReceipt | null;
 }
@@ -115,6 +116,7 @@ export type RecordClinicalBatchDecisionResult =
         | 'qualification_required'
         | 'display_name_required'
         | 'note_required'
+        | 'decision_not_allowed'
         | 'unknown';
       message: string;
       currentReviewRevision?: number;
@@ -280,6 +282,20 @@ function parseHandoff(value: unknown): ClinicalHandoffReceipt | null | undefined
   return { batchId, decisionCount, completedAt, digest, receiptDigest };
 }
 
+function parseAllowedDecisions(value: unknown): ClinicalBatchDecision[] | null {
+  if (!Array.isArray(value)) return null;
+  const decisions = value.filter(
+    (decision): decision is ClinicalBatchDecision =>
+      decision === 'approved' || decision === 'changes_requested' || decision === 'not_applicable',
+  );
+  if (decisions.length !== value.length || new Set(decisions).size !== decisions.length) return null;
+  const decisionSet = new Set(decisions);
+  if (!decisionSet.has('approved') || !decisionSet.has('changes_requested')) return null;
+  if (decisions.length !== 2 && decisions.length !== 3) return null;
+  if (decisions.length === 3 && !decisionSet.has('not_applicable')) return null;
+  return decisions;
+}
+
 /**
  * Converts the future server response into the only shape the clinical UI may
  * render. It deliberately refuses to derive assignments from the broad owner
@@ -320,7 +336,9 @@ export function adaptFrozenClinicalBatch(
   const frozenAt = requiredNumber(raw, 'frozenAt');
   const freezeDigest = requiredString(raw, 'freezeDigest');
   const freezeReceiptDigest = requiredString(raw, 'freezeReceiptDigest');
-  if (!batchId || frozenAt === null || !freezeDigest || !freezeReceiptDigest || !Array.isArray(raw.items) || raw.items.length === 0) {
+  const allowedDecisions = parseAllowedDecisions(raw.allowedDecisions);
+  if (!batchId || frozenAt === null || !freezeDigest || !freezeReceiptDigest || !allowedDecisions
+    || !Array.isArray(raw.items) || raw.items.length === 0) {
     return { kind: 'invalid', reason: 'incomplete_freeze_manifest' };
   }
 
@@ -356,6 +374,7 @@ export function adaptFrozenClinicalBatch(
     frozenAt,
     freezeDigest,
     freezeReceiptDigest,
+    allowedDecisions,
     items,
     handoff,
   };
