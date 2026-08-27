@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { sha256Canonical } from '../../../convex/lib/aiAuditHash';
 import {
+  CLINICAL_ENGLISH_RELEASE_BATCH_ROUTING_HASH,
   CLINICAL_NEWBORN_REFREEZE_BATCH_HASH,
   CLINICAL_NEWBORN_REFREEZE_BATCH_MANIFEST,
   CLINICAL_NEWBORN_REFREEZE_BATCH_ROUTING_HASH,
@@ -70,6 +71,12 @@ describe('clinical newborn refreeze registry data', () => {
         activation: 'after_changes_requested_refreeze',
         predecessor: 'clinical-native-myanmar-governed-14-2026-08-26-v1',
       },
+      {
+        sequence: 8,
+        batchId: 'clinical-english-governed-14-2026-08-27-v1',
+        activation: 'after_handoff',
+        predecessor: 'clinical-native-myanmar-refreeze-14-2026-08-26-v1',
+      },
     ]);
 
     const expected = new Map([
@@ -78,6 +85,7 @@ describe('clinical newborn refreeze registry data', () => {
       ['clinical-older-safety-2026-08-24-v1', CLINICAL_OLDER_SAFETY_RELEASE_BATCH_ROUTING_HASH],
       ['clinical-native-myanmar-governed-14-2026-08-26-v1', CLINICAL_NATIVE_MYANMAR_RELEASE_BATCH_ROUTING_HASH],
       ['clinical-native-myanmar-refreeze-14-2026-08-26-v1', CLINICAL_NATIVE_MYANMAR_REFREEZE_BATCH_ROUTING_HASH],
+      ['clinical-english-governed-14-2026-08-27-v1', CLINICAL_ENGLISH_RELEASE_BATCH_ROUTING_HASH],
     ]);
     for (const registration of releases.slice(1)) {
       expect(await sha256Canonical(clinicalReviewBatchRoutingPayload(registration)))
