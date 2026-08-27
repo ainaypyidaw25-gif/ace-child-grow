@@ -104,7 +104,13 @@ type Production = {
 const production = JSON.parse(raw) as Production;
 const committedFixture = existsSync(fixturePath) ? JSON.parse(
   readFileSync(fixturePath, 'utf8'),
-) as { frozenAt: number; expiresAt: number; freezeDigest: string; routingDigest: string } : null;
+) as {
+  frozenFrom: { gitBase: string };
+  frozenAt: number;
+  expiresAt: number;
+  freezeDigest: string;
+  routingDigest: string;
+} : null;
 
 function canonicalJson(value: unknown): string {
   if (value === null) return 'null';
@@ -398,7 +404,8 @@ const fixture = {
   frozenFrom: {
     deployment,
     checkedAt: new Date(frozenAt).toISOString(),
-    gitBase: execFileSync('git', ['rev-parse', 'origin/main'], { encoding: 'utf8' }).trim(),
+    gitBase: committedFixture?.frozenFrom.gitBase
+      ?? execFileSync('git', ['rev-parse', 'origin/main'], { encoding: 'utf8' }).trim(),
   },
   batchId,
   frozenAt,
