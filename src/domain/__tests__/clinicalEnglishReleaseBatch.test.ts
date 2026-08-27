@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { sha256Canonical } from '../../../convex/lib/aiAuditHash';
 import {
@@ -78,5 +80,17 @@ describe('English all-14 release batch', () => {
     expect(registration).toBeDefined();
     expect(await sha256Canonical(clinicalReviewBatchRoutingPayload(registration!)))
       .toBe(CLINICAL_ENGLISH_RELEASE_BATCH_ROUTING_HASH);
+  });
+
+  it('preserves the committed frozen git base when the audit fixture is rewritten', () => {
+    const auditSource = readFileSync(
+      resolve(process.cwd(), 'scripts/auditClinicalEnglishBatch.mts'),
+      'utf8',
+    );
+
+    expect(auditSource).toContain('gitBase: committedFixture?.frozenFrom.gitBase');
+    expect(auditSource).not.toContain(
+      "gitBase: execFileSync('git', ['rev-parse', 'origin/main']",
+    );
   });
 });
