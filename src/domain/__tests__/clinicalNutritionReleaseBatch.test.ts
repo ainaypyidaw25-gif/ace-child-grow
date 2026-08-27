@@ -20,7 +20,7 @@ describe('frozen infant-nutrition clinical release batch', () => {
       (entry) => entry.manifest.batchId === CLINICAL_NUTRITION_RELEASE_BATCH_MANIFEST.batchId,
     );
     if (!registration) throw new Error('Missing infant-nutrition release registration');
-    expect(CLINICAL_REVIEW_BATCH_REGISTRY).toHaveLength(7);
+    expect(CLINICAL_REVIEW_BATCH_REGISTRY).toHaveLength(8);
     expect(registration).toMatchObject({
       sequence: 4,
       laneGraphVersion: 1,
