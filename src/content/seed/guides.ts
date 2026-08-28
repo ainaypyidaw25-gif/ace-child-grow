@@ -252,8 +252,8 @@ export const GUIDES: SeedItem[] = [
   }),
 
   guide('5_6m', 'nutrition', {
-    title: b('၅–၆ လ — အာဟာရ (အစိုင်အခဲ စတင်ခြင်း)', '5–6 months — Nutrition (starting solids)'),
-    why: b('၆ လခန့်တွင် အစိုင်အခဲ စတင်ခြင်းသည် ကြီးထွားမှုနှင့် အရသာ သင်ယူမှုအတွက် အရေးကြီးသည်။', 'Around 6 months, starting solids supports growth and taste learning.'),
+    title: b('၅–၆ လ — အာဟာရ (ဖြည့်စွက်စာ စတင်ခြင်း)', '5–6 months — Nutrition (starting solids)'),
+    why: b('၆ လခန့်တွင် ဖြည့်စွက်စာ စတင်ကျွေးခြင်းသည် ကြီးထွားမှုနှင့် အရသာ သင်ယူမှုအတွက် အရေးကြီးသည်။', 'Around 6 months, starting solids supports growth and taste learning.'),
     observationQuestions: [
       b('ခေါင်းကို တည်ငြိမ်စွာ ထိန်း၍ အထောက်ဖြင့် ထိုင်နိုင်ပါသလား။', 'Holds head steady and sits with support?'),
       b('အစားအစာကို စိတ်ဝင်စား၍ ပါးစပ်ဟပါသလား။', 'Shows interest in food and opens mouth?'),

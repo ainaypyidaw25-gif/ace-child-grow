@@ -1,4 +1,4 @@
-import seedData from '../seedData.json';
+import frozenDesiredContent from './nativeMyanmarRefreezeCorrectionDesired.json';
 import exactPreimagesJson from './nativeMyanmarRefreezeCorrectionPreimages.json';
 import { v, type Infer } from 'convex/values';
 
@@ -117,7 +117,7 @@ export const NATIVE_MYANMAR_REFREEZE_CORRECTION_PREIMAGES =
   exactPreimagesJson as ExactPreimages;
 
 const desiredBySlug = new Map(
-  (seedData as unknown as DesiredContent[]).map((row) => [row.slug, row]),
+  (frozenDesiredContent as unknown as DesiredContent[]).map((row) => [row.slug, row]),
 );
 
 export type NativeMyanmarRefreezeCorrectionTarget = TargetPreimage & {
