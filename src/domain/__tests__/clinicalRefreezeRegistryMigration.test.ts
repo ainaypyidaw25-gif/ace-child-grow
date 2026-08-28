@@ -35,6 +35,7 @@ import {
 } from '../../../convex/clinicalReviewRegistry';
 import { sha256Canonical } from '../../../convex/lib/aiAuditHash';
 import {
+  CLINICAL_ENGLISH_REFREEZE_BATCH_ID,
   CLINICAL_ENGLISH_RELEASE_BATCH_ID,
   CLINICAL_INITIAL_RELEASE_BATCH_ID,
   CLINICAL_NATIVE_MYANMAR_RELEASE_BATCH_ID,
@@ -265,6 +266,7 @@ async function materializeCurrentRegistryTail(
     CLINICAL_NATIVE_MYANMAR_RELEASE_BATCH_ID,
     CLINICAL_NATIVE_MYANMAR_REFREEZE_BATCH_ID,
     CLINICAL_ENGLISH_RELEASE_BATCH_ID,
+    CLINICAL_ENGLISH_REFREEZE_BATCH_ID,
   ]) {
     const tail = registration(batchId);
     state.tables.clinicalReviewBatches.push(batchRow(tail));
