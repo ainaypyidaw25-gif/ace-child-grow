@@ -4,7 +4,7 @@ import type { Id } from './_generated/dataModel';
 import { internalMutation, internalQuery, query, type MutationCtx } from './_generated/server';
 import { logAudit } from './audit';
 import { requireOwner, requireUser } from './lib/auth';
-import { billingPeriodMs, type BillingInterval } from './lib/billingPeriods';
+import { paidAccessPeriodEnd, type BillingInterval } from './lib/billingPeriods';
 
 const planKeyValidator = v.union(v.literal('premium'), v.literal('family'));
 const environmentValidator = v.union(v.literal('sandbox'), v.literal('production'));
@@ -307,13 +307,12 @@ async function applyUpdate(ctx: MutationCtx, update: Update, source: 'api' | 'we
       .withIndex('by_user', (q) => q.eq('userId', row.userId))
       .unique();
     const interval = row.planInterval ?? plan.interval;
-    const periodMs = billingPeriodMs(interval);
     const patch = {
       planKey: row.planKey,
       status: 'active' as const,
       provider: 'myanmyanpay',
       providerSubscriptionId: row.orderId,
-      currentPeriodEnd: now + periodMs,
+      currentPeriodEnd: paidAccessPeriodEnd(now, interval, row.planKey, subscription),
       cancelAtPeriodEnd: true,
       updatedAt: now,
     };

@@ -8,3 +8,23 @@ export function billingPeriodMs(interval: BillingInterval): number {
   return 30 * DAY_MS;
 }
 
+type ExistingAccess = {
+  planKey: string;
+  status: string;
+  currentPeriodEnd?: number;
+} | null | undefined;
+
+export function paidAccessPeriodEnd(
+  purchasedAt: number,
+  interval: BillingInterval,
+  purchasedPlanKey: string,
+  existing: ExistingAccess,
+): number {
+  const canExtend = existing
+    && existing.planKey === purchasedPlanKey
+    && (existing.status === 'active' || existing.status === 'trialing')
+    && existing.currentPeriodEnd !== undefined
+    && existing.currentPeriodEnd > purchasedAt;
+  const startsAt = canExtend ? existing.currentPeriodEnd! : purchasedAt;
+  return startsAt + billingPeriodMs(interval);
+}

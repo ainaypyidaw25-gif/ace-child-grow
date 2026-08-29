@@ -3,7 +3,7 @@ import { v } from 'convex/values';
 import { getAuthUserId } from '@convex-dev/auth/server';
 import { requireOwner, requireUser } from './lib/auth';
 import { logAudit } from './audit';
-import { billingPeriodMs } from './lib/billingPeriods';
+import { paidAccessPeriodEnd } from './lib/billingPeriods';
 
 const paidPlanValidator = v.union(v.literal('premium'), v.literal('family'));
 const intervalValidator = v.union(v.literal('week'), v.literal('month'), v.literal('year'));
@@ -397,12 +397,11 @@ export const reviewPaymentRequest = mutation({
         .withIndex('by_user', (q) => q.eq('userId', row.userId))
         .unique();
       const interval = row.planInterval ?? plan.interval;
-      const periodMs = billingPeriodMs(interval);
       const patch = {
         planKey: row.planKey,
         status: 'active' as const,
         provider: 'manual_verified',
-        currentPeriodEnd: now + periodMs,
+        currentPeriodEnd: paidAccessPeriodEnd(now, interval, row.planKey, existing),
         cancelAtPeriodEnd: true,
         updatedAt: now,
       };

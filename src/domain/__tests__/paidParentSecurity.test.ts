@@ -14,7 +14,7 @@ import {
 } from '../../../convex/mmpayData';
 import { webhookSignatureIsValid } from '../../../convex/mmpay';
 import { PREMIUM_TRIAL_DAYS, premiumTrialPeriodEnd, trialIsAvailable } from '../../../convex/subscriptions';
-import { billingPeriodMs } from '../../../convex/lib/billingPeriods';
+import { billingPeriodMs, paidAccessPeriodEnd } from '../../../convex/lib/billingPeriods';
 
 const userId = 'users:owner' as Id<'users'>;
 const otherUserId = 'users:other' as Id<'users'>;
@@ -65,6 +65,33 @@ describe('paid-parent request-time entitlement gates', () => {
     expect(billingPeriodMs('week')).toBe(7 * 86_400_000);
     expect(billingPeriodMs('month')).toBe(30 * 86_400_000);
     expect(billingPeriodMs('year')).toBe(365 * 86_400_000);
+  });
+
+  it('adds paid access after an unexpired trial or same-plan pass', () => {
+    expect(paidAccessPeriodEnd(now, 'week', 'premium', {
+      planKey: 'premium',
+      status: 'trialing',
+      currentPeriodEnd: now + 3 * 86_400_000,
+    })).toBe(now + 10 * 86_400_000);
+    expect(paidAccessPeriodEnd(now, 'week', 'premium', {
+      planKey: 'premium',
+      status: 'active',
+      currentPeriodEnd: now + 20 * 86_400_000,
+    })).toBe(now + 27 * 86_400_000);
+  });
+
+  it('starts new or changed-plan access at payment time', () => {
+    expect(paidAccessPeriodEnd(now, 'week', 'premium', null)).toBe(now + 7 * 86_400_000);
+    expect(paidAccessPeriodEnd(now, 'week', 'premium', {
+      planKey: 'family',
+      status: 'active',
+      currentPeriodEnd: now + 20 * 86_400_000,
+    })).toBe(now + 7 * 86_400_000);
+    expect(paidAccessPeriodEnd(now, 'week', 'premium', {
+      planKey: 'premium',
+      status: 'canceled',
+      currentPeriodEnd: now + 20 * 86_400_000,
+    })).toBe(now + 7 * 86_400_000);
   });
 
   it('expires direct Premium and Family subscriptions at request time', () => {
