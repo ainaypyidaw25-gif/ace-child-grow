@@ -58,6 +58,7 @@ import type * as lib_birth2mNutritionCasData from "../lib/birth2mNutritionCasDat
 import type * as lib_burmeseCopyAuditRelease from "../lib/burmeseCopyAuditRelease.js";
 import type * as lib_classificationImport from "../lib/classificationImport.js";
 import type * as lib_clinicalBlockerCasData from "../lib/clinicalBlockerCasData.js";
+import type * as lib_clinicalChildDevelopmentBatchData from "../lib/clinicalChildDevelopmentBatchData.js";
 import type * as lib_clinicalEnglishBatchData from "../lib/clinicalEnglishBatchData.js";
 import type * as lib_clinicalEnglishRefreezeBatchData from "../lib/clinicalEnglishRefreezeBatchData.js";
 import type * as lib_clinicalNativeMyanmarRefreezeBatchData from "../lib/clinicalNativeMyanmarRefreezeBatchData.js";
@@ -192,6 +193,7 @@ declare const fullApi: ApiFromModules<{
   "lib/burmeseCopyAuditRelease": typeof lib_burmeseCopyAuditRelease;
   "lib/classificationImport": typeof lib_classificationImport;
   "lib/clinicalBlockerCasData": typeof lib_clinicalBlockerCasData;
+  "lib/clinicalChildDevelopmentBatchData": typeof lib_clinicalChildDevelopmentBatchData;
   "lib/clinicalEnglishBatchData": typeof lib_clinicalEnglishBatchData;
   "lib/clinicalEnglishRefreezeBatchData": typeof lib_clinicalEnglishRefreezeBatchData;
   "lib/clinicalNativeMyanmarRefreezeBatchData": typeof lib_clinicalNativeMyanmarRefreezeBatchData;
