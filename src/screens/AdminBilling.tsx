@@ -38,7 +38,7 @@ export function AdminBilling() {
   const [planKey, setPlanKey] = useState<'premium' | 'family'>('premium');
   const [planMm, setPlanMm] = useState(''); const [planEn, setPlanEn] = useState('');
   const [amount, setAmount] = useState(''); const [currency, setCurrency] = useState('MMK');
-  const [interval, setInterval] = useState<'month' | 'year'>('month');
+  const [interval, setInterval] = useState<'week' | 'month' | 'year'>('week');
   const [methodMm, setMethodMm] = useState(''); const [methodEn, setMethodEn] = useState('');
   const [accountName, setAccountName] = useState(''); const [accountIdentifier, setAccountIdentifier] = useState('');
   const [instructionsMm, setInstructionsMm] = useState(''); const [instructionsEn, setInstructionsEn] = useState('');
@@ -150,7 +150,8 @@ export function AdminBilling() {
       <h2 className="font-semibold">{editingPlan ? L('အခပေးအစီအစဉ် ပြင်ရန်', 'Edit paid plan') : L('အခပေးအစီအစဉ် ထည့်ရန်', 'Add paid plan')}</h2>
       <select value={planKey} onChange={(event) => setPlanKey(event.target.value as 'premium' | 'family')} className={input}><option value="premium">Premium</option><option value="family">Family</option></select>
       <div className="grid gap-2 sm:grid-cols-2"><input required value={planMm} onChange={(e) => setPlanMm(e.target.value)} placeholder={L('မြန်မာအမည်', 'Myanmar name')} className={input}/><input required value={planEn} onChange={(e) => setPlanEn(e.target.value)} placeholder={L('အင်္ဂလိပ်အမည်', 'English name')} className={input}/></div>
-      <div className="grid gap-2 sm:grid-cols-3"><input required type="number" min="1" step="1" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder={L('ဈေးနှုန်း', 'Amount')} className={input}/><input required value={currency} onChange={(e) => setCurrency(e.target.value)} placeholder="MMK" className={input}/><select value={interval} onChange={(e) => setInterval(e.target.value as 'month' | 'year')} className={input}><option value="month">{L('လစဉ်', 'Monthly')}</option><option value="year">{L('နှစ်စဉ်', 'Yearly')}</option></select></div>
+      <div className="grid gap-2 sm:grid-cols-3"><input required type="number" min="1" step="1" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder={L('ဈေးနှုန်း', 'Amount')} className={input}/><input required value={currency} onChange={(e) => setCurrency(e.target.value)} placeholder="MMK" className={input}/><select value={interval} onChange={(e) => setInterval(e.target.value as 'week' | 'month' | 'year')} className={input}><option value="week">{L('၇ ရက်သုံးခွင့်', '7-day access')}</option><option value="month">{L('ရက် ၃၀ သုံးခွင့်', '30-day access')}</option><option value="year">{L('ရက် ၃၆၅ သုံးခွင့်', '365-day access')}</option></select></div>
+      <p className="text-xs text-ink-soft">{L('အစီအစဉ်အားလုံးသည် တစ်ကြိမ်ဝယ်ယူမှုဖြစ်ပြီး အလိုအလျောက်ငွေကောက်ခံခြင်း မရှိပါ။ ၇ ရက်ဈေးနှုန်းကို Owner က အတည်ပြုပြီးမှ ထည့်ပါ။', 'All plans are one-time purchases with no automatic charge. Add the 7-day price only after owner approval.')}</p>
       <div className="flex gap-2"><button className="rounded-pill bg-sky px-5 py-2 font-semibold text-white">{L('အစီအစဉ် သိမ်းမည်', 'Save plan')}</button>{editingPlan && <button type="button" onClick={() => { setEditingPlan(undefined); setPlanMm(''); setPlanEn(''); setAmount(''); }} className="rounded-pill border border-line px-4 py-2">{L('မပြင်တော့ပါ', 'Cancel')}</button>}</div>
     </form>
 

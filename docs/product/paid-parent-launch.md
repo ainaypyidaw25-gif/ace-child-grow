@@ -15,8 +15,10 @@ animations, and offline access.
 Family includes Premium plus up to three children and three caregivers including
 the owner.
 
-The no-card Premium trial lasts seven days, is available once per account, and
-falls back to Free automatically.
+The no-card Premium trial lasts three days, is available once per account, and
+falls back to Free automatically without charging the parent. Parents who want
+to continue Premium can explicitly purchase a one-time seven-day pass. The pass
+does not renew automatically.
 
 ## Pricing
 
@@ -25,9 +27,13 @@ falls back to Free automatically.
 - Family monthly: 9,900 MMK
 - Family yearly: 99,000 MMK
 
+The seven-day pass price is owner-configured and must not be advertised until an
+approved live amount is active in Convex. Code never derives or invents this fee.
+
 Prices are installed into Convex by the owner and remain editable in Admin
 Billing. The selected plan record and interval are copied into each payment
-record so a yearly payment cannot accidentally receive a monthly entitlement.
+record so a seven-day, monthly, or yearly payment cannot accidentally receive a
+different entitlement after the owner edits the plan.
 
 ## Animation release gate
 
@@ -65,7 +71,8 @@ No CDC images or videos are included in this repository.
 - Typecheck, lint, tests, and production build pass.
 - Convex schema and functions deploy successfully.
 - Myan Myan Pay production credentials and signed webhook are verified.
-- Recommended prices are installed and test payments cover monthly and yearly.
+- Recommended monthly/yearly prices are installed. An owner-approved seven-day
+  price is configured separately, and test payments cover every active duration.
 - Five free and twenty Premium animation files pass rights and review gates.
 - Parent trial, payment, expiration, refund, report, appointment, and Family
   flows pass browser QA on mobile and desktop.

@@ -139,7 +139,7 @@ export function PaymentStatus({ view = 'status' }: { view?: View }) {
 
           {effectiveView === 'success' && (
             <div className="rounded-2xl border border-mint bg-mint-soft/50 p-4 text-center">
-              <p className="font-bold text-sky-deep">✓ {L('Subscription ကို အလိုအလျောက် ဖွင့်ပေးပြီးပါပြီ။', 'Your subscription has been activated automatically.')}</p>
+              <p className="font-bold text-sky-deep">✓ {L('ဝယ်ယူထားသည့် အခပေးသုံးခွင့်ကို ဖွင့်ပေးပြီးပါပြီ။ ကာလကုန်လျှင် အလိုအလျောက် ငွေကောက်ခံမည်မဟုတ်ပါ။', 'Your paid access is active. You will not be charged automatically when it ends.')}</p>
               {payment.transactionRefId && <p className="mt-2 break-all text-xs text-ink-soft">{L('Transaction', 'Transaction')}: {payment.transactionRefId}</p>}
             </div>
           )}

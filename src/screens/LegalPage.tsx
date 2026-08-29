@@ -148,13 +148,13 @@ export function LegalPage({ kind }: LegalPageProps) {
               ACE Child Grow ကို လက်ခံသုံးစွဲခြင်းဖြင့် ဤစည်းမျဉ်းများကို သဘောတူပါသည်။ App ကို မိဘနှင့် စောင့်ရှောက်သူများ အသုံးပြုရန် ရည်ရွယ်ပြီး အထွေထွေဖွံ့ဖြိုးရေးလမ်းညွှန်ချက်ဖြစ်သည်၊ ဆေးဘက်ဆိုင်ရာ ရောဂါစစ်ဆေးမှု သို့မဟုတ် ကုသမှု အစားထိုးအဖြစ် မဟုတ်ပါ။
             </LegalSection>
             <LegalSection title="အစီအစဉ်များနှင့် စျေးနှုန်း">
-              Free အစီအစဉ်သည် အမြဲတမ်း အခမဲ့ဖြစ်ပါသည်။ Premium နှင့် Family အစီအစဉ်များကို လစဉ် (သို့) နှစ်စဉ် MMK ဖြင့် ကြေညာထားသည့်နှုန်းအတိုင်း ကောက်ခံပါသည်။ Premium ကို ကတ်မလိုဘဲ ၇ ရက် အခမဲ့ စမ်းသုံးနိုင်ပြီး စမ်းသုံးကာလကုန်ဆုံးလျှင် ကတ်အလိုအလျောက် ကောက်ခံခြင်း မရှိဘဲ Free သို့ ပြန်ရောက်သွားပါမည်။
+              Free အစီအစဉ်သည် အမြဲတမ်း အခမဲ့ဖြစ်ပါသည်။ Premium နှင့် Family အခပေးသုံးခွင့်များကို ၇ ရက်၊ ရက် ၃၀ သို့မဟုတ် ရက် ၃၆၅ အတွက် App တွင် ပြထားသည့် MMK နှုန်းအတိုင်း တစ်ကြိမ်ချင်း ဝယ်ယူနိုင်ပါသည်။ Premium ကို ငွေပေးချေမှုအချက်အလက်မလိုဘဲ ၃ ရက် အခမဲ့ စမ်းသုံးနိုင်ပြီး စမ်းသုံးကာလကုန်ဆုံးလျှင် အလိုအလျောက် ငွေကောက်ခံခြင်းမရှိဘဲ Free သို့ ပြန်ရောက်သွားပါမည်။ Premium ဆက်သုံးလိုပါက အခပေးသုံးခွင့်ကို ကိုယ်တိုင်ရွေးချယ်ဝယ်ယူရပါမည်။
             </LegalSection>
             <LegalSection title="ငွေပေးချေမှု">
               ငွေပေးချေမှုကို Myan Myan Pay (MMQR) ဖြင့် ချက်ချင်း သို့မဟုတ် ငွေလွှဲအထောက်အထား upload တင်ခြင်းဖြင့် လုပ်ဆောင်နိုင်ပါသည်။ ဝန်ထမ်းက အထောက်အထားကို စစ်ဆေးပြီးမှ အစီအစဉ်ကို ဖွင့်ပေးပါမည်။ ငွေလက်ခံအကောင့်နှင့် API secret များကို browser သို့ မပို့ပါ။
             </LegalSection>
             <LegalSection title="သက်တမ်းတိုးခြင်းနှင့် ပယ်ဖျက်ခြင်း">
-              အစီအစဉ်များသည် ရွေးချယ်ထားသော ကာလ (တစ်လ သို့ တစ်နှစ်) ပြီးဆုံးသည်နှင့် ပယ်ဖျက်မထားပါက ဆက်လက်တိုးမြှင့်ပါသည်။ မည်သည့်အချိန်တွင်မဆို ပယ်ဖျက်နိုင်ပြီး ပယ်ဖျက်ပါက လက်ရှိပေးချေထားသည့် ကာလကုန်ဆုံးသည်အထိ ဝန်ဆောင်မှုအားလုံးကို ဆက်လက်အသုံးပြုနိုင်ပါသည်။ ကျန်ကာလအတွက် ပိုင်းခြား ငွေပြန်အမ်းမည် မဟုတ်ပါ။
+              အခပေးသုံးခွင့်များသည် တစ်ကြိမ်ဝယ်ယူမှုဖြစ်ပြီး ရွေးချယ်ထားသောကာလ ကုန်ဆုံးချိန်တွင် အလိုအလျောက် သက်တမ်းတိုးခြင်း သို့မဟုတ် ငွေကောက်ခံခြင်း မရှိပါ။ သုံးခွင့်ကာလကုန်ဆုံးသည်အထိ ဝန်ဆောင်မှုအားလုံးကို ဆက်လက်အသုံးပြုနိုင်ပြီး ဆက်သုံးလိုပါက သုံးခွင့်အသစ်ကို ကိုယ်တိုင်ဝယ်ယူရပါမည်။ ကျန်ကာလအတွက် ပိုင်းခြား ငွေပြန်အမ်းမည် မဟုတ်ပါ။
             </LegalSection>
             <LegalSection title="ငွေပြန်အမ်းခြင်း">
               ငွေပေးချေမှုအားလုံးကို ကိုယ်တိုင်စစ်ဆေးသည့်စနစ်ဖြင့် လုပ်ဆောင်ထားသောကြောင့် အလိုအလျောက် ငွေပြန်အမ်းစနစ် မရှိသေးပါ။ မှားယွင်းပေးချေမိခြင်း၊ နှစ်ကြိမ်ထပ်ပေးချေမိခြင်း သို့မဟုတ် အခြားပြဿနာများအတွက် ပေးချေပြီးချိန်မှ ၇ ရက်အတွင်း <a href={`mailto:${supportEmail}?subject=ACE%20Child%20Grow%20refund%20request`} className="font-semibold text-sky-deep underline">{supportEmail}</a> သို့ ဆက်သွယ်ပါက တစ်ခုချင်းစီ သုံးသပ်ပေးပါမည်။
@@ -176,13 +176,13 @@ export function LegalPage({ kind }: LegalPageProps) {
               By using ACE Child Grow you agree to these terms. The app is intended for parents and caregivers, and provides general developmental guidance — it is not a medical diagnosis or a substitute for treatment.
             </LegalSection>
             <LegalSection title="Plans and pricing">
-              The Free plan is always free. Premium and Family plans are billed monthly or yearly in MMK at the published rate. Premium can be trialed free for 7 days with no card required; when the trial ends you return to Free automatically — there is no automatic charge.
+              The Free plan is always free. Premium and Family access can be purchased once for 7, 30, or 365 days at the MMK price shown in the app. Premium can be tried free for 3 days with no payment details; when the trial ends you return to Free and are not charged automatically. To continue Premium, you must explicitly purchase paid access.
             </LegalSection>
             <LegalSection title="Payment">
               Payment is handled either instantly via Myan Myan Pay (MMQR) or by uploading proof of a bank/wallet transfer, which staff review before activating your plan. Merchant credentials and API secrets never reach this browser.
             </LegalSection>
             <LegalSection title="Renewal and cancellation">
-              Plans renew automatically for the billing period you chose (monthly or yearly) unless canceled. You may cancel at any time; your plan stays active until the end of the period you already paid for. We do not prorate or partially refund the remaining period.
+              Paid access is a one-time purchase. It does not renew or charge automatically when the selected period ends. Access remains active through the period you paid for; purchase new access explicitly if you want to continue. We do not prorate or partially refund the remaining period.
             </LegalSection>
             <LegalSection title="Refunds">
               Because payments go through manual review rather than an automated billing processor, there is no self-service refund yet. If you were charged in error, charged twice, or hit another payment problem, contact <a href={`mailto:${supportEmail}?subject=ACE%20Child%20Grow%20refund%20request`} className="font-semibold text-sky-deep underline">{supportEmail}</a> within 7 days of payment and we will review it individually.

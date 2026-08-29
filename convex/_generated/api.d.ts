@@ -32,9 +32,9 @@ import type * as contentEdits from "../contentEdits.js";
 import type * as contentReviews from "../contentReviews.js";
 import type * as crons from "../crons.js";
 import type * as directory from "../directory.js";
-import type * as evidence from "../evidence.js";
 import type * as englishRefreezeCorrection from "../englishRefreezeCorrection.js";
 import type * as englishRefreezeCorrectionActions from "../englishRefreezeCorrectionActions.js";
+import type * as evidence from "../evidence.js";
 import type * as family from "../family.js";
 import type * as favorites from "../favorites.js";
 import type * as gd10_12mPlayV5Cas from "../gd10_12mPlayV5Cas.js";
@@ -51,6 +51,7 @@ import type * as lib_aiPublicationReleaseData from "../lib/aiPublicationReleaseD
 import type * as lib_aiPublicationVisibility from "../lib/aiPublicationVisibility.js";
 import type * as lib_asqDoctorVisitsLinkCasData from "../lib/asqDoctorVisitsLinkCasData.js";
 import type * as lib_auth from "../lib/auth.js";
+import type * as lib_billingPeriods from "../lib/billingPeriods.js";
 import type * as lib_birth2mGrossMotorCasData from "../lib/birth2mGrossMotorCasData.js";
 import type * as lib_birth2mGrossMotorCorrection from "../lib/birth2mGrossMotorCorrection.js";
 import type * as lib_birth2mNutritionCasData from "../lib/birth2mNutritionCasData.js";
@@ -58,6 +59,7 @@ import type * as lib_burmeseCopyAuditRelease from "../lib/burmeseCopyAuditReleas
 import type * as lib_classificationImport from "../lib/classificationImport.js";
 import type * as lib_clinicalBlockerCasData from "../lib/clinicalBlockerCasData.js";
 import type * as lib_clinicalEnglishBatchData from "../lib/clinicalEnglishBatchData.js";
+import type * as lib_clinicalEnglishRefreezeBatchData from "../lib/clinicalEnglishRefreezeBatchData.js";
 import type * as lib_clinicalNativeMyanmarRefreezeBatchData from "../lib/clinicalNativeMyanmarRefreezeBatchData.js";
 import type * as lib_clinicalRefreezeRegistryMigrationData from "../lib/clinicalRefreezeRegistryMigrationData.js";
 import type * as lib_clinicalReviewBatchContract from "../lib/clinicalReviewBatchContract.js";
@@ -70,6 +72,7 @@ import type * as lib_clinicalTwoSmallCasGuard from "../lib/clinicalTwoSmallCasGu
 import type * as lib_contentEditDiff from "../lib/contentEditDiff.js";
 import type * as lib_contentRetirements from "../lib/contentRetirements.js";
 import type * as lib_contentReviewRequirements from "../lib/contentReviewRequirements.js";
+import type * as lib_englishRefreezeCorrectionData from "../lib/englishRefreezeCorrectionData.js";
 import type * as lib_entitlements from "../lib/entitlements.js";
 import type * as lib_evidenceFreshness from "../lib/evidenceFreshness.js";
 import type * as lib_evidenceHumanReviewSuccessorCas from "../lib/evidenceHumanReviewSuccessorCas.js";
@@ -78,7 +81,6 @@ import type * as lib_evidenceImportPolicy from "../lib/evidenceImportPolicy.js";
 import type * as lib_evidenceImportSafety from "../lib/evidenceImportSafety.js";
 import type * as lib_evidencePublicationGate from "../lib/evidencePublicationGate.js";
 import type * as lib_evidenceSafetyRelease from "../lib/evidenceSafetyRelease.js";
-import type * as lib_englishRefreezeCorrectionData from "../lib/englishRefreezeCorrectionData.js";
 import type * as lib_gd10_12mPlayV5CasData from "../lib/gd10_12mPlayV5CasData.js";
 import type * as lib_gd10_12mPlayV5ImportPolicy from "../lib/gd10_12mPlayV5ImportPolicy.js";
 import type * as lib_inherentPublicLinkCasData from "../lib/inherentPublicLinkCasData.js";
@@ -164,9 +166,9 @@ declare const fullApi: ApiFromModules<{
   contentReviews: typeof contentReviews;
   crons: typeof crons;
   directory: typeof directory;
-  evidence: typeof evidence;
   englishRefreezeCorrection: typeof englishRefreezeCorrection;
   englishRefreezeCorrectionActions: typeof englishRefreezeCorrectionActions;
+  evidence: typeof evidence;
   family: typeof family;
   favorites: typeof favorites;
   gd10_12mPlayV5Cas: typeof gd10_12mPlayV5Cas;
@@ -183,6 +185,7 @@ declare const fullApi: ApiFromModules<{
   "lib/aiPublicationVisibility": typeof lib_aiPublicationVisibility;
   "lib/asqDoctorVisitsLinkCasData": typeof lib_asqDoctorVisitsLinkCasData;
   "lib/auth": typeof lib_auth;
+  "lib/billingPeriods": typeof lib_billingPeriods;
   "lib/birth2mGrossMotorCasData": typeof lib_birth2mGrossMotorCasData;
   "lib/birth2mGrossMotorCorrection": typeof lib_birth2mGrossMotorCorrection;
   "lib/birth2mNutritionCasData": typeof lib_birth2mNutritionCasData;
@@ -190,6 +193,7 @@ declare const fullApi: ApiFromModules<{
   "lib/classificationImport": typeof lib_classificationImport;
   "lib/clinicalBlockerCasData": typeof lib_clinicalBlockerCasData;
   "lib/clinicalEnglishBatchData": typeof lib_clinicalEnglishBatchData;
+  "lib/clinicalEnglishRefreezeBatchData": typeof lib_clinicalEnglishRefreezeBatchData;
   "lib/clinicalNativeMyanmarRefreezeBatchData": typeof lib_clinicalNativeMyanmarRefreezeBatchData;
   "lib/clinicalRefreezeRegistryMigrationData": typeof lib_clinicalRefreezeRegistryMigrationData;
   "lib/clinicalReviewBatchContract": typeof lib_clinicalReviewBatchContract;
@@ -202,6 +206,7 @@ declare const fullApi: ApiFromModules<{
   "lib/contentEditDiff": typeof lib_contentEditDiff;
   "lib/contentRetirements": typeof lib_contentRetirements;
   "lib/contentReviewRequirements": typeof lib_contentReviewRequirements;
+  "lib/englishRefreezeCorrectionData": typeof lib_englishRefreezeCorrectionData;
   "lib/entitlements": typeof lib_entitlements;
   "lib/evidenceFreshness": typeof lib_evidenceFreshness;
   "lib/evidenceHumanReviewSuccessorCas": typeof lib_evidenceHumanReviewSuccessorCas;
@@ -210,7 +215,6 @@ declare const fullApi: ApiFromModules<{
   "lib/evidenceImportSafety": typeof lib_evidenceImportSafety;
   "lib/evidencePublicationGate": typeof lib_evidencePublicationGate;
   "lib/evidenceSafetyRelease": typeof lib_evidenceSafetyRelease;
-  "lib/englishRefreezeCorrectionData": typeof lib_englishRefreezeCorrectionData;
   "lib/gd10_12mPlayV5CasData": typeof lib_gd10_12mPlayV5CasData;
   "lib/gd10_12mPlayV5ImportPolicy": typeof lib_gd10_12mPlayV5ImportPolicy;
   "lib/inherentPublicLinkCasData": typeof lib_inherentPublicLinkCasData;

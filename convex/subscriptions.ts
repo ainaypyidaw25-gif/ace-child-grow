@@ -14,6 +14,12 @@ const statusValidator = v.union(
   v.literal('paused'),
 );
 
+export const PREMIUM_TRIAL_DAYS = 3;
+
+export function premiumTrialPeriodEnd(startedAt: number): number {
+  return startedAt + PREMIUM_TRIAL_DAYS * 86_400_000;
+}
+
 type TrialState = {
   trialUsedAt?: number;
   providerSubscriptionId?: string;
@@ -85,7 +91,7 @@ export const startTrial = mutation({
       throw new Error('Free trial is not available for this account');
     }
     const now = Date.now();
-    const currentPeriodEnd = now + 7 * 86_400_000;
+    const currentPeriodEnd = premiumTrialPeriodEnd(now);
     const patch = {
       planKey: 'premium' as const,
       status: 'trialing' as const,

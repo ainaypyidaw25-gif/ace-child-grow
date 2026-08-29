@@ -4,6 +4,7 @@ import type { Id } from './_generated/dataModel';
 import { internalMutation, internalQuery, query, type MutationCtx } from './_generated/server';
 import { logAudit } from './audit';
 import { requireOwner, requireUser } from './lib/auth';
+import { billingPeriodMs, type BillingInterval } from './lib/billingPeriods';
 
 const planKeyValidator = v.union(v.literal('premium'), v.literal('family'));
 const environmentValidator = v.union(v.literal('sandbox'), v.literal('production'));
@@ -24,7 +25,7 @@ const publicPaymentValidator = v.object({
   orderId: v.string(),
   planKey: planKeyValidator,
   planId: v.optional(v.id('subscriptionPlans')),
-  planInterval: v.optional(v.union(v.literal('month'), v.literal('year'))),
+  planInterval: v.optional(v.union(v.literal('week'), v.literal('month'), v.literal('year'))),
   environment: environmentValidator,
   amount: v.number(),
   currency: v.literal('MMK'),
@@ -63,7 +64,7 @@ function toPublic(row: {
   orderId: string;
   planKey: 'premium' | 'family';
   planId?: Id<'subscriptionPlans'>;
-  planInterval?: 'month' | 'year';
+  planInterval?: BillingInterval;
   environment: 'sandbox' | 'production';
   amount: number;
   currency: 'MMK';
@@ -114,7 +115,7 @@ export const checkoutContext = internalQuery({
     userId: v.id('users'),
     planKey: planKeyValidator,
     planId: v.id('subscriptionPlans'),
-    planInterval: v.union(v.literal('month'), v.literal('year')),
+    planInterval: v.union(v.literal('week'), v.literal('month'), v.literal('year')),
     nameMm: v.string(),
     nameEn: v.string(),
     amount: v.number(),
@@ -144,7 +145,7 @@ export const reserve = internalMutation({
     userId: v.id('users'),
     planKey: planKeyValidator,
     planId: v.id('subscriptionPlans'),
-    planInterval: v.union(v.literal('month'), v.literal('year')),
+    planInterval: v.union(v.literal('week'), v.literal('month'), v.literal('year')),
     environment: environmentValidator,
     orderId: v.string(),
     amount: v.number(),
@@ -306,14 +307,14 @@ async function applyUpdate(ctx: MutationCtx, update: Update, source: 'api' | 'we
       .withIndex('by_user', (q) => q.eq('userId', row.userId))
       .unique();
     const interval = row.planInterval ?? plan.interval;
-    const periodMs = interval === 'year' ? 365 * 24 * 60 * 60 * 1000 : 30 * 24 * 60 * 60 * 1000;
+    const periodMs = billingPeriodMs(interval);
     const patch = {
       planKey: row.planKey,
       status: 'active' as const,
       provider: 'myanmyanpay',
       providerSubscriptionId: row.orderId,
       currentPeriodEnd: now + periodMs,
-      cancelAtPeriodEnd: false,
+      cancelAtPeriodEnd: true,
       updatedAt: now,
     };
     if (subscription) await ctx.db.patch(subscription._id, patch);

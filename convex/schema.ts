@@ -152,7 +152,7 @@ export default defineSchema({
     descriptionEn: v.optional(v.string()),
     amount: v.number(),
     currency: v.string(),
-    interval: v.union(v.literal('month'), v.literal('year')),
+    interval: v.union(v.literal('week'), v.literal('month'), v.literal('year')),
     features: v.array(v.string()),
     isActive: v.boolean(),
     sortOrder: v.number(),
@@ -182,6 +182,9 @@ export default defineSchema({
     userId: v.id('users'),
     planKey: v.union(v.literal('premium'), v.literal('family')),
     planId: v.optional(v.id('subscriptionPlans')),
+    // Snapshot the purchased duration so later plan edits cannot change an
+    // already-submitted payment request.
+    planInterval: v.optional(v.union(v.literal('week'), v.literal('month'), v.literal('year'))),
     paymentMethodId: v.id('paymentMethods'),
     amount: v.number(),
     currency: v.string(),
@@ -205,7 +208,7 @@ export default defineSchema({
     userId: v.id('users'),
     planKey: v.union(v.literal('premium'), v.literal('family')),
     planId: v.optional(v.id('subscriptionPlans')),
-    planInterval: v.optional(v.union(v.literal('month'), v.literal('year'))),
+    planInterval: v.optional(v.union(v.literal('week'), v.literal('month'), v.literal('year'))),
     environment: v.union(v.literal('sandbox'), v.literal('production')),
     orderId: v.string(),
     amount: v.number(),

@@ -140,7 +140,7 @@ export function Activities() {
         <Link to="/subscription" className="block rounded-[28px] bg-ink p-6 text-white shadow-card">
           <p className="text-xs font-bold uppercase tracking-[0.16em] text-mint">ACE Premium</p>
           <h2 className="mt-2 text-xl font-bold">{L('နေ့စဉ်အစီအစဉ်နှင့် တိုးတက်မှုမှတ်တမ်း', 'Daily plan & progress history')}</h2>
-          <p className="mt-2 text-sm leading-7 text-white/75">{L('ဘဏ်ကတ်မလိုဘဲ ၇ ရက် အခမဲ့ စမ်းသုံးနိုင်ပါသည်။', 'Try it free for 7 days without a card.')}</p>
+          <p className="mt-2 text-sm leading-7 text-white/75">{L('Premium ကို ၃ ရက် အခမဲ့ စမ်းသုံးပြီးနောက် ၇ ရက်သုံးခွင့်ကို ရွေးချယ်ဝယ်ယူနိုင်ပါသည်။ အလိုအလျောက်ငွေမကောက်ပါ။', 'Try Premium free for 3 days, then choose 7-day paid access to continue. No automatic charge.')}</p>
         </Link>
       )}
     </div>
