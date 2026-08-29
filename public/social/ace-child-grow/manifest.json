@@ -485,7 +485,7 @@
         "မှတ်တမ်း • Favorites"
       ],
       "captionMyanmar": "ACE Child Grow ထဲမှာ ဘယ်ကဏ္ဍကို အများဆုံးသုံးဖြစ်လဲ? 👇\n\n၁️⃣ နေ့စဉ်လှုပ်ရှားမှု\n၂️⃣ လေ့လာရန်\n၃️⃣ ဖွံ့ဖြိုးမှုမှတ်တမ်း\n၄️⃣ Favorites\n\nနံပါတ်တစ်ခုရွေးပြီး comment မှာ ရေးပေးခဲ့ပါနော်။ မိဘတို့အသုံးများတဲ့အပိုင်းကို ပိုကောင်းအောင် ဆက်တိုးတက်စေချင်ပါတယ်။\n\n#ACEChildGrow #မိဘတို့အသံ",
-      "status": "scheduled",
+      "status": "published",
       "approvalStatus": "approved",
       "reviewerId": "OWNER_CONTINUOUS_POST_AUTH_2026_07_30",
       "approvalTimestamp": "2026-07-30T06:10:00.000Z",
@@ -496,9 +496,10 @@
       "mediaType": "image",
       "mediaUrl": "https://child.acegroup.com.mm/social/ace-child-grow/posts/monthly-calendar-v1/ACE-CAL-14.png",
       "mediaSha256": "a6a27e19266dca4a997d7831fe454375382eeca5c17d7f6a0b1f1fcb3f76bee6",
-      "alreadyPublished": false,
-      "platformPostId": null,
-      "platformPermalink": null
+      "alreadyPublished": true,
+      "platformPostId": "111009258047115_1091001780117269",
+      "platformPermalink": null,
+      "publishedAt": "2026-08-29T03:31:08.133Z"
     },
     {
       "id": "ACE-CAL-15",
