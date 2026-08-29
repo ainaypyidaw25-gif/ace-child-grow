@@ -51,6 +51,7 @@ import type * as lib_aiPublicationReleaseData from "../lib/aiPublicationReleaseD
 import type * as lib_aiPublicationVisibility from "../lib/aiPublicationVisibility.js";
 import type * as lib_asqDoctorVisitsLinkCasData from "../lib/asqDoctorVisitsLinkCasData.js";
 import type * as lib_auth from "../lib/auth.js";
+import type * as lib_billingPeriods from "../lib/billingPeriods.js";
 import type * as lib_birth2mGrossMotorCasData from "../lib/birth2mGrossMotorCasData.js";
 import type * as lib_birth2mGrossMotorCorrection from "../lib/birth2mGrossMotorCorrection.js";
 import type * as lib_birth2mNutritionCasData from "../lib/birth2mNutritionCasData.js";
@@ -185,6 +186,7 @@ declare const fullApi: ApiFromModules<{
   "lib/aiPublicationVisibility": typeof lib_aiPublicationVisibility;
   "lib/asqDoctorVisitsLinkCasData": typeof lib_asqDoctorVisitsLinkCasData;
   "lib/auth": typeof lib_auth;
+  "lib/billingPeriods": typeof lib_billingPeriods;
   "lib/birth2mGrossMotorCasData": typeof lib_birth2mGrossMotorCasData;
   "lib/birth2mGrossMotorCorrection": typeof lib_birth2mGrossMotorCorrection;
   "lib/birth2mNutritionCasData": typeof lib_birth2mNutritionCasData;

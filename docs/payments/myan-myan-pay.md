@@ -47,7 +47,7 @@ approval through its Discord support channel.
 - Myan Myan Pay sent the signed callback to the sandbox callback URL and
   received HTTP 200 with `received: true` and `duplicate: false`.
 - Convex persisted the payment and webhook event as `SUCCESS` and activated
-  the test parent's monthly Premium subscription.
+  the test parent's fixed-term Premium access.
 - Production remains disabled. LIVE approval, production credentials, and a
   controlled small-value production payment are still required.
 
@@ -75,7 +75,7 @@ MMPAY_PRODUCTION_SECRET_KEY=...
 MMPAY_PRODUCTION_API_BASE_URL=...
 ```
 
-The sandbox create → signed callback → automatic subscription activation flow
+The sandbox create → signed callback → paid-access activation flow
 has passed. After Myan Myan Pay grants LIVE approval, set the production
 variables on the production deployment, deploy Convex, switch `MMPAY_ENV` to
 `production`, and perform a controlled small-value live payment before
@@ -96,7 +96,9 @@ promoting the verified Vercel preview.
 - Amount and currency must match the server-created order.
 - Terminal statuses cannot regress to pending; a successful transaction can
   only advance to refunded.
-- Success activates the selected plan atomically with the payment record.
+- Success activates the selected fixed-term plan atomically with the payment
+  record. Monthly and yearly durations are snapshotted when the
+  order is created, so later price-plan edits cannot change a purchase.
 - Refund downgrades only the subscription activated by that same order.
 - Owner/admin records show provider references, vendor, method, environment,
   status, and update time without exposing secrets.

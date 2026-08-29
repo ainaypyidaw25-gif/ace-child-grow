@@ -3,6 +3,7 @@ import { v } from 'convex/values';
 import { getAuthUserId } from '@convex-dev/auth/server';
 import { requireOwner, requireUser } from './lib/auth';
 import { logAudit } from './audit';
+import { paidAccessPeriodEnd } from './lib/billingPeriods';
 
 const paidPlanValidator = v.union(v.literal('premium'), v.literal('family'));
 const intervalValidator = v.union(v.literal('month'), v.literal('year'));
@@ -52,6 +53,7 @@ const requestValidator = v.object({
   userId: v.id('users'),
   planKey: paidPlanValidator,
   planId: v.optional(v.id('subscriptionPlans')),
+  planInterval: v.optional(intervalValidator),
   paymentMethodId: v.id('paymentMethods'),
   amount: v.number(),
   currency: v.string(),
@@ -144,6 +146,7 @@ export const submitPaymentRequest = mutation({
       userId,
       planKey: plan.planKey,
       planId: plan._id,
+      planInterval: plan.interval,
       paymentMethodId: method._id,
       amount: plan.amount,
       currency: plan.currency,
@@ -393,13 +396,13 @@ export const reviewPaymentRequest = mutation({
         .query('subscriptions')
         .withIndex('by_user', (q) => q.eq('userId', row.userId))
         .unique();
-      const periodMs = plan.interval === 'year' ? 365 * 24 * 60 * 60 * 1000 : 30 * 24 * 60 * 60 * 1000;
+      const interval = row.planInterval ?? plan.interval;
       const patch = {
         planKey: row.planKey,
         status: 'active' as const,
         provider: 'manual_verified',
-        currentPeriodEnd: now + periodMs,
-        cancelAtPeriodEnd: false,
+        currentPeriodEnd: paidAccessPeriodEnd(now, interval, row.planKey, existing),
+        cancelAtPeriodEnd: true,
         updatedAt: now,
       };
       if (existing) await ctx.db.patch(existing._id, patch);

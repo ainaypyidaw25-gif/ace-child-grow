@@ -13,7 +13,8 @@ import {
   refundMatchesSubscription,
 } from '../../../convex/mmpayData';
 import { webhookSignatureIsValid } from '../../../convex/mmpay';
-import { trialIsAvailable } from '../../../convex/subscriptions';
+import { PREMIUM_TRIAL_DAYS, premiumTrialPeriodEnd, trialIsAvailable } from '../../../convex/subscriptions';
+import { billingPeriodMs, paidAccessPeriodEnd } from '../../../convex/lib/billingPeriods';
 
 const userId = 'users:owner' as Id<'users'>;
 const otherUserId = 'users:other' as Id<'users'>;
@@ -44,6 +45,54 @@ const successUpdate = {
 };
 
 describe('paid-parent request-time entitlement gates', () => {
+  it('ends the Premium trial after exactly 3 days', () => {
+    const end = premiumTrialPeriodEnd(now);
+    expect(PREMIUM_TRIAL_DAYS).toBe(3);
+    expect(end).toBe(now + 3 * 86_400_000);
+    expect(subscriptionIsEnabled({
+      planKey: 'premium',
+      status: 'trialing',
+      currentPeriodEnd: end,
+    }, end - 1)).toBe(true);
+    expect(subscriptionIsEnabled({
+      planKey: 'premium',
+      status: 'trialing',
+      currentPeriodEnd: end,
+    }, end)).toBe(false);
+  });
+
+  it('maps each paid access interval to its fixed duration', () => {
+    expect(billingPeriodMs('month')).toBe(30 * 86_400_000);
+    expect(billingPeriodMs('year')).toBe(365 * 86_400_000);
+  });
+
+  it('adds paid access after an unexpired trial or same-plan pass', () => {
+    expect(paidAccessPeriodEnd(now, 'month', 'premium', {
+      planKey: 'premium',
+      status: 'trialing',
+      currentPeriodEnd: now + 3 * 86_400_000,
+    })).toBe(now + 33 * 86_400_000);
+    expect(paidAccessPeriodEnd(now, 'month', 'premium', {
+      planKey: 'premium',
+      status: 'active',
+      currentPeriodEnd: now + 20 * 86_400_000,
+    })).toBe(now + 50 * 86_400_000);
+  });
+
+  it('starts new or changed-plan access at payment time', () => {
+    expect(paidAccessPeriodEnd(now, 'month', 'premium', null)).toBe(now + 30 * 86_400_000);
+    expect(paidAccessPeriodEnd(now, 'month', 'premium', {
+      planKey: 'family',
+      status: 'active',
+      currentPeriodEnd: now + 20 * 86_400_000,
+    })).toBe(now + 30 * 86_400_000);
+    expect(paidAccessPeriodEnd(now, 'month', 'premium', {
+      planKey: 'premium',
+      status: 'canceled',
+      currentPeriodEnd: now + 20 * 86_400_000,
+    })).toBe(now + 30 * 86_400_000);
+  });
+
   it('expires direct Premium and Family subscriptions at request time', () => {
     expect(subscriptionIsEnabled(activePremium, now)).toBe(true);
     expect(subscriptionIsEnabled({ ...activePremium, currentPeriodEnd: now }, now)).toBe(false);
