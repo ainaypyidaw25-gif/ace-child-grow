@@ -4,24 +4,24 @@ import { MemoryRouter } from 'react-router-dom';
 import { LocaleProvider } from '../../app/LocaleContext';
 import { SubscriptionPlans } from '../SubscriptionPlans';
 
-const weeklyPlan = {
-  _id: 'plans:weekly',
+const monthlyPlan = {
+  _id: 'plans:monthly',
   _creationTime: 1,
   planKey: 'premium',
-  nameMm: 'Premium — ၇ ရက်သုံးခွင့်',
-  nameEn: 'Premium — 7-day access',
-  descriptionMm: 'Premium ဝန်ဆောင်မှုများကို ၇ ရက် အသုံးပြုရန်',
-  descriptionEn: 'Seven days of Premium access',
-  amount: 1_500,
+  nameMm: 'Premium လစဉ်',
+  nameEn: 'Premium Monthly',
+  descriptionMm: 'Premium ဝန်ဆောင်မှုများကို လစဉ် အသုံးပြုရန်',
+  descriptionEn: 'Monthly Premium access',
+  amount: 6_900,
   currency: 'MMK',
-  interval: 'week',
+  interval: 'month',
   features: [],
   isActive: true,
   sortOrder: 0,
   createdAt: 1,
   updatedAt: 1,
 };
-const options = { plans: [weeklyPlan], methods: [] };
+const options = { plans: [monthlyPlan], methods: [] };
 const emptyList: unknown[] = [];
 let subscriptionMock = {
   planKey: 'free' as 'free' | 'premium' | 'family',
@@ -64,22 +64,22 @@ function renderScreen() {
 }
 
 describe('SubscriptionPlans — fixed-term paid access', () => {
-  it('offers a 3-day trial and discloses the paid 7-day continuation', () => {
+  it('offers a 3-day trial and discloses monthly or yearly continuation', () => {
     subscriptionMock = { ...subscriptionMock, planKey: 'free', isTrial: false, trialEligible: true };
     renderScreen();
 
     expect(screen.getByText('Premium ကို ၃ ရက် အခမဲ့ စမ်းသုံးပါ')).toBeTruthy();
-    expect(screen.getByText(/Premium ဆက်သုံးလိုပါက ၇ ရက်သုံးခွင့်/)).toBeTruthy();
+    expect(screen.getByText(/Premium ဆက်သုံးလိုပါက လစဉ် သို့မဟုတ် နှစ်စဉ်အစီအစဉ်/)).toBeTruthy();
     expect(screen.queryByText(/၇ ရက် အခမဲ့/)).toBeNull();
   });
 
-  it('renders an owner-configured weekly price as 7-day one-time access', () => {
+  it('renders the owner-configured monthly price', () => {
     subscriptionMock = { ...subscriptionMock, planKey: 'free', trialEligible: false };
     renderScreen();
 
-    expect(screen.getByText(/1,500/)).toBeTruthy();
-    expect(screen.getByText(/MMK \/ ၇ ရက်/)).toBeTruthy();
-    expect(screen.getByText('တစ်ကြိမ်ဝယ်ယူမှု · အလိုအလျောက်ငွေမကောက်ပါ')).toBeTruthy();
+    expect(screen.getByText(/6,900/)).toBeTruthy();
+    expect(screen.getByText(/MMK \/ လ/)).toBeTruthy();
+    expect(screen.queryByText(/၇ ရက်သုံးခွင့်/)).toBeNull();
   });
 
   it('describes paid access as non-renewing even for legacy rows', () => {

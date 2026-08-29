@@ -148,7 +148,7 @@ export function LegalPage({ kind }: LegalPageProps) {
               ACE Child Grow ကို လက်ခံသုံးစွဲခြင်းဖြင့် ဤစည်းမျဉ်းများကို သဘောတူပါသည်။ App ကို မိဘနှင့် စောင့်ရှောက်သူများ အသုံးပြုရန် ရည်ရွယ်ပြီး အထွေထွေဖွံ့ဖြိုးရေးလမ်းညွှန်ချက်ဖြစ်သည်၊ ဆေးဘက်ဆိုင်ရာ ရောဂါစစ်ဆေးမှု သို့မဟုတ် ကုသမှု အစားထိုးအဖြစ် မဟုတ်ပါ။
             </LegalSection>
             <LegalSection title="အစီအစဉ်များနှင့် စျေးနှုန်း">
-              Free အစီအစဉ်သည် အမြဲတမ်း အခမဲ့ဖြစ်ပါသည်။ Premium နှင့် Family အခပေးသုံးခွင့်များကို ၇ ရက်၊ ရက် ၃၀ သို့မဟုတ် ရက် ၃၆၅ အတွက် App တွင် ပြထားသည့် MMK နှုန်းအတိုင်း တစ်ကြိမ်ချင်း ဝယ်ယူနိုင်ပါသည်။ Premium ကို ငွေပေးချေမှုအချက်အလက်မလိုဘဲ ၃ ရက် အခမဲ့ စမ်းသုံးနိုင်ပြီး စမ်းသုံးကာလကုန်ဆုံးလျှင် အလိုအလျောက် ငွေကောက်ခံခြင်းမရှိဘဲ Free သို့ ပြန်ရောက်သွားပါမည်။ Premium ဆက်သုံးလိုပါက အခပေးသုံးခွင့်ကို ကိုယ်တိုင်ရွေးချယ်ဝယ်ယူရပါမည်။
+              Free အစီအစဉ်သည် အမြဲတမ်း အခမဲ့ဖြစ်ပါသည်။ Premium နှင့် Family အခပေးသုံးခွင့်များကို လစဉ် သို့မဟုတ် နှစ်စဉ်အတွက် App တွင် ပြထားသည့် MMK နှုန်းအတိုင်း ဝယ်ယူနိုင်ပါသည်။ Premium ကို ငွေပေးချေမှုအချက်အလက်မလိုဘဲ ၃ ရက် အခမဲ့ စမ်းသုံးနိုင်ပြီး စမ်းသုံးကာလကုန်ဆုံးလျှင် အလိုအလျောက် ငွေကောက်ခံခြင်းမရှိဘဲ Free သို့ ပြန်ရောက်သွားပါမည်။ Premium ဆက်သုံးလိုပါက လစဉ် သို့မဟုတ် နှစ်စဉ်အစီအစဉ်ကို ကိုယ်တိုင်ရွေးချယ်ဝယ်ယူရပါမည်။
             </LegalSection>
             <LegalSection title="ငွေပေးချေမှု">
               ငွေပေးချေမှုကို Myan Myan Pay (MMQR) ဖြင့် ချက်ချင်း သို့မဟုတ် ငွေလွှဲအထောက်အထား upload တင်ခြင်းဖြင့် လုပ်ဆောင်နိုင်ပါသည်။ ဝန်ထမ်းက အထောက်အထားကို စစ်ဆေးပြီးမှ အစီအစဉ်ကို ဖွင့်ပေးပါမည်။ ငွေလက်ခံအကောင့်နှင့် API secret များကို browser သို့ မပို့ပါ။
@@ -176,7 +176,7 @@ export function LegalPage({ kind }: LegalPageProps) {
               By using ACE Child Grow you agree to these terms. The app is intended for parents and caregivers, and provides general developmental guidance — it is not a medical diagnosis or a substitute for treatment.
             </LegalSection>
             <LegalSection title="Plans and pricing">
-              The Free plan is always free. Premium and Family access can be purchased once for 7, 30, or 365 days at the MMK price shown in the app. Premium can be tried free for 3 days with no payment details; when the trial ends you return to Free and are not charged automatically. To continue Premium, you must explicitly purchase paid access.
+              The Free plan is always free. Premium and Family access can be purchased monthly or yearly at the MMK price shown in the app. Premium can be tried free for 3 days with no payment details; when the trial ends you return to Free and are not charged automatically. To continue Premium, you must explicitly purchase monthly or yearly access.
             </LegalSection>
             <LegalSection title="Payment">
               Payment is handled either instantly via Myan Myan Pay (MMQR) or by uploading proof of a bank/wallet transfer, which staff review before activating your plan. Merchant credentials and API secrets never reach this browser.

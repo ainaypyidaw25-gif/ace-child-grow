@@ -6,7 +6,7 @@ import { logAudit } from './audit';
 import { paidAccessPeriodEnd } from './lib/billingPeriods';
 
 const paidPlanValidator = v.union(v.literal('premium'), v.literal('family'));
-const intervalValidator = v.union(v.literal('week'), v.literal('month'), v.literal('year'));
+const intervalValidator = v.union(v.literal('month'), v.literal('year'));
 const requestStatusValidator = v.union(
   v.literal('pending'),
   v.literal('approved'),

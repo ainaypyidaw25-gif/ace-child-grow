@@ -97,7 +97,7 @@ promoting the verified Vercel preview.
 - Terminal statuses cannot regress to pending; a successful transaction can
   only advance to refunded.
 - Success activates the selected fixed-term plan atomically with the payment
-  record. Seven-day, 30-day, and 365-day durations are snapshotted when the
+  record. Monthly and yearly durations are snapshotted when the
   order is created, so later price-plan edits cannot change a purchase.
 - Refund downgrades only the subscription activated by that same order.
 - Owner/admin records show provider references, vendor, method, environment,

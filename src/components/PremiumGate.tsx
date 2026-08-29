@@ -30,8 +30,8 @@ export function PremiumGate({
               ? 'ဤဝန်ဆောင်မှုသည် လက်ရှိအခမဲ့အစီအစဉ်တွင် မပါဝင်ပါ။'
               : 'This feature is not included in the current free plan.'
             : locale === 'mm'
-            ? 'Premium ကို ၃ ရက် အခမဲ့စမ်းသုံးနိုင်ပြီး ငွေပေးချေမှုအချက်အလက် မလိုပါ။ ပြီးနောက် Premium ဆက်သုံးလိုပါက ၇ ရက်သုံးခွင့်ကို ဝယ်ယူနိုင်ပါသည်။ အလိုအလျောက်ငွေမကောက်ပါ။'
-            : 'Try Premium free for 3 days with no payment details. Afterward, purchase 7-day access to continue Premium. You will not be charged automatically.'}
+            ? 'Premium ကို ၃ ရက် အခမဲ့စမ်းသုံးနိုင်ပြီး ငွေပေးချေမှုအချက်အလက် မလိုပါ။ ပြီးနောက် Premium ဆက်သုံးလိုပါက လစဉ် သို့မဟုတ် နှစ်စဉ်အစီအစဉ်ကို ဝယ်ယူနိုင်ပါသည်။ အလိုအလျောက်ငွေမကောက်ပါ။'
+            : 'Try Premium free for 3 days with no payment details. Afterward, purchase monthly or yearly access to continue Premium. You will not be charged automatically.'}
         </p>
       </div>
       {!nativeStoreBuild && <div className="p-6">

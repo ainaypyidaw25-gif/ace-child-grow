@@ -152,7 +152,7 @@ export function SubscriptionPlans() {
             <p className="text-xs font-bold uppercase tracking-[0.16em] text-sky-deep">3-day free trial</p>
             <h2 className="mt-1 text-xl font-bold text-ink">{L('Premium ကို ၃ ရက် အခမဲ့ စမ်းသုံးပါ', 'Try Premium free for 3 days')}</h2>
             <p className="mt-2 max-w-2xl text-sm leading-7 text-ink-soft">
-              {L('ငွေပေးချေမှုအချက်အလက် မလိုပါ။ ၃ ရက်ပြည့်လျှင် အလိုအလျောက် ငွေကောက်ခံမည်မဟုတ်ဘဲ အခမဲ့အစီအစဉ်သို့ ပြန်သွားပါမည်။ Premium ဆက်သုံးလိုပါက ၇ ရက်သုံးခွင့်ကို ရွေးချယ်ဝယ်ယူနိုင်ပါသည်။', 'No payment details required. You will not be charged automatically when the 3-day trial ends; your account returns to Free. To continue using Premium, choose and purchase 7-day access.')}
+              {L('ငွေပေးချေမှုအချက်အလက် မလိုပါ။ ၃ ရက်ပြည့်လျှင် အလိုအလျောက် ငွေကောက်ခံမည်မဟုတ်ဘဲ အခမဲ့အစီအစဉ်သို့ ပြန်သွားပါမည်။ Premium ဆက်သုံးလိုပါက လစဉ် သို့မဟုတ် နှစ်စဉ်အစီအစဉ်ကို ကိုယ်တိုင်ရွေးချယ်ဝယ်ယူနိုင်ပါသည်။', 'No payment details required. You will not be charged automatically when the 3-day trial ends; your account returns to Free. To continue using Premium, choose and purchase monthly or yearly access.')}
             </p>
           </div>
           <button
@@ -221,9 +221,8 @@ export function SubscriptionPlans() {
                   {current && <span className="rounded-pill bg-sky-deep px-3 py-1 text-xs font-semibold text-white">{L('လက်ရှိ', 'Current')}</span>}
                 </span>
                 <span className="mt-3 block text-2xl font-bold text-ink">
-                  {plan.amount.toLocaleString()} <span className="text-sm font-semibold">{plan.currency} / {plan.interval === 'week' ? L('၇ ရက်', '7 days') : plan.interval === 'month' ? L('လ', 'month') : L('နှစ်', 'year')}</span>
+                  {plan.amount.toLocaleString()} <span className="text-sm font-semibold">{plan.currency} / {plan.interval === 'month' ? L('လ', 'month') : L('နှစ်', 'year')}</span>
                 </span>
-                {plan.interval === 'week' && <span className="mt-2 block text-xs font-semibold text-sky-deep">{L('တစ်ကြိမ်ဝယ်ယူမှု · အလိုအလျောက်ငွေမကောက်ပါ', 'One-time purchase · no automatic charge')}</span>}
                 <span className="mt-2 block text-sm text-ink-soft">{locale === 'mm' ? plan.descriptionMm : plan.descriptionEn}</span>
                 <span className="mt-5 block space-y-2 text-sm text-ink">
                   {features.map((feature) => <span key={feature} className="flex gap-2"><span className="text-sky-deep">✓</span>{feature}</span>)}
