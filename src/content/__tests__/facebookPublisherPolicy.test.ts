@@ -49,6 +49,27 @@ describe('Facebook publisher policy', () => {
     const result = validateManifestAndSelect(manifest([item()], { killSwitch: true }), { now })
     expect(result.eligible).toBe(false)
     expect(result.blockers).toContain('GLOBAL_KILL_SWITCH_ON')
+    expect(result.alertOwner).toBe(false)
+  })
+
+  it('keeps the kill switch quiet even when a stale item has another actionable blocker', () => {
+    const result = validateManifestAndSelect(
+      manifest([item({ scheduledAt: '2026-08-30T00:00:00.000Z' })], { killSwitch: true }),
+      { now },
+    )
+    expect(result.blockers).toEqual(expect.arrayContaining([
+      'GLOBAL_KILL_SWITCH_ON',
+      'STALE_DUE_ITEM_REQUIRES_REVIEW',
+    ]))
+    expect(result.alertOwner).toBe(false)
+  })
+
+  it('keeps an empty queue quiet but alerts for stale backlog when the kill switch is off', () => {
+    expect(validateManifestAndSelect(manifest([]), { now }).alertOwner).toBe(false)
+    expect(validateManifestAndSelect(
+      manifest([item({ scheduledAt: '2026-08-30T00:00:00.000Z' })]),
+      { now },
+    ).alertOwner).toBe(true)
   })
 
   it('blocks a stale backlog item instead of draining the backlog', () => {
@@ -143,6 +164,7 @@ describe('Facebook continuous publisher workflow export', () => {
       const dataTableNode = node(name)
       expect(dataTableNode.type).toBe('n8n-nodes-base.dataTable')
       expect(dataTableNode.parameters.dataTableId?.value).toBe('REPLACE_WITH_FACEBOOK_PUBLISH_LEDGER_TABLE_ID')
+      expect(dataTableNode.parameters.columns?.value ?? {}).not.toHaveProperty('updatedAt')
     }
   })
 
@@ -196,7 +218,9 @@ describe('Facebook continuous publisher workflow export', () => {
 
   it('preserves quiet blocker decisions instead of forcing an alert every schedule tick', () => {
     const validation = node('Validate Kill Switch Approval and Queue Age Gates').parameters.jsCode ?? ''
-    expect(validation).toContain("new Set(['GLOBAL_KILL_SWITCH_ON', 'NO_DUE_APPROVED_ITEM'])")
+    expect(validation).toContain("blockers.includes('GLOBAL_KILL_SWITCH_ON')")
+    expect(validation).toContain("new Set(['NO_DUE_APPROVED_ITEM'])")
+    expect(validation).toContain('!killSwitchOn &&')
     const blocker = node('Block and Flag Owner').parameters.jsCode ?? ''
     expect(blocker).toContain('alertOwner:$json.alertOwner === true')
     expect(blocker).not.toContain('alertOwner:true')
