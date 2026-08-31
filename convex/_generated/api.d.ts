@@ -21,6 +21,8 @@ import type * as billing from "../billing.js";
 import type * as birth2mGrossMotorCas from "../birth2mGrossMotorCas.js";
 import type * as birth2mNutritionCas from "../birth2mNutritionCas.js";
 import type * as children from "../children.js";
+import type * as childDevelopmentRefreezeCorrection from "../childDevelopmentRefreezeCorrection.js";
+import type * as childDevelopmentRefreezeCorrectionActions from "../childDevelopmentRefreezeCorrectionActions.js";
 import type * as clinicalRefreezeRegistryMigration from "../clinicalRefreezeRegistryMigration.js";
 import type * as clinicalRefreezeRegistryMigrationActions from "../clinicalRefreezeRegistryMigrationActions.js";
 import type * as clinicalReviewBatch from "../clinicalReviewBatch.js";
@@ -58,6 +60,8 @@ import type * as lib_birth2mNutritionCasData from "../lib/birth2mNutritionCasDat
 import type * as lib_burmeseCopyAuditRelease from "../lib/burmeseCopyAuditRelease.js";
 import type * as lib_classificationImport from "../lib/classificationImport.js";
 import type * as lib_clinicalBlockerCasData from "../lib/clinicalBlockerCasData.js";
+import type * as lib_childDevelopmentRefreezeCorrectionCopy from "../lib/childDevelopmentRefreezeCorrectionCopy.js";
+import type * as lib_childDevelopmentRefreezeCorrectionData from "../lib/childDevelopmentRefreezeCorrectionData.js";
 import type * as lib_clinicalChildDevelopmentBatchData from "../lib/clinicalChildDevelopmentBatchData.js";
 import type * as lib_clinicalEnglishBatchData from "../lib/clinicalEnglishBatchData.js";
 import type * as lib_clinicalEnglishRefreezeBatchData from "../lib/clinicalEnglishRefreezeBatchData.js";
@@ -156,6 +160,8 @@ declare const fullApi: ApiFromModules<{
   birth2mGrossMotorCas: typeof birth2mGrossMotorCas;
   birth2mNutritionCas: typeof birth2mNutritionCas;
   children: typeof children;
+  childDevelopmentRefreezeCorrection: typeof childDevelopmentRefreezeCorrection;
+  childDevelopmentRefreezeCorrectionActions: typeof childDevelopmentRefreezeCorrectionActions;
   clinicalRefreezeRegistryMigration: typeof clinicalRefreezeRegistryMigration;
   clinicalRefreezeRegistryMigrationActions: typeof clinicalRefreezeRegistryMigrationActions;
   clinicalReviewBatch: typeof clinicalReviewBatch;
@@ -193,6 +199,8 @@ declare const fullApi: ApiFromModules<{
   "lib/burmeseCopyAuditRelease": typeof lib_burmeseCopyAuditRelease;
   "lib/classificationImport": typeof lib_classificationImport;
   "lib/clinicalBlockerCasData": typeof lib_clinicalBlockerCasData;
+  "lib/childDevelopmentRefreezeCorrectionCopy": typeof lib_childDevelopmentRefreezeCorrectionCopy;
+  "lib/childDevelopmentRefreezeCorrectionData": typeof lib_childDevelopmentRefreezeCorrectionData;
   "lib/clinicalChildDevelopmentBatchData": typeof lib_clinicalChildDevelopmentBatchData;
   "lib/clinicalEnglishBatchData": typeof lib_clinicalEnglishBatchData;
   "lib/clinicalEnglishRefreezeBatchData": typeof lib_clinicalEnglishRefreezeBatchData;

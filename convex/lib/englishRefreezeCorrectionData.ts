@@ -1,4 +1,3 @@
-import seedData from '../seedData.json';
 import exactPreimagesJson from './englishRefreezeCorrectionPreimages.json';
 import { v, type Infer } from 'convex/values';
 
@@ -29,7 +28,7 @@ type ExactDocument = Record<string, unknown> & {
   _creationTime: number;
 };
 
-type ContentDocument = ExactDocument & {
+type ContentDocument = ExactDocument & DesiredContent & {
   type: string;
   slug: string;
   reviewRevision: number;
@@ -116,26 +115,133 @@ type DesiredContent = {
 export const ENGLISH_REFREEZE_CORRECTION_PREIMAGES =
   exactPreimagesJson as ExactPreimages;
 
-const desiredBySlug = new Map(
-  (seedData as unknown as DesiredContent[]).map((row) => [row.slug, row]),
-);
-
 export type EnglishRefreezeCorrectionTarget = TargetPreimage & {
   desiredContent: DesiredContent;
 };
-
-export const ENGLISH_REFREEZE_CORRECTION_TARGETS =
-  ENGLISH_REFREEZE_CORRECTION_PREIMAGES.targets.map((target) => {
-    const desiredContent = desiredBySlug.get(target.slug);
-    if (!desiredContent) throw new Error(`Missing English refreeze desired content: ${target.slug}`);
-    return { ...target, desiredContent };
-  }) as readonly EnglishRefreezeCorrectionTarget[];
 
 export const ENGLISH_REFREEZE_CONFIRMED_COPY = {
   titleMm: '၅–၆ လ — အာဟာရ (ဖြည့်စွက်စာ စတင်ခြင်း)',
   whyMm:
     '၆ လခန့်တွင် ဖြည့်စွက်စာ စတင်ကျွေးခြင်းသည် ကြီးထွားမှုနှင့် အရသာ သင်ယူမှုအတွက် အရေးကြီးသည်။',
 } as const;
+
+function collectStrings(value: unknown, output: string[]): void {
+  if (value == null) return;
+  if (typeof value === 'string') {
+    output.push(value);
+    return;
+  }
+  if (Array.isArray(value)) {
+    for (const item of value) collectStrings(item, output);
+    return;
+  }
+  if (typeof value === 'object') {
+    for (const item of Object.values(value)) collectStrings(item, output);
+  }
+}
+
+function normalizedSearchText(item: Omit<DesiredContent, 'searchText'>): string {
+  const parts = [
+    item.titleMm,
+    item.titleEn,
+    item.summaryMm ?? '',
+    item.summaryEn ?? '',
+    ...item.tags,
+  ];
+  collectStrings(item.data, parts);
+  return parts.join(' ').toLowerCase();
+}
+
+const NUTRITION_DATA_SEARCH_ORDER = [
+  'title',
+  'why',
+  'observationQuestions',
+  'dailyActivities',
+  'weeklyActivities',
+  'indoor',
+  'lowCost',
+  'materials',
+  'safety',
+  'commonMistakes',
+  'parentTips',
+  'faq',
+  'redFlags',
+  'referral',
+  'encouragement',
+] as const;
+
+function authoredOrderClone(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(authoredOrderClone);
+  if (!value || typeof value !== 'object') return value;
+  const object = value as Record<string, unknown>;
+  const hasOwn = (key: string) => Object.prototype.hasOwnProperty.call(object, key);
+  const keys = hasOwn('mm') && hasOwn('en')
+    ? ['mm', 'en']
+    : hasOwn('q') && hasOwn('a')
+      ? ['q', 'a']
+      : Object.keys(object);
+  return Object.fromEntries(keys.map((key) => [key, authoredOrderClone(object[key])]));
+}
+
+function nutritionDataInHistoricalAuthoredOrder(value: unknown): Record<string, unknown> {
+  const object = value as Record<string, unknown>;
+  return Object.fromEntries(NUTRITION_DATA_SEARCH_ORDER.map(
+    (key) => [key, authoredOrderClone(object[key])],
+  ));
+}
+
+function frozenDesiredContent(target: TargetPreimage): DesiredContent {
+  const content = target.content;
+  const isConfirmedNutrition = target.slug === 'gd_5_6m_nutrition';
+  const data = isConfirmedNutrition
+    ? nutritionDataInHistoricalAuthoredOrder(content.data)
+    : JSON.parse(JSON.stringify(content.data)) as Record<string, unknown>;
+  if (isConfirmedNutrition) {
+    const title = (data.title ?? {}) as Record<string, unknown>;
+    const why = (data.why ?? {}) as Record<string, unknown>;
+    data.title = { ...title, mm: ENGLISH_REFREEZE_CONFIRMED_COPY.titleMm };
+    data.why = { ...why, mm: ENGLISH_REFREEZE_CONFIRMED_COPY.whyMm };
+  }
+  const authored = {
+    type: content.type,
+    slug: content.slug,
+    ageGroupKey: content.ageGroupKey,
+    domainKey: content.domainKey,
+    category: content.category,
+    titleMm: isConfirmedNutrition
+      ? ENGLISH_REFREEZE_CONFIRMED_COPY.titleMm
+      : content.titleMm,
+    titleEn: content.titleEn,
+    summaryMm: isConfirmedNutrition
+      ? ENGLISH_REFREEZE_CONFIRMED_COPY.whyMm
+      : content.summaryMm,
+    summaryEn: content.summaryEn,
+    tags: [...content.tags],
+    difficulty: content.difficulty,
+    durationMinutes: content.durationMinutes,
+    offline: content.offline,
+    data,
+    source: content.source,
+    version: content.version,
+  };
+  return {
+    ...authored,
+    searchText: isConfirmedNutrition
+      ? normalizedSearchText(authored)
+      : content.searchText,
+  };
+}
+
+/**
+ * Historical desired postimages are reconstructed only from the immutable
+ * Production preimage fixture plus the one literal approved copy correction.
+ * Later seed changes must never rewrite a past release's CAS template.
+ */
+export const ENGLISH_REFREEZE_CORRECTION_TARGETS =
+  ENGLISH_REFREEZE_CORRECTION_PREIMAGES.targets.map((target) => ({
+    ...target,
+    desiredContent: frozenDesiredContent(target),
+  })) as readonly EnglishRefreezeCorrectionTarget[];
 
 export const englishRefreezeCorrectionPreflightValidator = v.object({
   releaseId: v.literal(ENGLISH_REFREEZE_CORRECTION_RELEASE_ID),

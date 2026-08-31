@@ -21,6 +21,23 @@ import { CONTENT_SEED } from '../../content/seed';
 import { EVIDENCE_LINKS } from '../links';
 import { SOURCE_BY_ID } from '../sources';
 
+const CDC_TODDLER_2_3_SOURCE_ID = 'cdc-positive-parenting-toddlers-2-3-2026';
+
+function governedSuccessorCompatibleSourceIds(
+  slug: string,
+  historicalSourceIds: readonly string[],
+): readonly (readonly string[])[] {
+  if (slug !== 'gd_2y_safety' && slug !== 'gd_2_5y_safety') {
+    return [historicalSourceIds];
+  }
+  return [
+    historicalSourceIds,
+    historicalSourceIds.map((sourceId) => (
+      sourceId === CDC_TODDLER_SOURCE_ID ? CDC_TODDLER_2_3_SOURCE_ID : sourceId
+    )),
+  ];
+}
+
 describe('older-safety current-evidence exact CAS data', () => {
   it('freezes nine distinct review-bound targets and the exact AAP reverse graph', () => {
     expect(OLDER_SAFETY_2026_RELEASE_ID)
@@ -38,7 +55,7 @@ describe('older-safety current-evidence exact CAS data', () => {
     ).sort((left, right) => left.localeCompare(right)));
   });
 
-  it('keeps authored content and generated evidence links on the intended postimages', () => {
+  it('keeps the historical postimage frozen while permitting only the governed CDC successor edge', () => {
     for (const target of OLDER_SAFETY_2026_TARGETS) {
       const item = CONTENT_SEED.find((candidate) => candidate.slug === target.slug);
       const link = EVIDENCE_LINKS.find((candidate) => (
@@ -46,7 +63,10 @@ describe('older-safety current-evidence exact CAS data', () => {
       ));
       expect(item?.type, target.slug).toBe('guide');
       expect(item?.clinicalStatus, target.slug).toBe('clinical_review');
-      expect(link?.sourceIds, target.slug).toEqual(target.desiredSourceIds);
+      expect(
+        governedSuccessorCompatibleSourceIds(target.slug, target.desiredSourceIds),
+        target.slug,
+      ).toContainEqual(link?.sourceIds);
       expect(target.desiredSourceIds).not.toContain(AAP_DROWNING_2021_SOURCE_ID);
       expect(target.desiredSourceIds[0]).toBe(AAP_DROWNING_2026_SOURCE_ID);
       if (target.slug === 'gd_19_24m_safety') {
