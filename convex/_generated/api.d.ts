@@ -67,6 +67,7 @@ import type * as lib_clinicalChildDevelopmentRefreezeBatchData from "../lib/clin
 import type * as lib_clinicalEnglishBatchData from "../lib/clinicalEnglishBatchData.js";
 import type * as lib_clinicalEnglishRefreezeBatchData from "../lib/clinicalEnglishRefreezeBatchData.js";
 import type * as lib_clinicalEnglishSuccessorBatchData from "../lib/clinicalEnglishSuccessorBatchData.js";
+import type * as lib_clinicalEvidenceSuccessorBatchData from "../lib/clinicalEvidenceSuccessorBatchData.js";
 import type * as lib_clinicalNativeMyanmarRefreezeBatchData from "../lib/clinicalNativeMyanmarRefreezeBatchData.js";
 import type * as lib_clinicalNativeMyanmarSuccessorBatchData from "../lib/clinicalNativeMyanmarSuccessorBatchData.js";
 import type * as lib_clinicalRefreezeRegistryMigrationData from "../lib/clinicalRefreezeRegistryMigrationData.js";
@@ -209,6 +210,7 @@ declare const fullApi: ApiFromModules<{
   "lib/clinicalEnglishBatchData": typeof lib_clinicalEnglishBatchData;
   "lib/clinicalEnglishRefreezeBatchData": typeof lib_clinicalEnglishRefreezeBatchData;
   "lib/clinicalEnglishSuccessorBatchData": typeof lib_clinicalEnglishSuccessorBatchData;
+  "lib/clinicalEvidenceSuccessorBatchData": typeof lib_clinicalEvidenceSuccessorBatchData;
   "lib/clinicalNativeMyanmarRefreezeBatchData": typeof lib_clinicalNativeMyanmarRefreezeBatchData;
   "lib/clinicalNativeMyanmarSuccessorBatchData": typeof lib_clinicalNativeMyanmarSuccessorBatchData;
   "lib/clinicalRefreezeRegistryMigrationData": typeof lib_clinicalRefreezeRegistryMigrationData;

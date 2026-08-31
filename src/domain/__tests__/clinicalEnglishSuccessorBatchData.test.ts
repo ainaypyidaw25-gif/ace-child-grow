@@ -73,7 +73,9 @@ describe('English all-14 immutable successor data', () => {
       expectedPreviousDecisionDigest: CLINICAL_ENGLISH_SUCCESSOR_PREVIOUS_DECISION_DIGEST,
       expectedPreviousReceiptDigest: CLINICAL_ENGLISH_SUCCESSOR_PREVIOUS_RECEIPT_DIGEST,
     });
-    expect(CLINICAL_REVIEW_BATCH_REGISTRY.at(-1)).toEqual(registration);
+    expect(CLINICAL_REVIEW_BATCH_REGISTRY.find(
+      (row) => row.manifest.batchId === CLINICAL_ENGLISH_SUCCESSOR_BATCH_ID,
+    )).toEqual(registration);
   });
 
   it('binds Daw La Pyae to all fourteen exact current Production revisions', () => {
