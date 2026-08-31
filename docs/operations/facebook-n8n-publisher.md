@@ -21,11 +21,14 @@ these **String** columns: `ledgerKey`, `postId`, `status`, `reservationToken`,
 Replace `REPLACE_WITH_FACEBOOK_PUBLISH_LEDGER_TABLE_ID` in every Data Table
 node with its actual table ID. The placeholder is a deployment blocker.
 
-Create n8n project variables `ACE_SOCIAL_ALERT_FROM_EMAIL` and
-`ACE_SOCIAL_OWNER_ALERT_EMAIL`, attach an SMTP credential to
-`Send Owner Alert - CREDENTIAL REQUIRED`, and test an actual alert. Actionable
-blocks are upserted to the ledger before email, so SMTP failure cannot erase the
-alert evidence. Kill-switch and empty-queue stops are intentionally quiet.
+The current n8n workspace plan does not provide project Variables. In
+`Send Owner Alert - CREDENTIAL REQUIRED`, replace
+`REPLACE_WITH_SOCIAL_ALERT_FROM_EMAIL` and
+`REPLACE_WITH_SOCIAL_OWNER_ALERT_EMAIL` directly in n8n, attach an SMTP
+credential, and test an actual alert. Do not commit real email addresses to this
+repository. Actionable blocks are upserted to the ledger before email, so SMTP
+failure cannot erase the alert evidence. Kill-switch and empty-queue stops are
+intentionally quiet.
 
 ## Import and credential setup
 

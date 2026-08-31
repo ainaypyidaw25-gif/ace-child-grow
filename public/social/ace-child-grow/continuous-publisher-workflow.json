@@ -814,8 +814,8 @@
       "parameters": {
         "resource": "email",
         "operation": "send",
-        "fromEmail": "={{ $vars.ACE_SOCIAL_ALERT_FROM_EMAIL }}",
-        "toEmail": "={{ $vars.ACE_SOCIAL_OWNER_ALERT_EMAIL }}",
+        "fromEmail": "REPLACE_WITH_SOCIAL_ALERT_FROM_EMAIL",
+        "toEmail": "REPLACE_WITH_SOCIAL_OWNER_ALERT_EMAIL",
         "subject": "={{ \"ACE Child Grow Facebook publisher blocked: \" + $json.alertCode }}",
         "emailFormat": "text",
         "text": "={{ $json.alertMessage + \"\\nPost: \" + ($json.postId || \"none\") + \"\\nExecution: \" + $json.lastExecutionId + \"\\nRecorded: \" + $json.updatedAt }}",
@@ -1231,9 +1231,9 @@
     "publishLedgerRequired": true,
     "publishLedgerTableIdPlaceholder": "REPLACE_WITH_FACEBOOK_PUBLISH_LEDGER_TABLE_ID",
     "ownerAlertCredentialRequired": true,
-    "ownerAlertVariablesRequired": [
-      "ACE_SOCIAL_ALERT_FROM_EMAIL",
-      "ACE_SOCIAL_OWNER_ALERT_EMAIL"
+    "ownerAlertFieldPlaceholders": [
+      "REPLACE_WITH_SOCIAL_ALERT_FROM_EMAIL",
+      "REPLACE_WITH_SOCIAL_OWNER_ALERT_EMAIL"
     ]
   },
   "tags": []
