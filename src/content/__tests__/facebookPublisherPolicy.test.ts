@@ -90,14 +90,30 @@ describe('Facebook publisher policy', () => {
 })
 
 const workflow = JSON.parse(readFileSync(resolve('public/social/ace-child-grow/continuous-publisher-workflow.json'), 'utf8'))
-const nodes = new Map(workflow.nodes.map((node: { name: string }) => [node.name, node]))
+type WorkflowNode = {
+  name: string
+  type: string
+  parameters: {
+    jsCode?: string
+    dataTableId?: { value?: string }
+    columns?: { value?: Record<string, string> }
+    fromEmail?: string
+    toEmail?: string
+  }
+}
+const nodes = new Map<string, WorkflowNode>(workflow.nodes.map((node: WorkflowNode) => [node.name, node]))
+const node = (name: string) => {
+  const result = nodes.get(name)
+  if (!result) throw new Error(`Missing workflow node: ${name}`)
+  return result
+}
 const destinations = (name: string, branch = 0) =>
   (workflow.connections[name]?.main?.[branch] ?? []).map((edge: { node: string }) => edge.node)
 
 describe('Facebook continuous publisher workflow export', () => {
   it('is inert on import and retains the manifest kill-switch gate', () => {
     expect(workflow.active).toBe(false)
-    const gate = nodes.get('Validate Kill Switch Approval and Queue Age Gates') as any
+    const gate = node('Validate Kill Switch Approval and Queue Age Gates')
     expect(gate.parameters.jsCode).toContain('manifest.killSwitch !== false')
     expect(destinations('Eligible for Facebook Publish?', 1)).toContain('Block and Flag Owner')
   })
@@ -105,9 +121,9 @@ describe('Facebook continuous publisher workflow export', () => {
   it('uses a durable n8n Data Table instead of workflow static data', () => {
     expect(JSON.stringify(workflow)).not.toContain('$getWorkflowStaticData')
     for (const name of ['Read Durable Publish Ledger', 'Upsert Publish Reservation or Reconciliation', 'Read Reservation Back', 'Upsert Published Ledger', 'Upsert Durable Owner Alert']) {
-      const node = nodes.get(name) as any
-      expect(node.type).toBe('n8n-nodes-base.dataTable')
-      expect(node.parameters.dataTableId.value).toBe('REPLACE_WITH_FACEBOOK_PUBLISH_LEDGER_TABLE_ID')
+      const dataTableNode = node(name)
+      expect(dataTableNode.type).toBe('n8n-nodes-base.dataTable')
+      expect(dataTableNode.parameters.dataTableId?.value).toBe('REPLACE_WITH_FACEBOOK_PUBLISH_LEDGER_TABLE_ID')
     }
   })
 
@@ -122,7 +138,7 @@ describe('Facebook continuous publisher workflow export', () => {
 
   it('writes platform ID and permalink after Meta returns', () => {
     expect(destinations('Remember Published Post')).toContain('Fetch Published Post Permalink')
-    const values = (nodes.get('Upsert Published Ledger') as any).parameters.columns.value
+    const values = node('Upsert Published Ledger').parameters.columns?.value ?? {}
     expect(values.platformPostId).toBe('={{ $json.platformPostId }}')
     expect(values.platformPermalink).toBe('={{ $json.platformPermalink }}')
     expect(values.publishedAt).toBe('={{ $json.publishedAt }}')
@@ -131,7 +147,7 @@ describe('Facebook continuous publisher workflow export', () => {
   it('records actionable blockers and sends a real owner email', () => {
     expect(destinations('Prepare Durable Owner Alert')).toContain('Upsert Durable Owner Alert')
     expect(destinations('Upsert Durable Owner Alert')).toContain('Send Owner Alert - CREDENTIAL REQUIRED')
-    const email = nodes.get('Send Owner Alert - CREDENTIAL REQUIRED') as any
+    const email = node('Send Owner Alert - CREDENTIAL REQUIRED')
     expect(email.type).toBe('n8n-nodes-base.emailSend')
     expect(email.parameters.fromEmail).toBe('REPLACE_WITH_SOCIAL_ALERT_FROM_EMAIL')
     expect(email.parameters.toEmail).toBe('REPLACE_WITH_SOCIAL_OWNER_ALERT_EMAIL')
@@ -139,7 +155,7 @@ describe('Facebook continuous publisher workflow export', () => {
   })
 
   it('blocks stale backlog drain and limits an execution to one selected item', () => {
-    const js = (nodes.get('Validate Kill Switch Approval and Queue Age Gates') as any).parameters.jsCode
+    const js = node('Validate Kill Switch Approval and Queue Age Gates').parameters.jsCode
     expect(js).toContain('STALE_DUE_ITEM_REQUIRES_REVIEW')
     expect(js).toContain('const item = due[0] || null')
     expect(workflow.settings.executionTimeout).toBe(300)
