@@ -7,7 +7,16 @@ const manifestPath = path.join(root, 'public/social/ace-child-grow/manifest.json
 const calendarPath = path.join(root, 'public/social/ace-child-grow/content-calendar.json')
 const generatorPath = path.join(root, 'scripts/generate-social-calendar.mjs')
 
-const reviewRequiredIds = [
+const provenanceReviewRequiredIds = [
+  'ACE-CAL-07',
+  'ACE-CAL-08',
+  'ACE-CAL-09',
+  'ACE-CAL-10',
+  'ACE-CAL-11',
+  'ACE-CAL-12',
+  'ACE-CAL-13',
+  'ACE-CAL-14',
+  'ACE-CAL-15',
   'ACE-CAL-16',
   'ACE-CAL-17',
   'ACE-CAL-18',
@@ -18,6 +27,10 @@ const reviewRequiredIds = [
   'ACE-ACT-5M-05',
   'ACE-ACT-5M-06',
 ]
+
+const editorialReviewRequiredIds = provenanceReviewRequiredIds.filter(
+  (id) => !/^ACE-CAL-(0[7-9]|1[0-5])$/.test(id),
+)
 
 describe('paused Facebook content queue', () => {
   it('keeps the live manifest and generator kill switch on', async () => {
@@ -32,7 +45,7 @@ describe('paused Facebook content queue', () => {
     const manifest = JSON.parse(await readFile(manifestPath, 'utf8'))
     const byId = new Map(manifest.items.map((item: { id: string }) => [item.id, item]))
 
-    for (const id of reviewRequiredIds) {
+    for (const id of provenanceReviewRequiredIds) {
       const item = byId.get(id) as Record<string, unknown> | undefined
       expect(item, `${id} is missing`).toBeDefined()
       expect(item?.status, id).toBe('draft')
@@ -44,13 +57,11 @@ describe('paused Facebook content queue', () => {
     }
   })
 
-  it('applies the same review gate to future calendar data', async () => {
+  it('applies the same review gate to every rebuilt calendar item', async () => {
     const calendar = JSON.parse(await readFile(calendarPath, 'utf8'))
-    const futurePosts = calendar.posts.filter((post: { id: string }) =>
-      ['ACE-CAL-16', 'ACE-CAL-17', 'ACE-CAL-18'].includes(post.id),
-    )
+    const futurePosts = calendar.posts.filter((post: { id: string }) => post.id.startsWith('ACE-CAL-'))
 
-    expect(futurePosts).toHaveLength(3)
+    expect(futurePosts).toHaveLength(12)
     for (const post of futurePosts) {
       expect(post.status, post.id).toBe('draft')
       expect(post.approvalStatus, post.id).toBe('review_required')
@@ -61,9 +72,9 @@ describe('paused Facebook content queue', () => {
 describe('future Facebook brand voice', () => {
   it('uses practical, saveable and shareable captions without generic vocatives', async () => {
     const manifest = JSON.parse(await readFile(manifestPath, 'utf8'))
-    const selected = manifest.items.filter((item: { id: string }) => reviewRequiredIds.includes(item.id))
+    const selected = manifest.items.filter((item: { id: string }) => editorialReviewRequiredIds.includes(item.id))
 
-    expect(selected).toHaveLength(reviewRequiredIds.length)
+    expect(selected).toHaveLength(editorialReviewRequiredIds.length)
     for (const item of selected) {
       const caption = String(item.captionMyanmar)
       const prose = caption

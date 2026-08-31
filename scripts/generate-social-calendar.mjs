@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto'
 import { access, copyFile, mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import sharp from 'sharp'
+import { reconcileGeneratedApproval } from './social/approval-provenance.mjs'
 
 const root = path.resolve(import.meta.dirname, '..')
 const socialDir = path.join(root, 'public/social/ace-child-grow')
@@ -63,46 +64,55 @@ const palette = {
 const posts = [
   {
     id: 'ACE-CAL-07', scheduledAt: '2026-08-12T13:30:00.000Z', category: 'app_feature', objective: 'feature discovery', icon: 'bookmark', accent: palette.sky,
+    reviewRequired: true,
     eyebrow: 'ကြိုက်နှစ်သက်ရာ', title: ['ပြန်ကြည့်ချင်တာကို', 'သိမ်းထားမယ်'], body: ['အသုံးဝင်တဲ့ အစီအစဉ်တွေကို', 'Favorites ထဲမှာ ပြန်ရှာလို့ရတယ်'],
     captionMyanmar: 'ဖတ်ပြီးတာနဲ့ ပျောက်သွားမှာစိုးရိမ်စရာ မလိုပါဘူး 💛\n\nACE Child Grow မှာ ပြန်ကြည့်ချင်တဲ့ လှုပ်ရှားမှုနဲ့ လေ့လာစရာတွေကို Favorites ထဲ သိမ်းထားနိုင်ပါတယ်။\n\nကလေးနဲ့ လုပ်ကြည့်ဖို့ အချိန်ရတဲ့အခါ အလွယ်တကူ ပြန်ဖွင့်ကြည့်ရုံပါပဲ။\n\n#ACEChildGrow #မိဘနဲ့ကလေး #Favorites',
   },
   {
     id: 'ACE-CAL-08', scheduledAt: '2026-08-15T03:30:00.000Z', category: 'engagement', objective: 'weekend activity', icon: 'star', accent: palette.gold,
+    reviewRequired: true,
     eyebrow: 'စနေမနက် အတူကစားမယ်', title: ['အိမ်မှာရှိတာနဲ့', 'ကစားလို့ရတယ်'], body: ['အထူးပစ္စည်း မလိုပါဘူး', 'အတူရှိပေးတဲ့အချိန်က အရေးကြီးတယ်'],
     captionMyanmar: 'ကလေးနဲ့ ကစားဖို့ ပစ္စည်းအများကြီး မလိုပါဘူးနော် 🌟\n\nအိမ်မှာရှိတဲ့ ခွက်၊ ဇွန်း၊ စက္ကူ ဒါမှမဟုတ် ပျော့ပျောင်းတဲ့အဝတ်လေးတွေကို အသက်အရွယ်နဲ့ ကိုက်ညီအောင် အသုံးပြုလို့ရပါတယ်။\n\nအရေးကြီးတာက မိဘက ဘေးမှာရှိပြီး အတူကြည့်၊ အတုပြ၊ စကားပြောပေးဖို့ပါ။\n\nဒီနေ့ ဘာနဲ့အတူကစားဖြစ်လဲ comment မှာ မျှဝေပေးပါနော်။\n\n#ACEChildGrow #အိမ်မှာအတူကစားမယ်',
   },
   {
     id: 'ACE-CAL-09', scheduledAt: '2026-08-17T13:30:00.000Z', category: 'parent_support', objective: 'habit building', icon: 'chart', accent: palette.sage, source: 'ACE-AUTO-02.png',
+    reviewRequired: true,
     eyebrow: 'တစ်ပတ်တာ ပြန်ကြည့်မယ်', title: ['ပြောင်းလဲမှုလေးတွေကို', 'သတိထားမယ်'], body: ['နေ့တိုင်းမှတ်ထားတဲ့ အချက်လေးတွေက', 'အချိန်ကြာရင် ပုံပြင်တစ်ပုဒ်ဖြစ်လာတယ်'],
     captionMyanmar: 'ကလေးရဲ့ ပြောင်းလဲမှုက နေ့တိုင်းနည်းနည်းစီ ဖြစ်လာတာပါ 🌱\n\nတစ်ပတ်ပြီးတိုင်း “ဒီအပတ် ဘာအသစ်လုပ်တတ်လာလဲ၊ ဘာကိုပိုစိတ်ဝင်စားလာလဲ” ဆိုတာ ခဏပြန်စဉ်းစားကြည့်ပါ။\n\nACE Child Grow ထဲမှာ နေ့စဉ်အချက်လေးတွေကို သတိထားရင်း မိဘကိုယ်တိုင်လည်း ကလေးကို ပိုနားလည်လာနိုင်ပါတယ်။\n\n#ACEChildGrow #ကလေးဖွံ့ဖြိုးမှု #တစ်ပတ်တာမှတ်တမ်း',
   },
   {
     id: 'ACE-CAL-10', scheduledAt: '2026-08-19T13:30:00.000Z', category: 'app_feature', objective: 'content discovery', icon: 'book', accent: palette.coral, source: 'ACE-AUTO-03.png',
+    reviewRequired: true,
     eyebrow: 'သိချင်တာ ရှာဖတ်မယ်', title: ['မေးခွန်းရှိတဲ့အခါ', 'ဘယ်မှာရှာမလဲ?'], body: ['လေ့လာရန်ကဏ္ဍမှာ', 'ခေါင်းစဉ်အလိုက် ဖတ်ရှုနိုင်တယ်'],
     captionMyanmar: 'ကလေးပြုစုရင်း မေးခွန်းအသစ်တွေ နေ့တိုင်းပေါ်လာတတ်ပါတယ်နော် 📚\n\nACE Child Grow ရဲ့ လေ့လာရန်ကဏ္ဍမှာ အကြောင်းအရာတွေကို ခေါင်းစဉ်အလိုက် ရှာဖတ်နိုင်ပါတယ်။\n\nအားတဲ့အချိန် ဖတ်ထားမယ်၊ လိုအပ်တဲ့အခါ ပြန်ကြည့်မယ်—မိဘအတွက် အဆင်ပြေတဲ့ လေ့လာစရာနေရာလေးပါ။\n\n#ACEChildGrow #မိဘများအတွက် #လေ့လာရန်',
   },
   {
     id: 'ACE-CAL-11', scheduledAt: '2026-08-22T03:30:00.000Z', category: 'education', objective: 'healthy expectations', icon: 'heart', accent: palette.sky,
+    reviewRequired: true,
     eyebrow: 'ကလေးတိုင်း မတူကြပါဘူး', title: ['ဖွံ့ဖြိုးမှုက', 'ပြိုင်ပွဲမဟုတ်ပါဘူး'], body: ['ကိုယ့်ကလေးရဲ့ အရှိန်နဲ့', 'သေးငယ်တဲ့တိုးတက်မှုကို သတိထားပေးပါ'],
     captionMyanmar: 'ကလေးတိုင်းရဲ့ သင်ယူပုံနဲ့ ဖွံ့ဖြိုးလာပုံက မတူနိုင်ပါတယ် 💛\n\nတခြားကလေးနဲ့ နှိုင်းယှဉ်တာထက် ကိုယ့်ကလေးရဲ့ မနေ့ကနဲ့ ဒီနေ့ကို ပြန်ကြည့်ပေးပါ။ သေးငယ်တဲ့ တိုးတက်မှုလေးတွေကို အသိအမှတ်ပြုပေးတာက အရေးကြီးပါတယ်။\n\nစိုးရိမ်စရာတစ်ခုရှိရင်တော့ သင့်တော်တဲ့ ကျန်းမာရေးပညာရှင်နဲ့ တိုင်ပင်ပါ။\n\n#ACEChildGrow #ကလေးဖွံ့ဖြိုးမှု #မိဘအားပေးမှု',
   },
   {
     id: 'ACE-CAL-12', scheduledAt: '2026-08-24T13:30:00.000Z', category: 'app_tutorial', objective: 'product education', icon: 'phone', accent: palette.gold, source: 'ACE-AUTO-04.png',
+    reviewRequired: true,
     eyebrow: 'App ကို စသုံးမယ်', title: ['ဒီနေ့အစီအစဉ်ကို', '၃ ချက်နဲ့ကြည့်မယ်'], body: ['အသက်အရွယ်ရွေး → အစီအစဉ်ကြည့်', 'ကြိုက်တာကို သိမ်းထား'],
     captionMyanmar: 'ACE Child Grow ကို စသုံးဖို့ မခက်ပါဘူး 📱\n\n၁။ ကလေးရဲ့ အသက်အရွယ်နဲ့ကိုက်တဲ့ အကြောင်းအရာကိုရွေးပါ။\n၂။ ဒီနေ့အတွက် လှုပ်ရှားမှုနဲ့ လိုအပ်တာတွေကိုဖတ်ပါ။\n၃။ နောက်မှပြန်ကြည့်ချင်တာကို Favorites ထဲ သိမ်းထားပါ။\n\nမိဘတို့ရဲ့ နေ့စဉ်အချိန်နဲ့ကိုက်အောင် အဆင်ပြေသလို အသုံးပြုနိုင်ပါတယ်။\n\n#ACEChildGrow #Appအသုံးပြုနည်း',
   },
   {
     id: 'ACE-CAL-13', scheduledAt: '2026-08-26T13:30:00.000Z', category: 'parent_support', objective: 'caregiver wellbeing', icon: 'cup', accent: palette.sage,
+    reviewRequired: true,
     eyebrow: 'မိဘလည်း နားဖို့လိုတယ်', title: ['၅ မိနစ်လောက်', 'ကိုယ့်အတွက်ထားမယ်'], body: ['ရေသောက်၊ အသက်ရှူ၊ ခဏနား', 'အားပြန်ဖြည့်တာလည်း ဂရုစိုက်ခြင်းပါ'],
     captionMyanmar: 'ကလေးကို ဂရုစိုက်နေတဲ့ မိဘကိုလည်း ဂရုစိုက်ဖို့လိုပါတယ် 💛\n\nရေတစ်ခွက်သောက်ပါ။ ပခုံးကိုလျှော့ပြီး အသက်ပြင်းပြင်း သုံးခါရှူပါ။ ဖြစ်နိုင်ရင် ၅ မိနစ်လောက် ခဏနားပါ။\n\nအရာအားလုံးကို တစ်ယောက်တည်း အပြီးလုပ်စရာမလိုပါဘူး။ လိုအပ်ရင် အနားကလူကို အကူအညီတောင်းလို့ရပါတယ်။\n\n#ACEChildGrow #မိဘနားချိန်',
   },
   {
     id: 'ACE-CAL-14', scheduledAt: '2026-08-29T03:30:00.000Z', category: 'engagement', objective: 'audience research', icon: 'chat', accent: palette.coral,
+    reviewRequired: true,
     eyebrow: 'မိဘတို့အသံ', title: ['App ထဲမှာ ဘာကို', 'အများဆုံးသုံးဖြစ်လဲ?'], body: ['နေ့စဉ်လှုပ်ရှားမှု • လေ့လာရန်', 'မှတ်တမ်း • Favorites'],
     captionMyanmar: 'ACE Child Grow ထဲမှာ ဘယ်ကဏ္ဍကို အများဆုံးသုံးဖြစ်လဲ? 👇\n\n၁️⃣ နေ့စဉ်လှုပ်ရှားမှု\n၂️⃣ လေ့လာရန်\n၃️⃣ ဖွံ့ဖြိုးမှုမှတ်တမ်း\n၄️⃣ Favorites\n\nနံပါတ်တစ်ခုရွေးပြီး comment မှာ ရေးပေးခဲ့ပါနော်။ မိဘတို့အသုံးများတဲ့အပိုင်းကို ပိုကောင်းအောင် ဆက်တိုးတက်စေချင်ပါတယ်။\n\n#ACEChildGrow #မိဘတို့အသံ',
   },
   {
     id: 'ACE-CAL-15', scheduledAt: '2026-08-31T13:30:00.000Z', category: 'trust', objective: 'privacy awareness', icon: 'shield', accent: palette.sky,
+    reviewRequired: true,
     eyebrow: 'အွန်လိုင်းမှာ မျှဝေတဲ့အခါ', title: ['ကလေးရဲ့ ကိုယ်ရေးအချက်အလက်ကို', 'ကာကွယ်ထားမယ်'], body: ['နာမည်အပြည့်၊ လိပ်စာ၊ ဆေးမှတ်တမ်းတွေကို', 'public comment မှာ မရေးပါနဲ့'],
     captionMyanmar: 'မိဘတို့ရေ—online မှာ မေးခွန်းမေးတဲ့အခါ ကလေးရဲ့ ကိုယ်ရေးအချက်အလက်ကို သတိထားပေးပါနော် 🛡️\n\nနာမည်အပြည့်အစုံ၊ လိပ်စာ၊ ဖုန်းနံပါတ်၊ ဆေးမှတ်တမ်းလို အချက်အလက်တွေကို public comment မှာ မရေးပေးဖို့ မေတ္တာရပ်ခံပါတယ်။\n\nမေးခွန်းကို အထွေထွေဖော်ပြပြီး လိုအပ်ရင် သင့်တော်တဲ့ပညာရှင်နဲ့ တိုက်ရိုက်တိုင်ပင်ပါ။\n\n#ACEChildGrow #ကလေးကိုယ်ရေးလုံခြုံမှု',
   },
@@ -293,36 +303,19 @@ let previous = { items: [] }
 try { previous = JSON.parse(await readFile(manifestFile, 'utf8')) } catch {}
 const previousById = new Map((previous.items || []).map((item) => [item.id, item]))
 
-function preservePublishedState(item) {
-  const prior = previousById.get(item.id)
-  const wasPublished = prior && (prior.alreadyPublished || prior.status === 'published' || prior.platformPostId)
-  if (!wasPublished) return item
-  if (prior.approvedContentHash && prior.approvedContentHash !== item.approvedContentHash) {
-    throw new Error(`Refusing to change already-published Facebook content: ${item.id}`)
-  }
-  return {
-    ...item,
-    status: 'published',
-    alreadyPublished: true,
-    platformPostId: prior.platformPostId || null,
-    platformPermalink: prior.platformPermalink || null,
-    publishedAt: prior.publishedAt || null,
-  }
-}
-
 const generated = []
 for (const post of posts) {
   const output = await renderPost(post)
   const mediaSha256 = hash(await readFile(output))
-  const reviewRequired = post.reviewRequired === true
-  generated.push(preservePublishedState({
+  const currentContentHash = hash(`${post.id}|${post.scheduledAt}|${post.captionMyanmar}|${mediaSha256}`)
+  const candidate = {
     ...post,
-    status: reviewRequired ? 'draft' : 'scheduled',
-    approvalStatus: reviewRequired ? 'review_required' : 'approved',
-    reviewerId: reviewRequired ? null : 'OWNER_CONTINUOUS_POST_AUTH_2026_07_30',
-    approvalTimestamp: reviewRequired ? null : '2026-07-30T06:10:00.000Z',
-    approvalExpiresAt: reviewRequired ? null : '2026-10-01T00:00:00.000Z',
-    approvedContentHash: reviewRequired ? null : hash(`${post.id}|${post.scheduledAt}|${post.captionMyanmar}|${mediaSha256}`),
+    status: 'draft',
+    approvalStatus: 'review_required',
+    reviewerId: null,
+    approvalTimestamp: null,
+    approvalExpiresAt: null,
+    approvedContentHash: null,
     riskLevel: 'low',
     clinicalApprovalId: null,
     mediaType: 'image',
@@ -331,6 +324,12 @@ for (const post of posts) {
     alreadyPublished: false,
     platformPostId: null,
     platformPermalink: null,
+  }
+  generated.push(reconcileGeneratedApproval({
+    candidate,
+    currentContentHash,
+    prior: previousById.get(post.id),
+    forceReview: post.reviewRequired === true,
   }))
 }
 await renderPhonePreview()
@@ -339,8 +338,8 @@ const activityGenerated = []
 for (const post of activityPosts) {
   const output = await renderActivityPost(post)
   const mediaSha256 = hash(await readFile(output))
-  const reviewRequired = post.reviewRequired === true
-  activityGenerated.push(preservePublishedState({
+  const currentContentHash = hash(`${post.id}|${post.scheduledAt}|${post.captionMyanmar}|${mediaSha256}`)
+  const candidate = {
     id: post.id,
     campaign: 'activity_5_6m',
     sourceSlug: post.sourceSlug,
@@ -350,12 +349,12 @@ for (const post of activityPosts) {
     titleMm: post.titleMm,
     titleEn: post.titleEn,
     scheduledAt: post.scheduledAt,
-    status: reviewRequired ? 'draft' : 'scheduled',
-    approvalStatus: reviewRequired ? 'review_required' : 'approved',
-    reviewerId: reviewRequired ? null : 'OWNER_FACEBOOK_ACTIVITY_APPROVAL_2026_08_04',
-    approvalTimestamp: reviewRequired ? null : '2026-08-04T00:29:42.000Z',
-    approvalExpiresAt: reviewRequired ? null : '2026-12-31T00:00:00.000Z',
-    approvedContentHash: reviewRequired ? null : hash(`${post.id}|${post.scheduledAt}|${post.captionMyanmar}|${mediaSha256}`),
+    status: 'draft',
+    approvalStatus: 'review_required',
+    reviewerId: null,
+    approvalTimestamp: null,
+    approvalExpiresAt: null,
+    approvedContentHash: null,
     riskLevel: 'low',
     clinicalApprovalId: null,
     mediaType: 'image',
@@ -365,6 +364,12 @@ for (const post of activityPosts) {
     alreadyPublished: false,
     platformPostId: null,
     platformPermalink: null,
+  }
+  activityGenerated.push(reconcileGeneratedApproval({
+    candidate,
+    currentContentHash,
+    prior: previousById.get(post.id),
+    forceReview: post.reviewRequired === true,
   }))
 }
 
