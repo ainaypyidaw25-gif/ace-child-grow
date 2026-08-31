@@ -7,6 +7,7 @@
 // by 12 months is NOT presented as required, because it is not.
 import { activity, guide, milestone, printable, type SeedItem } from '../../types';
 import { kb } from './editorial';
+import { CHILD_DEVELOPMENT_REFREEZE_COPY } from '../../../../convex/lib/childDevelopmentRefreezeCorrectionCopy';
 
 const b = (mm: string, en: string) => ({ mm, en });
 
@@ -955,7 +956,7 @@ const GUIDES_F: SeedItem[] = [
         b('ဗိုက်ပြည့်လျှင် ခေါင်းလွှဲခြင်း၊ ပါးစပ်ပိတ်ခြင်း ကဲ့သို့ အချက်ပြပါသလား။', 'Does she signal fullness by turning away or closing her mouth?'),
       ],
       dailyActivities: [
-        b('အစာ အမျိုးအစား အနည်းဆုံး ၄ မျိုးမှ ၅ မျိုးကို တစ်နေ့အတွင်း ပေးပါ။', 'Offer at least four to five different food groups across the day.'),
+        CHILD_DEVELOPMENT_REFREEZE_COPY.gd_10_12m_nutrition.dailyActivity,
         b('မိသားစုနှင့် အတူ စားပွဲတွင် ထိုင်စားစေပါ။', 'Let her eat with the family at the same time.'),
         b('ဗိုက်ပြည့်ပြီဟု အချက်ပြလျှင် ရပ်ပါ — အတင်း မကျွေးပါနှင့်။', 'Stop when she signals she is full — never force-feed.'),
       ],
@@ -985,7 +986,7 @@ const GUIDES_F: SeedItem[] = [
         b('အချိုရည်၊ လက်ဖက်ရည် သို့မဟုတ် ဆားပါသော အစာ တိုက်ခြင်း။', 'Giving sweet drinks, tea or salty food.'),
       ],
       parentTips: [
-        b('ကလေးက ဘာစားမလဲ ဆုံးဖြတ်သည်၊ မိဘက ဘာကို ဘယ်အချိန် ပေးမလဲ ဆုံးဖြတ်သည်။', 'You decide what is offered and when; she decides how much she eats.'),
+        CHILD_DEVELOPMENT_REFREEZE_COPY.gd_10_12m_nutrition.parentTip,
         b('အစားအစာ ငြင်းသည့် ရက်များ ရှိတတ်သည် — တစ်ပတ်လုံး ကြည့်ပါ၊ တစ်နပ်တည်း မကြည့်ပါနှင့်။', 'Refusal days happen — judge intake across a week, not one meal.'),
       ],
       faq: [

@@ -22,6 +22,24 @@ import { EVIDENCE_LINKS } from '../links';
 
 const unsupportedEn = 'Move climbable furniture away';
 const unsupportedMm = 'တက်နိုင်သော ပရိဘောဂများကို ဝေးရာရွှေ့';
+const CDC_TODDLER_2_3_SOURCE_ID = 'cdc-positive-parenting-toddlers-2-3-2026';
+
+function governedSuccessorCompatibleSourceIds(
+  slug: string,
+  historicalSourceIds: readonly string[],
+): readonly (readonly string[])[] {
+  if (slug !== 'gd_2y_safety' && slug !== 'gd_2_5y_safety') {
+    return [historicalSourceIds];
+  }
+  return [
+    historicalSourceIds,
+    historicalSourceIds.map((sourceId) => (
+      sourceId === 'cdc-positive-parenting-toddlers-2026'
+        ? CDC_TODDLER_2_3_SOURCE_ID
+        : sourceId
+    )),
+  ];
+}
 
 describe('older-safety corrected v2 exact CAS data', () => {
   it('uses a new literal v2 identity and keeps all frozen v1 preimages intact', () => {
@@ -76,13 +94,16 @@ describe('older-safety corrected v2 exact CAS data', () => {
     expect(generated).toEqual(authored);
   });
 
-  it('preserves ordered evidence links, reverse graph and review/AI invariants', () => {
+  it('preserves the frozen link postimage while permitting only the governed CDC successor edge', () => {
     for (const target of OLDER_SAFETY_2026_TARGETS) {
       const link = EVIDENCE_LINKS.find(
         (candidate) => candidate.kind === target.kind && candidate.slug === target.slug,
       );
       const item = CONTENT_SEED.find((candidate) => candidate.slug === target.slug);
-      expect(link?.sourceIds, target.slug).toEqual(target.desiredSourceIds);
+      expect(
+        governedSuccessorCompatibleSourceIds(target.slug, target.desiredSourceIds),
+        target.slug,
+      ).toContainEqual(link?.sourceIds);
       expect(target.desiredSourceIds[0], target.slug).toBe(AAP_DROWNING_2026_SOURCE_ID);
       expect(target.desiredSourceIds, target.slug).not.toContain(AAP_DROWNING_2021_SOURCE_ID);
       expect(item, target.slug).toMatchObject({

@@ -1,5 +1,10 @@
 import { activity, guide, milestone, printable, type Bilingual, type SeedItem } from '../../types';
 import { kb } from '../infant/editorial';
+import {
+  CDC_TODDLERS_1_2_SOURCE_ID,
+  CDC_TODDLERS_2_3_SOURCE_ID,
+  CHILD_DEVELOPMENT_REFREEZE_COPY,
+} from '../../../../convex/lib/childDevelopmentRefreezeCorrectionCopy';
 
 const b = (mm: string, en: string): Bilingual => ({ mm, en });
 type Skill = [domain: string, title: Bilingual, observe: Bilingual];
@@ -186,7 +191,9 @@ const bands: Band[] = [
   ], guides: [
     ['nutrition', b('မိသားစုစားသော အစားအစာကို နူးညံ့စွာ ပြင်ဆင်ပြီး အုပ်စုစုံ စားသုံးခွင့်ပေးပါ။', 'Offer varied family foods prepared in soft, safe textures.'), b('ဇွန်းနှင့် ခွက်ကို ကိုယ်တိုင်စမ်းသုံးခွင့်ပေးပါ။', 'Let the child practise with a spoon and open cup.')],
     ['sleep', b('နေ့ခင်းအိပ်ချိန်နှင့် ညအိပ်ချိန်ကို တည်ငြိမ်သော အစီအစဉ်ဖြင့် ချမှတ်ပါ။', 'Use a predictable nap and bedtime rhythm.'), b('အိပ်မီ စာဖတ်ခြင်း သို့မဟုတ် သီချင်းဆိုခြင်းကို တူညီစွာ ပြုလုပ်ပါ။', 'Repeat the same book or song before sleep.')],
-    ['safety', b('လမ်းလျှောက်စပြုသောကလေးအတွက် လှေကား၊ ပရိဘောဂနှင့် ရေနေရာများကို ကာကွယ်ပါ။', 'Childproof stairs, furniture, and water hazards for a new walker.'), b('ကလေးအမြင့်မှ အခန်းတိုင်းကို ကြည့်ပြီး အန္တရာယ်ရှိရာများ ဖယ်ရှားပါ။', 'Check each room from the child’s height and remove hazards.')],
+    ['safety',
+      CHILD_DEVELOPMENT_REFREEZE_COPY.gd_13_18m_safety.why,
+      b('ကလေးအမြင့်မှ အခန်းတိုင်းကို ကြည့်ပြီး အန္တရာယ်ရှိရာများ ဖယ်ရှားပါ။', 'Check each room from the child’s height and remove hazards.')],
     ['daily_routine', b('စားချိန်၊ ကစားချိန်နှင့် အိပ်ချိန်ကို နေ့စဉ် ခန့်မှန်းနိုင်အောင် စီစဉ်ပါ။', 'Keep meals, play, and sleep reasonably predictable.'), b('ရိုးရှင်းသော ရွေးချယ်စရာနှစ်ခု ပေးပါ။', 'Offer two simple choices.')],
   ], play: [
     ['posting_big_shapes_13_18m', b('အပေါက်ထဲ ပုံသဏ္ဌာန်ကြီး ထည့်ကစားခြင်း', 'Post large shapes'), b('လက်ထိန်းချုပ်မှုနှင့် အကြောင်းအကျိုး နားလည်မှု', 'Hand control and cause-and-effect'), b('ဘူးကြီးနှင့် မျိုမချနိုင်သော အရာကြီးများ', 'A container and non-swallowable large objects'), b('အရာတစ်ခုစီကို အပေါက်ထဲထည့်ပြီး ပြန်ထုတ်ခိုင်းပါ။', 'Post each object, then empty the container together.'), b('အရာအားလုံးကို ကလေးပါးစပ်ထက် ကြီးစေရန် စစ်ပါ။', 'Ensure every object is larger than the child’s mouth.'), ['fine_motor', 'cognitive']],
@@ -219,7 +226,9 @@ const bands: Band[] = [
   ], guides: [
     ['nutrition', b('ပုံမှန်စားချိန်ထားပြီး အုပ်စုစုံပေးကာ မည်မျှစားမည်ကို ကလေးဆုံးဖြတ်ခွင့်ပေးပါ။', 'Keep regular meals, offer variety, and let the child decide how much to eat.'), b('အချိုရည်အစား ရေနှင့် သင့်တော်သော နို့ကိုပေးပါ။', 'Offer water and suitable milk instead of sugary drinks.')],
     ['sleep', b('ညအိပ်ချိန်မတိုင်မီ တူညီသော အဆင့်တိုများ အသုံးပြုပါ။', 'Use the same short sequence before bed.'), b('ရေချိုး၊ သွားတိုက်၊ စာဖတ်၊ အိပ် ဟူသောအစီအစဉ်ကို လိုက်နာပါ။', 'Follow a bath, brush, book, bed sequence.')],
-    ['safety', b('ပြေးတတ်လာသောကလေးအတွက် လမ်းမ၊ ရေကန်နှင့် မီးဖိုအန္တရာယ်ကို ကြိုကာကွယ်ပါ။', 'Plan ahead for traffic, water, and burn hazards as running begins.'), b('အပြင်ထွက်တိုင်း လူကြီးလက်ကိုင်ခြင်းကို လေ့ကျင့်ပါ။', 'Practise holding an adult’s hand outdoors.')],
+    ['safety',
+      CHILD_DEVELOPMENT_REFREEZE_COPY.gd_2y_safety.why,
+      b('အပြင်ထွက်တိုင်း လူကြီးလက်ကိုင်ခြင်းကို လေ့ကျင့်ပါ။', 'Practise holding an adult’s hand outdoors.')],
     ['play', b('အတုယူကစားခြင်း၊ ကစားတုံးနှင့် ပုံစာအုပ်ကို နေ့စဉ် အလှည့်ကျကစားပါ။', 'Rotate pretend play, blocks, and picture books each day.'), b('နေ့စဉ် ကလေးဦးဆောင်သော ကစားချိန် အနည်းငယ် ပေးပါ။', 'Set aside a little child-led play time each day.')],
   ], play: [
     ['tower_crash_2y', b('မျှော်စင်တည်ပြီး ဖြိုကစားခြင်း', 'Build and tumble'), b('လက်ထိန်းချုပ်မှုနှင့် ပြဿနာဖြေရှင်းမှု', 'Hand control and problem-solving'), b('ကစားတုံးကြီးများ', 'Large blocks'), b('မျှော်စင်တည်ပြီး အတူရေတွက်ကာ ဖြိုပါ။', 'Build a tower, count, and knock it down together.'), b('မာကျောလေးလံသောတုံး မသုံးပါနှင့်။', 'Avoid hard or heavy blocks.'), ['fine_motor', 'problem_solving']],
@@ -250,7 +259,11 @@ const preschool: Band[] = [
   guides: [
     ['nutrition', b(`${mm}အရွယ်တွင် မိသားစုစားပွဲ၌ အုပ်စုစုံ အစားအစာနှင့် ရေကို ပုံမှန်ပေးပါ။`, `At ${en}, offer varied family foods and water at regular meals.`), b('အစားပြင်ခြင်း သို့မဟုတ် စားပွဲခင်းခြင်းတွင် လွယ်ကူသောအလုပ်တစ်ခု ပါဝင်ခွင့်ပေးပါ။', 'Include the child in one simple food-preparation or table task.')],
     ['sleep', b(`${mm}အရွယ်အတွက် ပုံမှန်အိပ်ချိန်၊ နိုးချိန်နှင့် ငြိမ်သက်သော အိပ်မီအလေ့အထ ထားပါ။`, `Keep regular sleep and wake times with a calm bedtime routine at ${en}.`), b('အိပ်မီ စာဖတ်ခြင်းကို မျက်နှာပြင်ကြည့်ခြင်းအစား အသုံးပြုပါ။', 'Choose shared reading instead of screens before bed.')],
-    ['safety', b(`${mm}အရွယ်တွင် လမ်းမ၊ ရေ၊ မီး၊ ပြတင်းပေါက်နှင့် ဆေးဝါးအန္တရာယ်များကို လူကြီးက ဆက်လက်ကာကွယ်ရပါမည်။`, `At ${en}, adults still need to prevent traffic, water, burn, window, and medicine hazards.`), b('အရေးပေါ်အခြေအနေတွင် ယုံကြည်ရသော လူကြီးကို ခေါ်ရန် လေ့ကျင့်ပါ။', 'Practise calling a trusted adult when something feels unsafe.')],
+    ['safety',
+      b(`${mm}အရွယ်တွင် လမ်းမ၊ ရေ၊ မီး၊ ပြတင်းပေါက်နှင့် ဆေးဝါးအန္တရာယ်များကို လူကြီးက ဆက်လက်ကာကွယ်ရပါမည်။`, `At ${en}, adults still need to prevent traffic, water, burn, window, and medicine hazards.`),
+      key === '2_5y'
+        ? CHILD_DEVELOPMENT_REFREEZE_COPY.gd_2_5y_safety.dailyActivity
+        : b('အရေးပေါ်အခြေအနေတွင် ယုံကြည်ရသော လူကြီးကို ခေါ်ရန် လေ့ကျင့်ပါ။', 'Practise calling a trusted adult when something feels unsafe.')],
     ['daily_routine', b(`${mm}အရွယ်တွင် သွားတိုက်ခြင်း၊ အဝတ်ဝတ်ခြင်းနှင့် ပစ္စည်းသိမ်းခြင်းကို ပုံမှန်အစီအစဉ်ဖြင့် လေ့ကျင့်ပါ။`, `At ${en}, practise brushing, dressing, and tidying in a predictable order.`), b('ပုံနှစ်ပုံ သို့မဟုတ် သုံးပုံပါ လုပ်ရိုးလုပ်စဉ်ဇယား သုံးပါ။', 'Use a two- or three-picture routine chart.')],
   ],
   play: PRESCHOOL_PLAY[key],
@@ -268,6 +281,12 @@ for (const band of bands) {
   for (const [domain, focus, daily] of band.guides) {
     const editorial = GUIDE_EDITORIAL[domain] ?? GUIDE_EDITORIAL.daily_routine;
     let guideSources = [...GUIDE_SOURCES[domain]];
+    if (domain === 'safety' && ['2y', '2_5y'].includes(band.key)) {
+      guideSources = guideSources.map((sourceId) =>
+        sourceId === CDC_TODDLERS_1_2_SOURCE_ID
+          ? CDC_TODDLERS_2_3_SOURCE_ID
+          : sourceId);
+    }
     if (domain === 'safety' && ['3y', '3_5y', '4y', '4_5y', '5y'].includes(band.key)) {
       guideSources = guideSources.map((sourceId) =>
         sourceId === 'cdc-positive-parenting-toddlers-2026'

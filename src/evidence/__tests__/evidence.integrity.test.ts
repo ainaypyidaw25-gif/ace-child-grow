@@ -175,11 +175,11 @@ describe('content links', () => {
     // cleanup. They must not be approved or parent-citable merely to satisfy a
     // link-count invariant.
     const unused = unusedSourceIds();
-    expect(unused).toEqual([
+    const governedSuccessorSourceId = 'cdc-positive-parenting-toddlers-2-3-2026';
+    expect(unused.filter((id) => id !== governedSuccessorSourceId)).toEqual([
       'aota-early-intervention',
       'asha-speech-sound-disorders',
       'asha-spoken-language-disorders',
-      'cdc-positive-parenting-toddlers-2-3-2026',
       'cpsc-window-coverings-cordless-2021',
       'jr-asq3-argentina-2018',
       'jr-mchat-rf-2014',
@@ -189,6 +189,14 @@ describe('content links', () => {
       'nice-ph40-social-emotional-2012',
       'tb-swaiman-7e-2025',
     ]);
+    if (!unused.includes(governedSuccessorSourceId)) {
+      expect(EVIDENCE_LINKS.filter(
+        (link) => link.sourceIds.includes(governedSuccessorSourceId),
+      ).map((link) => link.kind + ':' + link.slug).sort()).toEqual([
+        'guide:gd_2_5y_safety',
+        'guide:gd_2y_safety',
+      ]);
+    }
     for (const id of unused) {
       expect(['evidence_required', 'awaiting_review', 'retired']).toContain(
         resolveReviewStatus(SOURCE_BY_ID.get(id)!),
