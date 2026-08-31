@@ -49,9 +49,9 @@ const expected = [
 ] as const;
 
 describe('Facebook 5–6 month activity queue', () => {
-  it('targets only the allowlisted ACE Child Grow Facebook page', () => {
+  it('keeps the rebuilt queue paused on the allowlisted ACE Child Grow Facebook page', () => {
     expect(manifest.automationMode).toBe('production');
-    expect(manifest.killSwitch).toBe(false);
+    expect(manifest.killSwitch).toBe(true);
     expect(manifest.destination).toEqual(
       expect.objectContaining({
         platform: 'facebook',
@@ -60,7 +60,7 @@ describe('Facebook 5–6 month activity queue', () => {
     );
   });
 
-  it('queues every approved production activity exactly once on the existing cadence', () => {
+  it('holds every rebuilt activity for fresh review exactly once on the existing cadence', () => {
     expect(campaign.map(({ id, sourceSlug, scheduledAt }) => [id, sourceSlug, scheduledAt])).toEqual(
       expected,
     );
@@ -71,10 +71,10 @@ describe('Facebook 5–6 month activity queue', () => {
     for (const item of campaign) {
       expect(item.sourceAgeGroupKey).toBe('5_6m');
       expect(item.sourceClinicalStatus).toBe('published');
-      expect(item.status).toBe('scheduled');
-      expect(item.approvalStatus).toBe('approved');
-      expect(item.reviewerId).toBe('OWNER_FACEBOOK_ACTIVITY_APPROVAL_2026_08_04');
-      expect(item.approvalTimestamp).toBeTruthy();
+      expect(item.status).toBe('draft');
+      expect(item.approvalStatus).toBe('review_required');
+      expect(item.reviewerId).toBeNull();
+      expect(item.approvalTimestamp).toBeNull();
       expect(item.captionMyanmar.trim().length).toBeGreaterThan(100);
       expect(item.mediaType).toBe('image');
       expect(item.alreadyPublished).toBe(false);
@@ -104,11 +104,7 @@ describe('Facebook 5–6 month activity queue', () => {
       expect(metadata.height).toBe(1086);
       expect(metadata.width! / metadata.height!).toBeCloseTo(4 / 3, 5);
 
-      expect(item.approvedContentHash).toBe(
-        createHash('sha256')
-          .update([item.id, item.scheduledAt, item.captionMyanmar, item.mediaSha256].join('|'))
-          .digest('hex'),
-      );
+      expect(item.approvedContentHash).toBeNull();
     }
   });
 });

@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto'
-import { mkdir, readFile, writeFile } from 'node:fs/promises'
+import { access, copyFile, mkdir, readFile, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 import sharp from 'sharp'
 
@@ -9,10 +9,43 @@ const outputDir = path.join(socialDir, 'posts/monthly-calendar-v1')
 const manifestFile = path.join(socialDir, 'manifest.json')
 const calendarFile = path.join(socialDir, 'content-calendar.json')
 const galleryFile = path.join(socialDir, 'calendar.html')
-const launchDir = path.join(socialDir, 'posts/continuous-launch-v1')
+const phonePreviewFile = path.join(socialDir, 'calendar-phone-preview.png')
 const activityCampaignDir = path.join(socialDir, 'posts/activity-5-6m-v1')
 const activityPostsFile = path.join(root, 'scripts/social/activity-5-6m-posts.json')
 const activityPosts = JSON.parse(await readFile(activityPostsFile, 'utf8'))
+const visualOnly = process.argv.includes('--visual-only')
+
+const fontSourceDir = process.env.SOCIAL_FONT_SOURCE_DIR
+  ? path.resolve(process.env.SOCIAL_FONT_SOURCE_DIR)
+  : path.join(root, 'node_modules/@fontsource/noto-sans-myanmar')
+const bundledFontDir = path.join(socialDir, 'assets/fonts/noto-sans-myanmar')
+const fontAssets = {
+  regular: {
+    source: path.join(fontSourceDir, 'files/noto-sans-myanmar-myanmar-400-normal.woff2'),
+    bundled: path.join(bundledFontDir, 'NotoSansMyanmar-400.woff2'),
+  },
+  bold: {
+    source: path.join(fontSourceDir, 'files/noto-sans-myanmar-myanmar-700-normal.woff2'),
+    bundled: path.join(bundledFontDir, 'NotoSansMyanmar-700.woff2'),
+  },
+}
+const fontLicenseSource = path.join(fontSourceDir, 'LICENSE')
+const fontLicenseBundled = path.join(bundledFontDir, 'OFL-1.1.txt')
+
+const visualAssets = {
+  'ACE-CAL-07': 'public/illustrations/activities/play.webp',
+  'ACE-CAL-08': 'public/activities/5_6m/act_safe_touch_basket.c953264aef.webp',
+  'ACE-CAL-09': 'public/guides/gd_13_18m_daily_routine.cf3d513e9d.webp',
+  'ACE-CAL-10': 'public/lessons/language_development/lsn_language_rich_home.5490311de9.webp',
+  'ACE-CAL-11': 'public/illustrations/activities/emotional.webp',
+  'ACE-CAL-12': 'public/social/ace-child-grow/posts/continuous-launch-v1/ACE-AUTO-04.png',
+  'ACE-CAL-13': 'public/illustrations/activities/self_help.webp',
+  'ACE-CAL-14': 'public/social/ace-child-grow/posts/continuous-launch-v1/ACE-AUTO-01.png',
+  'ACE-CAL-15': 'public/illustrations/activities/safety.webp',
+  'ACE-CAL-16': 'public/illustrations/activities/daily_routine.webp',
+  'ACE-CAL-17': 'public/illustrations/activities/social.webp',
+  'ACE-CAL-18': 'public/illustrations/activities/school_readiness.webp',
+}
 
 const palette = {
   cream: '#FFF8EA',
@@ -75,18 +108,21 @@ const posts = [
   },
   {
     id: 'ACE-CAL-16', scheduledAt: '2026-09-02T13:30:00.000Z', category: 'app_feature', objective: 'retention', icon: 'bell', accent: palette.gold,
-    eyebrow: 'မမေ့အောင် သတိပေးမယ်', title: ['နေ့စဉ်အချိန်လေးကို', 'ပုံမှန်ဖြစ်အောင်လုပ်မယ်'], body: ['အချိန်အများကြီး မလိုပါဘူး', 'ပုံမှန်နည်းနည်းစီက ပိုအရေးကြီးတယ်'],
-    captionMyanmar: 'နေ့တိုင်းအချိန်အများကြီးပေးမှ မဟုတ်ပါဘူး ⏰\n\nမိဘနဲ့ကလေးအတွက် အဆင်ပြေတဲ့အချိန်လေးတစ်ခုရွေးပြီး ၅ မိနစ်၊ ၁၀ မိနစ်လောက် ပုံမှန်အတူလုပ်ကြည့်ပါ။\n\nနည်းနည်းစီပေမယ့် ပုံမှန်ဖြစ်လာတာက နေ့စဉ်အလေ့အကျင့်ကောင်းတစ်ခု ဖြစ်လာစေပါတယ်။\n\n#ACEChildGrow #နေ့စဉ်အလေ့အကျင့်',
+    reviewRequired: true,
+    eyebrow: 'ညနေ ၅ မိနစ်', title: ['နေ့စဉ်အချိန်တစ်ခုကို', 'ကလေးနဲ့အတူထားမယ်'], body: ['လှုပ်ရှားမှုတစ်ခုရွေးပြီး', 'နေ့တိုင်းအချိန်တူတူ စလုပ်ပါ'],
+    captionMyanmar: 'ညစာစားပြီးချိန်မှာ ကလေးနဲ့ ဘာလုပ်ပေးရမလဲ စဉ်းစားနေရသလား? ⏰\n\nဒီနေ့ လုပ်စရာတစ်ခုပဲ ရွေးပါ—သီချင်းဆိုတာ၊ ပုံစာအုပ်ကြည့်တာ ဒါမှမဟုတ် ပစ္စည်းတစ်ခုကို အမည်ခေါ်ပြတာ။ ၅ မိနစ်ပြည့်ရင် ရပ်လို့ရပါတယ်။ ကလေး စိတ်မဝင်စားတဲ့နေ့မှာလည်း အဆင်ပြေပါတယ်။\n\nမနက်ဖြန် ပြန်သုံးဖို့ ဒီ ၅ မိနစ်နည်းကို သိမ်းထားပါ။ အိမ်မှာ လုပ်စရာရွေးရခက်နေသူတစ်ယောက်ကို မျှဝေပေးပါ။\n\nအသက်အလိုက် လက်တွေ့လုပ်နည်းတွေကို ACE Child Grow မှာ ပြန်ရှာနိုင်ပါတယ်။\n\n#ACEChildGrow #ကလေးနဲ့အတူ #နေ့စဉ်၅မိနစ်',
   },
   {
     id: 'ACE-CAL-17', scheduledAt: '2026-09-05T03:30:00.000Z', category: 'family', objective: 'shared caregiving', icon: 'people', accent: palette.sage,
-    eyebrow: 'အတူတူဂရုစိုက်မယ်', title: ['ကလေးပြုစုတာက', 'တစ်ယောက်တည်းအလုပ်မဟုတ်ပါဘူး'], body: ['မိသားစုဝင်တွေနဲ့ အစီအစဉ်မျှဝေပြီး', 'ကူညီနိုင်တာကို ခွဲလုပ်ကြမယ်'],
-    captionMyanmar: 'ကလေးပြုစုတာကို တစ်ယောက်တည်း ထမ်းထားစရာမလိုပါဘူး 👨‍👩‍👧\n\nဒီနေ့လုပ်မယ့်အစီအစဉ်၊ ကလေးစိတ်ဝင်စားတာနဲ့ သတိထားမိတဲ့အချက်လေးတွေကို မိသားစုဝင်တွေနဲ့ ပြောပြမျှဝေပါ။\n\nကူညီနိုင်တာကို ခွဲလုပ်ရင် မိဘလည်း ပိုနားရပြီး ကလေးအတွက်လည်း တည်ငြိမ်တဲ့ဂရုစိုက်မှု ရလာနိုင်ပါတယ်။\n\n#ACEChildGrow #မိသားစုနဲ့အတူ',
+    reviewRequired: true,
+    eyebrow: 'လက်လွှဲမယ့်အချိန်', title: ['ကလေးအကြောင်း ၃ ချက်ကို', 'တိုတိုလေး မျှဝေမယ်'], body: ['စားချိန် • အိပ်ချိန် • စိတ်ဝင်စားတာ', 'ဂရုစိုက်သူတိုင်း သိထားအောင်'],
+    captionMyanmar: 'အလုပ်ကပြန်လာတဲ့ မိသားစုဝင်ကို ကလေးအကြောင်း အမြန်ပြောပြရမယ့်အချိန် ရှိတတ်ပါတယ် 👨‍👩‍👧\n\nဒီ ၃ ချက်ကို တစ်မိနစ်အတွင်း မျှဝေပါ—\n၁။ နောက်ဆုံးစားထားတဲ့အချိန်\n၂။ နောက်ဆုံးအိပ်ထားတဲ့အချိန်\n၃။ ဒီနေ့ စိတ်ဝင်စားခဲ့တဲ့အရာ\n\nအားလုံးကို ပြောနိုင်ဖို့ မလိုပါဘူး။ နောက်တစ်ယောက် ဂရုစိုက်ရလွယ်မယ့် အချက်တစ်ချက်ကနေ စလို့ရပါတယ်။\n\nလက်လွှဲချိန်တိုင်း ပြန်ကြည့်ဖို့ ဒီစာရင်းကို သိမ်းထားပါ။ ကလေးကို အတူဂရုစိုက်သူတွေဆီ မျှဝေပေးပါ။\n\nနေ့စဉ်မှတ်သားစရာတွေကို ACE Child Grow မှာ တစ်နေရာတည်း ပြန်ကြည့်နိုင်ပါတယ်။\n\n#ACEChildGrow #မိသားစုနဲ့အတူ #ကလေးနေ့စဉ်မှတ်တမ်း',
   },
   {
     id: 'ACE-CAL-18', scheduledAt: '2026-09-07T13:30:00.000Z', category: 'planning', objective: 'weekly return', icon: 'calendar', accent: palette.coral,
-    eyebrow: 'တစ်ပတ်သစ် စမယ်', title: ['ဒီတစ်ပတ်အတွက်', 'အစီအစဉ် ၃ ခုရွေးမယ်'], body: ['လုပ်နိုင်သလောက်ကို ရွေးပြီး', 'မိဘနဲ့ကလေး အဆင်ပြေသလိုလုပ်ပါ'],
-    captionMyanmar: 'တစ်ပတ်သစ်ကို အများကြီးစီစဉ်စရာမလိုပါဘူး 🗓️\n\nACE Child Grow ထဲက လှုပ်ရှားမှုတွေထဲက မိဘနဲ့ကလေးအတွက် အဆင်ပြေမယ့် ၃ ခုလောက် ရွေးထားပါ။\n\nပြီးအောင်လုပ်ဖို့ထက် အတူတူပျော်ပျော်ရွှင်ရွှင် လုပ်နိုင်ဖို့က ပိုအရေးကြီးပါတယ်။\n\nဒီတစ်ပတ် ဘယ်နေ့မှာ စလုပ်မလဲ?\n\n#ACEChildGrow #တစ်ပတ်တာအစီအစဉ်',
+    reviewRequired: true,
+    eyebrow: 'တနင်္ဂနွေည ၃ မိနစ်', title: ['နောက်တစ်ပတ်အတွက်', 'လှုပ်ရှားမှု ၃ ခုရွေးမယ်'], body: ['အလုပ်များတဲ့နေ့ကို ရှောင်ပြီး', 'အဆင်ပြေတဲ့နေ့မှာ ထည့်ထားပါ'],
+    captionMyanmar: 'တနင်္ဂနွေညမှာ နောက်တစ်ပတ်အတွက် ကလေးနဲ့လုပ်စရာကို ၃ မိနစ်ပဲ စီစဉ်ကြည့်ပါ 🗓️\n\n၁။ ကလေးစိတ်ဝင်စားနိုင်တဲ့ လှုပ်ရှားမှု ၃ ခုရွေးပါ။\n၂။ အလုပ်နည်းတဲ့နေ့ ၃ ရက်နဲ့ တွဲမှတ်ပါ။\n၃။ မလုပ်ဖြစ်တဲ့နေ့ရှိရင် နောက်ရက်ကို အေးအေးဆေးဆေး ရွှေ့ပါ။\n\nတစ်ပတ်တိုင်း ပြန်သုံးဖို့ ဒီအစီအစဉ်ကို သိမ်းထားပါ။ အိမ်မှာ ကလေးကို အတူဂရုစိုက်သူနဲ့ မျှဝေပြီး သင့်တော်တဲ့နေ့တွေကို အတူရွေးပါ။\n\nအသက်အလိုက် လှုပ်ရှားမှုရွေးစရာတွေကို ACE Child Grow မှာ ပြန်ရှာနိုင်ပါတယ်။\n\n#ACEChildGrow #တစ်ပတ်တာအစီအစဉ် #ကလေးနဲ့အတူ',
   },
 ]
 
@@ -98,55 +134,59 @@ function hash(value) {
   return createHash('sha256').update(value).digest('hex')
 }
 
-function iconMarkup(name, accent) {
-  const common = `fill="none" stroke="${accent}" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"`
-  const icons = {
-    bookmark: `<path ${common} d="M730 420h180v300l-90-60-90 60z"/><path ${common} d="M770 490h100"/>`,
-    star: `<path ${common} d="M820 400l36 108h114l-92 67 35 109-93-67-93 67 35-109-92-67h114z"/>`,
-    chart: `<path ${common} d="M680 700V430M680 700h300M735 620l70-75 70 25 75-115"/><circle cx="735" cy="620" r="13" fill="${accent}"/><circle cx="805" cy="545" r="13" fill="${accent}"/><circle cx="875" cy="570" r="13" fill="${accent}"/><circle cx="950" cy="455" r="13" fill="${accent}"/>`,
-    book: `<path ${common} d="M650 440q90-35 170 25v250q-80-60-170-20zM990 440q-90-35-170 25v250q80-60 170-20z"/>`,
-    heart: `<path ${common} d="M820 690c-190-110-165-275-55-275 55 0 55 45 55 45s0-45 55-45c110 0 135 165-55 275z"/>`,
-    phone: `<rect ${common} x="700" y="380" width="240" height="390" rx="42"/><path ${common} d="M785 720h70M790 420h60"/>`,
-    cup: `<path ${common} d="M700 470h210v170q0 90-105 90t-105-90zM910 515h25q70 0 70 60t-85 60"/><path ${common} d="M730 775h160"/>`,
-    chat: `<path ${common} d="M660 430h320v230H820l-95 70 20-70h-85z"/><circle cx="750" cy="545" r="13" fill="${accent}"/><circle cx="820" cy="545" r="13" fill="${accent}"/><circle cx="890" cy="545" r="13" fill="${accent}"/>`,
-    shield: `<path ${common} d="M820 380q75 55 150 60v120q0 135-150 220-150-85-150-220V440q75-5 150-60z"/><path ${common} d="M755 565l45 45 90-105"/>`,
-    bell: `<path ${common} d="M700 660h240l-35-55V500q0-85-85-85t-85 85v105zM780 710q40 55 80 0"/>`,
-    people: `<circle ${common} cx="760" cy="480" r="65"/><circle ${common} cx="900" cy="500" r="55"/><path ${common} d="M640 730q15-140 120-140t120 140M850 620q120-20 145 110"/>`,
-    calendar: `<rect ${common} x="660" y="410" width="320" height="320" rx="36"/><path ${common} d="M660 510h320M740 370v80M900 370v80"/><path ${common} d="M740 585h30M820 585h30M900 585h30M740 655h30M820 655h30"/>`,
+async function ensureFontAssets() {
+  await mkdir(bundledFontDir, { recursive: true })
+  for (const asset of Object.values(fontAssets)) {
+    try {
+      await access(asset.source)
+    } catch {
+      throw new Error(`Required licensed Myanmar font is missing: ${asset.source}. Run npm install before generating social assets.`)
+    }
+    await copyFile(asset.source, asset.bundled)
   }
-  return icons[name] || icons.star
+  try {
+    await access(fontLicenseSource)
+  } catch {
+    throw new Error(`Required font license is missing: ${fontLicenseSource}`)
+  }
+  await copyFile(fontLicenseSource, fontLicenseBundled)
 }
 
-function cardSvg(post, index, hasScreen) {
-  const [line1, line2] = post.title
-  const [body1, body2] = post.body
-  const titleSize = Math.max(line1.length, line2.length) > 22 ? 45 : Math.max(line1.length, line2.length) > 18 ? 50 : 57
-  const bodySize = Math.max(body1.length, body2.length) > 28 ? 26 : Math.max(body1.length, body2.length) > 22 ? 29 : 32
-  const rightVisual = hasScreen
-    ? `<rect x="610" y="300" width="390" height="760" rx="58" fill="none" stroke="${palette.ink}" stroke-width="18"/><rect x="750" y="325" width="110" height="12" rx="6" fill="${palette.ink}"/>`
-    : `<circle cx="820" cy="560" r="270" fill="${post.accent}" opacity="0.18"/>${iconMarkup(post.icon, post.accent)}`
+function layoutSvg(post) {
   return Buffer.from(`
   <svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1350">
-    <circle cx="1010" cy="100" r="235" fill="${palette.mint}"/>
-    <circle cx="-40" cy="1100" r="220" fill="${post.accent}" opacity="0.12"/>
-    <rect x="58" y="58" width="430" height="74" rx="37" fill="${palette.mint}"/>
-    <text x="90" y="107" font-family="Noto Sans Myanmar" font-size="31" font-weight="700" fill="${palette.teal}">${escapeXml(post.eyebrow)}</text>
-    <text x="930" y="108" text-anchor="end" font-family="Arial" font-size="28" font-weight="700" fill="${palette.teal}" opacity="0.72">${String(index + 7).padStart(2, '0')} / 18</text>
-    <text x="60" y="245" font-family="Noto Sans Myanmar" font-size="${titleSize}" font-weight="700" fill="${palette.ink}">${escapeXml(line1)}</text>
-    <text x="60" y="325" font-family="Noto Sans Myanmar" font-size="${titleSize}" font-weight="700" fill="${palette.ink}">${escapeXml(line2)}</text>
-    <text x="62" y="440" font-family="Noto Sans Myanmar" font-size="${bodySize}" font-weight="600" fill="${palette.teal}">${escapeXml(body1)}</text>
-    <text x="62" y="495" font-family="Noto Sans Myanmar" font-size="${bodySize}" font-weight="600" fill="${palette.teal}">${escapeXml(body2)}</text>
-    ${rightVisual}
-    <rect x="58" y="1192" width="964" height="100" rx="32" fill="${palette.teal}"/>
-    <text x="92" y="1258" font-family="Arial" font-size="34" font-weight="700" fill="white">ACE Child Grow</text>
-    <text x="930" y="1256" text-anchor="end" font-family="Noto Sans Myanmar" font-size="27" font-weight="700" fill="white">မိဘဘေးက နေ့စဉ်လမ်းညွှန်</text>
-    <circle cx="975" cy="1242" r="28" fill="${palette.white}" opacity="0.95"/>
-    <circle cx="975" cy="1235" r="8" fill="${palette.teal}"/>
-    <path d="M960 1250q15 18 30 0" fill="none" stroke="${palette.gold}" stroke-width="7" stroke-linecap="round"/>
+    <defs>
+      <linearGradient id="photoFade" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="55%" stop-color="#000" stop-opacity="0"/>
+        <stop offset="100%" stop-color="#000" stop-opacity="0.24"/>
+      </linearGradient>
+    </defs>
+    <rect y="0" width="1080" height="650" fill="url(#photoFade)"/>
+    <rect x="48" y="38" width="460" height="104" rx="34" fill="${palette.white}" opacity="0.92"/>
+    <path d="M0 610Q540 680 1080 610V1350H0Z" fill="${palette.cream}"/>
+    <rect x="58" y="692" width="520" height="70" rx="35" fill="${palette.mint}"/>
+    <circle cx="1010" cy="790" r="180" fill="${post.accent}" opacity="0.10"/>
+    <rect x="58" y="1215" width="964" height="92" rx="30" fill="${palette.teal}"/>
   </svg>`)
 }
 
-async function renderPost(post, index) {
+async function renderedText(text, { width, height, font = fontAssets.bold.bundled, color = palette.ink, align = 'left' }) {
+  if (!text.trim()) throw new Error('Refusing to render an empty social-card text block')
+  await access(font)
+  return sharp({
+    text: {
+      text: `<span foreground="${color}">${escapeXml(text)}</span>`,
+      font: 'Noto Sans Myanmar',
+      fontfile: font,
+      width,
+      height,
+      align,
+      rgba: true,
+    },
+  }).png().toBuffer()
+}
+
+async function renderPost(post) {
   const output = path.join(outputDir, `${post.id}.png`)
   if (process.env.REGENERATE_SOCIAL_ASSETS !== '1') {
     try {
@@ -154,21 +194,56 @@ async function renderPost(post, index) {
       return output
     } catch {}
   }
-  const hasScreen = Boolean(post.source)
-  const canvas = sharp({ create: { width: 1080, height: 1350, channels: 4, background: palette.cream } })
-  const layers = []
-  if (hasScreen) {
-    const source = path.join(launchDir, post.source)
-    const crop = await sharp(source)
-      .extract({ left: 570, top: 185, width: 430, height: 980 })
-      .resize(360, 720, { fit: 'cover' })
-      .png()
-      .toBuffer()
-    layers.push({ input: crop, left: 625, top: 325 })
-  }
-  layers.push({ input: cardSvg(post, index, hasScreen), left: 0, top: 0 })
-  await canvas.composite(layers).png().toFile(output)
+  const visualAsset = visualAssets[post.id]
+  if (!visualAsset) throw new Error(`No approved visual asset mapped for ${post.id}`)
+  const visualPath = path.join(root, visualAsset)
+  await access(visualPath)
+
+  const visual = await sharp(visualPath)
+    .rotate()
+    .resize(1080, 650, { fit: 'cover', position: 'attention' })
+    .modulate({ saturation: 0.92, brightness: 0.96 })
+    .png()
+    .toBuffer()
+  const logo = await sharp(path.join(root, 'public/icon-512.png')).resize(68, 68).png().toBuffer()
+  const eyebrow = await renderedText(post.eyebrow, { width: 455, height: 44, color: palette.teal })
+  const title = await renderedText(post.title.join('\n'), { width: 920, height: 182, color: palette.ink })
+  const body = await renderedText(post.body.join('\n'), { width: 900, height: 116, font: fontAssets.regular.bundled, color: palette.teal })
+  const brandPromise = sharp({
+    text: { text: '<span foreground="#245B57"><b>ACE Child Grow</b></span>', font: 'Arial', width: 330, height: 46, rgba: true },
+  }).png().toBuffer()
+  const taglinePromise = renderedText('ကလေးနဲ့အတူ နေ့စဉ်သင်ယူ', { width: 390, height: 42, color: palette.white, align: 'right' })
+
+  await sharp({ create: { width: 1080, height: 1350, channels: 4, background: palette.cream } })
+    .composite([
+      { input: visual, left: 0, top: 0 },
+      { input: layoutSvg(post), left: 0, top: 0 },
+      { input: logo, left: 68, top: 55 },
+      { input: await brandPromise, left: 154, top: 68 },
+      { input: eyebrow, left: 88, top: 706 },
+      { input: title, left: 70, top: 805 },
+      { input: body, left: 72, top: 1035 },
+      { input: await taglinePromise, left: 575, top: 1241 },
+    ])
+    .png({ compressionLevel: 9, adaptiveFiltering: false })
+    .toFile(output)
   return output
+}
+
+async function renderPhonePreview() {
+  const thumbWidth = 252
+  const thumbHeight = 315
+  const gap = 18
+  const columns = 4
+  const rows = Math.ceil(posts.length / columns)
+  const width = (columns * thumbWidth) + ((columns + 1) * gap)
+  const height = (rows * thumbHeight) + ((rows + 1) * gap)
+  const layers = []
+  for (const [index, post] of posts.entries()) {
+    const thumb = await sharp(path.join(outputDir, `${post.id}.png`)).resize(thumbWidth, thumbHeight).png().toBuffer()
+    layers.push({ input: thumb, left: gap + ((index % columns) * (thumbWidth + gap)), top: gap + (Math.floor(index / columns) * (thumbHeight + gap)) })
+  }
+  await sharp({ create: { width, height, channels: 4, background: '#E8ECEA' } }).composite(layers).png().toFile(phonePreviewFile)
 }
 
 async function renderActivityPost(post) {
@@ -199,11 +274,21 @@ function galleryHtml(items) {
       <div class="copy"><div class="meta"><b>${post.id}</b><span>${new Date(post.scheduledAt).toLocaleString('en-GB', { timeZone: 'Asia/Yangon', dateStyle: 'medium', timeStyle: 'short' })} Yangon</span></div><p>${escapeHtml(post.captionMyanmar)}</p></div>
     </article>`).join('')
   return `<!doctype html><html lang="my"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ACE Child Grow Content Calendar</title><style>
-  @font-face{font-family:NotoMyanmar;src:url('/assets/noto-sans-myanmar-myanmar-400-normal-C_Ri2PLj.woff2')}*{box-sizing:border-box}body{margin:0;background:#f4f1e9;color:#243238;font-family:NotoMyanmar,'Noto Sans Myanmar',sans-serif}.top{padding:28px clamp(18px,5vw,70px);background:#245b57;color:#fff}.top h1{margin:0 0 8px;font-size:clamp(24px,4vw,42px)}.top p{margin:0;opacity:.85}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px;padding:28px clamp(16px,4vw,60px)}.card{background:white;border-radius:24px;overflow:hidden;box-shadow:0 10px 28px #183c3a18}.card img{display:block;width:100%;height:auto}.copy{padding:20px}.meta{display:flex;justify-content:space-between;gap:12px;color:#245b57;font-family:system-ui,sans-serif;font-size:14px}.copy p{line-height:1.9;white-space:normal}.badge{display:inline-block;padding:6px 12px;background:#dfeee7;color:#245b57;border-radius:999px;font-size:13px;margin-top:10px}</style></head><body><header class="top"><h1>ACE Child Grow — ၄ ပတ်စာ Content Calendar</h1><p>မိဘတွေအတွက် app feature၊ နေ့စဉ်အသုံးဝင်မှုနဲ့ engagement post ၁၂ ခု</p><span class="badge">Asia/Yangon • Mon/Wed 20:00 • Sat 10:00</span></header><main class="grid">${cards}</main></body></html>`
+  @font-face{font-family:NotoMyanmar;src:url('./assets/fonts/noto-sans-myanmar/NotoSansMyanmar-400.woff2')}*{box-sizing:border-box}body{margin:0;background:#f4f1e9;color:#243238;font-family:NotoMyanmar,'Noto Sans Myanmar',sans-serif}.top{padding:28px clamp(18px,5vw,70px);background:#245b57;color:#fff}.top h1{margin:0 0 8px;font-size:clamp(24px,4vw,42px)}.top p{margin:0;opacity:.85}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px;padding:28px clamp(16px,4vw,60px)}.card{background:white;border-radius:24px;overflow:hidden;box-shadow:0 10px 28px #183c3a18}.card img{display:block;width:100%;height:auto}.copy{padding:20px}.meta{display:flex;justify-content:space-between;gap:12px;color:#245b57;font-family:system-ui,sans-serif;font-size:14px}.copy p{line-height:1.9;white-space:normal}.badge{display:inline-block;padding:6px 12px;background:#dfeee7;color:#245b57;border-radius:999px;font-size:13px;margin-top:10px}</style></head><body><header class="top"><h1>ACE Child Grow — ၄ ပတ်စာ Content Calendar</h1><p>မိဘတွေအတွက် app feature၊ နေ့စဉ်အသုံးဝင်မှုနဲ့ engagement post ၁၂ ခု</p><span class="badge">Asia/Yangon • Mon/Wed 20:00 • Sat 10:00</span></header><main class="grid">${cards}</main></body></html>`
 }
 
 await mkdir(outputDir, { recursive: true })
 await mkdir(activityCampaignDir, { recursive: true })
+await ensureFontAssets()
+
+if (visualOnly) {
+  for (const post of posts) await renderPost(post)
+  await renderPhonePreview()
+  await writeFile(galleryFile, galleryHtml(posts))
+  console.log(JSON.stringify({ generated: posts.length, visualOnly: true, outputDir, phonePreviewFile, galleryFile }, null, 2))
+  process.exit(0)
+}
+
 let previous = { items: [] }
 try { previous = JSON.parse(await readFile(manifestFile, 'utf8')) } catch {}
 const previousById = new Map((previous.items || []).map((item) => [item.id, item]))
@@ -226,17 +311,18 @@ function preservePublishedState(item) {
 }
 
 const generated = []
-for (const [index, post] of posts.entries()) {
-  const output = await renderPost(post, index)
+for (const post of posts) {
+  const output = await renderPost(post)
   const mediaSha256 = hash(await readFile(output))
+  const reviewRequired = post.reviewRequired === true
   generated.push(preservePublishedState({
     ...post,
-    status: 'scheduled',
-    approvalStatus: 'approved',
-    reviewerId: 'OWNER_CONTINUOUS_POST_AUTH_2026_07_30',
-    approvalTimestamp: '2026-07-30T06:10:00.000Z',
-    approvalExpiresAt: '2026-10-01T00:00:00.000Z',
-    approvedContentHash: hash(`${post.id}|${post.scheduledAt}|${post.captionMyanmar}|${mediaSha256}`),
+    status: reviewRequired ? 'draft' : 'scheduled',
+    approvalStatus: reviewRequired ? 'review_required' : 'approved',
+    reviewerId: reviewRequired ? null : 'OWNER_CONTINUOUS_POST_AUTH_2026_07_30',
+    approvalTimestamp: reviewRequired ? null : '2026-07-30T06:10:00.000Z',
+    approvalExpiresAt: reviewRequired ? null : '2026-10-01T00:00:00.000Z',
+    approvedContentHash: reviewRequired ? null : hash(`${post.id}|${post.scheduledAt}|${post.captionMyanmar}|${mediaSha256}`),
     riskLevel: 'low',
     clinicalApprovalId: null,
     mediaType: 'image',
@@ -247,11 +333,13 @@ for (const [index, post] of posts.entries()) {
     platformPermalink: null,
   }))
 }
+await renderPhonePreview()
 
 const activityGenerated = []
 for (const post of activityPosts) {
   const output = await renderActivityPost(post)
   const mediaSha256 = hash(await readFile(output))
+  const reviewRequired = post.reviewRequired === true
   activityGenerated.push(preservePublishedState({
     id: post.id,
     campaign: 'activity_5_6m',
@@ -262,12 +350,12 @@ for (const post of activityPosts) {
     titleMm: post.titleMm,
     titleEn: post.titleEn,
     scheduledAt: post.scheduledAt,
-    status: 'scheduled',
-    approvalStatus: 'approved',
-    reviewerId: 'OWNER_FACEBOOK_ACTIVITY_APPROVAL_2026_08_04',
-    approvalTimestamp: '2026-08-04T00:29:42.000Z',
-    approvalExpiresAt: '2026-12-31T00:00:00.000Z',
-    approvedContentHash: hash(`${post.id}|${post.scheduledAt}|${post.captionMyanmar}|${mediaSha256}`),
+    status: reviewRequired ? 'draft' : 'scheduled',
+    approvalStatus: reviewRequired ? 'review_required' : 'approved',
+    reviewerId: reviewRequired ? null : 'OWNER_FACEBOOK_ACTIVITY_APPROVAL_2026_08_04',
+    approvalTimestamp: reviewRequired ? null : '2026-08-04T00:29:42.000Z',
+    approvalExpiresAt: reviewRequired ? null : '2026-12-31T00:00:00.000Z',
+    approvedContentHash: reviewRequired ? null : hash(`${post.id}|${post.scheduledAt}|${post.captionMyanmar}|${mediaSha256}`),
     riskLevel: 'low',
     clinicalApprovalId: null,
     mediaType: 'image',
@@ -287,7 +375,7 @@ const manifest = {
   schemaVersion: 2,
   generatedAt: new Date().toISOString(),
   automationMode: 'production',
-  killSwitch: false,
+  killSwitch: true,
   destination: {
     platform: 'facebook',
     pageId: '111009258047115',

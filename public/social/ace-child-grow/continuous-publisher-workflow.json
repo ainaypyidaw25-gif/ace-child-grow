@@ -16,7 +16,10 @@
       "name": "Check Queue Every 15 Minutes",
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.2,
-      "position": [0, -120]
+      "position": [
+        0,
+        -120
+      ]
     },
     {
       "parameters": {},
@@ -24,7 +27,10 @@
       "name": "Manual Trigger",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
-      "position": [0, 0]
+      "position": [
+        0,
+        0
+      ]
     },
     {
       "parameters": {
@@ -35,17 +41,23 @@
       "name": "Load Public Approved Manifest",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [220, 0]
+      "position": [
+        220,
+        0
+      ]
     },
     {
       "parameters": {
-        "jsCode": "const manifest = $json;\nconst now = Date.now();\nconst state = $getWorkflowStaticData('global');\nstate.publishedIds ??= {};\nfor (const prior of (manifest.items || [])) {\n  if (prior.alreadyPublished || prior.status === 'published' || prior.platformPostId) {\n    state.publishedIds[prior.id] ??= { platformPostId: prior.platformPostId || null, publishedAt: prior.publishedAt || null };\n  }\n}\nconst due = (Array.isArray(manifest.items) ? manifest.items : [])\n  .filter((candidate) => candidate.status === 'scheduled' && candidate.approvalStatus === 'approved' && Date.parse(candidate.scheduledAt || 0) <= now && !candidate.alreadyPublished && !candidate.platformPostId && !candidate.platformPermalink && !state.publishedIds[candidate.id])\n  .sort((a, b) => Date.parse(a.scheduledAt) - Date.parse(b.scheduledAt));\nconst item = due[0] || null;\nconst blockers = [];\nif (manifest.killSwitch !== false) blockers.push('GLOBAL_KILL_SWITCH_ON');\nif (manifest.automationMode !== 'production') blockers.push('NOT_PRODUCTION_MODE');\nif (manifest.destination?.platform !== 'facebook') blockers.push('WRONG_PLATFORM');\nif (manifest.destination?.pageId !== '111009258047115') blockers.push('PAGE_NOT_ALLOWLISTED');\nif (!/^v\\d+\\.\\d+$/.test(manifest.destination?.graphApiVersion || '')) blockers.push('INVALID_GRAPH_API_VERSION');\nif (!item) blockers.push('NO_DUE_APPROVED_ITEM');\nif (item) {\n  const mediaType = item.mediaType === 'photo' ? 'image' : item.mediaType;\n  if (!item.reviewerId || !item.approvalTimestamp) blockers.push('MISSING_APPROVAL_AUDIT');\n  if (item.approvalExpiresAt && Date.parse(item.approvalExpiresAt) <= now) blockers.push('APPROVAL_EXPIRED');\n  if (!item.captionMyanmar?.trim()) blockers.push('EMPTY_CAPTION');\n  if (!item.mediaUrl?.startsWith('https://child.acegroup.com.mm/')) blockers.push('MEDIA_NOT_ON_APPROVED_HOST');\n  if (!item.mediaSha256) blockers.push('MISSING_MEDIA_HASH');\n  if (!item.approvedContentHash) blockers.push('MISSING_APPROVED_HASH');\n  if (!['image', 'reel'].includes(mediaType)) blockers.push('UNSUPPORTED_MEDIA_TYPE');\n  if (mediaType === 'reel' && !/^https:\\/\\/child\\.acegroup\\.com\\.mm\\/.+\\.mp4(?:\\?.*)?$/i.test(item.mediaUrl || '')) blockers.push('REEL_MUST_BE_HOSTED_MP4');\n  if (item.riskLevel === 'high' && !item.clinicalApprovalId) blockers.push('MISSING_CLINICAL_APPROVAL');\n}\nreturn [{ json: { ...(item || {}), destinationPageId: manifest.destination?.pageId, graphApiVersion: manifest.destination?.graphApiVersion, automationMode: manifest.automationMode, killSwitch: manifest.killSwitch, eligible: blockers.length === 0, blockers } }];"
+        "jsCode": "const manifest = $json;\nconst now = Date.now();\nconst maxBacklogAgeMinutes = manifest.publisherPolicy?.maxBacklogAgeMinutes ?? 180;\nconst due = (Array.isArray(manifest.items) ? manifest.items : [])\n  .filter((candidate) => candidate.status === 'scheduled' && candidate.approvalStatus === 'approved' && Date.parse(candidate.scheduledAt || 0) <= now && !candidate.alreadyPublished && !candidate.platformPostId && !candidate.platformPermalink)\n  .sort((a, b) => Date.parse(a.scheduledAt) - Date.parse(b.scheduledAt));\nconst item = due[0] || null;\nconst blockers = [];\nif (manifest.killSwitch !== false) blockers.push('GLOBAL_KILL_SWITCH_ON');\nif (manifest.automationMode !== 'production') blockers.push('NOT_PRODUCTION_MODE');\nif (manifest.destination?.platform !== 'facebook') blockers.push('WRONG_PLATFORM');\nif (manifest.destination?.pageId !== '111009258047115') blockers.push('PAGE_NOT_ALLOWLISTED');\nif (!/^v\\d+\\.\\d+$/.test(manifest.destination?.graphApiVersion || '')) blockers.push('INVALID_GRAPH_API_VERSION');\nif (!item) blockers.push('NO_DUE_APPROVED_ITEM');\nif (item) {\n  item.mediaType = item.mediaType === 'photo' ? 'image' : item.mediaType;\n  if ((now - Date.parse(item.scheduledAt)) / 60000 > maxBacklogAgeMinutes) blockers.push('STALE_DUE_ITEM_REQUIRES_REVIEW');\n  if (!item.reviewerId || !item.approvalTimestamp) blockers.push('MISSING_APPROVAL_AUDIT');\n  if (item.approvalExpiresAt && Date.parse(item.approvalExpiresAt) <= now) blockers.push('APPROVAL_EXPIRED');\n  if (!item.captionMyanmar?.trim()) blockers.push('EMPTY_CAPTION');\n  if (!item.mediaUrl?.startsWith('https://child.acegroup.com.mm/')) blockers.push('MEDIA_NOT_ON_APPROVED_HOST');\n  if (!/^[a-f0-9]{64}$/i.test(item.mediaSha256 || '')) blockers.push('MISSING_OR_INVALID_MEDIA_HASH');\n  if (!/^[a-f0-9]{64}$/i.test(item.approvedContentHash || '')) blockers.push('MISSING_OR_INVALID_APPROVED_HASH');\n  if (!['image', 'reel'].includes(item.mediaType)) blockers.push('UNSUPPORTED_MEDIA_TYPE');\n  if (item.mediaType === 'reel' && !/^https:\\/\\/child\\.acegroup\\.com\\.mm\\/.+\\.mp4(?:\\?.*)?$/i.test(item.mediaUrl || '')) blockers.push('REEL_MUST_BE_HOSTED_MP4');\n  if (item.riskLevel === 'high' && !item.clinicalApprovalId) blockers.push('MISSING_CLINICAL_APPROVAL');\n}\nconst quiet = new Set(['GLOBAL_KILL_SWITCH_ON', 'NO_DUE_APPROVED_ITEM']);\nreturn [{ json: { ...(item || {}), dueCount: due.length, destinationPageId: manifest.destination?.pageId, graphApiVersion: manifest.destination?.graphApiVersion, eligible: blockers.length === 0, blockers, alertOwner: blockers.some((b) => !quiet.has(b)) } }];"
       },
       "id": "validate-gates",
-      "name": "Validate Kill Switch Approval and Duplicate Gates",
+      "name": "Validate Kill Switch Approval and Queue Age Gates",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [460, 0]
+      "position": [
+        460,
+        0
+      ]
     },
     {
       "parameters": {
@@ -74,7 +86,10 @@
       "name": "Eligible for Facebook Publish?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
-      "position": [700, 0]
+      "position": [
+        700,
+        0
+      ]
     },
     {
       "parameters": {
@@ -87,7 +102,7 @@
           "conditions": [
             {
               "id": "is-reel",
-              "leftValue": "={{ $json.mediaType }}",
+              "leftValue": "={{ $('Validate Downloaded Hashes').item.json.mediaType }}",
               "rightValue": "reel",
               "operator": {
                 "type": "string",
@@ -102,25 +117,28 @@
       "name": "Is Approved Item a Reel?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
-      "position": [940, -80]
+      "position": [
+        3100,
+        -80
+      ]
     },
     {
       "parameters": {
         "authentication": "genericCredentialType",
         "genericAuthType": "httpBearerAuth",
         "method": "POST",
-        "url": "={{ 'https://graph.facebook.com/' + $json.graphApiVersion + '/' + $json.destinationPageId + '/photos' }}",
+        "url": "={{ 'https://graph.facebook.com/' + $('Validate Downloaded Hashes').item.json.graphApiVersion + '/' + $('Validate Downloaded Hashes').item.json.destinationPageId + '/photos' }}",
         "sendBody": true,
         "contentType": "form-urlencoded",
         "bodyParameters": {
           "parameters": [
             {
               "name": "url",
-              "value": "={{ $json.mediaUrl }}"
+              "value": "={{ $('Validate Downloaded Hashes').item.json.mediaUrl }}"
             },
             {
               "name": "message",
-              "value": "={{ $json.captionMyanmar }}"
+              "value": "={{ $('Validate Downloaded Hashes').item.json.captionMyanmar }}"
             }
           ]
         },
@@ -130,14 +148,17 @@
       "name": "Publish Photo to ACE Child Grow - CREDENTIAL REQUIRED",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1200, 60]
+      "position": [
+        1200,
+        60
+      ]
     },
     {
       "parameters": {
         "authentication": "genericCredentialType",
         "genericAuthType": "httpBearerAuth",
         "method": "POST",
-        "url": "={{ 'https://graph.facebook.com/' + $json.graphApiVersion + '/' + $json.destinationPageId + '/video_reels' }}",
+        "url": "={{ 'https://graph.facebook.com/' + $('Validate Downloaded Hashes').item.json.graphApiVersion + '/' + $('Validate Downloaded Hashes').item.json.destinationPageId + '/video_reels' }}",
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
@@ -153,7 +174,10 @@
       "name": "Start Facebook Reel Upload - CREDENTIAL REQUIRED",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1200, -240]
+      "position": [
+        1200,
+        -240
+      ]
     },
     {
       "parameters": {
@@ -163,7 +187,10 @@
       "name": "Confirm Facebook Reel Upload Session",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1440, -240]
+      "position": [
+        1440,
+        -240
+      ]
     },
     {
       "parameters": {
@@ -176,7 +203,7 @@
           "parameters": [
             {
               "name": "file_url",
-              "value": "={{ $('Validate Kill Switch Approval and Duplicate Gates').item.json.mediaUrl }}"
+              "value": "={{ $('Validate Kill Switch Approval and Queue Age Gates').item.json.mediaUrl }}"
             }
           ]
         },
@@ -186,7 +213,10 @@
       "name": "Upload Hosted Reel to Meta - CREDENTIAL REQUIRED",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1680, -240]
+      "position": [
+        1680,
+        -240
+      ]
     },
     {
       "parameters": {
@@ -196,14 +226,17 @@
       "name": "Confirm Facebook Reel Upload",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [1920, -240]
+      "position": [
+        1920,
+        -240
+      ]
     },
     {
       "parameters": {
         "authentication": "genericCredentialType",
         "genericAuthType": "httpBearerAuth",
         "method": "POST",
-        "url": "={{ 'https://graph.facebook.com/' + $('Validate Kill Switch Approval and Duplicate Gates').item.json.graphApiVersion + '/' + $('Validate Kill Switch Approval and Duplicate Gates').item.json.destinationPageId + '/video_reels' }}",
+        "url": "={{ 'https://graph.facebook.com/' + $('Validate Kill Switch Approval and Queue Age Gates').item.json.graphApiVersion + '/' + $('Validate Kill Switch Approval and Queue Age Gates').item.json.destinationPageId + '/video_reels' }}",
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
@@ -221,7 +254,7 @@
             },
             {
               "name": "description",
-              "value": "={{ $('Validate Kill Switch Approval and Duplicate Gates').item.json.captionMyanmar }}"
+              "value": "={{ $('Validate Kill Switch Approval and Queue Age Gates').item.json.captionMyanmar }}"
             }
           ]
         },
@@ -231,17 +264,23 @@
       "name": "Publish Facebook Reel - CREDENTIAL REQUIRED",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [2160, -240]
+      "position": [
+        2160,
+        -240
+      ]
     },
     {
       "parameters": {
-        "jsCode": "const item = $('Validate Kill Switch Approval and Duplicate Gates').item.json;\nconst response = $json;\nif (item.mediaType === 'reel' && response.success !== true) throw new Error('META_REEL_PUBLISH_FAILED');\nconst platformPostId = item.mediaType === 'reel' ? $('Start Facebook Reel Upload - CREDENTIAL REQUIRED').item.json.video_id : (response.post_id || response.id);\nif (!platformPostId) throw new Error('META_RESPONSE_MISSING_POST_ID');\nconst state = $getWorkflowStaticData('global');\nstate.publishedIds ??= {};\nstate.publishedIds[item.id] = { platformPostId, publishedAt: new Date().toISOString(), approvedContentHash: item.approvedContentHash, mediaType: item.mediaType };\nreturn [{ json: { result: 'PUBLISHED', postId: item.id, platformPostId, mediaType: item.mediaType, publishedAt: state.publishedIds[item.id].publishedAt } }];"
+        "jsCode": "const item=$('Validate Downloaded Hashes').item.json; const response=$json; if(item.mediaType==='reel' && response.success!==true) throw new Error('META_REEL_PUBLISH_FAILED'); const platformPostId=item.mediaType==='reel' ? $('Start Facebook Reel Upload - CREDENTIAL REQUIRED').item.json.video_id : (response.post_id || response.id); if(!platformPostId) throw new Error('META_RESPONSE_MISSING_POST_ID'); return [{json:{result:'META_PUBLISHED_PENDING_LEDGER',postId:item.id,platformPostId,mediaType:item.mediaType,publishedAt:new Date().toISOString()}}];"
       },
       "id": "mark-published",
       "name": "Remember Published Post",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [2400, -80]
+      "position": [
+        3600,
+        -80
+      ]
     },
     {
       "parameters": {
@@ -251,69 +290,951 @@
       "name": "Block and Flag Owner",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
-      "position": [940, 180]
+      "position": [
+        940,
+        180
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.mediaUrl }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "data"
+            }
+          }
+        }
+      },
+      "id": "download-approved-media",
+      "name": "Download Approved Media",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        940,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "action": "hash",
+        "binaryData": true,
+        "binaryPropertyName": "data",
+        "type": "SHA256",
+        "dataPropertyName": "computedMediaSha256",
+        "encoding": "hex"
+      },
+      "id": "hash-media",
+      "name": "Compute Downloaded Media SHA256",
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 2,
+      "position": [
+        1160,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "action": "hash",
+        "binaryData": false,
+        "type": "SHA256",
+        "value": "={{ $json.id + '|' + $json.scheduledAt + '|' + $json.captionMyanmar + '|' + $json.computedMediaSha256 }}",
+        "dataPropertyName": "computedApprovedContentHash",
+        "encoding": "hex"
+      },
+      "id": "hash-content",
+      "name": "Compute Approved Content SHA256",
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 2,
+      "position": [
+        1380,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const blockers = [];\nif ($json.computedMediaSha256 !== $json.mediaSha256) blockers.push('DOWNLOADED_MEDIA_HASH_MISMATCH');\nif ($json.computedApprovedContentHash !== $json.approvedContentHash) blockers.push('APPROVED_CONTENT_HASH_MISMATCH');\nreturn [{json: {...$json, eligible: blockers.length === 0, blockers, alertOwner: blockers.length > 0}}];"
+      },
+      "id": "validate-downloaded-hashes",
+      "name": "Validate Downloaded Hashes",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1600,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "downloaded-hashes-match",
+              "leftValue": "={{ $json.eligible }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "downloaded-hashes-match",
+      "name": "Downloaded Hashes Match?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1820,
+        -100
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "REPLACE_WITH_FACEBOOK_PUBLISH_LEDGER_TABLE_ID",
+          "mode": "id"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "ledgerKey",
+              "condition": "eq",
+              "keyValue": "={{ $('Validate Downloaded Hashes').item.json.id }}"
+            }
+          ]
+        },
+        "returnAll": false,
+        "limit": 1
+      },
+      "id": "read-ledger",
+      "name": "Read Durable Publish Ledger",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        2040,
+        -160
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "url": "={{ 'https://graph.facebook.com/' + $('Validate Downloaded Hashes').item.json.graphApiVersion + '/' + $('Validate Downloaded Hashes').item.json.destinationPageId + '/feed' }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "fields",
+              "value": "id,message,permalink_url,created_time"
+            },
+            {
+              "name": "limit",
+              "value": "100"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "fetch-page-feed",
+      "name": "Fetch Recent ACE Child Grow Page Posts",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2260,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $('Validate Downloaded Hashes').item.json;\nconst ledger = $('Read Durable Publish Ledger').first()?.json || {};\nconst now = Date.now(); const executionId = $execution.id;\nif (['published','reconciled'].includes(ledger.status)) return [{json:{action:'SKIP', ...ledger}}];\nif (ledger.status === 'reserved' && ledger.reservationToken !== executionId && Date.parse(ledger.reservationExpiresAt || 0) > now) return [{json:{action:'SKIP', ...ledger}}];\nconst match = ($json.data || []).find((p) => p.id && p.message === item.captionMyanmar && Math.abs(Date.parse(p.created_time || 0) - Date.parse(item.scheduledAt)) <= 604800000);\nconst base = {ledgerKey:item.id,postId:item.id,approvedContentHash:item.approvedContentHash,mediaSha256:item.mediaSha256,scheduledAt:item.scheduledAt,lastExecutionId:executionId,updatedAt:new Date(now).toISOString(),alertCode:'',alertMessage:''};\nif (match) return [{json:{action:'RECONCILED',...base,status:'reconciled',reservationToken:'',reservationExpiresAt:'',platformPostId:match.id,platformPermalink:match.permalink_url || '',publishedAt:match.created_time || new Date(now).toISOString()}}];\nreturn [{json:{action:'RESERVE',...base,status:'reserved',reservationToken:executionId,reservationExpiresAt:new Date(now+600000).toISOString(),platformPostId:'',platformPermalink:'',publishedAt:''}}];"
+      },
+      "id": "prepare-reservation",
+      "name": "Prepare Reservation or Reconciliation",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2480,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "REPLACE_WITH_FACEBOOK_PUBLISH_LEDGER_TABLE_ID",
+          "mode": "id"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "ledgerKey",
+              "condition": "eq",
+              "keyValue": "={{ $json.ledgerKey }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ledgerKey": "={{ $json.ledgerKey }}",
+            "postId": "={{ $json.postId }}",
+            "status": "={{ $json.status }}",
+            "reservationToken": "={{ $json.reservationToken }}",
+            "reservationExpiresAt": "={{ $json.reservationExpiresAt }}",
+            "approvedContentHash": "={{ $json.approvedContentHash }}",
+            "mediaSha256": "={{ $json.mediaSha256 }}",
+            "platformPostId": "={{ $json.platformPostId }}",
+            "platformPermalink": "={{ $json.platformPermalink }}",
+            "publishedAt": "={{ $json.publishedAt }}",
+            "scheduledAt": "={{ $json.scheduledAt }}",
+            "lastExecutionId": "={{ $json.lastExecutionId }}",
+            "alertCode": "={{ $json.alertCode }}",
+            "alertMessage": "={{ $json.alertMessage }}",
+            "updatedAt": "={{ $json.updatedAt }}"
+          }
+        }
+      },
+      "id": "upsert-reservation",
+      "name": "Upsert Publish Reservation or Reconciliation",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        2700,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "reserved-this-execution",
+              "leftValue": "={{ $('Prepare Reservation or Reconciliation').item.json.action }}",
+              "rightValue": "RESERVE",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "singleValue": false
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "reserved-this-execution",
+      "name": "Reserved by This Execution?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2900,
+        -160
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "REPLACE_WITH_FACEBOOK_PUBLISH_LEDGER_TABLE_ID",
+          "mode": "id"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "ledgerKey",
+              "condition": "eq",
+              "keyValue": "={{ $('Validate Downloaded Hashes').item.json.id }}"
+            }
+          ]
+        },
+        "returnAll": false,
+        "limit": 1
+      },
+      "id": "read-reservation-back",
+      "name": "Read Reservation Back",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        2900,
+        20
+      ],
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const row=$json; const owns=row.status==='reserved' && row.reservationToken===$execution.id && Date.parse(row.reservationExpiresAt||0)>Date.now(); return [{json:{...row,ownsReservation:owns,blockers:owns?[]:['RESERVATION_NOT_OWNED'],alertOwner:false}}];"
+      },
+      "id": "confirm-reservation-owner",
+      "name": "Confirm Reservation Ownership",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3100,
+        20
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "lease-owned",
+              "leftValue": "={{ $json.ownsReservation }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "lease-owned",
+      "name": "Reservation Lease Owned?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        3300,
+        20
+      ]
+    },
+    {
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBearerAuth",
+        "url": "={{ 'https://graph.facebook.com/' + $('Validate Downloaded Hashes').item.json.graphApiVersion + '/' + $json.platformPostId }}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "fields",
+              "value": "id,permalink_url,created_time"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "fetch-permalink",
+      "name": "Fetch Published Post Permalink",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        3820,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item=$('Validate Downloaded Hashes').item.json; const remembered=$('Remember Published Post').item.json; const platformPostId=$json.id || remembered.platformPostId; if(!platformPostId) throw new Error('PLATFORM_POST_ID_REQUIRED'); return [{json:{ledgerKey:item.id,postId:item.id,status:'published',reservationToken:'',reservationExpiresAt:'',approvedContentHash:item.approvedContentHash,mediaSha256:item.mediaSha256,platformPostId,platformPermalink:$json.permalink_url || '',publishedAt:$json.created_time || remembered.publishedAt || new Date().toISOString(),scheduledAt:item.scheduledAt,lastExecutionId:$execution.id,alertCode:$json.permalink_url?'':'PERMALINK_RECONCILIATION_REQUIRED',alertMessage:$json.permalink_url?'':'Facebook returned a post ID but no permalink; reconcile before any retry.',updatedAt:new Date().toISOString()}}];"
+      },
+      "id": "prepare-published-ledger",
+      "name": "Prepare Published Ledger Row",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4040,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "REPLACE_WITH_FACEBOOK_PUBLISH_LEDGER_TABLE_ID",
+          "mode": "id"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "ledgerKey",
+              "condition": "eq",
+              "keyValue": "={{ $json.ledgerKey }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ledgerKey": "={{ $json.ledgerKey }}",
+            "postId": "={{ $json.postId }}",
+            "status": "={{ $json.status }}",
+            "reservationToken": "={{ $json.reservationToken }}",
+            "reservationExpiresAt": "={{ $json.reservationExpiresAt }}",
+            "approvedContentHash": "={{ $json.approvedContentHash }}",
+            "mediaSha256": "={{ $json.mediaSha256 }}",
+            "platformPostId": "={{ $json.platformPostId }}",
+            "platformPermalink": "={{ $json.platformPermalink }}",
+            "publishedAt": "={{ $json.publishedAt }}",
+            "scheduledAt": "={{ $json.scheduledAt }}",
+            "lastExecutionId": "={{ $json.lastExecutionId }}",
+            "alertCode": "={{ $json.alertCode }}",
+            "alertMessage": "={{ $json.alertMessage }}",
+            "updatedAt": "={{ $json.updatedAt }}"
+          }
+        }
+      },
+      "id": "upsert-published-ledger",
+      "name": "Upsert Published Ledger",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        4260,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "alert-owner",
+              "leftValue": "={{ $json.alertOwner }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "alert-owner",
+      "name": "Alert Owner?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1160,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const blockers=$json.blockers || ['UNKNOWN_PUBLISHER_BLOCKER']; const code=blockers.join(','); const postId=$json.id || $json.postId || ''; const day=new Date().toISOString().slice(0,10); return [{json:{ledgerKey:postId?('alert:'+postId+':'+code):('alert:'+day+':'+code),postId,status:'alert',reservationToken:'',reservationExpiresAt:'',approvedContentHash:'',mediaSha256:'',platformPostId:'',platformPermalink:'',publishedAt:'',scheduledAt:'',lastExecutionId:$execution.id,alertCode:code,alertMessage:'ACE Child Grow Facebook publisher blocked: '+code,updatedAt:new Date().toISOString()}}];"
+      },
+      "id": "prepare-owner-alert",
+      "name": "Prepare Durable Owner Alert",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1380,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "row",
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "REPLACE_WITH_FACEBOOK_PUBLISH_LEDGER_TABLE_ID",
+          "mode": "id"
+        },
+        "matchType": "allConditions",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "ledgerKey",
+              "condition": "eq",
+              "keyValue": "={{ $json.ledgerKey }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ledgerKey": "={{ $json.ledgerKey }}",
+            "postId": "={{ $json.postId }}",
+            "status": "={{ $json.status }}",
+            "reservationToken": "",
+            "reservationExpiresAt": "",
+            "approvedContentHash": "",
+            "mediaSha256": "",
+            "platformPostId": "",
+            "platformPermalink": "",
+            "publishedAt": "",
+            "scheduledAt": "",
+            "lastExecutionId": "={{ $json.lastExecutionId }}",
+            "alertCode": "={{ $json.alertCode }}",
+            "alertMessage": "={{ $json.alertMessage }}",
+            "updatedAt": "={{ $json.updatedAt }}"
+          }
+        }
+      },
+      "id": "upsert-owner-alert",
+      "name": "Upsert Durable Owner Alert",
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1600,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "email",
+        "operation": "send",
+        "fromEmail": "={{ $vars.ACE_SOCIAL_ALERT_FROM_EMAIL }}",
+        "toEmail": "={{ $vars.ACE_SOCIAL_OWNER_ALERT_EMAIL }}",
+        "subject": "={{ \"ACE Child Grow Facebook publisher blocked: \" + $json.alertCode }}",
+        "emailFormat": "text",
+        "text": "={{ $json.alertMessage + \"\\nPost: \" + ($json.postId || \"none\") + \"\\nExecution: \" + $json.lastExecutionId + \"\\nRecorded: \" + $json.updatedAt }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "send-owner-alert",
+      "name": "Send Owner Alert - CREDENTIAL REQUIRED",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1820,
+        260
+      ],
+      "onError": "continueRegularOutput"
     }
   ],
   "connections": {
     "Check Queue Every 15 Minutes": {
-      "main": [[{"node": "Load Public Approved Manifest", "type": "main", "index": 0}]]
+      "main": [
+        [
+          {
+            "node": "Load Public Approved Manifest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Manual Trigger": {
-      "main": [[{"node": "Load Public Approved Manifest", "type": "main", "index": 0}]]
+      "main": [
+        [
+          {
+            "node": "Load Public Approved Manifest",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Load Public Approved Manifest": {
-      "main": [[{"node": "Validate Kill Switch Approval and Duplicate Gates", "type": "main", "index": 0}]]
+      "main": [
+        [
+          {
+            "node": "Validate Kill Switch Approval and Queue Age Gates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
-    "Validate Kill Switch Approval and Duplicate Gates": {
-      "main": [[{"node": "Eligible for Facebook Publish?", "type": "main", "index": 0}]]
+    "Validate Kill Switch Approval and Queue Age Gates": {
+      "main": [
+        [
+          {
+            "node": "Eligible for Facebook Publish?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Eligible for Facebook Publish?": {
       "main": [
-        [{"node": "Is Approved Item a Reel?", "type": "main", "index": 0}],
-        [{"node": "Block and Flag Owner", "type": "main", "index": 0}]
+        [
+          {
+            "node": "Download Approved Media",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Block and Flag Owner",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Block and Flag Owner": {
+      "main": [
+        [
+          {
+            "node": "Alert Owner?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Downloaded Hashes Match?": {
+      "main": [
+        [
+          {
+            "node": "Read Durable Publish Ledger",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Durable Owner Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Approved Media": {
+      "main": [
+        [
+          {
+            "node": "Compute Downloaded Media SHA256",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compute Downloaded Media SHA256": {
+      "main": [
+        [
+          {
+            "node": "Compute Approved Content SHA256",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compute Approved Content SHA256": {
+      "main": [
+        [
+          {
+            "node": "Validate Downloaded Hashes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Downloaded Hashes": {
+      "main": [
+        [
+          {
+            "node": "Downloaded Hashes Match?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Durable Publish Ledger": {
+      "main": [
+        [
+          {
+            "node": "Fetch Recent ACE Child Grow Page Posts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Recent ACE Child Grow Page Posts": {
+      "main": [
+        [
+          {
+            "node": "Prepare Reservation or Reconciliation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Reservation or Reconciliation": {
+      "main": [
+        [
+          {
+            "node": "Upsert Publish Reservation or Reconciliation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upsert Publish Reservation or Reconciliation": {
+      "main": [
+        [
+          {
+            "node": "Reserved by This Execution?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reserved by This Execution?": {
+      "main": [
+        [
+          {
+            "node": "Read Reservation Back",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Reservation Back": {
+      "main": [
+        [
+          {
+            "node": "Confirm Reservation Ownership",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Confirm Reservation Ownership": {
+      "main": [
+        [
+          {
+            "node": "Reservation Lease Owned?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reservation Lease Owned?": {
+      "main": [
+        [
+          {
+            "node": "Is Approved Item a Reel?",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Is Approved Item a Reel?": {
       "main": [
-        [{"node": "Start Facebook Reel Upload - CREDENTIAL REQUIRED", "type": "main", "index": 0}],
-        [{"node": "Publish Photo to ACE Child Grow - CREDENTIAL REQUIRED", "type": "main", "index": 0}]
+        [
+          {
+            "node": "Start Facebook Reel Upload - CREDENTIAL REQUIRED",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Publish Photo to ACE Child Grow - CREDENTIAL REQUIRED",
+            "type": "main",
+            "index": 0
+          }
+        ]
       ]
     },
     "Start Facebook Reel Upload - CREDENTIAL REQUIRED": {
-      "main": [[{"node": "Confirm Facebook Reel Upload Session", "type": "main", "index": 0}]]
+      "main": [
+        [
+          {
+            "node": "Confirm Facebook Reel Upload Session",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Confirm Facebook Reel Upload Session": {
-      "main": [[{"node": "Upload Hosted Reel to Meta - CREDENTIAL REQUIRED", "type": "main", "index": 0}]]
+      "main": [
+        [
+          {
+            "node": "Upload Hosted Reel to Meta - CREDENTIAL REQUIRED",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Upload Hosted Reel to Meta - CREDENTIAL REQUIRED": {
-      "main": [[{"node": "Confirm Facebook Reel Upload", "type": "main", "index": 0}]]
+      "main": [
+        [
+          {
+            "node": "Confirm Facebook Reel Upload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Confirm Facebook Reel Upload": {
-      "main": [[{"node": "Publish Facebook Reel - CREDENTIAL REQUIRED", "type": "main", "index": 0}]]
+      "main": [
+        [
+          {
+            "node": "Publish Facebook Reel - CREDENTIAL REQUIRED",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Publish Facebook Reel - CREDENTIAL REQUIRED": {
-      "main": [[{"node": "Remember Published Post", "type": "main", "index": 0}]]
+      "main": [
+        [
+          {
+            "node": "Remember Published Post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Publish Photo to ACE Child Grow - CREDENTIAL REQUIRED": {
-      "main": [[{"node": "Remember Published Post", "type": "main", "index": 0}]]
+      "main": [
+        [
+          {
+            "node": "Remember Published Post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remember Published Post": {
+      "main": [
+        [
+          {
+            "node": "Fetch Published Post Permalink",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fetch Published Post Permalink": {
+      "main": [
+        [
+          {
+            "node": "Prepare Published Ledger Row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Published Ledger Row": {
+      "main": [
+        [
+          {
+            "node": "Upsert Published Ledger",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Alert Owner?": {
+      "main": [
+        [
+          {
+            "node": "Prepare Durable Owner Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Durable Owner Alert": {
+      "main": [
+        [
+          {
+            "node": "Upsert Durable Owner Alert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upsert Durable Owner Alert": {
+      "main": [
+        [
+          {
+            "node": "Send Owner Alert - CREDENTIAL REQUIRED",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,
   "settings": {
     "executionOrder": "v1",
     "saveManualExecutions": true,
-    "timezone": "Asia/Yangon"
+    "timezone": "Asia/Yangon",
+    "executionTimeout": 300
   },
-  "versionId": "00000000-0000-4000-8000-000000000003",
+  "versionId": "00000000-0000-4000-8000-000000000004",
   "meta": {
     "templateCredsSetupCompleted": false,
     "aceMode": "continuous_low_risk",
-    "killSwitchExpected": true,
-    "supportedMediaTypes": ["image", "reel"],
+    "supportedMediaTypes": [
+      "image",
+      "reel"
+    ],
     "graphApiVersionSource": "public manifest",
     "credentialAttachmentRequired": true,
     "credentialTypeRequired": "HTTP Bearer Auth",
-    "credentialValueFormat": "<PAGE_ACCESS_TOKEN>"
+    "credentialValueFormat": "<PAGE_ACCESS_TOKEN>",
+    "publishLedgerRequired": true,
+    "publishLedgerTableIdPlaceholder": "REPLACE_WITH_FACEBOOK_PUBLISH_LEDGER_TABLE_ID",
+    "ownerAlertCredentialRequired": true,
+    "ownerAlertVariablesRequired": [
+      "ACE_SOCIAL_ALERT_FROM_EMAIL",
+      "ACE_SOCIAL_OWNER_ALERT_EMAIL"
+    ]
   },
   "tags": []
 }
