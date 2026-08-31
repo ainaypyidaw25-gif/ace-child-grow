@@ -131,7 +131,11 @@ describe('Facebook continuous publisher workflow export', () => {
   it('records actionable blockers and sends a real owner email', () => {
     expect(destinations('Prepare Durable Owner Alert')).toContain('Upsert Durable Owner Alert')
     expect(destinations('Upsert Durable Owner Alert')).toContain('Send Owner Alert - CREDENTIAL REQUIRED')
-    expect((nodes.get('Send Owner Alert - CREDENTIAL REQUIRED') as any).type).toBe('n8n-nodes-base.emailSend')
+    const email = nodes.get('Send Owner Alert - CREDENTIAL REQUIRED') as any
+    expect(email.type).toBe('n8n-nodes-base.emailSend')
+    expect(email.parameters.fromEmail).toBe('REPLACE_WITH_SOCIAL_ALERT_FROM_EMAIL')
+    expect(email.parameters.toEmail).toBe('REPLACE_WITH_SOCIAL_OWNER_ALERT_EMAIL')
+    expect(JSON.stringify(email)).not.toContain('$vars')
   })
 
   it('blocks stale backlog drain and limits an execution to one selected item', () => {

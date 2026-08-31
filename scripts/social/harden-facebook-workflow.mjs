@@ -140,7 +140,7 @@ return [{json:{action:'RESERVE',...base,status:'reserved',reservationToken:execu
   ifNode('alert-owner', 'Alert Owner?', '={{ $json.alertOwner }}', true, 1160, 260),
   code('prepare-owner-alert', 'Prepare Durable Owner Alert', `const blockers=$json.blockers || ['UNKNOWN_PUBLISHER_BLOCKER']; const code=blockers.join(','); const postId=$json.id || $json.postId || ''; const day=new Date().toISOString().slice(0,10); return [{json:{ledgerKey:postId?('alert:'+postId+':'+code):('alert:'+day+':'+code),postId,status:'alert',reservationToken:'',reservationExpiresAt:'',approvedContentHash:'',mediaSha256:'',platformPostId:'',platformPermalink:'',publishedAt:'',scheduledAt:'',lastExecutionId:$execution.id,alertCode:code,alertMessage:'ACE Child Grow Facebook publisher blocked: '+code,updatedAt:new Date().toISOString()}}];`, 1380, 260),
   dataTable('upsert-owner-alert', 'Upsert Durable Owner Alert', 'upsert', [{ keyName: 'ledgerKey', condition: 'eq', keyValue: '={{ $json.ledgerKey }}' }], { ledgerKey: '={{ $json.ledgerKey }}', postId: '={{ $json.postId }}', status: '={{ $json.status }}', reservationToken: '', reservationExpiresAt: '', approvedContentHash: '', mediaSha256: '', platformPostId: '', platformPermalink: '', publishedAt: '', scheduledAt: '', lastExecutionId: '={{ $json.lastExecutionId }}', alertCode: '={{ $json.alertCode }}', alertMessage: '={{ $json.alertMessage }}', updatedAt: '={{ $json.updatedAt }}' }, 1600, 260),
-  { parameters: { resource: 'email', operation: 'send', fromEmail: '={{ $vars.ACE_SOCIAL_ALERT_FROM_EMAIL }}', toEmail: '={{ $vars.ACE_SOCIAL_OWNER_ALERT_EMAIL }}', subject: '={{ "ACE Child Grow Facebook publisher blocked: " + $json.alertCode }}', emailFormat: 'text', text: '={{ $json.alertMessage + "\\nPost: " + ($json.postId || "none") + "\\nExecution: " + $json.lastExecutionId + "\\nRecorded: " + $json.updatedAt }}', options: { appendAttribution: false } }, id: 'send-owner-alert', name: 'Send Owner Alert - CREDENTIAL REQUIRED', type: 'n8n-nodes-base.emailSend', typeVersion: 2.1, position: position(1820, 260), onError: 'continueRegularOutput' },
+  { parameters: { resource: 'email', operation: 'send', fromEmail: 'REPLACE_WITH_SOCIAL_ALERT_FROM_EMAIL', toEmail: 'REPLACE_WITH_SOCIAL_OWNER_ALERT_EMAIL', subject: '={{ "ACE Child Grow Facebook publisher blocked: " + $json.alertCode }}', emailFormat: 'text', text: '={{ $json.alertMessage + "\\nPost: " + ($json.postId || "none") + "\\nExecution: " + $json.lastExecutionId + "\\nRecorded: " + $json.updatedAt }}', options: { appendAttribution: false } }, id: 'send-owner-alert', name: 'Send Owner Alert - CREDENTIAL REQUIRED', type: 'n8n-nodes-base.emailSend', typeVersion: 2.1, position: position(1820, 260), onError: 'continueRegularOutput' },
 )
 
 const mark = workflow.nodes.find((node) => node.name === 'Remember Published Post')
@@ -190,7 +190,11 @@ workflow.versionId = '00000000-0000-4000-8000-000000000004'
 workflow.meta.publishLedgerRequired = true
 workflow.meta.publishLedgerTableIdPlaceholder = tableId.value
 workflow.meta.ownerAlertCredentialRequired = true
-workflow.meta.ownerAlertVariablesRequired = ['ACE_SOCIAL_ALERT_FROM_EMAIL', 'ACE_SOCIAL_OWNER_ALERT_EMAIL']
+delete workflow.meta.ownerAlertVariablesRequired
+workflow.meta.ownerAlertFieldPlaceholders = [
+  'REPLACE_WITH_SOCIAL_ALERT_FROM_EMAIL',
+  'REPLACE_WITH_SOCIAL_OWNER_ALERT_EMAIL',
+]
 delete workflow.meta.killSwitchExpected
 
 for (const node of workflow.nodes) {
