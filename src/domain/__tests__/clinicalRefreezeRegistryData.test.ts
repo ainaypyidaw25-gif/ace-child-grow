@@ -3,6 +3,7 @@ import { sha256Canonical } from '../../../convex/lib/aiAuditHash';
 import {
   CLINICAL_CHILD_DEVELOPMENT_REFREEZE_BATCH_ROUTING_HASH,
   CLINICAL_CHILD_DEVELOPMENT_RELEASE_BATCH_ROUTING_HASH,
+  CLINICAL_EVIDENCE_SUCCESSOR_BATCH_ROUTING_HASH,
   CLINICAL_ENGLISH_SUCCESSOR_BATCH_ROUTING_HASH,
   CLINICAL_ENGLISH_REFREEZE_BATCH_ROUTING_HASH,
   CLINICAL_ENGLISH_RELEASE_BATCH_ROUTING_HASH,
@@ -112,6 +113,12 @@ describe('clinical newborn refreeze registry data', () => {
         activation: 'after_handoff',
         predecessor: 'clinical-native-myanmar-successor-14-2026-08-31-v1',
       },
+      {
+        sequence: 14,
+        batchId: 'clinical-evidence-successor-14-2026-09-01-v1',
+        activation: 'after_handoff',
+        predecessor: 'clinical-english-successor-14-2026-08-31-v1',
+      },
     ]);
 
     const expected = new Map([
@@ -126,6 +133,7 @@ describe('clinical newborn refreeze registry data', () => {
       ['clinical-child-development-refreeze-14-2026-08-31-v1', CLINICAL_CHILD_DEVELOPMENT_REFREEZE_BATCH_ROUTING_HASH],
       ['clinical-native-myanmar-successor-14-2026-08-31-v1', CLINICAL_NATIVE_MYANMAR_SUCCESSOR_BATCH_ROUTING_HASH],
       ['clinical-english-successor-14-2026-08-31-v1', CLINICAL_ENGLISH_SUCCESSOR_BATCH_ROUTING_HASH],
+      ['clinical-evidence-successor-14-2026-09-01-v1', CLINICAL_EVIDENCE_SUCCESSOR_BATCH_ROUTING_HASH],
     ]);
     for (const registration of releases.slice(1)) {
       expect(await sha256Canonical(clinicalReviewBatchRoutingPayload(registration)))
