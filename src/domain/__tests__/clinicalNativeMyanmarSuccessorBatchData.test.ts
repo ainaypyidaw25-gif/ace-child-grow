@@ -62,7 +62,9 @@ describe('native-Myanmar all-14 immutable successor data', () => {
       });
     expect(CLINICAL_NATIVE_MYANMAR_SUCCESSOR_PREVIOUS_RECEIPT_DIGEST)
       .toBe('3d7457b5b5ce35e5bf644bd694382c06de17b31701ee1f8dc19f67e41a6d2204');
-    expect(CLINICAL_REVIEW_BATCH_REGISTRY.at(-1)).toEqual(registration);
+    expect(CLINICAL_REVIEW_BATCH_REGISTRY.find(
+      (entry) => entry.manifest.batchId === CLINICAL_NATIVE_MYANMAR_SUCCESSOR_BATCH_ID,
+    )).toEqual(registration);
   });
 
   it('binds Daw La Pyae to all fourteen exact current Production revisions', () => {
