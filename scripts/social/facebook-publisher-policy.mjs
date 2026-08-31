@@ -72,14 +72,15 @@ export function validateManifestAndSelect(manifest, options = {}) {
     }
   }
 
-  const quietBlockers = new Set(['GLOBAL_KILL_SWITCH_ON', 'NO_DUE_APPROVED_ITEM'])
+  const killSwitchOn = blockers.includes('GLOBAL_KILL_SWITCH_ON')
+  const quietBlockers = new Set(['NO_DUE_APPROVED_ITEM'])
   return {
     item,
     dueCount: due.length,
     maxBacklogAgeMinutes,
     eligible: blockers.length === 0,
     blockers,
-    alertOwner: blockers.some((blocker) => !quietBlockers.has(blocker)),
+    alertOwner: !killSwitchOn && blockers.some((blocker) => !quietBlockers.has(blocker)),
   }
 }
 

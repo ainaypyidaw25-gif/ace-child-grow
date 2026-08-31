@@ -22,7 +22,11 @@ Create an n8n Data Table named `ACE Child Grow Facebook Publish Ledger`. Add
 these **String** columns: `ledgerKey`, `postId`, `status`, `reservationToken`,
 `reservationExpiresAt`, `approvedContentHash`, `mediaSha256`, `platformPostId`,
 `platformPermalink`, `publishedAt`, `scheduledAt`, `lastExecutionId`,
-`alertCode`, `alertMessage`, and `updatedAt`.
+`alertCode`, and `alertMessage`.
+
+n8n automatically provides the built-in `id`, `createdAt`, and `updatedAt`
+columns. Do not create or map a custom `updatedAt` field: Data Table write nodes
+must leave the built-in timestamp to n8n.
 
 Replace `REPLACE_WITH_FACEBOOK_PUBLISH_LEDGER_TABLE_ID` in every Data Table
 node with its actual table ID. The placeholder is a deployment blocker.
@@ -42,8 +46,9 @@ The current n8n workspace plan does not provide project Variables. In
 `REPLACE_WITH_SOCIAL_OWNER_ALERT_EMAIL` directly in n8n, attach an SMTP
 credential, and test an actual alert. Do not commit real email addresses to this
 repository. Actionable blocks are upserted to the ledger before email, so SMTP
-failure cannot erase the alert evidence. Kill-switch and empty-queue stops are
-intentionally quiet.
+failure cannot erase the alert evidence. A global kill switch forces a quiet
+stop even when the selected item also has another blocker; empty-queue stops
+are also intentionally quiet.
 
 ## Import and credential setup
 

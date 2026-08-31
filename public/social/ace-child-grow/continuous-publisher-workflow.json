@@ -48,7 +48,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const manifest = $json;\nconst now = Date.now();\nconst maxBacklogAgeMinutes = manifest.publisherPolicy?.maxBacklogAgeMinutes ?? 180;\nconst due = (Array.isArray(manifest.items) ? manifest.items : [])\n  .filter((candidate) => candidate.status === 'scheduled' && candidate.approvalStatus === 'approved' && Date.parse(candidate.scheduledAt || 0) <= now && !candidate.alreadyPublished && !candidate.platformPostId && !candidate.platformPermalink)\n  .sort((a, b) => Date.parse(a.scheduledAt) - Date.parse(b.scheduledAt));\nconst item = due[0] || null;\nconst blockers = [];\nif (manifest.killSwitch !== false) blockers.push('GLOBAL_KILL_SWITCH_ON');\nif (manifest.automationMode !== 'production') blockers.push('NOT_PRODUCTION_MODE');\nif (manifest.destination?.platform !== 'facebook') blockers.push('WRONG_PLATFORM');\nif (manifest.destination?.pageId !== '111009258047115') blockers.push('PAGE_NOT_ALLOWLISTED');\nif (!/^v\\d+\\.\\d+$/.test(manifest.destination?.graphApiVersion || '')) blockers.push('INVALID_GRAPH_API_VERSION');\nif (!item) blockers.push('NO_DUE_APPROVED_ITEM');\nif (item) {\n  item.mediaType = item.mediaType === 'photo' ? 'image' : item.mediaType;\n  if ((now - Date.parse(item.scheduledAt)) / 60000 > maxBacklogAgeMinutes) blockers.push('STALE_DUE_ITEM_REQUIRES_REVIEW');\n  if (!item.reviewerId || !item.approvalTimestamp) blockers.push('MISSING_APPROVAL_AUDIT');\n  if (item.approvalExpiresAt && Date.parse(item.approvalExpiresAt) <= now) blockers.push('APPROVAL_EXPIRED');\n  if (!item.captionMyanmar?.trim()) blockers.push('EMPTY_CAPTION');\n  if (!item.mediaUrl?.startsWith('https://child.acegroup.com.mm/')) blockers.push('MEDIA_NOT_ON_APPROVED_HOST');\n  if (!/^[a-f0-9]{64}$/i.test(item.mediaSha256 || '')) blockers.push('MISSING_OR_INVALID_MEDIA_HASH');\n  if (!/^[a-f0-9]{64}$/i.test(item.approvedContentHash || '')) blockers.push('MISSING_OR_INVALID_APPROVED_HASH');\n  if (!['image', 'reel'].includes(item.mediaType)) blockers.push('UNSUPPORTED_MEDIA_TYPE');\n  if (item.mediaType === 'reel' && !/^https:\\/\\/child\\.acegroup\\.com\\.mm\\/.+\\.mp4(?:\\?.*)?$/i.test(item.mediaUrl || '')) blockers.push('REEL_MUST_BE_HOSTED_MP4');\n  if (item.riskLevel === 'high' && !item.clinicalApprovalId) blockers.push('MISSING_CLINICAL_APPROVAL');\n}\nconst quiet = new Set(['GLOBAL_KILL_SWITCH_ON', 'NO_DUE_APPROVED_ITEM']);\nreturn [{ json: { ...(item || {}), dueCount: due.length, destinationPageId: manifest.destination?.pageId, graphApiVersion: manifest.destination?.graphApiVersion, eligible: blockers.length === 0, blockers, alertOwner: blockers.some((b) => !quiet.has(b)) } }];"
+        "jsCode": "const manifest = $json;\nconst now = Date.now();\nconst maxBacklogAgeMinutes = manifest.publisherPolicy?.maxBacklogAgeMinutes ?? 180;\nconst due = (Array.isArray(manifest.items) ? manifest.items : [])\n  .filter((candidate) => candidate.status === 'scheduled' && candidate.approvalStatus === 'approved' && Date.parse(candidate.scheduledAt || 0) <= now && !candidate.alreadyPublished && !candidate.platformPostId && !candidate.platformPermalink)\n  .sort((a, b) => Date.parse(a.scheduledAt) - Date.parse(b.scheduledAt));\nconst item = due[0] || null;\nconst blockers = [];\nif (manifest.killSwitch !== false) blockers.push('GLOBAL_KILL_SWITCH_ON');\nif (manifest.automationMode !== 'production') blockers.push('NOT_PRODUCTION_MODE');\nif (manifest.destination?.platform !== 'facebook') blockers.push('WRONG_PLATFORM');\nif (manifest.destination?.pageId !== '111009258047115') blockers.push('PAGE_NOT_ALLOWLISTED');\nif (!/^v\\d+\\.\\d+$/.test(manifest.destination?.graphApiVersion || '')) blockers.push('INVALID_GRAPH_API_VERSION');\nif (!item) blockers.push('NO_DUE_APPROVED_ITEM');\nif (item) {\n  item.mediaType = item.mediaType === 'photo' ? 'image' : item.mediaType;\n  if ((now - Date.parse(item.scheduledAt)) / 60000 > maxBacklogAgeMinutes) blockers.push('STALE_DUE_ITEM_REQUIRES_REVIEW');\n  if (!item.reviewerId || !item.approvalTimestamp) blockers.push('MISSING_APPROVAL_AUDIT');\n  if (item.approvalExpiresAt && Date.parse(item.approvalExpiresAt) <= now) blockers.push('APPROVAL_EXPIRED');\n  if (!item.captionMyanmar?.trim()) blockers.push('EMPTY_CAPTION');\n  if (!item.mediaUrl?.startsWith('https://child.acegroup.com.mm/')) blockers.push('MEDIA_NOT_ON_APPROVED_HOST');\n  if (!/^[a-f0-9]{64}$/i.test(item.mediaSha256 || '')) blockers.push('MISSING_OR_INVALID_MEDIA_HASH');\n  if (!/^[a-f0-9]{64}$/i.test(item.approvedContentHash || '')) blockers.push('MISSING_OR_INVALID_APPROVED_HASH');\n  if (!['image', 'reel'].includes(item.mediaType)) blockers.push('UNSUPPORTED_MEDIA_TYPE');\n  if (item.mediaType === 'reel' && !/^https:\\/\\/child\\.acegroup\\.com\\.mm\\/.+\\.mp4(?:\\?.*)?$/i.test(item.mediaUrl || '')) blockers.push('REEL_MUST_BE_HOSTED_MP4');\n  if (item.riskLevel === 'high' && !item.clinicalApprovalId) blockers.push('MISSING_CLINICAL_APPROVAL');\n}\nconst killSwitchOn = blockers.includes('GLOBAL_KILL_SWITCH_ON');\nconst quiet = new Set(['NO_DUE_APPROVED_ITEM']);\nreturn [{ json: { ...(item || {}), dueCount: due.length, destinationPageId: manifest.destination?.pageId, graphApiVersion: manifest.destination?.graphApiVersion, eligible: blockers.length === 0, blockers, alertOwner: !killSwitchOn && blockers.some((b) => !quiet.has(b)) } }];"
       },
       "id": "validate-gates",
       "name": "Validate Kill Switch Approval and Queue Age Gates",
@@ -538,8 +538,7 @@
             "scheduledAt": "={{ $json.scheduledAt }}",
             "lastExecutionId": "={{ $json.lastExecutionId }}",
             "alertCode": "={{ $json.alertCode }}",
-            "alertMessage": "={{ $json.alertMessage }}",
-            "updatedAt": "={{ $json.updatedAt }}"
+            "alertMessage": "={{ $json.alertMessage }}"
           }
         }
       },
@@ -624,8 +623,7 @@
             "status": "reserved",
             "reservationToken": "={{ $json.reservationToken }}",
             "reservationExpiresAt": "={{ $json.reservationExpiresAt }}",
-            "lastExecutionId": "={{ $json.lastExecutionId }}",
-            "updatedAt": "={{ $json.updatedAt }}"
+            "lastExecutionId": "={{ $json.lastExecutionId }}"
           }
         }
       },
@@ -757,8 +755,7 @@
             "scheduledAt": "={{ $json.scheduledAt }}",
             "lastExecutionId": "={{ $json.lastExecutionId }}",
             "alertCode": "={{ $json.alertCode }}",
-            "alertMessage": "={{ $json.alertMessage }}",
-            "updatedAt": "={{ $json.updatedAt }}"
+            "alertMessage": "={{ $json.alertMessage }}"
           }
         }
       },
@@ -851,8 +848,7 @@
             "scheduledAt": "",
             "lastExecutionId": "={{ $json.lastExecutionId }}",
             "alertCode": "={{ $json.alertCode }}",
-            "alertMessage": "={{ $json.alertMessage }}",
-            "updatedAt": "={{ $json.updatedAt }}"
+            "alertMessage": "={{ $json.alertMessage }}"
           }
         }
       },
