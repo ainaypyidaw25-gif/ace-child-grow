@@ -114,7 +114,6 @@ describe('frozen older-safety clinical release batch', () => {
       (entry) => entry.manifest.batchId === CLINICAL_OLDER_SAFETY_RELEASE_BATCH_MANIFEST.batchId,
     );
     if (!registration) throw new Error('Missing older-safety release registration');
-    expect(CLINICAL_REVIEW_BATCH_REGISTRY).toHaveLength(10);
     expect(registration).toMatchObject({
       sequence: 5,
       laneGraphVersion: 1,

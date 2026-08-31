@@ -35,12 +35,7 @@ import {
 } from '../../../convex/clinicalReviewRegistry';
 import { sha256Canonical } from '../../../convex/lib/aiAuditHash';
 import {
-  CLINICAL_CHILD_DEVELOPMENT_RELEASE_BATCH_ID,
-  CLINICAL_ENGLISH_REFREEZE_BATCH_ID,
-  CLINICAL_ENGLISH_RELEASE_BATCH_ID,
   CLINICAL_INITIAL_RELEASE_BATCH_ID,
-  CLINICAL_NATIVE_MYANMAR_RELEASE_BATCH_ID,
-  CLINICAL_NATIVE_MYANMAR_REFREEZE_BATCH_ID,
   CLINICAL_NEWBORN_REFREEZE_BATCH_ID,
   CLINICAL_NEWBORN_REFREEZE_BATCH_EXPIRES_AT,
   CLINICAL_NEWBORN_REFREEZE_DECISION_SET_DIGEST,
@@ -263,14 +258,13 @@ async function exactContext() {
 async function materializeCurrentRegistryTail(
   state: Awaited<ReturnType<typeof exactContext>>,
 ) {
-  for (const batchId of [
-    CLINICAL_NATIVE_MYANMAR_RELEASE_BATCH_ID,
-    CLINICAL_NATIVE_MYANMAR_REFREEZE_BATCH_ID,
-    CLINICAL_ENGLISH_RELEASE_BATCH_ID,
-    CLINICAL_ENGLISH_REFREEZE_BATCH_ID,
-    CLINICAL_CHILD_DEVELOPMENT_RELEASE_BATCH_ID,
-  ]) {
-    const tail = registration(batchId);
+  const persistedBatchIds = new Set(
+    state.tables.clinicalReviewBatches.map((row) => row.batchId),
+  );
+  const currentReleaseTail = CLINICAL_REVIEW_BATCH_REGISTRY.filter((row) => (
+    row.authority === 'release' && !persistedBatchIds.has(row.manifest.batchId)
+  ));
+  for (const tail of currentReleaseTail) {
     state.tables.clinicalReviewBatches.push(batchRow(tail));
     for (const item of tail.manifest.items) {
       state.tables.clinicalReviewAssignments.push(await assignmentRow(tail, item));
