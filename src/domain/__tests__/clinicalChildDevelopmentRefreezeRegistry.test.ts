@@ -174,7 +174,7 @@ describe('sequence-11 child-development refreeze registry handlers', () => {
     const registration = CLINICAL_REVIEW_BATCH_REGISTRY.find((row) =>
       row.manifest.batchId === CLINICAL_CHILD_DEVELOPMENT_REFREEZE_BATCH_MANIFEST.batchId,
     ) as ClinicalReviewBatchRegistration;
-    expect(CLINICAL_REVIEW_BATCH_REGISTRY).toHaveLength(12);
+    expect(CLINICAL_REVIEW_BATCH_REGISTRY).toHaveLength(13);
     expect(registration).toMatchObject({
       sequence: 11,
       laneGraphVersion: 1,
@@ -222,11 +222,11 @@ describe('sequence-11 child-development refreeze registry handlers', () => {
     })).resolves.toMatchObject({
       ok: true,
       code: 'materialized',
-      createdBatches: 2,
-      createdAssignments: 28,
+      createdBatches: 3,
+      createdAssignments: 42,
     });
-    expect(ctx.tables.clinicalReviewBatches).toHaveLength(11);
-    expect(ctx.tables.clinicalReviewAssignments).toHaveLength(114);
+    expect(ctx.tables.clinicalReviewBatches).toHaveLength(12);
+    expect(ctx.tables.clinicalReviewAssignments).toHaveLength(128);
     expect(ctx.tables.clinicalReviewBatchReceipts).toHaveLength(5);
     expect(ctx.tables.clinicalReviewBatches.find(
       (row) => row.batchId === CLINICAL_CHILD_DEVELOPMENT_REFREEZE_BATCH_MANIFEST.batchId,
@@ -253,8 +253,8 @@ describe('sequence-11 child-development refreeze registry handlers', () => {
     });
     expect(ctx.db.insert).toHaveBeenCalledTimes(1);
     expect(ctx.db.insert).toHaveBeenCalledWith('auditLogs', expect.any(Object));
-    expect(ctx.tables.clinicalReviewBatches).toHaveLength(11);
-    expect(ctx.tables.clinicalReviewAssignments).toHaveLength(114);
+    expect(ctx.tables.clinicalReviewBatches).toHaveLength(12);
+    expect(ctx.tables.clinicalReviewAssignments).toHaveLength(128);
     expect(ctx.tables.clinicalReviewBatchReceipts).toHaveLength(5);
 
     ctx.db.insert.mockClear();
