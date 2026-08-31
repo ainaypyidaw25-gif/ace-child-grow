@@ -76,6 +76,16 @@ describe('future Facebook brand voice', () => {
       expect(caption, item.id).not.toMatch(/မိဘတို့ရေ|ဖေဖေ\s*မေမေတို့ရေ|မိဘတို့/)
       expect(caption, item.id).not.toContain('နော်')
       expect(prose, item.id).not.toMatch(/[A-Za-z]/)
+      expect(caption, item.id).not.toContain('မီးဖိုချောင်ဘေး')
     }
+  })
+
+  it('retains essential source safety guidance for the infant movement activities', async () => {
+    const manifest = JSON.parse(await readFile(manifestPath, 'utf8'))
+    const byId = new Map(manifest.items.map((item: { id: string }) => [item.id, item]))
+    const clapAndSing = byId.get('ACE-ACT-5M-05') as { captionMyanmar: string }
+
+    expect(clapAndSing.captionMyanmar).toContain('လှုပ်ခါခြင်း')
+    expect(clapAndSing.captionMyanmar).toContain('လေထဲပစ်တင်ခြင်း')
   })
 })
