@@ -171,8 +171,10 @@ describe('sequence-11 child-development refreeze registry handlers', () => {
   });
 
   it('registers only the exact immutable successor of the stopped sequence-10 batch', () => {
-    const registration = CLINICAL_REVIEW_BATCH_REGISTRY.at(-1) as ClinicalReviewBatchRegistration;
-    expect(CLINICAL_REVIEW_BATCH_REGISTRY).toHaveLength(11);
+    const registration = CLINICAL_REVIEW_BATCH_REGISTRY.find((row) =>
+      row.manifest.batchId === CLINICAL_CHILD_DEVELOPMENT_REFREEZE_BATCH_MANIFEST.batchId,
+    ) as ClinicalReviewBatchRegistration;
+    expect(CLINICAL_REVIEW_BATCH_REGISTRY).toHaveLength(12);
     expect(registration).toMatchObject({
       sequence: 11,
       laneGraphVersion: 1,
@@ -200,7 +202,7 @@ describe('sequence-11 child-development refreeze registry handlers', () => {
     expect(registration.manifest.count).toBe(14);
   });
 
-  it('materializes 9/86/5 to 10/100/5 idempotently, then activates only seq11 by exact decision digest', async () => {
+  it('materializes the registered tail idempotently, then activates only seq11 by exact decision digest', async () => {
     vi.spyOn(Date, 'now').mockReturnValue(CLINICAL_CHILD_DEVELOPMENT_REFREEZE_BATCH_FROZEN_AT + 1);
     const ctx = productionLikeContext();
     const preserved = preservedRows(ctx);
@@ -220,11 +222,11 @@ describe('sequence-11 child-development refreeze registry handlers', () => {
     })).resolves.toMatchObject({
       ok: true,
       code: 'materialized',
-      createdBatches: 1,
-      createdAssignments: 14,
+      createdBatches: 2,
+      createdAssignments: 28,
     });
-    expect(ctx.tables.clinicalReviewBatches).toHaveLength(10);
-    expect(ctx.tables.clinicalReviewAssignments).toHaveLength(100);
+    expect(ctx.tables.clinicalReviewBatches).toHaveLength(11);
+    expect(ctx.tables.clinicalReviewAssignments).toHaveLength(114);
     expect(ctx.tables.clinicalReviewBatchReceipts).toHaveLength(5);
     expect(ctx.tables.clinicalReviewBatches.find(
       (row) => row.batchId === CLINICAL_CHILD_DEVELOPMENT_REFREEZE_BATCH_MANIFEST.batchId,
@@ -251,8 +253,8 @@ describe('sequence-11 child-development refreeze registry handlers', () => {
     });
     expect(ctx.db.insert).toHaveBeenCalledTimes(1);
     expect(ctx.db.insert).toHaveBeenCalledWith('auditLogs', expect.any(Object));
-    expect(ctx.tables.clinicalReviewBatches).toHaveLength(10);
-    expect(ctx.tables.clinicalReviewAssignments).toHaveLength(100);
+    expect(ctx.tables.clinicalReviewBatches).toHaveLength(11);
+    expect(ctx.tables.clinicalReviewAssignments).toHaveLength(114);
     expect(ctx.tables.clinicalReviewBatchReceipts).toHaveLength(5);
 
     ctx.db.insert.mockClear();
