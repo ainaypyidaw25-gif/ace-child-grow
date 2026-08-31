@@ -1298,6 +1298,25 @@ export const CDC_SOURCES: EvidenceSource[] = [
       'CDC child development page shows the title and a 2026 "last reviewed" date; `year` records that reviewed year.',
   }),
   s({
+    id: 'cdc-positive-parenting-toddlers-2-3-2026',
+    org: 'Centers for Disease Control and Prevention',
+    orgKey: 'CDC',
+    title: 'Positive Parenting Tips: Toddlers (2–3 years old)',
+    year: 2026,
+    country: 'United States',
+    url: 'https://www.cdc.gov/child-development/positive-parenting-tips/toddlers-2-3-years.html',
+    evidenceLevel: 'parent_education',
+    keywords: [
+      'positive parenting', 'toddler', 'adult modelling', 'close supervision', 'water safety',
+    ],
+    topics: ['parenting', 'safety', 'social_emotional'],
+    ageMonthsMin: 24,
+    ageMonthsMax: 47,
+    verifiedOn: '2026-08-31',
+    verifiedNote:
+      'The official CDC page prints this exact title and “Jan. 29, 2026.” It says children in this age band imitate adults, and its Child safety first section says dangerous situations can happen quickly, instructs adults to keep a close eye on the child, and requires someone to watch the child near or around water. This source is limited to ages 24–47 months and to adult modelling, close supervision, and the safety statements printed on the page.',
+  }),
+  s({
     id: 'cdc-positive-parenting-preschoolers-2026',
     org: 'Centers for Disease Control and Prevention',
     orgKey: 'CDC',
