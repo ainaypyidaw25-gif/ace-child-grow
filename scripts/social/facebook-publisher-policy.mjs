@@ -105,14 +105,6 @@ export function planPublish({ item, ledgerRow, feedPosts = [], now = Date.now(),
     return { action: 'SKIP_PUBLISHED', alertOwner: false, ledgerRow }
   }
 
-  if (
-    ledgerRow?.status === 'reserved' &&
-    ledgerRow.reservationToken !== executionId &&
-    Date.parse(ledgerRow.reservationExpiresAt ?? '') > now
-  ) {
-    return { action: 'SKIP_ACTIVE_RESERVATION', alertOwner: false, ledgerRow }
-  }
-
   const matchingPost = feedPosts.find(
     (post) =>
       post?.id &&
@@ -139,9 +131,51 @@ export function planPublish({ item, ledgerRow, feedPosts = [], now = Date.now(),
     }
   }
 
+  if (!ledgerRow?.ledgerKey) {
+    return {
+      action: 'BLOCK_MISSING_LEDGER_ROW',
+      alertOwner: true,
+      blockers: ['MISSING_PRESEEDED_LEDGER_ROW'],
+      ledgerRow: null,
+    }
+  }
+
+  if (
+    ledgerRow.approvedContentHash !== item.approvedContentHash ||
+    ledgerRow.mediaSha256 !== item.mediaSha256
+  ) {
+    return {
+      action: 'BLOCK_LEDGER_HASH_MISMATCH',
+      alertOwner: true,
+      blockers: ['LEDGER_APPROVED_HASH_MISMATCH'],
+      ledgerRow,
+    }
+  }
+
+  if (ledgerRow.status === 'reserved') {
+    const active = Date.parse(ledgerRow.reservationExpiresAt ?? '') > now
+    return {
+      action: active ? 'SKIP_ACTIVE_RESERVATION' : 'BLOCK_EXPIRED_RESERVATION',
+      alertOwner: !active,
+      blockers: [
+        active ? 'PUBLISH_CLAIM_ALREADY_HELD' : 'EXPIRED_CLAIM_REQUIRES_FACEBOOK_RECONCILIATION',
+      ],
+      ledgerRow,
+    }
+  }
+
+  if (ledgerRow.status !== 'ready') {
+    return {
+      action: 'BLOCK_LEDGER_NOT_READY',
+      alertOwner: true,
+      blockers: ['LEDGER_ROW_NOT_READY'],
+      ledgerRow,
+    }
+  }
+
   const leaseMinutes = DEFAULT_RESERVATION_LEASE_MINUTES
   return {
-    action: 'RESERVE',
+    action: 'CLAIM',
     alertOwner: false,
     ledgerRow: {
       ledgerKey: item.id,

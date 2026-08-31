@@ -284,7 +284,7 @@
     },
     {
       "parameters": {
-        "jsCode": "return [{json: {...$json, result: 'BLOCKED', platformPostId: null, publishedAt: null, alertOwner: true}}];"
+        "jsCode": "return [{json:{...$json,result:'BLOCKED',platformPostId:null,publishedAt:null,alertOwner:$json.alertOwner === true}}];"
       },
       "id": "blocked",
       "name": "Block and Flag Owner",
@@ -460,7 +460,7 @@
     },
     {
       "parameters": {
-        "jsCode": "const item = $('Validate Downloaded Hashes').item.json;\nconst ledger = $('Read Durable Publish Ledger').first()?.json || {};\nconst now = Date.now(); const executionId = $execution.id;\nif (['published','reconciled'].includes(ledger.status)) return [{json:{action:'SKIP', ...ledger}}];\nif (ledger.status === 'reserved' && ledger.reservationToken !== executionId && Date.parse(ledger.reservationExpiresAt || 0) > now) return [{json:{action:'SKIP', ...ledger}}];\nconst match = ($json.data || []).find((p) => p.id && p.message === item.captionMyanmar && Math.abs(Date.parse(p.created_time || 0) - Date.parse(item.scheduledAt)) <= 604800000);\nconst base = {ledgerKey:item.id,postId:item.id,approvedContentHash:item.approvedContentHash,mediaSha256:item.mediaSha256,scheduledAt:item.scheduledAt,lastExecutionId:executionId,updatedAt:new Date(now).toISOString(),alertCode:'',alertMessage:''};\nif (match) return [{json:{action:'RECONCILED',...base,status:'reconciled',reservationToken:'',reservationExpiresAt:'',platformPostId:match.id,platformPermalink:match.permalink_url || '',publishedAt:match.created_time || new Date(now).toISOString()}}];\nreturn [{json:{action:'RESERVE',...base,status:'reserved',reservationToken:executionId,reservationExpiresAt:new Date(now+600000).toISOString(),platformPostId:'',platformPermalink:'',publishedAt:''}}];"
+        "jsCode": "const item = $('Validate Downloaded Hashes').item.json;\nconst ledger = $('Read Durable Publish Ledger').first()?.json || {};\nconst now = Date.now(); const executionId = $execution.id;\nif (['published','reconciled'].includes(ledger.status)) return [{json:{action:'SKIP', ...ledger, blockers:[], alertOwner:false}}];\nconst match = ($json.data || []).find((p) => p.id && p.message === item.captionMyanmar && Math.abs(Date.parse(p.created_time || 0) - Date.parse(item.scheduledAt)) <= 604800000);\nconst base = {ledgerKey:item.id,postId:item.id,approvedContentHash:item.approvedContentHash,mediaSha256:item.mediaSha256,scheduledAt:item.scheduledAt,lastExecutionId:executionId,updatedAt:new Date(now).toISOString(),alertCode:'',alertMessage:''};\nif (match) return [{json:{action:'RECONCILED',...base,status:'reconciled',reservationToken:'',reservationExpiresAt:'',platformPostId:match.id,platformPermalink:match.permalink_url || '',publishedAt:match.created_time || new Date(now).toISOString(),blockers:[],alertOwner:false}}];\nif (!ledger.ledgerKey) return [{json:{action:'BLOCK',...base,blockers:['MISSING_PRESEEDED_LEDGER_ROW'],alertOwner:true}}];\nif (ledger.approvedContentHash !== item.approvedContentHash || ledger.mediaSha256 !== item.mediaSha256) return [{json:{action:'BLOCK',...base,blockers:['LEDGER_APPROVED_HASH_MISMATCH'],alertOwner:true}}];\nif (ledger.status === 'reserved') {\n  const active = Date.parse(ledger.reservationExpiresAt || 0) > now;\n  return [{json:{action:'BLOCK',...base,...ledger,blockers:[active?'PUBLISH_CLAIM_ALREADY_HELD':'EXPIRED_CLAIM_REQUIRES_FACEBOOK_RECONCILIATION'],alertOwner:!active}}];\n}\nif (ledger.status !== 'ready') return [{json:{action:'BLOCK',...base,...ledger,blockers:['LEDGER_ROW_NOT_READY'],alertOwner:true}}];\nreturn [{json:{action:'CLAIM',...base,status:'reserved',reservationToken:executionId,reservationExpiresAt:new Date(now+600000).toISOString(),platformPostId:'',platformPermalink:'',publishedAt:'',blockers:[],alertOwner:false}}];"
       },
       "id": "prepare-reservation",
       "name": "Prepare Reservation or Reconciliation",
@@ -469,6 +469,38 @@
       "position": [
         2480,
         -160
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "reconciled-existing-post",
+              "leftValue": "={{ $json.action }}",
+              "rightValue": "RECONCILED",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "singleValue": false
+              }
+            }
+          ],
+          "combinator": "and"
+        }
+      },
+      "id": "reconciled-existing-post",
+      "name": "Reconciled Existing Facebook Post?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2700,
+        -240
       ]
     },
     {
@@ -511,13 +543,13 @@
           }
         }
       },
-      "id": "upsert-reservation",
-      "name": "Upsert Publish Reservation or Reconciliation",
+      "id": "upsert-reconciled-ledger",
+      "name": "Upsert Reconciled Publish Ledger",
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        2700,
-        -160
+        2920,
+        -320
       ]
     },
     {
@@ -530,9 +562,9 @@
           },
           "conditions": [
             {
-              "id": "reserved-this-execution",
-              "leftValue": "={{ $('Prepare Reservation or Reconciliation').item.json.action }}",
-              "rightValue": "RESERVE",
+              "id": "ready-to-claim",
+              "leftValue": "={{ $json.action }}",
+              "rightValue": "CLAIM",
               "operator": {
                 "type": "string",
                 "operation": "equals",
@@ -543,19 +575,19 @@
           "combinator": "and"
         }
       },
-      "id": "reserved-this-execution",
-      "name": "Reserved by This Execution?",
+      "id": "ready-to-claim",
+      "name": "Ready to Claim Publish Slot?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        2900,
-        -160
+        2920,
+        -120
       ]
     },
     {
       "parameters": {
         "resource": "row",
-        "operation": "get",
+        "operation": "update",
         "dataTableId": {
           "__rl": true,
           "value": "REPLACE_WITH_FACEBOOK_PUBLISH_LEDGER_TABLE_ID",
@@ -567,34 +599,57 @@
             {
               "keyName": "ledgerKey",
               "condition": "eq",
-              "keyValue": "={{ $('Validate Downloaded Hashes').item.json.id }}"
+              "keyValue": "={{ $json.ledgerKey }}"
+            },
+            {
+              "keyName": "status",
+              "condition": "eq",
+              "keyValue": "ready"
+            },
+            {
+              "keyName": "approvedContentHash",
+              "condition": "eq",
+              "keyValue": "={{ $json.approvedContentHash }}"
+            },
+            {
+              "keyName": "mediaSha256",
+              "condition": "eq",
+              "keyValue": "={{ $json.mediaSha256 }}"
             }
           ]
         },
-        "returnAll": false,
-        "limit": 1
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "reserved",
+            "reservationToken": "={{ $json.reservationToken }}",
+            "reservationExpiresAt": "={{ $json.reservationExpiresAt }}",
+            "lastExecutionId": "={{ $json.lastExecutionId }}",
+            "updatedAt": "={{ $json.updatedAt }}"
+          }
+        }
       },
-      "id": "read-reservation-back",
-      "name": "Read Reservation Back",
+      "id": "claim-publish-slot",
+      "name": "Claim Publish Slot Atomically",
       "type": "n8n-nodes-base.dataTable",
       "typeVersion": 1.1,
       "position": [
-        2900,
-        20
+        3140,
+        -120
       ],
       "alwaysOutputData": true
     },
     {
       "parameters": {
-        "jsCode": "const row=$json; const owns=row.status==='reserved' && row.reservationToken===$execution.id && Date.parse(row.reservationExpiresAt||0)>Date.now(); return [{json:{...row,ownsReservation:owns,blockers:owns?[]:['RESERVATION_NOT_OWNED'],alertOwner:false}}];"
+        "jsCode": "const prepared=$('Prepare Reservation or Reconciliation').item.json; const row=$json || {}; const owns=row.ledgerKey===prepared.ledgerKey && row.status==='reserved' && row.reservationToken===$execution.id && row.approvedContentHash===prepared.approvedContentHash && row.mediaSha256===prepared.mediaSha256 && Date.parse(row.reservationExpiresAt||0)>Date.now(); return [{json:{...prepared,...row,ownsReservation:owns,blockers:owns?[]:['ATOMIC_PUBLISH_CLAIM_NOT_ACQUIRED'],alertOwner:false}}];"
       },
-      "id": "confirm-reservation-owner",
-      "name": "Confirm Reservation Ownership",
+      "id": "confirm-atomic-claim",
+      "name": "Confirm Atomic Publish Claim",
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        3100,
-        20
+        3360,
+        -120
       ]
     },
     {
@@ -607,7 +662,7 @@
           },
           "conditions": [
             {
-              "id": "lease-owned",
+              "id": "atomic-claim-won",
               "leftValue": "={{ $json.ownsReservation }}",
               "rightValue": true,
               "operator": {
@@ -620,13 +675,13 @@
           "combinator": "and"
         }
       },
-      "id": "lease-owned",
-      "name": "Reservation Lease Owned?",
+      "id": "atomic-claim-won",
+      "name": "Atomic Publish Claim Won?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        3300,
-        20
+        3580,
+        -120
       ]
     },
     {
@@ -996,58 +1051,72 @@
       "main": [
         [
           {
-            "node": "Upsert Publish Reservation or Reconciliation",
+            "node": "Reconciled Existing Facebook Post?",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Upsert Publish Reservation or Reconciliation": {
+    "Reconciled Existing Facebook Post?": {
       "main": [
         [
           {
-            "node": "Reserved by This Execution?",
+            "node": "Upsert Reconciled Publish Ledger",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Ready to Claim Publish Slot?",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Reserved by This Execution?": {
+    "Ready to Claim Publish Slot?": {
       "main": [
         [
           {
-            "node": "Read Reservation Back",
+            "node": "Claim Publish Slot Atomically",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Alert Owner?",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Read Reservation Back": {
+    "Claim Publish Slot Atomically": {
       "main": [
         [
           {
-            "node": "Confirm Reservation Ownership",
+            "node": "Confirm Atomic Publish Claim",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Confirm Reservation Ownership": {
+    "Confirm Atomic Publish Claim": {
       "main": [
         [
           {
-            "node": "Reservation Lease Owned?",
+            "node": "Atomic Publish Claim Won?",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Reservation Lease Owned?": {
+    "Atomic Publish Claim Won?": {
       "main": [
         [
           {
@@ -1216,7 +1285,7 @@
     "timezone": "Asia/Yangon",
     "executionTimeout": 300
   },
-  "versionId": "00000000-0000-4000-8000-000000000004",
+  "versionId": "00000000-0000-4000-8000-000000000005",
   "meta": {
     "templateCredsSetupCompleted": false,
     "aceMode": "continuous_low_risk",
@@ -1234,7 +1303,18 @@
     "ownerAlertFieldPlaceholders": [
       "REPLACE_WITH_SOCIAL_ALERT_FROM_EMAIL",
       "REPLACE_WITH_SOCIAL_OWNER_ALERT_EMAIL"
-    ]
+    ],
+    "atomicPublishClaim": {
+      "operation": "dataTable.updateRows",
+      "requiredInitialStatus": "ready",
+      "filters": [
+        "ledgerKey",
+        "status",
+        "approvedContentHash",
+        "mediaSha256"
+      ],
+      "failClosedOnZeroUpdatedRows": true
+    }
   },
   "tags": []
 }

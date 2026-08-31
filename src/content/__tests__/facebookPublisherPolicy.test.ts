@@ -36,6 +36,14 @@ function manifest(items = [item()], overrides: Record<string, unknown> = {}) {
   }
 }
 
+function readyLedger(candidate = item()) {
+  return {
+    ledgerKey: candidate.id, postId: candidate.id, status: 'ready', reservationToken: '',
+    reservationExpiresAt: '', approvedContentHash: candidate.approvedContentHash,
+    mediaSha256: candidate.mediaSha256,
+  }
+}
+
 describe('Facebook publisher policy', () => {
   it('keeps the kill switch as a hard publish gate', () => {
     const result = validateManifestAndSelect(manifest([item()], { killSwitch: true }), { now })
@@ -70,12 +78,23 @@ describe('Facebook publisher policy', () => {
     expect(plan.ledgerRow).toMatchObject({ status: 'reconciled', platformPostId: '111_222' })
   })
 
-  it('creates a lease and blocks another execution while it is active', () => {
+  it('fails closed without a pre-seeded row, then prepares a claim from a matching ready row', () => {
     const candidate = item()
-    const reservation = planPublish({ item: candidate, ledgerRow: null, now, executionId: 'execution-1' })
-    expect(reservation.action).toBe('RESERVE')
+    const missing = planPublish({ item: candidate, ledgerRow: null, now, executionId: 'execution-1' })
+    expect(missing).toMatchObject({ action: 'BLOCK_MISSING_LEDGER_ROW', alertOwner: true })
+    const reservation = planPublish({ item: candidate, ledgerRow: readyLedger(candidate), now, executionId: 'execution-1' })
+    expect(reservation.action).toBe('CLAIM')
     expect(ownsReservation(reservation.ledgerRow, 'execution-1', now)).toBe(true)
     expect(planPublish({ item: candidate, ledgerRow: reservation.ledgerRow, now: now + 1_000, executionId: 'execution-2' }).action).toBe('SKIP_ACTIVE_RESERVATION')
+  })
+
+  it('does not automatically reclaim an expired claim after a possibly successful Meta call', () => {
+    const candidate = item()
+    const reservation = planPublish({ item: candidate, ledgerRow: readyLedger(candidate), now, executionId: 'execution-1' })
+    expect(planPublish({ item: candidate, ledgerRow: reservation.ledgerRow, now: now + 700_000, executionId: 'execution-2' })).toMatchObject({
+      action: 'BLOCK_EXPIRED_RESERVATION', alertOwner: true,
+      blockers: ['EXPIRED_CLAIM_REQUIRES_FACEBOOK_RECONCILIATION'],
+    })
   })
 
   it('persists post identifiers and creates a de-duplicated durable alert key', () => {
@@ -120,20 +139,41 @@ describe('Facebook continuous publisher workflow export', () => {
 
   it('uses a durable n8n Data Table instead of workflow static data', () => {
     expect(JSON.stringify(workflow)).not.toContain('$getWorkflowStaticData')
-    for (const name of ['Read Durable Publish Ledger', 'Upsert Publish Reservation or Reconciliation', 'Read Reservation Back', 'Upsert Published Ledger', 'Upsert Durable Owner Alert']) {
+    for (const name of ['Read Durable Publish Ledger', 'Claim Publish Slot Atomically', 'Upsert Reconciled Publish Ledger', 'Upsert Published Ledger', 'Upsert Durable Owner Alert']) {
       const dataTableNode = node(name)
       expect(dataTableNode.type).toBe('n8n-nodes-base.dataTable')
       expect(dataTableNode.parameters.dataTableId?.value).toBe('REPLACE_WITH_FACEBOOK_PUBLISH_LEDGER_TABLE_ID')
     }
   })
 
-  it('verifies hashes, reconciles, reserves, and reads lease ownership before publish', () => {
+  it('verifies hashes, reconciles, and requires an atomic conditional claim before publish', () => {
     expect(destinations('Eligible for Facebook Publish?')).toContain('Download Approved Media')
     expect(destinations('Compute Downloaded Media SHA256')).toContain('Compute Approved Content SHA256')
     expect(destinations('Downloaded Hashes Match?')).toContain('Read Durable Publish Ledger')
     expect(destinations('Read Durable Publish Ledger')).toContain('Fetch Recent ACE Child Grow Page Posts')
-    expect(destinations('Read Reservation Back')).toContain('Confirm Reservation Ownership')
-    expect(destinations('Reservation Lease Owned?')).toContain('Is Approved Item a Reel?')
+    expect(destinations('Ready to Claim Publish Slot?')).toContain('Claim Publish Slot Atomically')
+    expect(destinations('Claim Publish Slot Atomically')).toContain('Confirm Atomic Publish Claim')
+    expect(destinations('Atomic Publish Claim Won?')).toContain('Is Approved Item a Reel?')
+    expect(destinations('Atomic Publish Claim Won?', 1)).toEqual([])
+    expect(destinations('Ready to Claim Publish Slot?', 1)).toContain('Alert Owner?')
+    expect(nodes.has('Upsert Publish Reservation or Reconciliation')).toBe(false)
+    expect(nodes.has('Read Reservation Back')).toBe(false)
+
+    const claim = node('Claim Publish Slot Atomically')
+    expect((claim.parameters as { operation?: string }).operation).toBe('update')
+    const serializedClaim = JSON.stringify(claim.parameters)
+    for (const field of ['ledgerKey', 'status', 'ready', 'approvedContentHash', 'mediaSha256']) {
+      expect(serializedClaim).toContain(field)
+    }
+    expect(workflow.meta.atomicPublishClaim).toMatchObject({
+      operation: 'dataTable.updateRows', requiredInitialStatus: 'ready',
+      failClosedOnZeroUpdatedRows: true,
+    })
+    const metaPredecessors = [...nodes.keys()].filter((name) =>
+      destinations(name).includes('Is Approved Item a Reel?') ||
+      destinations(name, 1).includes('Is Approved Item a Reel?'),
+    )
+    expect(metaPredecessors).toEqual(['Atomic Publish Claim Won?'])
   })
 
   it('writes platform ID and permalink after Meta returns', () => {
@@ -152,6 +192,15 @@ describe('Facebook continuous publisher workflow export', () => {
     expect(email.parameters.fromEmail).toBe('REPLACE_WITH_SOCIAL_ALERT_FROM_EMAIL')
     expect(email.parameters.toEmail).toBe('REPLACE_WITH_SOCIAL_OWNER_ALERT_EMAIL')
     expect(JSON.stringify(email)).not.toContain('$vars')
+  })
+
+  it('preserves quiet blocker decisions instead of forcing an alert every schedule tick', () => {
+    const validation = node('Validate Kill Switch Approval and Queue Age Gates').parameters.jsCode ?? ''
+    expect(validation).toContain("new Set(['GLOBAL_KILL_SWITCH_ON', 'NO_DUE_APPROVED_ITEM'])")
+    const blocker = node('Block and Flag Owner').parameters.jsCode ?? ''
+    expect(blocker).toContain('alertOwner:$json.alertOwner === true')
+    expect(blocker).not.toContain('alertOwner:true')
+    expect(destinations('Block and Flag Owner')).toContain('Alert Owner?')
   })
 
   it('blocks stale backlog drain and limits an execution to one selected item', () => {

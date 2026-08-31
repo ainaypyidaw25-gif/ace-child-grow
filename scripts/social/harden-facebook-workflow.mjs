@@ -33,6 +33,9 @@ const managed = new Set([
   'Fetch Recent ACE Child Grow Page Posts', 'Prepare Reservation or Reconciliation',
   'Upsert Publish Reservation or Reconciliation', 'Reserved by This Execution?',
   'Read Reservation Back', 'Confirm Reservation Ownership', 'Reservation Lease Owned?',
+  'Reconciled Existing Facebook Post?', 'Upsert Reconciled Publish Ledger',
+  'Ready to Claim Publish Slot?', 'Claim Publish Slot Atomically',
+  'Confirm Atomic Publish Claim', 'Atomic Publish Claim Won?',
   'Fetch Published Post Permalink', 'Prepare Published Ledger Row', 'Upsert Published Ledger',
   'Alert Owner?', 'Prepare Durable Owner Alert', 'Upsert Durable Owner Alert',
   'Send Owner Alert - CREDENTIAL REQUIRED',
@@ -79,6 +82,8 @@ return [{ json: { ...(item || {}), dueCount: due.length, destinationPageId: mani
 
 const eligible = workflow.nodes.find((node) => node.name === 'Eligible for Facebook Publish?')
 eligible.position = position(700, 0)
+const blocked = workflow.nodes.find((node) => node.name === 'Block and Flag Owner')
+blocked.parameters.jsCode = `return [{json:{...$json,result:'BLOCKED',platformPostId:null,publishedAt:null,alertOwner:$json.alertOwner === true}}];`
 const isReel = workflow.nodes.find((node) => node.name === 'Is Approved Item a Reel?')
 isReel.position = position(3100, -80)
 isReel.parameters.conditions.conditions[0].leftValue =
@@ -120,17 +125,32 @@ return [{json: {...$json, eligible: blockers.length === 0, blockers, alertOwner:
   code('prepare-reservation', 'Prepare Reservation or Reconciliation', `const item = $('Validate Downloaded Hashes').item.json;
 const ledger = $('Read Durable Publish Ledger').first()?.json || {};
 const now = Date.now(); const executionId = $execution.id;
-if (['published','reconciled'].includes(ledger.status)) return [{json:{action:'SKIP', ...ledger}}];
-if (ledger.status === 'reserved' && ledger.reservationToken !== executionId && Date.parse(ledger.reservationExpiresAt || 0) > now) return [{json:{action:'SKIP', ...ledger}}];
+if (['published','reconciled'].includes(ledger.status)) return [{json:{action:'SKIP', ...ledger, blockers:[], alertOwner:false}}];
 const match = ($json.data || []).find((p) => p.id && p.message === item.captionMyanmar && Math.abs(Date.parse(p.created_time || 0) - Date.parse(item.scheduledAt)) <= 604800000);
 const base = {ledgerKey:item.id,postId:item.id,approvedContentHash:item.approvedContentHash,mediaSha256:item.mediaSha256,scheduledAt:item.scheduledAt,lastExecutionId:executionId,updatedAt:new Date(now).toISOString(),alertCode:'',alertMessage:''};
-if (match) return [{json:{action:'RECONCILED',...base,status:'reconciled',reservationToken:'',reservationExpiresAt:'',platformPostId:match.id,platformPermalink:match.permalink_url || '',publishedAt:match.created_time || new Date(now).toISOString()}}];
-return [{json:{action:'RESERVE',...base,status:'reserved',reservationToken:executionId,reservationExpiresAt:new Date(now+600000).toISOString(),platformPostId:'',platformPermalink:'',publishedAt:''}}];`, 2480, -160),
-  dataTable('upsert-reservation', 'Upsert Publish Reservation or Reconciliation', 'upsert', [{ keyName: 'ledgerKey', condition: 'eq', keyValue: '={{ $json.ledgerKey }}' }], { ledgerKey: '={{ $json.ledgerKey }}', postId: '={{ $json.postId }}', status: '={{ $json.status }}', reservationToken: '={{ $json.reservationToken }}', reservationExpiresAt: '={{ $json.reservationExpiresAt }}', approvedContentHash: '={{ $json.approvedContentHash }}', mediaSha256: '={{ $json.mediaSha256 }}', platformPostId: '={{ $json.platformPostId }}', platformPermalink: '={{ $json.platformPermalink }}', publishedAt: '={{ $json.publishedAt }}', scheduledAt: '={{ $json.scheduledAt }}', lastExecutionId: '={{ $json.lastExecutionId }}', alertCode: '={{ $json.alertCode }}', alertMessage: '={{ $json.alertMessage }}', updatedAt: '={{ $json.updatedAt }}' }, 2700, -160),
-  ifNode('reserved-this-execution', 'Reserved by This Execution?', "={{ $('Prepare Reservation or Reconciliation').item.json.action }}", 'RESERVE', 2900, -160),
-  dataTable('read-reservation-back', 'Read Reservation Back', 'get', [{ keyName: 'ledgerKey', condition: 'eq', keyValue: "={{ $('Validate Downloaded Hashes').item.json.id }}" }], null, 2900, 20, { returnAll: false, limit: 1 }),
-  code('confirm-reservation-owner', 'Confirm Reservation Ownership', `const row=$json; const owns=row.status==='reserved' && row.reservationToken===$execution.id && Date.parse(row.reservationExpiresAt||0)>Date.now(); return [{json:{...row,ownsReservation:owns,blockers:owns?[]:['RESERVATION_NOT_OWNED'],alertOwner:false}}];`, 3100, 20),
-  ifNode('lease-owned', 'Reservation Lease Owned?', '={{ $json.ownsReservation }}', true, 3300, 20),
+if (match) return [{json:{action:'RECONCILED',...base,status:'reconciled',reservationToken:'',reservationExpiresAt:'',platformPostId:match.id,platformPermalink:match.permalink_url || '',publishedAt:match.created_time || new Date(now).toISOString(),blockers:[],alertOwner:false}}];
+if (!ledger.ledgerKey) return [{json:{action:'BLOCK',...base,blockers:['MISSING_PRESEEDED_LEDGER_ROW'],alertOwner:true}}];
+if (ledger.approvedContentHash !== item.approvedContentHash || ledger.mediaSha256 !== item.mediaSha256) return [{json:{action:'BLOCK',...base,blockers:['LEDGER_APPROVED_HASH_MISMATCH'],alertOwner:true}}];
+if (ledger.status === 'reserved') {
+  const active = Date.parse(ledger.reservationExpiresAt || 0) > now;
+  return [{json:{action:'BLOCK',...base,...ledger,blockers:[active?'PUBLISH_CLAIM_ALREADY_HELD':'EXPIRED_CLAIM_REQUIRES_FACEBOOK_RECONCILIATION'],alertOwner:!active}}];
+}
+if (ledger.status !== 'ready') return [{json:{action:'BLOCK',...base,...ledger,blockers:['LEDGER_ROW_NOT_READY'],alertOwner:true}}];
+return [{json:{action:'CLAIM',...base,status:'reserved',reservationToken:executionId,reservationExpiresAt:new Date(now+600000).toISOString(),platformPostId:'',platformPermalink:'',publishedAt:'',blockers:[],alertOwner:false}}];`, 2480, -160),
+  ifNode('reconciled-existing-post', 'Reconciled Existing Facebook Post?', '={{ $json.action }}', 'RECONCILED', 2700, -240),
+  dataTable('upsert-reconciled-ledger', 'Upsert Reconciled Publish Ledger', 'upsert', [{ keyName: 'ledgerKey', condition: 'eq', keyValue: '={{ $json.ledgerKey }}' }], { ledgerKey: '={{ $json.ledgerKey }}', postId: '={{ $json.postId }}', status: '={{ $json.status }}', reservationToken: '={{ $json.reservationToken }}', reservationExpiresAt: '={{ $json.reservationExpiresAt }}', approvedContentHash: '={{ $json.approvedContentHash }}', mediaSha256: '={{ $json.mediaSha256 }}', platformPostId: '={{ $json.platformPostId }}', platformPermalink: '={{ $json.platformPermalink }}', publishedAt: '={{ $json.publishedAt }}', scheduledAt: '={{ $json.scheduledAt }}', lastExecutionId: '={{ $json.lastExecutionId }}', alertCode: '={{ $json.alertCode }}', alertMessage: '={{ $json.alertMessage }}', updatedAt: '={{ $json.updatedAt }}' }, 2920, -320),
+  ifNode('ready-to-claim', 'Ready to Claim Publish Slot?', '={{ $json.action }}', 'CLAIM', 2920, -120),
+  {
+    ...dataTable('claim-publish-slot', 'Claim Publish Slot Atomically', 'update', [
+      { keyName: 'ledgerKey', condition: 'eq', keyValue: '={{ $json.ledgerKey }}' },
+      { keyName: 'status', condition: 'eq', keyValue: 'ready' },
+      { keyName: 'approvedContentHash', condition: 'eq', keyValue: '={{ $json.approvedContentHash }}' },
+      { keyName: 'mediaSha256', condition: 'eq', keyValue: '={{ $json.mediaSha256 }}' },
+    ], { status: 'reserved', reservationToken: '={{ $json.reservationToken }}', reservationExpiresAt: '={{ $json.reservationExpiresAt }}', lastExecutionId: '={{ $json.lastExecutionId }}', updatedAt: '={{ $json.updatedAt }}' }, 3140, -120),
+    alwaysOutputData: true,
+  },
+  code('confirm-atomic-claim', 'Confirm Atomic Publish Claim', `const prepared=$('Prepare Reservation or Reconciliation').item.json; const row=$json || {}; const owns=row.ledgerKey===prepared.ledgerKey && row.status==='reserved' && row.reservationToken===$execution.id && row.approvedContentHash===prepared.approvedContentHash && row.mediaSha256===prepared.mediaSha256 && Date.parse(row.reservationExpiresAt||0)>Date.now(); return [{json:{...prepared,...row,ownsReservation:owns,blockers:owns?[]:['ATOMIC_PUBLISH_CLAIM_NOT_ACQUIRED'],alertOwner:false}}];`, 3360, -120),
+  ifNode('atomic-claim-won', 'Atomic Publish Claim Won?', '={{ $json.ownsReservation }}', true, 3580, -120),
   {
     parameters: { authentication: 'genericCredentialType', genericAuthType: 'httpBearerAuth', url: "={{ 'https://graph.facebook.com/' + $('Validate Downloaded Hashes').item.json.graphApiVersion + '/' + $json.platformPostId }}", sendQuery: true, queryParameters: { parameters: [{ name: 'fields', value: 'id,permalink_url,created_time' }] }, options: {} },
     id: 'fetch-permalink', name: 'Fetch Published Post Permalink', type: 'n8n-nodes-base.httpRequest', typeVersion: 4.2, position: position(3820, -80),
@@ -163,12 +183,14 @@ connect('Compute Approved Content SHA256', 'Validate Downloaded Hashes')
 connect('Validate Downloaded Hashes', 'Downloaded Hashes Match?')
 connect('Read Durable Publish Ledger', 'Fetch Recent ACE Child Grow Page Posts')
 connect('Fetch Recent ACE Child Grow Page Posts', 'Prepare Reservation or Reconciliation')
-connect('Prepare Reservation or Reconciliation', 'Upsert Publish Reservation or Reconciliation')
-connect('Upsert Publish Reservation or Reconciliation', 'Reserved by This Execution?')
-connect('Reserved by This Execution?', 'Read Reservation Back', 0)
-connect('Read Reservation Back', 'Confirm Reservation Ownership')
-connect('Confirm Reservation Ownership', 'Reservation Lease Owned?')
-connect('Reservation Lease Owned?', 'Is Approved Item a Reel?', 0)
+connect('Prepare Reservation or Reconciliation', 'Reconciled Existing Facebook Post?')
+connect('Reconciled Existing Facebook Post?', 'Upsert Reconciled Publish Ledger', 0)
+connect('Reconciled Existing Facebook Post?', 'Ready to Claim Publish Slot?', 1)
+connect('Ready to Claim Publish Slot?', 'Claim Publish Slot Atomically', 0)
+connect('Ready to Claim Publish Slot?', 'Alert Owner?', 1)
+connect('Claim Publish Slot Atomically', 'Confirm Atomic Publish Claim')
+connect('Confirm Atomic Publish Claim', 'Atomic Publish Claim Won?')
+connect('Atomic Publish Claim Won?', 'Is Approved Item a Reel?', 0)
 connect('Is Approved Item a Reel?', 'Start Facebook Reel Upload - CREDENTIAL REQUIRED', 0)
 connect('Is Approved Item a Reel?', 'Publish Photo to ACE Child Grow - CREDENTIAL REQUIRED', 1)
 connect('Start Facebook Reel Upload - CREDENTIAL REQUIRED', 'Confirm Facebook Reel Upload Session')
@@ -186,9 +208,15 @@ connect('Upsert Durable Owner Alert', 'Send Owner Alert - CREDENTIAL REQUIRED')
 
 workflow.active = false
 workflow.settings.executionTimeout = 300
-workflow.versionId = '00000000-0000-4000-8000-000000000004'
+workflow.versionId = '00000000-0000-4000-8000-000000000005'
 workflow.meta.publishLedgerRequired = true
 workflow.meta.publishLedgerTableIdPlaceholder = tableId.value
+workflow.meta.atomicPublishClaim = {
+  operation: 'dataTable.updateRows',
+  requiredInitialStatus: 'ready',
+  filters: ['ledgerKey', 'status', 'approvedContentHash', 'mediaSha256'],
+  failClosedOnZeroUpdatedRows: true,
+}
 workflow.meta.ownerAlertCredentialRequired = true
 delete workflow.meta.ownerAlertVariablesRequired
 workflow.meta.ownerAlertFieldPlaceholders = [
