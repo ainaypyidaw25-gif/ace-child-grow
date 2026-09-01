@@ -57,6 +57,7 @@ const SOURCE_NAME = 'Lapyae Wun';
 const SOURCE_IMAGE = 'https://lh3.googleusercontent.com/a/ACg8ocJwP6KQ1LPgG1d1FM93hgHxwf3xK5aQa8_qPGxinSwScdcw9g=s96-c';
 
 const ACTIVE_DATA_DIGESTS = {
+  sourceAuthSessions: '0c0b4d960624e6a21c895aec27259c6b84d4a557fa9edef97fcf5c5349e248d1',
   sourceChildren: 'b330d52f5e1003e776c96ba6e394d558fefd18f274377eb77927854dc96fc1b5',
   targetChildren: '2cc6123bb70a12205d2f7a8f339cc800f87cb25236ed8a9f37ab1439d1abf0c5',
   sourceActivityCompletions: 'faf9467837af122bea60e074d124553f1787670e9b0421316053b95254a9989d',
@@ -75,7 +76,9 @@ const quarantineBefore = JSON.stringify({
   sourceName: SOURCE_NAME,
   sourceImage: SOURCE_IMAGE,
   sourceSessionCount: 16,
-  sourceRefreshTokenCount: 120,
+  sourceSessionDigest: ACTIVE_DATA_DIGESTS.sourceAuthSessions,
+  sourceRefreshTokenPolicy: 'delete every bounded token under the exact frozen sessions',
+  sourceRefreshTokenPerSessionSafetyBound: 100,
   sourceVerifierCount: 1,
   googleVerificationCodeCount: 0,
 });
@@ -390,6 +393,7 @@ async function preflightState(ctx: DatabaseContext) {
   const quarantineAt = quarantineAudit?._creationTime ?? null;
   const drainEndsAt = quarantineAt === null ? null : quarantineAt + ACCESS_TOKEN_DRAIN_MS;
   const [
+    sourceAuthSessionsDigest,
     sourceChildrenDigest,
     targetChildrenDigest,
     sourceActivityCompletionsDigest,
@@ -397,6 +401,7 @@ async function preflightState(ctx: DatabaseContext) {
     sourceNotificationsDigest,
     targetNotificationsDigest,
   ] = await Promise.all([
+    sha256Canonical(byId(source.sessions)),
     sha256Canonical(byId(source.children)),
     sha256Canonical(byId(target.children)),
     sha256Canonical(byId(source.activityCompletions)),
@@ -534,7 +539,7 @@ async function preflightState(ctx: DatabaseContext) {
       && typeof target.accounts[0].secret === 'string'
       && target.accounts[0].secret.length > 0
       && source.sessions.length === 16
-      && source.refreshTokens.length === 120
+      && sourceAuthSessionsDigest === ACTIVE_DATA_DIGESTS.sourceAuthSessions
       && source.verifiers.length === 1
       && googleVerificationCodes.length === 0
       && activeDataPreimageMatches,

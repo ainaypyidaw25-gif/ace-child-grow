@@ -8,6 +8,7 @@ import {
   preflight,
   quarantine,
 } from '../../../convex/ownerAccountMerge';
+import { OWNER_ACCOUNT_MERGE_SOURCE_SESSIONS } from '../../../convex/lib/ownerAccountMergePolicy';
 
 type Row = Record<string, unknown> & { _id: string };
 
@@ -98,15 +99,17 @@ function initialTables(): Record<string, Row[]> {
         secret: 'exact-password-secret-is-present',
       },
     ],
-    authSessions: Array.from({ length: 16 }, (_, index) => ({
-      _id: `source-session-${index}`,
-      userId: SOURCE_USER_ID,
-    })),
-    authRefreshTokens: Array.from({ length: 120 }, (_, index) => ({
+    authSessions: OWNER_ACCOUNT_MERGE_SOURCE_SESSIONS.map((session) => ({ ...session })),
+    // Refresh tokens are deliberately a live count (122 in the final snapshot)
+    // while their owning session rows are exact and frozen.
+    authRefreshTokens: Array.from({ length: 122 }, (_, index) => ({
       _id: `source-refresh-${index}`,
-      sessionId: `source-session-${index % 16}`,
+      sessionId: OWNER_ACCOUNT_MERGE_SOURCE_SESSIONS[index % 16]._id,
     })),
-    authVerifiers: [{ _id: 'source-verifier-0', sessionId: 'source-session-0' }],
+    authVerifiers: [{
+      _id: 'source-verifier-0',
+      sessionId: OWNER_ACCOUNT_MERGE_SOURCE_SESSIONS[0]._id,
+    }],
     authVerificationCodes: [],
     children: [
       {
@@ -290,7 +293,7 @@ describe('exact duplicate-owner account merge', () => {
     })).resolves.toMatchObject({
       phase: 'quarantine_ready',
       blockers: [],
-      source: { sessionCount: 16, refreshTokenCount: 120, verifierCount: 1 },
+      source: { sessionCount: 16, refreshTokenCount: 122, verifierCount: 1 },
     });
 
     await expect(handler(quarantine)(state.ctx, {
@@ -468,6 +471,42 @@ describe('exact duplicate-owner account merge', () => {
     })).resolves.toMatchObject({
       phase: 'blocked',
       blockers: expect.arrayContaining(['quarantine postimage or final preimage drifted']),
+    });
+  });
+
+  it('blocks drift in the exact source auth-session rows while allowing token rotation', async () => {
+    const liveTokenSeed = initialTables();
+    liveTokenSeed.authRefreshTokens.push({
+      _id: 'newly-rotated-source-token',
+      sessionId: OWNER_ACCOUNT_MERGE_SOURCE_SESSIONS[0]._id,
+    });
+    await expect(handler(preflight)(context(liveTokenSeed).ctx, {
+      releaseId: OWNER_ACCOUNT_MERGE_RELEASE_ID,
+    })).resolves.toMatchObject({
+      phase: 'quarantine_ready',
+      blockers: [],
+      source: { sessionCount: 16, refreshTokenCount: 123 },
+    });
+    const liveTokenState = context(liveTokenSeed);
+    await expect(handler(quarantine)(liveTokenState.ctx, {
+      releaseId: OWNER_ACCOUNT_MERGE_RELEASE_ID,
+      confirmation: OWNER_ACCOUNT_MERGE_QUARANTINE_CONFIRMATION,
+    })).resolves.toMatchObject({
+      phase: 'quarantined_waiting',
+      blockers: [],
+      source: { sessionCount: 0, refreshTokenCount: 0, verifierCount: 0 },
+    });
+    expect(liveTokenState.tables.authRefreshTokens).not.toContainEqual(
+      expect.objectContaining({ _id: 'newly-rotated-source-token' }),
+    );
+
+    const driftedSessionSeed = initialTables();
+    driftedSessionSeed.authSessions[0].expirationTime = 0;
+    await expect(handler(preflight)(context(driftedSessionSeed).ctx, {
+      releaseId: OWNER_ACCOUNT_MERGE_RELEASE_ID,
+    })).resolves.toMatchObject({
+      phase: 'blocked',
+      blockers: expect.arrayContaining(['exact initial preimage drifted']),
     });
   });
 
