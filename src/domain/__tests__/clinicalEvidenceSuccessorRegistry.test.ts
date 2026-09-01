@@ -134,7 +134,7 @@ describe('sequence-14 evidence successor registry handlers', () => {
     vi.restoreAllMocks();
   });
 
-  it('materializes only seq14 and consumes only the exact seq13 handoff', async () => {
+  it('materializes seq14 and its registered successor, then consumes only the exact seq13 handoff', async () => {
     vi.spyOn(Date, 'now').mockReturnValue(
       CLINICAL_EVIDENCE_SUCCESSOR_BATCH_FROZEN_AT + 1,
     );
@@ -149,11 +149,11 @@ describe('sequence-14 evidence successor registry handlers', () => {
     })).resolves.toMatchObject({
       ok: true,
       code: 'materialized',
-      createdBatches: 1,
-      createdAssignments: 14,
+      createdBatches: 2,
+      createdAssignments: 28,
     });
-    expect(ctx.tables.clinicalReviewBatches).toHaveLength(13);
-    expect(ctx.tables.clinicalReviewAssignments).toHaveLength(142);
+    expect(ctx.tables.clinicalReviewBatches).toHaveLength(14);
+    expect(ctx.tables.clinicalReviewAssignments).toHaveLength(156);
     expect(ctx.tables.clinicalReviewBatchReceipts).toHaveLength(8);
     expect(ctx.tables.contentReviews).toEqual(decisionsBefore);
     expect(ctx.tables.clinicalReviewBatches.find(
