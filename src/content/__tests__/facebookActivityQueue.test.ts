@@ -15,9 +15,9 @@ type QueueItem = {
   scheduledAt: string;
   status: string;
   approvalStatus: string;
-  reviewerId?: string;
-  approvalTimestamp?: string;
-  approvedContentHash?: string;
+  reviewerId?: string | null;
+  approvalTimestamp?: string | null;
+  approvedContentHash?: string | null;
   riskLevel?: string;
   mediaType: string;
   mediaUrl: string;
@@ -48,6 +48,12 @@ const expected = [
   ['ACE-ACT-5M-06', 'act_safe_touch_basket', '2026-09-21T13:30:00.000Z'],
 ] as const;
 
+const ownerApprovedIds = new Set([
+  'ACE-ACT-5M-01',
+  'ACE-ACT-5M-03',
+  'ACE-ACT-5M-04',
+]);
+
 describe('Facebook 5–6 month activity queue', () => {
   it('keeps the rebuilt queue paused on the allowlisted ACE Child Grow Facebook page', () => {
     expect(manifest.automationMode).toBe('production');
@@ -69,12 +75,13 @@ describe('Facebook 5–6 month activity queue', () => {
     expect(new Set(campaign.map((item) => item.mediaUrl)).size).toBe(expected.length);
 
     for (const item of campaign) {
+      const approved = ownerApprovedIds.has(item.id);
       expect(item.sourceAgeGroupKey).toBe('5_6m');
       expect(item.sourceClinicalStatus).toBe('published');
-      expect(item.status).toBe('draft');
-      expect(item.approvalStatus).toBe('review_required');
-      expect(item.reviewerId).toBeNull();
-      expect(item.approvalTimestamp).toBeNull();
+      expect(item.status).toBe(approved ? 'scheduled' : 'draft');
+      expect(item.approvalStatus).toBe(approved ? 'approved' : 'review_required');
+      expect(item.reviewerId).toBe(approved ? 'page-owner-action-confirmation' : null);
+      expect(item.approvalTimestamp).toBe(approved ? '2026-09-01T03:35:16.000Z' : null);
       expect(item.captionMyanmar.trim().length).toBeGreaterThan(100);
       expect(item.mediaType).toBe('image');
       expect(item.alreadyPublished).toBe(false);
@@ -104,7 +111,10 @@ describe('Facebook 5–6 month activity queue', () => {
       expect(metadata.height).toBe(1086);
       expect(metadata.width! / metadata.height!).toBeCloseTo(4 / 3, 5);
 
-      expect(item.approvedContentHash).toBeNull();
+      const expectedApprovalHash = createHash('sha256')
+        .update(`${item.id}|${item.scheduledAt}|${item.captionMyanmar}|${item.mediaSha256}`)
+        .digest('hex');
+      expect(item.approvedContentHash).toBe(ownerApprovedIds.has(item.id) ? expectedApprovalHash : null);
     }
   });
 });

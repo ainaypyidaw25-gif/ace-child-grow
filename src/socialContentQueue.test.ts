@@ -1,4 +1,5 @@
 import { readFile } from 'node:fs/promises'
+import { createHash } from 'node:crypto'
 import path from 'node:path'
 import { describe, expect, it } from 'vitest'
 
@@ -28,6 +29,15 @@ const provenanceReviewRequiredIds = [
   'ACE-ACT-5M-06',
 ]
 
+const ownerApprovedIds = [
+  'ACE-CAL-16',
+  'ACE-ACT-5M-01',
+  'ACE-ACT-5M-03',
+  'ACE-ACT-5M-04',
+]
+
+const pendingReviewIds = provenanceReviewRequiredIds.filter((id) => !ownerApprovedIds.includes(id))
+
 const editorialReviewRequiredIds = provenanceReviewRequiredIds.filter(
   (id) => !/^ACE-CAL-(0[7-9]|1[0-5])$/.test(id),
 )
@@ -45,7 +55,7 @@ describe('paused Facebook content queue', () => {
     const manifest = JSON.parse(await readFile(manifestPath, 'utf8'))
     const byId = new Map(manifest.items.map((item: { id: string }) => [item.id, item]))
 
-    for (const id of provenanceReviewRequiredIds) {
+    for (const id of pendingReviewIds) {
       const item = byId.get(id) as Record<string, unknown> | undefined
       expect(item, `${id} is missing`).toBeDefined()
       expect(item?.status, id).toBe('draft')
@@ -57,14 +67,33 @@ describe('paused Facebook content queue', () => {
     }
   })
 
+  it('preserves only the exact content-owner approved revisions', async () => {
+    const manifest = JSON.parse(await readFile(manifestPath, 'utf8'))
+    const byId = new Map(manifest.items.map((item: { id: string }) => [item.id, item]))
+
+    for (const id of ownerApprovedIds) {
+      const item = byId.get(id) as Record<string, unknown> | undefined
+      expect(item, `${id} is missing`).toBeDefined()
+      expect(item?.status, id).toBe('scheduled')
+      expect(item?.approvalStatus, id).toBe('approved')
+      expect(item?.reviewerId, id).toBe('page-owner-action-confirmation')
+      expect(item?.approvalTimestamp, id).toBe('2026-09-01T03:35:16.000Z')
+      const expectedHash = createHash('sha256')
+        .update(`${item?.id}|${item?.scheduledAt}|${item?.captionMyanmar}|${item?.mediaSha256}`)
+        .digest('hex')
+      expect(item?.approvedContentHash, id).toBe(expectedHash)
+    }
+  })
+
   it('applies the same review gate to every rebuilt calendar item', async () => {
     const calendar = JSON.parse(await readFile(calendarPath, 'utf8'))
     const futurePosts = calendar.posts.filter((post: { id: string }) => post.id.startsWith('ACE-CAL-'))
 
     expect(futurePosts).toHaveLength(12)
     for (const post of futurePosts) {
-      expect(post.status, post.id).toBe('draft')
-      expect(post.approvalStatus, post.id).toBe('review_required')
+      const approved = ownerApprovedIds.includes(post.id)
+      expect(post.status, post.id).toBe(approved ? 'scheduled' : 'draft')
+      expect(post.approvalStatus, post.id).toBe(approved ? 'approved' : 'review_required')
     }
   })
 })

@@ -2,7 +2,7 @@
   "title": "ACE Child Grow — 4 Week Content Calendar",
   "timezone": "Asia/Yangon",
   "cadence": "Mon/Wed 20:00, Sat 10:00",
-  "generatedAt": "2026-08-31T19:37:25.281Z",
+  "generatedAt": "2026-09-01T03:50:13.978Z",
   "posts": [
     {
       "id": "ACE-CAL-07",
@@ -293,7 +293,7 @@
       "objective": "retention",
       "icon": "bell",
       "accent": "#F3C866",
-      "reviewRequired": true,
+      "reviewRequired": false,
       "eyebrow": "ညနေ ၅ မိနစ်",
       "title": [
         "နေ့စဉ်အချိန်တစ်ခုကို",
@@ -304,10 +304,10 @@
         "နေ့တိုင်းအချိန်တူတူ စလုပ်ပါ"
       ],
       "captionMyanmar": "ညစာစားပြီးချိန်မှာ ကလေးနဲ့ ဘာလုပ်ပေးရမလဲ စဉ်းစားနေရသလား? ⏰\n\nဒီနေ့ လုပ်စရာတစ်ခုပဲ ရွေးပါ—သီချင်းဆိုတာ၊ ပုံစာအုပ်ကြည့်တာ ဒါမှမဟုတ် ပစ္စည်းတစ်ခုကို အမည်ခေါ်ပြတာ။ ၅ မိနစ်ပြည့်ရင် ရပ်လို့ရပါတယ်။ ကလေး စိတ်မဝင်စားတဲ့နေ့မှာလည်း အဆင်ပြေပါတယ်။\n\nမနက်ဖြန် ပြန်သုံးဖို့ ဒီ ၅ မိနစ်နည်းကို သိမ်းထားပါ။ အိမ်မှာ လုပ်စရာရွေးရခက်နေသူတစ်ယောက်ကို မျှဝေပေးပါ။\n\nအသက်အလိုက် လက်တွေ့လုပ်နည်းတွေကို ACE Child Grow မှာ ပြန်ရှာနိုင်ပါတယ်။\n\n#ACEChildGrow #ကလေးနဲ့အတူ #နေ့စဉ်၅မိနစ်",
-      "status": "draft",
-      "approvalStatus": "review_required",
-      "reviewerId": null,
-      "approvalTimestamp": null,
+      "status": "scheduled",
+      "approvalStatus": "approved",
+      "reviewerId": "page-owner-action-confirmation",
+      "approvalTimestamp": "2026-09-01T03:35:16.000Z",
       "approvalExpiresAt": null,
       "riskLevel": "low",
       "clinicalApprovalId": null,
