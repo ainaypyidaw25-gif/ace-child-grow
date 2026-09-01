@@ -102,6 +102,7 @@ import type * as lib_nativeMyanmarRefreezeCorrectionData from "../lib/nativeMyan
 import type * as lib_nutritionGuidesCasData from "../lib/nutritionGuidesCasData.js";
 import type * as lib_olderSafety2026CasData from "../lib/olderSafety2026CasData.js";
 import type * as lib_olderSafety2026CasV2Data from "../lib/olderSafety2026CasV2Data.js";
+import type * as lib_ownerAccountMergePolicy from "../lib/ownerAccountMergePolicy.js";
 import type * as lib_ownerPriority from "../lib/ownerPriority.js";
 import type * as lib_ownerPriorityAccess from "../lib/ownerPriorityAccess.js";
 import type * as lib_printablePayloadRelease from "../lib/printablePayloadRelease.js";
@@ -248,6 +249,7 @@ declare const fullApi: ApiFromModules<{
   "lib/nutritionGuidesCasData": typeof lib_nutritionGuidesCasData;
   "lib/olderSafety2026CasData": typeof lib_olderSafety2026CasData;
   "lib/olderSafety2026CasV2Data": typeof lib_olderSafety2026CasV2Data;
+  "lib/ownerAccountMergePolicy": typeof lib_ownerAccountMergePolicy;
   "lib/ownerPriority": typeof lib_ownerPriority;
   "lib/ownerPriorityAccess": typeof lib_ownerPriorityAccess;
   "lib/printablePayloadRelease": typeof lib_printablePayloadRelease;
