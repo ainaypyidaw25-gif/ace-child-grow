@@ -9,9 +9,7 @@ import {
   CLINICAL_SAFETY_SUCCESSOR_BATCH_ID,
   CLINICAL_SAFETY_SUCCESSOR_BATCH_ITEMS,
 } from '../convex/lib/clinicalSafetySuccessorBatchData.ts';
-import {
-  CLINICAL_CHILD_DEVELOPMENT_REFREEZE_BATCH_REVIEWER,
-} from '../convex/lib/clinicalChildDevelopmentRefreezeBatchData.ts';
+import type { ClinicalReviewBatchReviewer } from '../convex/lib/clinicalReviewBatchData.ts';
 
 const deployment = 'graceful-possum-566';
 const deploymentReference = 'hotel-ace-groups-of-company:ace-child-grow:prod';
@@ -23,6 +21,15 @@ const fixturePath = resolve(
   'convex/lib/clinicalReviewSuccessorBatchPreimages.json',
 );
 const writeFixture = process.argv.includes('--write');
+const CLINICAL_REVIEW_SUCCESSOR_REVIEWER = {
+  profileId: 'md79ghw3fm2a09pvhgs63c754n8bgnpy',
+  userId: 'mn726081xpgg24y4z4tq9ncw098bh6t1',
+  displayName: 'Phyo Ko Ko',
+  qualification: 'MBBS',
+  role: 'clinical_reviewer',
+  identityCanonicalSha256:
+    'a0863d6008b7680ef5ebcb5290974f3fbbe3ea7a4e7bdf38a295a60ba888e9d3',
+} as const satisfies ClinicalReviewBatchReviewer;
 const targets = CLINICAL_SAFETY_SUCCESSOR_BATCH_ITEMS.map((item) => ({
   kind: item.kind,
   slug: item.slug,
@@ -80,7 +87,7 @@ const query = `
     checkedAt: Date.now(),
     targets: targetRows,
     reviewerProfiles: await ctx.db.query("parentProfiles")
-      .withIndex("by_user", (q) => q.eq("userId", ${JSON.stringify(CLINICAL_CHILD_DEVELOPMENT_REFREEZE_BATCH_REVIEWER.userId)})).take(2),
+      .withIndex("by_user", (q) => q.eq("userId", ${JSON.stringify(CLINICAL_REVIEW_SUCCESSOR_REVIEWER.userId)})).take(2),
     batches,
     assignments,
     receipts,
@@ -322,7 +329,7 @@ const expiresAt = committedFixture?.expiresAt ?? (frozenAt + 14 * 24 * 60 * 60 *
 const manifest = {
   batchId,
   count: items.length,
-  reviewer: CLINICAL_CHILD_DEVELOPMENT_REFREEZE_BATCH_REVIEWER,
+  reviewer: CLINICAL_REVIEW_SUCCESSOR_REVIEWER,
   items: items.map(({ item }) => item),
 };
 const freezeDigest = sha256(manifest);
@@ -340,7 +347,7 @@ const routing = {
   freezeDigest,
   frozenAt,
   expiresAt,
-  reviewerUserId: CLINICAL_CHILD_DEVELOPMENT_REFREEZE_BATCH_REVIEWER.userId,
+  reviewerUserId: CLINICAL_REVIEW_SUCCESSOR_REVIEWER.userId,
   itemCount: items.length,
 };
 const routingDigest = sha256(routing);
@@ -360,7 +367,7 @@ const globalRegistryUnique = new Set(production.batches.map((row) => row.batchId
 const snapshotExact = items.every(({ exact }) => exact)
   && production.reviewerProfiles.length === 1
   && sha256(stableIdentity)
-    === CLINICAL_CHILD_DEVELOPMENT_REFREEZE_BATCH_REVIEWER.identityCanonicalSha256
+    === CLINICAL_REVIEW_SUCCESSOR_REVIEWER.identityCanonicalSha256
   && predecessorExact
   && activeBatches.length === 0
   && newBatchAbsent
@@ -392,7 +399,7 @@ const fixture = {
   expectedPreviousReceiptId,
   expectedPreviousDecisionDigest,
   expectedPreviousReceiptDigest,
-  reviewer: CLINICAL_CHILD_DEVELOPMENT_REFREEZE_BATCH_REVIEWER,
+  reviewer: CLINICAL_REVIEW_SUCCESSOR_REVIEWER,
   items: manifest.items,
   freezeDigest,
   routingDigest,
