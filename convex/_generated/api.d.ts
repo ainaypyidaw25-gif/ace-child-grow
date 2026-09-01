@@ -76,6 +76,7 @@ import type * as lib_clinicalReviewBatchData from "../lib/clinicalReviewBatchDat
 import type * as lib_clinicalReviewBatchProvenance from "../lib/clinicalReviewBatchProvenance.js";
 import type * as lib_clinicalReviewCopyRelease from "../lib/clinicalReviewCopyRelease.js";
 import type * as lib_clinicalReviewRegistryContract from "../lib/clinicalReviewRegistryContract.js";
+import type * as lib_clinicalReviewSuccessorBatchData from "../lib/clinicalReviewSuccessorBatchData.js";
 import type * as lib_clinicalSafetySuccessorBatchData from "../lib/clinicalSafetySuccessorBatchData.js";
 import type * as lib_clinicalTwoSmallCasData from "../lib/clinicalTwoSmallCasData.js";
 import type * as lib_clinicalTwoSmallCasGuard from "../lib/clinicalTwoSmallCasGuard.js";
@@ -220,6 +221,7 @@ declare const fullApi: ApiFromModules<{
   "lib/clinicalReviewBatchProvenance": typeof lib_clinicalReviewBatchProvenance;
   "lib/clinicalReviewCopyRelease": typeof lib_clinicalReviewCopyRelease;
   "lib/clinicalReviewRegistryContract": typeof lib_clinicalReviewRegistryContract;
+  "lib/clinicalReviewSuccessorBatchData": typeof lib_clinicalReviewSuccessorBatchData;
   "lib/clinicalSafetySuccessorBatchData": typeof lib_clinicalSafetySuccessorBatchData;
   "lib/clinicalTwoSmallCasData": typeof lib_clinicalTwoSmallCasData;
   "lib/clinicalTwoSmallCasGuard": typeof lib_clinicalTwoSmallCasGuard;

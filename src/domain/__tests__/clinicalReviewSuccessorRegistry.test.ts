@@ -21,11 +21,11 @@ import {
 } from '../../../convex/clinicalReviewRegistry';
 import { sha256Canonical } from '../../../convex/lib/aiAuditHash';
 import {
-  CLINICAL_EVIDENCE_SUCCESSOR_BATCH_FROZEN_AT,
-  CLINICAL_EVIDENCE_SUCCESSOR_BATCH_HASH,
-  CLINICAL_EVIDENCE_SUCCESSOR_BATCH_MANIFEST,
-  CLINICAL_EVIDENCE_SUCCESSOR_BATCH_PREIMAGES,
-  CLINICAL_EVIDENCE_SUCCESSOR_PREVIOUS_RECEIPT_DIGEST,
+  CLINICAL_REVIEW_SUCCESSOR_BATCH_FROZEN_AT,
+  CLINICAL_REVIEW_SUCCESSOR_BATCH_HASH,
+  CLINICAL_REVIEW_SUCCESSOR_BATCH_MANIFEST,
+  CLINICAL_REVIEW_SUCCESSOR_BATCH_PREIMAGES,
+  CLINICAL_REVIEW_SUCCESSOR_PREVIOUS_RECEIPT_DIGEST,
   CLINICAL_REVIEW_BATCH_REGISTRY,
   clinicalReviewBatchRoutingPayload,
 } from '../../../convex/lib/clinicalReviewBatchData';
@@ -37,7 +37,7 @@ function clone<T>(value: T): T {
 }
 
 function productionLikeContext() {
-  const frozen = CLINICAL_EVIDENCE_SUCCESSOR_BATCH_PREIMAGES;
+  const frozen = CLINICAL_REVIEW_SUCCESSOR_BATCH_PREIMAGES;
   const tables: Record<string, Row[]> = {
     parentProfiles: [{
       _id: 'owner-profile',
@@ -90,7 +90,7 @@ function productionLikeContext() {
   let inserted = 0;
   const insert = vi.fn(async (table: string, value: Row) => {
     inserted += 1;
-    const id = `${table}-seq14-${inserted}`;
+    const id = `${table}-seq16-${inserted}`;
     (tables[table] ??= []).push({ _id: id, _creationTime: inserted, ...value });
     return id;
   });
@@ -123,7 +123,7 @@ async function registryDigest() {
   })));
 }
 
-describe('sequence-14 evidence successor registry handlers', () => {
+describe('sequence-16 clinical successor registry handlers', () => {
   beforeEach(() => {
     authState.userId = 'owner-user';
     livePreflight.blockers.mockReset();
@@ -134,44 +134,44 @@ describe('sequence-14 evidence successor registry handlers', () => {
     vi.restoreAllMocks();
   });
 
-  it('materializes seq14 and its registered successor, then consumes only the exact seq13 handoff', async () => {
+  it('materializes only seq16 and consumes only the exact seq15 handoff', async () => {
     vi.spyOn(Date, 'now').mockReturnValue(
-      CLINICAL_EVIDENCE_SUCCESSOR_BATCH_FROZEN_AT + 1,
+      CLINICAL_REVIEW_SUCCESSOR_BATCH_FROZEN_AT + 1,
     );
     const ctx = productionLikeContext();
     const decisionsBefore = clone(ctx.tables.contentReviews);
-    expect(ctx.tables.clinicalReviewBatches).toHaveLength(12);
-    expect(ctx.tables.clinicalReviewAssignments).toHaveLength(128);
-    expect(ctx.tables.clinicalReviewBatchReceipts).toHaveLength(8);
+    expect(ctx.tables.clinicalReviewBatches).toHaveLength(14);
+    expect(ctx.tables.clinicalReviewAssignments).toHaveLength(156);
+    expect(ctx.tables.clinicalReviewBatchReceipts).toHaveLength(10);
 
     await expect(handler(materializeRegisteredReleaseBatches)(ctx, {
       expectedRegistryDigest: await registryDigest(),
     })).resolves.toMatchObject({
       ok: true,
       code: 'materialized',
-      createdBatches: 3,
-      createdAssignments: 42,
+      createdBatches: 1,
+      createdAssignments: 14,
     });
     expect(ctx.tables.clinicalReviewBatches).toHaveLength(15);
     expect(ctx.tables.clinicalReviewAssignments).toHaveLength(170);
-    expect(ctx.tables.clinicalReviewBatchReceipts).toHaveLength(8);
+    expect(ctx.tables.clinicalReviewBatchReceipts).toHaveLength(10);
     expect(ctx.tables.contentReviews).toEqual(decisionsBefore);
     expect(ctx.tables.clinicalReviewBatches.find(
-      (row) => row.batchId === CLINICAL_EVIDENCE_SUCCESSOR_BATCH_MANIFEST.batchId,
+      (row) => row.batchId === CLINICAL_REVIEW_SUCCESSOR_BATCH_MANIFEST.batchId,
     )).toMatchObject({
-      sequence: 14,
-      dimension: 'evidence',
+      sequence: 16,
+      dimension: 'clinical',
       status: 'frozen',
       itemCount: 14,
       activationKind: 'after_handoff',
-      predecessorBatchId: 'clinical-english-successor-14-2026-08-31-v1',
+      predecessorBatchId: 'clinical-safety-successor-14-2026-09-01-v1',
     });
 
     ctx.db.insert.mockClear();
     ctx.db.patch.mockClear();
     await expect(handler(activateRegisteredBatch)(ctx, {
-      batchId: CLINICAL_EVIDENCE_SUCCESSOR_BATCH_MANIFEST.batchId,
-      expectedFreezeDigest: CLINICAL_EVIDENCE_SUCCESSOR_BATCH_HASH,
+      batchId: CLINICAL_REVIEW_SUCCESSOR_BATCH_MANIFEST.batchId,
+      expectedFreezeDigest: CLINICAL_REVIEW_SUCCESSOR_BATCH_HASH,
       expectedUpstreamReceiptDigest: '0'.repeat(64),
     })).resolves.toMatchObject({
       ok: false,
@@ -181,14 +181,14 @@ describe('sequence-14 evidence successor registry handlers', () => {
     expect(ctx.db.insert).not.toHaveBeenCalled();
 
     await expect(handler(activateRegisteredBatch)(ctx, {
-      batchId: CLINICAL_EVIDENCE_SUCCESSOR_BATCH_MANIFEST.batchId,
-      expectedFreezeDigest: CLINICAL_EVIDENCE_SUCCESSOR_BATCH_HASH,
+      batchId: CLINICAL_REVIEW_SUCCESSOR_BATCH_MANIFEST.batchId,
+      expectedFreezeDigest: CLINICAL_REVIEW_SUCCESSOR_BATCH_HASH,
       expectedUpstreamReceiptDigest:
-        CLINICAL_EVIDENCE_SUCCESSOR_PREVIOUS_RECEIPT_DIGEST,
+        CLINICAL_REVIEW_SUCCESSOR_PREVIOUS_RECEIPT_DIGEST,
     })).resolves.toMatchObject({
       ok: true,
       code: 'activated',
-      batchId: CLINICAL_EVIDENCE_SUCCESSOR_BATCH_MANIFEST.batchId,
+      batchId: CLINICAL_REVIEW_SUCCESSOR_BATCH_MANIFEST.batchId,
     });
     expect(livePreflight.blockers).toHaveBeenCalledTimes(1);
     expect(ctx.db.patch).toHaveBeenCalledTimes(1);
@@ -198,14 +198,14 @@ describe('sequence-14 evidence successor registry handlers', () => {
       (row) => row.status === 'active',
     )).toHaveLength(1);
     expect(ctx.tables.clinicalReviewBatches.find(
-      (row) => row.batchId === CLINICAL_EVIDENCE_SUCCESSOR_BATCH_MANIFEST.batchId,
+      (row) => row.batchId === CLINICAL_REVIEW_SUCCESSOR_BATCH_MANIFEST.batchId,
     )).toMatchObject({
       status: 'active',
       consumedUpstreamReceiptDigest:
-        CLINICAL_EVIDENCE_SUCCESSOR_PREVIOUS_RECEIPT_DIGEST,
-      activatedAt: CLINICAL_EVIDENCE_SUCCESSOR_BATCH_FROZEN_AT + 1,
+        CLINICAL_REVIEW_SUCCESSOR_PREVIOUS_RECEIPT_DIGEST,
+      activatedAt: CLINICAL_REVIEW_SUCCESSOR_BATCH_FROZEN_AT + 1,
     });
     expect(ctx.tables.contentReviews).toEqual(decisionsBefore);
-    expect(ctx.tables.clinicalReviewBatchReceipts).toHaveLength(8);
+    expect(ctx.tables.clinicalReviewBatchReceipts).toHaveLength(10);
   });
 });

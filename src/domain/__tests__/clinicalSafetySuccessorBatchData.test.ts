@@ -77,7 +77,9 @@ describe('Safety all-14 immutable successor data', () => {
       expectedPreviousDecisionDigest: CLINICAL_SAFETY_SUCCESSOR_PREVIOUS_DECISION_DIGEST,
       expectedPreviousReceiptDigest: CLINICAL_SAFETY_SUCCESSOR_PREVIOUS_RECEIPT_DIGEST,
     });
-    expect(CLINICAL_REVIEW_BATCH_REGISTRY.at(-1)).toEqual(registration);
+    expect(CLINICAL_REVIEW_BATCH_REGISTRY.find(
+      (entry) => entry.manifest.batchId === CLINICAL_SAFETY_SUCCESSOR_BATCH_ID,
+    )).toEqual(registration);
   });
 
   it('binds qualified Phyo Ko Ko to all fourteen exact current Production revisions', () => {
