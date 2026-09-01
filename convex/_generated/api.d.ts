@@ -129,6 +129,7 @@ import type * as nutritionGuidesCas from "../nutritionGuidesCas.js";
 import type * as observations from "../observations.js";
 import type * as olderSafety2026Cas from "../olderSafety2026Cas.js";
 import type * as olderSafety2026CasV2 from "../olderSafety2026CasV2.js";
+import type * as ownerAccountMerge from "../ownerAccountMerge.js";
 import type * as ownerPriority from "../ownerPriority.js";
 import type * as parent from "../parent.js";
 import type * as referrals from "../referrals.js";
@@ -274,6 +275,7 @@ declare const fullApi: ApiFromModules<{
   observations: typeof observations;
   olderSafety2026Cas: typeof olderSafety2026Cas;
   olderSafety2026CasV2: typeof olderSafety2026CasV2;
+  ownerAccountMerge: typeof ownerAccountMerge;
   ownerPriority: typeof ownerPriority;
   parent: typeof parent;
   referrals: typeof referrals;
