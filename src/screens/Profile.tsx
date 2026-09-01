@@ -207,10 +207,10 @@ export function Profile() {
             {locale === 'mm' ? 'မြန်မာ' : 'English'}
           </button>
         </div>
-        {!appStoreBuild && <Link to="/favorites" className="flex items-center justify-between py-2 text-sky-deep">
+        <Link to="/favorites" className="flex items-center justify-between py-2 text-sky-deep">
           <span>♥ {locale === 'mm' ? 'သိမ်းထားသော လှုပ်ရှားမှုများ' : 'Saved activities'}</span>
           <span aria-hidden>→</span>
-        </Link>}
+        </Link>
         {!appStoreBuild && <Link to="/offline" className="flex items-center justify-between py-2 text-sky-deep">
           <span>{locale === 'mm' ? 'အင်တာနက်မရှိချိန် ဖတ်ရှုရန် သိမ်းထားသည့် အကြောင်းအရာများ' : 'Offline downloads'}</span>
           <span aria-hidden>→</span>
