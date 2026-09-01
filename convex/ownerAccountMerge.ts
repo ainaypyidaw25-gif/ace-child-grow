@@ -8,6 +8,11 @@ import {
 import type { Doc, Id } from './_generated/dataModel';
 import { logAudit } from './audit';
 import { sha256Canonical } from './lib/aiAuditHash';
+import {
+  OWNER_ACCOUNT_MERGE_QUARANTINE_ACTION,
+  OWNER_ACCOUNT_MERGE_RELEASE_ID,
+  OWNER_ACCOUNT_MERGE_SOURCE_USER_ID,
+} from './lib/ownerAccountMergePolicy';
 
 /**
  * Exact, two-phase consolidation of the two Production Convex Auth users for
@@ -20,8 +25,7 @@ import { sha256Canonical } from './lib/aiAuditHash';
  * and audit rows retain the source user id as their historical actor.
  */
 
-export const OWNER_ACCOUNT_MERGE_RELEASE_ID =
-  'owner-account-merge-lapyaewun2690-2026-09-01-v1' as const;
+export { OWNER_ACCOUNT_MERGE_RELEASE_ID } from './lib/ownerAccountMergePolicy';
 export const OWNER_ACCOUNT_MERGE_QUARANTINE_CONFIRMATION =
   'confirm-owner-account-quarantine-lapyaewun2690-2026-09-01-v1' as const;
 export const OWNER_ACCOUNT_MERGE_FINALIZE_CONFIRMATION =
@@ -30,10 +34,10 @@ export const OWNER_ACCOUNT_MERGE_FINALIZE_CONFIRMATION =
 const EMAIL = 'lapyaewun2690@gmail.com';
 const QUALIFICATION = 'MEd (Early Childhood and Special Education)';
 const ACCESS_TOKEN_DRAIN_MS = 65 * 60 * 1_000;
-const QUARANTINE_ACTION = 'auth.account.merge_duplicate_owner.quarantine.2026_09_01_v1';
+const QUARANTINE_ACTION = OWNER_ACCOUNT_MERGE_QUARANTINE_ACTION;
 const FINALIZE_ACTION = 'auth.account.merge_duplicate_owner.finalize.2026_09_01_v1';
 
-const SOURCE_USER_ID = 'mn7en7gt4yc0w1fny6gfccqb8s8bck0m' as Id<'users'>;
+const SOURCE_USER_ID = OWNER_ACCOUNT_MERGE_SOURCE_USER_ID;
 const TARGET_USER_ID = 'mn79pqcdy108y85stdxvtvqcz18b8w9c' as Id<'users'>;
 const SOURCE_PROFILE_ID = 'md7ab5dgsg9h6ew6ah2n39f7v98bds46' as Id<'parentProfiles'>;
 const TARGET_PROFILE_ID = 'md7bqb9vjxytefqsdfd8p19cwd8b8vq8' as Id<'parentProfiles'>;
