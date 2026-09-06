@@ -55,6 +55,12 @@ export function Activities() {
               ? L('အသက်အရွယ်နှင့် ကိုက်ညီသော လှုပ်ရှားမှုများကို အခမဲ့ အသုံးပြုနိုင်ပါသည်။', 'Age-appropriate activities are available free.')
               : L('အခြေခံလှုပ်ရှားမှုများကို အခမဲ့ အသုံးပြုနိုင်ပါသည်။ အလိုအလျောက်နေ့စဉ်အစီအစဉ်နှင့် ပြီးစီးမှုမှတ်တမ်းအတွက် Premium စမ်းသုံးနိုင်ပါသည်။', 'Core activities are free. Try Premium for a personalized plan and completion history.')}
         </p>
+        <Link
+          to="/favorites"
+          className="mt-3 inline-flex min-h-touch items-center rounded-pill border border-line bg-white px-4 py-2 text-sm font-semibold text-sky-deep"
+        >
+          {L('သိမ်းထားသော လှုပ်ရှားမှုများ', 'Saved activities')}
+        </Link>
       </header>
 
       {premium && daily.length > 0 && (

@@ -30,7 +30,7 @@ const HopeCenter = APP_STORE_DISTRIBUTION ? null : lazy(() => import('../screens
 const Report = APP_STORE_DISTRIBUTION ? null : lazy(() => import('../screens/Report').then((module) => ({ default: module.Report })));
 const Profile = lazy(() => import('../screens/Profile').then((module) => ({ default: module.Profile })));
 const OfflineDownloads = APP_STORE_DISTRIBUTION ? null : lazy(() => import('../screens/OfflineDownloads').then((module) => ({ default: module.OfflineDownloads })));
-const Favorites = APP_STORE_DISTRIBUTION ? null : lazy(() => import('../screens/Favorites').then((module) => ({ default: module.Favorites })));
+const Favorites = lazy(() => import('../screens/Favorites').then((module) => ({ default: module.Favorites })));
 const Notifications = lazy(() => import('../screens/Notifications').then((module) => ({ default: module.Notifications })));
 const HealthcareDirectory = lazy(() => import('../screens/HealthcareDirectory').then((module) => ({ default: module.HealthcareDirectory })));
 const ChildProfile = lazy(() => import('../screens/ChildProfile').then((module) => ({ default: module.ChildProfile })));
@@ -284,7 +284,7 @@ function AppRoutes() {
       <Route path="/payment/cancel/:orderId" element={nativeStoreBuild || !PaymentStatus ? <Navigate to="/home" replace /> : <AppScreen><PaymentStatus view="cancel" /></AppScreen>} />
       <Route path="/payment/:orderId" element={nativeStoreBuild || !PaymentStatus ? <Navigate to="/home" replace /> : <AppScreen><PaymentStatus /></AppScreen>} />
       <Route path="/offline" element={appleAppStoreBuild || !OfflineDownloads ? <Navigate to="/home" replace /> : <AppScreen><OfflineDownloads /></AppScreen>} />
-      <Route path="/favorites" element={appleAppStoreBuild || !Favorites ? <Navigate to="/home" replace /> : <AppScreen><Favorites /></AppScreen>} />
+      <Route path="/favorites" element={<AppScreen><Favorites /></AppScreen>} />
       <Route path="/notifications" element={<AppScreen><Notifications /></AppScreen>} />
       <Route path="/directory" element={<AppScreen><HealthcareDirectory /></AppScreen>} />
       <Route path="/child-profile" element={<AppScreen><ChildProfile /></AppScreen>} />
