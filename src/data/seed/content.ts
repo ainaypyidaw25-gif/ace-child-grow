@@ -2,13 +2,13 @@
 //
 // EVERY item here is marked reviewStatus: 'clinical_review'. It may be shown as
 // clearly labelled, general educational content while professional review
-// continues, but MUST NOT be described as clinically approved. Reviewers can
+// continues, but MUST NOT be described as a personal professional endorsement. Reviewers can
 // revise it through the editorial workflow; it must never be used to diagnose.
 //
 // This file is a representative sample across age groups. The full catalogue
 // (8 milestones / 5 activities / 2 lessons / 1 safety tip / 1 awareness tip per
 // age group) is generated and reviewed through the Admin CMS — see
-// docs/content/clinical-review-policy.md. Do not hardcode the entire catalogue
+// docs/content/evidence-and-safety-review-policy.md. Do not hardcode the entire catalogue
 // as "published".
 
 import type { DevelopmentDomain } from '../../domain/types';
@@ -232,8 +232,8 @@ export const SAMPLE_AWARENESS: SeedAwarenessTopic[] = [
   {
     slug: 'cerebral-palsy',
     titleMm: 'ဦးနှောက်ဆိုင်ရာ ကြွက်သားထိန်းချုပ်မှု (Cerebral Palsy)', titleEn: 'Cerebral Palsy',
-    whatItMeansMm: 'ဦးနှောက် စောစီးစွာ ဖွံ့ဖြိုးမှုကြောင့် လှုပ်ရှားမှုနှင့် ကိုယ်ဟန်အနေအထားတွင် ကွဲပြားမှု ဖြစ်သည်။',
-    whatItMeansEn: 'A difference in movement and posture from early brain development.',
+    whatItMeansMm: 'ဖွံ့ဖြိုးဆဲ ဦးနှောက်၏ ပုံမှန်မဟုတ်သော ဖွံ့ဖြိုးမှု သို့မဟုတ် ထိခိုက်မှုကြောင့် လှုပ်ရှားမှုနှင့် ကိုယ်ဟန်အနေအထားကို သက်ရောက်စေသော အခြေအနေအုပ်စု ဖြစ်သည်။',
+    whatItMeansEn: 'A group of conditions affecting movement and posture caused by abnormal development of, or injury to, the developing brain.',
     whatItDoesNotMeanMm: 'ကလေး၏ ဉာဏ်ရည် (သို့) အလားအလာကို ဆုံးဖြတ်ပေးသည် မဟုတ်ပါ။',
     whatItDoesNotMeanEn: 'It does not define a child’s intelligence or potential.',
     reviewStatus: 'clinical_review',

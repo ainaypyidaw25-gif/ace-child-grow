@@ -1,0 +1,1755 @@
+{
+  "content": [
+    {
+      "ageGroupKey": "birth_2m",
+      "domainKey": "emotional",
+      "summaryMm": "မိဘ အပြည့်အဝ နိုးကြားနေချိန်တွင် ကလေး၏ အသက်ရှူလမ်းကြောင်းကို ရှင်းလင်းစွာထားပြီး ရင်ဘတ်ပေါ် အရေပြားချင်းထိ အနီးကပ်ပွေ့ချီပါ။",
+      "summaryEn": "While you are fully awake, hold your baby skin-to-skin on your chest for closeness and keep the airway clear.",
+      "difficulty": "easy",
+      "durationMinutes": 15,
+      "offline": true,
+      "tags": [
+        "social_activity",
+        "bonding",
+        "emotional",
+        "social",
+        "birth_2m"
+      ],
+      "data": {
+        "domains": [
+          "emotional",
+          "social"
+        ],
+        "materials": {
+          "mm": "ပါးလွှာသော စောင် သို့မဟုတ် ပုဆိုး",
+          "en": "A light blanket or longyi"
+        },
+        "setup": {
+          "mm": "သက်တောင့်သက်သာ ထိုင်ပါ။ ကလေး၏ ရင်ဘတ်ကို သင့်ရင်ဘတ်ပေါ် တင်ပါ။ ကျောပေါ်တွင် ပါးလွှာသော အဝတ် ခြုံပေးပါ။",
+          "en": "Sit comfortably, place your baby chest-to-chest with you, and cover the back with a light cloth."
+        },
+        "instructions": [
+          {
+            "mm": "ကလေး၏ ခေါင်းကို ဘေးတစ်ဖက်သို့ လှည့်ထား၍ အသက်ရှူလမ်းကြောင်း ရှင်းနေစေပါ။",
+            "en": "Turn the baby’s head to one side so the airway is clear."
+          },
+          {
+            "mm": "နူးညံ့စွာ စကားပြောပါ သို့မဟုတ် သီချင်းဆိုပါ။",
+            "en": "Talk softly or hum."
+          },
+          {
+            "mm": "ကလေး၏ အသက်ရှူမှုနှင့် အရောင်ကို မကြာခဏ ကြည့်ပါ။",
+            "en": "Check your baby’s breathing and colour often."
+          },
+          {
+            "mm": "သင် အိပ်ငိုက်လာလျှင် ကလေးကို ဘေးကင်းသော အိပ်ရာသို့ ပက်လက် ရွှေ့ပါ။",
+            "en": "If you feel sleepy, move your baby onto her back in a safe sleep space."
+          }
+        ],
+        "safety": {
+          "mm": "သင် အိပ်ငိုက်နေချိန်၊ ဆေးလိပ်သောက်ပြီးချိန်၊ အရက်/မူးယစ်ဆေး သုံးထားချိန်တွင် ဤနည်းကို မလုပ်ပါနှင့်။ ဆိုဖာ သို့မဟုတ် ကုလားထိုင်ပေါ်တွင် ကလေးနှင့်အတူ လုံးဝ အိပ်မပျော်ပါစေနှင့်။",
+          "en": "Do not do this if you are drowsy, have smoked, or have used alcohol or sedating drugs. Never fall asleep with your baby on a sofa or armchair."
+        },
+        "indoor": true,
+        "outdoor": false,
+        "oneChild": true,
+        "group": false,
+        "parentChild": true,
+        "outcomes": [
+          {
+            "mm": "မိဘ အပြည့်အဝ နိုးကြားနေချိန်တွင် ကလေးနှင့် အေးဆေးစွာ အနီးကပ်နေချိန် ရရှိရန်။",
+            "en": "Learning objective — spend calm, close time together while the parent is fully awake."
+          }
+        ],
+        "variations": [],
+        "lowCost": true,
+        "evidenceSummary": "WHO guidance directly supports immediate skin-to-skin contact in maternity and newborn services and breastfeeding support; this activity makes no claim that repeated at-home use improves feeding or treats distress. The fully-awake, airway, sofa/armchair and drowsiness cautions follow AAP safe-sleep guidance and NHS SIDS advice.",
+        "editorialStatus": "reference_verified"
+      },
+      "media": [
+        {
+          "kind": "illustration",
+          "placeholder": true,
+          "offline": true
+        },
+        {
+          "kind": "video",
+          "placeholder": true
+        }
+      ],
+      "type": "activity",
+      "slug": "act_skin_to_skin_calm",
+      "titleMm": "နိုးကြားနေချိန် အရေပြားချင်းထိ ပွေ့ချီခြင်း",
+      "titleEn": "Awake skin-to-skin closeness",
+      "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
+      "version": 1,
+      "clinicalStatus": "clinical_review",
+      "searchText": "နိုးကြားနေချိန် အရေပြားချင်းထိ ပွေ့ချီခြင်း awake skin-to-skin closeness မိဘ အပြည့်အဝ နိုးကြားနေချိန်တွင် ကလေး၏ အသက်ရှူလမ်းကြောင်းကို ရှင်းလင်းစွာထားပြီး ရင်ဘတ်ပေါ် အရေပြားချင်းထိ အနီးကပ်ပွေ့ချီပါ။ while you are fully awake, hold your baby skin-to-skin on your chest for closeness and keep the airway clear. social_activity bonding emotional social birth_2m emotional social ပါးလွှာသော စောင် သို့မဟုတ် ပုဆိုး a light blanket or longyi သက်တောင့်သက်သာ ထိုင်ပါ။ ကလေး၏ ရင်ဘတ်ကို သင့်ရင်ဘတ်ပေါ် တင်ပါ။ ကျောပေါ်တွင် ပါးလွှာသော အဝတ် ခြုံပေးပါ။ sit comfortably, place your baby chest-to-chest with you, and cover the back with a light cloth. ကလေး၏ ခေါင်းကို ဘေးတစ်ဖက်သို့ လှည့်ထား၍ အသက်ရှူလမ်းကြောင်း ရှင်းနေစေပါ။ turn the baby’s head to one side so the airway is clear. နူးညံ့စွာ စကားပြောပါ သို့မဟုတ် သီချင်းဆိုပါ။ talk softly or hum. ကလေး၏ အသက်ရှူမှုနှင့် အရောင်ကို မကြာခဏ ကြည့်ပါ။ check your baby’s breathing and colour often. သင် အိပ်ငိုက်လာလျှင် ကလေးကို ဘေးကင်းသော အိပ်ရာသို့ ပက်လက် ရွှေ့ပါ။ if you feel sleepy, move your baby onto her back in a safe sleep space. သင် အိပ်ငိုက်နေချိန်၊ ဆေးလိပ်သောက်ပြီးချိန်၊ အရက်/မူးယစ်ဆေး သုံးထားချိန်တွင် ဤနည်းကို မလုပ်ပါနှင့်။ ဆိုဖာ သို့မဟုတ် ကုလားထိုင်ပေါ်တွင် ကလေးနှင့်အတူ လုံးဝ အိပ်မပျော်ပါစေနှင့်။ do not do this if you are drowsy, have smoked, or have used alcohol or sedating drugs. never fall asleep with your baby on a sofa or armchair. မိဘ အပြည့်အဝ နိုးကြားနေချိန်တွင် ကလေးနှင့် အေးဆေးစွာ အနီးကပ်နေချိန် ရရှိရန်။ learning objective — spend calm, close time together while the parent is fully awake. who guidance directly supports immediate skin-to-skin contact in maternity and newborn services and breastfeeding support; this activity makes no claim that repeated at-home use improves feeding or treats distress. the fully-awake, airway, sofa/armchair and drowsiness cautions follow aap safe-sleep guidance and nhs sids advice. reference_verified"
+    },
+    {
+      "ageGroupKey": "birth_2m",
+      "domainKey": "sleep",
+      "tags": [
+        "sleep",
+        "birth_2m",
+        "guide"
+      ],
+      "summaryMm": "အိပ်စက်ခြင်းသည် ဦးနှောက် ဖွံ့ဖြိုးမှုနှင့် ကြီးထွားမှုအတွက် မရှိမဖြစ်ဖြစ်သည်။ ဘေးကင်းသော အိပ်ရာက အသက်ကို ကာကွယ်သည်။",
+      "summaryEn": "Sleep is essential for brain growth; safe sleep protects life.",
+      "data": {
+        "title": {
+          "mm": "မွေးကင်း–၂ လ — အိပ်စက်ခြင်း",
+          "en": "Birth–2 months — Sleep"
+        },
+        "why": {
+          "mm": "အိပ်စက်ခြင်းသည် ဦးနှောက် ဖွံ့ဖြိုးမှုနှင့် ကြီးထွားမှုအတွက် မရှိမဖြစ်ဖြစ်သည်။ ဘေးကင်းသော အိပ်ရာက အသက်ကို ကာကွယ်သည်။",
+          "en": "Sleep is essential for brain growth; safe sleep protects life."
+        },
+        "observationQuestions": [
+          {
+            "mm": "တစ်ရက်လျှင် ကြိမ်ဖန်များစွာ (၁၄–၁၇ နာရီခန့်) အိပ်ပါသလား။",
+            "en": "Sleeps often through the day (about 14–17 hours total)?"
+          },
+          {
+            "mm": "ပက်လက်လှန်၍ အိပ်ပါသလား။",
+            "en": "Sleeps on the back?"
+          }
+        ],
+        "dailyActivities": [
+          {
+            "mm": "နေ့/ည ကွာခြားမှုကို အလင်း/အမှောင်ဖြင့် သိစေပါ။",
+            "en": "Help day/night difference with light and dark."
+          }
+        ],
+        "indoor": [
+          {
+            "mm": "တိတ်ဆိတ်၍ အေးမြသော အိပ်ခန်း ဖန်တီးပါ။",
+            "en": "Keep a calm, cool sleep space."
+          }
+        ],
+        "lowCost": [
+          {
+            "mm": "ကလေးအတွက် လူကြီးအိပ်ရာနှင့် သီးခြားဖြစ်သော ဘေးကင်းသည့် အိပ်စက်နေရာထားပါ။ မွေ့ရာသည် ခိုင်ခံ့၊ ပြားညီပြီး မစောင်းရပါ။",
+            "en": "Give the baby a safe sleep space separate from the adult bed, with a firm, flat, non-inclined mattress."
+          }
+        ],
+        "materials": {
+          "mm": "ခိုင်ခံ့သော ပြားသော မွေ့ရာ။",
+          "en": "Firm flat sleep surface."
+        },
+        "safety": {
+          "mm": "ပက်လက်လှန် အိပ်ပါ။ မွေ့ရာပေါ်တွင် ခေါင်းအုံး၊ စောင်ပျော့၊ အရုပ် မထားပါနှင့်။ ဆေးလိပ်ငွေ့ ရှောင်ပါ။ ဤဘေးကင်းရေးအချက်များသည် ရုတ်တရက်သေဆုံးမှု (SIDS) အန္တရာယ်ကို လျှော့ချသည်။ အိပ်ချိန်နှင့် ညအိပ်ချိန်တွင် နို့သီးခေါင်း ပေးကြည့်နိုင်ပါသည် — ရုတ်တရက် သေဆုံးမှု အန္တရာယ် လျော့ကျစေကြောင်း တွေ့ရှိထားပါသည်။ နို့တိုက်နေပါက နို့တိုက်ခြင်း အသားကျပြီးမှ စတင်ပေးပါ။",
+          "en": "Back to sleep; no pillows, soft bedding, or toys in the sleep space; avoid smoke. These reduce SIDS risk. You can try offering a pacifier at nap time and bedtime — it is associated with a lower risk of SIDS. If you are breastfeeding, wait until feeding is well established before offering one."
+        },
+        "commonMistakes": [
+          {
+            "mm": "ကလေးအား ဗိုက်လှန်/ဘေးစောင်း အိပ်စေခြင်း သို့မဟုတ် နူးညံ့ပစ္စည်းများ ထားခြင်း။",
+            "en": "Placing baby on tummy/side or with soft items."
+          },
+          {
+            "mm": "အလေးချိန်ပါသော စောင်၊ အိပ်ဝတ်စုံ သို့မဟုတ် ပတ်ရစ်ပိတ်စများ သုံးခြင်း။",
+            "en": "Using weighted blankets, weighted sleepers or weighted swaddles."
+          },
+          {
+            "mm": "အိမ်သုံး အသက်ရှူ/နှလုံးခုန် စောင့်ကြည့်စက်ကို ဘေးကင်းစွာ အိပ်စေခြင်း၏ အစား အားကိုးခြင်း — အန္တရာယ် လျှော့ချပေးသည်ဟု သက်သေ မရှိပါ။",
+            "en": "Relying on a home breathing or heart-rate monitor instead of a safe sleep space — these have not been shown to reduce the risk of SIDS."
+          }
+        ],
+        "parentTips": [
+          {
+            "mm": "ကလေးအိပ်ချိန်တွင် သင်လည်း အနားယူပါ။",
+            "en": "Rest when your baby rests."
+          }
+        ],
+        "faq": [
+          {
+            "q": {
+              "mm": "ညတိုင်း အကြိမ်ကြိမ် နိုးတာ ပုံမှန်လား။",
+              "en": "Is frequent night waking normal?"
+            },
+            "a": {
+              "mm": "ဤအရွယ်တွင် ပုံမှန်ဖြစ်သည် — မွေးကင်းစများ မကြာခဏ နို့စို့ရန် နိုးတတ်သည်။",
+              "en": "Yes — newborns wake often to feed."
+            }
+          }
+        ],
+        "redFlags": [
+          {
+            "mm": "အသက်ရှူ ရပ်သွားခြင်း၊ အသက်ရှူ ခက်ခဲခြင်း သို့မဟုတ် အသက်ရှူသံ ညည်းသံလို ထွက်ခြင်း။",
+            "en": "Pauses in breathing, difficulty breathing, or grunting with each breath."
+          },
+          {
+            "mm": "နှုတ်ခမ်း၊ လျှာ သို့မဟုတ် အသားအရေ ပြာနှမ်း/မီးခိုးရောင် ဖြစ်ခြင်း။",
+            "en": "Lips, tongue or skin turning blue or grey."
+          },
+          {
+            "mm": "နိုးရ အလွန်ခက်ခြင်း သို့မဟုတ် လုံးဝ မနိုးခြင်း။",
+            "en": "Very hard to wake, or not waking at all."
+          },
+          {
+            "mm": "ကိုယ်ခန္ဓာ အလွန် ပျော့ခွေခြင်း။",
+            "en": "A very floppy body."
+          },
+          {
+            "mm": "အသက် ၃ လအောက် ဖျားခြင်း (၃၈°C နှင့်အထက်)။",
+            "en": "Any fever in a baby under 3 months (38°C / 100.4°F or above)."
+          }
+        ],
+        "referral": {
+          "mm": "အထက်ပါတို့ တွေ့ပါက ချက်ချင်း အနီးဆုံး ဆေးရုံသို့ သွားပါ — စောင့်၍ မရပါ။ ဤသည်မှာ အရေးပေါ် ဖြစ်ပြီး ဤ app သည် အရေးပေါ် ဝန်ဆောင်မှု မဟုတ်ပါ။",
+          "en": "Go to the nearest hospital immediately if you notice any of these — do not wait. This is an emergency, and this app is not an emergency service."
+        },
+        "encouragement": {
+          "mm": "အိပ်ချိန်ပုံစံသည် တဖြည်းဖြည်း တည်ငြိမ်လာမည် — သည်းခံပါ။",
+          "en": "Sleep patterns settle with time — be patient with yourself."
+        }
+      },
+      "type": "guide",
+      "slug": "gd_birth_2m_sleep",
+      "titleMm": "မွေးကင်း–၂ လ — အိပ်စက်ခြင်း",
+      "titleEn": "Birth–2 months — Sleep",
+      "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
+      "version": 1,
+      "clinicalStatus": "clinical_review",
+      "media": [],
+      "searchText": "မွေးကင်း–၂ လ — အိပ်စက်ခြင်း birth–2 months — sleep အိပ်စက်ခြင်းသည် ဦးနှောက် ဖွံ့ဖြိုးမှုနှင့် ကြီးထွားမှုအတွက် မရှိမဖြစ်ဖြစ်သည်။ ဘေးကင်းသော အိပ်ရာက အသက်ကို ကာကွယ်သည်။ sleep is essential for brain growth; safe sleep protects life. sleep birth_2m guide မွေးကင်း–၂ လ — အိပ်စက်ခြင်း birth–2 months — sleep အိပ်စက်ခြင်းသည် ဦးနှောက် ဖွံ့ဖြိုးမှုနှင့် ကြီးထွားမှုအတွက် မရှိမဖြစ်ဖြစ်သည်။ ဘေးကင်းသော အိပ်ရာက အသက်ကို ကာကွယ်သည်။ sleep is essential for brain growth; safe sleep protects life. တစ်ရက်လျှင် ကြိမ်ဖန်များစွာ (၁၄–၁၇ နာရီခန့်) အိပ်ပါသလား။ sleeps often through the day (about 14–17 hours total)? ပက်လက်လှန်၍ အိပ်ပါသလား။ sleeps on the back? နေ့/ည ကွာခြားမှုကို အလင်း/အမှောင်ဖြင့် သိစေပါ။ help day/night difference with light and dark. တိတ်ဆိတ်၍ အေးမြသော အိပ်ခန်း ဖန်တီးပါ။ keep a calm, cool sleep space. ကလေးအတွက် လူကြီးအိပ်ရာနှင့် သီးခြားဖြစ်သော ဘေးကင်းသည့် အိပ်စက်နေရာထားပါ။ မွေ့ရာသည် ခိုင်ခံ့၊ ပြားညီပြီး မစောင်းရပါ။ give the baby a safe sleep space separate from the adult bed, with a firm, flat, non-inclined mattress. ခိုင်ခံ့သော ပြားသော မွေ့ရာ။ firm flat sleep surface. ပက်လက်လှန် အိပ်ပါ။ မွေ့ရာပေါ်တွင် ခေါင်းအုံး၊ စောင်ပျော့၊ အရုပ် မထားပါနှင့်။ ဆေးလိပ်ငွေ့ ရှောင်ပါ။ ဤဘေးကင်းရေးအချက်များသည် ရုတ်တရက်သေဆုံးမှု (sids) အန္တရာယ်ကို လျှော့ချသည်။ အိပ်ချိန်နှင့် ညအိပ်ချိန်တွင် နို့သီးခေါင်း ပေးကြည့်နိုင်ပါသည် — ရုတ်တရက် သေဆုံးမှု အန္တရာယ် လျော့ကျစေကြောင်း တွေ့ရှိထားပါသည်။ နို့တိုက်နေပါက နို့တိုက်ခြင်း အသားကျပြီးမှ စတင်ပေးပါ။ back to sleep; no pillows, soft bedding, or toys in the sleep space; avoid smoke. these reduce sids risk. you can try offering a pacifier at nap time and bedtime — it is associated with a lower risk of sids. if you are breastfeeding, wait until feeding is well established before offering one. ကလေးအား ဗိုက်လှန်/ဘေးစောင်း အိပ်စေခြင်း သို့မဟုတ် နူးညံ့ပစ္စည်းများ ထားခြင်း။ placing baby on tummy/side or with soft items. အလေးချိန်ပါသော စောင်၊ အိပ်ဝတ်စုံ သို့မဟုတ် ပတ်ရစ်ပိတ်စများ သုံးခြင်း။ using weighted blankets, weighted sleepers or weighted swaddles. အိမ်သုံး အသက်ရှူ/နှလုံးခုန် စောင့်ကြည့်စက်ကို ဘေးကင်းစွာ အိပ်စေခြင်း၏ အစား အားကိုးခြင်း — အန္တရာယ် လျှော့ချပေးသည်ဟု သက်သေ မရှိပါ။ relying on a home breathing or heart-rate monitor instead of a safe sleep space — these have not been shown to reduce the risk of sids. ကလေးအိပ်ချိန်တွင် သင်လည်း အနားယူပါ။ rest when your baby rests. ညတိုင်း အကြိမ်ကြိမ် နိုးတာ ပုံမှန်လား။ is frequent night waking normal? ဤအရွယ်တွင် ပုံမှန်ဖြစ်သည် — မွေးကင်းစများ မကြာခဏ နို့စို့ရန် နိုးတတ်သည်။ yes — newborns wake often to feed. အသက်ရှူ ရပ်သွားခြင်း၊ အသက်ရှူ ခက်ခဲခြင်း သို့မဟုတ် အသက်ရှူသံ ညည်းသံလို ထွက်ခြင်း။ pauses in breathing, difficulty breathing, or grunting with each breath. နှုတ်ခမ်း၊ လျှာ သို့မဟုတ် အသားအရေ ပြာနှမ်း/မီးခိုးရောင် ဖြစ်ခြင်း။ lips, tongue or skin turning blue or grey. နိုးရ အလွန်ခက်ခြင်း သို့မဟုတ် လုံးဝ မနိုးခြင်း။ very hard to wake, or not waking at all. ကိုယ်ခန္ဓာ အလွန် ပျော့ခွေခြင်း။ a very floppy body. အသက် ၃ လအောက် ဖျားခြင်း (၃၈°c နှင့်အထက်)။ any fever in a baby under 3 months (38°c / 100.4°f or above). အထက်ပါတို့ တွေ့ပါက ချက်ချင်း အနီးဆုံး ဆေးရုံသို့ သွားပါ — စောင့်၍ မရပါ။ ဤသည်မှာ အရေးပေါ် ဖြစ်ပြီး ဤ app သည် အရေးပေါ် ဝန်ဆောင်မှု မဟုတ်ပါ။ go to the nearest hospital immediately if you notice any of these — do not wait. this is an emergency, and this app is not an emergency service. အိပ်ချိန်ပုံစံသည် တဖြည်းဖြည်း တည်ငြိမ်လာမည် — သည်းခံပါ။ sleep patterns settle with time — be patient with yourself."
+    },
+    {
+      "ageGroupKey": "5_6m",
+      "domainKey": "nutrition",
+      "tags": [
+        "nutrition",
+        "5_6m",
+        "guide"
+      ],
+      "summaryMm": "၆ လခန့်တွင် ဖြည့်စွက်စာ စတင်ကျွေးခြင်းသည် ကြီးထွားမှုနှင့် အရသာ သင်ယူမှုအတွက် အရေးကြီးသည်။",
+      "summaryEn": "Around 6 months, starting solids supports growth and taste learning.",
+      "data": {
+        "title": {
+          "mm": "၅–၆ လ — အာဟာရ (ဖြည့်စွက်စာ စတင်ခြင်း)",
+          "en": "5–6 months — Nutrition (starting solids)"
+        },
+        "why": {
+          "mm": "၆ လခန့်တွင် ဖြည့်စွက်စာ စတင်ကျွေးခြင်းသည် ကြီးထွားမှုနှင့် အရသာ သင်ယူမှုအတွက် အရေးကြီးသည်။",
+          "en": "Around 6 months, starting solids supports growth and taste learning."
+        },
+        "observationQuestions": [
+          {
+            "mm": "ခေါင်းကို တည်ငြိမ်စွာ ထိန်း၍ အထောက်ဖြင့် ထိုင်နိုင်ပါသလား။",
+            "en": "Holds head steady and sits with support?"
+          },
+          {
+            "mm": "အစားအစာကို စိတ်ဝင်စား၍ ပါးစပ်ဟပါသလား။",
+            "en": "Shows interest in food and opens mouth?"
+          }
+        ],
+        "dailyActivities": [
+          {
+            "mm": "ချောမွေ့သော အစားအစာ အနည်းငယ်မှ စတင်ပါ။",
+            "en": "Begin with small amounts of smooth food."
+          }
+        ],
+        "weeklyActivities": [
+          {
+            "mm": "အစားအစာ အသစ်တစ်မျိုးစီကို မိတ်ဆက်ပြီး ၃ ရက်မှ ၅ ရက် စောင့်ကြည့်ပါ။",
+            "en": "Introduce one new food at a time and wait 3 to 5 days."
+          }
+        ],
+        "indoor": [
+          {
+            "mm": "မိသားစုနှင့်အတူ စားပွဲတွင် ထိုင်စားစေပါ။",
+            "en": "Let baby join family mealtimes."
+          }
+        ],
+        "lowCost": [
+          {
+            "mm": "ဒေသထွက် အသီးအနှံ/အသီးအရွက်များကို ချက်၍ ချေပါ။",
+            "en": "Use local, affordable fruits/vegetables mashed."
+          }
+        ],
+        "materials": {
+          "mm": "နူးညံ့ဇွန်း၊ ခွက်၊ ဒေသထွက် အစားအစာ။",
+          "en": "Soft spoon, bowl, local foods."
+        },
+        "safety": {
+          "mm": "အသက် ၁ နှစ်မပြည့်သေးသော ကလေးကို ပျားရည် မပေးပါနှင့်။ အသက်ရှူလမ်းကြောင်း ပိတ်ဆို့စေနိုင်သည့် အရွယ်အစားနှင့် ပုံသဏ္ဌာန်ရှိသော အစားအစာများကို ရှောင်ပြီး စားနေစဉ် အမြဲ အနီးကပ်ကြီးကြပ်ပါ။",
+          "en": "No honey under 1 year; avoid choking shapes; always supervise eating."
+        },
+        "commonMistakes": [
+          {
+            "mm": "ဆား/သကြား ထည့်ခြင်း သို့မဟုတ် နို့ပုလင်းဖြင့် ဖြည့်စွက်အစားအစာကို အစားထိုးခြင်း။",
+            "en": "Adding salt/sugar, or replacing complementary foods with bottles."
+          }
+        ],
+        "parentTips": [
+          {
+            "mm": "မိခင်နို့/နို့ကို ဆက်တိုက်ပေးရင်း အစိုင်အခဲကို ဖြည့်ပါ။",
+            "en": "Continue breast/formula milk alongside solids."
+          }
+        ],
+        "faq": [
+          {
+            "q": {
+              "mm": "အစားအစာ ငြင်းရင် ဘယ်လိုလုပ်မလဲ။",
+              "en": "What if baby refuses food?"
+            },
+            "a": {
+              "mm": "ထပ်ခါ တင်ပြပါ — အသစ်တစ်ခုကို လက်ခံဖို့ အကြိမ်များစွာ လိုနိုင်သည်။",
+              "en": "Keep offering — new foods often take many tries."
+            }
+          },
+          {
+            "q": {
+              "mm": "ဓာတ်မတည့်တတ်သော အစားအစာများ (ဥ၊ မြေပဲ၊ ငါး) ကို ရှောင်သင့်ပါသလား။",
+              "en": "Should I avoid common allergy foods (egg, peanut, fish)?"
+            },
+            "a": {
+              "mm": "ရှောင်ရန် မလိုပါ။ ကလေးသည် ဖြည့်စွက်အစားအစာ စတင်စားရန် အသင့်ဖြစ်သည့်အချိန် (များသောအားဖြင့် ခြောက်လခန့်တွင် ခေါင်းကို တည်ငြိမ်စွာ ထိန်းနိုင်ပြီး အကူအညီဖြင့် ထိုင်နိုင်ချိန်) ရောက်ပါက ဥ၊ ငါး၊ ချောမွေ့အောင် ဖျော်ထားသော မြေပဲထောပတ်နှင့် အချိုမပါ ပိုးသတ်အပူပေးထားသော ဒိန်ချဉ် သို့မဟုတ် ချိစ်ကဲ့သို့ နို့ထွက်အစားအစာများကို (နွားနို့ကို အသက် ၁၂ လမတိုင်မီ အဓိကသောက်စရာအဖြစ် မပေးဘဲ) တစ်မျိုးချင်း အနည်းငယ်စီ စတင်ပေးနိုင်ပါသည်။ အသက်ရှူလမ်းကြောင်း မပိတ်ဆို့စေရန် အစာကို ချောမွေ့နူးညံ့သော ပုံစံဖြင့်ပေးပြီး စားနေစဉ် အမြဲ အနီးကပ်ကြီးကြပ်ပါ။ အစားအစာအသစ် တစ်မျိုးနှင့်တစ်မျိုးကြား ၃ ရက်မှ ၅ ရက် စောင့်ကြည့်ပါ။ အရေပြားယားယံခြင်း၊ အဖုအပိန့်ထွက်ခြင်း သို့မဟုတ် အော့အန်ခြင်း ဖြစ်ပါက ဆက်မပေးဘဲ ကျန်းမာရေးဝန်ထမ်းနှင့် တိုင်ပင်ပါ။ နှုတ်ခမ်း သို့မဟုတ် မျက်နှာရောင်ခြင်း၊ အသက်ရှူခက်ခြင်း ဖြစ်ပါက အရေးပေါ် ဆေးကုသမှု ချက်ချင်းခံယူပါ။ ကလေးတွင် ပြင်းထန်သော အရေပြားရောင်ရမ်းနာ သို့မဟုတ် ဥနှင့် ဓာတ်မတည့်မှု ရှိပါက မြေပဲမစတင်မီ ဆရာဝန်နှင့် တိုင်ပင်ပါ။ သိရှိထားသော အစားအစာဓာတ်မတည့်မှု သို့မဟုတ် အစားအစာတစ်မျိုးကို ယခင်က တုံ့ပြန်မှု ဖြစ်ဖူးပါက ထိုအစားအစာကို ဘေးကင်းစွာ မိတ်ဆက်ပုံကို ဆရာဝန်အား မေးမြန်းပါ။",
+              "en": "There is no need to avoid them. Once your baby is developmentally ready for solids (around six months, holding the head steady and sitting with support), common allergen foods—egg, fish, smooth peanut paste, and pasteurized dairy foods such as plain yogurt or cheese (not cow’s milk as a main drink before 12 months)—can be introduced one at a time in small amounts. Offer them only in a smooth, soft, choking-safe texture and always supervise eating. Wait 3 to 5 days between each new food. If you see a rash, hives or vomiting, stop and talk to a health worker. If the lips or face swell or breathing becomes difficult, seek emergency care immediately. If your child has severe eczema or egg allergy, talk with a doctor before introducing peanut. If your child has a known food allergy or has previously reacted to a food, ask a doctor how to introduce that food safely."
+            }
+          }
+        ],
+        "redFlags": [
+          {
+            "mm": "ကိုယ်အလေးချိန် မတက်ခြင်း သို့မဟုတ် ကျဆင်းခြင်း။",
+            "en": "Weight not rising, or falling."
+          },
+          {
+            "mm": "ထပ်ခါထပ်ခါ အန်ခြင်း သို့မဟုတ် ဝမ်းလျှောခြင်း။",
+            "en": "Repeated vomiting or diarrhoea."
+          },
+          {
+            "mm": "မျိုချရ ခက်ခဲခြင်း၊ စားတိုင်း ချောင်းဆိုး/တစ်ဆို့ခြင်း။",
+            "en": "Difficulty swallowing, or coughing and choking at every feed."
+          },
+          {
+            "mm": "ဆီးအရေအတွက် သိသိသာသာ လျော့ကျခြင်း၊ ပါးစပ် ခြောက်ခြင်း သို့မဟုတ် မျက်လုံး ချိုင့်ဝင်ခြင်း — ရေဓာတ်ခန်းခြောက်မှု လက္ခဏာများ ဖြစ်ပါသည်။",
+            "en": "A clear drop in the number of wet nappies, a dry mouth, or sunken eyes — these are signs of dehydration."
+          }
+        ],
+        "referral": {
+          "mm": "အထက်ပါတို့ တွေ့ပါက ကျန်းမာရေးဝန်ထမ်းနှင့် အမြန်ဆုံး ပြသပါ — ရင်သွေးငယ်များတွင် ရေဓာတ်ခန်းခြောက်မှု လျင်မြန်စွာ ဖြစ်နိုင်ပါသည်။ ရေဓာတ်ခန်းခြောက်မှု လက္ခဏာ ပါလျှင် ချက်ချင်း ပြသပါ။",
+          "en": "See a health worker promptly if you notice any of these — dehydration develops quickly in infants. If there are signs of dehydration, seek care immediately."
+        },
+        "encouragement": {
+          "mm": "စားခြင်းကို ပျော်ရွှင်ဖွယ် ဖြစ်စေပါ — ဖိအားမပေးပါနှင့်။",
+          "en": "Keep mealtimes happy — no pressure."
+        }
+      },
+      "type": "guide",
+      "slug": "gd_5_6m_nutrition",
+      "titleMm": "၅–၆ လ — အာဟာရ (ဖြည့်စွက်စာ စတင်ခြင်း)",
+      "titleEn": "5–6 months — Nutrition (starting solids)",
+      "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
+      "version": 1,
+      "clinicalStatus": "clinical_review",
+      "media": [],
+      "searchText": "၅–၆ လ — အာဟာရ (ဖြည့်စွက်စာ စတင်ခြင်း) 5–6 months — nutrition (starting solids) ၆ လခန့်တွင် ဖြည့်စွက်စာ စတင်ကျွေးခြင်းသည် ကြီးထွားမှုနှင့် အရသာ သင်ယူမှုအတွက် အရေးကြီးသည်။ around 6 months, starting solids supports growth and taste learning. nutrition 5_6m guide ၅–၆ လ — အာဟာရ (ဖြည့်စွက်စာ စတင်ခြင်း) 5–6 months — nutrition (starting solids) ၆ လခန့်တွင် ဖြည့်စွက်စာ စတင်ကျွေးခြင်းသည် ကြီးထွားမှုနှင့် အရသာ သင်ယူမှုအတွက် အရေးကြီးသည်။ around 6 months, starting solids supports growth and taste learning. ခေါင်းကို တည်ငြိမ်စွာ ထိန်း၍ အထောက်ဖြင့် ထိုင်နိုင်ပါသလား။ holds head steady and sits with support? အစားအစာကို စိတ်ဝင်စား၍ ပါးစပ်ဟပါသလား။ shows interest in food and opens mouth? ချောမွေ့သော အစားအစာ အနည်းငယ်မှ စတင်ပါ။ begin with small amounts of smooth food. အစားအစာ အသစ်တစ်မျိုးစီကို မိတ်ဆက်ပြီး ၃ ရက်မှ ၅ ရက် စောင့်ကြည့်ပါ။ introduce one new food at a time and wait 3 to 5 days. မိသားစုနှင့်အတူ စားပွဲတွင် ထိုင်စားစေပါ။ let baby join family mealtimes. ဒေသထွက် အသီးအနှံ/အသီးအရွက်များကို ချက်၍ ချေပါ။ use local, affordable fruits/vegetables mashed. နူးညံ့ဇွန်း၊ ခွက်၊ ဒေသထွက် အစားအစာ။ soft spoon, bowl, local foods. အသက် ၁ နှစ်မပြည့်သေးသော ကလေးကို ပျားရည် မပေးပါနှင့်။ အသက်ရှူလမ်းကြောင်း ပိတ်ဆို့စေနိုင်သည့် အရွယ်အစားနှင့် ပုံသဏ္ဌာန်ရှိသော အစားအစာများကို ရှောင်ပြီး စားနေစဉ် အမြဲ အနီးကပ်ကြီးကြပ်ပါ။ no honey under 1 year; avoid choking shapes; always supervise eating. ဆား/သကြား ထည့်ခြင်း သို့မဟုတ် နို့ပုလင်းဖြင့် ဖြည့်စွက်အစားအစာကို အစားထိုးခြင်း။ adding salt/sugar, or replacing complementary foods with bottles. မိခင်နို့/နို့ကို ဆက်တိုက်ပေးရင်း အစိုင်အခဲကို ဖြည့်ပါ။ continue breast/formula milk alongside solids. အစားအစာ ငြင်းရင် ဘယ်လိုလုပ်မလဲ။ what if baby refuses food? ထပ်ခါ တင်ပြပါ — အသစ်တစ်ခုကို လက်ခံဖို့ အကြိမ်များစွာ လိုနိုင်သည်။ keep offering — new foods often take many tries. ဓာတ်မတည့်တတ်သော အစားအစာများ (ဥ၊ မြေပဲ၊ ငါး) ကို ရှောင်သင့်ပါသလား။ should i avoid common allergy foods (egg, peanut, fish)? ရှောင်ရန် မလိုပါ။ ကလေးသည် ဖြည့်စွက်အစားအစာ စတင်စားရန် အသင့်ဖြစ်သည့်အချိန် (များသောအားဖြင့် ခြောက်လခန့်တွင် ခေါင်းကို တည်ငြိမ်စွာ ထိန်းနိုင်ပြီး အကူအညီဖြင့် ထိုင်နိုင်ချိန်) ရောက်ပါက ဥ၊ ငါး၊ ချောမွေ့အောင် ဖျော်ထားသော မြေပဲထောပတ်နှင့် အချိုမပါ ပိုးသတ်အပူပေးထားသော ဒိန်ချဉ် သို့မဟုတ် ချိစ်ကဲ့သို့ နို့ထွက်အစားအစာများကို (နွားနို့ကို အသက် ၁၂ လမတိုင်မီ အဓိကသောက်စရာအဖြစ် မပေးဘဲ) တစ်မျိုးချင်း အနည်းငယ်စီ စတင်ပေးနိုင်ပါသည်။ အသက်ရှူလမ်းကြောင်း မပိတ်ဆို့စေရန် အစာကို ချောမွေ့နူးညံ့သော ပုံစံဖြင့်ပေးပြီး စားနေစဉ် အမြဲ အနီးကပ်ကြီးကြပ်ပါ။ အစားအစာအသစ် တစ်မျိုးနှင့်တစ်မျိုးကြား ၃ ရက်မှ ၅ ရက် စောင့်ကြည့်ပါ။ အရေပြားယားယံခြင်း၊ အဖုအပိန့်ထွက်ခြင်း သို့မဟုတ် အော့အန်ခြင်း ဖြစ်ပါက ဆက်မပေးဘဲ ကျန်းမာရေးဝန်ထမ်းနှင့် တိုင်ပင်ပါ။ နှုတ်ခမ်း သို့မဟုတ် မျက်နှာရောင်ခြင်း၊ အသက်ရှူခက်ခြင်း ဖြစ်ပါက အရေးပေါ် ဆေးကုသမှု ချက်ချင်းခံယူပါ။ ကလေးတွင် ပြင်းထန်သော အရေပြားရောင်ရမ်းနာ သို့မဟုတ် ဥနှင့် ဓာတ်မတည့်မှု ရှိပါက မြေပဲမစတင်မီ ဆရာဝန်နှင့် တိုင်ပင်ပါ။ သိရှိထားသော အစားအစာဓာတ်မတည့်မှု သို့မဟုတ် အစားအစာတစ်မျိုးကို ယခင်က တုံ့ပြန်မှု ဖြစ်ဖူးပါက ထိုအစားအစာကို ဘေးကင်းစွာ မိတ်ဆက်ပုံကို ဆရာဝန်အား မေးမြန်းပါ။ there is no need to avoid them. once your baby is developmentally ready for solids (around six months, holding the head steady and sitting with support), common allergen foods—egg, fish, smooth peanut paste, and pasteurized dairy foods such as plain yogurt or cheese (not cow’s milk as a main drink before 12 months)—can be introduced one at a time in small amounts. offer them only in a smooth, soft, choking-safe texture and always supervise eating. wait 3 to 5 days between each new food. if you see a rash, hives or vomiting, stop and talk to a health worker. if the lips or face swell or breathing becomes difficult, seek emergency care immediately. if your child has severe eczema or egg allergy, talk with a doctor before introducing peanut. if your child has a known food allergy or has previously reacted to a food, ask a doctor how to introduce that food safely. ကိုယ်အလေးချိန် မတက်ခြင်း သို့မဟုတ် ကျဆင်းခြင်း။ weight not rising, or falling. ထပ်ခါထပ်ခါ အန်ခြင်း သို့မဟုတ် ဝမ်းလျှောခြင်း။ repeated vomiting or diarrhoea. မျိုချရ ခက်ခဲခြင်း၊ စားတိုင်း ချောင်းဆိုး/တစ်ဆို့ခြင်း။ difficulty swallowing, or coughing and choking at every feed. ဆီးအရေအတွက် သိသိသာသာ လျော့ကျခြင်း၊ ပါးစပ် ခြောက်ခြင်း သို့မဟုတ် မျက်လုံး ချိုင့်ဝင်ခြင်း — ရေဓာတ်ခန်းခြောက်မှု လက္ခဏာများ ဖြစ်ပါသည်။ a clear drop in the number of wet nappies, a dry mouth, or sunken eyes — these are signs of dehydration. အထက်ပါတို့ တွေ့ပါက ကျန်းမာရေးဝန်ထမ်းနှင့် အမြန်ဆုံး ပြသပါ — ရင်သွေးငယ်များတွင် ရေဓာတ်ခန်းခြောက်မှု လျင်မြန်စွာ ဖြစ်နိုင်ပါသည်။ ရေဓာတ်ခန်းခြောက်မှု လက္ခဏာ ပါလျှင် ချက်ချင်း ပြသပါ။ see a health worker promptly if you notice any of these — dehydration develops quickly in infants. if there are signs of dehydration, seek care immediately. စားခြင်းကို ပျော်ရွှင်ဖွယ် ဖြစ်စေပါ — ဖိအားမပေးပါနှင့်။ keep mealtimes happy — no pressure."
+    },
+    {
+      "ageGroupKey": "7_9m",
+      "domainKey": "nutrition",
+      "tags": [
+        "nutrition",
+        "7_9m",
+        "guide"
+      ],
+      "summaryMm": "ဤအရွယ်တွင် အစားအစာသည် နို့ကို ဖြည့်စွက်ပေးရန် ဖြစ်ပြီး အစားထိုးရန် မဟုတ်ပါ။ ကမ္ဘာ့ကျန်းမာရေးအဖွဲ့က ၆ လမှ ၈ လအရွယ်တွင် တစ်နေ့လျှင် အစာ နှစ်နပ်မှ သုံးနပ်၊ ၉ လမှ စ၍ သုံးနပ်နှင့် အကြားစာ တစ်နပ်မှ နှစ်နပ် အကြံပြုပြီး နှစ်နှစ်နှင့် အထက်ထိ နို့တိုက်ရန် ဖြစ်သည်။ ဤကာလတွင် သံဓာတ် လိုအပ်ချက် မြင့်တက်လာသဖြင့် သံဓာတ်ကြွယ်ဝသော အစာများ လိုအပ်သည်။",
+      "summaryEn": "Food complements milk now; it does not replace it. WHO guidance is two to three meals a day at 6–8 months and three meals plus one or two snacks from 9 months, alongside breastfeeding into the second year and beyond. Iron needs rise sharply, so iron-rich foods matter.",
+      "data": {
+        "title": {
+          "mm": "၇ – ၉ လ — အာဟာရ လမ်းညွှန်",
+          "en": "7–9 months — Nutrition guide"
+        },
+        "why": {
+          "mm": "ဤအရွယ်တွင် အစားအစာသည် နို့ကို ဖြည့်စွက်ပေးရန် ဖြစ်ပြီး အစားထိုးရန် မဟုတ်ပါ။ ကမ္ဘာ့ကျန်းမာရေးအဖွဲ့က ၆ လမှ ၈ လအရွယ်တွင် တစ်နေ့လျှင် အစာ နှစ်နပ်မှ သုံးနပ်၊ ၉ လမှ စ၍ သုံးနပ်နှင့် အကြားစာ တစ်နပ်မှ နှစ်နပ် အကြံပြုပြီး နှစ်နှစ်နှင့် အထက်ထိ နို့တိုက်ရန် ဖြစ်သည်။ ဤကာလတွင် သံဓာတ် လိုအပ်ချက် မြင့်တက်လာသဖြင့် သံဓာတ်ကြွယ်ဝသော အစာများ လိုအပ်သည်။",
+          "en": "Food complements milk now; it does not replace it. WHO guidance is two to three meals a day at 6–8 months and three meals plus one or two snacks from 9 months, alongside breastfeeding into the second year and beyond. Iron needs rise sharply, so iron-rich foods matter."
+        },
+        "observationQuestions": [
+          {
+            "mm": "တစ်နေ့လျှင် အစာ ဘယ်နှစ်နပ် စားပါသလဲ။",
+            "en": "How many meals a day is she eating?"
+          },
+          {
+            "mm": "သံဓာတ်ပါသော အစာ (အသားညက်၊ ကြက်ဥ၊ ပဲ၊ အသည်း) ပါဝင်ပါသလား။",
+            "en": "Do her meals include iron-rich foods — minced meat, egg, beans, liver?"
+          },
+          {
+            "mm": "အစာ ပျစ်ခဲမှုကို တဖြည်းဖြည်း တိုးပေးနေပါသလား။",
+            "en": "Are you slowly increasing the thickness and texture?"
+          },
+          {
+            "mm": "စားနေစဉ် ကလေးက ကျေနပ်မှု ပြသပါသလား။",
+            "en": "Does she seem content during meals?"
+          }
+        ],
+        "dailyActivities": [
+          {
+            "mm": "တစ်နေ့ နှစ်နပ်မှ သုံးနပ် အစာကို မိသားစုနှင့်အတူ ကျွေးပါ။",
+            "en": "Offer two to three meals a day, with the family where you can."
+          },
+          {
+            "mm": "သံဓာတ်ကြွယ်ဝသော အစာ တစ်မျိုး နေ့စဉ် ထည့်ပေးပါ။",
+            "en": "Include one iron-rich food every day."
+          },
+          {
+            "mm": "နို့တိုက်ခြင်းကို ဆက်လက် လုပ်ပါ။",
+            "en": "Continue breastfeeding."
+          }
+        ],
+        "weeklyActivities": [
+          {
+            "mm": "အစားအစာ အသစ် တစ်မျိုးကို သီတင်းပတ်တိုင်း မိတ်ဆက်ပါ။",
+            "en": "Introduce one new food each week."
+          },
+          {
+            "mm": "အရောင်စုံ ဟင်းသီးဟင်းရွက်နှင့် အသီးများကို လှည့်၍ ပေးပါ။",
+            "en": "Rotate different coloured vegetables and fruits."
+          }
+        ],
+        "indoor": [
+          {
+            "mm": "မိသားစုနှင့်အတူ ထမင်းစားခြင်း — ကလေးက ကြည့်ပြီး သင်ယူသည်။",
+            "en": "Eating together as a family so she learns by watching."
+          },
+          {
+            "mm": "ပျော့သော အစာတုံးများကို ကိုယ်တိုင် ကောက်စားခွင့် ပေးခြင်း။",
+            "en": "Letting her pick up soft finger foods herself."
+          }
+        ],
+        "outdoor": [
+          {
+            "mm": "စျေးသို့ အတူသွား၍ အစားအစာများကို နာမည်တပ်ပြခြင်း။",
+            "en": "Naming foods together at the market."
+          }
+        ],
+        "lowCost": [
+          {
+            "mm": "ဒေသထွက် ပဲ၊ ကြက်ဥ၊ အစိမ်းရောင် ဟင်းရွက်များသည် စျေးသက်သာပြီး အာဟာရ ကြွယ်ဝသည်။",
+            "en": "Local beans, eggs and dark green leaves are cheap and nutritious."
+          },
+          {
+            "mm": "မိသားစု ဟင်းကို ဆားမထည့်မီ ခွဲယူ၍ ညက်အောင် ချေပေးနိုင်သည်။",
+            "en": "Take the baby’s portion from the family pot before salt is added and mash it."
+          }
+        ],
+        "materials": {
+          "mm": "ဇွန်း၊ ခွက်၊ သန့်ရှင်းသော ပန်းကန်",
+          "en": "A spoon, a cup and a clean bowl"
+        },
+        "safety": {
+          "mm": "တစ်နှစ်အောက် ကလေးကို ပျားရည် လုံးဝ မကျွေးပါနှင့်။ ဆား၊ သကြား ထပ်မထည့်ပါနှင့်။ လည်ချောင်း ပိတ်စေနိုင်သော အစာများ — အခွံမာသီးလုံး၊ စပျစ်သီးလုံး၊ မာသော အသီးအရွက် တုံးများ — ကို ရှောင်ပါ။ စားနေစဉ် ကလေးအား ထိုင်စေပြီး အမြဲ ကြီးကြပ်ပါ။ နို့ဗူးကို မထောက်ထားပါနှင့်။ အစားအစာနှင့် လက်များကို သန့်ရှင်းအောင် ထားပါ။ ရေကို ကျိုချက်ပြီးမှ တိုက်ပါ။",
+          "en": "Never give honey under 12 months. Do not add salt or sugar. Avoid choking foods — whole nuts, whole grapes, hard chunks. Always seat her upright and supervise every meal. Never prop a bottle. Keep food and hands clean, and boil drinking water."
+        },
+        "commonMistakes": [
+          {
+            "mm": "အစာကို နို့နှင့် အစားထိုးခြင်း — နို့ကို ဆက်တိုက်ရမည်။",
+            "en": "Replacing milk with food — milk continues."
+          },
+          {
+            "mm": "အစာ အရည်ဖျော့လွန်းစွာ ပေးခြင်း — အာဟာရ လျော့နည်းစေသည်။",
+            "en": "Making food too watery, which lowers its nutrition."
+          },
+          {
+            "mm": "ကလေး ငြင်းလျှင် အတင်းကျွေးခြင်း။",
+            "en": "Forcing food when she refuses."
+          }
+        ],
+        "parentTips": [
+          {
+            "mm": "အစားအစာ အသစ်ကို ၈ ကြိမ်မှ ၁၀ ကြိမ်အထိ ပြန်ပေးကြည့်ရတတ်သည်။",
+            "en": "A new food may need eight to ten tries."
+          },
+          {
+            "mm": "ကလေးက စားချင်စိတ် ရှိမရှိ အချက်ပြမှုကို လိုက်နာပါ။",
+            "en": "Follow her hunger and fullness cues."
+          }
+        ],
+        "faq": [
+          {
+            "q": {
+              "mm": "နို့ရည် လျော့သွားမလား စိုးရိမ်တယ်။",
+              "en": "Will my milk supply drop if she eats food?"
+            },
+            "a": {
+              "mm": "အစာစပြီးနောက်တွင်လည်း ဆက်လက် နို့တိုက်ပါက နို့ရည် ဆက်ထွက်ပါသည်။ အစာမတိုင်မီ သို့မဟုတ် အစာပြီးနောက် နို့တိုက်နိုင်ပါသည်။",
+              "en": "If you keep breastfeeding, supply continues. You can feed before or after meals."
+            }
+          },
+          {
+            "q": {
+              "mm": "နွားနို့ တိုက်လို့ ရပြီလား။",
+              "en": "Can she drink cow’s milk now?"
+            },
+            "a": {
+              "mm": "နွားနို့ကို အဓိက သောက်စရာအဖြစ် တစ်နှစ်မပြည့်မီ မတိုက်သင့်ပါ။ သို့သော် ဟင်းချက်ရာတွင် အနည်းငယ် ထည့်နိုင်ပါသည်။",
+              "en": "Cow’s milk should not be her main drink before 12 months, though small amounts in cooking are fine."
+            }
+          },
+          {
+            "q": {
+              "mm": "ဓာတ်မတည့်တတ်သော အစားအစာများကို ရှောင်သင့်သလား။",
+              "en": "Should I avoid foods that commonly cause allergy?"
+            },
+            "a": {
+              "mm": "ရှောင်ရန် မလိုပါ။ ဥ၊ ငါး၊ ချောမွေ့အောင် ဖျော်ထားသော မြေပဲထောပတ်နှင့် နို့ထွက်ပစ္စည်းများကို ခြောက်လခန့်မှစ၍ တစ်မျိုးချင်း အနည်းငယ်စီ စတင်ပေးနိုင်ပါသည်။ အစားအစာအသစ် တစ်မျိုးနှင့်တစ်မျိုးကြား ၃ ရက်မှ ၅ ရက် စောင့်ကြည့်ပါ။ အရေပြားယားယံခြင်း၊ အဖုအပိန့်ထွက်ခြင်း သို့မဟုတ် အော့အန်ခြင်း ဖြစ်ပါက ဆက်မပေးဘဲ ကျန်းမာရေးဝန်ထမ်းနှင့် တိုင်ပင်ပါ။ နှုတ်ခမ်း သို့မဟုတ် မျက်နှာရောင်ခြင်း၊ အသက်ရှူခက်ခြင်း ဖြစ်ပါက အရေးပေါ် ဆေးကုသမှု ချက်ချင်းခံယူပါ။ ကလေးတွင် ပြင်းထန်သော အရေပြားရောင်ရမ်းနာ သို့မဟုတ် ဥနှင့် ဓာတ်မတည့်မှု ရှိပါက မြေပဲမစတင်မီ ဆရာဝန်နှင့် တိုင်ပင်ပါ။ သိရှိထားသော အစားအစာဓာတ်မတည့်မှု သို့မဟုတ် ယခင်က တုံ့ပြန်မှုရှိပါက ထိုအစားအစာကို ဘေးကင်းစွာ မိတ်ဆက်ပုံကို ဆရာဝန်အား မေးမြန်းပါ။",
+              "en": "There is no need to avoid them. Egg, fish, smooth peanut paste and dairy can be introduced from around six months, one at a time and in small amounts. Wait 3 to 5 days between each new food. If you see a rash, hives or vomiting, stop and talk to a health worker. If the lips or face swell or breathing becomes difficult, seek emergency care immediately. If your child has severe eczema or egg allergy, talk with a doctor before introducing peanut. If your child has a known food allergy or has previously reacted to a food, ask a doctor how to introduce that food safely."
+            }
+          }
+        ],
+        "redFlags": [
+          {
+            "mm": "အစာ လုံးဝ ငြင်းပယ်ခြင်း၊ မျိုချရ ခက်ခဲခြင်း။",
+            "en": "Refusing all food or difficulty swallowing."
+          },
+          {
+            "mm": "စားတိုင်း ချောင်းဆိုးခြင်း၊ လည်ချောင်း ပိတ်ခြင်း။",
+            "en": "Coughing or choking at every meal."
+          },
+          {
+            "mm": "ကိုယ်အလေးချိန် မတက်ခြင်း သို့မဟုတ် ကျဆင်းခြင်း။",
+            "en": "Weight that is not increasing, or falling."
+          },
+          {
+            "mm": "ဝမ်းလျှောခြင်း၊ အန်ခြင်း ဆက်တိုက် ဖြစ်ခြင်း။",
+            "en": "Ongoing diarrhoea or vomiting."
+          }
+        ],
+        "referral": {
+          "mm": "ဤလက္ခဏာများကို ကျန်းမာရေးဝန်ထမ်းအား ပြသပါ — အစာမျိုချမှု စစ်ဆေးရန် လိုအပ်နိုင်သည်။ ဤသည် ရောဂါ ဖော်ထုတ်ချက် မဟုတ်ပါ။",
+          "en": "Raise these with a health worker; a feeding and swallowing assessment may be suggested. This is not a diagnosis."
+        },
+        "encouragement": {
+          "mm": "အစားအစာ သင်ယူမှုသည် အချိန်ယူရသော ခရီး ဖြစ်သည် — တစ်နပ်စာ မအောင်မြင်လျှင်လည်း ရပါသည်။",
+          "en": "Learning to eat is a long journey — one difficult meal is not a failure."
+        },
+        "editorialStatus": "reference_verified",
+        "evidenceSummary": "Meal frequency, iron-rich complementary foods and continued breastfeeding at 7–9 months follow WHO complementary feeding guidance, the WHO infant and young child feeding model chapter, the WHO/UNICEF infant and young child feeding indicators, NHS advice on first solid foods, CDC guidance on foods for 6–24 months and NICE maternal and child nutrition guidance; the swallowing red flags follow the paediatric feeding and swallowing references in the registry."
+      },
+      "type": "guide",
+      "slug": "gd_7_9m_nutrition",
+      "titleMm": "၇ – ၉ လ — အာဟာရ လမ်းညွှန်",
+      "titleEn": "7–9 months — Nutrition guide",
+      "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
+      "version": 1,
+      "clinicalStatus": "clinical_review",
+      "media": [],
+      "searchText": "၇ – ၉ လ — အာဟာရ လမ်းညွှန် 7–9 months — nutrition guide ဤအရွယ်တွင် အစားအစာသည် နို့ကို ဖြည့်စွက်ပေးရန် ဖြစ်ပြီး အစားထိုးရန် မဟုတ်ပါ။ ကမ္ဘာ့ကျန်းမာရေးအဖွဲ့က ၆ လမှ ၈ လအရွယ်တွင် တစ်နေ့လျှင် အစာ နှစ်နပ်မှ သုံးနပ်၊ ၉ လမှ စ၍ သုံးနပ်နှင့် အကြားစာ တစ်နပ်မှ နှစ်နပ် အကြံပြုပြီး နှစ်နှစ်နှင့် အထက်ထိ နို့တိုက်ရန် ဖြစ်သည်။ ဤကာလတွင် သံဓာတ် လိုအပ်ချက် မြင့်တက်လာသဖြင့် သံဓာတ်ကြွယ်ဝသော အစာများ လိုအပ်သည်။ food complements milk now; it does not replace it. who guidance is two to three meals a day at 6–8 months and three meals plus one or two snacks from 9 months, alongside breastfeeding into the second year and beyond. iron needs rise sharply, so iron-rich foods matter. nutrition 7_9m guide ၇ – ၉ လ — အာဟာရ လမ်းညွှန် 7–9 months — nutrition guide ဤအရွယ်တွင် အစားအစာသည် နို့ကို ဖြည့်စွက်ပေးရန် ဖြစ်ပြီး အစားထိုးရန် မဟုတ်ပါ။ ကမ္ဘာ့ကျန်းမာရေးအဖွဲ့က ၆ လမှ ၈ လအရွယ်တွင် တစ်နေ့လျှင် အစာ နှစ်နပ်မှ သုံးနပ်၊ ၉ လမှ စ၍ သုံးနပ်နှင့် အကြားစာ တစ်နပ်မှ နှစ်နပ် အကြံပြုပြီး နှစ်နှစ်နှင့် အထက်ထိ နို့တိုက်ရန် ဖြစ်သည်။ ဤကာလတွင် သံဓာတ် လိုအပ်ချက် မြင့်တက်လာသဖြင့် သံဓာတ်ကြွယ်ဝသော အစာများ လိုအပ်သည်။ food complements milk now; it does not replace it. who guidance is two to three meals a day at 6–8 months and three meals plus one or two snacks from 9 months, alongside breastfeeding into the second year and beyond. iron needs rise sharply, so iron-rich foods matter. တစ်နေ့လျှင် အစာ ဘယ်နှစ်နပ် စားပါသလဲ။ how many meals a day is she eating? သံဓာတ်ပါသော အစာ (အသားညက်၊ ကြက်ဥ၊ ပဲ၊ အသည်း) ပါဝင်ပါသလား။ do her meals include iron-rich foods — minced meat, egg, beans, liver? အစာ ပျစ်ခဲမှုကို တဖြည်းဖြည်း တိုးပေးနေပါသလား။ are you slowly increasing the thickness and texture? စားနေစဉ် ကလေးက ကျေနပ်မှု ပြသပါသလား။ does she seem content during meals? တစ်နေ့ နှစ်နပ်မှ သုံးနပ် အစာကို မိသားစုနှင့်အတူ ကျွေးပါ။ offer two to three meals a day, with the family where you can. သံဓာတ်ကြွယ်ဝသော အစာ တစ်မျိုး နေ့စဉ် ထည့်ပေးပါ။ include one iron-rich food every day. နို့တိုက်ခြင်းကို ဆက်လက် လုပ်ပါ။ continue breastfeeding. အစားအစာ အသစ် တစ်မျိုးကို သီတင်းပတ်တိုင်း မိတ်ဆက်ပါ။ introduce one new food each week. အရောင်စုံ ဟင်းသီးဟင်းရွက်နှင့် အသီးများကို လှည့်၍ ပေးပါ။ rotate different coloured vegetables and fruits. မိသားစုနှင့်အတူ ထမင်းစားခြင်း — ကလေးက ကြည့်ပြီး သင်ယူသည်။ eating together as a family so she learns by watching. ပျော့သော အစာတုံးများကို ကိုယ်တိုင် ကောက်စားခွင့် ပေးခြင်း။ letting her pick up soft finger foods herself. စျေးသို့ အတူသွား၍ အစားအစာများကို နာမည်တပ်ပြခြင်း။ naming foods together at the market. ဒေသထွက် ပဲ၊ ကြက်ဥ၊ အစိမ်းရောင် ဟင်းရွက်များသည် စျေးသက်သာပြီး အာဟာရ ကြွယ်ဝသည်။ local beans, eggs and dark green leaves are cheap and nutritious. မိသားစု ဟင်းကို ဆားမထည့်မီ ခွဲယူ၍ ညက်အောင် ချေပေးနိုင်သည်။ take the baby’s portion from the family pot before salt is added and mash it. ဇွန်း၊ ခွက်၊ သန့်ရှင်းသော ပန်းကန် a spoon, a cup and a clean bowl တစ်နှစ်အောက် ကလေးကို ပျားရည် လုံးဝ မကျွေးပါနှင့်။ ဆား၊ သကြား ထပ်မထည့်ပါနှင့်။ လည်ချောင်း ပိတ်စေနိုင်သော အစာများ — အခွံမာသီးလုံး၊ စပျစ်သီးလုံး၊ မာသော အသီးအရွက် တုံးများ — ကို ရှောင်ပါ။ စားနေစဉ် ကလေးအား ထိုင်စေပြီး အမြဲ ကြီးကြပ်ပါ။ နို့ဗူးကို မထောက်ထားပါနှင့်။ အစားအစာနှင့် လက်များကို သန့်ရှင်းအောင် ထားပါ။ ရေကို ကျိုချက်ပြီးမှ တိုက်ပါ။ never give honey under 12 months. do not add salt or sugar. avoid choking foods — whole nuts, whole grapes, hard chunks. always seat her upright and supervise every meal. never prop a bottle. keep food and hands clean, and boil drinking water. အစာကို နို့နှင့် အစားထိုးခြင်း — နို့ကို ဆက်တိုက်ရမည်။ replacing milk with food — milk continues. အစာ အရည်ဖျော့လွန်းစွာ ပေးခြင်း — အာဟာရ လျော့နည်းစေသည်။ making food too watery, which lowers its nutrition. ကလေး ငြင်းလျှင် အတင်းကျွေးခြင်း။ forcing food when she refuses. အစားအစာ အသစ်ကို ၈ ကြိမ်မှ ၁၀ ကြိမ်အထိ ပြန်ပေးကြည့်ရတတ်သည်။ a new food may need eight to ten tries. ကလေးက စားချင်စိတ် ရှိမရှိ အချက်ပြမှုကို လိုက်နာပါ။ follow her hunger and fullness cues. နို့ရည် လျော့သွားမလား စိုးရိမ်တယ်။ will my milk supply drop if she eats food? အစာစပြီးနောက်တွင်လည်း ဆက်လက် နို့တိုက်ပါက နို့ရည် ဆက်ထွက်ပါသည်။ အစာမတိုင်မီ သို့မဟုတ် အစာပြီးနောက် နို့တိုက်နိုင်ပါသည်။ if you keep breastfeeding, supply continues. you can feed before or after meals. နွားနို့ တိုက်လို့ ရပြီလား။ can she drink cow’s milk now? နွားနို့ကို အဓိက သောက်စရာအဖြစ် တစ်နှစ်မပြည့်မီ မတိုက်သင့်ပါ။ သို့သော် ဟင်းချက်ရာတွင် အနည်းငယ် ထည့်နိုင်ပါသည်။ cow’s milk should not be her main drink before 12 months, though small amounts in cooking are fine. ဓာတ်မတည့်တတ်သော အစားအစာများကို ရှောင်သင့်သလား။ should i avoid foods that commonly cause allergy? ရှောင်ရန် မလိုပါ။ ဥ၊ ငါး၊ ချောမွေ့အောင် ဖျော်ထားသော မြေပဲထောပတ်နှင့် နို့ထွက်ပစ္စည်းများကို ခြောက်လခန့်မှစ၍ တစ်မျိုးချင်း အနည်းငယ်စီ စတင်ပေးနိုင်ပါသည်။ အစားအစာအသစ် တစ်မျိုးနှင့်တစ်မျိုးကြား ၃ ရက်မှ ၅ ရက် စောင့်ကြည့်ပါ။ အရေပြားယားယံခြင်း၊ အဖုအပိန့်ထွက်ခြင်း သို့မဟုတ် အော့အန်ခြင်း ဖြစ်ပါက ဆက်မပေးဘဲ ကျန်းမာရေးဝန်ထမ်းနှင့် တိုင်ပင်ပါ။ နှုတ်ခမ်း သို့မဟုတ် မျက်နှာရောင်ခြင်း၊ အသက်ရှူခက်ခြင်း ဖြစ်ပါက အရေးပေါ် ဆေးကုသမှု ချက်ချင်းခံယူပါ။ ကလေးတွင် ပြင်းထန်သော အရေပြားရောင်ရမ်းနာ သို့မဟုတ် ဥနှင့် ဓာတ်မတည့်မှု ရှိပါက မြေပဲမစတင်မီ ဆရာဝန်နှင့် တိုင်ပင်ပါ။ သိရှိထားသော အစားအစာဓာတ်မတည့်မှု သို့မဟုတ် ယခင်က တုံ့ပြန်မှုရှိပါက ထိုအစားအစာကို ဘေးကင်းစွာ မိတ်ဆက်ပုံကို ဆရာဝန်အား မေးမြန်းပါ။ there is no need to avoid them. egg, fish, smooth peanut paste and dairy can be introduced from around six months, one at a time and in small amounts. wait 3 to 5 days between each new food. if you see a rash, hives or vomiting, stop and talk to a health worker. if the lips or face swell or breathing becomes difficult, seek emergency care immediately. if your child has severe eczema or egg allergy, talk with a doctor before introducing peanut. if your child has a known food allergy or has previously reacted to a food, ask a doctor how to introduce that food safely. အစာ လုံးဝ ငြင်းပယ်ခြင်း၊ မျိုချရ ခက်ခဲခြင်း။ refusing all food or difficulty swallowing. စားတိုင်း ချောင်းဆိုးခြင်း၊ လည်ချောင်း ပိတ်ခြင်း။ coughing or choking at every meal. ကိုယ်အလေးချိန် မတက်ခြင်း သို့မဟုတ် ကျဆင်းခြင်း။ weight that is not increasing, or falling. ဝမ်းလျှောခြင်း၊ အန်ခြင်း ဆက်တိုက် ဖြစ်ခြင်း။ ongoing diarrhoea or vomiting. ဤလက္ခဏာများကို ကျန်းမာရေးဝန်ထမ်းအား ပြသပါ — အစာမျိုချမှု စစ်ဆေးရန် လိုအပ်နိုင်သည်။ ဤသည် ရောဂါ ဖော်ထုတ်ချက် မဟုတ်ပါ။ raise these with a health worker; a feeding and swallowing assessment may be suggested. this is not a diagnosis. အစားအစာ သင်ယူမှုသည် အချိန်ယူရသော ခရီး ဖြစ်သည် — တစ်နပ်စာ မအောင်မြင်လျှင်လည်း ရပါသည်။ learning to eat is a long journey — one difficult meal is not a failure. reference_verified meal frequency, iron-rich complementary foods and continued breastfeeding at 7–9 months follow who complementary feeding guidance, the who infant and young child feeding model chapter, the who/unicef infant and young child feeding indicators, nhs advice on first solid foods, cdc guidance on foods for 6–24 months and nice maternal and child nutrition guidance; the swallowing red flags follow the paediatric feeding and swallowing references in the registry."
+    },
+    {
+      "ageGroupKey": "10_12m",
+      "domainKey": "nutrition",
+      "tags": [
+        "nutrition",
+        "10_12m",
+        "guide"
+      ],
+      "summaryMm": "ဤအရွယ်တွင် ဖြည့်စွက်အစားအစာက ကလေး၏ အာဟာရအတွက် ပိုမိုအရေးပါလာသည်။ တစ်နေ့လျှင် အဓိကအစာ သုံးနပ်နှင့် အကြားစာ တစ်ကြိမ်မှ နှစ်ကြိမ်ခန့် ပေးနိုင်ပြီး မိခင်နို့ကို အသက် ၂ နှစ် သို့မဟုတ် ထို့ထက်ကျော်လွန်၍ ဆက်လက်တိုက်ကျွေးနိုင်သည်။ အစာကို ချောမွေ့အောင် ကြိတ်ထားသည့်ပုံစံမှ အဖတ်အနည်းငယ်ပါသည့်ပုံစံ၊ ထို့နောက် လက်ဖြင့် ကိုင်စားနိုင်သည့် နူးညံ့သောအတုံးများအဖြစ် တဖြည်းဖြည်း ပြောင်းပေးပါ။ အသား၊ ငါး၊ ဥ၊ ပဲနှင့် အစိမ်းရောင် ဟင်းသီးဟင်းရွက်ကဲ့သို့ သံဓာတ်ကြွယ်ဝသော အစားအစာများသည် အထူးအရေးကြီးသည်။",
+      "summaryEn": "Food now plays a larger part in her nutrition — often about three main meals plus one or two snacks a day, alongside breastfeeding which can continue to two years and beyond. Texture should progress gradually from puréed to mashed with soft lumps, then to soft finger pieces. Iron-rich foods — meat, fish, eggs, beans and dark green vegetables — matter especially at this age.",
+      "data": {
+        "title": {
+          "mm": "၁၀ – ၁၂ လ — အာဟာရ လမ်းညွှန်",
+          "en": "10–12 months — Nutrition guide"
+        },
+        "why": {
+          "mm": "ဤအရွယ်တွင် ဖြည့်စွက်အစားအစာက ကလေး၏ အာဟာရအတွက် ပိုမိုအရေးပါလာသည်။ တစ်နေ့လျှင် အဓိကအစာ သုံးနပ်နှင့် အကြားစာ တစ်ကြိမ်မှ နှစ်ကြိမ်ခန့် ပေးနိုင်ပြီး မိခင်နို့ကို အသက် ၂ နှစ် သို့မဟုတ် ထို့ထက်ကျော်လွန်၍ ဆက်လက်တိုက်ကျွေးနိုင်သည်။ အစာကို ချောမွေ့အောင် ကြိတ်ထားသည့်ပုံစံမှ အဖတ်အနည်းငယ်ပါသည့်ပုံစံ၊ ထို့နောက် လက်ဖြင့် ကိုင်စားနိုင်သည့် နူးညံ့သောအတုံးများအဖြစ် တဖြည်းဖြည်း ပြောင်းပေးပါ။ အသား၊ ငါး၊ ဥ၊ ပဲနှင့် အစိမ်းရောင် ဟင်းသီးဟင်းရွက်ကဲ့သို့ သံဓာတ်ကြွယ်ဝသော အစားအစာများသည် အထူးအရေးကြီးသည်။",
+          "en": "Food now plays a larger part in her nutrition — often about three main meals plus one or two snacks a day, alongside breastfeeding which can continue to two years and beyond. Texture should progress gradually from puréed to mashed with soft lumps, then to soft finger pieces. Iron-rich foods — meat, fish, eggs, beans and dark green vegetables — matter especially at this age."
+        },
+        "observationQuestions": [
+          {
+            "mm": "တစ်နေ့လျှင် အဓိက အစာ ၃ နပ် စားပါသလား။",
+            "en": "Is she eating about three main meals a day?"
+          },
+          {
+            "mm": "အဖတ်အနည်းငယ်ပါသော အစာနှင့် လက်ဖြင့်ကိုင်စားနိုင်သည့် နူးညံ့သောအစာများကို စားနိုင်ပါသလား။",
+            "en": "Does she accept lumpy food and finger pieces?"
+          },
+          {
+            "mm": "သံဓာတ် ကြွယ်ဝသော အစာ နေ့စဉ် ပါဝင်ပါသလား။",
+            "en": "Is an iron-rich food included every day?"
+          },
+          {
+            "mm": "ဗိုက်ပြည့်လျှင် ခေါင်းလွှဲခြင်း၊ ပါးစပ်ပိတ်ခြင်း ကဲ့သို့ အချက်ပြပါသလား။",
+            "en": "Does she signal fullness by turning away or closing her mouth?"
+          }
+        ],
+        "dailyActivities": [
+          {
+            "mm": "တစ်နေ့တာအတွင်း ရရှိနိုင်မှုအလိုက် အစာအုပ်စုမတူသော အစားအစာမျိုးစုံကို ပေးကြည့်ပါ။ ကလေးစားသည့် ပမာဏနှင့် အမျိုးအစားသည် တစ်နေ့နှင့်တစ်နေ့ ကွာခြားနိုင်ပါသည်။",
+            "en": "Across the day, offer a variety of foods from different food groups, based on what is available; the amount and variety eaten can vary from day to day."
+          },
+          {
+            "mm": "မိသားစုနှင့် အတူ စားပွဲတွင် ထိုင်စားစေပါ။",
+            "en": "Let her eat with the family at the same time."
+          },
+          {
+            "mm": "ဗိုက်ပြည့်ပြီဟု အချက်ပြလျှင် ရပ်ပါ — အတင်း မကျွေးပါနှင့်။",
+            "en": "Stop when she signals she is full — never force-feed."
+          }
+        ],
+        "weeklyActivities": [
+          {
+            "mm": "အရောင်နှင့် အသွင်အပြင် အသစ်တစ်မျိုးကို တစ်ပတ်လျှင် တစ်ခါ မိတ်ဆက်ပါ။",
+            "en": "Introduce one new colour or texture each week."
+          },
+          {
+            "mm": "အသစ်သော အစာကို ငြင်းလျှင် နောက်ရက်များတွင် ထပ်ပေးပါ — အကြိမ် ၁၀ ကျော် လိုနိုင်သည်။",
+            "en": "If she refuses a new food, offer it again on later days — it can take ten tries or more."
+          }
+        ],
+        "indoor": [
+          {
+            "mm": "မိသားစု အစာမှ ဆားမထည့်ရသေးသော အပိုင်းကို ခွဲယူ၍ ကျွေးခြင်း။",
+            "en": "Setting aside her portion of the family food before salt is added."
+          },
+          {
+            "mm": "အစာကို လက်ညှိုးအရွယ် အရှည်လိုက် ဖြတ်၍ ကိုယ်တိုင် စားစေခြင်း။",
+            "en": "Cutting food into finger-length strips for self-feeding."
+          }
+        ],
+        "outdoor": [
+          {
+            "mm": "ဈေးသို့ အတူသွားသည့်အခါ သစ်သီးနှင့် ဟင်းသီးဟင်းရွက်များကို ပြသပြီး အမည်ပြောပေးခြင်း။",
+            "en": "Visiting the market together and naming fruits and vegetables."
+          }
+        ],
+        "lowCost": [
+          {
+            "mm": "ဒေသထွက် ပဲ၊ ဥ၊ ငါး၊ အစိမ်းရောင် ဟင်းရွက်များသည် ဈေးသက်သာပြီး အာဟာရ ပြည့်ဝသည်။",
+            "en": "Local beans, eggs, fish and dark green leaves are cheap and nutritious."
+          },
+          {
+            "mm": "အထူး ကလေးအစာ ဝယ်ရန် မလိုပါ — မိသားစု အစာကို ချေ၍ ကျွေးနိုင်သည်။",
+            "en": "No special baby food is needed — family food can be mashed."
+          }
+        ],
+        "materials": {
+          "mm": "ခွက်၊ ဇွန်း၊ မိသားစု အစာ (ဆား၊ သကြား မထည့်ရသေးသော အပိုင်း)",
+          "en": "A cup, a spoon and family food set aside before salt or sugar"
+        },
+        "safety": {
+          "mm": "အသက်ရှူလမ်းကြောင်း ပိတ်ဆို့စေနိုင်သော အခွံမာသီးလုံး၊ ပဲစေ့လုံး၊ စပျစ်သီးနှင့် ချယ်ရီသီးလုံး၊ ပြောင်းဖူးပေါက်ပေါက်၊ သကြားလုံးမာ၊ ဝက်အူချောင်းအဝိုင်း၊ ငါးရိုးပါသောအသားနှင့် မာသော ဟင်းသီးဟင်းရွက်အတုံးများကို ရှောင်ပါ။ စပျစ်သီးနှင့် ချယ်ရီသီးကို အလျားလိုက် လေးစိတ်ခွဲပေးပါ။ အစာစားစဉ် အမြဲ အနီးကပ်ကြီးကြပ်ပြီး ကလေးကို မတ်မတ်ထိုင်စေပါ။ အသက် ၁၂ လမပြည့်မီ ပျားရည် မပေးပါနှင့်။ နွားနို့ကိုလည်း အဓိကသောက်စရာအဖြစ် မပေးပါနှင့်။ ဆားနှင့် သကြား ထပ်မထည့်ဘဲ ချိုသောအချိုရည်နှင့် လက်ဖက်ရည်ကို ရှောင်ပါ။ ဥ၊ ငါး၊ နို့ထွက်ပစ္စည်းနှင့် ချောမွေ့အောင် ဖျော်ထားသော အခွံမာသီးထုတ်ကုန်များကဲ့သို့ ဓာတ်မတည့်နိုင်သော အစားအစာများကို တစ်မျိုးချင်း အနည်းငယ်စီ စတင်ပေးပြီး အစားအစာအသစ် တစ်မျိုးနှင့်တစ်မျိုးကြား ၃ ရက်မှ ၅ ရက် စောင့်ကြည့်ပါ။ ကလေးတွင် ပြင်းထန်သော အရေပြားရောင်ရမ်းနာ သို့မဟုတ် ဥနှင့် ဓာတ်မတည့်မှု ရှိပါက မြေပဲမစတင်မီ ဆရာဝန်နှင့် တိုင်ပင်ပါ။ သိရှိထားသော အစားအစာဓာတ်မတည့်မှု သို့မဟုတ် ယခင်က တုံ့ပြန်မှုရှိပါက ထိုအစားအစာကို ဘေးကင်းစွာ မိတ်ဆက်ပုံကို ဆရာဝန်အား မေးမြန်းပါ။ အစားအစာကို ကောင်းစွာချက်ပြုတ်ပြီး လက်နှင့် အသုံးအဆောင်များကို သန့်ရှင်းစွာထားပါ။ သန့်ရှင်းသောရေကို သုံးပြီး ကျန်ရှိသောအစာကို အချိန်ကြာမြင့်စွာ မထားပါနှင့်။",
+          "en": "Avoid choking foods — whole nuts, whole beans, whole grapes and cherries (quarter them), popcorn, hard sweets, whole sausage rounds, fish with bones and hard raw vegetable chunks. Always supervise meals with her sitting upright. Never give honey before 12 months. Do not use cow’s milk as a main drink before 12 months. Add no salt or sugar and avoid sweet drinks and tea. Common allergenic foods such as egg, fish, dairy and nut products (as smooth pastes, never whole nuts) do not need to be avoided. Introduce them one at a time and wait 3 to 5 days between each new food. If your child has severe eczema or egg allergy, talk with a doctor before introducing peanut. If your child has a known food allergy or has previously reacted to a food, ask a doctor how to introduce that food safely. Cook food thoroughly, wash hands, use clean water, and do not keep leftovers for long."
+        },
+        "commonMistakes": [
+          {
+            "mm": "ချောမွေ့အောင် ကြိတ်ထားသော အစာကိုသာ အချိန်ကြာမြင့်စွာ ကျွေးခြင်း။ ကလေးစားနိုင်သည့် အစာအဖတ်နှင့် ပုံစံကို တဖြည်းဖြည်း ပြောင်းပေးရန် လိုသည်။",
+            "en": "Staying on purée too long — textures need to progress."
+          },
+          {
+            "mm": "အတင်း ကျွေးခြင်း သို့မဟုတ် ငိုအောင် တိုက်တွန်းခြင်း။",
+            "en": "Force-feeding or pressuring until she cries."
+          },
+          {
+            "mm": "အချိုရည်၊ လက်ဖက်ရည် သို့မဟုတ် ဆားပါသော အစာ တိုက်ခြင်း။",
+            "en": "Giving sweet drinks, tea or salty food."
+          }
+        ],
+        "parentTips": [
+          {
+            "mm": "မိဘက ဘာကို ဘယ်အချိန်ပေးမလဲ ဆုံးဖြတ်ပြီး၊ ကလေးက ဘယ်လောက်စားမလဲ ဆုံးဖြတ်ပါစေ။",
+            "en": "You decide what is offered and when; she decides how much she eats."
+          },
+          {
+            "mm": "အစားအစာ ငြင်းသည့် ရက်များ ရှိတတ်သည် — တစ်ပတ်လုံး ကြည့်ပါ၊ တစ်နပ်တည်း မကြည့်ပါနှင့်။",
+            "en": "Refusal days happen — judge intake across a week, not one meal."
+          }
+        ],
+        "faq": [
+          {
+            "q": {
+              "mm": "မိခင်နို့ကို ဘယ်အချိန်အထိ တိုက်သင့်လဲ။",
+              "en": "How long should I keep breastfeeding?"
+            },
+            "a": {
+              "mm": "ကမ္ဘာ့ကျန်းမာရေးအဖွဲ့၏ လမ်းညွှန်ချက်အရ ၂ နှစ် သို့မဟုတ် ထို့ထက် ပိုကြာအောင် အစားအစာနှင့် တွဲဖက်၍ ဆက်တိုက်ကျွေးရန် အကြံပြုထားသည်။ ၁၀–၁၂ လတွင် နို့သည် အာဟာရ အရင်းအမြစ် တစ်ခုအဖြစ် ဆက်လက် အရေးပါပါသည်။",
+              "en": "WHO guidance recommends continuing breastfeeding to two years and beyond alongside family foods. At 10–12 months milk is still an important part of her nutrition."
+            }
+          },
+          {
+            "q": {
+              "mm": "အစာ နည်းနည်းပဲ စားတယ် — စိုးရိမ်ရလား။",
+              "en": "She eats only small amounts — should I worry?"
+            },
+            "a": {
+              "mm": "ကလေးများ၏ အစာစားနှုန်းသည် နေ့စဉ် ကွာခြားနိုင်ပါသည်။ ကိုယ်အလေးချိန် ပုံမှန် တိုးနေပြီး တက်ကြွစွာ ရှိနေလျှင် များသောအားဖြင့် စိုးရိမ်ရန် မလိုပါ။ ကိုယ်အလေးချိန် မတိုးခြင်း သို့မဟုတ် ကျဆင်းခြင်း ရှိလျှင် ကျန်းမာရေးဝန်ထမ်းနှင့် ဆွေးနွေးပါ။",
+              "en": "Intake varies a lot from day to day. If she is gaining weight steadily and is active, this is usually fine. If weight is static or falling, discuss it with a health worker."
+            }
+          }
+        ],
+        "redFlags": [
+          {
+            "mm": "ကိုယ်အလေးချိန် မတိုးခြင်း သို့မဟုတ် ကျဆင်းခြင်း။",
+            "en": "Weight that is not increasing, or is falling."
+          },
+          {
+            "mm": "အစာမျိုချရန် ခက်ခဲခြင်း၊ အစာစားစဉ် ခဏခဏ ချောင်းဆိုးခြင်း။",
+            "en": "Difficulty swallowing or frequent coughing with feeds."
+          },
+          {
+            "mm": "ဝမ်းလျှောခြင်း သို့မဟုတ် အန်ခြင်း ကြာရှည်ခြင်း၊ ရေဓာတ်ခန်းခြောက်ခြင်း လက္ခဏာများ။",
+            "en": "Persistent diarrhoea or vomiting, or signs of dehydration."
+          },
+          {
+            "mm": "အစာစားပြီးနောက် အရေပြားယားခြင်း၊ မျက်နှာဖောင်းခြင်း၊ အသက်ရှူ ခက်ခဲခြင်း။",
+            "en": "Rash, facial swelling or breathing difficulty after a food."
+          }
+        ],
+        "referral": {
+          "mm": "ကိုယ်အလေးချိန် မတိုးခြင်း သို့မဟုတ် မျိုချရန် ခက်ခဲခြင်းကို ကျန်းမာရေးဝန်ထမ်းနှင့် ဆွေးနွေးပါ။ အစာစားပြီးနောက် မျက်နှာဖောင်းခြင်း သို့မဟုတ် အသက်ရှူ ခက်ခဲခြင်း ဖြစ်ပါက ချက်ချင်း အရေးပေါ် ဆေးကုသမှု ခံယူပါ။ ဤသည် ရောဂါ ဖော်ထုတ်ချက် မဟုတ်ပါ။",
+          "en": "Discuss poor weight gain or swallowing difficulty with a health worker. Facial swelling or breathing difficulty after a food needs emergency care immediately. This is not a diagnosis."
+        },
+        "encouragement": {
+          "mm": "အစာစားခြင်းသည် လေ့ကျင့်ရသော ကျွမ်းကျင်မှု တစ်ခု ဖြစ်သည် — အေးဆေးစွာ ထပ်ခါထပ်ခါ ပေးခြင်းက အကောင်းဆုံး ဖြစ်ပါသည်။",
+          "en": "Eating is a skill she is learning — calm, repeated offers work best."
+        },
+        "editorialStatus": "reference_verified",
+        "evidenceSummary": "Meal frequency, texture progression, iron-rich foods, responsive feeding and continued breastfeeding at 10–12 months follow the WHO complementary feeding guideline, the WHO infant and young child feeding model chapter, the WHO and UNICEF infant and young child feeding indicators, the NHS first solid foods guidance, the CDC foods and drinks guidance for 6–24 months, the NICE maternal and child nutrition guideline and the AAP breastfeeding policy, with the swallowing cautions taken from the ASHA practice portal."
+      },
+      "type": "guide",
+      "slug": "gd_10_12m_nutrition",
+      "titleMm": "၁၀ – ၁၂ လ — အာဟာရ လမ်းညွှန်",
+      "titleEn": "10–12 months — Nutrition guide",
+      "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
+      "version": 1,
+      "clinicalStatus": "clinical_review",
+      "media": [],
+      "searchText": "၁၀ – ၁၂ လ — အာဟာရ လမ်းညွှန် 10–12 months — nutrition guide ဤအရွယ်တွင် ဖြည့်စွက်အစားအစာက ကလေး၏ အာဟာရအတွက် ပိုမိုအရေးပါလာသည်။ တစ်နေ့လျှင် အဓိကအစာ သုံးနပ်နှင့် အကြားစာ တစ်ကြိမ်မှ နှစ်ကြိမ်ခန့် ပေးနိုင်ပြီး မိခင်နို့ကို အသက် ၂ နှစ် သို့မဟုတ် ထို့ထက်ကျော်လွန်၍ ဆက်လက်တိုက်ကျွေးနိုင်သည်။ အစာကို ချောမွေ့အောင် ကြိတ်ထားသည့်ပုံစံမှ အဖတ်အနည်းငယ်ပါသည့်ပုံစံ၊ ထို့နောက် လက်ဖြင့် ကိုင်စားနိုင်သည့် နူးညံ့သောအတုံးများအဖြစ် တဖြည်းဖြည်း ပြောင်းပေးပါ။ အသား၊ ငါး၊ ဥ၊ ပဲနှင့် အစိမ်းရောင် ဟင်းသီးဟင်းရွက်ကဲ့သို့ သံဓာတ်ကြွယ်ဝသော အစားအစာများသည် အထူးအရေးကြီးသည်။ food now plays a larger part in her nutrition — often about three main meals plus one or two snacks a day, alongside breastfeeding which can continue to two years and beyond. texture should progress gradually from puréed to mashed with soft lumps, then to soft finger pieces. iron-rich foods — meat, fish, eggs, beans and dark green vegetables — matter especially at this age. nutrition 10_12m guide ၁၀ – ၁၂ လ — အာဟာရ လမ်းညွှန် 10–12 months — nutrition guide ဤအရွယ်တွင် ဖြည့်စွက်အစားအစာက ကလေး၏ အာဟာရအတွက် ပိုမိုအရေးပါလာသည်။ တစ်နေ့လျှင် အဓိကအစာ သုံးနပ်နှင့် အကြားစာ တစ်ကြိမ်မှ နှစ်ကြိမ်ခန့် ပေးနိုင်ပြီး မိခင်နို့ကို အသက် ၂ နှစ် သို့မဟုတ် ထို့ထက်ကျော်လွန်၍ ဆက်လက်တိုက်ကျွေးနိုင်သည်။ အစာကို ချောမွေ့အောင် ကြိတ်ထားသည့်ပုံစံမှ အဖတ်အနည်းငယ်ပါသည့်ပုံစံ၊ ထို့နောက် လက်ဖြင့် ကိုင်စားနိုင်သည့် နူးညံ့သောအတုံးများအဖြစ် တဖြည်းဖြည်း ပြောင်းပေးပါ။ အသား၊ ငါး၊ ဥ၊ ပဲနှင့် အစိမ်းရောင် ဟင်းသီးဟင်းရွက်ကဲ့သို့ သံဓာတ်ကြွယ်ဝသော အစားအစာများသည် အထူးအရေးကြီးသည်။ food now plays a larger part in her nutrition — often about three main meals plus one or two snacks a day, alongside breastfeeding which can continue to two years and beyond. texture should progress gradually from puréed to mashed with soft lumps, then to soft finger pieces. iron-rich foods — meat, fish, eggs, beans and dark green vegetables — matter especially at this age. တစ်နေ့လျှင် အဓိက အစာ ၃ နပ် စားပါသလား။ is she eating about three main meals a day? အဖတ်အနည်းငယ်ပါသော အစာနှင့် လက်ဖြင့်ကိုင်စားနိုင်သည့် နူးညံ့သောအစာများကို စားနိုင်ပါသလား။ does she accept lumpy food and finger pieces? သံဓာတ် ကြွယ်ဝသော အစာ နေ့စဉ် ပါဝင်ပါသလား။ is an iron-rich food included every day? ဗိုက်ပြည့်လျှင် ခေါင်းလွှဲခြင်း၊ ပါးစပ်ပိတ်ခြင်း ကဲ့သို့ အချက်ပြပါသလား။ does she signal fullness by turning away or closing her mouth? တစ်နေ့တာအတွင်း ရရှိနိုင်မှုအလိုက် အစာအုပ်စုမတူသော အစားအစာမျိုးစုံကို ပေးကြည့်ပါ။ ကလေးစားသည့် ပမာဏနှင့် အမျိုးအစားသည် တစ်နေ့နှင့်တစ်နေ့ ကွာခြားနိုင်ပါသည်။ across the day, offer a variety of foods from different food groups, based on what is available; the amount and variety eaten can vary from day to day. မိသားစုနှင့် အတူ စားပွဲတွင် ထိုင်စားစေပါ။ let her eat with the family at the same time. ဗိုက်ပြည့်ပြီဟု အချက်ပြလျှင် ရပ်ပါ — အတင်း မကျွေးပါနှင့်။ stop when she signals she is full — never force-feed. အရောင်နှင့် အသွင်အပြင် အသစ်တစ်မျိုးကို တစ်ပတ်လျှင် တစ်ခါ မိတ်ဆက်ပါ။ introduce one new colour or texture each week. အသစ်သော အစာကို ငြင်းလျှင် နောက်ရက်များတွင် ထပ်ပေးပါ — အကြိမ် ၁၀ ကျော် လိုနိုင်သည်။ if she refuses a new food, offer it again on later days — it can take ten tries or more. မိသားစု အစာမှ ဆားမထည့်ရသေးသော အပိုင်းကို ခွဲယူ၍ ကျွေးခြင်း။ setting aside her portion of the family food before salt is added. အစာကို လက်ညှိုးအရွယ် အရှည်လိုက် ဖြတ်၍ ကိုယ်တိုင် စားစေခြင်း။ cutting food into finger-length strips for self-feeding. ဈေးသို့ အတူသွားသည့်အခါ သစ်သီးနှင့် ဟင်းသီးဟင်းရွက်များကို ပြသပြီး အမည်ပြောပေးခြင်း။ visiting the market together and naming fruits and vegetables. ဒေသထွက် ပဲ၊ ဥ၊ ငါး၊ အစိမ်းရောင် ဟင်းရွက်များသည် ဈေးသက်သာပြီး အာဟာရ ပြည့်ဝသည်။ local beans, eggs, fish and dark green leaves are cheap and nutritious. အထူး ကလေးအစာ ဝယ်ရန် မလိုပါ — မိသားစု အစာကို ချေ၍ ကျွေးနိုင်သည်။ no special baby food is needed — family food can be mashed. ခွက်၊ ဇွန်း၊ မိသားစု အစာ (ဆား၊ သကြား မထည့်ရသေးသော အပိုင်း) a cup, a spoon and family food set aside before salt or sugar အသက်ရှူလမ်းကြောင်း ပိတ်ဆို့စေနိုင်သော အခွံမာသီးလုံး၊ ပဲစေ့လုံး၊ စပျစ်သီးနှင့် ချယ်ရီသီးလုံး၊ ပြောင်းဖူးပေါက်ပေါက်၊ သကြားလုံးမာ၊ ဝက်အူချောင်းအဝိုင်း၊ ငါးရိုးပါသောအသားနှင့် မာသော ဟင်းသီးဟင်းရွက်အတုံးများကို ရှောင်ပါ။ စပျစ်သီးနှင့် ချယ်ရီသီးကို အလျားလိုက် လေးစိတ်ခွဲပေးပါ။ အစာစားစဉ် အမြဲ အနီးကပ်ကြီးကြပ်ပြီး ကလေးကို မတ်မတ်ထိုင်စေပါ။ အသက် ၁၂ လမပြည့်မီ ပျားရည် မပေးပါနှင့်။ နွားနို့ကိုလည်း အဓိကသောက်စရာအဖြစ် မပေးပါနှင့်။ ဆားနှင့် သကြား ထပ်မထည့်ဘဲ ချိုသောအချိုရည်နှင့် လက်ဖက်ရည်ကို ရှောင်ပါ။ ဥ၊ ငါး၊ နို့ထွက်ပစ္စည်းနှင့် ချောမွေ့အောင် ဖျော်ထားသော အခွံမာသီးထုတ်ကုန်များကဲ့သို့ ဓာတ်မတည့်နိုင်သော အစားအစာများကို တစ်မျိုးချင်း အနည်းငယ်စီ စတင်ပေးပြီး အစားအစာအသစ် တစ်မျိုးနှင့်တစ်မျိုးကြား ၃ ရက်မှ ၅ ရက် စောင့်ကြည့်ပါ။ ကလေးတွင် ပြင်းထန်သော အရေပြားရောင်ရမ်းနာ သို့မဟုတ် ဥနှင့် ဓာတ်မတည့်မှု ရှိပါက မြေပဲမစတင်မီ ဆရာဝန်နှင့် တိုင်ပင်ပါ။ သိရှိထားသော အစားအစာဓာတ်မတည့်မှု သို့မဟုတ် ယခင်က တုံ့ပြန်မှုရှိပါက ထိုအစားအစာကို ဘေးကင်းစွာ မိတ်ဆက်ပုံကို ဆရာဝန်အား မေးမြန်းပါ။ အစားအစာကို ကောင်းစွာချက်ပြုတ်ပြီး လက်နှင့် အသုံးအဆောင်များကို သန့်ရှင်းစွာထားပါ။ သန့်ရှင်းသောရေကို သုံးပြီး ကျန်ရှိသောအစာကို အချိန်ကြာမြင့်စွာ မထားပါနှင့်။ avoid choking foods — whole nuts, whole beans, whole grapes and cherries (quarter them), popcorn, hard sweets, whole sausage rounds, fish with bones and hard raw vegetable chunks. always supervise meals with her sitting upright. never give honey before 12 months. do not use cow’s milk as a main drink before 12 months. add no salt or sugar and avoid sweet drinks and tea. common allergenic foods such as egg, fish, dairy and nut products (as smooth pastes, never whole nuts) do not need to be avoided. introduce them one at a time and wait 3 to 5 days between each new food. if your child has severe eczema or egg allergy, talk with a doctor before introducing peanut. if your child has a known food allergy or has previously reacted to a food, ask a doctor how to introduce that food safely. cook food thoroughly, wash hands, use clean water, and do not keep leftovers for long. ချောမွေ့အောင် ကြိတ်ထားသော အစာကိုသာ အချိန်ကြာမြင့်စွာ ကျွေးခြင်း။ ကလေးစားနိုင်သည့် အစာအဖတ်နှင့် ပုံစံကို တဖြည်းဖြည်း ပြောင်းပေးရန် လိုသည်။ staying on purée too long — textures need to progress. အတင်း ကျွေးခြင်း သို့မဟုတ် ငိုအောင် တိုက်တွန်းခြင်း။ force-feeding or pressuring until she cries. အချိုရည်၊ လက်ဖက်ရည် သို့မဟုတ် ဆားပါသော အစာ တိုက်ခြင်း။ giving sweet drinks, tea or salty food. မိဘက ဘာကို ဘယ်အချိန်ပေးမလဲ ဆုံးဖြတ်ပြီး၊ ကလေးက ဘယ်လောက်စားမလဲ ဆုံးဖြတ်ပါစေ။ you decide what is offered and when; she decides how much she eats. အစားအစာ ငြင်းသည့် ရက်များ ရှိတတ်သည် — တစ်ပတ်လုံး ကြည့်ပါ၊ တစ်နပ်တည်း မကြည့်ပါနှင့်။ refusal days happen — judge intake across a week, not one meal. မိခင်နို့ကို ဘယ်အချိန်အထိ တိုက်သင့်လဲ။ how long should i keep breastfeeding? ကမ္ဘာ့ကျန်းမာရေးအဖွဲ့၏ လမ်းညွှန်ချက်အရ ၂ နှစ် သို့မဟုတ် ထို့ထက် ပိုကြာအောင် အစားအစာနှင့် တွဲဖက်၍ ဆက်တိုက်ကျွေးရန် အကြံပြုထားသည်။ ၁၀–၁၂ လတွင် နို့သည် အာဟာရ အရင်းအမြစ် တစ်ခုအဖြစ် ဆက်လက် အရေးပါပါသည်။ who guidance recommends continuing breastfeeding to two years and beyond alongside family foods. at 10–12 months milk is still an important part of her nutrition. အစာ နည်းနည်းပဲ စားတယ် — စိုးရိမ်ရလား။ she eats only small amounts — should i worry? ကလေးများ၏ အစာစားနှုန်းသည် နေ့စဉ် ကွာခြားနိုင်ပါသည်။ ကိုယ်အလေးချိန် ပုံမှန် တိုးနေပြီး တက်ကြွစွာ ရှိနေလျှင် များသောအားဖြင့် စိုးရိမ်ရန် မလိုပါ။ ကိုယ်အလေးချိန် မတိုးခြင်း သို့မဟုတ် ကျဆင်းခြင်း ရှိလျှင် ကျန်းမာရေးဝန်ထမ်းနှင့် ဆွေးနွေးပါ။ intake varies a lot from day to day. if she is gaining weight steadily and is active, this is usually fine. if weight is static or falling, discuss it with a health worker. ကိုယ်အလေးချိန် မတိုးခြင်း သို့မဟုတ် ကျဆင်းခြင်း။ weight that is not increasing, or is falling. အစာမျိုချရန် ခက်ခဲခြင်း၊ အစာစားစဉ် ခဏခဏ ချောင်းဆိုးခြင်း။ difficulty swallowing or frequent coughing with feeds. ဝမ်းလျှောခြင်း သို့မဟုတ် အန်ခြင်း ကြာရှည်ခြင်း၊ ရေဓာတ်ခန်းခြောက်ခြင်း လက္ခဏာများ။ persistent diarrhoea or vomiting, or signs of dehydration. အစာစားပြီးနောက် အရေပြားယားခြင်း၊ မျက်နှာဖောင်းခြင်း၊ အသက်ရှူ ခက်ခဲခြင်း။ rash, facial swelling or breathing difficulty after a food. ကိုယ်အလေးချိန် မတိုးခြင်း သို့မဟုတ် မျိုချရန် ခက်ခဲခြင်းကို ကျန်းမာရေးဝန်ထမ်းနှင့် ဆွေးနွေးပါ။ အစာစားပြီးနောက် မျက်နှာဖောင်းခြင်း သို့မဟုတ် အသက်ရှူ ခက်ခဲခြင်း ဖြစ်ပါက ချက်ချင်း အရေးပေါ် ဆေးကုသမှု ခံယူပါ။ ဤသည် ရောဂါ ဖော်ထုတ်ချက် မဟုတ်ပါ။ discuss poor weight gain or swallowing difficulty with a health worker. facial swelling or breathing difficulty after a food needs emergency care immediately. this is not a diagnosis. အစာစားခြင်းသည် လေ့ကျင့်ရသော ကျွမ်းကျင်မှု တစ်ခု ဖြစ်သည် — အေးဆေးစွာ ထပ်ခါထပ်ခါ ပေးခြင်းက အကောင်းဆုံး ဖြစ်ပါသည်။ eating is a skill she is learning — calm, repeated offers work best. reference_verified meal frequency, texture progression, iron-rich foods, responsive feeding and continued breastfeeding at 10–12 months follow the who complementary feeding guideline, the who infant and young child feeding model chapter, the who and unicef infant and young child feeding indicators, the nhs first solid foods guidance, the cdc foods and drinks guidance for 6–24 months, the nice maternal and child nutrition guideline and the aap breastfeeding policy, with the swallowing cautions taken from the asha practice portal."
+    },
+    {
+      "ageGroupKey": "13_18m",
+      "domainKey": "safety",
+      "tags": [
+        "safety",
+        "13_18m",
+        "guide"
+      ],
+      "summaryMm": "တွားသွားခြင်း၊ မတ်တပ်ရပ်ရန် ဆွဲထခြင်း သို့မဟုတ် လမ်းလျှောက်စပြုခြင်း စသဖြင့် လှုပ်ရှားနိုင်မှု တိုးလာသည်နှင့်အမျှ လှေကား၊ ပရိဘောဂနှင့် ရေအန္တရာယ်များကို စောစောကတည်းက ကာကွယ်ပါ။",
+      "summaryEn": "Childproof stairs, furniture, and water hazards early, as mobility increases—whether the child is crawling, pulling to stand, or beginning to walk.",
+      "data": {
+        "title": {
+          "mm": "၁၃–၁၈ လ — ဘေးကင်းလုံခြုံရေး လမ်းညွှန်",
+          "en": "13–18 months — safety guide"
+        },
+        "why": {
+          "mm": "တွားသွားခြင်း၊ မတ်တပ်ရပ်ရန် ဆွဲထခြင်း သို့မဟုတ် လမ်းလျှောက်စပြုခြင်း စသဖြင့် လှုပ်ရှားနိုင်မှု တိုးလာသည်နှင့်အမျှ လှေကား၊ ပရိဘောဂနှင့် ရေအန္တရာယ်များကို စောစောကတည်းက ကာကွယ်ပါ။",
+          "en": "Childproof stairs, furniture, and water hazards early, as mobility increases—whether the child is crawling, pulling to stand, or beginning to walk."
+        },
+        "observationQuestions": [
+          {
+            "mm": "ကလေးအမြင့်မှ အိမ်နှင့် အပြင်ကစားနေရာကို လိုက်ကြည့်ပြီး ရေ၊ မီး၊ လမ်းမ၊ ပြတင်းပေါက်၊ ကြိုးနှင့် ဆေးဝါးအန္တရာယ်ကို စစ်ပါ။",
+            "en": "Inspect home and play areas from the child’s height for water, burn, traffic, window, cord, and medicine hazards."
+          }
+        ],
+        "dailyActivities": [
+          {
+            "mm": "ကလေးအမြင့်မှ အခန်းတိုင်းကို ကြည့်ပြီး အန္တရာယ်ရှိရာများ ဖယ်ရှားပါ။",
+            "en": "Check each room from the child’s height and remove hazards."
+          }
+        ],
+        "weeklyActivities": [
+          {
+            "mm": "ဒီတစ်ပတ် အခန်းတစ်ခန်း သို့မဟုတ် အပြင်ကစားနေရာတစ်ခုကို ဘေးကင်းရေးစာရင်းဖြင့် ပြန်စစ်ပါ။",
+            "en": "This week, recheck one room or outdoor play area with a safety list."
+          }
+        ],
+        "indoor": [
+          {
+            "mm": "ကလေးအမြင့်မှ အခန်းတိုင်းကို ကြည့်ပြီး အန္တရာယ်ရှိရာများ ဖယ်ရှားပါ။",
+            "en": "Check each room from the child’s height and remove hazards."
+          }
+        ],
+        "outdoor": [
+          {
+            "mm": "ကလေးအမြင့်မှ အခန်းတိုင်းကို ကြည့်ပြီး အန္တရာယ်ရှိရာများ ဖယ်ရှားပါ။",
+            "en": "Check each room from the child’s height and remove hazards."
+          }
+        ],
+        "safety": {
+          "mm": "ကလေးကို ရေ၊ လမ်းမ၊ မီးဖိုနှင့် အမြင့်နေရာအနီး တစ်ယောက်တည်း မထားပါနှင့်။",
+          "en": "Never leave the child alone near water, traffic, cooking areas, or heights."
+        },
+        "parentTips": [
+          {
+            "mm": "“မလုပ်နဲ့” ဟုသာ မပြောဘဲ အန္တရာယ်ကို လူကြီးက ဖယ်ရှားပြီး ဘေးကင်းသည့် အစားထိုးလုပ်ဆောင်ချက် ပြပါ။",
+            "en": "Do not rely only on “no”; remove the hazard and show a safe alternative."
+          }
+        ],
+        "faq": [
+          {
+            "q": {
+              "mm": "ကလေးက စည်းကမ်းနားလည်ရင် အနီးကပ်ကြီးကြပ်ဖို့ လိုသေးလား။",
+              "en": "Does a child who understands rules still need close supervision?"
+            },
+            "a": {
+              "mm": "လိုပါသည်။ ဤအရွယ်ကလေးများသည် အန္တရာယ်ကို အမြဲမခန့်မှန်းနိုင်သေးသဖြင့် ရေ၊ လမ်းမ၊ မီးနှင့် အမြင့်နေရာအနီး လူကြီးက အနီးကပ်ကြီးကြပ်ရပါမည်။",
+              "en": "Yes. Young children cannot reliably judge danger, so adults must stay close near water, traffic, heat, and heights."
+            }
+          }
+        ],
+        "redFlags": [
+          {
+            "mm": "ခလုတ်ဘက်ထရီ၊ ဆေးဝါး သို့မဟုတ် အဆိပ်ဖြစ်နိုင်သောပစ္စည်း မျိုမိခြင်း၊ ရေနစ်လုဖြစ်ခြင်း၊ မီးလောင်ဒဏ်ရာ သို့မဟုတ် ပြင်းထန်သော ထိခိုက်ဒဏ်ရာ။",
+            "en": "Swallowing a button battery, medicine, or poison; a drowning incident; a burn; or a serious injury."
+          }
+        ],
+        "referral": {
+          "mm": "အရေးပေါ်အန္တရာယ် သို့မဟုတ် ပြင်းထန်ဒဏ်ရာရှိပါက ချက်ချင်း အရေးပေါ်ဆေးကုသမှု ရယူပါ။",
+          "en": "Seek emergency medical care immediately for a serious hazard exposure or injury."
+        },
+        "encouragement": {
+          "mm": "အန္တရာယ်ကို ကြိုဖယ်ရှားခြင်းက ကလေးကို လွတ်လပ်စွာ စူးစမ်းခွင့်ပေးနိုင်သည့် အကောင်းဆုံးနည်းဖြစ်သည်။",
+          "en": "Removing hazards in advance creates safer freedom to explore."
+        },
+        "editorialStatus": "reference_verified",
+        "evidenceSummary": "Registered safety references support this conservative parent guide for 13–18 months."
+      },
+      "type": "guide",
+      "slug": "gd_13_18m_safety",
+      "titleMm": "၁၃–၁၈ လ — ဘေးကင်းလုံခြုံရေး လမ်းညွှန်",
+      "titleEn": "13–18 months — safety guide",
+      "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
+      "version": 1,
+      "clinicalStatus": "clinical_review",
+      "media": [],
+      "searchText": "၁၃–၁၈ လ — ဘေးကင်းလုံခြုံရေး လမ်းညွှန် 13–18 months — safety guide တွားသွားခြင်း၊ မတ်တပ်ရပ်ရန် ဆွဲထခြင်း သို့မဟုတ် လမ်းလျှောက်စပြုခြင်း စသဖြင့် လှုပ်ရှားနိုင်မှု တိုးလာသည်နှင့်အမျှ လှေကား၊ ပရိဘောဂနှင့် ရေအန္တရာယ်များကို စောစောကတည်းက ကာကွယ်ပါ။ childproof stairs, furniture, and water hazards early, as mobility increases—whether the child is crawling, pulling to stand, or beginning to walk. safety 13_18m guide ၁၃–၁၈ လ — ဘေးကင်းလုံခြုံရေး လမ်းညွှန် 13–18 months — safety guide တွားသွားခြင်း၊ မတ်တပ်ရပ်ရန် ဆွဲထခြင်း သို့မဟုတ် လမ်းလျှောက်စပြုခြင်း စသဖြင့် လှုပ်ရှားနိုင်မှု တိုးလာသည်နှင့်အမျှ လှေကား၊ ပရိဘောဂနှင့် ရေအန္တရာယ်များကို စောစောကတည်းက ကာကွယ်ပါ။ childproof stairs, furniture, and water hazards early, as mobility increases—whether the child is crawling, pulling to stand, or beginning to walk. ကလေးအမြင့်မှ အိမ်နှင့် အပြင်ကစားနေရာကို လိုက်ကြည့်ပြီး ရေ၊ မီး၊ လမ်းမ၊ ပြတင်းပေါက်၊ ကြိုးနှင့် ဆေးဝါးအန္တရာယ်ကို စစ်ပါ။ inspect home and play areas from the child’s height for water, burn, traffic, window, cord, and medicine hazards. ကလေးအမြင့်မှ အခန်းတိုင်းကို ကြည့်ပြီး အန္တရာယ်ရှိရာများ ဖယ်ရှားပါ။ check each room from the child’s height and remove hazards. ဒီတစ်ပတ် အခန်းတစ်ခန်း သို့မဟုတ် အပြင်ကစားနေရာတစ်ခုကို ဘေးကင်းရေးစာရင်းဖြင့် ပြန်စစ်ပါ။ this week, recheck one room or outdoor play area with a safety list. ကလေးအမြင့်မှ အခန်းတိုင်းကို ကြည့်ပြီး အန္တရာယ်ရှိရာများ ဖယ်ရှားပါ။ check each room from the child’s height and remove hazards. ကလေးအမြင့်မှ အခန်းတိုင်းကို ကြည့်ပြီး အန္တရာယ်ရှိရာများ ဖယ်ရှားပါ။ check each room from the child’s height and remove hazards. ကလေးကို ရေ၊ လမ်းမ၊ မီးဖိုနှင့် အမြင့်နေရာအနီး တစ်ယောက်တည်း မထားပါနှင့်။ never leave the child alone near water, traffic, cooking areas, or heights. “မလုပ်နဲ့” ဟုသာ မပြောဘဲ အန္တရာယ်ကို လူကြီးက ဖယ်ရှားပြီး ဘေးကင်းသည့် အစားထိုးလုပ်ဆောင်ချက် ပြပါ။ do not rely only on “no”; remove the hazard and show a safe alternative. ကလေးက စည်းကမ်းနားလည်ရင် အနီးကပ်ကြီးကြပ်ဖို့ လိုသေးလား။ does a child who understands rules still need close supervision? လိုပါသည်။ ဤအရွယ်ကလေးများသည် အန္တရာယ်ကို အမြဲမခန့်မှန်းနိုင်သေးသဖြင့် ရေ၊ လမ်းမ၊ မီးနှင့် အမြင့်နေရာအနီး လူကြီးက အနီးကပ်ကြီးကြပ်ရပါမည်။ yes. young children cannot reliably judge danger, so adults must stay close near water, traffic, heat, and heights. ခလုတ်ဘက်ထရီ၊ ဆေးဝါး သို့မဟုတ် အဆိပ်ဖြစ်နိုင်သောပစ္စည်း မျိုမိခြင်း၊ ရေနစ်လုဖြစ်ခြင်း၊ မီးလောင်ဒဏ်ရာ သို့မဟုတ် ပြင်းထန်သော ထိခိုက်ဒဏ်ရာ။ swallowing a button battery, medicine, or poison; a drowning incident; a burn; or a serious injury. အရေးပေါ်အန္တရာယ် သို့မဟုတ် ပြင်းထန်ဒဏ်ရာရှိပါက ချက်ချင်း အရေးပေါ်ဆေးကုသမှု ရယူပါ။ seek emergency medical care immediately for a serious hazard exposure or injury. အန္တရာယ်ကို ကြိုဖယ်ရှားခြင်းက ကလေးကို လွတ်လပ်စွာ စူးစမ်းခွင့်ပေးနိုင်သည့် အကောင်းဆုံးနည်းဖြစ်သည်။ removing hazards in advance creates safer freedom to explore. reference_verified registered safety references support this conservative parent guide for 13–18 months."
+    },
+    {
+      "ageGroupKey": "19_24m",
+      "domainKey": "safety",
+      "tags": [
+        "safety",
+        "19_24m",
+        "guide"
+      ],
+      "summaryMm": "ပြတင်းပေါက်တွင် အကာအရံ သို့မဟုတ် အဖွင့်ကန့်သတ်ကိရိယာ တပ်၍ ၄ လက်မထက် ပိုမဖွင့်နိုင်အောင် ထားပါ။ မီးဘေးဖြစ်ပါက ထွက်ပြေးနိုင်ရန် အခန်းတိုင်းတွင် အနည်းဆုံး ပြတင်းပေါက်တစ်ပေါက်ကို လွယ်ကူစွာ ဖွင့်နိုင်အောင် ထားပါ။ ဆေးဝါးနှင့် သန့်ရှင်းရေးပစ္စည်းများကို ကလေးမမီသော နေရာတွင် သော့ခတ်သိမ်းပါ။",
+      "summaryEn": "Fit operable window guards or stops so windows open no more than four inches; keep at least one window in each room easy to open for fire escape. Lock medicines and cleaning products out of reach.",
+      "data": {
+        "title": {
+          "mm": "၁၉–၂၄ လ — ဘေးကင်းလုံခြုံရေး လမ်းညွှန်",
+          "en": "19–24 months — safety guide"
+        },
+        "why": {
+          "mm": "ပြတင်းပေါက်တွင် အကာအရံ သို့မဟုတ် အဖွင့်ကန့်သတ်ကိရိယာ တပ်၍ ၄ လက်မထက် ပိုမဖွင့်နိုင်အောင် ထားပါ။ မီးဘေးဖြစ်ပါက ထွက်ပြေးနိုင်ရန် အခန်းတိုင်းတွင် အနည်းဆုံး ပြတင်းပေါက်တစ်ပေါက်ကို လွယ်ကူစွာ ဖွင့်နိုင်အောင် ထားပါ။ ဆေးဝါးနှင့် သန့်ရှင်းရေးပစ္စည်းများကို ကလေးမမီသော နေရာတွင် သော့ခတ်သိမ်းပါ။",
+          "en": "Fit operable window guards or stops so windows open no more than four inches; keep at least one window in each room easy to open for fire escape. Lock medicines and cleaning products out of reach."
+        },
+        "observationQuestions": [
+          {
+            "mm": "ကလေးအမြင့်မှ အိမ်နှင့် အပြင်ကစားနေရာကို လိုက်ကြည့်ပြီး ရေ၊ မီး၊ လမ်းမ၊ ပြတင်းပေါက်၊ ကြိုးနှင့် ဆေးဝါးအန္တရာယ်ကို စစ်ပါ။",
+            "en": "Inspect home and play areas from the child’s height for water, burn, traffic, window, cord, and medicine hazards."
+          }
+        ],
+        "dailyActivities": [
+          {
+            "mm": "ပရိဘောဂကြီးများကို နံရံတွင် ခိုင်ခံ့စွာ တပ်ပါ။",
+            "en": "Anchor heavy furniture securely to the wall."
+          }
+        ],
+        "weeklyActivities": [
+          {
+            "mm": "ဒီတစ်ပတ် အခန်းတစ်ခန်း သို့မဟုတ် အပြင်ကစားနေရာတစ်ခုကို ဘေးကင်းရေးစာရင်းဖြင့် ပြန်စစ်ပါ။",
+            "en": "This week, recheck one room or outdoor play area with a safety list."
+          }
+        ],
+        "indoor": [
+          {
+            "mm": "ပရိဘောဂကြီးများကို နံရံတွင် ခိုင်ခံ့စွာ တပ်ပါ။",
+            "en": "Anchor heavy furniture securely to the wall."
+          }
+        ],
+        "outdoor": [
+          {
+            "mm": "ပရိဘောဂကြီးများကို နံရံတွင် ခိုင်ခံ့စွာ တပ်ပါ။",
+            "en": "Anchor heavy furniture securely to the wall."
+          }
+        ],
+        "safety": {
+          "mm": "ကလေးကို ရေ၊ လမ်းမ၊ မီးဖိုနှင့် အမြင့်နေရာအနီး တစ်ယောက်တည်း မထားပါနှင့်။",
+          "en": "Never leave the child alone near water, traffic, cooking areas, or heights."
+        },
+        "parentTips": [
+          {
+            "mm": "“မလုပ်နဲ့” ဟုသာ မပြောဘဲ အန္တရာယ်ကို လူကြီးက ဖယ်ရှားပြီး ဘေးကင်းသည့် အစားထိုးလုပ်ဆောင်ချက် ပြပါ။",
+            "en": "Do not rely only on “no”; remove the hazard and show a safe alternative."
+          }
+        ],
+        "faq": [
+          {
+            "q": {
+              "mm": "ကလေးက စည်းကမ်းနားလည်ရင် အနီးကပ်ကြီးကြပ်ဖို့ လိုသေးလား။",
+              "en": "Does a child who understands rules still need close supervision?"
+            },
+            "a": {
+              "mm": "လိုပါသည်။ ဤအရွယ်ကလေးများသည် အန္တရာယ်ကို အမြဲမခန့်မှန်းနိုင်သေးသဖြင့် ရေ၊ လမ်းမ၊ မီးနှင့် အမြင့်နေရာအနီး လူကြီးက အနီးကပ်ကြီးကြပ်ရပါမည်။",
+              "en": "Yes. Young children cannot reliably judge danger, so adults must stay close near water, traffic, heat, and heights."
+            }
+          }
+        ],
+        "redFlags": [
+          {
+            "mm": "ခလုတ်ဘက်ထရီ၊ ဆေးဝါး သို့မဟုတ် အဆိပ်ဖြစ်နိုင်သောပစ္စည်း မျိုမိခြင်း၊ ရေနစ်လုဖြစ်ခြင်း၊ မီးလောင်ဒဏ်ရာ သို့မဟုတ် ပြင်းထန်သော ထိခိုက်ဒဏ်ရာ။",
+            "en": "Swallowing a button battery, medicine, or poison; a drowning incident; a burn; or a serious injury."
+          }
+        ],
+        "referral": {
+          "mm": "အရေးပေါ်အန္တရာယ် သို့မဟုတ် ပြင်းထန်ဒဏ်ရာရှိပါက ချက်ချင်း အရေးပေါ်ဆေးကုသမှု ရယူပါ။",
+          "en": "Seek emergency medical care immediately for a serious hazard exposure or injury."
+        },
+        "encouragement": {
+          "mm": "အန္တရာယ်ကို ကြိုဖယ်ရှားခြင်းက ကလေးကို လွတ်လပ်စွာ စူးစမ်းခွင့်ပေးနိုင်သည့် အကောင်းဆုံးနည်းဖြစ်သည်။",
+          "en": "Removing hazards in advance creates safer freedom to explore."
+        },
+        "editorialStatus": "reference_verified",
+        "evidenceSummary": "The 2023 CPSC childproofing guide directly supports window guards/opening limits, preserving one operable fire-escape window per room, furniture anchoring and locked medicines/cleaners. Current AAP and age-matched CDC guidance support layered water, traffic and supervision precautions."
+      },
+      "type": "guide",
+      "slug": "gd_19_24m_safety",
+      "titleMm": "၁၉–၂၄ လ — ဘေးကင်းလုံခြုံရေး လမ်းညွှန်",
+      "titleEn": "19–24 months — safety guide",
+      "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
+      "version": 1,
+      "clinicalStatus": "clinical_review",
+      "media": [],
+      "searchText": "၁၉–၂၄ လ — ဘေးကင်းလုံခြုံရေး လမ်းညွှန် 19–24 months — safety guide ပြတင်းပေါက်တွင် အကာအရံ သို့မဟုတ် အဖွင့်ကန့်သတ်ကိရိယာ တပ်၍ ၄ လက်မထက် ပိုမဖွင့်နိုင်အောင် ထားပါ။ မီးဘေးဖြစ်ပါက ထွက်ပြေးနိုင်ရန် အခန်းတိုင်းတွင် အနည်းဆုံး ပြတင်းပေါက်တစ်ပေါက်ကို လွယ်ကူစွာ ဖွင့်နိုင်အောင် ထားပါ။ ဆေးဝါးနှင့် သန့်ရှင်းရေးပစ္စည်းများကို ကလေးမမီသော နေရာတွင် သော့ခတ်သိမ်းပါ။ fit operable window guards or stops so windows open no more than four inches; keep at least one window in each room easy to open for fire escape. lock medicines and cleaning products out of reach. safety 19_24m guide ၁၉–၂၄ လ — ဘေးကင်းလုံခြုံရေး လမ်းညွှန် 19–24 months — safety guide ပြတင်းပေါက်တွင် အကာအရံ သို့မဟုတ် အဖွင့်ကန့်သတ်ကိရိယာ တပ်၍ ၄ လက်မထက် ပိုမဖွင့်နိုင်အောင် ထားပါ။ မီးဘေးဖြစ်ပါက ထွက်ပြေးနိုင်ရန် အခန်းတိုင်းတွင် အနည်းဆုံး ပြတင်းပေါက်တစ်ပေါက်ကို လွယ်ကူစွာ ဖွင့်နိုင်အောင် ထားပါ။ ဆေးဝါးနှင့် သန့်ရှင်းရေးပစ္စည်းများကို ကလေးမမီသော နေရာတွင် သော့ခတ်သိမ်းပါ။ fit operable window guards or stops so windows open no more than four inches; keep at least one window in each room easy to open for fire escape. lock medicines and cleaning products out of reach. ကလေးအမြင့်မှ အိမ်နှင့် အပြင်ကစားနေရာကို လိုက်ကြည့်ပြီး ရေ၊ မီး၊ လမ်းမ၊ ပြတင်းပေါက်၊ ကြိုးနှင့် ဆေးဝါးအန္တရာယ်ကို စစ်ပါ။ inspect home and play areas from the child’s height for water, burn, traffic, window, cord, and medicine hazards. ပရိဘောဂကြီးများကို နံရံတွင် ခိုင်ခံ့စွာ တပ်ပါ။ anchor heavy furniture securely to the wall. ဒီတစ်ပတ် အခန်းတစ်ခန်း သို့မဟုတ် အပြင်ကစားနေရာတစ်ခုကို ဘေးကင်းရေးစာရင်းဖြင့် ပြန်စစ်ပါ။ this week, recheck one room or outdoor play area with a safety list. ပရိဘောဂကြီးများကို နံရံတွင် ခိုင်ခံ့စွာ တပ်ပါ။ anchor heavy furniture securely to the wall. ပရိဘောဂကြီးများကို နံရံတွင် ခိုင်ခံ့စွာ တပ်ပါ။ anchor heavy furniture securely to the wall. ကလေးကို ရေ၊ လမ်းမ၊ မီးဖိုနှင့် အမြင့်နေရာအနီး တစ်ယောက်တည်း မထားပါနှင့်။ never leave the child alone near water, traffic, cooking areas, or heights. “မလုပ်နဲ့” ဟုသာ မပြောဘဲ အန္တရာယ်ကို လူကြီးက ဖယ်ရှားပြီး ဘေးကင်းသည့် အစားထိုးလုပ်ဆောင်ချက် ပြပါ။ do not rely only on “no”; remove the hazard and show a safe alternative. ကလေးက စည်းကမ်းနားလည်ရင် အနီးကပ်ကြီးကြပ်ဖို့ လိုသေးလား။ does a child who understands rules still need close supervision? လိုပါသည်။ ဤအရွယ်ကလေးများသည် အန္တရာယ်ကို အမြဲမခန့်မှန်းနိုင်သေးသဖြင့် ရေ၊ လမ်းမ၊ မီးနှင့် အမြင့်နေရာအနီး လူကြီးက အနီးကပ်ကြီးကြပ်ရပါမည်။ yes. young children cannot reliably judge danger, so adults must stay close near water, traffic, heat, and heights. ခလုတ်ဘက်ထရီ၊ ဆေးဝါး သို့မဟုတ် အဆိပ်ဖြစ်နိုင်သောပစ္စည်း မျိုမိခြင်း၊ ရေနစ်လုဖြစ်ခြင်း၊ မီးလောင်ဒဏ်ရာ သို့မဟုတ် ပြင်းထန်သော ထိခိုက်ဒဏ်ရာ။ swallowing a button battery, medicine, or poison; a drowning incident; a burn; or a serious injury. အရေးပေါ်အန္တရာယ် သို့မဟုတ် ပြင်းထန်ဒဏ်ရာရှိပါက ချက်ချင်း အရေးပေါ်ဆေးကုသမှု ရယူပါ။ seek emergency medical care immediately for a serious hazard exposure or injury. အန္တရာယ်ကို ကြိုဖယ်ရှားခြင်းက ကလေးကို လွတ်လပ်စွာ စူးစမ်းခွင့်ပေးနိုင်သည့် အကောင်းဆုံးနည်းဖြစ်သည်။ removing hazards in advance creates safer freedom to explore. reference_verified the 2023 cpsc childproofing guide directly supports window guards/opening limits, preserving one operable fire-escape window per room, furniture anchoring and locked medicines/cleaners. current aap and age-matched cdc guidance support layered water, traffic and supervision precautions."
+    },
+    {
+      "ageGroupKey": "2y",
+      "domainKey": "safety",
+      "tags": [
+        "safety",
+        "2y",
+        "guide"
+      ],
+      "summaryMm": "ပြေးစပြုချိန်အပါအဝင် လှုပ်ရှားနိုင်မှုနှင့် အရှိန် တိုးလာသည်နှင့်အမျှ လမ်းမ၊ ရေကန်နှင့် မီးဖိုအန္တရာယ်များကို ကြိုတင်ကာကွယ်ပါ။",
+      "summaryEn": "Plan ahead for traffic, water, and burn hazards as mobility and speed increase, including when running begins.",
+      "data": {
+        "title": {
+          "mm": "၂ နှစ် — ဘေးကင်းလုံခြုံရေး လမ်းညွှန်",
+          "en": "2 years — safety guide"
+        },
+        "why": {
+          "mm": "ပြေးစပြုချိန်အပါအဝင် လှုပ်ရှားနိုင်မှုနှင့် အရှိန် တိုးလာသည်နှင့်အမျှ လမ်းမ၊ ရေကန်နှင့် မီးဖိုအန္တရာယ်များကို ကြိုတင်ကာကွယ်ပါ။",
+          "en": "Plan ahead for traffic, water, and burn hazards as mobility and speed increase, including when running begins."
+        },
+        "observationQuestions": [
+          {
+            "mm": "ကလေးအမြင့်မှ အိမ်နှင့် အပြင်ကစားနေရာကို လိုက်ကြည့်ပြီး ရေ၊ မီး၊ လမ်းမ၊ ပြတင်းပေါက်၊ ကြိုးနှင့် ဆေးဝါးအန္တရာယ်ကို စစ်ပါ။",
+            "en": "Inspect home and play areas from the child’s height for water, burn, traffic, window, cord, and medicine hazards."
+          }
+        ],
+        "dailyActivities": [
+          {
+            "mm": "အပြင်ထွက်တိုင်း လူကြီးလက်ကိုင်ခြင်းကို လေ့ကျင့်ပါ။",
+            "en": "Practise holding an adult’s hand outdoors."
+          }
+        ],
+        "weeklyActivities": [
+          {
+            "mm": "ဒီတစ်ပတ် အခန်းတစ်ခန်း သို့မဟုတ် အပြင်ကစားနေရာတစ်ခုကို ဘေးကင်းရေးစာရင်းဖြင့် ပြန်စစ်ပါ။",
+            "en": "This week, recheck one room or outdoor play area with a safety list."
+          }
+        ],
+        "indoor": [
+          {
+            "mm": "အပြင်ထွက်တိုင်း လူကြီးလက်ကိုင်ခြင်းကို လေ့ကျင့်ပါ။",
+            "en": "Practise holding an adult’s hand outdoors."
+          }
+        ],
+        "outdoor": [
+          {
+            "mm": "အပြင်ထွက်တိုင်း လူကြီးလက်ကိုင်ခြင်းကို လေ့ကျင့်ပါ။",
+            "en": "Practise holding an adult’s hand outdoors."
+          }
+        ],
+        "safety": {
+          "mm": "ကလေးကို ရေ၊ လမ်းမ၊ မီးဖိုနှင့် အမြင့်နေရာအနီး တစ်ယောက်တည်း မထားပါနှင့်။",
+          "en": "Never leave the child alone near water, traffic, cooking areas, or heights."
+        },
+        "parentTips": [
+          {
+            "mm": "“မလုပ်နဲ့” ဟုသာ မပြောဘဲ အန္တရာယ်ကို လူကြီးက ဖယ်ရှားပြီး ဘေးကင်းသည့် အစားထိုးလုပ်ဆောင်ချက် ပြပါ။",
+            "en": "Do not rely only on “no”; remove the hazard and show a safe alternative."
+          }
+        ],
+        "faq": [
+          {
+            "q": {
+              "mm": "ကလေးက စည်းကမ်းနားလည်ရင် အနီးကပ်ကြီးကြပ်ဖို့ လိုသေးလား။",
+              "en": "Does a child who understands rules still need close supervision?"
+            },
+            "a": {
+              "mm": "လိုပါသည်။ ဤအရွယ်ကလေးများသည် အန္တရာယ်ကို အမြဲမခန့်မှန်းနိုင်သေးသဖြင့် ရေ၊ လမ်းမ၊ မီးနှင့် အမြင့်နေရာအနီး လူကြီးက အနီးကပ်ကြီးကြပ်ရပါမည်။",
+              "en": "Yes. Young children cannot reliably judge danger, so adults must stay close near water, traffic, heat, and heights."
+            }
+          }
+        ],
+        "redFlags": [
+          {
+            "mm": "ခလုတ်ဘက်ထရီ၊ ဆေးဝါး သို့မဟုတ် အဆိပ်ဖြစ်နိုင်သောပစ္စည်း မျိုမိခြင်း၊ ရေနစ်လုဖြစ်ခြင်း၊ မီးလောင်ဒဏ်ရာ သို့မဟုတ် ပြင်းထန်သော ထိခိုက်ဒဏ်ရာ။",
+            "en": "Swallowing a button battery, medicine, or poison; a drowning incident; a burn; or a serious injury."
+          }
+        ],
+        "referral": {
+          "mm": "အရေးပေါ်အန္တရာယ် သို့မဟုတ် ပြင်းထန်ဒဏ်ရာရှိပါက ချက်ချင်း အရေးပေါ်ဆေးကုသမှု ရယူပါ။",
+          "en": "Seek emergency medical care immediately for a serious hazard exposure or injury."
+        },
+        "encouragement": {
+          "mm": "အန္တရာယ်ကို ကြိုဖယ်ရှားခြင်းက ကလေးကို လွတ်လပ်စွာ စူးစမ်းခွင့်ပေးနိုင်သည့် အကောင်းဆုံးနည်းဖြစ်သည်။",
+          "en": "Removing hazards in advance creates safer freedom to explore."
+        },
+        "editorialStatus": "reference_verified",
+        "evidenceSummary": "Registered safety references support this conservative parent guide for 2 years."
+      },
+      "type": "guide",
+      "slug": "gd_2y_safety",
+      "titleMm": "၂ နှစ် — ဘေးကင်းလုံခြုံရေး လမ်းညွှန်",
+      "titleEn": "2 years — safety guide",
+      "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
+      "version": 1,
+      "clinicalStatus": "clinical_review",
+      "media": [],
+      "searchText": "၂ နှစ် — ဘေးကင်းလုံခြုံရေး လမ်းညွှန် 2 years — safety guide ပြေးစပြုချိန်အပါအဝင် လှုပ်ရှားနိုင်မှုနှင့် အရှိန် တိုးလာသည်နှင့်အမျှ လမ်းမ၊ ရေကန်နှင့် မီးဖိုအန္တရာယ်များကို ကြိုတင်ကာကွယ်ပါ။ plan ahead for traffic, water, and burn hazards as mobility and speed increase, including when running begins. safety 2y guide ၂ နှစ် — ဘေးကင်းလုံခြုံရေး လမ်းညွှန် 2 years — safety guide ပြေးစပြုချိန်အပါအဝင် လှုပ်ရှားနိုင်မှုနှင့် အရှိန် တိုးလာသည်နှင့်အမျှ လမ်းမ၊ ရေကန်နှင့် မီးဖိုအန္တရာယ်များကို ကြိုတင်ကာကွယ်ပါ။ plan ahead for traffic, water, and burn hazards as mobility and speed increase, including when running begins. ကလေးအမြင့်မှ အိမ်နှင့် အပြင်ကစားနေရာကို လိုက်ကြည့်ပြီး ရေ၊ မီး၊ လမ်းမ၊ ပြတင်းပေါက်၊ ကြိုးနှင့် ဆေးဝါးအန္တရာယ်ကို စစ်ပါ။ inspect home and play areas from the child’s height for water, burn, traffic, window, cord, and medicine hazards. အပြင်ထွက်တိုင်း လူကြီးလက်ကိုင်ခြင်းကို လေ့ကျင့်ပါ။ practise holding an adult’s hand outdoors. ဒီတစ်ပတ် အခန်းတစ်ခန်း သို့မဟုတ် အပြင်ကစားနေရာတစ်ခုကို ဘေးကင်းရေးစာရင်းဖြင့် ပြန်စစ်ပါ။ this week, recheck one room or outdoor play area with a safety list. အပြင်ထွက်တိုင်း လူကြီးလက်ကိုင်ခြင်းကို လေ့ကျင့်ပါ။ practise holding an adult’s hand outdoors. အပြင်ထွက်တိုင်း လူကြီးလက်ကိုင်ခြင်းကို လေ့ကျင့်ပါ။ practise holding an adult’s hand outdoors. ကလေးကို ရေ၊ လမ်းမ၊ မီးဖိုနှင့် အမြင့်နေရာအနီး တစ်ယောက်တည်း မထားပါနှင့်။ never leave the child alone near water, traffic, cooking areas, or heights. “မလုပ်နဲ့” ဟုသာ မပြောဘဲ အန္တရာယ်ကို လူကြီးက ဖယ်ရှားပြီး ဘေးကင်းသည့် အစားထိုးလုပ်ဆောင်ချက် ပြပါ။ do not rely only on “no”; remove the hazard and show a safe alternative. ကလေးက စည်းကမ်းနားလည်ရင် အနီးကပ်ကြီးကြပ်ဖို့ လိုသေးလား။ does a child who understands rules still need close supervision? လိုပါသည်။ ဤအရွယ်ကလေးများသည် အန္တရာယ်ကို အမြဲမခန့်မှန်းနိုင်သေးသဖြင့် ရေ၊ လမ်းမ၊ မီးနှင့် အမြင့်နေရာအနီး လူကြီးက အနီးကပ်ကြီးကြပ်ရပါမည်။ yes. young children cannot reliably judge danger, so adults must stay close near water, traffic, heat, and heights. ခလုတ်ဘက်ထရီ၊ ဆေးဝါး သို့မဟုတ် အဆိပ်ဖြစ်နိုင်သောပစ္စည်း မျိုမိခြင်း၊ ရေနစ်လုဖြစ်ခြင်း၊ မီးလောင်ဒဏ်ရာ သို့မဟုတ် ပြင်းထန်သော ထိခိုက်ဒဏ်ရာ။ swallowing a button battery, medicine, or poison; a drowning incident; a burn; or a serious injury. အရေးပေါ်အန္တရာယ် သို့မဟုတ် ပြင်းထန်ဒဏ်ရာရှိပါက ချက်ချင်း အရေးပေါ်ဆေးကုသမှု ရယူပါ။ seek emergency medical care immediately for a serious hazard exposure or injury. အန္တရာယ်ကို ကြိုဖယ်ရှားခြင်းက ကလေးကို လွတ်လပ်စွာ စူးစမ်းခွင့်ပေးနိုင်သည့် အကောင်းဆုံးနည်းဖြစ်သည်။ removing hazards in advance creates safer freedom to explore. reference_verified registered safety references support this conservative parent guide for 2 years."
+    },
+    {
+      "ageGroupKey": "2_5y",
+      "domainKey": "safety",
+      "tags": [
+        "safety",
+        "2_5y",
+        "guide"
+      ],
+      "summaryMm": "၂ နှစ်ခွဲအရွယ်တွင် လမ်းမ၊ ရေ၊ မီး၊ ပြတင်းပေါက်နှင့် ဆေးဝါးအန္တရာယ်များကို လူကြီးက ဆက်လက်ကာကွယ်ရပါမည်။",
+      "summaryEn": "At 2.5 years, adults still need to prevent traffic, water, burn, window, and medicine hazards.",
+      "data": {
+        "title": {
+          "mm": "၂ နှစ်ခွဲ — ဘေးကင်းလုံခြုံရေး လမ်းညွှန်",
+          "en": "2.5 years — safety guide"
+        },
+        "why": {
+          "mm": "၂ နှစ်ခွဲအရွယ်တွင် လမ်းမ၊ ရေ၊ မီး၊ ပြတင်းပေါက်နှင့် ဆေးဝါးအန္တရာယ်များကို လူကြီးက ဆက်လက်ကာကွယ်ရပါမည်။",
+          "en": "At 2.5 years, adults still need to prevent traffic, water, burn, window, and medicine hazards."
+        },
+        "observationQuestions": [
+          {
+            "mm": "ကလေးအမြင့်မှ အိမ်နှင့် အပြင်ကစားနေရာကို လိုက်ကြည့်ပြီး ရေ၊ မီး၊ လမ်းမ၊ ပြတင်းပေါက်၊ ကြိုးနှင့် ဆေးဝါးအန္တရာယ်ကို စစ်ပါ။",
+            "en": "Inspect home and play areas from the child’s height for water, burn, traffic, window, cord, and medicine hazards."
+          }
+        ],
+        "dailyActivities": [
+          {
+            "mm": "လူကြီးက အနီးကပ်ကြီးကြပ်နေပြီး ယုံကြည်ရသော လူကြီး၏ အာရုံစိုက်မှုကို ရယူပုံ နမူနာပြကာ အတူလေ့ကျင့်ပါ။ အန္တရာယ်ကို ကလေးက ကိုယ်တိုင် ခွဲခြားသိရှိ၍ စီမံနိုင်မည်ဟု မမှီခိုပါနှင့်။",
+            "en": "Stay close and model how to get a trusted adult’s attention, then practise together; do not rely on the child to identify or manage danger."
+          }
+        ],
+        "weeklyActivities": [
+          {
+            "mm": "ဒီတစ်ပတ် အခန်းတစ်ခန်း သို့မဟုတ် အပြင်ကစားနေရာတစ်ခုကို ဘေးကင်းရေးစာရင်းဖြင့် ပြန်စစ်ပါ။",
+            "en": "This week, recheck one room or outdoor play area with a safety list."
+          }
+        ],
+        "indoor": [
+          {
+            "mm": "လူကြီးက အနီးကပ်ကြီးကြပ်နေပြီး ယုံကြည်ရသော လူကြီး၏ အာရုံစိုက်မှုကို ရယူပုံ နမူနာပြကာ အတူလေ့ကျင့်ပါ။ အန္တရာယ်ကို ကလေးက ကိုယ်တိုင် ခွဲခြားသိရှိ၍ စီမံနိုင်မည်ဟု မမှီခိုပါနှင့်။",
+            "en": "Stay close and model how to get a trusted adult’s attention, then practise together; do not rely on the child to identify or manage danger."
+          }
+        ],
+        "outdoor": [
+          {
+            "mm": "လူကြီးက အနီးကပ်ကြီးကြပ်နေပြီး ယုံကြည်ရသော လူကြီး၏ အာရုံစိုက်မှုကို ရယူပုံ နမူနာပြကာ အတူလေ့ကျင့်ပါ။ အန္တရာယ်ကို ကလေးက ကိုယ်တိုင် ခွဲခြားသိရှိ၍ စီမံနိုင်မည်ဟု မမှီခိုပါနှင့်။",
+            "en": "Stay close and model how to get a trusted adult’s attention, then practise together; do not rely on the child to identify or manage danger."
+          }
+        ],
+        "safety": {
+          "mm": "ကလေးကို ရေ၊ လမ်းမ၊ မီးဖိုနှင့် အမြင့်နေရာအနီး တစ်ယောက်တည်း မထားပါနှင့်။",
+          "en": "Never leave the child alone near water, traffic, cooking areas, or heights."
+        },
+        "parentTips": [
+          {
+            "mm": "“မလုပ်နဲ့” ဟုသာ မပြောဘဲ အန္တရာယ်ကို လူကြီးက ဖယ်ရှားပြီး ဘေးကင်းသည့် အစားထိုးလုပ်ဆောင်ချက် ပြပါ။",
+            "en": "Do not rely only on “no”; remove the hazard and show a safe alternative."
+          }
+        ],
+        "faq": [
+          {
+            "q": {
+              "mm": "ကလေးက စည်းကမ်းနားလည်ရင် အနီးကပ်ကြီးကြပ်ဖို့ လိုသေးလား။",
+              "en": "Does a child who understands rules still need close supervision?"
+            },
+            "a": {
+              "mm": "လိုပါသည်။ ဤအရွယ်ကလေးများသည် အန္တရာယ်ကို အမြဲမခန့်မှန်းနိုင်သေးသဖြင့် ရေ၊ လမ်းမ၊ မီးနှင့် အမြင့်နေရာအနီး လူကြီးက အနီးကပ်ကြီးကြပ်ရပါမည်။",
+              "en": "Yes. Young children cannot reliably judge danger, so adults must stay close near water, traffic, heat, and heights."
+            }
+          }
+        ],
+        "redFlags": [
+          {
+            "mm": "ခလုတ်ဘက်ထရီ၊ ဆေးဝါး သို့မဟုတ် အဆိပ်ဖြစ်နိုင်သောပစ္စည်း မျိုမိခြင်း၊ ရေနစ်လုဖြစ်ခြင်း၊ မီးလောင်ဒဏ်ရာ သို့မဟုတ် ပြင်းထန်သော ထိခိုက်ဒဏ်ရာ။",
+            "en": "Swallowing a button battery, medicine, or poison; a drowning incident; a burn; or a serious injury."
+          }
+        ],
+        "referral": {
+          "mm": "အရေးပေါ်အန္တရာယ် သို့မဟုတ် ပြင်းထန်ဒဏ်ရာရှိပါက ချက်ချင်း အရေးပေါ်ဆေးကုသမှု ရယူပါ။",
+          "en": "Seek emergency medical care immediately for a serious hazard exposure or injury."
+        },
+        "encouragement": {
+          "mm": "အန္တရာယ်ကို ကြိုဖယ်ရှားခြင်းက ကလေးကို လွတ်လပ်စွာ စူးစမ်းခွင့်ပေးနိုင်သည့် အကောင်းဆုံးနည်းဖြစ်သည်။",
+          "en": "Removing hazards in advance creates safer freedom to explore."
+        },
+        "editorialStatus": "reference_verified",
+        "evidenceSummary": "Registered safety references support this conservative parent guide for 2.5 years."
+      },
+      "type": "guide",
+      "slug": "gd_2_5y_safety",
+      "titleMm": "၂ နှစ်ခွဲ — ဘေးကင်းလုံခြုံရေး လမ်းညွှန်",
+      "titleEn": "2.5 years — safety guide",
+      "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
+      "version": 1,
+      "clinicalStatus": "clinical_review",
+      "media": [],
+      "searchText": "၂ နှစ်ခွဲ — ဘေးကင်းလုံခြုံရေး လမ်းညွှန် 2.5 years — safety guide ၂ နှစ်ခွဲအရွယ်တွင် လမ်းမ၊ ရေ၊ မီး၊ ပြတင်းပေါက်နှင့် ဆေးဝါးအန္တရာယ်များကို လူကြီးက ဆက်လက်ကာကွယ်ရပါမည်။ at 2.5 years, adults still need to prevent traffic, water, burn, window, and medicine hazards. safety 2_5y guide ၂ နှစ်ခွဲ — ဘေးကင်းလုံခြုံရေး လမ်းညွှန် 2.5 years — safety guide ၂ နှစ်ခွဲအရွယ်တွင် လမ်းမ၊ ရေ၊ မီး၊ ပြတင်းပေါက်နှင့် ဆေးဝါးအန္တရာယ်များကို လူကြီးက ဆက်လက်ကာကွယ်ရပါမည်။ at 2.5 years, adults still need to prevent traffic, water, burn, window, and medicine hazards. ကလေးအမြင့်မှ အိမ်နှင့် အပြင်ကစားနေရာကို လိုက်ကြည့်ပြီး ရေ၊ မီး၊ လမ်းမ၊ ပြတင်းပေါက်၊ ကြိုးနှင့် ဆေးဝါးအန္တရာယ်ကို စစ်ပါ။ inspect home and play areas from the child’s height for water, burn, traffic, window, cord, and medicine hazards. လူကြီးက အနီးကပ်ကြီးကြပ်နေပြီး ယုံကြည်ရသော လူကြီး၏ အာရုံစိုက်မှုကို ရယူပုံ နမူနာပြကာ အတူလေ့ကျင့်ပါ။ အန္တရာယ်ကို ကလေးက ကိုယ်တိုင် ခွဲခြားသိရှိ၍ စီမံနိုင်မည်ဟု မမှီခိုပါနှင့်။ stay close and model how to get a trusted adult’s attention, then practise together; do not rely on the child to identify or manage danger. ဒီတစ်ပတ် အခန်းတစ်ခန်း သို့မဟုတ် အပြင်ကစားနေရာတစ်ခုကို ဘေးကင်းရေးစာရင်းဖြင့် ပြန်စစ်ပါ။ this week, recheck one room or outdoor play area with a safety list. လူကြီးက အနီးကပ်ကြီးကြပ်နေပြီး ယုံကြည်ရသော လူကြီး၏ အာရုံစိုက်မှုကို ရယူပုံ နမူနာပြကာ အတူလေ့ကျင့်ပါ။ အန္တရာယ်ကို ကလေးက ကိုယ်တိုင် ခွဲခြားသိရှိ၍ စီမံနိုင်မည်ဟု မမှီခိုပါနှင့်။ stay close and model how to get a trusted adult’s attention, then practise together; do not rely on the child to identify or manage danger. လူကြီးက အနီးကပ်ကြီးကြပ်နေပြီး ယုံကြည်ရသော လူကြီး၏ အာရုံစိုက်မှုကို ရယူပုံ နမူနာပြကာ အတူလေ့ကျင့်ပါ။ အန္တရာယ်ကို ကလေးက ကိုယ်တိုင် ခွဲခြားသိရှိ၍ စီမံနိုင်မည်ဟု မမှီခိုပါနှင့်။ stay close and model how to get a trusted adult’s attention, then practise together; do not rely on the child to identify or manage danger. ကလေးကို ရေ၊ လမ်းမ၊ မီးဖိုနှင့် အမြင့်နေရာအနီး တစ်ယောက်တည်း မထားပါနှင့်။ never leave the child alone near water, traffic, cooking areas, or heights. “မလုပ်နဲ့” ဟုသာ မပြောဘဲ အန္တရာယ်ကို လူကြီးက ဖယ်ရှားပြီး ဘေးကင်းသည့် အစားထိုးလုပ်ဆောင်ချက် ပြပါ။ do not rely only on “no”; remove the hazard and show a safe alternative. ကလေးက စည်းကမ်းနားလည်ရင် အနီးကပ်ကြီးကြပ်ဖို့ လိုသေးလား။ does a child who understands rules still need close supervision? လိုပါသည်။ ဤအရွယ်ကလေးများသည် အန္တရာယ်ကို အမြဲမခန့်မှန်းနိုင်သေးသဖြင့် ရေ၊ လမ်းမ၊ မီးနှင့် အမြင့်နေရာအနီး လူကြီးက အနီးကပ်ကြီးကြပ်ရပါမည်။ yes. young children cannot reliably judge danger, so adults must stay close near water, traffic, heat, and heights. ခလုတ်ဘက်ထရီ၊ ဆေးဝါး သို့မဟုတ် အဆိပ်ဖြစ်နိုင်သောပစ္စည်း မျိုမိခြင်း၊ ရေနစ်လုဖြစ်ခြင်း၊ မီးလောင်ဒဏ်ရာ သို့မဟုတ် ပြင်းထန်သော ထိခိုက်ဒဏ်ရာ။ swallowing a button battery, medicine, or poison; a drowning incident; a burn; or a serious injury. အရေးပေါ်အန္တရာယ် သို့မဟုတ် ပြင်းထန်ဒဏ်ရာရှိပါက ချက်ချင်း အရေးပေါ်ဆေးကုသမှု ရယူပါ။ seek emergency medical care immediately for a serious hazard exposure or injury. အန္တရာယ်ကို ကြိုဖယ်ရှားခြင်းက ကလေးကို လွတ်လပ်စွာ စူးစမ်းခွင့်ပေးနိုင်သည့် အကောင်းဆုံးနည်းဖြစ်သည်။ removing hazards in advance creates safer freedom to explore. reference_verified registered safety references support this conservative parent guide for 2.5 years."
+    },
+    {
+      "ageGroupKey": "3y",
+      "domainKey": "safety",
+      "tags": [
+        "safety",
+        "3y",
+        "guide"
+      ],
+      "summaryMm": "၃ နှစ်အရွယ်တွင် လမ်းမ၊ ရေ၊ မီး၊ ပြတင်းပေါက်နှင့် ဆေးဝါးအန္တရာယ်များကို လူကြီးက ဆက်လက်ကာကွယ်ရပါမည်။",
+      "summaryEn": "At 3 years, adults still need to prevent traffic, water, burn, window, and medicine hazards.",
+      "data": {
+        "title": {
+          "mm": "၃ နှစ် — ဘေးကင်းလုံခြုံရေး လမ်းညွှန်",
+          "en": "3 years — safety guide"
+        },
+        "why": {
+          "mm": "၃ နှစ်အရွယ်တွင် လမ်းမ၊ ရေ၊ မီး၊ ပြတင်းပေါက်နှင့် ဆေးဝါးအန္တရာယ်များကို လူကြီးက ဆက်လက်ကာကွယ်ရပါမည်။",
+          "en": "At 3 years, adults still need to prevent traffic, water, burn, window, and medicine hazards."
+        },
+        "observationQuestions": [
+          {
+            "mm": "ကလေးအမြင့်မှ အိမ်နှင့် အပြင်ကစားနေရာကို လိုက်ကြည့်ပြီး ရေ၊ မီး၊ လမ်းမ၊ ပြတင်းပေါက်၊ ကြိုးနှင့် ဆေးဝါးအန္တရာယ်ကို စစ်ပါ။",
+            "en": "Inspect home and play areas from the child’s height for water, burn, traffic, window, cord, and medicine hazards."
+          }
+        ],
+        "dailyActivities": [
+          {
+            "mm": "အရေးပေါ်အခြေအနေတွင် ယုံကြည်ရသော လူကြီးကို ခေါ်ရန် လေ့ကျင့်ပါ။",
+            "en": "Practise calling a trusted adult when something feels unsafe."
+          }
+        ],
+        "weeklyActivities": [
+          {
+            "mm": "ဒီတစ်ပတ် အခန်းတစ်ခန်း သို့မဟုတ် အပြင်ကစားနေရာတစ်ခုကို ဘေးကင်းရေးစာရင်းဖြင့် ပြန်စစ်ပါ။",
+            "en": "This week, recheck one room or outdoor play area with a safety list."
+          }
+        ],
+        "indoor": [
+          {
+            "mm": "အရေးပေါ်အခြေအနေတွင် ယုံကြည်ရသော လူကြီးကို ခေါ်ရန် လေ့ကျင့်ပါ။",
+            "en": "Practise calling a trusted adult when something feels unsafe."
+          }
+        ],
+        "outdoor": [
+          {
+            "mm": "အရေးပေါ်အခြေအနေတွင် ယုံကြည်ရသော လူကြီးကို ခေါ်ရန် လေ့ကျင့်ပါ။",
+            "en": "Practise calling a trusted adult when something feels unsafe."
+          }
+        ],
+        "safety": {
+          "mm": "ကလေးကို ရေ၊ လမ်းမ၊ မီးဖိုနှင့် အမြင့်နေရာအနီး တစ်ယောက်တည်း မထားပါနှင့်။",
+          "en": "Never leave the child alone near water, traffic, cooking areas, or heights."
+        },
+        "parentTips": [
+          {
+            "mm": "“မလုပ်နဲ့” ဟုသာ မပြောဘဲ အန္တရာယ်ကို လူကြီးက ဖယ်ရှားပြီး ဘေးကင်းသည့် အစားထိုးလုပ်ဆောင်ချက် ပြပါ။",
+            "en": "Do not rely only on “no”; remove the hazard and show a safe alternative."
+          }
+        ],
+        "faq": [
+          {
+            "q": {
+              "mm": "ကလေးက စည်းကမ်းနားလည်ရင် အနီးကပ်ကြီးကြပ်ဖို့ လိုသေးလား။",
+              "en": "Does a child who understands rules still need close supervision?"
+            },
+            "a": {
+              "mm": "လိုပါသည်။ ဤအရွယ်ကလေးများသည် အန္တရာယ်ကို အမြဲမခန့်မှန်းနိုင်သေးသဖြင့် ရေ၊ လမ်းမ၊ မီးနှင့် အမြင့်နေရာအနီး လူကြီးက အနီးကပ်ကြီးကြပ်ရပါမည်။",
+              "en": "Yes. Young children cannot reliably judge danger, so adults must stay close near water, traffic, heat, and heights."
+            }
+          }
+        ],
+        "redFlags": [
+          {
+            "mm": "ခလုတ်ဘက်ထရီ၊ ဆေးဝါး သို့မဟုတ် အဆိပ်ဖြစ်နိုင်သောပစ္စည်း မျိုမိခြင်း၊ ရေနစ်လုဖြစ်ခြင်း၊ မီးလောင်ဒဏ်ရာ သို့မဟုတ် ပြင်းထန်သော ထိခိုက်ဒဏ်ရာ။",
+            "en": "Swallowing a button battery, medicine, or poison; a drowning incident; a burn; or a serious injury."
+          }
+        ],
+        "referral": {
+          "mm": "အရေးပေါ်အန္တရာယ် သို့မဟုတ် ပြင်းထန်ဒဏ်ရာရှိပါက ချက်ချင်း အရေးပေါ်ဆေးကုသမှု ရယူပါ။",
+          "en": "Seek emergency medical care immediately for a serious hazard exposure or injury."
+        },
+        "encouragement": {
+          "mm": "အန္တရာယ်ကို ကြိုဖယ်ရှားခြင်းက ကလေးကို လွတ်လပ်စွာ စူးစမ်းခွင့်ပေးနိုင်သည့် အကောင်းဆုံးနည်းဖြစ်သည်။",
+          "en": "Removing hazards in advance creates safer freedom to explore."
+        },
+        "editorialStatus": "reference_verified",
+        "evidenceSummary": "Registered safety references support this conservative parent guide for 3 years."
+      },
+      "type": "guide",
+      "slug": "gd_3y_safety",
+      "titleMm": "၃ နှစ် — ဘေးကင်းလုံခြုံရေး လမ်းညွှန်",
+      "titleEn": "3 years — safety guide",
+      "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
+      "version": 1,
+      "clinicalStatus": "clinical_review",
+      "media": [],
+      "searchText": "၃ နှစ် — ဘေးကင်းလုံခြုံရေး လမ်းညွှန် 3 years — safety guide ၃ နှစ်အရွယ်တွင် လမ်းမ၊ ရေ၊ မီး၊ ပြတင်းပေါက်နှင့် ဆေးဝါးအန္တရာယ်များကို လူကြီးက ဆက်လက်ကာကွယ်ရပါမည်။ at 3 years, adults still need to prevent traffic, water, burn, window, and medicine hazards. safety 3y guide ၃ နှစ် — ဘေးကင်းလုံခြုံရေး လမ်းညွှန် 3 years — safety guide ၃ နှစ်အရွယ်တွင် လမ်းမ၊ ရေ၊ မီး၊ ပြတင်းပေါက်နှင့် ဆေးဝါးအန္တရာယ်များကို လူကြီးက ဆက်လက်ကာကွယ်ရပါမည်။ at 3 years, adults still need to prevent traffic, water, burn, window, and medicine hazards. ကလေးအမြင့်မှ အိမ်နှင့် အပြင်ကစားနေရာကို လိုက်ကြည့်ပြီး ရေ၊ မီး၊ လမ်းမ၊ ပြတင်းပေါက်၊ ကြိုးနှင့် ဆေးဝါးအန္တရာယ်ကို စစ်ပါ။ inspect home and play areas from the child’s height for water, burn, traffic, window, cord, and medicine hazards. အရေးပေါ်အခြေအနေတွင် ယုံကြည်ရသော လူကြီးကို ခေါ်ရန် လေ့ကျင့်ပါ။ practise calling a trusted adult when something feels unsafe. ဒီတစ်ပတ် အခန်းတစ်ခန်း သို့မဟုတ် အပြင်ကစားနေရာတစ်ခုကို ဘေးကင်းရေးစာရင်းဖြင့် ပြန်စစ်ပါ။ this week, recheck one room or outdoor play area with a safety list. အရေးပေါ်အခြေအနေတွင် ယုံကြည်ရသော လူကြီးကို ခေါ်ရန် လေ့ကျင့်ပါ။ practise calling a trusted adult when something feels unsafe. အရေးပေါ်အခြေအနေတွင် ယုံကြည်ရသော လူကြီးကို ခေါ်ရန် လေ့ကျင့်ပါ။ practise calling a trusted adult when something feels unsafe. ကလေးကို ရေ၊ လမ်းမ၊ မီးဖိုနှင့် အမြင့်နေရာအနီး တစ်ယောက်တည်း မထားပါနှင့်။ never leave the child alone near water, traffic, cooking areas, or heights. “မလုပ်နဲ့” ဟုသာ မပြောဘဲ အန္တရာယ်ကို လူကြီးက ဖယ်ရှားပြီး ဘေးကင်းသည့် အစားထိုးလုပ်ဆောင်ချက် ပြပါ။ do not rely only on “no”; remove the hazard and show a safe alternative. ကလေးက စည်းကမ်းနားလည်ရင် အနီးကပ်ကြီးကြပ်ဖို့ လိုသေးလား။ does a child who understands rules still need close supervision? လိုပါသည်။ ဤအရွယ်ကလေးများသည် အန္တရာယ်ကို အမြဲမခန့်မှန်းနိုင်သေးသဖြင့် ရေ၊ လမ်းမ၊ မီးနှင့် အမြင့်နေရာအနီး လူကြီးက အနီးကပ်ကြီးကြပ်ရပါမည်။ yes. young children cannot reliably judge danger, so adults must stay close near water, traffic, heat, and heights. ခလုတ်ဘက်ထရီ၊ ဆေးဝါး သို့မဟုတ် အဆိပ်ဖြစ်နိုင်သောပစ္စည်း မျိုမိခြင်း၊ ရေနစ်လုဖြစ်ခြင်း၊ မီးလောင်ဒဏ်ရာ သို့မဟုတ် ပြင်းထန်သော ထိခိုက်ဒဏ်ရာ။ swallowing a button battery, medicine, or poison; a drowning incident; a burn; or a serious injury. အရေးပေါ်အန္တရာယ် သို့မဟုတ် ပြင်းထန်ဒဏ်ရာရှိပါက ချက်ချင်း အရေးပေါ်ဆေးကုသမှု ရယူပါ။ seek emergency medical care immediately for a serious hazard exposure or injury. အန္တရာယ်ကို ကြိုဖယ်ရှားခြင်းက ကလေးကို လွတ်လပ်စွာ စူးစမ်းခွင့်ပေးနိုင်သည့် အကောင်းဆုံးနည်းဖြစ်သည်။ removing hazards in advance creates safer freedom to explore. reference_verified registered safety references support this conservative parent guide for 3 years."
+    },
+    {
+      "ageGroupKey": "3_5y",
+      "domainKey": "safety",
+      "tags": [
+        "safety",
+        "3_5y",
+        "guide"
+      ],
+      "summaryMm": "၃ နှစ်ခွဲအရွယ်တွင် လမ်းမ၊ ရေ၊ မီး၊ ပြတင်းပေါက်နှင့် ဆေးဝါးအန္တရာယ်များကို လူကြီးက ဆက်လက်ကာကွယ်ရပါမည်။",
+      "summaryEn": "At 3.5 years, adults still need to prevent traffic, water, burn, window, and medicine hazards.",
+      "data": {
+        "title": {
+          "mm": "၃ နှစ်ခွဲ — ဘေးကင်းလုံခြုံရေး လမ်းညွှန်",
+          "en": "3.5 years — safety guide"
+        },
+        "why": {
+          "mm": "၃ နှစ်ခွဲအရွယ်တွင် လမ်းမ၊ ရေ၊ မီး၊ ပြတင်းပေါက်နှင့် ဆေးဝါးအန္တရာယ်များကို လူကြီးက ဆက်လက်ကာကွယ်ရပါမည်။",
+          "en": "At 3.5 years, adults still need to prevent traffic, water, burn, window, and medicine hazards."
+        },
+        "observationQuestions": [
+          {
+            "mm": "ကလေးအမြင့်မှ အိမ်နှင့် အပြင်ကစားနေရာကို လိုက်ကြည့်ပြီး ရေ၊ မီး၊ လမ်းမ၊ ပြတင်းပေါက်၊ ကြိုးနှင့် ဆေးဝါးအန္တရာယ်ကို စစ်ပါ။",
+            "en": "Inspect home and play areas from the child’s height for water, burn, traffic, window, cord, and medicine hazards."
+          }
+        ],
+        "dailyActivities": [
+          {
+            "mm": "အရေးပေါ်အခြေအနေတွင် ယုံကြည်ရသော လူကြီးကို ခေါ်ရန် လေ့ကျင့်ပါ။",
+            "en": "Practise calling a trusted adult when something feels unsafe."
+          }
+        ],
+        "weeklyActivities": [
+          {
+            "mm": "ဒီတစ်ပတ် အခန်းတစ်ခန်း သို့မဟုတ် အပြင်ကစားနေရာတစ်ခုကို ဘေးကင်းရေးစာရင်းဖြင့် ပြန်စစ်ပါ။",
+            "en": "This week, recheck one room or outdoor play area with a safety list."
+          }
+        ],
+        "indoor": [
+          {
+            "mm": "အရေးပေါ်အခြေအနေတွင် ယုံကြည်ရသော လူကြီးကို ခေါ်ရန် လေ့ကျင့်ပါ။",
+            "en": "Practise calling a trusted adult when something feels unsafe."
+          }
+        ],
+        "outdoor": [
+          {
+            "mm": "အရေးပေါ်အခြေအနေတွင် ယုံကြည်ရသော လူကြီးကို ခေါ်ရန် လေ့ကျင့်ပါ။",
+            "en": "Practise calling a trusted adult when something feels unsafe."
+          }
+        ],
+        "safety": {
+          "mm": "ကလေးကို ရေ၊ လမ်းမ၊ မီးဖိုနှင့် အမြင့်နေရာအနီး တစ်ယောက်တည်း မထားပါနှင့်။",
+          "en": "Never leave the child alone near water, traffic, cooking areas, or heights."
+        },
+        "parentTips": [
+          {
+            "mm": "“မလုပ်နဲ့” ဟုသာ မပြောဘဲ အန္တရာယ်ကို လူကြီးက ဖယ်ရှားပြီး ဘေးကင်းသည့် အစားထိုးလုပ်ဆောင်ချက် ပြပါ။",
+            "en": "Do not rely only on “no”; remove the hazard and show a safe alternative."
+          }
+        ],
+        "faq": [
+          {
+            "q": {
+              "mm": "ကလေးက စည်းကမ်းနားလည်ရင် အနီးကပ်ကြီးကြပ်ဖို့ လိုသေးလား။",
+              "en": "Does a child who understands rules still need close supervision?"
+            },
+            "a": {
+              "mm": "လိုပါသည်။ ဤအရွယ်ကလေးများသည် အန္တရာယ်ကို အမြဲမခန့်မှန်းနိုင်သေးသဖြင့် ရေ၊ လမ်းမ၊ မီးနှင့် အမြင့်နေရာအနီး လူကြီးက အနီးကပ်ကြီးကြပ်ရပါမည်။",
+              "en": "Yes. Young children cannot reliably judge danger, so adults must stay close near water, traffic, heat, and heights."
+            }
+          }
+        ],
+        "redFlags": [
+          {
+            "mm": "ခလုတ်ဘက်ထရီ၊ ဆေးဝါး သို့မဟုတ် အဆိပ်ဖြစ်နိုင်သောပစ္စည်း မျိုမိခြင်း၊ ရေနစ်လုဖြစ်ခြင်း၊ မီးလောင်ဒဏ်ရာ သို့မဟုတ် ပြင်းထန်သော ထိခိုက်ဒဏ်ရာ။",
+            "en": "Swallowing a button battery, medicine, or poison; a drowning incident; a burn; or a serious injury."
+          }
+        ],
+        "referral": {
+          "mm": "အရေးပေါ်အန္တရာယ် သို့မဟုတ် ပြင်းထန်ဒဏ်ရာရှိပါက ချက်ချင်း အရေးပေါ်ဆေးကုသမှု ရယူပါ။",
+          "en": "Seek emergency medical care immediately for a serious hazard exposure or injury."
+        },
+        "encouragement": {
+          "mm": "အန္တရာယ်ကို ကြိုဖယ်ရှားခြင်းက ကလေးကို လွတ်လပ်စွာ စူးစမ်းခွင့်ပေးနိုင်သည့် အကောင်းဆုံးနည်းဖြစ်သည်။",
+          "en": "Removing hazards in advance creates safer freedom to explore."
+        },
+        "editorialStatus": "reference_verified",
+        "evidenceSummary": "Registered safety references support this conservative parent guide for 3.5 years."
+      },
+      "type": "guide",
+      "slug": "gd_3_5y_safety",
+      "titleMm": "၃ နှစ်ခွဲ — ဘေးကင်းလုံခြုံရေး လမ်းညွှန်",
+      "titleEn": "3.5 years — safety guide",
+      "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
+      "version": 1,
+      "clinicalStatus": "clinical_review",
+      "media": [],
+      "searchText": "၃ နှစ်ခွဲ — ဘေးကင်းလုံခြုံရေး လမ်းညွှန် 3.5 years — safety guide ၃ နှစ်ခွဲအရွယ်တွင် လမ်းမ၊ ရေ၊ မီး၊ ပြတင်းပေါက်နှင့် ဆေးဝါးအန္တရာယ်များကို လူကြီးက ဆက်လက်ကာကွယ်ရပါမည်။ at 3.5 years, adults still need to prevent traffic, water, burn, window, and medicine hazards. safety 3_5y guide ၃ နှစ်ခွဲ — ဘေးကင်းလုံခြုံရေး လမ်းညွှန် 3.5 years — safety guide ၃ နှစ်ခွဲအရွယ်တွင် လမ်းမ၊ ရေ၊ မီး၊ ပြတင်းပေါက်နှင့် ဆေးဝါးအန္တရာယ်များကို လူကြီးက ဆက်လက်ကာကွယ်ရပါမည်။ at 3.5 years, adults still need to prevent traffic, water, burn, window, and medicine hazards. ကလေးအမြင့်မှ အိမ်နှင့် အပြင်ကစားနေရာကို လိုက်ကြည့်ပြီး ရေ၊ မီး၊ လမ်းမ၊ ပြတင်းပေါက်၊ ကြိုးနှင့် ဆေးဝါးအန္တရာယ်ကို စစ်ပါ။ inspect home and play areas from the child’s height for water, burn, traffic, window, cord, and medicine hazards. အရေးပေါ်အခြေအနေတွင် ယုံကြည်ရသော လူကြီးကို ခေါ်ရန် လေ့ကျင့်ပါ။ practise calling a trusted adult when something feels unsafe. ဒီတစ်ပတ် အခန်းတစ်ခန်း သို့မဟုတ် အပြင်ကစားနေရာတစ်ခုကို ဘေးကင်းရေးစာရင်းဖြင့် ပြန်စစ်ပါ။ this week, recheck one room or outdoor play area with a safety list. အရေးပေါ်အခြေအနေတွင် ယုံကြည်ရသော လူကြီးကို ခေါ်ရန် လေ့ကျင့်ပါ။ practise calling a trusted adult when something feels unsafe. အရေးပေါ်အခြေအနေတွင် ယုံကြည်ရသော လူကြီးကို ခေါ်ရန် လေ့ကျင့်ပါ။ practise calling a trusted adult when something feels unsafe. ကလေးကို ရေ၊ လမ်းမ၊ မီးဖိုနှင့် အမြင့်နေရာအနီး တစ်ယောက်တည်း မထားပါနှင့်။ never leave the child alone near water, traffic, cooking areas, or heights. “မလုပ်နဲ့” ဟုသာ မပြောဘဲ အန္တရာယ်ကို လူကြီးက ဖယ်ရှားပြီး ဘေးကင်းသည့် အစားထိုးလုပ်ဆောင်ချက် ပြပါ။ do not rely only on “no”; remove the hazard and show a safe alternative. ကလေးက စည်းကမ်းနားလည်ရင် အနီးကပ်ကြီးကြပ်ဖို့ လိုသေးလား။ does a child who understands rules still need close supervision? လိုပါသည်။ ဤအရွယ်ကလေးများသည် အန္တရာယ်ကို အမြဲမခန့်မှန်းနိုင်သေးသဖြင့် ရေ၊ လမ်းမ၊ မီးနှင့် အမြင့်နေရာအနီး လူကြီးက အနီးကပ်ကြီးကြပ်ရပါမည်။ yes. young children cannot reliably judge danger, so adults must stay close near water, traffic, heat, and heights. ခလုတ်ဘက်ထရီ၊ ဆေးဝါး သို့မဟုတ် အဆိပ်ဖြစ်နိုင်သောပစ္စည်း မျိုမိခြင်း၊ ရေနစ်လုဖြစ်ခြင်း၊ မီးလောင်ဒဏ်ရာ သို့မဟုတ် ပြင်းထန်သော ထိခိုက်ဒဏ်ရာ။ swallowing a button battery, medicine, or poison; a drowning incident; a burn; or a serious injury. အရေးပေါ်အန္တရာယ် သို့မဟုတ် ပြင်းထန်ဒဏ်ရာရှိပါက ချက်ချင်း အရေးပေါ်ဆေးကုသမှု ရယူပါ။ seek emergency medical care immediately for a serious hazard exposure or injury. အန္တရာယ်ကို ကြိုဖယ်ရှားခြင်းက ကလေးကို လွတ်လပ်စွာ စူးစမ်းခွင့်ပေးနိုင်သည့် အကောင်းဆုံးနည်းဖြစ်သည်။ removing hazards in advance creates safer freedom to explore. reference_verified registered safety references support this conservative parent guide for 3.5 years."
+    },
+    {
+      "ageGroupKey": "4y",
+      "domainKey": "safety",
+      "tags": [
+        "safety",
+        "4y",
+        "guide"
+      ],
+      "summaryMm": "၄ နှစ်အရွယ်တွင် လမ်းမ၊ ရေ၊ မီး၊ ပြတင်းပေါက်နှင့် ဆေးဝါးအန္တရာယ်များကို လူကြီးက ဆက်လက်ကာကွယ်ရပါမည်။",
+      "summaryEn": "At 4 years, adults still need to prevent traffic, water, burn, window, and medicine hazards.",
+      "data": {
+        "title": {
+          "mm": "၄ နှစ် — ဘေးကင်းလုံခြုံရေး လမ်းညွှန်",
+          "en": "4 years — safety guide"
+        },
+        "why": {
+          "mm": "၄ နှစ်အရွယ်တွင် လမ်းမ၊ ရေ၊ မီး၊ ပြတင်းပေါက်နှင့် ဆေးဝါးအန္တရာယ်များကို လူကြီးက ဆက်လက်ကာကွယ်ရပါမည်။",
+          "en": "At 4 years, adults still need to prevent traffic, water, burn, window, and medicine hazards."
+        },
+        "observationQuestions": [
+          {
+            "mm": "ကလေးအမြင့်မှ အိမ်နှင့် အပြင်ကစားနေရာကို လိုက်ကြည့်ပြီး ရေ၊ မီး၊ လမ်းမ၊ ပြတင်းပေါက်၊ ကြိုးနှင့် ဆေးဝါးအန္တရာယ်ကို စစ်ပါ။",
+            "en": "Inspect home and play areas from the child’s height for water, burn, traffic, window, cord, and medicine hazards."
+          }
+        ],
+        "dailyActivities": [
+          {
+            "mm": "အရေးပေါ်အခြေအနေတွင် ယုံကြည်ရသော လူကြီးကို ခေါ်ရန် လေ့ကျင့်ပါ။",
+            "en": "Practise calling a trusted adult when something feels unsafe."
+          }
+        ],
+        "weeklyActivities": [
+          {
+            "mm": "ဒီတစ်ပတ် အခန်းတစ်ခန်း သို့မဟုတ် အပြင်ကစားနေရာတစ်ခုကို ဘေးကင်းရေးစာရင်းဖြင့် ပြန်စစ်ပါ။",
+            "en": "This week, recheck one room or outdoor play area with a safety list."
+          }
+        ],
+        "indoor": [
+          {
+            "mm": "အရေးပေါ်အခြေအနေတွင် ယုံကြည်ရသော လူကြီးကို ခေါ်ရန် လေ့ကျင့်ပါ။",
+            "en": "Practise calling a trusted adult when something feels unsafe."
+          }
+        ],
+        "outdoor": [
+          {
+            "mm": "အရေးပေါ်အခြေအနေတွင် ယုံကြည်ရသော လူကြီးကို ခေါ်ရန် လေ့ကျင့်ပါ။",
+            "en": "Practise calling a trusted adult when something feels unsafe."
+          }
+        ],
+        "safety": {
+          "mm": "ကလေးကို ရေ၊ လမ်းမ၊ မီးဖိုနှင့် အမြင့်နေရာအနီး တစ်ယောက်တည်း မထားပါနှင့်။",
+          "en": "Never leave the child alone near water, traffic, cooking areas, or heights."
+        },
+        "parentTips": [
+          {
+            "mm": "“မလုပ်နဲ့” ဟုသာ မပြောဘဲ အန္တရာယ်ကို လူကြီးက ဖယ်ရှားပြီး ဘေးကင်းသည့် အစားထိုးလုပ်ဆောင်ချက် ပြပါ။",
+            "en": "Do not rely only on “no”; remove the hazard and show a safe alternative."
+          }
+        ],
+        "faq": [
+          {
+            "q": {
+              "mm": "ကလေးက စည်းကမ်းနားလည်ရင် အနီးကပ်ကြီးကြပ်ဖို့ လိုသေးလား။",
+              "en": "Does a child who understands rules still need close supervision?"
+            },
+            "a": {
+              "mm": "လိုပါသည်။ ဤအရွယ်ကလေးများသည် အန္တရာယ်ကို အမြဲမခန့်မှန်းနိုင်သေးသဖြင့် ရေ၊ လမ်းမ၊ မီးနှင့် အမြင့်နေရာအနီး လူကြီးက အနီးကပ်ကြီးကြပ်ရပါမည်။",
+              "en": "Yes. Young children cannot reliably judge danger, so adults must stay close near water, traffic, heat, and heights."
+            }
+          }
+        ],
+        "redFlags": [
+          {
+            "mm": "ခလုတ်ဘက်ထရီ၊ ဆေးဝါး သို့မဟုတ် အဆိပ်ဖြစ်နိုင်သောပစ္စည်း မျိုမိခြင်း၊ ရေနစ်လုဖြစ်ခြင်း၊ မီးလောင်ဒဏ်ရာ သို့မဟုတ် ပြင်းထန်သော ထိခိုက်ဒဏ်ရာ။",
+            "en": "Swallowing a button battery, medicine, or poison; a drowning incident; a burn; or a serious injury."
+          }
+        ],
+        "referral": {
+          "mm": "အရေးပေါ်အန္တရာယ် သို့မဟုတ် ပြင်းထန်ဒဏ်ရာရှိပါက ချက်ချင်း အရေးပေါ်ဆေးကုသမှု ရယူပါ။",
+          "en": "Seek emergency medical care immediately for a serious hazard exposure or injury."
+        },
+        "encouragement": {
+          "mm": "အန္တရာယ်ကို ကြိုဖယ်ရှားခြင်းက ကလေးကို လွတ်လပ်စွာ စူးစမ်းခွင့်ပေးနိုင်သည့် အကောင်းဆုံးနည်းဖြစ်သည်။",
+          "en": "Removing hazards in advance creates safer freedom to explore."
+        },
+        "editorialStatus": "reference_verified",
+        "evidenceSummary": "Registered safety references support this conservative parent guide for 4 years."
+      },
+      "type": "guide",
+      "slug": "gd_4y_safety",
+      "titleMm": "၄ နှစ် — ဘေးကင်းလုံခြုံရေး လမ်းညွှန်",
+      "titleEn": "4 years — safety guide",
+      "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
+      "version": 1,
+      "clinicalStatus": "clinical_review",
+      "media": [],
+      "searchText": "၄ နှစ် — ဘေးကင်းလုံခြုံရေး လမ်းညွှန် 4 years — safety guide ၄ နှစ်အရွယ်တွင် လမ်းမ၊ ရေ၊ မီး၊ ပြတင်းပေါက်နှင့် ဆေးဝါးအန္တရာယ်များကို လူကြီးက ဆက်လက်ကာကွယ်ရပါမည်။ at 4 years, adults still need to prevent traffic, water, burn, window, and medicine hazards. safety 4y guide ၄ နှစ် — ဘေးကင်းလုံခြုံရေး လမ်းညွှန် 4 years — safety guide ၄ နှစ်အရွယ်တွင် လမ်းမ၊ ရေ၊ မီး၊ ပြတင်းပေါက်နှင့် ဆေးဝါးအန္တရာယ်များကို လူကြီးက ဆက်လက်ကာကွယ်ရပါမည်။ at 4 years, adults still need to prevent traffic, water, burn, window, and medicine hazards. ကလေးအမြင့်မှ အိမ်နှင့် အပြင်ကစားနေရာကို လိုက်ကြည့်ပြီး ရေ၊ မီး၊ လမ်းမ၊ ပြတင်းပေါက်၊ ကြိုးနှင့် ဆေးဝါးအန္တရာယ်ကို စစ်ပါ။ inspect home and play areas from the child’s height for water, burn, traffic, window, cord, and medicine hazards. အရေးပေါ်အခြေအနေတွင် ယုံကြည်ရသော လူကြီးကို ခေါ်ရန် လေ့ကျင့်ပါ။ practise calling a trusted adult when something feels unsafe. ဒီတစ်ပတ် အခန်းတစ်ခန်း သို့မဟုတ် အပြင်ကစားနေရာတစ်ခုကို ဘေးကင်းရေးစာရင်းဖြင့် ပြန်စစ်ပါ။ this week, recheck one room or outdoor play area with a safety list. အရေးပေါ်အခြေအနေတွင် ယုံကြည်ရသော လူကြီးကို ခေါ်ရန် လေ့ကျင့်ပါ။ practise calling a trusted adult when something feels unsafe. အရေးပေါ်အခြေအနေတွင် ယုံကြည်ရသော လူကြီးကို ခေါ်ရန် လေ့ကျင့်ပါ။ practise calling a trusted adult when something feels unsafe. ကလေးကို ရေ၊ လမ်းမ၊ မီးဖိုနှင့် အမြင့်နေရာအနီး တစ်ယောက်တည်း မထားပါနှင့်။ never leave the child alone near water, traffic, cooking areas, or heights. “မလုပ်နဲ့” ဟုသာ မပြောဘဲ အန္တရာယ်ကို လူကြီးက ဖယ်ရှားပြီး ဘေးကင်းသည့် အစားထိုးလုပ်ဆောင်ချက် ပြပါ။ do not rely only on “no”; remove the hazard and show a safe alternative. ကလေးက စည်းကမ်းနားလည်ရင် အနီးကပ်ကြီးကြပ်ဖို့ လိုသေးလား။ does a child who understands rules still need close supervision? လိုပါသည်။ ဤအရွယ်ကလေးများသည် အန္တရာယ်ကို အမြဲမခန့်မှန်းနိုင်သေးသဖြင့် ရေ၊ လမ်းမ၊ မီးနှင့် အမြင့်နေရာအနီး လူကြီးက အနီးကပ်ကြီးကြပ်ရပါမည်။ yes. young children cannot reliably judge danger, so adults must stay close near water, traffic, heat, and heights. ခလုတ်ဘက်ထရီ၊ ဆေးဝါး သို့မဟုတ် အဆိပ်ဖြစ်နိုင်သောပစ္စည်း မျိုမိခြင်း၊ ရေနစ်လုဖြစ်ခြင်း၊ မီးလောင်ဒဏ်ရာ သို့မဟုတ် ပြင်းထန်သော ထိခိုက်ဒဏ်ရာ။ swallowing a button battery, medicine, or poison; a drowning incident; a burn; or a serious injury. အရေးပေါ်အန္တရာယ် သို့မဟုတ် ပြင်းထန်ဒဏ်ရာရှိပါက ချက်ချင်း အရေးပေါ်ဆေးကုသမှု ရယူပါ။ seek emergency medical care immediately for a serious hazard exposure or injury. အန္တရာယ်ကို ကြိုဖယ်ရှားခြင်းက ကလေးကို လွတ်လပ်စွာ စူးစမ်းခွင့်ပေးနိုင်သည့် အကောင်းဆုံးနည်းဖြစ်သည်။ removing hazards in advance creates safer freedom to explore. reference_verified registered safety references support this conservative parent guide for 4 years."
+    },
+    {
+      "ageGroupKey": "4_5y",
+      "domainKey": "safety",
+      "tags": [
+        "safety",
+        "4_5y",
+        "guide"
+      ],
+      "summaryMm": "၄ နှစ်ခွဲအရွယ်တွင် လမ်းမ၊ ရေ၊ မီး၊ ပြတင်းပေါက်နှင့် ဆေးဝါးအန္တရာယ်များကို လူကြီးက ဆက်လက်ကာကွယ်ရပါမည်။",
+      "summaryEn": "At 4.5 years, adults still need to prevent traffic, water, burn, window, and medicine hazards.",
+      "data": {
+        "title": {
+          "mm": "၄ နှစ်ခွဲ — ဘေးကင်းလုံခြုံရေး လမ်းညွှန်",
+          "en": "4.5 years — safety guide"
+        },
+        "why": {
+          "mm": "၄ နှစ်ခွဲအရွယ်တွင် လမ်းမ၊ ရေ၊ မီး၊ ပြတင်းပေါက်နှင့် ဆေးဝါးအန္တရာယ်များကို လူကြီးက ဆက်လက်ကာကွယ်ရပါမည်။",
+          "en": "At 4.5 years, adults still need to prevent traffic, water, burn, window, and medicine hazards."
+        },
+        "observationQuestions": [
+          {
+            "mm": "ကလေးအမြင့်မှ အိမ်နှင့် အပြင်ကစားနေရာကို လိုက်ကြည့်ပြီး ရေ၊ မီး၊ လမ်းမ၊ ပြတင်းပေါက်၊ ကြိုးနှင့် ဆေးဝါးအန္တရာယ်ကို စစ်ပါ။",
+            "en": "Inspect home and play areas from the child’s height for water, burn, traffic, window, cord, and medicine hazards."
+          }
+        ],
+        "dailyActivities": [
+          {
+            "mm": "အရေးပေါ်အခြေအနေတွင် ယုံကြည်ရသော လူကြီးကို ခေါ်ရန် လေ့ကျင့်ပါ။",
+            "en": "Practise calling a trusted adult when something feels unsafe."
+          }
+        ],
+        "weeklyActivities": [
+          {
+            "mm": "ဒီတစ်ပတ် အခန်းတစ်ခန်း သို့မဟုတ် အပြင်ကစားနေရာတစ်ခုကို ဘေးကင်းရေးစာရင်းဖြင့် ပြန်စစ်ပါ။",
+            "en": "This week, recheck one room or outdoor play area with a safety list."
+          }
+        ],
+        "indoor": [
+          {
+            "mm": "အရေးပေါ်အခြေအနေတွင် ယုံကြည်ရသော လူကြီးကို ခေါ်ရန် လေ့ကျင့်ပါ။",
+            "en": "Practise calling a trusted adult when something feels unsafe."
+          }
+        ],
+        "outdoor": [
+          {
+            "mm": "အရေးပေါ်အခြေအနေတွင် ယုံကြည်ရသော လူကြီးကို ခေါ်ရန် လေ့ကျင့်ပါ။",
+            "en": "Practise calling a trusted adult when something feels unsafe."
+          }
+        ],
+        "safety": {
+          "mm": "ကလေးကို ရေ၊ လမ်းမ၊ မီးဖိုနှင့် အမြင့်နေရာအနီး တစ်ယောက်တည်း မထားပါနှင့်။",
+          "en": "Never leave the child alone near water, traffic, cooking areas, or heights."
+        },
+        "parentTips": [
+          {
+            "mm": "“မလုပ်နဲ့” ဟုသာ မပြောဘဲ အန္တရာယ်ကို လူကြီးက ဖယ်ရှားပြီး ဘေးကင်းသည့် အစားထိုးလုပ်ဆောင်ချက် ပြပါ။",
+            "en": "Do not rely only on “no”; remove the hazard and show a safe alternative."
+          }
+        ],
+        "faq": [
+          {
+            "q": {
+              "mm": "ကလေးက စည်းကမ်းနားလည်ရင် အနီးကပ်ကြီးကြပ်ဖို့ လိုသေးလား။",
+              "en": "Does a child who understands rules still need close supervision?"
+            },
+            "a": {
+              "mm": "လိုပါသည်။ ဤအရွယ်ကလေးများသည် အန္တရာယ်ကို အမြဲမခန့်မှန်းနိုင်သေးသဖြင့် ရေ၊ လမ်းမ၊ မီးနှင့် အမြင့်နေရာအနီး လူကြီးက အနီးကပ်ကြီးကြပ်ရပါမည်။",
+              "en": "Yes. Young children cannot reliably judge danger, so adults must stay close near water, traffic, heat, and heights."
+            }
+          }
+        ],
+        "redFlags": [
+          {
+            "mm": "ခလုတ်ဘက်ထရီ၊ ဆေးဝါး သို့မဟုတ် အဆိပ်ဖြစ်နိုင်သောပစ္စည်း မျိုမိခြင်း၊ ရေနစ်လုဖြစ်ခြင်း၊ မီးလောင်ဒဏ်ရာ သို့မဟုတ် ပြင်းထန်သော ထိခိုက်ဒဏ်ရာ။",
+            "en": "Swallowing a button battery, medicine, or poison; a drowning incident; a burn; or a serious injury."
+          }
+        ],
+        "referral": {
+          "mm": "အရေးပေါ်အန္တရာယ် သို့မဟုတ် ပြင်းထန်ဒဏ်ရာရှိပါက ချက်ချင်း အရေးပေါ်ဆေးကုသမှု ရယူပါ။",
+          "en": "Seek emergency medical care immediately for a serious hazard exposure or injury."
+        },
+        "encouragement": {
+          "mm": "အန္တရာယ်ကို ကြိုဖယ်ရှားခြင်းက ကလေးကို လွတ်လပ်စွာ စူးစမ်းခွင့်ပေးနိုင်သည့် အကောင်းဆုံးနည်းဖြစ်သည်။",
+          "en": "Removing hazards in advance creates safer freedom to explore."
+        },
+        "editorialStatus": "reference_verified",
+        "evidenceSummary": "Registered safety references support this conservative parent guide for 4.5 years."
+      },
+      "type": "guide",
+      "slug": "gd_4_5y_safety",
+      "titleMm": "၄ နှစ်ခွဲ — ဘေးကင်းလုံခြုံရေး လမ်းညွှန်",
+      "titleEn": "4.5 years — safety guide",
+      "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
+      "version": 1,
+      "clinicalStatus": "clinical_review",
+      "media": [],
+      "searchText": "၄ နှစ်ခွဲ — ဘေးကင်းလုံခြုံရေး လမ်းညွှန် 4.5 years — safety guide ၄ နှစ်ခွဲအရွယ်တွင် လမ်းမ၊ ရေ၊ မီး၊ ပြတင်းပေါက်နှင့် ဆေးဝါးအန္တရာယ်များကို လူကြီးက ဆက်လက်ကာကွယ်ရပါမည်။ at 4.5 years, adults still need to prevent traffic, water, burn, window, and medicine hazards. safety 4_5y guide ၄ နှစ်ခွဲ — ဘေးကင်းလုံခြုံရေး လမ်းညွှန် 4.5 years — safety guide ၄ နှစ်ခွဲအရွယ်တွင် လမ်းမ၊ ရေ၊ မီး၊ ပြတင်းပေါက်နှင့် ဆေးဝါးအန္တရာယ်များကို လူကြီးက ဆက်လက်ကာကွယ်ရပါမည်။ at 4.5 years, adults still need to prevent traffic, water, burn, window, and medicine hazards. ကလေးအမြင့်မှ အိမ်နှင့် အပြင်ကစားနေရာကို လိုက်ကြည့်ပြီး ရေ၊ မီး၊ လမ်းမ၊ ပြတင်းပေါက်၊ ကြိုးနှင့် ဆေးဝါးအန္တရာယ်ကို စစ်ပါ။ inspect home and play areas from the child’s height for water, burn, traffic, window, cord, and medicine hazards. အရေးပေါ်အခြေအနေတွင် ယုံကြည်ရသော လူကြီးကို ခေါ်ရန် လေ့ကျင့်ပါ။ practise calling a trusted adult when something feels unsafe. ဒီတစ်ပတ် အခန်းတစ်ခန်း သို့မဟုတ် အပြင်ကစားနေရာတစ်ခုကို ဘေးကင်းရေးစာရင်းဖြင့် ပြန်စစ်ပါ။ this week, recheck one room or outdoor play area with a safety list. အရေးပေါ်အခြေအနေတွင် ယုံကြည်ရသော လူကြီးကို ခေါ်ရန် လေ့ကျင့်ပါ။ practise calling a trusted adult when something feels unsafe. အရေးပေါ်အခြေအနေတွင် ယုံကြည်ရသော လူကြီးကို ခေါ်ရန် လေ့ကျင့်ပါ။ practise calling a trusted adult when something feels unsafe. ကလေးကို ရေ၊ လမ်းမ၊ မီးဖိုနှင့် အမြင့်နေရာအနီး တစ်ယောက်တည်း မထားပါနှင့်။ never leave the child alone near water, traffic, cooking areas, or heights. “မလုပ်နဲ့” ဟုသာ မပြောဘဲ အန္တရာယ်ကို လူကြီးက ဖယ်ရှားပြီး ဘေးကင်းသည့် အစားထိုးလုပ်ဆောင်ချက် ပြပါ။ do not rely only on “no”; remove the hazard and show a safe alternative. ကလေးက စည်းကမ်းနားလည်ရင် အနီးကပ်ကြီးကြပ်ဖို့ လိုသေးလား။ does a child who understands rules still need close supervision? လိုပါသည်။ ဤအရွယ်ကလေးများသည် အန္တရာယ်ကို အမြဲမခန့်မှန်းနိုင်သေးသဖြင့် ရေ၊ လမ်းမ၊ မီးနှင့် အမြင့်နေရာအနီး လူကြီးက အနီးကပ်ကြီးကြပ်ရပါမည်။ yes. young children cannot reliably judge danger, so adults must stay close near water, traffic, heat, and heights. ခလုတ်ဘက်ထရီ၊ ဆေးဝါး သို့မဟုတ် အဆိပ်ဖြစ်နိုင်သောပစ္စည်း မျိုမိခြင်း၊ ရေနစ်လုဖြစ်ခြင်း၊ မီးလောင်ဒဏ်ရာ သို့မဟုတ် ပြင်းထန်သော ထိခိုက်ဒဏ်ရာ။ swallowing a button battery, medicine, or poison; a drowning incident; a burn; or a serious injury. အရေးပေါ်အန္တရာယ် သို့မဟုတ် ပြင်းထန်ဒဏ်ရာရှိပါက ချက်ချင်း အရေးပေါ်ဆေးကုသမှု ရယူပါ။ seek emergency medical care immediately for a serious hazard exposure or injury. အန္တရာယ်ကို ကြိုဖယ်ရှားခြင်းက ကလေးကို လွတ်လပ်စွာ စူးစမ်းခွင့်ပေးနိုင်သည့် အကောင်းဆုံးနည်းဖြစ်သည်။ removing hazards in advance creates safer freedom to explore. reference_verified registered safety references support this conservative parent guide for 4.5 years."
+    },
+    {
+      "ageGroupKey": "5y",
+      "domainKey": "safety",
+      "tags": [
+        "safety",
+        "5y",
+        "guide"
+      ],
+      "summaryMm": "၅ နှစ်အရွယ်တွင် လမ်းမ၊ ရေ၊ မီး၊ ပြတင်းပေါက်နှင့် ဆေးဝါးအန္တရာယ်များကို လူကြီးက ဆက်လက်ကာကွယ်ရပါမည်။",
+      "summaryEn": "At 5 years, adults still need to prevent traffic, water, burn, window, and medicine hazards.",
+      "data": {
+        "title": {
+          "mm": "၅ နှစ် — ဘေးကင်းလုံခြုံရေး လမ်းညွှန်",
+          "en": "5 years — safety guide"
+        },
+        "why": {
+          "mm": "၅ နှစ်အရွယ်တွင် လမ်းမ၊ ရေ၊ မီး၊ ပြတင်းပေါက်နှင့် ဆေးဝါးအန္တရာယ်များကို လူကြီးက ဆက်လက်ကာကွယ်ရပါမည်။",
+          "en": "At 5 years, adults still need to prevent traffic, water, burn, window, and medicine hazards."
+        },
+        "observationQuestions": [
+          {
+            "mm": "ကလေးအမြင့်မှ အိမ်နှင့် အပြင်ကစားနေရာကို လိုက်ကြည့်ပြီး ရေ၊ မီး၊ လမ်းမ၊ ပြတင်းပေါက်၊ ကြိုးနှင့် ဆေးဝါးအန္တရာယ်ကို စစ်ပါ။",
+            "en": "Inspect home and play areas from the child’s height for water, burn, traffic, window, cord, and medicine hazards."
+          }
+        ],
+        "dailyActivities": [
+          {
+            "mm": "အရေးပေါ်အခြေအနေတွင် ယုံကြည်ရသော လူကြီးကို ခေါ်ရန် လေ့ကျင့်ပါ။",
+            "en": "Practise calling a trusted adult when something feels unsafe."
+          }
+        ],
+        "weeklyActivities": [
+          {
+            "mm": "ဒီတစ်ပတ် အခန်းတစ်ခန်း သို့မဟုတ် အပြင်ကစားနေရာတစ်ခုကို ဘေးကင်းရေးစာရင်းဖြင့် ပြန်စစ်ပါ။",
+            "en": "This week, recheck one room or outdoor play area with a safety list."
+          }
+        ],
+        "indoor": [
+          {
+            "mm": "အရေးပေါ်အခြေအနေတွင် ယုံကြည်ရသော လူကြီးကို ခေါ်ရန် လေ့ကျင့်ပါ။",
+            "en": "Practise calling a trusted adult when something feels unsafe."
+          }
+        ],
+        "outdoor": [
+          {
+            "mm": "အရေးပေါ်အခြေအနေတွင် ယုံကြည်ရသော လူကြီးကို ခေါ်ရန် လေ့ကျင့်ပါ။",
+            "en": "Practise calling a trusted adult when something feels unsafe."
+          }
+        ],
+        "safety": {
+          "mm": "ကလေးကို ရေ၊ လမ်းမ၊ မီးဖိုနှင့် အမြင့်နေရာအနီး တစ်ယောက်တည်း မထားပါနှင့်။",
+          "en": "Never leave the child alone near water, traffic, cooking areas, or heights."
+        },
+        "parentTips": [
+          {
+            "mm": "“မလုပ်နဲ့” ဟုသာ မပြောဘဲ အန္တရာယ်ကို လူကြီးက ဖယ်ရှားပြီး ဘေးကင်းသည့် အစားထိုးလုပ်ဆောင်ချက် ပြပါ။",
+            "en": "Do not rely only on “no”; remove the hazard and show a safe alternative."
+          }
+        ],
+        "faq": [
+          {
+            "q": {
+              "mm": "ကလေးက စည်းကမ်းနားလည်ရင် အနီးကပ်ကြီးကြပ်ဖို့ လိုသေးလား။",
+              "en": "Does a child who understands rules still need close supervision?"
+            },
+            "a": {
+              "mm": "လိုပါသည်။ ဤအရွယ်ကလေးများသည် အန္တရာယ်ကို အမြဲမခန့်မှန်းနိုင်သေးသဖြင့် ရေ၊ လမ်းမ၊ မီးနှင့် အမြင့်နေရာအနီး လူကြီးက အနီးကပ်ကြီးကြပ်ရပါမည်။",
+              "en": "Yes. Young children cannot reliably judge danger, so adults must stay close near water, traffic, heat, and heights."
+            }
+          }
+        ],
+        "redFlags": [
+          {
+            "mm": "ခလုတ်ဘက်ထရီ၊ ဆေးဝါး သို့မဟုတ် အဆိပ်ဖြစ်နိုင်သောပစ္စည်း မျိုမိခြင်း၊ ရေနစ်လုဖြစ်ခြင်း၊ မီးလောင်ဒဏ်ရာ သို့မဟုတ် ပြင်းထန်သော ထိခိုက်ဒဏ်ရာ။",
+            "en": "Swallowing a button battery, medicine, or poison; a drowning incident; a burn; or a serious injury."
+          }
+        ],
+        "referral": {
+          "mm": "အရေးပေါ်အန္တရာယ် သို့မဟုတ် ပြင်းထန်ဒဏ်ရာရှိပါက ချက်ချင်း အရေးပေါ်ဆေးကုသမှု ရယူပါ။",
+          "en": "Seek emergency medical care immediately for a serious hazard exposure or injury."
+        },
+        "encouragement": {
+          "mm": "အန္တရာယ်ကို ကြိုဖယ်ရှားခြင်းက ကလေးကို လွတ်လပ်စွာ စူးစမ်းခွင့်ပေးနိုင်သည့် အကောင်းဆုံးနည်းဖြစ်သည်။",
+          "en": "Removing hazards in advance creates safer freedom to explore."
+        },
+        "editorialStatus": "reference_verified",
+        "evidenceSummary": "Registered safety references support this conservative parent guide for 5 years."
+      },
+      "type": "guide",
+      "slug": "gd_5y_safety",
+      "titleMm": "၅ နှစ် — ဘေးကင်းလုံခြုံရေး လမ်းညွှန်",
+      "titleEn": "5 years — safety guide",
+      "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
+      "version": 1,
+      "clinicalStatus": "clinical_review",
+      "media": [],
+      "searchText": "၅ နှစ် — ဘေးကင်းလုံခြုံရေး လမ်းညွှန် 5 years — safety guide ၅ နှစ်အရွယ်တွင် လမ်းမ၊ ရေ၊ မီး၊ ပြတင်းပေါက်နှင့် ဆေးဝါးအန္တရာယ်များကို လူကြီးက ဆက်လက်ကာကွယ်ရပါမည်။ at 5 years, adults still need to prevent traffic, water, burn, window, and medicine hazards. safety 5y guide ၅ နှစ် — ဘေးကင်းလုံခြုံရေး လမ်းညွှန် 5 years — safety guide ၅ နှစ်အရွယ်တွင် လမ်းမ၊ ရေ၊ မီး၊ ပြတင်းပေါက်နှင့် ဆေးဝါးအန္တရာယ်များကို လူကြီးက ဆက်လက်ကာကွယ်ရပါမည်။ at 5 years, adults still need to prevent traffic, water, burn, window, and medicine hazards. ကလေးအမြင့်မှ အိမ်နှင့် အပြင်ကစားနေရာကို လိုက်ကြည့်ပြီး ရေ၊ မီး၊ လမ်းမ၊ ပြတင်းပေါက်၊ ကြိုးနှင့် ဆေးဝါးအန္တရာယ်ကို စစ်ပါ။ inspect home and play areas from the child’s height for water, burn, traffic, window, cord, and medicine hazards. အရေးပေါ်အခြေအနေတွင် ယုံကြည်ရသော လူကြီးကို ခေါ်ရန် လေ့ကျင့်ပါ။ practise calling a trusted adult when something feels unsafe. ဒီတစ်ပတ် အခန်းတစ်ခန်း သို့မဟုတ် အပြင်ကစားနေရာတစ်ခုကို ဘေးကင်းရေးစာရင်းဖြင့် ပြန်စစ်ပါ။ this week, recheck one room or outdoor play area with a safety list. အရေးပေါ်အခြေအနေတွင် ယုံကြည်ရသော လူကြီးကို ခေါ်ရန် လေ့ကျင့်ပါ။ practise calling a trusted adult when something feels unsafe. အရေးပေါ်အခြေအနေတွင် ယုံကြည်ရသော လူကြီးကို ခေါ်ရန် လေ့ကျင့်ပါ။ practise calling a trusted adult when something feels unsafe. ကလေးကို ရေ၊ လမ်းမ၊ မီးဖိုနှင့် အမြင့်နေရာအနီး တစ်ယောက်တည်း မထားပါနှင့်။ never leave the child alone near water, traffic, cooking areas, or heights. “မလုပ်နဲ့” ဟုသာ မပြောဘဲ အန္တရာယ်ကို လူကြီးက ဖယ်ရှားပြီး ဘေးကင်းသည့် အစားထိုးလုပ်ဆောင်ချက် ပြပါ။ do not rely only on “no”; remove the hazard and show a safe alternative. ကလေးက စည်းကမ်းနားလည်ရင် အနီးကပ်ကြီးကြပ်ဖို့ လိုသေးလား။ does a child who understands rules still need close supervision? လိုပါသည်။ ဤအရွယ်ကလေးများသည် အန္တရာယ်ကို အမြဲမခန့်မှန်းနိုင်သေးသဖြင့် ရေ၊ လမ်းမ၊ မီးနှင့် အမြင့်နေရာအနီး လူကြီးက အနီးကပ်ကြီးကြပ်ရပါမည်။ yes. young children cannot reliably judge danger, so adults must stay close near water, traffic, heat, and heights. ခလုတ်ဘက်ထရီ၊ ဆေးဝါး သို့မဟုတ် အဆိပ်ဖြစ်နိုင်သောပစ္စည်း မျိုမိခြင်း၊ ရေနစ်လုဖြစ်ခြင်း၊ မီးလောင်ဒဏ်ရာ သို့မဟုတ် ပြင်းထန်သော ထိခိုက်ဒဏ်ရာ။ swallowing a button battery, medicine, or poison; a drowning incident; a burn; or a serious injury. အရေးပေါ်အန္တရာယ် သို့မဟုတ် ပြင်းထန်ဒဏ်ရာရှိပါက ချက်ချင်း အရေးပေါ်ဆေးကုသမှု ရယူပါ။ seek emergency medical care immediately for a serious hazard exposure or injury. အန္တရာယ်ကို ကြိုဖယ်ရှားခြင်းက ကလေးကို လွတ်လပ်စွာ စူးစမ်းခွင့်ပေးနိုင်သည့် အကောင်းဆုံးနည်းဖြစ်သည်။ removing hazards in advance creates safer freedom to explore. reference_verified registered safety references support this conservative parent guide for 5 years."
+    }
+  ],
+  "links": [
+    {
+      "kind": "activity",
+      "slug": "act_skin_to_skin_calm",
+      "sourceIds": [
+        "who-bfhi-2017",
+        "who-bf-counselling-2018",
+        "aap-safe-sleep-2022",
+        "nhs-sids-2025"
+      ]
+    },
+    {
+      "kind": "guide",
+      "slug": "gd_birth_2m_sleep",
+      "sourceIds": [
+        "aap-safe-sleep-2022",
+        "nhs-sids-2025",
+        "who-pa-sleep-under5-2019",
+        "hc-safe-sleep-2026",
+        "nice-ng143-fever-2019",
+        "hc-child-ems-2026"
+      ]
+    },
+    {
+      "kind": "guide",
+      "slug": "gd_5_6m_nutrition",
+      "sourceIds": [
+        "who-complementary-feeding-2023",
+        "nhs-first-solid-foods-2026",
+        "cdc-introduce-solid-foods-2026",
+        "cdc-cows-milk-2026",
+        "jr-niaid-peanut-prevention-2017",
+        "who-iycf-model-chapter-2025",
+        "aap-breastfeeding-2022",
+        "nhs-breastfeeding-first-days-2023",
+        "asha-pediatric-feeding-swallowing",
+        "hc-child-ems-2026"
+      ]
+    },
+    {
+      "kind": "guide",
+      "slug": "gd_7_9m_nutrition",
+      "sourceIds": [
+        "who-complementary-feeding-2023",
+        "who-iycf-model-chapter-2025",
+        "who-iycf-indicators-2021",
+        "nhs-first-solid-foods-2026",
+        "cdc-foods-6-24m-2025",
+        "cdc-introduce-solid-foods-2026",
+        "jr-niaid-peanut-prevention-2017",
+        "nice-ng247-maternal-child-nutrition-2025",
+        "asha-pediatric-feeding-swallowing"
+      ]
+    },
+    {
+      "kind": "guide",
+      "slug": "gd_10_12m_nutrition",
+      "sourceIds": [
+        "who-complementary-feeding-2023",
+        "who-iycf-model-chapter-2025",
+        "who-iycf-indicators-2021",
+        "nhs-first-solid-foods-2026",
+        "cdc-foods-6-24m-2025",
+        "cdc-introduce-solid-foods-2026",
+        "jr-niaid-peanut-prevention-2017",
+        "nice-ng247-maternal-child-nutrition-2025",
+        "aap-breastfeeding-2022",
+        "asha-pediatric-feeding-swallowing"
+      ]
+    },
+    {
+      "kind": "guide",
+      "slug": "gd_13_18m_safety",
+      "sourceIds": [
+        "aap-drowning-2026",
+        "tb-bright-futures-4e-2017",
+        "cdc-positive-parenting-toddlers-2026"
+      ]
+    },
+    {
+      "kind": "guide",
+      "slug": "gd_19_24m_safety",
+      "sourceIds": [
+        "aap-drowning-2026",
+        "tb-bright-futures-4e-2017",
+        "cdc-positive-parenting-toddlers-2026",
+        "cpsc-childproofing-home-2023"
+      ]
+    },
+    {
+      "kind": "guide",
+      "slug": "gd_2y_safety",
+      "sourceIds": [
+        "aap-drowning-2026",
+        "tb-bright-futures-4e-2017",
+        "cdc-positive-parenting-toddlers-2-3-2026"
+      ]
+    },
+    {
+      "kind": "guide",
+      "slug": "gd_2_5y_safety",
+      "sourceIds": [
+        "aap-drowning-2026",
+        "tb-bright-futures-4e-2017",
+        "cdc-positive-parenting-toddlers-2-3-2026"
+      ]
+    },
+    {
+      "kind": "guide",
+      "slug": "gd_3y_safety",
+      "sourceIds": [
+        "aap-drowning-2026",
+        "tb-bright-futures-4e-2017",
+        "cdc-positive-parenting-preschoolers-2026"
+      ]
+    },
+    {
+      "kind": "guide",
+      "slug": "gd_3_5y_safety",
+      "sourceIds": [
+        "aap-drowning-2026",
+        "tb-bright-futures-4e-2017",
+        "cdc-positive-parenting-preschoolers-2026"
+      ]
+    },
+    {
+      "kind": "guide",
+      "slug": "gd_4y_safety",
+      "sourceIds": [
+        "aap-drowning-2026",
+        "tb-bright-futures-4e-2017",
+        "cdc-positive-parenting-preschoolers-2026"
+      ]
+    },
+    {
+      "kind": "guide",
+      "slug": "gd_4_5y_safety",
+      "sourceIds": [
+        "aap-drowning-2026",
+        "tb-bright-futures-4e-2017",
+        "cdc-positive-parenting-preschoolers-2026"
+      ]
+    },
+    {
+      "kind": "guide",
+      "slug": "gd_5y_safety",
+      "sourceIds": [
+        "aap-drowning-2026",
+        "tb-bright-futures-4e-2017",
+        "cdc-positive-parenting-preschoolers-2026"
+      ]
+    }
+  ]
+}

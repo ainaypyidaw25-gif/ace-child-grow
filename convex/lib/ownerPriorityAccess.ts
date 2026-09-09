@@ -4,7 +4,7 @@
  * The full queue is a catalogue-wide management view: it exposes every content
  * item, reviewer display names, decision timing and edit activity. That is an
  * owner/manager view, not a reviewer view — a language reviewer has no business
- * reading which clinical reviewer touched which record and when. This module is
+ * reading which specialist safety reviewer touched which record and when. This module is
  * the single source of that rule, consumed by the Convex handlers and the UI.
  *
  * Three access levels:
@@ -16,7 +16,7 @@
  *                      content it is authorised for, but does NOT get the
  *                      catalogue-wide roster: reviewer identities, decision
  *                      timings and edit activity are stripped.
- *   assignment_scoped  language/evidence/clinical reviewers — only records
+ *   assignment_scoped  language/evidence/specialist reviewers — only records
  *                      scoped to them, with other reviewers' identities and
  *                      activity stripped.
  *   none               support and non-staff.
@@ -78,7 +78,7 @@ export function mayRequestReviews(role: string | null | undefined): boolean {
 export function scopedDimensionsForRole(role: string | null | undefined): string[] {
   if (role === 'language_reviewer') return ['native_myanmar', 'english'];
   if (role === 'evidence_reviewer') return ['evidence'];
-  if (role === 'clinical_reviewer') return ['clinical', 'safety'];
+  if (role === 'clinical_reviewer') return ['child_development', 'clinical', 'safety'];
   return [];
 }
 
@@ -90,7 +90,7 @@ export interface ScopableRow {
 /**
  * Whether an assignment-scoped reviewer may see this record. Suggested
  * dimensions count as well as confirmed ones: a record awaiting manual triage
- * that *may* need clinical review should still reach the clinical reviewer's
+ * that *may* need specialist safety review should still reach that reviewer's
  * queue rather than being invisible until a manager acts.
  */
 export function rowInReviewerScope(role: string | null | undefined, row: ScopableRow): boolean {

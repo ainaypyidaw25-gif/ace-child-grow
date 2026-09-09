@@ -9,7 +9,7 @@
 //   published          — released to parents
 //
 // 'clinical_approved' / 'medical_approved' / 'doctor_approved' deliberately do
-// not exist here. Clinical sign-off is a separate, human act recorded against
+// not exist here. A specialist safety decision is a separate human act recorded against
 // the reference registry by a named reviewer with a stated qualification; it is
 // never something a content author can assert about their own writing.
 //

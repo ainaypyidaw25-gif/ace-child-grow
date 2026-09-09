@@ -87,7 +87,7 @@ export function Sleep() {
         <label className="flex items-center gap-2 text-sm">
           <input type="checkbox" checked={breathingPauses}
             onChange={(e) => setBreathingPauses(e.target.checked)} className="h-5 w-5" />
-          {locale === 'mm' ? 'အသက်ရှူ ရပ်တန့်မှု' : 'Breathing pauses'}
+          {locale === 'mm' ? 'အိပ်နေစဉ် အသက်ရှူရပ်တန့်မှု' : 'Breathing pauses'}
         </label>
         {error && <p className="text-sm text-state-red-deep">⚠️ {t('sleep.bedtime')} / {t('sleep.wake')}</p>}
         <button onClick={saveAndSummarize} type="button" disabled={busy}

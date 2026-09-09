@@ -3,8 +3,9 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { LocaleProvider } from '../../app/LocaleContext';
 import { MilestoneDemo } from '../../screens/MilestoneDemo';
+import { isRetiredMilestoneSlug } from '../../../convex/lib/contentRetirements';
 
-const slugs = [
+const allSlugs = [
   'ms_5_6m_cognitive_1',
   'ms_5_6m_cognitive_2',
   'ms_5_6m_fine_motor_1',
@@ -18,6 +19,7 @@ const slugs = [
   'ms_5_6m_speech_1',
   'ms_5_6m_speech_2',
 ] as const;
+const slugs = allSlugs.filter((slug) => !isRetiredMilestoneSlug(slug));
 
 const milestoneItems = slugs.map((slug) => ({
   _id: slug,

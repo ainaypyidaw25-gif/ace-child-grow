@@ -1,6 +1,6 @@
-// Clinical review batch — age 0–12 months.
+// Evidence and safety review batch — age 0–12 months.
 //
-// A "batch" is a fixed, reproducible work packet handed to a clinical reviewer:
+// A "batch" is a fixed, reproducible work packet handed to the assigned reviewers:
 // exactly which content items are in scope, what evidence stands behind each
 // one, what must be checked, and what is blocking sign-off. It is derived from
 // the content seed and the evidence registry, so it cannot drift from either.
@@ -45,7 +45,7 @@ export interface ChecklistDimension {
 
 /**
  * The eight dimensions a reviewer signs off per item. Wording is deliberately
- * a question a clinician can answer yes/no/change-requested against the exact
+ * a question a qualified reviewer can answer yes/no/change-requested against the exact
  * item in front of them — not a general principle.
  */
 export const REVIEWER_CHECKLIST: ChecklistDimension[] = [
@@ -86,7 +86,7 @@ export const REVIEWER_CHECKLIST: ChecklistDimension[] = [
     promptMm:
       'မြန်မာဘာသာပြန်သည် သဘာဝကျပြီး မိဘတစ်ဦး နားလည်လွယ်ပါသလား။ ဆေးပညာဝေါဟာရများကို မှန်ကန်စွာ သုံးထားပါသလား။ ကလေးအား အထင်သေးစေသော အသုံးအနှုန်း ပါနေပါသလား။',
     promptEn:
-      'Does the Myanmar read naturally to a parent, use the correct clinical terms, and avoid any wording that belittles the child?',
+      'Does the Myanmar read naturally to a parent, use health terms correctly where present, and avoid any wording that belittles the child?',
     blocking: true,
   },
   {
@@ -245,7 +245,7 @@ const CONTENT_TYPE_MM: Record<string, string> = {
 
 const CLINICAL_STATUS_MM: Record<string, string> = {
   draft: 'မူကြမ်း',
-  clinical_review: 'ဆေးပညာ သုံးသပ်ဆဲ',
+  clinical_review: 'သုံးသပ်ဆဲ',
   published: 'ထုတ်ဝေပြီး',
 };
 

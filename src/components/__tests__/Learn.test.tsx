@@ -71,8 +71,8 @@ describe('Learn', () => {
 
     expect(screen.getByRole('heading', { name: 'မေမေ့သားလေး အတွက် သင်ယူရန်' })).toBeVisible();
     expect(screen.getByRole('heading', { name: 'ကစားရင်း အတူသင်ယူမယ်' })).toBeVisible();
-    expect(requests).toContainEqual({ type: 'guide', ageGroupKey: '10_12m' });
-    expect(requests).toContainEqual({ type: 'story', ageGroupKey: '10_12m' });
+    expect(requests).toContainEqual({ type: 'guide', ageGroupKey: '10_12m', audience: 'parent' });
+    expect(requests).toContainEqual({ type: 'story', ageGroupKey: '10_12m', audience: 'parent' });
     expect(screen.getByRole('link', { name: /ကစားရင်း အတူသင်ယူမယ်/ })).toHaveAttribute('href', '/content/guide-toddler-play');
   });
 
@@ -91,7 +91,7 @@ describe('Learn', () => {
       </MemoryRouter>,
     );
 
-    expect(requests).toContainEqual({ type: 'guide', ageGroupKey: '3_4m' });
-    expect(requests).toContainEqual({ type: 'story', ageGroupKey: '3_4m' });
+    expect(requests).toContainEqual({ type: 'guide', ageGroupKey: '3_4m', audience: 'parent' });
+    expect(requests).toContainEqual({ type: 'story', ageGroupKey: '3_4m', audience: 'parent' });
   });
 });

@@ -52,7 +52,8 @@ describe('queue access policy', () => {
 
   it('scopes reviewer roles to their own dimensions', () => {
     expect(scopedDimensionsForRole('language_reviewer')).toEqual(['native_myanmar', 'english']);
-    expect(scopedDimensionsForRole('clinical_reviewer')).toEqual(['clinical', 'safety']);
+    expect(scopedDimensionsForRole('evidence_reviewer')).toEqual(['evidence']);
+    expect(scopedDimensionsForRole('clinical_reviewer')).toEqual(['child_development', 'clinical', 'safety']);
     expect(scopedDimensionsForRole('owner')).toEqual([]);
   });
 
@@ -254,6 +255,27 @@ describe('direct-handler authorization — governance mutations', () => {
     expect(patched).toEqual([]);
   });
 
+  it('does not treat an absent stored classification as zero required reviews', async () => {
+    const { ctx, patched } = makeCtx({ staffRole: 'owner' }, {
+      content: {
+        _id: 'content1', slug: 'act_story_sequence', type: 'activity', titleMm: 'က', titleEn: 'Story sequence', data: {},
+        clinicalStatus: 'clinical_review', reviewRevision: 2, tags: [],
+      },
+    });
+    const result = await handler<{
+      ok: boolean;
+      code?: string;
+      outstanding?: string[];
+    }>(setGovernance)(ctx, {
+      slug: 'act_story_sequence', expectedReviewRevision: 2, priorityStatus: 'completed',
+    });
+
+    expect(result.ok).toBe(false);
+    expect(result.code).toBe('outstanding_dimensions');
+    expect(result.outstanding).toEqual(['native_myanmar', 'english', 'child_development', 'evidence']);
+    expect(patched).toEqual([]);
+  });
+
   it('refuses completion on an untriaged D/E record', async () => {
     const { ctx, patched } = makeCtx({ staffRole: 'owner' }, {
       content: {
@@ -332,7 +354,7 @@ describe('review_manager powers and limits', () => {
 
   it('CANNOT record a decision in any review dimension', async () => {
     const { roleMayReview } = await import('../../../convex/lib/reviewPolicy');
-    for (const dimension of ['english', 'native_myanmar', 'evidence', 'safety', 'clinical'] as const) {
+    for (const dimension of ['english', 'native_myanmar', 'child_development', 'evidence', 'safety', 'clinical'] as const) {
       expect(roleMayReview('review_manager', dimension), `must not review ${dimension}`).toBe(false);
     }
   });
@@ -359,7 +381,8 @@ describe('review_manager powers and limits', () => {
       authSource.indexOf('export async function requireProfessionalPublisher'),
       authSource.indexOf('export async function requireProfessionalPublisher') + 400,
     );
-    expect(block).toContain("requireOneOf(ctx, ['owner', 'clinical_reviewer'])");
+    expect(block).toContain("requireOneOf(ctx, ['owner'])");
+    expect(block).not.toContain('clinical_reviewer');
     expect(block).not.toContain('review_manager');
   });
 

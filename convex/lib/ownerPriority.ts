@@ -82,6 +82,71 @@ export function coerceOwnerPriority(value: string | null | undefined): OwnerPrio
 
 export const PRIORITY_ORDER: Record<OwnerPriority, number> = { P0: 0, P1: 1, P2: 2, P3: 3 };
 
+export interface ReviewDecisionForQueue {
+  dimension: string;
+  decision: string;
+  reviewerId: unknown;
+  contentVersion: number;
+  reviewRevision?: number;
+  note?: string;
+  reviewedAt: number;
+}
+
+/**
+ * Project append-only review history onto one exact content revision.
+ *
+ * Historical decisions remain useful for the activity timeline and therefore
+ * still contribute to `latestDecisionAt`, but only decisions bound to the
+ * CURRENT review revision may approve a dimension or raise a duplicate-row
+ * workflow blocker. Treating duplicates from an old/unbound revision as a
+ * current P0 made immutable legacy audit history look like an active safety
+ * incident (the production `lsn_balanced_meals` false positive).
+ *
+ * Callers pass decisions newest-first. The first row for each dimension is
+ * therefore the current effective decision, matching the queue's existing
+ * behavior.
+ */
+export function projectReviewDecisionsForRevision<T extends ReviewDecisionForQueue>(
+  decisions: readonly T[],
+  currentRevision: number,
+): {
+  currentByDimension: Map<string, T>;
+  latestDecisionAt: number | null;
+  workflowBlocker: string | null;
+} {
+  const currentByDimension = new Map<string, T>();
+  const duplicateKeys = new Set<string>();
+  let latestDecisionAt: number | null = null;
+  let workflowBlocker: string | null = null;
+
+  for (const decision of decisions) {
+    if (latestDecisionAt === null || decision.reviewedAt > latestDecisionAt) {
+      latestDecisionAt = decision.reviewedAt;
+    }
+
+    const effectiveRevision = decision.reviewRevision ?? decision.contentVersion;
+    if (effectiveRevision !== currentRevision) continue;
+
+    const identityKey = [
+      decision.dimension,
+      decision.decision,
+      String(decision.reviewerId),
+      effectiveRevision,
+      decision.note ?? '',
+    ].join('|');
+    if (duplicateKeys.has(identityKey)) {
+      workflowBlocker = 'duplicate identical review decisions recorded';
+    }
+    duplicateKeys.add(identityKey);
+
+    if (!currentByDimension.has(decision.dimension)) {
+      currentByDimension.set(decision.dimension, decision);
+    }
+  }
+
+  return { currentByDimension, latestDecisionAt, workflowBlocker };
+}
+
 /** Default queue ordering of content types (task Part 3, items 3–9). */
 export const TYPE_SORT_ORDER = [
   'special_need',
@@ -259,6 +324,8 @@ export function classifyRecord(record: ClassifiableRecord): ProvisionalClassific
   for (const [name, pattern] of C_TRIGGERS) if (pattern.test(text)) clinicalTriggers.push(name);
 
   const bilingualConflicts = findBilingualConflicts(record.data);
+  // Legacy imported metadata used this exact phrase. Keep detecting it so an
+  // old row cannot escape review merely because current UI terminology changed.
   const pendingClinicalReferences = /pending clinical reviewer/i.test(safeStringify((record.data as Record<string, unknown> | null)?.references ?? ''));
 
   let riskClass: RiskClass;
@@ -364,15 +431,20 @@ export function computePriority(record: ClassifiableRecord): PriorityResult {
   }
   if (visible && provisionalResult.pendingClinicalReferences) {
     priority = 'P0';
-    reasons.push('parent-visible while its own text says clinical references are pending');
+      reasons.push('parent-visible while its own legacy metadata says specialist source review is pending');
   }
 
   if (!priority) {
     if (riskClass === 'C' || riskClass === 'D' || riskClass === 'E') {
       priority = visible ? 'P1' : 'P2';
-      reasons.push(visible
-        ? 'parent-visible clinical/safety-sensitive record awaiting clinical review'
-        : 'unpublished clinical/safety-sensitive record');
+      const completed = record.priorityStatus === 'completed';
+      reasons.push(completed
+        ? visible
+          ? 'parent-visible high-risk record with required reviews completed'
+          : 'unpublished high-risk record with required reviews completed'
+        : visible
+          ? 'parent-visible high-risk record awaiting specialist safety review'
+          : 'unpublished high-risk record awaiting specialist safety review');
     } else {
       priority = 'P3';
       reasons.push('standard review (Class A/B)');

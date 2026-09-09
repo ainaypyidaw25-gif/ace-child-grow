@@ -1,9 +1,9 @@
 // Content library item model + builders.
 //
 // The seed files author terse, genuine records via these builders; `normalize()`
-// fills defaults and derives searchText. NOTHING here is fabricated clinical
+// fills defaults and derives searchText. NOTHING here is fabricated medical
 // data — narrative text is general, parent-friendly developmental guidance and
-// carries clinicalStatus 'clinical_review' until a qualified reviewer approves.
+// carries clinicalStatus 'clinical_review' until its risk-scoped reviews pass.
 
 import type { ContentType, ClinicalStatus } from './taxonomy';
 
@@ -41,7 +41,7 @@ export interface SeedItem {
 }
 
 const EDITORIAL_SOURCE =
-  'ACE Child Grow editorial draft — general developmental guidance, pending native-Myanmar and clinical review';
+  'ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance';
 
 function base(
   type: ContentType,
@@ -301,8 +301,11 @@ export function printable(a: PrintableArgs): SeedItem {
     summaryMm: a.description.mm,
     summaryEn: a.description.en,
     tags: [a.key, 'printable', 'toolkit'],
-    data: { format: a.format },
-    media: [{ kind: 'pdf', placeholder: true, offline: true, note: 'printable resource' }],
+    data: {
+      format: 'Preview only — bilingual PDF not yet available',
+      availability: 'preview_only',
+    },
+    media: [{ kind: 'pdf', placeholder: true, offline: true, note: 'planned printable resource; no reviewed payload' }],
   });
 }
 

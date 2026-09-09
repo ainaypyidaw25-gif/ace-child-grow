@@ -4,6 +4,7 @@ import {
   AGE_GROUP_KEYS, DOMAIN_KEYS, CONTENT_TYPES, LESSON_CATEGORIES,
   SPECIAL_NEEDS_KEYS, STORY_TYPES, PRINTABLE_TYPES, CLINICAL_STATUSES,
 } from '../taxonomy';
+import { FLASH_CARDS_PRINTABLE_RETIREMENT_SLUG } from '../../../convex/lib/contentRetirements';
 
 // Acceptance criteria for the content platform (mirrors the milestone brief):
 // every age/domain has content, no orphan records, no duplicate IDs, everything
@@ -82,13 +83,14 @@ describe('content library integrity', () => {
     }
   });
 
-  it('keeps the newly added older-child activity evidence notes explicitly non-approved', () => {
+  it('keeps the newly added older-child activity evidence notes revision-bound', () => {
     for (const slug of ['act_copy_everyday_actions', 'act_follow_the_pattern', 'act_draw_and_tell']) {
       const item = CONTENT_SEED.find((candidate) => candidate.slug === slug);
       expect(item, slug).toBeDefined();
       const summary = (item?.data as Record<string, unknown>).evidenceSummary;
       expect(typeof summary, `${slug} evidence summary`).toBe('string');
-      expect(summary, `${slug} evidence summary`).toContain('No clinical approval has been recorded');
+      expect(summary, `${slug} evidence summary`).toContain('evidence and safety review remains revision-bound');
+      expect(summary, `${slug} evidence summary`).not.toMatch(/personal endorsement/i);
       expect(item?.clinicalStatus, `${slug} status`).toBe('clinical_review');
     }
   });
@@ -130,7 +132,12 @@ describe('content library integrity', () => {
 
   it('every printable type is present', () => {
     const types = new Set(byType('printable').map((p) => p.category));
-    for (const t of PRINTABLE_TYPES) expect(types, `printable ${t}`).toContain(t);
+    for (const t of PRINTABLE_TYPES.filter((type) => type !== 'flash_cards')) {
+      expect(types, `printable ${t}`).toContain(t);
+    }
+    expect(types).not.toContain('flash_cards');
+    expect(CONTENT_SEED.some((item) => item.slug === FLASH_CARDS_PRINTABLE_RETIREMENT_SLUG))
+      .toBe(false);
   });
 
   it('activities carry the required structured fields', () => {

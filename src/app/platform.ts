@@ -2,6 +2,10 @@ import { App as CapacitorApp } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
 import { useEffect } from 'react';
 import { useAuthActions } from '@convex-dev/auth/react';
+import {
+  APPLE_APP_STORE_DISTRIBUTION,
+  GOOGLE_PLAY_DISTRIBUTION,
+} from './distribution';
 
 const PRODUCTION_APP_ORIGIN = 'https://child.acegroup.com.mm';
 export const NATIVE_AUTH_CALLBACK_ERROR_EVENT = 'ace-native-auth-callback-error';
@@ -42,7 +46,38 @@ export function createNativeUrlRelay() {
 const nativeUrlRelay = createNativeUrlRelay();
 
 export function isGooglePlayBuild(): boolean {
-  return Capacitor.getPlatform() === 'android';
+  return GOOGLE_PLAY_DISTRIBUTION
+    || Capacitor.getPlatform() === 'android';
+}
+
+export function isAppleAppStoreBuild(): boolean {
+  return APPLE_APP_STORE_DISTRIBUTION
+    || Capacitor.getPlatform() === 'ios';
+}
+
+export function isNativeStoreBuild(): boolean {
+  return isGooglePlayBuild() || isAppleAppStoreBuild();
+}
+
+const NATIVE_STORE_FREE_FEATURES = new Set([
+  'child_profile',
+  'milestones',
+  'activities',
+  'growth',
+  'sleep',
+  'learning_library',
+]);
+
+export function isFeatureAvailableOnCurrentPlatform(
+  features: readonly string[],
+  feature: string,
+): boolean {
+  return features.includes(feature)
+    && (!isNativeStoreBuild() || NATIVE_STORE_FREE_FEATURES.has(feature));
+}
+
+export function effectivePlanKeyForCurrentPlatform<T extends string>(planKey: T): T | 'free' {
+  return isNativeStoreBuild() ? 'free' : planKey;
 }
 
 export function resolveAuthRedirectUrl(

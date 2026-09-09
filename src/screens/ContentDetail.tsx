@@ -6,20 +6,24 @@ import { useLocale } from '../app/LocaleContext';
 import { useDownloadedLibrary } from '../app/useOfflineLibrary';
 import { readOfflineMediaObjectUrl } from '../app/offlineMediaStore';
 import type { OfflineMediaRecord } from '../domain/offline/offlineLibrary';
-import { ReviewBadge } from '../components/ReviewBadge';
 import { ActivityScene } from '../components/ActivityScene';
 import { activityIllustration } from '../content/activityIllustrations';
 import { guideIllustration } from '../content/guideIllustrations';
 import { lessonIllustration } from '../content/lessonIllustrations';
 import { printableIllustration } from '../content/printableIllustrations';
 import { storyIllustration } from '../content/storyIllustrations';
+import { approvedPrintablePayload } from '../domain/content/printableAvailability';
+import { isAppleAppStoreBuild } from '../app/platform';
+import { ContentReferences } from '../components/ContentReferences';
+import { publicContentCopy } from '../domain/content/publicContentCopy';
 
 type BL = { mm: string; en: string };
 
 export function ContentDetail() {
   const { slug = '' } = useParams();
   const { locale } = useLocale();
-  const remote = useQuery(api.library.getBySlug, { slug });
+  const remote = useQuery(api.library.getBySlug, { slug, audience: 'parent' });
+  const evidence = useQuery(api.evidence.forContent, { slug });
   const { records, loaded } = useDownloadedLibrary();
   const offlineRecord = useMemo(
     () => records.find((record) => record.slug === slug),
@@ -64,6 +68,7 @@ export function ContentDetail() {
     : offlineFallback as Exclude<typeof remote, undefined> | undefined;
 
   const T = (o?: BL) => (o ? (locale === 'mm' ? o.mm : o.en) : '');
+  const publicBody = (o?: BL) => publicContentCopy(T(o));
 
   if (res === undefined) return <p className="text-ink-soft">…</p>;
   if (res === null) {
@@ -84,6 +89,9 @@ export function ContentDetail() {
   }
 
   const { item, media } = res;
+  if (isAppleAppStoreBuild() && item.type === 'printable') {
+    return <p className="text-ink-soft">{locale === 'mm' ? 'မတွေ့ပါ။' : 'Not found.'}</p>;
+  }
   const mappedLessonIllustration = item.type === 'lesson'
     ? lessonIllustration(item.slug)
     : undefined;
@@ -108,6 +116,7 @@ export function ContentDetail() {
     && !(mappedPrintableIllustration && asset.kind === 'illustration')
     && !(mappedStoryIllustration && asset.kind === 'illustration')
   ));
+  const printablePayload = approvedPrintablePayload(media);
   const d = (item.data ?? {}) as Record<string, unknown>;
   const list = (k: string): BL[] => (Array.isArray(d[k]) ? (d[k] as BL[]) : []);
   const bl = (k: string): BL | undefined => (d[k] && typeof d[k] === 'object' ? (d[k] as BL) : undefined);
@@ -136,7 +145,6 @@ export function ContentDetail() {
           <Link to="/library" className="text-sm text-sky-deep underline">
             {L('← စာကြည့်တိုက်', '← Library')}
           </Link>
-          <ReviewBadge published={item.clinicalStatus === 'published'} />
         </div>
         <h1 className="mt-1 text-xl font-bold text-sky-deep">{locale === 'mm' ? item.titleMm : item.titleEn}</h1>
         {(item.summaryMm || item.summaryEn) && (
@@ -286,6 +294,15 @@ export function ContentDetail() {
       {/* Milestone */}
       {item.type === 'milestone' && (
         <>
+          <div
+            className="rounded-card border border-line bg-canvas p-4 text-sm leading-6 text-ink-soft"
+            data-testid="milestone-use-note"
+          >
+            {L(
+              'အသက်အလိုက် milestone များသည် အိမ်တွင် စောင့်ကြည့်ရန် အချက်များသာ ဖြစ်ပြီး အောင်/ရှုံး သတ်မှတ်ချက် သို့မဟုတ် ရောဂါဖော်ထုတ်ချက် မဟုတ်ပါ။ ယခင်တတ်မြောက်ပြီးသော စွမ်းရည် ပျောက်ဆုံးခြင်း သို့မဟုတ် ဖွံ့ဖြိုးမှုအပေါ် စိုးရိမ်ချက်ရှိပါက ကျန်းမာရေးဝန်ထမ်းနှင့် အမြန်တိုင်ပင်ပါ။',
+              'Age-based milestones are observations for home use, not pass/fail criteria or a diagnosis. If a child loses a skill they previously had, or you are concerned about development, talk with a health worker promptly.',
+            )}
+          </div>
           <Section title={L('ဘာကို ကြည့်ရမလဲ', 'What to observe')}>
             <p className="text-sm text-ink-soft">{T(bl('observeMm') ?? { mm: String(d.observeMm ?? ''), en: String(d.observeEn ?? '') })}</p>
           </Section>
@@ -369,7 +386,7 @@ export function ContentDetail() {
       {item.type === 'lesson' && (
         <>
           {list('objectives').length > 0 && <Section title={L('ဒီသင်ခန်းစာမှ သိရှိနိုင်မည့်အချက်', 'Learning objectives')}><Bullets items={list('objectives')} /></Section>}
-          {bl('body') && <Section title={L('သင်ခန်းစာ', 'Lesson')}><p className="whitespace-pre-line text-sm text-ink-soft">{T(bl('body'))}</p></Section>}
+          {bl('body') && <Section title={L('သင်ခန်းစာ', 'Lesson')}><p className="whitespace-pre-line text-sm text-ink-soft">{publicBody(bl('body'))}</p></Section>}
           {bl('takeaway') && <div className="rounded-card bg-mint-soft p-4 text-sm text-ink">💡 {T(bl('takeaway'))}</div>}
           {bl('actionToday') && <Section title={L('ယနေ့ စမ်းလုပ်ကြည့်ရန်', 'Action today')}><p className="text-sm text-ink-soft">{T(bl('actionToday'))}</p></Section>}
         </>
@@ -382,7 +399,7 @@ export function ContentDetail() {
             {L('ဤအက်ပ်သည် ရောဂါ မဖော်ထုတ်ပါ။ စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။',
                'This app does not diagnose. If concerned, consult a professional.')}
           </div>
-          {list('strengths').length > 0 && <Section title={L('အားသာချက်များ', 'Strengths')}><Bullets items={list('strengths')} /></Section>}
+          {list('strengths').length > 0 && <Section title={L('ကလေးတစ်ဦးချင်းအလိုက် တွေ့နိုင်သော အားသာချက်များ (ကလေးတိုင်းတွင် တူညီမည် မဟုတ်ပါ)', 'Possible individual strengths (not shared by every child)')}><Bullets items={list('strengths')} /></Section>}
           {list('possibleSigns').length > 0 && <Section title={L('သတိပြုမိနိုင်သည့် အချက်များ (ရောဂါသတ်မှတ်ချက် မဟုတ်ပါ)', 'Possible signs (not a diagnosis)')}><Bullets items={list('possibleSigns')} /></Section>}
           {Array.isArray(d.myths) && (d.myths as { myth: BL; fact: BL }[]).length > 0 && (
             <Section title={L('အယူအဆမှားနှင့် အမှန်', 'Myths vs Facts')}>
@@ -415,7 +432,16 @@ export function ContentDetail() {
       {/* Story */}
       {item.type === 'story' && (
         <>
-          {bl('body') && <Section title={L('ပုံပြင်', 'Story')}><p className="whitespace-pre-line text-sm text-ink-soft">{T(bl('body'))}</p></Section>}
+          <div
+            className="rounded-card border border-line bg-canvas p-4 text-sm leading-6 text-ink-soft"
+            data-testid="story-use-note"
+          >
+            {L(
+              'ဤပုံပြင်များသည် ကလေး၏ ဘာသာစကား၊ စိတ်ကူးဉာဏ်နှင့် မိဘ–ကလေး အတူတကွဆက်သွယ်မှုကို အားပေးရန် ဖန်တီးထားသော သင်ယူရေးနှင့် ဖျော်ဖြေရေး အကြောင်းအရာများ ဖြစ်သည်။',
+              'These stories are learning and entertainment content created to support language, imagination, and shared caregiver-child connection.',
+            )}
+          </div>
+          {bl('body') && <Section title={L('ပုံပြင်', 'Story')}><p className="whitespace-pre-line text-sm text-ink-soft">{publicBody(bl('body'))}</p></Section>}
           {list('vocabulary').length > 0 && <Section title={L('ဝေါဟာရ', 'Vocabulary')}><Bullets items={list('vocabulary')} /></Section>}
           {list('questions').length > 0 && <Section title={L('မေးခွန်းများ', 'Questions')}><Bullets items={list('questions')} /></Section>}
           {list('activities').length > 0 && <Section title={L('လှုပ်ရှားမှုများ', 'Activities')}><Bullets items={list('activities')} /></Section>}
@@ -426,25 +452,30 @@ export function ContentDetail() {
       {item.type === 'printable' && (
         <Section title={L('ပုံနှိပ်အသုံးပြုနိုင်သော စာရွက်', 'Printable resource')}>
           <p className="text-sm text-ink-soft">{locale === 'mm' ? item.summaryMm : item.summaryEn}</p>
-          <p className="mt-2 text-xs text-ink-soft">
-            {L('ပုံနှိပ်အသုံးပြုနိုင်သော ဖိုင်ကို အကြောင်းအရာစီမံခန့်ခွဲရေးစနစ်မှတစ်ဆင့် ပြင်ဆင်တင်ပါမည်။', 'The printable PDF is prepared via the CMS.')}
+          <p
+            className="mt-3 rounded-xl border border-line bg-canvas p-3 text-sm leading-6 text-ink-soft"
+            data-testid="printable-use-note"
+          >
+            {L(
+              'ဤစစ်ဆေးလွှာနှင့် မှတ်တမ်းစာရွက်များသည် အိမ်တွင် စောင့်ကြည့်မှတ်သားရန်သာ ဖြစ်ပြီး ဆေးဘက်ဆိုင်ရာ ရောဂါဖော်ထုတ်ချက် မဟုတ်ပါ။ လိုအပ်ပါက ကျန်းမာရေးဝန်ထမ်းနှင့် တိုင်ပင်ရာတွင် အထောက်အကူပြု မှတ်တမ်းအဖြစ် အသုံးပြုပါ။',
+              'These checklists and logs are for observation at home and are not a medical diagnosis. Use them as supporting notes when talking with a health worker if needed.',
+            )}
           </p>
+          {printablePayload?.url ? (
+            <a className="mt-3 inline-block text-sm text-sky-deep underline" href={printablePayload.url} download>
+              {L('သုံးသပ်ပြီးသော ဖိုင်ကို ဒေါင်းလုဒ်လုပ်ရန်', 'Download reviewed printable')}
+            </a>
+          ) : (
+            <p className="mt-2 text-xs text-ink-soft">
+              {L('အကြိုကြည့်ရှုရန်သာ — သုံးသပ်ပြီးသော မြန်မာ–အင်္ဂလိပ် PDF ဖိုင် မရရှိသေးပါ။', 'Preview only — a reviewed bilingual PDF is not yet available.')}
+            </p>
+          )}
         </Section>
       )}
 
-      <p className="rounded-lg bg-pastel-yellow/50 px-3 py-2 text-[11px] leading-relaxed text-ink-soft">
-        {locale === 'mm'
-          ? item.clinicalStatus !== 'published'
-            ? 'စိစစ်ဆဲ — ဤအကြောင်းအရာကို ယခု ဖတ်ရှုအသုံးပြုနိုင်သော်လည်း ပညာရှင်များက ဆက်လက်စိစစ်ပြင်ဆင်နိုင်ပါသည်။ ရောဂါသတ်မှတ်ချက် သို့မဟုတ် တစ်ဦးချင်းဆေးဘက်ဆိုင်ရာ အကြံဉာဏ် မဟုတ်ပါ။'
-            : item.reviewScope === 'education'
-            ? 'သုံးသပ်မှုမှတ်တမ်း — ဤအကြောင်းအရာကို ပညာရေးနှင့် အထူးပညာရေးဆိုင်ရာ ပညာရှင်က သုံးသပ်အတည်ပြုထားပါသည်။ ဆေးဘက်ဆိုင်ရာ အကြောင်းအရာများသည် ယုံကြည်ရသော ကိုးကားချက်များအပေါ် အခြေခံထားသည့် အထွေထွေ လမ်းညွှန်သာဖြစ်ပြီး ဆေးဘက်ဆိုင်ရာ အတည်ပြုချက် သို့မဟုတ် ဆရာဝန်၏ အကြံဉာဏ် မဟုတ်ပါ။ စိုးရိမ်စရာရှိပါက သက်ဆိုင်ရာ ကျန်းမာရေးပညာရှင်နှင့် တိုင်ပင်ပါ။'
-            : 'မှတ်ချက် — ဤအကြောင်းအရာသည် ယုံကြည်ရသော ကိုးကားချက်များအပေါ် အခြေခံထားသည့် အထွေထွေ မိဘလမ်းညွှန် ဖြစ်ပါသည်။ ဆေးဘက်ဆိုင်ရာ အကြံဉာဏ်အဖြစ် မယူဆသင့်ပါ။'
-          : item.clinicalStatus !== 'published'
-            ? 'Review ongoing — this content is available now, but professional reviewers may revise it. It is not a diagnosis or personal medical advice.'
-            : item.reviewScope === 'education'
-            ? 'Review record: approved by an education and special-education professional. Medical information is general evidence-based guidance, not clinical approval or medical advice. Consult an appropriate health professional if concerned.'
-            : `General evidence-based parent guidance, not medical advice. Source: ${item.source}`}
-      </p>
+      <ContentReferences
+        sources={evidence?.allowed && Array.isArray(evidence.sources) ? evidence.sources : []}
+      />
     </div>
   );
 }

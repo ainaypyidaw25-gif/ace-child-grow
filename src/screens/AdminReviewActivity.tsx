@@ -11,15 +11,16 @@ import { useLocale } from '../app/LocaleContext';
 // returns { allowed:false } to anyone who is not owner/content_editor, so this
 // is not client-side hiding.
 
-type Dimension = 'english' | 'native_myanmar' | 'evidence' | 'safety' | 'clinical';
+type Dimension = 'english' | 'native_myanmar' | 'child_development' | 'evidence' | 'safety' | 'clinical';
 type Decision = 'in_review' | 'approved' | 'changes_requested' | 'not_applicable';
 
 const DIMENSION_LABELS: Record<Dimension, { mm: string; en: string }> = {
   english: { mm: 'အင်္ဂလိပ်စာ', en: 'English' },
   native_myanmar: { mm: 'မြန်မာစာ', en: 'Native Myanmar' },
+  child_development: { mm: 'ကလေးဖွံ့ဖြိုးမှု', en: 'Child development' },
   evidence: { mm: 'ကိုးကားချက်', en: 'Evidence' },
   safety: { mm: 'ဘေးကင်းလုံခြုံရေး', en: 'Safety' },
-  clinical: { mm: 'ဆေးဘက်ဆိုင်ရာ', en: 'Clinical' },
+  clinical: { mm: 'အထူးကျွမ်းကျင်သူ ဘေးကင်းရေး', en: 'Specialist safety' },
 };
 
 const DECISION_LABELS: Record<Decision, { mm: string; en: string }> = {
@@ -34,7 +35,7 @@ const ROLE_LABELS: Record<string, { mm: string; en: string }> = {
   content_editor: { mm: 'အကြောင်းအရာ တည်းဖြတ်သူ', en: 'Content editor' },
   language_reviewer: { mm: 'ဘာသာစကား သုံးသပ်သူ', en: 'Language reviewer' },
   evidence_reviewer: { mm: 'ကိုးကားချက် သုံးသပ်သူ', en: 'Evidence reviewer' },
-  clinical_reviewer: { mm: 'ဆေးဘက်ဆိုင်ရာ သုံးသပ်သူ', en: 'Clinical reviewer' },
+  clinical_reviewer: { mm: 'အထူးကျွမ်းကျင်သူ ဘေးကင်းရေးသုံးသပ်သူ', en: 'Specialist safety reviewer' },
   review_manager: { mm: 'စစ်ဆေးရေး မန်နေဂျာ', en: 'Review manager' },
   support: { mm: 'ပံ့ပိုးကူညီရေး', en: 'Support' },
 };
@@ -168,7 +169,7 @@ export function AdminReviewActivity() {
                     <dd className="inline font-semibold text-ink">{r.inReview}</dd>
                   </div>
                   <div>
-                    <dt className="inline">{L('အကြောင်းအရာ အမျိုးအစား', 'Items touched')}: </dt>
+                    <dt className="inline">{L('သုံးသပ်ခဲ့သော အကြောင်းအရာ', 'Items touched')}: </dt>
                     <dd className="inline font-semibold text-ink">{r.distinctItems}</dd>
                   </div>
                 </dl>

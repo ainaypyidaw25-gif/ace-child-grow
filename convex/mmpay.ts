@@ -6,8 +6,8 @@ import { MMPaySDK } from 'mmpay-node-sdk';
 import { v } from 'convex/values';
 import { action, internalAction } from './_generated/server';
 import { internal } from './_generated/api';
+import { readMmpayConfig, type MmpayConfig } from './lib/mmpayConfig';
 
-type Environment = 'sandbox' | 'production';
 type ProviderStatus = 'PENDING' | 'SUCCESS' | 'FAILED' | 'REFUNDED' | 'CANCELLED' | 'EXPIRED';
 type PaymentMethod = 'QR' | 'PIN' | 'PWA' | 'CARD';
 type Condition = 'PRISTINE' | 'TOUCHED' | 'DIRTY' | 'EXPIRED';
@@ -49,42 +49,7 @@ const paymentResultValidator = v.object({
   transactionRefId: v.optional(v.string()),
 });
 
-type Config = {
-  environment: Environment;
-  appId: string;
-  publishableKey: string;
-  secretKey: string;
-  apiBaseUrl: string;
-  webhookUrl: string;
-};
-
-function required(name: string) {
-  const value = process.env[name]?.trim();
-  if (!value) throw new Error(`Myan Myan Pay is not configured: missing ${name}`);
-  return value;
-}
-
-function getConfig(): Config {
-  const environment = (process.env.MMPAY_ENV?.trim().toLowerCase() || 'sandbox') as Environment;
-  if (environment !== 'sandbox' && environment !== 'production') throw new Error('MMPAY_ENV must be sandbox or production');
-  const prefix = environment === 'sandbox' ? 'MMPAY_SANDBOX' : 'MMPAY_PRODUCTION';
-  const config = {
-    environment,
-    appId: required(`${prefix}_APP_ID`),
-    publishableKey: required(`${prefix}_PUBLISHABLE_KEY`),
-    secretKey: required(`${prefix}_SECRET_KEY`),
-    apiBaseUrl: required(`${prefix}_API_BASE_URL`).replace(/\/$/, ''),
-    webhookUrl: required('MMPAY_WEBHOOK_URL'),
-  };
-  if (!/^https:\/\//i.test(config.apiBaseUrl)) throw new Error(`${prefix}_API_BASE_URL must use HTTPS`);
-  if (!/^https:\/\//i.test(config.webhookUrl)) throw new Error('MMPAY_WEBHOOK_URL must use HTTPS');
-  const looksSandbox = config.publishableKey.includes('_test_') || config.secretKey.includes('_test_');
-  if (environment === 'sandbox' && !looksSandbox) throw new Error('Sandbox mode requires Myan Myan Pay test keys');
-  if (environment === 'production' && looksSandbox) throw new Error('Production mode cannot use Myan Myan Pay test keys');
-  return config;
-}
-
-function sdk(config: Config) {
+function sdk(config: MmpayConfig) {
   return MMPaySDK({
     appId: config.appId,
     publishableKey: config.publishableKey,
@@ -178,7 +143,7 @@ export const startPayment = action({
   returns: paymentResultValidator,
   handler: async (ctx, { planId }): Promise<PaymentResult> => {
     if (!(await getAuthUserId(ctx))) throw new Error('Not authenticated');
-    const config = getConfig();
+    const config = readMmpayConfig();
     const plan = await ctx.runQuery(internal.mmpayData.checkoutContext, { planId });
     const orderId = `ACG-${Date.now()}-${crypto.randomUUID().replace(/-/g, '').slice(0, 10).toUpperCase()}`;
     await ctx.runMutation(internal.mmpayData.reserve, {
@@ -224,7 +189,7 @@ export const refreshPayment = action({
         status: payment.status,
       };
     }
-    const config = getConfig();
+    const config = readMmpayConfig();
     const response = await sdk(config).get({ orderId, nonce: crypto.randomUUID() });
     const parsed = parseResponse(response, orderId, payment.amount);
     await ctx.runMutation(internal.mmpayData.applyProviderUpdate, parsed);
@@ -239,7 +204,7 @@ export const cancelPayment = action({
     if (!(await getAuthUserId(ctx))) throw new Error('Not authenticated');
     const payment: OwnedPayment = await ctx.runQuery(internal.mmpayData.ownedOrder, { orderId });
     if (payment.status !== 'INITIATING' && payment.status !== 'PENDING') throw new Error('Only a pending payment can be canceled');
-    const config = getConfig();
+    const config = readMmpayConfig();
     const response = await sdk(config).cancel({ orderId, nonce: crypto.randomUUID() });
     const parsed = parseResponse(response, orderId, payment.amount);
     await ctx.runMutation(internal.mmpayData.applyProviderUpdate, parsed);
@@ -262,7 +227,7 @@ export const verifyWebhook = internalAction({
     transactionRefId: v.optional(v.string()),
   }),
   handler: async (_ctx, args) => {
-    const config = getConfig();
+    const config = readMmpayConfig();
     if (!webhookSignatureIsValid(config.secretKey, args.rawBody, args.nonce, args.signature)) {
       throw new Error('Invalid Myan Myan Pay webhook signature');
     }

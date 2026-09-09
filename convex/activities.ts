@@ -2,6 +2,7 @@ import { v } from 'convex/values';
 import { mutation, query } from './_generated/server';
 import { ownChild, requireUser } from './lib/auth';
 import { requireFeature } from './lib/entitlements';
+import { contentIsParentReadable } from './lib/publicationVisibility';
 
 const completionValidator = v.object({
   _id: v.id('activityCompletions'),
@@ -30,7 +31,7 @@ export const complete = mutation({
       .query('libraryContent')
       .withIndex('by_slug', (q) => q.eq('slug', args.contentSlug))
       .unique();
-    if (!content || content.type !== 'activity' || content.clinicalStatus !== 'published') {
+    if (!content || content.type !== 'activity' || !(await contentIsParentReadable(ctx, content))) {
       throw new Error('Activity not found');
     }
     return await ctx.db.insert('activityCompletions', {

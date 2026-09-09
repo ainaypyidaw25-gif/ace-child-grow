@@ -7,7 +7,8 @@
 //  - It never fabricates emergency phone numbers or facilities.
 //  - A triggered urgent flag INTERRUPTS any reassuring milestone result.
 
-export const URGENT_SYMPTOMS = [
+/** The eight acute symptoms a parent can explicitly report in the assessment. */
+export const ACUTE_URGENT_SYMPTOMS = [
   'severe_breathing_difficulty',
   'blue_lips',
   'breathing_pauses',
@@ -16,6 +17,28 @@ export const URGENT_SYMPTOMS = [
   'sudden_weakness',
   'serious_injury',
   'severe_dehydration',
+] as const;
+export type AcuteUrgentSymptom = (typeof ACUTE_URGENT_SYMPTOMS)[number];
+
+export const ACUTE_URGENT_SYMPTOM_LABELS = {
+  severe_breathing_difficulty: {
+    mm: 'အသက်ရှူရန် အလွန်ခက်ခဲခြင်း',
+    en: 'Severe difficulty breathing',
+  },
+  blue_lips: { mm: 'နှုတ်ခမ်းပြာလာခြင်း', en: 'Blue lips' },
+  breathing_pauses: { mm: 'အသက်ရှူရပ်သလို ဖြစ်ခြင်း', en: 'Pauses in breathing' },
+  seizure: { mm: 'တက်ခြင်း', en: 'A seizure' },
+  unresponsiveness: {
+    mm: 'မနိုးနိုင်ခြင်း သို့မဟုတ် တုံ့ပြန်မှုမရှိခြင်း',
+    en: 'Cannot be woken or is unresponsive',
+  },
+  sudden_weakness: { mm: 'ရုတ်တရက် အားနည်းသွားခြင်း', en: 'Sudden weakness' },
+  serious_injury: { mm: 'ပြင်းထန်သော ထိခိုက်ဒဏ်ရာ', en: 'A serious injury' },
+  severe_dehydration: { mm: 'ပြင်းထန်စွာ ရေဓာတ်ခန်းခြောက်ခြင်း', en: 'Severe dehydration' },
+} as const satisfies Record<AcuteUrgentSymptom, { mm: string; en: string }>;
+
+export const URGENT_SYMPTOMS = [
+  ...ACUTE_URGENT_SYMPTOMS,
   'loss_of_acquired_skills',
 ] as const;
 export type UrgentSymptom = (typeof URGENT_SYMPTOMS)[number];

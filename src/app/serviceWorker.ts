@@ -35,7 +35,18 @@ export async function configureServiceWorker(
   dependencies: ServiceWorkerDependencies = browserDependencies(),
 ): Promise<void> {
   if (!dependencies.isNative()) {
-    dependencies.register({ immediate: true });
+    let updateStarted = false;
+    const applyUpdate = dependencies.register({
+      immediate: true,
+      onNeedRefresh() {
+        if (updateStarted) return;
+        updateStarted = true;
+        // Older releases used a prompt-based update flow without rendering a
+        // prompt. Apply and reload immediately so users cannot remain trapped
+        // on a stale sign-in screen after a production deployment.
+        void Promise.resolve().then(() => applyUpdate(true));
+      },
+    });
     return;
   }
 

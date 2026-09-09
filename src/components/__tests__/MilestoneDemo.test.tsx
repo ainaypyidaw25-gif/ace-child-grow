@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { LocaleProvider } from '../../app/LocaleContext';
 import { MilestoneDemo } from '../../screens/MilestoneDemo';
@@ -27,9 +27,11 @@ const milestoneItems = [
   },
 ];
 
+const recordSession = vi.hoisted(() => vi.fn(async () => undefined));
+
 vi.mock('convex/react', () => ({
   useQuery: () => ({ staff: false, items: milestoneItems }),
-  useMutation: () => vi.fn(),
+  useMutation: () => recordSession,
 }));
 
 vi.mock('../../app/AppState', () => ({
@@ -71,5 +73,98 @@ describe('MilestoneDemo (component)', () => {
     fireEvent.click(screen.getByText('လုပ်နိုင်ပြီ'));
     fireEvent.click(screen.getByText('ရှေ့သို့'));
     expect(screen.getByText('စိတ်ဝင်စားသည့်အရာကို လက်ညှိုးထိုးပြပါသလား။')).toBeInTheDocument();
+  });
+
+  it('collects all eight acute symptoms and sends every selection to the urgent-result engine', async () => {
+    recordSession.mockClear();
+    renderWithProviders();
+    fireEvent.click(screen.getByText('လုပ်နိုင်ပြီ'));
+    fireEvent.click(screen.getByText('ရှေ့သို့'));
+    fireEvent.click(screen.getAllByRole('button', { name: 'လုပ်နိုင်ပြီ' })[0]);
+
+    const acuteSymptoms = [
+      ['အသက်ရှူရန် အလွန်ခက်ခဲခြင်း', 'severe_breathing_difficulty'],
+      ['နှုတ်ခမ်းပြာလာခြင်း', 'blue_lips'],
+      ['အသက်ရှူရပ်သလို ဖြစ်ခြင်း', 'breathing_pauses'],
+      ['တက်ခြင်း', 'seizure'],
+      ['မနိုးနိုင်ခြင်း သို့မဟုတ် တုံ့ပြန်မှုမရှိခြင်း', 'unresponsiveness'],
+      ['ရုတ်တရက် အားနည်းသွားခြင်း', 'sudden_weakness'],
+      ['ပြင်းထန်သော ထိခိုက်ဒဏ်ရာ', 'serious_injury'],
+      ['ပြင်းထန်စွာ ရေဓာတ်ခန်းခြောက်ခြင်း', 'severe_dehydration'],
+    ];
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    for (const [label] of acuteSymptoms) {
+      expect(screen.queryByRole('button', { name: label })).not.toBeInTheDocument();
+    }
+    fireEvent.click(screen.getByRole('button', { name: 'လက္ခဏာစာရင်းကို ကြည့်မည်' }));
+    for (const [label] of acuteSymptoms) {
+      expect(screen.getByRole('button', { name: label })).toBeInTheDocument();
+    }
+
+    const saveButton = screen.getByRole('button', { name: 'သိမ်းဆည်းမည်' });
+    fireEvent.click(screen.getByRole('button', { name: 'မရှိပါ' }));
+    expect(saveButton).toBeDisabled();
+    for (const [label] of acuteSymptoms) {
+      fireEvent.click(screen.getByRole('button', { name: label }));
+    }
+    expect(screen.getByRole('alert')).toBeInTheDocument();
+    expect(saveButton).toBeEnabled();
+    fireEvent.click(saveButton);
+
+    const urgentSymptoms = acuteSymptoms.map(([, symptom]) => symptom);
+    await waitFor(() => expect(recordSession).toHaveBeenCalledWith(expect.objectContaining({
+      resultState: 'red',
+      urgentSymptoms,
+      resultSnapshot: expect.objectContaining({ urgentSymptoms }),
+    })));
+  });
+
+  it('keeps the default safety check calm and collapses after an explicit none response', () => {
+    renderWithProviders();
+    fireEvent.click(screen.getByText('လုပ်နိုင်ပြီ'));
+    fireEvent.click(screen.getByText('ရှေ့သို့'));
+    fireEvent.click(screen.getAllByRole('button', { name: 'လုပ်နိုင်ပြီ' })[0]);
+
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'အသက်ရှူရန် အလွန်ခက်ခဲခြင်း' })).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'လက္ခဏာစာရင်းကို ကြည့်မည်' }));
+    expect(screen.getByRole('button', { name: 'အသက်ရှူရန် အလွန်ခက်ခဲခြင်း' })).toBeInTheDocument();
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'ဤလက္ခဏာများ မရှိပါ' }));
+    expect(screen.getByRole('status')).toHaveTextContent('အရေးပေါ်လက္ခဏာများ မရှိပါဟု မှတ်သားထားသည်။');
+    expect(screen.queryByRole('button', { name: 'အသက်ရှူရန် အလွန်ခက်ခဲခြင်း' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+  });
+
+  it('uses clear skill-loss answers and makes an affirmed loss urgent', async () => {
+    recordSession.mockClear();
+    renderWithProviders();
+    fireEvent.click(screen.getByText('လုပ်နိုင်ပြီ'));
+    fireEvent.click(screen.getByText('ရှေ့သို့'));
+    fireEvent.click(screen.getAllByRole('button', { name: 'လုပ်နိုင်ပြီ' })[0]);
+    fireEvent.click(screen.getByRole('button', { name: 'လက္ခဏာစာရင်းကို ကြည့်မည်' }));
+    fireEvent.click(screen.getByRole('button', { name: 'ဤလက္ခဏာများ မရှိပါ' }));
+
+    const skillLossGroup = screen.getByRole('group', {
+      name: /အရင်လုပ်နိုင်ခဲ့သော.*မလုပ်နိုင်တော့ပါသလား/,
+    });
+    expect(within(skillLossGroup).getByRole('button', { name: 'ရှိပါသည်' })).toBeInTheDocument();
+    expect(within(skillLossGroup).getByRole('button', { name: 'မရှိပါ' })).toBeInTheDocument();
+    expect(within(skillLossGroup).queryByRole('button', { name: 'လုပ်နိုင်ပြီ' })).not.toBeInTheDocument();
+
+    fireEvent.click(within(skillLossGroup).getByRole('button', { name: 'ရှိပါသည်' }));
+    expect(screen.getByRole('alert')).toBeInTheDocument();
+    const saveButton = screen.getByRole('button', { name: 'သိမ်းဆည်းမည်' });
+    expect(saveButton).toBeEnabled();
+    fireEvent.click(saveButton);
+
+    await waitFor(() => expect(recordSession).toHaveBeenCalledWith(expect.objectContaining({
+      resultState: 'red',
+      lostSkill: true,
+      urgentSymptoms: [],
+      resultSnapshot: expect.objectContaining({ urgentSymptoms: ['loss_of_acquired_skills'] }),
+    })));
   });
 });

@@ -3,13 +3,15 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { LocaleProvider } from '../../app/LocaleContext';
 import { MilestoneDemo } from '../../screens/MilestoneDemo';
+import { isRetiredMilestoneSlug } from '../../../convex/lib/contentRetirements';
 
-const slugs = [
+const allSlugs = [
   'ms_4y_school_readiness_1',
   'ms_4y_problem_solving_1',
   'ms_4y_language_1',
   'ms_4y_gross_motor_1',
 ] as const;
+const slugs = allSlugs.filter((slug) => !isRetiredMilestoneSlug(slug));
 
 const milestoneItems = slugs.map((slug) => ({
   _id: slug,
@@ -64,6 +66,6 @@ describe('MilestoneDemo 4 year illustration navigation', () => {
 
     expect(new Set(seenSources).size).toBe(slugs.length);
     fireEvent.click(screen.getByText('နောက်သို့'));
-    expect(screen.getByTestId('milestone-illustration')).toHaveAttribute('src', seenSources[2]);
+    expect(screen.getByTestId('milestone-illustration')).toHaveAttribute('src', seenSources.at(-2));
   });
 });

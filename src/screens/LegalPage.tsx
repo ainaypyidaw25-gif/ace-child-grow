@@ -1,8 +1,15 @@
 import { Link } from 'react-router-dom';
+import { useQuery } from 'convex/react';
+import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
+import {
+  GOOGLE_PLAY_DISTRIBUTION,
+  NATIVE_STORE_DISTRIBUTION,
+} from '../app/distribution';
+import { currentLegalTermsReadiness } from '../domain/releaseReadiness';
 import type { Locale } from '../domain/types';
 
-type LegalPageProps = { kind: 'privacy' | 'account-deletion' | 'terms' };
+type LegalPageProps = { kind: 'privacy' | 'account-deletion' | 'terms' | 'support' | 'content-policy' };
 
 const supportEmail = 'admin-ace@acegroup.com.mm';
 
@@ -13,6 +20,72 @@ const supportEmail = 'admin-ace@acegroup.com.mm';
 // regardless of the visitor's saved language choice.
 export function LegalPage({ kind }: LegalPageProps) {
   const { locale, setLocale } = useLocale();
+
+  if (kind === 'content-policy') {
+    return (
+      <PublicLegalShell title="Content Policy" locale={locale} setLocale={setLocale}>
+        {locale === 'mm' ? (
+          <>
+            <p>ACE Child Grow ရှိ အကြောင်းအရာများကို ယုံကြည်ရသော ကျန်းမာရေးနှင့် ကလေးဖွံ့ဖြိုးမှုဆိုင်ရာ ရင်းမြစ်များအပေါ် အခြေခံ၍ နည်းပညာအကူအညီဖြင့် ပြုစုထားပါသည်။</p>
+            <p>ဤအချက်အလက်များသည် အထွေထွေပညာပေးအတွက်သာဖြစ်ပြီး ဆေးဘက်ဆိုင်ရာ ရောဂါရှာဖွေခြင်း၊ ကုသခြင်း သို့မဟုတ် ကျွမ်းကျင်သူ၏ အကြံပြုချက်ကို အစားထိုးခြင်းမဟုတ်ပါ။ ကလေး၏ ကျန်းမာရေး သို့မဟုတ် ဖွံ့ဖြိုးမှုနှင့်ပတ်သက်၍ စိုးရိမ်မှုရှိပါက သက်ဆိုင်ရာကျွမ်းကျင်သူနှင့် တိုင်ပင်ပါ။</p>
+          </>
+        ) : (
+          <>
+            <p>ACE Child Grow content is prepared with technology assistance and is based on trusted health and child-development sources.</p>
+            <p>This information is for general education only. It does not replace medical diagnosis, treatment, or advice from a qualified professional. If you are concerned about a child&rsquo;s health or development, consult an appropriate professional.</p>
+          </>
+        )}
+      </PublicLegalShell>
+    );
+  }
+
+  if (kind === 'support') {
+    return (
+      <PublicLegalShell
+        title={locale === 'mm' ? 'ACE Child Grow အကူအညီ' : 'ACE Child Grow Support'}
+        locale={locale}
+        setLocale={setLocale}
+      >
+        {locale === 'mm' ? (
+          <>
+            <p>အကောင့်ဝင်ခြင်း၊ အကောင့်ပြန်လည်ရယူခြင်း၊ App အသုံးပြုခြင်း၊ ကိုယ်ရေးလုံခြုံမှု သို့မဟုတ် အကောင့်ဖျက်ခြင်းအတွက် <a href={`mailto:${supportEmail}?subject=ACE%20Child%20Grow%20support`} className="font-semibold text-sky-deep underline">{supportEmail}</a> သို့ ဆက်သွယ်နိုင်ပါသည်။</p>
+            <LegalSection title="အကောင့် ပြန်လည်ရယူရန်">
+              အကောင့်ဝင်စာမျက်နှာရှိ <strong>PIN/စကားဝှက် မေ့နေပါသလား?</strong> ကို ရွေးပြီး အီးမေးလ်သို့ ပို့ထားသော ၆ လုံးကုဒ်ကို ဖြည့်ပါ။ Google သို့မဟုတ် Apple ဖြင့် အကောင့်ဖွင့်ထားပါက မူလအသုံးပြုခဲ့သော ဝင်ရောက်နည်းကိုပင် ရွေးပါ။
+            </LegalSection>
+            <LegalSection title="ပြဿနာတင်ပြရာတွင် ပါဝင်သင့်သည်များ">
+              App version နှင့် build၊ ဖုန်းအမျိုးအစား၊ OS version၊ ဖြစ်ပွားသည့်အဆင့်များနှင့် ပြထားသော error စာသားကို ရေးပို့ပါ။ လိုအပ်ပါက ကိုယ်ရေးအချက်အလက် မပါသော screenshot တစ်ပုံ ပူးတွဲနိုင်ပါသည်။ PIN၊ စကားဝှက်၊ အတည်ပြုကုဒ်၊ ကလေး၏အမည်အပြည့်အစုံ၊ မွေးသက္ကရာဇ် သို့မဟုတ် ကျန်းမာရေးမှတ်တမ်းကို အီးမေးလ်ဖြင့် မပို့ပါနှင့်။
+            </LegalSection>
+            <LegalSection title="ကျန်းမာရေး အရေးပေါ်အခြေအနေ">
+              ACE Child Grow သည် အရေးပေါ်ဝန်ဆောင်မှု မဟုတ်သလို ရောဂါရှာဖွေခြင်း မပြုပါ။ အရေးပေါ်အခြေအနေတွင် App support ကို မစောင့်ဘဲ ဒေသဆိုင်ရာ အရေးပေါ်ဝန်ဆောင်မှု သို့မဟုတ် အရည်အချင်းပြည့်မီသော ကျန်းမာရေးပညာရှင်ထံ ချက်ချင်း ဆက်သွယ်ပါ။
+            </LegalSection>
+            <div className="flex flex-wrap gap-4">
+              <Link to="/privacy" className="font-semibold text-sky-deep underline">ကိုယ်ရေးအချက်အလက် မူဝါဒ</Link>
+              <Link to="/account-deletion" className="font-semibold text-sky-deep underline">အကောင့်ဖျက်နည်း</Link>
+            </div>
+            <Link to="/" className="inline-flex rounded-pill bg-sky-deep px-5 py-3 font-semibold text-white">ACE Child Grow သို့ ပြန်သွားမည်</Link>
+          </>
+        ) : (
+          <>
+            <p>For help with sign-in, account recovery, using the app, privacy, or account deletion, email <a href={`mailto:${supportEmail}?subject=ACE%20Child%20Grow%20support`} className="font-semibold text-sky-deep underline">{supportEmail}</a>.</p>
+            <LegalSection title="Recover your account">
+              Choose <strong>Forgot PIN/password?</strong> on the sign-in screen and enter the six-digit code sent to your email. If you created the account with Google or Apple, use the same sign-in method again.
+            </LegalSection>
+            <LegalSection title="What to include in a support request">
+              Include the app version and build, device model, OS version, steps that caused the problem, and the exact error shown. You may attach a screenshot that contains no personal information. Never email a PIN, password, verification code, child&rsquo;s full identity or birth date, or health records.
+            </LegalSection>
+            <LegalSection title="Medical emergencies">
+              ACE Child Grow is not an emergency service and does not diagnose. In an emergency, do not wait for app support; contact local emergency services or a qualified health professional immediately.
+            </LegalSection>
+            <div className="flex flex-wrap gap-4">
+              <Link to="/privacy" className="font-semibold text-sky-deep underline">Privacy Policy</Link>
+              <Link to="/account-deletion" className="font-semibold text-sky-deep underline">Account deletion</Link>
+            </div>
+            <Link to="/" className="inline-flex rounded-pill bg-sky-deep px-5 py-3 font-semibold text-white">Return to ACE Child Grow</Link>
+          </>
+        )}
+      </PublicLegalShell>
+    );
+  }
 
   if (kind === 'account-deletion') {
     return (
@@ -43,12 +116,36 @@ export function LegalPage({ kind }: LegalPageProps) {
   }
 
   if (kind === 'terms') {
+    if (NATIVE_STORE_DISTRIBUTION) {
+      const storeName = GOOGLE_PLAY_DISTRIBUTION ? 'Google Play' : 'App Store';
+      return (
+        <PublicLegalShell
+          title={locale === 'mm' ? 'ဝန်ဆောင်မှုစည်းမျဉ်းများ' : 'Terms of Service'}
+          locale={locale}
+          setLocale={setLocale}
+        >
+          {locale === 'mm' ? (
+            <>
+              <LegalSection title="ဝန်ဆောင်မှု အကြောင်း">ACE Child Grow သည် မိဘနှင့် စောင့်ရှောက်သူများအတွက် အထွေထွေ ဖွံ့ဖြိုးရေးနှင့် မှတ်တမ်းတင်ရေး အထောက်အကူဖြစ်သည်။ ရောဂါရှာဖွေခြင်း သို့မဟုတ် ဆရာဝန်၏ အကြံဉာဏ်ကို အစားထိုးခြင်း မပြုပါ။</LegalSection>
+              <LegalSection title={`${storeName} version`}>ဤ {storeName} version တွင် ဖော်ပြထားသော မိဘဝန်ဆောင်မှုများကို အခမဲ့ အသုံးပြုနိုင်ပြီး App အတွင်း ဝယ်ယူမှု သို့မဟုတ် ပြင်ပငွေပေးချေမှု မရှိပါ။</LegalSection>
+              <LegalSection title="ဆက်သွယ်ရန်">မေးခွန်းများအတွက် <a href={`mailto:${supportEmail}`} className="font-semibold text-sky-deep underline">{supportEmail}</a> သို့ ဆက်သွယ်နိုင်ပါသည်။</LegalSection>
+            </>
+          ) : (
+            <>
+              <LegalSection title="About the service">ACE Child Grow provides general development guidance and record-keeping support for parents and caregivers. It does not diagnose or replace a doctor&rsquo;s advice.</LegalSection>
+              <LegalSection title={`${storeName} version`}>The parent features shown in this {storeName} version are available free. It contains no in-app purchase or external payment flow.</LegalSection>
+              <LegalSection title="Contact">For questions, contact <a href={`mailto:${supportEmail}`} className="font-semibold text-sky-deep underline">{supportEmail}</a>.</LegalSection>
+            </>
+          )}
+        </PublicLegalShell>
+      );
+    }
     return (
       <PublicLegalShell
         title={locale === 'mm' ? 'ဝန်ဆောင်မှုစည်းမျဉ်းများ' : 'Terms of Service'}
         locale={locale}
         setLocale={setLocale}
-        draft
+        draft={currentLegalTermsReadiness().level !== 'pass'}
       >
         {locale === 'mm' ? (
           <>
@@ -57,16 +154,16 @@ export function LegalPage({ kind }: LegalPageProps) {
               ACE Child Grow ကို လက်ခံသုံးစွဲခြင်းဖြင့် ဤစည်းမျဉ်းများကို သဘောတူပါသည်။ App ကို မိဘနှင့် စောင့်ရှောက်သူများ အသုံးပြုရန် ရည်ရွယ်ပြီး အထွေထွေဖွံ့ဖြိုးရေးလမ်းညွှန်ချက်ဖြစ်သည်၊ ဆေးဘက်ဆိုင်ရာ ရောဂါစစ်ဆေးမှု သို့မဟုတ် ကုသမှု အစားထိုးအဖြစ် မဟုတ်ပါ။
             </LegalSection>
             <LegalSection title="အစီအစဉ်များနှင့် စျေးနှုန်း">
-              Free အစီအစဉ်သည် အမြဲတမ်း အခမဲ့ဖြစ်ပါသည်။ Premium နှင့် Family အစီအစဉ်များကို လစဉ် (သို့) နှစ်စဉ် MMK ဖြင့် ကြေညာထားသည့်နှုန်းအတိုင်း ကောက်ခံပါသည်။ Premium ကို ကတ်မလိုဘဲ ၇ ရက် အခမဲ့ စမ်းသုံးနိုင်ပြီး စမ်းသုံးကာလကုန်ဆုံးလျှင် ကတ်အလိုအလျောက် ကောက်ခံခြင်း မရှိဘဲ Free သို့ ပြန်ရောက်သွားပါမည်။
+              Free အစီအစဉ်သည် အမြဲတမ်း အခမဲ့ဖြစ်ပါသည်။ Premium နှင့် Family အခပေးသုံးခွင့်များကို လစဉ် သို့မဟုတ် နှစ်စဉ်အတွက် App တွင် ပြထားသည့် MMK နှုန်းအတိုင်း ဝယ်ယူနိုင်ပါသည်။ Premium ကို ငွေပေးချေမှုအချက်အလက်မလိုဘဲ ၃ ရက် အခမဲ့ စမ်းသုံးနိုင်ပြီး စမ်းသုံးကာလကုန်ဆုံးလျှင် အလိုအလျောက် ငွေကောက်ခံခြင်းမရှိဘဲ Free သို့ ပြန်ရောက်သွားပါမည်။ Premium ဆက်သုံးလိုပါက လစဉ် သို့မဟုတ် နှစ်စဉ်အစီအစဉ်ကို ကိုယ်တိုင်ရွေးချယ်ဝယ်ယူရပါမည်။
             </LegalSection>
             <LegalSection title="ငွေပေးချေမှု">
-              ငွေပေးချေမှုကို Myan Myan Pay (MMQR) ဖြင့် ချက်ချင်း သို့မဟုတ် ငွေလွှဲအထောက်အထား upload တင်ခြင်းဖြင့် လုပ်ဆောင်နိုင်ပါသည်။ ဝန်ထမ်းက အထောက်အထားကို စစ်ဆေးပြီးမှ အစီအစဉ်ကို ဖွင့်ပေးပါမည်။ ငွေလက်ခံအကောင့်နှင့် API secret များကို browser သို့ မပို့ပါ။
+              <PaymentTerms locale="mm" />
             </LegalSection>
             <LegalSection title="သက်တမ်းတိုးခြင်းနှင့် ပယ်ဖျက်ခြင်း">
-              အစီအစဉ်များသည် ရွေးချယ်ထားသော ကာလ (တစ်လ သို့ တစ်နှစ်) ပြီးဆုံးသည်နှင့် ပယ်ဖျက်မထားပါက ဆက်လက်တိုးမြှင့်ပါသည်။ မည်သည့်အချိန်တွင်မဆို ပယ်ဖျက်နိုင်ပြီး ပယ်ဖျက်ပါက လက်ရှိပေးချေထားသည့် ကာလကုန်ဆုံးသည်အထိ ဝန်ဆောင်မှုအားလုံးကို ဆက်လက်အသုံးပြုနိုင်ပါသည်။ ကျန်ကာလအတွက် ပိုင်းခြား ငွေပြန်အမ်းမည် မဟုတ်ပါ။
+              အခပေးသုံးခွင့်များသည် တစ်ကြိမ်ဝယ်ယူမှုဖြစ်ပြီး ရွေးချယ်ထားသောကာလ ကုန်ဆုံးချိန်တွင် အလိုအလျောက် သက်တမ်းတိုးခြင်း သို့မဟုတ် ငွေကောက်ခံခြင်း မရှိပါ။ သုံးခွင့်ကာလကုန်ဆုံးသည်အထိ ဝန်ဆောင်မှုအားလုံးကို ဆက်လက်အသုံးပြုနိုင်ပြီး ဆက်သုံးလိုပါက သုံးခွင့်အသစ်ကို ကိုယ်တိုင်ဝယ်ယူရပါမည်။ ကျန်ကာလအတွက် ပိုင်းခြား ငွေပြန်အမ်းမည် မဟုတ်ပါ။
             </LegalSection>
             <LegalSection title="ငွေပြန်အမ်းခြင်း">
-              ငွေပေးချေမှုအားလုံးကို ကိုယ်တိုင်စစ်ဆေးသည့်စနစ်ဖြင့် လုပ်ဆောင်ထားသောကြောင့် အလိုအလျောက် ငွေပြန်အမ်းစနစ် မရှိသေးပါ။ မှားယွင်းပေးချေမိခြင်း၊ နှစ်ကြိမ်ထပ်ပေးချေမိခြင်း သို့မဟုတ် အခြားပြဿနာများအတွက် ပေးချေပြီးချိန်မှ ၇ ရက်အတွင်း <a href={`mailto:${supportEmail}?subject=ACE%20Child%20Grow%20refund%20request`} className="font-semibold text-sky-deep underline">{supportEmail}</a> သို့ ဆက်သွယ်ပါက တစ်ခုချင်းစီ သုံးသပ်ပေးပါမည်။
+              အလိုအလျောက် ငွေပြန်အမ်းစနစ် မရှိသေးပါ။ မှားယွင်းပေးချေမိခြင်း၊ နှစ်ကြိမ်ထပ်ပေးချေမိခြင်း သို့မဟုတ် အခြားပြဿနာများအတွက် ပေးချေပြီးချိန်မှ ၇ ရက်အတွင်း <a href={`mailto:${supportEmail}?subject=ACE%20Child%20Grow%20refund%20request`} className="font-semibold text-sky-deep underline">{supportEmail}</a> သို့ ဆက်သွယ်ပါက တစ်ခုချင်းစီ သုံးသပ်ပေးပါမည်။
             </LegalSection>
             <LegalSection title="အကြောင်းအရာနှင့် တာဝန်ကန့်သတ်ချက်">
               App ၏ လမ်းညွှန်ချက်၊ လှုပ်ရှားမှုနှင့် အစီရင်ခံစာများသည် ယေဘုယျ ဖွံ့ဖြိုးရေးအထောက်အကူဖြစ်ပြီး ကလေးတစ်ဦးချင်းစီအတွက် ဆရာဝန် သို့မဟုတ် အထူးကုပညာရှင်၏ အကြံဉာဏ်ကို အစားထိုးသည် မဟုတ်ပါ။ ကျန်းမာရေးဆိုင်ရာ စိုးရိမ်စရာများအတွက် အမြဲ ပညာရှင်နှင့် တိုင်ပင်ပါ။
@@ -85,16 +182,16 @@ export function LegalPage({ kind }: LegalPageProps) {
               By using ACE Child Grow you agree to these terms. The app is intended for parents and caregivers, and provides general developmental guidance — it is not a medical diagnosis or a substitute for treatment.
             </LegalSection>
             <LegalSection title="Plans and pricing">
-              The Free plan is always free. Premium and Family plans are billed monthly or yearly in MMK at the published rate. Premium can be trialed free for 7 days with no card required; when the trial ends you return to Free automatically — there is no automatic charge.
+              The Free plan is always free. Premium and Family access can be purchased monthly or yearly at the MMK price shown in the app. Premium can be tried free for 3 days with no payment details; when the trial ends you return to Free and are not charged automatically. To continue Premium, you must explicitly purchase monthly or yearly access.
             </LegalSection>
             <LegalSection title="Payment">
-              Payment is handled either instantly via Myan Myan Pay (MMQR) or by uploading proof of a bank/wallet transfer, which staff review before activating your plan. Merchant credentials and API secrets never reach this browser.
+              <PaymentTerms locale="en" />
             </LegalSection>
             <LegalSection title="Renewal and cancellation">
-              Plans renew automatically for the billing period you chose (monthly or yearly) unless canceled. You may cancel at any time; your plan stays active until the end of the period you already paid for. We do not prorate or partially refund the remaining period.
+              Paid access is a one-time purchase. It does not renew or charge automatically when the selected period ends. Access remains active through the period you paid for; purchase new access explicitly if you want to continue. We do not prorate or partially refund the remaining period.
             </LegalSection>
             <LegalSection title="Refunds">
-              Because payments go through manual review rather than an automated billing processor, there is no self-service refund yet. If you were charged in error, charged twice, or hit another payment problem, contact <a href={`mailto:${supportEmail}?subject=ACE%20Child%20Grow%20refund%20request`} className="font-semibold text-sky-deep underline">{supportEmail}</a> within 7 days of payment and we will review it individually.
+              There is no self-service refund yet. If you were charged in error, charged twice, or hit another payment problem, contact <a href={`mailto:${supportEmail}?subject=ACE%20Child%20Grow%20refund%20request`} className="font-semibold text-sky-deep underline">{supportEmail}</a> within 7 days of payment and we will review it individually.
             </LegalSection>
             <LegalSection title="Content and liability">
               The app&rsquo;s guidance, activities and reports are general developmental support and do not replace the advice of a doctor or specialist for your specific child. Always consult a qualified professional for health concerns.
@@ -204,4 +301,34 @@ function PublicLegalShell({
 
 function LegalSection({ title, children }: { title: string; children: React.ReactNode }) {
   return <section><h2 className="mb-2 text-lg font-bold">{title}</h2><p>{children}</p></section>;
+}
+
+function PaymentTerms({ locale }: { locale: Locale }) {
+  const capabilities = useQuery(api.billing.paymentCapabilities);
+  const manualTransferAvailable = capabilities?.manualTransferAvailable === true;
+  const mmpayProductionAvailable = capabilities?.mmpayProductionAvailable === true;
+
+  if (locale === 'mm') {
+    if (mmpayProductionAvailable && manualTransferAvailable) {
+      return <>ငွေပေးချေမှုကို Production Myan Myan Pay (MMQR) သို့မဟုတ် App တွင် ဖော်ပြထားသော ငွေလွှဲနည်းလမ်းဖြင့် လုပ်ဆောင်နိုင်ပါသည်။ MMQR ငွေပေးချေမှု အတည်ပြုပြီးလျှင် အစီအစဉ်ကို အလိုအလျောက်ဖွင့်ပေးပြီး၊ လက်ဖြင့်ငွေလွှဲမှုကို ဝန်ထမ်းက စစ်ဆေးပြီးမှ ဖွင့်ပေးပါမည်။ ရွေးချယ်ထားသော ငွေလက်ခံအကောင့်ကိုသာ browser တွင် ပြပြီး API secret များကို မပို့ပါ။</>;
+    }
+    if (mmpayProductionAvailable) {
+      return <>ငွေပေးချေမှုကို Production Myan Myan Pay (MMQR) ဖြင့် လုပ်ဆောင်နိုင်ပြီး အောင်မြင်ကြောင်း အတည်ပြုပြီးသည်နှင့် အစီအစဉ်ကို အလိုအလျောက် ဖွင့်ပေးပါမည်။ Merchant credential နှင့် API secret များကို browser သို့ မပို့ပါ။</>;
+    }
+    if (manualTransferAvailable) {
+      return <>App တွင် ဖော်ပြထားသော ငွေလွှဲနည်းလမ်းကို သုံးပြီး အထောက်အထားတင်ခြင်းဖြင့် ငွေပေးချေနိုင်ပါသည်။ ဝန်ထမ်းက အထောက်အထားကို စစ်ဆေးပြီးမှ အစီအစဉ်ကို ဖွင့်ပေးပါမည်။ ရွေးချယ်ထားသော ငွေလက်ခံအကောင့်ကိုသာ browser တွင် ပြပြီး API secret များကို မပို့ပါ။</>;
+    }
+    return <>အတည်ပြုထားသော ငွေပေးချေမှုနည်းလမ်း မရှိသေးသဖြင့် အခပေးအစီအစဉ်အသစ် ဝယ်ယူခြင်းကို ယာယီပိတ်ထားပါသည်။ App တွင် အတည်ပြုထားသော နည်းလမ်းပေါ်လာသည်အထိ ငွေမပေးချေပါနှင့်။</>;
+  }
+
+  if (mmpayProductionAvailable && manualTransferAvailable) {
+    return <>Payment is available through production Myan Myan Pay (MMQR) or a transfer method displayed in the app. Verified MMQR payments activate access automatically; staff review manual-transfer proof before activation. The browser receives only the selected transfer destination, never merchant API secrets.</>;
+  }
+  if (mmpayProductionAvailable) {
+    return <>Payment is available through production Myan Myan Pay (MMQR), and access activates automatically after verification. Merchant credentials and API secrets never reach this browser.</>;
+  }
+  if (manualTransferAvailable) {
+    return <>Payment is available only through a transfer method displayed in the app. Staff review the submitted proof before activating access. The browser receives only the selected transfer destination, never merchant API secrets.</>;
+  }
+  return <>New paid purchases are temporarily unavailable because no verified payment method is active. Do not send payment until the app presents an approved method.</>;
 }

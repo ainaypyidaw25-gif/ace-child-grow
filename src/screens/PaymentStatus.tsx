@@ -9,11 +9,25 @@ import { ConfirmDialog } from '../components/ConfirmDialog';
 type View = 'status' | 'success' | 'cancel';
 
 const TERMINAL = new Set(['SUCCESS', 'FAILED', 'REFUNDED', 'CANCELLED', 'EXPIRED']);
+export const MMQR_VALIDITY_MS = 15 * 60 * 1_000;
+
+export function paymentQrRemainingMs(createdAt: number, now: number) {
+  return Math.max(0, createdAt + MMQR_VALIDITY_MS - now);
+}
+
+export function formatPaymentCountdown(remainingMs: number) {
+  const totalSeconds = Math.ceil(Math.max(0, remainingMs) / 1_000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}
 
 export function PaymentStatus({ view = 'status' }: { view?: View }) {
   const { orderId = '' } = useParams();
   const { locale } = useLocale();
   const payment = useQuery(api.mmpayData.myPayment, orderId ? { orderId } : 'skip');
+  const paymentCreatedAt = payment?.createdAt;
+  const paymentStatus = payment?.status;
   const refresh = useAction(api.mmpay.refreshPayment);
   const cancel = useAction(api.mmpay.cancelPayment);
   const navigate = useNavigate();
@@ -21,6 +35,7 @@ export function PaymentStatus({ view = 'status' }: { view?: View }) {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState('');
   const [confirmCancel, setConfirmCancel] = useState(false);
+  const [now, setNow] = useState(() => Date.now());
   const L = (mm: string, en: string) => locale === 'mm' ? mm : en;
 
   useEffect(() => {
@@ -44,6 +59,13 @@ export function PaymentStatus({ view = 'status' }: { view?: View }) {
   }, [payment, refresh]);
 
   useEffect(() => {
+    if (!paymentCreatedAt || !paymentStatus || TERMINAL.has(paymentStatus)) return;
+    setNow(Date.now());
+    const timer = window.setInterval(() => setNow(Date.now()), 1_000);
+    return () => window.clearInterval(timer);
+  }, [paymentCreatedAt, paymentStatus]);
+
+  useEffect(() => {
     if (!payment) return;
     if (payment.status === 'SUCCESS' && view !== 'success') navigate(`/payment/success/${payment.orderId}`, { replace: true });
     if (payment.status === 'CANCELLED' && view !== 'cancel') navigate(`/payment/cancel/${payment.orderId}`, { replace: true });
@@ -54,6 +76,8 @@ export function PaymentStatus({ view = 'status' }: { view?: View }) {
   if (payment === null) return <p className="rounded-card bg-white p-5 text-state-red-deep">{L('ဤငွေပေးချေမှုကို ရှာမတွေ့ပါ။', 'Payment not found.')}</p>;
 
   const pending = payment.status === 'INITIATING' || payment.status === 'PENDING';
+  const qrRemainingMs = pending ? paymentQrRemainingMs(payment.createdAt, now) : 0;
+  const qrCountdownExpired = pending && qrRemainingMs === 0;
   // Route names are presentation only. Never show a success/cancel result just
   // because someone manually typed that URL; the persisted provider status wins.
   const effectiveView: View = payment.status === 'SUCCESS' ? 'success' : payment.status === 'CANCELLED' ? 'cancel' : 'status';
@@ -78,7 +102,21 @@ export function PaymentStatus({ view = 'status' }: { view?: View }) {
             <span className="text-xl font-bold text-ink">{payment.amount.toLocaleString()} MMK</span>
           </div>
 
-          {pending && qrUrl && (
+          {pending && !qrCountdownExpired && (
+            <div className="rounded-2xl border border-pastel-yellow bg-pastel-yellow/30 px-4 py-3 text-center" role="timer" aria-live="polite">
+              <p className="text-sm font-semibold text-ink-soft">{L('MMQR သက်တမ်းကုန်ရန် ကျန်ချိန်', 'MMQR expires in')}</p>
+              <p className="mt-1 font-mono text-2xl font-bold tabular-nums text-state-red-deep">{formatPaymentCountdown(qrRemainingMs)}</p>
+            </div>
+          )}
+
+          {pending && qrCountdownExpired && (
+            <div className="rounded-2xl border border-pastel-yellow bg-pastel-yellow/40 p-4 text-center text-ink" role="status">
+              <p className="font-bold">{L('ဤ MMQR ၏ ၁၅ မိနစ် အချိန်ကန့်သတ်ချက် ပြည့်သွားပါပြီ။', 'This MMQR has reached its 15-minute time limit.')}</p>
+              <p className="mt-2 text-sm text-ink-soft">{L('အခြေအနေကို ပြန်စစ်ပါ။ ငွေမပေးရသေးပါက ပယ်ဖျက်ပြီး QR အသစ်ဖန်တီးနိုင်ပါသည်။', 'Refresh the status. If it was not paid, cancel it and create a new QR.')}</p>
+            </div>
+          )}
+
+          {pending && !qrCountdownExpired && qrUrl && (
             <div className="text-center">
               <img src={qrUrl} alt={L('Myan Myan Pay MMQR ကုဒ်', 'Myan Myan Pay MMQR code')} className="mx-auto w-full max-w-[360px] rounded-2xl border border-line bg-white p-3" />
               <img
@@ -95,13 +133,13 @@ export function PaymentStatus({ view = 'status' }: { view?: View }) {
 
           {pending && payment.checkoutUrl && (
             <a href={payment.checkoutUrl} target="_blank" rel="noreferrer" className="block min-h-touch rounded-pill bg-sky-deep px-6 py-3 text-center font-bold text-white">
-              {L('Payment app/page ကိုဖွင့်မည်', 'Open payment page')}
+              {L('ငွေပေးချေမှု စာမျက်နှာ ဖွင့်မည်', 'Open payment page')}
             </a>
           )}
 
           {effectiveView === 'success' && (
             <div className="rounded-2xl border border-mint bg-mint-soft/50 p-4 text-center">
-              <p className="font-bold text-sky-deep">✓ {L('Subscription ကို အလိုအလျောက် ဖွင့်ပေးပြီးပါပြီ။', 'Your subscription has been activated automatically.')}</p>
+              <p className="font-bold text-sky-deep">✓ {L('ဝယ်ယူထားသည့် အခပေးသုံးခွင့်ကို ဖွင့်ပေးပြီးပါပြီ။ ကာလကုန်လျှင် အလိုအလျောက် ငွေကောက်ခံမည်မဟုတ်ပါ။', 'Your paid access is active. You will not be charged automatically when it ends.')}</p>
               {payment.transactionRefId && <p className="mt-2 break-all text-xs text-ink-soft">{L('Transaction', 'Transaction')}: {payment.transactionRefId}</p>}
             </div>
           )}

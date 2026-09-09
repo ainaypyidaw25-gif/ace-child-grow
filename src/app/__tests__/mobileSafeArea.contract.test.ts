@@ -18,6 +18,7 @@ const indexHtml = read('index.html');
 const androidMainActivity = read('android/app/src/main/java/mm/com/acegroup/acechildgrow/MainActivity.java');
 const addChild = read('src/screens/AddChild.tsx');
 const consent = read('src/screens/Consent.tsx');
+const signIn = read('src/screens/SignIn.tsx');
 
 describe('mobile safe-area contract', () => {
   it('opts into viewport-fit=cover, which makes the insets mandatory', () => {
@@ -59,6 +60,12 @@ describe('mobile safe-area contract', () => {
   it('keeps mobile form controls readable without focus zoom', () => {
     expect(indexCss).toContain('@media (max-width: 767px)');
     expect(indexCss).toMatch(/input,\s*\n\s*select,\s*\n\s*textarea\s*\{\s*font-size:\s*16px/);
+  });
+
+  it('keeps sign-in help and policy links at the minimum touch-target height', () => {
+    expect(signIn).toContain('<Link to="/support" className="inline-flex min-h-touch items-center px-1">');
+    expect(signIn).toContain('<Link to="/privacy" className="inline-flex min-h-touch items-center px-1">');
+    expect(signIn).toContain('<Link to="/account-deletion" className="inline-flex min-h-touch items-center px-1">');
   });
 
   it('reserves every Android system-bar and display-cutout edge natively', () => {

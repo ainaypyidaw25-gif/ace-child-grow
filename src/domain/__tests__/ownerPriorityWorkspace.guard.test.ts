@@ -99,15 +99,24 @@ describe('duplicate decision prevention and exact revision binding', () => {
 });
 
 describe('role permissions on review areas', () => {
-  it('an owner or publisher account cannot record clinical or safety approvals', () => {
+  it('keeps clinical approval specialist-only while allowing qualified child-safety review', () => {
     expect(roleMayReview('owner', 'clinical')).toBe(false);
-    expect(roleMayReview('owner', 'safety')).toBe(false);
+    expect(roleMayReview('owner', 'safety')).toBe(true);
     expect(roleMayReview('content_editor', 'clinical')).toBe(false);
+    expect(roleMayReview('content_editor', 'safety')).toBe(true);
+    expect(roleMayReview('evidence_reviewer', 'safety')).toBe(true);
   });
   it('language and development reviewers cannot decide clinical areas', () => {
     expect(roleMayReview('language_reviewer', 'clinical')).toBe(false);
     expect(roleMayReview('language_reviewer', 'safety')).toBe(false);
     expect(roleMayReview('evidence_reviewer', 'clinical')).toBe(false);
+  });
+  it('makes the queue child-development requirement recordable by qualified reviewers', () => {
+    expect(roleMayReview('clinical_reviewer', 'child_development')).toBe(true);
+    expect(roleMayReview('owner', 'child_development')).toBe(false);
+    expect(roleMayReview('content_editor', 'child_development')).toBe(false);
+    expect(roleMayReview('evidence_reviewer', 'child_development')).toBe(false);
+    expect(roleMayReview('language_reviewer', 'child_development')).toBe(false);
   });
   it('only clinical reviewers hold the clinical dimension', () => {
     expect(roleMayReview('clinical_reviewer', 'clinical')).toBe(true);
@@ -117,8 +126,10 @@ describe('role permissions on review areas', () => {
 
 describe('language/development reviewers cannot publish', () => {
   const librarySource = readFileSync('convex/library.ts', 'utf8');
-  it('publication still requires the clinical publisher gate and full approvals', () => {
-    expect(librarySource).toContain('requireClinicalPublisher');
+  it('publication still requires the owner publisher and frozen specialist provenance gates', () => {
+    expect(librarySource).toContain('requireProfessionalPublisher');
+    expect(librarySource).toContain('frozenClinicalPublicationApproval');
+    expect(librarySource).not.toContain('await requireClinicalPublisher');
     expect(librarySource).toContain('missing review approvals');
   });
 });

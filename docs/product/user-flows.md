@@ -31,6 +31,7 @@ safety flag.
 Generate from stored data only: Parent Monthly Summary, Doctor Visit Summary,
 Share-safe Summary (no sensitive notes) → Myanmar-compatible PDF (planned module).
 
-## Admin / clinical
-Draft → Content Review → Translation Review → Clinical Review → Approved →
-Published → Archived, with audit logging.
+## Admin evidence and safety review
+Draft → English Review → Native-Myanmar Review → Evidence Review → Safety
+Review → Specialist Safety Review (only when risk-triggered) → Published →
+Archived, with revision binding and audit logging.

@@ -15,7 +15,13 @@
  * bundle can use it.
  */
 
-export type ReviewDimension = 'english' | 'native_myanmar' | 'evidence' | 'safety' | 'clinical';
+export type ReviewDimension =
+  | 'english'
+  | 'native_myanmar'
+  | 'child_development'
+  | 'evidence'
+  | 'safety'
+  | 'clinical';
 export type ReviewDecision = 'in_review' | 'approved' | 'changes_requested' | 'not_applicable';
 export type ReviewerRole =
   | 'owner'
@@ -35,7 +41,14 @@ export function roleMayReview(role: string | null | undefined, dimension: Review
   // person who can clear it by approving. Someone who is both a manager and a
   // qualified reviewer holds the reviewer role as well, and signs under that.
   if (role === 'review_manager') return false;
-  if (dimension === 'clinical' || dimension === 'safety') return role === 'clinical_reviewer';
+  if (dimension === 'clinical') return role === 'clinical_reviewer';
+  // Child-development sign-off is a professional decision. Until a dedicated
+  // child-development reviewer role exists, keep this least-privilege and use
+  // the already qualification-gated clinical reviewer role only.
+  if (dimension === 'child_development') return role === 'clinical_reviewer';
+  if (dimension === 'safety') {
+    return ['owner', 'content_editor', 'evidence_reviewer', 'clinical_reviewer'].includes(role);
+  }
   if (dimension === 'evidence') {
     return ['owner', 'content_editor', 'evidence_reviewer', 'clinical_reviewer'].includes(role);
   }
@@ -43,12 +56,33 @@ export function roleMayReview(role: string | null | undefined, dimension: Review
 }
 
 /**
- * Clinical, safety and evidence approvals are professional sign-offs, so the
- * reviewer's stated qualification is recorded with them. Language review is
- * editorial and does not carry that claim.
+ * Frozen release batches use a narrower assignee set than the broad reviewer
+ * workspace. Owners and content editors may make ordinary review decisions,
+ * but they cannot be substituted for the named specialist/language assignee
+ * whose exact identity is frozen into a release receipt.
+ */
+export function roleMayReviewFrozenBatch(
+  role: string | null | undefined,
+  dimension: ReviewDimension,
+): boolean {
+  if (dimension === 'english' || dimension === 'native_myanmar') {
+    return role === 'language_reviewer';
+  }
+  if (dimension === 'evidence') {
+    return role === 'evidence_reviewer' || role === 'clinical_reviewer';
+  }
+  return role === 'clinical_reviewer';
+}
+
+/**
+ * Clinical, child-safety and evidence decisions record the reviewer's stated
+ * qualification. A safety decision is never represented as a personal endorsement.
  */
 export function approvalNeedsQualification(dimension: ReviewDimension): boolean {
-  return dimension === 'clinical' || dimension === 'safety' || dimension === 'evidence';
+  return dimension === 'clinical'
+    || dimension === 'safety'
+    || dimension === 'evidence'
+    || dimension === 'child_development';
 }
 
 export type ReviewRefusalCode =
@@ -58,6 +92,8 @@ export type ReviewRefusalCode =
   | 'qualification_required'
   | 'note_required'
   | 'content_not_found'
+  | 'retired_content'
+  | 'assignment_required'
   | 'stale_revision';
 
 export type ReviewRefusal = { code: ReviewRefusalCode; message: string };
@@ -127,27 +163,35 @@ export const REVIEW_REFUSAL_LABELS: Record<ReviewRefusalCode, { mm: string; en: 
     en: 'Your account does not have permission to record review decisions.',
   },
   role_may_not_review_area: {
-    mm: 'သင့်သုံးသပ်သူ အခန်းကနေ ဤအပိုင်းကို ဆုံးဖြတ်ခွင့် မရှိပါ။',
+    mm: 'သင့်သုံးသပ်သူ အခန်းကဏ္ဍအရ ဤအပိုင်းကို ဆုံးဖြတ်ခွင့် မရှိပါ။',
     en: 'Your reviewer role cannot decide this review area.',
   },
   display_name_required: {
-    mm: 'ဆုံးဖြတ်ချက် မှတ်တမ်းတင်မီ သင့်အကောင့်တွင် ပြသမည့်နာမည် ထည့်ပါ။',
+    mm: 'ဆုံးဖြတ်ချက် မှတ်တမ်းမတင်မီ သင့်အကောင့်တွင် ပြသမည့်အမည် ထည့်ပါ။',
     en: 'Add your display name in your admin profile before recording a decision.',
   },
   qualification_required: {
-    mm: 'ဤအပိုင်းကို အတည်ပြုမီ သင့်အကောင့်တွင် ကျွမ်းကျင်မှု အရည်အချင်း ထည့်ပါ။',
+    mm: 'ဤအပိုင်းကို အတည်မပြုမီ သင့်အကောင့်တွင် သက်ဆိုင်ရာ ပညာရပ်ဆိုင်ရာ အရည်အချင်းကို ထည့်ပါ။',
     en: 'Add your professional qualification in your admin profile before approving this area.',
   },
   note_required: {
-    mm: 'ပြင်ဆင်ရန် တောင်းဆိုပါက ဘာပြင်ရမည်ကို မှတ်ချက်တွင် ရေးပါ။',
+    mm: 'ပြင်ဆင်ရန် တောင်းဆိုပါက မည်သည့်အချက်ကို ပြင်ဆင်ရမည်ဖြစ်ကြောင်း မှတ်ချက်တွင် ရေးပါ။',
     en: 'Write a note explaining what needs to change.',
   },
   content_not_found: {
-    mm: 'ဤအကြောင်းအရာ မတွေ့ရပါ။',
+    mm: 'ဤအကြောင်းအရာကို ရှာမတွေ့ပါ။',
     en: 'This content item no longer exists.',
   },
+  retired_content: {
+    mm: 'မပြောင်းလဲနိုင်သော ထုတ်ဝေမှုမှတ်တမ်းဖြင့် ရပ်ဆိုင်းထားသော ဤအကြောင်းအရာတွင် သုံးသပ်ဆုံးဖြတ်ချက်အသစ် မထည့်နိုင်ပါ။',
+    en: 'This content was retired by an immutable release and cannot receive new review decisions.',
+  },
+  assignment_required: {
+    mm: 'Clinical reviewer ဆုံးဖြတ်ချက်ကို သတ်မှတ်ထားသော frozen batch ထဲမှသာ မှတ်တမ်းတင်နိုင်ပါသည်။',
+    en: 'Clinical reviewer decisions must be recorded through the assigned frozen batch.',
+  },
   stale_revision: {
-    mm: 'သင်ဖတ်ပြီးနောက် ဤအကြောင်းအရာ ပြောင်းလဲသွားပါပြီ။ မူကွဲအသစ်ကို ပြန်ဖတ်ပြီးမှ ဆုံးဖြတ်ပါ။',
+    mm: 'သင်ဖတ်ရှုပြီးနောက် ဤအကြောင်းအရာ ပြောင်းလဲသွားပါပြီ။ မူကွဲအသစ်ကို ပြန်လည်စစ်ဆေးပြီးမှ ဆုံးဖြတ်ပါ။',
     en: 'This content changed after you loaded it. Review the new revision before deciding.',
   },
 };

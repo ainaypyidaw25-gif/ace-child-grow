@@ -4,6 +4,9 @@ import type { QueryCtx } from './_generated/server';
 import type { Doc } from './_generated/dataModel';
 import { logAudit } from './audit';
 import { getStaffAccess, requireUser, type StaffAccess } from './lib/auth';
+import { specialistReviewReason } from './lib/contentReviewRequirements';
+import { isRetiredContentSlug } from './lib/contentRetirements';
+import { isPersistedReleaseGovernedContent } from './lib/clinicalReviewBatchProvenance';
 import {
   coerceOwnerPriority,
   coercePriorityStatus,
@@ -15,12 +18,12 @@ import {
   needsManualTriage,
   OWNER_PRIORITIES,
   PRIORITY_STATUSES,
+  projectReviewDecisionsForRevision,
   requiredDimensionsFor,
   REVIEW_DIMENSION_IDS,
   RISK_CLASSES,
   suggestedDimensionsFor,
   type PriorityStatus,
-  type RiskClass,
 } from './lib/ownerPriority';
 import {
   mayManageGovernance,
@@ -195,6 +198,38 @@ function fallbackQueueRow(item: Doc<'libraryContent'>, error: unknown) {
   };
 }
 
+/**
+ * Build the single policy input used by both the queue and governance writes.
+ * Completion must never use a narrower risk interpretation than the row the
+ * owner sees in the queue; otherwise an unconfirmed/provisional row can appear
+ * to require reviews in the UI while the mutation treats its requirement set
+ * as empty and accepts `completed`.
+ */
+function priorityForLibraryItem(
+  item: Doc<'libraryContent'>,
+  workflowBlocker: string | null = null,
+) {
+  return computePriority({
+    slug: item.slug,
+    type: item.type,
+    category: item.category ?? null,
+    ageGroupKey: item.ageGroupKey ?? null,
+    domainKey: item.domainKey ?? null,
+    titleMm: item.titleMm,
+    titleEn: item.titleEn,
+    summaryMm: item.summaryMm ?? null,
+    summaryEn: item.summaryEn ?? null,
+    tags: item.tags,
+    data: item.data,
+    clinicalStatus: item.clinicalStatus,
+    riskClassification: coerceRiskClass(item.riskClassification),
+    ownerPriority: coerceOwnerPriority(item.ownerPriority),
+    riskReasons: item.riskReasons ?? null,
+    priorityStatus: item.priorityStatus ?? null,
+    workflowBlocker,
+  });
+}
+
 const queueResultValidator = v.object({
   allowed: v.boolean(),
   accessLevel: v.string(),
@@ -262,42 +297,13 @@ async function buildQueueResult(ctx: QueryCtx, level: string, role: string | und
       try {
       const revision = item.reviewRevision ?? 1;
       const slugDecisions = decisionsBySlug.get(item.slug) ?? [];
-      const currentByDimension = new Map<string, ReviewRow>();
-      let latestDecisionAt: number | null = null;
-      let workflowBlocker: string | null = null;
-      const duplicateKeys = new Set<string>();
-      for (const decision of slugDecisions) {
-        if (latestDecisionAt === null || decision.reviewedAt > latestDecisionAt) latestDecisionAt = decision.reviewedAt;
-        const identityKey = [decision.dimension, decision.decision, String(decision.reviewerId), decision.contentVersion, decision.note ?? ''].join('|');
-        if (duplicateKeys.has(identityKey)) workflowBlocker = 'duplicate identical review decisions recorded';
-        duplicateKeys.add(identityKey);
-        if ((decision.reviewRevision ?? decision.contentVersion) !== revision) continue;
-        if (!currentByDimension.has(decision.dimension)) currentByDimension.set(decision.dimension, decision);
-      }
+      const { currentByDimension, latestDecisionAt, workflowBlocker } =
+        projectReviewDecisionsForRevision(slugDecisions, revision);
 
-      const result = computePriority({
-        slug: item.slug,
-        type: item.type,
-        category: item.category ?? null,
-        ageGroupKey: item.ageGroupKey ?? null,
-        domainKey: item.domainKey ?? null,
-        titleMm: item.titleMm,
-        titleEn: item.titleEn,
-        summaryMm: item.summaryMm ?? null,
-        summaryEn: item.summaryEn ?? null,
-        tags: item.tags,
-        data: item.data,
-        clinicalStatus: item.clinicalStatus,
-        // Coerce stored governance strings to known enum members. A legacy value
-        // from an earlier schema would otherwise flow into the return-validated
-        // riskClass/priority fields and make this whole query throw, crashing
-        // the review workspace for every staff user.
-        riskClassification: coerceRiskClass(item.riskClassification),
-        ownerPriority: coerceOwnerPriority(item.ownerPriority),
-        riskReasons: item.riskReasons ?? null,
-        priorityStatus: item.priorityStatus ?? null,
-        workflowBlocker,
-      });
+      // The exact same mapping is used by the completion mutation below. A
+      // legacy stored enum is coerced here so one malformed value cannot crash
+      // the full return-validated workspace.
+      const result = priorityForLibraryItem(item, workflowBlocker);
 
       // Confirmed requirements are ONLY what a human stored, or what policy
       // allows for A/B/C. Untriaged D/E carry none, so nothing about them can
@@ -322,11 +328,22 @@ async function buildQueueResult(ctx: QueryCtx, level: string, role: string | und
         storedStatus === 'assigned' && !hasActiveAssignment ? 'review_requested' : storedStatus;
 
       const warnings: string[] = [];
+      // Class C is deliberately broader than the specialist publication gate:
+      // a guide with a neutral redFlags/referral block belongs in the high-risk
+      // work queue, but ordinary education may still be published with an
+      // education-scoped professional decision. Only the canonical specialist
+      // policy (diagnosis/treatment/emergency/bed-sharing or an explicit
+      // clinical requirement) may demand a clinical-scope publication.
+      const specialistReason = specialistReviewReason(item);
       if (workflowBlocker) warnings.push(workflowBlocker);
-      if (item.clinicalStatus === 'published' && result.riskClass === 'C') {
-        warnings.push('parent-visible now with no clinical approval (education-scoped legacy publication)');
+      if (item.clinicalStatus === 'published'
+        && specialistReason !== null
+        && (item.reviewScope !== 'clinical' || !approvedSet.has('clinical'))) {
+        warnings.push('parent-visible high-risk wording lacks a current clinical-scope publication decision');
       }
-      if (item.reviewScope === 'education') warnings.push('education-scoped review must never be read as clinical approval');
+      if (item.reviewScope === 'education' && specialistReason !== null) {
+        warnings.push('education-scoped review covers general education only, not a specialist safety decision');
+      }
       if (!linkedSlugs.has(item.slug)) warnings.push('no evidence link recorded on this deployment');
       if (result.provisional) warnings.push('classification is provisional (in-app rules) — not yet owner-confirmed');
       if (triageRequired) warnings.push('manual triage required: a manager must confirm the required review dimensions');
@@ -529,11 +546,29 @@ export const setGovernance = mutation({
         messageMm: 'ဦးစားပေး စီမံခန့်ခွဲမှုကို ပိုင်ရှင် သို့မဟုတ် စစ်ဆေးရေးမန်နေဂျာသာ ပြောင်းလဲနိုင်သည်။',
       };
     }
+    if (isRetiredContentSlug(args.slug)) {
+      await logAudit(ctx, userId, 'ownerPriority.setGovernance', 'libraryContent', undefined, `${args.slug} · refused: retired_content`, { result: 'rejected' });
+      return {
+        ok: false as const,
+        code: 'retired_content',
+        message: 'Retired content is immutable and cannot receive governance changes.',
+        messageMm: 'ရပ်ဆိုင်းထားသော အကြောင်းအရာကို မပြောင်းလဲနိုင်သဖြင့် စီမံခန့်ခွဲမှုအချက်အလက်များ ပြင်ဆင်၍ မရပါ။',
+      };
+    }
     const item = await ctx.db
       .query('libraryContent')
       .withIndex('by_slug', (q) => q.eq('slug', args.slug))
       .unique();
     if (!item) return { ok: false as const, code: 'content_not_found', message: 'This content item no longer exists.' };
+    if (await isPersistedReleaseGovernedContent(ctx, args.slug)) {
+      await logAudit(ctx, userId, 'ownerPriority.setGovernance', 'libraryContent', item._id,
+        `${args.slug} · refused: frozen_release_governed`, { result: 'rejected' });
+      return {
+        ok: false as const,
+        code: 'frozen_release_governed',
+        message: 'Invalidate and refreeze the exact release batch before changing governance.',
+      };
+    }
     if ((item.reviewRevision ?? 1) !== args.expectedReviewRevision) {
       await logAudit(ctx, userId, 'ownerPriority.setGovernance', 'libraryContent', item._id, `${args.slug} · refused: stale_revision`, { result: 'rejected' });
       return { ok: false as const, code: 'stale_revision', message: 'This item has newer changes. Refresh before saving.' };
@@ -567,14 +602,17 @@ export const setGovernance = mutation({
               && row.decision === 'approved')
             .map((row) => row.dimension),
         )];
-        const riskClass = (item.riskClassification ?? null) as RiskClass | null;
+        // Stored classification wins when present; otherwise use the same
+        // conservative provisional classifier as the queue. An absent stored
+        // classification never means "zero required reviews".
+        const riskClass = priorityForLibraryItem(item).riskClass;
         const confirmed = (patch.requiredReviewDimensions as string[] | undefined)
           ?? item.requiredReviewDimensions
-          ?? (riskClass ? requiredDimensionsFor(riskClass) : []);
+          ?? requiredDimensionsFor(riskClass);
         const refusal = completionRefusal({
           confirmedRequiredDimensions: confirmed,
           approvedDimensionsAtCurrentRevision: approvedDimensions,
-          needsManualTriage: riskClass ? needsManualTriage(riskClass) : false,
+          needsManualTriage: needsManualTriage(riskClass),
           dataComplete: reviewsResult.complete,
         });
         if (refusal) {
@@ -667,6 +705,15 @@ export const requestReviews = mutation({
         messageMm: 'စစ်ဆေးမှု တောင်းဆိုခြင်းကို ပိုင်ရှင်၊ စစ်ဆေးရေးမန်နေဂျာ သို့မဟုတ် အကြောင်းအရာ တည်းဖြတ်သူသာ လုပ်နိုင်သည်။',
       };
     }
+    if (isRetiredContentSlug(args.slug)) {
+      await logAudit(ctx, userId, 'ownerPriority.requestReviews', 'libraryContent', undefined, `${args.slug} · refused: retired_content`, { result: 'rejected' });
+      return {
+        ok: false as const,
+        code: 'retired_content',
+        message: 'Retired content is immutable and cannot receive new review requests.',
+        messageMm: 'ရပ်ဆိုင်းထားသော အကြောင်းအရာကို မပြောင်းလဲနိုင်သဖြင့် သုံးသပ်ချက်အသစ် တောင်းဆို၍ မရပါ။',
+      };
+    }
     const invalid = args.dimensions.filter((dimension) => !(REVIEW_DIMENSION_IDS as readonly string[]).includes(dimension));
     if (invalid.length > 0) {
       return { ok: false as const, code: 'unknown_dimension', message: `Unknown review dimension: ${invalid.join(', ')}` };
@@ -676,6 +723,15 @@ export const requestReviews = mutation({
       .withIndex('by_slug', (q) => q.eq('slug', args.slug))
       .unique();
     if (!item) return { ok: false as const, code: 'content_not_found', message: 'This content item no longer exists.' };
+    if (await isPersistedReleaseGovernedContent(ctx, args.slug)) {
+      await logAudit(ctx, userId, 'ownerPriority.requestReviews', 'libraryContent', item._id,
+        `${args.slug} · refused: frozen_release_governed`, { result: 'rejected' });
+      return {
+        ok: false as const,
+        code: 'frozen_release_governed',
+        message: 'Invalidate and refreeze the exact release batch before changing review requests.',
+      };
+    }
     if ((item.reviewRevision ?? 1) !== args.expectedReviewRevision) {
       return { ok: false as const, code: 'stale_revision', message: 'This item has newer changes. Refresh before saving.' };
     }

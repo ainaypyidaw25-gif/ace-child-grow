@@ -24,7 +24,7 @@ const TYPE_LABELS: Record<string, { mm: string; en: string }> = {
   story: { mm: 'ပုံပြင်', en: 'Stories' },
   milestone: { mm: 'မှတ်တိုင်', en: 'Milestones' },
   special_need: { mm: 'အထူးလိုအပ်ချက်', en: 'Special needs' },
-  printable: { mm: 'ပုံနှိပ်စာရွက်', en: 'Printables' },
+  printable: { mm: 'ပုံနှိပ်အသုံးပြုရန်', en: 'Printables' },
 };
 
 export function OfflineDownloads() {
@@ -39,13 +39,13 @@ export function OfflineDownloads() {
   const L = (mm: string, en: string) => (locale === 'mm' ? mm : en);
 
   // One query per readable type; each returns published rows only for a parent.
-  const guides = useQuery(api.library.listByType, { type: 'guide' });
-  const activities = useQuery(api.library.listByType, { type: 'activity' });
-  const lessons = useQuery(api.library.listByType, { type: 'lesson' });
-  const stories = useQuery(api.library.listByType, { type: 'story' });
-  const milestones = useQuery(api.library.listByType, { type: 'milestone' });
-  const specialNeeds = useQuery(api.library.listByType, { type: 'special_need' });
-  const printables = useQuery(api.library.listByType, { type: 'printable' });
+  const guides = useQuery(api.library.listByType, { type: 'guide', audience: 'parent' });
+  const activities = useQuery(api.library.listByType, { type: 'activity', audience: 'parent' });
+  const lessons = useQuery(api.library.listByType, { type: 'lesson', audience: 'parent' });
+  const stories = useQuery(api.library.listByType, { type: 'story', audience: 'parent' });
+  const milestones = useQuery(api.library.listByType, { type: 'milestone', audience: 'parent' });
+  const specialNeeds = useQuery(api.library.listByType, { type: 'special_need', audience: 'parent' });
+  const printables = useQuery(api.library.listByType, { type: 'printable', audience: 'parent' });
 
   const available = useMemo(() => {
     const groups = [guides, activities, lessons, stories, milestones, specialNeeds, printables];
@@ -104,7 +104,7 @@ export function OfflineDownloads() {
 
         <section className="space-y-3 rounded-card border border-line bg-white p-4 shadow-card">
           <div className="flex items-baseline justify-between gap-3">
-            <span className="text-sm text-ink-soft">{L('ဖုန်းတွင် သိမ်းထားမှု', 'Stored on this device')}</span>
+            <span className="text-sm text-ink-soft">{L('ဖုန်းထဲတွင် သိမ်းဆည်းထားမှု', 'Stored on this device')}</span>
             <span className="text-lg font-bold text-sky-deep">
               {loaded ? `${records.length} ${L('ခု', 'items')}` : '…'}
             </span>

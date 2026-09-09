@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useAuthActions } from '@convex-dev/auth/react';
+import { Link } from 'react-router-dom';
 import { useLocale } from '../app/LocaleContext';
 import { clearPortalMode, setPortalMode } from '../app/portalMode';
 import {
@@ -12,21 +13,23 @@ import {
   type AccountPasswordKind,
 } from '../domain/auth/passwordPolicy';
 import { captureReferralFromSearch } from '../domain/referrals/referralCapture';
-import { getAuthRedirectUrl, NATIVE_AUTH_CALLBACK_ERROR_EVENT } from '../app/platform';
+import { getAuthRedirectUrl, isNativeStoreBuild, NATIVE_AUTH_CALLBACK_ERROR_EVENT } from '../app/platform';
 
 type AuthFlow = 'signIn' | 'signUp' | 'reset' | 'resetVerification';
+type OAuthProvider = 'apple' | 'google';
 
 // Parent accounts use a memorable six-digit PIN. Existing accounts that still
 // use the former 8+ character password remain supported during sign-in.
 export function SignIn() {
   const { t, locale, setLocale } = useLocale();
   const { signIn } = useAuthActions();
-  const isStaffInvite = window.location.pathname.startsWith('/admin/accept-invite/')
+  const nativeStoreBuild = isNativeStoreBuild();
+  const isStaffInvite = !nativeStoreBuild && (window.location.pathname.startsWith('/admin/accept-invite/')
     || (window.location.pathname === '/admin/accept-invite'
-      && new URLSearchParams(window.location.search).has('invite'));
+      && new URLSearchParams(window.location.search).has('invite')));
   const [flow, setFlow] = useState<AuthFlow>(() => isStaffInvite ? 'signUp' : 'signIn');
   const [portal, setPortal] = useState<'parent' | 'staff'>(() =>
-    isStaffInvite || new URLSearchParams(window.location.search).get('portal') === 'staff' ? 'staff' : 'parent',
+    !nativeStoreBuild && (isStaffInvite || new URLSearchParams(window.location.search).get('portal') === 'staff') ? 'staff' : 'parent',
   );
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -34,6 +37,7 @@ export function SignIn() {
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
   const [busy, setBusy] = useState(false);
+  const [showCredentialForm, setShowCredentialForm] = useState(isStaffInvite);
 
   useEffect(() => {
     try {
@@ -49,15 +53,15 @@ export function SignIn() {
       clearPortalMode();
       setError(
         locale === 'mm'
-          ? 'Google အကောင့်ဝင်ခြင်းကို အပြီးသတ်၍ မရပါ။ ထပ်မံကြိုးစားပါ။'
-          : 'Google sign-in could not be completed. Please try again.',
+          ? 'အကောင့်ဝင်ခြင်းကို အပြီးသတ်၍ မရပါ။ ထပ်မံကြိုးစားပါ။'
+          : 'Sign-in could not be completed. Please try again.',
       );
     };
     window.addEventListener(NATIVE_AUTH_CALLBACK_ERROR_EVENT, showNativeCallbackError);
     return () => window.removeEventListener(NATIVE_AUTH_CALLBACK_ERROR_EVENT, showNativeCallbackError);
   }, [locale]);
 
-  const accountType: AccountPasswordKind = portal === 'staff' ? 'staff' : 'parent';
+  const accountType: AccountPasswordKind = !nativeStoreBuild && portal === 'staff' ? 'staff' : 'parent';
   const requiresNewCredential = flow === 'signUp' || flow === 'resetVerification';
   const requiresSixDigitPin = accountType === 'parent' && requiresNewCredential;
   const normalizedEmail = email.trim().toLowerCase();
@@ -69,6 +73,7 @@ export function SignIn() {
   const verificationCodeReady = flow !== 'resetVerification' || /^\d{6}$/.test(code);
   const formReady = emailReady && credentialReady && verificationCodeReady;
   const likelyWebPrefix = hasLikelyWebPrefixInEmail(email);
+  const showEmailCredentialFields = showCredentialForm || flow !== 'signIn';
 
   function resetToSignIn() {
     setFlow('signIn');
@@ -76,6 +81,7 @@ export function SignIn() {
     setCode('');
     setError('');
     setMessage('');
+    setShowCredentialForm(false);
   }
 
   async function submit(e: React.FormEvent) {
@@ -142,7 +148,7 @@ export function SignIn() {
     }
   }
 
-  async function continueWithGoogle() {
+  async function continueWithOAuth(provider: OAuthProvider) {
     setError('');
     setMessage('');
     setBusy(true);
@@ -151,15 +157,15 @@ export function SignIn() {
       const redirectPath = isStaffInvite
         ? `${window.location.pathname}${window.location.search}${window.location.hash}`
         : '';
-      await signIn('google', {
+      await signIn(provider, {
         redirectTo: getAuthRedirectUrl(redirectPath),
       });
     } catch {
       clearPortalMode();
       setError(
         locale === 'mm'
-          ? 'Google အကောင့်ဖြင့် ဝင်၍မရပါ။ ထပ်မံကြိုးစားပါ။'
-          : 'Could not continue with Google. Please try again.',
+          ? `${provider === 'apple' ? 'Apple' : 'Google'} အကောင့်ဖြင့် ဝင်၍မရပါ။ ထပ်မံကြိုးစားပါ။`
+          : `Could not continue with ${provider === 'apple' ? 'Apple' : 'Google'}. Please try again.`,
       );
     } finally {
       // Android keeps the WebView alive while OAuth runs in the browser. If
@@ -177,7 +183,7 @@ export function SignIn() {
         <p className="text-ink-soft">{t('app.tagline')}</p>
       </div>
 
-      <div className="grid grid-cols-2 rounded-pill border border-line bg-white p-1">
+      {!nativeStoreBuild && <div className="grid grid-cols-2 rounded-pill border border-line bg-white p-1">
         <button
           type="button"
           onClick={() => { if (!isStaffInvite) { setPortal('parent'); resetToSignIn(); } }}
@@ -193,7 +199,7 @@ export function SignIn() {
         >
           {locale === 'mm' ? 'အဖွဲ့ဝင်/ပညာရှင်ဝင်ရန်' : 'Staff/reviewer sign in'}
         </button>
-      </div>
+      </div>}
 
       <form onSubmit={submit} className="space-y-3 rounded-card border border-line bg-white p-5 shadow-card">
         <h2 className="font-semibold text-ink">
@@ -206,7 +212,7 @@ export function SignIn() {
                 : locale === 'mm' ? 'မိဘအကောင့်ဝင်ရန်' : 'Parent sign in'}
         </h2>
 
-        {portal === 'staff' && flow !== 'reset' && flow !== 'resetVerification' && (
+        {!nativeStoreBuild && portal === 'staff' && flow !== 'reset' && flow !== 'resetVerification' && (
           <p className="rounded-xl bg-pastel-yellow/50 p-3 text-xs text-ink">
             {locale === 'mm'
               ? isStaffInvite
@@ -220,9 +226,25 @@ export function SignIn() {
 
         {(flow === 'signIn' || flow === 'signUp') && (
           <>
+            <p className="rounded-xl bg-mint-soft px-4 py-3 text-center text-sm text-sky-deep">
+              {locale === 'mm'
+                ? 'Google သို့မဟုတ် Apple အကောင့်ဖြင့် အလွယ်တကူဝင်နိုင်ပြီး သီးခြား PIN သို့မဟုတ် စကားဝှက် မလိုပါ။'
+                : 'Sign in with Google or Apple. No separate PIN or password is needed.'}
+            </p>
+            {portal === 'parent' && (
+              <button
+                type="button"
+                onClick={() => void continueWithOAuth('apple')}
+                disabled={busy}
+                className="flex min-h-touch w-full items-center justify-center gap-3 rounded-pill border border-black bg-black px-5 py-3 font-semibold text-white shadow-sm disabled:opacity-50"
+              >
+                <span aria-hidden className="text-2xl leading-none"></span>
+                {locale === 'mm' ? 'Apple အကောင့်ဖြင့် ဆက်လုပ်မည်' : 'Continue with Apple'}
+              </button>
+            )}
             <button
               type="button"
-              onClick={() => void continueWithGoogle()}
+              onClick={() => void continueWithOAuth('google')}
               disabled={busy}
               className="flex min-h-touch w-full items-center justify-center gap-3 rounded-pill border border-line bg-white px-5 py-3 font-semibold text-ink shadow-sm disabled:opacity-50"
             >
@@ -237,107 +259,121 @@ export function SignIn() {
           </>
         )}
 
-        <label className="block text-sm">
-          {locale === 'mm' ? 'အီးမေးလ်' : 'Email'}
-          <input
-            type="email"
-            required
-            autoComplete="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            disabled={flow === 'resetVerification'}
-            className="mt-1 block min-h-touch w-full rounded-lg border border-line px-3 py-2 disabled:bg-canvas"
-          />
-          {likelyWebPrefix && (
-            <span className="mt-1 block text-xs text-state-red-deep" role="alert">
-              {locale === 'mm'
-                ? 'အီးမေးလ်အစတွင် “www.” ပါနေသည်။ မိမိအကောင့်လိပ်စာမှန်ကြောင်း စစ်ပါ။'
-                : 'This email starts with “www.” Check that it is really part of your account address.'}
-            </span>
-          )}
-        </label>
-
-        {flow === 'resetVerification' && (
-          <label className="block text-sm">
-            {locale === 'mm' ? 'အီးမေးလ်မှ ၆ လုံးအတည်ပြုကုဒ်' : 'Six-digit email code'}
-            <input
-              type="text"
-              required
-              inputMode="numeric"
-              autoComplete="one-time-code"
-              pattern="[0-9]{6}"
-              maxLength={6}
-              value={code}
-              onChange={(event) => setCode(event.target.value.replace(/\D/g, '').slice(0, 6))}
-              className="mt-1 block min-h-touch w-full rounded-lg border border-line px-3 py-2 text-center text-xl tracking-[0.35em]"
-            />
-          </label>
-        )}
-
-        {flow !== 'reset' && (
-          <label className="block text-sm">
-            {locale === 'mm'
-              ? requiresSixDigitPin
-                ? 'ဂဏန်း ၆ လုံး PIN အသစ်'
-                : accountType === 'parent' ? 'PIN (သို့) ယခင် စကားဝှက်' : 'စကားဝှက်'
-              : requiresSixDigitPin
-                ? 'New 6-digit PIN'
-                : accountType === 'parent' ? 'PIN or existing password' : 'Password'}
-            <input
-              type="password"
-              required
-              autoComplete={requiresNewCredential ? 'new-password' : 'current-password'}
-              inputMode={requiresSixDigitPin ? 'numeric' : undefined}
-              pattern={requiresSixDigitPin ? '[0-9]{6}' : undefined}
-              minLength={requiresSixDigitPin ? 6 : accountType === 'staff' ? 8 : 6}
-              maxLength={requiresSixDigitPin ? 6 : undefined}
-              value={password}
-              onChange={(event) => setPassword(requiresSixDigitPin ? event.target.value.replace(/\D/g, '').slice(0, 6) : event.target.value)}
-              className="mt-1 block min-h-touch w-full rounded-lg border border-line px-3 py-2"
-            />
-            {requiresSixDigitPin && <span className="mt-1 block text-xs text-ink-soft">{locale === 'mm' ? 'မမှန်းဆလွယ်သော ဂဏန်း ၆ လုံးကို သတ်မှတ်ပါ။' : 'Choose six digits that are difficult to guess.'}</span>}
-          </label>
-        )}
-
         {message && <p className="rounded-xl bg-mint-soft p-3 text-sm text-sky-deep" role="status">{message}</p>}
         {error && <p className="text-sm text-state-red-deep" role="alert">⚠️ {error}</p>}
 
-        {!busy && !formReady && (
-          <p className="text-xs text-ink-soft" role="status">
-            {!emailReady
-              ? (locale === 'mm' ? 'မှန်ကန်သော အီးမေးလ်လိပ်စာကို ဖြည့်ပါ။' : 'Enter a valid email address.')
-              : !verificationCodeReady
-                ? (locale === 'mm' ? 'အီးမေးလ်မှ ၆ လုံးကုဒ်ကို ဖြည့်ပါ။' : 'Enter the six-digit email code.')
-                : accountType === 'parent'
-                  ? (locale === 'mm' ? 'ဂဏန်း ၆ လုံး PIN သို့မဟုတ် ယခင်စကားဝှက် အနည်းဆုံး ၈ လုံးကို ဖြည့်ပါ။' : 'Enter a six-digit PIN or an existing password of at least eight characters.')
-                  : (locale === 'mm' ? 'စကားဝှက် အနည်းဆုံး ၈ လုံးကို ဖြည့်ပါ။' : 'Enter a password of at least eight characters.')}
-          </p>
+        {flow === 'signIn' && !showEmailCredentialFields && (
+          <button
+            type="button"
+            onClick={() => setShowCredentialForm(true)}
+            className="min-h-touch w-full rounded-pill border border-line bg-white px-5 py-3 text-sm font-semibold text-sky-deep"
+          >
+            {locale === 'mm' ? 'အီးမေးလ်နှင့် PIN/စကားဝှက်ဖြင့် ဝင်မည်' : 'Use email and PIN/password instead'}
+          </button>
         )}
 
-        <button type="submit" disabled={busy || !formReady} aria-busy={busy} className="min-h-touch w-full rounded-pill bg-sky px-6 py-3 font-semibold text-white disabled:opacity-50">
-          {busy ? '…'
-            : flow === 'reset' ? (locale === 'mm' ? 'အတည်ပြုကုဒ် ပို့မည်' : 'Send recovery code')
-              : flow === 'resetVerification' ? (locale === 'mm' ? 'PIN/စကားဝှက် ပြောင်းမည်' : 'Change credential')
-                : flow === 'signIn' ? (locale === 'mm' ? 'ဝင်မည်' : 'Sign in')
-                  : (locale === 'mm' ? 'အကောင့်ဖွင့်မည်' : 'Create account')}
-        </button>
+        {showEmailCredentialFields && (
+          <>
+            <label className="block text-sm">
+              {locale === 'mm' ? 'အီးမေးလ်' : 'Email'}
+              <input
+                type="email"
+                required
+                autoComplete="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                disabled={flow === 'resetVerification'}
+                className="mt-1 block min-h-touch w-full rounded-lg border border-line px-3 py-2 disabled:bg-canvas"
+              />
+              {likelyWebPrefix && (
+                <span className="mt-1 block text-xs text-state-red-deep" role="alert">
+                  {locale === 'mm'
+                    ? 'အီးမေးလ်အစတွင် “www.” ပါနေသည်။ မိမိအကောင့်လိပ်စာမှန်ကြောင်း စစ်ပါ။'
+                    : 'This email starts with “www.” Check that it is really part of your account address.'}
+                </span>
+              )}
+            </label>
 
-        {flow === 'signIn' && (
-          <button type="button" onClick={() => { setFlow('reset'); setPassword(''); setError(''); }} className="w-full text-center text-sm font-semibold text-sky-deep">
-            {locale === 'mm' ? 'PIN/စကားဝှက် မေ့နေပါသလား?' : 'Forgot PIN/password?'}
-          </button>
-        )}
-        {(flow === 'reset' || flow === 'resetVerification') && (
-          <button type="button" onClick={resetToSignIn} className="w-full text-center text-sm text-sky-deep">
-            {locale === 'mm' ? 'အကောင့်ဝင်ရန် ပြန်သွားမည်' : 'Back to sign in'}
-          </button>
-        )}
-        {(portal === 'parent' || isStaffInvite) && flow !== 'reset' && flow !== 'resetVerification' && (
-          <button type="button" onClick={() => { setFlow(flow === 'signIn' ? 'signUp' : 'signIn'); setPassword(''); setError(''); }} className="w-full text-center text-sm text-sky-deep">
-            {flow === 'signIn'
-              ? (locale === 'mm' ? 'အကောင့်မရှိသေးပါက အသစ်ဖွင့်ရန်' : 'Create a new account')
-              : (locale === 'mm' ? 'အကောင့်ရှိပြီးသားဆိုလျှင် ဝင်ရန်' : 'Sign in to an existing account')}
-          </button>
+            {flow === 'resetVerification' && (
+              <label className="block text-sm">
+                {locale === 'mm' ? 'အီးမေးလ်မှ ၆ လုံးအတည်ပြုကုဒ်' : 'Six-digit email code'}
+                <input
+                  type="text"
+                  required
+                  inputMode="numeric"
+                  autoComplete="one-time-code"
+                  pattern="[0-9]{6}"
+                  maxLength={6}
+                  value={code}
+                  onChange={(event) => setCode(event.target.value.replace(/\D/g, '').slice(0, 6))}
+                  className="mt-1 block min-h-touch w-full rounded-lg border border-line px-3 py-2 text-center text-xl tracking-[0.35em]"
+                />
+              </label>
+            )}
+
+            {flow !== 'reset' && (
+              <label className="block text-sm">
+                {locale === 'mm'
+                  ? requiresSixDigitPin
+                    ? 'ဂဏန်း ၆ လုံး PIN အသစ်'
+                    : accountType === 'parent' ? 'PIN (သို့) ယခင် စကားဝှက်' : 'စကားဝှက်'
+                  : requiresSixDigitPin
+                    ? 'New 6-digit PIN'
+                    : accountType === 'parent' ? 'PIN or existing password' : 'Password'}
+                <input
+                  type="password"
+                  required
+                  autoComplete={requiresNewCredential ? 'new-password' : 'current-password'}
+                  inputMode={requiresSixDigitPin ? 'numeric' : undefined}
+                  pattern={requiresSixDigitPin ? '[0-9]{6}' : undefined}
+                  minLength={requiresSixDigitPin ? 6 : accountType === 'staff' ? 8 : 6}
+                  maxLength={requiresSixDigitPin ? 6 : undefined}
+                  value={password}
+                  onChange={(event) => setPassword(requiresSixDigitPin ? event.target.value.replace(/\D/g, '').slice(0, 6) : event.target.value)}
+                  className="mt-1 block min-h-touch w-full rounded-lg border border-line px-3 py-2"
+                />
+                {requiresSixDigitPin && <span className="mt-1 block text-xs text-ink-soft">{locale === 'mm' ? 'မမှန်းဆလွယ်သော ဂဏန်း ၆ လုံးကို သတ်မှတ်ပါ။' : 'Choose six digits that are difficult to guess.'}</span>}
+              </label>
+            )}
+
+            {!busy && !formReady && (
+              <p className="text-xs text-ink-soft" role="status">
+                {!emailReady
+                  ? (locale === 'mm' ? 'မှန်ကန်သော အီးမေးလ်လိပ်စာကို ဖြည့်ပါ။' : 'Enter a valid email address.')
+                  : !verificationCodeReady
+                    ? (locale === 'mm' ? 'အီးမေးလ်မှ ၆ လုံးကုဒ်ကို ဖြည့်ပါ။' : 'Enter the six-digit email code.')
+                    : accountType === 'parent'
+                      ? (locale === 'mm' ? 'ဂဏန်း ၆ လုံး PIN သို့မဟုတ် ယခင်စကားဝှက် အနည်းဆုံး ၈ လုံးကို ဖြည့်ပါ။' : 'Enter a six-digit PIN or an existing password of at least eight characters.')
+                      : (locale === 'mm' ? 'စကားဝှက် အနည်းဆုံး ၈ လုံးကို ဖြည့်ပါ။' : 'Enter a password of at least eight characters.')}
+              </p>
+            )}
+
+            <button type="submit" disabled={busy || !formReady} aria-busy={busy} className="min-h-touch w-full rounded-pill bg-sky px-6 py-3 font-semibold text-white disabled:opacity-50">
+              {busy ? '…'
+                : flow === 'reset' ? (locale === 'mm' ? 'အတည်ပြုကုဒ် ပို့မည်' : 'Send recovery code')
+                  : flow === 'resetVerification' ? (locale === 'mm' ? 'PIN/စကားဝှက် ပြောင်းမည်' : 'Change credential')
+                    : flow === 'signIn' ? (locale === 'mm' ? 'ဝင်မည်' : 'Sign in')
+                      : (locale === 'mm' ? 'အကောင့်ဖွင့်မည်' : 'Create account')}
+            </button>
+
+            {flow === 'signIn' && (
+              <button type="button" onClick={() => { setFlow('reset'); setPassword(''); setError(''); }} className="w-full text-center text-sm font-semibold text-sky-deep">
+                {locale === 'mm' ? 'PIN/စကားဝှက် မေ့နေပါသလား?' : 'Forgot PIN/password?'}
+              </button>
+            )}
+            {(flow === 'reset' || flow === 'resetVerification') && (
+              <button type="button" onClick={resetToSignIn} className="w-full text-center text-sm text-sky-deep">
+                {locale === 'mm' ? 'အကောင့်ဝင်ရန် ပြန်သွားမည်' : 'Back to sign in'}
+              </button>
+            )}
+            {(portal === 'parent' || isStaffInvite) && flow !== 'reset' && flow !== 'resetVerification' && (
+              <button type="button" onClick={() => { setFlow(flow === 'signIn' ? 'signUp' : 'signIn'); setPassword(''); setError(''); }} className="w-full text-center text-sm text-sky-deep">
+                {flow === 'signIn'
+                  ? (locale === 'mm' ? 'အကောင့်မရှိသေးပါက အသစ်ဖွင့်ရန်' : 'Create a new account')
+                  : (locale === 'mm' ? 'အကောင့်ရှိပြီးသားဆိုလျှင် ဝင်ရန်' : 'Sign in to an existing account')}
+              </button>
+            )}
+          </>
         )}
       </form>
 
@@ -345,6 +381,12 @@ export function SignIn() {
         {locale === 'mm' ? 'English' : 'မြန်မာ'}
       </button>
       <p className="text-center text-xs text-ink-soft">{t('result.disclaimer.nonDiagnostic')}</p>
+      <nav aria-label={locale === 'mm' ? 'အကူအညီနှင့် မူဝါဒများ' : 'Help and policies'} className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-xs font-semibold text-sky-deep">
+        <Link to="/support" className="inline-flex min-h-touch items-center px-1">{locale === 'mm' ? 'အကူအညီ' : 'Support'}</Link>
+        <Link to="/content-policy" className="inline-flex min-h-touch items-center px-1">Content Policy</Link>
+        <Link to="/privacy" className="inline-flex min-h-touch items-center px-1">{locale === 'mm' ? 'ကိုယ်ရေးမူဝါဒ' : 'Privacy'}</Link>
+        <Link to="/account-deletion" className="inline-flex min-h-touch items-center px-1">{locale === 'mm' ? 'အကောင့်ဖျက်နည်း' : 'Account deletion'}</Link>
+      </nav>
     </div>
   );
 }

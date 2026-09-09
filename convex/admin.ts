@@ -19,7 +19,7 @@ const roleLabels: Record<StaffRole, string> = {
   content_editor: 'Content editor',
   language_reviewer: 'Native-language reviewer',
   evidence_reviewer: 'Evidence reviewer',
-  clinical_reviewer: 'Clinical reviewer',
+  clinical_reviewer: 'Specialist safety reviewer',
   review_manager: 'Review manager',
   support: 'Support',
 };

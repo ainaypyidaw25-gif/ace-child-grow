@@ -3,11 +3,14 @@ import { mutation, query } from './_generated/server';
 import type { Id } from './_generated/dataModel';
 import { logAudit } from './audit';
 import { getStaffAccess, requireUser, type StaffRole } from './lib/auth';
+import { isRetiredContentSlug } from './lib/contentRetirements';
 import { reviewRefusal, type ReviewDimension } from './lib/reviewPolicy';
+import { isPersistedReleaseGovernedContent } from './lib/clinicalReviewBatchProvenance';
 
 const dimensionValidator = v.union(
   v.literal('english'),
   v.literal('native_myanmar'),
+  v.literal('child_development'),
   v.literal('evidence'),
   v.literal('safety'),
   v.literal('clinical'),
@@ -44,6 +47,8 @@ const reviewValidator = v.object({
   reviewerRole: roleValidator,
   reviewedAt: v.number(),
   reviewRevision: v.optional(v.number()),
+  decisionKey: v.optional(v.string()),
+  clinicalReviewBatchId: v.optional(v.string()),
   createdAt: v.number(),
   updatedAt: v.number(),
 });
@@ -59,7 +64,7 @@ export const listForContent = query({
   handler: async (ctx, args) => {
     const userId = await requireUser(ctx);
     const access = await getStaffAccess(ctx, userId);
-    if (!access || access.role === 'support') {
+    if (!access || access.role === 'support' || access.role === 'clinical_reviewer') {
       return { allowed: false, contentVersion: null, current: [], history: [] };
     }
     const content = await ctx.db
@@ -252,6 +257,47 @@ export const saveDecision = mutation({
     const userId = await requireUser(ctx);
     const access = await getStaffAccess(ctx, userId);
 
+    // Once a release assignment is materialized, every dimension and every
+    // staff role is bound to its exact assignment lane. A generic decision
+    // would change the frozen review-history preimage even if its role would
+    // normally be permitted for that dimension.
+    if (await isPersistedReleaseGovernedContent(ctx, args.contentSlug)) {
+      await logAudit(
+        ctx,
+        userId,
+        `contentReview.${args.dimension}.${args.decision}`,
+        'libraryContent',
+        undefined,
+        `${args.contentSlug} · refused: frozen_release_assignment_required`,
+        { result: 'rejected' },
+      );
+      return {
+        ok: false as const,
+        code: 'assignment_required',
+        message: 'Frozen release decisions must be recorded through the exact assigned batch.',
+      };
+    }
+
+    // Clinical reviewer authority is assignment-scoped. The frozen batch
+    // mutation validates the exact row/revision/snapshot and is the sole path
+    // for that role; this broad mutation must never be a scope escape.
+    if (access?.role === 'clinical_reviewer') {
+      await logAudit(
+        ctx,
+        userId,
+        `contentReview.${args.dimension}.${args.decision}`,
+        'libraryContent',
+        undefined,
+        `${args.contentSlug} · refused: assignment_required`,
+        { result: 'rejected' },
+      );
+      return {
+        ok: false as const,
+        code: 'assignment_required',
+        message: 'Clinical reviewer decisions must be recorded through the assigned frozen batch.',
+      };
+    }
+
     const content = await ctx.db
       .query('libraryContent')
       .withIndex('by_slug', (q) => q.eq('slug', args.contentSlug))
@@ -280,6 +326,20 @@ export const saveDecision = mutation({
         { result: 'rejected' },
       );
       return { ok: false as const, code: refusal.code, message: refusal.message };
+    }
+
+    if (isRetiredContentSlug(args.contentSlug)) {
+      const message = 'This content was retired by an immutable release and cannot receive new review decisions.';
+      await logAudit(
+        ctx,
+        userId,
+        `contentReview.${args.dimension}.${args.decision}`,
+        'libraryContent',
+        content?._id,
+        `${args.contentSlug} · refused: retired_content`,
+        { result: 'rejected' },
+      );
+      return { ok: false as const, code: 'retired_content', message };
     }
 
     // reviewRefusal has already established these.

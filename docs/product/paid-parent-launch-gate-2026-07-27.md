@@ -51,9 +51,13 @@ provider LIVE approval remain external gates.
 
 ## External blockers
 
-- Myan Myan Pay merchant KYC is pending and no API application exists.
-- Sandbox credentials, callback registration, signed end-to-end payment, and
-  LIVE approval are outstanding.
+- Update 2026-08-20: Myan Myan Pay merchant KYC is approved; application
+  `ACE Child Grow` (`MM53855007`) exists in DEVELOPMENT mode.
+- Sandbox credentials and callback registration are complete. A signed
+  end-to-end 5,900 MMK sandbox payment returned HTTP 200, persisted payment and
+  webhook records as SUCCESS, and activated the test Premium subscription.
+- Myan Myan Pay LIVE approval, production credentials/API base URL, and a
+  controlled production payment remain outstanding.
 - Original animation uploads, rights evidence, professional approvals, legal
   pages, and authenticated mobile/desktop launch QA are outstanding.
 - PR remains draft and has no human review.

@@ -12,7 +12,7 @@ import {
 import { REVIEW_STATES, nextStep, isParentVisible, type ReviewState } from '../domain/content/workflow';
 import { matchesSearchQuery } from '../domain/search';
 
-// Admin clinical-review queue backed by Convex. Content transitions persist and
+// Admin professional-review queue backed by Convex. Content transitions persist and
 // are STAFF-ONLY (enforced in convex/content.ts). Non-staff see a read-only view.
 export function AdminReviewQueue() {
   const { t, locale } = useLocale();
@@ -29,10 +29,10 @@ export function AdminReviewQueue() {
 
   const seedItems = useMemo(
     () => [
-      ...SAMPLE_MILESTONES.map((m) => ({ kind: 'milestone', titleMm: m.titleMm, titleEn: m.titleEn })),
-      ...SAMPLE_ACTIVITIES.map((a) => ({ kind: 'activity', titleMm: a.titleMm, titleEn: a.titleEn })),
-      ...SAMPLE_AWARENESS.map((a) => ({ kind: 'awareness', titleMm: a.titleMm, titleEn: a.titleEn })),
-      ...SAMPLE_LESSONS.map((l) => ({ kind: 'lesson', titleMm: l.titleMm, titleEn: l.titleEn })),
+      ...SAMPLE_MILESTONES.map((m, index) => ({ kind: 'milestone', slug: `legacy-milestone-${index + 1}`, titleMm: m.titleMm, titleEn: m.titleEn })),
+      ...SAMPLE_ACTIVITIES.map((a, index) => ({ kind: 'activity', slug: `legacy-activity-${index + 1}`, titleMm: a.titleMm, titleEn: a.titleEn })),
+      ...SAMPLE_AWARENESS.map((a) => ({ kind: 'awareness', slug: a.slug, titleMm: a.titleMm, titleEn: a.titleEn })),
+      ...SAMPLE_LESSONS.map((l, index) => ({ kind: 'lesson', slug: `legacy-lesson-${index + 1}`, titleMm: l.titleMm, titleEn: l.titleEn })),
     ],
     [],
   );
@@ -51,7 +51,7 @@ export function AdminReviewQueue() {
       </h1>
       <p className="rounded-lg bg-pastel-yellow/60 px-3 py-2 text-sm text-ink">
         {locale === 'mm'
-          ? `စောင့်ဆိုင်းဆဲ ${pending} ခု။ Approve/Publish မလုပ်မချင်း မိဘတွေဆီ မရောက်ပါဘူး။`
+          ? `စောင့်ဆိုင်းဆဲ ${pending} ခု။ ထုတ်ဝေခြင်း (Publish) မပြုလုပ်မချင်း မိဘများထံ မရောက်ရှိပါ။`
           : `${pending} awaiting review. Nothing reaches parents until published.`}
         {!staff && ` · ${t('admin.staffOnly')}`}
       </p>
@@ -77,13 +77,13 @@ export function AdminReviewQueue() {
             {locale === 'mm'
               ? canReview
                 ? educationReviewer
-                  ? 'ပညာရေးနှင့် အထူးပညာရေးဆိုင်ရာ အတည်ပြုချက်ဖြင့် ထုတ်ဝေနိုင်ပါသည်။ ဆေးဘက်ဆိုင်ရာ အတည်ပြုချက် မဟုတ်ပါ။ လုပ်ဆောင်ချက်တိုင်းကို မှတ်တမ်းတင်ထားသည်။'
-                  : 'ဆေးဘက်ဆိုင်ရာ သုံးသပ်သူအဖြစ် အတည်ပြုပြီး ထုတ်ဝေနိုင်ပါသည်။ လုပ်ဆောင်ချက်တိုင်းကို မှတ်တမ်းတင်ထားသည်။'
+                  ? 'ပညာရေးနှင့် အထူးပညာရေးဆိုင်ရာ သုံးသပ်မှုဖြင့် သာမန်ပညာပေးအကြောင်းအရာကို ထုတ်ဝေနိုင်ပါသည်။ အထောက်အထားနှင့် ဘေးကင်းရေးဆုံးဖြတ်ချက်တိုင်းကို မှတ်တမ်းတင်ထားသည်။'
+                  : 'သာမန်အကြောင်းအရာကို ပညာရေးသုံးသပ်မှုနယ်ပယ်ဖြင့်၊ အန္တရာယ်မြင့်စာသားကို အထူးကျွမ်းကျင်သူ ဘေးကင်းရေးသုံးသပ်မှုနယ်ပယ်ဖြင့် ထုတ်ဝေနိုင်ပါသည်။ လုပ်ဆောင်ချက်တိုင်းကို မှတ်တမ်းတင်ထားသည်။'
                 : 'မူကြမ်းများကို ကြည့်ရှုတည်းဖြတ်နိုင်ပါသည်။ အတည်ပြုပြီး ထုတ်ဝေရန် အရည်အချင်းရှိ ပညာရှင် လိုအပ်ပါသည်။'
               : canReview
                 ? educationReviewer
-                  ? 'You may publish with education and special-education review scope. This is not clinical approval.'
-                  : 'You may approve and publish as the assigned clinical reviewer. Every action is audited.'
+                  ? 'You may publish ordinary education with education and special-education review scope. Evidence and safety decisions are audited.'
+                  : 'You may publish ordinary content with education review scope and high-risk wording with specialist safety review scope. Every action is audited.'
                 : 'You may inspect and edit drafts. A qualified assigned reviewer is required to publish.'}
           </p>
           <div className="mt-3 flex flex-wrap gap-2 text-sm">
@@ -169,7 +169,7 @@ export function AdminReviewQueue() {
                     onClick={async () => {
                       if (busyId) return;
                       setBusyId(it._id);
-                      try { await transition({ id: it._id, to }); } finally { setBusyId(null); }
+                      try { await transition({ id: it._id, to, expectedReviewRevision: it.reviewRevision ?? 1 }); } finally { setBusyId(null); }
                     }}
                     className="min-h-touch rounded-pill bg-sky px-3 py-1 text-xs font-semibold text-white disabled:opacity-50">
                     → {to}

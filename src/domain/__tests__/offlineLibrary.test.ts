@@ -15,6 +15,10 @@ import {
   type OfflineMediaCandidate,
   type LibraryRowLike,
 } from '../offline/offlineLibrary';
+import {
+  DUPLICATE_MILESTONE_SLUGS,
+  SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_TARGETS,
+} from '../../../convex/lib/contentRetirements';
 
 const row = (over: Partial<LibraryRowLike> = {}): LibraryRowLike => ({
   _id: 'id_guide_sleep',
@@ -33,6 +37,17 @@ const row = (over: Partial<LibraryRowLike> = {}): LibraryRowLike => ({
 describe('what may be stored offline', () => {
   it('accepts published content', () => {
     expect(isDownloadable(row())).toBe(true);
+  });
+
+  it('accepts only server-gated rows explicitly labelled as AI audited', () => {
+    const candidate = row({
+      slug: 'lsn_early_math',
+      type: 'lesson',
+      clinicalStatus: 'clinical_review',
+      publicationLane: 'ai_audited',
+    });
+    expect(isDownloadable(candidate)).toBe(true);
+    expect(toOfflineRecord(candidate, 42).publicationLane).toBe('ai_audited');
   });
 
   it.each(['draft', 'clinical_review', 'archived'])('refuses %s content', (status) => {
@@ -111,6 +126,33 @@ describe('refreshing a download', () => {
     );
     expect(plan.remove).toEqual(['guide_old']);
     expect(plan.put.map((r) => r.slug)).toEqual(['guide_new']);
+  });
+
+  it('withdraws all six retired milestone slugs together while keeping their replacement', () => {
+    const replacement = row({ slug: 'ms_5_6m_gross_motor_2', type: 'milestone' });
+    const stored = [
+      ...DUPLICATE_MILESTONE_SLUGS.map((slug) => ({ slug, savedAt: 1 })),
+      { slug: replacement.slug, savedAt: 1 },
+    ];
+    const plan = buildDownloadPlan(selectDownloadable([replacement], 2), stored);
+    expect(plan.remove).toEqual(DUPLICATE_MILESTONE_SLUGS);
+    expect(plan.put.map((record) => record.slug)).toEqual(['ms_5_6m_gross_motor_2']);
+  });
+
+  it('withdraws the exact unsupported social-emotional milestone release', () => {
+    const active = row({ slug: 'ms_3_4m_social_1', type: 'milestone' });
+    const retired = SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_TARGETS.map((target) => ({
+      slug: target.slug,
+      savedAt: 1,
+    }));
+    const plan = buildDownloadPlan(selectDownloadable([active], 2), [
+      ...retired,
+      { slug: active.slug, savedAt: 1 },
+    ]);
+    expect(plan.remove).toEqual(
+      SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_TARGETS.map((target) => target.slug),
+    );
+    expect(plan.put.map((record) => record.slug)).toEqual(['ms_3_4m_social_1']);
   });
 
   it('reports how many were already held', () => {

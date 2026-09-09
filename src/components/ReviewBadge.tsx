@@ -3,7 +3,7 @@ import { useLocale } from '../app/LocaleContext';
 /**
  * Compact "in review" marker for content not yet published. Deliberately small
  * and subtle (a tiny amber dot + short label) so it never dominates a card.
- * The full "Clinical Review Required" wording lives in the Admin CMS, not here.
+ * Specialist-risk wording is routed in the Admin CMS, not exposed here.
  */
 export function ReviewBadge({ published }: { published: boolean }) {
   const { t } = useLocale();

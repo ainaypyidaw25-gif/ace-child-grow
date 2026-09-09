@@ -3,6 +3,10 @@ import { internal } from './_generated/api';
 import type { Id, TableNames } from './_generated/dataModel';
 import { internalMutation, mutation, type MutationCtx } from './_generated/server';
 import { requireUser } from './lib/auth';
+import {
+  OWNER_ACCOUNT_MERGE_QUARANTINE_ACTION,
+  OWNER_ACCOUNT_MERGE_SOURCE_USER_ID,
+} from './lib/ownerAccountMergePolicy';
 
 const ROOT_BATCH_SIZE = 24;
 const NESTED_BATCH_SIZE = 32;
@@ -50,11 +54,38 @@ function normalizedTokens(values: ReadonlyArray<string | undefined>): string[] {
   return [...new Set(values.map((value) => value?.trim()).filter((value): value is string => Boolean(value)))];
 }
 
+/**
+ * The duplicate source identity is retained permanently as historical review
+ * provenance. The exact Phase-1 system audit is the durable erasure interlock.
+ *
+ * This indexed range read also protects a deletion worker that was scheduled
+ * before quarantine: a concurrent audit insert conflicts under Convex OCC, so
+ * the worker retries and observes the interlock before any destructive write.
+ */
+async function isProtectedOwnerMergeSource(ctx: MutationCtx, userId: Id<'users'>): Promise<boolean> {
+  if (userId !== OWNER_ACCOUNT_MERGE_SOURCE_USER_ID) return false;
+  const locks = await ctx.db
+    .query('auditLogs')
+    .withIndex('by_action_and_entity_table_and_entity_id_and_result', (q) => q
+      .eq('action', OWNER_ACCOUNT_MERGE_QUARANTINE_ACTION)
+      .eq('entityTable', 'users')
+      .eq('entityId', String(OWNER_ACCOUNT_MERGE_SOURCE_USER_ID))
+      .eq('result', 'ok'))
+    .take(2);
+  if (locks.length > 1) {
+    throw new Error('Duplicate owner-account quarantine audit rows; account erasure is blocked');
+  }
+  return locks.length === 1;
+}
+
 export const deleteMine = mutation({
   args: { confirmation: v.literal('DELETE') },
   returns: v.null(),
   handler: async (ctx) => {
     const userId = await requireUser(ctx);
+    if (await isProtectedOwnerMergeSource(ctx, userId)) {
+      throw new Error('This historical account identity is retained by an owner-account merge');
+    }
     const [user, profile] = await Promise.all([
       ctx.db.get(userId),
       ctx.db
@@ -109,6 +140,9 @@ export const deleteMineBatch = internalMutation({
   returns: v.null(),
   handler: async (ctx, args) => {
     const userId = args.userId;
+    // Essential for workers queued before Phase 1 and for every later retry.
+    // Return before reading or mutating any user-owned or historical row.
+    if (await isProtectedOwnerMergeSource(ctx, userId)) return null;
     let hadWork = false;
 
     // Parent-owned records with direct user indexes.
@@ -258,7 +292,7 @@ export const deleteMineBatch = internalMutation({
 
     // Global editorial/reconciliation rows remain useful, but their reviewer
     // link and known display-name metadata must not survive account erasure.
-    const [contentItems, facilities, libraryItems, classificationConfirmed, contentReviews, contentEdits, media, evidenceSources] = await Promise.all([
+    const [contentItems, facilities, libraryItems, classificationConfirmed, contentReviews, clinicalBatches, clinicalBatchReceipts, contentEdits, media, evidenceSources] = await Promise.all([
       ctx.db.query('contentItems').withIndex('by_reviewer', (q) => q.eq('reviewerId', userId)).take(ROOT_BATCH_SIZE),
       ctx.db.query('healthcareFacilities').withIndex('by_verified_by', (q) => q.eq('verifiedBy', userId)).take(ROOT_BATCH_SIZE),
       ctx.db.query('libraryContent').withIndex('by_reviewer', (q) => q.eq('reviewerId', userId)).take(ROOT_BATCH_SIZE),
@@ -266,6 +300,8 @@ export const deleteMineBatch = internalMutation({
         .withIndex('by_classification_confirmed_by', (q) => q.eq('classificationConfirmedBy', userId))
         .take(ROOT_BATCH_SIZE),
       ctx.db.query('contentReviews').withIndex('by_reviewer', (q) => q.eq('reviewerId', userId)).take(ROOT_BATCH_SIZE),
+      ctx.db.query('clinicalReviewBatches').withIndex('by_reviewer', (q) => q.eq('reviewerId', userId)).take(ROOT_BATCH_SIZE),
+      ctx.db.query('clinicalReviewBatchReceipts').withIndex('by_reviewer', (q) => q.eq('reviewerId', userId)).take(ROOT_BATCH_SIZE),
       ctx.db.query('contentEditLogs').withIndex('by_editor', (q) => q.eq('editorId', userId)).take(ROOT_BATCH_SIZE),
       ctx.db.query('libraryMedia').withIndex('by_reviewed_by', (q) => q.eq('reviewedBy', userId)).take(ROOT_BATCH_SIZE),
       ctx.db.query('evidenceSources').withIndex('by_reviewer', (q) => q.eq('reviewerId', userId)).take(ROOT_BATCH_SIZE),
@@ -303,7 +339,41 @@ export const deleteMineBatch = internalMutation({
       });
       hadWork = true;
     }
-    if (await deleteRows(ctx, [...contentReviews, ...contentEdits])) hadWork = true;
+    // Resolve the complete bounded downstream chain before patching. A receipt
+    // from reviewer B must not remain publication-authoritative after its
+    // reviewer-A predecessor is erased.
+    const registryRows = [...clinicalBatches];
+    const seenRegistryIds = new Set(registryRows.map((row) => String(row._id)));
+    for (let index = 0; index < registryRows.length && registryRows.length <= 32; index += 1) {
+      const downstream = await ctx.db.query('clinicalReviewBatches')
+        .withIndex('by_predecessor_batch_id', (q) => q.eq('predecessorBatchId', registryRows[index].batchId))
+        .take(2);
+      if (downstream.length > 1) throw new Error('Clinical review registry downstream fork');
+      if (downstream.length === 1 && !seenRegistryIds.has(String(downstream[0]._id))) {
+        seenRegistryIds.add(String(downstream[0]._id));
+        registryRows.push(downstream[0]);
+      }
+    }
+    if (registryRows.length > 32) throw new Error('Clinical review registry invalidation bound exceeded');
+    const registryInvalidatedAt = Date.now();
+    for (const row of registryRows) {
+      const assignedToErasedReviewer = row.reviewerId === userId;
+      await ctx.db.patch(row._id, {
+        status: 'invalidated',
+        invalidatedAt: registryInvalidatedAt,
+        invalidationReason: 'assigned_reviewer_account_erased',
+        ...(assignedToErasedReviewer ? {
+          reviewerProfileId: undefined,
+          reviewerId: undefined,
+          reviewerDisplayName: undefined,
+          reviewerQualification: undefined,
+          reviewerRole: undefined,
+          reviewerIdentityDigest: undefined,
+        } : {}),
+      });
+      hadWork = true;
+    }
+    if (await deleteRows(ctx, [...contentReviews, ...clinicalBatchReceipts, ...contentEdits])) hadWork = true;
     for (const row of media) {
       await ctx.db.patch(row._id, {
         reviewedBy: undefined,

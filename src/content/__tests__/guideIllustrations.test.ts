@@ -57,10 +57,101 @@ const PRODUCTION_GUIDE_SLUGS = [
   'gd_7_9m_sleep',
   'gd_7_9m_social',
   'gd_7_9m_speech',
+  'gd_10_12m_cognitive',
+  'gd_10_12m_communication',
+  'gd_10_12m_daily_routine',
+  'gd_10_12m_emotional',
+  'gd_10_12m_fine_motor',
+  'gd_10_12m_gross_motor',
+  'gd_10_12m_language',
+  'gd_10_12m_nutrition',
+  'gd_10_12m_play',
+  'gd_10_12m_safety',
+  'gd_10_12m_self_help',
+  'gd_10_12m_sleep',
+  'gd_10_12m_social',
+  'gd_10_12m_speech',
+  'gd_13_18m_daily_routine',
+  'gd_13_18m_fine_motor',
+  'gd_13_18m_nutrition',
+  'gd_13_18m_safety',
+  'gd_13_18m_self_help',
+  'gd_13_18m_sleep',
+  'gd_19_24m_daily_routine',
+  'gd_19_24m_nutrition',
+  'gd_19_24m_safety',
+  'gd_19_24m_sleep',
+  'gd_19_24m_speech',
+  'gd_2y_daily_routine',
+  'gd_2y_language',
+  'gd_2y_nutrition',
+  'gd_2y_play',
+  'gd_2y_safety',
+  'gd_2y_sleep',
+  'gd_3y_cognitive',
+  'gd_3y_daily_routine',
+  'gd_3y_nutrition',
+  'gd_3y_safety',
+  'gd_3y_sleep',
+  'gd_3y_social',
+  'gd_3_5y_daily_routine',
+  'gd_3_5y_nutrition',
+  'gd_3_5y_safety',
+  'gd_3_5y_sleep',
+  'gd_4y_daily_routine',
+  'gd_4y_nutrition',
+  'gd_4y_problem_solving',
+  'gd_4y_safety',
+  'gd_4y_school_readiness',
+  'gd_4y_sleep',
+  'gd_4_5y_daily_routine',
+  'gd_4_5y_nutrition',
+  'gd_4_5y_safety',
+  'gd_4_5y_sleep',
+  'gd_5y_daily_routine',
+  'gd_5y_nutrition',
+  'gd_5y_safety',
+  'gd_5y_sleep',
 ] as const;
 
 const PRODUCTION_7_9M_GUIDE_SLUGS = PRODUCTION_GUIDE_SLUGS.filter(
   (slug) => slug.startsWith('gd_7_9m_'),
+);
+
+const PRODUCTION_10_12M_GUIDE_SLUGS = PRODUCTION_GUIDE_SLUGS.filter(
+  (slug) => slug.startsWith('gd_10_12m_'),
+);
+
+const PRODUCTION_13_18M_GUIDE_SLUGS = PRODUCTION_GUIDE_SLUGS.filter(
+  (slug) => slug.startsWith('gd_13_18m_'),
+);
+
+const PRODUCTION_19_24M_GUIDE_SLUGS = PRODUCTION_GUIDE_SLUGS.filter(
+  (slug) => slug.startsWith('gd_19_24m_'),
+);
+
+const PRODUCTION_3_5Y_GUIDE_SLUGS = PRODUCTION_GUIDE_SLUGS.filter(
+  (slug) => slug.startsWith('gd_3_5y_'),
+);
+
+const PRODUCTION_2Y_GUIDE_SLUGS = PRODUCTION_GUIDE_SLUGS.filter(
+  (slug) => slug.startsWith('gd_2y_'),
+);
+
+const PRODUCTION_3Y_GUIDE_SLUGS = PRODUCTION_GUIDE_SLUGS.filter(
+  (slug) => slug.startsWith('gd_3y_'),
+);
+
+const PRODUCTION_4Y_GUIDE_SLUGS = PRODUCTION_GUIDE_SLUGS.filter(
+  (slug) => slug.startsWith('gd_4y_'),
+);
+
+const PRODUCTION_4_5Y_GUIDE_SLUGS = PRODUCTION_GUIDE_SLUGS.filter(
+  (slug) => slug.startsWith('gd_4_5y_'),
+);
+
+const PRODUCTION_5Y_GUIDE_SLUGS = PRODUCTION_GUIDE_SLUGS.filter(
+  (slug) => slug.startsWith('gd_5y_'),
 );
 
 describe('Production guide illustrations', () => {
@@ -92,6 +183,78 @@ describe('Production guide illustrations', () => {
     const paths = PRODUCTION_7_9M_GUIDE_SLUGS.map((slug) => guideIllustration(slug));
     expect(paths.every((path) => path?.startsWith('/guides/gd_7_9m_'))).toBe(true);
     expect(new Set(paths).size).toBe(13);
+  });
+
+  it('maps all 14 exact 10–12 month Production slugs without a shared asset', () => {
+    expect(PRODUCTION_10_12M_GUIDE_SLUGS).toHaveLength(14);
+
+    const paths = PRODUCTION_10_12M_GUIDE_SLUGS.map((slug) => guideIllustration(slug));
+    expect(paths.every((path) => path?.startsWith('/guides/gd_10_12m_'))).toBe(true);
+    expect(new Set(paths).size).toBe(14);
+  });
+
+  it('maps all 6 exact 13–18 month Production slugs without a shared asset', () => {
+    expect(PRODUCTION_13_18M_GUIDE_SLUGS).toHaveLength(6);
+
+    const paths = PRODUCTION_13_18M_GUIDE_SLUGS.map((slug) => guideIllustration(slug));
+    expect(paths.every((path) => path?.startsWith('/guides/gd_13_18m_'))).toBe(true);
+    expect(new Set(paths).size).toBe(6);
+  });
+
+  it('maps all 5 exact 19–24 month Production slugs without a shared asset', () => {
+    expect(PRODUCTION_19_24M_GUIDE_SLUGS).toHaveLength(5);
+
+    const paths = PRODUCTION_19_24M_GUIDE_SLUGS.map((slug) => guideIllustration(slug));
+    expect(paths.every((path) => path?.startsWith('/guides/gd_19_24m_'))).toBe(true);
+    expect(new Set(paths).size).toBe(5);
+  });
+
+  it('maps all 4 exact 3.5-year Production slugs without a shared asset', () => {
+    expect(PRODUCTION_3_5Y_GUIDE_SLUGS).toHaveLength(4);
+
+    const paths = PRODUCTION_3_5Y_GUIDE_SLUGS.map((slug) => guideIllustration(slug));
+    expect(paths.every((path) => path?.startsWith('/guides/gd_3_5y_'))).toBe(true);
+    expect(new Set(paths).size).toBe(4);
+  });
+
+  it('maps all 6 exact 2-year Production slugs without a shared asset', () => {
+    expect(PRODUCTION_2Y_GUIDE_SLUGS).toHaveLength(6);
+
+    const paths = PRODUCTION_2Y_GUIDE_SLUGS.map((slug) => guideIllustration(slug));
+    expect(paths.every((path) => path?.startsWith('/guides/gd_2y_'))).toBe(true);
+    expect(new Set(paths).size).toBe(6);
+  });
+
+  it('maps all 6 exact 3-year Production slugs without a shared asset', () => {
+    expect(PRODUCTION_3Y_GUIDE_SLUGS).toHaveLength(6);
+
+    const paths = PRODUCTION_3Y_GUIDE_SLUGS.map((slug) => guideIllustration(slug));
+    expect(paths.every((path) => path?.startsWith('/guides/gd_3y_'))).toBe(true);
+    expect(new Set(paths).size).toBe(6);
+  });
+
+  it('maps all 6 exact 4-year Production slugs without a shared asset', () => {
+    expect(PRODUCTION_4Y_GUIDE_SLUGS).toHaveLength(6);
+
+    const paths = PRODUCTION_4Y_GUIDE_SLUGS.map((slug) => guideIllustration(slug));
+    expect(paths.every((path) => path?.startsWith('/guides/gd_4y_'))).toBe(true);
+    expect(new Set(paths).size).toBe(6);
+  });
+
+  it('maps all 4 exact 4.5-year Production slugs without a shared asset', () => {
+    expect(PRODUCTION_4_5Y_GUIDE_SLUGS).toHaveLength(4);
+
+    const paths = PRODUCTION_4_5Y_GUIDE_SLUGS.map((slug) => guideIllustration(slug));
+    expect(paths.every((path) => path?.startsWith('/guides/gd_4_5y_'))).toBe(true);
+    expect(new Set(paths).size).toBe(4);
+  });
+
+  it('maps all 4 exact 5-year Production slugs without a shared asset', () => {
+    expect(PRODUCTION_5Y_GUIDE_SLUGS).toHaveLength(4);
+
+    const paths = PRODUCTION_5Y_GUIDE_SLUGS.map((slug) => guideIllustration(slug));
+    expect(paths.every((path) => path?.startsWith('/guides/gd_5y_'))).toBe(true);
+    expect(new Set(paths).size).toBe(4);
   });
 
   it('resolves every mapping to the content-hashed file under public', () => {

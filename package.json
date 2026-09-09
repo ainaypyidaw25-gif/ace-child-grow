@@ -5,10 +5,13 @@
   "description": "ACE Child Grow — bilingual Myanmar–English early-childhood development support platform (educational & screening-support only; never diagnostic).",
   "type": "module",
   "scripts": {
-    "prebuild": "npm run social:generate",
     "social:generate": "node scripts/generate-social-calendar.mjs",
+    "social:publisher:harden": "node scripts/social/harden-facebook-workflow.mjs",
+    "social:generate:visuals": "REGENERATE_SOCIAL_ASSETS=1 node scripts/generate-social-calendar.mjs --visual-only",
+    "social:verify:visuals": "node scripts/verify-social-calendar-visuals.mjs",
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:play-store:verify": "node scripts/verify-play-store-build.mjs",
     "build:harness": "vite build --config vite.harness.config.ts",
     "preview": "vite preview",
     "typecheck": "tsc -b --noEmit",
@@ -24,16 +27,22 @@
     "evidence:gate": "node scripts/evidence-gate-probe.mjs",
     "evidence:batch": "node scripts/evidence-review-pack.mjs",
     "evidence:batch:live": "node scripts/evidence-batch-live.mjs",
+    "readiness:production": "node scripts/production-release-readiness.mjs",
     "seed:dump": "node scripts/dumpSeed.mjs",
     "android:add": "npx cap add android",
-    "android:sync": "npm run build && npx cap sync android",
-    "android:bundle": "npm run android:sync && cd android && ./gradlew bundleRelease"
+    "android:sync": "VITE_DISTRIBUTION=play-store npm run build && npx cap sync android",
+    "android:release:source-check": "node scripts/check-android-release-source.mjs",
+    "android:bundle": "VITE_DISTRIBUTION=play-store npm run android:release:source-check && npm run android:sync && cd android && VITE_DISTRIBUTION=play-store ./gradlew bundleRelease",
+    "ios:sync": "VITE_DISTRIBUTION=app-store npm run build && npx cap sync ios",
+    "ios:open": "npx cap open ios",
+    "ios:build": "npm run ios:sync && xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Release -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build"
   },
   "dependencies": {
     "@auth/core": "^0.41.3",
     "@capacitor/android": "^8.4.2",
     "@capacitor/app": "^8.0.1",
     "@capacitor/core": "^8.4.2",
+    "@capacitor/ios": "^8.4.2",
     "@capacitor/network": "^8.0.1",
     "@convex-dev/auth": "^0.0.94",
     "@fontsource/noto-sans-myanmar": "^5.3.0",
@@ -63,11 +72,11 @@
     "jsdom": "^25.0.0",
     "playwright-core": "^1.61.1",
     "postcss": "^8.5.25",
-    "sharp": "^0.35.3",
+    "sharp": "^0.35.4",
     "tailwindcss": "^3.4.10",
     "typescript": "^5.5.4",
     "vite": "^7.3.6",
     "vite-plugin-pwa": "^1.3.0",
-    "vitest": "^3.2.7"
+    "vitest": "^4.1.11"
   }
 }

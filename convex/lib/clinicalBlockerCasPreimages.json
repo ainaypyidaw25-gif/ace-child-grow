@@ -1,0 +1,711 @@
+{
+  "frozenFrom": {
+    "deployment": "prod:graceful-possum-566",
+    "queriedOn": "2026-08-23",
+    "gitBase": "8898c8c9022f550ec8b46ae9df246a812f172b33"
+  },
+  "gdBirth2mEmotional": {
+    "content": {
+      "_creationTime": 1785024282947.2307,
+      "_id": "kx70dy4r6gqderfzphwpqatz518b9tke",
+      "ageGroupKey": "birth_2m",
+      "clinicalStatus": "clinical_review",
+      "createdAt": 1785024282947,
+      "data": {
+        "commonMistakes": [
+          {
+            "en": "Following \"let them cry it out\" advice with a newborn.",
+            "mm": "\"ငိုတာ ခဏထားလိုက်\" ဟု အကြံပေးမှုကို မွေးကင်းစတွင် လိုက်နာခြင်း။"
+          },
+          {
+            "en": "Ignoring your own exhaustion.",
+            "mm": "မိဘ ကိုယ်တိုင် ပင်ပန်းနေသည်ကို လျစ်လျူရှုခြင်း။"
+          }
+        ],
+        "dailyActivities": [
+          {
+            "en": "Respond to crying — hold, speak softly, rock gently.",
+            "mm": "ငိုသည်နှင့် နှစ်သိမ့်ပေးပါ — ပွေ့ချီ၊ နူးညံ့စွာ ပြော၊ ယိမ်းပေးပါ။"
+          },
+          {
+            "en": "Include skin-to-skin every day.",
+            "mm": "အရေပြားချင်းထိ ပွေ့ချီခြင်းကို နေ့စဉ် ထည့်ပါ။"
+          }
+        ],
+        "editorialStatus": "reference_verified",
+        "encouragement": {
+          "en": "Every time you respond, your baby learns \"I am safe\".",
+          "mm": "သင် တုံ့ပြန်ပေးတိုင်း ကလေးသည် \"ငါ ဘေးကင်းတယ်\" ဟု သင်ယူနေပါသည်။"
+        },
+        "evidenceSummary": "Responsive soothing and the never-shake message follow the WHO nurturing care framework and AAP toxic-stress guidance; the urgent-symptom list (floppy, hard to rouse, fever under 3 months) follows NHS advice on spotting a seriously ill infant and NICE fever guidance.",
+        "faq": [
+          {
+            "a": {
+              "en": "No. At this age responding builds security.",
+              "mm": "မကျပါ။ ဤအရွယ်တွင် တုံ့ပြန်ပေးခြင်းသည် လုံခြုံမှုကို တည်ဆောက်ပေးသည်။"
+            },
+            "q": {
+              "en": "Will holding too much spoil my baby?",
+              "mm": "ပွေ့ချီများရင် အလိုလိုက်ရာ ကျမလား။"
+            }
+          },
+          {
+            "a": {
+              "en": "Increased crying in the early months is common. But if crying comes with fever, vomiting, refusing feeds or floppiness, seek care immediately.",
+              "mm": "ပထမလများတွင် ငိုချိန် များခြင်းသည် တွေ့ရလေ့ရှိသည်။ သို့သော် ငိုသံနှင့်အတူ ဖျားခြင်း၊ အန်ခြင်း၊ နို့မစို့ခြင်း၊ ပျော့ခွေခြင်း ပါလျှင် ချက်ချင်း ဆေးကုသမှု ခံယူပါ။"
+            },
+            "q": {
+              "en": "She cries every evening. Is that normal?",
+              "mm": "ညနေတိုင်း ငိုတယ်။ ပုံမှန်လား။"
+            }
+          },
+          {
+            "a": {
+              "en": "Take the temperature. Under 3 months, 38°C (100.4°F) or above: seek care straight away, even if the baby otherwise seems well. Between 3 and 6 months, 39°C (102.2°F) or above: seek care promptly. At any age, fever together with difficulty breathing, a rash that does not fade under pressure, a stiff neck, or being hard to wake: seek care immediately. If you have no thermometer, and the child feels hot and has any of those signs, do not wait.",
+              "mm": "အပူချိန် တိုင်းပါ။ အသက် ၃ လအောက် ကလေး ၃၈°C (၁၀၀.၄°F) နှင့်အထက် ဖျားပါက — ကလေး ပုံမှန်လို ထင်ရလျှင်ပင် ချက်ချင်း ပြသပါ။ အသက် ၃ လမှ ၆ လကြား ၃၉°C (၁၀၂.၂°F) နှင့်အထက် ဖျားပါက အမြန် ပြသပါ။ အသက်မရွေး — ဖျားခြင်းနှင့်အတူ အသက်ရှူခက်ခြင်း၊ နှိပ်လျှင် မပျောက်သော အနီစက်၊ လည်ပင်း တောင့်တင်းခြင်း သို့မဟုတ် နိုးရခက်ခြင်း ပါလာပါက ချက်ချင်း ပြသပါ။ အပူချိန်တိုင်းကိရိယာ မရှိပါက — ကလေး ပူနေပြီး အထက်ပါ လက္ခဏာများ ပါလျှင် မစောင့်ဘဲ ပြသပါ။"
+            },
+            "q": {
+              "en": "What temperature means we should seek care?",
+              "mm": "ဘယ်အပူချိန် ရောက်ရင် ဆေးရုံ သွားရမလဲ။"
+            }
+          }
+        ],
+        "indoor": [
+          {
+            "en": "Comfort in a dim, quiet place.",
+            "mm": "အလင်းမှိန်၊ အသံတိတ်သော နေရာတွင် နှစ်သိမ့်ပေးပါ။"
+          }
+        ],
+        "lowCost": [
+          {
+            "en": "Holding and a soft voice cost nothing.",
+            "mm": "ပွေ့ချီခြင်း၊ အသံနူးညံ့စွာ ပြောခြင်း — ကုန်ကျစရိတ် မရှိပါ။"
+          }
+        ],
+        "materials": {
+          "en": "A cloth or baby carrier",
+          "mm": "ပွေ့ချီရန် ပုဆိုး/ကလေးထမ်းအိတ်"
+        },
+        "observationQuestions": [
+          {
+            "en": "Does holding help your baby settle?",
+            "mm": "ပွေ့ချီလျှင် ငြိမ်သွားပါသလား။"
+          },
+          {
+            "en": "Is there a lot of crying, especially in the evening?",
+            "mm": "တစ်ရက်လုံး ငိုချိန် များပါသလား၊ အထူးသဖြင့် ညနေပိုင်း။"
+          },
+          {
+            "en": "How are you feeling yourself?",
+            "mm": "သင်ကိုယ်တိုင် မည်သို့ ခံစားနေရပါသလဲ။"
+          }
+        ],
+        "outdoor": [
+          {
+            "en": "A slow walk in the shade often eases crying.",
+            "mm": "အရိပ်တွင် ဖြည်းညှင်းစွာ လမ်းလျှောက်ခြင်းက ငိုသံကို လျော့စေတတ်သည်။"
+          }
+        ],
+        "parentTips": [
+          {
+            "en": "If crying is heavy, arrange someone to take turns with you.",
+            "mm": "ငိုသံ များလွန်းလျှင် အလှည့်ကျ ကူညီပေးမည့်သူ ရှာပါ။"
+          },
+          {
+            "en": "Note when the crying happens — it helps at a health visit.",
+            "mm": "ငိုသံ ပုံစံကို မှတ်တမ်းတင်ထားပါ — ဆရာဝန်ပြသည့်အခါ အသုံးဝင်သည်။"
+          }
+        ],
+        "redFlags": [
+          {
+            "en": "A cry that becomes weak, or unusually high-pitched.",
+            "mm": "ငိုသံ ပုံမှန်မဟုတ်ဘဲ အသံတိုးလာခြင်း သို့မဟုတ် အော်ဟစ်သံ ဖြစ်လာခြင်း။"
+          },
+          {
+            "en": "Floppiness or being hard to wake.",
+            "mm": "ကိုယ်ခန္ဓာ ပျော့ခွေခြင်း၊ နိုးရန် ခက်ခဲခြင်း။"
+          },
+          {
+            "en": "Fever in a baby under 3 months.",
+            "mm": "အသက် ၃ လအောက် ကလေးတွင် ဖျားခြင်း။"
+          }
+        ],
+        "referral": {
+          "en": "Floppiness, being hard to rouse, breathing difficulty, or fever under 3 months — seek medical care immediately, without waiting.",
+          "mm": "ပျော့ခွေခြင်း၊ နိုးရန်ခက်ခဲခြင်း၊ အသက်ရှူခက်ခဲခြင်း၊ ၃ လအောက် ဖျားခြင်း — ဤအခြေအနေများတွင် နှောင့်နှေးမနေဘဲ ဆေးကုသမှု ချက်ချင်း ခံယူပါ။"
+        },
+        "safety": {
+          "en": "Never shake a baby — it can cause severe brain injury. If you feel overwhelmed, put your baby down somewhere safe, step away to breathe, and come back.",
+          "mm": "ကလေးကို ဘယ်တော့မှ မလှုပ်ခါပါနှင့် — ဦးနှောက်ကို ပြင်းထန်စွာ ထိခိုက်စေနိုင်သည်။ စိတ်မထိန်းနိုင်တော့လျှင် ကလေးကို ဘေးကင်းသော အိပ်ရာတွင် ချထားပြီး ခဏ ထွက်၍ အသက်ရှူပါ၊ ပြီးမှ ပြန်လာပါ။"
+        },
+        "title": {
+          "en": "Birth–2 months — Feelings and comfort guide",
+          "mm": "မွေးကင်း – ၂ လ — စိတ်ခံစားမှု လမ်းညွှန်"
+        },
+        "weeklyActivities": [
+          {
+            "en": "Plan at least two rest breaks for yourself each week.",
+            "mm": "မိဘ ကိုယ်တိုင် အနားယူချိန် တစ်ပတ်လျှင် အနည်းဆုံး နှစ်ကြိမ် စီစဉ်ပါ။"
+          }
+        ],
+        "why": {
+          "en": "A newborn cannot regulate feelings alone. She borrows your calm to settle. Crying is not manipulation.",
+          "mm": "မွေးကင်းစကလေးသည် မိမိစိတ်ကို ကိုယ်တိုင် မထိန်းနိုင်သေးပါ။ မိဘ၏ တည်ငြိမ်သော တုံ့ပြန်မှုကို အသုံးပြု၍ ငြိမ်သက်ရန် သင်ယူသည်။ ငိုခြင်းသည် မိဘကို စမ်းသပ်ခြင်း မဟုတ်ပါ။"
+        }
+      },
+      "domainKey": "emotional",
+      "priorityStatus": "triage_complete",
+      "reviewRevision": 2,
+      "searchText": "မွေးကင်း – ၂ လ — စိတ်ခံစားမှု လမ်းညွှန် birth–2 months — feelings and comfort guide မွေးကင်းစကလေးသည် မိမိစိတ်ကို ကိုယ်တိုင် မထိန်းနိုင်သေးပါ။ မိဘ၏ တည်ငြိမ်သော တုံ့ပြန်မှုကို အသုံးပြု၍ ငြိမ်သက်ရန် သင်ယူသည်။ ငိုခြင်းသည် မိဘကို စမ်းသပ်ခြင်း မဟုတ်ပါ။ a newborn cannot regulate feelings alone. she borrows your calm to settle. crying is not manipulation. emotional birth_2m guide မွေးကင်း – ၂ လ — စိတ်ခံစားမှု လမ်းညွှန် birth–2 months — feelings and comfort guide မွေးကင်းစကလေးသည် မိမိစိတ်ကို ကိုယ်တိုင် မထိန်းနိုင်သေးပါ။ မိဘ၏ တည်ငြိမ်သော တုံ့ပြန်မှုကို အသုံးပြု၍ ငြိမ်သက်ရန် သင်ယူသည်။ ငိုခြင်းသည် မိဘကို စမ်းသပ်ခြင်း မဟုတ်ပါ။ a newborn cannot regulate feelings alone. she borrows your calm to settle. crying is not manipulation. ပွေ့ချီလျှင် ငြိမ်သွားပါသလား။ does holding help your baby settle? တစ်ရက်လုံး ငိုချိန် များပါသလား၊ အထူးသဖြင့် ညနေပိုင်း။ is there a lot of crying, especially in the evening? သင်ကိုယ်တိုင် မည်သို့ ခံစားနေရပါသလဲ။ how are you feeling yourself? ငိုသည်နှင့် နှစ်သိမ့်ပေးပါ — ပွေ့ချီ၊ နူးညံ့စွာ ပြော၊ ယိမ်းပေးပါ။ respond to crying — hold, speak softly, rock gently. အရေပြားချင်းထိ ပွေ့ချီခြင်းကို နေ့စဉ် ထည့်ပါ။ include skin-to-skin every day. မိဘ ကိုယ်တိုင် အနားယူချိန် တစ်ပတ်လျှင် အနည်းဆုံး နှစ်ကြိမ် စီစဉ်ပါ။ plan at least two rest breaks for yourself each week. အလင်းမှိန်၊ အသံတိတ်သော နေရာတွင် နှစ်သိမ့်ပေးပါ။ comfort in a dim, quiet place. အရိပ်တွင် ဖြည်းညှင်းစွာ လမ်းလျှောက်ခြင်းက ငိုသံကို လျော့စေတတ်သည်။ a slow walk in the shade often eases crying. ပွေ့ချီခြင်း၊ အသံနူးညံ့စွာ ပြောခြင်း — ကုန်ကျစရိတ် မရှိပါ။ holding and a soft voice cost nothing. ပွေ့ချီရန် ပုဆိုး/ကလေးထမ်းအိတ် a cloth or baby carrier ကလေးကို ဘယ်တော့မှ မလှုပ်ခါပါနှင့် — ဦးနှောက်ကို ပြင်းထန်စွာ ထိခိုက်စေနိုင်သည်။ စိတ်မထိန်းနိုင်တော့လျှင် ကလေးကို ဘေးကင်းသော အိပ်ရာတွင် ချထားပြီး ခဏ ထွက်၍ အသက်ရှူပါ၊ ပြီးမှ ပြန်လာပါ။ never shake a baby — it can cause severe brain injury. if you feel overwhelmed, put your baby down somewhere safe, step away to breathe, and come back. \"ငိုတာ ခဏထားလိုက်\" ဟု အကြံပေးမှုကို မွေးကင်းစတွင် လိုက်နာခြင်း။ following \"let them cry it out\" advice with a newborn. မိဘ ကိုယ်တိုင် ပင်ပန်းနေသည်ကို လျစ်လျူရှုခြင်း။ ignoring your own exhaustion. ငိုသံ များလွန်းလျှင် အလှည့်ကျ ကူညီပေးမည့်သူ ရှာပါ။ if crying is heavy, arrange someone to take turns with you. ငိုသံ ပုံစံကို မှတ်တမ်းတင်ထားပါ — ဆရာဝန်ပြသည့်အခါ အသုံးဝင်သည်။ note when the crying happens — it helps at a health visit. ပွေ့ချီများရင် အလိုလိုက်ရာ ကျမလား။ will holding too much spoil my baby? မကျပါ။ ဤအရွယ်တွင် တုံ့ပြန်ပေးခြင်းသည် လုံခြုံမှုကို တည်ဆောက်ပေးသည်။ no. at this age responding builds security. ညနေတိုင်း ငိုတယ်။ ပုံမှန်လား။ she cries every evening. is that normal? ပထမလများတွင် ငိုချိန် များခြင်းသည် တွေ့ရလေ့ရှိသည်။ သို့သော် ငိုသံနှင့်အတူ ဖျားခြင်း၊ အန်ခြင်း၊ နို့မစို့ခြင်း၊ ပျော့ခွေခြင်း ပါလျှင် ချက်ချင်း ဆေးကုသမှု ခံယူပါ။ increased crying in the early months is common. but if crying comes with fever, vomiting, refusing feeds or floppiness, seek care immediately. ဘယ်အပူချိန် ရောက်ရင် ဆေးရုံ သွားရမလဲ။ what temperature means we should seek care? အပူချိန် တိုင်းပါ။ အသက် ၃ လအောက် ကလေး ၃၈°c (၁၀၀.၄°f) နှင့်အထက် ဖျားပါက — ကလေး ပုံမှန်လို ထင်ရလျှင်ပင် ချက်ချင်း ပြသပါ။ အသက် ၃ လမှ ၆ လကြား ၃၉°c (၁၀၂.၂°f) နှင့်အထက် ဖျားပါက အမြန် ပြသပါ။ အသက်မရွေး — ဖျားခြင်းနှင့်အတူ အသက်ရှူခက်ခြင်း၊ နှိပ်လျှင် မပျောက်သော အနီစက်၊ လည်ပင်း တောင့်တင်းခြင်း သို့မဟုတ် နိုးရခက်ခြင်း ပါလာပါက ချက်ချင်း ပြသပါ။ အပူချိန်တိုင်းကိရိယာ မရှိပါက — ကလေး ပူနေပြီး အထက်ပါ လက္ခဏာများ ပါလျှင် မစောင့်ဘဲ ပြသပါ။ take the temperature. under 3 months, 38°c (100.4°f) or above: seek care straight away, even if the baby otherwise seems well. between 3 and 6 months, 39°c (102.2°f) or above: seek care promptly. at any age, fever together with difficulty breathing, a rash that does not fade under pressure, a stiff neck, or being hard to wake: seek care immediately. if you have no thermometer, and the child feels hot and has any of those signs, do not wait. ငိုသံ ပုံမှန်မဟုတ်ဘဲ အသံတိုးလာခြင်း သို့မဟုတ် အော်ဟစ်သံ ဖြစ်လာခြင်း။ a cry that becomes weak, or unusually high-pitched. ကိုယ်ခန္ဓာ ပျော့ခွေခြင်း၊ နိုးရန် ခက်ခဲခြင်း။ floppiness or being hard to wake. အသက် ၃ လအောက် ကလေးတွင် ဖျားခြင်း။ fever in a baby under 3 months. ပျော့ခွေခြင်း၊ နိုးရန်ခက်ခဲခြင်း၊ အသက်ရှူခက်ခဲခြင်း၊ ၃ လအောက် ဖျားခြင်း — ဤအခြေအနေများတွင် နှောင့်နှေးမနေဘဲ ဆေးကုသမှု ချက်ချင်း ခံယူပါ။ floppiness, being hard to rouse, breathing difficulty, or fever under 3 months — seek medical care immediately, without waiting. သင် တုံ့ပြန်ပေးတိုင်း ကလေးသည် \"ငါ ဘေးကင်းတယ်\" ဟု သင်ယူနေပါသည်။ every time you respond, your baby learns \"i am safe\". reference_verified responsive soothing and the never-shake message follow the who nurturing care framework and aap toxic-stress guidance; the urgent-symptom list (floppy, hard to rouse, fever under 3 months) follows nhs advice on spotting a seriously ill infant and nice fever guidance.",
+      "slug": "gd_birth_2m_emotional",
+      "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
+      "summaryEn": "A newborn cannot regulate feelings alone. She borrows your calm to settle. Crying is not manipulation.",
+      "summaryMm": "မွေးကင်းစကလေးသည် မိမိစိတ်ကို ကိုယ်တိုင် မထိန်းနိုင်သေးပါ။ မိဘ၏ တည်ငြိမ်သော တုံ့ပြန်မှုကို အသုံးပြု၍ ငြိမ်သက်ရန် သင်ယူသည်။ ငိုခြင်းသည် မိဘကို စမ်းသပ်ခြင်း မဟုတ်ပါ။",
+      "tags": [
+        "emotional",
+        "birth_2m",
+        "guide"
+      ],
+      "titleEn": "Birth–2 months — Feelings and comfort guide",
+      "titleMm": "မွေးကင်း – ၂ လ — စိတ်ခံစားမှု လမ်းညွှန်",
+      "type": "guide",
+      "updatedAt": 1786432330925,
+      "version": 1
+    },
+    "link": {
+      "_creationTime": 1785024331625.8374,
+      "_id": "k97dtta5bpbq9ngek0tkndcxzn8b869s",
+      "createdAt": 1785024331625,
+      "kind": "guide",
+      "slug": "gd_birth_2m_emotional",
+      "sourceIds": [
+        "aap-toxic-stress-2021",
+        "who-nurturing-care-2018",
+        "nhs-child-accident-2025",
+        "nice-ng143-fever-2019"
+      ],
+      "updatedAt": 1786432286642
+    },
+    "sources": [
+      {
+        "_creationTime": 1785024320720.737,
+        "_id": "kd74m0vq8vxdpgxd07gknrwy5d8b910c",
+        "ageMonthsMax": 60,
+        "ageMonthsMin": 0,
+        "authors": "Garner A, Yogman M; Committee on Psychosocial Aspects of Child and Family Health",
+        "country": "United States",
+        "createdAt": 1785024320720,
+        "doi": "10.1542/peds.2021-052582",
+        "edition": null,
+        "evidenceLevel": "guideline",
+        "isbn": null,
+        "keywords": [
+          "toxic stress",
+          "relational health",
+          "safe stable nurturing relationships"
+        ],
+        "language": "en",
+        "nextReviewDate": "2027-07-26",
+        "org": "American Academy of Pediatrics",
+        "orgKey": "AAP",
+        "pmid": "34312296",
+        "reviewDate": "2026-07-26",
+        "reviewNote": "Education and special-needs professional review completed. This is not medical or clinical approval; medical guidance remains general, evidence-based information. Official publisher metadata verified where previously required.",
+        "reviewScope": "education",
+        "reviewStatus": "approved",
+        "reviewer": "ACE Child Grow Owner / Education Reviewer",
+        "reviewerId": "mn79pqcdy108y85stdxvtvqcz18b8w9c",
+        "reviewerQualification": "MEd (Early Childhood and Special Education)",
+        "searchText": "american academy of pediatrics preventing childhood toxic stress: partnering with families and communities to promote relational health garner a, yogman m; committee on psychosocial aspects of child and family health https://pubmed.ncbi.nlm.nih.gov/34312296/ 10.1542/peds.2021-052582  toxic stress relational health safe stable nurturing relationships social_emotional mental_health parenting",
+        "sourceId": "aap-toxic-stress-2021",
+        "title": "Preventing Childhood Toxic Stress: Partnering With Families and Communities to Promote Relational Health",
+        "topics": [
+          "social_emotional",
+          "mental_health",
+          "parenting"
+        ],
+        "updatedAt": 1785043814882,
+        "url": "https://pubmed.ncbi.nlm.nih.gov/34312296/",
+        "verifiedNote": "PubMed record 34312296 shows the title, the 2021 Pediatrics publication and DOI 10.1542/peds.2021-052582.",
+        "verifiedOn": "2026-07-24",
+        "year": 2021
+      },
+      {
+        "_creationTime": 1785024320720.7305,
+        "_id": "kd72zteyt82ewxyccb740hneyx8b8h9p",
+        "ageMonthsMax": 60,
+        "ageMonthsMin": 0,
+        "authors": null,
+        "country": "International",
+        "createdAt": 1785024320720,
+        "doi": null,
+        "edition": null,
+        "evidenceLevel": "guideline",
+        "isbn": "9789241514064",
+        "keywords": [
+          "nurturing care",
+          "early childhood development",
+          "responsive caregiving",
+          "framework"
+        ],
+        "language": "en",
+        "nextReviewDate": "2027-07-26",
+        "org": "World Health Organization / UNICEF / World Bank Group",
+        "orgKey": "WHO",
+        "pmid": null,
+        "reviewDate": "2026-07-26",
+        "reviewNote": "Education and special-needs professional review completed. This is not medical or clinical approval; medical guidance remains general, evidence-based information. Official publisher metadata verified where previously required.",
+        "reviewScope": "education",
+        "reviewStatus": "approved",
+        "reviewer": "ACE Child Grow Owner / Education Reviewer",
+        "reviewerId": "mn79pqcdy108y85stdxvtvqcz18b8w9c",
+        "reviewerQualification": "MEd (Early Childhood and Special Education)",
+        "searchText": "world health organization / unicef / world bank group nurturing care for early childhood development: a framework for helping children survive and thrive to transform health and human potential  https://www.who.int/publications/i/item/9789241514064  9789241514064 nurturing care early childhood development responsive caregiving framework milestones parenting play nutrition social_emotional",
+        "sourceId": "who-nurturing-care-2018",
+        "title": "Nurturing care for early childhood development: A framework for helping children survive and thrive to transform health and human potential",
+        "topics": [
+          "milestones",
+          "parenting",
+          "play",
+          "nutrition",
+          "social_emotional"
+        ],
+        "updatedAt": 1785043814882,
+        "url": "https://www.who.int/publications/i/item/9789241514064",
+        "verifiedNote": "WHO publication page shows the title, \"1 January 2018\" and ISBN 9789241514064 in the publication details block.",
+        "verifiedOn": "2026-07-24",
+        "year": 2018
+      },
+      {
+        "_creationTime": 1786432282130.9558,
+        "_id": "kd7712yk4q0v5xd56z3tcvcq7n8c9rjt",
+        "ageMonthsMax": 60,
+        "ageMonthsMin": 0,
+        "authors": null,
+        "country": "United Kingdom",
+        "createdAt": 1786432282131,
+        "doi": null,
+        "edition": "Page last reviewed: 18 December 2025; Next review due: 18 December 2028",
+        "evidenceLevel": "parent_education",
+        "isbn": null,
+        "keywords": [
+          "child accident",
+          "call 999",
+          "breathing",
+          "seizure",
+          "serious injury"
+        ],
+        "language": "en",
+        "nextReviewDate": "2028-12-18",
+        "org": "National Health Service (UK)",
+        "orgKey": "NHS",
+        "pmid": null,
+        "reviewDate": "2026-08-21",
+        "reviewScope": "education",
+        "reviewStatus": "approved",
+        "reviewer": "Phyo Ko Ko",
+        "reviewerId": "mn726081xpgg24y4z4tq9ncw098bh6t1",
+        "reviewerQualification": "MBBS",
+        "searchText": "national health service (uk) what to do if your child has an accident  https://www.nhs.uk/baby/first-aid-and-safety/first-aid/what-to-do-if-your-child-has-an-accident/   child accident call 999 breathing seizure serious injury safety",
+        "sourceId": "nhs-child-accident-2025",
+        "title": "What to do if your child has an accident",
+        "topics": [
+          "safety"
+        ],
+        "updatedAt": 1787318686569,
+        "url": "https://www.nhs.uk/baby/first-aid-and-safety/first-aid/what-to-do-if-your-child-has-an-accident/",
+        "verifiedNote": "NHS page prints this title, \"Page last reviewed: 18 December 2025\" and \"Next review due: 18 December 2028\" and lists stopped or difficult breathing, seizure, unresponsiveness, blue or grey colour and severe injury as ambulance triggers.",
+        "verifiedOn": "2026-08-11",
+        "year": 2025
+      },
+      {
+        "_creationTime": 1785024320720.7422,
+        "_id": "kd797n46fgdag01wf7kk09d8k18b8jca",
+        "ageMonthsMax": 60,
+        "ageMonthsMin": 0,
+        "authors": null,
+        "country": "United Kingdom",
+        "createdAt": 1785024320720,
+        "doi": null,
+        "edition": "NG143 (last updated 26 November 2021)",
+        "evidenceLevel": "guideline",
+        "isbn": null,
+        "keywords": [
+          "fever",
+          "traffic light system",
+          "red flags",
+          "serious illness"
+        ],
+        "language": "en",
+        "nextReviewDate": "2027-07-26",
+        "org": "National Institute for Health and Care Excellence",
+        "orgKey": "NICE",
+        "pmid": null,
+        "reviewDate": "2026-07-26",
+        "reviewNote": "Education and special-needs professional review completed. This is not medical or clinical approval; medical guidance remains general, evidence-based information. Official publisher metadata verified where previously required.",
+        "reviewScope": "education",
+        "reviewStatus": "approved",
+        "reviewer": "ACE Child Grow Owner / Education Reviewer",
+        "reviewerId": "mn79pqcdy108y85stdxvtvqcz18b8w9c",
+        "reviewerQualification": "MEd (Early Childhood and Special Education)",
+        "searchText": "national institute for health and care excellence fever in under 5s: assessment and initial management  https://www.nice.org.uk/guidance/ng143   fever traffic light system red flags serious illness safety",
+        "sourceId": "nice-ng143-fever-2019",
+        "title": "Fever in under 5s: assessment and initial management",
+        "topics": [
+          "safety"
+        ],
+        "updatedAt": 1785043814882,
+        "url": "https://www.nice.org.uk/guidance/ng143",
+        "verifiedNote": "NICE page for NG143 prints this title, \"Published: 07 November 2019\" and \"Last updated: 26 November 2021\".",
+        "verifiedOn": "2026-07-24",
+        "year": 2019
+      }
+    ],
+    "reviews": [
+      {
+        "_creationTime": 1786170745570.7573,
+        "_id": "nn76a1k7sh3bsb49w90z4wncw58c3xap",
+        "contentSlug": "gd_birth_2m_emotional",
+        "contentVersion": 2,
+        "createdAt": 1786170745570,
+        "decision": "approved",
+        "dimension": "english",
+        "reviewRevision": 2,
+        "reviewedAt": 1786170745570,
+        "reviewerDisplayName": "ဒေါ်လပြည့်၀န်း",
+        "reviewerId": "mn7adb0ryhcqwg2hppnrn52sm18bmeqj",
+        "reviewerRole": "owner",
+        "updatedAt": 1786170745570
+      },
+      {
+        "_creationTime": 1786170737187.9573,
+        "_id": "nn7cs5mftntkjd63xq14gxnxjn8c2dgz",
+        "contentSlug": "gd_birth_2m_emotional",
+        "contentVersion": 2,
+        "createdAt": 1786170737188,
+        "decision": "approved",
+        "dimension": "native_myanmar",
+        "reviewRevision": 2,
+        "reviewedAt": 1786170737188,
+        "reviewerDisplayName": "ဒေါ်လပြည့်၀န်း",
+        "reviewerId": "mn7adb0ryhcqwg2hppnrn52sm18bmeqj",
+        "reviewerRole": "owner",
+        "updatedAt": 1786170737188
+      }
+    ],
+    "media": [],
+    "aiContentAudits": [],
+    "aiPublicationReleases": []
+  },
+  "unicefSeenCountedIncluded": {
+    "source": {
+      "_creationTime": 1785024320720.735,
+      "_id": "kd7fj4z905aww9f4pq295vymyh8b9mbk",
+      "ageMonthsMax": 60,
+      "ageMonthsMin": 0,
+      "authors": null,
+      "country": "International",
+      "createdAt": 1785024320720,
+      "doi": null,
+      "edition": null,
+      "evidenceLevel": "expert_consensus",
+      "isbn": null,
+      "keywords": [
+        "children with disabilities",
+        "data",
+        "well-being",
+        "inclusion"
+      ],
+      "language": "en",
+      "nextReviewDate": "2027-07-26",
+      "org": "UNICEF",
+      "orgKey": "UNICEF",
+      "pmid": null,
+      "reviewDate": "2026-07-26",
+      "reviewNote": "Education and special-needs professional review completed. This is not medical or clinical approval; medical guidance remains general, evidence-based information. Official publisher metadata verified where previously required.",
+      "reviewScope": "education",
+      "reviewStatus": "approved",
+      "reviewer": "ACE Child Grow Owner / Education Reviewer",
+      "reviewerId": "mn79pqcdy108y85stdxvtvqcz18b8w9c",
+      "reviewerQualification": "MEd (Early Childhood and Special Education)",
+      "searchText": "unicef seen, counted, included: using data to shed light on the well-being of children with disabilities  https://data.unicef.org/resources/children-with-disabilities-report-2021/   children with disabilities data well-being inclusion special_needs",
+      "sourceId": "unicef-seen-counted-included-2022",
+      "title": "Seen, Counted, Included: Using data to shed light on the well-being of children with disabilities",
+      "topics": [
+        "special_needs"
+      ],
+      "updatedAt": 1785043814882,
+      "url": "https://data.unicef.org/resources/children-with-disabilities-report-2021/",
+      "verifiedNote": "UNICEF Data page shows the title and the November 2021/2022 release. No ISBN is printed on the resource page, so isbn is null.",
+      "verifiedOn": "2026-07-24",
+      "year": 2022
+    },
+    "contents": [
+      {
+        "_creationTime": 1785024282947.2043,
+        "_id": "kx7dnm8z17qf34t5daw6d6g5v58b8yy1",
+        "category": "special_needs_awareness",
+        "clinicalStatus": "clinical_review",
+        "createdAt": 1785024282947,
+        "data": {
+          "actionToday": {
+            "en": "Praise one of your child’s strengths today.",
+            "mm": "ယနေ့ ကလေး၏ အားသာချက်တစ်ခုကို ချီးမွမ်းပါ။"
+          },
+          "body": {
+            "en": "Every child has strengths. See children with special needs not as “broken” but as learning and growing differently. This app does not diagnose — if concerned, it guides you to a professional. Early support can help a lot.",
+            "mm": "ကလေးတိုင်းတွင် အားသာချက်များ ရှိသည်။ အထူးလိုအပ်ချက်ရှိသော ကလေးများကို “ချို့ယွင်း” ဟု မမြင်ဘဲ ကွဲပြားစွာ သင်ယူ/ကြီးထွားသူများအဖြစ် မြင်ပါ။ ဤအက်ပ်သည် ရောဂါ မဖော်ထုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ရန် လမ်းညွှန်ပေးသည်။ စောစီးစွာ ပံ့ပိုးမှုက များစွာ ကူညီနိုင်သည်။"
+          },
+          "objectives": [
+            {
+              "en": "Understand a strengths-based approach.",
+              "mm": "အားသာချက်အခြေခံ သဘောထား သိရှိရန်။"
+            }
+          ],
+          "quiz": [
+            {
+              "answerIndex": 0,
+              "options": [
+                {
+                  "en": "does not diagnose",
+                  "mm": "ရောဂါ မဖော်ထုတ်ပါ"
+                },
+                {
+                  "en": "gives a diagnosis",
+                  "mm": "ရောဂါ ဖော်ထုတ်ပေးသည်"
+                }
+              ],
+              "q": {
+                "en": "This app —",
+                "mm": "ဤအက်ပ်သည် —"
+              }
+            }
+          ],
+          "readingMinutes": 4,
+          "takeaway": {
+            "en": "Respect difference; see strengths.",
+            "mm": "ကွဲပြားမှုကို လေးစားပါ — အားသာချက်ကို မြင်ပါ။"
+          }
+        },
+        "durationMinutes": 4,
+        "reviewRevision": 2,
+        "searchText": "အထူးလိုအပ်ချက် သိရှိနားလည်မှု special-needs awareness ကွဲပြားမှုကို လေးစား၍ အားသာချက်အခြေခံ ချဉ်းကပ်ခြင်း။ respecting difference with a strengths-based view. special_needs_awareness lesson အားသာချက်အခြေခံ သဘောထား သိရှိရန်။ understand a strengths-based approach. ကလေးတိုင်းတွင် အားသာချက်များ ရှိသည်။ အထူးလိုအပ်ချက်ရှိသော ကလေးများကို “ချို့ယွင်း” ဟု မမြင်ဘဲ ကွဲပြားစွာ သင်ယူ/ကြီးထွားသူများအဖြစ် မြင်ပါ။ ဤအက်ပ်သည် ရောဂါ မဖော်ထုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ရန် လမ်းညွှန်ပေးသည်။ စောစီးစွာ ပံ့ပိုးမှုက များစွာ ကူညီနိုင်သည်။ every child has strengths. see children with special needs not as “broken” but as learning and growing differently. this app does not diagnose — if concerned, it guides you to a professional. early support can help a lot. ဤအက်ပ်သည် — this app — ရောဂါ မဖော်ထုတ်ပါ does not diagnose ရောဂါ ဖော်ထုတ်ပေးသည် gives a diagnosis ကွဲပြားမှုကို လေးစားပါ — အားသာချက်ကို မြင်ပါ။ respect difference; see strengths. ယနေ့ ကလေး၏ အားသာချက်တစ်ခုကို ချီးမွမ်းပါ။ praise one of your child’s strengths today.",
+        "slug": "lsn_special_needs_awareness",
+        "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
+        "summaryEn": "Respecting difference with a strengths-based view.",
+        "summaryMm": "ကွဲပြားမှုကို လေးစား၍ အားသာချက်အခြေခံ ချဉ်းကပ်ခြင်း။",
+        "tags": [
+          "special_needs_awareness",
+          "lesson"
+        ],
+        "titleEn": "Special-needs awareness",
+        "titleMm": "အထူးလိုအပ်ချက် သိရှိနားလည်မှု",
+        "type": "lesson",
+        "updatedAt": 1786432330925,
+        "version": 1
+      },
+      {
+        "_creationTime": 1785024282947.2112,
+        "_id": "kx7brw1mycpr3faz4zpr5tkfyd8b9w3n",
+        "category": "learning_disability",
+        "clinicalStatus": "clinical_review",
+        "createdAt": 1785024282947,
+        "data": {
+          "activities": [
+            {
+              "en": "Playful letter/number games.",
+              "mm": "ကစားရင်း သင်ယူသော အက္ခရာ/သင်္ချာ ကစားနည်းများ။"
+            }
+          ],
+          "faq": [
+            {
+              "a": {
+                "en": "It is hard to confirm early; it usually becomes clearer at school age.",
+                "mm": "ငယ်ရွယ်စဉ် အတည်ပြုရ ခက်ခဲ၍ ကျောင်းအရွယ်တွင် ပို၍ ရှင်းလင်းလာတတ်သည်။"
+              },
+              "q": {
+                "en": "Can it be known early?",
+                "mm": "ငယ်ရွယ်စဉ် သိနိုင်သလား။"
+              }
+            }
+          ],
+          "homeSupport": [
+            {
+              "en": "Teach through strengths; praise effort.",
+              "mm": "အားသာချက်ကို အသုံးပြု၍ သင်ကြားပါ။ ကြိုးစားမှုကို ချီးမွမ်းပါ။"
+            }
+          ],
+          "myths": [
+            {
+              "fact": {
+                "en": "No — it is unrelated to intelligence; just a different way of learning.",
+                "mm": "မဟုတ်ပါ — ဉာဏ်ရည်နှင့် မသက်ဆိုင်ဘဲ သင်ယူပုံ ကွဲပြားခြင်းဖြစ်သည်။"
+              },
+              "myth": {
+                "en": "A learning difficulty means low intelligence",
+                "mm": "သင်ယူမှု အခက်အခဲ ရှိရင် ဉာဏ်နည်းတယ်"
+              }
+            }
+          ],
+          "overview": {
+            "en": "A learning difficulty such as dyslexia or dyscalculia affects specific skills like reading, writing or maths. It does not affect general intelligence. It is hard to confirm at very young ages and usually becomes clearer at school age. Note: this is different from a learning disability (intellectual disability), which does affect intellectual ability and is usually identified soon after birth or in the early years.",
+            "mm": "dyslexia၊ dyscalculia ကဲ့သို့ သင်ယူမှု အခက်အခဲသည် စာဖတ်ခြင်း၊ စာရေးခြင်း၊ သင်္ချာ စသည့် သီးသန့် ကျွမ်းကျင်မှုများကို သက်ရောက်ပါသည်။ ယေဘုယျ ဉာဏ်ရည်ကို မထိခိုက်ပါ။ ငယ်ရွယ်စဉ် အတည်ပြုရန် ခက်ခဲပြီး ကျောင်းနေအရွယ်တွင် ပိုရှင်းလာတတ်ပါသည်။ မှတ်ချက် — ၎င်းသည် ဉာဏ်ရည် ဖွံ့ဖြိုးမှု ချို့တဲ့ခြင်း (intellectual disability) နှင့် မတူပါ။ ထိုအခြေအနေမှာမူ ဉာဏ်ရည်ကို သက်ရောက်ပြီး၊ များသောအားဖြင့် မွေးဖွားပြီးမကြာမီ သို့မဟုတ် ငယ်ရွယ်စဉ်ကတည်းက တွေ့ရှိလေ့ရှိပါသည်။"
+          },
+          "possibleSigns": [
+            {
+              "en": "Ongoing difficulty with one specific skill at school age",
+              "mm": "ကျောင်းအရွယ်တွင် သီးခြား ကျွမ်းကျင်မှုတစ်ခု သင်ယူရ ဆက်တိုက် ခက်ခဲခြင်း"
+            },
+            {
+              "en": "These are awareness points, not a diagnosis — if concerned, consult a professional.",
+              "mm": "ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။"
+            }
+          ],
+          "professionalSupport": [
+            {
+              "en": "At school age, consult an educational psychologist.",
+              "mm": "ကျောင်းအရွယ်တွင် ပညာရေးစိတ်ပညာရှင်နှင့် တိုင်ပင်ပါ။"
+            }
+          ],
+          "references": [
+            "NHS. Learning disabilities. https://www.nhs.uk/conditions/learning-disabilities/ (accessed 2026-07-31)",
+            "Mencap. What is a learning disability? https://www.mencap.org.uk/learning-disability-explained/what-learning-disability (accessed 2026-07-31)",
+            "Clinical review still outstanding: sources verified against public guidance and the wording accepted by the product owner, but no qualified clinical reviewer has signed off this page."
+          ],
+          "relatedActivities": [
+            "act_name_writing"
+          ],
+          "relatedLessons": [
+            "lsn_early_math"
+          ],
+          "relatedMilestones": [],
+          "schoolSupport": [
+            {
+              "en": "Provide teaching adjustments and extra time.",
+              "mm": "သင်ကြားမှု ပုံစံ ချိန်ညှိမှုနှင့် အချိန်ပို ပေးပါ။"
+            }
+          ],
+          "strengths": [
+            {
+              "en": "Creativity and problem-solving",
+              "mm": "တီထွင်ဖန်တီးမှုနှင့် ပြဿနာ ဖြေရှင်းနိုင်မှု"
+            }
+          ]
+        },
+        "priorityStatus": "triage_complete",
+        "reviewRevision": 3,
+        "searchText": "သင်ယူမှု အခက်အခဲ (specific learning difficulty) understanding learning difficulty (specific learning disorder) dyslexia၊ dyscalculia ကဲ့သို့ သင်ယူမှု အခက်အခဲသည် စာဖတ်ခြင်း၊ စာရေးခြင်း၊ သင်္ချာ စသည့် သီးသန့် ကျွမ်းကျင်မှုများကို သက်ရောက်ပါသည်။ ယေဘုယျ ဉာဏ်ရည်ကို မထိခိုက်ပါ။ ငယ်ရွယ်စဉ် အတည်ပြုရန် ခက်ခဲပြီး ကျောင်းနေအရွယ်တွင် ပိုရှင်းလာတတ်ပါသည်။ မှတ်ချက် — ၎င်းသည် ဉာဏ်ရည် ဖွံ့ဖြိုးမှု ချို့တဲ့ခြင်း (intellectual disability) နှင့် မတူပါ။ ထိုအခြေအနေမှာမူ ဉာဏ်ရည်ကို သက်ရောက်ပြီး၊ များသောအားဖြင့် မွေးဖွားပြီးမကြာမီ သို့မဟုတ် ငယ်ရွယ်စဉ်ကတည်းက တွေ့ရှိလေ့ရှိပါသည်။ a learning difficulty such as dyslexia or dyscalculia affects specific skills like reading, writing or maths. it does not affect general intelligence. it is hard to confirm at very young ages and usually becomes clearer at school age. note: this is different from a learning disability (intellectual disability), which does affect intellectual ability and is usually identified soon after birth or in the early years. learning_disability hope_center special_needs dyslexia၊ dyscalculia ကဲ့သို့ သင်ယူမှု အခက်အခဲသည် စာဖတ်ခြင်း၊ စာရေးခြင်း၊ သင်္ချာ စသည့် သီးသန့် ကျွမ်းကျင်မှုများကို သက်ရောက်ပါသည်။ ယေဘုယျ ဉာဏ်ရည်ကို မထိခိုက်ပါ။ ငယ်ရွယ်စဉ် အတည်ပြုရန် ခက်ခဲပြီး ကျောင်းနေအရွယ်တွင် ပိုရှင်းလာတတ်ပါသည်။ မှတ်ချက် — ၎င်းသည် ဉာဏ်ရည် ဖွံ့ဖြိုးမှု ချို့တဲ့ခြင်း (intellectual disability) နှင့် မတူပါ။ ထိုအခြေအနေမှာမူ ဉာဏ်ရည်ကို သက်ရောက်ပြီး၊ များသောအားဖြင့် မွေးဖွားပြီးမကြာမီ သို့မဟုတ် ငယ်ရွယ်စဉ်ကတည်းက တွေ့ရှိလေ့ရှိပါသည်။ a learning difficulty such as dyslexia or dyscalculia affects specific skills like reading, writing or maths. it does not affect general intelligence. it is hard to confirm at very young ages and usually becomes clearer at school age. note: this is different from a learning disability (intellectual disability), which does affect intellectual ability and is usually identified soon after birth or in the early years. တီထွင်ဖန်တီးမှုနှင့် ပြဿနာ ဖြေရှင်းနိုင်မှု creativity and problem-solving ကျောင်းအရွယ်တွင် သီးခြား ကျွမ်းကျင်မှုတစ်ခု သင်ယူရ ဆက်တိုက် ခက်ခဲခြင်း ongoing difficulty with one specific skill at school age ဤအချက်များသည် ရောဂါဖော်ထုတ်ခြင်း မဟုတ်ပါ — စိုးရိမ်ပါက ကျွမ်းကျင်ပညာရှင်နှင့် တိုင်ပင်ပါ။ these are awareness points, not a diagnosis — if concerned, consult a professional. သင်ယူမှု အခက်အခဲ ရှိရင် ဉာဏ်နည်းတယ် a learning difficulty means low intelligence မဟုတ်ပါ — ဉာဏ်ရည်နှင့် မသက်ဆိုင်ဘဲ သင်ယူပုံ ကွဲပြားခြင်းဖြစ်သည်။ no — it is unrelated to intelligence; just a different way of learning. အားသာချက်ကို အသုံးပြု၍ သင်ကြားပါ။ ကြိုးစားမှုကို ချီးမွမ်းပါ။ teach through strengths; praise effort. သင်ကြားမှု ပုံစံ ချိန်ညှိမှုနှင့် အချိန်ပို ပေးပါ။ provide teaching adjustments and extra time. ကျောင်းအရွယ်တွင် ပညာရေးစိတ်ပညာရှင်နှင့် တိုင်ပင်ပါ။ at school age, consult an educational psychologist. ကစားရင်း သင်ယူသော အက္ခရာ/သင်္ချာ ကစားနည်းများ။ playful letter/number games. ငယ်ရွယ်စဉ် သိနိုင်သလား။ can it be known early? ငယ်ရွယ်စဉ် အတည်ပြုရ ခက်ခဲ၍ ကျောင်းအရွယ်တွင် ပို၍ ရှင်းလင်းလာတတ်သည်။ it is hard to confirm early; it usually becomes clearer at school age. lsn_early_math act_name_writing nhs. learning disabilities. https://www.nhs.uk/conditions/learning-disabilities/ (accessed 2026-07-31) mencap. what is a learning disability? https://www.mencap.org.uk/learning-disability-explained/what-learning-disability (accessed 2026-07-31) clinical review still outstanding: sources verified against public guidance and the wording accepted by the product owner, but no qualified clinical reviewer has signed off this page.",
+        "slug": "sn_learning_disability",
+        "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
+        "summaryEn": "A learning difficulty such as dyslexia or dyscalculia affects specific skills like reading, writing or maths. It does not affect general intelligence. It is hard to confirm at very young ages and usually becomes clearer at school age. Note: this is different from a learning disability (intellectual disability), which does affect intellectual ability and is usually identified soon after birth or in the early years.",
+        "summaryMm": "dyslexia၊ dyscalculia ကဲ့သို့ သင်ယူမှု အခက်အခဲသည် စာဖတ်ခြင်း၊ စာရေးခြင်း၊ သင်္ချာ စသည့် သီးသန့် ကျွမ်းကျင်မှုများကို သက်ရောက်ပါသည်။ ယေဘုယျ ဉာဏ်ရည်ကို မထိခိုက်ပါ။ ငယ်ရွယ်စဉ် အတည်ပြုရန် ခက်ခဲပြီး ကျောင်းနေအရွယ်တွင် ပိုရှင်းလာတတ်ပါသည်။ မှတ်ချက် — ၎င်းသည် ဉာဏ်ရည် ဖွံ့ဖြိုးမှု ချို့တဲ့ခြင်း (intellectual disability) နှင့် မတူပါ။ ထိုအခြေအနေမှာမူ ဉာဏ်ရည်ကို သက်ရောက်ပြီး၊ များသောအားဖြင့် မွေးဖွားပြီးမကြာမီ သို့မဟုတ် ငယ်ရွယ်စဉ်ကတည်းက တွေ့ရှိလေ့ရှိပါသည်။",
+        "tags": [
+          "learning_disability",
+          "hope_center",
+          "special_needs"
+        ],
+        "titleEn": "Understanding Learning Difficulty (Specific Learning Disorder)",
+        "titleMm": "သင်ယူမှု အခက်အခဲ (Specific Learning Difficulty)",
+        "type": "special_need",
+        "updatedAt": 1786432330925,
+        "version": 1
+      }
+    ],
+    "links": [
+      {
+        "_creationTime": 1785024331625.825,
+        "_id": "k9779mh6r36txgb56cs15cps818b9yz5",
+        "createdAt": 1785024331625,
+        "kind": "lesson",
+        "slug": "lsn_special_needs_awareness",
+        "sourceIds": [
+          "who-unicef-developmental-disabilities-2023",
+          "unicef-seen-counted-included-2022",
+          "aap-surveillance-2020",
+          "tb-ccitsn-3e-2004"
+        ],
+        "updatedAt": 1785024331625
+      },
+      {
+        "_creationTime": 1785024331625.8284,
+        "_id": "k974151yk3f5w2m97seyf7z2h18b9w75",
+        "createdAt": 1785024331625,
+        "kind": "special_need",
+        "slug": "sn_learning_disability",
+        "sourceIds": [
+          "tb-dbp-5e-2022",
+          "unicef-seen-counted-included-2022",
+          "tb-handbook-ecse-2016"
+        ],
+        "updatedAt": 1785024331625
+      }
+    ],
+    "reviews": [
+      {
+        "_creationTime": 1785905196496.5217,
+        "_id": "nn72dz7j3847x7xbns114tdwnh8bxpgp",
+        "contentSlug": "sn_learning_disability",
+        "contentVersion": 2,
+        "createdAt": 1785905196496,
+        "decision": "approved",
+        "dimension": "english",
+        "reviewRevision": 2,
+        "reviewedAt": 1785905196496,
+        "reviewerDisplayName": "ဒေါ်လပြည့်၀န်း",
+        "reviewerId": "mn7adb0ryhcqwg2hppnrn52sm18bmeqj",
+        "reviewerRole": "owner",
+        "updatedAt": 1785905196496
+      },
+      {
+        "_creationTime": 1785905194118.5134,
+        "_id": "nn729vzadwc5sxrf1bdr1h41a58bxtnz",
+        "contentSlug": "sn_learning_disability",
+        "contentVersion": 2,
+        "createdAt": 1785905194118,
+        "decision": "approved",
+        "dimension": "native_myanmar",
+        "reviewRevision": 2,
+        "reviewedAt": 1785905194118,
+        "reviewerDisplayName": "ဒေါ်လပြည့်၀န်း",
+        "reviewerId": "mn7adb0ryhcqwg2hppnrn52sm18bmeqj",
+        "reviewerRole": "owner",
+        "updatedAt": 1785905194118
+      },
+      {
+        "_creationTime": 1785755045309.3394,
+        "_id": "nn7ek55v2bj3h4ggz4t7xyhz158bsz4h",
+        "contentSlug": "sn_learning_disability",
+        "contentVersion": 2,
+        "createdAt": 1785755045309,
+        "decision": "approved",
+        "dimension": "native_myanmar",
+        "reviewRevision": 2,
+        "reviewedAt": 1785755045309,
+        "reviewerDisplayName": "Daw La Pyae",
+        "reviewerId": "mn71d67gneb2fdcve4gpv7j00d8bec4c",
+        "reviewerRole": "language_reviewer",
+        "updatedAt": 1785755045309
+      }
+    ],
+    "media": [
+      {
+        "_creationTime": 1786432330925.2163,
+        "_id": "m179jw61n6mj4cvtdsx2zp8zhx8c92r5",
+        "contentSlug": "sn_learning_disability",
+        "kind": "pdf",
+        "note": "printable handout",
+        "placeholder": true
+      },
+      {
+        "_creationTime": 1786432330925.2131,
+        "_id": "m179bhjgcc0m2gv6aczdt6cpxs8c81j5",
+        "contentSlug": "lsn_special_needs_awareness",
+        "kind": "illustration",
+        "offline": true,
+        "placeholder": true
+      }
+    ],
+    "aiContentAudits": [],
+    "aiPublicationReleases": []
+  }
+}

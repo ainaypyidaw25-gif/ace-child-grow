@@ -26,6 +26,7 @@ const KNOWN_AUTH_CALLS = [
   'requireOwner',
   'requireContentEditor',
   'requireEvidenceEditor',
+  'requireEvidenceSourceApprover',
   'requireClinicalReviewer',
   'requireProfessionalPublisher',
   'requireReviewEditor',
@@ -35,6 +36,8 @@ const KNOWN_AUTH_CALLS = [
 // Functions that are INTENTIONALLY public. Each must only expose data that is
 // safe for anonymous callers. Keep this list tiny and justified.
 const PUBLIC_ALLOWLIST: Record<string, string> = {
+  'billing.ts:paymentCapabilities':
+    'returns only booleans for active manual and valid production-provider paths — no account, credential or customer data',
   'directory.ts:listPublic':
     'returns only active + clinically-verified facilities — no personal data',
 };

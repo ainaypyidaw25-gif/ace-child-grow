@@ -34,6 +34,12 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { ConvexHttpClient } from 'convex/browser';
+import {
+  classifyConvexCommandFailure,
+  formatConvexCommandFailure,
+  formatConvexOutputFailure,
+  sanitizedConvexCommandError,
+} from './lib/safe-convex-command-error.mjs';
 
 let failures = 0;
 
@@ -66,14 +72,24 @@ function findDeployKey() {
 }
 
 function run(name, args, key) {
-  const raw = execFileSync('npx', ['convex', 'run', name, JSON.stringify(args)], {
-    encoding: 'utf8',
-    env: { ...process.env, CONVEX_DEPLOY_KEY: key },
-    stdio: ['ignore', 'pipe', 'pipe'],
-    maxBuffer: 64 * 1024 * 1024,
-  });
+  let raw;
+  try {
+    raw = execFileSync('npx', ['convex', 'run', name, JSON.stringify(args)], {
+      encoding: 'utf8',
+      env: { ...process.env, CONVEX_DEPLOY_KEY: key },
+      stdio: ['ignore', 'pipe', 'pipe'],
+      maxBuffer: 64 * 1024 * 1024,
+    });
+  } catch (err) {
+    throw sanitizedConvexCommandError(err, { operation: `run:${name}` });
+  }
   const at = raw.indexOf('{');
-  return at < 0 ? null : JSON.parse(raw.slice(at));
+  if (at < 0) throw new Error(formatConvexOutputFailure({ operation: `run:${name}` }));
+  try {
+    return JSON.parse(raw.slice(at));
+  } catch {
+    throw new Error(formatConvexOutputFailure({ operation: `run:${name}` }));
+  }
 }
 
 const url = readConvexUrl();
@@ -99,9 +115,13 @@ async function refusedOrEmpty(fn, args, isEmpty) {
     const res = await anon.query(fn, args);
     return { ok: isEmpty(res), detail: JSON.stringify(res).slice(0, 90) };
   } catch (err) {
+    const category = classifyConvexCommandFailure(err);
     return {
-      ok: /not authenticated|staff/i.test(String(err)),
-      detail: `threw: ${String(err).slice(0, 70)}`,
+      ok: category === 'auth_refused',
+      detail: formatConvexCommandFailure(err, {
+        operation: `query:${fn}`,
+        command: 'convex-client',
+      }),
     };
   }
 }
@@ -160,7 +180,10 @@ try {
     A,
     'directory:listPublic is public by design and holds no child data',
     false,
-    String(err).slice(0, 80),
+    formatConvexCommandFailure(err, {
+      operation: 'query:directory:listPublic',
+      command: 'convex-client',
+    }),
   );
 }
 
@@ -179,8 +202,15 @@ for (const [fn, label] of [
     await anon.query(fn, {});
     record(A, label, false, 'it answered a browser');
   } catch (err) {
-    const unrouted = /could not find public function/i.test(String(err));
-    record(A, label, unrouted, unrouted ? 'not routed to browsers' : String(err).slice(0, 70));
+    const unrouted = classifyConvexCommandFailure(err) === 'not_deployed';
+    record(
+      A,
+      label,
+      unrouted,
+      unrouted
+        ? 'not routed to browsers'
+        : formatConvexCommandFailure(err, { operation: `query:${fn}`, command: 'convex-client' }),
+    );
   }
 }
 
@@ -256,8 +286,8 @@ for (const [fn, args, label] of staffWrites) {
     run(fn, args, key);
     record(K, label, false, 'the call SUCCEEDED');
   } catch (err) {
-    const text = String(err.stderr ?? err);
-    if (/ArgumentValidationError/.test(text)) {
+    const category = classifyConvexCommandFailure(err);
+    if (category === 'argument_validation') {
       record(
         K,
         label,
@@ -265,8 +295,15 @@ for (const [fn, args, label] of staffWrites) {
         'rejected by the argument validator, so the auth guard was never reached',
       );
     } else {
-      const refused = /not authenticated|staff only/i.test(text);
-      record(K, label, refused, refused ? 'refused at the auth guard' : text.slice(0, 90));
+      const refused = category === 'auth_refused';
+      record(
+        K,
+        label,
+        refused,
+        refused
+          ? 'refused at the auth guard'
+          : formatConvexCommandFailure(err, { operation: `run:${fn}` }),
+      );
     }
   }
 }

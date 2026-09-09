@@ -11,8 +11,9 @@ import { STORIES } from './stories';
 import { PRINTABLES } from './printables';
 import { INFANT_CONTENT } from './infant';
 import { OLDER_AUTHORED_CONTENT } from './older';
+import { isRetiredContentSlug } from '../../../convex/lib/contentRetirements';
 
-export const RAW_SEED: SeedItem[] = [
+const AUTHORED_SEED: SeedItem[] = [
   ...MILESTONES,
   ...GUIDES,
   ...ACTIVITIES,
@@ -23,6 +24,12 @@ export const RAW_SEED: SeedItem[] = [
   ...INFANT_CONTENT,
   ...OLDER_AUTHORED_CONTENT,
 ];
+
+// Every code-reviewed retirement remains absent from new seed/import payloads,
+// even if an old authored row is accidentally restored during a later edit.
+export const RAW_SEED: SeedItem[] = AUTHORED_SEED.filter(
+  (item) => !isRetiredContentSlug(item.slug),
+);
 
 export const CONTENT_SEED: NormalizedItem[] = RAW_SEED.map(normalize);
 

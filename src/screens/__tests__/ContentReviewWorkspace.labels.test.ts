@@ -10,6 +10,7 @@ import {
   formatEditorFieldReference,
   HIDDEN_SYSTEM_FIELDS,
   humanizeField,
+  mayOperateClinicalRegistry,
   reviewFieldElementId,
   updateStructuredField,
   type EditableField,
@@ -59,6 +60,14 @@ describe('reviewer content field labels', () => {
     expect(contentTypeLabel('special_need', 'mm')).toBe('အထူးလိုအပ်ချက်');
     expect(contentTypeLabel('special_need', 'en')).toBe('Special needs');
     expect(contentTypeLabel('unknown_legacy_type', 'mm')).toBe('unknown_legacy_type');
+  });
+
+  it('exposes clinical registry operations only to the owner role', () => {
+    expect(mayOperateClinicalRegistry('owner')).toBe(true);
+    expect(mayOperateClinicalRegistry('clinical_reviewer')).toBe(false);
+    expect(mayOperateClinicalRegistry('evidence_reviewer')).toBe(false);
+    expect(mayOperateClinicalRegistry('review_manager')).toBe(false);
+    expect(mayOperateClinicalRegistry(null)).toBe(false);
   });
 
   it('gives direct bilingual milestone fields clear Myanmar labels', () => {
@@ -157,7 +166,9 @@ describe('reviewer content field labels', () => {
   it('falls back to the raw value instead of crashing on an unknown decision or dimension', () => {
     // Known values still resolve to their localized label.
     expect(decisionLabel('approved', 'en')).toBe('Approve this revision');
-    expect(dimensionLabel('clinical', 'mm')).toBe('ဆေးဘက်ဆိုင်ရာ သုံးသပ်မှု');
+    expect(dimensionLabel('clinical', 'mm')).toBe('အထူးကျွမ်းကျင်သူ ဘေးကင်းရေးသုံးသပ်မှု');
+    expect(dimensionLabel('child_development', 'en')).toBe('Child-development content');
+    expect(dimensionLabel('child_development', 'mm')).toBe('ကလေးဖွံ့ဖြိုးမှုဆိုင်ရာ အကြောင်းအရာ');
     // A legacy/unrecognized string from the database must not throw — it is
     // shown verbatim so the "Review item" tab keeps rendering.
     expect(decisionLabel('legacy_rejected', 'en')).toBe('legacy_rejected');
@@ -175,6 +186,7 @@ describe('reviewer content field labels', () => {
     expect(source).toContain('You have unsaved changes. Change items without saving?');
     expect(source).toContain('mayEditContent(access.role)');
     expect(source).toContain('You may correct wording directly while reviewing.');
+    expect(source).toContain('ဘာသာစကား၊ ကလေးဖွံ့ဖြိုးမှု၊ ကိုးကားချက်၊ ဘေးကင်းရေး');
     expect(source).toContain('disabled={busy}');
     expect(source).toContain('overflow-x-auto');
     expect(source).toContain("L('ခွဲခြားမှု အကြိုစစ်ဆေးရန်', 'Import preview')");

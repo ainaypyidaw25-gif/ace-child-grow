@@ -10,7 +10,6 @@ import { v } from 'convex/values';
 import { getAuthUserId } from '@convex-dev/auth/server';
 import {
   hasStaffRole,
-  requireClinicalPublisher,
   requireContentEditor,
   requireProfessionalPublisher,
   requireReviewEditor,
@@ -21,11 +20,43 @@ import { STARTER_ANIMATION_SLUGS } from './animationPlan';
 import { diffEditableContent } from './lib/contentEditDiff';
 import { seedAuditSummary, seedMayUpdateExisting, seedMediaIsProtected } from './lib/seedPolicy';
 import { findReviewContentMatches } from './lib/reviewSearch';
+import { requiredPublicationReviews, specialistReviewReason } from './lib/contentReviewRequirements';
+import type { ReviewDimension } from './lib/reviewPolicy';
+import {
+  contentIsParentReadable,
+  filterParentReadableContent,
+  parentReadableContentResult,
+  publicationEvidenceForContent,
+  governancePublicationApproval,
+} from './lib/publicationVisibility';
+import { activeAiParentReadableContent } from './lib/aiPublicationVisibility';
+import { isRetiredContentSlug } from './lib/contentRetirements';
+import { isManualReviewContentCasTargetSlug } from './lib/manualReviewContentCasData';
+import { isBirth2mNutritionCasTargetSlug } from './lib/birth2mNutritionCasData';
+import { isClinicalTwoSmallCasTargetSlug } from './lib/clinicalTwoSmallCasGuard';
+import { isBirth2mGrossMotorCorrectionSlug } from './lib/birth2mGrossMotorCorrection';
+import { isNutritionGuidesCasTargetSlug } from './lib/nutritionGuidesCasData';
+import { isOlderSafety2026ContentTargetSlug } from './lib/olderSafety2026CasData';
+import {
+  frozenClinicalPublicationApproval,
+  isPersistedReleaseGovernedContent,
+  isRegisteredReleaseContentTarget,
+} from './lib/clinicalReviewBatchProvenance';
+import {
+  isGdBirth2mEmotionalCasContentSlug,
+  isUnicefSeenCountedConsumerSlug,
+} from './lib/clinicalBlockerCasData';
+import { isEvidenceHumanReviewSuccessorContentSlug } from './lib/evidenceHumanReviewSuccessorCasData';
+import { isGd10_12mPlayV5ContentSlug } from './lib/gd10_12mPlayV5ImportPolicy';
+
+export { isPubliclyReadableStatus } from './lib/publicationVisibility';
 
 const protectedContentDataFields = new Set([
   'editorialStatus',
   'evidenceSummary',
   'format',
+  'requestedFormat',
+  'availability',
   'readingLevel',
   'domains',
   'references',
@@ -73,11 +104,55 @@ function mergeEditableContentData(current: unknown, proposed: unknown): Record<s
   return mergeEditableContentValue(current, proposed) as Record<string, unknown>;
 }
 
-// List content by type, optionally filtered by age/domain/category and a query.
-// Non-staff receive published rows only; staff receive every workflow status.
-export function isPubliclyReadableStatus(status: string): boolean {
-  return status === 'published';
+function parentPublicationFields(item: { aiPublicationReleaseId?: string }) {
+  return item.aiPublicationReleaseId
+    ? { publicationLane: 'ai_audited' as const }
+    : { publicationLane: 'human_reviewed' as const };
 }
+
+// List content by type, optionally filtered by age/domain/category and a query.
+// Non-staff receive published rows with current approved evidence only; staff
+// receive every workflow status.
+
+const PUBLICATION_MANIFEST_LIMIT = 5_000;
+
+/**
+ * Complete parent-readable slug manifest used only to withdraw stale offline
+ * copies. It contains no draft slug, wording, media or review metadata. If the
+ * bounded query ever exceeds its catalogue budget, `complete` is false and the
+ * client refuses to delete anything from an incomplete manifest.
+ */
+export const publicationManifest = query({
+  args: {},
+  returns: v.object({
+    complete: v.boolean(),
+    slugs: v.array(v.string()),
+  }),
+  handler: async (ctx) => {
+    const userId = await getAuthUserId(ctx);
+    if (!userId) return { complete: false, slugs: [] };
+    const [publishedRows, aiRows] = await Promise.all([
+      ctx.db
+        .query('libraryContent')
+        .withIndex('by_status', (q) => q.eq('clinicalStatus', 'published'))
+        .take(PUBLICATION_MANIFEST_LIMIT + 1),
+      activeAiParentReadableContent(ctx),
+    ]);
+    if (publishedRows.length > PUBLICATION_MANIFEST_LIMIT || !aiRows.complete) {
+      return { complete: false, slugs: [] };
+    }
+    const rows = [...new Map(
+      [...publishedRows, ...aiRows.rows].map((row) => [row.slug, row]),
+    ).values()];
+    if (rows.length > PUBLICATION_MANIFEST_LIMIT) return { complete: false, slugs: [] };
+    const visibility = await parentReadableContentResult(ctx, rows);
+    if (!visibility.complete) return { complete: false, slugs: [] };
+    return {
+      complete: true,
+      slugs: visibility.rows.map((row) => row.slug).sort((a, b) => a.localeCompare(b)),
+    };
+  },
+});
 
 export const listByType = query({
   args: {
@@ -86,6 +161,7 @@ export const listByType = query({
     domainKey: v.optional(v.string()),
     category: v.optional(v.string()),
     q: v.optional(v.string()),
+    audience: v.optional(v.literal('parent')),
   },
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
@@ -115,35 +191,42 @@ export const listByType = query({
     if (args.ageGroupKey) rows = rows.filter((r) => r.ageGroupKey === args.ageGroupKey);
     if (args.domainKey) rows = rows.filter((r) => r.domainKey === args.domainKey);
     if (args.category) rows = rows.filter((r) => r.category === args.category);
-    if (!staff) rows = rows.filter((r) => isPubliclyReadableStatus(r.clinicalStatus));
+    const parentAudience = args.audience === 'parent';
+    if (parentAudience || !staff) rows = await filterParentReadableContent(ctx, rows);
     if (args.q) {
       const needle = args.q.toLowerCase();
       rows = rows.filter((r) => r.searchText.includes(needle));
     }
     // Stable ordering: age order not stored here, so order by slug for determinism.
     rows.sort((a, b) => a.slug.localeCompare(b.slug));
-    return { staff, items: rows };
+    return {
+      staff: parentAudience ? false : staff,
+      items: rows.map((item) => ({ ...item, ...parentPublicationFields(item) })),
+    };
   },
 });
 
 // Fetch one item by slug (with its media). Non-staff can read published items only.
 export const getBySlug = query({
-  args: { slug: v.string() },
+  args: { slug: v.string(), audience: v.optional(v.literal('parent')) },
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) return null;
     const staff = await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'language_reviewer', 'evidence_reviewer', 'clinical_reviewer']);
+    const parentAudience = args.audience === 'parent';
     const item = await ctx.db
       .query('libraryContent')
       .withIndex('by_slug', (qq) => qq.eq('slug', args.slug))
       .unique();
     if (!item) return null;
-    if (!staff && !isPubliclyReadableStatus(item.clinicalStatus)) return { restricted: true };
+    if ((parentAudience || !staff) && !(await contentIsParentReadable(ctx, item))) {
+      return { restricted: true };
+    }
     let mediaRows = await ctx.db
       .query('libraryMedia')
       .withIndex('by_content', (qq) => qq.eq('contentSlug', args.slug))
       .take(20);
-    if (!staff) {
+    if (parentAudience || !staff) {
       const entitlements = await resolveEntitlements(ctx, userId);
       const canViewPremium = entitlements.features.includes('premium_media');
       mediaRows = mediaRows
@@ -154,7 +237,11 @@ export const getBySlug = query({
       ...row,
       url: row.storageId ? await ctx.storage.getUrl(row.storageId) : row.url,
     })));
-    return { item, media, staff };
+    return {
+      item: { ...item, ...parentPublicationFields(item) },
+      media,
+      staff: parentAudience ? false : staff,
+    };
   },
 });
 
@@ -196,11 +283,17 @@ export const attachUploadedMedia = mutation({
   returns: v.object({ ok: v.literal(true) }),
   handler: async (ctx, args) => {
     const userId = await requireContentEditor(ctx);
+    if (isRetiredContentSlug(args.contentSlug)) {
+      throw new Error('Retired content is immutable');
+    }
     const content = await ctx.db
       .query('libraryContent')
       .withIndex('by_slug', (q) => q.eq('slug', args.contentSlug))
       .unique();
     if (!content) throw new Error('Content not found');
+    if (await isPersistedReleaseGovernedContent(ctx, args.contentSlug)) {
+      throw new Error('Frozen release media requires an owner-controlled invalidation and refreeze.');
+    }
 
     const metadata = await ctx.db.system.get(args.storageId);
     if (!metadata) throw new Error('Uploaded file not found');
@@ -272,6 +365,12 @@ export const approveMedia = mutation({
     const approval = await requireProfessionalPublisher(ctx);
     const media = await ctx.db.get(args.mediaId);
     if (!media || media.placeholder || (!media.storageId && !media.url)) throw new Error('Media asset not found');
+    if (await isPersistedReleaseGovernedContent(ctx, media.contentSlug)) {
+      throw new Error('Frozen release media requires an owner-controlled invalidation and refreeze.');
+    }
+    if (isRetiredContentSlug(media.contentSlug)) {
+      throw new Error('Retired content is immutable');
+    }
     if (!media.rightsOwner?.trim() || !media.licenseType?.trim()) {
       throw new Error('Rights owner and license type are required');
     }
@@ -299,9 +398,17 @@ export const createStarterAnimationQueue = mutation({
   returns: v.object({ created: v.number(), existing: v.number() }),
   handler: async (ctx) => {
     const userId = await requireContentEditor(ctx);
+    // Preflight the complete bounded starter set before the first insert so a
+    // governed target cannot cause a partially-created queue.
+    for (const contentSlug of STARTER_ANIMATION_SLUGS) {
+      if (await isPersistedReleaseGovernedContent(ctx, contentSlug)) {
+        throw new Error('Frozen release media requires an owner-controlled invalidation and refreeze.');
+      }
+    }
     let created = 0;
     let existing = 0;
     for (const [sortOrder, contentSlug] of STARTER_ANIMATION_SLUGS.entries()) {
+      if (isRetiredContentSlug(contentSlug)) continue;
       const content = await ctx.db
         .query('libraryContent')
         .withIndex('by_slug', (q) => q.eq('slug', contentSlug))
@@ -336,7 +443,7 @@ export const createStarterAnimationQueue = mutation({
 
 // Cross-type search (for the library search box).
 export const search = query({
-  args: { q: v.string(), type: v.optional(v.string()) },
+  args: { q: v.string(), type: v.optional(v.string()), audience: v.optional(v.literal('parent')) },
   handler: async (ctx, args) => {
     const userId = await getAuthUserId(ctx);
     if (!userId) return [];
@@ -346,11 +453,19 @@ export const search = query({
     let rows = args.type
       ? await ctx.db.query('libraryContent').withIndex('by_type', (qq) => qq.eq('type', args.type as string)).collect()
       : await ctx.db.query('libraryContent').collect();
-    if (!staff) rows = rows.filter((r) => isPubliclyReadableStatus(r.clinicalStatus));
+    if (args.audience === 'parent' || !staff) rows = await filterParentReadableContent(ctx, rows);
     return rows
       .filter((r) => r.searchText.includes(needle))
       .slice(0, 50)
-      .map((r) => ({ _id: r._id, slug: r.slug, type: r.type, titleMm: r.titleMm, titleEn: r.titleEn, clinicalStatus: r.clinicalStatus }));
+      .map((r) => ({
+        _id: r._id,
+        slug: r.slug,
+        type: r.type,
+        titleMm: r.titleMm,
+        titleEn: r.titleEn,
+        clinicalStatus: r.clinicalStatus,
+        ...parentPublicationFields(r),
+      }));
   },
 });
 
@@ -500,13 +615,32 @@ export const importSeed = mutation({
     let updated = 0;
     let skippedApproved = 0;
     for (const it of items) {
+      // Fail closed at the server boundary as well as in local seed generation:
+      // a stale or hand-built client must never recreate or mutate an archived
+      // catalogue row. Reuse the existing skip counter to preserve the API.
+      if (await isPersistedReleaseGovernedContent(ctx, it.slug)
+        || isRegisteredReleaseContentTarget(it.type, it.slug)
+        || isRetiredContentSlug(it.slug)
+        || isManualReviewContentCasTargetSlug(it.slug)
+        || isBirth2mNutritionCasTargetSlug(it.slug)
+        || isBirth2mGrossMotorCorrectionSlug(it.slug)
+        || isOlderSafety2026ContentTargetSlug(it.slug)
+        || isGdBirth2mEmotionalCasContentSlug(it.slug)
+        || isUnicefSeenCountedConsumerSlug(it.slug)
+        || isEvidenceHumanReviewSuccessorContentSlug(it.slug)
+        || isGd10_12mPlayV5ContentSlug(it.slug)
+        || isClinicalTwoSmallCasTargetSlug(it.slug)
+        || isNutritionGuidesCasTargetSlug(it.slug)) {
+        skippedApproved += 1;
+        continue;
+      }
       const existing = await ctx.db
         .query('libraryContent')
         .withIndex('by_slug', (qq) => qq.eq('slug', it.slug))
         .unique();
       const { media, ...content } = it;
       if (existing) {
-        if (!seedMayUpdateExisting(existing.clinicalStatus)) {
+        if (!seedMayUpdateExisting(existing.clinicalStatus, Boolean(existing.aiPublicationReleaseId))) {
           skippedApproved += 1;
           continue;
         }
@@ -581,17 +715,25 @@ export const updateDraft = mutation({
   },
   returns: v.object({ ok: v.literal(true), reviewRevision: v.number() }),
   handler: async (ctx, args) => {
-    // All reviewer roles may correct parent-facing wording directly from the
-    // review workspace. This deliberately does not grant publishing, team,
+    // Editorial reviewer roles may correct parent-facing wording directly from
+    // the review workspace. Assigned clinical decisions remain immutable and
+    // use only the frozen-batch path. This does not grant publishing, team,
     // billing, evidence-registry or other owner-only permissions. Every save
     // creates a fresh review revision below, so the editor cannot reuse a
     // previous reviewer sign-off for changed text.
     const { userId, access } = await requireReviewEditor(ctx);
+    if (isRetiredContentSlug(args.slug)) {
+      throw new Error('Retired content is immutable');
+    }
     const item = await ctx.db
       .query('libraryContent')
       .withIndex('by_slug', (q) => q.eq('slug', args.slug))
       .unique();
     if (!item) throw new Error('Content not found');
+    if (await isPersistedReleaseGovernedContent(ctx, item.slug)
+      || isRegisteredReleaseContentTarget(item.type, item.slug)) {
+      throw new Error('Frozen release content requires an owner-controlled correction and refreeze.');
+    }
     const currentReviewRevision = item.reviewRevision ?? 1;
     if (args.expectedReviewRevision !== currentReviewRevision) {
       throw new Error('This item has newer changes. Refresh before saving.');
@@ -638,6 +780,8 @@ export const updateDraft = mutation({
       reviewedAt: undefined,
       nextReviewAt: undefined,
       reviewNote: undefined,
+      aiPublicationReleaseId: undefined,
+      aiPublishedAt: undefined,
       updatedAt: now,
     });
     await ctx.db.insert('contentEditLogs', {
@@ -674,43 +818,92 @@ export const setReview = mutation({
   args: {
     slug: v.string(),
     clinicalStatus: v.string(),
+    expectedReviewRevision: v.number(),
     reviewerQualification: v.optional(v.string()),
     reviewNote: v.optional(v.string()),
     nextReviewAt: v.optional(v.number()),
   },
   returns: v.object({
     ok: v.literal(true),
-    reviewScope: v.union(v.literal('clinical'), v.null()),
+    reviewScope: v.union(v.literal('education'), v.literal('clinical'), v.null()),
   }),
   handler: async (ctx, args) => {
     if (!['draft', 'clinical_review', 'published'].includes(args.clinicalStatus)) {
       throw new Error('Invalid status');
     }
-    const approval = args.clinicalStatus === 'published'
-      ? await requireClinicalPublisher(ctx)
-      : null;
-    const userId = approval?.userId ?? await requireContentEditor(ctx);
     const item = await ctx.db
       .query('libraryContent')
       .withIndex('by_slug', (qq) => qq.eq('slug', args.slug))
       .unique();
     if (!item) throw new Error('Not found');
+    if (isRetiredContentSlug(item.slug)) {
+      throw new Error('Retired content is immutable');
+    }
+    const revision = item.reviewRevision ?? 1;
+    if (args.expectedReviewRevision !== revision) {
+      throw new Error('This item has newer changes. Refresh before changing publication status.');
+    }
+    const frozenApproval = args.clinicalStatus === 'published'
+      ? await frozenClinicalPublicationApproval(ctx, item)
+      : { required: false, allowed: true, missing: [], governedDimensions: [] };
+    const frozenClinicalRequired = frozenApproval.governedDimensions.includes('clinical');
+    const specialistReason = args.clinicalStatus === 'published'
+      ? specialistReviewReason(item)
+        ?? (frozenClinicalRequired ? 'explicit_clinical_requirement' : null)
+      : null;
+    const approval = args.clinicalStatus === 'published'
+      ? await requireProfessionalPublisher(ctx)
+      : null;
+    const userId = approval?.userId ?? await requireContentEditor(ctx);
     if (args.clinicalStatus === 'published') {
-      const revision = item.reviewRevision ?? 1;
-      const decisions = await ctx.db
-        .query('contentReviews')
-        .withIndex('by_content', (q) => q.eq('contentSlug', args.slug))
-        .order('desc')
-        .take(100);
-      const approved = new Set(
-        decisions
-          .filter((row) => row.contentVersion === revision && row.decision === 'approved')
-          .map((row) => row.dimension),
-      );
-      const required = ['english', 'native_myanmar', 'evidence', 'safety', 'clinical'] as const;
-      const missing = required.filter((dimension) => !approved.has(dimension));
+      const required: ReviewDimension[] = [...new Set<ReviewDimension>([
+        ...requiredPublicationReviews(item),
+        ...frozenApproval.governedDimensions as ReviewDimension[],
+      ])];
+      const missing: string[] = [];
+      for (const dimension of required) {
+        const [latestDecision] = await ctx.db
+          .query('contentReviews')
+          .withIndex('by_content_dimension_version', (q) =>
+            q.eq('contentSlug', args.slug).eq('dimension', dimension).eq('contentVersion', revision),
+          )
+          .order('desc')
+          .take(1);
+        if (latestDecision?.decision !== 'approved') missing.push(dimension);
+      }
       if (missing.length > 0) {
         throw new Error(`Current revision is missing review approvals: ${missing.join(', ')}`);
+      }
+
+      if (!frozenApproval.allowed) {
+        throw new Error(`Current revision is missing frozen review provenance: ${frozenApproval.missing.join(', ')}`);
+      }
+
+      const governanceApproval = await governancePublicationApproval(ctx, item);
+      if (!governanceApproval.allowed) {
+        throw new Error(`Current revision is missing owner-confirmed review approvals: ${governanceApproval.missing.join(', ')}`);
+      }
+
+      const evidenceGate = await publicationEvidenceForContent(ctx, item);
+      if (!evidenceGate.allowed) {
+        const details = [
+          evidenceGate.unknownSourceIds.length > 0
+            ? `unknown: ${evidenceGate.unknownSourceIds.join(', ')}`
+            : null,
+          evidenceGate.retiredSourceIds.length > 0
+            ? `retired: ${evidenceGate.retiredSourceIds.join(', ')}`
+            : null,
+          evidenceGate.evidenceRequiredSourceIds.length > 0
+            ? `evidence required: ${evidenceGate.evidenceRequiredSourceIds.join(', ')}`
+            : null,
+          evidenceGate.eligibleApprovedSourceIds.length === 0
+            ? 'no approved, verified and unexpired source'
+            : null,
+          evidenceGate.ineligibleApprovedSourceIds.length > 0
+            ? `ineligible approved: ${evidenceGate.ineligibleApprovedSourceIds.join(', ')}`
+            : null,
+        ].filter(Boolean).join('; ');
+        throw new Error(`Evidence is not ready for publication: ${details}`);
       }
     }
     const now = Date.now();
@@ -719,13 +912,30 @@ export const setReview = mutation({
       reviewerId: userId,
       reviewerQualification: approval?.qualification ?? args.reviewerQualification?.trim(),
       reviewerDisplayName: approval?.reviewerName,
+      // This is the final owner publication receipt, not a clinical decision.
+      // Specialist provenance remains on the exact frozen contentReviews row
+      // and batch handoff receipt; never relabel the education owner as the
+      // clinical reviewer of the content.
       reviewScope: approval?.scope,
       reviewedAt: now,
       nextReviewAt: args.nextReviewAt,
       reviewNote: args.reviewNote,
+      // Any human workflow transition supersedes the separate AI release
+      // binding. The append-only AI release/audits remain as history, but can
+      // no longer label or authorize this changed workflow state.
+      aiPublicationReleaseId: undefined,
+      aiPublishedAt: undefined,
       updatedAt: now,
     });
-    await logAudit(ctx, userId, `library.${args.clinicalStatus}`, 'libraryContent', item._id, item.titleEn);
-    return { ok: true as const, reviewScope: approval ? 'clinical' as const : null };
+    const auditSummary = specialistReason === 'focused_emergency_wording'
+      ? `${item.titleEn} · specialist review limited to emergency wording`
+      : specialistReason === 'bed_sharing_wording'
+        ? `${item.titleEn} · specialist review required for bed-sharing wording`
+        : item.titleEn;
+    await logAudit(ctx, userId, `library.${args.clinicalStatus}`, 'libraryContent', item._id, auditSummary);
+    return {
+      ok: true as const,
+      reviewScope: approval?.scope ?? null,
+    };
   },
 });

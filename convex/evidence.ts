@@ -21,9 +21,74 @@ import {
 import { v, type Infer } from 'convex/values';
 import type { Id } from './_generated/dataModel';
 import { getAuthUserId } from '@convex-dev/auth/server';
-import { hasStaffRole, requireEvidenceEditor, requireProfessionalPublisher } from './lib/auth';
-import { isPubliclyReadableStatus } from './library';
+import {
+  hasStaffRole,
+  requireEvidenceEditor,
+  requireEvidenceSourceApprover,
+} from './lib/auth';
 import { logAudit } from './audit';
+import {
+  evidenceDateValidationProblem,
+  evidenceIsExpired,
+  evidenceIsOutdated,
+  todayIsoUtc,
+} from './lib/evidenceFreshness';
+import {
+  evaluatePublicationEvidence,
+  publicationEvidenceIsEligible,
+} from './lib/evidencePublicationGate';
+import { contentIsParentReadable } from './lib/publicationVisibility';
+import { isRetiredContentSlug } from './lib/contentRetirements';
+import {
+  evidenceImportReviewFields,
+  evidenceImportReviewPolicy,
+} from './lib/evidenceImportPolicy';
+import { unprotectedCitationGapKeys } from './lib/evidenceImportSafety';
+import { isInherentPublicLinkCasTarget } from './lib/inherentPublicLinkCasData';
+import { isSwaimanSeizureLinkCasTarget } from './lib/swaimanSeizureLinkCasData';
+import { isSwaimanCerebralPalsyLinkCasTarget } from './lib/swaimanCerebralPalsyLinkCasData';
+import { isAsqDoctorVisitsLinkCasTarget } from './lib/asqDoctorVisitsLinkCasData';
+import { isBirth2mNutritionCasTarget } from './lib/birth2mNutritionCasData';
+import {
+  isClinicalTwoSmallCasSource,
+  isClinicalTwoSmallCasTarget,
+} from './lib/clinicalTwoSmallCasGuard';
+import { isManualReviewEvidenceLinkCasTarget } from './lib/manualReviewEvidenceLinkCasData';
+import {
+  isBirth2mGrossMotorCorrectionLink,
+  isBirth2mGrossMotorCorrectionSource,
+} from './lib/birth2mGrossMotorCorrection';
+import {
+  isSwaimanSuddenWeaknessLinkCasTarget,
+  isSwaimanSuddenWeaknessSourceCasTarget,
+} from './lib/swaimanSuddenWeaknessCasData';
+import {
+  isNutritionGuidesCasSource,
+  isNutritionGuidesCasTarget,
+} from './lib/nutritionGuidesCasData';
+import {
+  isOlderSafety2026LinkTarget,
+  isOlderSafety2026SourceTarget,
+} from './lib/olderSafety2026CasData';
+import {
+  isRegisteredReleaseContentTarget,
+  isRegisteredReleaseSourceId,
+  isPersistedReleaseGovernedContent,
+  isPersistedReleaseGovernedSource,
+} from './lib/clinicalReviewBatchProvenance';
+import {
+  isClinicalBlockerCasSource,
+  isGdBirth2mEmotionalCasLink,
+  isUnicefSeenCountedConsumer,
+} from './lib/clinicalBlockerCasData';
+import {
+  isEvidenceHumanReviewSuccessorSourceId,
+  isEvidenceHumanReviewSuccessorTarget,
+} from './lib/evidenceHumanReviewSuccessorCasData';
+import {
+  isGd10_12mPlayV5Link,
+  isGd10_12mPlayV5Source,
+} from './lib/gd10_12mPlayV5ImportPolicy';
 
 const REVIEW_STATUSES = [
   'evidence_required',
@@ -33,37 +98,13 @@ const REVIEW_STATUSES = [
   'retired',
 ] as const;
 
-// Staleness rules, mirrored from src/evidence/types.ts so the live integrity
-// probe classifies a stored row exactly as the local reports classify the same
-// record. They are duplicated rather than imported because a Convex function
-// bundle should not reach into the browser source tree; a test compares the two
-// tables field by field, so a change on either side fails CI rather than
-// producing two different answers to "is this reference expired".
-const REVIEW_CADENCE_MONTHS: Record<string, number> = {
-  guideline: 24,
-  parent_education: 24,
-  expert_consensus: 36,
-  systematic_review: 48,
-  rct: 60,
-  cohort: 60,
-  textbook: 60,
-};
-const OUTDATED_AFTER_YEARS: Record<string, number> = {
-  guideline: 8,
-  parent_education: 5,
-  expert_consensus: 10,
-  systematic_review: 10,
-  rct: 20,
-  cohort: 20,
-  textbook: 12,
-};
-
-function addMonthsIso(isoDate: string, months: number): string {
-  const d = new Date(`${isoDate}T00:00:00Z`);
-  if (Number.isNaN(d.getTime())) return isoDate;
-  d.setUTCMonth(d.getUTCMonth() + months);
-  return d.toISOString().slice(0, 10);
-}
+const reviewStatusValidator = v.union(
+  v.literal('evidence_required'),
+  v.literal('awaiting_review'),
+  v.literal('in_review'),
+  v.literal('approved'),
+  v.literal('retired'),
+);
 
 const sourceValidator = v.object({
   id: v.string(),
@@ -80,7 +121,7 @@ const sourceValidator = v.object({
   isbn: v.union(v.string(), v.null()),
   pmid: v.union(v.string(), v.null()),
   evidenceLevel: v.string(),
-  reviewStatus: v.string(),
+  reviewStatus: reviewStatusValidator,
   reviewer: v.union(v.string(), v.null()),
   reviewDate: v.union(v.string(), v.null()),
   nextReviewDate: v.union(v.string(), v.null()),
@@ -96,6 +137,28 @@ const linkValidator = v.object({
   kind: v.string(),
   slug: v.string(),
   sourceIds: v.array(v.string()),
+});
+
+const sourceImportResultValidator = v.object({
+  created: v.number(),
+  updated: v.number(),
+  unchanged: v.number(),
+  reviewReset: v.number(),
+  reviewResetIds: v.array(v.string()),
+  invalidatedContentKeys: v.array(v.string()),
+  skipped: v.number(),
+  failed: v.number(),
+  failedIds: v.array(v.string()),
+});
+
+const linkImportResultValidator = v.object({
+  created: v.number(),
+  updated: v.number(),
+  unchanged: v.number(),
+  invalidatedContentKeys: v.array(v.string()),
+  skipped: v.number(),
+  failed: v.number(),
+  failedKeys: v.array(v.string()),
 });
 
 const publicCitationValidator = v.object({
@@ -154,6 +217,144 @@ function sameSource(existing: Record<string, unknown>, next: Record<string, unkn
     if ((a ?? null) === null && (b ?? null) === null) return true;
     return a === b;
   });
+}
+
+type EvidenceDependency = { kind: string; slug: string };
+
+export function evidenceDependencyInvalidationPatch(
+  currentReviewRevision: number | undefined,
+  now: number,
+) {
+  return {
+    reviewRevision: (currentReviewRevision ?? 1) + 1,
+    clinicalStatus: 'clinical_review' as const,
+    reviewerId: undefined,
+    reviewerQualification: undefined,
+    reviewerDisplayName: undefined,
+    reviewScope: undefined,
+    reviewedAt: undefined,
+    nextReviewAt: undefined,
+    reviewNote: undefined,
+    updatedAt: now,
+  };
+}
+
+/**
+ * A changed evidence dependency invalidates every prior content decision for
+ * that exact revision. Revision bumps retain the append-only decisions as
+ * history while making them unusable for publication, and immediately remove
+ * a published row from parent visibility until named humans review it again.
+ */
+async function invalidateDependentContentReviews(
+  ctx: MutationCtx,
+  dependencies: readonly EvidenceDependency[],
+  actorId: Id<'users'> | null,
+  reason: string,
+  now: number,
+): Promise<string[]> {
+  const wanted = new Set(dependencies.map(({ kind, slug }) => `${kind}:${slug}`));
+  if (wanted.size === 0) return [];
+
+  const libraryRows = await ctx.db.query('libraryContent').take(5_001);
+  if (libraryRows.length > 5_000) {
+    throw new Error('Evidence dependency invalidation exceeded the 5,000-content safety bound');
+  }
+
+  const invalidated: string[] = [];
+  for (const row of libraryRows) {
+    const key = `${row.type}:${row.slug}`;
+    if (!wanted.has(key) || row.clinicalStatus === 'archived') continue;
+    const fromRevision = row.reviewRevision ?? 1;
+    const patch = evidenceDependencyInvalidationPatch(row.reviewRevision, now);
+    const toRevision = patch.reviewRevision;
+    await ctx.db.patch(row._id, patch);
+    await logAudit(
+      ctx,
+      actorId,
+      'library.evidence_dependency_invalidated',
+      'libraryContent',
+      row._id,
+      `${key} · ${reason} · review revision ${fromRevision} → ${toRevision}`,
+      {
+        before: JSON.stringify({ clinicalStatus: row.clinicalStatus, reviewRevision: fromRevision }),
+        after: JSON.stringify({ clinicalStatus: 'clinical_review', reviewRevision: toRevision }),
+      },
+    );
+    invalidated.push(key);
+  }
+  return invalidated.sort((a, b) => a.localeCompare(b));
+}
+
+/**
+ * Published rows are parent-visible, but `forContent` deliberately exposes
+ * approved sources only. A link to awaiting or retired evidence therefore does
+ * not make a parent-visible citation. Keep this calculation separate from the
+ * database query so the exact release rule can be regression-tested.
+ */
+export function publishedSlugsWithoutApprovedEvidence(
+  publishedSlugs: readonly string[],
+  links: readonly { slug: string; sourceIds: readonly string[] }[],
+  sources: readonly {
+    sourceId: string;
+    reviewStatus: string;
+    evidenceLevel: string;
+    year: number | null;
+    reviewDate?: string | null;
+    nextReviewDate: string | null;
+    verifiedOn: string | null;
+  }[],
+  todayIso: string,
+): string[] {
+  const sourceById = new Map(sources.map((source) => [source.sourceId, source]));
+  return [...publishedSlugs]
+    .filter((slug) => {
+      const sourceIds = [...new Set(
+        links.filter((link) => link.slug === slug).flatMap((link) => [...link.sourceIds]),
+      )];
+      return !evaluatePublicationEvidence(
+        sourceIds,
+        sourceIds.flatMap((sourceId) => {
+          const source = sourceById.get(sourceId);
+          return source ? [source] : [];
+        }),
+        todayIso,
+      ).allowed;
+    })
+    .sort((a, b) => a.localeCompare(b));
+}
+
+/**
+ * Evidence links for archived library rows are deliberately retained as audit
+ * history, but they are no longer part of the active source registry that an
+ * import or release check should compare with. Anything that is not bound to
+ * an archived library row remains active, including safety-rule and hope-topic
+ * links that do not have a libraryContent row.
+ */
+export function evidenceLinkReadinessCounts(
+  links: readonly { kind: string; slug: string }[],
+  libraryRows: readonly { type: string; slug: string; clinicalStatus: string }[],
+): {
+  activeLinks: number;
+  activeLinkedSlugs: number;
+  preservedArchivedLinks: string[];
+} {
+  const archivedKeys = new Set(
+    libraryRows
+      .filter((row) => row.clinicalStatus === 'archived')
+      .map((row) => `${row.type}:${row.slug}`),
+  );
+  const activeKeys: string[] = [];
+  const preservedArchivedLinks: string[] = [];
+  for (const link of links) {
+    const key = `${link.kind}:${link.slug}`;
+    if (archivedKeys.has(key)) preservedArchivedLinks.push(key);
+    else activeKeys.push(key);
+  }
+  return {
+    activeLinks: activeKeys.length,
+    activeLinkedSlugs: new Set(activeKeys).size,
+    preservedArchivedLinks: preservedArchivedLinks.sort((a, b) => a.localeCompare(b)),
+  };
 }
 
 const EMPTY_LIST = {
@@ -254,14 +455,19 @@ export const forContent = query({
     // no libraryContent row (safety_rule, hope_topic) are inherently public
     // safety references and remain visible. Mirrors library.getBySlug.
     const staff = await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'language_reviewer', 'evidence_reviewer', 'clinical_reviewer']);
-    if (!staff) {
-      const content = await ctx.db
-        .query('libraryContent')
-        .withIndex('by_slug', (qq) => qq.eq('slug', args.slug))
-        .unique();
-      if (content && !isPubliclyReadableStatus(content.clinicalStatus)) {
-        return { allowed: true as const, sources: [] };
-      }
+    const content = await ctx.db
+      .query('libraryContent')
+      .withIndex('by_slug', (qq) => qq.eq('slug', args.slug))
+      .unique();
+    const contentReadable = content ? await contentIsParentReadable(ctx, content) : false;
+    const aiAuditedContent = Boolean(
+      content
+      && content.clinicalStatus === 'clinical_review'
+      && content.aiPublicationReleaseId
+      && contentReadable,
+    );
+    if (!staff && content && !contentReadable) {
+      return { allowed: true as const, sources: [] };
     }
     const links = await ctx.db
       .query('evidenceLinks')
@@ -275,8 +481,19 @@ export const forContent = query({
         .query('evidenceSources')
         .withIndex('by_source_id', (qq) => qq.eq('sourceId', id))
         .unique();
-      // Parents only ever see a citation that a human approved.
-      if (src && src.reviewStatus === 'approved') {
+      // Conventional publications expose only human-approved citations. The
+      // separate AI-audited educational lane may expose its exact linked source
+      // snapshots after the shared fail-closed AI gate validates every one.
+      if (
+        src
+        && (
+          aiAuditedContent
+          || (
+            src.reviewStatus === 'approved'
+            && (staff || publicationEvidenceIsEligible(src, todayIsoUtc()))
+          )
+        )
+      ) {
         const {
           sourceId, org, title, authors, year, edition, country, language,
           url, doi, isbn, pmid, evidenceLevel,
@@ -332,8 +549,11 @@ export const stats = query({
 /**
  * Import the verified reference registry. Idempotent by sourceId.
  *
- * A re-import refreshes publisher metadata but NEVER overwrites a human review
- * decision — reviewStatus, reviewer and reviewDate on an existing row are kept.
+ * An identical re-import preserves a human decision. A materially changed
+ * publisher record invalidates that decision and returns the source to
+ * awaiting_review; a structurally incomplete record is forced to
+ * evidence_required. This prevents an approval from silently moving onto a
+ * different evidence payload.
  * An insert can never arrive as 'approved': approval is a human act performed
  * through setReview, not something an import can assert.
  *
@@ -355,6 +575,8 @@ async function applySources(
   let created = 0;
   let updated = 0;
   let unchanged = 0;
+  let reviewReset = 0;
+  const reviewResetIds: string[] = [];
   let skipped = 0;
   const failed: string[] = [];
 
@@ -364,6 +586,25 @@ async function applySources(
 
   for (const src of sources) {
     const { id, ...rest } = src;
+    // Compile-time exact-CAS exclusions must short-circuit before any database
+    // read. Besides keeping stale imports harmless, this lets bounded release
+    // handlers prove that protected sources cannot even reach source lookup.
+    if (isRegisteredReleaseSourceId(id)
+      || isSwaimanSuddenWeaknessSourceCasTarget(id)
+      || isOlderSafety2026SourceTarget(id)
+      || isBirth2mGrossMotorCorrectionSource(id)
+      || isClinicalBlockerCasSource(id)
+      || isEvidenceHumanReviewSuccessorSourceId(id)
+      || isClinicalTwoSmallCasSource(id)
+      || isNutritionGuidesCasSource(id)
+      || isGd10_12mPlayV5Source(id)) {
+      skipped += 1;
+      continue;
+    }
+    if (await isPersistedReleaseGovernedSource(ctx, id)) {
+      skipped += 1;
+      continue;
+    }
     if (seen.has(id)) {
       skipped += 1;
       continue;
@@ -371,6 +612,8 @@ async function applySources(
     seen.add(id);
 
     try {
+      const incomingDateProblem = evidenceDateValidationProblem(rest, todayIsoUtc());
+      if (incomingDateProblem) throw new Error(`Invalid evidence dates: ${incomingDateProblem}`);
       const existing = await ctx.db
         .query('evidenceSources')
         .withIndex('by_source_id', (qq) => qq.eq('sourceId', id))
@@ -378,20 +621,52 @@ async function applySources(
       const searchText = searchTextFor(rest);
 
       if (existing) {
-        const next = {
-          ...rest,
+        // Retired means immutable audit history. A new publisher snapshot may
+        // be imported under a new source id, but this exact retired row is
+        // never rewritten by a registry refresh.
+        if (existing.reviewStatus === 'retired') {
+          unchanged += 1;
+          continue;
+        }
+        const {
+          reviewStatus: _incomingReviewStatus,
+          reviewer: _incomingReviewer,
+          reviewDate: _incomingReviewDate,
+          nextReviewDate: incomingNextReviewDate,
+          ...incomingMetadata
+        } = rest;
+        // These imported review fields are intentionally discarded: only the
+        // policy below may decide whether a stored human review survives.
+        void _incomingReviewStatus;
+        void _incomingReviewer;
+        void _incomingReviewDate;
+        const metadata = {
+          ...incomingMetadata,
           sourceId: id,
-          // Human review decisions survive re-import.
-          reviewStatus: existing.reviewStatus,
-          reviewer: existing.reviewer,
-          reviewerQualification: existing.reviewerQualification,
-          reviewDate: existing.reviewDate,
-          reviewNote: existing.reviewNote,
-          nextReviewDate: existing.nextReviewDate ?? rest.nextReviewDate,
-          reviewerId: existing.reviewerId,
-          reviewScope: existing.reviewScope,
           searchText,
         };
+        const metadataChanged = !sameSource(existing, metadata);
+        const policy = evidenceImportReviewPolicy(
+          existing.reviewStatus,
+          rest.reviewStatus,
+          metadataChanged,
+          incomingNextReviewDate !== null
+            && incomingNextReviewDate !== existing.nextReviewDate,
+        );
+        const reviewFields = evidenceImportReviewFields(
+          existing,
+          rest.reviewStatus,
+          metadataChanged,
+          incomingNextReviewDate,
+        );
+        const next = {
+          ...metadata,
+          ...reviewFields,
+        };
+        const preservedDateProblem = evidenceDateValidationProblem(next, todayIsoUtc());
+        if (preservedDateProblem) {
+          throw new Error(`Invalid preserved evidence dates: ${preservedDateProblem}`);
+        }
         // 'updated' should mean something changed. Counting an identical
         // re-import as an update makes an idempotent run look like a rewrite
         // of all 90 records, which is exactly the thing an operator is
@@ -401,6 +676,10 @@ async function applySources(
         } else {
           await ctx.db.patch(existing._id, { ...next, updatedAt: now });
           updated += 1;
+          if (policy.resetReview) {
+            reviewReset += 1;
+            reviewResetIds.push(id);
+          }
         }
       } else {
         const reviewStatus =
@@ -422,7 +701,47 @@ async function applySources(
     }
   }
 
-  const summary = `created ${created}, updated ${updated}, unchanged ${unchanged}, skipped ${skipped}, failed ${failed.length}`;
+  const resetIdSet = new Set(reviewResetIds);
+  let invalidatedContentKeys: string[] = [];
+  if (resetIdSet.size > 0) {
+    const linkSnapshot = await ctx.db.query('evidenceLinks').take(5_001);
+    if (linkSnapshot.length > 5_000) {
+      throw new Error('Evidence source invalidation exceeded the 5,000-link safety bound');
+    }
+    const dependencies = linkSnapshot
+      .filter((link) => link.sourceIds.some((sourceId) => resetIdSet.has(sourceId)))
+      .map((link) => ({ kind: link.kind, slug: link.slug }));
+    const sourceSnapshot = await ctx.db.query('evidenceSources').take(2_001);
+    if (sourceSnapshot.length > 2_000) {
+      throw new Error('Evidence source safety preflight exceeded the 2,000-source bound');
+    }
+    const librarySnapshot = await ctx.db.query('libraryContent').take(5_001);
+    if (librarySnapshot.length > 5_000) {
+      throw new Error('Evidence source safety preflight exceeded the 5,000-content bound');
+    }
+    const citationGaps = unprotectedCitationGapKeys(
+      linkSnapshot.filter((link) =>
+        link.sourceIds.some((sourceId) => resetIdSet.has(sourceId))),
+      sourceSnapshot,
+      new Set(librarySnapshot.map((row) => row.slug)),
+      todayIsoUtc(),
+    );
+    if (citationGaps.length > 0) {
+      throw new Error(
+        'Evidence import would remove the last eligible citation from inherently public content: '
+          + citationGaps.slice(0, 20).join(', '),
+      );
+    }
+    invalidatedContentKeys = await invalidateDependentContentReviews(
+      ctx,
+      dependencies,
+      userId,
+      `source review reset: ${reviewResetIds.join(', ')}`,
+      now,
+    );
+  }
+
+  const summary = `created ${created}, updated ${updated}, unchanged ${unchanged}, review-reset ${reviewReset}, content-invalidated ${invalidatedContentKeys.length}, skipped ${skipped}, failed ${failed.length}`;
   await logAudit(
     ctx,
     userId,
@@ -433,13 +752,16 @@ async function applySources(
     {
       result: failed.length > 0 ? 'failed' : 'ok',
       before: `${sources.length} submitted`,
-      after: summary,
+      after: `${summary}; reset ids: ${reviewResetIds.join(', ') || 'none'}; invalidated content: ${invalidatedContentKeys.join(', ') || 'none'}`,
     },
   );
   return {
     created,
     updated,
     unchanged,
+    reviewReset,
+    reviewResetIds,
+    invalidatedContentKeys,
     skipped,
     failed: failed.length,
     failedIds: failed,
@@ -448,6 +770,7 @@ async function applySources(
 
 export const importSources = mutation({
   args: { sources: v.array(sourceValidator) },
+  returns: sourceImportResultValidator,
   handler: async (ctx, { sources }) =>
     applySources(ctx, sources, await requireEvidenceEditor(ctx), 'admin screen'),
 });
@@ -461,6 +784,7 @@ export const importSources = mutation({
  */
 export const importSourcesFromCli = internalMutation({
   args: { sources: v.array(sourceValidator) },
+  returns: sourceImportResultValidator,
   handler: async (ctx, { sources }) => applySources(ctx, sources, null, 'deploy key (CLI)'),
 });
 
@@ -477,13 +801,47 @@ async function applyLinks(
 ) {
   const userId = actorId;
   const now = Date.now();
-  const known = new Set((await ctx.db.query('evidenceSources').collect()).map((r) => r.sourceId));
+  let skipped = 0;
+  // Historical production links remain preserved by exact releases. Stale or
+  // generic clients may neither recreate retired edges nor mutate inherently
+  // public rows reserved for bounded atomic CAS releases. Filter
+  // before validation and before any link write.
+  const activeLinks: Infer<typeof linkValidator>[] = [];
+  for (const link of links) {
+    if (!await isPersistedReleaseGovernedContent(ctx, link.slug)
+      && !isRegisteredReleaseContentTarget(link.kind, link.slug)
+      && !isRetiredContentSlug(link.slug)
+      && !isInherentPublicLinkCasTarget(link.kind, link.slug)
+      && !isSwaimanSeizureLinkCasTarget(link.kind, link.slug)
+      && !isSwaimanCerebralPalsyLinkCasTarget(link.kind, link.slug)
+      && !isAsqDoctorVisitsLinkCasTarget(link.kind, link.slug)
+      && !isBirth2mNutritionCasTarget(link.kind, link.slug)
+      && !isClinicalTwoSmallCasTarget(link.kind, link.slug)
+      && !isBirth2mGrossMotorCorrectionLink(link.kind, link.slug)
+      && !isManualReviewEvidenceLinkCasTarget(link.kind, link.slug)
+      && !isSwaimanSuddenWeaknessLinkCasTarget(link.kind, link.slug)
+      && !isOlderSafety2026LinkTarget(link.kind, link.slug)
+      && !isGdBirth2mEmotionalCasLink(link.kind, link.slug)
+      && !isUnicefSeenCountedConsumer(link.kind, link.slug)
+      && !isEvidenceHumanReviewSuccessorTarget(link.kind, link.slug)
+      && !isNutritionGuidesCasTarget(link.kind, link.slug)
+      && !isGd10_12mPlayV5Link(link.kind, link.slug)) {
+      activeLinks.push(link);
+    } else {
+      skipped += 1;
+    }
+  }
+  const sourceSnapshot = await ctx.db.query('evidenceSources').take(2_001);
+  if (sourceSnapshot.length > 2_000) {
+    throw new Error('Evidence link import exceeded the 2,000-source safety bound');
+  }
+  const known = new Set(sourceSnapshot.map((r) => r.sourceId));
 
-  const unknown = [...new Set(links.flatMap((l) => l.sourceIds).filter((id) => !known.has(id)))];
+  const unknown = [...new Set(activeLinks.flatMap((l) => l.sourceIds).filter((id) => !known.has(id)))];
   if (unknown.length > 0) {
     throw new Error(`Unknown reference ids: ${unknown.slice(0, 10).join(', ')}`);
   }
-  const empty = links.filter((l) => l.sourceIds.length === 0);
+  const empty = activeLinks.filter((l) => l.sourceIds.length === 0);
   if (empty.length > 0) {
     throw new Error(
       `Orphan content rejected: ${empty
@@ -496,11 +854,11 @@ async function applyLinks(
   let created = 0;
   let updated = 0;
   let unchanged = 0;
-  let skipped = 0;
   const failed: string[] = [];
+  const changedLinks: EvidenceDependency[] = [];
   const seen = new Set<string>();
 
-  for (const link of links) {
+  for (const link of activeLinks) {
     const key = `${link.kind}:${link.slug}`;
     if (seen.has(key)) {
       skipped += 1;
@@ -525,6 +883,7 @@ async function applyLinks(
             updatedAt: now,
           });
           updated += 1;
+          changedLinks.push({ kind: link.kind, slug: link.slug });
         }
       } else {
         await ctx.db.insert('evidenceLinks', {
@@ -533,13 +892,21 @@ async function applyLinks(
           updatedAt: now,
         });
         created += 1;
+        changedLinks.push({ kind: link.kind, slug: link.slug });
       }
     } catch {
       failed.push(key);
     }
   }
 
-  const summary = `created ${created}, updated ${updated}, unchanged ${unchanged}, skipped ${skipped}, failed ${failed.length}`;
+  const invalidatedContentKeys = await invalidateDependentContentReviews(
+    ctx,
+    changedLinks,
+    userId,
+    'evidence link set changed',
+    now,
+  );
+  const summary = `created ${created}, updated ${updated}, unchanged ${unchanged}, content-invalidated ${invalidatedContentKeys.length}, skipped ${skipped}, failed ${failed.length}`;
   await logAudit(
     ctx,
     userId,
@@ -550,13 +917,14 @@ async function applyLinks(
     {
       result: failed.length > 0 ? 'failed' : 'ok',
       before: `${links.length} submitted`,
-      after: summary,
+      after: `${summary}; invalidated content: ${invalidatedContentKeys.join(', ') || 'none'}`,
     },
   );
   return {
     created,
     updated,
     unchanged,
+    invalidatedContentKeys,
     skipped,
     failed: failed.length,
     failedKeys: failed,
@@ -565,6 +933,7 @@ async function applyLinks(
 
 export const importLinks = mutation({
   args: { links: v.array(linkValidator) },
+  returns: linkImportResultValidator,
   handler: async (ctx, { links }) =>
     applyLinks(ctx, links, await requireEvidenceEditor(ctx), 'admin screen'),
 });
@@ -572,12 +941,13 @@ export const importLinks = mutation({
 /** CLI-only counterpart to importLinks. See importSourcesFromCli. */
 export const importLinksFromCli = internalMutation({
   args: { links: v.array(linkValidator) },
+  returns: linkImportResultValidator,
   handler: async (ctx, { links }) => applyLinks(ctx, links, null, 'deploy key (CLI)'),
 });
 
 /**
- * Record a clinical review decision on one reference. This is the ONLY path to
- * 'approved', it requires a named and qualified reviewer, and it is audited —
+ * Record a professional evidence-review decision on one reference. This is the
+ * ONLY path to 'approved', it requires a named and qualified reviewer, and it is audited —
  * whether it succeeds or is refused. A record that was imported as
  * 'evidence_required' (metadata that could not be verified against the
  * publisher page) cannot be approved until the metadata is fixed and
@@ -604,8 +974,17 @@ export function reviewRefusal(
     reviewer: string;
     reviewerQualification: string;
     reviewDate: string;
+    nextReviewDate?: string;
+    note?: string;
   },
-  row: { reviewStatus: string } | null,
+  row: {
+    reviewStatus: string;
+    evidenceLevel?: string;
+    year?: number | null;
+    verifiedOn?: string | null;
+    reviewDate?: string | null;
+    nextReviewDate?: string | null;
+  } | null,
 ): { code: string; message: string } | null {
   if (!(REVIEW_STATUSES as readonly string[]).includes(args.status)) {
     return { code: 'unknown_status', message: `Unknown review status: ${args.status}` };
@@ -621,6 +1000,26 @@ export function reviewRefusal(
   if (!args.reviewDate.trim()) {
     return { code: 'review_date_required', message: 'A review date is required' };
   }
+  if (args.note && args.note.trim().length > 2_000) {
+    return { code: 'note_too_long', message: 'Reviewer note must be 2,000 characters or fewer' };
+  }
+  const dateProblem = evidenceDateValidationProblem({
+    verifiedOn: null,
+    reviewDate: args.reviewDate,
+    nextReviewDate: args.nextReviewDate ?? null,
+  }, todayIsoUtc());
+  if (dateProblem === 'review_date_invalid') {
+    return { code: dateProblem, message: 'Review date must be a real date in YYYY-MM-DD format' };
+  }
+  if (dateProblem === 'review_date_future') {
+    return { code: dateProblem, message: 'Review date cannot be in the future' };
+  }
+  if (dateProblem === 'next_review_date_invalid') {
+    return { code: dateProblem, message: 'Next review date must be a real date in YYYY-MM-DD format' };
+  }
+  if (dateProblem === 'next_review_date_before_anchor') {
+    return { code: dateProblem, message: 'Next review date cannot be before the review date' };
+  }
   if (!row) {
     return { code: 'not_found', message: 'Reference not found' };
   }
@@ -630,6 +1029,51 @@ export function reviewRefusal(
       message:
         'This reference is marked evidence_required: its metadata could not be verified against the publisher page. Fix and re-import before approving.',
     };
+  }
+  if (args.status === 'approved') {
+    if (!row.verifiedOn || !row.evidenceLevel || row.year === undefined) {
+      return {
+        code: 'source_metadata_incomplete',
+        message: 'Reference verification metadata is incomplete; re-import a verified source before approving',
+      };
+    }
+    const storedDateProblem = evidenceDateValidationProblem({
+      verifiedOn: row.verifiedOn,
+      reviewDate: row.reviewDate ?? null,
+      nextReviewDate: row.nextReviewDate ?? null,
+    }, todayIsoUtc());
+    if (storedDateProblem) {
+      return {
+        code: 'source_date_invalid',
+        message: `Reference date metadata is invalid: ${storedDateProblem}`,
+      };
+    }
+    if (row.nextReviewDate && row.nextReviewDate < todayIsoUtc()) {
+      return {
+        code: 'source_review_overdue',
+        message: 'The publisher or prior review date is overdue; refresh the source metadata before approving',
+      };
+    }
+    if (
+      evidenceIsOutdated({ evidenceLevel: row.evidenceLevel, year: row.year }, todayIsoUtc())
+      && !args.note?.trim()
+    ) {
+      return {
+        code: 'outdated_note_required',
+        message:
+          'This source is old enough to check for a replacement. Record why it remains appropriate, or use a newer source.',
+      };
+    }
+    if (
+      row.nextReviewDate
+      && args.nextReviewDate
+      && args.nextReviewDate > row.nextReviewDate
+    ) {
+      return {
+        code: 'next_review_exceeds_source_due',
+        message: 'A reviewer cannot extend the publisher or existing source review deadline',
+      };
+    }
   }
   return null;
 }
@@ -646,7 +1090,7 @@ export const setReview = mutation({
   },
   handler: async (ctx, args) => {
     const approval = args.status === 'approved'
-      ? await requireProfessionalPublisher(ctx)
+      ? await requireEvidenceSourceApprover(ctx)
       : null;
     const userId = approval?.userId ?? await requireEvidenceEditor(ctx);
     const reviewArgs = approval
@@ -675,6 +1119,14 @@ export const setReview = mutation({
       .withIndex('by_source_id', (qq) => qq.eq('sourceId', args.sourceId))
       .unique();
 
+    if (await isPersistedReleaseGovernedSource(ctx, args.sourceId)) {
+      return refuse(
+        'frozen_release_governed',
+        'This source belongs to a frozen release. Invalidate and refreeze the exact batch before changing it.',
+        row ? `${row.reviewStatus} / ${row.reviewer ?? 'no reviewer'}` : 'unchanged',
+      );
+    }
+
     // One policy, evaluated once. See reviewRefusal.
     const refusal = reviewRefusal(reviewArgs, row);
     if (refusal) {
@@ -690,19 +1142,22 @@ export const setReview = mutation({
     // the kind of thing that stops being true after a future edit.
     if (!row) return refuse('not_found', 'Reference not found', 'unchanged');
 
+    const reviewNote = args.note?.trim() || undefined;
+    const outdatedAdvisory = args.status === 'approved'
+      && evidenceIsOutdated({ evidenceLevel: row.evidenceLevel ?? '', year: row.year ?? null }, todayIsoUtc());
     const before = `${row.reviewStatus} / ${row.reviewer ?? 'no reviewer'} / ${row.reviewDate ?? 'no date'}`;
     await ctx.db.patch(row._id, {
       reviewStatus: args.status,
       reviewer: reviewArgs.reviewer.trim(),
       reviewerQualification: reviewArgs.reviewerQualification.trim(),
       reviewDate: args.reviewDate,
-      nextReviewDate: args.nextReviewDate ?? row.nextReviewDate,
-      reviewNote: args.note,
+      nextReviewDate: row.nextReviewDate ?? args.nextReviewDate ?? null,
+      reviewNote,
       reviewerId: userId,
       reviewScope: approval?.scope,
       updatedAt: Date.now(),
     });
-    const after = `${args.status} / ${reviewArgs.reviewer.trim()} (${reviewArgs.reviewerQualification.trim()}) / ${args.reviewDate}`;
+    const after = `${args.status} / ${reviewArgs.reviewer.trim()} (${reviewArgs.reviewerQualification.trim()}) / ${args.reviewDate}${reviewNote ? ` / note: ${reviewNote}` : ''}`;
 
     await logAudit(
       ctx,
@@ -710,7 +1165,7 @@ export const setReview = mutation({
       'evidence.setReview',
       'evidenceSources',
       args.sourceId,
-      `${row.reviewStatus} → ${args.status} by ${reviewArgs.reviewer.trim()} (${reviewArgs.reviewerQualification.trim()})`,
+      `${row.reviewStatus} → ${args.status} by ${reviewArgs.reviewer.trim()} (${reviewArgs.reviewerQualification.trim()})${outdatedAdvisory ? ' · outdated-source advisory acknowledged in reviewer note' : ''}`,
       { result: 'ok', before, after },
     );
     return { ok: true as const, reviewScope: approval?.scope ?? null };
@@ -747,6 +1202,8 @@ export const reviewGate = internalQuery({
     reviewer: v.string(),
     reviewerQualification: v.string(),
     reviewDate: v.string(),
+    nextReviewDate: v.optional(v.string()),
+    note: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const row = await ctx.db
@@ -877,13 +1334,21 @@ export const integrity = internalQuery({
       )
       .map((s) => s.sourceId);
 
-    const publishedContent = (await ctx.db.query('libraryContent').collect()).filter(
+    const libraryContent = await ctx.db.query('libraryContent').collect();
+    const publishedContent = libraryContent.filter(
       (c) => c.clinicalStatus === 'published',
     );
     const linkedSlugs = new Set(links.map((l) => l.slug));
+    const linkReadiness = evidenceLinkReadinessCounts(links, libraryContent);
     const publishedWithoutEvidence = publishedContent
       .filter((c) => !linkedSlugs.has(c.slug))
       .map((c) => c.slug);
+    const publishedWithoutApprovedEvidence = publishedSlugsWithoutApprovedEvidence(
+      publishedContent.map((content) => content.slug),
+      links,
+      sources,
+      today,
+    );
 
     // A reference nothing cites is either a link that was never made or a
     // record that should be retired; either way an operator should see it.
@@ -919,18 +1384,9 @@ export const integrity = internalQuery({
     // because it is old.
     const expired: string[] = [];
     const outdated: string[] = [];
-    const thisYear = Number(today.slice(0, 4));
     for (const s of sources) {
-      const due =
-        s.nextReviewDate ??
-        ((s.reviewDate ?? s.verifiedOn)
-          ? addMonthsIso(
-              (s.reviewDate ?? s.verifiedOn) as string,
-              REVIEW_CADENCE_MONTHS[s.evidenceLevel] ?? 24,
-            )
-          : null);
-      if (!due || due < today) expired.push(s.sourceId);
-      if (s.year === null || thisYear - s.year > (OUTDATED_AFTER_YEARS[s.evidenceLevel] ?? 8)) {
+      if (evidenceIsExpired(s, today)) expired.push(s.sourceId);
+      if (evidenceIsOutdated(s, today)) {
         outdated.push(s.sourceId);
       }
     }
@@ -939,7 +1395,10 @@ export const integrity = internalQuery({
       todayIso: today,
       sources: sources.length,
       links: links.length,
-      linkedSlugs: linkedSlugs.size,
+      linkedSlugs: new Set(links.map((l) => `${l.kind}:${l.slug}`)).size,
+      activeLinks: linkReadiness.activeLinks,
+      activeLinkedSlugs: linkReadiness.activeLinkedSlugs,
+      preservedArchivedLinks: linkReadiness.preservedArchivedLinks,
       byStatus,
       approved: byStatus.approved ?? 0,
       awaitingReview: byStatus.awaiting_review ?? 0,
@@ -958,6 +1417,7 @@ export const integrity = internalQuery({
       approvedWithoutReviewer,
       publishedContent: publishedContent.length,
       publishedWithoutEvidence,
+      publishedWithoutApprovedEvidence,
     };
   },
 });

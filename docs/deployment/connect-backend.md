@@ -35,8 +35,9 @@ parent's child rows (the top P0).
 ## Step 3 — deploy
 - **Preview:** deploy the built app to Vercel (connector available). Set the env
   vars in the Vercel project. Preview deploys are automatic per branch.
-- **Production:** requires explicit human approval (and clinical-review sign-off
-  before any content is published). See deployment-guide.md and rollback-plan.md.
+- **Production:** requires explicit human approval. Content publication follows
+  the current risk-scoped review policy; specialist-risk wording additionally
+  needs clinical sign-off. See deployment-guide.md and rollback-plan.md.
 
 ## Security reminders
 Only `VITE_`-prefixed vars reach the client. The service-role key and DB URL are

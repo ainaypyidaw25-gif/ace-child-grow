@@ -1,8 +1,11 @@
 import { convexAuth } from '@convex-dev/auth/server';
 import { Password } from '@convex-dev/auth/providers/Password';
 import Google from '@auth/core/providers/google';
+import Apple from '@auth/core/providers/apple';
 import type { EmailConfig } from '@auth/core/providers';
+import { normalizeAppleProfile } from '../src/domain/auth/appleProfile';
 import { validateAccountPassword } from '../src/domain/auth/passwordPolicy';
+import { generateRecoveryToken } from '../src/domain/auth/recoveryToken';
 
 const passwordResetEmail: EmailConfig = {
   id: 'ace-password-reset',
@@ -11,10 +14,7 @@ const passwordResetEmail: EmailConfig = {
   from: process.env.AUTH_EMAIL_FROM ?? 'ACE Child Grow <onboarding@resend.dev>',
   apiKey: process.env.AUTH_RESEND_KEY,
   maxAge: 15 * 60,
-  generateVerificationToken: async () => {
-    const value = crypto.getRandomValues(new Uint32Array(1))[0] % 1_000_000;
-    return String(value).padStart(6, '0');
-  },
+  generateVerificationToken: async () => generateRecoveryToken(),
   async sendVerificationRequest({ identifier, token, provider }) {
     if (!provider.apiKey) throw new Error('Password recovery email is not configured');
     const response = await fetch('https://api.resend.com/emails', {
@@ -39,7 +39,23 @@ const passwordResetEmail: EmailConfig = {
 // tables (see authTables in schema.ts). Every data function derives the owner
 // from the authenticated identity — never from client input.
 export const { auth, signIn, signOut, store, isAuthenticated } = convexAuth({
-  providers: [Google, Password({
+  providers: [Apple({
+    // Apple web OAuth uses a Services ID and a signed client-secret JWT.
+    // Both values live only in the Convex deployment environment.
+    clientId: process.env.AUTH_APPLE_ID,
+    clientSecret: process.env.AUTH_APPLE_SECRET,
+    // Apple's Auth.js provider returns `image: null`, while Convex Auth's
+    // optional users.image field accepts a string or omission, not null.
+    profile(profile) {
+      return normalizeAppleProfile(profile);
+    },
+  }), Google({
+    // These credentials live in the Convex deployment environment. Binding
+    // the Auth.js-standard AUTH_GOOGLE_* names explicitly prevents an
+    // undefined client ID while keeping secrets out of the frontend bundle.
+    clientId: process.env.AUTH_GOOGLE_ID,
+    clientSecret: process.env.AUTH_GOOGLE_SECRET,
+  }), Password({
     reset: passwordResetEmail,
     validatePasswordRequirements(password) {
       const valid = /^\d{6}$/.test(password) || password.length >= 8;

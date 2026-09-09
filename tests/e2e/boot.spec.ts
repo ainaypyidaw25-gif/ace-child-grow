@@ -10,7 +10,9 @@ test('app boots and shows the sign-in gate', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'မိဘဝင်ရန်' })).toBeVisible();
   await page.getByRole('button', { name: 'အဖွဲ့ဝင်/ပညာရှင်ဝင်ရန်' }).click();
   await expect(page.getByRole('heading', { name: 'အဖွဲ့ဝင် သို့မဟုတ် ပညာရှင်အကောင့်ဝင်ရန်' })).toBeVisible();
-  // Password fields present (the Convex Auth gate).
+  await expect(page.getByRole('button', { name: 'Google အကောင့်ဖြင့် ဆက်လုပ်မည်' })).toBeVisible();
+  // PIN/password stays available as an explicit fallback to Google-first sign-in.
+  await page.getByRole('button', { name: 'အီးမေးလ်နှင့် PIN/စကားဝှက်ဖြင့် ဝင်မည်' }).click();
   await expect(page.locator('input[type="email"]')).toBeVisible();
   await expect(page.locator('input[type="password"]')).toBeVisible();
 });

@@ -3,6 +3,7 @@ import { CONTENT_SEED } from '../seed';
 import { OLDER_AUTHORED_CONTENT } from '../seed/older';
 import { AUTHORABLE_EDITORIAL_STATUSES } from '../seed/infant/editorial';
 import { sourcesForContent } from '../../evidence/links';
+import { isRetiredMilestoneSlug } from '../../../convex/lib/contentRetirements';
 
 const BANDS = ['13_18m', '19_24m', '2y', '2_5y', '3y', '3_5y', '4y', '4_5y', '5y'];
 
@@ -10,7 +11,9 @@ describe('knowledge base — 13 months through 5 years', () => {
   it('gives every band a useful parent-facing baseline', () => {
     for (const band of BANDS) {
       const items = CONTENT_SEED.filter((item) => item.ageGroupKey === band);
-      expect(items.filter((item) => item.type === 'milestone').length, `${band} milestones`).toBeGreaterThanOrEqual(8);
+      const minimumMilestones = band === '3_5y' ? 7 : band === '5y' ? 6 : 8;
+      expect(items.filter((item) => item.type === 'milestone').length, `${band} milestones`)
+        .toBeGreaterThanOrEqual(minimumMilestones);
       expect(items.filter((item) => item.type === 'guide').length, `${band} guides`).toBeGreaterThanOrEqual(4);
       expect(items.filter((item) => item.type === 'activity').length, `${band} activities`).toBeGreaterThanOrEqual(4);
       expect(items.some((item) => item.type === 'printable' && item.category === `checklist_${band}`), `${band} checklist`).toBe(true);
@@ -22,6 +25,10 @@ describe('knowledge base — 13 months through 5 years', () => {
       const status = (item.data as Record<string, unknown>).editorialStatus;
       expect(AUTHORABLE_EDITORIAL_STATUSES, item.slug).toContain(status as never);
       expect(item.clinicalStatus, item.slug).toBe('clinical_review');
+      if (item.type === 'milestone' && isRetiredMilestoneSlug(item.slug)) {
+        expect(CONTENT_SEED.some((candidate) => candidate.slug === item.slug), item.slug).toBe(false);
+        continue;
+      }
       expect(sourcesForContent(item.slug).length, `${item.slug} evidence`).toBeGreaterThan(0);
     }
   });

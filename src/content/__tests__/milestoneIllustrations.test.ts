@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { MILESTONE_ILLUSTRATIONS, milestoneIllustration } from '../milestoneIllustrations';
 
@@ -137,6 +137,21 @@ describe('birth–2 month milestone illustrations', () => {
   it('does not provide a fallback for another age group or an unknown slug', () => {
     expect(milestoneIllustration('ms_4_5y_social_1')).toBeUndefined();
     expect(milestoneIllustration('unknown')).toBeUndefined();
+  });
+
+  it('resolves every exact slug to a reviewed asset file', () => {
+    const review = readFileSync(
+      resolve(process.cwd(), 'docs/illustration-review/birth_2m-milestones.md'),
+      'utf8',
+    );
+    expect(review).toContain('SAFETY REVIEWED');
+
+    BIRTH_2M_SLUGS.forEach((slug) => {
+      const assetPath = milestoneIllustration(slug);
+      expect(assetPath).toBeDefined();
+      expect(existsSync(resolve(process.cwd(), 'public', assetPath!.slice(1))), slug).toBe(true);
+      expect(review, `${slug} missing from image-QA record`).toContain(`\`${slug}\``);
+    });
   });
 });
 

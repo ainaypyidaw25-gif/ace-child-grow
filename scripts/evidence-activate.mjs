@@ -13,9 +13,10 @@
  * because the counts were never read back.
  *
  * SAFETY
- *   - Additive only. It pushes schema and functions and imports references.
- *     It never resets data, never deletes a row, never approves and never
- *     publishes. Approval is a human act performed through the admin screen.
+ *   - It never deletes a row, approves a source or publishes content. When
+ *     source metadata or link dependencies change, it deliberately clears the
+ *     affected approvals and returns dependent content to clinical_review.
+ *     Approval is a human act performed through the admin screen.
  *   - Idempotent. Re-running is expected and safe; the import distinguishes
  *     created / updated / unchanged / skipped / failed so a second run visibly
  *     changes nothing.
@@ -31,6 +32,10 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { build } from 'esbuild';
+import {
+  formatConvexCommandFailure,
+  formatConvexOutputFailure,
+} from './lib/safe-convex-command-error.mjs';
 
 const DRY_RUN = process.argv.includes('--dry-run');
 const VERIFY_ONLY = process.argv.includes('--verify');
@@ -159,8 +164,12 @@ function convex(args, key, { input } = {}) {
 function runFunction(name, argsObject, key) {
   const raw = convex(['run', name, JSON.stringify(argsObject)], key);
   const at = raw.indexOf('{');
-  if (at < 0) return { raw, value: null };
-  return { raw, value: JSON.parse(raw.slice(at)) };
+  if (at < 0) throw new Error(formatConvexOutputFailure({ operation: `run:${name}` }));
+  try {
+    return { value: JSON.parse(raw.slice(at)) };
+  } catch {
+    throw new Error(formatConvexOutputFailure({ operation: `run:${name}` }));
+  }
 }
 
 /**
@@ -169,17 +178,32 @@ function runFunction(name, argsObject, key) {
  * rather than as an obvious "too big", and a batch that fails names the batch.
  */
 function importBatched(name, key, items, wrap, batchSize) {
-  const totals = { created: 0, updated: 0, unchanged: 0, skipped: 0, failed: 0, failedIds: [] };
+  const totals = {
+    created: 0,
+    updated: 0,
+    unchanged: 0,
+    reviewReset: 0,
+    reviewResetIds: [],
+    invalidatedContentKeys: [],
+    skipped: 0,
+    failed: 0,
+    failedIds: [],
+  };
   for (let i = 0; i < items.length; i += batchSize) {
     const slice = items.slice(i, i + batchSize);
     const res = runFunction(name, wrap(slice), key).value;
     totals.created += res.created;
     totals.updated += res.updated;
     totals.unchanged += res.unchanged;
+    totals.reviewReset += res.reviewReset ?? 0;
+    totals.reviewResetIds.push(...(res.reviewResetIds ?? []));
+    totals.invalidatedContentKeys.push(...(res.invalidatedContentKeys ?? []));
     totals.skipped += res.skipped;
     totals.failed += res.failed;
     totals.failedIds.push(...(res.failedIds ?? res.failedKeys ?? []));
   }
+  totals.reviewResetIds = [...new Set(totals.reviewResetIds)].sort();
+  totals.invalidatedContentKeys = [...new Set(totals.invalidatedContentKeys)].sort();
   return totals;
 }
 
@@ -225,7 +249,7 @@ if (!VERIFY_ONLY) {
     convex(['deploy', '--yes'], found.key);
     say('     done.');
   } catch (err) {
-    fail(`convex deploy failed:\n${String(err.stderr ?? err).slice(0, 1200)}`);
+    fail(formatConvexCommandFailure(err, { operation: 'deploy' }));
   }
 } else {
   say('1/3  skipped (--verify)');
@@ -246,11 +270,24 @@ if (!VERIFY_ONLY) {
     );
     say(
       `     references: created ${sourceResult.created}, updated ${sourceResult.updated}, ` +
-        `unchanged ${sourceResult.unchanged}, skipped ${sourceResult.skipped}, failed ${sourceResult.failed}`,
+        `unchanged ${sourceResult.unchanged}, review-reset ${sourceResult.reviewReset}, ` +
+        `content-invalidated ${sourceResult.invalidatedContentKeys.length}, ` +
+        `skipped ${sourceResult.skipped}, failed ${sourceResult.failed}`,
     );
-    if (sourceResult.failed > 0) say(`     failed ids: ${sourceResult.failedIds.join(', ')}`);
+    if (sourceResult.reviewReset > 0) {
+      say(`     reset source ids: ${sourceResult.reviewResetIds.join(', ')}`);
+    }
+    if (sourceResult.invalidatedContentKeys.length > 0) {
+      say(`     invalidated content: ${sourceResult.invalidatedContentKeys.join(', ')}`);
+    }
+    if (sourceResult.failed > 0) {
+      fail(
+        `reference import partially failed; link import was NOT started. Failed ids: ` +
+          sourceResult.failedIds.join(', '),
+      );
+    }
   } catch (err) {
-    fail(`the reference import failed:\n${String(err.stderr ?? err).slice(0, 1200)}`);
+    fail(formatConvexCommandFailure(err, { operation: 'import:evidence-sources' }));
   }
 
   try {
@@ -263,11 +300,17 @@ if (!VERIFY_ONLY) {
     );
     say(
       `     links:      created ${linkResult.created}, updated ${linkResult.updated}, ` +
-        `unchanged ${linkResult.unchanged}, skipped ${linkResult.skipped}, failed ${linkResult.failed}`,
+        `unchanged ${linkResult.unchanged}, content-invalidated ${linkResult.invalidatedContentKeys.length}, ` +
+        `skipped ${linkResult.skipped}, failed ${linkResult.failed}`,
     );
-    if (linkResult.failed > 0) say(`     failed keys: ${linkResult.failedKeys.join(', ')}`);
+    if (linkResult.invalidatedContentKeys.length > 0) {
+      say(`     invalidated content: ${linkResult.invalidatedContentKeys.join(', ')}`);
+    }
+    if (linkResult.failed > 0) {
+      fail(`link import partially failed. Failed keys: ${linkResult.failedIds.join(', ')}`);
+    }
   } catch (err) {
-    fail(`the link import failed:\n${String(err.stderr ?? err).slice(0, 1200)}`);
+    fail(formatConvexCommandFailure(err, { operation: 'import:evidence-links' }));
   }
 } else {
   say('2/3  skipped (--verify)');
@@ -279,7 +322,7 @@ let live;
 try {
   live = runFunction('evidence:integrity', {}, found.key).value;
 } catch (err) {
-  fail(`evidence:integrity failed:\n${String(err.stderr ?? err).slice(0, 1200)}`);
+  fail(formatConvexCommandFailure(err, { operation: 'run:evidence:integrity' }));
 }
 
 const row = (label, value) => say(`  ${String(label).padEnd(34)} ${value}`);
@@ -288,6 +331,9 @@ say('LIVE COUNTS (queried from the deployment, not assumed)');
 row('references', live.sources);
 row('links', live.links);
 row('linked slugs', live.linkedSlugs);
+row('active links', live.activeLinks);
+row('active linked slugs', live.activeLinkedSlugs);
+row('archived audit links retained', live.preservedArchivedLinks.length);
 row('orphan links', live.orphanLinks.length);
 row('dangling links', live.danglingLinks.length);
 row('duplicate identifiers', live.duplicateIdentifier.length);
@@ -301,6 +347,7 @@ row('approved', live.approved);
 row('approved without a qualified reviewer', live.approvedWithoutReviewer.length);
 row('published content', live.publishedContent);
 row('published without evidence', live.publishedWithoutEvidence.length);
+row('published without approved citation', live.publishedWithoutApprovedEvidence.length);
 say('');
 say('Nothing was approved or published by this script. Approval is a human act');
 say('performed by a named, qualified reviewer through the admin screen.');

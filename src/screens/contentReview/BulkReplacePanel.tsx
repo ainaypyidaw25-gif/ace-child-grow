@@ -88,10 +88,10 @@ export function BulkReplacePanel({ canEdit }: { canEdit: boolean }) {
   return (
     <section className="space-y-4 rounded-card border border-line bg-white p-4 shadow-card">
       <div>
-        <h2 className="font-bold text-ink">{L('တစ်ခါထဲ ရှာပြီးအစားထိုးရန်', 'Find and replace across all content')}</h2>
+        <h2 className="font-bold text-ink">{L('တစ်ပြိုင်နက် ရှာဖွေအစားထိုးရန်', 'Find and replace across all content')}</h2>
         <p className="mt-1 text-sm leading-6 text-ink-soft">
           {L(
-            'စာသားတစ်ခုကို ရှာပြီး အားလုံးထဲမှာ တစ်ခါထဲ အစားထိုးနိုင်ပါသည်။ တိုက်ရိုက် စာလုံးအတိုင်း ရှာပါသည် — ဒီဇိုင်း/စည်းမျဉ်းအမှတ်အသား (regex) မဟုတ်ပါ။ ရေးသားပြီးမှသာ ပြောင်းလဲမည့်နေရာအားလုံးကို ကြိုကြည့်နိုင်ပြီး၊ ရွေးထားသည့်ဟာများကိုသာ အတည်ပြုမှသာ သိမ်းဆည်းပါမည်။',
+            'စာသားတစ်ခုကို ရှာပြီး အားလုံးထဲတွင် တစ်ပြိုင်နက် အစားထိုးနိုင်ပါသည်။ တိုက်ရိုက် စာလုံးအတိုင်း ရှာဖွေပါသည် — regular expression (regex) မဟုတ်ပါ။ မသိမ်းမီ ပြောင်းလဲမည့် နေရာအားလုံးကို ကြိုတင်ကြည့်ရှုနိုင်ပြီး၊ ရွေးချယ်အတည်ပြုထားသော အကြောင်းအရာများကိုသာ သိမ်းဆည်းပါမည်။',
             'Find a piece of text and replace every occurrence across the content library at once. This is a literal text match, not a regex. You review every field it would change before anything is saved, and only confirmed items are written.',
           )}
         </p>

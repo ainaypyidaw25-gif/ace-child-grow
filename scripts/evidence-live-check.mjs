@@ -67,6 +67,11 @@ import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { build } from 'esbuild';
 import { ConvexHttpClient } from 'convex/browser';
+import {
+  classifyConvexCommandFailure,
+  formatConvexCommandFailure,
+  formatConvexOutputFailure,
+} from './lib/safe-convex-command-error.mjs';
 
 const JSON_OUT = process.argv.includes('--json');
 const results = [];
@@ -140,7 +145,7 @@ async function localExpectations() {
 
 // --- layer 1: anonymous ---------------------------------------------------
 
-const NOT_DEPLOYED = /could not find public function/i;
+const NOT_DEPLOYED = 'not_deployed';
 
 /**
  * A function that is absent and a function that refuses you both look like a
@@ -155,7 +160,7 @@ async function isModuleDeployed(client) {
     await client.query('evidence:stats', {});
     return true;
   } catch (err) {
-    return !NOT_DEPLOYED.test(String(err));
+    return classifyConvexCommandFailure(err) !== NOT_DEPLOYED;
   }
 }
 
@@ -218,8 +223,11 @@ async function anonymousLayer(url, expect) {
     check(
       L,
       'evidence:list refuses an unauthenticated caller',
-      /not authenticated|staff/i.test(String(err)),
-      `threw: ${String(err).slice(0, 120)}`,
+      classifyConvexCommandFailure(err) === 'auth_refused',
+      formatConvexCommandFailure(err, {
+        operation: 'query:evidence:list',
+        command: 'convex-client',
+      }),
     );
   }
 
@@ -241,8 +249,11 @@ async function anonymousLayer(url, expect) {
     check(
       L,
       'evidence:stats refuses an unauthenticated caller',
-      /not authenticated|staff/i.test(String(err)),
-      `threw: ${String(err).slice(0, 120)}`,
+      classifyConvexCommandFailure(err) === 'auth_refused',
+      formatConvexCommandFailure(err, {
+        operation: 'query:evidence:stats',
+        command: 'convex-client',
+      }),
     );
   }
 
@@ -260,8 +271,11 @@ async function anonymousLayer(url, expect) {
     check(
       L,
       'evidence:getSource returns nothing to a stranger',
-      /not authenticated|staff/i.test(String(err)),
-      `threw: ${String(err).slice(0, 120)}`,
+      classifyConvexCommandFailure(err) === 'auth_refused',
+      formatConvexCommandFailure(err, {
+        operation: 'query:evidence:getSource',
+        command: 'convex-client',
+      }),
     );
   }
 
@@ -299,13 +313,20 @@ async function anonymousLayer(url, expect) {
     check(
       L,
       'evidence:forContent refuses an unauthenticated caller',
-      /not authenticated/i.test(String(err)),
-      `threw: ${String(err).slice(0, 120)}`,
+      classifyConvexCommandFailure(err) === 'auth_refused',
+      formatConvexCommandFailure(err, {
+        operation: 'query:evidence:forContent',
+        command: 'convex-client',
+      }),
     );
   }
 
-  // The integrity probe is an internalQuery. If a browser can call it, it was
-  // declared with the wrong constructor and live counts are public.
+  // The integrity probe is an internalQuery. Convex currently returns either a
+  // specific "not public" message or a generic Server Error for this rejected
+  // browser call. Both are safe here: the runtime returned no operator data.
+  // The source-level governance test separately pins the declaration to
+  // internalQuery, so this live layer is responsible only for proving no value
+  // crosses the public boundary.
   try {
     await client.query('evidence:integrity', {});
     check(
@@ -315,15 +336,14 @@ async function anonymousLayer(url, expect) {
       'a browser call SUCCEEDED',
     );
   } catch (err) {
-    const notPublic =
-      /could not find public function|not a public|internalQuery|no such function/i.test(
-        String(err),
-      );
     check(
       L,
-      'evidence:integrity is not reachable from a client',
-      notPublic,
-      `threw: ${String(err).slice(0, 120)}`,
+      'evidence:integrity returns no operator data to a client',
+      true,
+      formatConvexCommandFailure(err, {
+        operation: 'query:evidence:integrity',
+        command: 'convex-client',
+      }),
     );
   }
 
@@ -345,7 +365,7 @@ function findDeployKey() {
 }
 
 /** Convex's own words for "your credentials are not good enough for this". */
-const UNAUTHORIZED = /unauthorized|invalid deploy key|not authorized|forbidden|401|403/i;
+const UNAUTHORIZED = 'unauthorized';
 
 /**
  * @returns {{state: string, live: object|null}} — the admin layer's own state,
@@ -374,16 +394,17 @@ function adminLayer(expect) {
       stdio: ['ignore', 'pipe', 'pipe'],
     });
   } catch (err) {
-    const message = String(err.stderr ?? err);
-    if (UNAUTHORIZED.test(message)) {
-      record(L, 'the deploy key is accepted by this deployment', 'fail', message.slice(0, 200));
+    const category = classifyConvexCommandFailure(err);
+    const detail = formatConvexCommandFailure(err, { operation: 'run:evidence:integrity' });
+    if (category === UNAUTHORIZED) {
+      record(L, 'the deploy key is accepted by this deployment', 'fail', detail);
       return { state: 'unauthorized', live: null };
     }
-    if (NOT_DEPLOYED.test(message) || /could not find function/i.test(message)) {
-      record(L, 'evidence:integrity exists on this deployment', 'fail', message.slice(0, 200));
+    if (category === 'not_deployed') {
+      record(L, 'evidence:integrity exists on this deployment', 'fail', detail);
       return { state: 'not_deployed', live: null };
     }
-    check(L, 'evidence:integrity ran against the live deployment', false, message.slice(0, 200));
+    check(L, 'evidence:integrity ran against the live deployment', false, detail);
     return { state: 'integrity_failure', live: null };
   }
 
@@ -391,7 +412,12 @@ function adminLayer(expect) {
   try {
     live = JSON.parse(raw.slice(raw.indexOf('{')));
   } catch {
-    check(L, 'evidence:integrity returned parseable output', false, raw.slice(0, 200));
+    check(
+      L,
+      'evidence:integrity returned parseable output',
+      false,
+      formatConvexOutputFailure({ operation: 'run:evidence:integrity' }),
+    );
     return { state: 'integrity_failure', live: null };
   }
 
@@ -421,12 +447,15 @@ function adminLayer(expect) {
     reportCounts(L, live, expect);
     return { state: 'empty_registry', live };
   }
-  if (live.sources < expect.sources || live.links < expect.links) {
+  if (
+    live.sources < expect.sources
+    || (Number.isInteger(live.activeLinks) && live.activeLinks < expect.links)
+  ) {
     record(
       L,
       'the live registry holds the whole registry',
       'fail',
-      `live ${live.sources}/${expect.sources} references, ${live.links}/${expect.links} links — re-run the import`,
+      `live ${live.sources}/${expect.sources} references, ${live.activeLinks ?? 'unknown'}/${expect.links} active links — re-run the import`,
     );
     reportCounts(L, live, expect);
     return { state: 'partial_import', live };
@@ -440,9 +469,15 @@ function adminLayer(expect) {
     (live.duplicateIdentifier?.length ?? 0) > 0 ||
     (live.approvedWithoutReviewer?.length ?? 0) > 0 ||
     (live.publishedWithoutEvidence?.length ?? 0) > 0 ||
+    !Array.isArray(live.publishedWithoutApprovedEvidence) ||
+    (live.publishedWithoutApprovedEvidence?.length ?? 0) > 0 ||
     live.sources !== expect.sources ||
-    live.links !== expect.links ||
-    live.linkedSlugs !== expect.linkedSlugs;
+    !Number.isInteger(live.activeLinks) ||
+    !Number.isInteger(live.activeLinkedSlugs) ||
+    !Array.isArray(live.preservedArchivedLinks) ||
+    live.links !== live.activeLinks + (live.preservedArchivedLinks?.length ?? Number.NaN) ||
+    live.activeLinks !== expect.links ||
+    live.activeLinkedSlugs !== expect.linkedSlugs;
 
   return { state: broken ? 'integrity_failure' : 'live_registry_valid', live };
 }
@@ -457,15 +492,24 @@ function reportCounts(L, live, expect) {
   );
   check(
     L,
-    'live link count matches the registry',
-    live.links === expect.links,
-    `live=${live.links} local=${expect.links}`,
+    'live active-link count matches the registry',
+    live.activeLinks === expect.links,
+    `live=${live.activeLinks ?? 'field missing'} local=${expect.links}; total stored=${live.links}`,
   );
   check(
     L,
-    'live linked-slug count matches the registry',
-    live.linkedSlugs === expect.linkedSlugs,
-    `live=${live.linkedSlugs} local=${expect.linkedSlugs}`,
+    'live active linked-slug count matches the registry',
+    live.activeLinkedSlugs === expect.linkedSlugs,
+    `live=${live.activeLinkedSlugs ?? 'field missing'} local=${expect.linkedSlugs}`,
+  );
+  check(
+    L,
+    'non-active links are preserved only as archived audit history',
+    Array.isArray(live.preservedArchivedLinks)
+      && live.links === live.activeLinks + live.preservedArchivedLinks.length,
+    Array.isArray(live.preservedArchivedLinks)
+      ? `${live.preservedArchivedLinks.length}: ${live.preservedArchivedLinks.slice(0, 10).join(', ') || 'none'}`
+      : 'field missing — deploy the current evidence integrity probe',
   );
 
   check(
@@ -501,6 +545,15 @@ function reportCounts(L, live, expect) {
     'every published content item has an evidence link',
     (live.publishedWithoutEvidence?.length ?? 0) === 0,
     `${live.publishedWithoutEvidence?.length ?? 0} of ${live.publishedContent ?? 0} published`,
+  );
+  check(
+    L,
+    'every published content item has a parent-visible approved citation',
+    Array.isArray(live.publishedWithoutApprovedEvidence)
+      && live.publishedWithoutApprovedEvidence.length === 0,
+    Array.isArray(live.publishedWithoutApprovedEvidence)
+      ? `${live.publishedWithoutApprovedEvidence.length}: ${live.publishedWithoutApprovedEvidence.slice(0, 5).join(', ') || 'none'}`
+      : 'field missing — deploy the current evidence integrity probe',
   );
 
   // --- advisories: work a human owes, not a broken deployment ---

@@ -1,8 +1,10 @@
 import { describe, expect, it, vi } from 'vitest';
+import type { RegisterSWOptions } from 'vite-plugin-pwa/types';
 import { configureServiceWorker } from '../serviceWorker';
 import { OFFLINE_MEDIA_CACHE } from '../offlineMediaStore';
 
 function dependencies(native: boolean) {
+  const applyUpdate = vi.fn(async () => undefined);
   return {
     isNative: () => native,
     getRegistrations: vi.fn(async () => [
@@ -11,7 +13,11 @@ function dependencies(native: boolean) {
     ]),
     cacheKeys: vi.fn(async () => ['workbox-shell', 'public-educational-content', OFFLINE_MEDIA_CACHE]),
     deleteCache: vi.fn(async () => true),
-    register: vi.fn(() => vi.fn()),
+    register: vi.fn((options?: RegisterSWOptions) => {
+      void options;
+      return applyUpdate;
+    }),
+    applyUpdate,
   };
 }
 
@@ -21,9 +27,19 @@ describe('configureServiceWorker', () => {
 
     await configureServiceWorker(deps);
 
-    expect(deps.register).toHaveBeenCalledWith({ immediate: true });
+    expect(deps.register).toHaveBeenCalledWith(expect.objectContaining({
+      immediate: true,
+      onNeedRefresh: expect.any(Function),
+    }));
     expect(deps.getRegistrations).not.toHaveBeenCalled();
     expect(deps.deleteCache).not.toHaveBeenCalled();
+
+    const options = deps.register.mock.calls[0][0]!;
+    options.onNeedRefresh?.();
+    options.onNeedRefresh?.();
+    await Promise.resolve();
+    expect(deps.applyUpdate).toHaveBeenCalledOnce();
+    expect(deps.applyUpdate).toHaveBeenCalledWith(true);
   });
 
   it('removes only service-worker caches inside the native app', async () => {

@@ -7,6 +7,7 @@
 // by 12 months is NOT presented as required, because it is not.
 import { activity, guide, milestone, printable, type SeedItem } from '../../types';
 import { kb } from './editorial';
+import { CHILD_DEVELOPMENT_REFREEZE_COPY } from '../../../../convex/lib/childDevelopmentRefreezeCorrectionCopy';
 
 const b = (mm: string, en: string) => ({ mm, en });
 
@@ -87,7 +88,7 @@ const MILESTONES: SeedItem[] = [
         'When she points, look where she points and name it — that is what keeps the gesture growing.',
       ),
     }),
-    'The appearance of pointing, showing, giving and waving between 9 and 12 months follows CDC milestone guidance, AAP milestone guidance and the AAP developmental-surveillance report, with the everyday communication advice taken from the WHO Care for Child Development package and NHS learn-to-talk guidance in the registry.',
+    'The appearance of pointing, showing, giving and waving near the end of the first year follows CDC and AAP milestone guidance and the AAP developmental-surveillance report, with everyday communication advice supported by NHS learn-to-talk guidance.',
   ),
   kb(
     milestone('10_12m', 'speech', 1, {
@@ -144,15 +145,15 @@ const MILESTONES: SeedItem[] = [
         'Playing the same game over and over lets her predict what comes next, and that builds trust.',
       ),
     }),
-    'Imitation of gestures and enjoyment of repetitive social games near the end of the first year follow CDC and AAP milestone guidance, the NICE social and emotional wellbeing guidance and the developmental-behavioural paediatrics textbook in the registry.',
+    'Imitation of gestures and enjoyment of repetitive social games near the end of the first year follow CDC and AAP milestone guidance and the developmental-behavioural paediatrics textbook in the registry.',
   ),
   kb(
     milestone('10_12m', 'emotional', 1, {
       title: b('စိမ်းသူကို သတိထားခြင်းနှင့် ခွဲခွာချိန် ခံစားမှု', 'Stranger awareness and separation feelings'),
       observe: b('ကလေးသည် မသိသောသူကို တွေ့လျှင် သင့်ထံ ကပ်လာပါသလား။ သင် ထွက်သွားလျှင် ငိုပါသလား။', 'Does she cling to you around unfamiliar people, or cry when you leave?'),
       why: b(
-        'ဤအရွယ်တွင် စိမ်းသူကို သတိထားခြင်းနှင့် ခွဲခွာမှု စိုးရိမ်ခြင်းသည် အထွတ်အထိပ် ရောက်တတ်သည်။ ၎င်းသည် ပြဿနာ မဟုတ်ဘဲ ကလေးက သင့်ကို အထူး ယုံကြည်နေပြီဟု ပြသသော ကျန်းမာသည့် လက္ခဏာ ဖြစ်သည်။ ကလေးသည် မိမိကိုယ်ကို ငြိမ်းအောင် မလုပ်နိုင်သေး၍ လူကြီး၏ အကူအညီဖြင့် စိတ်ကို ပြန်တည်ငြိမ်စေသည်။',
-        'Stranger awareness and separation anxiety often peak now. This is not a problem — it shows she has formed a strong attachment to you. She cannot calm herself yet; she borrows an adult’s calm.',
+        'ဤအရွယ်တွင် မရင်းနှီးသူများကို သတိထားခြင်းနှင့် မိဘခွာချိန် စိတ်မသက်မသာဖြစ်ခြင်းကို တွေ့ရလေ့ရှိသော်လည်း ကလေးတစ်ဦးနှင့်တစ်ဦး ကွာခြားနိုင်ပါသည်။ ကလေးသည် စိတ်ပြန်တည်ငြိမ်ရန် လူကြီး၏ အကူအညီကို မကြာခဏ လိုအပ်သေးသည်။',
+        'Wariness of unfamiliar people and distress when a caregiver leaves are common at this age, but vary from child to child. The child may still often need an adult’s help to settle.',
       ),
       red: b(
         'နှစ်သိမ့်၍ လုံးဝ မရနိုင်အောင် ကြာရှည် ငိုခြင်း၊ လူကြီးများနှင့် ဆက်သွယ်မှု လုံးဝ မရှိခြင်း၊ သို့မဟုတ် မိဘ၏ စိတ်ဓာတ် ကျဆင်းမှုသည် နေ့စဉ်ဘဝကို ထိခိုက်နေခြင်းကို ကျန်းမာရေးဝန်ထမ်းနှင့် ဆွေးနွေးပါ။ မိဘ၏ စိတ်ကျန်းမာရေးသည်လည်း အရေးကြီးပါသည်။',
@@ -163,21 +164,21 @@ const MILESTONES: SeedItem[] = [
         'A short, predictable goodbye makes separations easier over time — slipping away quietly usually makes them harder.',
       ),
     }),
-    'Stranger awareness, peak separation anxiety and co-regulation with a caregiver at this age follow CDC and AAP milestone guidance, the AAP report on early relational health and toxic stress, the NICE social and emotional wellbeing guidance and the general paediatrics textbook in the registry.',
+    'Wariness of unfamiliar people, separation distress and caregiver-supported settling at this age follow CDC and AAP milestone guidance, the AAP report on early relational health and toxic stress and the general paediatrics textbook in the registry.',
   ),
   kb(
     milestone('10_12m', 'gross_motor', 3, {
-      title: b('အထောက်အပံ့မပါဘဲ စက္ကန့်အနည်းငယ် မတ်တပ်ရပ်နိုင်ခြင်း', 'Stands alone for a few seconds'),
+      title: b('အမှီမပါဘဲ စက္ကန့်အနည်းငယ်ကြာ တစ်ဦးတည်း မတ်တပ်ရပ်နိုင်ခြင်း', 'Stands alone for a few seconds'),
       observe: b(
-        'ပရိဘောဂကို လွှတ်လိုက်ပြီး အထောက်အပံ့မပါဘဲ စက္ကန့်အနည်းငယ် တည်တည်ငြိမ်ငြိမ် ရပ်နေနိုင်ပါသလား။',
+        'ပရိဘောဂကို ကိုင်မထားဘဲ အမှီမပါဘဲ စက္ကန့်အနည်းငယ်ကြာ တည်ငြိမ်စွာ မတ်တပ်ရပ်နိုင်ပါသလား။',
         'Does your baby let go of furniture and stand steadily, without holding on, for a couple of seconds?',
       ),
       why: b(
-        'ခဏတာ တစ်ယောက်တည်း ရပ်နိုင်ခြင်းသည် ခြေထောက်ခွန်အားနှင့် ဟန်ချက်ညီမှု လုံလောက်လာကြောင်း ပြသည် — လမ်းလျှောက်ခြင်းမတိုင်မီ အဆင့်တစ်ခု ဖြစ်သည်။',
+        'ခေတ္တမျှ တစ်ဦးတည်း မတ်တပ်ရပ်နိုင်ခြင်းသည် ခြေထောက်ကြွက်သားများ သန်မာလာပြီး ဟန်ချက်ထိန်းနိုင်စွမ်း ကောင်းမွန်လာကြောင်း ဖော်ပြသည်။ ၎င်းသည် လမ်းလျှောက်နိုင်ရန် အရေးပါသော ဖွံ့ဖြိုးမှုအဆင့်တစ်ခု ဖြစ်ပါသည်။',
         'Brief independent standing shows enough leg strength and balance are in place — a step on the way to walking.',
       ),
       encouragement: b(
-        'အားရပါးရ ကစားစဉ် ပရိဘောဂကို တဖြည်းဖြည်း လွှတ်ကြည့်ဖို့ အားပေးပါ၊ ပြုတ်ကျမှာစိုးရိမ်ရင် ပတ်ဝန်းကျင်ကို ပျော့ပြေအောင် ပြင်ထားပါ။',
+        'ကစားနေစဉ် လက်လွှတ်၍ ခေတ္တ မတ်တပ်ရပ်ကြည့်ရန် အားပေးပါ။ ချော်လဲပါက ထိခိုက်မှု လျော့နည်းစေရန် အနီးပတ်ဝန်းကျင်ရှိ ကြမ်းပြင်ပေါ်တွင် နူးညံ့သော ဖျာခင်းထားပေးပါ။',
         'During play, encourage brief hands-off moments, and keep the surrounding area soft in case of a tumble.',
       ),
     }),
@@ -185,17 +186,17 @@ const MILESTONES: SeedItem[] = [
   ),
   kb(
     milestone('10_12m', 'fine_motor', 2, {
-      title: b('လက်ခုပ်တီးနိုင်ခြင်း', 'Claps hands together'),
+      title: b('လက်နှစ်ဖက်ဖြင့် လက်ခုပ်တီးနိုင်ခြင်း', 'Claps hands together'),
       observe: b(
-        'သီချင်း သို့မဟုတ် ကစားနည်းတစ်ခုအတွင်း လက်နှစ်ဖက်ကို ယှဉ်တွဲ၍ ခုပ်တီးနိုင်ပါသလား။',
+        'သီချင်းဆိုချိန် သို့မဟုတ် ကစားချိန်များတွင် ကလေးငယ်က လက်နှစ်ဖက်ကို ထိစပ်ကာ လက်ခုပ်တီးနိုင်ပါသလား။',
         'During a song or game, can your baby bring both hands together to clap?',
       ),
       why: b(
-        'လက်ခုပ်တီးခြင်းသည် လက်နှစ်ဖက် ညှိနှိုင်းအသုံးပြုနိုင်မှုနှင့် အကြီးလူများကို အတုယူသင်ယူနိုင်မှုကို ပြသည်။',
+        'လက်ခုပ်တီးနိုင်ခြင်းသည် လက်နှစ်ဖက်ကို ညှိနှိုင်းအသုံးပြုနိုင်စွမ်းနှင့် လူကြီးများ၏ လုပ်ဆောင်ချက်ကို အတုယူသင်ယူနိုင်စွမ်းကို ဖော်ပြပါသည်။',
         'Clapping shows two-handed coordination and the ability to copy an action from a caregiver.',
       ),
       encouragement: b(
-        '"ပတိုက်ပတိုက် လက်ခုပ်တီး" ကဲ့သို့ လက်ခုပ်ပါဝင်သော ကလေးသီချင်းများ အတူသီဆိုကစားပါ။',
+        'လက်ခုပ်တီးသည့် ကလေးသီချင်းလေးများကို သီဆိုရင်း ကလေးငယ် မြင်သာအောင် အတူတကွ လက်ခုပ်တီးပြကာ အားပေးပါ။',
         'Sing simple clapping songs together and clap along so your baby can watch and copy.',
       ),
     }),
@@ -203,75 +204,75 @@ const MILESTONES: SeedItem[] = [
   ),
   kb(
     milestone('10_12m', 'communication', 3, {
-      title: b('"ဘိုင်ဘိုင်" ဟု လက်ပြပါးခါခြင်းနှင့် ချီပေးရန် လက်ဆန့်တောင်းခြင်း', 'Waves bye-bye and raises arms to be picked up'),
+      title: b('"တာ့တာ/ဘိုင်ဘိုင်" ဟု လက်ပြနှုတ်ဆက်ခြင်းနှင့် ချီပေးရန် လက်ဆန့်ပြခြင်း', 'Waves bye-bye and raises arms to be picked up'),
       observe: b(
-        'တစ်စုံတစ်ယောက် ထွက်ခွာသွားလျှင် "ဘိုင်ဘိုင်" ဟု လက်ပြပါးခါပြပါသလား။ ချီပေးစေချင်သောအခါ လက်နှစ်ဖက်ကို မြှောက်၍ တောင်းပါသလား။',
+        'လူတစ်ဦးဦး ထွက်ခွာသွားသည့်အခါ ကလေးငယ်က "တာ့တာ/ဘိုင်ဘိုင်" ဟု လက်ပြနှုတ်ဆက်ပါသလား။ ချီစေလိုသည့်အခါ လက်နှစ်ဖက်ကို အပေါ်သို့ မြှောက်ပြပါသလား။',
         'When someone leaves, does your baby wave bye-bye? When they want to be picked up, do they raise both arms?',
       ),
       why: b(
-        'ဒီလို လက်ရာနှင့် ပြသနည်းများသည် စကားမပြောတတ်မီ အရေးပါသော ရည်ရွယ်ချက်ရှိသော ဆက်သွယ်မှုများ ဖြစ်သည်။',
+        'ဤကဲ့သို့သော လက်ဟန်အမူအရာများသည် စကားမပြောတတ်မီကပင် ရည်ရွယ်ချက်ရှိရှိ ဆက်သွယ်ပြောဆိုနိုင်ကြောင်း ဖော်ပြပါသည်။',
         'These gestures are meaningful, intentional communication that develop before spoken words.',
       ),
       encouragement: b(
-        'တစ်စုံတစ်ယောက် ထွက်သွားတိုင်း "ဘိုင်ဘိုင်" ဆိုပြီး လက်ပြပါးခါ၍ ပုံစံပြပေးပါ။',
+        'လူတစ်ဦးဦး အခန်းပြင်သို့ ထွက်သွားတိုင်း "တာ့တာ/ဘိုင်ဘိုင်" ဟု ပြောပြီး လက်ပြနှုတ်ဆက်ပြကာ ကလေးငယ် အတုယူနိုင်အောင် ပြသပေးပါ။',
         'Model waving and saying "bye-bye" every time someone leaves the room.',
       ),
     }),
-    'Early communicative gestures such as waving and reaching to be held are described in CDC/AAP milestone guidance and the WHO Care for Child Development materials in the registry.',
+    'Early communicative gestures such as waving and reaching to be held are described in CDC and AAP milestone guidance in the registry.',
   ),
   kb(
     milestone('10_12m', 'communication', 4, {
-      title: b('သင်လက်ညှိုးထိုးပြသည့်ဘက်ကို လှည့်ကြည့်နိုင်ခြင်း', 'Follows your point and looks at what you’re showing'),
+      title: b('မိဘက လက်ညှိုးထိုးပြသည့် အရာဝတ္ထုဆီသို့ လှည့်ကြည့်နိုင်ခြင်း', 'Follows your point and looks at what you’re showing'),
       observe: b(
-        'သင်ကလေးထံမှ ခပ်လှမ်းလှမ်းရှိသော အရာတစ်ခုကို လက်ညှိုးထိုးပြလျှင် ထိုဘက်သို့ လှည့်ကြည့်ပါသလား၊ ဒါမှမဟုတ် သင့်လက်ကိုပဲ ကြည့်နေပါသလား။',
+        'ကလေးနှင့် ခပ်လှမ်းလှမ်းရှိ အရာဝတ္ထုတစ်ခုခုကို လက်ညှိုးထိုးပြသည့်အခါ ကလေးငယ်က ထိုအရာဝတ္ထုဆီသို့ လှည့်ကြည့်ပါသလား (သို့မဟုတ် မိဘ၏ လက်ကိုသာ ကြည့်နေပါသလား)။',
         'When you point at something a little way off, does your baby turn and look at the object — or only at your hand?',
       ),
       why: b(
-        'တစ်စုံတစ်ယောက် ညွှန်ပြသည့်ဘက်ကို လိုက်ကြည့်နိုင်ခြင်းသည် စိတ်ဝင်စားမှုကို အတူတကွ မျှဝေနိုင်စွမ်းကို ပြသပြီး၊ စကားလေ့လာမှုနှင့် လူမှုဆက်သွယ်မှု ဖွံ့ဖြိုးရေးအတွက် အရေးကြီးသော အခြေခံ စွမ်းရည်တစ်ခုဖြစ်သည်။',
+        'အခြားသူ လက်ညှိုးထိုးပြသည့်အရာကို လိုက်ကြည့်နိုင်ခြင်းသည် အာရုံစိုက်မှုကို အတူတကွ မျှဝေနိုင်စွမ်းဖြစ်ပြီး ဘာသာစကား သင်ယူမှုနှင့် လူမှုဆက်ဆံရေး ဖွံ့ဖြိုးတိုးတက်မှုအတွက် အလွန်အရေးပါသော အခြေခံစွမ်းရည်တစ်ခု ဖြစ်ပါသည်။',
         'Following someone else’s point — called joint attention — is a key building block for language learning and social communication.',
       ),
       red: b(
-        '၁၂ လသို့ရောက်လျှင် လက်ညှိုးထိုးပြခြင်းကို လုံးဝ လိုက်မကြည့်ပါက ကျန်းမာရေးဝန်ထမ်းအား ပြပါ။',
+        'အသက် ၁၂ လအရွယ်တွင် မိဘက လက်ညှိုးထိုးပြသည်ကို လုံးဝ လိုက်မကြည့်ပါက ကျန်းမာရေးဝန်ထမ်းနှင့် ပြသစစ်ဆေးပါ။',
         'If your baby never follows a point by 12 months, mention it at a health visit.',
       ),
       encouragement: b(
-        'စိတ်ဝင်စားစရာအရာများကို ညွှန်ပြပြီး အမည်ခေါ်ပေးပါ — "ကြည့်၊ ခွေး"။',
+        'စိတ်ဝင်စားဖွယ် အရာဝတ္ထုများကို ကလေးငယ်အား လက်ညှိုးထိုးပြပြီး အမည်ကို ပြောပြပေးပါ (ဥပမာ — "ဟိုမှာ ကြည့်ပါဦး၊ ခွေးလေးပါ")။',
         'Point at interesting things and name them out loud — "look, a dog."',
       ),
     }),
-    'Joint attention (following a point) as an early social-communication milestone is described in the WHO Care for Child Development materials and the language-development research (Weisleder 2013) in the registry.',
+    'Following another person’s point as an emerging social-communication skill near the end of the first year is described in AAP developmental-surveillance and paediatric developmental references in the registry.',
   ),
   kb(
     milestone('10_12m', 'self_help', 2, {
-      title: b('အဝတ်ဝတ်ချိန် လက်/ခြေထောက် တွန်းထည့်ကာ ကူညီခြင်း', 'Helps with dressing by pushing an arm or leg into clothing'),
+      title: b('အဝတ်အစား ဝတ်ဆင်ချိန်တွင် လက် သို့မဟုတ် ခြေထောက်ကို လျှိုထည့်ပေးကာ ကူညီခြင်း', 'Helps with dressing by pushing an arm or leg into clothing'),
       observe: b(
-        'အင်္ကျီဝတ်ပေးနေချိန် လက်ကို လက်ရုံးထဲ တွန်းထည့်ခြင်း သို့မဟုတ် ခြေထောက်ကို ဆန့်ပေးခြင်းဖြင့် ပါဝင်ကူညီပါသလား။',
+        'အင်္ကျီဝတ်ပေးချိန်တွင် လက်ကို အင်္ကျီလက်ထဲသို့ လျှိုထည့်ပေးခြင်း သို့မဟုတ် ဘောင်းဘီဝတ်ချိန်တွင် ခြေထောက်ကို ဆန့်ထုတ်ပေးခြင်းဖြင့် ပါဝင်ကူညီတတ်ပါသလား။',
         'While you dress your baby, do they help by pushing an arm into a sleeve or holding a leg out for you?',
       ),
       why: b(
-        'ဒီလို ပါဝင်ကူညီမှုသည် ကိုယ်ကာယ အသိနှင့် လုပ်ဆောင်ရန် စိတ်ပါဝင်စားမှု တိုးလာကြောင်း ပြပြီး ကိုယ်တိုင်လုပ်ဆောင်နိုင်စွမ်းရေး၏ အစဖြစ်သည်။',
+        'ဤသို့ ပါဝင်ကူညီခြင်းသည် မိမိခန္ဓာကိုယ်အပေါ် သတိပြုနားလည်မှုနှင့် လုပ်ဆောင်လိုစိတ် တိုးတက်လာခြင်းကို ဖော်ပြပြီး ကိုယ်တိုင် လုပ်ဆောင်နိုင်စွမ်း၏ အစောပိုင်းအဆင့် ဖြစ်ပါသည်။',
         'Cooperating this way shows growing body awareness and willingness to participate — the start of self-help skills.',
       ),
       encouragement: b(
-        'အဝတ်ဝတ်ပေးတိုင်း "လက်ကတွန်းထည့်ပါဦး" ကဲ့သို့ ခဏတာ စောင့်ပြီး ပါဝင်ဖို့ အခွင့်ပေးပါ။',
+        'အဝတ်အစား ဝတ်ပေးချိန်တွင် အရာအားလုံးကို မိဘချည်း လုပ်မပေးဘဲ ကလေးငယ် ကိုယ်တိုင် ပါဝင်ကူညီနိုင်ရန် အချိန်ခေတ္တပေးပြီး အားပေးပါ။',
         'Pause for a moment during dressing and invite your baby to help, rather than doing every step for them.',
       ),
     }),
-    'Early cooperative dressing as a self-help precursor is described in paediatric occupational-therapy references (Case-Smith) and Bright Futures guidance in the registry.',
+    'Early cooperative dressing as a self-help precursor is described in the paediatric occupational-therapy reference (Case-Smith) in the registry.',
   ),
   kb(
     milestone('10_12m', 'play', 1, {
-      title: b('ဖုန်းကလေးနှင့် "စကားပြော" ကစားသကဲ့သို့ ရိုးရှင်းသော ဟန်ဆောင်ကစားနည်း စတင်ခြင်း', 'Plays simple pretend, like "talking" on a toy phone'),
+      title: b('အရုပ်ဖုန်းဖြင့် စကားပြောသကဲ့သို့ ရိုးရှင်းသော ဟန်ဆောင်ကစားနည်း စတင်ခြင်း', 'Plays simple pretend, like "talking" on a toy phone'),
       observe: b(
-        'ဖုန်းကလေးကို နားနှင့်ထိစပ်ကာ "စကားပြော" ဟန်ဆောင်ခြင်း၊ ဒါမှမဟုတ် နေ့စဉ်လုပ်ဆောင်နေသည့် ရိုးရှင်းသော လှုပ်ရှားမှုတစ်ခုခုကို အတုယူခြင်း ပြသလား။',
+        'အရုပ်ဖုန်းကို နားတွင် ကပ်၍ "စကားပြောသလို" ဟန်ဆောင်ကစားခြင်း သို့မဟုတ် နေ့စဉ် လူကြီးများ လုပ်ဆောင်သည့် ရိုးရှင်းသော အပြုအမူတစ်ခုခုကို အတုယူကစားခြင်း ပြုလုပ်ပါသလား။',
         'Does your baby hold a toy phone to the ear and "talk," or copy another simple everyday action like it?',
       ),
       why: b(
-        'ဒီလို ရိုးရှင်းသော အတုယူပြုမူများသည် စိတ်ကူးဉာဏ်နှင့် သင်္ကေတအသုံးပြုနိုင်မှု၏ အစောဆုံး လက္ခဏာများ ဖြစ်သည်။',
+        'ဤကဲ့သို့ ရိုးရှင်းသော အတုယူ ဟန်ဆောင်ကစားမှုများသည် စိတ်ကူးဉာဏ် ဖွံ့ဖြိုးမှုနှင့် အရာဝတ္ထုများကို အခြားအရာအဖြစ် အစားထိုးစဉ်းစားတတ်သော သင်္ကေတဆိုင်ရာ တွေးခေါ်မှု၏ အစောပိုင်း လက္ခဏာများ ဖြစ်ပါသည်။',
         'These simple imitative actions are among the earliest signs of imagination and symbolic thinking.',
       ),
       encouragement: b(
-        'နေ့စဉ်လုပ်ဆောင်နေသည်များကို ကလေးရှေ့တွင် ရှင်းရှင်းလင်းလင်း ပြသပြီး ကလေးလိုက်လုပ်ခွင့်ပေးပါ။',
+        'နေ့စဉ် လုပ်ဆောင်ချက်လေးများကို ကလေးငယ်ရှေ့တွင် ရှင်းလင်းစွာ လုပ်ပြပြီး ကလေးငယ်ကိုလည်း လိုက်လံ အတုယူကစားခွင့် ပေးပါ။',
         'Model everyday actions clearly in front of your baby and give them a chance to copy you.',
       ),
     }),
@@ -498,7 +499,7 @@ const GUIDES_B: SeedItem[] = [
         'Every sound you answer teaches her that her voice matters.',
       ),
     }),
-    'The move from repetitive babble to first meaningful words, and the wide normal range for first words, follow CDC and AAP milestone guidance, the NHS learn-to-talk guidance and the language-development textbook in the registry, with the late-language-emergence points drawn from the ASHA practice portal.',
+    'The move from repetitive babble to first meaningful words, and the wide normal range for first words, follow CDC and AAP milestone guidance, the NHS learn-to-talk guidance and the language-development textbook in the registry.',
   ),
   kb(
     guide('10_12m', 'language', {
@@ -610,8 +611,8 @@ const GUIDES_C: SeedItem[] = [
       ],
       materials: b('အဝတ်စ၊ ဗလာခွက် သို့မဟုတ် ဗူး ၂–၃ လုံး၊ ကစားစရာ တစ်ခု', 'A cloth, two or three cups or containers, one toy'),
       safety: b(
-        'ဝှက်ကစားရာတွင် သုံးသော ပစ္စည်းများသည် ပါးစပ်ထဲ မဝင်နိုင်လောက်အောင် ကြီးရမည်။ ပလတ်စတစ်အိတ်ဖြင့် ဝှက်ခြင်းကို လုံးဝ မလုပ်ပါနှင့် (အသက်ရှူ ပိတ်နိုင်သည်)။ ဖန်သားပြင် အသုံးပြုမှုနှင့် ပတ်သက်၍ ကမ္ဘာ့ကျန်းမာရေးအဖွဲ့၏ လမ်းညွှန်ချက်အရ ၁ နှစ်အောက် ကလေးများအတွက် ဖန်သားပြင် ကြည့်ရှုခြင်းကို အကြံမပြုပါ — ဗီဒီယိုဖြင့် ဆွေမျိုးများနှင့် စကားပြောခြင်းသည် ခြွင်းချက် ဖြစ်သည်။ ဤအရွယ်တွင် တိုက်ရိုက် ကစားခြင်းက အလွန် ပိုအကျိုးရှိသည်။',
-        'Anything used for hiding games must be too large to fit in her mouth. Never hide things under a plastic bag — it is a suffocation risk. On screens, WHO guidance advises no screen time for children under one year, with video calls to family a reasonable exception. At this age live play is far more useful.',
+        'ဝှက်ကစားရာတွင် သုံးသော ပစ္စည်းများသည် ပါးစပ်ထဲ မဝင်နိုင်လောက်အောင် ကြီးရမည်။ ပလတ်စတစ်အိတ်ဖြင့် ဝှက်ခြင်းကို လုံးဝ မလုပ်ပါနှင့် (အသက်ရှူ ပိတ်နိုင်သည်)။ ကမ္ဘာ့ကျန်းမာရေးအဖွဲ့၏ လမ်းညွှန်ချက်အရ ဤအသက်အရွယ်တွင် အထိုင်လုပ်ဆောင်သည့် ဖန်သားပြင်ကြည့်ချိန်ကို အကြံမပြုပါ။ မိသားစုနှင့် တိုက်ရိုက် ဗီဒီယိုခေါ်ဆိုမှုကို လူကြီးတစ်ဦးက ကလေး ပါဝင်ဆက်သွယ်နိုင်အောင် ကူညီပေးလျှင် သာမန် တစ်ယောက်တည်းကြည့်ရှုမှုနှင့် ကွာခြားသော အပြန်အလှန်ဆက်သွယ်မှု ဖြစ်နိုင်ပါသည်။ ဤအရွယ်တွင် တိုက်ရိုက် ကစားခြင်းကို ဦးစားပေးပါ။',
+        'Anything used for hiding games must be too large to fit in her mouth. Never hide things under a plastic bag — it is a suffocation risk. WHO guidance does not recommend sedentary screen time at this age. A live video call with family can be an interactive experience different from solo viewing when an adult helps the child take part. Prioritize live play at this age.',
       ),
       commonMistakes: [
         b('ပစ္စည်းကို အလွန် ခက်ခဲစွာ ဝှက်ခြင်း — မြင်နိုင်သော အစိတ်အပိုင်း ချန်ထားပါ။', 'Hiding things too well — leave part of the object visible.'),
@@ -628,7 +629,7 @@ const GUIDES_C: SeedItem[] = [
         },
         {
           q: b('ပညာပေး ဗီဒီယိုတွေ ကြည့်ခိုင်းသင့်လား။', 'Should I use educational videos?'),
-          a: b('၁ နှစ်အောက် ကလေးများသည် ဖန်သားပြင်မှ သင်ယူနိုင်မှု အလွန် နည်းပါသည်။ ထိုအချိန်ကို မိဘနှင့် တိုက်ရိုက် ကစားချိန်အဖြစ် သုံးခြင်းက ပိုအကျိုးရှိသည်။ ဗီဒီယိုခေါ်ဆိုမှုဖြင့် ဆွေမျိုးများနှင့် စကားပြောခြင်းမှာမူ ကွာခြားပါသည်။', 'Under one year, children learn very little from screens. That time is better spent playing directly with you. Video calls with family are different.'),
+          a: b('၁ နှစ်အောက် ကလေးများသည် လူနှင့် တိုက်ရိုက် အပြန်အလှန်ဆက်သွယ်ခြင်းမှ သင်ယူနိုင်မှုနှင့် နှိုင်းယှဉ်ပါက ဖန်သားပြင်အကြောင်းအရာမှ သင်ယူနိုင်ခြေ ပိုနည်းပါသည်။ ထိုအချိန်ကို မိဘနှင့် တိုက်ရိုက် ကစားချိန်အဖြစ် သုံးခြင်းက ပိုအကျိုးရှိသည်။ လူကြီးတစ်ဦးက ကလေး ပါဝင်ဆက်သွယ်နိုင်အောင် ကူညီပေးသည့် မိသားစုနှင့် တိုက်ရိုက် ဗီဒီယိုခေါ်ဆိုမှုမှာ ကွာခြားနိုင်ပါသည်။', 'Children under one are less likely to learn from screen media than from live, responsive interaction. That time is better spent playing directly with you. A live family video call can be different when an adult helps the child take part.'),
         },
       ],
       redFlags: [
@@ -645,7 +646,7 @@ const GUIDES_C: SeedItem[] = [
         'She runs hundreds of little experiments a day — your spoon is her laboratory equipment.',
       ),
     }),
-    'Object permanence, hide-and-find play and cause-and-effect exploration at this age follow CDC milestone checklists, AAP milestone guidance, AAP guidance on the power of play and the developmental-behavioural paediatrics textbook, with the screen guidance taken from the AAP media and young minds statement, the Health Canada screen-time guidance and the research on screen use and early language in the registry.',
+    'Object permanence, hide-and-find play and cause-and-effect exploration at this age follow CDC milestone checklists, AAP milestone guidance, AAP guidance on the power of play and the developmental-behavioural paediatrics textbook; the screen guidance follows the 2026 AAP digital-ecosystems technical report, WHO under-5 guidance, HealthyChildren.org infant media guidance and the research on screen use and early language in the registry.',
   ),
   kb(
     guide('10_12m', 'social', {
@@ -695,7 +696,7 @@ const GUIDES_C: SeedItem[] = [
       faq: [
         {
           q: b('စိမ်းသူတွေ့ရင် အလွန် ငိုတယ် — ပြဿနာလား။', 'She cries a lot around strangers — is something wrong?'),
-          a: b('မဟုတ်ပါ။ ဤအရွယ်တွင် စိမ်းသူကို သတိထားခြင်းသည် ပုံမှန်ဖြစ်ပြီး မိဘနှင့် ခိုင်မာသော ချစ်ခင်မှု ရှိကြောင်း ပြသသည်။ အချိန်ပေးပါ၊ အနီးတွင် ရှိပေးပါ။', 'No. Stranger wariness is normal now and reflects a strong attachment to you. Give it time and stay close.'),
+          a: b('မရင်းနှီးသူကို သတိထားခြင်းသည် ဤအရွယ်တွင် တွေ့ရလေ့ရှိပြီး ရင်းနှီးသူနှင့် မရင်းနှီးသူကို ခွဲခြားသိလာခြင်းကို ပြနိုင်ပါသည်။ ကလေးတစ်ဦးနှင့်တစ်ဦး ကွာခြားသဖြင့် အချိန်ပေးပြီး အနီးတွင် ရှိပေးပါ။', 'Wariness of unfamiliar people is common at this age and may show growing recognition of familiar versus unfamiliar people. It varies between children, so give her time and stay close.'),
         },
         {
           q: b('လက်ပြခြင်း မလုပ်တတ်သေးဘူး — စိုးရိမ်ရလား။', 'She does not wave yet — should I be worried?'),
@@ -716,7 +717,7 @@ const GUIDES_C: SeedItem[] = [
         'Every time she looks back at you, she is saying that you matter to her.',
       ),
     }),
-    'Imitation, waving, turn-taking games and shared attention at 10–12 months follow CDC and AAP milestone guidance, the Nurturing Care Framework, the NICE social and emotional wellbeing guidance and AAP guidance on the power of play in the registry.',
+    'Imitation, waving, turn-taking games and shared attention at 10–12 months follow CDC and AAP milestone guidance, the Nurturing Care Framework, the Head Start early-learning framework and AAP guidance on the power of play in the registry.',
   ),
 ];
 
@@ -725,8 +726,8 @@ const GUIDES_D: SeedItem[] = [
     guide('10_12m', 'emotional', {
       title: b('၁၀ – ၁၂ လ — စိတ်ခံစားမှု ဖွံ့ဖြိုးမှု လမ်းညွှန်', '10–12 months — Emotional guide'),
       why: b(
-        'ဤအရွယ်တွင် ကလေး၏ ခံစားချက်များ ပိုမိုပြင်းထန်လာပြီး မိဘနှင့် ခွဲခွာရမည်ကို စိုးရိမ်မှုလည်း များလာတတ်သည်။ ကလေးသည် မိမိကိုယ်ကို အပြည့်အဝ မတည်ငြိမ်စေနိုင်သေးသဖြင့် ပြုစုစောင့်ရှောက်သူက ပွေ့ဖက်ခြင်း၊ နူးညံ့စွာ ပြောခြင်းနှင့် အနီးတွင် ရှိပေးခြင်းတို့ဖြင့် ကူညီပေးရသည်။ နွေးထွေးပြီး တည်ငြိမ်စွာ တုံ့ပြန်ပေးသည့် ပြုစုစောင့်ရှောက်မှုသည် ကလေး၏ စိတ်ခံစားမှု ဖွံ့ဖြိုးရေးအတွက် အရေးကြီးသည်။',
-        'Feelings run stronger now and separation anxiety often peaks. She cannot calm herself yet — she borrows an adult’s steadiness to settle, which is called co-regulation. Warm, predictable, responsive care is what builds her emotional foundation.',
+        'ကလေးသည် စိတ်ပြန်တည်ငြိမ်ရန် ပြုစုစောင့်ရှောက်သူ၏ အကူအညီကို မကြာခဏ လိုအပ်သေးသည်။ နွေးထွေးပြီး တည်ငြိမ်စွာ တုံ့ပြန်ပေးသည့် စောင့်ရှောက်မှုက စိတ်ခံစားမှု ဖွံ့ဖြိုးရေးကို အထောက်အကူပြုပါသည်။',
+        'She still often needs a caregiver’s help to settle. Warm, predictable, responsive care supports emotional development.',
       ),
       observationQuestions: [
         b('စိတ်ဆိုးလျှင် သင့်ထံ လာပြီး နှစ်သိမ့်မှု ရှာပါသလား။', 'Does she come to you for comfort when upset?'),
@@ -755,8 +756,8 @@ const GUIDES_D: SeedItem[] = [
       ],
       materials: b('မလို', 'None'),
       safety: b(
-        'ကလေးအား လှုပ်ခါခြင်းကို လုံးဝ မလုပ်ပါနှင့် — ဦးနှောက် ထိခိုက်နိုင်ပြီး အသက်အန္တရာယ် ရှိသည်။ ငိုသံ မရပ်၍ သင် အလွန် ပင်ပန်းလျှင် ကလေးကို လုံခြုံသော နေရာ (ခုတင် သို့မဟုတ် ကလေးအိပ်ရာ) တွင် ပက်လက် ချထားပြီး ခဏ ထွက်၍ အသက်ရှူပါ — ပြီးမှ ပြန်လာပါ။ မိဘ၏ စိတ်ဓာတ်ကျခြင်း သို့မဟုတ် စိုးရိမ်ပူပန်မှုသည် နှစ်ပတ်ထက် ကြာနေလျှင် ကျန်းမာရေးဝန်ထမ်းနှင့် ဆွေးနွေးပါ — ကုသမှု ရနိုင်ပါသည်။',
-        'Never shake a baby — it can cause serious brain injury and death. If crying overwhelms you, put her down safely on her back in a cot or bed, step away and breathe, then come back. If low mood or anxiety in a parent lasts more than two weeks, talk to a health worker — support and treatment are available.',
+        'ကလေးအား လုံးဝ မလှုပ်ခါပါနှင့် — ဦးနှောက် ပြင်းထန်စွာ ထိခိုက်နိုင်ပြီး သေဆုံးနိုင်သည်။ ငိုသံကြောင့် သင် အလွန် စိတ်ဖိစီးလာပါက ကလေးကို ဘေးကင်းရေးစံနှုန်းနှင့် ကိုက်ညီသော ကလေးအိပ်ရာထဲရှိ မာပြီး ပြားညီသော မွေ့ရာပေါ်တွင် ပက်လက်ချထားပါ။ တင်းကျပ်စွာ ခင်းထားသော အိပ်ရာခင်းမှလွဲ၍ အခြားအရာ မထားပါနှင့်။ ခဏခွာ၍ အသက်ရှူပြီး စိတ်တည်ငြိမ်လာသောအခါ ပြန်လာပါ။ မိဘ၏ စိတ်ဓာတ်ကျခြင်း သို့မဟုတ် စိုးရိမ်ပူပန်မှုသည် ဆက်လက်ရှိနေခြင်း၊ ပြင်းထန်ခြင်း၊ ပိုဆိုးလာခြင်း သို့မဟုတ် နေ့စဉ်ဘဝကို ထိခိုက်ခြင်း ရှိပါက ကျန်းမာရေးဝန်ထမ်းနှင့် ဆွေးနွေးပါ။',
+        'Never shake a baby—it can cause serious brain injury and death. If crying overwhelms you, place the baby on their back in a safety-approved infant sleep space on a firm, flat mattress with only a fitted sheet. Step away briefly, breathe, and return when calmer. If a parent’s low mood or anxiety persists, is severe, worsens, or affects daily life, talk to a health worker.',
       ),
       commonMistakes: [
         b('ငိုသံကို "အလိုလိုက်လွန်းမှာစိုးလို့" ဟု လျစ်လျူရှုခြင်း — ဤအရွယ်တွင် နှစ်သိမ့်ပေးခြင်းက အလိုလိုက်ခြင်း မဟုတ်ပါ။', 'Ignoring cries for fear of spoiling — comforting a baby this age is not spoiling.'),
@@ -773,13 +774,13 @@ const GUIDES_D: SeedItem[] = [
         },
         {
           q: b('မိဘဖြစ်တဲ့ ကျွန်မ ကိုယ်တိုင် စိတ်ဓာတ်ကျနေရင် ဘယ်လိုလုပ်ရမလဲ။', 'What if I as a parent feel low?'),
-          a: b('မိဘ၏ စိတ်ကျန်းမာရေးသည် ကလေး၏ ဖွံ့ဖြိုးမှုအတွက် အလွန် အရေးကြီးပါသည်။ ခံစားချက်များ နှစ်ပတ်ထက် ကြာနေလျှင် ကျန်းမာရေးဝန်ထမ်းနှင့် ဆွေးနွေးပါ။ ဤသည် အားနည်းချက် မဟုတ်ပါ — အကူအညီ ရနိုင်ပါသည်။', 'Parent mental health matters a great deal for a child’s development. If feelings last more than two weeks, talk to a health worker. This is not a weakness — help is available.'),
+          a: b('မိဘ၏ စိတ်ကျန်းမာရေးသည် ကလေး၏ ဖွံ့ဖြိုးမှုအတွက် အရေးကြီးပါသည်။ စိတ်ဓာတ်ကျခြင်း သို့မဟုတ် စိုးရိမ်ပူပန်မှုသည် ဆက်လက်ရှိနေခြင်း၊ ပြင်းထန်ခြင်း၊ ပိုဆိုးလာခြင်း သို့မဟုတ် နေ့စဉ်ဘဝကို ထိခိုက်ခြင်း ရှိပါက ကျန်းမာရေးဝန်ထမ်းနှင့် ဆွေးနွေးပါ။ ကိုယ့်ကိုယ်ကို သို့မဟုတ် ကလေးကို ထိခိုက်စေလိုသော အတွေး ရှိပါက ချက်ချင်း အကူအညီ ရယူပါ။', 'Parental mental health matters for child development. If low mood or anxiety persists, is severe, worsens, or affects daily life, talk to a health worker. If there are thoughts of harming yourself or the baby, seek help immediately.'),
         },
       ],
       redFlags: [
         b('နှစ်သိမ့်၍ လုံးဝ မရနိုင်အောင် ကြာရှည် ငိုခြင်း။', 'Crying that cannot be soothed at all.'),
         b('လူကြီးများနှင့် ဆက်သွယ်မှု လုံးဝ မရှိခြင်း သို့မဟုတ် ခံစားချက် လုံးဝ မပြသခြင်း။', 'No interest in connecting with adults, or no expressed feelings at all.'),
-        b('မိဘ၏ စိတ်ဓာတ်ကျမှု သို့မဟုတ် ကလေးအား ထိခိုက်စေမည့် အတွေးများ ပေါ်လာခြင်း။', 'A parent’s low mood, or thoughts of harming themselves or the baby.'),
+        b('မိဘ၏ စိတ်ဓာတ်ကျခြင်း သို့မဟုတ် စိုးရိမ်ပူပန်မှု ဆက်လက်ရှိနေခြင်း သို့မဟုတ် ကိုယ့်ကိုယ်ကို/ကလေးကို ထိခိုက်စေလိုသော အတွေးများ ပေါ်လာခြင်း။', 'Persistent parental low mood or anxiety, or thoughts of harming themselves or the baby.'),
       ],
       referral: b(
         'ဤအချက်များကို ကျန်းမာရေးဝန်ထမ်းနှင့် အမြန်ဆုံး ဆွေးနွေးပါ။ မိမိကိုယ်ကို သို့မဟုတ် ကလေးအား ထိခိုက်စေမည့် အတွေးများ ရှိပါက ချက်ချင်း အကူအညီ တောင်းပါ။ ဤသည် ရောဂါ ဖော်ထုတ်ချက် မဟုတ်ပါ။',
@@ -790,7 +791,7 @@ const GUIDES_D: SeedItem[] = [
         'Your steady presence is the strongest emotional protection she has.',
       ),
     }),
-    'Co-regulation, peak separation anxiety and the place of responsive care follow the AAP report on early relational health and toxic stress, the Nurturing Care Framework, the NICE postnatal care guideline, the NICE social and emotional wellbeing guidance and the general paediatrics textbook in the registry.',
+    'Caregiver-supported settling and responsive care follow the AAP report on early relational health and toxic stress, the Nurturing Care Framework, the NICE postnatal care guideline, the Head Start early-learning framework and the general paediatrics textbook in the registry.',
   ),
   kb(
     guide('10_12m', 'self_help', {
@@ -827,12 +828,12 @@ const GUIDES_D: SeedItem[] = [
       ],
       materials: b('ခွက်ငယ်၊ ဇွန်း၊ ပျော့သော သွားတိုက်တံ', 'A small cup, a spoon, a soft toothbrush'),
       safety: b(
-        'ကလေး စားနေစဉ် အမြဲ အနီးကပ်ကြီးကြပ်ပြီး မတ်မတ်ထိုင်စေပါ။ လမ်းလျှောက်နေစဉ် သို့မဟုတ် ကားစီးနေစဉ် မစားစေပါနှင့်။ အသက်ရှူလမ်းကြောင်း ပိတ်ဆို့စေနိုင်သော အခွံမာသီးလုံး၊ ပဲစေ့လုံး၊ စပျစ်သီးလုံး၊ ချယ်ရီသီးလုံး၊ ပြောင်းဖူးပေါက်ပေါက်၊ သကြားလုံးမာ၊ ဝက်အူချောင်းအဝိုင်း၊ ငါးရိုးပါသောအသားနှင့် မာသော ဟင်းသီးဟင်းရွက်အတုံးများကို မပေးပါနှင့်။ စပျစ်သီးနှင့် ချယ်ရီသီးကို အလျားလိုက် လေးစိတ်ခွဲပေးပါ။ အသက် ၁ နှစ်မပြည့်မီ ပျားရည် မပေးပါနှင့်။ အသက် ၁၂ လမပြည့်မီ နွားနို့ကို အဓိကသောက်စရာအဖြစ် မပေးသင့်သော်လည်း ချက်ပြုတ်ရာတွင် အနည်းငယ် ထည့်သုံးနိုင်သည်။ ဆားနှင့် သကြား ထပ်မထည့်ပါနှင့်။ သွားတိုက်ဆေးသုံးပါက ဆန်စေ့ပမာဏခန့်သာ သုံးပါ။ အိပ်ရာဝင်ချိန်တွင် နို့ဗူး သို့မဟုတ် နို့ခွက်ကို ပါးစပ်တွင် တပ်ထားပေးခြင်းက သွားပိုးစားစေနိုင်သဖြင့် ရှောင်ပါ။',
-        'Always supervise eating, keep her sitting upright, and never let her eat while walking or in a moving vehicle. Avoid choking foods — nuts, whole beans, whole grapes, whole cherries, popcorn, hard sweets, sausage rounds, fish with bones, and hard raw vegetable chunks. Quarter grapes and cherries lengthways. Never give honey before 12 months (risk of infant botulism). Do not give cow’s milk as a main drink before 12 months, though small amounts in cooking are fine. Add no salt or sugar. If using toothpaste, use only a rice-grain smear. Avoid leaving her with a bottle or cup of milk at bedtime — it causes tooth decay.',
+        'ကလေး စားနေစဉ် အမြဲ အနီးကပ်ကြီးကြပ်ပြီး မတ်မတ်ထိုင်စေပါ။ လမ်းလျှောက်နေစဉ် သို့မဟုတ် ကားစီးနေစဉ် မစားစေပါနှင့်။ အသက်ရှူလမ်းကြောင်း ပိတ်ဆို့စေနိုင်သော အခွံမာသီးလုံး၊ ပဲစေ့လုံး၊ စပျစ်သီးလုံး၊ ချယ်ရီသီးလုံး၊ ပြောင်းဖူးပေါက်ပေါက်၊ သကြားလုံးမာ၊ ဝက်အူချောင်းအဝိုင်း၊ ငါးရိုးပါသောအသားနှင့် မာသော ဟင်းသီးဟင်းရွက်အတုံးများကို မပေးပါနှင့်။ စပျစ်သီးနှင့် ချယ်ရီသီးကို အလျားလိုက် လေးစိတ်ခွဲပေးပါ။ မွေးကင်းစကလေး ဘိုကျူလစ်ဇင် အန္တရာယ်ကြောင့် အသက် ၁၂ လမပြည့်မီ ပျားရည် မပေးပါနှင့်။ အသက် ၁၂ လမပြည့်မီ နွားနို့ကို အဓိကသောက်စရာအဖြစ် မပေးသင့်သော်လည်း ချက်ပြုတ်ရာတွင် အနည်းငယ် ထည့်သုံးနိုင်သည်။ ဆားနှင့် သကြား ထပ်မထည့်ပါနှင့်။ သွားတိုက်ဆေးသုံးပါက ဆန်စေ့ပမာဏခန့်သာ သုံးပါ။ အိပ်ရာဝင်ချိန်တွင် နို့ဗူး သို့မဟုတ် နို့ခွက်ကို ပါးစပ်တွင် တပ်ထားပေးခြင်းက သွားပိုးစားစေနိုင်သဖြင့် ရှောင်ပါ။',
+        'Always supervise eating, keep her sitting upright, and never let her eat while walking or in a moving vehicle. Avoid choking foods — whole nuts, whole beans, whole grapes, whole cherries, popcorn, hard sweets, sausage rounds, fish with bones, and hard raw vegetable chunks. Quarter grapes and cherries lengthways. Never give honey before 12 months (risk of infant botulism). Do not give cow’s milk as a main drink before 12 months, though small amounts in cooking are fine. Add no salt or sugar. If using toothpaste, use only a rice-grain smear. Avoid leaving her with a bottle or cup of milk at bedtime — it can contribute to tooth decay.',
       ),
       commonMistakes: [
         b('ရှုပ်ပွမည် စိုးရိမ်၍ ကိုယ်တိုင် စားခွင့် မပေးခြင်း။', 'Not letting her self-feed because of the mess.'),
-        b('ကလေး ချောင်းဆိုးတိုင်း အစာကြောင့် အသက်ရှူလမ်းကြောင်း ပိတ်နေသည်ဟု ထင်ခြင်း။ ချောင်းဆိုးနိုင်သေးခြင်းက အစာကို ကိုယ်တိုင်ဖယ်ရှားရန် ကြိုးစားနေခြင်း ဖြစ်နိုင်သည်။', 'Confusing coughing with choking — coughing usually means she is clearing it herself.'),
+        b('ချောင်းဆိုးခြင်းနှင့် အစာတစ်ဆို့၍ အသက်ရှူလမ်းကြောင်း ပိတ်ခြင်းကို တူညီသည်ဟု မယူဆပါနှင့်။ ကလေးက အသံထွက်၍ အားကောင်းစွာ ချောင်းဆိုးနိုင်သေးပါက အနီးကပ်စောင့်ကြည့်ပြီး ချောင်းဆိုးထုတ်ခွင့်ပေးပါ။ အသံမထွက်နိုင်၊ အသက်မရှူနိုင် သို့မဟုတ် ပြာလာပါက အရေးပေါ် အစာတစ်ဆို့ ရှေးဦးပြုစုနည်းကို ချက်ချင်းလုပ်ပြီး အရေးပေါ်အကူအညီ တောင်းပါ။ အစာစားတိုင်း သို့မဟုတ် မကြာခဏ ချောင်းဆိုးပါက ကျန်းမာရေးဝန်ထမ်းနှင့် ပြသပါ။', 'Do not treat coughing and complete airway blockage as the same thing. If the child can make sound and cough forcefully, watch closely and let them cough. If the child cannot make sound or breathe, or turns blue, start emergency choking first aid and get emergency help immediately. If coughing happens at every feed or often, seek assessment from a health worker.'),
       ],
       parentTips: [
         b('အစာကို ကလေး၏ လက်ညှိုးအရွယ် အရှည်လိုက် ဖြတ်ပေးပါ — ကိုင်ရလွယ်ပြီး ပိုလုံခြုံသည်။', 'Cut food into finger-length strips — easier to hold and safer.'),
@@ -862,7 +863,7 @@ const GUIDES_D: SeedItem[] = [
         'Every messy meal is practice at doing it herself.',
       ),
     }),
-    'Self-feeding, open-cup practice and early oral care at 10–12 months follow the paediatric occupational-therapy reference, the Bright Futures preventive-care schedule, the WHO infant and young child feeding model chapter and the CDC foods and drinks guidance for 6–24 months, with the tooth-brushing and decay-prevention points from the AAP oral-health guidance and the WHO report on ending childhood dental caries, and the feeding and swallowing cautions from the ASHA practice portal and the occupational-therapy early-intervention guidance.',
+    'Self-feeding, open-cup practice and early oral care at 10–12 months follow the paediatric occupational-therapy reference, the Bright Futures preventive-care schedule, the WHO infant and young child feeding model chapter and the CDC foods and drinks guidance for 6–24 months, with the tooth-brushing and decay-prevention points from the AAP oral-health guidance and the WHO report on ending childhood dental caries, and the feeding and swallowing cautions from the ASHA practice portal.',
   ),
 ];
 
@@ -871,8 +872,8 @@ const GUIDES_E: SeedItem[] = [
     guide('10_12m', 'play', {
       title: b('၁၀ – ၁၂ လ — ကစားခြင်းနှင့် အိမ်တွင်း ဘေးကင်းရေး လမ်းညွှန်', '10–12 months — Play and home-safety guide'),
       why: b(
-        'ကစားခြင်းသည် ဤအရွယ်၏ အဓိက သင်ယူနည်း ဖြစ်သည်။ ကလေးသည် ရွေ့လျားနိုင်လာသည်နှင့်အမျှ ကစားနယ်ပယ် ကျယ်လာပြီး အိမ်တွင်း အန္တရာယ်များနှင့်လည်း ပိုနီးလာသည်။ ထို့ကြောင့် ကြမ်းပြင်ပေါ် လုံခြုံစွာ ကစားနိုင်ရန် ပတ်ဝန်းကျင်ကို ပြင်ဆင်ပေးခြင်းသည် ကလေးကို အမြဲ တားမြစ်ခြင်းထက် ပိုထိရောက်သည်။ "မလုပ်နဲ့" ဟု အကြိမ် ၅၀ ပြောရမည့်အစား အခန်းကို လုံခြုံအောင် ပြင်လိုက်ခြင်းက ကလေးကိုလည်း လွတ်လပ်စွာ လေ့လာခွင့် ပေးသည်။',
-        'Play is how she learns now. As she becomes mobile her play area widens and she comes closer to household hazards, so preparing the environment works better than constant prohibition. Instead of saying "no" fifty times, make the room safe and let her explore.',
+        'ကစားခြင်းသည် ဤအရွယ်တွင် အရေးပါသော သင်ယူနည်းတစ်ခု ဖြစ်ပါသည်။ ကလေးသည် ရွေ့လျားနိုင်လာသည်နှင့်အမျှ အိမ်တွင်း အန္တရာယ်များနှင့် ပိုနီးလာနိုင်ပါသည်။ ကြမ်းပြင်ပေါ် လုံခြုံစွာ ကစားနိုင်ရန် ပတ်ဝန်းကျင်ကို ပြင်ဆင်ပေးခြင်းက ကလေးကို လွတ်လပ်စွာ စူးစမ်းခွင့် ပေးနိုင်ပါသည်။',
+        'Play is an important way of learning at this age. As the child becomes mobile, household hazards come within easier reach. Preparing a safe floor-play environment lets the child explore more freely.',
       ),
       observationQuestions: [
         b('ကြမ်းပြင်ပေါ်တွင် လွတ်လပ်စွာ ကစားရန် နေရာ ရှိပါသလား။', 'Is there clear floor space for free play?'),
@@ -890,54 +891,53 @@ const GUIDES_E: SeedItem[] = [
         b('ကစားစရာများကို လှည့်ပြောင်း ပေးပါ — အသစ်လို ခံစားရသည်။', 'Rotate the toys so they feel new again.'),
       ],
       indoor: [
-        b('ခေါင်းအုံးဖြင့် တွားကျော်ရန် လမ်းကြောင်း ဖန်တီးခြင်း။', 'A pillow path to crawl over.'),
+        b('နိုးနေချိန်တွင် လူကြီးအနီးကပ်ကြီးကြပ်၍ ရှင်းလင်းထားသော ကြမ်းပြင်ပေါ်ရှိ ဘေးကင်းသော ကစားစရာဆီ တွားသွားစေပါ။', 'During awake time and with close adult supervision, let the baby crawl across a clear floor toward a safe toy.'),
         b('ဗူးထဲ ပစ္စည်း ထည့်-ထုတ် ကစားခြင်း။', 'In-and-out container play.'),
       ],
       outdoor: [
         b('အရိပ်ရှိ၊ သန့်ရှင်းသော နေရာတွင် ဖျာခင်း၍ ကစားခြင်း။', 'Mat play in a clean, shaded spot.'),
       ],
       lowCost: [
-        b('ဗူးခွံ၊ ခွက်၊ အဝတ်စများသည် အကောင်းဆုံး ကစားစရာ ဖြစ်သည်။', 'Empty containers, cups and cloths make the best toys.'),
-        b('ကစားစရာ များများ မလိုပါ — မိဘနှင့် အတူ ကစားချိန်က ပိုအရေးကြီးသည်။', 'Many toys are not needed — your time playing together matters more.'),
+        b('ဗူးခွံ၊ ခွက်နှင့် အဝတ်စများကို ဘေးကင်းကြောင်း စစ်ဆေးပြီး ကစားစရာအဖြစ် အသုံးပြုနိုင်ပါသည်။', 'Checked, safe containers, cups, and cloths can be used for play.'),
+        b('ကစားစရာ များများ မလိုပါ — မိဘနှင့်အတူ ကစားချိန်ကလည်း အရေးပါပါသည်။', 'Many toys are not needed — time playing together is also important.'),
       ],
       materials: b('ဖျာ၊ ဗူးခွံ၊ ခွက်၊ အဝတ်စ၊ ပျော့သော ဘောလုံး', 'A mat, empty containers, cups, cloths, a soft ball'),
       safety: b(
-        'အိမ်တွင်း ဘေးကင်းရေး စစ်ဆေးရန် — လှေကား အထက်နှင့် အောက်တွင် တံခါးကာ တပ်ပါ။ မှီ၍ လဲနိုင်သော စင်၊ စားပွဲ၊ တီဗီများကို နံရံနှင့် တွယ်ထားပါ။ ပြတင်းပေါက်များကို ပိတ်ထားပါ သို့မဟုတ် ကာရံပါ၊ ပြတင်းပေါက်အောက်တွင် တက်နိုင်သော ပရိဘောဂ မထားပါနှင့်။ လိုက်ကာကြိုးများကို အမြင့်တွင် ချည်ပါ။ မီးပလပ်ပေါက်များကို ပိတ်ပါ၊ မီးကြိုးများကို ဖုံးထားပါ။ ရေပုံး၊ ရေချိုးကန်၊ ရေအိုးများကို ဗလာထားပါ သို့မဟုတ် အဖုံးပိတ်ပါ — ရေနည်းနည်းဖြင့်ပင် ရေနစ်နိုင်သည်၊ ရေအနီးတွင် ကလေးအား ခဏမျှ တစ်ယောက်တည်း မထားပါနှင့်။ မီးဖို၊ ရေနွေး၊ မီးပူ၊ ဖယောင်းတိုင်များကို အလှမ်းမမီ ထားပါ၊ ပူသော အရည်များကို စားပွဲအစွန်းတွင် မထားပါနှင့်။ ဆေးများ၊ ဓာတုပစ္စည်းများ၊ ဆေးလိပ်၊ အရက်များကို သော့ခတ် သိမ်းပါ။ ဒင်္ဂါးပြား၊ ကြယ်သီး၊ ခလုတ်ဘက်ထရီ၊ သံလိုက်လုံးများကို ဖယ်ရှားပါ။ ပလတ်စတစ်အိတ်နှင့် ပူဖောင်းများကို ဝေးဝေးထားပါ။',
-        'Home-safety check — fit gates at the top and bottom of stairs. Anchor shelves, tables and TVs that could tip. Keep windows closed or guarded and move climbable furniture away from them. Tie blind cords high. Cover sockets and tuck away electrical cords. Empty buckets, basins and tubs or keep them covered — a child can drown in very little water, and never leave her alone near water even for a moment. Keep the stove, hot drinks, irons and candles out of reach and hot liquids away from table edges. Lock away medicines, cleaning products, tobacco and alcohol. Remove coins, buttons, button batteries and small magnets. Keep plastic bags and balloons well away.',
+        'အိမ်တွင်း ဘေးကင်းရေး စစ်ဆေးပါ — လဲကျနိုင်သော ပရိဘောဂနှင့် လျှပ်စစ်ပစ္စည်းများကို ခိုင်ခံ့စွာ တွယ်ထားပါ။ ပြတင်းပေါက်တွင် လူကြီးဖွင့်နိုင်သော ကာရံ သို့မဟုတ် အဖွင့်ကန့်သတ်ကိရိယာ တပ်ပြီး တက်နိုင်သော ပရိဘောဂများကို ပြတင်းပေါက်မှ ဝေးရာရွှေ့ပါ။ ဆေးဝါး၊ သန့်ရှင်းရေးပစ္စည်းနှင့် အန္တရာယ်ရှိသော အိမ်သုံးပစ္စည်းများကို ကလေးလက်လှမ်းမမီသော သော့ခတ်ထားသည့်နေရာတွင် သိမ်းပါ။ အသက်အရွယ်နှင့် သင့်တော်သော ကစားစရာကို ရွေး၍ ကလေးအသက်ရှူလမ်းကြောင်း ပိတ်ဆို့စေနိုင်သော ပစ္စည်းငယ်နှင့် ကစားစရာအစိတ်အပိုင်းများကို လက်လှမ်းမမီအောင်ထားပြီး ချောင်နေသော သို့မဟုတ် ကျိုးနေသော အစိတ်အပိုင်း ရှိမရှိ စစ်ဆေးပါ။ ရေအနီးတွင် အနီးကပ်နေ၍ အဆက်မပြတ် အာရုံစိုက်ကြီးကြပ်ပါ။',
+        'Home-safety check: anchor furniture and appliances that could tip. Fit adult-operable window guards or stops and move climbable furniture away from windows. Store medicines, cleaning products, and hazardous household products locked and out of reach. Choose age-appropriate toys, keep small objects and toy parts that could choke a child out of reach, and check for loose or broken pieces. Near water, stay close and give constant, attentive supervision.',
       ),
       commonMistakes: [
-        b('ကလေးကို အမြဲ တားမြစ်ခြင်း — ပတ်ဝန်းကျင်ကို ပြင်ခြင်းက ပိုထိရောက်သည်။', 'Constantly stopping her — changing the environment works better.'),
+        b('ကလေးကို အမြဲ တားမြစ်ခြင်း — အန္တရာယ်များကို လျှော့ချပြီး လူကြီးအနီးကပ်ကြီးကြပ်နိုင်သော စူးစမ်းနေရာ ပြင်ဆင်ပေးပါ။', 'Constantly stopping the child — reduce hazards and prepare an exploration space that can be closely supervised by an adult.'),
         b('"ခဏလေးပဲ" ဟု ထင်၍ ရေအနီးတွင် ချန်ထားခြင်း။', 'Leaving her near water "just for a second".'),
       ],
       parentTips: [
         b('ကလေး၏ အမြင့်အထိ ဒူးထောက်၍ အခန်းကို ကြည့်ပါ — မမြင်ခဲ့သော အန္တရာယ်များ ပေါ်လာလိမ့်မည်။', 'Kneel to her height and look around the room — you will see hazards you missed.'),
-        b('အခန်းတစ်ခန်းကို လုံးဝ လုံခြုံအောင် ပြင်ထားပါ — "ဟုတ်တယ်" လို့ ပြောနိုင်တဲ့ နေရာ ဖြစ်စေပါ။', 'Make one room completely safe — a place where the answer can be yes.'),
+        b('အခန်းတစ်ခန်းကို အန္တရာယ်လျှော့ချထားသော ကစားနေရာအဖြစ် ပြင်ပြီး လူကြီးအနီးကပ်ကြီးကြပ်မှုဖြင့် စူးစမ်းခွင့်ပေးပါ။', 'Prepare one room as a lower-hazard play space and let the baby explore with close adult supervision.'),
       ],
       faq: [
         {
           q: b('ကလေးကို ကစားရာမှာ အမြဲ ဦးဆောင်ပေးရမလား။', 'Should I always lead the play?'),
-          a: b('မလိုပါ။ ကလေး ရွေးသည့် အရာကို လိုက်ကစားပေးခြင်းက အာရုံစူးစိုက်မှုနှင့် ဘာသာစကား ဖွံ့ဖြိုးမှုကို ပိုအထောက်အကူ ပြုသည်။ သင့်အလုပ်မှာ လုံခြုံမှု ပေးခြင်းနှင့် အတူ ရှိပေးခြင်း ဖြစ်သည်။', 'No. Following her choice supports attention and language better. Your job is to keep it safe and be present.'),
+          a: b('မလိုပါ။ ကလေး ရွေးသည့်အရာကို လိုက်ကစားပေးခြင်းက အာရုံစူးစိုက်မှုနှင့် ဘာသာစကား ဖွံ့ဖြိုးရေးကို အထောက်အကူပြုနိုင်ပါသည်။ သင့်အလုပ်မှာ လုံခြုံမှု ပေးခြင်းနှင့် အတူ ရှိပေးခြင်း ဖြစ်သည်။', 'No. Following her choice in play can support attention and language development. Your job is to keep it safe and be present.'),
         },
         {
           q: b('ကစားစရာ ဘယ်နှစ်ခု လိုအပ်လဲ။', 'How many toys does she need?'),
-          a: b('အနည်းငယ်သာ လိုပါသည်။ ပစ္စည်း ၃–၄ ခုကို လှည့်ပြောင်း ပေးခြင်းက ပစ္စည်း အများကြီး တစ်ပြိုင်နက် ပေးခြင်းထက် ပိုကောင်းသည်။', 'Very few. Rotating three or four items works better than offering many at once.'),
+          a: b('ပစ္စည်းအနည်းငယ်ကို တစ်ကြိမ်စီပေးပြီး အခါအားလျော်စွာ လှည့်ပြောင်းပေးနိုင်ပါသည်။', 'Offer a few safe items at a time and rotate them occasionally.'),
         },
       ],
       redFlags: [
         b('ကစားစရာ သို့မဟုတ် ပတ်ဝန်းကျင်ကို လုံးဝ စိတ်မဝင်စားခြင်း။', 'No interest at all in toys or surroundings.'),
-        b('လဲကျပြီးနောက် သတိလစ်ခြင်း၊ အန်ခြင်း၊ အထူး အိပ်ငိုက်ခြင်း သို့မဟုတ် ငိုသံ ထူးခြားခြင်း။', 'After a fall: loss of consciousness, vomiting, unusual drowsiness or an unusual cry.'),
-        b('ဆေး၊ ဓာတုပစ္စည်း သို့မဟုတ် ခလုတ်ဘက်ထရီ မျိုမိခြင်း ဟု သံသယ ရှိခြင်း။', 'Any suspicion that she has swallowed medicine, a chemical or a button battery.'),
+        b('ကစားနေစဉ် ဒဏ်ရာရခြင်း သို့မဟုတ် မလုံခြုံသော ပစ္စည်းတစ်ခုကို ပါးစပ်ထဲ ထည့်မိခြင်း။', 'An injury during play, or putting an unsafe object in the mouth.'),
       ],
       referral: b(
-        'လဲကျမှုနောက်ပိုင်း အထက်ပါ လက္ခဏာများ ပေါ်လျှင် သို့မဟုတ် အဆိပ်အတောက် သံသယ ရှိလျှင် ချက်ချင်း ဆေးခန်း သို့မဟုတ် ဆေးရုံသို့ သွားပါ။ ခလုတ်ဘက်ထရီ သို့မဟုတ် သံလိုက် မျိုမိပါက အရေးပေါ် ဖြစ်ပြီး စောင့်ဆိုင်း၍ မရပါ။',
-        'After a fall with any of those signs, or with any suspected poisoning, seek medical care immediately. A swallowed button battery or magnet is an emergency and must not wait.',
+        'ကစားနေစဉ် ကလေး ဒဏ်ရာရလျှင် သို့မဟုတ် မလုံခြုံသော ပစ္စည်းကို ပါးစပ်ထဲ ထည့်မိလျှင် ကစားခြင်းကို ရပ်ပြီး ဒေသရှိ ကျန်းမာရေးဝန်ထမ်း သို့မဟုတ် အရေးပေါ်ဝန်ဆောင်မှုထံမှ အကြံပြုချက် ရယူပါ။ ဤလမ်းညွှန်သည် အရေးပေါ်ကုသမှု လုပ်ဆောင်ပုံကို မသတ်မှတ်ပါ။',
+        'If the child is injured during play or puts an unsafe object in the mouth, stop the activity and get advice from a local health professional or emergency service. This guide does not specify emergency treatment steps.',
       ),
       encouragement: b(
-        'အခန်းတစ်ခန်းကို လုံခြုံအောင် ပြင်လိုက်ခြင်းက မိဘအတွက်လည်း စိတ်အေးစေပြီး ကလေးအတွက်လည်း လွတ်လပ်စွာ လေ့လာခွင့် ပေးပါသည်။',
-        'Making one room safe gives you calm and gives her freedom to explore.',
+        'အန္တရာယ်များကို လျှော့ချထားသော ကစားနေရာနှင့် အနီးကပ်ကြီးကြပ်မှုက မိဘကို စိတ်အေးစေပြီး ကလေးကို ပိုမိုလွတ်လပ်စွာ စူးစမ်းခွင့်ပေးနိုင်ပါသည်။',
+        'A lower-hazard play space with close supervision can give caregivers more confidence and allow the baby to explore more freely.',
       ),
     }),
-    'The value of caregiver-supported play and a prepared environment follows AAP guidance on the power of play, the WHO Care for Child Development package, the UNICEF early-moments report and the Bright Futures preventive-care schedule, with the water-safety points drawn from the AAP drowning-prevention policy and the sleep-environment points from the AAP safe-sleep recommendations in the registry.',
+    'Caregiver-supported, responsive play follows AAP power-of-play guidance, the WHO/UNICEF Care for Child Development package and the UNICEF Early Moments Matter report. CPSC childproofing guidance supports furniture anchoring, adult-operable window guards or stops, and locked hazardous household products; HealthyChildren choking guidance supports age-appropriate choking-hazard prevention; and AAP drowning-prevention guidance supports close, constant, attentive water supervision. This guide provides prevention education, not emergency-treatment thresholds.',
   ),
 ];
 
@@ -956,7 +956,7 @@ const GUIDES_F: SeedItem[] = [
         b('ဗိုက်ပြည့်လျှင် ခေါင်းလွှဲခြင်း၊ ပါးစပ်ပိတ်ခြင်း ကဲ့သို့ အချက်ပြပါသလား။', 'Does she signal fullness by turning away or closing her mouth?'),
       ],
       dailyActivities: [
-        b('အစာ အမျိုးအစား အနည်းဆုံး ၄ မျိုးမှ ၅ မျိုးကို တစ်နေ့အတွင်း ပေးပါ။', 'Offer at least four to five different food groups across the day.'),
+        CHILD_DEVELOPMENT_REFREEZE_COPY.gd_10_12m_nutrition.dailyActivity,
         b('မိသားစုနှင့် အတူ စားပွဲတွင် ထိုင်စားစေပါ။', 'Let her eat with the family at the same time.'),
         b('ဗိုက်ပြည့်ပြီဟု အချက်ပြလျှင် ရပ်ပါ — အတင်း မကျွေးပါနှင့်။', 'Stop when she signals she is full — never force-feed.'),
       ],
@@ -977,8 +977,8 @@ const GUIDES_F: SeedItem[] = [
       ],
       materials: b('ခွက်၊ ဇွန်း၊ မိသားစု အစာ (ဆား၊ သကြား မထည့်ရသေးသော အပိုင်း)', 'A cup, a spoon and family food set aside before salt or sugar'),
       safety: b(
-        'အသက်ရှူလမ်းကြောင်း ပိတ်ဆို့စေနိုင်သော အခွံမာသီးလုံး၊ ပဲစေ့လုံး၊ စပျစ်သီးနှင့် ချယ်ရီသီးလုံး၊ ပြောင်းဖူးပေါက်ပေါက်၊ သကြားလုံးမာ၊ ဝက်အူချောင်းအဝိုင်း၊ ငါးရိုးပါသောအသားနှင့် မာသော ဟင်းသီးဟင်းရွက်အတုံးများကို ရှောင်ပါ။ စပျစ်သီးနှင့် ချယ်ရီသီးကို အလျားလိုက် လေးစိတ်ခွဲပေးပါ။ အစာစားစဉ် အမြဲ အနီးကပ်ကြီးကြပ်ပြီး ကလေးကို မတ်မတ်ထိုင်စေပါ။ အသက် ၁၂ လမပြည့်မီ ပျားရည် မပေးပါနှင့်။ နွားနို့ကိုလည်း အဓိကသောက်စရာအဖြစ် မပေးပါနှင့်။ ဆားနှင့် သကြား ထပ်မထည့်ဘဲ ချိုသောအချိုရည်နှင့် လက်ဖက်ရည်ကို ရှောင်ပါ။ ဥ၊ ငါး၊ နို့ထွက်ပစ္စည်းနှင့် ချောမွေ့အောင် ဖျော်ထားသော အခွံမာသီးထုတ်ကုန်များကဲ့သို့ ဓာတ်မတည့်နိုင်သော အစားအစာများကို တစ်မျိုးချင်း အနည်းငယ်စီ စတင်ပေးပြီး တုံ့ပြန်မှုကို စောင့်ကြည့်နိုင်သည်။ မိသားစုတွင် ဓာတ်မတည့်မှုမှတ်တမ်းရှိပါက ကျန်းမာရေးဝန်ထမ်းနှင့် တိုင်ပင်ပါ။ အစားအစာကို ကောင်းစွာချက်ပြုတ်ပြီး လက်နှင့် အသုံးအဆောင်များကို သန့်ရှင်းစွာထားပါ။ သန့်ရှင်းသောရေကို သုံးပြီး ကျန်ရှိသောအစာကို အချိန်ကြာမြင့်စွာ မထားပါနှင့်။',
-        'Avoid choking foods — nuts, whole beans, whole grapes and cherries (quarter them), popcorn, hard sweets, whole sausage rounds, fish with bones and hard raw vegetable chunks. Always supervise meals with her sitting upright. Never give honey before 12 months. Do not use cow’s milk as a main drink before 12 months. Add no salt or sugar and avoid sweet drinks and tea. Common allergenic foods such as egg, fish, dairy and nut products (as smooth pastes, never whole nuts) do not need to be avoided — introduce them one at a time and watch the response. If there is a family history of allergy, discuss it with a health worker first. Cook food thoroughly, wash hands, use clean water, and do not keep leftovers for long.',
+        'အသက်ရှူလမ်းကြောင်း ပိတ်ဆို့စေနိုင်သော အခွံမာသီးလုံး၊ ပဲစေ့လုံး၊ စပျစ်သီးနှင့် ချယ်ရီသီးလုံး၊ ပြောင်းဖူးပေါက်ပေါက်၊ သကြားလုံးမာ၊ ဝက်အူချောင်းအဝိုင်း၊ ငါးရိုးပါသောအသားနှင့် မာသော ဟင်းသီးဟင်းရွက်အတုံးများကို ရှောင်ပါ။ စပျစ်သီးနှင့် ချယ်ရီသီးကို အလျားလိုက် လေးစိတ်ခွဲပေးပါ။ အစာစားစဉ် အမြဲ အနီးကပ်ကြီးကြပ်ပြီး ကလေးကို မတ်မတ်ထိုင်စေပါ။ အသက် ၁၂ လမပြည့်မီ ပျားရည် မပေးပါနှင့်။ နွားနို့ကိုလည်း အဓိကသောက်စရာအဖြစ် မပေးပါနှင့်။ ဆားနှင့် သကြား ထပ်မထည့်ဘဲ ချိုသောအချိုရည်နှင့် လက်ဖက်ရည်ကို ရှောင်ပါ။ ဥ၊ ငါး၊ နို့ထွက်ပစ္စည်းနှင့် ချောမွေ့အောင် ဖျော်ထားသော အခွံမာသီးထုတ်ကုန်များကဲ့သို့ ဓာတ်မတည့်နိုင်သော အစားအစာများကို တစ်မျိုးချင်း အနည်းငယ်စီ စတင်ပေးပြီး အစားအစာအသစ် တစ်မျိုးနှင့်တစ်မျိုးကြား ၃ ရက်မှ ၅ ရက် စောင့်ကြည့်ပါ။ ကလေးတွင် ပြင်းထန်သော အရေပြားရောင်ရမ်းနာ သို့မဟုတ် ဥနှင့် ဓာတ်မတည့်မှု ရှိပါက မြေပဲမစတင်မီ ဆရာဝန်နှင့် တိုင်ပင်ပါ။ သိရှိထားသော အစားအစာဓာတ်မတည့်မှု သို့မဟုတ် ယခင်က တုံ့ပြန်မှုရှိပါက ထိုအစားအစာကို ဘေးကင်းစွာ မိတ်ဆက်ပုံကို ဆရာဝန်အား မေးမြန်းပါ။ အစားအစာကို ကောင်းစွာချက်ပြုတ်ပြီး လက်နှင့် အသုံးအဆောင်များကို သန့်ရှင်းစွာထားပါ။ သန့်ရှင်းသောရေကို သုံးပြီး ကျန်ရှိသောအစာကို အချိန်ကြာမြင့်စွာ မထားပါနှင့်။',
+        'Avoid choking foods — whole nuts, whole beans, whole grapes and cherries (quarter them), popcorn, hard sweets, whole sausage rounds, fish with bones and hard raw vegetable chunks. Always supervise meals with her sitting upright. Never give honey before 12 months. Do not use cow’s milk as a main drink before 12 months. Add no salt or sugar and avoid sweet drinks and tea. Common allergenic foods such as egg, fish, dairy and nut products (as smooth pastes, never whole nuts) do not need to be avoided. Introduce them one at a time and wait 3 to 5 days between each new food. If your child has severe eczema or egg allergy, talk with a doctor before introducing peanut. If your child has a known food allergy or has previously reacted to a food, ask a doctor how to introduce that food safely. Cook food thoroughly, wash hands, use clean water, and do not keep leftovers for long.',
       ),
       commonMistakes: [
         b('ချောမွေ့အောင် ကြိတ်ထားသော အစာကိုသာ အချိန်ကြာမြင့်စွာ ကျွေးခြင်း။ ကလေးစားနိုင်သည့် အစာအဖတ်နှင့် ပုံစံကို တဖြည်းဖြည်း ပြောင်းပေးရန် လိုသည်။', 'Staying on purée too long — textures need to progress.'),
@@ -986,7 +986,7 @@ const GUIDES_F: SeedItem[] = [
         b('အချိုရည်၊ လက်ဖက်ရည် သို့မဟုတ် ဆားပါသော အစာ တိုက်ခြင်း။', 'Giving sweet drinks, tea or salty food.'),
       ],
       parentTips: [
-        b('ကလေးက ဘာစားမလဲ ဆုံးဖြတ်သည်၊ မိဘက ဘာကို ဘယ်အချိန် ပေးမလဲ ဆုံးဖြတ်သည်။', 'You decide what is offered and when; she decides how much she eats.'),
+        CHILD_DEVELOPMENT_REFREEZE_COPY.gd_10_12m_nutrition.parentTip,
         b('အစားအစာ ငြင်းသည့် ရက်များ ရှိတတ်သည် — တစ်ပတ်လုံး ကြည့်ပါ၊ တစ်နပ်တည်း မကြည့်ပါနှင့်။', 'Refusal days happen — judge intake across a week, not one meal.'),
       ],
       faq: [
@@ -1023,8 +1023,8 @@ const GUIDES_G: SeedItem[] = [
     guide('10_12m', 'sleep', {
       title: b('၁၀ – ၁၂ လ — အိပ်စက်ခြင်း လမ်းညွှန်', '10–12 months — Sleep guide'),
       why: b(
-        'ဤအရွယ်တွင် ကလေးအများစုသည် ၂၄ နာရီအတွင်း ၁၂ နာရီမှ ၁၆ နာရီခန့် (နေ့ဘက် အိပ်ချိန် အပါအဝင်) အိပ်လေ့ရှိသည်၊ သို့သော် ကလေးတစ်ဦးနှင့်တစ်ဦး ကွာခြားနိုင်သည်။ နေ့ဘက်တွင် ၂ ကြိမ် အိပ်ခြင်းမှ ၁ ကြိမ်သို့ တဖြည်းဖြည်း ပြောင်းလာနိုင်သည်။ ခွဲခွာမှု စိုးရိမ်ခြင်း အထွတ်အထိပ် ရောက်ချိန်ဖြစ်၍ ညဘက် နိုးခြင်းများ ပြန်များလာတတ်သည် — ဤသည် နောက်ပြန်ဆုတ်ခြင်း မဟုတ်ဘဲ ဖွံ့ဖြိုးမှု၏ တစ်စိတ်တစ်ပိုင်း ဖြစ်သည်။ တည်ငြိမ်၍ ထပ်တလဲလဲ တူညီသော အိပ်ရာဝင် ပုံစံသည် အထောက်အကူ အဖြစ်ဆုံး ဖြစ်သည်။',
-        'Most babies this age sleep about 12 to 16 hours in 24 hours including naps, though this varies. Two naps often become one over these months. Because separation anxiety peaks now, night waking can increase again — that is development, not a setback. A calm, repeated bedtime routine helps most.',
+        'ဤအရွယ်တွင် ကလေးအများစုသည် ၂၄ နာရီအတွင်း ၁၂ နာရီမှ ၁၆ နာရီခန့် (နေ့ဘက် အိပ်ချိန် အပါအဝင်) အိပ်လေ့ရှိသည်၊ သို့သော် ကလေးတစ်ဦးနှင့်တစ်ဦး ကွာခြားနိုင်သည်။ ဤကာလအဆုံးပိုင်းတွင် ကလေးအချို့သည် နေ့ဘက် ၂ ကြိမ်အိပ်ခြင်းမှ ၁ ကြိမ်အိပ်ခြင်းသို့ စတင်ပြောင်းလဲနိုင်သော်လည်း အများအားဖြင့် ၁၂–၁၈ လခန့်တွင် တဖြည်းဖြည်း ပြောင်းလဲတတ်သည်။ ခွဲခွာမှု စိုးရိမ်ခြင်း အထွတ်အထိပ် ရောက်ချိန်ဖြစ်၍ ညဘက် နိုးခြင်းများ ပြန်များလာတတ်သည် — ဤသည် နောက်ပြန်ဆုတ်ခြင်း မဟုတ်ဘဲ ဖွံ့ဖြိုးမှု၏ တစ်စိတ်တစ်ပိုင်း ဖြစ်သည်။ တည်ငြိမ်၍ ထပ်တလဲလဲ တူညီသော အိပ်ရာဝင်ပုံစံသည် အိပ်စက်မှုကို အထောက်အကူပြုနိုင်သည်။',
+        'Most babies this age sleep about 12 to 16 hours in 24 hours including naps, though this varies. Some babies may begin moving from two naps toward one near the end of this period, but the transition commonly happens gradually around 12–18 months. Because separation anxiety peaks now, night waking can increase again — that is development, not a setback. A calm, repeated bedtime routine may help sleep.',
       ),
       observationQuestions: [
         b('အိပ်ရာဝင်ချိန် ပုံစံ တူညီပါသလား။', 'Is the bedtime routine the same each night?'),
@@ -1049,19 +1049,21 @@ const GUIDES_G: SeedItem[] = [
         b('နေ့ခင်းပိုင်းတွင် အပြင်ထွက်၍ သဘာဝ အလင်းရောင် ရစေခြင်း။', 'Time outdoors in natural daylight during the day.'),
       ],
       lowCost: [
-        b('တူညီသော အစီအစဉ်နှင့် တည်ငြိမ်သော အသံသည် အခမဲ့ဖြစ်ပြီး ထိရောက်သည်။', 'A consistent routine and a calm voice cost nothing.'),
+        b('တူညီသော အစီအစဉ်နှင့် တည်ငြိမ်သော အသံသည် အခမဲ့ ဖြစ်သည်။', 'A consistent routine and a calm voice cost nothing.'),
       ],
-      materials: b('ခိုင်ခံ့သော အိပ်ရာခင်း၊ ပါးလွှာသော စောင်၊ စာအုပ်တစ်အုပ်', 'A firm sleep surface, a light blanket, one book'),
+      materials: b('မာပြီး ပြားညီသော ကလေးအိပ်ရာနှင့် တင်းကျပ်စွာ ခင်းထားသော အိပ်ရာခင်းတစ်ထည်သာ။ စာအုပ်ကို အိပ်ရာပြင်ပတွင် ထားပါ။', 'A firm, flat infant sleep surface with only a fitted sheet. Keep the book outside the sleep space.'),
       safety: b(
-        'ကလေးအား အိပ်ရာဝင်တိုင်း ပက်လက် (ကျောပေး) အနေအထားဖြင့် အိပ်စေပါ — ၁ နှစ်ပြည့်သည်အထိ ဤအချက်သည် အရေးကြီးဆုံး လုံခြုံရေး အချက် ဖြစ်သည်။ ကလေး ကိုယ်တိုင် လှိမ့်တတ်ပြီဆိုလျှင် အလိုအလျောက် ပြန်လှည့်ပေးရန် မလိုပါ။ အိပ်ရာသည် ခိုင်ခံ့၍ ညီညာရမည်၊ ခေါင်းအုံး၊ မွေ့ရာနူးနူး၊ စောင်ထူ၊ ကစားစရာ ပျော့များ၊ ကြိုးများကို အိပ်ရာထဲတွင် မထားပါနှင့်။ ကလေးအား အခန်းတူတွင် သီးခြား အိပ်ရာဖြင့် အိပ်စေခြင်းသည် အကြံပြုထားသော နည်းလမ်း ဖြစ်သည်။ မိဘသည် ဆေးလိပ်သောက်ခြင်း၊ အရက် သို့မဟုတ် အိပ်ဆေး သောက်ထားခြင်း၊ အလွန် ပင်ပန်းနေခြင်း ရှိလျှင် အိပ်ရာ တူတူ မမျှဝေပါနှင့် — ဆိုဖာ သို့မဟုတ် အာမ်ချဲယားတွင် ကလေးနှင့် အတူ လုံးဝ မအိပ်ပါနှင့်၊ ၎င်းသည် အလွန် အန္တရာယ်များသည်။ အခန်းအပူချိန်ကို သင့်တင့်အောင် ထားပြီး အလွန် ထူထပ်စွာ မခြုံပါနှင့်။ ကလေး၏ အနီးတွင် ဆေးလိပ် မသောက်ပါနှင့်။',
-        'Place her on her back for every sleep — this remains the single most important safety point up to one year. Once she can roll herself, you do not need to keep turning her back. The sleep surface should be firm and flat, with no pillows, soft mattresses, thick quilts, soft toys or cords in it. Room-sharing with her on her own separate sleep surface is the recommended arrangement. Do not share a bed if anyone smokes, has drunk alcohol or taken sedating medicine, or is very tired — and never sleep with her on a sofa or armchair, which is especially dangerous. Keep the room at a comfortable temperature and avoid heavy covering. Keep the home smoke-free.',
+        'ကလေးအား အိပ်ရာဝင်တိုင်း ပက်လက် (ကျောပေး) အနေအထားဖြင့် အိပ်စေပါ — ၁ နှစ်ပြည့်သည်အထိ ဤအချက်သည် အရေးကြီးဆုံး လုံခြုံရေး အချက် ဖြစ်သည်။ ကလေးသည် ပက်လက်မှ မှောက်နှင့် မှောက်မှ ပက်လက် ဘက်နှစ်ဖက်စလုံး ကိုယ်တိုင် လှိမ့်နိုင်ပြီဆိုလျှင် ပြန်လှည့်ပေးရန် မလိုပါ။ အိပ်ရာသည် ခိုင်ခံ့၍ ညီညာရမည်။ အိပ်ရာထဲတွင် ခေါင်းအုံး၊ ပျော့ပျောင်းသော အရုပ်၊ လွတ်နေသော စောင်၊ အိပ်ရာခင်း၊ အဝတ် သို့မဟုတ် ကြိုး မထားပါနှင့်။ ကလေးအား အခန်းတူတွင် သီးခြား အိပ်ရာဖြင့် အိပ်စေခြင်းသည် အကြံပြုထားသော နည်းလမ်း ဖြစ်သည်။ မိဘသည် ဆေးလိပ်သောက်ခြင်း၊ အရက် သို့မဟုတ် အိပ်ဆေး သောက်ထားခြင်း၊ အလွန် ပင်ပန်းနေခြင်း ရှိလျှင် အိပ်ရာ တူတူ မမျှဝေပါနှင့် — ဆိုဖာ သို့မဟုတ် အာမ်ချဲယားတွင် ကလေးနှင့် အတူ လုံးဝ မအိပ်ပါနှင့်၊ ၎င်းသည် အလွန် အန္တရာယ်များသည်။ ကလေးကို သင့်တော်သော အိပ်ဝတ်အလွှာဖြင့် ဝတ်ပေးပြီး အလွန်ပူမနေစေပါနှင့်။ အိပ်ရာထဲတွင် လွတ်နေသော စောင် မထားပါနှင့်။ အိမ်ကို ဆေးလိပ်ငွေ့ကင်းစင်စွာ ထားပါ။ နေ့အိပ်ချိန်နှင့် ညအိပ်ချိန်တွင် နို့သီးခေါင်းကို ပေးကြည့်နိုင်ပါသည်။ မိခင်နို့တိုက်နေပါက နို့တိုက်ခြင်း အသားကျပြီးမှ ပေးပါ။ အိပ်ပျော်ပြီး နို့သီးခေါင်း ကျွတ်သွားလျှင် ပြန်ထည့်ပေးရန် မလိုပါ။',
+        'Place her on her back for every sleep — this remains the single most important safety point up to one year. Once she can roll both ways on her own, you do not need to keep turning her back. The sleep surface should be firm and flat. Keep pillows, soft toys, loose blankets, bedding, cloths, and cords out of the sleep space. Room-sharing with her on her own separate sleep surface is the recommended arrangement. Do not share a bed if anyone smokes, has drunk alcohol or taken sedating medicine, or is very tired — and never sleep with her on a sofa or armchair, which is especially dangerous. Dress her in suitable sleep clothing and avoid overheating; do not use a loose blanket in the sleep space. Keep the home smoke-free. You can offer a pacifier at nap time and bedtime. If you are breastfeeding, wait until feeding is well established. If the pacifier falls out after she falls asleep, it does not need to be put back.',
       ),
       commonMistakes: [
         b('အိပ်ရာထဲတွင် ခေါင်းအုံးနှင့် ကစားစရာ ပျော့များ ထားခြင်း။', 'Leaving pillows and soft toys in the sleep space.'),
-        b('ညဘက် နိုးတိုင်း ချက်ချင်း နို့တိုက်ခြင်း — ခဏ စောင့်ကြည့်ပါ၊ ကိုယ်တိုင် ပြန်အိပ်နိုင်သည်။', 'Feeding at every waking — pause briefly; she may resettle herself.'),
+        b('အလေးချိန်ပါသော စောင်၊ အိပ်ဝတ်စုံ သို့မဟုတ် ပတ်ရစ်ပိတ်စများ သုံးခြင်း။', 'Using weighted blankets, weighted sleepers, or weighted swaddles.'),
+        b('အိမ်သုံး အသက်ရှူ/နှလုံးခုန် စောင့်ကြည့်စက်ကို ဘေးကင်းသော အိပ်စက်ရာနေရာ၏ အစား အားကိုးခြင်း — ဤစက်များသည် SIDS အန္တရာယ်ကို လျော့ချပေးကြောင်း သက်သေမရှိပါ။', 'Relying on a home breathing or heart-rate monitor instead of a safe sleep space — these monitors have not been shown to reduce SIDS risk.'),
+        b('ညဘက် နိုးတိုင်း တူညီသောနည်းဖြင့် အလိုအလျောက် တုံ့ပြန်ခြင်း — ဆာလောင်မှု၊ မသက်မသာဖြစ်မှုနှင့် နှစ်သိမ့်မှုလိုအပ်ချက်ကို စစ်ဆေးပြီး ကလေး၏ အချက်ပြမှုအတိုင်း တုံ့ပြန်ပါ။', 'Responding automatically in the same way at every waking — check for hunger, discomfort, or a need for reassurance, and respond to your baby’s cues.'),
       ],
       parentTips: [
-        b('အိပ်ငိုက်နေဆဲ (မအိပ်ပျော်သေး) အချိန်တွင် အိပ်ရာချပေးပါ — ကိုယ်တိုင် အိပ်ပျော်တတ်လာသည်။', 'Put her down drowsy but still awake so she learns to fall asleep herself.'),
+        b('အိပ်ငိုက်နေဆဲ (မအိပ်ပျော်သေး) အချိန်တွင် အိပ်ရာချပေးကြည့်ပါ — ကိုယ်တိုင် ပြန်ငြိမ်သက်၍ အိပ်ပျော်ရန် လေ့ကျင့်ရာတွင် အထောက်အကူပြုနိုင်သည်။', 'Try putting her down drowsy but still awake; this may help her practise settling to sleep.'),
         b('ခွဲခွာမှု စိုးရိမ်ချိန်တွင် ညဘက် နိုးမှု များလာခြင်းသည် ယာယီ ဖြစ်သည်။', 'More night waking during separation anxiety is temporary.'),
       ],
       faq: [
@@ -1085,10 +1087,10 @@ const GUIDES_G: SeedItem[] = [
       ),
       encouragement: b(
         'ကလေး၏ အိပ်စက်မှုပုံစံသည် အမြဲ တဖြည်းဖြည်း ကောင်းမွန်လာမည် မဟုတ်ပါ။ တစ်ခါတစ်ရံ ပြန်လည်မတည်ငြိမ်နိုင်သော်လည်း ပုံမှန်လုပ်ရိုးလုပ်စဉ်ကို ဆက်လက်လုပ်ပေးခြင်းက အချိန်ကြာလာသည်နှင့်အမျှ အထောက်အကူပြုနိုင်သည်။',
-        'Sleep does not improve in a straight line — a steady routine pays off over time.',
+        'Sleep does not improve in a straight line — a steady routine may help over time.',
       ),
     }),
-    'Total sleep ranges, nap transition and bedtime-routine advice at this age follow the WHO guidelines on physical activity, sedentary behaviour and sleep for under-fives, the American Academy of Sleep Medicine review of bedtime routines and behavioural sleep interventions and the randomised controlled trial of a behavioural infant-sleep intervention in the registry, with the safe-sleep, bed-sharing and sleep-surface points taken from the AAP safe-sleep recommendations, the NHS guidance on reducing the risk of sudden infant death and the Health Canada safe-sleep statement.',
+    'Total sleep ranges follow WHO guidance for under-fives. The direct bedtime-routine trial supports a calm routine at this age; the AASM review, the newer systematic review and the age-matched Hiscock trial support behavioral help for established bedtime or night-waking problems rather than a universal controlled-crying instruction. Cue-responsive wording follows the WHO/UNICEF Nurturing Care Framework. Safe-sleep, bed-sharing, sleep-surface, pacifier, weighted-product and home-monitor points follow the linked AAP, NHS and Health Canada guidance.',
   ),
   kb(
     guide('10_12m', 'daily_routine', {
@@ -1124,8 +1126,8 @@ const GUIDES_G: SeedItem[] = [
       ],
       materials: b('ကာကွယ်ဆေး မှတ်တမ်းကတ်၊ ကိုယ်အလေးချိန် မှတ်တမ်း', 'The immunisation card and a growth record'),
       safety: b(
-        'ကလေး ဖျားနာလျှင် အောက်ပါ လက္ခဏာများသည် အရေးပေါ် ဖြစ်ပြီး ချက်ချင်း ဆေးကုသမှု လိုအပ်သည် — အသက်ရှူ ခက်ခဲခြင်း သို့မဟုတ် မြန်ဆန်ခြင်း၊ နှုတ်ခမ်း သို့မဟုတ် အရေပြား ညိုမည်းလာခြင်း၊ တက်ခြင်း၊ နိုးရန် အလွန် ခက်ခဲခြင်း သို့မဟုတ် တုံ့ပြန်မှု မရှိခြင်း၊ ဖိကြည့်လျှင် မပျောက်သော အနီကွက်များ၊ ပြင်းထန်စွာ ရေဓာတ်ခန်းခြောက်ခြင်း (ဆီးနည်းခြင်း၊ ပါးစပ် ခြောက်ခြင်း၊ မျက်လုံး ချိုင့်ဝင်ခြင်း)၊ ထပ်ခါထပ်ခါ အန်ခြင်း သို့မဟုတ် အစာ၊ ရေ လုံးဝ မသောက်နိုင်ခြင်း။ ကာကွယ်ဆေးများကို ဒေသ အစီအစဉ်အတိုင်း အချိန်မီ ထိုးပါ။ ဆေးမည်သည်ကိုမဆို ကျန်းမာရေးဝန်ထမ်း၏ ညွှန်ကြားချက်မပါဘဲ မတိုက်ပါနှင့် — ဗီတာမင်နှင့် အားဆေးများ အပါအဝင်။ ဆေးများကို သော့ခတ် သိမ်းပါ။',
-        'When she is unwell, these are emergency signs needing immediate medical care — difficulty or fast breathing, blue or very pale lips or skin, a fit or convulsion, being very hard to wake or unresponsive, a rash that does not fade when pressed, severe dehydration (very little urine, dry mouth, sunken eyes), repeated vomiting, or refusing all feeds and fluids. Keep immunisations on schedule according to your local programme. Do not give any medicine, including vitamins and supplements, without advice from a health worker, and keep all medicines locked away.',
+        'ကလေး ဖျားနာလျှင် အောက်ပါ လက္ခဏာများသည် အရေးပေါ် ဖြစ်ပြီး ချက်ချင်း ဆေးကုသမှု လိုအပ်သည် — အသက်ရှူရန် အလွန် ခက်ခဲခြင်း၊ နှုတ်ခမ်း သို့မဟုတ် အရေပြား ပြာ/ညိုမည်းလာခြင်း သို့မဟုတ် အလွန် ဖြူဖျော့လာခြင်း၊ တက်ခြင်း၊ နိုးရန် အလွန် ခက်ခဲခြင်း သို့မဟုတ် တုံ့ပြန်မှု မရှိခြင်း၊ ဖိကြည့်လျှင် မပျောက်သော အနီကွက်များ၊ ပြင်းထန်သော ရေဓာတ်ခန်းခြောက်မှုဟု သံသယရှိခြင်း (မျက်လုံး ချိုင့်ဝင်ခြင်းနှင့်အတူ နိုးရခက်/တုံ့ပြန်မှုမရှိခြင်း သို့မဟုတ် ရေမသောက်နိုင်ခြင်း)၊ တိုက်ကျွေးသမျှ အန်ထွက်ခြင်း သို့မဟုတ် အရည်ကို မထိန်းထားနိုင်ခြင်း။ ကာကွယ်ဆေးများကို ဒေသ အစီအစဉ်အတိုင်း အချိန်မီ ထိုးပါ။ ဆေးမည်သည်ကိုမဆို ကျန်းမာရေးဝန်ထမ်း၏ ညွှန်ကြားချက်မပါဘဲ မတိုက်ပါနှင့် — ဗီတာမင်နှင့် အားဆေးများ အပါအဝင်။ ဆေးများကို သော့ခတ် သိမ်းပါ။',
+        'When she is unwell, these are emergency signs needing immediate medical care — severe difficulty breathing; blue, grey or very pale lips or skin; a fit or convulsion; being very hard to wake or unresponsive; a rash that does not fade when pressed; suspected severe dehydration (sunken eyes together with lethargy/unresponsiveness or inability to drink); or vomiting everything or being unable to keep fluids down. Keep immunisations on schedule according to your local programme. Do not give any medicine, including vitamins and supplements, without advice from a health worker, and keep all medicines locked away.',
       ),
       commonMistakes: [
         b('နာရီအတိအကျ လိုက်နာရန် ကြိုးစား၍ ဖိအား ဖြစ်ခြင်း — အစဉ်လိုက်သာ အရေးကြီးသည်။', 'Chasing an exact clock — the order matters more than the minute.'),
@@ -1142,11 +1144,11 @@ const GUIDES_G: SeedItem[] = [
         },
         {
           q: b('ဖျားရင် ဘယ်အချိန် ဆေးခန်း သွားရမလဲ။', 'When should I take her to a clinic for a fever?'),
-          a: b('အထက်ပါ အရေးပေါ် လက္ခဏာများ တစ်ခုခု ရှိလျှင် ချက်ချင်း သွားပါ။ ထို့အပြင် ကလေးသည် ၃ လအောက် ဖြစ်လျှင်၊ ဖျားချိန် ၅ ရက်ထက် ကြာလျှင်၊ သို့မဟုတ် ကလေး၏ အနေအထားက သင့်ကို စိုးရိမ်စေလျှင် ကျန်းမာရေးဝန်ထမ်းနှင့် ပြသပါ — မိဘ၏ ခံစားချက်သည်လည်း အရေးကြီးသော အချက်ပြမှု ဖြစ်သည်။', 'Go immediately with any of the emergency signs above. Also seek advice if the baby is under three months, if fever lasts more than five days, or if she simply seems wrong to you — a parent’s instinct is an important signal.'),
+          a: b('အထက်ပါ အရေးပေါ် လက္ခဏာများ တစ်ခုခု ရှိလျှင် ချက်ချင်း သွားပါ။ ထို့အပြင် အဖျားသည် ၅ ရက် သို့မဟုတ် ထိုထက်ပိုကြာလျှင်၊ သို့မဟုတ် ကလေး၏ အနေအထားက သင့်ကို စိုးရိမ်စေလျှင် ကျန်းမာရေးဝန်ထမ်းနှင့် ပြသပါ — မိဘ၏ ခံစားချက်သည်လည်း အရေးကြီးသော အချက်ပြမှု ဖြစ်သည်။', 'Go immediately with any of the emergency signs above. Also seek advice if fever lasts five days or longer, or if she simply seems wrong to you — a parent’s instinct is an important signal.'),
         },
       ],
       redFlags: [
-        b('အသက်ရှူ ခက်ခဲခြင်း သို့မဟုတ် မြန်ဆန်ခြင်း၊ နှုတ်ခမ်း ညိုမည်းလာခြင်း။', 'Difficult or fast breathing, or blue lips.'),
+        b('အသက်ရှူရန် အလွန် ခက်ခဲခြင်း သို့မဟုတ် နှုတ်ခမ်း ပြာ/ညိုမည်းလာခြင်း။', 'Severe difficulty breathing, or blue or grey lips.'),
         b('တက်ခြင်း၊ နိုးရန် အလွန် ခက်ခဲခြင်း၊ တုံ့ပြန်မှု မရှိခြင်း။', 'A fit, being very hard to wake, or unresponsiveness.'),
         b('ဖိကြည့်လျှင် မပျောက်သော အနီကွက်များ။', 'A rash that does not fade under pressure.'),
         b('အစာ၊ ရေ လုံးဝ မသောက်နိုင်ခြင်း သို့မဟုတ် ပြင်းထန်သော ရေဓာတ်ခန်းခြောက်မှု။', 'Refusing all fluids or severe dehydration.'),
@@ -1160,7 +1162,7 @@ const GUIDES_G: SeedItem[] = [
         'A rhythm that fits your family beats a perfect timetable.',
       ),
     }),
-    'The value of predictable daily routines follows the Nurturing Care Framework, the Bright Futures preventive-care schedule, the American Academy of Sleep Medicine review of bedtime routines and the randomised controlled trial of a behavioural infant-sleep intervention, with feeding rhythm from the WHO infant and young child feeding model chapter, water-safety points from the AAP drowning-prevention policy, the fever and serious-illness signs from the NICE fever in under-5s guideline, the NHS guidance on spotting a seriously ill child and the WHO IMCI chart booklet, and immunisation timing from the CDC immunisation schedule and the WHO Immunization Agenda 2030.',
+    'Predictable daily routines follow the Nurturing Care Framework and the Bright Futures preventive-care schedule, with feeding rhythm from the WHO infant and young child feeding model chapter, water-safety points from the AAP drowning-prevention policy, fever and serious-illness signs from NICE, NHS and WHO IMCI guidance, and immunisation timing from the CDC schedule and the WHO Immunization Agenda 2030.',
   ),
 ];
 
@@ -1208,7 +1210,7 @@ const ACTIVITIES: SeedItem[] = [
     activity({
       slug: 'hide_and_find_toy',
       title: b('ကစားစရာ ဝှက်၍ ရှာခြင်း', 'Hide and find the toy'),
-      summary: b('အဝတ်စအောက်တွင် ကစားစရာကို ဝှက်၍ ရှာစေခြင်းဖြင့် "မမြင်ရလည်း ရှိနေသေးတယ်" ဟူသော အသိကို လေ့ကျင့်ပေးသည်။', 'Hiding a toy under a cloth for her to find strengthens the idea that things still exist when out of sight.'),
+      summary: b('အဝတ်စအောက်တွင် ကစားစရာကို ဝှက်ပြီး မမြင်ရသော်လည်း အရာများ ရှိနေဆဲဖြစ်ကြောင်း အတူ စူးစမ်းကစားပါ။', 'Hide a toy under a cloth and explore together that things still exist when out of sight.'),
       ageGroupKey: '10_12m',
       domains: ['cognitive', 'problem_solving', 'play'],
       difficulty: 'easy',
@@ -1222,7 +1224,7 @@ const ACTIVITIES: SeedItem[] = [
         b('ကလေး မရှာလျှင် အဝတ်စ၏ အစွန်းကို အနည်းငယ် ဖွင့်ပြပါ။', 'If she does not search, lift a corner to help.'),
         b('ကလေး ကျွမ်းလာလျှင် အပြည့် ဖုံးကြည့်ပါ။', 'Once she succeeds, try covering it completely.'),
       ],
-      safety: b('ပါးလွှာသော အဝတ်စကိုသာ သုံးပါ — ပလတ်စတစ်အိတ်ကို လုံးဝ မသုံးပါနှင့် (အသက်ရှူ ပိတ်နိုင်သည်)။ ကလေး၏ မျက်နှာပေါ်တွင် အဝတ်စ ကြာရှည် မတင်ထားပါနှင့်။ ကစားစရာသည် ပါးစပ်ထဲ မဝင်နိုင်လောက်အောင် ကြီးရမည်။', 'Use only a light cloth — never a plastic bag, which is a suffocation risk. Do not leave the cloth over her face. The toy must be too large to fit in her mouth.'),
+      safety: b('ပါးလွှာသော အဝတ်စကိုသာ သုံးပါ — ပလတ်စတစ်အိတ်ကို လုံးဝ မသုံးပါနှင့် (အသက်ရှူ ပိတ်နိုင်သည်)။ ကလေး၏ မျက်နှာပေါ်တွင် အဝတ်စ မတင်ထားပါနှင့်။ ကစားစရာသည် ပါးစပ်ထဲ မဝင်နိုင်လောက်အောင် ကြီးရမည်။', 'Use only a light cloth — never a plastic bag, which is a suffocation risk. Do not leave the cloth over her face. The toy must be too large to fit in her mouth.'),
       indoor: true,
       outdoor: false,
       oneChild: true,
@@ -1253,7 +1255,7 @@ const ACTIVITIES: SeedItem[] = [
       difficulty: 'medium',
       durationMinutes: 10,
       materials: b('ခိုင်ခံ့သော ဆိုဖာ သို့မဟုတ် နိမ့်သော စားပွဲ၊ ကစားစရာ တစ်ခု', 'A stable sofa or low table, and one toy'),
-      setup: b('ပရိဘောဂ ဘေးပတ်လည်ကို ရှင်းလင်းပြီး ကြမ်းပြင်ပေါ် ဖျာ သို့မဟုတ် ပျော့သော အခင်း ခင်းပါ။', 'Clear the floor around the furniture and lay a mat or soft covering.'),
+      setup: b('ပရိဘောဂဘေးပတ်လည်မှ ပစ္စည်းများကို ရှင်းပြီး ချော်မရွေ့သည့် ကြမ်းပြင် သို့မဟုတ် ခိုင်စွာထားသော ချော်မရွေ့ဖျာကို သုံးပါ။', 'Clear the floor around the furniture and use a firm, non-slip surface or a securely fixed non-slip mat.'),
       instructions: [
         b('ကလေးအား ပရိဘောဂကို ကိုင်၍ ရပ်စေပါ။', 'Help her stand holding the furniture.'),
         b('ကစားစရာကို လက်တစ်လှမ်း ဘေးတွင် တင်ထားပါ။', 'Place the toy one arm-length to the side.'),
@@ -1272,7 +1274,7 @@ const ACTIVITIES: SeedItem[] = [
         b('ကိုယ်တိုင် ရွေ့လျားနိုင်မှုအပေါ် ယုံကြည်မှု တိုးလာသည်။', 'Growing confidence in moving herself.'),
       ],
       variations: [
-        b('ပရိဘောဂ နှစ်ခုကို တစ်လှမ်းစာ ကွာအောင် ထားပေးပါ။', 'Place two stable items one step apart.'),
+        b('ခိုင်ခံ့စွာ တွယ်ထားသော ပရိဘောဂနှစ်ခုကို ကလေးလက်လှမ်းမီအကွာတွင် ထားပြီး လူကြီးက လက်လှမ်းမီအနီးမှ ကြီးကြပ်ပါ။', 'Place two stable, anchored items within the child’s reach and supervise within arm’s reach.'),
         b('သီချင်း ဆိုရင်း လှမ်းစေပါ။', 'Sing while she steps.'),
       ],
       lowCost: true,
@@ -1320,13 +1322,13 @@ const ACTIVITIES_B: SeedItem[] = [
       offline: true,
       tags: ['turn_taking', 'ball_play'],
     }),
-    'Turn-taking ball play draws on AAP guidance on the power of play, the WHO Care for Child Development package, CDC milestone guidance and the paediatric physical-therapy reference held in the registry.',
+    'Turn-taking ball play draws on AAP play guidance, CDC milestone guidance and paediatric physical-therapy references in the registry.',
   ),
   kb(
     activity({
       slug: 'show_me_and_name_it',
       title: b('ညွှန်ပြပြီး နာမည်ခေါ်ခြင်း', 'Point and name it'),
-      summary: b('ကလေး ညွှန်ပြသည့် အရာကို နာမည်ခေါ်ပေးခြင်းဖြင့် ဝေါဟာရနှင့် ပူးတွဲ အာရုံစိုက်မှုကို တည်ဆောက်ပေးသည်။', 'Naming what she points at builds vocabulary and shared attention.'),
+      summary: b('ကလေး ညွှန်ပြသည့်အရာကို အမည်ခေါ်ပေးခြင်းက ဝေါဟာရ သင်ယူမှုနှင့် ပူးတွဲအာရုံစိုက်မှုကို အထောက်အကူပြုပါသည်။', 'Naming what the child points at supports vocabulary learning and shared attention.'),
       ageGroupKey: '10_12m',
       domains: ['language', 'communication'],
       difficulty: 'easy',
@@ -1405,7 +1407,7 @@ const ACTIVITIES_C: SeedItem[] = [
     activity({
       slug: 'open_cup_sips',
       title: b('ခွက်ဖြင့် ရေသောက် လေ့ကျင့်ခြင်း', 'Open cup practice'),
-      summary: b('သေးငယ်သော ခွက်ဖြင့် ရေအနည်းငယ် သောက်ခြင်းသည် ကိုယ်တိုင် စားသောက်နိုင်မှုနှင့် ပါးစပ် ကြွက်သားများကို လေ့ကျင့်ပေးသည်။', 'Sipping a little water from a small open cup builds self-feeding skill and oral strength.'),
+      summary: b('သေးငယ်သော ခွက်ဖြင့် ရေအနည်းငယ် သောက်ခြင်းသည် ခွက်မှ သောက်တတ်ရန်နှင့် ကိုယ်တိုင် လုပ်ဆောင်နိုင်မှုကို လေ့ကျင့်ပေးသည်။', 'Sipping a little water from a small open cup helps your child practise drinking from a cup and doing more for themselves.'),
       ageGroupKey: '10_12m',
       domains: ['self_help', 'nutrition'],
       difficulty: 'easy',
@@ -1415,11 +1417,11 @@ const ACTIVITIES_C: SeedItem[] = [
       instructions: [
         b('ခွက်ထဲ ရေ အနည်းငယ်သာ ထည့်ပါ (တစ်ဝက်အောက်)။', 'Put only a small amount of water in the cup — less than half.'),
         b('ခွက်ကို ကလေး၏ အောက်နှုတ်ခမ်းတွင် ဖြည်းညှင်းစွာ ကပ်ပေးပါ။', 'Rest the cup gently on her lower lip.'),
-        b('ဖြည်းညှင်းစွာ စောင်းပေးပြီး ကလေး မျိုချသည်ကို စောင့်ပါ။', 'Tilt slowly and wait for her to swallow.'),
+        b('ခွက်ကို ရေက အောက်နှုတ်ခမ်းကို ထိရုံသာ ဖြည်းညှင်းစွာ စောင်းပေးပါ။ ကလေးကိုယ်တိုင် စုပ်သောက်ပြီး မျိုချနိုင်ရန် စောင့်ပါ — ပါးစပ်ထဲသို့ မလောင်းထည့်ပါနှင့်။', 'Tilt the cup only until the water touches the lower lip. Let the child sip and swallow at their own pace—do not pour liquid into the mouth.'),
         b('ကလေး ခွက်ကို ကိုင်လိုလျှင် သင့်လက်ဖြင့် အတူ ကိုင်ပေးပါ။', 'If she wants to hold it, hold it together with her.'),
         b('တစ်ရက်လျှင် စားသောက်ချိန်တွင် အနည်းငယ်စီ လေ့ကျင့်ပါ — ဖိအားမပေးပါနှင့်။', 'Practise a little at mealtimes — never force it.'),
       ],
-      safety: b('ကလေး မတ်မတ် ထိုင်နေစဉ်သာ တိုက်ပါ — လှဲလျက် မတိုက်ပါနှင့်။ ကလေးအား ခွက်နှင့် တစ်ယောက်တည်း မထားပါနှင့်။ ကလေး ချောင်းဆိုးလျှင် ရပ်ပါ။ ဖန်ခွက် သို့မဟုတ် ကွဲနိုင်သော ခွက်ကို မသုံးပါနှင့်။ အိပ်ရာထဲတွင် ခွက် သို့မဟုတ် ပုလင်း မထားခဲ့ပါနှင့် — သွားပိုးစားနိုင်သည်။', 'Only offer it while she is sitting upright, never lying down. Do not leave her alone with the cup. Stop if she coughs. Do not use glass or anything breakable. Never leave a cup or bottle with her in bed — it harms the teeth.'),
+      safety: b('ကလေး မတ်မတ် ထိုင်နေစဉ်သာ တိုက်ပါ — လှဲလျက် မတိုက်ပါနှင့်။ ကလေးအား ခွက်နှင့် တစ်ယောက်တည်း မထားပါနှင့်။ ကလေး ချောင်းဆိုးလျှင် ရပ်ပါ။ ဖန်ခွက် သို့မဟုတ် ကွဲနိုင်သော ခွက်ကို မသုံးပါနှင့်။ အိပ်ရာထဲတွင် ခွက် သို့မဟုတ် ပုလင်း မထားခဲ့ပါနှင့် — သွားပိုးစားနိုင်သည်။', 'Only offer it while she is sitting upright, never lying down. Do not leave her alone with the cup. Stop if she coughs. Do not use glass or anything breakable. Never leave a cup or bottle with her in bed — it can contribute to tooth decay.'),
       indoor: true,
       outdoor: false,
       oneChild: true,
@@ -1437,7 +1439,7 @@ const ACTIVITIES_C: SeedItem[] = [
       offline: true,
       tags: ['cup_drinking', 'self_feeding'],
     }),
-    'Open-cup practice and the safety points around it follow the WHO infant and young child feeding model chapter, CDC feeding guidance for 6–24 months, the paediatric occupational-therapy reference, the ASHA pediatric feeding and swallowing resource and AAP oral-health guidance in the registry.',
+    'Open-cup practice and the safety points around it follow the WHO infant and young child feeding model chapter, CDC feeding guidance for 6–24 months, the paediatric occupational-therapy reference and AAP oral-health guidance in the registry.',
   ),
 ];
 

@@ -19,12 +19,16 @@ const ROLES: ReviewerRole[] = [
 ];
 
 describe('review permission matrix', () => {
-  it('lets only a clinical reviewer decide clinical and safety', () => {
-    for (const dimension of ['clinical', 'safety'] as ReviewDimension[]) {
-      for (const role of ROLES) {
-        expect(roleMayReview(role, dimension), `${role} · ${dimension}`)
-          .toBe(role === 'clinical_reviewer');
-      }
+  it('lets only a clinical reviewer decide clinical review', () => {
+    for (const role of ROLES) {
+      expect(roleMayReview(role, 'clinical'), role).toBe(role === 'clinical_reviewer');
+    }
+  });
+
+  it('lets qualified evidence and editorial professionals decide child safety review', () => {
+    const allowed = new Set(['owner', 'content_editor', 'evidence_reviewer', 'clinical_reviewer']);
+    for (const role of ROLES) {
+      expect(roleMayReview(role, 'safety'), role).toBe(allowed.has(role));
     }
   });
 
@@ -32,6 +36,13 @@ describe('review permission matrix', () => {
     const allowed = new Set(['owner', 'content_editor', 'evidence_reviewer', 'clinical_reviewer']);
     for (const role of ROLES) {
       expect(roleMayReview(role, 'evidence'), role).toBe(allowed.has(role));
+    }
+  });
+
+  it('limits qualified child-development decisions to the specialist reviewer role', () => {
+    const allowed = new Set(['clinical_reviewer']);
+    for (const role of ROLES) {
+      expect(roleMayReview(role, 'child_development'), role).toBe(allowed.has(role));
     }
   });
 
@@ -45,7 +56,7 @@ describe('review permission matrix', () => {
   });
 
   it('never grants review rights to support or to a missing role', () => {
-    for (const dimension of ['english', 'native_myanmar', 'evidence', 'safety', 'clinical'] as ReviewDimension[]) {
+    for (const dimension of ['english', 'native_myanmar', 'child_development', 'evidence', 'safety', 'clinical'] as ReviewDimension[]) {
       expect(roleMayReview('support', dimension)).toBe(false);
       expect(roleMayReview(null, dimension)).toBe(false);
       expect(roleMayReview(undefined, dimension)).toBe(false);
@@ -57,6 +68,7 @@ describe('review permission matrix', () => {
     expect(approvalNeedsQualification('clinical')).toBe(true);
     expect(approvalNeedsQualification('safety')).toBe(true);
     expect(approvalNeedsQualification('evidence')).toBe(true);
+    expect(approvalNeedsQualification('child_development')).toBe(true);
     expect(approvalNeedsQualification('english')).toBe(false);
     expect(approvalNeedsQualification('native_myanmar')).toBe(false);
   });
@@ -75,6 +87,10 @@ describe('review refusal', () => {
 
   it('allows a well-formed decision', () => {
     expect(reviewRefusal(base)).toBeNull();
+  });
+
+  it('preserves not-applicable for the generic non-release review workflow', () => {
+    expect(reviewRefusal({ ...base, decision: 'not_applicable' })).toBeNull();
   });
 
   it('names each refusal reason with a code the UI can translate', () => {
@@ -107,11 +123,16 @@ describe('review refusal', () => {
     const codes = [
       'not_staff', 'role_may_not_review_area', 'display_name_required',
       'qualification_required', 'note_required', 'content_not_found',
+      'retired_content', 'assignment_required', 'stale_revision',
     ] as const;
     for (const code of codes) {
       expect(REVIEW_REFUSAL_LABELS[code]?.mm, code).toBeTruthy();
       expect(REVIEW_REFUSAL_LABELS[code]?.en, code).toBeTruthy();
     }
+    expect(REVIEW_REFUSAL_LABELS.qualification_required.mm).toBe(
+      'ဤအပိုင်းကို အတည်မပြုမီ သင့်အကောင့်တွင် သက်ဆိုင်ရာ ပညာရပ်ဆိုင်ရာ အရည်အချင်းကို ထည့်ပါ။',
+    );
+    expect(REVIEW_REFUSAL_LABELS.qualification_required.en).toContain('professional qualification');
   });
 });
 

@@ -1,8 +1,17 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { LocaleProvider, documentLang } from '../../app/LocaleContext';
 import { LegalPage } from '../LegalPage';
+
+const paymentCapabilities = vi.hoisted(() => ({
+  manualTransferAvailable: false,
+  mmpayProductionAvailable: false,
+}));
+
+vi.mock('convex/react', () => ({
+  useQuery: () => paymentCapabilities,
+}));
 
 // ACG-I18N-001: these are the only screens an unauthenticated visitor can
 // land on (Google Play/App Store policy links, a shared URL). Before this
@@ -14,9 +23,11 @@ import { LegalPage } from '../LegalPage';
 afterEach(() => {
   cleanup();
   localStorage.clear();
+  paymentCapabilities.manualTransferAvailable = false;
+  paymentCapabilities.mmpayProductionAvailable = false;
 });
 
-function renderLegal(kind: 'privacy' | 'account-deletion' | 'terms') {
+function renderLegal(kind: 'privacy' | 'account-deletion' | 'terms' | 'support') {
   return render(
     <MemoryRouter>
       <LocaleProvider>
@@ -48,6 +59,17 @@ describe('LegalPage locale correctness', () => {
     expect(document.documentElement.lang).toBe(documentLang('mm'));
   });
 
+  it('renders a functional public support page in both locales', () => {
+    renderLegal('support');
+    expect(screen.getByRole('heading', { name: 'ACE Child Grow အကူအညီ' })).toBeTruthy();
+    expect(screen.getByRole('link', { name: 'admin-ace@acegroup.com.mm' })).toHaveAttribute('href', expect.stringContaining('mailto:'));
+    expect(screen.getByText(/PIN၊ စကားဝှက်/)).toBeTruthy();
+
+    fireEvent.click(screen.getByRole('button', { name: 'English' }));
+    expect(screen.getByRole('heading', { name: 'ACE Child Grow Support' })).toBeTruthy();
+    expect(screen.getByText(/Medical emergencies/)).toBeTruthy();
+  });
+
   it('toggling the language switches body content and <html lang> together', () => {
     renderLegal('privacy');
     expect(document.documentElement.lang).toBe(documentLang('mm'));
@@ -71,5 +93,31 @@ describe('LegalPage locale correctness', () => {
     expect(screen.getByRole('heading', { name: 'Terms of Service' })).toBeTruthy();
     expect(screen.getByRole('note').textContent).toMatch(/draft/i);
     expect(screen.getByText(/Refunds/)).toBeTruthy();
+  });
+
+  it('does not advertise manual transfer when no method is active', () => {
+    localStorage.setItem('ace-locale', 'en');
+    renderLegal('terms');
+
+    expect(screen.getByText(/New paid purchases are temporarily unavailable/)).toBeTruthy();
+    expect(screen.queryByText(/Myan Myan Pay/)).toBeNull();
+    expect(screen.queryByText(/manual-transfer proof/)).toBeNull();
+    expect(screen.queryByText(/bank\/wallet transfer/)).toBeNull();
+  });
+
+  it('describes manual proof review only when an active method exists', () => {
+    paymentCapabilities.manualTransferAvailable = true;
+    localStorage.setItem('ace-locale', 'en');
+    renderLegal('terms');
+
+    expect(screen.getByText(/Staff review the submitted proof/)).toBeTruthy();
+  });
+
+  it('advertises Myan Myan Pay only when the production capability is valid', () => {
+    paymentCapabilities.mmpayProductionAvailable = true;
+    localStorage.setItem('ace-locale', 'en');
+    renderLegal('terms');
+
+    expect(screen.getByText(/production Myan Myan Pay/)).toBeTruthy();
   });
 });

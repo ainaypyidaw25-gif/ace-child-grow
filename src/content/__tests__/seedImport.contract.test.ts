@@ -14,6 +14,20 @@ import {
 } from '../../../convex/lib/seedPolicy';
 import { importSeed } from '../../../convex/library';
 import { run as seedRun } from '../../../convex/seed';
+import {
+  BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID,
+  BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_TARGET,
+  DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID,
+  DUPLICATE_MILESTONE_SLUGS,
+  isRetiredMilestoneSlug,
+  SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_RELEASE_ID,
+  SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_TARGETS,
+} from '../../../convex/lib/contentRetirements';
+import {
+  BURMESE_COPY_AUDIT_HELD_SLUGS,
+  BURMESE_COPY_AUDIT_RELEASE_ID,
+  BURMESE_COPY_AUDIT_TARGETS,
+} from '../../../convex/lib/burmeseCopyAuditRelease';
 
 // Resolved from this file, not the runner's cwd, so the guard cannot silently
 // pass (or fail) because of where vitest was invoked from.
@@ -46,6 +60,41 @@ const IMPORTER_FIELDS = new Set([
 ]);
 
 describe('seed generation', () => {
+  it('excludes the exact code-reviewed duplicate-milestone retirement release', () => {
+    expect(DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID).toBe('2026-08-11-duplicate-milestones');
+    expect(DUPLICATE_MILESTONE_SLUGS).toHaveLength(6);
+    const slugs = new Set(seedPayload().map((item) => item.slug));
+    for (const slug of DUPLICATE_MILESTONE_SLUGS) expect(slugs.has(slug), slug).toBe(false);
+  });
+
+  it('excludes the exact PH40-scope milestone retirement release', () => {
+    expect(SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_RELEASE_ID)
+      .toBe('2026-08-18-social-emotional-milestones');
+    expect(SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_TARGETS).toEqual([
+      { slug: 'ms_3_4m_social_2', expectedClinicalStatus: 'clinical_review', expectedReviewRevision: 1 },
+      { slug: 'ms_2_5y_social_3', expectedClinicalStatus: 'clinical_review', expectedReviewRevision: 2 },
+      { slug: 'ms_13_18m_emotional_1', expectedClinicalStatus: 'clinical_review', expectedReviewRevision: 2 },
+      { slug: 'ms_5y_emotional_1', expectedClinicalStatus: 'clinical_review', expectedReviewRevision: 1 },
+    ]);
+    const slugs = new Set(seedPayload().map((item) => item.slug));
+    for (const target of SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_TARGETS) {
+      expect(slugs.has(target.slug), target.slug).toBe(false);
+    }
+  });
+
+  it('excludes the exact Bright Futures template duplicate retirement release', () => {
+    expect(BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_RELEASE_ID)
+      .toBe('2026-08-19-bright-futures-duplicate-milestone');
+    expect(BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_TARGET).toEqual({
+      slug: 'ms_5y_self_help_2',
+      expectedClinicalStatus: 'clinical_review',
+      expectedReviewRevision: 5,
+    });
+    expect(seedPayload().some(
+      (item) => item.slug === BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_TARGET.slug,
+    )).toBe(false);
+  });
+
   it('keeps published errata narrow and code-versioned', () => {
     const releases = [
       ['2026-07-28-content-remediation', 11],
@@ -59,6 +108,19 @@ describe('seed generation', () => {
       expect(slugs?.every((slug) => seedPayload().some((item) => item.slug === slug))).toBe(true);
     }
     expect(publishedErrataSlugs('unknown-release')).toBeNull();
+  });
+
+  it('keeps the guarded Burmese production release exact and separate from specialist review', () => {
+    expect(BURMESE_COPY_AUDIT_RELEASE_ID).toBe('2026-08-18-burmese-copy-audit');
+    expect(BURMESE_COPY_AUDIT_TARGETS).toHaveLength(25);
+    expect(new Set(BURMESE_COPY_AUDIT_TARGETS.map((target) => target.slug)).size).toBe(25);
+    expect(BURMESE_COPY_AUDIT_HELD_SLUGS).toEqual(['ms_birth_2m_sleep_1']);
+    for (const target of BURMESE_COPY_AUDIT_TARGETS) {
+      expect(seedPayload().some((item) => item.slug === target.slug), target.slug)
+        .toBe(!isRetiredMilestoneSlug(target.slug));
+      expect(target.expectedReviewRevision).toBeGreaterThan(0);
+      expect(target.expectedUpdatedAt).toBeGreaterThan(0);
+    }
   });
 
   it('has unique slugs across the whole payload', () => {

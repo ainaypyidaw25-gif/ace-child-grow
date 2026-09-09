@@ -5,7 +5,6 @@ import type { Id } from '../../convex/_generated/dataModel';
 import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
 import { SourceTransparency } from '../components/SourceTransparency';
-import { ConfirmDialog } from '../components/ConfirmDialog';
 import { isGooglePlayBuild } from '../app/platform';
 
 const PLAN_FEATURES = {
@@ -37,7 +36,6 @@ export function SubscriptionPlans() {
   const submit = useMutation(api.billing.submitPaymentRequest);
   const cancel = useMutation(api.billing.cancelMyRequest);
   const startTrial = useMutation(api.subscriptions.startTrial);
-  const cancelRenewal = useMutation(api.subscriptions.cancelAtPeriodEnd);
   const [planId, setPlanId] = useState<Id<'subscriptionPlans'> | ''>('');
   const [methodId, setMethodId] = useState<Id<'paymentMethods'> | ''>('');
   const [reference, setReference] = useState('');
@@ -45,8 +43,6 @@ export function SubscriptionPlans() {
   const [busy, setBusy] = useState(false);
   const [mmpayBusy, setMmpayBusy] = useState(false);
   const [trialBusy, setTrialBusy] = useState(false);
-  const [confirmingCancel, setConfirmingCancel] = useState(false);
-  const [cancelMessage, setCancelMessage] = useState('');
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
   const L = (mm: string, en: string) => locale === 'mm' ? mm : en;
@@ -109,6 +105,8 @@ export function SubscriptionPlans() {
     : L('မကြာမီ', 'soon');
   const selectedPlan = options.plans.find((plan) => plan._id === planId);
   const selectedMethod = options.methods.find((method) => method._id === methodId);
+  const manualTransferAvailable = options.methods.length > 0;
+  const mmpayProductionAvailable = options.mmpayProductionAvailable;
   const hasPendingRequest = requests.some((request) => request.status === 'pending');
   const hasPendingMmpay = mmpayPayments.some((payment) => payment.status === 'INITIATING' || payment.status === 'PENDING');
   const statusLabel = (status: (typeof requests)[number]['status']) => ({
@@ -136,68 +134,27 @@ export function SubscriptionPlans() {
         </div>
       </header>
 
-      {/* Self-service renewal control for real paid plans. Deliberately excludes
-          the free trial (subscription.isTrial): that already carries
-          cancelAtPeriodEnd: true by design and needs no "cancel" action — see
-          startTrial in convex/subscriptions.ts. */}
+      {/* Current payment providers sell fixed-term access. They do not create a
+          recurring debit mandate, so this section must never imply auto-renewal. */}
       {subscription.planKey !== 'free' && !subscription.isTrial && (
         <section className="rounded-3xl border border-line bg-white p-5 shadow-card sm:p-6">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-[0.16em] text-sky-deep">{L('အသုံးပြုမှု စီမံခန့်ခွဲရန်', 'Manage subscription')}</p>
-              <p className="mt-1 text-sm text-ink-soft">
-                {subscription.cancelAtPeriodEnd
-                  ? L(
-                      `${periodEndLabel} ကျော်လွန်ပါက အလိုအလျောက် သက်တမ်းတိုးမည် မဟုတ်တော့ပါ — Free အစီအစဉ်သို့ ပြန်ရောက်သွားပါမည်။`,
-                      `Won't renew after ${periodEndLabel}. You'll return to the Free plan automatically.`,
-                    )
-                  : L(`${periodEndLabel} တွင် အလိုအလျောက် သက်တမ်းတိုးပါမည်။`, `Renews automatically on ${periodEndLabel}.`)}
-              </p>
-            </div>
-            {!subscription.cancelAtPeriodEnd && (
-              <button
-                type="button"
-                onClick={() => setConfirmingCancel(true)}
-                className="min-h-touch rounded-pill border border-state-red px-4 py-2 text-sm font-semibold text-state-red-deep"
-              >
-                {L('သက်တမ်းတိုးခြင်း ပယ်ဖျက်မည်', 'Cancel auto-renewal')}
-              </button>
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-sky-deep">{L('လက်ရှိ အခပေးသုံးခွင့်', 'Current paid access')}</p>
+          <p className="mt-1 text-sm text-ink-soft">
+            {L(
+              `${periodEndLabel} အထိ အသုံးပြုနိုင်ပါသည်။ အလိုအလျောက် သက်တမ်းတိုးခြင်း သို့မဟုတ် ငွေကောက်ခံခြင်း မရှိပါ။ ဆက်သုံးလိုပါက သုံးခွင့်အသစ်ကို ကိုယ်တိုင်ဝယ်ယူပါ။`,
+              `Access continues through ${periodEndLabel}. It does not renew or charge automatically; purchase new access to continue.`,
             )}
-          </div>
-          {confirmingCancel && (
-            <div className="mt-4">
-              <ConfirmDialog
-                message={L(
-                  'သက်တမ်းတိုးခြင်းကို ပယ်ဖျက်မှာ သေချာပါသလား။ လက်ရှိပေးချေထားသည့် ကာလကုန်ဆုံးသည်အထိ ဝန်ဆောင်မှုအားလုံးကို ဆက်လက်အသုံးပြုနိုင်ပါသည်။',
-                  'Cancel auto-renewal? You keep full access until the end of your current billing period.',
-                )}
-                confirmLabel={L('ပယ်ဖျက်မည်', 'Cancel renewal')}
-                cancelLabel={L('မလုပ်တော့ပါ', "Don't cancel")}
-                onCancel={() => setConfirmingCancel(false)}
-                onConfirm={async () => {
-                  setConfirmingCancel(false);
-                  try {
-                    await cancelRenewal({});
-                    setCancelMessage(L('သက်တမ်းတိုးခြင်းကို ပယ်ဖျက်ပြီးပါပြီ။', 'Auto-renewal canceled.'));
-                  } catch (error) {
-                    console.error(error);
-                    setCancelMessage(L('ပယ်ဖျက်၍ မရပါ။', 'Could not cancel auto-renewal.'));
-                  }
-                }}
-              />
-            </div>
-          )}
-          {cancelMessage && <p className="mt-3 text-sm text-ink-soft" role="status">{cancelMessage}</p>}
+          </p>
         </section>
       )}
 
       {subscription.trialEligible && subscription.planKey === 'free' && (
         <section className="flex flex-col gap-5 rounded-[30px] border border-mint bg-mint-soft/45 p-6 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-sky-deep">7-day free trial</p>
-            <h2 className="mt-1 text-xl font-bold text-ink">{L('Premium ကို ၇ ရက် အခမဲ့ စမ်းသုံးပါ', 'Try Premium free for 7 days')}</h2>
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-sky-deep">3-day free trial</p>
+            <h2 className="mt-1 text-xl font-bold text-ink">{L('Premium ကို ၃ ရက် အခမဲ့ စမ်းသုံးပါ', 'Try Premium free for 3 days')}</h2>
             <p className="mt-2 max-w-2xl text-sm leading-7 text-ink-soft">
-              {L('ဘဏ်ကတ်ထည့်ရန် မလိုပါ။ စမ်းသုံးကာလပြီးလျှင် အခမဲ့အစီအစဉ်သို့ အလိုအလျောက် ပြန်သွားပါမည်။', 'No card required. You will return to Free automatically when the trial ends.')}
+              {L('ငွေပေးချေမှုအချက်အလက် မလိုပါ။ ၃ ရက်ပြည့်လျှင် အလိုအလျောက် ငွေကောက်ခံမည်မဟုတ်ဘဲ အခမဲ့အစီအစဉ်သို့ ပြန်သွားပါမည်။ Premium ဆက်သုံးလိုပါက လစဉ် သို့မဟုတ် နှစ်စဉ်အစီအစဉ်ကို ကိုယ်တိုင်ရွေးချယ်ဝယ်ယူနိုင်ပါသည်။', 'No payment details required. You will not be charged automatically when the 3-day trial ends; your account returns to Free. To continue using Premium, choose and purchase monthly or yearly access.')}
             </p>
           </div>
           <button
@@ -282,7 +239,7 @@ export function SubscriptionPlans() {
         )}
       </section>
 
-      {selectedPlan && (
+      {selectedPlan && mmpayProductionAvailable && (
         <section aria-labelledby="mmpay-title" className="overflow-hidden rounded-[30px] border border-sky/40 bg-white shadow-card">
           <header className="border-b border-line bg-mint-soft/45 px-5 py-6 sm:px-8">
             <p className="text-xs font-bold uppercase tracking-[0.16em] text-sky-deep">02 · Myan Myan Pay</p>
@@ -325,6 +282,15 @@ export function SubscriptionPlans() {
         </section>
       )}
 
+      {selectedPlan && !mmpayProductionAvailable && !manualTransferAvailable && (
+        <p className="rounded-2xl bg-pastel-yellow/60 p-4 text-sm font-semibold text-ink" role="status">
+          {L(
+            'အတည်ပြုထားသော ငွေပေးချေမှုနည်းလမ်း မရှိသေးသဖြင့် အခပေးအစီအစဉ်အသစ် ဝယ်ယူခြင်းကို ယာယီပိတ်ထားပါသည်။',
+            'New paid purchases are temporarily unavailable because no verified payment method is active.',
+          )}
+        </p>
+      )}
+
       <SourceTransparency />
 
       <p className="text-center text-xs text-ink-soft">
@@ -333,19 +299,17 @@ export function SubscriptionPlans() {
         {L(' (ငွေပြန်အမ်းမူဝါဒ ပါဝင်သည်) ကို သဘောတူပါသည်။', ', including our refund policy.')}
       </p>
 
-      {selectedPlan && (
+      {selectedPlan && manualTransferAvailable && (
         <section aria-labelledby="payment-title" className="overflow-hidden rounded-[30px] border border-line bg-white shadow-card">
           <header className="border-b border-line bg-cream px-5 py-6 sm:px-8">
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-sky-deep">{L('အခြားနည်းလမ်း', 'Alternative')} · {L('လက်ဖြင့်ငွေလွှဲခြင်း', 'Manual transfer')}</p>
+            <p className="text-xs font-bold uppercase tracking-[0.16em] text-sky-deep">{L('အခြားနည်းလမ်း', 'Alternative')} · {L('ဘဏ်အကောင့်သို့ တိုက်ရိုက်ငွေလွှဲခြင်း', 'Manual transfer')}</p>
             <h2 id="payment-title" className="mt-1 text-xl font-bold text-ink">{L('ငွေလွှဲအထောက်အထားဖြင့် ပေးချေပါ', 'Pay with transfer proof')}</h2>
             <ol className="mt-4 grid gap-3 text-sm text-ink-soft sm:grid-cols-3">
               {[L('အစီအစဉ်ရွေးရန်', 'Choose a plan'), L('သတ်မှတ်အကောင့်သို့ ငွေလွှဲရန်', 'Make the transfer'), L('ငွေလွှဲနံပါတ် ပို့ရန်', 'Submit the reference')].map((step, index) => <li key={step} className="flex gap-2"><span className="font-bold text-sky-deep">{index + 1}</span><span>{step}</span></li>)}
             </ol>
           </header>
 
-          {options.methods.length === 0 ? (
-            <p className="p-5 text-sm text-ink-soft sm:p-8">{L('ငွေပေးချေမှုနည်းလမ်းများကို Owner က ပြင်ဆင်နေပါသည်။', 'Payment methods are being configured by the owner.')}</p>
-          ) : hasPendingRequest ? (
+          {hasPendingRequest ? (
             <div className="p-5 sm:p-8">
               <p className="font-bold text-ink">{L('သင့်ငွေပေးချေမှုကို စစ်ဆေးနေပါသည်', 'Your payment is being reviewed')}</p>
               <p className="mt-2 text-sm text-ink-soft">{L('တစ်ကြိမ်လျှင် ငွေပေးချေမှုတစ်ခုသာ တင်နိုင်ပါသည်။ အောက်ရှိ အခြေအနေမှတ်တမ်းတွင် ဆက်လက်ကြည့်ရှုနိုင်ပါသည်။', 'Only one payment can be reviewed at a time. Follow its status below.')}</p>

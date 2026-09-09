@@ -163,7 +163,7 @@ describe('Facebook Reel publishing workflow', () => {
     );
 
     const validationCode = String(
-      node('Validate Kill Switch Approval and Duplicate Gates')?.parameters.jsCode,
+      node('Validate Kill Switch Approval and Queue Age Gates')?.parameters.jsCode,
     );
     expect(validationCode).toContain("pageId !== '111009258047115'");
     expect(validationCode).toContain("['image', 'reel']");
@@ -189,7 +189,9 @@ describe('Facebook Reel publishing workflow', () => {
     }
 
     const start = node('Start Facebook Reel Upload - CREDENTIAL REQUIRED')!;
-    expect(String(start.parameters.url)).toContain("$json.graphApiVersion");
+    expect(String(start.parameters.url)).toContain(
+      "$('Validate Downloaded Hashes').item.json.graphApiVersion",
+    );
     expect(start.parameters.queryParameters).toEqual({
       parameters: [{ name: 'upload_phase', value: 'start' }],
     });
@@ -201,7 +203,7 @@ describe('Facebook Reel publishing workflow', () => {
         {
           name: 'file_url',
           value:
-            "={{ $('Validate Kill Switch Approval and Duplicate Gates').item.json.mediaUrl }}",
+            "={{ $('Validate Kill Switch Approval and Queue Age Gates').item.json.mediaUrl }}",
         },
       ],
     });
@@ -229,7 +231,7 @@ describe('Facebook Reel publishing workflow', () => {
 
   it('routes images and Reels through separate paths and records only successful posts', () => {
     expect(outputTargets('Eligible for Facebook Publish?')).toEqual([
-      ['Is Approved Item a Reel?'],
+      ['Download Approved Media'],
       ['Block and Flag Owner'],
     ]);
     expect(outputTargets('Is Approved Item a Reel?')).toEqual([
@@ -254,5 +256,7 @@ describe('Facebook Reel publishing workflow', () => {
     expect(String(node('Remember Published Post')?.parameters.jsCode)).toContain(
       'META_REEL_PUBLISH_FAILED',
     );
+    expect(outputTargets('Remember Published Post')).toEqual([['Fetch Published Post Permalink']]);
+    expect(outputTargets('Prepare Published Ledger Row')).toEqual([['Upsert Published Ledger']]);
   });
 });

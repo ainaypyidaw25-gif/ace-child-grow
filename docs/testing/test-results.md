@@ -6,18 +6,21 @@
 > what's covered and the sandbox limitations noted below, not the specific
 > counts.
 
-**Last regenerated:** 2026-08-05 · **Command:** `npx vitest run` (Vitest ^3.2.7 as pinned in `package.json`)
+**Last regenerated:** 2026-09-09 · **Command:** `npm test` (Vitest 4.1.11)
 
 ## Summary
 
 | Check | Result |
 |-------|--------|
 | TypeScript typecheck (`tsc -b --noEmit`) | ✅ PASS (0 errors) |
-| Unit + component tests | ✅ **1,072 / 1,072 passing**, 107 test files |
-| Production build (`vite build`) | ✅ PASS |
-| PWA service worker generated | ✅ precache public content only |
+| Unit + component tests | ✅ **2,207 / 2,207 passing**, 249 test files |
+| Production build (`npm run build`) | ✅ PASS (324 modules) |
+| Harness build (`npm run build:harness`) | ✅ PASS (298 modules) |
+| Google Play build policy scan | ✅ PASS — no excluded route chunks/payment copy; free native Terms present |
+| PWA service worker generated | ✅ 346 precache entries; public content only |
+| Playwright local/non-live matrix | ✅ 20 passed, 4 intentionally skipped |
 | Myanmar PDF generation | ✅ verified — sample A4 PDF renders Myanmar correctly (see below) |
-| Dependency audit (`npm audit --omit=dev`) | ⚠️ 1 **high**-severity advisory in `react-router` (GHSA-qwww-vcr4-c8h2) — see the 2026-08-05 production audit; not dev-toolchain-only |
+| Dependency audit (`npm audit --audit-level=high`) | ✅ 0 vulnerabilities |
 
 ## Backend (Convex) — verified
 
@@ -27,11 +30,13 @@
   this is the current stand-in for a live two-account integration test (see
   the sandbox note below for why the live version can't run here).
 
-## E2E (Playwright, `npm run test:e2e`)
+## E2E (Playwright, `env -u E2E_LIVE npx playwright test`)
 
-- `boot.spec.ts` — app boots and shows the sign-in gate (runs anywhere).
-- Full authenticated flows (sign-up → consent → add child → milestone → safety
-  banner, etc.) need `E2E_LIVE=1` and a real WebSocket connection to Convex.
+- 20 local/harness checks passed, including sign-in boot, responsive parent and
+  owner layouts, no dev routes, and every listed guide-image review card.
+- Four authenticated/live-backend flows were intentionally skipped: login
+  persistence, parent onboarding, urgent safety, and staff invitation. They need
+  `E2E_LIVE=1`, disposable test accounts and a real Convex WebSocket connection.
 
 **Sandbox note:** this build/test sandbox blocks browser WebSocket (WSS)
 egress to `*.convex.cloud` (Node HTTPS works; browser WSS times out), so
@@ -67,9 +72,6 @@ against production, visual regression, and offline runtime tests. See
 
 ## Known audit note
 
-`npm audit --omit=dev` currently reports one high-severity advisory in
-`react-router` (not just the dev toolchain, as an earlier version of this doc
-claimed) — see the 2026-08-05 production audit for the fix. Separately, `npm
-outdated` shows the build toolchain (vite, vitest, typescript, eslint,
-esbuild) several majors behind current; scheduled incremental upgrades are
-tracked as a follow-up.
+The 2026-09-09 lockfile audit reports zero vulnerabilities. This result is tied
+to the committed lockfile and must be rerun after dependency or lockfile changes;
+it does not replace CodeQL, branch protection or runtime security monitoring.

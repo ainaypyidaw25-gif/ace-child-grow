@@ -96,7 +96,7 @@ export async function requireContentEditor(ctx: Ctx): Promise<Id<'users'>> {
 }
 
 export async function requireEvidenceEditor(ctx: Ctx): Promise<Id<'users'>> {
-  return (await requireOneOf(ctx, ['owner', 'content_editor', 'evidence_reviewer', 'clinical_reviewer'])).userId;
+  return (await requireOneOf(ctx, ['owner', 'content_editor', 'evidence_reviewer'])).userId;
 }
 
 /** Staff who may edit a review draft. Publishing remains a separate permission. */
@@ -108,7 +108,6 @@ export async function requireReviewEditor(
     'content_editor',
     'language_reviewer',
     'evidence_reviewer',
-    'clinical_reviewer',
     // A review manager may correct wording as part of running corrections.
     // This grants no publishing authority and no review decision.
     'review_manager',
@@ -119,27 +118,26 @@ export async function requireClinicalReviewer(
   ctx: Ctx,
 ): Promise<{ userId: Id<'users'>; qualification: string; reviewerName: string }> {
   const { userId, access } = await requireOneOf(ctx, ['clinical_reviewer']);
-  if (!access.qualification) throw new Error('Clinical reviewer qualification is required');
-  if (!access.displayName) throw new Error('Clinical reviewer name is required');
+  if (!access.qualification) throw new Error('Specialist safety reviewer qualification is required');
+  if (!access.displayName) throw new Error('Specialist safety reviewer audit identity is required');
   return { userId, qualification: access.qualification, reviewerName: access.displayName };
 }
 
 /**
- * Publishing authority with an explicit scope. A clinical reviewer signs with
- * clinical scope. A qualified owner may sign education / special-education
- * material, but this never turns their decision into medical approval.
+ * Qualified human authority for approving an evidence-source record.
+ *
+ * This is deliberately separate from final content publication. Owners remain
+ * the only role allowed to publish content, while a named clinical reviewer
+ * may record the source-level evidence decision that the Evidence Library UI
+ * assigns to that role. Both paths require a server-stored qualification and
+ * produce education-scoped provenance; source approval is not a clinical
+ * content sign-off and cannot publish anything by itself.
  */
-export async function requireProfessionalPublisher(ctx: Ctx): Promise<ProfessionalApproval> {
+export async function requireEvidenceSourceApprover(ctx: Ctx): Promise<ProfessionalApproval> {
   const { userId, access } = await requireOneOf(ctx, ['owner', 'clinical_reviewer']);
   if (!access.qualification) throw new Error('Professional qualification is required');
-  if (access.role === 'clinical_reviewer') {
-    if (!access.displayName) throw new Error('Clinical reviewer name is required');
-    return {
-      userId,
-      qualification: access.qualification,
-      reviewerName: access.displayName,
-      scope: 'clinical',
-    };
+  if (access.role === 'clinical_reviewer' && !access.displayName) {
+    throw new Error('Specialist safety reviewer audit identity is required');
   }
   return {
     userId,
@@ -150,10 +148,26 @@ export async function requireProfessionalPublisher(ctx: Ctx): Promise<Profession
 }
 
 /**
- * Publishing parent-facing developmental or health content is a clinical
- * decision. Education-scoped owner approval is intentionally insufficient;
- * it remains valid for evidence/media governance but cannot expose guidance
- * to parent accounts as clinically reviewed content.
+ * Publishing authority for ordinary educational material. The resulting
+ * decision is education-scoped. Final publication is owner-only; specialist
+ * reviewers record their exact decisions through frozen assignments and never
+ * publish directly.
+ */
+export async function requireProfessionalPublisher(ctx: Ctx): Promise<ProfessionalApproval> {
+  const { userId, access } = await requireOneOf(ctx, ['owner']);
+  if (!access.qualification) throw new Error('Professional qualification is required');
+  return {
+    userId,
+    qualification: access.qualification,
+    reviewerName: access.displayName || 'ACE Child Grow Owner / Education Reviewer',
+    scope: 'education',
+  };
+}
+
+/**
+ * Specialist publishing authority for diagnosis, treatment, medication,
+ * individualized advice and emergency-decision wording. Ordinary educational
+ * parent content uses requireProfessionalPublisher and retains education scope.
  */
 export async function requireClinicalPublisher(ctx: Ctx): Promise<ProfessionalApproval> {
   const reviewer = await requireClinicalReviewer(ctx);

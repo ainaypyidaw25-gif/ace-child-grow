@@ -20,7 +20,7 @@ describe('content review workflow', () => {
     ]);
   });
 
-  it('forbids skipping clinical review', () => {
+  it('forbids skipping the required professional-review workflow', () => {
     expect(canTransition('translation_review', 'approved')).toBe(false);
     expect(canTransition('draft', 'published')).toBe(false);
     expect(() => transition('draft', 'published')).toThrowError(WorkflowError);

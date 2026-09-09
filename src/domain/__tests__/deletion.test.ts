@@ -13,6 +13,10 @@ vi.mock('@convex-dev/auth/server', async (importOriginal) => {
 
 import { deleteMine, deleteMineBatch } from '../../../convex/account';
 import { deleteChildBatch, remove as removeChild } from '../../../convex/children';
+import {
+  OWNER_ACCOUNT_MERGE_QUARANTINE_ACTION,
+  OWNER_ACCOUNT_MERGE_SOURCE_USER_ID,
+} from '../../../convex/lib/ownerAccountMergePolicy';
 
 type Row = Record<string, unknown> & { _id: string };
 
@@ -107,6 +111,16 @@ const batchArgs = {
   scrubTokens: ['user-1', 'parent@example.com', 'Parent Name'],
   auditCursor: null,
   auditDone: false,
+};
+
+const ownerMergeQuarantineAudit: Row = {
+  _id: 'owner-merge-quarantine-audit',
+  actorId: undefined,
+  action: OWNER_ACCOUNT_MERGE_QUARANTINE_ACTION,
+  entityTable: 'users',
+  entityId: String(OWNER_ACCOUNT_MERGE_SOURCE_USER_ID),
+  summary: 'owner-account-merge-lapyaewun2690-2026-09-01-v1',
+  result: 'ok',
 };
 
 describe('child deletion cascade', () => {
@@ -207,6 +221,84 @@ describe('account deletion pipeline', () => {
     );
   });
 
+  it('rejects a cached source JWT after owner-account quarantine without scheduling erasure', async () => {
+    authState.userId = String(OWNER_ACCOUNT_MERGE_SOURCE_USER_ID);
+    const ctx = context({
+      documents: {
+        [OWNER_ACCOUNT_MERGE_SOURCE_USER_ID]: {
+          _id: OWNER_ACCOUNT_MERGE_SOURCE_USER_ID,
+          email: undefined,
+          name: undefined,
+        },
+      },
+      rows: {
+        auditLogs: [{ ...ownerMergeQuarantineAudit }],
+        parentProfiles: [{
+          _id: 'source-profile',
+          userId: OWNER_ACCOUNT_MERGE_SOURCE_USER_ID,
+          displayName: 'ဒေါ်လပြည့်၀န်း',
+        }],
+      },
+    });
+
+    await expect(handler(deleteMine)(ctx, { confirmation: 'DELETE' }))
+      .rejects.toThrow('historical account identity is retained');
+    expect(ctx.scheduler.runAfter).not.toHaveBeenCalled();
+    expect(ctx.db.delete).not.toHaveBeenCalled();
+    expect(ctx.db.patch).not.toHaveBeenCalled();
+    expect(ctx.storage.delete).not.toHaveBeenCalled();
+  });
+
+  it('makes a pre-scheduled source erasure worker a permanent no-op after quarantine', async () => {
+    const sourceUserId = String(OWNER_ACCOUNT_MERGE_SOURCE_USER_ID);
+    const ctx = context({
+      documents: {
+        [sourceUserId]: { _id: sourceUserId, email: undefined, name: undefined },
+      },
+      rows: {
+        auditLogs: [{ ...ownerMergeQuarantineAudit }],
+        parentProfiles: [{ _id: 'source-profile', userId: sourceUserId }],
+        subscriptions: [{ _id: 'source-subscription', userId: sourceUserId }],
+        children: [{ _id: 'source-child', userId: sourceUserId }],
+        contentReviews: [{ _id: 'historical-review', reviewerId: sourceUserId }],
+        contentEditLogs: [{ _id: 'historical-edit', editorId: sourceUserId }],
+      },
+    });
+
+    await expect(handler(deleteMineBatch)(ctx, {
+      ...batchArgs,
+      userId: sourceUserId,
+      deleteAfter: Date.now() - 1,
+      auditDone: true,
+    })).resolves.toBeNull();
+    expect(ctx.db.delete).not.toHaveBeenCalled();
+    expect(ctx.db.patch).not.toHaveBeenCalled();
+    expect(ctx.storage.delete).not.toHaveBeenCalled();
+    expect(ctx.scheduler.runAfter).not.toHaveBeenCalled();
+    expect(ctx.scheduler.runAt).not.toHaveBeenCalled();
+  });
+
+  it('fails closed on duplicate quarantine interlocks before any destructive write', async () => {
+    const sourceUserId = String(OWNER_ACCOUNT_MERGE_SOURCE_USER_ID);
+    const ctx = context({
+      rows: {
+        auditLogs: [
+          { ...ownerMergeQuarantineAudit },
+          { ...ownerMergeQuarantineAudit, _id: 'duplicate-owner-merge-quarantine-audit' },
+        ],
+        parentProfiles: [{ _id: 'source-profile', userId: sourceUserId }],
+      },
+    });
+
+    await expect(handler(deleteMineBatch)(ctx, { ...batchArgs, userId: sourceUserId }))
+      .rejects.toThrow('Duplicate owner-account quarantine audit rows');
+    expect(ctx.db.delete).not.toHaveBeenCalled();
+    expect(ctx.db.patch).not.toHaveBeenCalled();
+    expect(ctx.storage.delete).not.toHaveBeenCalled();
+    expect(ctx.scheduler.runAfter).not.toHaveBeenCalled();
+    expect(ctx.scheduler.runAt).not.toHaveBeenCalled();
+  });
+
   it('removes storage/auth dependants, anonymizes audit data, and continues batching', async () => {
     const ctx = context({
       documents: { 'user-1': { _id: 'user-1', email: 'parent@example.com' } },
@@ -248,6 +340,34 @@ describe('account deletion pipeline', () => {
     expect(ctx.scheduler.runAfter).toHaveBeenCalledWith(0, expect.anything(), expect.objectContaining({
       userId: 'user-1',
     }));
+  });
+
+  it('invalidates a deleted reviewer batch and every downstream reviewer batch', async () => {
+    const predecessor: Row = {
+      _id: 'clinical-batch-a', batchId: 'batch-a', reviewerId: 'user-1', status: 'completed',
+      reviewerProfileId: 'profile-a', reviewerDisplayName: 'Parent Name',
+      reviewerQualification: 'MBBS', reviewerRole: 'clinical_reviewer', reviewerIdentityDigest: 'identity-a',
+    };
+    const successor: Row = {
+      _id: 'clinical-batch-b', batchId: 'batch-b', predecessorBatchId: 'batch-a',
+      reviewerId: 'reviewer-b', status: 'completed', reviewerDisplayName: 'Reviewer B',
+    };
+    const ctx = context({
+      documents: { 'user-1': { _id: 'user-1', email: 'parent@example.com' } },
+      rows: { clinicalReviewBatches: [predecessor, successor] },
+    });
+
+    await handler(deleteMineBatch)(ctx, batchArgs);
+
+    expect(predecessor).toMatchObject({
+      status: 'invalidated', invalidationReason: 'assigned_reviewer_account_erased',
+      reviewerId: undefined, reviewerDisplayName: undefined, reviewerQualification: undefined,
+    });
+    expect(successor).toMatchObject({
+      status: 'invalidated', invalidationReason: 'assigned_reviewer_account_erased',
+      reviewerId: 'reviewer-b', reviewerDisplayName: 'Reviewer B',
+    });
+    expect(predecessor.invalidatedAt).toBe(successor.invalidatedAt);
   });
 
   it('deletes the user in the final no-work pass after the access-token grace period', async () => {

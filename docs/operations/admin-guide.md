@@ -6,22 +6,31 @@
 - **Native-language reviewer** — reviews English and natural Myanmar wording.
 - **Evidence reviewer** — reviews source support; a name and relevant
   professional qualification are required for approval decisions.
-- **Clinical Reviewer** — approves/rejects health & development content; cannot
-  access parent/child records.
+- **Specialist safety reviewer** — reviews specialist-risk wording (diagnosis, treatment,
+  medication, individualized advice and emergency decisions); cannot access
+  parent/child records.
 - **Support** — support access only; cannot edit or approve content.
 
 ## Content workflow
-Open `/admin/reviews` to edit an item and record five independent decisions:
-English copy, native-Myanmar language, evidence, safety and clinical review.
-Each decision is stored in `contentReviews` with the reviewer identity, role,
-qualification, note, timestamp and exact review revision. Editing content or
-refreshing it from the seed creates a new revision; prior decisions stay in the
-history but cannot authorize the new text.
+Open `/admin/reviews` to edit an item and record independent English copy,
+native-Myanmar language, evidence and safety decisions. A specialist safety decision is
+also recorded only when the item contains specialist-risk wording: diagnosis,
+treatment, medication, individualized advice or an emergency decision. General
+milestones, activities, stories, lessons, printable catalogue metadata and
+parent education do not require a specialist reviewer merely because parents can
+read them. Each decision is stored in `contentReviews` with the reviewer
+identity, role, qualification, note, timestamp and exact review revision.
+Editing content or refreshing it from the seed creates a new revision; prior
+decisions stay in the history but cannot authorize the new text.
 
-Only `published` library content is visible to parents. Publishing requires all
-five current-revision decisions to be approved and the final action must be
-performed by a named, qualified clinical reviewer. Every edit, decision and
-publish attempt is audited. Nothing is auto-approved.
+Only `published` library content is visible to parents. Ordinary education
+publishing requires the four current-revision education decisions. A
+specialist-risk item additionally requires a current specialist safety decision
+from an authorized, qualified reviewer. The audit identity is restricted staff
+data and is not displayed to parents as a personal endorsement. Emergency-only and
+bed-sharing review must not be described as approval of the item's ordinary
+developmental content. Every edit, decision and publish attempt is audited.
+Nothing is auto-approved.
 
 ## Safety rules
 The nine fixed urgent rules (`safety_rules`) mirror the deterministic engine in
@@ -35,7 +44,8 @@ verified rows are public. Expire/deactivate stale entries.
 
 ## WHO growth standards
 Do not enable percentiles until the licensed dataset is integrated, tested, and
-clinically reviewed (clinical-review-policy.md). Until then the UI shows the
+evidence checked and specialist-safety reviewed
+(`evidence-and-safety-review-policy.md`). Until then the UI shows the
 "pending" message.
 
 ## Audit

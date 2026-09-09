@@ -182,6 +182,9 @@ export default defineSchema({
     userId: v.id('users'),
     planKey: v.union(v.literal('premium'), v.literal('family')),
     planId: v.optional(v.id('subscriptionPlans')),
+    // Snapshot the purchased duration so later plan edits cannot change an
+    // already-submitted payment request.
+    planInterval: v.optional(v.union(v.literal('month'), v.literal('year'))),
     paymentMethodId: v.id('paymentMethods'),
     amount: v.number(),
     currency: v.string(),
@@ -271,9 +274,11 @@ export default defineSchema({
   // authenticated user only when 'published'; staff see all and can transition.
   contentItems: defineTable({
     kind: v.string(), // milestone | activity | awareness | lesson
+    slug: v.optional(v.string()),
     titleMm: v.string(),
     titleEn: v.string(),
     reviewStatus: v.string(), // matches src/domain/content/workflow.ts states
+    reviewRevision: v.optional(v.number()),
     // Optional translation-review fields (side-by-side en/mm editing).
     bodyMm: v.optional(v.string()),
     bodyEn: v.optional(v.string()),
@@ -324,6 +329,12 @@ export default defineSchema({
     after: v.optional(v.string()),
   })
     .index('by_action', ['action'])
+    .index('by_action_and_entity_table_and_entity_id_and_result', [
+      'action',
+      'entityTable',
+      'entityId',
+      'result',
+    ])
     .index('by_result', ['result']),
 
   // ------------------------------------------------------------------
@@ -331,7 +342,9 @@ export default defineSchema({
   // One row per content item across all types (milestone/guide/activity/
   // lesson/special_need/story/printable). Type-specific structure lives in
   // `data`; first-class columns carry the searchable/indexed metadata and the
-  // clinical-review lifecycle. Nothing is 'published' until a reviewer approves.
+  // review lifecycle. `clinicalStatus` is a legacy field name; ordinary content
+  // follows education-scoped review and only risk-triggered wording needs a
+  // clinical decision. Nothing is 'published' until required reviews approve it.
   // ------------------------------------------------------------------
   libraryContent: defineTable({
     type: v.string(),
@@ -359,6 +372,12 @@ export default defineSchema({
     reviewedAt: v.optional(v.number()),
     nextReviewAt: v.optional(v.number()),
     reviewNote: v.optional(v.string()),
+    // Agent-assisted publication is a separate, explicitly disclosed lane.
+    // These fields never substitute for reviewerId/reviewerQualification or
+    // rows in contentReviews; they bind the visible item to an append-only AI
+    // audit run while preserving the human review history unchanged.
+    aiPublicationReleaseId: v.optional(v.string()),
+    aiPublishedAt: v.optional(v.number()),
     // ------------------------------------------------------------------
     // Owner-priority governance (all OPTIONAL and additive — existing rows,
     // including every Production row, remain valid without them). These fields
@@ -432,6 +451,7 @@ export default defineSchema({
     dimension: v.union(
       v.literal('english'),
       v.literal('native_myanmar'),
+      v.literal('child_development'),
       v.literal('evidence'),
       v.literal('safety'),
       v.literal('clinical'),
@@ -462,12 +482,255 @@ export default defineSchema({
     // mismatch in audits. New rows record both, identically; old rows stay
     // valid without it. A decision NEVER applies to any other revision.
     reviewRevision: v.optional(v.number()),
+    // Optional/additive: deterministic idempotency for bounded clinical-review
+    // batches. Historical rows remain valid and carry neither field.
+    decisionKey: v.optional(v.string()),
+    clinicalReviewBatchId: v.optional(v.string()),
     createdAt: v.number(),
     updatedAt: v.number(),
   })
     .index('by_content_dimension_version', ['contentSlug', 'dimension', 'contentVersion'])
     .index('by_content', ['contentSlug'])
+    .index('by_reviewer', ['reviewerId'])
+    .index('by_decision_key', ['decisionKey'])
+    .index('by_clinical_review_batch_and_content', ['clinicalReviewBatchId', 'contentSlug']),
+
+  // Server-authoritative frozen clinical lane registry. Manifest identity and
+  // assignee fields are immutable after insert; only the lifecycle fields move
+  // monotonically through frozen -> active -> completed/stopped/invalidated.
+  clinicalReviewBatches: defineTable({
+    batchId: v.string(),
+    sequence: v.number(),
+    laneGraphVersion: v.literal(1),
+    dimension: v.union(
+      v.literal('english'), v.literal('native_myanmar'), v.literal('child_development'),
+      v.literal('evidence'), v.literal('safety'), v.literal('clinical'),
+    ),
+    authority: v.union(v.literal('pilot'), v.literal('release')),
+    status: v.union(
+      v.literal('frozen'),
+      v.literal('active'),
+      v.literal('stopped_changes_requested'),
+      v.literal('completed'),
+      v.literal('invalidated'),
+    ),
+    freezeDigest: v.string(),
+    routingDigest: v.string(),
+    itemCount: v.number(),
+    frozenAt: v.number(),
+    expiresAt: v.number(),
+    reviewerProfileId: v.optional(v.string()),
+    reviewerId: v.optional(v.id('users')),
+    reviewerDisplayName: v.optional(v.string()),
+    reviewerQualification: v.optional(v.string()),
+    reviewerRole: v.optional(v.union(
+      v.literal('language_reviewer'), v.literal('evidence_reviewer'), v.literal('clinical_reviewer'),
+    )),
+    reviewerIdentityDigest: v.optional(v.string()),
+    activationKind: v.union(
+      v.literal('initial'),
+      v.literal('after_handoff'),
+      v.literal('after_changes_requested_refreeze'),
+    ),
+    predecessorBatchId: v.optional(v.string()),
+    expectedUpstreamStateDigest: v.optional(v.string()),
+    consumedUpstreamReceiptDigest: v.optional(v.string()),
+    activatedAt: v.optional(v.number()),
+    completedAt: v.optional(v.number()),
+    invalidatedAt: v.optional(v.number()),
+    invalidationReason: v.optional(v.string()),
+    createdAt: v.number(),
+  })
+    .index('by_batch_id', ['batchId'])
+    .index('by_sequence', ['sequence'])
+    .index('by_status', ['status'])
+    .index('by_reviewer', ['reviewerId'])
+    .index('by_reviewer_and_status', ['reviewerId', 'status'])
+    .index('by_predecessor_batch_id', ['predecessorBatchId']),
+
+  // Exact preimages for each registered assignment. Rows are insert-only;
+  // decisions and lifecycle state live in separate append-only/monotonic rows.
+  clinicalReviewAssignments: defineTable({
+    batchId: v.string(),
+    assignmentId: v.string(),
+    ordinal: v.number(),
+    dimension: v.union(
+      v.literal('english'), v.literal('native_myanmar'), v.literal('child_development'),
+      v.literal('evidence'), v.literal('safety'), v.literal('clinical'),
+    ),
+    kind: v.string(),
+    contentSlug: v.string(),
+    reviewRevision: v.number(),
+    contentId: v.id('libraryContent'),
+    contentCreationTime: v.number(),
+    contentUpdatedAt: v.number(),
+    contentCanonicalSha256: v.string(),
+    linkId: v.id('evidenceLinks'),
+    linkCreationTime: v.number(),
+    linkUpdatedAt: v.number(),
+    linkCanonicalSha256: v.string(),
+    sourceIds: v.array(v.string()),
+    sourceCount: v.number(),
+    sourcesCanonicalSha256: v.string(),
+    mediaCount: v.number(),
+    mediaCanonicalSha256: v.string(),
+    aiCanonicalSha256: v.string(),
+    currentClinicalReviewCount: v.number(),
+    currentClinicalReviewsCanonicalSha256: v.string(),
+    allClinicalReviewHistoryCanonicalSha256: v.string(),
+    upstreamReviewDigests: v.array(v.object({
+      dimension: v.string(),
+      digest: v.string(),
+    })),
+    createdAt: v.number(),
+  })
+    .index('by_batch_id_and_ordinal', ['batchId', 'ordinal'])
+    .index('by_assignment_id', ['assignmentId'])
+    .index('by_exact_target', ['contentSlug', 'dimension', 'reviewRevision']),
+
+  // Immutable completion receipts for exact frozen clinical-review batches.
+  // A receipt is inserted atomically with the final per-item approval; it does
+  // not approve content by itself. Publication and later batch activation use
+  // it only together with the exact registered manifest and decision rows.
+  clinicalReviewBatchReceipts: defineTable({
+    batchId: v.string(),
+    freezeDigest: v.string(),
+    reviewerId: v.id('users'),
+    decisionCount: v.number(),
+    completedAt: v.number(),
+    digest: v.string(),
+    receiptDigest: v.string(),
+    authority: v.union(v.literal('pilot'), v.literal('release')),
+    createdAt: v.number(),
+  })
+    .index('by_batch_id', ['batchId'])
+    .index('by_receipt_digest', ['receiptDigest'])
     .index('by_reviewer', ['reviewerId']),
+
+  // ------------------------------------------------------------------
+  // Advisory AI audit provenance. These append-only records are deliberately
+  // separate from human review decisions and can never represent clinical or
+  // evidence approval. A narrowly allowlisted AI-publication lane may read
+  // them, but only when every exact content/link/source snapshot still matches.
+  // ------------------------------------------------------------------
+  aiAuditRuns: defineTable({
+    runId: v.string(),
+    releaseId: v.string(),
+    status: v.union(v.literal('completed'), v.literal('failed')),
+    provider: v.string(),
+    model: v.string(),
+    modelVersion: v.optional(v.string()),
+    policyVersion: v.string(),
+    gitCommit: v.string(),
+    targetCount: v.number(),
+    summary: v.string(),
+    limitations: v.array(v.string()),
+    startedAt: v.number(),
+    completedAt: v.number(),
+    outputHash: v.string(),
+  })
+    .index('by_run_id', ['runId'])
+    .index('by_release_id', ['releaseId'])
+    .index('by_status', ['status']),
+
+  aiEvidenceAudits: defineTable({
+    runId: v.string(),
+    sourceId: v.string(),
+    sourceUpdatedAt: v.number(),
+    sourceSnapshotHash: v.string(),
+    verdict: v.union(
+      v.literal('pass'),
+      v.literal('needs_changes'),
+      v.literal('insufficient_evidence'),
+      v.literal('blocked'),
+    ),
+    claimScope: v.string(),
+    urlsChecked: v.array(v.string()),
+    findings: v.array(v.string()),
+    limitations: v.array(v.string()),
+    auditedAt: v.number(),
+    nextAuditDate: v.string(),
+    outputHash: v.string(),
+  })
+    .index('by_run_id', ['runId'])
+    .index('by_source_and_updated_at', ['sourceId', 'sourceUpdatedAt']),
+
+  aiContentAudits: defineTable({
+    runId: v.string(),
+    contentSlug: v.string(),
+    contentType: v.string(),
+    reviewRevision: v.number(),
+    contentUpdatedAt: v.number(),
+    contentSnapshotHash: v.string(),
+    evidenceLinkUpdatedAt: v.number(),
+    evidenceLinkSnapshotHash: v.string(),
+    sourceIds: v.array(v.string()),
+    verdict: v.union(
+      v.literal('pass'),
+      v.literal('needs_changes'),
+      v.literal('insufficient_evidence'),
+      v.literal('blocked'),
+    ),
+    checks: v.array(v.string()),
+    limitations: v.array(v.string()),
+    auditedAt: v.number(),
+    nextAuditDate: v.string(),
+    outputHash: v.string(),
+  })
+    .index('by_run_id', ['runId'])
+    .index('by_content_revision_and_updated_at', [
+      'contentSlug',
+      'reviewRevision',
+      'contentUpdatedAt',
+    ]),
+
+  // Default-off operational switch. Both this singleton and the server-side
+  // environment flag must be enabled before an AI-audited release is visible.
+  // Configuration can disable releases but cannot extend the compile-time
+  // three-item allowlist.
+  aiPublicationConfig: defineTable({
+    key: v.literal('global'),
+    enabled: v.boolean(),
+    generation: v.number(),
+    reason: v.string(),
+    operator: v.string(),
+    updatedAt: v.number(),
+  }).index('by_key', ['key']),
+
+  // Immutable release snapshots for the separate AI-audited parent lane.
+  // Revocation appends state to the release row; it never rewrites an AI audit
+  // into a human approval or changes contentReviews/evidenceSources decisions.
+  aiPublicationReleases: defineTable({
+    releaseId: v.string(),
+    targetKey: v.string(),
+    contentId: v.id('libraryContent'),
+    contentType: v.string(),
+    contentSlug: v.string(),
+    status: v.union(v.literal('active'), v.literal('revoked')),
+    reviewRevision: v.number(),
+    contentUpdatedAt: v.number(),
+    contentSnapshotHash: v.string(),
+    evidenceLinkUpdatedAt: v.number(),
+    evidenceLinkSnapshotHash: v.string(),
+    sourceSnapshots: v.array(v.object({
+      sourceId: v.string(),
+      sourceUpdatedAt: v.number(),
+      sourceSnapshotHash: v.string(),
+      evidenceAuditRunId: v.string(),
+    })),
+    contentAuditRunId: v.string(),
+    auditArtifactHash: v.string(),
+    policyVersion: v.string(),
+    gitCommit: v.string(),
+    operator: v.string(),
+    createdAt: v.number(),
+    expiresAt: v.number(),
+    revokedAt: v.optional(v.number()),
+    revokeReason: v.optional(v.string()),
+  })
+    .index('by_release_id', ['releaseId'])
+    .index('by_target_key', ['targetKey'])
+    .index('by_status', ['status']),
 
   // Append-only field-level edit history for the reviewer workspace. Full
   // content snapshots can exceed Convex's document limit, so each row stores a
@@ -564,7 +827,7 @@ export default defineSchema({
     reviewStatus: v.string(), // evidence_required | awaiting_review | in_review | approved | retired
     reviewer: v.union(v.string(), v.null()),
     // Professional qualification of the named reviewer (e.g. 'MBBS, MMedSc
-    // (Paediatrics)'). Recorded alongside the name so a clinical sign-off can
+    // (Paediatrics)'). Recorded alongside the audit identity so a specialist safety decision can
     // be audited: an approval with no stated qualification is not a sign-off.
     reviewerQualification: v.optional(v.string()),
     reviewDate: v.union(v.string(), v.null()),

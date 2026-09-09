@@ -33,15 +33,20 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
           cache: npm
 
       - name: Install dependencies
         run: npm ci
+
+      # Build and test tools execute repository inputs during CI, so high or
+      # critical advisories in either runtime or development packages block it.
+      - name: Audit dependencies
+        run: npm audit --audit-level=high
 
       - name: Typecheck
         run: npm run typecheck
@@ -58,10 +63,18 @@ jobs:
       - name: Production build
         run: npm run build
 
+      # Generic application builds must be reproducible and must never refresh
+      # the separately approved social-publication queue as a side effect.
+      - name: Assert production build leaves tracked sources unchanged
+        run: git diff --exit-code
+
       # The layout harness is a separate bundle that must never reach the app.
       # Building it here proves it still compiles on its own config.
       - name: Layout harness build
         run: npm run build:harness
+
+      - name: Verify parent-only free Google Play bundle
+        run: npm run build:play-store:verify
 
       # Re-run the bundle assertions against a real dist/: no dev route and no
       # harness marker in anything shipped.
@@ -79,9 +92,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
           cache: npm
@@ -89,8 +102,11 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # The hosted runner already carries Chromium's system libraries. Install
+      # only the pinned browser binary so an unavailable apt mirror cannot
+      # prevent the actual browser suite from starting.
       - name: Install Chromium for Playwright
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install chromium
         env:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: '0'
 
@@ -103,7 +119,7 @@ jobs:
 
       - name: Upload screenshots and traces
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: playwright-artifacts
           path: |

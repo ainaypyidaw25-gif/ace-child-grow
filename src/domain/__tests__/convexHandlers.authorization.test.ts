@@ -13,11 +13,83 @@ vi.mock('@convex-dev/auth/server', async (importOriginal) => {
 import { list as listChildren, update as updateChild } from '../../../convex/children';
 import { importSeed, listByType, setReview as setLibraryReview, updateDraft } from '../../../convex/library';
 import { activity as reviewerActivity, listForContent as listContentReviews, saveDecision } from '../../../convex/contentReviews';
-import { forContent as evidenceForContent, setReview as setEvidenceReview } from '../../../convex/evidence';
+import {
+  forContent as evidenceForContent,
+  importLinks,
+  importSources,
+  setReview as setEvidenceReview,
+} from '../../../convex/evidence';
 import { transition as transitionContent } from '../../../convex/content';
 import { listSessions, recordSession } from '../../../convex/milestones';
 import { complete as completeActivity, list as listActivities } from '../../../convex/activities';
 import { claimInvite, createInvite, setOwnDisplayName } from '../../../convex/admin';
+import { seedRunSkipsItem } from '../../../convex/seed';
+import {
+  BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_TARGET,
+  DUPLICATE_MILESTONE_SLUGS,
+  FLASH_CARDS_PRINTABLE_RETIREMENT_SLUG,
+  MOTOR_PSEUDO_MILESTONE_RETIREMENT_SLUGS,
+  NUTRITION_PSEUDO_MILESTONE_RETIREMENT_SLUGS,
+  PLAY_PSEUDO_MILESTONE_RETIREMENT_SLUGS,
+  REMAINING_PSEUDO_MILESTONE_RETIREMENT_SLUGS,
+  SLEEP_PSEUDO_MILESTONE_RETIREMENT_SLUGS,
+  SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_SLUGS,
+} from '../../../convex/lib/contentRetirements';
+import {
+  INHERENT_PUBLIC_LINK_CAS_TARGETS,
+} from '../../../convex/lib/inherentPublicLinkCasData';
+import {
+  SWAIMAN_SEIZURE_LINK_CAS_TARGET,
+} from '../../../convex/lib/swaimanSeizureLinkCasData';
+import {
+  SWAIMAN_CEREBRAL_PALSY_TARGET,
+} from '../../../convex/lib/swaimanCerebralPalsyLinkCasData';
+import {
+  ASQ_DOCTOR_VISITS_TARGET,
+} from '../../../convex/lib/asqDoctorVisitsLinkCasData';
+import {
+  BIRTH2M_NUTRITION_TARGET,
+} from '../../../convex/lib/birth2mNutritionCasData';
+import {
+  BIRTH2M_GROSS_MOTOR_CORRECTION_TARGET,
+} from '../../../convex/lib/birth2mGrossMotorCorrection';
+import {
+  SWAIMAN_SUDDEN_WEAKNESS_SOURCE_ID,
+  SWAIMAN_SUDDEN_WEAKNESS_TARGET,
+} from '../../../convex/lib/swaimanSuddenWeaknessCasData';
+import {
+  MANUAL_REVIEW_CONTENT_TARGETS,
+} from '../../../convex/lib/manualReviewContentCasData';
+import {
+  NUTRITION_GUIDES_CAS_TARGETS,
+  NUTRITION_GUIDES_NEW_SOURCE_IDS,
+} from '../../../convex/lib/nutritionGuidesCasData';
+import {
+  OLDER_SAFETY_2026_STAGED_SOURCES,
+  OLDER_SAFETY_2026_TARGETS,
+} from '../../../convex/lib/olderSafety2026CasData';
+import {
+  CLINICAL_TWO_SMALL_SOURCE_PREIMAGES,
+  CLINICAL_TWO_SMALL_TARGETS,
+} from '../../../convex/lib/clinicalTwoSmallCasData';
+import {
+  GD10_12M_PLAY_V5_SOURCE_PREIMAGES,
+  GD10_12M_PLAY_V5_TARGET,
+} from '../../../convex/lib/gd10_12mPlayV5CasData';
+
+const RETIRED_SERVER_GUARD_ITEMS = [
+  ...[
+    ...DUPLICATE_MILESTONE_SLUGS,
+    ...SOCIAL_EMOTIONAL_MILESTONE_RETIREMENT_SLUGS,
+    BRIGHT_FUTURES_DUPLICATE_MILESTONE_RETIREMENT_TARGET.slug,
+    ...PLAY_PSEUDO_MILESTONE_RETIREMENT_SLUGS,
+    ...NUTRITION_PSEUDO_MILESTONE_RETIREMENT_SLUGS,
+    ...SLEEP_PSEUDO_MILESTONE_RETIREMENT_SLUGS,
+    ...MOTOR_PSEUDO_MILESTONE_RETIREMENT_SLUGS,
+    ...REMAINING_PSEUDO_MILESTONE_RETIREMENT_SLUGS,
+  ].map((slug) => ({ type: 'milestone', slug })),
+  { type: 'printable', slug: FLASH_CARDS_PRINTABLE_RETIREMENT_SLUG },
+] as const;
 
 type Row = Record<string, unknown> & { _id?: string };
 
@@ -32,23 +104,25 @@ function ctx(options: {
     : table === 'activityCompletions' ? 'completion-1' : 'insert-1');
   const query = vi.fn((table: string) => {
     const rows = options.rows?.[table] ?? [];
+    const clauses: Array<[string, unknown]> = [];
+    const matching = () => rows.filter((row) =>
+      clauses.every(([field, value]) => row[field] === value));
     const terminal: {
       collect: () => Promise<Row[]>;
       take: (count: number) => Promise<Row[]>;
       unique: () => Promise<Row | null>;
       order?: (direction: 'asc' | 'desc') => unknown;
     } = {
-      collect: async () => rows,
-      take: async (count: number) => rows.slice(0, count),
-      unique: async () => table === 'parentProfiles' ? options.profile ?? null : rows[0] ?? null,
+      collect: async () => matching(),
+      take: async (count: number) => matching().slice(0, count),
+      unique: async () => table === 'parentProfiles' ? options.profile ?? null : matching()[0] ?? null,
     };
     terminal.order = () => terminal;
     return {
       ...terminal,
       withIndex: (_name: string, callback: (q: { eq: (field: string, value: unknown) => unknown }) => unknown) => {
         const q = { eq: (field: string, value: unknown): unknown => {
-          void field;
-          void value;
+          clauses.push([field, value]);
           return q;
         } };
         callback(q);
@@ -65,6 +139,17 @@ function ctx(options: {
       insert,
     },
     storage: {},
+  };
+}
+
+function approvedEvidenceRows(slug: string, kind = 'guide'): Record<string, Row[]> {
+  return {
+    evidenceLinks: [{ kind, slug, sourceIds: ['approved-current-source'] }],
+    evidenceSources: [{
+      _id: 'evidence-1', sourceId: 'approved-current-source', reviewStatus: 'approved',
+      evidenceLevel: 'guideline', year: 2025, reviewDate: '2026-08-01',
+      nextReviewDate: '2028-08-01', verifiedOn: '2026-08-01',
+    }],
   };
 }
 
@@ -123,10 +208,16 @@ describe('Convex registered handlers enforce authorization', () => {
     };
     const context = ctx({
       profile: { userId: 'user-1', isStaff: false },
-      rows: { libraryContent: [published, reviewPending, archived] },
+      rows: {
+        libraryContent: [published, reviewPending, archived],
+        ...approvedEvidenceRows('safe-public', 'activity'),
+      },
     });
     const result = await handler(listByType)(context, { type: 'activity' });
-    expect(result).toEqual({ staff: false, items: [published] });
+    expect(result).toEqual({
+      staff: false,
+      items: [{ ...published, publicationLane: 'human_reviewed' }],
+    });
     expect(JSON.stringify(result)).not.toMatch(/childId|birthDate|nickname|userId/);
   });
 
@@ -192,6 +283,747 @@ describe('Convex registered handlers enforce authorization', () => {
     }));
   });
 
+  it('broad staff and CLI seed paths skip the eight exact manual-review CAS targets', async () => {
+    authState.userId = 'editor-1';
+    const context = ctx({
+      profile: { userId: 'editor-1', isStaff: true, staffRole: 'content_editor' },
+    });
+    const items = MANUAL_REVIEW_CONTENT_TARGETS.map((target) => ({
+      type: target.type,
+      slug: target.slug,
+      titleMm: 'stale',
+      titleEn: 'stale',
+      tags: [],
+      source: 'stale broad seed',
+      version: 1,
+      clinicalStatus: 'clinical_review',
+      data: {},
+      media: [{ kind: 'illustration' }],
+      searchText: 'stale',
+    }));
+
+    const result = await handler(importSeed)(context, { items }) as Record<string, number>;
+    expect(result).toEqual({ created: 0, updated: 0, skippedApproved: 8, total: 8 });
+    expect(context.db.query).not.toHaveBeenCalledWith('libraryContent');
+    expect(context.db.query).not.toHaveBeenCalledWith('libraryMedia');
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalledWith('libraryContent', expect.anything());
+    expect(context.db.insert).not.toHaveBeenCalledWith('libraryMedia', expect.anything());
+    for (const item of items) expect(seedRunSkipsItem(item)).toBe(true);
+  });
+
+  it('broad staff and CLI seed paths reserve the nutrition correction for exact CAS only', async () => {
+    authState.userId = 'editor-1';
+    const context = ctx({
+      profile: { userId: 'editor-1', isStaff: true, staffRole: 'content_editor' },
+    });
+    const stale = {
+      type: BIRTH2M_NUTRITION_TARGET.kind,
+      slug: BIRTH2M_NUTRITION_TARGET.slug,
+      titleMm: 'stale',
+      titleEn: 'stale',
+      tags: [],
+      source: 'stale broad seed',
+      version: 1,
+      clinicalStatus: 'clinical_review',
+      data: {},
+      media: [{ kind: 'illustration' }],
+      searchText: 'stale',
+    };
+
+    await expect(handler(importSeed)(context, { items: [stale] })).resolves.toEqual({
+      created: 0,
+      updated: 0,
+      skippedApproved: 1,
+      total: 1,
+    });
+    expect(seedRunSkipsItem(stale)).toBe(true);
+    expect(context.db.query).not.toHaveBeenCalledWith('libraryContent');
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalledWith('libraryContent', expect.anything());
+  });
+
+  it('reserves the three nutrition guides and two source rows at every broad import boundary', async () => {
+    authState.userId = 'editor-1';
+    const context = ctx({
+      profile: { userId: 'editor-1', isStaff: true, staffRole: 'content_editor' },
+      rows: { evidenceSources: [] },
+    });
+    const items = NUTRITION_GUIDES_CAS_TARGETS.map((target) => ({
+      type: target.kind,
+      slug: target.slug,
+      titleMm: 'stale',
+      titleEn: 'stale',
+      tags: [],
+      source: 'stale broad seed',
+      version: 1,
+      clinicalStatus: 'clinical_review',
+      data: {},
+      media: [],
+      searchText: 'stale',
+    }));
+    await expect(handler(importSeed)(context, { items })).resolves.toEqual({
+      created: 0,
+      updated: 0,
+      skippedApproved: 3,
+      total: 3,
+    });
+    for (const item of items) expect(seedRunSkipsItem(item)).toBe(true);
+
+    await expect(handler(importLinks)(context, { links:
+      NUTRITION_GUIDES_CAS_TARGETS.map((target) => ({
+        kind: target.kind,
+        slug: target.slug,
+        sourceIds: ['stale-or-unknown-source'],
+      })),
+    })).resolves.toMatchObject({ skipped: 3, created: 0, updated: 0, failed: 0 });
+
+    await expect(handler(importSources)(context, { sources:
+      NUTRITION_GUIDES_NEW_SOURCE_IDS.map((id) => ({ id })),
+    })).resolves.toMatchObject({ skipped: 2, created: 0, updated: 0, failed: 0 });
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalledWith('libraryContent', expect.anything());
+    expect(context.db.insert).not.toHaveBeenCalledWith('evidenceLinks', expect.anything());
+    expect(context.db.insert).not.toHaveBeenCalledWith('evidenceSources', expect.anything());
+  });
+
+  it('reserves the birth-to-2-month gross-motor correction at every broad import boundary', async () => {
+    authState.userId = 'editor-1';
+    const context = ctx({
+      profile: { userId: 'editor-1', isStaff: true, staffRole: 'content_editor' },
+      rows: { evidenceSources: [] },
+    });
+    const stale = {
+      type: BIRTH2M_GROSS_MOTOR_CORRECTION_TARGET.kind,
+      slug: BIRTH2M_GROSS_MOTOR_CORRECTION_TARGET.slug,
+      titleMm: 'stale',
+      titleEn: 'stale',
+      tags: [],
+      source: 'stale broad seed',
+      version: 1,
+      clinicalStatus: 'clinical_review',
+      data: {},
+      media: [{ kind: 'illustration' }],
+      searchText: 'stale',
+    };
+
+    await expect(handler(importSeed)(context, { items: [stale] })).resolves.toEqual({
+      created: 0,
+      updated: 0,
+      skippedApproved: 1,
+      total: 1,
+    });
+    expect(seedRunSkipsItem(stale)).toBe(true);
+
+    await expect(handler(importLinks)(context, { links: [{
+      kind: BIRTH2M_GROSS_MOTOR_CORRECTION_TARGET.kind,
+      slug: BIRTH2M_GROSS_MOTOR_CORRECTION_TARGET.slug,
+      sourceIds: ['stale-or-unknown-source'],
+    }] })).resolves.toMatchObject({
+      created: 0,
+      updated: 0,
+      unchanged: 0,
+      skipped: 1,
+      failed: 0,
+    });
+
+    await expect(handler(importSources)(context, { sources: [{
+      id: BIRTH2M_GROSS_MOTOR_CORRECTION_TARGET.exactSourceId,
+      org: 'Centers for Disease Control and Prevention',
+      orgKey: 'CDC',
+      title: 'stale',
+      authors: null,
+      year: 2026,
+      edition: null,
+      country: 'United States',
+      language: 'en',
+      url: 'https://example.invalid/stale',
+      doi: null,
+      isbn: null,
+      pmid: null,
+      evidenceLevel: 'parent_education',
+      reviewStatus: 'awaiting_review',
+      reviewer: null,
+      reviewDate: null,
+      nextReviewDate: null,
+      keywords: [],
+      topics: [],
+      ageMonthsMin: 2,
+      ageMonthsMax: 2,
+      verifiedOn: '2026-08-22',
+      verifiedNote: 'stale generic import must be skipped',
+    }] })).resolves.toMatchObject({
+      created: 0,
+      updated: 0,
+      unchanged: 0,
+      reviewReset: 0,
+      skipped: 1,
+      failed: 0,
+    });
+
+    expect(context.db.query).not.toHaveBeenCalledWith('libraryContent');
+    expect(context.db.query).not.toHaveBeenCalledWith('evidenceLinks');
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalledWith('libraryContent', expect.anything());
+    expect(context.db.insert).not.toHaveBeenCalledWith('evidenceLinks', expect.anything());
+    expect(context.db.insert).not.toHaveBeenCalledWith('evidenceSources', expect.anything());
+  });
+
+  it('reserves all nine older-safety rows and three source records for exact CAS only', async () => {
+    authState.userId = 'editor-1';
+    const context = ctx({
+      profile: { userId: 'editor-1', isStaff: true, staffRole: 'content_editor' },
+      rows: { evidenceSources: [] },
+    });
+    const items = OLDER_SAFETY_2026_TARGETS.map((target) => ({
+      type: target.kind,
+      slug: target.slug,
+      titleMm: 'stale',
+      titleEn: 'stale',
+      tags: [],
+      source: 'stale broad seed',
+      version: 1,
+      clinicalStatus: 'clinical_review',
+      data: {},
+      media: [{ kind: 'illustration' }],
+      searchText: 'stale',
+    }));
+    await expect(handler(importSeed)(context, { items })).resolves.toEqual({
+      created: 0,
+      updated: 0,
+      skippedApproved: 9,
+      total: 9,
+    });
+    await expect(handler(importLinks)(context, { links:
+      OLDER_SAFETY_2026_TARGETS.map((target) => ({
+        kind: target.kind,
+        slug: target.slug,
+        sourceIds: ['stale-or-unknown-source'],
+      })),
+    })).resolves.toMatchObject({
+      created: 0,
+      updated: 0,
+      unchanged: 0,
+      skipped: 9,
+      failed: 0,
+    });
+    await expect(handler(importSources)(context, { sources:
+      OLDER_SAFETY_2026_STAGED_SOURCES.map((source) => ({
+        ...source,
+        id: source.sourceId,
+        reviewStatus: 'awaiting_review',
+        reviewer: null,
+        reviewDate: null,
+        nextReviewDate: null,
+        keywords: [...source.keywords],
+        topics: [...source.topics],
+      })),
+    })).resolves.toMatchObject({
+      created: 0,
+      updated: 0,
+      unchanged: 0,
+      reviewReset: 0,
+      skipped: 3,
+      failed: 0,
+    });
+
+    expect(context.db.query).not.toHaveBeenCalledWith('libraryContent');
+    expect(context.db.query).not.toHaveBeenCalledWith('evidenceLinks');
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalledWith('libraryContent', expect.anything());
+    expect(context.db.insert).not.toHaveBeenCalledWith('evidenceLinks', expect.anything());
+    expect(context.db.insert).not.toHaveBeenCalledWith('evidenceSources', expect.anything());
+  });
+
+  it('reserves both clinical two-small postimages and all six sources at broad boundaries', async () => {
+    authState.userId = 'editor-1';
+    const context = ctx({
+      profile: { userId: 'editor-1', isStaff: true, staffRole: 'content_editor' },
+      rows: { evidenceSources: [] },
+    });
+    const staleItems = CLINICAL_TWO_SMALL_TARGETS.map((target) => ({
+      type: target.kind,
+      slug: target.slug,
+      titleMm: 'stale',
+      titleEn: 'stale',
+      tags: [],
+      source: 'stale broad seed',
+      version: 1,
+      clinicalStatus: 'clinical_review',
+      data: {},
+      media: [{ kind: 'illustration' }],
+      searchText: 'stale',
+    }));
+
+    await expect(handler(importSeed)(context, { items: staleItems })).resolves.toEqual({
+      created: 0,
+      updated: 0,
+      skippedApproved: 2,
+      total: 2,
+    });
+    for (const item of staleItems) expect(seedRunSkipsItem(item)).toBe(true);
+
+    await expect(handler(importLinks)(context, { links: CLINICAL_TWO_SMALL_TARGETS.map(
+      (target) => ({ kind: target.kind, slug: target.slug, sourceIds: ['unknown-stale'] }),
+    ) })).resolves.toMatchObject({ created: 0, updated: 0, unchanged: 0, skipped: 2, failed: 0 });
+
+    await expect(handler(importSources)(context, {
+      sources: CLINICAL_TWO_SMALL_SOURCE_PREIMAGES.map((source) => ({
+        id: source.sourceId,
+        org: 'stale',
+        orgKey: 'STALE',
+        title: 'stale',
+        authors: null,
+        year: 2026,
+        edition: null,
+        country: null,
+        language: 'en',
+        url: 'https://example.invalid/stale',
+        doi: null,
+        isbn: null,
+        pmid: null,
+        evidenceLevel: 'guideline',
+        reviewStatus: 'awaiting_review',
+        reviewer: null,
+        reviewDate: null,
+        nextReviewDate: null,
+        keywords: [],
+        topics: [],
+        ageMonthsMin: 0,
+        ageMonthsMax: 60,
+        verifiedOn: '2026-08-23',
+        verifiedNote: 'stale generic import must be skipped',
+      })),
+    })).resolves.toMatchObject({
+      created: 0,
+      updated: 0,
+      unchanged: 0,
+      reviewReset: 0,
+      skipped: 6,
+      failed: 0,
+    });
+
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalledWith('libraryContent', expect.anything());
+    expect(context.db.insert).not.toHaveBeenCalledWith('evidenceLinks', expect.anything());
+    expect(context.db.insert).not.toHaveBeenCalledWith('evidenceSources', expect.anything());
+  });
+
+  it('reserves the play-safety v5 postimage and all eight source rows for exact CAS only', async () => {
+    authState.userId = 'editor-1';
+    const context = ctx({
+      profile: { userId: 'editor-1', isStaff: true, staffRole: 'content_editor' },
+      rows: { evidenceSources: [] },
+    });
+    const staleItem = {
+      type: GD10_12M_PLAY_V5_TARGET.kind,
+      slug: GD10_12M_PLAY_V5_TARGET.slug,
+      titleMm: 'stale',
+      titleEn: 'stale',
+      tags: [],
+      source: 'stale broad seed',
+      version: 1,
+      clinicalStatus: 'clinical_review',
+      data: {},
+      media: [{ kind: 'illustration' }],
+      searchText: 'stale',
+    };
+
+    await expect(handler(importSeed)(context, { items: [staleItem] })).resolves.toEqual({
+      created: 0,
+      updated: 0,
+      skippedApproved: 1,
+      total: 1,
+    });
+    expect(seedRunSkipsItem(staleItem)).toBe(true);
+
+    await expect(handler(importLinks)(context, { links: [{
+      kind: GD10_12M_PLAY_V5_TARGET.kind,
+      slug: GD10_12M_PLAY_V5_TARGET.slug,
+      sourceIds: ['unknown-stale'],
+    }] })).resolves.toMatchObject({
+      created: 0,
+      updated: 0,
+      unchanged: 0,
+      skipped: 1,
+      failed: 0,
+    });
+
+    await expect(handler(importSources)(context, {
+      sources: GD10_12M_PLAY_V5_SOURCE_PREIMAGES.map((source) => ({
+        id: source.sourceId,
+        org: 'stale',
+        orgKey: 'STALE',
+        title: 'stale',
+        authors: null,
+        year: 2026,
+        edition: null,
+        country: null,
+        language: 'en',
+        url: 'https://example.invalid/stale',
+        doi: null,
+        isbn: null,
+        pmid: null,
+        evidenceLevel: 'guideline',
+        reviewStatus: 'awaiting_review',
+        reviewer: null,
+        reviewDate: null,
+        nextReviewDate: null,
+        keywords: [],
+        topics: [],
+        ageMonthsMin: 0,
+        ageMonthsMax: 60,
+        verifiedOn: '2026-08-24',
+        verifiedNote: 'stale generic import must be skipped',
+      })),
+    })).resolves.toMatchObject({
+      created: 0,
+      updated: 0,
+      unchanged: 0,
+      reviewReset: 0,
+      skipped: 8,
+      failed: 0,
+    });
+
+    expect(context.db.query).not.toHaveBeenCalledWith('libraryContent');
+    expect(context.db.query).not.toHaveBeenCalledWith('evidenceLinks');
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalledWith('libraryContent', expect.anything());
+    expect(context.db.insert).not.toHaveBeenCalledWith('evidenceLinks', expect.anything());
+    expect(context.db.insert).not.toHaveBeenCalledWith('evidenceSources', expect.anything());
+  });
+
+  it('the server seed boundary skips retired content before any catalogue or media write', async () => {
+    authState.userId = 'editor-1';
+    const context = ctx({
+      profile: { userId: 'editor-1', isStaff: true, staffRole: 'content_editor' },
+    });
+    const result = await handler(importSeed)(context, { items:
+      RETIRED_SERVER_GUARD_ITEMS.map(({ type, slug }) => ({
+        type,
+        slug,
+        titleMm: 'retired',
+        titleEn: 'retired',
+        tags: [],
+        source: 'stale client',
+        version: 1,
+        clinicalStatus: 'clinical_review',
+        data: {},
+        media: [{ kind: 'illustration' }],
+        searchText: 'retired',
+      })),
+    }) as Record<string, number>;
+
+    expect(RETIRED_SERVER_GUARD_ITEMS).toHaveLength(57);
+    expect(result).toEqual({ created: 0, updated: 0, skippedApproved: 57, total: 57 });
+    expect(context.db.query).not.toHaveBeenCalledWith('libraryContent');
+    expect(context.db.query).not.toHaveBeenCalledWith('libraryMedia');
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalledWith(
+      'libraryContent', expect.anything(),
+    );
+    expect(context.db.insert).not.toHaveBeenCalledWith(
+      'libraryMedia', expect.anything(),
+    );
+  });
+
+  it('the server seed boundary rejects retired slugs even when a stale client lies about type', async () => {
+    authState.userId = 'editor-1';
+    const context = ctx({
+      profile: { userId: 'editor-1', isStaff: true, staffRole: 'content_editor' },
+    });
+    const result = await handler(importSeed)(context, { items: [{
+      type: 'guide',
+      slug: REMAINING_PSEUDO_MILESTONE_RETIREMENT_SLUGS[0],
+      titleMm: 'retired',
+      titleEn: 'retired',
+      tags: [],
+      source: 'stale client with wrong type',
+      version: 1,
+      clinicalStatus: 'clinical_review',
+      data: {},
+      media: [{ kind: 'illustration' }],
+      searchText: 'retired',
+    }] }) as Record<string, number>;
+
+    expect(result).toEqual({ created: 0, updated: 0, skippedApproved: 1, total: 1 });
+    expect(context.db.query).not.toHaveBeenCalledWith('libraryContent');
+    expect(context.db.query).not.toHaveBeenCalledWith('libraryMedia');
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalledWith('libraryContent', expect.anything());
+    expect(context.db.insert).not.toHaveBeenCalledWith('libraryMedia', expect.anything());
+  });
+
+  it('the internal CLI seed path applies the same all-57 server guard', () => {
+    expect(RETIRED_SERVER_GUARD_ITEMS).toHaveLength(57);
+    for (const item of RETIRED_SERVER_GUARD_ITEMS) {
+      expect(seedRunSkipsItem(item), `${item.type}:${item.slug}`).toBe(true);
+    }
+    expect(seedRunSkipsItem({
+      type: 'guide',
+      slug: REMAINING_PSEUDO_MILESTONE_RETIREMENT_SLUGS[0],
+    })).toBe(true);
+    expect(seedRunSkipsItem({ type: 'guide', slug: 'gd_active_example' })).toBe(false);
+  });
+
+  it('the server evidence-link boundary skips retired keys without link writes', async () => {
+    authState.userId = 'editor-1';
+    const context = ctx({
+      profile: { userId: 'editor-1', isStaff: true, staffRole: 'content_editor' },
+      rows: { evidenceSources: [] },
+    });
+    const result = await handler(importLinks)(context, { links:
+      RETIRED_SERVER_GUARD_ITEMS.map(({ type, slug }, index) => ({
+        kind: type,
+        slug,
+        sourceIds: index % 2 === 0 ? ['stale-unknown-source'] : [],
+      })),
+    }) as Record<string, unknown>;
+
+    expect(result).toMatchObject({
+      created: 0,
+      updated: 0,
+      unchanged: 0,
+      skipped: 57,
+      failed: 0,
+      failedKeys: [],
+      invalidatedContentKeys: [],
+    });
+    expect(context.db.query).not.toHaveBeenCalledWith('evidenceLinks');
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalledWith(
+      'evidenceLinks', expect.anything(),
+    );
+  });
+
+  it('the evidence boundary also rejects a retired slug submitted under the wrong kind', async () => {
+    authState.userId = 'editor-1';
+    const context = ctx({
+      profile: { userId: 'editor-1', isStaff: true, staffRole: 'content_editor' },
+      rows: { evidenceSources: [] },
+    });
+    const result = await handler(importLinks)(context, { links: [{
+      kind: 'guide',
+      slug: REMAINING_PSEUDO_MILESTONE_RETIREMENT_SLUGS[0],
+      sourceIds: ['stale-unknown-source'],
+    }] }) as Record<string, unknown>;
+
+    expect(result).toMatchObject({
+      created: 0,
+      updated: 0,
+      unchanged: 0,
+      skipped: 1,
+      failed: 0,
+      failedKeys: [],
+      invalidatedContentKeys: [],
+    });
+    expect(context.db.query).not.toHaveBeenCalledWith('evidenceLinks');
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalledWith('evidenceLinks', expect.anything());
+  });
+
+  it('the evidence boundary reserves the four inherent-public rows for exact CAS only', async () => {
+    authState.userId = 'editor-1';
+    const context = ctx({
+      profile: { userId: 'editor-1', isStaff: true, staffRole: 'content_editor' },
+      rows: { evidenceSources: [] },
+    });
+    const result = await handler(importLinks)(context, { links:
+      INHERENT_PUBLIC_LINK_CAS_TARGETS.map(({ kind, slug }) => ({
+        kind,
+        slug,
+        sourceIds: ['stale-or-unknown-source'],
+      })),
+    }) as Record<string, unknown>;
+
+    expect(result).toMatchObject({
+      created: 0,
+      updated: 0,
+      unchanged: 0,
+      skipped: 4,
+      failed: 0,
+      failedKeys: [],
+      invalidatedContentKeys: [],
+    });
+    expect(context.db.query).not.toHaveBeenCalledWith('evidenceLinks');
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalledWith('evidenceLinks', expect.anything());
+  });
+
+  it('the evidence boundary reserves the seizure row for its exact CAS only', async () => {
+    authState.userId = 'editor-1';
+    const context = ctx({
+      profile: { userId: 'editor-1', isStaff: true, staffRole: 'content_editor' },
+      rows: { evidenceSources: [] },
+    });
+    const result = await handler(importLinks)(context, {
+      links: [{
+        kind: SWAIMAN_SEIZURE_LINK_CAS_TARGET.kind,
+        slug: SWAIMAN_SEIZURE_LINK_CAS_TARGET.slug,
+        sourceIds: ['stale-or-unknown-source'],
+      }],
+    }) as Record<string, unknown>;
+
+    expect(result).toMatchObject({
+      created: 0,
+      updated: 0,
+      unchanged: 0,
+      skipped: 1,
+      failed: 0,
+      failedKeys: [],
+      invalidatedContentKeys: [],
+    });
+    expect(context.db.query).not.toHaveBeenCalledWith('evidenceLinks');
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalledWith('evidenceLinks', expect.anything());
+  });
+
+  it('the evidence boundary reserves the cerebral-palsy row for its exact CAS only', async () => {
+    authState.userId = 'editor-1';
+    const context = ctx({
+      profile: { userId: 'editor-1', isStaff: true, staffRole: 'content_editor' },
+      rows: { evidenceSources: [] },
+    });
+    const result = await handler(importLinks)(context, {
+      links: [{
+        kind: SWAIMAN_CEREBRAL_PALSY_TARGET.kind,
+        slug: SWAIMAN_CEREBRAL_PALSY_TARGET.slug,
+        sourceIds: ['stale-or-unknown-source'],
+      }],
+    }) as Record<string, unknown>;
+
+    expect(result).toMatchObject({
+      created: 0,
+      updated: 0,
+      unchanged: 0,
+      skipped: 1,
+      failed: 0,
+      failedKeys: [],
+      invalidatedContentKeys: [],
+    });
+    expect(context.db.query).not.toHaveBeenCalledWith('evidenceLinks');
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalledWith('evidenceLinks', expect.anything());
+  });
+
+  it('the evidence boundary reserves the doctor-visits row for its exact CAS only', async () => {
+    authState.userId = 'editor-1';
+    const context = ctx({
+      profile: { userId: 'editor-1', isStaff: true, staffRole: 'content_editor' },
+      rows: { evidenceSources: [] },
+    });
+    const result = await handler(importLinks)(context, {
+      links: [{
+        kind: ASQ_DOCTOR_VISITS_TARGET.kind,
+        slug: ASQ_DOCTOR_VISITS_TARGET.slug,
+        sourceIds: ['stale-or-unknown-source'],
+      }],
+    }) as Record<string, unknown>;
+
+    expect(result).toMatchObject({
+      created: 0,
+      updated: 0,
+      unchanged: 0,
+      skipped: 1,
+      failed: 0,
+      failedKeys: [],
+      invalidatedContentKeys: [],
+    });
+    expect(context.db.query).not.toHaveBeenCalledWith('evidenceLinks');
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalledWith('evidenceLinks', expect.anything());
+  });
+
+  it('the evidence boundary reserves the nutrition row for its exact CAS only', async () => {
+    authState.userId = 'editor-1';
+    const context = ctx({
+      profile: { userId: 'editor-1', isStaff: true, staffRole: 'content_editor' },
+      rows: { evidenceSources: [] },
+    });
+    const result = await handler(importLinks)(context, {
+      links: [{
+        kind: BIRTH2M_NUTRITION_TARGET.kind,
+        slug: BIRTH2M_NUTRITION_TARGET.slug,
+        sourceIds: ['stale-or-unknown-source'],
+      }],
+    }) as Record<string, unknown>;
+
+    expect(result).toMatchObject({
+      created: 0,
+      updated: 0,
+      unchanged: 0,
+      skipped: 1,
+      failed: 0,
+      failedKeys: [],
+      invalidatedContentKeys: [],
+    });
+    expect(context.db.query).not.toHaveBeenCalledWith('evidenceLinks');
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalledWith('evidenceLinks', expect.anything());
+  });
+
+  it('the evidence boundary reserves sudden-weakness link and source rows for exact CAS only', async () => {
+    authState.userId = 'editor-1';
+    const context = ctx({
+      profile: { userId: 'editor-1', isStaff: true, staffRole: 'content_editor' },
+      rows: { evidenceSources: [] },
+    });
+    const linkResult = await handler(importLinks)(context, {
+      links: [{
+        kind: SWAIMAN_SUDDEN_WEAKNESS_TARGET.kind,
+        slug: SWAIMAN_SUDDEN_WEAKNESS_TARGET.slug,
+        sourceIds: ['stale-or-unknown-source'],
+      }],
+    }) as Record<string, unknown>;
+    const sourceResult = await handler(importSources)(context, {
+      sources: [{
+        id: SWAIMAN_SUDDEN_WEAKNESS_SOURCE_ID,
+        org: 'Elsevier',
+        orgKey: 'TEXTBOOK',
+        title: "Swaiman's Pediatric Neurology",
+        authors: null,
+        year: 2025,
+        edition: '7th Edition',
+        country: null,
+        language: 'en',
+        url: 'https://example.invalid/stale',
+        doi: null,
+        isbn: '9780443109447',
+        pmid: null,
+        evidenceLevel: 'textbook',
+        reviewStatus: 'awaiting_review',
+        reviewer: null,
+        reviewDate: null,
+        nextReviewDate: null,
+        keywords: [],
+        topics: [],
+        ageMonthsMin: 0,
+        ageMonthsMax: 60,
+        verifiedOn: '2026-08-21',
+        verifiedNote: 'stale generic import must be skipped',
+      }],
+    }) as Record<string, unknown>;
+
+    expect(linkResult).toMatchObject({
+      created: 0,
+      updated: 0,
+      skipped: 1,
+      failed: 0,
+    });
+    expect(sourceResult).toMatchObject({
+      created: 0,
+      updated: 0,
+      unchanged: 0,
+      reviewReset: 0,
+      skipped: 1,
+      failed: 0,
+    });
+    expect(context.db.query).not.toHaveBeenCalledWith('evidenceLinks');
+    expect(context.db.patch).not.toHaveBeenCalled();
+    expect(context.db.insert).not.toHaveBeenCalledWith('evidenceLinks', expect.anything());
+    expect(context.db.insert).not.toHaveBeenCalledWith('evidenceSources', expect.anything());
+  });
+
   it('normal users cannot mutate evidence review state', async () => {
     authState.userId = 'user-1';
     const context = ctx({ profile: { userId: 'user-1', isStaff: false } });
@@ -211,26 +1043,35 @@ describe('Convex registered handlers enforce authorization', () => {
     await expect(handler(transitionContent)(context, {
       id: 'content-1' as never,
       to: 'clinical_review',
+      expectedReviewRevision: 1,
     })).rejects.toThrow('Insufficient staff permission');
     expect(context.db.patch).not.toHaveBeenCalled();
   });
 
-  it('a qualified education owner cannot publish parent-facing library content', async () => {
+  it('a qualified education owner can publish ordinary content after four scoped reviews', async () => {
     authState.userId = 'owner-1';
     const context = ctx({
       profile: {
         userId: 'owner-1', isStaff: true, staffRole: 'owner',
         staffQualification: 'MEd Early Childhood Education', displayName: 'Education Owner',
       },
-      rows: { libraryContent: [{ _id: 'content-1', slug: 'clinical-guidance', titleEn: 'Clinical guidance' }] },
+      rows: {
+        libraryContent: [{ _id: 'content-1', type: 'guide', slug: 'ordinary-parent-guide', titleEn: 'Play together', reviewRevision: 1 }],
+        contentReviews: ['english', 'native_myanmar', 'child_development', 'evidence', 'safety'].map((dimension) => ({
+          contentSlug: 'ordinary-parent-guide', contentVersion: 1, dimension, decision: 'approved',
+        })),
+        ...approvedEvidenceRows('ordinary-parent-guide'),
+      },
     });
     await expect(handler(setLibraryReview)(context, {
-      slug: 'clinical-guidance', clinicalStatus: 'published',
-    })).rejects.toThrow('Insufficient staff permission');
-    expect(context.db.patch).not.toHaveBeenCalled();
+      slug: 'ordinary-parent-guide', clinicalStatus: 'published', expectedReviewRevision: 1,
+    })).resolves.toEqual({ ok: true, reviewScope: 'education' });
+    expect(context.db.patch).toHaveBeenCalledWith('content-1', expect.objectContaining({
+      clinicalStatus: 'published', reviewScope: 'education', reviewerDisplayName: 'Education Owner',
+    }));
   });
 
-  it('a named qualified clinical reviewer can publish and records clinical scope', async () => {
+  it('a clinical reviewer cannot perform the owner-only final publication step', async () => {
     authState.userId = 'reviewer-1';
     const context = ctx({
       profile: {
@@ -238,18 +1079,205 @@ describe('Convex registered handlers enforce authorization', () => {
         staffQualification: 'MBBS, MMedSc (Paediatrics)', displayName: 'Clinical Reviewer',
       },
       rows: {
-        libraryContent: [{ _id: 'content-1', slug: 'clinical-guidance', titleEn: 'Clinical guidance', reviewRevision: 1 }],
-        contentReviews: ['english', 'native_myanmar', 'evidence', 'safety', 'clinical'].map((dimension) => ({
-          contentSlug: 'clinical-guidance', contentVersion: 1, dimension, decision: 'approved',
+        libraryContent: [{ _id: 'content-1', type: 'guide', slug: 'ordinary-parent-guide', titleEn: 'Play together', reviewRevision: 1 }],
+        contentReviews: ['english', 'native_myanmar', 'child_development', 'evidence', 'safety'].map((dimension) => ({
+          contentSlug: 'ordinary-parent-guide', contentVersion: 1, dimension, decision: 'approved',
         })),
+        ...approvedEvidenceRows('ordinary-parent-guide'),
       },
     });
     await expect(handler(setLibraryReview)(context, {
-      slug: 'clinical-guidance', clinicalStatus: 'published',
-    })).resolves.toEqual({ ok: true, reviewScope: 'clinical' });
+      slug: 'ordinary-parent-guide', clinicalStatus: 'published', expectedReviewRevision: 1,
+    })).rejects.toThrow('Insufficient staff permission');
+    expect(context.db.patch).not.toHaveBeenCalled();
+  });
+
+  it('does not reuse an older approval after the latest decision requests changes', async () => {
+    authState.userId = 'owner-1';
+    const context = ctx({
+      profile: {
+        userId: 'owner-1', isStaff: true, staffRole: 'owner',
+        staffQualification: 'MEd Early Childhood Education', displayName: 'Education Owner',
+      },
+      rows: {
+        libraryContent: [{
+          _id: 'content-1', type: 'guide', slug: 'ordinary-parent-guide',
+          titleEn: 'Play together', reviewRevision: 1,
+        }],
+        contentReviews: [
+          { contentSlug: 'ordinary-parent-guide', contentVersion: 1, dimension: 'native_myanmar', decision: 'changes_requested' },
+          { contentSlug: 'ordinary-parent-guide', contentVersion: 1, dimension: 'native_myanmar', decision: 'approved' },
+          ...['english', 'child_development', 'evidence', 'safety'].map((dimension) => ({
+            contentSlug: 'ordinary-parent-guide', contentVersion: 1, dimension, decision: 'approved',
+          })),
+        ],
+        ...approvedEvidenceRows('ordinary-parent-guide'),
+      },
+    });
+    await expect(handler(setLibraryReview)(context, {
+      slug: 'ordinary-parent-guide', clinicalStatus: 'published', expectedReviewRevision: 1,
+    })).rejects.toThrow('missing review approvals: native_myanmar');
+    expect(context.db.patch).not.toHaveBeenCalled();
+  });
+
+  it('blocks publication when the content has no current approved evidence source', async () => {
+    authState.userId = 'owner-1';
+    const context = ctx({
+      profile: {
+        userId: 'owner-1', isStaff: true, staffRole: 'owner',
+        staffQualification: 'MEd Early Childhood Education', displayName: 'Education Owner',
+      },
+      rows: {
+        libraryContent: [{
+          _id: 'content-1', type: 'guide', slug: 'ordinary-parent-guide',
+          titleEn: 'Play together', reviewRevision: 1,
+        }],
+        contentReviews: ['english', 'native_myanmar', 'child_development', 'evidence', 'safety'].map((dimension) => ({
+          contentSlug: 'ordinary-parent-guide', contentVersion: 1, dimension, decision: 'approved',
+        })),
+        evidenceLinks: [{
+          kind: 'guide', slug: 'ordinary-parent-guide', sourceIds: ['awaiting-source'],
+        }],
+        evidenceSources: [{
+          sourceId: 'awaiting-source', reviewStatus: 'awaiting_review',
+          evidenceLevel: 'guideline', year: 2025, reviewDate: null,
+          nextReviewDate: null, verifiedOn: '2026-08-01',
+        }],
+      },
+    });
+    await expect(handler(setLibraryReview)(context, {
+      slug: 'ordinary-parent-guide', clinicalStatus: 'published', expectedReviewRevision: 1,
+    })).rejects.toThrow('no approved, verified and unexpired source');
+    expect(context.db.patch).not.toHaveBeenCalled();
+  });
+
+  it('a qualified education owner can publish preview-only printable metadata without a clinical record', async () => {
+    authState.userId = 'owner-1';
+    const context = ctx({
+      profile: {
+        userId: 'owner-1', isStaff: true, staffRole: 'owner',
+        staffQualification: 'MEd Early Childhood Education', displayName: 'Education Owner',
+      },
+      rows: {
+        libraryContent: [{
+          _id: 'content-1', type: 'printable', slug: 'prt_preview_only', reviewRevision: 1,
+          titleEn: 'Parent checklist preview',
+          summaryEn: 'Catalogue preview: the future PDF will cover medicine safety and emergency signs.',
+          data: { availability: 'preview_only' },
+        }],
+        contentReviews: ['english', 'native_myanmar', 'child_development', 'evidence', 'safety'].map((dimension) => ({
+          contentSlug: 'prt_preview_only', contentVersion: 1, dimension, decision: 'approved',
+        })),
+        ...approvedEvidenceRows('prt_preview_only', 'printable'),
+      },
+    });
+    await expect(handler(setLibraryReview)(context, {
+      slug: 'prt_preview_only', clinicalStatus: 'published', expectedReviewRevision: 1,
+    })).resolves.toEqual({ ok: true, reviewScope: 'education' });
+  });
+
+  it('an education owner cannot publish emergency wording without current specialist approval', async () => {
+    authState.userId = 'owner-1';
+    const context = ctx({
+      profile: {
+        userId: 'owner-1', isStaff: true, staffRole: 'owner',
+        staffQualification: 'MEd Early Childhood Education', displayName: 'Education Owner',
+      },
+      rows: { libraryContent: [{
+        _id: 'content-1', slug: 'gd_7_9m_safety', titleEn: 'Safety guide', reviewRevision: 1,
+      }] },
+    });
+    await expect(handler(setLibraryReview)(context, {
+      slug: 'gd_7_9m_safety', clinicalStatus: 'published', expectedReviewRevision: 1,
+    })).rejects.toThrow('missing review approvals:');
+    expect(context.db.patch).not.toHaveBeenCalled();
+  });
+
+  it('an education owner cannot publish bed-sharing wording without current specialist approval', async () => {
+    authState.userId = 'owner-1';
+    const context = ctx({
+      profile: {
+        userId: 'owner-1', isStaff: true, staffRole: 'owner',
+        staffQualification: 'MEd Early Childhood Education', displayName: 'Education Owner',
+      },
+      rows: { libraryContent: [{
+        _id: 'content-1', slug: 'future-bed-sharing-guide', titleEn: 'Infant sleep', reviewRevision: 1,
+        data: { safety: { en: 'How to bed-share with a baby.' } },
+      }] },
+    });
+    await expect(handler(setLibraryReview)(context, {
+      slug: 'future-bed-sharing-guide', clinicalStatus: 'published', expectedReviewRevision: 1,
+    })).rejects.toThrow('missing review approvals:');
+    expect(context.db.patch).not.toHaveBeenCalled();
+  });
+
+  it('records the owner as education publisher after an independent specialist approval', async () => {
+    authState.userId = 'owner-1';
+    const context = ctx({
+      profile: {
+        userId: 'owner-1', isStaff: true, staffRole: 'owner',
+        staffQualification: 'MEd Early Childhood Education', displayName: 'Education Owner',
+      },
+      rows: {
+        libraryContent: [{
+          _id: 'content-1', type: 'guide', slug: 'future-bed-sharing-guide', titleEn: 'Infant sleep', reviewRevision: 3,
+          data: { safety: { en: 'How to bed-share with a baby.' } },
+        }],
+        contentReviews: ['english', 'native_myanmar', 'child_development', 'evidence', 'safety', 'clinical'].map((dimension) => ({
+          contentSlug: 'future-bed-sharing-guide', contentVersion: 3, dimension, decision: 'approved',
+        })),
+        ...approvedEvidenceRows('future-bed-sharing-guide'),
+      },
+    });
+    await expect(handler(setLibraryReview)(context, {
+      slug: 'future-bed-sharing-guide', clinicalStatus: 'published', expectedReviewRevision: 3,
+    })).resolves.toEqual({ ok: true, reviewScope: 'education' });
     expect(context.db.patch).toHaveBeenCalledWith('content-1', expect.objectContaining({
-      clinicalStatus: 'published', reviewScope: 'clinical', reviewerDisplayName: 'Clinical Reviewer',
+      clinicalStatus: 'published', reviewScope: 'education', reviewerDisplayName: 'Education Owner',
     }));
+    expect(context.db.insert).toHaveBeenCalledWith('auditLogs', expect.objectContaining({
+      action: 'library.published',
+      summary: 'Infant sleep · specialist review required for bed-sharing wording',
+    }));
+  });
+
+  it('an education owner cannot publish newly-authored medication wording without specialist approval', async () => {
+    authState.userId = 'owner-1';
+    const context = ctx({
+      profile: {
+        userId: 'owner-1', isStaff: true, staffRole: 'owner',
+        staffQualification: 'MEd Early Childhood Education', displayName: 'Education Owner',
+      },
+      rows: { libraryContent: [{
+        _id: 'content-1', slug: 'future-medication-guide', titleEn: 'Medication guide', reviewRevision: 1,
+        summaryEn: 'Give this medication to the child.',
+      }] },
+    });
+    await expect(handler(setLibraryReview)(context, {
+      slug: 'future-medication-guide', clinicalStatus: 'published', expectedReviewRevision: 1,
+    })).rejects.toThrow('missing review approvals:');
+    expect(context.db.patch).not.toHaveBeenCalled();
+  });
+
+  it('a named qualified clinical reviewer cannot bypass owner-only final publication', async () => {
+    authState.userId = 'reviewer-1';
+    const context = ctx({
+      profile: {
+        userId: 'reviewer-1', isStaff: true, staffRole: 'clinical_reviewer',
+        staffQualification: 'MBBS, MMedSc (Paediatrics)', displayName: 'Clinical Reviewer',
+      },
+      rows: {
+        libraryContent: [{ _id: 'content-1', type: 'guide', slug: 'gd_7_9m_safety', titleEn: 'Safety guide', reviewRevision: 1 }],
+        contentReviews: ['english', 'native_myanmar', 'child_development', 'evidence', 'safety', 'clinical'].map((dimension) => ({
+          contentSlug: 'gd_7_9m_safety', contentVersion: 1, dimension, decision: 'approved',
+        })),
+        ...approvedEvidenceRows('gd_7_9m_safety'),
+      },
+    });
+    await expect(handler(setLibraryReview)(context, {
+      slug: 'gd_7_9m_safety', clinicalStatus: 'published', expectedReviewRevision: 1,
+    })).rejects.toThrow('Insufficient staff permission');
+    expect(context.db.patch).not.toHaveBeenCalled();
   });
 
   it('a language reviewer cannot make a clinical or safety decision', async () => {
@@ -288,10 +1316,10 @@ describe('Convex registered handlers enforce authorization', () => {
         code: 'display_name_required',
       },
       {
-        name: 'approval without a stated qualification',
+        name: 'clinical reviewer without an exact assignment',
         profile: { userId: 'u-1', isStaff: true, staffRole: 'clinical_reviewer', displayName: 'Dr Someone' },
         args: { contentSlug: 'item-1', dimension: 'clinical', decision: 'approved', expectedReviewRevision: 1 },
-        code: 'qualification_required',
+        code: 'assignment_required',
       },
       {
         name: 'changes requested with no note',
@@ -335,7 +1363,7 @@ describe('Convex registered handlers enforce authorization', () => {
     });
   });
 
-  it('a qualified clinical reviewer can record a version-bound safety decision', async () => {
+  it('a qualified clinical reviewer cannot bypass the frozen assignment for a safety decision', async () => {
     authState.userId = 'clinical-1';
     const context = ctx({
       profile: {
@@ -346,14 +1374,35 @@ describe('Convex registered handlers enforce authorization', () => {
     });
     await expect(handler(saveDecision)(context, {
       contentSlug: 'item-1', dimension: 'safety', decision: 'approved', note: 'Checked', expectedReviewRevision: 3,
-    })).resolves.toEqual({ ok: true, contentVersion: 3 });
-    expect(context.db.insert).toHaveBeenCalledWith('contentReviews', expect.objectContaining({
-      contentSlug: 'item-1', contentVersion: 3, dimension: 'safety', decision: 'approved',
-      reviewerDisplayName: 'Dr Reviewer', reviewerQualification: 'MBBS',
-    }));
+    })).resolves.toEqual({
+      ok: false,
+      code: 'assignment_required',
+      message: 'Clinical reviewer decisions must be recorded through the assigned frozen batch.',
+    });
+    expect(context.db.insert).not.toHaveBeenCalledWith('contentReviews', expect.anything());
   });
 
-  it('appends repeated review decisions and reports only the latest decision per dimension as current', async () => {
+  it('a qualified clinical reviewer cannot bypass the frozen assignment for child development', async () => {
+    authState.userId = 'clinical-1';
+    const context = ctx({
+      profile: {
+        userId: 'clinical-1', isStaff: true, staffRole: 'clinical_reviewer',
+        displayName: 'Dr Reviewer', staffQualification: 'MBBS',
+      },
+      rows: { libraryContent: [{ _id: 'content-1', slug: 'item-1', version: 1, reviewRevision: 3 }] },
+    });
+    await expect(handler(saveDecision)(context, {
+      contentSlug: 'item-1', dimension: 'child_development', decision: 'approved',
+      note: 'Developmental wording checked', expectedReviewRevision: 3,
+    })).resolves.toEqual({
+      ok: false,
+      code: 'assignment_required',
+      message: 'Clinical reviewer decisions must be recorded through the assigned frozen batch.',
+    });
+    expect(context.db.insert).not.toHaveBeenCalledWith('contentReviews', expect.anything());
+  });
+
+  it('keeps clinical review history behind the exact assignment boundary', async () => {
     authState.userId = 'clinical-1';
     const existingRows = [
       { _id: 'review-3', contentSlug: 'item-1', contentVersion: 2, dimension: 'clinical', decision: 'changes_requested' },
@@ -371,10 +1420,10 @@ describe('Convex registered handlers enforce authorization', () => {
       },
     });
     await expect(handler(listContentReviews)(listContext, { contentSlug: 'item-1' })).resolves.toEqual({
-      allowed: true,
-      contentVersion: 2,
-      current: [existingRows[0], existingRows[1]],
-      history: existingRows,
+      allowed: false,
+      contentVersion: null,
+      current: [],
+      history: [],
     });
 
     const saveContext = ctx({
@@ -389,10 +1438,12 @@ describe('Convex registered handlers enforce authorization', () => {
     });
     await expect(handler(saveDecision)(saveContext, {
       contentSlug: 'item-1', dimension: 'clinical', decision: 'approved', note: 'Re-approved after changes', expectedReviewRevision: 2,
-    })).resolves.toEqual({ ok: true, contentVersion: 2 });
-    expect(saveContext.db.insert).toHaveBeenCalledWith('contentReviews', expect.objectContaining({
-      contentSlug: 'item-1', contentVersion: 2, dimension: 'clinical', decision: 'approved',
-    }));
+    })).resolves.toEqual({
+      ok: false,
+      code: 'assignment_required',
+      message: 'Clinical reviewer decisions must be recorded through the assigned frozen batch.',
+    });
+    expect(saveContext.db.insert).not.toHaveBeenCalledWith('contentReviews', expect.anything());
     expect(saveContext.db.patch).not.toHaveBeenCalled();
   });
 
@@ -430,7 +1481,7 @@ describe('Convex registered handlers enforce authorization', () => {
     }));
   });
 
-  it.each(['language_reviewer', 'evidence_reviewer', 'clinical_reviewer'] as const)(
+  it.each(['language_reviewer', 'evidence_reviewer'] as const)(
     'lets a %s correct wording while resetting the item for fresh review',
     async (staffRole) => {
       authState.userId = 'reviewer-1';
@@ -458,6 +1509,23 @@ describe('Convex registered handlers enforce authorization', () => {
       }));
     },
   );
+
+  it('prevents a clinical reviewer from editing outside the assigned frozen decision path', async () => {
+    authState.userId = 'reviewer-1';
+    const context = ctx({
+      profile: {
+        userId: 'reviewer-1', isStaff: true, staffRole: 'clinical_reviewer', displayName: 'Clinical Reviewer',
+      },
+      rows: { libraryContent: [{
+        _id: 'content-1', slug: 'item-1', titleMm: 'ဟောင်း', titleEn: 'Old', tags: [], data: { body: 'Old' },
+      }] },
+    });
+    await expect(handler(updateDraft)(context, {
+      slug: 'item-1', titleMm: 'အသစ်', titleEn: 'New', data: { body: 'Revised' },
+      expectedReviewRevision: 1,
+    })).rejects.toThrow('Insufficient staff permission');
+    expect(context.db.patch).not.toHaveBeenCalled();
+  });
 
   it('does not let support staff edit review content', async () => {
     authState.userId = 'support-1';
@@ -491,19 +1559,20 @@ describe('Convex registered handlers enforce authorization', () => {
   });
 
   it('blocks publication when any current-revision review area is missing', async () => {
-    authState.userId = 'reviewer-1';
+    authState.userId = 'owner-1';
     const context = ctx({
       profile: {
-        userId: 'reviewer-1', isStaff: true, staffRole: 'clinical_reviewer',
-        staffQualification: 'MBBS', displayName: 'Clinical Reviewer',
+        userId: 'owner-1', isStaff: true, staffRole: 'owner',
+        staffQualification: 'MEd', displayName: 'Owner',
       },
       rows: {
-        libraryContent: [{ _id: 'content-1', slug: 'item-1', titleEn: 'Item', reviewRevision: 2 }],
+        libraryContent: [{ _id: 'content-1', type: 'guide', slug: 'item-1', titleEn: 'Item', reviewRevision: 2 }],
         contentReviews: [{ contentSlug: 'item-1', contentVersion: 2, dimension: 'clinical', decision: 'approved' }],
+        ...approvedEvidenceRows('item-1'),
       },
     });
     await expect(handler(setLibraryReview)(context, {
-      slug: 'item-1', clinicalStatus: 'published',
+      slug: 'item-1', clinicalStatus: 'published', expectedReviewRevision: 2,
     })).rejects.toThrow('missing review approvals');
     expect(context.db.patch).not.toHaveBeenCalled();
   });
@@ -517,6 +1586,7 @@ describe('Convex registered handlers enforce authorization', () => {
         authors: null, year: 2024, edition: null, country: null, language: 'en',
         url: 'https://example.test/source', doi: null, isbn: null, pmid: null,
         evidenceLevel: 'guideline', reviewStatus: 'approved', reviewer: 'Private Reviewer',
+        verifiedOn: '2026-08-01', reviewDate: '2026-08-01', nextReviewDate: '2028-08-01',
         reviewerId: 'reviewer-1', reviewerQualification: 'Private qualification',
         verifiedNote: 'Internal note', reviewNote: 'Internal review note', searchText: 'internal',
         createdAt: 1, updatedAt: 2,
@@ -548,6 +1618,57 @@ describe('Convex registered handlers enforce authorization', () => {
     })).resolves.toBe('session-1');
     expect(context.db.insert).toHaveBeenCalledWith('milestoneSessions', expect.objectContaining({
       userId: 'user-1', childId: 'child-1', resultState: 'green',
+      resultSnapshot: expect.objectContaining({ state: 'green', urgentSymptoms: [], safetyUrgent: false }),
+    }));
+  });
+
+  it('milestone server preserves all eight validated acute symptoms and forces red', async () => {
+    authState.userId = 'user-1';
+    const context = ctx({ get: { _id: 'child-1', userId: 'user-1' } });
+    const urgentSymptoms = [
+      'severe_breathing_difficulty',
+      'blue_lips',
+      'breathing_pauses',
+      'seizure',
+      'unresponsiveness',
+      'sudden_weakness',
+      'serious_injury',
+      'severe_dehydration',
+    ];
+    await handler(recordSession)(context, {
+      childId: 'child-1', resultState: 'green', lostSkill: false,
+      urgentSymptoms, resultSnapshot: { state: 'green' }, responses: [],
+    });
+    expect(context.db.insert).toHaveBeenCalledWith('milestoneSessions', expect.objectContaining({
+      resultState: 'red',
+      resultSnapshot: expect.objectContaining({
+        state: 'red', urgentSymptoms, safetyUrgent: true,
+      }),
+    }));
+  });
+
+  it('milestone server keeps stale snapshot-only clients safe and forces skill loss to red', async () => {
+    authState.userId = 'user-1';
+    const symptomContext = ctx({ get: { _id: 'child-1', userId: 'user-1' } });
+    await handler(recordSession)(symptomContext, {
+      childId: 'child-1', resultState: 'yellow', lostSkill: false,
+      resultSnapshot: { state: 'yellow', urgentSymptoms: ['blue_lips'] }, responses: [],
+    });
+    expect(symptomContext.db.insert).toHaveBeenCalledWith('milestoneSessions', expect.objectContaining({
+      resultState: 'red',
+      resultSnapshot: expect.objectContaining({ state: 'red', urgentSymptoms: ['blue_lips'] }),
+    }));
+
+    const skillLossContext = ctx({ get: { _id: 'child-1', userId: 'user-1' } });
+    await handler(recordSession)(skillLossContext, {
+      childId: 'child-1', resultState: 'green', lostSkill: true,
+      resultSnapshot: { state: 'green' }, responses: [],
+    });
+    expect(skillLossContext.db.insert).toHaveBeenCalledWith('milestoneSessions', expect.objectContaining({
+      resultState: 'red',
+      resultSnapshot: expect.objectContaining({
+        state: 'red', urgentSymptoms: ['loss_of_acquired_skills'], safetyUrgent: true,
+      }),
     }));
   });
 

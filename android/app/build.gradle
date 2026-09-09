@@ -1,5 +1,8 @@
 apply plugin: 'com.android.application'
 
+def aceReleaseSourceCommit = System.getenv("ACE_ANDROID_SOURCE_COMMIT") ?: "development"
+def aceReleasePlayMaxVersionCode = System.getenv("ACE_ANDROID_PLAY_MAX_VERSION_CODE")
+
 android {
     namespace = "mm.com.acegroup.acechildgrow"
     compileSdk = rootProject.ext.compileSdkVersion
@@ -9,6 +12,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 14
         versionName "1.13"
+        manifestPlaceholders = [aceSourceCommit: aceReleaseSourceCommit]
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -38,6 +42,39 @@ android {
             minifyEnabled = true
             shrinkResources = true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+gradle.taskGraph.whenReady { graph ->
+    def releasePackagingRequested = graph.allTasks.any { task ->
+        def name = task.name.toLowerCase()
+        name.contains("release") && (name.contains("bundle") || name.contains("assemble") || name.contains("package"))
+    }
+    if (releasePackagingRequested) {
+        def repositoryRoot = rootProject.projectDir.parentFile
+        def sourceGate = new File(repositoryRoot, "scripts/check-android-release-source.mjs")
+        if (!sourceGate.isFile()) {
+            throw new GradleException("Android release source preflight script is missing")
+        }
+
+        try {
+            def processBuilder = new ProcessBuilder("node", sourceGate.absolutePath)
+                .directory(repositoryRoot)
+                .redirectErrorStream(true)
+            processBuilder.environment().put("ACE_ANDROID_SOURCE_COMMIT", aceReleaseSourceCommit)
+            if (aceReleasePlayMaxVersionCode == null) {
+                processBuilder.environment().remove("ACE_ANDROID_PLAY_MAX_VERSION_CODE")
+            } else {
+                processBuilder.environment().put("ACE_ANDROID_PLAY_MAX_VERSION_CODE", aceReleasePlayMaxVersionCode)
+            }
+            def process = processBuilder.start()
+            process.inputStream.eachLine { line -> logger.lifecycle(line) }
+            if (process.waitFor() != 0) {
+                throw new GradleException("Android release source preflight failed")
+            }
+        } catch (IOException error) {
+            throw new GradleException("Android release source preflight could not run", error)
         }
     }
 }

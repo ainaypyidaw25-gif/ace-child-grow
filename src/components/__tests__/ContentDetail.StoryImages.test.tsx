@@ -25,7 +25,8 @@ vi.mock('convex/react', () => {
         summaryEn: `EN ${slug}`,
         type: 'story',
         category: 'story',
-        clinicalStatus: 'published',
+        clinicalStatus: slug === 'st_first_day_school' ? 'clinical_review' : 'published',
+        publicationLane: slug === 'st_first_day_school' ? 'ai_audited' : 'human_reviewed',
         reviewScope: 'education',
         source: 'Production Convex',
         data: {
@@ -80,6 +81,7 @@ describe('ContentDetail published story illustrations', () => {
       const myanmarView = renderStory(slug);
 
       expect(screen.getByRole('heading', { name: titleMm })).toBeVisible();
+      expect(screen.getByTestId('story-use-note')).toHaveTextContent(/ဘာသာစကား/);
       expect(screen.getByTestId('story-illustration')).toHaveAttribute('src', asset);
       expect(screen.getByTestId('story-illustration')).toHaveAttribute('alt', titleMm);
       expect(document.querySelector('img[src="/legacy-shared-story.webp"]')).toBeNull();
@@ -89,8 +91,17 @@ describe('ContentDetail published story illustrations', () => {
       renderStory(slug);
 
       expect(screen.getByRole('heading', { name: titleEn })).toBeVisible();
+      expect(screen.getByTestId('story-use-note')).toHaveTextContent(/learning and entertainment/i);
       expect(screen.getByTestId('story-illustration')).toHaveAttribute('src', asset);
       expect(screen.getByTestId('story-illustration')).toHaveAttribute('alt', titleEn);
     },
   );
+
+  it('does not repeat AI provenance on an AI-audited public story', () => {
+    localStorage.setItem('ace-locale', 'en');
+    renderStory('st_first_day_school');
+    expect(screen.queryByTestId('ai-publication-disclosure')).not.toBeInTheDocument();
+    expect(screen.queryByText(/AI-reviewed|AI review notice/i)).not.toBeInTheDocument();
+    expect(screen.getByText('Story st_first_day_school')).toBeVisible();
+  });
 });

@@ -1,5 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import { evaluateSafety, EMERGENCY_MESSAGE } from '../safety/safety';
+import {
+  ACUTE_URGENT_SYMPTOMS,
+  evaluateSafety,
+  EMERGENCY_MESSAGE,
+} from '../safety/safety';
 
 describe('urgent safety engine', () => {
   it('is not urgent with no symptoms and no skill loss', () => {
@@ -14,6 +18,16 @@ describe('urgent safety engine', () => {
     expect(r.urgent).toBe(true);
     expect(r.message).toEqual(EMERGENCY_MESSAGE);
     expect(r.triggers).toContain('seizure');
+  });
+
+  it('exposes exactly eight acute symptoms and every one produces an urgent result', () => {
+    expect(ACUTE_URGENT_SYMPTOMS).toHaveLength(8);
+    for (const symptom of ACUTE_URGENT_SYMPTOMS) {
+      const result = evaluateSafety({ confirmedSymptoms: [symptom], lostSkill: false });
+      expect(result.urgent, symptom).toBe(true);
+      expect(result.triggers, symptom).toContain(symptom);
+      expect(result.message, symptom).toEqual(EMERGENCY_MESSAGE);
+    }
   });
 
   it('treats skill loss as an urgent trigger and saves the concern', () => {

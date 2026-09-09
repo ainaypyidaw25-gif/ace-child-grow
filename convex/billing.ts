@@ -3,6 +3,8 @@ import { v } from 'convex/values';
 import { getAuthUserId } from '@convex-dev/auth/server';
 import { requireOwner, requireUser } from './lib/auth';
 import { logAudit } from './audit';
+import { paidAccessPeriodEnd } from './lib/billingPeriods';
+import { isMmpayProductionConfigured } from './lib/mmpayConfig';
 
 const paidPlanValidator = v.union(v.literal('premium'), v.literal('family'));
 const intervalValidator = v.union(v.literal('month'), v.literal('year'));
@@ -52,6 +54,7 @@ const requestValidator = v.object({
   userId: v.id('users'),
   planKey: paidPlanValidator,
   planId: v.optional(v.id('subscriptionPlans')),
+  planInterval: v.optional(intervalValidator),
   paymentMethodId: v.id('paymentMethods'),
   amount: v.number(),
   currency: v.string(),
@@ -65,9 +68,34 @@ const requestValidator = v.object({
   updatedAt: v.number(),
 });
 
+// Public legal pages need to describe only payment paths that are actually
+// available. Expose a capability flag rather than payment-method rows so an
+// unauthenticated visitor never receives account names or identifiers.
+export const paymentCapabilities = query({
+  args: {},
+  returns: v.object({
+    manualTransferAvailable: v.boolean(),
+    mmpayProductionAvailable: v.boolean(),
+  }),
+  handler: async (ctx) => {
+    const activeManualMethods = await ctx.db
+      .query('paymentMethods')
+      .withIndex('by_active_and_sort_order', (q) => q.eq('isActive', true))
+      .take(1);
+    return {
+      manualTransferAvailable: activeManualMethods.length > 0,
+      mmpayProductionAvailable: isMmpayProductionConfigured(),
+    };
+  },
+});
+
 export const options = query({
   args: {},
-  returns: v.object({ plans: v.array(planValidator), methods: v.array(methodValidator) }),
+  returns: v.object({
+    plans: v.array(planValidator),
+    methods: v.array(methodValidator),
+    mmpayProductionAvailable: v.boolean(),
+  }),
   handler: async (ctx) => {
     await requireUser(ctx);
     const plans = await ctx.db
@@ -78,7 +106,11 @@ export const options = query({
       .query('paymentMethods')
       .withIndex('by_active_and_sort_order', (q) => q.eq('isActive', true))
       .take(20);
-    return { plans, methods };
+    return {
+      plans,
+      methods,
+      mmpayProductionAvailable: isMmpayProductionConfigured(),
+    };
   },
 });
 
@@ -144,6 +176,7 @@ export const submitPaymentRequest = mutation({
       userId,
       planKey: plan.planKey,
       planId: plan._id,
+      planInterval: plan.interval,
       paymentMethodId: method._id,
       amount: plan.amount,
       currency: plan.currency,
@@ -265,7 +298,7 @@ export const installRecommendedPlans = mutation({
     const ownerId = await requireOwner(ctx);
     const now = Date.now();
     const templates = [
-      { planKey: 'premium' as const, interval: 'month' as const, amount: 5_900, sortOrder: 1, nameMm: 'Premium လစဉ်', nameEn: 'Premium Monthly' },
+      { planKey: 'premium' as const, interval: 'month' as const, amount: 6_900, sortOrder: 1, nameMm: 'Premium လစဉ်', nameEn: 'Premium Monthly' },
       { planKey: 'premium' as const, interval: 'year' as const, amount: 59_000, sortOrder: 2, nameMm: 'Premium နှစ်စဉ်', nameEn: 'Premium Yearly' },
       { planKey: 'family' as const, interval: 'month' as const, amount: 9_900, sortOrder: 3, nameMm: 'Family လစဉ်', nameEn: 'Family Monthly' },
       { planKey: 'family' as const, interval: 'year' as const, amount: 99_000, sortOrder: 4, nameMm: 'Family နှစ်စဉ်', nameEn: 'Family Yearly' },
@@ -393,13 +426,13 @@ export const reviewPaymentRequest = mutation({
         .query('subscriptions')
         .withIndex('by_user', (q) => q.eq('userId', row.userId))
         .unique();
-      const periodMs = plan.interval === 'year' ? 365 * 24 * 60 * 60 * 1000 : 30 * 24 * 60 * 60 * 1000;
+      const interval = row.planInterval ?? plan.interval;
       const patch = {
         planKey: row.planKey,
         status: 'active' as const,
         provider: 'manual_verified',
-        currentPeriodEnd: now + periodMs,
-        cancelAtPeriodEnd: false,
+        currentPeriodEnd: paidAccessPeriodEnd(now, interval, row.planKey, existing),
+        cancelAtPeriodEnd: true,
         updatedAt: now,
       };
       if (existing) await ctx.db.patch(existing._id, patch);
