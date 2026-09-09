@@ -17,7 +17,6 @@ import {
 import { isPersistedReleaseGovernedSource } from './lib/clinicalReviewBatchProvenance';
 import {
   evidenceIsOutdated,
-  isStrictIsoDate,
   todayIsoUtc,
 } from './lib/evidenceFreshness';
 import { publicationEvidenceIsEligible } from './lib/evidencePublicationGate';
@@ -341,9 +340,9 @@ async function successorHumanReviewAuditMatches(
 
 async function preflightState(
   ctx: DatabaseContext,
-  todayIso: string,
+  now: number,
 ): Promise<PreflightState> {
-  if (!isStrictIsoDate(todayIso)) throw new Error('todayIso must be a real date in YYYY-MM-DD format');
+  const todayIso = todayIsoUtc(new Date(now));
   const spec = AI_EARLY_MATH_PROVENANCE_CORRECTION_SPEC;
   const [sourceRows, targetLinks, allLinks, humanAuditRows, correctionAuditRows,
     aiPublicationReleaseRows, aiPublicationConfigRows, persistedReleaseGovernedSource] = await Promise.all([
@@ -535,10 +534,9 @@ async function preflightState(
 export const preflight = internalQuery({
   args: {
     releaseId: v.literal(AI_EARLY_MATH_PROVENANCE_CORRECTION_RELEASE_ID),
-    todayIso: v.string(),
   },
   returns: preflightResultValidator,
-  handler: async (ctx, args) => preflightState(ctx, args.todayIso),
+  handler: async (ctx) => preflightState(ctx, Date.now()),
 });
 
 /**
@@ -562,8 +560,8 @@ export const prepare = internalMutation({
     publicationDecision: v.literal('not_made'),
   }),
   handler: async (ctx) => {
-    const todayIso = todayIsoUtc();
-    const before = await preflightState(ctx, todayIso);
+    const now = Date.now();
+    const before = await preflightState(ctx, now);
     if (before.phase === 'awaiting_human_review'
       || before.phase === 'human_review_recorded') {
       if (before.correctedAt === null) throw new Error('Exact successor lacks correctedAt');
@@ -581,7 +579,7 @@ export const prepare = internalMutation({
     if (before.phase !== 'correction_ready') {
       throw new Error(`AI early-math provenance correction blocked: ${before.blockers.join('; ')}`);
     }
-    const rechecked = await preflightState(ctx, todayIso);
+    const rechecked = await preflightState(ctx, now);
     if (rechecked.phase !== 'correction_ready') throw new Error('State changed after preflight');
 
     const spec = AI_EARLY_MATH_PROVENANCE_CORRECTION_SPEC;
@@ -591,7 +589,7 @@ export const prepare = internalMutation({
       throw new Error('Exact source preimage disappeared after preflight');
     }
     const source = sourceRows[0];
-    const correctedAt = Date.now();
+    const correctedAt = now;
     await ctx.db.patch(source._id, {
       reviewStatus: 'awaiting_review',
       reviewer: null,
@@ -626,7 +624,7 @@ export const prepare = internalMutation({
       },
     );
 
-    const after = await preflightState(ctx, todayIso);
+    const after = await preflightState(ctx, now);
     if (after.phase !== 'awaiting_human_review' || after.correctedAt !== correctedAt) {
       throw new Error(`Correction postflight failed; transaction rolled back: ${after.blockers.join('; ')}`);
     }

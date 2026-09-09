@@ -73,9 +73,12 @@ authorization.
 
 ```sh
 npx convex run aiEarlyMathProvenanceCorrection:preflight \
-  '{"releaseId":"2026-09-09-lsn-early-math-provenance-correction-1","todayIso":"2026-09-09"}' \
+  '{"releaseId":"2026-09-09-lsn-early-math-provenance-correction-1"}' \
   --prod
 ```
+
+The preflight derives the current UTC date on the server. It does not accept a
+caller-supplied freshness date.
 
 Proceed only when the exact result is `phase: "correction_ready"` with an empty
 `blockers` array. Then, and only with action-time authorization:

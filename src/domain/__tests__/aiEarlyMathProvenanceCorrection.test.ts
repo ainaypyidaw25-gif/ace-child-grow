@@ -173,11 +173,11 @@ describe('early-math AI provenance correction CAS', () => {
     const state = exactContext();
     const before = await registeredHandler(preflight)(state.ctx, {
       releaseId: AI_EARLY_MATH_PROVENANCE_CORRECTION_RELEASE_ID,
-      todayIso: '2026-09-09',
     }) as Row;
     expect(before).toMatchObject({
       phase: 'correction_ready',
       blockers: [],
+      todayIso: '2026-09-09',
       sourceExactPreimage: true,
       reverseDependencyKeys: ['lesson:lsn_early_math'],
       dataRowsChanged: 0,
@@ -229,7 +229,6 @@ describe('early-math AI provenance correction CAS', () => {
 
     const after = await registeredHandler(preflight)(state.ctx, {
       releaseId: AI_EARLY_MATH_PROVENANCE_CORRECTION_RELEASE_ID,
-      todayIso: '2026-09-09',
     }) as Row;
     expect(after).toMatchObject({
       phase: 'awaiting_human_review',
@@ -300,7 +299,6 @@ describe('early-math AI provenance correction CAS', () => {
 
     const result = await registeredHandler(preflight)(state.ctx, {
       releaseId: AI_EARLY_MATH_PROVENANCE_CORRECTION_RELEASE_ID,
-      todayIso: '2026-09-09',
     }) as Row;
     expect(result).toMatchObject({
       phase: 'human_review_recorded',
@@ -381,7 +379,6 @@ describe('early-math AI provenance correction CAS', () => {
     });
     const result = await registeredHandler(preflight)(state.ctx, {
       releaseId: AI_EARLY_MATH_PROVENANCE_CORRECTION_RELEASE_ID,
-      todayIso: '2026-09-09',
     }) as Row;
     expect(result.phase).toBe('blocked');
     expect(result.blockers).toContain(
