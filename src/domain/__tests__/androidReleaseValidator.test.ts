@@ -1,11 +1,13 @@
 import { describe, expect, it } from 'vitest';
 import {
   assessAndroidBundle,
+  assessAndroidReleaseSource,
   jarsignerOutputIsComplete,
   normalizeSha256,
   parseBundletoolManifest,
   parseGradleReleaseMetadata,
   parseKeytoolCertificate,
+  parsePlayMaxVersionCode,
 } from '../../../scripts/lib/android-release-validator.mjs';
 
 const fingerprint = 'b2ec6b6417bd19e9dd48cbdff54ac32cf189738a9691bb334b5698fcc6f56386';
@@ -18,6 +20,32 @@ const validCertificate = {
 };
 
 describe('Android release validation', () => {
+  it('requires the exact clean git source and a version above the fresh Play maximum', () => {
+    expect(parsePlayMaxVersionCode('13')).toBe(13);
+    expect(parsePlayMaxVersionCode('-1')).toBeNull();
+    expect(parsePlayMaxVersionCode('13.5')).toBeNull();
+
+    const common = {
+      expectedSourceCommit: sourceCommit,
+      actualSourceCommit: sourceCommit,
+      sourceClean: true,
+      versionCode: 14,
+      playMaxVersionCode: 13,
+    };
+    expect(assessAndroidReleaseSource(common).ready).toBe(true);
+
+    for (const input of [
+      { ...common, expectedSourceCommit: null },
+      { ...common, expectedSourceCommit: '2'.repeat(40) },
+      { ...common, sourceClean: false },
+      { ...common, playMaxVersionCode: null },
+      { ...common, versionCode: 13 },
+      { ...common, versionCode: 12 },
+    ]) {
+      expect(assessAndroidReleaseSource(input).ready).toBe(false);
+    }
+  });
+
   it('parses source, manifest and certificate metadata', () => {
     expect(parseGradleReleaseMetadata(`
       applicationId "mm.com.acegroup.acechildgrow"

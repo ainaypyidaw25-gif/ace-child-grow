@@ -16,6 +16,17 @@ export type CertificateMetadata = {
 };
 
 export function parseGradleReleaseMetadata(source: string): ReleaseMetadata;
+export function parsePlayMaxVersionCode(value: unknown): number | null;
+export function assessAndroidReleaseSource(input: {
+  expectedSourceCommit: string | null;
+  actualSourceCommit: string;
+  sourceClean: boolean;
+  versionCode: number | null;
+  playMaxVersionCode: number | null;
+}): {
+  ready: boolean;
+  checks: Array<{ id: string; pass: boolean; detail: string }>;
+};
 export function parseBundletoolManifest(source: string): ReleaseMetadata;
 export function normalizeSha256(value: unknown): string | null;
 export function parseKeytoolCertificate(source: string): CertificateMetadata;

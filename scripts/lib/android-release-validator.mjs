@@ -10,6 +10,75 @@ export function parseGradleReleaseMetadata(source) {
   };
 }
 
+export function parsePlayMaxVersionCode(value) {
+  if (typeof value !== 'string') return null;
+  const normalized = value.trim();
+  if (!/^(?:0|[1-9]\d*)$/.test(normalized)) return null;
+  const parsed = Number(normalized);
+  return Number.isSafeInteger(parsed) ? parsed : null;
+}
+
+export function assessAndroidReleaseSource({
+  expectedSourceCommit,
+  actualSourceCommit,
+  sourceClean,
+  versionCode,
+  playMaxVersionCode,
+}) {
+  const expectedCommitIsExact = typeof expectedSourceCommit === 'string'
+    && /^[0-9a-f]{40}$/.test(expectedSourceCommit);
+  const sourceCommitMatchesHead = expectedCommitIsExact
+    && typeof actualSourceCommit === 'string'
+    && expectedSourceCommit === actualSourceCommit;
+  const playMaximumIsSupplied = Number.isSafeInteger(playMaxVersionCode)
+    && playMaxVersionCode >= 0;
+  const versionCodeExceedsPlay = playMaximumIsSupplied
+    && Number.isSafeInteger(versionCode)
+    && versionCode > playMaxVersionCode;
+  const checks = [
+    {
+      id: 'source_commit_exact',
+      pass: expectedCommitIsExact,
+      detail: expectedCommitIsExact
+        ? 'ACE_ANDROID_SOURCE_COMMIT is the exact 40-character reviewed commit.'
+        : 'ACE_ANDROID_SOURCE_COMMIT must be a lowercase 40-character git commit.',
+    },
+    {
+      id: 'source_commit_matches_head',
+      pass: sourceCommitMatchesHead,
+      detail: sourceCommitMatchesHead
+        ? 'ACE_ANDROID_SOURCE_COMMIT matches git HEAD.'
+        : 'ACE_ANDROID_SOURCE_COMMIT must match git HEAD exactly.',
+    },
+    {
+      id: 'source_worktree_clean',
+      pass: sourceClean,
+      detail: sourceClean
+        ? 'The release source worktree is clean.'
+        : 'The release source worktree has tracked or untracked changes.',
+    },
+    {
+      id: 'play_max_version_code_supplied',
+      pass: playMaximumIsSupplied,
+      detail: playMaximumIsSupplied
+        ? `Fresh Play Console maximum version code: ${playMaxVersionCode}.`
+        : 'ACE_ANDROID_PLAY_MAX_VERSION_CODE must be a fresh non-negative integer.',
+    },
+    {
+      id: 'version_code_exceeds_play',
+      pass: versionCodeExceedsPlay,
+      detail: playMaximumIsSupplied
+        ? `Checked-in version code ${versionCode ?? 'missing'} must exceed Play Console maximum ${playMaxVersionCode}.`
+        : 'A fresh Play Console maximum is required before comparing version codes.',
+    },
+  ];
+
+  return {
+    ready: checks.every((check) => check.pass),
+    checks,
+  };
+}
+
 export function parseBundletoolManifest(source) {
   const manifest = source.match(/<manifest\b[^>]*>/)?.[0] ?? '';
   const packageName = manifest.match(/\bpackage="([^"]+)"/)?.[1] ?? null;

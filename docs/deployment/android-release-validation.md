@@ -5,7 +5,8 @@ does not build, sign, upload or publish anything.
 
 ## Before building
 
-1. Read the highest version code already present in Google Play Console.
+1. Read the highest version code already present in Google Play Console and set
+   it as `ACE_ANDROID_PLAY_MAX_VERSION_CODE`.
 2. Start from the exact reviewed release commit, with a clean worktree.
 3. Set a `versionCode` greater than the Play Console maximum and set the intended
    `versionName` in `android/app/build.gradle`.
@@ -15,8 +16,25 @@ does not build, sign, upload or publish anything.
 5. Run the repository tests, typecheck, lint and web build before
    `npm run android:bundle`.
 6. Set `ACE_ANDROID_SOURCE_COMMIT` to the exact 40-character reviewed commit.
-   Release packaging fails if this value is absent, and the value is embedded
-   as non-secret manifest metadata so the validator can bind the AAB to source.
+   Every Gradle release bundle/assemble/package task runs a fail-closed source
+   preflight before task execution. Packaging fails when the value is absent or
+   differs from Git `HEAD`, the worktree has tracked or untracked changes, the
+   fresh Play maximum is absent, or the checked-in version code does not exceed
+   that maximum. The reviewed commit is embedded as non-secret manifest metadata
+   so the post-build validator can bind the AAB back to that exact source.
+
+For example, after recording the fresh Play maximum and committing every
+reviewed release change:
+
+```sh
+export ACE_ANDROID_PLAY_MAX_VERSION_CODE=PLAY_CONSOLE_MAX_CODE
+export ACE_ANDROID_SOURCE_COMMIT=EXACT_40_CHARACTER_REVIEWED_COMMIT
+npm run android:bundle
+```
+
+Do not reuse a previous local bundle just because its version code is higher.
+The preflight and the post-build validator must both bind the successor artifact
+to the current reviewed commit.
 
 ## Validate the exact AAB
 
