@@ -6,6 +6,7 @@ import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
 import { renderMilestoneShareCard } from '../lib/shareCard';
 import { buildMilestoneShareCaption } from '../domain/share/shareCaption';
+import { normalizeMilestoneStorageUrl } from '../domain/milestonePhotoUrl';
 
 export function MilestoneKeepsake() {
   const { t, locale } = useLocale();
@@ -21,14 +22,15 @@ export function MilestoneKeepsake() {
   if (data === null) return <p className="text-ink-soft">{t('milestoneKeepsake.notFound')}</p>;
 
   const title = locale === 'mm' ? (data.titleMm ?? data.titleEn) : (data.titleEn ?? data.titleMm);
+  const photoUrl = normalizeMilestoneStorageUrl(data.photoUrl, import.meta.env.VITE_CONVEX_URL);
 
   async function handleShare() {
-    if (!data || !data.photoUrl || !title) return;
+    if (!data || !photoUrl || !title) return;
     setShareMessage('');
     setSharing(true);
     try {
       const blob = await renderMilestoneShareCard({
-        photoUrl: data.photoUrl,
+        photoUrl,
         childNickname: data.childNickname,
         title,
         achievedAt: data.answeredAt,
@@ -66,9 +68,9 @@ export function MilestoneKeepsake() {
           <h1 className="mt-1 text-xl font-bold text-ink">{data.childNickname}</h1>
         </header>
 
-        {data.photoUrl ? (
+        {photoUrl ? (
           <img
-            src={data.photoUrl}
+            src={photoUrl}
             alt={title ?? ''}
             className="aspect-[4/3] w-full rounded-2xl bg-canvas object-cover"
           />
@@ -84,7 +86,7 @@ export function MilestoneKeepsake() {
         </p>
       </article>
 
-      {data.photoUrl && (
+      {photoUrl && (
         <div className="flex flex-wrap gap-2 print:hidden">
           <button
             type="button"

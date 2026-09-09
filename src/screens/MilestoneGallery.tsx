@@ -7,6 +7,10 @@ import { useLocale } from '../app/LocaleContext';
 import { useAppState } from '../app/AppState';
 import { NoChild } from './Growth';
 import { ConfirmDialog } from '../components/ConfirmDialog';
+import {
+  normalizeMilestoneBlobPreviewUrl,
+  normalizeMilestoneStorageUrl,
+} from '../domain/milestonePhotoUrl';
 
 const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
 
@@ -71,7 +75,9 @@ export function MilestoneGallery() {
         <ul className="grid gap-4 sm:grid-cols-2">
           {achieved.map((item) => {
             const title = locale === 'mm' ? (item.titleMm ?? item.titleEn) : (item.titleEn ?? item.titleMm);
-            const photoUrl = uploadingId === item._id && preview ? preview.url : item.photoUrl;
+            const photoUrl = uploadingId === item._id && preview?.id === item._id
+              ? normalizeMilestoneBlobPreviewUrl(preview.url, window.location.origin)
+              : normalizeMilestoneStorageUrl(item.photoUrl, import.meta.env.VITE_CONVEX_URL);
             const busy = uploadingId === item._id;
             return (
               <li key={item._id} className="rounded-[26px] border border-line bg-white p-4 shadow-card">

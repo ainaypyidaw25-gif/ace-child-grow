@@ -4,6 +4,8 @@ import { MemoryRouter } from 'react-router-dom';
 import { LocaleProvider } from '../../app/LocaleContext';
 import { MilestoneGallery } from '../../screens/MilestoneGallery';
 
+const VALID_PHOTO_URL = 'https://graceful-possum-566.convex.cloud/api/storage/photo-1';
+
 const achievedMilestones = [
   {
     _id: 'response-1',
@@ -12,7 +14,7 @@ const achievedMilestones = [
     titleEn: 'First steps',
     domain: 'gross_motor',
     answeredAt: Date.parse('2026-01-15'),
-    photoUrl: 'https://cdn.example/photo-1',
+    photoUrl: VALID_PHOTO_URL,
   },
   {
     _id: 'response-2',
@@ -60,8 +62,10 @@ function renderWithProviders() {
 }
 
 beforeEach(() => {
+  vi.stubEnv('VITE_CONVEX_URL', 'https://graceful-possum-566.convex.cloud');
   mutationCallCount = 0;
   mutationCalls.length = 0;
+  achievedMilestones[0].photoUrl = VALID_PHOTO_URL;
 });
 
 describe('MilestoneGallery (component)', () => {
@@ -76,6 +80,26 @@ describe('MilestoneGallery (component)', () => {
     renderWithProviders();
     const printLinks = screen.getAllByText('အမှတ်တရ ပုံနှိပ်မည်');
     expect(printLinks).toHaveLength(1);
+  });
+
+  it('renders only the normalized configured Convex storage photo URL', () => {
+    renderWithProviders();
+    expect(screen.getByRole('img', { name: 'ပထမဆုံး လှမ်းလှမ်း' })).toHaveAttribute(
+      'src',
+      VALID_PHOTO_URL,
+    );
+  });
+
+  it('does not put an unexpected backend URL into an image sink', () => {
+    achievedMilestones[0].photoUrl = 'javascript:alert(document.domain)';
+    renderWithProviders();
+    expect(screen.queryByRole('img', { name: 'ပထမဆုံး လှမ်းလှမ်း' })).not.toBeInTheDocument();
+  });
+
+  it('does not render a photo belonging to a different Convex deployment', () => {
+    vi.stubEnv('VITE_CONVEX_URL', 'https://uncommon-orca-603.convex.cloud');
+    renderWithProviders();
+    expect(screen.queryByRole('img', { name: 'ပထမဆုံး လှမ်းလှမ်း' })).not.toBeInTheDocument();
   });
 
   it('opens a ConfirmDialog on remove and only calls removeMilestonePhoto after confirming', () => {
