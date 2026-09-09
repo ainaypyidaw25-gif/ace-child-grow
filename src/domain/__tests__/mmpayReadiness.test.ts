@@ -1,6 +1,9 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { parseReadOnlyProviderProbeResponse } from '../../../convex/mmpayReadiness';
+import {
+  parseReadOnlyProviderProbeResponse,
+  safelyReadProviderPayment,
+} from '../../../convex/mmpayReadiness';
 
 const target = {
   orderId: 'ACG-EXISTING-TERMINAL',
@@ -98,6 +101,23 @@ describe('read-only Myan Myan Pay production probe', () => {
     expect(JSON.stringify(result)).not.toContain('Provider rejected request');
   });
 
+  it('catches a rejected SDK get without returning the rejected value', async () => {
+    const response = await safelyReadProviderPayment(async () => {
+      throw new Error('secret=sk_live_never-return; order=customer-sensitive');
+    });
+    const result = parseReadOnlyProviderProbeResponse(response, target);
+
+    expect(result).toEqual({
+      environment: 'production',
+      providerReached: false,
+      failureClass: 'transport_or_sdk_failure',
+      structuredErrorReceived: false,
+      developmentStateSignal: 'not_observed',
+    });
+    expect(JSON.stringify(result)).not.toContain('sk_live_');
+    expect(JSON.stringify(result)).not.toContain('customer-sensitive');
+  });
+
   it('rejects mismatched identifiers, amounts, currencies, and invalid statuses', () => {
     expect(() => parseReadOnlyProviderProbeResponse({
       orderId: 'ACG-OTHER', amount: target.amount, status: 'SUCCESS',
@@ -137,7 +157,8 @@ describe('read-only Myan Myan Pay production probe', () => {
     const source = readFileSync('convex/mmpayReadiness.ts', 'utf8');
     const action = source.slice(source.indexOf('export const probeTerminalProductionPayment'));
     expect(action).toContain('internalAction({');
-    expect(action).toContain('sdk(config).get({');
+    expect(action).toContain('safelyReadProviderPayment(');
+    expect(action).toContain('() => sdk(config).get({');
     expect(action).not.toContain('runMutation');
     expect(action).not.toContain('.pay(');
     expect(action).not.toContain('.cancel(');

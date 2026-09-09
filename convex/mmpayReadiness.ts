@@ -188,6 +188,21 @@ function classifyProviderFailure(value: unknown): {
 }
 
 /**
+ * Normalize a rejected SDK call to a fixed local sentinel. The caught value is
+ * deliberately neither logged nor returned, so transport libraries cannot
+ * leak request headers, credentials, URLs or provider/customer identifiers.
+ */
+export async function safelyReadProviderPayment(
+  request: () => Promise<unknown>,
+): Promise<unknown> {
+  try {
+    return await request();
+  } catch {
+    return new Error('Provider SDK request rejected');
+  }
+}
+
+/**
  * Validate the provider response without returning any provider identifier,
  * QR, checkout URL, customer detail, amount or credential-bearing value.
  */
@@ -251,10 +266,12 @@ export const probeTerminalProductionPayment = internalAction({
       internal.mmpayReadinessData.providerProbeTarget,
       { transactionId },
     );
-    const response = await sdk(config).get({
-      orderId: target.orderId,
-      nonce: crypto.randomUUID(),
-    });
+    const response = await safelyReadProviderPayment(
+      () => sdk(config).get({
+        orderId: target.orderId,
+        nonce: crypto.randomUUID(),
+      }),
+    );
     return {
       checkedAt: Date.now(),
       ...parseReadOnlyProviderProbeResponse(response, target),

@@ -107,6 +107,10 @@ or logged. The categories are `live_access_not_enabled`, `ip_not_allowlisted`,
 Only `live_access_not_enabled` produces `developmentStateSignal: consistent`.
 All other failures report `not_observed`, which means the result did not prove
 or disprove the merchant console's DEVELOPMENT state.
+If the SDK or transport rejects instead of returning a value, the action catches
+it at the provider-call boundary and substitutes a fixed local sentinel before
+classification. The rejected value is never logged, returned or interpolated
+into an error message.
 
 An authenticated owner can pass the same transaction document ID to
 `mmpayReadinessData:productionWebhookEvidence`. That query reads at most 51

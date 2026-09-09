@@ -123,6 +123,9 @@ application still being in DEVELOPMENT; `malformed_response` means no known
 error envelope was observed and a provider/SDK contract mismatch remains
 possible. Do not infer either cause from a generic missing-order result, and do
 not rerun the provider probe until this classifier is reviewed and deployed.
+An SDK promise rejection is caught at the same boundary and becomes the fixed
+`transport_or_sdk_failure` result; the rejected value cannot escape through the
+action response, logs or an interpolated exception.
 
 ## Gate 2 — AI preview release
 
