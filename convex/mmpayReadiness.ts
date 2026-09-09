@@ -33,7 +33,18 @@ const terminalStatusValidator = v.union(
   v.literal('EXPIRED'),
 );
 
-const probeResultValidator = v.object({
+const probeFailureClassValidator = v.union(
+  v.literal('live_access_not_enabled'),
+  v.literal('ip_not_allowlisted'),
+  v.literal('authentication_rejected'),
+  v.literal('rate_limited'),
+  v.literal('provider_unavailable'),
+  v.literal('provider_rejected'),
+  v.literal('transport_or_sdk_failure'),
+  v.literal('malformed_response'),
+);
+
+const verifiedProbeResultValidator = v.object({
   checkedAt: v.number(),
   environment: v.literal('production'),
   providerReached: v.literal(true),
@@ -48,6 +59,23 @@ const probeResultValidator = v.object({
   providerStatusTerminal: v.boolean(),
   statusMatchesStored: v.boolean(),
 });
+
+const blockedProbeResultValidator = v.object({
+  checkedAt: v.number(),
+  environment: v.literal('production'),
+  providerReached: v.literal(false),
+  failureClass: probeFailureClassValidator,
+  structuredErrorReceived: v.boolean(),
+  developmentStateSignal: v.union(
+    v.literal('consistent'),
+    v.literal('not_observed'),
+  ),
+});
+
+const probeResultValidator = v.union(
+  verifiedProbeResultValidator,
+  blockedProbeResultValidator,
+);
 
 function sdk(config: MmpayConfig) {
   return MMPaySDK({
@@ -78,13 +106,113 @@ function isTerminalStatus(status: ProviderStatus): status is TerminalStatus {
   return status !== 'PENDING';
 }
 
+type ProbeFailureClass =
+  | 'live_access_not_enabled'
+  | 'ip_not_allowlisted'
+  | 'authentication_rejected'
+  | 'rate_limited'
+  | 'provider_unavailable'
+  | 'provider_rejected'
+  | 'transport_or_sdk_failure'
+  | 'malformed_response';
+
+function boundedErrorTokens(value: Record<string, unknown>) {
+  const tokens: string[] = [];
+  const append = (candidate: unknown) => {
+    if (typeof candidate === 'string' || typeof candidate === 'number') {
+      tokens.push(String(candidate).slice(0, 300));
+    }
+  };
+  for (const key of ['code', 'message', 'error', 'statusCode', 'status']) {
+    const candidate = value[key];
+    append(candidate);
+    if (isRecord(candidate)) {
+      append(candidate.code);
+      append(candidate.message);
+      append(candidate.statusCode);
+    }
+  }
+  return tokens.join(' ').toLowerCase().slice(0, 1_200);
+}
+
+function classifyProviderFailure(value: unknown): {
+  failureClass: ProbeFailureClass;
+  structuredErrorReceived: boolean;
+  developmentStateSignal: 'consistent' | 'not_observed';
+} {
+  if (value instanceof Error || !isRecord(value)) {
+    return {
+      failureClass: 'transport_or_sdk_failure',
+      structuredErrorReceived: false,
+      developmentStateSignal: 'not_observed',
+    };
+  }
+
+  const tokens = boundedErrorTokens(value);
+  let failureClass: ProbeFailureClass;
+  if (tokens.includes('ka0002')
+    || tokens.includes('api key not live')
+    || tokens.includes("api key not 'live'")
+    || tokens.includes('live access not enabled')
+    || tokens.includes('development mode')) {
+    failureClass = 'live_access_not_enabled';
+  } else if (tokens.includes('ka0005') || tokens.includes('not whitelisted') || tokens.includes('allowlist')) {
+    failureClass = 'ip_not_allowlisted';
+  } else if (tokens.includes('ka0001')
+    || tokens.includes('ka0003')
+    || tokens.includes('signature')
+    || tokens.includes('unauthorized')
+    || tokens.includes('forbidden')
+    || tokens.includes('bearer token')) {
+    failureClass = 'authentication_rejected';
+  } else if (tokens.includes('429') || tokens.includes('rate limit') || tokens.includes('ratelimit')) {
+    failureClass = 'rate_limited';
+  } else if (tokens.includes('ka0004')
+    || /(^|\s)5\d\d(\s|$)/.test(tokens)
+    || tokens.includes('internal server error')
+    || tokens.includes('service unavailable')) {
+    failureClass = 'provider_unavailable';
+  } else if (tokens) {
+    failureClass = 'provider_rejected';
+  } else {
+    failureClass = 'malformed_response';
+  }
+
+  return {
+    failureClass,
+    structuredErrorReceived: tokens.length > 0,
+    developmentStateSignal: failureClass === 'live_access_not_enabled'
+      ? 'consistent'
+      : 'not_observed',
+  };
+}
+
+/**
+ * Normalize a rejected SDK call to a fixed local sentinel. The caught value is
+ * deliberately neither logged nor returned, so transport libraries cannot
+ * leak request headers, credentials, URLs or provider/customer identifiers.
+ */
+export async function safelyReadProviderPayment(
+  request: () => Promise<unknown>,
+): Promise<unknown> {
+  try {
+    return await request();
+  } catch {
+    return new Error('Provider SDK request rejected');
+  }
+}
+
 /**
  * Validate the provider response without returning any provider identifier,
  * QR, checkout URL, customer detail, amount or credential-bearing value.
  */
 export function parseReadOnlyProviderProbeResponse(value: unknown, target: ProbeTarget) {
   if (!isRecord(value) || typeof value.orderId !== 'string') {
-    throw new Error('Provider probe request failed');
+    return {
+      environment: 'production' as const,
+      providerReached: false as const,
+      ...classifyProviderFailure(value),
+    };
   }
   if (value.orderId !== target.orderId) {
     throw new Error('Provider probe returned a mismatched order ID');
@@ -138,10 +266,12 @@ export const probeTerminalProductionPayment = internalAction({
       internal.mmpayReadinessData.providerProbeTarget,
       { transactionId },
     );
-    const response = await sdk(config).get({
-      orderId: target.orderId,
-      nonce: crypto.randomUUID(),
-    });
+    const response = await safelyReadProviderPayment(
+      () => sdk(config).get({
+        orderId: target.orderId,
+        nonce: crypto.randomUUID(),
+      }),
+    );
     return {
       checkedAt: Date.now(),
       ...parseReadOnlyProviderProbeResponse(response, target),
