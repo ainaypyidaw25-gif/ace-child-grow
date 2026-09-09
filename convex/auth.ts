@@ -5,6 +5,7 @@ import Apple from '@auth/core/providers/apple';
 import type { EmailConfig } from '@auth/core/providers';
 import { normalizeAppleProfile } from '../src/domain/auth/appleProfile';
 import { validateAccountPassword } from '../src/domain/auth/passwordPolicy';
+import { generateRecoveryToken } from '../src/domain/auth/recoveryToken';
 
 const passwordResetEmail: EmailConfig = {
   id: 'ace-password-reset',
@@ -13,10 +14,7 @@ const passwordResetEmail: EmailConfig = {
   from: process.env.AUTH_EMAIL_FROM ?? 'ACE Child Grow <onboarding@resend.dev>',
   apiKey: process.env.AUTH_RESEND_KEY,
   maxAge: 15 * 60,
-  generateVerificationToken: async () => {
-    const value = crypto.getRandomValues(new Uint32Array(1))[0] % 1_000_000;
-    return String(value).padStart(6, '0');
-  },
+  generateVerificationToken: async () => generateRecoveryToken(),
   async sendVerificationRequest({ identifier, token, provider }) {
     if (!provider.apiKey) throw new Error('Password recovery email is not configured');
     const response = await fetch('https://api.resend.com/emails', {
