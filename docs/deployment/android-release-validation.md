@@ -23,6 +23,16 @@ does not build, sign, upload or publish anything.
    that maximum. The reviewed commit is embedded as non-secret manifest metadata
    so the post-build validator can bind the AAB back to that exact source.
 
+The Android release web build has one controlled Vite input file:
+`.env.production`. It must be a tracked regular file containing exactly the
+literal `VITE_CONVEX_URL` and `VITE_DEFAULT_LOCALE` keys. Variable expansion is
+blocked. `.env`, `.env.local` and `.env.production.local` must not exist, even
+when Git ignores them. Process-level `VITE_*` overrides are also blocked except
+for `VITE_DISTRIBUTION=play-store`, which the `android:bundle` command fixes for
+both the pre-build and Gradle checks. The preflight prints the non-secret SHA-256
+of the tracked production environment file so it can be retained with release
+evidence without logging any environment values.
+
 For example, after recording the fresh Play maximum and committing every
 reviewed release change:
 

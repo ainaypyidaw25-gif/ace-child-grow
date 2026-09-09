@@ -31,7 +31,8 @@
     "seed:dump": "node scripts/dumpSeed.mjs",
     "android:add": "npx cap add android",
     "android:sync": "VITE_DISTRIBUTION=play-store npm run build && npx cap sync android",
-    "android:bundle": "npm run android:sync && cd android && ./gradlew bundleRelease",
+    "android:release:source-check": "node scripts/check-android-release-source.mjs",
+    "android:bundle": "VITE_DISTRIBUTION=play-store npm run android:release:source-check && npm run android:sync && cd android && VITE_DISTRIBUTION=play-store ./gradlew bundleRelease",
     "ios:sync": "VITE_DISTRIBUTION=app-store npm run build && npx cap sync ios",
     "ios:open": "npx cap open ios",
     "ios:build": "npm run ios:sync && xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Release -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO build"

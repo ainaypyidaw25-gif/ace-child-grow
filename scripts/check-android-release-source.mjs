@@ -7,19 +7,51 @@
  * uploads or publishes an artifact.
  */
 import { execFileSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { lstatSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import {
   assessAndroidReleaseSource,
+  parseControlledProductionViteEnv,
   parseGradleReleaseMetadata,
   parsePlayMaxVersionCode,
 } from './lib/android-release-validator.mjs';
+
+const PROHIBITED_VITE_ENV_FILES = [
+  '.env',
+  '.env.local',
+  '.env.production.local',
+];
 
 function gitOutput(args) {
   return execFileSync('git', args, {
     encoding: 'utf8',
     stdio: ['ignore', 'pipe', 'ignore'],
   }).trim();
+}
+
+function pathType(path) {
+  try {
+    const stats = lstatSync(path);
+    return stats.isFile() ? 'file' : 'other';
+  } catch (error) {
+    if (error instanceof Error && 'code' in error && error.code === 'ENOENT') {
+      return 'missing';
+    }
+    throw error;
+  }
+}
+
+function gitTracks(repoRoot, path) {
+  try {
+    execFileSync('git', ['ls-files', '--error-unmatch', '--', path], {
+      cwd: repoRoot,
+      stdio: 'ignore',
+    });
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 function main() {
@@ -36,6 +68,22 @@ function main() {
   );
   const gradlePath = resolve(repoRoot, 'android/app/build.gradle');
   const gradle = parseGradleReleaseMetadata(readFileSync(gradlePath, 'utf8'));
+  const productionEnvRelativePath = '.env.production';
+  const productionEnvPath = resolve(repoRoot, productionEnvRelativePath);
+  const productionEnvIsRegularFile = pathType(productionEnvPath) === 'file';
+  const productionEnvSource = productionEnvIsRegularFile
+    ? readFileSync(productionEnvPath, 'utf8')
+    : '';
+  const productionViteEnv = parseControlledProductionViteEnv(productionEnvSource);
+  const productionEnvSha256 = productionEnvIsRegularFile
+    ? createHash('sha256').update(productionEnvSource).digest('hex')
+    : null;
+  const localViteEnvFiles = PROHIBITED_VITE_ENV_FILES.filter(
+    (path) => pathType(resolve(repoRoot, path)) !== 'missing',
+  );
+  const viteEnvironmentOverrides = Object.keys(process.env)
+    .filter((key) => key.startsWith('VITE_') && key !== 'VITE_DISTRIBUTION')
+    .sort();
   const assessment = assessAndroidReleaseSource({
     expectedSourceCommit: process.env.ACE_ANDROID_SOURCE_COMMIT ?? null,
     actualSourceCommit,
@@ -44,6 +92,13 @@ function main() {
     playMaxVersionCode: parsePlayMaxVersionCode(
       process.env.ACE_ANDROID_PLAY_MAX_VERSION_CODE,
     ),
+    viteProductionEnvControlled: productionEnvIsRegularFile
+      && gitTracks(repoRoot, productionEnvRelativePath)
+      && productionViteEnv.valid,
+    viteProductionEnvSha256: productionEnvSha256,
+    viteLocalFiles: localViteEnvFiles,
+    viteEnvironmentOverrides,
+    viteDistribution: process.env.VITE_DISTRIBUTION ?? null,
   });
 
   for (const check of assessment.checks) {
