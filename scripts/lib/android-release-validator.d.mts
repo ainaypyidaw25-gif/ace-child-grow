@@ -16,6 +16,28 @@ export type CertificateMetadata = {
 };
 
 export function parseGradleReleaseMetadata(source: string): ReleaseMetadata;
+export function parsePlayMaxVersionCode(value: unknown): number | null;
+export function parseControlledProductionViteEnv(source: unknown): {
+  valid: boolean;
+  keys: string[];
+  missingKeys: string[];
+  unexpectedKeys: string[];
+};
+export function assessAndroidReleaseSource(input: {
+  expectedSourceCommit: string | null;
+  actualSourceCommit: string;
+  sourceClean: boolean;
+  versionCode: number | null;
+  playMaxVersionCode: number | null;
+  viteProductionEnvControlled?: boolean;
+  viteProductionEnvSha256?: string | null;
+  viteLocalFiles?: string[];
+  viteEnvironmentOverrides?: string[];
+  viteDistribution?: string | null;
+}): {
+  ready: boolean;
+  checks: Array<{ id: string; pass: boolean; detail: string }>;
+};
 export function parseBundletoolManifest(source: string): ReleaseMetadata;
 export function normalizeSha256(value: unknown): string | null;
 export function parseKeytoolCertificate(source: string): CertificateMetadata;

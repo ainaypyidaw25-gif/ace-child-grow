@@ -10,6 +10,163 @@ export function parseGradleReleaseMetadata(source) {
   };
 }
 
+export function parsePlayMaxVersionCode(value) {
+  if (typeof value !== 'string') return null;
+  const normalized = value.trim();
+  if (!/^(?:0|[1-9]\d*)$/.test(normalized)) return null;
+  const parsed = Number(normalized);
+  return Number.isSafeInteger(parsed) ? parsed : null;
+}
+
+const ANDROID_RELEASE_VITE_KEYS = [
+  'VITE_CONVEX_URL',
+  'VITE_DEFAULT_LOCALE',
+];
+
+export function parseControlledProductionViteEnv(source) {
+  if (typeof source !== 'string') {
+    return {
+      valid: false,
+      keys: [],
+      missingKeys: [...ANDROID_RELEASE_VITE_KEYS],
+      unexpectedKeys: [],
+    };
+  }
+
+  const keys = [];
+  const seen = new Set();
+  let syntaxIsLiteral = true;
+  for (const rawLine of source.split(/\r?\n/)) {
+    const line = rawLine.trim();
+    if (line === '' || line.startsWith('#')) continue;
+    const match = line.match(/^([A-Z][A-Z0-9_]*)=(.*)$/);
+    if (!match) {
+      syntaxIsLiteral = false;
+      continue;
+    }
+    const [, key, value] = match;
+    if (!key.startsWith('VITE_') || seen.has(key) || value.includes('$')) {
+      syntaxIsLiteral = false;
+    }
+    seen.add(key);
+    keys.push(key);
+  }
+
+  const uniqueKeys = [...seen].sort();
+  const missingKeys = ANDROID_RELEASE_VITE_KEYS.filter((key) => !seen.has(key));
+  const unexpectedKeys = uniqueKeys.filter(
+    (key) => !ANDROID_RELEASE_VITE_KEYS.includes(key),
+  );
+  return {
+    valid: syntaxIsLiteral && missingKeys.length === 0 && unexpectedKeys.length === 0,
+    keys: uniqueKeys,
+    missingKeys,
+    unexpectedKeys,
+  };
+}
+
+export function assessAndroidReleaseSource({
+  expectedSourceCommit,
+  actualSourceCommit,
+  sourceClean,
+  versionCode,
+  playMaxVersionCode,
+  viteProductionEnvControlled = false,
+  viteProductionEnvSha256 = null,
+  viteLocalFiles = [],
+  viteEnvironmentOverrides = [],
+  viteDistribution = null,
+}) {
+  const expectedCommitIsExact = typeof expectedSourceCommit === 'string'
+    && /^[0-9a-f]{40}$/.test(expectedSourceCommit);
+  const sourceCommitMatchesHead = expectedCommitIsExact
+    && typeof actualSourceCommit === 'string'
+    && expectedSourceCommit === actualSourceCommit;
+  const playMaximumIsSupplied = Number.isSafeInteger(playMaxVersionCode)
+    && playMaxVersionCode >= 0;
+  const versionCodeExceedsPlay = playMaximumIsSupplied
+    && Number.isSafeInteger(versionCode)
+    && versionCode > playMaxVersionCode;
+  const productionEnvIsControlled = viteProductionEnvControlled
+    && typeof viteProductionEnvSha256 === 'string'
+    && /^[a-f0-9]{64}$/.test(viteProductionEnvSha256);
+  const localViteEnvIsAbsent = Array.isArray(viteLocalFiles)
+    && viteLocalFiles.length === 0;
+  const viteOverridesAreAbsent = Array.isArray(viteEnvironmentOverrides)
+    && viteEnvironmentOverrides.length === 0;
+  const distributionIsPlayStore = viteDistribution === 'play-store';
+  const checks = [
+    {
+      id: 'vite_production_env_controlled',
+      pass: productionEnvIsControlled,
+      detail: productionEnvIsControlled
+        ? `Tracked literal .env.production SHA-256: ${viteProductionEnvSha256}.`
+        : 'A tracked regular .env.production with only approved literal Vite keys is required.',
+    },
+    {
+      id: 'vite_local_env_absent',
+      pass: localViteEnvIsAbsent,
+      detail: localViteEnvIsAbsent
+        ? 'No local Vite environment file can override the reviewed production inputs.'
+        : `Remove prohibited local Vite environment files: ${viteLocalFiles.join(', ')}.`,
+    },
+    {
+      id: 'vite_environment_overrides_absent',
+      pass: viteOverridesAreAbsent,
+      detail: viteOverridesAreAbsent
+        ? 'No unexpected process-level VITE_* override is present.'
+        : `Unexpected process-level Vite overrides: ${viteEnvironmentOverrides.join(', ')}.`,
+    },
+    {
+      id: 'vite_distribution_play_store',
+      pass: distributionIsPlayStore,
+      detail: distributionIsPlayStore
+        ? 'VITE_DISTRIBUTION is fixed to play-store.'
+        : 'VITE_DISTRIBUTION must be exactly play-store for Android release packaging.',
+    },
+    {
+      id: 'source_commit_exact',
+      pass: expectedCommitIsExact,
+      detail: expectedCommitIsExact
+        ? 'ACE_ANDROID_SOURCE_COMMIT is the exact 40-character reviewed commit.'
+        : 'ACE_ANDROID_SOURCE_COMMIT must be a lowercase 40-character git commit.',
+    },
+    {
+      id: 'source_commit_matches_head',
+      pass: sourceCommitMatchesHead,
+      detail: sourceCommitMatchesHead
+        ? 'ACE_ANDROID_SOURCE_COMMIT matches git HEAD.'
+        : 'ACE_ANDROID_SOURCE_COMMIT must match git HEAD exactly.',
+    },
+    {
+      id: 'source_worktree_clean',
+      pass: sourceClean,
+      detail: sourceClean
+        ? 'The release source worktree is clean.'
+        : 'The release source worktree has tracked or untracked changes.',
+    },
+    {
+      id: 'play_max_version_code_supplied',
+      pass: playMaximumIsSupplied,
+      detail: playMaximumIsSupplied
+        ? `Fresh Play Console maximum version code: ${playMaxVersionCode}.`
+        : 'ACE_ANDROID_PLAY_MAX_VERSION_CODE must be a fresh non-negative integer.',
+    },
+    {
+      id: 'version_code_exceeds_play',
+      pass: versionCodeExceedsPlay,
+      detail: playMaximumIsSupplied
+        ? `Checked-in version code ${versionCode ?? 'missing'} must exceed Play Console maximum ${playMaxVersionCode}.`
+        : 'A fresh Play Console maximum is required before comparing version codes.',
+    },
+  ];
+
+  return {
+    ready: checks.every((check) => check.pass),
+    checks,
+  };
+}
+
 export function parseBundletoolManifest(source) {
   const manifest = source.match(/<manifest\b[^>]*>/)?.[0] ?? '';
   const packageName = manifest.match(/\bpackage="([^"]+)"/)?.[1] ?? null;
