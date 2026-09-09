@@ -27,7 +27,7 @@ it never upgrades a shallow `jarsigner` result into release evidence.
 The existing human-reviewed web catalogue and iOS application may continue to
 serve customers. Do not describe the product as fully production-ready yet:
 
-- the duplicate owner login is safely quarantined but not consolidated;
+- owner merge v2 is reported as applied, but its exact action-time and sign-in evidence is not attached to this record, so that gate remains evidence-blocked and the mutation must not be repeated;
 - the enabled three-item AI preview release has fail-closed snapshot drift;
 - 297 library rows remain intentionally unpublished and no clinical batch is
   active;
@@ -52,36 +52,31 @@ in both locales and preserve the approved document/version evidence.
 
 ## Gate 1 — duplicate owner consolidation
 
-The exact Production preflight at the time of this record returned `blocked`:
+The earlier exact Production v1 preflight returned `blocked` after the
+canonical target changed. This branch prepares immutable successor
+`owner-account-merge-lapyaewun2690-2026-09-09-v2`.
 
-- `canonical target user preimage drifted`;
-- `quarantine postimage or final preimage drifted`;
-- both Google and password accounts point to the canonical target;
-- the quarantined source has zero auth accounts, sessions, refresh tokens and
-  verifiers;
-- the source private data is still preserved: one profile, one subscription,
-  one child, 16 activity completions and one notification;
-- the canonical target is actively changing and reports eight references that
-  the frozen v1 migration did not support.
+The PR description now reports that v2 was applied separately after an exact
+action-time preflight and postflight. This read-only record does **not** yet
+contain the exact preflight output, Owner approval, mutation result, postflight
+output, finalization-audit identifier, or separate Google/password sign-in
+results. Therefore the account state must be treated as **evidence-blocked**,
+not as either unapplied or fully verified.
 
-Do **not** run `ownerAccountMerge:apply` for v1 and do not edit v1 constants to
-make the changed state pass. This branch prepares immutable successor
-`owner-account-merge-lapyaewun2690-2026-09-09-v2`. It freezes the exact core
-preimage/postimage, the eight populated target-owner reference sets, and checks
-all 30 other source-user reference categories. Any new source credential,
-verification code, row digest, target reference, or unexpected source reference
-makes the transaction fail closed.
+Do not run the v1 or v2 mutation again. First attach and independently review
+the evidence for the already-reported action:
 
-1. Review and merge the v2 code and its exact frozen digests without editing
-   the historical v1 release.
-2. Deploy the v2 query/mutation dark. Run only its read-only Production
-   preflight and stop unless it returns exactly `finalize_ready` with no blocker.
-3. Obtain an action-time Owner confirmation for that exact release ID. Apply
-   once, immediately run postflight, then test Google and password sign-in
-   separately against the one canonical account.
+1. exact release ID and source commit;
+2. action-time `finalize_ready` preflight with no blocker;
+3. Owner approval tied to that exact release ID;
+4. single apply result and immediate `applied` postflight;
+5. finalization audit showing no source credentials or unexpected references;
+6. separate successful Google and password sign-in checks against the canonical
+   account, with no duplicate profile or subscription.
 
-Customer activity on the canonical account can change this snapshot again. A
-fresh exact preflight is mandatory immediately before any v2 apply.
+Only after all six artifacts agree may this gate be recorded as PASS. Missing,
+stale or contradictory evidence leaves it BLOCKED and must never be repaired by
+repeating the mutation or editing frozen release constants.
 
 ## Gate 1A — paid checkout capability
 
