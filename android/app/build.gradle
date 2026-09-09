@@ -10,8 +10,8 @@ android {
         applicationId "mm.com.acegroup.acechildgrow"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 13
-        versionName "1.12"
+        versionCode 14
+        versionName "1.13"
         manifestPlaceholders = [aceSourceCommit: aceReleaseSourceCommit]
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
