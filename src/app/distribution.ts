@@ -1,0 +1,6 @@
+export const APPLE_APP_STORE_DISTRIBUTION =
+  import.meta.env.VITE_DISTRIBUTION === 'app-store';
+export const GOOGLE_PLAY_DISTRIBUTION =
+  import.meta.env.VITE_DISTRIBUTION === 'play-store';
+export const NATIVE_STORE_DISTRIBUTION =
+  APPLE_APP_STORE_DISTRIBUTION || GOOGLE_PLAY_DISTRIBUTION;

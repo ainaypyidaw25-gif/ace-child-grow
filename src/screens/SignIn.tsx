@@ -13,7 +13,7 @@ import {
   type AccountPasswordKind,
 } from '../domain/auth/passwordPolicy';
 import { captureReferralFromSearch } from '../domain/referrals/referralCapture';
-import { getAuthRedirectUrl, isAppleAppStoreBuild, NATIVE_AUTH_CALLBACK_ERROR_EVENT } from '../app/platform';
+import { getAuthRedirectUrl, isNativeStoreBuild, NATIVE_AUTH_CALLBACK_ERROR_EVENT } from '../app/platform';
 
 type AuthFlow = 'signIn' | 'signUp' | 'reset' | 'resetVerification';
 type OAuthProvider = 'apple' | 'google';
@@ -23,13 +23,13 @@ type OAuthProvider = 'apple' | 'google';
 export function SignIn() {
   const { t, locale, setLocale } = useLocale();
   const { signIn } = useAuthActions();
-  const appStoreBuild = isAppleAppStoreBuild();
-  const isStaffInvite = !appStoreBuild && (window.location.pathname.startsWith('/admin/accept-invite/')
+  const nativeStoreBuild = isNativeStoreBuild();
+  const isStaffInvite = !nativeStoreBuild && (window.location.pathname.startsWith('/admin/accept-invite/')
     || (window.location.pathname === '/admin/accept-invite'
       && new URLSearchParams(window.location.search).has('invite')));
   const [flow, setFlow] = useState<AuthFlow>(() => isStaffInvite ? 'signUp' : 'signIn');
   const [portal, setPortal] = useState<'parent' | 'staff'>(() =>
-    !appStoreBuild && (isStaffInvite || new URLSearchParams(window.location.search).get('portal') === 'staff') ? 'staff' : 'parent',
+    !nativeStoreBuild && (isStaffInvite || new URLSearchParams(window.location.search).get('portal') === 'staff') ? 'staff' : 'parent',
   );
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -61,7 +61,7 @@ export function SignIn() {
     return () => window.removeEventListener(NATIVE_AUTH_CALLBACK_ERROR_EVENT, showNativeCallbackError);
   }, [locale]);
 
-  const accountType: AccountPasswordKind = !appStoreBuild && portal === 'staff' ? 'staff' : 'parent';
+  const accountType: AccountPasswordKind = !nativeStoreBuild && portal === 'staff' ? 'staff' : 'parent';
   const requiresNewCredential = flow === 'signUp' || flow === 'resetVerification';
   const requiresSixDigitPin = accountType === 'parent' && requiresNewCredential;
   const normalizedEmail = email.trim().toLowerCase();
@@ -183,7 +183,7 @@ export function SignIn() {
         <p className="text-ink-soft">{t('app.tagline')}</p>
       </div>
 
-      {!appStoreBuild && <div className="grid grid-cols-2 rounded-pill border border-line bg-white p-1">
+      {!nativeStoreBuild && <div className="grid grid-cols-2 rounded-pill border border-line bg-white p-1">
         <button
           type="button"
           onClick={() => { if (!isStaffInvite) { setPortal('parent'); resetToSignIn(); } }}
@@ -212,7 +212,7 @@ export function SignIn() {
                 : locale === 'mm' ? 'မိဘအကောင့်ဝင်ရန်' : 'Parent sign in'}
         </h2>
 
-        {!appStoreBuild && portal === 'staff' && flow !== 'reset' && flow !== 'resetVerification' && (
+        {!nativeStoreBuild && portal === 'staff' && flow !== 'reset' && flow !== 'resetVerification' && (
           <p className="rounded-xl bg-pastel-yellow/50 p-3 text-xs text-ink">
             {locale === 'mm'
               ? isStaffInvite

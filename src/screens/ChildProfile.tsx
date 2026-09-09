@@ -8,7 +8,7 @@ import { ageLabels } from '../domain/age/ageLabel';
 import { chronologicalAge } from '../domain/age/age';
 import { NoChild } from './Growth';
 import { ConfirmDialog } from '../components/ConfirmDialog';
-import { isAppleAppStoreBuild } from '../app/platform';
+import { isNativeStoreBuild } from '../app/platform';
 
 // Dedicated child profile — separate from parent account settings.
 // Aggregates the child's records; never exposes sensitive notes in shared views.
@@ -75,7 +75,7 @@ export function ChildProfile() {
             {locale === 'mm' ? 'ပြင်ရန်' : 'Edit'}
           </Link>
         )}
-        {!isAppleAppStoreBuild() && <Link to="/report" role="button"
+        {!isNativeStoreBuild() && <Link to="/report" role="button"
           className="min-h-touch flex-1 rounded-pill border border-line px-5 py-2 text-center">
           {t('report.title')}
         </Link>}

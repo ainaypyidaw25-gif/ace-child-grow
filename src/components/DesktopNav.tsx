@@ -1,7 +1,7 @@
 import { NavLink, Link } from 'react-router-dom';
 import { useLocale } from '../app/LocaleContext';
 import { PRIMARY_NAV_ITEMS } from './navigationItems';
-import { isAppleAppStoreBuild, isNativeStoreBuild } from '../app/platform';
+import { isNativeStoreBuild } from '../app/platform';
 
 export function DesktopNav() {
   const { t, locale } = useLocale();
@@ -33,7 +33,7 @@ export function DesktopNav() {
           </ul>
         </nav>
 
-        {!isAppleAppStoreBuild() && <nav aria-label={locale === 'mm' ? 'မိသားစုကိရိယာများ' : 'Family tools'}>
+        {!isNativeStoreBuild() && <nav aria-label={locale === 'mm' ? 'မိသားစုကိရိယာများ' : 'Family tools'}>
           <p className="px-3 text-[11px] font-bold uppercase tracking-[0.16em] text-ink-soft">
             {locale === 'mm' ? 'မှတ်တမ်းကိရိယာများ' : 'Tools'}
           </p>

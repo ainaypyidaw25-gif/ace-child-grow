@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { LocaleProvider } from '../../app/LocaleContext';
 import { SubscriptionPlans } from '../SubscriptionPlans';
@@ -21,7 +21,23 @@ const monthlyPlan = {
   createdAt: 1,
   updatedAt: 1,
 };
-const options = { plans: [monthlyPlan], methods: [] };
+const manualMethod = {
+  _id: 'methods:bank',
+  _creationTime: 1,
+  nameMm: 'ဘဏ်ငွေလွှဲ',
+  nameEn: 'Bank transfer',
+  accountName: 'ACE Child Grow',
+  accountIdentifier: '000-000-000',
+  isActive: true,
+  sortOrder: 0,
+  createdAt: 1,
+  updatedAt: 1,
+};
+const options = {
+  plans: [monthlyPlan],
+  methods: [] as typeof manualMethod[],
+  mmpayProductionAvailable: false,
+};
 const emptyList: unknown[] = [];
 let subscriptionMock = {
   planKey: 'free' as 'free' | 'premium' | 'family',
@@ -51,6 +67,8 @@ vi.mock('convex/react', () => ({
 afterEach(() => {
   cleanup();
   queryCallCount = 0;
+  options.methods = [];
+  options.mmpayProductionAvailable = false;
 });
 
 function renderScreen() {
@@ -80,6 +98,36 @@ describe('SubscriptionPlans — fixed-term paid access', () => {
     expect(screen.getByText(/6,900/)).toBeTruthy();
     expect(screen.getByText(/MMK \/ လ/)).toBeTruthy();
     expect(screen.queryByText(/၇ ရက်သုံးခွင့်/)).toBeNull();
+  });
+
+  it('hides manual transfer when no active payment method is configured', () => {
+    subscriptionMock = { ...subscriptionMock, planKey: 'free', trialEligible: false };
+    renderScreen();
+    fireEvent.click(screen.getByRole('button', { name: /Premium လစဉ်/ }));
+
+    expect(screen.queryByRole('heading', { name: 'ငွေလွှဲအထောက်အထားဖြင့် ပေးချေပါ' })).toBeNull();
+    expect(screen.queryByText(/ငွေပေးချေမှုနည်းလမ်းများကို Owner က ပြင်ဆင်နေပါသည်/)).toBeNull();
+    expect(screen.queryByRole('heading', { name: 'MMQR ဖြင့် ချက်ချင်းပေးချေပါ' })).toBeNull();
+    expect(screen.getByText(/အခပေးအစီအစဉ်အသစ် ဝယ်ယူခြင်းကို ယာယီပိတ်ထားပါသည်/)).toBeTruthy();
+  });
+
+  it('shows Myan Myan Pay only when production configuration is valid', () => {
+    options.mmpayProductionAvailable = true;
+    subscriptionMock = { ...subscriptionMock, planKey: 'free', trialEligible: false };
+    renderScreen();
+    fireEvent.click(screen.getByRole('button', { name: /Premium လစဉ်/ }));
+
+    expect(screen.getByRole('heading', { name: 'MMQR ဖြင့် ချက်ချင်းပေးချေပါ' })).toBeTruthy();
+  });
+
+  it('shows manual transfer only when an active payment method is configured', () => {
+    options.methods = [manualMethod];
+    subscriptionMock = { ...subscriptionMock, planKey: 'free', trialEligible: false };
+    renderScreen();
+    fireEvent.click(screen.getByRole('button', { name: /Premium လစဉ်/ }));
+
+    expect(screen.getByRole('heading', { name: 'ငွေလွှဲအထောက်အထားဖြင့် ပေးချေပါ' })).toBeTruthy();
+    expect(screen.getByRole('option', { name: 'ဘဏ်ငွေလွှဲ' })).toBeTruthy();
   });
 
   it('describes paid access as non-renewing even for legacy rows', () => {

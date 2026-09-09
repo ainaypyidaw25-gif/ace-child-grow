@@ -4,6 +4,7 @@ import { getAuthUserId } from '@convex-dev/auth/server';
 import { requireOwner, requireUser } from './lib/auth';
 import { logAudit } from './audit';
 import { paidAccessPeriodEnd } from './lib/billingPeriods';
+import { isMmpayProductionConfigured } from './lib/mmpayConfig';
 
 const paidPlanValidator = v.union(v.literal('premium'), v.literal('family'));
 const intervalValidator = v.union(v.literal('month'), v.literal('year'));
@@ -67,9 +68,34 @@ const requestValidator = v.object({
   updatedAt: v.number(),
 });
 
+// Public legal pages need to describe only payment paths that are actually
+// available. Expose a capability flag rather than payment-method rows so an
+// unauthenticated visitor never receives account names or identifiers.
+export const paymentCapabilities = query({
+  args: {},
+  returns: v.object({
+    manualTransferAvailable: v.boolean(),
+    mmpayProductionAvailable: v.boolean(),
+  }),
+  handler: async (ctx) => {
+    const activeManualMethods = await ctx.db
+      .query('paymentMethods')
+      .withIndex('by_active_and_sort_order', (q) => q.eq('isActive', true))
+      .take(1);
+    return {
+      manualTransferAvailable: activeManualMethods.length > 0,
+      mmpayProductionAvailable: isMmpayProductionConfigured(),
+    };
+  },
+});
+
 export const options = query({
   args: {},
-  returns: v.object({ plans: v.array(planValidator), methods: v.array(methodValidator) }),
+  returns: v.object({
+    plans: v.array(planValidator),
+    methods: v.array(methodValidator),
+    mmpayProductionAvailable: v.boolean(),
+  }),
   handler: async (ctx) => {
     await requireUser(ctx);
     const plans = await ctx.db
@@ -80,7 +106,11 @@ export const options = query({
       .query('paymentMethods')
       .withIndex('by_active_and_sort_order', (q) => q.eq('isActive', true))
       .take(20);
-    return { plans, methods };
+    return {
+      plans,
+      methods,
+      mmpayProductionAvailable: isMmpayProductionConfigured(),
+    };
   },
 });
 

@@ -2,6 +2,10 @@ import { App as CapacitorApp } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
 import { useEffect } from 'react';
 import { useAuthActions } from '@convex-dev/auth/react';
+import {
+  APPLE_APP_STORE_DISTRIBUTION,
+  GOOGLE_PLAY_DISTRIBUTION,
+} from './distribution';
 
 const PRODUCTION_APP_ORIGIN = 'https://child.acegroup.com.mm';
 export const NATIVE_AUTH_CALLBACK_ERROR_EVENT = 'ace-native-auth-callback-error';
@@ -42,12 +46,12 @@ export function createNativeUrlRelay() {
 const nativeUrlRelay = createNativeUrlRelay();
 
 export function isGooglePlayBuild(): boolean {
-  return import.meta.env.VITE_DISTRIBUTION === 'play-store'
+  return GOOGLE_PLAY_DISTRIBUTION
     || Capacitor.getPlatform() === 'android';
 }
 
 export function isAppleAppStoreBuild(): boolean {
-  return import.meta.env.VITE_DISTRIBUTION === 'app-store'
+  return APPLE_APP_STORE_DISTRIBUTION
     || Capacitor.getPlatform() === 'ios';
 }
 
