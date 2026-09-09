@@ -57,6 +57,47 @@ describe('read-only Myan Myan Pay production probe', () => {
     expect(result.currencyValidation).toBe('stored_only_provider_omits_currency');
   });
 
+  it('classifies an inactive LIVE provider error without returning its raw payload', () => {
+    const result = parseReadOnlyProviderProbeResponse({
+      code: 'KA0002',
+      message: "API Key Not 'LIVE' for merchant MM-sensitive",
+      secret: 'sk_live_must-never-leave-parser',
+      customer: 'must-never-leave-parser',
+    }, target);
+
+    expect(result).toEqual({
+      environment: 'production',
+      providerReached: false,
+      failureClass: 'live_access_not_enabled',
+      structuredErrorReceived: true,
+      developmentStateSignal: 'consistent',
+    });
+    expect(JSON.stringify(result)).not.toContain('MM-sensitive');
+    expect(JSON.stringify(result)).not.toContain('sk_live_');
+    expect(JSON.stringify(result)).not.toContain('customer');
+  });
+
+  it.each([
+    [{ error: 'IP not whitelisted' }, 'ip_not_allowlisted', true],
+    [{ code: 'KA0003', message: 'Signature mismatch' }, 'authentication_rejected', true],
+    [{ statusCode: 429 }, 'rate_limited', true],
+    [{ statusCode: 503 }, 'provider_unavailable', true],
+    [{ message: 'Provider rejected request' }, 'provider_rejected', true],
+    [{ unexpected: true }, 'malformed_response', false],
+    [new Error('network detail must not leave parser'), 'transport_or_sdk_failure', false],
+  ] as const)('sanitizes provider failure shape as %s', (value, failureClass, structuredErrorReceived) => {
+    const result = parseReadOnlyProviderProbeResponse(value, target);
+    expect(result).toMatchObject({
+      environment: 'production',
+      providerReached: false,
+      failureClass,
+      structuredErrorReceived,
+      developmentStateSignal: 'not_observed',
+    });
+    expect(JSON.stringify(result)).not.toContain('network detail');
+    expect(JSON.stringify(result)).not.toContain('Provider rejected request');
+  });
+
   it('rejects mismatched identifiers, amounts, currencies, and invalid statuses', () => {
     expect(() => parseReadOnlyProviderProbeResponse({
       orderId: 'ACG-OTHER', amount: target.amount, status: 'SUCCESS',

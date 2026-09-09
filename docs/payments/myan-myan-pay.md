@@ -97,6 +97,17 @@ currency field on `get`; when it is absent the result explicitly reports
 `stored_only_provider_omits_currency` rather than claiming provider-side
 currency proof. If the provider supplies a currency, it must be `MMK`.
 
+SDK 1.1.4 catches handshake/status HTTP failures and returns the response value
+instead of throwing it. A value without the documented success `orderId` is
+therefore classified into a fixed safe category and returned with
+`providerReached: false`; the raw code, message and response are never returned
+or logged. The categories are `live_access_not_enabled`, `ip_not_allowlisted`,
+`authentication_rejected`, `rate_limited`, `provider_unavailable`,
+`provider_rejected`, `transport_or_sdk_failure`, and `malformed_response`.
+Only `live_access_not_enabled` produces `developmentStateSignal: consistent`.
+All other failures report `not_observed`, which means the result did not prove
+or disprove the merchant console's DEVELOPMENT state.
+
 An authenticated owner can pass the same transaction document ID to
 `mmpayReadinessData:productionWebhookEvidence`. That query reads at most 51
 indexed webhook rows, returns at most 50 as aggregate evidence, and exposes
@@ -116,6 +127,8 @@ evidence; neither one creates a payment or substitutes for the other.
 - The production readiness probe is internal-only, accepts only an existing
   terminal production transaction, calls only provider `get`, and performs no
   database write.
+- Provider/SDK failures are reduced to a fixed classification; raw responses,
+  error text, codes, credentials and identifiers are discarded.
 - Webhook readiness evidence is owner-only, indexed and bounded, with sensitive
   identifiers removed from its response.
 - The webhook verifies HMAC-SHA256 over the exact raw body and nonce using a
