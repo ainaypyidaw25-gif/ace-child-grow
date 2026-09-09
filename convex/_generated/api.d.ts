@@ -101,6 +101,7 @@ import type * as lib_inherentPublicLinkCasData from "../lib/inherentPublicLinkCa
 import type * as lib_legacyCompletedPriorityCorrectionData from "../lib/legacyCompletedPriorityCorrectionData.js";
 import type * as lib_manualReviewContentCasData from "../lib/manualReviewContentCasData.js";
 import type * as lib_manualReviewEvidenceLinkCasData from "../lib/manualReviewEvidenceLinkCasData.js";
+import type * as lib_mmpayConfig from "../lib/mmpayConfig.js";
 import type * as lib_nativeMyanmarRefreezeCorrectionData from "../lib/nativeMyanmarRefreezeCorrectionData.js";
 import type * as lib_nutritionGuidesCasData from "../lib/nutritionGuidesCasData.js";
 import type * as lib_olderSafety2026CasData from "../lib/olderSafety2026CasData.js";
@@ -253,6 +254,7 @@ declare const fullApi: ApiFromModules<{
   "lib/legacyCompletedPriorityCorrectionData": typeof lib_legacyCompletedPriorityCorrectionData;
   "lib/manualReviewContentCasData": typeof lib_manualReviewContentCasData;
   "lib/manualReviewEvidenceLinkCasData": typeof lib_manualReviewEvidenceLinkCasData;
+  "lib/mmpayConfig": typeof lib_mmpayConfig;
   "lib/nativeMyanmarRefreezeCorrectionData": typeof lib_nativeMyanmarRefreezeCorrectionData;
   "lib/nutritionGuidesCasData": typeof lib_nutritionGuidesCasData;
   "lib/olderSafety2026CasData": typeof lib_olderSafety2026CasData;
