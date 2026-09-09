@@ -6,7 +6,7 @@ import {
   GOOGLE_PLAY_DISTRIBUTION,
   NATIVE_STORE_DISTRIBUTION,
 } from '../app/distribution';
-import { LEGAL_TERMS_RELEASE } from '../domain/legalRelease';
+import { currentLegalTermsReadiness } from '../domain/releaseReadiness';
 import type { Locale } from '../domain/types';
 
 type LegalPageProps = { kind: 'privacy' | 'account-deletion' | 'terms' | 'support' | 'content-policy' };
@@ -145,7 +145,7 @@ export function LegalPage({ kind }: LegalPageProps) {
         title={locale === 'mm' ? 'ဝန်ဆောင်မှုစည်းမျဉ်းများ' : 'Terms of Service'}
         locale={locale}
         setLocale={setLocale}
-        draft={LEGAL_TERMS_RELEASE.status === 'draft'}
+        draft={currentLegalTermsReadiness().level !== 'pass'}
       >
         {locale === 'mm' ? (
           <>

@@ -94,6 +94,27 @@ webhook reaches the expected endpoint. A syntactically valid configuration is
 not proof of provider reachability, and a sandbox configuration must never be
 shown to customers.
 
+The dark-deploy candidate now includes two deliberately separate read-only
+checks. `mmpayReadiness:probeTerminalProductionPayment` is an internal action
+that accepts only a pre-existing terminal production transaction and calls the
+provider SDK `get` method without any database mutation, scheduler call or
+audit write. Its sanitized result contains invariant booleans, statuses and a
+check time only. `mmpayReadinessData:productionWebhookEvidence` is an
+authenticated owner-only query that correlates that transaction with an
+indexed, capped webhook history without returning order IDs, nonce digests,
+provider references, QR payloads or customer data.
+
+Do not invoke either function until the code is reviewed and deployed dark.
+The status probe must not be changed to `pay`, `cancel` or the write-back
+`refreshPayment` action. Passing the status probe does not prove callback
+delivery; close this gate only when the owner query also reads back a fresh
+signed production webhook for the selected transaction. SDK 1.1.4 omits
+currency from its documented `get` response, so a `stored_only_provider_omits_currency`
+result is transparent stored-MMK validation, not provider-side currency proof.
+Treat `providerReached: true`, `orderIdMatched: true`, `amountMatched: true`,
+`providerStatusTerminal: true` and `statusMatchesStored: true` as a single
+fail-closed set; any false field or thrown invariant error keeps this gate open.
+
 ## Gate 2 — AI preview release
 
 Production has one enabled AI publication control and three rows marked

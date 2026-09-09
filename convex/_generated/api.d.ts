@@ -127,6 +127,8 @@ import type * as media from "../media.js";
 import type * as milestones from "../milestones.js";
 import type * as mmpay from "../mmpay.js";
 import type * as mmpayData from "../mmpayData.js";
+import type * as mmpayReadiness from "../mmpayReadiness.js";
+import type * as mmpayReadinessData from "../mmpayReadinessData.js";
 import type * as nativeMyanmarRefreezeCorrection from "../nativeMyanmarRefreezeCorrection.js";
 import type * as nativeMyanmarRefreezeCorrectionActions from "../nativeMyanmarRefreezeCorrectionActions.js";
 import type * as nhsSoothingHumanReviewSuccessorCas from "../nhsSoothingHumanReviewSuccessorCas.js";
@@ -280,6 +282,8 @@ declare const fullApi: ApiFromModules<{
   milestones: typeof milestones;
   mmpay: typeof mmpay;
   mmpayData: typeof mmpayData;
+  mmpayReadiness: typeof mmpayReadiness;
+  mmpayReadinessData: typeof mmpayReadinessData;
   nativeMyanmarRefreezeCorrection: typeof nativeMyanmarRefreezeCorrection;
   nativeMyanmarRefreezeCorrectionActions: typeof nativeMyanmarRefreezeCorrectionActions;
   nhsSoothingHumanReviewSuccessorCas: typeof nhsSoothingHumanReviewSuccessorCas;
