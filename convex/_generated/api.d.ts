@@ -11,6 +11,7 @@
 import type * as account from "../account.js";
 import type * as activities from "../activities.js";
 import type * as admin from "../admin.js";
+import type * as aiEarlyMathProvenanceCorrection from "../aiEarlyMathProvenanceCorrection.js";
 import type * as aiPublication from "../aiPublication.js";
 import type * as aiPublicationSuccessor20260909 from "../aiPublicationSuccessor20260909.js";
 import type * as animationPlan from "../animationPlan.js";
@@ -48,6 +49,7 @@ import type * as http from "../http.js";
 import type * as inherentPublicLinkCas from "../inherentPublicLinkCas.js";
 import type * as legacyCompletedPriorityCorrection from "../legacyCompletedPriorityCorrection.js";
 import type * as lib_aiAuditHash from "../lib/aiAuditHash.js";
+import type * as lib_aiEarlyMathProvenanceCorrectionData from "../lib/aiEarlyMathProvenanceCorrectionData.js";
 import type * as lib_aiPublicationAuditArtifact from "../lib/aiPublicationAuditArtifact.js";
 import type * as lib_aiPublicationPolicy from "../lib/aiPublicationPolicy.js";
 import type * as lib_aiPublicationReleaseData from "../lib/aiPublicationReleaseData.js";
@@ -166,6 +168,7 @@ declare const fullApi: ApiFromModules<{
   account: typeof account;
   activities: typeof activities;
   admin: typeof admin;
+  aiEarlyMathProvenanceCorrection: typeof aiEarlyMathProvenanceCorrection;
   aiPublication: typeof aiPublication;
   aiPublicationSuccessor20260909: typeof aiPublicationSuccessor20260909;
   animationPlan: typeof animationPlan;
@@ -203,6 +206,7 @@ declare const fullApi: ApiFromModules<{
   inherentPublicLinkCas: typeof inherentPublicLinkCas;
   legacyCompletedPriorityCorrection: typeof legacyCompletedPriorityCorrection;
   "lib/aiAuditHash": typeof lib_aiAuditHash;
+  "lib/aiEarlyMathProvenanceCorrectionData": typeof lib_aiEarlyMathProvenanceCorrectionData;
   "lib/aiPublicationAuditArtifact": typeof lib_aiPublicationAuditArtifact;
   "lib/aiPublicationPolicy": typeof lib_aiPublicationPolicy;
   "lib/aiPublicationReleaseData": typeof lib_aiPublicationReleaseData;
