@@ -115,6 +115,18 @@ Treat `providerReached: true`, `orderIdMatched: true`, `amountMatched: true`,
 `providerStatusTerminal: true` and `statusMatchesStored: true` as a single
 fail-closed set; any false field or thrown invariant error keeps this gate open.
 
+The first live invocation returned no `orderId`. That is not a verified payment
+response: SDK 1.1.4 returns caught HTTP/transport failures as values. The probe
+now reduces such values to a fixed failure class without returning or logging
+the raw response. `live_access_not_enabled` is consistent with the merchant
+application still being in DEVELOPMENT; `malformed_response` means no known
+error envelope was observed and a provider/SDK contract mismatch remains
+possible. Do not infer either cause from a generic missing-order result, and do
+not rerun the provider probe until this classifier is reviewed and deployed.
+An SDK promise rejection is caught at the same boundary and becomes the fixed
+`transport_or_sdk_failure` result; the rejected value cannot escape through the
+action response, logs or an interpolated exception.
+
 ## Gate 2 — AI preview release
 
 Production has one enabled AI publication control and three rows marked
