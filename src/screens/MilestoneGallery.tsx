@@ -77,7 +77,7 @@ export function MilestoneGallery() {
             const title = locale === 'mm' ? (item.titleMm ?? item.titleEn) : (item.titleEn ?? item.titleMm);
             const photoUrl = uploadingId === item._id && preview?.id === item._id
               ? normalizeMilestoneBlobPreviewUrl(preview.url, window.location.origin)
-              : normalizeMilestoneStorageUrl(item.photoUrl);
+              : normalizeMilestoneStorageUrl(item.photoUrl, import.meta.env.VITE_CONVEX_URL);
             const busy = uploadingId === item._id;
             return (
               <li key={item._id} className="rounded-[26px] border border-line bg-white p-4 shadow-card">

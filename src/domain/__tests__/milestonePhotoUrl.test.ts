@@ -5,10 +5,18 @@ import {
 } from '../milestonePhotoUrl';
 
 describe('milestone photo URL policy', () => {
-  it('normalizes the exact Production Convex storage URL shape', () => {
+  it('normalizes a storage URL from the configured Production deployment', () => {
     expect(normalizeMilestoneStorageUrl(
       'https://graceful-possum-566.convex.cloud/api/storage/kg2abc_DEF-123',
+      'https://graceful-possum-566.convex.cloud',
     )).toBe('https://graceful-possum-566.convex.cloud/api/storage/kg2abc_DEF-123');
+  });
+
+  it('normalizes a storage URL from the documented configured dev deployment', () => {
+    expect(normalizeMilestoneStorageUrl(
+      'https://uncommon-orca-603.convex.cloud/api/storage/kg2abc_DEF-123',
+      'https://uncommon-orca-603.convex.cloud',
+    )).toBe('https://uncommon-orca-603.convex.cloud/api/storage/kg2abc_DEF-123');
   });
 
   it.each([
@@ -25,7 +33,34 @@ describe('milestone photo URL policy', () => {
     'https://graceful-possum-566.convex.cloud/api/storage/../admin',
     ' https://graceful-possum-566.convex.cloud/api/storage/kg2abc',
   ])('rejects an unexpected stored-photo URL: %s', (value) => {
-    expect(normalizeMilestoneStorageUrl(value)).toBeNull();
+    expect(normalizeMilestoneStorageUrl(
+      value,
+      'https://graceful-possum-566.convex.cloud',
+    )).toBeNull();
+  });
+
+  it.each([
+    undefined,
+    '',
+    'http://graceful-possum-566.convex.cloud',
+    'https://graceful-possum-566.convex.site',
+    'https://graceful-possum-566.convex.cloud.evil.example',
+    'https://user@graceful-possum-566.convex.cloud',
+    'https://graceful-possum-566.convex.cloud:444',
+    'https://graceful-possum-566.convex.cloud/path',
+    'https://graceful-possum-566.convex.cloud?query=1',
+  ])('fails closed when the configured Convex URL is invalid: %s', (configuredConvexUrl) => {
+    expect(normalizeMilestoneStorageUrl(
+      'https://graceful-possum-566.convex.cloud/api/storage/kg2abc',
+      configuredConvexUrl,
+    )).toBeNull();
+  });
+
+  it('rejects a valid URL belonging to a different Convex deployment', () => {
+    expect(normalizeMilestoneStorageUrl(
+      'https://uncommon-orca-603.convex.cloud/api/storage/kg2abc',
+      'https://graceful-possum-566.convex.cloud',
+    )).toBeNull();
   });
 
   it('preserves a locally created blob preview from the current app origin', () => {

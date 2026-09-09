@@ -62,6 +62,7 @@ function renderWithProviders() {
 }
 
 beforeEach(() => {
+  vi.stubEnv('VITE_CONVEX_URL', 'https://graceful-possum-566.convex.cloud');
   mutationCallCount = 0;
   mutationCalls.length = 0;
   achievedMilestones[0].photoUrl = VALID_PHOTO_URL;
@@ -81,7 +82,7 @@ describe('MilestoneGallery (component)', () => {
     expect(printLinks).toHaveLength(1);
   });
 
-  it('renders only the normalized Production Convex storage photo URL', () => {
+  it('renders only the normalized configured Convex storage photo URL', () => {
     renderWithProviders();
     expect(screen.getByRole('img', { name: 'ပထမဆုံး လှမ်းလှမ်း' })).toHaveAttribute(
       'src',
@@ -91,6 +92,12 @@ describe('MilestoneGallery (component)', () => {
 
   it('does not put an unexpected backend URL into an image sink', () => {
     achievedMilestones[0].photoUrl = 'javascript:alert(document.domain)';
+    renderWithProviders();
+    expect(screen.queryByRole('img', { name: 'ပထမဆုံး လှမ်းလှမ်း' })).not.toBeInTheDocument();
+  });
+
+  it('does not render a photo belonging to a different Convex deployment', () => {
+    vi.stubEnv('VITE_CONVEX_URL', 'https://uncommon-orca-603.convex.cloud');
     renderWithProviders();
     expect(screen.queryByRole('img', { name: 'ပထမဆုံး လှမ်းလှမ်း' })).not.toBeInTheDocument();
   });

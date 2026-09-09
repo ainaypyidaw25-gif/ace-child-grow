@@ -22,7 +22,7 @@ export function MilestoneKeepsake() {
   if (data === null) return <p className="text-ink-soft">{t('milestoneKeepsake.notFound')}</p>;
 
   const title = locale === 'mm' ? (data.titleMm ?? data.titleEn) : (data.titleEn ?? data.titleMm);
-  const photoUrl = normalizeMilestoneStorageUrl(data.photoUrl);
+  const photoUrl = normalizeMilestoneStorageUrl(data.photoUrl, import.meta.env.VITE_CONVEX_URL);
 
   async function handleShare() {
     if (!data || !photoUrl || !title) return;

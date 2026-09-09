@@ -1,5 +1,5 @@
-const PRODUCTION_CONVEX_STORAGE_ORIGIN = 'https://graceful-possum-566.convex.cloud';
 const CONVEX_STORAGE_PATH = /^\/api\/storage\/([A-Za-z0-9_-]{1,200})$/;
+const CONVEX_CLOUD_HOST = /^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.convex\.cloud$/;
 const BLOB_OBJECT_KEY = /^[A-Za-z0-9._~-]{1,200}$/;
 
 function parsedUrl(value: string): URL | null {
@@ -30,18 +30,43 @@ function normalizedDocumentOrigin(value: string): string | null {
   return null;
 }
 
-/**
- * Accept only URLs returned by this Production deployment's `ctx.storage.getUrl`.
- * Rebuilding the value from a constant origin and a validated opaque ID keeps
- * unexpected schemes, hosts, credentials and URL suffixes out of DOM sinks.
- */
-export function normalizeMilestoneStorageUrl(value: string | null | undefined): string | null {
+function normalizedConvexStorageOrigin(value: string | null | undefined): string | null {
   if (!value) return null;
   const parsed = parsedUrl(value);
   if (
     !parsed
     || parsed.protocol !== 'https:'
-    || parsed.origin !== PRODUCTION_CONVEX_STORAGE_ORIGIN
+    || parsed.username
+    || parsed.password
+    || parsed.port
+    || parsed.pathname !== '/'
+    || parsed.search
+    || parsed.hash
+    || !CONVEX_CLOUD_HOST.test(parsed.hostname)
+  ) {
+    return null;
+  }
+  return `https://${parsed.hostname}`;
+}
+
+/**
+ * Accept only URLs returned by the configured Convex deployment's
+ * `ctx.storage.getUrl`. Rebuilding the value from its validated `*.convex.cloud`
+ * origin and a validated opaque ID keeps unexpected schemes, hosts, credentials
+ * and URL suffixes out of DOM sinks without coupling dev builds to Production.
+ */
+export function normalizeMilestoneStorageUrl(
+  value: string | null | undefined,
+  configuredConvexUrl: string | null | undefined,
+): string | null {
+  if (!value) return null;
+  const parsed = parsedUrl(value);
+  const storageOrigin = normalizedConvexStorageOrigin(configuredConvexUrl);
+  if (
+    !parsed
+    || !storageOrigin
+    || parsed.protocol !== 'https:'
+    || parsed.origin !== storageOrigin
     || parsed.username
     || parsed.password
     || parsed.search
@@ -51,7 +76,7 @@ export function normalizeMilestoneStorageUrl(value: string | null | undefined): 
   }
   const match = CONVEX_STORAGE_PATH.exec(parsed.pathname);
   if (!match) return null;
-  return `${PRODUCTION_CONVEX_STORAGE_ORIGIN}/api/storage/${encodeURIComponent(match[1])}`;
+  return `${storageOrigin}/api/storage/${encodeURIComponent(match[1])}`;
 }
 
 /**
