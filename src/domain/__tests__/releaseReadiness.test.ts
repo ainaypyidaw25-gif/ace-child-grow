@@ -7,12 +7,111 @@ import {
   currentLegalTermsReadiness,
   unresolvedStoppedClinicalBatches,
 } from '../releaseReadiness';
+import {
+  LEGAL_TERMS_TEXT_SHA256,
+  type LegalTermsRelease,
+} from '../legalRelease';
+
+const validPublishedTerms: LegalTermsRelease = {
+  status: 'published',
+  version: 'terms-2026-09-15-v1',
+  effectiveDate: '2026-09-15',
+  publishedAt: '2026-09-14T12:00:00.000Z',
+  textDigest: LEGAL_TERMS_TEXT_SHA256,
+  approvalReceipt: {
+    receiptId: 'test-terms-approval-2026-09-15-v1',
+    approverId: 'test_owner_stable_id',
+    authority: 'owner',
+    approvedAt: '2026-09-14T11:30:00.000Z',
+    version: 'terms-2026-09-15-v1',
+    effectiveDate: '2026-09-15',
+    textDigest: LEGAL_TERMS_TEXT_SHA256,
+  },
+};
 
 describe('production release readiness classification', () => {
   it('blocks release while paid-access Terms are explicitly a draft', () => {
     expect(currentLegalTermsReadiness()).toMatchObject({
       level: 'blocked',
       code: 'legal_terms_draft',
+    });
+  });
+
+  it('passes only a published release with an exact-text approval receipt', () => {
+    expect(currentLegalTermsReadiness(validPublishedTerms)).toEqual({
+      level: 'pass',
+      code: 'legal_terms_published',
+      detail: 'Terms terms-2026-09-15-v1 have an exact-text approval receipt, effective date and publication time.',
+    });
+  });
+
+  it('does not treat a status typo as publication', () => {
+    const typo = { ...validPublishedTerms, status: 'approved' } as unknown as LegalTermsRelease;
+    expect(currentLegalTermsReadiness(typo)).toMatchObject({
+      level: 'blocked',
+      code: 'legal_terms_invalid_release',
+    });
+  });
+
+  it.each([
+    ['bad version', { version: '2026-09-15' }],
+    ['impossible effective date', { effectiveDate: '2026-02-30' }],
+    ['non-canonical publication time', { publishedAt: '2026-09-14T12:00:00Z' }],
+    ['wrong text digest', { textDigest: `sha256:${'0'.repeat(64)}` }],
+  ])('blocks a published release with %s', (_label, patch) => {
+    expect(currentLegalTermsReadiness({ ...validPublishedTerms, ...patch })).toMatchObject({
+      level: 'blocked',
+      code: 'legal_terms_invalid_release',
+    });
+  });
+
+  it('binds the receipt to the exact version, effective date and text digest', () => {
+    expect(currentLegalTermsReadiness({
+      ...validPublishedTerms,
+      approvalReceipt: {
+        ...validPublishedTerms.approvalReceipt!,
+        version: 'terms-2026-09-15-v2',
+        effectiveDate: '2026-09-16',
+        textDigest: `sha256:${'f'.repeat(64)}`,
+      },
+    })).toMatchObject({
+      level: 'blocked',
+      code: 'legal_terms_invalid_release',
+    });
+  });
+
+  it.each([
+    ['missing receipt', { approvalReceipt: null }],
+    ['email instead of stable approver ID', {
+      approvalReceipt: {
+        ...validPublishedTerms.approvalReceipt!,
+        approverId: 'owner@example.com',
+      },
+    }],
+  ])('blocks a published release with %s', (_label, patch) => {
+    expect(currentLegalTermsReadiness({ ...validPublishedTerms, ...patch })).toMatchObject({
+      level: 'blocked',
+      code: 'legal_terms_invalid_release',
+    });
+  });
+
+  it.each([
+    ['approval after publication', {
+      approvalReceipt: {
+        ...validPublishedTerms.approvalReceipt!,
+        approvedAt: '2026-09-14T12:00:00.001Z',
+      },
+    }],
+    ['publication after effective date', {
+      publishedAt: '2026-09-16T00:00:00.000Z',
+    }],
+    ['publication after the effective-day boundary', {
+      publishedAt: '2026-09-15T00:00:00.001Z',
+    }],
+  ])('blocks invalid legal-release ordering: %s', (_label, patch) => {
+    expect(currentLegalTermsReadiness({ ...validPublishedTerms, ...patch })).toMatchObject({
+      level: 'blocked',
+      code: 'legal_terms_invalid_release',
     });
   });
 

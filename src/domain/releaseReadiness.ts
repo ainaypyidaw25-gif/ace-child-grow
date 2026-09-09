@@ -1,4 +1,8 @@
-import { LEGAL_TERMS_RELEASE } from './legalRelease';
+import {
+  LEGAL_TERMS_RELEASE,
+  LEGAL_TERMS_TEXT_SHA256,
+  type LegalTermsRelease,
+} from './legalRelease';
 
 export type ReadinessLevel = 'pass' | 'blocked' | 'advisory';
 
@@ -8,22 +12,108 @@ export type ReadinessFinding = {
   detail: string;
 };
 
-export function currentLegalTermsReadiness(): ReadinessFinding {
+const LEGAL_TERMS_VERSION = /^terms-(\d{4}-\d{2}-\d{2})-v([1-9]\d*)$/;
+const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+const RECEIPT_ID = /^[A-Za-z0-9][A-Za-z0-9._:-]{7,127}$/;
+const APPROVER_ID = /^[A-Za-z0-9][A-Za-z0-9_-]{7,127}$/;
+
+function isRealIsoDate(value: string): boolean {
+  if (!ISO_DATE.test(value)) return false;
+  const [year, month, day] = value.split('-').map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day));
+  return date.getUTCFullYear() === year
+    && date.getUTCMonth() === month - 1
+    && date.getUTCDate() === day;
+}
+
+function isCanonicalIsoInstant(value: string): boolean {
+  if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(value)) return false;
+  const parsed = new Date(value);
+  return !Number.isNaN(parsed.valueOf()) && parsed.toISOString() === value;
+}
+
+export function legalTermsReleaseProblems(release: LegalTermsRelease): string[] {
+  const problems: string[] = [];
+  if (release.status !== 'published') problems.push('status must be exactly published');
+
+  const versionMatch = LEGAL_TERMS_VERSION.exec(release.version);
+  if (!versionMatch || !isRealIsoDate(versionMatch[1])) {
+    problems.push('version must match terms-YYYY-MM-DD-vN with a real date');
+  }
+  if (!release.effectiveDate || !isRealIsoDate(release.effectiveDate)) {
+    problems.push('effectiveDate must be a real YYYY-MM-DD date');
+  }
+  if (!release.publishedAt || !isCanonicalIsoInstant(release.publishedAt)) {
+    problems.push('publishedAt must be a canonical UTC instant with milliseconds');
+  }
+  if (release.textDigest !== LEGAL_TERMS_TEXT_SHA256) {
+    problems.push('textDigest does not match the exact bilingual Terms source');
+  }
+
+  const receipt = release.approvalReceipt;
+  if (!receipt) {
+    problems.push('a binding Owner/legal approval receipt is required');
+    return problems;
+  }
+  if (!RECEIPT_ID.test(receipt.receiptId)) {
+    problems.push('approval receiptId is invalid');
+  }
+  if (!APPROVER_ID.test(receipt.approverId)) {
+    problems.push('approval approverId must be a stable non-email identifier');
+  }
+  if (receipt.authority !== 'owner' && receipt.authority !== 'legal_reviewer') {
+    problems.push('approval authority must be owner or legal_reviewer');
+  }
+  if (!isCanonicalIsoInstant(receipt.approvedAt)) {
+    problems.push('approval approvedAt must be a canonical UTC instant with milliseconds');
+  }
+  if (receipt.version !== release.version) {
+    problems.push('approval receipt version does not match the release');
+  }
+  if (receipt.effectiveDate !== release.effectiveDate) {
+    problems.push('approval receipt effectiveDate does not match the release');
+  }
+  if (receipt.textDigest !== release.textDigest || receipt.textDigest !== LEGAL_TERMS_TEXT_SHA256) {
+    problems.push('approval receipt is not bound to the exact bilingual Terms digest');
+  }
+  if (versionMatch && release.effectiveDate && versionMatch[1] !== release.effectiveDate) {
+    problems.push('version date must match effectiveDate');
+  }
   if (
-    LEGAL_TERMS_RELEASE.status === 'draft'
-    || LEGAL_TERMS_RELEASE.effectiveDate === null
-    || LEGAL_TERMS_RELEASE.publishedAt === null
+    release.publishedAt
+    && isCanonicalIsoInstant(release.publishedAt)
+    && release.effectiveDate
+    && isRealIsoDate(release.effectiveDate)
+    && release.publishedAt > `${release.effectiveDate}T00:00:00.000Z`
   ) {
+    problems.push('Terms cannot be published after their effective date');
+  }
+  if (
+    isCanonicalIsoInstant(receipt.approvedAt)
+    && release.publishedAt
+    && isCanonicalIsoInstant(release.publishedAt)
+    && receipt.approvedAt > release.publishedAt
+  ) {
+    problems.push('approval must be recorded no later than publication');
+  }
+  return problems;
+}
+
+export function currentLegalTermsReadiness(
+  release: LegalTermsRelease = LEGAL_TERMS_RELEASE,
+): ReadinessFinding {
+  const problems = legalTermsReleaseProblems(release);
+  if (problems.length > 0) {
     return {
       level: 'blocked',
-      code: 'legal_terms_draft',
-      detail: `Terms ${LEGAL_TERMS_RELEASE.version} remain a non-binding draft and require Owner/legal approval, an effective date, and versioned publication.`,
+      code: release.status === 'draft' ? 'legal_terms_draft' : 'legal_terms_invalid_release',
+      detail: `Terms ${release.version} are not publication-ready: ${problems.join('; ')}.`,
     };
   }
   return {
     level: 'pass',
     code: 'legal_terms_published',
-    detail: `Terms ${LEGAL_TERMS_RELEASE.version} have a recorded effective date and publication time.`,
+    detail: `Terms ${release.version} have an exact-text approval receipt, effective date and publication time.`,
   };
 }
 

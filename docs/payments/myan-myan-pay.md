@@ -81,6 +81,30 @@ variables on the production deployment, deploy Convex, switch `MMPAY_ENV` to
 `production`, and perform a controlled small-value live payment before
 promoting the verified Vercel preview.
 
+## Non-charging production readiness probe
+
+After deploying the readiness functions dark, an operator may select the
+Convex document ID of one **pre-existing terminal production**
+`mmpayTransactions` row and run the internal
+`mmpayReadiness:probeTerminalProductionPayment` action. The action calls only
+the SDK `get` status operation. It cannot create, reserve, cancel, update or log
+a payment, and its result omits the order ID, amount, customer, QR, checkout
+URL, vendor and provider references.
+
+The probe validates the stored production/MMK/terminal invariants and the
+provider response's order ID, amount and status. SDK 1.1.4 does not document a
+currency field on `get`; when it is absent the result explicitly reports
+`stored_only_provider_omits_currency` rather than claiming provider-side
+currency proof. If the provider supplies a currency, it must be `MMK`.
+
+An authenticated owner can pass the same transaction document ID to
+`mmpayReadinessData:productionWebhookEvidence`. That query reads at most 51
+indexed webhook rows, returns at most 50 as aggregate evidence, and exposes
+only payment/webhook statuses and timestamps. It never returns the provider
+order ID, nonce digest, user/customer ID, QR, checkout URL or transaction
+reference. A fresh probe and a fresh signed callback read-back are separate
+evidence; neither one creates a payment or substitutes for the other.
+
 ## Security and reconciliation behavior
 
 - The pinned `mmpay-node-sdk` 1.1.4 source documents
@@ -89,6 +113,11 @@ promoting the verified Vercel preview.
   keeps an automated regression test for invalid signatures. Merchant sandbox
   callback verification remains required before LIVE approval.
 - Provider calls run only in Convex Node actions.
+- The production readiness probe is internal-only, accepts only an existing
+  terminal production transaction, calls only provider `get`, and performs no
+  database write.
+- Webhook readiness evidence is owner-only, indexed and bounded, with sensitive
+  identifiers removed from its response.
 - The webhook verifies HMAC-SHA256 over the exact raw body and nonce using a
   timing-safe comparison.
 - Callback nonces are hashed and persisted so retries are idempotent.
