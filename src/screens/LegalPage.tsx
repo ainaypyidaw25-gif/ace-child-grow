@@ -1,8 +1,13 @@
 import { Link } from 'react-router-dom';
+import { useQuery } from 'convex/react';
+import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
+import {
+  GOOGLE_PLAY_DISTRIBUTION,
+  NATIVE_STORE_DISTRIBUTION,
+} from '../app/distribution';
+import { LEGAL_TERMS_RELEASE } from '../domain/legalRelease';
 import type { Locale } from '../domain/types';
-
-const APP_STORE_DISTRIBUTION = import.meta.env.VITE_DISTRIBUTION === 'app-store';
 
 type LegalPageProps = { kind: 'privacy' | 'account-deletion' | 'terms' | 'support' | 'content-policy' };
 
@@ -111,7 +116,8 @@ export function LegalPage({ kind }: LegalPageProps) {
   }
 
   if (kind === 'terms') {
-    if (APP_STORE_DISTRIBUTION) {
+    if (NATIVE_STORE_DISTRIBUTION) {
+      const storeName = GOOGLE_PLAY_DISTRIBUTION ? 'Google Play' : 'App Store';
       return (
         <PublicLegalShell
           title={locale === 'mm' ? 'ဝန်ဆောင်မှုစည်းမျဉ်းများ' : 'Terms of Service'}
@@ -121,13 +127,13 @@ export function LegalPage({ kind }: LegalPageProps) {
           {locale === 'mm' ? (
             <>
               <LegalSection title="ဝန်ဆောင်မှု အကြောင်း">ACE Child Grow သည် မိဘနှင့် စောင့်ရှောက်သူများအတွက် အထွေထွေ ဖွံ့ဖြိုးရေးနှင့် မှတ်တမ်းတင်ရေး အထောက်အကူဖြစ်သည်။ ရောဂါရှာဖွေခြင်း သို့မဟုတ် ဆရာဝန်၏ အကြံဉာဏ်ကို အစားထိုးခြင်း မပြုပါ။</LegalSection>
-              <LegalSection title="App Store version">ဤ App Store version တွင် ဖော်ပြထားသော မိဘဝန်ဆောင်မှုများကို အခမဲ့ အသုံးပြုနိုင်ပြီး App အတွင်း ဝယ်ယူမှု သို့မဟုတ် ပြင်ပငွေပေးချေမှု မရှိပါ။</LegalSection>
+              <LegalSection title={`${storeName} version`}>ဤ {storeName} version တွင် ဖော်ပြထားသော မိဘဝန်ဆောင်မှုများကို အခမဲ့ အသုံးပြုနိုင်ပြီး App အတွင်း ဝယ်ယူမှု သို့မဟုတ် ပြင်ပငွေပေးချေမှု မရှိပါ။</LegalSection>
               <LegalSection title="ဆက်သွယ်ရန်">မေးခွန်းများအတွက် <a href={`mailto:${supportEmail}`} className="font-semibold text-sky-deep underline">{supportEmail}</a> သို့ ဆက်သွယ်နိုင်ပါသည်။</LegalSection>
             </>
           ) : (
             <>
               <LegalSection title="About the service">ACE Child Grow provides general development guidance and record-keeping support for parents and caregivers. It does not diagnose or replace a doctor&rsquo;s advice.</LegalSection>
-              <LegalSection title="App Store version">The parent features shown in this App Store version are available free. It contains no in-app purchase or external payment flow.</LegalSection>
+              <LegalSection title={`${storeName} version`}>The parent features shown in this {storeName} version are available free. It contains no in-app purchase or external payment flow.</LegalSection>
               <LegalSection title="Contact">For questions, contact <a href={`mailto:${supportEmail}`} className="font-semibold text-sky-deep underline">{supportEmail}</a>.</LegalSection>
             </>
           )}
@@ -139,7 +145,7 @@ export function LegalPage({ kind }: LegalPageProps) {
         title={locale === 'mm' ? 'ဝန်ဆောင်မှုစည်းမျဉ်းများ' : 'Terms of Service'}
         locale={locale}
         setLocale={setLocale}
-        draft
+        draft={LEGAL_TERMS_RELEASE.status === 'draft'}
       >
         {locale === 'mm' ? (
           <>
@@ -151,13 +157,13 @@ export function LegalPage({ kind }: LegalPageProps) {
               Free အစီအစဉ်သည် အမြဲတမ်း အခမဲ့ဖြစ်ပါသည်။ Premium နှင့် Family အခပေးသုံးခွင့်များကို လစဉ် သို့မဟုတ် နှစ်စဉ်အတွက် App တွင် ပြထားသည့် MMK နှုန်းအတိုင်း ဝယ်ယူနိုင်ပါသည်။ Premium ကို ငွေပေးချေမှုအချက်အလက်မလိုဘဲ ၃ ရက် အခမဲ့ စမ်းသုံးနိုင်ပြီး စမ်းသုံးကာလကုန်ဆုံးလျှင် အလိုအလျောက် ငွေကောက်ခံခြင်းမရှိဘဲ Free သို့ ပြန်ရောက်သွားပါမည်။ Premium ဆက်သုံးလိုပါက လစဉ် သို့မဟုတ် နှစ်စဉ်အစီအစဉ်ကို ကိုယ်တိုင်ရွေးချယ်ဝယ်ယူရပါမည်။
             </LegalSection>
             <LegalSection title="ငွေပေးချေမှု">
-              ငွေပေးချေမှုကို Myan Myan Pay (MMQR) ဖြင့် ချက်ချင်း သို့မဟုတ် ငွေလွှဲအထောက်အထား upload တင်ခြင်းဖြင့် လုပ်ဆောင်နိုင်ပါသည်။ ဝန်ထမ်းက အထောက်အထားကို စစ်ဆေးပြီးမှ အစီအစဉ်ကို ဖွင့်ပေးပါမည်။ ငွေလက်ခံအကောင့်နှင့် API secret များကို browser သို့ မပို့ပါ။
+              <PaymentTerms locale="mm" />
             </LegalSection>
             <LegalSection title="သက်တမ်းတိုးခြင်းနှင့် ပယ်ဖျက်ခြင်း">
               အခပေးသုံးခွင့်များသည် တစ်ကြိမ်ဝယ်ယူမှုဖြစ်ပြီး ရွေးချယ်ထားသောကာလ ကုန်ဆုံးချိန်တွင် အလိုအလျောက် သက်တမ်းတိုးခြင်း သို့မဟုတ် ငွေကောက်ခံခြင်း မရှိပါ။ သုံးခွင့်ကာလကုန်ဆုံးသည်အထိ ဝန်ဆောင်မှုအားလုံးကို ဆက်လက်အသုံးပြုနိုင်ပြီး ဆက်သုံးလိုပါက သုံးခွင့်အသစ်ကို ကိုယ်တိုင်ဝယ်ယူရပါမည်။ ကျန်ကာလအတွက် ပိုင်းခြား ငွေပြန်အမ်းမည် မဟုတ်ပါ။
             </LegalSection>
             <LegalSection title="ငွေပြန်အမ်းခြင်း">
-              ငွေပေးချေမှုအားလုံးကို ကိုယ်တိုင်စစ်ဆေးသည့်စနစ်ဖြင့် လုပ်ဆောင်ထားသောကြောင့် အလိုအလျောက် ငွေပြန်အမ်းစနစ် မရှိသေးပါ။ မှားယွင်းပေးချေမိခြင်း၊ နှစ်ကြိမ်ထပ်ပေးချေမိခြင်း သို့မဟုတ် အခြားပြဿနာများအတွက် ပေးချေပြီးချိန်မှ ၇ ရက်အတွင်း <a href={`mailto:${supportEmail}?subject=ACE%20Child%20Grow%20refund%20request`} className="font-semibold text-sky-deep underline">{supportEmail}</a> သို့ ဆက်သွယ်ပါက တစ်ခုချင်းစီ သုံးသပ်ပေးပါမည်။
+              အလိုအလျောက် ငွေပြန်အမ်းစနစ် မရှိသေးပါ။ မှားယွင်းပေးချေမိခြင်း၊ နှစ်ကြိမ်ထပ်ပေးချေမိခြင်း သို့မဟုတ် အခြားပြဿနာများအတွက် ပေးချေပြီးချိန်မှ ၇ ရက်အတွင်း <a href={`mailto:${supportEmail}?subject=ACE%20Child%20Grow%20refund%20request`} className="font-semibold text-sky-deep underline">{supportEmail}</a> သို့ ဆက်သွယ်ပါက တစ်ခုချင်းစီ သုံးသပ်ပေးပါမည်။
             </LegalSection>
             <LegalSection title="အကြောင်းအရာနှင့် တာဝန်ကန့်သတ်ချက်">
               App ၏ လမ်းညွှန်ချက်၊ လှုပ်ရှားမှုနှင့် အစီရင်ခံစာများသည် ယေဘုယျ ဖွံ့ဖြိုးရေးအထောက်အကူဖြစ်ပြီး ကလေးတစ်ဦးချင်းစီအတွက် ဆရာဝန် သို့မဟုတ် အထူးကုပညာရှင်၏ အကြံဉာဏ်ကို အစားထိုးသည် မဟုတ်ပါ။ ကျန်းမာရေးဆိုင်ရာ စိုးရိမ်စရာများအတွက် အမြဲ ပညာရှင်နှင့် တိုင်ပင်ပါ။
@@ -179,13 +185,13 @@ export function LegalPage({ kind }: LegalPageProps) {
               The Free plan is always free. Premium and Family access can be purchased monthly or yearly at the MMK price shown in the app. Premium can be tried free for 3 days with no payment details; when the trial ends you return to Free and are not charged automatically. To continue Premium, you must explicitly purchase monthly or yearly access.
             </LegalSection>
             <LegalSection title="Payment">
-              Payment is handled either instantly via Myan Myan Pay (MMQR) or by uploading proof of a bank/wallet transfer, which staff review before activating your plan. Merchant credentials and API secrets never reach this browser.
+              <PaymentTerms locale="en" />
             </LegalSection>
             <LegalSection title="Renewal and cancellation">
               Paid access is a one-time purchase. It does not renew or charge automatically when the selected period ends. Access remains active through the period you paid for; purchase new access explicitly if you want to continue. We do not prorate or partially refund the remaining period.
             </LegalSection>
             <LegalSection title="Refunds">
-              Because payments go through manual review rather than an automated billing processor, there is no self-service refund yet. If you were charged in error, charged twice, or hit another payment problem, contact <a href={`mailto:${supportEmail}?subject=ACE%20Child%20Grow%20refund%20request`} className="font-semibold text-sky-deep underline">{supportEmail}</a> within 7 days of payment and we will review it individually.
+              There is no self-service refund yet. If you were charged in error, charged twice, or hit another payment problem, contact <a href={`mailto:${supportEmail}?subject=ACE%20Child%20Grow%20refund%20request`} className="font-semibold text-sky-deep underline">{supportEmail}</a> within 7 days of payment and we will review it individually.
             </LegalSection>
             <LegalSection title="Content and liability">
               The app&rsquo;s guidance, activities and reports are general developmental support and do not replace the advice of a doctor or specialist for your specific child. Always consult a qualified professional for health concerns.
@@ -295,4 +301,34 @@ function PublicLegalShell({
 
 function LegalSection({ title, children }: { title: string; children: React.ReactNode }) {
   return <section><h2 className="mb-2 text-lg font-bold">{title}</h2><p>{children}</p></section>;
+}
+
+function PaymentTerms({ locale }: { locale: Locale }) {
+  const capabilities = useQuery(api.billing.paymentCapabilities);
+  const manualTransferAvailable = capabilities?.manualTransferAvailable === true;
+  const mmpayProductionAvailable = capabilities?.mmpayProductionAvailable === true;
+
+  if (locale === 'mm') {
+    if (mmpayProductionAvailable && manualTransferAvailable) {
+      return <>ငွေပေးချေမှုကို Production Myan Myan Pay (MMQR) သို့မဟုတ် App တွင် ဖော်ပြထားသော ငွေလွှဲနည်းလမ်းဖြင့် လုပ်ဆောင်နိုင်ပါသည်။ MMQR ငွေပေးချေမှု အတည်ပြုပြီးလျှင် အစီအစဉ်ကို အလိုအလျောက်ဖွင့်ပေးပြီး၊ လက်ဖြင့်ငွေလွှဲမှုကို ဝန်ထမ်းက စစ်ဆေးပြီးမှ ဖွင့်ပေးပါမည်။ ရွေးချယ်ထားသော ငွေလက်ခံအကောင့်ကိုသာ browser တွင် ပြပြီး API secret များကို မပို့ပါ။</>;
+    }
+    if (mmpayProductionAvailable) {
+      return <>ငွေပေးချေမှုကို Production Myan Myan Pay (MMQR) ဖြင့် လုပ်ဆောင်နိုင်ပြီး အောင်မြင်ကြောင်း အတည်ပြုပြီးသည်နှင့် အစီအစဉ်ကို အလိုအလျောက် ဖွင့်ပေးပါမည်။ Merchant credential နှင့် API secret များကို browser သို့ မပို့ပါ။</>;
+    }
+    if (manualTransferAvailable) {
+      return <>App တွင် ဖော်ပြထားသော ငွေလွှဲနည်းလမ်းကို သုံးပြီး အထောက်အထားတင်ခြင်းဖြင့် ငွေပေးချေနိုင်ပါသည်။ ဝန်ထမ်းက အထောက်အထားကို စစ်ဆေးပြီးမှ အစီအစဉ်ကို ဖွင့်ပေးပါမည်။ ရွေးချယ်ထားသော ငွေလက်ခံအကောင့်ကိုသာ browser တွင် ပြပြီး API secret များကို မပို့ပါ။</>;
+    }
+    return <>အတည်ပြုထားသော ငွေပေးချေမှုနည်းလမ်း မရှိသေးသဖြင့် အခပေးအစီအစဉ်အသစ် ဝယ်ယူခြင်းကို ယာယီပိတ်ထားပါသည်။ App တွင် အတည်ပြုထားသော နည်းလမ်းပေါ်လာသည်အထိ ငွေမပေးချေပါနှင့်။</>;
+  }
+
+  if (mmpayProductionAvailable && manualTransferAvailable) {
+    return <>Payment is available through production Myan Myan Pay (MMQR) or a transfer method displayed in the app. Verified MMQR payments activate access automatically; staff review manual-transfer proof before activation. The browser receives only the selected transfer destination, never merchant API secrets.</>;
+  }
+  if (mmpayProductionAvailable) {
+    return <>Payment is available through production Myan Myan Pay (MMQR), and access activates automatically after verification. Merchant credentials and API secrets never reach this browser.</>;
+  }
+  if (manualTransferAvailable) {
+    return <>Payment is available only through a transfer method displayed in the app. Staff review the submitted proof before activating access. The browser receives only the selected transfer destination, never merchant API secrets.</>;
+  }
+  return <>New paid purchases are temporarily unavailable because no verified payment method is active. Do not send payment until the app presents an approved method.</>;
 }

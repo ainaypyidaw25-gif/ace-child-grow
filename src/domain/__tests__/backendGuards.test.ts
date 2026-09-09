@@ -15,7 +15,7 @@ vi.mock('@convex-dev/auth/server', async (importOriginal) => {
 
 import { add as addChild, update as updateChild } from '../../../convex/children';
 import { list as listGrowth } from '../../../convex/growth';
-import { submitPaymentRequest } from '../../../convex/billing';
+import { paymentCapabilities, submitPaymentRequest } from '../../../convex/billing';
 
 type Row = Record<string, unknown> & { _id?: string };
 
@@ -157,5 +157,23 @@ describe('ACG-SEC-004 — payment proof is validated, not trusted', () => {
   it('rejects a storage id with no uploaded file behind it', async () => {
     const context = ctx({ getMany: live, storageMeta: null });
     await expect(handler(submitPaymentRequest)(context, args)).rejects.toThrow(/not found/);
+  });
+});
+
+describe('payment capability disclosure', () => {
+  it('reports manual transfer as unavailable without exposing method rows', async () => {
+    await expect(handler(paymentCapabilities)(ctx({ rows: { paymentMethods: [] } }), {}))
+      .resolves.toEqual({
+        manualTransferAvailable: false,
+        mmpayProductionAvailable: false,
+      });
+  });
+
+  it('reports manual transfer as available when the active-method index returns a row', async () => {
+    await expect(handler(paymentCapabilities)(ctx({ rows: { paymentMethods: [{ _id: 'method-1' }] } }), {}))
+      .resolves.toEqual({
+        manualTransferAvailable: true,
+        mmpayProductionAvailable: false,
+      });
   });
 });

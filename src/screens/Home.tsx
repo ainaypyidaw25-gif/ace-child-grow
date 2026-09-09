@@ -4,7 +4,7 @@ import { api } from '../../convex/_generated/api';
 import { useLocale } from '../app/LocaleContext';
 import { useAppState } from '../app/AppState';
 import { ageLabels } from '../domain/age/ageLabel';
-import { effectivePlanKeyForCurrentPlatform, isAppleAppStoreBuild, isNativeStoreBuild } from '../app/platform';
+import { effectivePlanKeyForCurrentPlatform, isNativeStoreBuild } from '../app/platform';
 
 export function Home() {
   const { t, locale } = useLocale();
@@ -53,8 +53,8 @@ export function Home() {
     { to: '/milestone-gallery', label: t('milestoneGallery.title'), note: locale === 'mm' ? 'ဓာတ်ပုံထည့်၊ လူမှုကွန်ရက်တွင် မျှဝေ' : 'Add a photo, share on social media', symbol: '🏅', tone: 'bg-pastel-yellow/40 text-ink' },
     { to: '/hope', label: t('hope.title'), note: locale === 'mm' ? 'အထူးလိုအပ်ချက် နားလည်မှု' : 'Understanding special needs', symbol: '◇', tone: 'bg-pink/40 text-ink' },
   ] as const;
-  const appStoreBuild = isAppleAppStoreBuild();
-  const tools = appStoreBuild
+  const nativeStoreBuild = isNativeStoreBuild();
+  const tools = nativeStoreBuild
     ? allTools.filter((tool) => !['/appointments', '/report', '/weekly-plan', '/observations', '/hope'].includes(tool.to))
     : allTools;
 

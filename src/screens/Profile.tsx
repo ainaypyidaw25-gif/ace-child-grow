@@ -11,7 +11,6 @@ import { api } from '../../convex/_generated/api';
 import { clearPortalMode } from '../app/portalMode';
 import {
   effectivePlanKeyForCurrentPlatform,
-  isAppleAppStoreBuild,
   isFeatureAvailableOnCurrentPlatform,
   isNativeStoreBuild,
 } from '../app/platform';
@@ -42,7 +41,7 @@ export function Profile() {
   const familyEnabled = hasFamilyProfiles(subscription?.features)
     && isFeatureAvailableOnCurrentPlatform(subscription?.features ?? [], 'family_profiles');
   const planKey = safePlanKey(effectivePlanKeyForCurrentPlatform(subscription?.planKey ?? 'free'));
-  const appStoreBuild = isAppleAppStoreBuild();
+  const nativeStoreBuild = isNativeStoreBuild();
   const caregivers = useQuery(api.family.listCaregivers, familyEnabled ? {} : 'skip');
   const inviteCaregiver = useMutation(api.family.inviteCaregiver);
   const revokeCaregiver = useMutation(api.family.revokeCaregiver);
@@ -207,11 +206,11 @@ export function Profile() {
             {locale === 'mm' ? 'မြန်မာ' : 'English'}
           </button>
         </div>
-        {!appStoreBuild && <Link to="/favorites" className="flex items-center justify-between py-2 text-sky-deep">
+        {!nativeStoreBuild && <Link to="/favorites" className="flex items-center justify-between py-2 text-sky-deep">
           <span>♥ {locale === 'mm' ? 'သိမ်းထားသော လှုပ်ရှားမှုများ' : 'Saved activities'}</span>
           <span aria-hidden>→</span>
         </Link>}
-        {!appStoreBuild && <Link to="/offline" className="flex items-center justify-between py-2 text-sky-deep">
+        {!nativeStoreBuild && <Link to="/offline" className="flex items-center justify-between py-2 text-sky-deep">
           <span>{locale === 'mm' ? 'အင်တာနက်မရှိချိန် ဖတ်ရှုရန် သိမ်းထားသည့် အကြောင်းအရာများ' : 'Offline downloads'}</span>
           <span aria-hidden>→</span>
         </Link>}

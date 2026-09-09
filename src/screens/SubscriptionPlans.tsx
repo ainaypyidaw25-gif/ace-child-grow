@@ -105,6 +105,8 @@ export function SubscriptionPlans() {
     : L('မကြာမီ', 'soon');
   const selectedPlan = options.plans.find((plan) => plan._id === planId);
   const selectedMethod = options.methods.find((method) => method._id === methodId);
+  const manualTransferAvailable = options.methods.length > 0;
+  const mmpayProductionAvailable = options.mmpayProductionAvailable;
   const hasPendingRequest = requests.some((request) => request.status === 'pending');
   const hasPendingMmpay = mmpayPayments.some((payment) => payment.status === 'INITIATING' || payment.status === 'PENDING');
   const statusLabel = (status: (typeof requests)[number]['status']) => ({
@@ -237,7 +239,7 @@ export function SubscriptionPlans() {
         )}
       </section>
 
-      {selectedPlan && (
+      {selectedPlan && mmpayProductionAvailable && (
         <section aria-labelledby="mmpay-title" className="overflow-hidden rounded-[30px] border border-sky/40 bg-white shadow-card">
           <header className="border-b border-line bg-mint-soft/45 px-5 py-6 sm:px-8">
             <p className="text-xs font-bold uppercase tracking-[0.16em] text-sky-deep">02 · Myan Myan Pay</p>
@@ -280,6 +282,15 @@ export function SubscriptionPlans() {
         </section>
       )}
 
+      {selectedPlan && !mmpayProductionAvailable && !manualTransferAvailable && (
+        <p className="rounded-2xl bg-pastel-yellow/60 p-4 text-sm font-semibold text-ink" role="status">
+          {L(
+            'အတည်ပြုထားသော ငွေပေးချေမှုနည်းလမ်း မရှိသေးသဖြင့် အခပေးအစီအစဉ်အသစ် ဝယ်ယူခြင်းကို ယာယီပိတ်ထားပါသည်။',
+            'New paid purchases are temporarily unavailable because no verified payment method is active.',
+          )}
+        </p>
+      )}
+
       <SourceTransparency />
 
       <p className="text-center text-xs text-ink-soft">
@@ -288,7 +299,7 @@ export function SubscriptionPlans() {
         {L(' (ငွေပြန်အမ်းမူဝါဒ ပါဝင်သည်) ကို သဘောတူပါသည်။', ', including our refund policy.')}
       </p>
 
-      {selectedPlan && (
+      {selectedPlan && manualTransferAvailable && (
         <section aria-labelledby="payment-title" className="overflow-hidden rounded-[30px] border border-line bg-white shadow-card">
           <header className="border-b border-line bg-cream px-5 py-6 sm:px-8">
             <p className="text-xs font-bold uppercase tracking-[0.16em] text-sky-deep">{L('အခြားနည်းလမ်း', 'Alternative')} · {L('ဘဏ်အကောင့်သို့ တိုက်ရိုက်ငွေလွှဲခြင်း', 'Manual transfer')}</p>
@@ -298,9 +309,7 @@ export function SubscriptionPlans() {
             </ol>
           </header>
 
-          {options.methods.length === 0 ? (
-            <p className="p-5 text-sm text-ink-soft sm:p-8">{L('ငွေပေးချေမှုနည်းလမ်းများကို Owner က ပြင်ဆင်နေပါသည်။', 'Payment methods are being configured by the owner.')}</p>
-          ) : hasPendingRequest ? (
+          {hasPendingRequest ? (
             <div className="p-5 sm:p-8">
               <p className="font-bold text-ink">{L('သင့်ငွေပေးချေမှုကို စစ်ဆေးနေပါသည်', 'Your payment is being reviewed')}</p>
               <p className="mt-2 text-sm text-ink-soft">{L('တစ်ကြိမ်လျှင် ငွေပေးချေမှုတစ်ခုသာ တင်နိုင်ပါသည်။ အောက်ရှိ အခြေအနေမှတ်တမ်းတွင် ဆက်လက်ကြည့်ရှုနိုင်ပါသည်။', 'Only one payment can be reviewed at a time. Follow its status below.')}</p>

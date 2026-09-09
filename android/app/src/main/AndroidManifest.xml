@@ -8,6 +8,10 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="false"
         android:theme="@style/AppTheme">
+        <meta-data
+            android:name="mm.com.acegroup.acechildgrow.SOURCE_COMMIT"
+            android:value="${aceSourceCommit}" />
+
         <activity
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode|navigation|density"
             android:name=".MainActivity"
