@@ -32,6 +32,13 @@ import { TWO_STORIES_RELEASE_ROOT, TWO_STORIES_RELEASE_DAYS } from './aiTwoStori
 import type { AiPublicationAuditTargetArtifact } from './aiPublicationAuditArtifact';
 import { SEVEN_STORIES_ARTIFACT, SEVEN_STORIES_ARTIFACT_HASH } from './aiSevenStoriesPublication20260910Artifact';
 import { SEVEN_STORIES_RELEASE_ROOT, SEVEN_STORIES_RELEASE_DAYS, SEVEN_STORIES_POLICY_VERSION, SEVEN_STORIES_SLUGS } from './aiSevenStoriesPublication20260910Data';
+import { READING_TOGETHER_ARTIFACT, READING_TOGETHER_ARTIFACT_HASH } from './aiReadingTogetherPublication20260910Artifact';
+import {
+  READING_TOGETHER_POLICY_VERSION,
+  READING_TOGETHER_RELEASE_DAYS,
+  READING_TOGETHER_RELEASE_ROOT,
+  READING_TOGETHER_SLUG,
+} from './aiReadingTogetherPublication20260910Data';
 import { todayIsoUtc } from './evidenceFreshness';
 
 type DatabaseContext = Pick<QueryCtx, 'db'> | Pick<MutationCtx, 'db'>;
@@ -46,29 +53,33 @@ export type SevenStoryAuditSourceArtifact = {
   sourceId: string; sourceSnapshotHash: string; sourceUrl: string; claimScope: string;
   urlsChecked: readonly string[]; evidenceFindings: readonly string[]; limitations: readonly string[];
 };
-export type SevenStoryAuditTargetArtifact = {
-  type: 'story'; slug: string; contentSnapshotHash: string; evidenceLinkSnapshotHash: string;
+export type Schema2AuditTargetArtifact = {
+  type: 'lesson' | 'story'; slug: string; contentSnapshotHash: string; evidenceLinkSnapshotHash: string;
   verdict: 'pass'; sources: readonly SevenStoryAuditSourceArtifact[];
   mediaSnapshotHash: string; mediaCount: number;
   independentAgentResults: AiPublicationAuditTargetArtifact['independentAgentResults'];
   contentChecks: readonly string[]; limitations: readonly string[];
 };
-export type SevenStoryAuditArtifact = Omit<AuditArtifact, 'schemaVersion' | 'policyVersion' | 'targets'> & {
-  schemaVersion: 2; policyVersion: string; targets: readonly SevenStoryAuditTargetArtifact[];
+export type Schema2AuditArtifact = Omit<AuditArtifact, 'schemaVersion' | 'policyVersion' | 'targets'> & {
+  schemaVersion: 2; policyVersion: string; targets: readonly Schema2AuditTargetArtifact[];
 };
 type RegisteredArtifact =
   | { kind: 'legacy'; artifact: AuditArtifact; hash: string; releaseDays: number }
-  | { kind: 'seven_stories'; artifact: SevenStoryAuditArtifact; hash: string; releaseDays: number };
+  | { kind: 'seven_stories'; artifact: Schema2AuditArtifact; hash: string; releaseDays: number }
+  | { kind: 'reading_together'; artifact: Schema2AuditArtifact; hash: string; releaseDays: number };
 const SEVEN_STORY_RUNTIME_SLUGS = new Set<string>([
   'st_little_seed', 'st_ba_ba_sounds', 'st_when_i_feel_angry', 'st_taking_turns',
   'st_goodnight_moon_friend', 'st_visit_to_doctor', 'st_sharing_mango',
 ]);
 const SEVEN_STORY_MAX_SOURCES = 3;
-const COMBINED_ACTIVE_LIMIT = AI_PUBLICATION_MAX_ACTIVE_RELEASES + 7;
+const COMBINED_ACTIVE_LIMIT = AI_PUBLICATION_MAX_ACTIVE_RELEASES + 7 + 1;
 function isSevenStoryTarget(type: string, slug: string): boolean {
   return type === 'story' && SEVEN_STORY_RUNTIME_SLUGS.has(slug);
 }
-function sevenStoryArtifactHasExactScope(artifact: SevenStoryAuditArtifact): boolean {
+function isReadingTogetherTarget(type: string, slug: string): boolean {
+  return type === 'lesson' && slug === READING_TOGETHER_SLUG;
+}
+function sevenStoryArtifactHasExactScope(artifact: Schema2AuditArtifact): boolean {
   return artifact.schemaVersion === 2 && artifact.policyVersion === SEVEN_STORIES_POLICY_VERSION
     && artifact.releaseId === SEVEN_STORIES_RELEASE_ROOT
     && SEVEN_STORIES_SLUGS.length === 7 && new Set(SEVEN_STORIES_SLUGS).size === 7
@@ -84,6 +95,29 @@ function sevenStoryArtifactHasExactScope(artifact: SevenStoryAuditArtifact): boo
         && source.urlsChecked.length > 0 && source.urlsChecked.length <= 10
         && source.urlsChecked.includes(source.sourceUrl)));
 }
+function readingTogetherArtifactHasExactScope(artifact: Schema2AuditArtifact): boolean {
+  const target = artifact.targets[0];
+  return artifact.schemaVersion === 2
+    && artifact.policyVersion === READING_TOGETHER_POLICY_VERSION
+    && artifact.releaseId === READING_TOGETHER_RELEASE_ROOT
+    && artifact.targets.length === 1
+    && Boolean(target)
+    && isReadingTogetherTarget(target.type, target.slug)
+    && target.verdict === 'pass'
+    && isSha256Hex(target.contentSnapshotHash)
+    && isSha256Hex(target.evidenceLinkSnapshotHash)
+    && target.mediaCount === 1
+    && isSha256Hex(target.mediaSnapshotHash)
+    && target.sources.length === 3
+    && new Set(target.sources.map(source => source.sourceId)).size === 3
+    && target.sources.every(source => isSha256Hex(source.sourceSnapshotHash)
+      && source.urlsChecked.length > 0 && source.urlsChecked.length <= 10
+      && source.urlsChecked.includes(source.sourceUrl))
+    && target.independentAgentResults.length === 2
+    && target.independentAgentResults.every(result => result.verdict === 'pass')
+    && target.independentAgentResults.some(result => result.role === 'source_research')
+    && target.independentAgentResults.some(result => result.role === 'semantic_audit');
+}
 
 /** Explicit compiled registry: an arbitrary database hash cannot authorize publication. */
 export function registeredAiPublicationArtifact(releaseId: string, artifactHash: string): RegisteredArtifact | null {
@@ -96,10 +130,17 @@ export function registeredAiPublicationArtifact(releaseId: string, artifactHash:
     (target) => releaseId === `${entry.root}:${target.type}:${target.slug}`,
   ));
   if (legacy) return { ...legacy, kind: 'legacy' };
-  const artifact: SevenStoryAuditArtifact = SEVEN_STORIES_ARTIFACT;
-  if (artifactHash !== SEVEN_STORIES_ARTIFACT_HASH || !sevenStoryArtifactHasExactScope(artifact)
-    || !artifact.targets.some(target => releaseId === `${SEVEN_STORIES_RELEASE_ROOT}:story:${target.slug}`)) return null;
-  return { kind: 'seven_stories', artifact, hash: SEVEN_STORIES_ARTIFACT_HASH, releaseDays: SEVEN_STORIES_RELEASE_DAYS };
+  const sevenArtifact: Schema2AuditArtifact = SEVEN_STORIES_ARTIFACT;
+  if (artifactHash === SEVEN_STORIES_ARTIFACT_HASH && sevenStoryArtifactHasExactScope(sevenArtifact)
+    && sevenArtifact.targets.some(target => releaseId === `${SEVEN_STORIES_RELEASE_ROOT}:story:${target.slug}`)) {
+    return { kind: 'seven_stories', artifact: sevenArtifact, hash: SEVEN_STORIES_ARTIFACT_HASH, releaseDays: SEVEN_STORIES_RELEASE_DAYS };
+  }
+  const readingArtifact: Schema2AuditArtifact = READING_TOGETHER_ARTIFACT;
+  if (artifactHash === READING_TOGETHER_ARTIFACT_HASH && readingTogetherArtifactHasExactScope(readingArtifact)
+    && releaseId === `${READING_TOGETHER_RELEASE_ROOT}:lesson:${READING_TOGETHER_SLUG}`) {
+    return { kind: 'reading_together', artifact: readingArtifact, hash: READING_TOGETHER_ARTIFACT_HASH, releaseDays: READING_TOGETHER_RELEASE_DAYS };
+  }
+  return null;
 }
 
 type ActiveControl = {
@@ -127,7 +168,9 @@ export async function activeAiPublicationControl(ctx: DatabaseContext): Promise<
   for (const release of releases) {
     const expectedKey = aiPublicationTargetKey(release.contentType, release.contentSlug);
     if (
-      !(isAiPublicationTarget(release.contentType, release.contentSlug) || isSevenStoryTarget(release.contentType, release.contentSlug))
+      !(isAiPublicationTarget(release.contentType, release.contentSlug)
+        || isSevenStoryTarget(release.contentType, release.contentSlug)
+        || isReadingTogetherTarget(release.contentType, release.contentSlug))
       || release.targetKey !== expectedKey
       || keys.has(expectedKey)
       || typeof release.releaseId !== 'string' || release.releaseId.length === 0
@@ -139,7 +182,8 @@ export async function activeAiPublicationControl(ctx: DatabaseContext): Promise<
     releaseIds.add(release.releaseId);
   }
   if (releases.filter(r => isAiPublicationTarget(r.contentType, r.contentSlug)).length > AI_PUBLICATION_MAX_ACTIVE_RELEASES
-    || releases.filter(r => isSevenStoryTarget(r.contentType, r.contentSlug)).length > 7) return { complete: false, releases: [] };
+    || releases.filter(r => isSevenStoryTarget(r.contentType, r.contentSlug)).length > 7
+    || releases.filter(r => isReadingTogetherTarget(r.contentType, r.contentSlug)).length > 1) return { complete: false, releases: [] };
   return { complete: true, releases };
 }
 
@@ -149,7 +193,7 @@ async function matchingCompletedRun(
   release: Doc<'aiPublicationReleases'>,
   expectedOutputHash: string,
   expectedSummary: string,
-  artifact: AuditArtifact | SevenStoryAuditArtifact,
+  artifact: AuditArtifact | Schema2AuditArtifact,
 ): Promise<boolean> {
   const rows = await ctx.db
     .query('aiAuditRuns')
@@ -180,7 +224,7 @@ export async function aiReleaseMatchesCurrentState(
 ): Promise<boolean> {
   const registered = registeredAiPublicationArtifact(release.releaseId, release.auditArtifactHash);
   if (!registered) return false;
-  if (registered.kind === 'seven_stories') return sevenStoryReleaseMatchesCurrentState(ctx, content, release, now, todayIso, registered);
+  if (registered.kind !== 'legacy') return schema2ReleaseMatchesCurrentState(ctx, content, release, now, todayIso, registered);
   const { artifact, releaseDays } = registered;
   const artifactHash = await sha256Canonical(artifact);
   const artifactTarget = artifact.targets.find(
@@ -323,35 +367,42 @@ export async function aiReleaseMatchesCurrentState(
   return sourceResults.every(Boolean);
 }
 
-/** The schema-2 fiction lane has its own exact artifact and one run per source.
- * It never consumes contentReviews or synthesizes a human approval. */
-async function sevenStoryReleaseMatchesCurrentState(
+/** Schema-2 lanes have an exact compiled artifact and one run per source.
+ * They never consume contentReviews or synthesize a human approval. */
+async function schema2ReleaseMatchesCurrentState(
   ctx: DatabaseContext,
   content: Doc<'libraryContent'>,
   release: Doc<'aiPublicationReleases'>,
   now: number,
   todayIso: string,
-  registered: Extract<RegisteredArtifact, { kind: 'seven_stories' }>,
+  registered: Extract<RegisteredArtifact, { kind: 'seven_stories' | 'reading_together' }>,
 ): Promise<boolean> {
   const { artifact, releaseDays } = registered;
   const artifactHash = await sha256Canonical(artifact);
   const target = artifact.targets.find(t => t.type === content.type && t.slug === content.slug);
-  if (!target || !sevenStoryArtifactHasExactScope(artifact) || artifactHash !== registered.hash
+  const exactScope = registered.kind === 'seven_stories'
+    ? sevenStoryArtifactHasExactScope(artifact)
+    : readingTogetherArtifactHasExactScope(artifact);
+  const exactTarget = registered.kind === 'seven_stories'
+    ? isSevenStoryTarget(content.type, content.slug)
+    : isReadingTogetherTarget(content.type, content.slug);
+  const expectedRevision = registered.kind === 'seven_stories' ? 3 : 4;
+  if (!target || !exactScope || artifactHash !== registered.hash
     || releaseDays < 1 || releaseDays > AI_PUBLICATION_MAX_RELEASE_DAYS
     || ![now, release.createdAt, release.expiresAt, artifact.auditStartedAt, artifact.auditCompletedAt].every(Number.isFinite)
     || artifact.auditStartedAt > artifact.auditCompletedAt || artifact.auditCompletedAt > now
     || !/^[a-f0-9]{40}$/.test(release.gitCommit)
-    || !isSevenStoryTarget(content.type, content.slug)
-    || content.clinicalStatus !== 'clinical_review' || content.reviewRevision !== 3
+    || !exactTarget
+    || content.clinicalStatus !== 'clinical_review' || content.reviewRevision !== expectedRevision
     || content.reviewerId !== undefined || content.reviewerQualification !== undefined
     || content.reviewerDisplayName !== undefined || content.reviewScope !== undefined
     || content.reviewedAt !== undefined || content.nextReviewAt !== undefined || content.reviewNote !== undefined
     || release.status !== 'active' || release.contentId !== content._id
-    || release.contentType !== 'story' || release.contentSlug !== content.slug
-    || release.targetKey !== aiPublicationTargetKey('story', content.slug)
+    || release.contentType !== target.type || release.contentSlug !== content.slug
+    || release.targetKey !== aiPublicationTargetKey(target.type, content.slug)
     || release.policyVersion !== artifact.policyVersion
     || content.aiPublicationReleaseId !== release.releaseId || content.aiPublishedAt !== release.createdAt
-    || release.reviewRevision !== 3 || release.contentUpdatedAt !== content.updatedAt
+    || release.reviewRevision !== expectedRevision || release.contentUpdatedAt !== content.updatedAt
     || release.contentSnapshotHash !== target.contentSnapshotHash
     || release.evidenceLinkSnapshotHash !== target.evidenceLinkSnapshotHash
     || release.sourceSnapshots.length !== target.sources.length
@@ -372,21 +423,21 @@ async function sevenStoryReleaseMatchesCurrentState(
   const linkRows = await ctx.db.query('evidenceLinks')
     .withIndex('by_slug', q => q.eq('slug', content.slug)).take(2);
   const link = linkRows.length === 1 ? linkRows[0] : null;
-  if (!link || link.kind !== 'story' || link.updatedAt !== release.evidenceLinkUpdatedAt
+  if (!link || link.kind !== target.type || link.updatedAt !== release.evidenceLinkUpdatedAt
     || !arraysEqual(link.sourceIds, target.sources.map(s => s.sourceId))
     || await sha256Canonical(aiEvidenceLinkSnapshot(link)) !== target.evidenceLinkSnapshotHash) return false;
 
   const targetArtifactHash = await sha256Canonical(target);
   const expectedRunOutputHash = await sha256Canonical({ artifactHash, targetArtifactHash });
   const expectedContentOutputHash = await sha256Canonical({ artifactHash, targetArtifactHash, kind: 'content' });
-  const summary = `${artifact.summary} Target: story:${content.slug}.`;
+  const summary = `${artifact.summary} Target: ${target.type}:${content.slug}.`;
   const limitations = [...target.limitations, ...artifact.limitations];
   const nextAuditDate = new Date(artifact.auditCompletedAt + (releaseDays - 1) * 86_400_000).toISOString().slice(0, 10);
   const contentAudits = await ctx.db.query('aiContentAudits')
     .withIndex('by_run_id', q => q.eq('runId', release.contentAuditRunId)).take(2);
   const contentAudit = contentAudits.length === 1 ? contentAudits[0] : null;
-  if (!contentAudit || contentAudit.contentSlug !== content.slug || contentAudit.contentType !== 'story'
-    || contentAudit.reviewRevision !== 3 || contentAudit.contentUpdatedAt !== content.updatedAt
+  if (!contentAudit || contentAudit.contentSlug !== content.slug || contentAudit.contentType !== target.type
+    || contentAudit.reviewRevision !== expectedRevision || contentAudit.contentUpdatedAt !== content.updatedAt
     || contentAudit.contentSnapshotHash !== target.contentSnapshotHash || contentAudit.verdict !== 'pass'
     || contentAudit.evidenceLinkUpdatedAt !== link.updatedAt || contentAudit.evidenceLinkSnapshotHash !== target.evidenceLinkSnapshotHash
     || !arraysEqual(contentAudit.sourceIds, link.sourceIds) || !arraysEqual(contentAudit.checks, target.contentChecks)
@@ -428,7 +479,9 @@ export async function contentIsAiParentReadable(
   now = Date.now(),
   todayIso = todayIsoUtc(new Date(now)),
 ): Promise<boolean> {
-  if (!isAiPublicationTarget(content.type, content.slug) && !isSevenStoryTarget(content.type, content.slug)) return false;
+  if (!isAiPublicationTarget(content.type, content.slug)
+    && !isSevenStoryTarget(content.type, content.slug)
+    && !isReadingTogetherTarget(content.type, content.slug)) return false;
   const control = await activeAiPublicationControl(ctx);
   if (!control.complete) return false;
   const release = control.releases.find(
@@ -437,7 +490,7 @@ export async function contentIsAiParentReadable(
   return release ? await aiReleaseMatchesCurrentState(ctx, content, release, now, todayIso) : false;
 }
 
-/** Resolve only the bounded legacy-three plus separately registered seven stories. */
+/** Resolve only the bounded legacy-three, seven stories and one reading lesson. */
 export async function activeAiParentReadableContent(
   ctx: DatabaseContext,
   now = Date.now(),

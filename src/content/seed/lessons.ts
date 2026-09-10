@@ -47,13 +47,13 @@ export const LESSONS: SeedItem[] = [
   lesson({
     slug: 'reading_together', category: 'reading',
     title: b('အတူတူ စာဖတ်ခြင်း', 'Reading together'),
-    summary: b('နေ့စဉ် ရုပ်ပုံစာအုပ်ဖတ်ခြင်း၏ တန်ဖိုး။', 'The value of daily shared reading.'),
+    summary: b('ပျော်ရွှင်စွာ အတူစာဖတ်ခြင်း၏ တန်ဖိုး။', 'The value of enjoyable shared reading.'),
     objectives: [b('စာဖတ်ချိန်ကို ပျော်ရွှင်ဖွယ် ဖြစ်စေရန်။', 'Make reading time joyful.')],
     readingMinutes: 3,
-    body: b('နေ့စဉ် ရုပ်ပုံစာအုပ် အတူဖတ်ခြင်းသည် ဝေါဟာရ၊ စိတ်ကူးဉာဏ်နှင့် ချစ်ခင်မှုကို ကြီးထွားစေသည်။ စာအုပ်အသစ်များစွာထက် အနှစ်သက်ဆုံး စာအုပ်အနည်းငယ်ကို ထပ်ခါဖတ်ခြင်းက ပို၍ အကျိုးရှိသည်။', 'Daily shared picture-book reading grows vocabulary, imagination, and closeness. Re-reading a few favorites beats many new books.'),
-    quiz: [q('စာဖတ်ခြင်းအတွက် ကောင်းသည်မှာ —', 'For reading, better to —', [['အနှစ်သက်ဆုံးကို ထပ်ခါဖတ်', 're-read favorites'], ['အသစ်များစွာ ဝယ်', 'buy many new books']], 0)],
-    takeaway: b('တစ်နေ့ စာအုပ်တစ်အုပ် — အလေ့အထ ကောင်းတစ်ခု။', 'A book a day — a great habit.'),
-    actionToday: b('ယနေ့ည အိပ်ရာမဝင်မီ ပုံပြင်တစ်ပုဒ် ဖတ်ပါ။', 'Read one story before bed tonight.'),
+    body: b('AI စစ်ဆေးမှု အသိပေးချက် — ဤအကြောင်းအရာကို AI ဖြင့် စစ်ဆေးထားသော်လည်း ဆေးဘက်ပညာရှင် သို့မဟုတ် မြန်မာဘာသာကို မိခင်ဘာသာစကားအဖြစ် အသုံးပြုသော စာတည်းဖြတ်သူက အတည်ပြုထားခြင်း မရှိပါ။ အထွေထွေပညာပေးအတွက်သာ ဖြစ်ပြီး ဆေးဘက်ဆိုင်ရာ အကြံပြုချက်၊ ကလေးဖွံ့ဖြိုးမှု စစ်ဆေးချက် သို့မဟုတ် ရောဂါဖော်ထုတ်ချက် မဟုတ်ပါ။\n\nရုပ်ပုံစာအုပ်ကို အတူဖတ်ခြင်းက ဘာသာစကား၊ စကားပြောဆိုမှုနှင့် ချစ်ခင်ရင်းနှီးမှုတို့ကို အားပေးနိုင်ပါသည်။ ရင်းနှီးပြီးသား အကြိုက်ဆုံးစာအုပ်ကို ပြန်ဖတ်နိုင်သလို စာအုပ်အသစ်ကိုလည်း ဖတ်ရှုနိုင်ပြီး ကလေးစိတ်ဝင်စားသည့်အရာကို လိုက်၍ ခဏရပ်ကာ စကားပြောပါ။', 'AI review notice — This content was reviewed by AI but has not been approved by a clinician or native Myanmar-language editor. It is for general education only and is not medical advice, developmental screening, or diagnosis.\n\nShared picture-book reading can support language, conversation, and warm connection. Enjoy familiar favorites or explore new books, and pause to follow your child’s interest.'),
+    quiz: [q('အတူစာဖတ်ချိန်ကို အထောက်အကူပြုသည့် နည်းလမ်းမှာ —', 'Which approach supports shared reading?', [['ကလေးစိတ်ဝင်စားရာကို လိုက်၍ ပုံများအကြောင်း စကားပြောခြင်း', 'follow the child’s interest and talk about the pictures'], ['ကလေးတုံ့ပြန်မှုကို မစောင့်ဘဲ အမြန်ဖတ်ပြီးသွားခြင်း', 'rush to finish without responding']], 0)],
+    takeaway: b('ပျော်ရွှင်ဖွယ် အတူစာဖတ်ချိန် မိနစ်အနည်းငယ်ကပင် အသုံးဝင်သော အလေ့အထတစ်ခု ဖြစ်လာနိုင်ပါသည်။', 'A few enjoyable minutes of shared reading can be a useful routine.'),
+    actionToday: b('ယနေ့ စာအုပ်တစ်အုပ်ရွေးပြီး ပုံများကြည့်ခြင်း၊ စကားပြောခြင်း သို့မဟုတ် အတူဖတ်ခြင်းကို ပျော်ရွှင်စွာ မိနစ်အနည်းငယ် ပြုလုပ်ပါ။', 'Choose a book and spend a few enjoyable minutes looking, talking, or reading together today.'),
   }),
   lesson({
     slug: 'gentle_discipline', category: 'positive_parenting',

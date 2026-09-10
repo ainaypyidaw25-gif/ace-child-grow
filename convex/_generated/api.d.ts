@@ -15,6 +15,7 @@ import type * as aiEarlyMathProvenanceCorrection from "../aiEarlyMathProvenanceC
 import type * as aiEarlyMathPublication20260910 from "../aiEarlyMathPublication20260910.js";
 import type * as aiPublication from "../aiPublication.js";
 import type * as aiPublicationSuccessor20260909 from "../aiPublicationSuccessor20260909.js";
+import type * as aiReadingTogetherPublication20260910 from "../aiReadingTogetherPublication20260910.js";
 import type * as aiSevenStoriesPublication20260910 from "../aiSevenStoriesPublication20260910.js";
 import type * as aiTwoStoriesPublication20260910 from "../aiTwoStoriesPublication20260910.js";
 import type * as animationPlan from "../animationPlan.js";
@@ -62,6 +63,8 @@ import type * as lib_aiPublicationReleaseData from "../lib/aiPublicationReleaseD
 import type * as lib_aiPublicationSuccessor20260909AuditArtifact from "../lib/aiPublicationSuccessor20260909AuditArtifact.js";
 import type * as lib_aiPublicationSuccessor20260909Data from "../lib/aiPublicationSuccessor20260909Data.js";
 import type * as lib_aiPublicationVisibility from "../lib/aiPublicationVisibility.js";
+import type * as lib_aiReadingTogetherPublication20260910Artifact from "../lib/aiReadingTogetherPublication20260910Artifact.js";
+import type * as lib_aiReadingTogetherPublication20260910Data from "../lib/aiReadingTogetherPublication20260910Data.js";
 import type * as lib_aiSevenStoriesPreservation from "../lib/aiSevenStoriesPreservation.js";
 import type * as lib_aiSevenStoriesPublication20260910Artifact from "../lib/aiSevenStoriesPublication20260910Artifact.js";
 import type * as lib_aiSevenStoriesPublication20260910Data from "../lib/aiSevenStoriesPublication20260910Data.js";
@@ -193,6 +196,7 @@ declare const fullApi: ApiFromModules<{
   aiEarlyMathPublication20260910: typeof aiEarlyMathPublication20260910;
   aiPublication: typeof aiPublication;
   aiPublicationSuccessor20260909: typeof aiPublicationSuccessor20260909;
+  aiReadingTogetherPublication20260910: typeof aiReadingTogetherPublication20260910;
   aiSevenStoriesPublication20260910: typeof aiSevenStoriesPublication20260910;
   aiTwoStoriesPublication20260910: typeof aiTwoStoriesPublication20260910;
   animationPlan: typeof animationPlan;
@@ -240,6 +244,8 @@ declare const fullApi: ApiFromModules<{
   "lib/aiPublicationSuccessor20260909AuditArtifact": typeof lib_aiPublicationSuccessor20260909AuditArtifact;
   "lib/aiPublicationSuccessor20260909Data": typeof lib_aiPublicationSuccessor20260909Data;
   "lib/aiPublicationVisibility": typeof lib_aiPublicationVisibility;
+  "lib/aiReadingTogetherPublication20260910Artifact": typeof lib_aiReadingTogetherPublication20260910Artifact;
+  "lib/aiReadingTogetherPublication20260910Data": typeof lib_aiReadingTogetherPublication20260910Data;
   "lib/aiSevenStoriesPreservation": typeof lib_aiSevenStoriesPreservation;
   "lib/aiSevenStoriesPublication20260910Artifact": typeof lib_aiSevenStoriesPublication20260910Artifact;
   "lib/aiSevenStoriesPublication20260910Data": typeof lib_aiSevenStoriesPublication20260910Data;
