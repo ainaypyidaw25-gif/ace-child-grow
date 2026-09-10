@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   assessAiPublication,
   assessAiPublicationSuccessor,
+  assessSixPictureStoriesPostflight,
   assessOwnerMerge,
   assessOwnerMergeV2,
   currentLegalTermsReadiness,
@@ -196,6 +197,80 @@ describe('production release readiness classification', () => {
     })).toMatchObject({
       level: 'blocked',
       code: 'ai_publication_successor_blocked',
+    });
+  });
+
+  it('passes only the exact current six-picture-story postflight', () => {
+    const identity = {
+      releaseRoot: '2026-09-10-six-picture-stories-ai-preview-v1',
+      artifactHash: 'a'.repeat(64),
+      snapshotSha256: 'b'.repeat(64),
+    };
+    expect(assessSixPictureStoriesPostflight({
+      ...identity,
+      phase: 'enabled',
+      activeReleaseCount: 24,
+      previousReadable: true,
+      expiryScheduleExact: true,
+      parentReadable: true,
+      blockers: [],
+      targets: [
+        { slug: 'act_picture_story_2_5y', reviewRevision: 6, parentReadable: true },
+        { slug: 'act_picture_story_3y', reviewRevision: 6, parentReadable: true },
+        { slug: 'act_picture_story_3_5y', reviewRevision: 7, parentReadable: true },
+        { slug: 'act_picture_story_4y', reviewRevision: 6, parentReadable: true },
+        { slug: 'act_picture_story_4_5y', reviewRevision: 6, parentReadable: true },
+        { slug: 'act_picture_story_5y', reviewRevision: 6, parentReadable: true },
+      ],
+    }, identity)).toMatchObject({
+      level: 'pass',
+      code: 'ai_six_picture_stories_postflight_exact',
+    });
+  });
+
+  it.each([
+    'identity',
+    'phase',
+    'count',
+    'previous',
+    'expiry',
+    'parent',
+    'target',
+    'blocker',
+  ] as const)('fails closed when current six-picture-story postflight drifts: %s', (drift) => {
+    const identity = {
+      releaseRoot: '2026-09-10-six-picture-stories-ai-preview-v1',
+      artifactHash: 'a'.repeat(64),
+      snapshotSha256: 'b'.repeat(64),
+    };
+    const snapshot = {
+      ...identity,
+      phase: 'enabled' as const,
+      activeReleaseCount: 24,
+      previousReadable: true,
+      expiryScheduleExact: true,
+      parentReadable: true,
+      blockers: [] as string[],
+      targets: [
+        { slug: 'act_picture_story_2_5y', reviewRevision: 6, parentReadable: true },
+        { slug: 'act_picture_story_3y', reviewRevision: 6, parentReadable: true },
+        { slug: 'act_picture_story_3_5y', reviewRevision: 7, parentReadable: true },
+        { slug: 'act_picture_story_4y', reviewRevision: 6, parentReadable: true },
+        { slug: 'act_picture_story_4_5y', reviewRevision: 6, parentReadable: true },
+        { slug: 'act_picture_story_5y', reviewRevision: 6, parentReadable: true },
+      ],
+    };
+    if (drift === 'identity') snapshot.artifactHash = 'c'.repeat(64);
+    if (drift === 'phase') (snapshot as { phase: string }).phase = 'staged';
+    if (drift === 'count') snapshot.activeReleaseCount = 23;
+    if (drift === 'previous') snapshot.previousReadable = false;
+    if (drift === 'expiry') snapshot.expiryScheduleExact = false;
+    if (drift === 'parent') snapshot.parentReadable = false;
+    if (drift === 'target') snapshot.targets[2].reviewRevision = 6;
+    if (drift === 'blocker') snapshot.blockers.push('runtime drift');
+    expect(assessSixPictureStoriesPostflight(snapshot as never, identity)).toMatchObject({
+      level: 'blocked',
+      code: 'ai_six_picture_stories_postflight_blocked',
     });
   });
 
