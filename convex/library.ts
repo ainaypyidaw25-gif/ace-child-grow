@@ -36,6 +36,7 @@ import { isBirth2mNutritionCasTargetSlug } from './lib/birth2mNutritionCasData';
 import { isClinicalTwoSmallCasTargetSlug } from './lib/clinicalTwoSmallCasGuard';
 import { isBirth2mGrossMotorCorrectionSlug } from './lib/birth2mGrossMotorCorrection';
 import { isBookActivityAttributionCorrectionSlug } from './lib/bookActivityAttributionCorrection';
+import { isSevenStoryCorrectionSlug } from './lib/sevenStoryCorrectionScope';
 import { isNutritionGuidesCasTargetSlug } from './lib/nutritionGuidesCasData';
 import { isOlderSafety2026ContentTargetSlug } from './lib/olderSafety2026CasData';
 import {
@@ -626,6 +627,7 @@ export const importSeed = mutation({
         || isBirth2mNutritionCasTargetSlug(it.slug)
         || isBirth2mGrossMotorCorrectionSlug(it.slug)
         || isBookActivityAttributionCorrectionSlug(it.slug)
+        || isSevenStoryCorrectionSlug(it.slug)
         || isOlderSafety2026ContentTargetSlug(it.slug)
         || isGdBirth2mEmotionalCasContentSlug(it.slug)
         || isUnicefSeenCountedConsumerSlug(it.slug)
