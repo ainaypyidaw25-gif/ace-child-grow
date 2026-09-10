@@ -276,8 +276,16 @@ async function main() {
       return out;
     };
     const sourceById = new Map(sources.map(source => [source.sourceId, source]));
-    const contentByTarget = new Map(content.map(row => [row.type + '\\u0000' + row.slug, row]));
-    const releaseByTarget = new Map(releases.map(row => [row.contentType + '\\u0000' + row.contentSlug, row]));
+    const groupByTarget = (rows, keyFor) => {
+      const grouped = new Map();
+      for (const row of rows) {
+        const key = keyFor(row);
+        grouped.set(key, [...(grouped.get(key) ?? []), row]);
+      }
+      return grouped;
+    };
+    const contentByTarget = groupByTarget(content, row => row.type + '\\u0000' + row.slug);
+    const releaseByTarget = groupByTarget(releases, row => row.contentType + '\\u0000' + row.contentSlug);
     const releaseSourceState = [];
     for (const release of releases) {
       for (const snapshot of release.sourceSnapshots) {
@@ -293,8 +301,10 @@ async function main() {
     }
     const sourceDependencies = links.flatMap(link => link.sourceIds.map(sourceId => {
       const targetKey = link.kind + '\\u0000' + link.slug;
-      const linkedContent = contentByTarget.get(targetKey) ?? null;
-      const release = releaseByTarget.get(targetKey) ?? null;
+      const contentMatches = contentByTarget.get(targetKey) ?? [];
+      const releaseMatches = releaseByTarget.get(targetKey) ?? [];
+      const linkedContent = contentMatches[0] ?? null;
+      const release = releaseMatches[0] ?? null;
       const source = sourceById.get(sourceId) ?? null;
       const snapshot = release?.sourceSnapshots.find(row => row.sourceId === sourceId) ?? null;
       return {
@@ -302,6 +312,7 @@ async function main() {
         contentSlug: link.slug,
         contentStatus: linkedContent?.clinicalStatus ?? null,
         contentExists: linkedContent !== null,
+        targetJoinExact: contentMatches.length <= 1 && releaseMatches.length <= 1,
         aiReleaseActive: release?.status === 'active',
         aiSourceSnapshotExact: Boolean(
           source
@@ -377,6 +388,9 @@ async function main() {
     dependencies: registry.sourceDependencies,
   });
   for (const finding of [
+    evidenceReadiness.duplicateSources,
+    evidenceReadiness.missingSources,
+    evidenceReadiness.ambiguousTargets,
     evidenceReadiness.conventionalPublic,
     evidenceReadiness.aiPreview,
     evidenceReadiness.unpublishedBacklog,

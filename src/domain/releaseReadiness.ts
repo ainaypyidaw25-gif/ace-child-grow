@@ -352,17 +352,24 @@ export type EvidenceSourceReadinessSnapshot = {
     contentSlug: string;
     contentStatus: string | null;
     contentExists: boolean;
+    targetJoinExact: boolean;
     aiReleaseActive: boolean;
     aiSourceSnapshotExact: boolean;
   }>;
 };
 
 export type EvidenceSourceReadinessAssessment = {
+  duplicateSources: ReadinessFinding;
+  missingSources: ReadinessFinding;
+  ambiguousTargets: ReadinessFinding;
   conventionalPublic: ReadinessFinding;
   aiPreview: ReadinessFinding;
   unpublishedBacklog: ReadinessFinding;
   unlinked: ReadinessFinding;
   sourceIds: {
+    duplicate: string[];
+    missing: string[];
+    ambiguousTarget: string[];
     blockedConventionalPublic: string[];
     blockedAiPreview: string[];
     exactAiPreview: string[];
@@ -381,12 +388,32 @@ export function assessEvidenceSourceReadiness(
   snapshot: EvidenceSourceReadinessSnapshot,
 ): EvidenceSourceReadinessAssessment {
   const categories = {
+    duplicate: new Set<string>(),
+    missing: new Set<string>(),
+    ambiguousTarget: new Set<string>(),
     blockedConventionalPublic: new Set<string>(),
     blockedAiPreview: new Set<string>(),
     exactAiPreview: new Set<string>(),
     unpublishedBacklog: new Set<string>(),
     unlinked: new Set<string>(),
   };
+
+  const sourceCounts = new Map<string, number>();
+  for (const source of snapshot.sources) {
+    sourceCounts.set(source.sourceId, (sourceCounts.get(source.sourceId) ?? 0) + 1);
+  }
+  for (const [sourceId, count] of sourceCounts) {
+    if (count > 1) categories.duplicate.add(sourceId);
+  }
+  const knownSourceIds = new Set(sourceCounts.keys());
+  for (const dependency of snapshot.dependencies) {
+    if (!knownSourceIds.has(dependency.sourceId)) {
+      categories.missing.add(dependency.sourceId);
+    }
+    if (!dependency.targetJoinExact) {
+      categories.ambiguousTarget.add(dependency.sourceId);
+    }
+  }
 
   for (const source of snapshot.sources) {
     if (source.reviewStatus === 'approved') continue;
@@ -442,6 +469,39 @@ export function assessEvidenceSourceReadiness(
   const count = (values: string[]) => values.length;
 
   return {
+    duplicateSources: count(ids.duplicate) > 0
+      ? {
+          level: 'blocked',
+          code: 'evidence_source_id_duplicate',
+          detail: `Evidence source IDs are not unique: ${ids.duplicate.join(', ')}.`,
+        }
+      : {
+          level: 'pass',
+          code: 'evidence_source_ids_unique',
+          detail: 'Every evidence source ID resolves to exactly one row.',
+        },
+    missingSources: count(ids.missing) > 0
+      ? {
+          level: 'blocked',
+          code: 'evidence_link_source_missing',
+          detail: `Evidence links reference missing source rows: ${ids.missing.join(', ')}.`,
+        }
+      : {
+          level: 'pass',
+          code: 'evidence_link_sources_exist',
+          detail: 'Every evidence-link source ID resolves to an evidence source row.',
+        },
+    ambiguousTargets: count(ids.ambiguousTarget) > 0
+      ? {
+          level: 'blocked',
+          code: 'evidence_target_join_ambiguous',
+          detail: `Evidence-link targets have duplicate content or active release rows: ${ids.ambiguousTarget.join(', ')}.`,
+        }
+      : {
+          level: 'pass',
+          code: 'evidence_target_joins_exact',
+          detail: 'Every evidence-link target resolves without duplicate content or active release rows.',
+        },
     conventionalPublic: count(ids.blockedConventionalPublic) > 0
       ? {
           level: 'blocked',

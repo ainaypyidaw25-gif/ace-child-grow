@@ -292,6 +292,7 @@ describe('production release readiness classification', () => {
         contentSlug: 'published-guide',
         contentStatus: 'published',
         contentExists: true,
+        targetJoinExact: true,
         aiReleaseActive: false,
         aiSourceSnapshotExact: false,
       }],
@@ -305,6 +306,54 @@ describe('production release readiness classification', () => {
     ]);
   });
 
+  it('blocks an evidence link whose source row is missing', () => {
+    const assessment = assessEvidenceSourceReadiness({
+      aiPublicationExact: true,
+      sources: [],
+      dependencies: [{
+        sourceId: 'missing-source',
+        contentSlug: 'published-guide',
+        contentStatus: 'published',
+        contentExists: true,
+        targetJoinExact: true,
+        aiReleaseActive: false,
+        aiSourceSnapshotExact: false,
+      }],
+    });
+    expect(assessment.missingSources).toMatchObject({
+      level: 'blocked',
+      code: 'evidence_link_source_missing',
+    });
+    expect(assessment.sourceIds.missing).toEqual(['missing-source']);
+  });
+
+  it('blocks duplicate source IDs and ambiguous target joins', () => {
+    const assessment = assessEvidenceSourceReadiness({
+      aiPublicationExact: true,
+      sources: [
+        { sourceId: 'duplicate-source', reviewStatus: 'awaiting_review' },
+        { sourceId: 'duplicate-source', reviewStatus: 'awaiting_review' },
+      ],
+      dependencies: [{
+        sourceId: 'duplicate-source',
+        contentSlug: 'duplicate-target',
+        contentStatus: 'clinical_review',
+        contentExists: true,
+        targetJoinExact: false,
+        aiReleaseActive: false,
+        aiSourceSnapshotExact: false,
+      }],
+    });
+    expect(assessment.duplicateSources).toMatchObject({
+      level: 'blocked',
+      code: 'evidence_source_id_duplicate',
+    });
+    expect(assessment.ambiguousTargets).toMatchObject({
+      level: 'blocked',
+      code: 'evidence_target_join_ambiguous',
+    });
+  });
+
   it('allows an awaiting source only through an exact disclosed AI gate', () => {
     const input = {
       aiPublicationExact: true,
@@ -314,6 +363,7 @@ describe('production release readiness classification', () => {
         contentSlug: 'ai-preview',
         contentStatus: 'clinical_review',
         contentExists: true,
+        targetJoinExact: true,
         aiReleaseActive: true,
         aiSourceSnapshotExact: true,
       }],
@@ -350,6 +400,7 @@ describe('production release readiness classification', () => {
         contentSlug: 'clinical-review-guide',
         contentStatus: 'clinical_review',
         contentExists: true,
+        targetJoinExact: true,
         aiReleaseActive: false,
         aiSourceSnapshotExact: false,
       }],
