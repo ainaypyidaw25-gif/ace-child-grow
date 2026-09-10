@@ -168,7 +168,7 @@ export const GUIDES: SeedItem[] = [
 
   guide('3y', 'social', {
     title: b('၃ နှစ် — လူမှုဆက်ဆံရေး', '3 years — Social'),
-    why: b('အလှည့်ကျ ကစားခြင်းနှင့် ဝေမျှခြင်းသည် သူငယ်ချင်းဖွဲ့မှုနှင့် ကျောင်းဘဝအတွက် ပြင်ဆင်ပေးသည်။', 'Turn-taking and sharing prepare for friendships and school.'),
+    why: b('အခြားကလေးများနှင့် ကစားခြင်းသည် ဝေမျှခြင်း၊ မိတ်ဆွေဖွဲ့ခြင်းနှင့် သင့်မြတ်စွာ ပေါင်းသင်းခြင်းကို လေ့ကျင့်ရန် အထောက်အကူပြုပါသည်။', 'Playing with other children helps children practise sharing, friendship, and getting along.'),
     observationQuestions: [
       b('အခြားကလေးများနှင့် အတူ ကစားပါသလား။', 'Plays alongside/with other children?'),
       b('အလှည့်စောင့်ရန် ကြိုးစားပါသလား။', 'Tries to take turns?'),
@@ -182,30 +182,30 @@ export const GUIDES: SeedItem[] = [
     safety: b("ကစားစဉ် ကြီးကြပ်၍ ဘေးကင်းစေပါ။ အစာတစ်ဆို့ခြင်း အန္တရာယ်သည် အသက် ၄ နှစ်အထိ ဆက်ရှိပါသည် — လမ်းလျှောက်တတ်၊ စကားပြောတတ်ပြီဆိုသော်လည်း အန္တရာယ် မကုန်သေးပါ။ စပျစ်သီးနှင့် ချယ်ရီခရမ်းချဉ်သီးများကို အလျားလိုက် လေးစိတ် ခွဲပေးပါ။ အခွံမာသီး အလုံးလိုက်၊ ပြောင်းဖူးပေါက်ပေါက်၊ မာကျောသော သကြားလုံး၊ အစေ့အဆန်များနှင့် မုန်လာဥနီ အစိမ်းများကို အသက် ၄ နှစ်အောက် ကလေးများအား မပေးပါနှင့်။ အမြဲ ထိုင်၍ စားခိုင်းပြီး စားနေစဉ် အနားတွင် ရှိပါ။", "Supervise group play for safety. Choking remains a risk until about age 4 — walking and talking do not end it. Cut grapes and cherry tomatoes into quarters lengthwise. Do not give whole nuts, popcorn, hard sweets, seeds or raw carrot to a child under 4. Always have your child sit to eat, and stay with them while they eat."),
     commonMistakes: [b('ဝေမျှခြင်းကို အတင်းအကျပ် ခိုင်းခြင်း — နမူနာပြခြင်းက ပိုကောင်းသည်။', 'Forcing sharing — modeling works better.')],
     parentTips: [b('ကြင်နာသော အပြုအမူကို တိတိကျကျ ချီးမွမ်း၍ အားပေးပါ။', 'Praise kind behavior specifically.')],
-    faq: [{ q: b('တစ်ယောက်တည်း ကစားရင် ပြဿနာလား။', 'Is solo play a problem?'), a: b('မဟုတ်ပါ — တစ်ယောက်တည်း ကစားခြင်းသည်လည်း ကျန်းမာသော ဖွံ့ဖြိုးမှုဖြစ်သည်။', 'No — solo play is also healthy.') }],
+    faq: [{ q: b('၃ နှစ်အရွယ်တွင် အခြားကလေးများနှင့် မပေါင်းကစားသေးပါက ဘာလုပ်ရမလဲ။', 'What if my 3-year-old is not joining other children to play?'), a: b('CDC သည် အခြားကလေးများကို သတိပြု၍ သူတို့နှင့်အတူ ကစားခြင်းကို ၃ နှစ်အရွယ် ဖွံ့ဖြိုးမှုမှတ်တိုင်တစ်ခုအဖြစ် ဖော်ပြထားပါသည်။ ဤအရာကို မတွေ့ရပါက သို့မဟုတ် စိုးရိမ်ပါက ကလေး၏ ဆရာဝန်နှင့် တိုင်ပင်ပါ။ ဤဖွံ့ဖြိုးမှုမှတ်တိုင်စာရင်းသည် စံသတ်မှတ်၍ အတည်ပြုထားသော ဖွံ့ဖြိုးမှုစစ်ဆေးရေးကိရိယာကို အစားမထိုးနိုင်ပါ။', 'CDC lists noticing other children and joining them to play as a 3-year milestone. If you do not see this or you are concerned, talk with your child’s doctor. This milestone checklist is not a substitute for a standardized, validated developmental screening tool.') }],
     redFlags: [b('၃ နှစ်အရွယ်တွင် အခြားကလေးများကို သတိမပြုခြင်း သို့မဟုတ် ၎င်းတို့နှင့် ကစားရန် လုံးဝ မပါဝင်ခြင်း။', 'By 3 years: does not notice other children or join them to play.')],
     referral: b('လူမှုဆက်ဆံရေး စိုးရိမ်စရာ တွေ့ပါက ကလေးကျန်းမာရေးဆရာဝန်နှင့် တိုင်ပင်ပါ။', 'If concerned about social development, consult a pediatrician.'),
-    encouragement: b('လူမှုကျွမ်းကျင်မှုသည် ကစားရင်း တဖြည်းဖြည်း သင်ယူရသော ကျွမ်းကျင်မှုဖြစ်သည်။', 'Social skills are learned gradually through play.'),
+    encouragement: b('အခြားကလေးများနှင့် ကစားခွင့်ပေးခြင်းက ဝေမျှခြင်းနှင့် မိတ်ဆွေဖွဲ့ခြင်းကို လေ့ကျင့်ရန် အထောက်အကူပြုပါသည်။', 'Playing with other children gives your child practice with sharing and friendship.'),
   }),
 
   guide('2_5y', 'emotional', {
     title: b('၂ နှစ်ခွဲ — စိတ်ခံစားမှု', '2.5 years — Emotional'),
     why: b('ခံစားချက်ကို စကားလုံးဖြင့် ဖော်ပြပြီး ထိန်းညှိနည်း သင်ယူခြင်းသည် စိတ်ခံစားမှု ကျန်းမာရေးအတွက် အရေးကြီးပါသည်။', 'Learning to name and cope with feelings is important for emotional health.'),
     observationQuestions: [
-      b('ခံစားမှု အနည်းငယ်ကို စကားဖြင့် ပြောပါသလား။', 'Names a few feelings?'),
-      b('စိတ်တိုငိုပြီးနောက် ပြန်ငြိမ်နိုင်ပါသလား။', 'Calms down after a tantrum?'),
+      b('ကလေးက ခံစားချက်များကို မည်သို့ ပြသ သို့မဟုတ် ပြောဆိုပါသလဲ။', 'How does your child show or communicate feelings?'),
+      b('ပြင်းထန်သော ခံစားချက်ပြီးနောက် ဘာက ကလေးကို ပြန်ငြိမ်စေပါသလဲ။', 'What helps your child become calm after intense feelings?'),
     ],
     dailyActivities: [b('ကလေး၏ ခံစားချက်ကို စကားလုံးဖြင့် ပြောပြပေးပါ။ ဥပမာ—“သားသား စိတ်ဆိုးနေတယ်နော်”။', 'Name your child’s feelings (“you feel angry”).')],
-    indoor: [b('ခံစားမှု မျက်နှာ ပုံများဖြင့် ကစားပါ။', 'Play with feeling-face cards.')],
-    outdoor: [b('စွမ်းအင်ထုတ်ရန် ပြေးခုန် ကစားစေပါ။', 'Let them run to release energy.')],
-    lowCost: [b('မျက်နှာ ပုံ ၄ မျိုးကို ကိုယ်တိုင်ဆွဲ၍ ကစားပါ။', 'Draw four feeling faces to play with.')],
+    indoor: [b('ရိုးရှင်းသော ခံစားမှုမျက်နှာပုံများကို အတူကြည့်ပြီး ခံစားချက်တစ်ခုစီကို အမည်တပ်ပါ။', 'Look at simple feeling faces together and name each emotion.')],
+    outdoor: [b('အတူတူ ခဏလမ်းလျှောက်ပြီး မြင်တွေ့သည့်အရာများနှင့် ခံစားချက်များကို ပြောပါ။', 'Take a short walk together and talk about what you notice and feel.')],
+    lowCost: [b('ရိုးရှင်းသော ခံစားမှု မျက်နှာပုံများကို ကိုယ်တိုင်ဆွဲပြီး ခံစားချက်တစ်ခုစီကို အမည်တပ်ပါ။', 'Draw simple feeling faces and name each emotion.')],
     materials: b('ခံစားမှု ကတ်ပြား/ပုံ။', 'Feeling cards or drawings.'),
     safety: b('ကလေး စိတ်ခံစားမှု ပြင်းထန်နေစဉ် ဘေးကင်းအောင် ထားပါ။', 'Keep the child safe during big feelings.'),
     commonMistakes: [b('ခံစားမှုကို “မဖြစ်သင့်” ဟု ဆိုခြင်း — ခံစားမှုကို အသိအမှတ်ပြုပါ။', 'Dismissing feelings — acknowledge them instead.')],
     parentTips: [b('တည်ငြိမ်စွာ ရှိနေခြင်းက ကလေးကို ငြိမ်သက်ရန် သင်ပေးသည်။', 'Your calm teaches their calm.')],
     faq: [{ q: b('ကလေး စိတ်တိုပြီး ငိုကြွေးတတ်ခြင်းသည် ပုံမှန်လား။', 'Are tantrums normal?'), a: b('ဤအရွယ်တွင် မကြာခဏ တွေ့ရတတ်ပါသည်။ ကလေးသည် မိမိခံစားချက်ကို ထိန်းညှိနိုင်ရန် သင်ယူနေဆဲ ဖြစ်သည်။', 'Yes, at this age — they are practicing self-control.') }],
-    redFlags: [b('မကြာခဏ ကိုယ်ကို/သူတစ်ပါးကို ထိခိုက်စေခြင်း သို့မဟုတ် လုံးဝ မငြိမ်နိုင်ခြင်း။', 'Frequent self-harm/harm to others, or never able to calm.')],
-    referral: b('စိတ်ခံစားမှု ပြင်းထန်စွာ စိုးရိမ်ပါက ကလေးကျန်းမာရေးဆရာဝန် သို့မဟုတ် ကလေးစိတ်ပညာရှင်နှင့် တိုင်ပင်ပါ။', 'If very concerned, consult a pediatrician or child psychologist.'),
+    redFlags: [b('အပြုအမူကြောင့် ကလေး သို့မဟုတ် အခြားသူ တစ်ဦးဦး ထိခိုက်နိုင်သည့် အန္တရာယ်ရှိခြင်း သို့မဟုတ် ခံစားချက်/အပြုအမူကို သင် စိုးရိမ်ခြင်း။', 'Behavior that puts the child or someone else in danger, or any emotional or behavioral concern you have.')],
+    referral: b('ချက်ချင်း အန္တရာယ်ရှိပါက လူတိုင်းကို ဘေးကင်းအောင် ဦးစွာထားပြီး ဒေသရှိ အရေးပေါ်အကူအညီကို ရယူပါ။ အခြား စိတ်ခံစားမှု သို့မဟုတ် အပြုအမူ စိုးရိမ်ချက်များအတွက် ကလေး၏ ဆရာဝန် သို့မဟုတ် အရည်အချင်းပြည့်မီသော ကလေးစိတ်ကျန်းမာရေးပညာရှင်နှင့် တိုင်ပင်ပါ။', 'If there is immediate danger, first keep everyone safe and get local emergency help. For other emotional or behavioral concerns, talk with your child’s doctor or a qualified child mental-health professional.'),
     encouragement: b('ခံစားမှုကို လက်ခံပေးခြင်းဖြင့် ကလေးသည် လုံခြုံစိတ်ချရသည်။', 'Accepting feelings helps a child feel safe.'),
   }),
 

@@ -453,7 +453,7 @@ const GUIDES_B: SeedItem[] = [
       ),
       encouragement: b('သင်နှင့် ကလေး၏ ဆက်ဆံရေးသည် အကောင်းဆုံး သင်ခန်းစာ ဖြစ်သည်။', 'Your relationship is your baby’s best classroom.'),
     }),
-    'Face preference, the timing range for a social smile and postnatal parental mental-health support follow CDC milestone guidance, the WHO nurturing care framework, NICE postnatal care guidance and the Head Start early-learning framework in the registry.',
+    'Face preference, the timing range for a social smile and postnatal parental mental-health support follow CDC milestone guidance, the WHO nurturing care framework and NICE postnatal care guidance in the registry.',
   ),
 ];
 

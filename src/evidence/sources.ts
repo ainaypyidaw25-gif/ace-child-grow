@@ -550,6 +550,8 @@ export const GOVERNMENT_SOURCES: EvidenceSource[] = [
     year: 2015,
     country: 'United States',
     url: 'https://headstart.gov/sites/default/files/pdf/elof-ohs-framework.pdf',
+    // Desired registry state only. An existing Production row remains unchanged
+    // until a named evidence editor records an authenticated retirement.
     reviewStatus: 'retired',
     evidenceLevel: 'expert_consensus',
     keywords: ['early learning outcomes', 'early mathematics', 'social development', 'emotional development', 'school readiness'],
@@ -1236,6 +1238,23 @@ export const CDC_SOURCES: EvidenceSource[] = [
       'CDC Act Early page shows the title and a page "last reviewed" date in 2026; `year` records that reviewed year, not an original publication year.',
   }),
   s({
+    id: 'cdc-milestones-3-years-2026',
+    org: 'Centers for Disease Control and Prevention',
+    orgKey: 'CDC',
+    title: 'Milestones by 3 Years',
+    year: 2026,
+    country: 'United States',
+    url: 'https://www.cdc.gov/act-early/milestones/3-years.html',
+    evidenceLevel: 'parent_education',
+    keywords: ['3 years', 'developmental milestones', 'social play', 'act early'],
+    topics: ['milestones', 'social_emotional', 'parenting'],
+    ageMonthsMin: 36,
+    ageMonthsMax: 36,
+    verifiedOn: '2026-09-10',
+    verifiedNote:
+      'The official CDC page prints this exact title and “May 15, 2026.” It defines milestones as things most children (75% or more) can do by an age, lists noticing other children and joining them to play at 3 years, advises encouraging play with other children, and tells caregivers to act early and talk with the child’s doctor if a milestone is absent or there is another concern. The checklist is not a standardized screening tool.',
+  }),
+  s({
     id: 'cdc-milestone-checklists-2025',
     org: 'Centers for Disease Control and Prevention',
     orgKey: 'CDC',
@@ -1333,6 +1352,23 @@ export const CDC_SOURCES: EvidenceSource[] = [
     verifiedOn: '2026-08-31',
     verifiedNote:
       'The official CDC page prints this exact title and “Jan. 29, 2026.” It says children in this age band imitate adults, and its Child safety first section says dangerous situations can happen quickly, instructs adults to keep a close eye on the child, and requires someone to watch the child near or around water. This source is limited to ages 24–47 months and to adult modelling, close supervision, and the safety statements printed on the page.',
+  }),
+  s({
+    id: 'cdc-emotion-coaching-toddlers-preschoolers-2026',
+    org: 'Centers for Disease Control and Prevention',
+    orgKey: 'CDC',
+    title: 'Tips for Noticing and Naming Emotions',
+    year: 2026,
+    country: 'United States',
+    url: 'https://www.cdc.gov/parenting-toddlers/noticing-and-naming/emotion-coaching.html',
+    evidenceLevel: 'parent_education',
+    keywords: ['emotion coaching', 'naming feelings', 'tantrums', 'self-regulation', 'safety'],
+    topics: ['parenting', 'social_emotional', 'mental_health'],
+    ageMonthsMin: 24,
+    ageMonthsMax: 59,
+    verifiedOn: '2026-09-10',
+    verifiedNote:
+      'The official CDC page prints this exact title and “Apr. 30, 2026” and identifies its Essentials for Parenting scope as children ages 2–4. It says tantrums and emotional outbursts are common, instructs caregivers to ensure safety and remain calm, and gives five emotion-coaching steps: notice, connect, listen, name the emotion and find good solutions. It also recommends accepting feelings while setting limits on harmful behaviour and modelling calm self-regulation.',
   }),
   s({
     id: 'cdc-positive-parenting-preschoolers-2026',

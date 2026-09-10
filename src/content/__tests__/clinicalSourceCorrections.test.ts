@@ -147,6 +147,73 @@ describe('clinically sourced content corrections', () => {
     expect(flags[0].en).not.toContain('no pointing');
   });
 
+  it('binds the 3-year social guide to exact current official claims', () => {
+    expect(SOURCE_BY_ID.get('cdc-milestones-3-years-2026')).toMatchObject({
+      orgKey: 'CDC',
+      title: 'Milestones by 3 Years',
+      year: 2026,
+      url: 'https://www.cdc.gov/act-early/milestones/3-years.html',
+      ageMonthsMin: 36,
+      ageMonthsMax: 36,
+      verifiedOn: '2026-09-10',
+      reviewStatus: 'awaiting_review',
+    });
+    expect(SOURCE_BY_ID.get('cdc-milestones-3-years-2026')?.verifiedNote).toContain(
+      'noticing other children and joining them to play',
+    );
+
+    expect(sourcesForContent('gd_3y_social', 'guide')).toEqual([
+      'cdc-milestones-3-years-2026',
+      'cdc-positive-parenting-toddlers-2-3-2026',
+      'cdc-positive-parenting-preschoolers-2026',
+      'hc-choking-prevention-2026',
+    ]);
+
+    const social = dataFor('gd_3y_social');
+    const answer = (social.faq as Array<{ a: { en: string } }>)[0].a.en;
+    expect(answer).toContain('noticing other children and joining them to play');
+    expect(answer).toContain(
+      'not a substitute for a standardized, validated developmental screening tool',
+    );
+    expect(JSON.stringify(social)).not.toContain('solo play is also healthy');
+  });
+
+  it('binds the 2.5-year emotional guide to current official emotion-coaching claims', () => {
+    expect(SOURCE_BY_ID.get('cdc-emotion-coaching-toddlers-preschoolers-2026')).toMatchObject({
+      orgKey: 'CDC',
+      title: 'Tips for Noticing and Naming Emotions',
+      year: 2026,
+      url: 'https://www.cdc.gov/parenting-toddlers/noticing-and-naming/emotion-coaching.html',
+      ageMonthsMin: 24,
+      ageMonthsMax: 59,
+      verifiedOn: '2026-09-10',
+      reviewStatus: 'awaiting_review',
+    });
+    expect(
+      SOURCE_BY_ID.get('cdc-emotion-coaching-toddlers-preschoolers-2026')?.verifiedNote,
+    ).toContain('tantrums and emotional outbursts are common');
+
+    expect(sourcesForContent('gd_2_5y_emotional', 'guide')).toEqual([
+      'cdc-emotion-coaching-toddlers-preschoolers-2026',
+      'hc-mental-emotional-development-2026',
+    ]);
+
+    const emotional = JSON.stringify(dataFor('gd_2_5y_emotional'));
+    expect(emotional).toContain('first keep everyone safe and get local emergency help');
+    expect(emotional).toContain('qualified child mental-health professional');
+    expect(emotional).not.toContain('release energy');
+    expect(emotional).not.toContain('never able to calm');
+  });
+
+  it('does not advertise the retired Head Start framework in guide summaries', () => {
+    for (const row of seedPayload()) {
+      const summary = (row.data as { evidenceSummary?: unknown }).evidenceSummary;
+      if (typeof summary === 'string') {
+        expect(summary, row.slug).not.toContain('Head Start');
+      }
+    }
+  });
+
   it('uses current media evidence and preserves the responsive video-call exception', () => {
     const screenLesson = dataFor('lsn_screen_time');
     expect((screenLesson.body as { en: string }).en).toContain(

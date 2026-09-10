@@ -717,7 +717,7 @@ const GUIDES_C: SeedItem[] = [
         'Every time she looks back at you, she is saying that you matter to her.',
       ),
     }),
-    'Imitation, waving, turn-taking games and shared attention at 10–12 months follow CDC and AAP milestone guidance, the Nurturing Care Framework, the Head Start early-learning framework and AAP guidance on the power of play in the registry.',
+    'Imitation, waving, turn-taking games and shared attention at 10–12 months follow CDC and AAP milestone guidance, the Nurturing Care Framework and AAP guidance on the power of play in the registry.',
   ),
 ];
 
@@ -791,7 +791,7 @@ const GUIDES_D: SeedItem[] = [
         'Your steady presence is the strongest emotional protection she has.',
       ),
     }),
-    'Caregiver-supported settling and responsive care follow the AAP report on early relational health and toxic stress, the Nurturing Care Framework, the NICE postnatal care guideline, the Head Start early-learning framework and the general paediatrics textbook in the registry.',
+    'Caregiver-supported settling and responsive care follow the AAP report on early relational health and toxic stress, the Nurturing Care Framework, the NICE postnatal care guideline and the general paediatrics textbook in the registry.',
   ),
   kb(
     guide('10_12m', 'self_help', {
