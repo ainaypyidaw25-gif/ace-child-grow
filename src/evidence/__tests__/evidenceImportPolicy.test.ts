@@ -48,6 +48,17 @@ describe('evidence import review policy', () => {
     });
   });
 
+  it('does not treat a static retired status as an authenticated retirement', () => {
+    expect(evidenceImportReviewPolicy('awaiting_review', 'retired', false, false)).toEqual({
+      resetReview: false,
+      reviewStatus: 'awaiting_review',
+    });
+    expect(evidenceImportReviewPolicy('awaiting_review', 'retired', true, false)).toEqual({
+      resetReview: true,
+      reviewStatus: 'awaiting_review',
+    });
+  });
+
   it('preserves every human review field on an identical import', () => {
     expect(evidenceImportReviewFields(approved, 'awaiting_review', false, null)).toEqual(approved);
   });

@@ -539,7 +539,7 @@ const GUIDES_C: SeedItem[] = [
         'When she chooses you, that is the trust you built showing itself.',
       ),
     }),
-    'Recognising familiar people and early stranger wariness at 5–6 months follow CDC and AAP milestone guidance, the WHO/UNICEF nurturing care framework, the Head Start early-learning framework and AAP guidance on the power of play.',
+    'Recognising familiar people and early stranger wariness at 5–6 months follow CDC and AAP milestone guidance, the WHO/UNICEF nurturing care framework and AAP guidance on the power of play.',
   ),
   kb(
     guide('5_6m', 'emotional', {
@@ -611,7 +611,7 @@ const GUIDES_C: SeedItem[] = [
         'Every calm response teaches her: I am safe here.',
       ),
     }),
-    'The link between responsive caregiving, parental mental health and early emotional development follows AAP guidance on toxic stress, the WHO/UNICEF nurturing care framework, NICE postnatal care guidance, the Head Start early-learning framework and standard paediatric references in the registry.',
+    'The link between responsive caregiving, parental mental health and early emotional development follows AAP guidance on toxic stress, the WHO/UNICEF nurturing care framework, NICE postnatal care guidance and standard paediatric references in the registry.',
   ),
 ];
 

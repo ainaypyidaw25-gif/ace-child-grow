@@ -573,7 +573,7 @@ const GUIDES_C: SeedItem[] = [
         'Her looking for you is proof of how much you matter.',
       ),
     }),
-    'Familiar-versus-unfamiliar discrimination and separation distress at 7–9 months follow CDC and AAP milestone guidance, the WHO/UNICEF nurturing care framework, the Head Start early-learning framework and AAP guidance on the power of play.',
+    'Familiar-versus-unfamiliar discrimination and separation distress at 7–9 months follow CDC and AAP milestone guidance, the WHO/UNICEF nurturing care framework and AAP guidance on the power of play.',
   ),
   kb(
     guide('7_9m', 'emotional', {
@@ -646,7 +646,7 @@ const GUIDES_C: SeedItem[] = [
         'Caring for yourself while caring for her is part of doing this well.',
       ),
     }),
-    'The link between responsive caregiving, parental mental health and early emotional development follows AAP guidance on toxic stress, the WHO/UNICEF nurturing care framework, NICE postnatal care guidance, the Head Start early-learning framework and standard paediatric references in the registry.',
+    'The link between responsive caregiving, parental mental health and early emotional development follows AAP guidance on toxic stress, the WHO/UNICEF nurturing care framework, NICE postnatal care guidance and standard paediatric references in the registry.',
   ),
 ];
 
