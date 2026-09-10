@@ -255,6 +255,7 @@ async function fixture() {
   const schedules = new Map<string, Row>(
     scheduleRows.map((row) => [row._id, row]),
   );
+  const reads = new Map<string, number>();
   const db = {
     system: {
       async get(id: string) {
@@ -277,6 +278,12 @@ async function fixture() {
           return q;
         },
         async take(n: number) {
+          const readKey = JSON.stringify([
+            table,
+            index,
+            conditions[0]?.[1],
+          ]);
+          reads.set(readKey, (reads.get(readKey) ?? 0) + 1);
           const stored = (tables[table] ?? []).filter((row) =>
             conditions.every(([k, v]) => row[k] === v),
           );
@@ -376,13 +383,43 @@ async function fixture() {
       throw error;
     }
   }
-  return { ctx, targets, tables, config, virtual, schedules, transaction };
+  return {
+    ctx,
+    targets,
+    tables,
+    config,
+    virtual,
+    schedules,
+    reads,
+    transaction,
+  };
 }
 afterEach(() => {
   vi.restoreAllMocks();
   vi.unstubAllEnvs();
 });
 describe("atomic exact six-picture-story AI lifecycle", () => {
+  it("shares global preservation and parent read-back across all six lanes", async () => {
+    const f = await fixture();
+    const descriptor = preservation.find(
+      (entry) =>
+        entry.table === "aiPublicationReleases" &&
+        entry.index === "by_release_id",
+    )!;
+    const report = await f.transaction(preflight, { checkedAt: now });
+    expect(report.phase).toBe("ready");
+    expect(
+      f.reads.get(
+        JSON.stringify([
+          descriptor.table,
+          descriptor.index,
+          descriptor.key,
+        ]),
+      ),
+    ).toBe(1);
+    expect(visibility.activeAiParentReadableContent).toHaveBeenCalledTimes(1);
+  });
+
   it("matches immutable full artifact and manifest hashes", async () => {
     expect(artifact.batchGeneration).toBe(batchGeneration);
     expect(aggregateActiveCap).toBe(24);

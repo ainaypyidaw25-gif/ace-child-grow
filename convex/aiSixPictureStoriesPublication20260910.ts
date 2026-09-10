@@ -23,7 +23,6 @@ import {
 } from "./lib/aiPublicationPolicy";
 import {
   activeAiParentReadableContent,
-  contentIsAiParentReadable,
 } from "./lib/aiPublicationVisibility";
 import { CLINICAL_REVIEW_BATCH_REGISTRY } from "./lib/clinicalReviewBatchData";
 import { isRegisteredReleaseContentTarget } from "./lib/clinicalReviewBatchProvenance";
@@ -213,6 +212,70 @@ async function assertCompiledEvidence() {
     }
   }
 }
+
+async function inspectBatchShared(ctx: Ctx, now: number) {
+  await assertCompiledEvidence();
+  const [preservationChecks, scheduleChecks, readable] = await Promise.all([
+    Promise.all(
+      preservation.map(async (descriptor) => {
+        let rows: { _id: unknown }[];
+        if (
+          descriptor.table === "aiPublicationReleases" &&
+          descriptor.index === "by_release_id"
+        ) {
+          rows = await ctx.db
+            .query("aiPublicationReleases")
+            .withIndex("by_release_id", (q) =>
+              q.eq("releaseId", descriptor.key),
+            )
+            .take(descriptor.count + 1);
+        } else if (
+          descriptor.table === "aiEvidenceAudits" &&
+          descriptor.index === "by_source_and_updated_at"
+        ) {
+          const audited = await ctx.db
+            .query("aiEvidenceAudits")
+            .withIndex("by_source_and_updated_at", (q) =>
+              q.eq("sourceId", descriptor.key),
+            )
+            .take(descriptor.count + 2);
+          // Only this exact release's separately validated new audit may be added.
+          rows = audited.filter(
+            (row) =>
+              !preimage.targets.some((entry) =>
+                entry.sourceIds.some(
+                  (sourceId) =>
+                    sourceId === descriptor.key &&
+                    row.runId === sixPictureStoriesSourceRunId(entry.slug, sourceId),
+                ),
+              ),
+          );
+        } else {
+          rows = await sevenStoriesPreservedRows(ctx, descriptor);
+        }
+        return (
+          rows.length === descriptor.count &&
+          (await sha256Canonical(sortedRows(rows))) === descriptor.hash
+        );
+      }),
+    ),
+    Promise.all(
+      oldSchedules.map(async (descriptor) => {
+        const row = await ctx.db.system.get(
+          descriptor.id as Id<"_scheduled_functions">,
+        );
+        return Boolean(row && (await sha256Canonical(row)) === descriptor.hash);
+      }),
+    ),
+    activeAiParentReadableContent(ctx, now),
+  ]);
+  return {
+    preservationExact:
+      preservationChecks.every(Boolean) && scheduleChecks.every(Boolean),
+    readable,
+  };
+}
+type BatchSharedInspection = Awaited<ReturnType<typeof inspectBatchShared>>;
 
 async function receipt(ctx: Ctx, phase: string) {
   return ctx.db
@@ -496,8 +559,11 @@ function targetLane(index: number) {
     };
   }
 
-  async function inspect(ctx: Ctx, now: number) {
-    await assertCompiledEvidence();
+  async function inspect(
+    ctx: Ctx,
+    now: number,
+    shared: BatchSharedInspection,
+  ) {
     const [state, stageRows, enabledRows, withdrawnRows, expiredRows] =
       await Promise.all([
         readTarget(ctx),
@@ -534,58 +600,7 @@ function targetLane(index: number) {
         typeof payload.expiryScheduledFunctionId === "string",
     );
     const blockers: string[] = [];
-    const preservationChecks = await Promise.all(
-      preservation.map(async (descriptor) => {
-        let rows: { _id: unknown }[];
-        if (
-          descriptor.table === "aiPublicationReleases" &&
-          descriptor.index === "by_release_id"
-        ) {
-          rows = await ctx.db
-            .query("aiPublicationReleases")
-            .withIndex("by_release_id", (q) =>
-              q.eq("releaseId", descriptor.key),
-            )
-            .take(descriptor.count + 1);
-        } else if (
-          descriptor.table === "aiEvidenceAudits" &&
-          descriptor.index === "by_source_and_updated_at"
-        ) {
-          const audited = await ctx.db
-            .query("aiEvidenceAudits")
-            .withIndex("by_source_and_updated_at", (q) =>
-              q.eq("sourceId", descriptor.key),
-            )
-            .take(descriptor.count + 2);
-          // Only this exact release's separately validated new audit may be added.
-          rows = audited.filter(
-            (row) =>
-              !preimage.targets.some((entry) =>
-                entry.sourceIds.some(
-                  (sourceId) =>
-                    sourceId === descriptor.key &&
-                    row.runId === sixPictureStoriesSourceRunId(entry.slug, sourceId),
-                ),
-              ),
-          );
-        } else {
-          rows = await sevenStoriesPreservedRows(ctx, descriptor);
-        }
-        return (
-          rows.length === descriptor.count &&
-          (await sha256Canonical(sortedRows(rows))) === descriptor.hash
-        );
-      }),
-    );
-    const scheduleChecks = await Promise.all(
-      oldSchedules.map(async (descriptor) => {
-        const row = await ctx.db.system.get(
-          descriptor.id as Id<"_scheduled_functions">,
-        );
-        return Boolean(row && (await sha256Canonical(row)) === descriptor.hash);
-      }),
-    );
-    if (!preservationChecks.every(Boolean) || !scheduleChecks.every(Boolean)) {
+    if (!shared.preservationExact) {
       blockers.push(
         "Exact previous-eighteen dependency/history/audit/schedule preservation drift",
       );
@@ -788,7 +803,7 @@ function targetLane(index: number) {
         blockers.push("Exact reactive expiry schedule missing or drifted");
     }
 
-    const readable = await activeAiParentReadableContent(ctx, now);
+    const readable = shared.readable;
     const actualSlugs = readable.rows.map((row) => row.slug).sort();
     const readySlugs = [...previousSlugs].sort();
     const enabledSlugs = [...previousSlugs, ...slugs].sort();
@@ -797,6 +812,9 @@ function targetLane(index: number) {
       equal(actualSlugs, enabled ? enabledSlugs : readySlugs);
     if (!previousReadable)
       blockers.push("Existing AI previews or exact parent read-back drift");
+    const parentReadable = Boolean(
+      content && readable.rows.some((row) => row._id === content._id),
+    );
 
     let phase: "ready" | "staged" | "enabled" | "drift" = "drift";
     if (
@@ -804,7 +822,7 @@ function targetLane(index: number) {
       initial &&
       !staged &&
       !enabled &&
-      !(await contentIsAiParentReadable(ctx, content!, now))
+      !parentReadable
     )
       phase = "ready";
     else if (
@@ -816,7 +834,7 @@ function targetLane(index: number) {
       state.targetReleases.length === 0 &&
       content?.aiPublicationReleaseId === undefined &&
       content?.aiPublishedAt === undefined &&
-      !(await contentIsAiParentReadable(ctx, content!, now))
+      !parentReadable
     )
       phase = "staged";
     else if (
@@ -825,7 +843,7 @@ function targetLane(index: number) {
       enabled &&
       auditsExact &&
       released &&
-      (await contentIsAiParentReadable(ctx, content!, now))
+      parentReadable
     )
       phase = "enabled";
     else if (!blockers.length)
@@ -846,9 +864,7 @@ function targetLane(index: number) {
         previousReadable,
         expiryScheduleExact,
         reviewRevision: content?.reviewRevision ?? null,
-        parentReadable: content
-          ? await contentIsAiParentReadable(ctx, content, now)
-          : false,
+        parentReadable,
         blockers: [...new Set(blockers)].sort(),
       },
     };
@@ -858,8 +874,9 @@ function targetLane(index: number) {
 
 const lanes = slugs.map((_, index) => targetLane(index));
 async function inspectBatch(ctx: Ctx, now: number) {
+  const shared = await inspectBatchShared(ctx, now);
   const targets = await Promise.all(
-    lanes.map((lane) => lane.inspect(ctx, now)),
+    lanes.map((lane) => lane.inspect(ctx, now, shared)),
   );
   const phases = targets.map((target) => target.report.phase);
   const phase = phases.every((value) => value === phases[0])
