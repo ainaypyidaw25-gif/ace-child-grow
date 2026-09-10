@@ -30,6 +30,8 @@ import { EARLY_MATH_RELEASE_ROOT, EARLY_MATH_RELEASE_DAYS } from './aiEarlyMathP
 import { TWO_STORIES_ARTIFACT, TWO_STORIES_ARTIFACT_HASH } from './aiTwoStoriesPublication20260910Artifact';
 import { TWO_STORIES_RELEASE_ROOT, TWO_STORIES_RELEASE_DAYS } from './aiTwoStoriesPublication20260910Data';
 import type { AiPublicationAuditTargetArtifact } from './aiPublicationAuditArtifact';
+import { SEVEN_STORIES_ARTIFACT, SEVEN_STORIES_ARTIFACT_HASH } from './aiSevenStoriesPublication20260910Artifact';
+import { SEVEN_STORIES_RELEASE_ROOT, SEVEN_STORIES_RELEASE_DAYS, SEVEN_STORIES_POLICY_VERSION, SEVEN_STORIES_SLUGS } from './aiSevenStoriesPublication20260910Data';
 import { todayIsoUtc } from './evidenceFreshness';
 
 type DatabaseContext = Pick<QueryCtx, 'db'> | Pick<MutationCtx, 'db'>;
@@ -40,18 +42,64 @@ type AuditArtifact = Omit<typeof AI_PUBLICATION_AUDIT_ARTIFACT, 'artifactId' | '
   summary: string; limitations: readonly string[]; targets: readonly AiPublicationAuditTargetArtifact[];
 };
 
+export type SevenStoryAuditSourceArtifact = {
+  sourceId: string; sourceSnapshotHash: string; sourceUrl: string; claimScope: string;
+  urlsChecked: readonly string[]; evidenceFindings: readonly string[]; limitations: readonly string[];
+};
+export type SevenStoryAuditTargetArtifact = {
+  type: 'story'; slug: string; contentSnapshotHash: string; evidenceLinkSnapshotHash: string;
+  verdict: 'pass'; sources: readonly SevenStoryAuditSourceArtifact[];
+  mediaSnapshotHash: string; mediaCount: number;
+  independentAgentResults: AiPublicationAuditTargetArtifact['independentAgentResults'];
+  contentChecks: readonly string[]; limitations: readonly string[];
+};
+export type SevenStoryAuditArtifact = Omit<AuditArtifact, 'schemaVersion' | 'policyVersion' | 'targets'> & {
+  schemaVersion: 2; policyVersion: string; targets: readonly SevenStoryAuditTargetArtifact[];
+};
+type RegisteredArtifact =
+  | { kind: 'legacy'; artifact: AuditArtifact; hash: string; releaseDays: number }
+  | { kind: 'seven_stories'; artifact: SevenStoryAuditArtifact; hash: string; releaseDays: number };
+const SEVEN_STORY_RUNTIME_SLUGS = new Set<string>([
+  'st_little_seed', 'st_ba_ba_sounds', 'st_when_i_feel_angry', 'st_taking_turns',
+  'st_goodnight_moon_friend', 'st_visit_to_doctor', 'st_sharing_mango',
+]);
+const SEVEN_STORY_MAX_SOURCES = 3;
+const COMBINED_ACTIVE_LIMIT = AI_PUBLICATION_MAX_ACTIVE_RELEASES + 7;
+function isSevenStoryTarget(type: string, slug: string): boolean {
+  return type === 'story' && SEVEN_STORY_RUNTIME_SLUGS.has(slug);
+}
+function sevenStoryArtifactHasExactScope(artifact: SevenStoryAuditArtifact): boolean {
+  return artifact.schemaVersion === 2 && artifact.policyVersion === SEVEN_STORIES_POLICY_VERSION
+    && artifact.releaseId === SEVEN_STORIES_RELEASE_ROOT
+    && SEVEN_STORIES_SLUGS.length === 7 && new Set(SEVEN_STORIES_SLUGS).size === 7
+    && SEVEN_STORIES_SLUGS.every(slug => SEVEN_STORY_RUNTIME_SLUGS.has(slug))
+    && artifact.targets.length === 7 && new Set(artifact.targets.map(t => t.slug)).size === 7
+    && artifact.targets.every(target => isSevenStoryTarget(target.type, target.slug)
+      && target.verdict === 'pass' && isSha256Hex(target.contentSnapshotHash)
+      && isSha256Hex(target.evidenceLinkSnapshotHash)
+      && target.mediaCount === 3 && isSha256Hex(target.mediaSnapshotHash)
+      && target.sources.length >= 2 && target.sources.length <= SEVEN_STORY_MAX_SOURCES
+      && new Set(target.sources.map(source => source.sourceId)).size === target.sources.length
+      && target.sources.every(source => isSha256Hex(source.sourceSnapshotHash)
+        && source.urlsChecked.length > 0 && source.urlsChecked.length <= 10
+        && source.urlsChecked.includes(source.sourceUrl)));
+}
+
 /** Explicit compiled registry: an arbitrary database hash cannot authorize publication. */
-export function registeredAiPublicationArtifact(releaseId: string, artifactHash: string): {
-  artifact: AuditArtifact; hash: string; releaseDays: number;
-} | null {
+export function registeredAiPublicationArtifact(releaseId: string, artifactHash: string): RegisteredArtifact | null {
   const entries = [
     { artifact: AI_PUBLICATION_AUDIT_ARTIFACT, hash: AI_PUBLICATION_AUDIT_ARTIFACT_HASH, root: AI_PUBLICATION_RELEASE_ID, releaseDays: AI_PUBLICATION_MAX_RELEASE_DAYS },
     { artifact: EARLY_MATH_AUDIT_ARTIFACT, hash: EARLY_MATH_AUDIT_ARTIFACT_HASH, root: EARLY_MATH_RELEASE_ROOT, releaseDays: EARLY_MATH_RELEASE_DAYS },
     { artifact: TWO_STORIES_ARTIFACT, hash: TWO_STORIES_ARTIFACT_HASH, root: TWO_STORIES_RELEASE_ROOT, releaseDays: TWO_STORIES_RELEASE_DAYS },
   ];
-  return entries.find((entry) => entry.hash === artifactHash && entry.artifact.targets.some(
+  const legacy = entries.find((entry) => entry.hash === artifactHash && entry.artifact.targets.some(
     (target) => releaseId === `${entry.root}:${target.type}:${target.slug}`,
-  )) ?? null;
+  ));
+  if (legacy) return { ...legacy, kind: 'legacy' };
+  const artifact: SevenStoryAuditArtifact = SEVEN_STORIES_ARTIFACT;
+  if (artifactHash !== SEVEN_STORIES_ARTIFACT_HASH || !sevenStoryArtifactHasExactScope(artifact)
+    || !artifact.targets.some(target => releaseId === `${SEVEN_STORIES_RELEASE_ROOT}:story:${target.slug}`)) return null;
+  return { kind: 'seven_stories', artifact, hash: SEVEN_STORIES_ARTIFACT_HASH, releaseDays: SEVEN_STORIES_RELEASE_DAYS };
 }
 
 type ActiveControl = {
@@ -70,22 +118,28 @@ export async function activeAiPublicationControl(ctx: DatabaseContext): Promise<
     ctx.db
       .query('aiPublicationReleases')
       .withIndex('by_status', (q) => q.eq('status', 'active'))
-      .take(AI_PUBLICATION_MAX_ACTIVE_RELEASES + 1),
+      .take(COMBINED_ACTIVE_LIMIT + 1),
   ]);
   if (configs.length !== 1 || !configs[0].enabled) return { complete: configs.length <= 1, releases: [] };
-  if (releases.length > AI_PUBLICATION_MAX_ACTIVE_RELEASES) return { complete: false, releases: [] };
+  if (releases.length > COMBINED_ACTIVE_LIMIT) return { complete: false, releases: [] };
   const keys = new Set<string>();
+  const releaseIds = new Set<string>();
   for (const release of releases) {
     const expectedKey = aiPublicationTargetKey(release.contentType, release.contentSlug);
     if (
-      !isAiPublicationTarget(release.contentType, release.contentSlug)
+      !(isAiPublicationTarget(release.contentType, release.contentSlug) || isSevenStoryTarget(release.contentType, release.contentSlug))
       || release.targetKey !== expectedKey
       || keys.has(expectedKey)
+      || typeof release.releaseId !== 'string' || release.releaseId.length === 0
+      || releaseIds.has(release.releaseId)
     ) {
       return { complete: false, releases: [] };
     }
     keys.add(expectedKey);
+    releaseIds.add(release.releaseId);
   }
+  if (releases.filter(r => isAiPublicationTarget(r.contentType, r.contentSlug)).length > AI_PUBLICATION_MAX_ACTIVE_RELEASES
+    || releases.filter(r => isSevenStoryTarget(r.contentType, r.contentSlug)).length > 7) return { complete: false, releases: [] };
   return { complete: true, releases };
 }
 
@@ -95,7 +149,7 @@ async function matchingCompletedRun(
   release: Doc<'aiPublicationReleases'>,
   expectedOutputHash: string,
   expectedSummary: string,
-  artifact: AuditArtifact,
+  artifact: AuditArtifact | SevenStoryAuditArtifact,
 ): Promise<boolean> {
   const rows = await ctx.db
     .query('aiAuditRuns')
@@ -107,7 +161,7 @@ async function matchingCompletedRun(
     && rows[0].provider === artifact.provider
     && rows[0].model === artifact.model
     && rows[0].modelVersion === artifact.modelVersion
-    && rows[0].policyVersion === AI_PUBLICATION_POLICY_VERSION
+    && rows[0].policyVersion === artifact.policyVersion
     && rows[0].gitCommit === release.gitCommit
     && rows[0].targetCount === 1
     && rows[0].summary === expectedSummary
@@ -126,6 +180,7 @@ export async function aiReleaseMatchesCurrentState(
 ): Promise<boolean> {
   const registered = registeredAiPublicationArtifact(release.releaseId, release.auditArtifactHash);
   if (!registered) return false;
+  if (registered.kind === 'seven_stories') return sevenStoryReleaseMatchesCurrentState(ctx, content, release, now, todayIso, registered);
   const { artifact, releaseDays } = registered;
   const artifactHash = await sha256Canonical(artifact);
   const artifactTarget = artifact.targets.find(
@@ -268,13 +323,112 @@ export async function aiReleaseMatchesCurrentState(
   return sourceResults.every(Boolean);
 }
 
+/** The schema-2 fiction lane has its own exact artifact and one run per source.
+ * It never consumes contentReviews or synthesizes a human approval. */
+async function sevenStoryReleaseMatchesCurrentState(
+  ctx: DatabaseContext,
+  content: Doc<'libraryContent'>,
+  release: Doc<'aiPublicationReleases'>,
+  now: number,
+  todayIso: string,
+  registered: Extract<RegisteredArtifact, { kind: 'seven_stories' }>,
+): Promise<boolean> {
+  const { artifact, releaseDays } = registered;
+  const artifactHash = await sha256Canonical(artifact);
+  const target = artifact.targets.find(t => t.type === content.type && t.slug === content.slug);
+  if (!target || !sevenStoryArtifactHasExactScope(artifact) || artifactHash !== registered.hash
+    || releaseDays < 1 || releaseDays > AI_PUBLICATION_MAX_RELEASE_DAYS
+    || ![now, release.createdAt, release.expiresAt, artifact.auditStartedAt, artifact.auditCompletedAt].every(Number.isFinite)
+    || artifact.auditStartedAt > artifact.auditCompletedAt || artifact.auditCompletedAt > now
+    || !/^[a-f0-9]{40}$/.test(release.gitCommit)
+    || !isSevenStoryTarget(content.type, content.slug)
+    || content.clinicalStatus !== 'clinical_review' || content.reviewRevision !== 3
+    || content.reviewerId !== undefined || content.reviewerQualification !== undefined
+    || content.reviewerDisplayName !== undefined || content.reviewScope !== undefined
+    || content.reviewedAt !== undefined || content.nextReviewAt !== undefined || content.reviewNote !== undefined
+    || release.status !== 'active' || release.contentId !== content._id
+    || release.contentType !== 'story' || release.contentSlug !== content.slug
+    || release.targetKey !== aiPublicationTargetKey('story', content.slug)
+    || release.policyVersion !== artifact.policyVersion
+    || content.aiPublicationReleaseId !== release.releaseId || content.aiPublishedAt !== release.createdAt
+    || release.reviewRevision !== 3 || release.contentUpdatedAt !== content.updatedAt
+    || release.contentSnapshotHash !== target.contentSnapshotHash
+    || release.evidenceLinkSnapshotHash !== target.evidenceLinkSnapshotHash
+    || release.sourceSnapshots.length !== target.sources.length
+    || !arraysEqual(release.sourceSnapshots.map(s => s.sourceId), target.sources.map(s => s.sourceId))
+    || new Set(release.sourceSnapshots.map(s => s.evidenceAuditRunId)).size !== target.sources.length
+    || release.sourceSnapshots.some(s => s.evidenceAuditRunId === release.contentAuditRunId)
+    || release.expiresAt < now || release.createdAt > now
+    || release.expiresAt > artifact.auditCompletedAt + releaseDays * 86_400_000
+    || release.expiresAt - release.createdAt > releaseDays * 86_400_000
+    || release.expiresAt <= release.createdAt
+  ) return false;
+  if (await sha256Canonical(aiContentSnapshot(content)) !== target.contentSnapshotHash) return false;
+  const media = await ctx.db.query('libraryMedia')
+    .withIndex('by_content', q => q.eq('contentSlug', content.slug)).take(101);
+  if (media.length > 100 || media.length !== target.mediaCount
+    || media.some(row => row.placeholder !== true || row.url !== undefined || row.storageId !== undefined)
+    || await sha256Canonical([...media].sort((a, b) => String(a._id).localeCompare(String(b._id)))) !== target.mediaSnapshotHash) return false;
+  const linkRows = await ctx.db.query('evidenceLinks')
+    .withIndex('by_slug', q => q.eq('slug', content.slug)).take(2);
+  const link = linkRows.length === 1 ? linkRows[0] : null;
+  if (!link || link.kind !== 'story' || link.updatedAt !== release.evidenceLinkUpdatedAt
+    || !arraysEqual(link.sourceIds, target.sources.map(s => s.sourceId))
+    || await sha256Canonical(aiEvidenceLinkSnapshot(link)) !== target.evidenceLinkSnapshotHash) return false;
+
+  const targetArtifactHash = await sha256Canonical(target);
+  const expectedRunOutputHash = await sha256Canonical({ artifactHash, targetArtifactHash });
+  const expectedContentOutputHash = await sha256Canonical({ artifactHash, targetArtifactHash, kind: 'content' });
+  const summary = `${artifact.summary} Target: story:${content.slug}.`;
+  const limitations = [...target.limitations, ...artifact.limitations];
+  const nextAuditDate = new Date(artifact.auditCompletedAt + (releaseDays - 1) * 86_400_000).toISOString().slice(0, 10);
+  const contentAudits = await ctx.db.query('aiContentAudits')
+    .withIndex('by_run_id', q => q.eq('runId', release.contentAuditRunId)).take(2);
+  const contentAudit = contentAudits.length === 1 ? contentAudits[0] : null;
+  if (!contentAudit || contentAudit.contentSlug !== content.slug || contentAudit.contentType !== 'story'
+    || contentAudit.reviewRevision !== 3 || contentAudit.contentUpdatedAt !== content.updatedAt
+    || contentAudit.contentSnapshotHash !== target.contentSnapshotHash || contentAudit.verdict !== 'pass'
+    || contentAudit.evidenceLinkUpdatedAt !== link.updatedAt || contentAudit.evidenceLinkSnapshotHash !== target.evidenceLinkSnapshotHash
+    || !arraysEqual(contentAudit.sourceIds, link.sourceIds) || !arraysEqual(contentAudit.checks, target.contentChecks)
+    || !arraysEqual(contentAudit.limitations, limitations) || contentAudit.auditedAt !== artifact.auditCompletedAt
+    || contentAudit.nextAuditDate !== nextAuditDate || contentAudit.outputHash !== expectedContentOutputHash
+    || !aiAuditIsCurrent(contentAudit.auditedAt, contentAudit.nextAuditDate, todayIso, now)
+    || !await matchingCompletedRun(ctx, release.contentAuditRunId, release, expectedRunOutputHash, summary, artifact)) return false;
+
+  const sourceChecks = await Promise.all(target.sources.map(async (expectedSource, index) => {
+    const snapshot = release.sourceSnapshots[index];
+    if (snapshot.sourceSnapshotHash !== expectedSource.sourceSnapshotHash) return false;
+    const [sources, audits] = await Promise.all([
+      ctx.db.query('evidenceSources').withIndex('by_source_id', q => q.eq('sourceId', expectedSource.sourceId)).take(2),
+      ctx.db.query('aiEvidenceAudits').withIndex('by_run_id', q => q.eq('runId', snapshot.evidenceAuditRunId)).take(2),
+    ]);
+    const source = sources.length === 1 ? sources[0] : null;
+    const audit = audits.length === 1 ? audits[0] : null;
+    if (!source || source.updatedAt !== snapshot.sourceUpdatedAt || source.url !== expectedSource.sourceUrl
+      || !sourceMayEnterAiPublication(source, todayIso)
+      || await sha256Canonical(aiEvidenceSnapshot(source)) !== expectedSource.sourceSnapshotHash) return false;
+    const sourceId = expectedSource.sourceId;
+    const runOutputHash = await sha256Canonical({ artifactHash, targetArtifactHash, sourceId });
+    const outputHash = await sha256Canonical({ artifactHash, targetArtifactHash, kind: 'evidence', sourceId });
+    return Boolean(audit && audit.sourceId === sourceId && audit.sourceUpdatedAt === source.updatedAt
+      && audit.sourceSnapshotHash === expectedSource.sourceSnapshotHash && audit.verdict === 'pass'
+      && audit.claimScope === expectedSource.claimScope && arraysEqual(audit.urlsChecked, expectedSource.urlsChecked)
+      && arraysEqual(audit.findings, expectedSource.evidenceFindings)
+      && arraysEqual(audit.limitations, [...expectedSource.limitations, ...limitations])
+      && audit.auditedAt === artifact.auditCompletedAt && audit.nextAuditDate === nextAuditDate
+      && audit.outputHash === outputHash && aiAuditIsCurrent(audit.auditedAt, audit.nextAuditDate, todayIso, now)
+      && await matchingCompletedRun(ctx, snapshot.evidenceAuditRunId, release, runOutputHash, `${summary} Source: ${sourceId}.`, artifact));
+  }));
+  return sourceChecks.every(Boolean);
+}
+
 export async function contentIsAiParentReadable(
   ctx: DatabaseContext,
   content: Doc<'libraryContent'>,
   now = Date.now(),
   todayIso = todayIsoUtc(new Date(now)),
 ): Promise<boolean> {
-  if (!isAiPublicationTarget(content.type, content.slug)) return false;
+  if (!isAiPublicationTarget(content.type, content.slug) && !isSevenStoryTarget(content.type, content.slug)) return false;
   const control = await activeAiPublicationControl(ctx);
   if (!control.complete) return false;
   const release = control.releases.find(
@@ -283,7 +437,7 @@ export async function contentIsAiParentReadable(
   return release ? await aiReleaseMatchesCurrentState(ctx, content, release, now, todayIso) : false;
 }
 
-/** Resolve the at-most-three AI release rows for the offline/public manifest. */
+/** Resolve only the bounded legacy-three plus separately registered seven stories. */
 export async function activeAiParentReadableContent(
   ctx: DatabaseContext,
   now = Date.now(),
