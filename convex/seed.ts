@@ -71,6 +71,7 @@ import { isReadingTogetherAiPublicationSlug } from './lib/aiReadingTogetherPubli
 import { isPowerOfPlaySlug } from './lib/powerOfPlayScope';
 import { isDevelopmentFeelingsSlug } from './lib/developmentFeelingsScope';
 import { isFourLessonSuccessorSlug } from './lib/fourLessonSuccessorScope';
+import { isSixPictureStorySuccessorSlug } from './lib/sixPictureStorySuccessorScope';
 import { assertNoPersistedReleaseGovernedContent } from './lib/clinicalReviewBatchProvenance';
 
 const GRANTABLE_ROLES = [
@@ -222,6 +223,7 @@ export function seedRunSkipsItem(item: Pick<Item, 'type' | 'slug'>): boolean {
     || isPowerOfPlaySlug(item.slug)
     || isDevelopmentFeelingsSlug(item.slug)
     || isFourLessonSuccessorSlug(item.slug)
+    || isSixPictureStorySuccessorSlug(item.slug)
     || isClinicalTwoSmallCasTargetSlug(item.slug)
     || isNutritionGuidesCasTargetSlug(item.slug);
 }
@@ -1901,7 +1903,8 @@ export const applyPublishedErrata = internalMutation({
         || isThreeGuideCorrectionSlug(slug)
         || isPowerOfPlaySlug(slug)
         || isDevelopmentFeelingsSlug(slug)
-        || isFourLessonSuccessorSlug(slug)) {
+        || isFourLessonSuccessorSlug(slug)
+        || isSixPictureStorySuccessorSlug(slug)) {
         unchanged += 1;
         continue;
       }

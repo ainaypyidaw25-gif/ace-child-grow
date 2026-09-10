@@ -24637,24 +24637,24 @@
   {
     "ageGroupKey": "2_5y",
     "domainKey": "language",
-    "summaryMm": "စကားလုံးနှင့် ပုံချိတ်ဆက်မှု",
-    "summaryEn": "Connecting words and pictures",
+    "summaryMm": "ရင်းနှီးသော ပုံများအကြောင်း ပြောဆိုရန် အခွင့်အရေး",
+    "summaryEn": "An opportunity to talk about familiar pictures",
     "difficulty": "easy",
     "durationMinutes": 10,
     "offline": true,
     "tags": [
       "language",
-      "cognitive",
+      "play",
       "2_5y"
     ],
     "data": {
       "domains": [
         "language",
-        "cognitive"
+        "play"
       ],
       "materials": {
-        "mm": "ရင်းနှီးသော ပုံနှစ်ပုံ",
-        "en": "Two familiar pictures"
+        "mm": "စာအုပ်ထဲက ပုံများ၊ ကိုယ်တိုင်ဆွဲထားသော ပုံများ သို့မဟုတ် ခိုင်ခံ့သော ပုံကတ်ကြီးနှစ်ကတ်",
+        "en": "Two pictures in a book, drawings, or large sturdy picture cards"
       },
       "setup": {
         "mm": "ဘေးကင်းပြီး နေရာလွတ်ရှိသောနေရာကို ရွေးပါ။",
@@ -24662,13 +24662,13 @@
       },
       "instructions": [
         {
-          "mm": "ပုံတစ်ပုံစီကို ရွေးခိုင်းပြီး အရာဝတ္ထုနှင့် လုပ်ဆောင်ချက်ကို စကားတိုဖြင့် ပြောပါ။",
-          "en": "Let the child choose each picture and name the object or action in a short phrase."
+          "mm": "ပုံတစ်ပုံစီကို ကလေးရွေးစေပြီး မြင်သည့်အရာ သို့မဟုတ် လုပ်ဆောင်ချက်အကြောင်း ပြောရန် ဖိတ်ခေါ်ပါ။ အသံ၊ အမူအရာ သို့မဟုတ် စကားလုံးဖြင့် တုံ့ပြန်မှုကို လက်ခံပါ။",
+          "en": "Let the child choose each picture and invite them to talk about an object or action they see. Accept sounds, gestures, or words."
         }
       ],
       "safety": {
-        "mm": "အဖြေမှားသည်ဟု မပြောဘဲ ကလေးပြောသည့်စကားကို တိုးချဲ့ပေးပါ။",
-        "en": "Do not label answers wrong; expand the child’s words."
+        "mm": "အဖြေကို အမှားဟု မသတ်မှတ်ပါနှင့်။ ပုံကတ်သုံးပါက ကလေးပါးစပ်ထဲ မဝင်နိုင်အောင် ကြီးပြီး ခိုင်ခံ့သောကတ်များကို ရွေးပါ။",
+        "en": "Do not label an answer wrong. If using cards, choose large, sturdy ones that cannot fit in the child’s mouth."
       },
       "indoor": true,
       "outdoor": true,
@@ -24677,18 +24677,18 @@
       "parentChild": true,
       "outcomes": [
         {
-          "mm": "စကားလုံးနှင့် ပုံချိတ်ဆက်မှု",
-          "en": "Connecting words and pictures"
+          "mm": "ရင်းနှီးသော ပုံများအကြောင်း ပြောဆိုရန် အခွင့်အရေး",
+          "en": "An opportunity to talk about familiar pictures"
         }
       ],
       "variations": [
         {
-          "mm": "ကလေးပင်ပန်းလျှင် အဆင့်ကို လျှော့ပြီး ရပ်နားပါ။",
-          "en": "Simplify or stop when the child is tired."
+          "mm": "ကလေး စိတ်ဝင်စားမှု လျော့သွားလျှင် ပိုလွယ်အောင်လုပ်ပါ သို့မဟုတ် ရပ်နားပါ။",
+          "en": "Simplify or stop when the child loses interest."
         }
       ],
       "lowCost": true,
-      "evidenceSummary": "Play and developmental references support this age-adapted activity for 2.5 years.",
+      "evidenceSummary": "Official play and milestone sources informed this optional picture-story activity. It is not a developmental test.",
       "editorialStatus": "reference_verified"
     },
     "media": [
@@ -24709,7 +24709,7 @@
     "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
     "version": 1,
     "clinicalStatus": "clinical_review",
-    "searchText": "ပုံနှစ်ပုံကို အမည်ပေးခြင်း name two pictures စကားလုံးနှင့် ပုံချိတ်ဆက်မှု connecting words and pictures language cognitive 2_5y language cognitive ရင်းနှီးသော ပုံနှစ်ပုံ two familiar pictures ဘေးကင်းပြီး နေရာလွတ်ရှိသောနေရာကို ရွေးပါ။ choose a safe, clear space. ပုံတစ်ပုံစီကို ရွေးခိုင်းပြီး အရာဝတ္ထုနှင့် လုပ်ဆောင်ချက်ကို စကားတိုဖြင့် ပြောပါ။ let the child choose each picture and name the object or action in a short phrase. အဖြေမှားသည်ဟု မပြောဘဲ ကလေးပြောသည့်စကားကို တိုးချဲ့ပေးပါ။ do not label answers wrong; expand the child’s words. စကားလုံးနှင့် ပုံချိတ်ဆက်မှု connecting words and pictures ကလေးပင်ပန်းလျှင် အဆင့်ကို လျှော့ပြီး ရပ်နားပါ။ simplify or stop when the child is tired. play and developmental references support this age-adapted activity for 2.5 years. reference_verified"
+    "searchText": "ပုံနှစ်ပုံကို အမည်ပေးခြင်း name two pictures ရင်းနှီးသော ပုံများအကြောင်း ပြောဆိုရန် အခွင့်အရေး an opportunity to talk about familiar pictures language play 2_5y language play စာအုပ်ထဲက ပုံများ၊ ကိုယ်တိုင်ဆွဲထားသော ပုံများ သို့မဟုတ် ခိုင်ခံ့သော ပုံကတ်ကြီးနှစ်ကတ် two pictures in a book, drawings, or large sturdy picture cards ဘေးကင်းပြီး နေရာလွတ်ရှိသောနေရာကို ရွေးပါ။ choose a safe, clear space. ပုံတစ်ပုံစီကို ကလေးရွေးစေပြီး မြင်သည့်အရာ သို့မဟုတ် လုပ်ဆောင်ချက်အကြောင်း ပြောရန် ဖိတ်ခေါ်ပါ။ အသံ၊ အမူအရာ သို့မဟုတ် စကားလုံးဖြင့် တုံ့ပြန်မှုကို လက်ခံပါ။ let the child choose each picture and invite them to talk about an object or action they see. accept sounds, gestures, or words. အဖြေကို အမှားဟု မသတ်မှတ်ပါနှင့်။ ပုံကတ်သုံးပါက ကလေးပါးစပ်ထဲ မဝင်နိုင်အောင် ကြီးပြီး ခိုင်ခံ့သောကတ်များကို ရွေးပါ။ do not label an answer wrong. if using cards, choose large, sturdy ones that cannot fit in the child’s mouth. ရင်းနှီးသော ပုံများအကြောင်း ပြောဆိုရန် အခွင့်အရေး an opportunity to talk about familiar pictures ကလေး စိတ်ဝင်စားမှု လျော့သွားလျှင် ပိုလွယ်အောင်လုပ်ပါ သို့မဟုတ် ရပ်နားပါ။ simplify or stop when the child loses interest. official play and milestone sources informed this optional picture-story activity. it is not a developmental test. reference_verified"
   },
   {
     "ageGroupKey": "2_5y",
@@ -25328,20 +25328,20 @@
   {
     "ageGroupKey": "3y",
     "domainKey": "language",
-    "summaryMm": "အစ၊ အလယ်၊ အဆုံး စကားပြောမှု",
-    "summaryEn": "Beginning-middle-end language",
+    "summaryMm": "အစတွင် ဖြစ်နိုင်သည့်အရာနှင့် နောက်ဖြစ်နိုင်သည့်အရာကို အတူပြောဆိုခြင်း",
+    "summaryEn": "Talk together about what might happen first and next",
     "difficulty": "easy",
     "durationMinutes": 10,
     "offline": true,
     "tags": [
       "language",
-      "cognitive",
+      "play",
       "3y"
     ],
     "data": {
       "domains": [
         "language",
-        "cognitive"
+        "play"
       ],
       "materials": {
         "mm": "နေ့စဉ်ဖြစ်ရပ် ပုံသုံးပုံ",
@@ -25353,13 +25353,13 @@
       },
       "instructions": [
         {
-          "mm": "ပုံများကိုကြည့်ပြီး “အရင်ဘာဖြစ်လဲ၊ ပြီးတော့ဘာလဲ” ဟု မေးပါ။",
-          "en": "Ask, “What happened first, and what happened next?”"
+          "mm": "ပုံများကို အတူကြည့်ပြီး “အစမှာ ဘာဖြစ်နိုင်လဲ၊ နောက်တော့ ဘာဖြစ်နိုင်လဲ” ဟု မေးပါ။ ကလေးက လက်ညှိုးထိုးခြင်း၊ အမူအရာ သို့မဟုတ် စကားလုံးဖြင့် ပါဝင်နိုင်ပါသည်။",
+          "en": "Look at the pictures together and ask, “What might happen first? What might happen next?” The child may point, gesture, or talk."
         }
       ],
       "safety": {
-        "mm": "ကလေး၏ စကားအဆင့်နှင့် ကိုက်ညီအောင် မေးခွန်းတိုသုံးပါ။",
-        "en": "Use short questions suited to the child’s language level."
+        "mm": "မေးခွန်းတိုတိုသုံး၍ ကလေး၏ စိတ်ဝင်စားမှုကို လိုက်ပါ။ ဤကစားနည်းသည် စစ်ဆေးမှု မဟုတ်ပါ။",
+        "en": "Keep questions short and follow the child’s interest; this is play, not a test."
       },
       "indoor": true,
       "outdoor": true,
@@ -25368,18 +25368,18 @@
       "parentChild": true,
       "outcomes": [
         {
-          "mm": "အစ၊ အလယ်၊ အဆုံး စကားပြောမှု",
-          "en": "Beginning-middle-end language"
+          "mm": "အစတွင် ဖြစ်နိုင်သည့်အရာနှင့် နောက်ဖြစ်နိုင်သည့်အရာကို အတူပြောဆိုခြင်း",
+          "en": "Talk together about what might happen first and next"
         }
       ],
       "variations": [
         {
-          "mm": "ကလေးပင်ပန်းလျှင် အဆင့်ကို လျှော့ပြီး ရပ်နားပါ။",
-          "en": "Simplify or stop when the child is tired."
+          "mm": "ကလေး စိတ်ဝင်စားမှု လျော့သွားလျှင် ပိုလွယ်အောင်လုပ်ပါ သို့မဟုတ် ရပ်နားပါ။",
+          "en": "Simplify or stop when the child loses interest."
         }
       ],
       "lowCost": true,
-      "evidenceSummary": "Play and developmental references support this age-adapted activity for 3 years.",
+      "evidenceSummary": "Official play and milestone sources informed this optional picture-story activity. It is not a developmental test.",
       "editorialStatus": "reference_verified"
     },
     "media": [
@@ -25400,7 +25400,7 @@
     "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
     "version": 1,
     "clinicalStatus": "clinical_review",
-    "searchText": "ဖြစ်ရပ်သုံးပုံ ပြောခြင်း tell a three-picture event အစ၊ အလယ်၊ အဆုံး စကားပြောမှု beginning-middle-end language language cognitive 3y language cognitive နေ့စဉ်ဖြစ်ရပ် ပုံသုံးပုံ three pictures of a daily event ဘေးကင်းပြီး နေရာလွတ်ရှိသောနေရာကို ရွေးပါ။ choose a safe, clear space. ပုံများကိုကြည့်ပြီး “အရင်ဘာဖြစ်လဲ၊ ပြီးတော့ဘာလဲ” ဟု မေးပါ။ ask, “what happened first, and what happened next?” ကလေး၏ စကားအဆင့်နှင့် ကိုက်ညီအောင် မေးခွန်းတိုသုံးပါ။ use short questions suited to the child’s language level. အစ၊ အလယ်၊ အဆုံး စကားပြောမှု beginning-middle-end language ကလေးပင်ပန်းလျှင် အဆင့်ကို လျှော့ပြီး ရပ်နားပါ။ simplify or stop when the child is tired. play and developmental references support this age-adapted activity for 3 years. reference_verified"
+    "searchText": "ဖြစ်ရပ်သုံးပုံ ပြောခြင်း tell a three-picture event အစတွင် ဖြစ်နိုင်သည့်အရာနှင့် နောက်ဖြစ်နိုင်သည့်အရာကို အတူပြောဆိုခြင်း talk together about what might happen first and next language play 3y language play နေ့စဉ်ဖြစ်ရပ် ပုံသုံးပုံ three pictures of a daily event ဘေးကင်းပြီး နေရာလွတ်ရှိသောနေရာကို ရွေးပါ။ choose a safe, clear space. ပုံများကို အတူကြည့်ပြီး “အစမှာ ဘာဖြစ်နိုင်လဲ၊ နောက်တော့ ဘာဖြစ်နိုင်လဲ” ဟု မေးပါ။ ကလေးက လက်ညှိုးထိုးခြင်း၊ အမူအရာ သို့မဟုတ် စကားလုံးဖြင့် ပါဝင်နိုင်ပါသည်။ look at the pictures together and ask, “what might happen first? what might happen next?” the child may point, gesture, or talk. မေးခွန်းတိုတိုသုံး၍ ကလေး၏ စိတ်ဝင်စားမှုကို လိုက်ပါ။ ဤကစားနည်းသည် စစ်ဆေးမှု မဟုတ်ပါ။ keep questions short and follow the child’s interest; this is play, not a test. အစတွင် ဖြစ်နိုင်သည့်အရာနှင့် နောက်ဖြစ်နိုင်သည့်အရာကို အတူပြောဆိုခြင်း talk together about what might happen first and next ကလေး စိတ်ဝင်စားမှု လျော့သွားလျှင် ပိုလွယ်အောင်လုပ်ပါ သို့မဟုတ် ရပ်နားပါ။ simplify or stop when the child loses interest. official play and milestone sources informed this optional picture-story activity. it is not a developmental test. reference_verified"
   },
   {
     "ageGroupKey": "3y",
@@ -26069,24 +26069,24 @@
   {
     "ageGroupKey": "3_5y",
     "domainKey": "language",
-    "summaryMm": "ဖြစ်ရပ်အစီအစဉ်နှင့် စကားပြောမှု",
-    "summaryEn": "Event sequence and language",
+    "summaryMm": "ပုံများဖြင့် အဖြစ်အပျက်အစီအစဉ်တစ်ခု ဖန်တီးကစားခြင်း",
+    "summaryEn": "Make and talk through a picture sequence",
     "difficulty": "easy",
     "durationMinutes": 10,
     "offline": true,
     "tags": [
       "language",
-      "cognitive",
+      "play",
       "3_5y"
     ],
     "data": {
       "domains": [
         "language",
-        "cognitive"
+        "play"
       ],
       "materials": {
-        "mm": "သွားတိုက်ခြင်းကဲ့သို့ လုပ်ရိုးလုပ်စဉ်ပုံသုံးပုံ",
-        "en": "Three pictures of a routine such as brushing"
+        "mm": "ရင်းနှီးသော လုပ်ရိုးလုပ်စဉ် ပုံသုံးပုံ",
+        "en": "Three pictures from a familiar routine"
       },
       "setup": {
         "mm": "ဘေးကင်းပြီး နေရာလွတ်ရှိသောနေရာကို ရွေးပါ။",
@@ -26094,13 +26094,13 @@
       },
       "instructions": [
         {
-          "mm": "ပုံများကို ရောပြီး ကလေးကို အစီအစဉ်ပြန်စီကာ ပြောပြခိုင်းပါ။",
-          "en": "Mix the pictures, then invite the child to order and describe them."
+          "mm": "ကလေးအတွက် သင့်လျော်သည်ဟု ထင်ရသည့်ပုံစံဖြင့် ပုံများကို စီကာ နောက်ဘာဖြစ်မည်ကို ပြောရန် ဖိတ်ခေါ်ပါ။ တစ်မျိုးထက်ပိုသော ပြောပုံကိုလည်း လက်ခံပါ။",
+          "en": "Invite the child to arrange the pictures in a way that makes sense to them and talk about what happens next. More than one telling is okay."
         }
       ],
       "safety": {
-        "mm": "အမှားပြင်ပေးမည့်အစား “နောက်ဘာဖြစ်မလဲ” ဟု မေးပါ။",
-        "en": "Instead of correcting, ask, “What happens next?”"
+        "mm": "အစီအစဉ်ကို စစ်ဆေးချက်ကဲ့သို့ မပြင်ပါနှင့်။ “နောက်ဘာဖြစ်မလဲ” ဟု မေးပြီး အခြားပြောပုံကိုလည်း လက်ခံပါ။",
+        "en": "Do not correct the order as a test; ask what happens next and accept another telling."
       },
       "indoor": true,
       "outdoor": true,
@@ -26109,18 +26109,18 @@
       "parentChild": true,
       "outcomes": [
         {
-          "mm": "ဖြစ်ရပ်အစီအစဉ်နှင့် စကားပြောမှု",
-          "en": "Event sequence and language"
+          "mm": "ပုံများဖြင့် အဖြစ်အပျက်အစီအစဉ်တစ်ခု ဖန်တီးကစားခြင်း",
+          "en": "Make and talk through a picture sequence"
         }
       ],
       "variations": [
         {
-          "mm": "ကလေးပင်ပန်းလျှင် အဆင့်ကို လျှော့ပြီး ရပ်နားပါ။",
-          "en": "Simplify or stop when the child is tired."
+          "mm": "ကလေး စိတ်ဝင်စားမှု လျော့သွားလျှင် ပိုလွယ်အောင်လုပ်ပါ သို့မဟုတ် ရပ်နားပါ။",
+          "en": "Simplify or stop when the child loses interest."
         }
       ],
       "lowCost": true,
-      "evidenceSummary": "Play and developmental references support this age-adapted activity for 3.5 years.",
+      "evidenceSummary": "Official play and milestone sources informed this optional picture-story activity. It is not a developmental test.",
       "editorialStatus": "reference_verified"
     },
     "media": [
@@ -26141,7 +26141,7 @@
     "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
     "version": 1,
     "clinicalStatus": "clinical_review",
-    "searchText": "နေ့စဉ်လုပ်ရိုးလုပ်စဉ် ပုံစီခြင်း sequence a daily routine ဖြစ်ရပ်အစီအစဉ်နှင့် စကားပြောမှု event sequence and language language cognitive 3_5y language cognitive သွားတိုက်ခြင်းကဲ့သို့ လုပ်ရိုးလုပ်စဉ်ပုံသုံးပုံ three pictures of a routine such as brushing ဘေးကင်းပြီး နေရာလွတ်ရှိသောနေရာကို ရွေးပါ။ choose a safe, clear space. ပုံများကို ရောပြီး ကလေးကို အစီအစဉ်ပြန်စီကာ ပြောပြခိုင်းပါ။ mix the pictures, then invite the child to order and describe them. အမှားပြင်ပေးမည့်အစား “နောက်ဘာဖြစ်မလဲ” ဟု မေးပါ။ instead of correcting, ask, “what happens next?” ဖြစ်ရပ်အစီအစဉ်နှင့် စကားပြောမှု event sequence and language ကလေးပင်ပန်းလျှင် အဆင့်ကို လျှော့ပြီး ရပ်နားပါ။ simplify or stop when the child is tired. play and developmental references support this age-adapted activity for 3.5 years. reference_verified"
+    "searchText": "နေ့စဉ်လုပ်ရိုးလုပ်စဉ် ပုံစီခြင်း sequence a daily routine ပုံများဖြင့် အဖြစ်အပျက်အစီအစဉ်တစ်ခု ဖန်တီးကစားခြင်း make and talk through a picture sequence language play 3_5y language play ရင်းနှီးသော လုပ်ရိုးလုပ်စဉ် ပုံသုံးပုံ three pictures from a familiar routine ဘေးကင်းပြီး နေရာလွတ်ရှိသောနေရာကို ရွေးပါ။ choose a safe, clear space. ကလေးအတွက် သင့်လျော်သည်ဟု ထင်ရသည့်ပုံစံဖြင့် ပုံများကို စီကာ နောက်ဘာဖြစ်မည်ကို ပြောရန် ဖိတ်ခေါ်ပါ။ တစ်မျိုးထက်ပိုသော ပြောပုံကိုလည်း လက်ခံပါ။ invite the child to arrange the pictures in a way that makes sense to them and talk about what happens next. more than one telling is okay. အစီအစဉ်ကို စစ်ဆေးချက်ကဲ့သို့ မပြင်ပါနှင့်။ “နောက်ဘာဖြစ်မလဲ” ဟု မေးပြီး အခြားပြောပုံကိုလည်း လက်ခံပါ။ do not correct the order as a test; ask what happens next and accept another telling. ပုံများဖြင့် အဖြစ်အပျက်အစီအစဉ်တစ်ခု ဖန်တီးကစားခြင်း make and talk through a picture sequence ကလေး စိတ်ဝင်စားမှု လျော့သွားလျှင် ပိုလွယ်အောင်လုပ်ပါ သို့မဟုတ် ရပ်နားပါ။ simplify or stop when the child loses interest. official play and milestone sources informed this optional picture-story activity. it is not a developmental test. reference_verified"
   },
   {
     "ageGroupKey": "3_5y",
@@ -26835,8 +26835,8 @@
   {
     "ageGroupKey": "4y",
     "domainKey": "language",
-    "summaryMm": "ဇာတ်လမ်းဖွဲ့မှုနှင့် စကားပြောမှု",
-    "summaryEn": "Narrative and language",
+    "summaryMm": "ဇာတ်လမ်းပြောကစားခြင်း",
+    "summaryEn": "Storytelling practice",
     "difficulty": "easy",
     "durationMinutes": 10,
     "offline": true,
@@ -26860,13 +26860,13 @@
       },
       "instructions": [
         {
-          "mm": "ဇာတ်ကောင်၊ ဖြစ်ရပ်နှင့် အဆုံးသတ်ကို ကလေးစိတ်ကူးဖြင့် ပြောခိုင်းပါ။",
-          "en": "Invite the child to describe a character, an event, and an ending."
+          "mm": "ဇာတ်ကောင်၊ ဖြစ်ရပ်နှင့် အဆုံးသတ်တစ်ခုကို စိတ်ကူးကာ ပြောရန် ကလေးကို ဖိတ်ခေါ်ပါ။",
+          "en": "Invite the child to imagine and describe a character, an event, and an ending."
         }
       ],
       "safety": {
-        "mm": "စိတ်ကူးကို လက်ခံပြီး လိုအပ်မှ စကားလုံးတစ်လုံးစီ ဖြည့်ပေးပါ။",
-        "en": "Accept the child’s ideas and add only an occasional helpful word."
+        "mm": "ကလေး၏ စိတ်ကူးကို လက်ခံပြီး လိုအပ်မှသာ စကားလုံးတစ်လုံးစီ ကူညီဖြည့်ပေးပါ။ ဇာတ်လမ်းအတွက် အဖြေမှန်တစ်မျိုးတည်း မရှိပါ။",
+        "en": "Accept the child’s ideas and add only an occasional helpful word. There is no single correct story."
       },
       "indoor": true,
       "outdoor": true,
@@ -26875,18 +26875,18 @@
       "parentChild": true,
       "outcomes": [
         {
-          "mm": "ဇာတ်လမ်းဖွဲ့မှုနှင့် စကားပြောမှု",
-          "en": "Narrative and language"
+          "mm": "ဇာတ်လမ်းပြောကစားခြင်း",
+          "en": "Storytelling practice"
         }
       ],
       "variations": [
         {
-          "mm": "ကလေးပင်ပန်းလျှင် အဆင့်ကို လျှော့ပြီး ရပ်နားပါ။",
-          "en": "Simplify or stop when the child is tired."
+          "mm": "ကလေး စိတ်ဝင်စားမှု လျော့သွားလျှင် ပိုလွယ်အောင်လုပ်ပါ သို့မဟုတ် ရပ်နားပါ။",
+          "en": "Simplify or stop when the child loses interest."
         }
       ],
       "lowCost": true,
-      "evidenceSummary": "Play and developmental references support this age-adapted activity for 4 years.",
+      "evidenceSummary": "Official play and milestone sources informed this optional picture-story activity. It is not a developmental test.",
       "editorialStatus": "reference_verified"
     },
     "media": [
@@ -26907,7 +26907,7 @@
     "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
     "version": 1,
     "clinicalStatus": "clinical_review",
-    "searchText": "အစနှင့်အဆုံးပါ ဇာတ်လမ်း story with a beginning and ending ဇာတ်လမ်းဖွဲ့မှုနှင့် စကားပြောမှု narrative and language language play 4y language play လူနှင့်နေရာပါ ပုံသုံးပုံ three pictures showing people and places ဘေးကင်းပြီး နေရာလွတ်ရှိသောနေရာကို ရွေးပါ။ choose a safe, clear space. ဇာတ်ကောင်၊ ဖြစ်ရပ်နှင့် အဆုံးသတ်ကို ကလေးစိတ်ကူးဖြင့် ပြောခိုင်းပါ။ invite the child to describe a character, an event, and an ending. စိတ်ကူးကို လက်ခံပြီး လိုအပ်မှ စကားလုံးတစ်လုံးစီ ဖြည့်ပေးပါ။ accept the child’s ideas and add only an occasional helpful word. ဇာတ်လမ်းဖွဲ့မှုနှင့် စကားပြောမှု narrative and language ကလေးပင်ပန်းလျှင် အဆင့်ကို လျှော့ပြီး ရပ်နားပါ။ simplify or stop when the child is tired. play and developmental references support this age-adapted activity for 4 years. reference_verified"
+    "searchText": "အစနှင့်အဆုံးပါ ဇာတ်လမ်း story with a beginning and ending ဇာတ်လမ်းပြောကစားခြင်း storytelling practice language play 4y language play လူနှင့်နေရာပါ ပုံသုံးပုံ three pictures showing people and places ဘေးကင်းပြီး နေရာလွတ်ရှိသောနေရာကို ရွေးပါ။ choose a safe, clear space. ဇာတ်ကောင်၊ ဖြစ်ရပ်နှင့် အဆုံးသတ်တစ်ခုကို စိတ်ကူးကာ ပြောရန် ကလေးကို ဖိတ်ခေါ်ပါ။ invite the child to imagine and describe a character, an event, and an ending. ကလေး၏ စိတ်ကူးကို လက်ခံပြီး လိုအပ်မှသာ စကားလုံးတစ်လုံးစီ ကူညီဖြည့်ပေးပါ။ ဇာတ်လမ်းအတွက် အဖြေမှန်တစ်မျိုးတည်း မရှိပါ။ accept the child’s ideas and add only an occasional helpful word. there is no single correct story. ဇာတ်လမ်းပြောကစားခြင်း storytelling practice ကလေး စိတ်ဝင်စားမှု လျော့သွားလျှင် ပိုလွယ်အောင်လုပ်ပါ သို့မဟုတ် ရပ်နားပါ။ simplify or stop when the child loses interest. official play and milestone sources informed this optional picture-story activity. it is not a developmental test. reference_verified"
   },
   {
     "ageGroupKey": "4y",
@@ -27601,20 +27601,20 @@
   {
     "ageGroupKey": "4_5y",
     "domainKey": "language",
-    "summaryMm": "အစီအစဉ်မှတ်ဉာဏ်နှင့် စကားပြောမှု",
-    "summaryEn": "Sequence memory and language",
+    "summaryMm": "ပုံဇာတ်လမ်းတွင် အစီအစဉ်ပြ စကားလုံးများကို အသုံးပြုကစားခြင်း",
+    "summaryEn": "Practise sequence words in a picture story",
     "difficulty": "easy",
     "durationMinutes": 10,
     "offline": true,
     "tags": [
       "language",
-      "cognitive",
+      "play",
       "4_5y"
     ],
     "data": {
       "domains": [
         "language",
-        "cognitive"
+        "play"
       ],
       "materials": {
         "mm": "ဖြစ်ရပ်ဆက်စပ်သည့် ပုံလေးပုံ",
@@ -27626,13 +27626,13 @@
       },
       "instructions": [
         {
-          "mm": "ပုံလေးပုံကို စီပြီး “အရင်၊ ပြီးတော့၊ နောက်ဆုံး” စကားလုံးဖြင့် ပြောခိုင်းပါ။",
-          "en": "Order four pictures and retell using “first,” “then,” and “last.”"
+          "mm": "ပုံလေးပုံကို စီကာ “အရင်၊ ပြီးတော့၊ နောက်ဆုံး” ကဲ့သို့ စကားလုံးများသုံးပြီး ဇာတ်လမ်းပြောရန် ကလေးကို ဖိတ်ခေါ်ပါ။ အစီအစဉ်သည် အဖြေတစ်မျိုးတည်းနှင့် ကိုက်ညီရန် မလိုပါ။",
+          "en": "Invite the child to arrange four pictures and tell a story using words such as “first,” “then,” and “last.” The order does not need to match one answer."
         }
       ],
       "safety": {
-        "mm": "ကလေးမသေချာလျှင် ရွေးချယ်စရာနှစ်ခုသာ ပေးပါ။",
-        "en": "If the child is unsure, offer only two choices."
+        "mm": "ကလေးလိုအပ်ပါက ပုံအရေအတွက်ကို လျှော့ပေးပါ။ ဤကစားနည်းကို မှတ်ဉာဏ် သို့မဟုတ် ဖွံ့ဖြိုးမှုစစ်ဆေးချက်အဖြစ် မသုံးပါနှင့်။",
+        "en": "Offer fewer pictures if wanted; do not treat the activity as a memory or developmental test."
       },
       "indoor": true,
       "outdoor": true,
@@ -27641,18 +27641,18 @@
       "parentChild": true,
       "outcomes": [
         {
-          "mm": "အစီအစဉ်မှတ်ဉာဏ်နှင့် စကားပြောမှု",
-          "en": "Sequence memory and language"
+          "mm": "ပုံဇာတ်လမ်းတွင် အစီအစဉ်ပြ စကားလုံးများကို အသုံးပြုကစားခြင်း",
+          "en": "Practise sequence words in a picture story"
         }
       ],
       "variations": [
         {
-          "mm": "ကလေးပင်ပန်းလျှင် အဆင့်ကို လျှော့ပြီး ရပ်နားပါ။",
-          "en": "Simplify or stop when the child is tired."
+          "mm": "ကလေး စိတ်ဝင်စားမှု လျော့သွားလျှင် ပိုလွယ်အောင်လုပ်ပါ သို့မဟုတ် ရပ်နားပါ။",
+          "en": "Simplify or stop when the child loses interest."
         }
       ],
       "lowCost": true,
-      "evidenceSummary": "Play and developmental references support this age-adapted activity for 4.5 years.",
+      "evidenceSummary": "Official play and milestone sources informed this optional picture-story activity. It is not a developmental test.",
       "editorialStatus": "reference_verified"
     },
     "media": [
@@ -27673,7 +27673,7 @@
     "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
     "version": 1,
     "clinicalStatus": "clinical_review",
-    "searchText": "ပုံလေးပုံ အစီအစဉ်ဇာတ်လမ်း four-picture sequence story အစီအစဉ်မှတ်ဉာဏ်နှင့် စကားပြောမှု sequence memory and language language cognitive 4_5y language cognitive ဖြစ်ရပ်ဆက်စပ်သည့် ပုံလေးပုံ four pictures from one event ဘေးကင်းပြီး နေရာလွတ်ရှိသောနေရာကို ရွေးပါ။ choose a safe, clear space. ပုံလေးပုံကို စီပြီး “အရင်၊ ပြီးတော့၊ နောက်ဆုံး” စကားလုံးဖြင့် ပြောခိုင်းပါ။ order four pictures and retell using “first,” “then,” and “last.” ကလေးမသေချာလျှင် ရွေးချယ်စရာနှစ်ခုသာ ပေးပါ။ if the child is unsure, offer only two choices. အစီအစဉ်မှတ်ဉာဏ်နှင့် စကားပြောမှု sequence memory and language ကလေးပင်ပန်းလျှင် အဆင့်ကို လျှော့ပြီး ရပ်နားပါ။ simplify or stop when the child is tired. play and developmental references support this age-adapted activity for 4.5 years. reference_verified"
+    "searchText": "ပုံလေးပုံ အစီအစဉ်ဇာတ်လမ်း four-picture sequence story ပုံဇာတ်လမ်းတွင် အစီအစဉ်ပြ စကားလုံးများကို အသုံးပြုကစားခြင်း practise sequence words in a picture story language play 4_5y language play ဖြစ်ရပ်ဆက်စပ်သည့် ပုံလေးပုံ four pictures from one event ဘေးကင်းပြီး နေရာလွတ်ရှိသောနေရာကို ရွေးပါ။ choose a safe, clear space. ပုံလေးပုံကို စီကာ “အရင်၊ ပြီးတော့၊ နောက်ဆုံး” ကဲ့သို့ စကားလုံးများသုံးပြီး ဇာတ်လမ်းပြောရန် ကလေးကို ဖိတ်ခေါ်ပါ။ အစီအစဉ်သည် အဖြေတစ်မျိုးတည်းနှင့် ကိုက်ညီရန် မလိုပါ။ invite the child to arrange four pictures and tell a story using words such as “first,” “then,” and “last.” the order does not need to match one answer. ကလေးလိုအပ်ပါက ပုံအရေအတွက်ကို လျှော့ပေးပါ။ ဤကစားနည်းကို မှတ်ဉာဏ် သို့မဟုတ် ဖွံ့ဖြိုးမှုစစ်ဆေးချက်အဖြစ် မသုံးပါနှင့်။ offer fewer pictures if wanted; do not treat the activity as a memory or developmental test. ပုံဇာတ်လမ်းတွင် အစီအစဉ်ပြ စကားလုံးများကို အသုံးပြုကစားခြင်း practise sequence words in a picture story ကလေး စိတ်ဝင်စားမှု လျော့သွားလျှင် ပိုလွယ်အောင်လုပ်ပါ သို့မဟုတ် ရပ်နားပါ။ simplify or stop when the child loses interest. official play and milestone sources informed this optional picture-story activity. it is not a developmental test. reference_verified"
   },
   {
     "ageGroupKey": "4_5y",
@@ -28292,20 +28292,20 @@
   {
     "ageGroupKey": "5y",
     "domainKey": "language",
-    "summaryMm": "အကြောင်းအကျိုးနှင့် ဇာတ်လမ်းဖွဲ့မှု",
-    "summaryEn": "Cause-and-effect and narrative",
+    "summaryMm": "ပြဿနာ၊ ဖြစ်နိုင်သော စိတ်ကူးများနှင့် အဆုံးသတ်တစ်ခုကို စိတ်ကူးကစားခြင်း",
+    "summaryEn": "Imagine a problem, possible ideas, and an ending",
     "difficulty": "easy",
     "durationMinutes": 10,
     "offline": true,
     "tags": [
       "language",
-      "problem_solving",
+      "play",
       "5y"
     ],
     "data": {
       "domains": [
         "language",
-        "problem_solving"
+        "play"
       ],
       "materials": {
         "mm": "စိတ်ကူးပုံသုံးပုံ သို့မဟုတ် လေးပုံ",
@@ -28317,13 +28317,13 @@
       },
       "instructions": [
         {
-          "mm": "ဇာတ်ကောင်မှာ ဘာပြဿနာရှိသလဲ၊ ဘယ်လိုဖြေရှင်းမလဲ၊ နောက်ဆုံးဘာဖြစ်လဲ မေးပါ။",
-          "en": "Ask what problem the character has, how it could be solved, and what happens at the end."
+          "mm": "ဇာတ်ကောင်တွင် ဘာပြဿနာရှိနိုင်သလဲ၊ ဘာစိတ်ကူးများ စမ်းကြည့်နိုင်သလဲနှင့် နောက်ဆုံး ဘာဖြစ်နိုင်သလဲကို မေးပါ။",
+          "en": "Ask what problem the character might have, what ideas they could try, and what might happen at the end."
         }
       ],
       "safety": {
-        "mm": "အဖြေတစ်မျိုးတည်း မတောင်းဘဲ ဘေးကင်းသော စိတ်ကူးများကို လက်ခံပါ။",
-        "en": "Do not require one correct answer; accept safe, imaginative solutions."
+        "mm": "အဖြေတစ်မျိုးတည်းကို မတောင်းဆိုပါနှင့်။ ကြင်နာမှုရှိသော သို့မဟုတ် လက်တွေ့လုပ်ဆောင်နိုင်သည့် စိတ်ကူးများကို လက်ခံပါ။",
+        "en": "Do not require one correct answer; accept kind or workable ideas."
       },
       "indoor": true,
       "outdoor": true,
@@ -28332,18 +28332,18 @@
       "parentChild": true,
       "outcomes": [
         {
-          "mm": "အကြောင်းအကျိုးနှင့် ဇာတ်လမ်းဖွဲ့မှု",
-          "en": "Cause-and-effect and narrative"
+          "mm": "ပြဿနာ၊ ဖြစ်နိုင်သော စိတ်ကူးများနှင့် အဆုံးသတ်တစ်ခုကို စိတ်ကူးကစားခြင်း",
+          "en": "Imagine a problem, possible ideas, and an ending"
         }
       ],
       "variations": [
         {
-          "mm": "ကလေးပင်ပန်းလျှင် အဆင့်ကို လျှော့ပြီး ရပ်နားပါ။",
-          "en": "Simplify or stop when the child is tired."
+          "mm": "ကလေး စိတ်ဝင်စားမှု လျော့သွားလျှင် ပိုလွယ်အောင်လုပ်ပါ သို့မဟုတ် ရပ်နားပါ။",
+          "en": "Simplify or stop when the child loses interest."
         }
       ],
       "lowCost": true,
-      "evidenceSummary": "Play and developmental references support this age-adapted activity for 5 years.",
+      "evidenceSummary": "Official play and milestone sources informed this optional picture-story activity. It is not a developmental test.",
       "editorialStatus": "reference_verified"
     },
     "media": [
@@ -28364,7 +28364,7 @@
     "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
     "version": 1,
     "clinicalStatus": "clinical_review",
-    "searchText": "ပြဿနာနှင့် ဖြေရှင်းချက်ပါ ဇာတ်လမ်း problem-and-solution story အကြောင်းအကျိုးနှင့် ဇာတ်လမ်းဖွဲ့မှု cause-and-effect and narrative language problem_solving 5y language problem_solving စိတ်ကူးပုံသုံးပုံ သို့မဟုတ် လေးပုံ three or four imaginary-scene pictures ဘေးကင်းပြီး နေရာလွတ်ရှိသောနေရာကို ရွေးပါ။ choose a safe, clear space. ဇာတ်ကောင်မှာ ဘာပြဿနာရှိသလဲ၊ ဘယ်လိုဖြေရှင်းမလဲ၊ နောက်ဆုံးဘာဖြစ်လဲ မေးပါ။ ask what problem the character has, how it could be solved, and what happens at the end. အဖြေတစ်မျိုးတည်း မတောင်းဘဲ ဘေးကင်းသော စိတ်ကူးများကို လက်ခံပါ။ do not require one correct answer; accept safe, imaginative solutions. အကြောင်းအကျိုးနှင့် ဇာတ်လမ်းဖွဲ့မှု cause-and-effect and narrative ကလေးပင်ပန်းလျှင် အဆင့်ကို လျှော့ပြီး ရပ်နားပါ။ simplify or stop when the child is tired. play and developmental references support this age-adapted activity for 5 years. reference_verified"
+    "searchText": "ပြဿနာနှင့် ဖြေရှင်းချက်ပါ ဇာတ်လမ်း problem-and-solution story ပြဿနာ၊ ဖြစ်နိုင်သော စိတ်ကူးများနှင့် အဆုံးသတ်တစ်ခုကို စိတ်ကူးကစားခြင်း imagine a problem, possible ideas, and an ending language play 5y language play စိတ်ကူးပုံသုံးပုံ သို့မဟုတ် လေးပုံ three or four imaginary-scene pictures ဘေးကင်းပြီး နေရာလွတ်ရှိသောနေရာကို ရွေးပါ။ choose a safe, clear space. ဇာတ်ကောင်တွင် ဘာပြဿနာရှိနိုင်သလဲ၊ ဘာစိတ်ကူးများ စမ်းကြည့်နိုင်သလဲနှင့် နောက်ဆုံး ဘာဖြစ်နိုင်သလဲကို မေးပါ။ ask what problem the character might have, what ideas they could try, and what might happen at the end. အဖြေတစ်မျိုးတည်းကို မတောင်းဆိုပါနှင့်။ ကြင်နာမှုရှိသော သို့မဟုတ် လက်တွေ့လုပ်ဆောင်နိုင်သည့် စိတ်ကူးများကို လက်ခံပါ။ do not require one correct answer; accept kind or workable ideas. ပြဿနာ၊ ဖြစ်နိုင်သော စိတ်ကူးများနှင့် အဆုံးသတ်တစ်ခုကို စိတ်ကူးကစားခြင်း imagine a problem, possible ideas, and an ending ကလေး စိတ်ဝင်စားမှု လျော့သွားလျှင် ပိုလွယ်အောင်လုပ်ပါ သို့မဟုတ် ရပ်နားပါ။ simplify or stop when the child loses interest. official play and milestone sources informed this optional picture-story activity. it is not a developmental test. reference_verified"
   },
   {
     "ageGroupKey": "5y",

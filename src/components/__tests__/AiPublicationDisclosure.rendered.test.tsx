@@ -31,6 +31,11 @@ function mathItem(publicationLane: LibraryRowLike['publicationLane'] = 'ai_audit
   return { ...seed, _id: 'math-row', publicationLane };
 }
 
+function pictureStoryItem(): LibraryRowLike {
+  const seed = CONTENT_SEED.find((row) => row.slug === 'act_picture_story_2_5y')!;
+  return { ...seed, _id: 'picture-story-row', publicationLane: 'ai_audited' };
+}
+
 function renderDetail() {
   return render(
     <MemoryRouter initialEntries={['/content/lsn_early_math']}>
@@ -71,6 +76,25 @@ describe('parent-facing AI publication disclosure', () => {
     // Prefix cleanup remains safe because a separate, unstripped disclosure is shown.
     expect(screen.queryByText(/^AI review notice —/)).not.toBeInTheDocument();
   });
+
+  it.each(['en', 'mm'] as const)(
+    'renders the canonical %s AI-only disclosure exactly once for a picture-story activity',
+    async (locale) => {
+      localStorage.setItem('ace-locale', locale);
+      state.remote = { item: pictureStoryItem(), media: [], staff: false };
+      renderDetail();
+
+      const disclosure = await screen.findByTestId('ai-publication-disclosure');
+      expect(disclosure).toBeVisible();
+      expect(disclosure).toHaveTextContent(AI_BADGE[locale]);
+      expect(disclosure).toHaveTextContent(AI_DISCLOSURE[locale]);
+      expect(screen.getAllByText(AI_DISCLOSURE[locale])).toHaveLength(1);
+      expect(screen.queryByText(/^AI review notice —/)).not.toBeInTheDocument();
+      expect(screen.getAllByText(locale === 'en'
+        ? 'An opportunity to talk about familiar pictures'
+        : 'ရင်းနှီးသော ပုံများအကြောင်း ပြောဆိုရန် အခွင့်အရေး')).toHaveLength(2);
+    },
+  );
 
   it.each(['human_reviewed', 'missing'] as const)('does not add AI provenance to a %s lane', (lane) => {
     localStorage.setItem('ace-locale', 'en');
