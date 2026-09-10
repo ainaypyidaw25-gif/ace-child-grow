@@ -233,7 +233,8 @@ async function main() {
     ...aiIdentity,
     checkedAt: Date.now(),
   });
-  add('ai_preview', classify.assessSixPictureStoriesPostflight(ai, aiIdentity), {
+  const aiReadiness = classify.assessSixPictureStoriesPostflight(ai, aiIdentity);
+  add('ai_preview', aiReadiness, {
     releaseRoot: ai.releaseRoot,
     artifactHash: ai.artifactHash,
     snapshotSha256: ai.snapshotSha256,
@@ -274,7 +275,17 @@ async function main() {
       for (const row of rows) out[String(row[key] ?? 'missing')] = (out[String(row[key] ?? 'missing')] ?? 0) + 1;
       return out;
     };
-    const linked = new Set(links.flatMap(link => link.sourceIds));
+    const sourceById = new Map(sources.map(source => [source.sourceId, source]));
+    const groupByTarget = (rows, keyFor) => {
+      const grouped = new Map();
+      for (const row of rows) {
+        const key = keyFor(row);
+        grouped.set(key, [...(grouped.get(key) ?? []), row]);
+      }
+      return grouped;
+    };
+    const contentByTarget = groupByTarget(content, row => row.type + '\\u0000' + row.slug);
+    const releaseByTarget = groupByTarget(releases, row => row.contentType + '\\u0000' + row.contentSlug);
     const releaseSourceState = [];
     for (const release of releases) {
       for (const snapshot of release.sourceSnapshots) {
@@ -288,6 +299,28 @@ async function main() {
         });
       }
     }
+    const sourceDependencies = links.flatMap(link => link.sourceIds.map(sourceId => {
+      const targetKey = link.kind + '\\u0000' + link.slug;
+      const contentMatches = contentByTarget.get(targetKey) ?? [];
+      const releaseMatches = releaseByTarget.get(targetKey) ?? [];
+      const linkedContent = contentMatches[0] ?? null;
+      const release = releaseMatches[0] ?? null;
+      const source = sourceById.get(sourceId) ?? null;
+      const snapshot = release?.sourceSnapshots.find(row => row.sourceId === sourceId) ?? null;
+      return {
+        sourceId,
+        contentSlug: link.slug,
+        contentStatus: linkedContent?.clinicalStatus ?? null,
+        contentExists: linkedContent !== null,
+        targetJoinExact: contentMatches.length <= 1 && releaseMatches.length <= 1,
+        aiReleaseActive: release?.status === 'active',
+        aiSourceSnapshotExact: Boolean(
+          source
+          && snapshot
+          && source.updatedAt === snapshot.sourceUpdatedAt
+        ),
+      };
+    }));
     return {
       bounds: {
         content: content.length,
@@ -301,11 +334,11 @@ async function main() {
       reviewDecision: count(reviews, 'decision'),
       evidenceStatus: count(sources, 'reviewStatus'),
       batches: batches.map(batch => ({ batchId: batch.batchId, status: batch.status, predecessorBatchId: batch.predecessorBatchId })),
-      nonApprovedSources: sources.filter(source => source.reviewStatus !== 'approved').map(source => ({
+      evidenceSources: sources.map(source => ({
         sourceId: source.sourceId,
         reviewStatus: source.reviewStatus,
-        linked: linked.has(source.sourceId),
       })),
+      sourceDependencies,
       releaseSourceState,
     };
   `);
@@ -349,19 +382,25 @@ async function main() {
     });
   }
 
-  const linkedNonApproved = registry.nonApprovedSources.filter((source) => source.linked);
-  add('evidence', linkedNonApproved.length > 0 ? {
-    level: 'blocked',
-    code: 'linked_evidence_not_approved',
-    detail: `Non-approved sources are linked to content: ${linkedNonApproved.map((source) => source.sourceId).join(', ')}.`,
-  } : {
-    level: 'pass',
-    code: 'nonapproved_evidence_unlinked',
-    detail: 'No non-approved evidence source is linked to content.',
-  }, {
-    reviewStatus: registry.evidenceStatus,
-    nonApprovedSources: registry.nonApprovedSources,
+  const evidenceReadiness = classify.assessEvidenceSourceReadiness({
+    aiPublicationExact: aiReadiness.level === 'pass',
+    sources: registry.evidenceSources,
+    dependencies: registry.sourceDependencies,
   });
+  for (const finding of [
+    evidenceReadiness.duplicateSources,
+    evidenceReadiness.missingSources,
+    evidenceReadiness.ambiguousTargets,
+    evidenceReadiness.conventionalPublic,
+    evidenceReadiness.aiPreview,
+    evidenceReadiness.unpublishedBacklog,
+    evidenceReadiness.unlinked,
+  ]) {
+    add('evidence', finding, {
+      reviewStatus: registry.evidenceStatus,
+      sourceIds: evidenceReadiness.sourceIds,
+    });
+  }
   const driftedReleaseSources = registry.releaseSourceState.filter(
     (source) => source.liveUpdatedAt !== source.frozenUpdatedAt,
   );

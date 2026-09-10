@@ -341,6 +341,215 @@ export function assessSixPictureStoriesPostflight(
   };
 }
 
+export type EvidenceSourceReadinessSnapshot = {
+  aiPublicationExact: boolean;
+  sources: Array<{
+    sourceId: string;
+    reviewStatus: string;
+  }>;
+  dependencies: Array<{
+    sourceId: string;
+    contentSlug: string;
+    contentStatus: string | null;
+    contentExists: boolean;
+    targetJoinExact: boolean;
+    aiReleaseActive: boolean;
+    aiSourceSnapshotExact: boolean;
+  }>;
+};
+
+export type EvidenceSourceReadinessAssessment = {
+  duplicateSources: ReadinessFinding;
+  missingSources: ReadinessFinding;
+  ambiguousTargets: ReadinessFinding;
+  conventionalPublic: ReadinessFinding;
+  aiPreview: ReadinessFinding;
+  unpublishedBacklog: ReadinessFinding;
+  unlinked: ReadinessFinding;
+  sourceIds: {
+    duplicate: string[];
+    missing: string[];
+    ambiguousTarget: string[];
+    blockedConventionalPublic: string[];
+    blockedAiPreview: string[];
+    exactAiPreview: string[];
+    unpublishedBacklog: string[];
+    unlinked: string[];
+  };
+};
+
+/**
+ * Classify source-review debt by the publication path it can actually affect.
+ * `approved` remains a qualified human decision. The separately disclosed AI
+ * lane may use awaiting/in-review metadata only when the full immutable AI gate
+ * and this source's frozen snapshot are exact.
+ */
+export function assessEvidenceSourceReadiness(
+  snapshot: EvidenceSourceReadinessSnapshot,
+): EvidenceSourceReadinessAssessment {
+  const categories = {
+    duplicate: new Set<string>(),
+    missing: new Set<string>(),
+    ambiguousTarget: new Set<string>(),
+    blockedConventionalPublic: new Set<string>(),
+    blockedAiPreview: new Set<string>(),
+    exactAiPreview: new Set<string>(),
+    unpublishedBacklog: new Set<string>(),
+    unlinked: new Set<string>(),
+  };
+
+  const sourceCounts = new Map<string, number>();
+  for (const source of snapshot.sources) {
+    sourceCounts.set(source.sourceId, (sourceCounts.get(source.sourceId) ?? 0) + 1);
+  }
+  for (const [sourceId, count] of sourceCounts) {
+    if (count > 1) categories.duplicate.add(sourceId);
+  }
+  const knownSourceIds = new Set(sourceCounts.keys());
+  for (const dependency of snapshot.dependencies) {
+    if (!knownSourceIds.has(dependency.sourceId)) {
+      categories.missing.add(dependency.sourceId);
+    }
+    if (!dependency.targetJoinExact) {
+      categories.ambiguousTarget.add(dependency.sourceId);
+    }
+  }
+
+  for (const source of snapshot.sources) {
+    if (source.reviewStatus === 'approved') continue;
+    const dependencies = snapshot.dependencies.filter(
+      (dependency) => dependency.sourceId === source.sourceId,
+    );
+    if (dependencies.length === 0) {
+      categories.unlinked.add(source.sourceId);
+      continue;
+    }
+
+    const conventionalPublic = dependencies.some(
+      (dependency) =>
+        dependency.contentStatus === 'published'
+        // Evidence links without a libraryContent row back inherently public
+        // safety/hope references and therefore use the conventional gate.
+        || !dependency.contentExists,
+    );
+    if (conventionalPublic) {
+      categories.blockedConventionalPublic.add(source.sourceId);
+      continue;
+    }
+
+    const aiDependencies = dependencies.filter(
+      (dependency) => dependency.aiReleaseActive,
+    );
+    if (aiDependencies.length > 0) {
+      const aiStatusEligible = source.reviewStatus === 'awaiting_review'
+        || source.reviewStatus === 'in_review';
+      if (
+        snapshot.aiPublicationExact
+        && aiStatusEligible
+        && aiDependencies.every(
+          (dependency) => dependency.aiSourceSnapshotExact,
+        )
+      ) {
+        categories.exactAiPreview.add(source.sourceId);
+      } else {
+        categories.blockedAiPreview.add(source.sourceId);
+      }
+      continue;
+    }
+
+    categories.unpublishedBacklog.add(source.sourceId);
+  }
+
+  const ids = Object.fromEntries(
+    Object.entries(categories).map(([key, values]) => [
+      key,
+      [...values].sort(),
+    ]),
+  ) as EvidenceSourceReadinessAssessment['sourceIds'];
+  const count = (values: string[]) => values.length;
+
+  return {
+    duplicateSources: count(ids.duplicate) > 0
+      ? {
+          level: 'blocked',
+          code: 'evidence_source_id_duplicate',
+          detail: `Evidence source IDs are not unique: ${ids.duplicate.join(', ')}.`,
+        }
+      : {
+          level: 'pass',
+          code: 'evidence_source_ids_unique',
+          detail: 'Every evidence source ID resolves to exactly one row.',
+        },
+    missingSources: count(ids.missing) > 0
+      ? {
+          level: 'blocked',
+          code: 'evidence_link_source_missing',
+          detail: `Evidence links reference missing source rows: ${ids.missing.join(', ')}.`,
+        }
+      : {
+          level: 'pass',
+          code: 'evidence_link_sources_exist',
+          detail: 'Every evidence-link source ID resolves to an evidence source row.',
+        },
+    ambiguousTargets: count(ids.ambiguousTarget) > 0
+      ? {
+          level: 'blocked',
+          code: 'evidence_target_join_ambiguous',
+          detail: `Evidence-link targets have duplicate content or active release rows: ${ids.ambiguousTarget.join(', ')}.`,
+        }
+      : {
+          level: 'pass',
+          code: 'evidence_target_joins_exact',
+          detail: 'Every evidence-link target resolves without duplicate content or active release rows.',
+        },
+    conventionalPublic: count(ids.blockedConventionalPublic) > 0
+      ? {
+          level: 'blocked',
+          code: 'conventional_public_source_not_approved',
+          detail: `Conventionally published content has non-approved evidence: ${ids.blockedConventionalPublic.join(', ')}.`,
+        }
+      : {
+          level: 'pass',
+          code: 'conventional_public_sources_approved',
+          detail: 'No conventionally public content depends on non-approved evidence.',
+        },
+    aiPreview: count(ids.blockedAiPreview) > 0
+      ? {
+          level: 'blocked',
+          code: 'ai_preview_source_gate_not_exact',
+          detail: `Active AI previews have a non-approved source outside the exact AI gate: ${ids.blockedAiPreview.join(', ')}.`,
+        }
+      : {
+          level: 'pass',
+          code: count(ids.exactAiPreview) > 0
+            ? 'ai_preview_sources_exact_without_human_approval'
+            : 'ai_preview_nonapproved_sources_not_applicable',
+          detail: count(ids.exactAiPreview) > 0
+            ? `The disclosed exact AI gate covers awaiting or in-review source metadata without representing human approval: ${ids.exactAiPreview.join(', ')}.`
+            : 'No active AI preview depends on non-approved evidence.',
+        },
+    unpublishedBacklog: count(ids.unpublishedBacklog) > 0
+      ? {
+          level: 'advisory',
+          code: 'evidence_awaiting_unpublished_backlog',
+          detail: `Non-approved evidence remains linked only to unpublished content: ${ids.unpublishedBacklog.join(', ')}.`,
+        }
+      : {
+          level: 'pass',
+          code: 'evidence_unpublished_backlog_clear',
+          detail: 'No non-approved evidence remains linked solely to unpublished content.',
+        },
+    unlinked: {
+      level: 'pass',
+      code: 'unlinked_nonapproved_sources_not_blocking',
+      detail: count(ids.unlinked) > 0
+        ? `Unlinked non-approved sources do not affect publication readiness: ${ids.unlinked.join(', ')}.`
+        : 'No unlinked non-approved sources were found.',
+    },
+    sourceIds: ids,
+  };
+}
+
 export type ClinicalBatchSnapshot = {
   batchId: string;
   status: 'frozen' | 'active' | 'stopped_changes_requested' | 'completed' | 'invalidated';
