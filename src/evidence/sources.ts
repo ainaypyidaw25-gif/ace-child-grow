@@ -560,6 +560,23 @@ export const GOVERNMENT_SOURCES: EvidenceSource[] = [
       'The official Head Start PDF cover prints this title, 2015 and the Office of Head Start corporate body. The framework describes overlapping developmental progressions from birth through 60 months; its preschool Mathematics Development domain explicitly covers counting and cardinality, measurement, patterns, geometry and spatial sense. It also says the framework is not an assessment tool or checklist and must not be used to conclude that a child has failed or is not ready.',
   }),
   s({
+    id: 'naeyc-nurturing-early-math-play-2022',
+    org: 'National Association for the Education of Young Children',
+    orgKey: 'JOURNAL',
+    title: 'Rocking and Rolling. Nurturing Early Math Play and Discovery',
+    authors: 'Rebecca Parlakian',
+    year: 2022,
+    edition: 'Young Children; Fall 2022; Vol. 77, No. 3',
+    country: null,
+    url: 'https://www.naeyc.org/resources/pubs/yc/fall2022/nurturing-early-math-play',
+    evidenceLevel: 'parent_education',
+    keywords: ['early math', 'counting', 'shapes', 'measurement', 'infant', 'toddler'],
+    topics: ['cognitive', 'play', 'parenting'],
+    verifiedOn: '2026-09-10',
+    verifiedNote:
+      'The publisher page names Rebecca Parlakian, Young Children, Fall 2022, Vol. 77, No. 3, and copyright 2022. It describes everyday counting, shape exploration and size-comparison language with playful adult support. Audience is Teacher; age category is Infant/Toddler, without a precise numeric age band. Used for general educational practice only, not assessment, a required five-object daily dose, or evidence of superiority over flashcards. No human review is asserted.',
+  }),
+  s({
     id: 'us-hhs-head-start-first-day-jitters-2024',
     org: 'U.S. Department of Health and Human Services, Administration for Children and Families, Office of Head Start',
     orgKey: 'GOV',

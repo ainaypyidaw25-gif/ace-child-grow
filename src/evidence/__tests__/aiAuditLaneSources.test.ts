@@ -5,7 +5,7 @@ import { SOURCE_BY_ID } from '../sources';
 describe('bounded AI source-audit lane', () => {
   it('uses claim-direct current sources for everyday early math', () => {
     expect(sourcesForContent('lsn_early_math', 'lesson')).toEqual([
-      'us-hhs-head-start-elof-2015',
+      'naeyc-nurturing-early-math-play-2022',
     ]);
     expect(sourcesForContent('lsn_early_math', 'lesson')).not.toContain(
       'tb-handbook-ecse-2016',
@@ -33,6 +33,26 @@ describe('bounded AI source-audit lane', () => {
       verifiedOn: '2026-08-19',
       reviewStatus: 'awaiting_review',
     });
+    expect(SOURCE_BY_ID.get('naeyc-nurturing-early-math-play-2022')).toMatchObject({
+      title: 'Rocking and Rolling. Nurturing Early Math Play and Discovery',
+      authors: 'Rebecca Parlakian',
+      year: 2022,
+      edition: 'Young Children; Fall 2022; Vol. 77, No. 3',
+      url: 'https://www.naeyc.org/resources/pubs/yc/fall2022/nurturing-early-math-play',
+      evidenceLevel: 'parent_education',
+      verifiedOn: '2026-09-10',
+      reviewStatus: 'awaiting_review',
+      reviewer: null,
+      reviewDate: null,
+      ageMonthsMin: null,
+      ageMonthsMax: null,
+      doi: null,
+      isbn: null,
+      pmid: null,
+    });
+    expect(relatedContent('naeyc-nurturing-early-math-play-2022').lesson).toEqual(['lsn_early_math']);
+    // A math article is not a replacement for unrelated social/emotional guidance.
+    expect(sourcesForContent('lsn_big_feelings', 'lesson')).toContain('us-hhs-head-start-elof-2015');
   });
 
   it('uses outpatient waiting-area guidance instead of a baby-review schedule', () => {
