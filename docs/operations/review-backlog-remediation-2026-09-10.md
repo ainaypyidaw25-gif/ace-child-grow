@@ -18,7 +18,7 @@ The local-versus-production authored-field comparison found 139 items with seed 
 | AI preparatory pass only | 49 |
 | Total | 280 |
 
-These are mutually exclusive primary findings, not completed publication gates. Existing clinical requirements on 46 records overlap these groups. The 49 preparatory passes retain all missing human-review requirements and the reports' source/media verification limits. They are not release-ready approvals.
+These are mutually exclusive primary findings, not completed publication gates. Existing clinical requirements on 44 records in this 280-item packet overlap these groups. The earlier 282-item inventory counted 46 before the two stories left the pending queue. The 49 preparatory passes retain all missing human-review requirements and the reports' source/media verification limits. They are not release-ready approvals.
 
 Code verification after the attribution correction: 2,384 Vitest tests passed, build and lint passed, and 10 additional local node integrity/comparison tests passed. Initial seed parity failure was fixed by canonical regeneration of only the three targets' derived search text; no other seed record was changed.
 
@@ -26,7 +26,7 @@ Code verification after the attribution correction: 2,384 Vitest tests passed, b
 
 - The unpublished `gd_birth_2m_nutrition` r6 Burmese honey warning says 6 months, whereas English and the current authored seed say 12 months. CDC's current food guidance supports the 12-month restriction. A browser form attempt was not saved and was discarded; independent production read-back confirmed r6 and the old wording unchanged. **Do not call this corrected in production.**
 - Unpublished guides contain choking-material, cord, sleep-surface and bilingual terminology issues. Reports identify exact fields, before/after proposals and current seed comparisons. These are not complete release payloads.
-- Milestone age claims and special-needs treatment/referral copy require targeted source or specialist review. The code's 46-item clinical classification is not an exhaustive medical risk assessment.
+- Milestone age claims and special-needs treatment/referral copy require targeted source or specialist review. The packet's 44-item clinical classification is not an exhaustive medical risk assessment.
 - All 24 pending printables were reviewed as metadata/preview records only. The actual printable payloads were not available in the captured packet, so no actual PDF/tool review is claimed.
 - Corrected AAP/HealthyChildren publisher attribution in the local authored and generated seeds for `act_board_book_point`, `act_lift_the_flap_book` and `act_first_words_book_share`. Only three evidence-summary strings and their derived generated `searchText` values changed. No status, revision, approval, source-link or history changes were made. This does not update production data.
 
