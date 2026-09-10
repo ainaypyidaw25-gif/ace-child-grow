@@ -1004,8 +1004,10 @@ describe('clinically sourced content corrections', () => {
   it('keeps responsive-caregiving copy bilingual and avoids categorical benefit claims', () => {
     const powerOfPlay = dataFor('lsn_power_of_play');
     expect((powerOfPlay.actionToday as { en: string }).en).toBe(
-      'Today, use one safe household object to play with your child.',
+      'Today, notice what interests your child and respond with a sound, gesture, or words.',
     );
+    expect((powerOfPlay.body as { en: string }).en).not.toContain('household object');
+    expect((powerOfPlay.body as { en: string }).en).not.toContain('learn best');
 
     const birthCommunication = dataFor('gd_birth_2m_communication');
     expect((birthCommunication.why as { en: string }).en).toContain(
@@ -1144,7 +1146,7 @@ describe('clinically sourced content corrections', () => {
       'Naming what the child points at supports vocabulary learning and shared attention.',
     );
     expect((dataFor('lsn_power_of_play').takeaway as { en: string }).en).toBe(
-      'Playing with you is valuable learning time for your child.',
+      'Enjoyable back-and-forth play can support connection and learning.',
     );
   });
 

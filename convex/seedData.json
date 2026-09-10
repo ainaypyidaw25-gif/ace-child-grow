@@ -4027,8 +4027,8 @@
   },
   {
     "category": "learning_through_play",
-    "summaryMm": "ကစားခြင်းသည် ကလေးငယ်များ သင်ယူရာတွင် အရေးပါသော နည်းလမ်းတစ်ခု ဖြစ်သည်။",
-    "summaryEn": "Play is an important way young children learn.",
+    "summaryMm": "ကစားခြင်းက သင်ယူမှုနှင့် ရင်းနှီးဆက်ဆံမှုအတွက် အခွင့်အလမ်းများ ပေးနိုင်ပါသည်။",
+    "summaryEn": "Play offers opportunities for learning and connection.",
     "durationMinutes": 3,
     "tags": [
       "learning_through_play",
@@ -4043,35 +4043,35 @@
       ],
       "readingMinutes": 3,
       "body": {
-        "mm": "ကစားခြင်းသည် ကလေးငယ်များအတွက် အရေးပါသော သင်ယူနည်းတစ်ခု ဖြစ်သည်။ ကစားနေစဉ် စဉ်းစားတွေးခေါ်နိုင်စွမ်း၊ ဘာသာစကား၊ ကိုယ်လက်လှုပ်ရှားမှုနှင့် လူမှုဆက်ဆံရေးတို့ တဖြည်းဖြည်း ဖွံ့ဖြိုးလာနိုင်သည်။ ဈေးကြီးသော ကစားစရာများ မလိုအပ်ပါ။ မိဘ၏ အာရုံစိုက်ပေးမှုနှင့် ဘေးကင်းသော အိမ်သုံးပစ္စည်းများက ကစားခြင်းနှင့် သင်ယူမှုကို အထောက်အကူပြုနိုင်ပါသည်။",
-        "en": "Play is an important way young children learn. Through play, thinking, language, movement, and relationships can develop gradually. Expensive toys are not needed; caregiver attention and safe household objects can support play and learning."
+        "mm": "AI စစ်ဆေးမှု အသိပေးချက် — ဤအကြောင်းအရာကို AI ဖြင့် စစ်ဆေးထားသော်လည်း ဆေးဘက်ပညာရှင် သို့မဟုတ် မြန်မာဘာသာကို မိခင်ဘာသာစကားအဖြစ် အသုံးပြုသော စာတည်းဖြတ်သူက အတည်ပြုထားခြင်း မရှိပါ။ အထွေထွေပညာပေးအတွက်သာ ဖြစ်ပြီး ဆေးဘက်ဆိုင်ရာ အကြံပြုချက်၊ ကလေးဖွံ့ဖြိုးမှု စစ်ဆေးချက် သို့မဟုတ် ရောဂါဖော်ထုတ်ချက် မဟုတ်ပါ။\n\nကစားခြင်းက ဘာသာစကား၊ သင်ယူမှုနှင့် ပြုစုစောင့်ရှောက်သူနှင့် နွေးထွေးစွာ အပြန်အလှန်ဆက်ဆံမှုအတွက် အခွင့်အလမ်းများ ပေးနိုင်ပါသည်။ ကလေး၏ စိတ်ဝင်စားမှုနှင့် စွမ်းရည်တို့နှင့် ကိုက်ညီသော ကစားနည်းကို ရွေးပါ။ ကလေး၏ အသံ၊ အမူအရာ သို့မဟုတ် စကားများကို သတိပြု၍ တုံ့ပြန်ပြီး ခဏနားချိန်များ ပေးပါ။",
+        "en": "AI review notice — This content was reviewed by AI but has not been approved by a clinician or native Myanmar-language editor. It is for general education only and is not medical advice, developmental screening, or diagnosis.\n\nPlay can offer opportunities for language, learning, and warm interaction with a caregiver. Choose play that fits your child’s interests and abilities. Notice and respond to their sounds, gestures, or words, and allow pauses."
       },
       "quiz": [
         {
           "q": {
-            "mm": "ကလေးနှင့် ကစားရန် ဈေးကြီးသော ကစားစရာများ —",
-            "en": "Expensive toys are —"
+            "mm": "ပျော်ရွှင်ဖွယ် ကစားချိန်ကို အထောက်အကူပြုသည့် နည်းလမ်းမှာ —",
+            "en": "Which approach supports enjoyable play?"
           },
           "options": [
             {
-              "mm": "မဖြစ်မနေ လိုအပ်သည်",
-              "en": "essential"
+              "mm": "ကလေး၏ တုံ့ပြန်မှုကို သတိပြု၍ ပြန်လည်တုံ့ပြန်ခြင်း",
+              "en": "notice and respond to the child"
             },
             {
-              "mm": "မလိုအပ်ပါ",
-              "en": "not needed"
+              "mm": "ကလေး၏ တုံ့ပြန်မှုများကို လျစ်လျူရှုခြင်း",
+              "en": "ignore the child’s responses"
             }
           ],
-          "answerIndex": 1
+          "answerIndex": 0
         }
       ],
       "takeaway": {
-        "mm": "မိဘနှင့်အတူ ကစားချိန်သည် ကလေးအတွက် အဖိုးတန်သော သင်ယူချိန် ဖြစ်သည်။",
-        "en": "Playing with you is valuable learning time for your child."
+        "mm": "ပျော်ရွှင်ဖွယ် အပြန်အလှန်ကစားခြင်းက ရင်းနှီးဆက်ဆံမှုနှင့် သင်ယူမှုကို အထောက်အကူပြုနိုင်ပါသည်။",
+        "en": "Enjoyable back-and-forth play can support connection and learning."
       },
       "actionToday": {
-        "mm": "ယနေ့ အိမ်တွင်ရှိသော ဘေးကင်းသည့် ပစ္စည်းတစ်ခုကို အသုံးပြုပြီး ကလေးနှင့်အတူ ကစားပါ။",
-        "en": "Today, use one safe household object to play with your child."
+        "mm": "ယနေ့ ကလေးစိတ်ဝင်စားသည့်အရာကို သတိပြုပြီး အသံ၊ အမူအရာ သို့မဟုတ် စကားဖြင့် တုံ့ပြန်ပါ။",
+        "en": "Today, notice what interests your child and respond with a sound, gesture, or words."
       }
     },
     "media": [
@@ -4088,7 +4088,7 @@
     "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
     "version": 1,
     "clinicalStatus": "clinical_review",
-    "searchText": "ကစားခြင်း၏ အကျိုးကျေးဇူးများ the power of play ကစားခြင်းသည် ကလေးငယ်များ သင်ယူရာတွင် အရေးပါသော နည်းလမ်းတစ်ခု ဖြစ်သည်။ play is an important way young children learn. learning_through_play lesson ကစားခြင်းက ကလေးဖွံ့ဖြိုးမှုကို မည်သို့ အထောက်အကူပြုသည်ကို သိရှိရန်။ know the benefits of play. ကစားခြင်းသည် ကလေးငယ်များအတွက် အရေးပါသော သင်ယူနည်းတစ်ခု ဖြစ်သည်။ ကစားနေစဉ် စဉ်းစားတွေးခေါ်နိုင်စွမ်း၊ ဘာသာစကား၊ ကိုယ်လက်လှုပ်ရှားမှုနှင့် လူမှုဆက်ဆံရေးတို့ တဖြည်းဖြည်း ဖွံ့ဖြိုးလာနိုင်သည်။ ဈေးကြီးသော ကစားစရာများ မလိုအပ်ပါ။ မိဘ၏ အာရုံစိုက်ပေးမှုနှင့် ဘေးကင်းသော အိမ်သုံးပစ္စည်းများက ကစားခြင်းနှင့် သင်ယူမှုကို အထောက်အကူပြုနိုင်ပါသည်။ play is an important way young children learn. through play, thinking, language, movement, and relationships can develop gradually. expensive toys are not needed; caregiver attention and safe household objects can support play and learning. ကလေးနှင့် ကစားရန် ဈေးကြီးသော ကစားစရာများ — expensive toys are — မဖြစ်မနေ လိုအပ်သည် essential မလိုအပ်ပါ not needed မိဘနှင့်အတူ ကစားချိန်သည် ကလေးအတွက် အဖိုးတန်သော သင်ယူချိန် ဖြစ်သည်။ playing with you is valuable learning time for your child. ယနေ့ အိမ်တွင်ရှိသော ဘေးကင်းသည့် ပစ္စည်းတစ်ခုကို အသုံးပြုပြီး ကလေးနှင့်အတူ ကစားပါ။ today, use one safe household object to play with your child."
+    "searchText": "ကစားခြင်း၏ အကျိုးကျေးဇူးများ the power of play ကစားခြင်းက သင်ယူမှုနှင့် ရင်းနှီးဆက်ဆံမှုအတွက် အခွင့်အလမ်းများ ပေးနိုင်ပါသည်။ play offers opportunities for learning and connection. learning_through_play lesson ကစားခြင်းက ကလေးဖွံ့ဖြိုးမှုကို မည်သို့ အထောက်အကူပြုသည်ကို သိရှိရန်။ know the benefits of play. ai စစ်ဆေးမှု အသိပေးချက် — ဤအကြောင်းအရာကို ai ဖြင့် စစ်ဆေးထားသော်လည်း ဆေးဘက်ပညာရှင် သို့မဟုတ် မြန်မာဘာသာကို မိခင်ဘာသာစကားအဖြစ် အသုံးပြုသော စာတည်းဖြတ်သူက အတည်ပြုထားခြင်း မရှိပါ။ အထွေထွေပညာပေးအတွက်သာ ဖြစ်ပြီး ဆေးဘက်ဆိုင်ရာ အကြံပြုချက်၊ ကလေးဖွံ့ဖြိုးမှု စစ်ဆေးချက် သို့မဟုတ် ရောဂါဖော်ထုတ်ချက် မဟုတ်ပါ။\n\nကစားခြင်းက ဘာသာစကား၊ သင်ယူမှုနှင့် ပြုစုစောင့်ရှောက်သူနှင့် နွေးထွေးစွာ အပြန်အလှန်ဆက်ဆံမှုအတွက် အခွင့်အလမ်းများ ပေးနိုင်ပါသည်။ ကလေး၏ စိတ်ဝင်စားမှုနှင့် စွမ်းရည်တို့နှင့် ကိုက်ညီသော ကစားနည်းကို ရွေးပါ။ ကလေး၏ အသံ၊ အမူအရာ သို့မဟုတ် စကားများကို သတိပြု၍ တုံ့ပြန်ပြီး ခဏနားချိန်များ ပေးပါ။ ai review notice — this content was reviewed by ai but has not been approved by a clinician or native myanmar-language editor. it is for general education only and is not medical advice, developmental screening, or diagnosis.\n\nplay can offer opportunities for language, learning, and warm interaction with a caregiver. choose play that fits your child’s interests and abilities. notice and respond to their sounds, gestures, or words, and allow pauses. ပျော်ရွှင်ဖွယ် ကစားချိန်ကို အထောက်အကူပြုသည့် နည်းလမ်းမှာ — which approach supports enjoyable play? ကလေး၏ တုံ့ပြန်မှုကို သတိပြု၍ ပြန်လည်တုံ့ပြန်ခြင်း notice and respond to the child ကလေး၏ တုံ့ပြန်မှုများကို လျစ်လျူရှုခြင်း ignore the child’s responses ပျော်ရွှင်ဖွယ် အပြန်အလှန်ကစားခြင်းက ရင်းနှီးဆက်ဆံမှုနှင့် သင်ယူမှုကို အထောက်အကူပြုနိုင်ပါသည်။ enjoyable back-and-forth play can support connection and learning. ယနေ့ ကလေးစိတ်ဝင်စားသည့်အရာကို သတိပြုပြီး အသံ၊ အမူအရာ သို့မဟုတ် စကားဖြင့် တုံ့ပြန်ပါ။ today, notice what interests your child and respond with a sound, gesture, or words."
   },
   {
     "category": "speech_development",

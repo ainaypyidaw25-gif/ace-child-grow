@@ -25,13 +25,13 @@ export const LESSONS: SeedItem[] = [
   lesson({
     slug: 'power_of_play', category: 'learning_through_play',
     title: b('ကစားခြင်း၏ အကျိုးကျေးဇူးများ', 'The power of play'),
-    summary: b('ကစားခြင်းသည် ကလေးငယ်များ သင်ယူရာတွင် အရေးပါသော နည်းလမ်းတစ်ခု ဖြစ်သည်။', 'Play is an important way young children learn.'),
+    summary: b('ကစားခြင်းက သင်ယူမှုနှင့် ရင်းနှီးဆက်ဆံမှုအတွက် အခွင့်အလမ်းများ ပေးနိုင်ပါသည်။', 'Play offers opportunities for learning and connection.'),
     objectives: [b('ကစားခြင်းက ကလေးဖွံ့ဖြိုးမှုကို မည်သို့ အထောက်အကူပြုသည်ကို သိရှိရန်။', 'Know the benefits of play.')],
     readingMinutes: 3,
-    body: b('ကစားခြင်းသည် ကလေးငယ်များအတွက် အရေးပါသော သင်ယူနည်းတစ်ခု ဖြစ်သည်။ ကစားနေစဉ် စဉ်းစားတွေးခေါ်နိုင်စွမ်း၊ ဘာသာစကား၊ ကိုယ်လက်လှုပ်ရှားမှုနှင့် လူမှုဆက်ဆံရေးတို့ တဖြည်းဖြည်း ဖွံ့ဖြိုးလာနိုင်သည်။ ဈေးကြီးသော ကစားစရာများ မလိုအပ်ပါ။ မိဘ၏ အာရုံစိုက်ပေးမှုနှင့် ဘေးကင်းသော အိမ်သုံးပစ္စည်းများက ကစားခြင်းနှင့် သင်ယူမှုကို အထောက်အကူပြုနိုင်ပါသည်။', 'Play is an important way young children learn. Through play, thinking, language, movement, and relationships can develop gradually. Expensive toys are not needed; caregiver attention and safe household objects can support play and learning.'),
-    quiz: [q('ကလေးနှင့် ကစားရန် ဈေးကြီးသော ကစားစရာများ —', 'Expensive toys are —', [['မဖြစ်မနေ လိုအပ်သည်', 'essential'], ['မလိုအပ်ပါ', 'not needed']], 1)],
-    takeaway: b('မိဘနှင့်အတူ ကစားချိန်သည် ကလေးအတွက် အဖိုးတန်သော သင်ယူချိန် ဖြစ်သည်။', 'Playing with you is valuable learning time for your child.'),
-    actionToday: b('ယနေ့ အိမ်တွင်ရှိသော ဘေးကင်းသည့် ပစ္စည်းတစ်ခုကို အသုံးပြုပြီး ကလေးနှင့်အတူ ကစားပါ။', 'Today, use one safe household object to play with your child.'),
+    body: b('AI စစ်ဆေးမှု အသိပေးချက် — ဤအကြောင်းအရာကို AI ဖြင့် စစ်ဆေးထားသော်လည်း ဆေးဘက်ပညာရှင် သို့မဟုတ် မြန်မာဘာသာကို မိခင်ဘာသာစကားအဖြစ် အသုံးပြုသော စာတည်းဖြတ်သူက အတည်ပြုထားခြင်း မရှိပါ။ အထွေထွေပညာပေးအတွက်သာ ဖြစ်ပြီး ဆေးဘက်ဆိုင်ရာ အကြံပြုချက်၊ ကလေးဖွံ့ဖြိုးမှု စစ်ဆေးချက် သို့မဟုတ် ရောဂါဖော်ထုတ်ချက် မဟုတ်ပါ။\n\nကစားခြင်းက ဘာသာစကား၊ သင်ယူမှုနှင့် ပြုစုစောင့်ရှောက်သူနှင့် နွေးထွေးစွာ အပြန်အလှန်ဆက်ဆံမှုအတွက် အခွင့်အလမ်းများ ပေးနိုင်ပါသည်။ ကလေး၏ စိတ်ဝင်စားမှုနှင့် စွမ်းရည်တို့နှင့် ကိုက်ညီသော ကစားနည်းကို ရွေးပါ။ ကလေး၏ အသံ၊ အမူအရာ သို့မဟုတ် စကားများကို သတိပြု၍ တုံ့ပြန်ပြီး ခဏနားချိန်များ ပေးပါ။', 'AI review notice — This content was reviewed by AI but has not been approved by a clinician or native Myanmar-language editor. It is for general education only and is not medical advice, developmental screening, or diagnosis.\n\nPlay can offer opportunities for language, learning, and warm interaction with a caregiver. Choose play that fits your child’s interests and abilities. Notice and respond to their sounds, gestures, or words, and allow pauses.'),
+    quiz: [q('ပျော်ရွှင်ဖွယ် ကစားချိန်ကို အထောက်အကူပြုသည့် နည်းလမ်းမှာ —', 'Which approach supports enjoyable play?', [['ကလေး၏ တုံ့ပြန်မှုကို သတိပြု၍ ပြန်လည်တုံ့ပြန်ခြင်း', 'notice and respond to the child'], ['ကလေး၏ တုံ့ပြန်မှုများကို လျစ်လျူရှုခြင်း', 'ignore the child’s responses']], 0)],
+    takeaway: b('ပျော်ရွှင်ဖွယ် အပြန်အလှန်ကစားခြင်းက ရင်းနှီးဆက်ဆံမှုနှင့် သင်ယူမှုကို အထောက်အကူပြုနိုင်ပါသည်။', 'Enjoyable back-and-forth play can support connection and learning.'),
+    actionToday: b('ယနေ့ ကလေးစိတ်ဝင်စားသည့်အရာကို သတိပြုပြီး အသံ၊ အမူအရာ သို့မဟုတ် စကားဖြင့် တုံ့ပြန်ပါ။', 'Today, notice what interests your child and respond with a sound, gesture, or words.'),
   }),
   lesson({
     slug: 'talk_more', category: 'speech_development',
