@@ -127,6 +127,9 @@ import type * as lib_remainingPseudoMilestoneRetirementData from "../lib/remaini
 import type * as lib_reviewPolicy from "../lib/reviewPolicy.js";
 import type * as lib_reviewSearch from "../lib/reviewSearch.js";
 import type * as lib_seedPolicy from "../lib/seedPolicy.js";
+import type * as lib_sevenStoryCorrectionData from "../lib/sevenStoryCorrectionData.js";
+import type * as lib_sevenStoryCorrectionHelpers from "../lib/sevenStoryCorrectionHelpers.js";
+import type * as lib_sevenStoryCorrectionScope from "../lib/sevenStoryCorrectionScope.js";
 import type * as lib_skinToSkinRefreezeCorrectionData from "../lib/skinToSkinRefreezeCorrectionData.js";
 import type * as lib_swaimanCerebralPalsyLinkCasData from "../lib/swaimanCerebralPalsyLinkCasData.js";
 import type * as lib_swaimanSeizureLinkCasData from "../lib/swaimanSeizureLinkCasData.js";
@@ -157,6 +160,7 @@ import type * as release from "../release.js";
 import type * as remainingPseudoMilestoneRetirement from "../remainingPseudoMilestoneRetirement.js";
 import type * as reports from "../reports.js";
 import type * as seed from "../seed.js";
+import type * as sevenStoryCorrection from "../sevenStoryCorrection.js";
 import type * as skinToSkinRefreezeCorrection from "../skinToSkinRefreezeCorrection.js";
 import type * as skinToSkinRefreezeCorrectionActions from "../skinToSkinRefreezeCorrectionActions.js";
 import type * as sleep from "../sleep.js";
@@ -293,6 +297,9 @@ declare const fullApi: ApiFromModules<{
   "lib/reviewPolicy": typeof lib_reviewPolicy;
   "lib/reviewSearch": typeof lib_reviewSearch;
   "lib/seedPolicy": typeof lib_seedPolicy;
+  "lib/sevenStoryCorrectionData": typeof lib_sevenStoryCorrectionData;
+  "lib/sevenStoryCorrectionHelpers": typeof lib_sevenStoryCorrectionHelpers;
+  "lib/sevenStoryCorrectionScope": typeof lib_sevenStoryCorrectionScope;
   "lib/skinToSkinRefreezeCorrectionData": typeof lib_skinToSkinRefreezeCorrectionData;
   "lib/swaimanCerebralPalsyLinkCasData": typeof lib_swaimanCerebralPalsyLinkCasData;
   "lib/swaimanSeizureLinkCasData": typeof lib_swaimanSeizureLinkCasData;
@@ -323,6 +330,7 @@ declare const fullApi: ApiFromModules<{
   remainingPseudoMilestoneRetirement: typeof remainingPseudoMilestoneRetirement;
   reports: typeof reports;
   seed: typeof seed;
+  sevenStoryCorrection: typeof sevenStoryCorrection;
   skinToSkinRefreezeCorrection: typeof skinToSkinRefreezeCorrection;
   skinToSkinRefreezeCorrectionActions: typeof skinToSkinRefreezeCorrectionActions;
   sleep: typeof sleep;
