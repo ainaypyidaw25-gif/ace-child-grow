@@ -40,6 +40,8 @@ const query = `export default query({args:{},handler:async(ctx)=>{
 const m=${JSON.stringify(manifest)};
 const fail=message=>{throw new Error('Seven-story publication capture: '+message);};
 const check=(yes,message)=>{if(!yes)fail(message);};
+const canonical=value=>Array.isArray(value)?value.map(canonical):value&&typeof value==='object'?Object.fromEntries(Object.keys(value).sort().map(key=>[key,canonical(value[key])])):value;
+const equal=(left,right)=>JSON.stringify(canonical(left))===JSON.stringify(canonical(right));
 const unique=(rows,key,label)=>check(new Set(rows.map(r=>r[key])).size===rows.length,'duplicate '+label);
 const staged=m.phase!=='ready',enabled=m.phase==='enabled';
 const active=await ctx.db.query('aiPublicationReleases').withIndex('by_status',q=>q.eq('status','active')).take(11);
@@ -74,7 +76,7 @@ for(const descriptor of m.oldSchedules){const row=await ctx.db.system.get(descri
 const receipts={};
 for(const phase of ['staged','enabled','withdrawn','expired']){const rows=await ctx.db.query('auditLogs').withIndex('by_action',q=>q.eq('action','library.ai_seven_stories.'+phase)).take(2);check(rows.length===((phase==='staged'&&staged)||(phase==='enabled'&&enabled)?1:0),'phase receipt count '+phase);if(rows.length){const value=JSON.parse(rows[0].after??'null');check(value&&JSON.stringify(value.identity)===JSON.stringify(m.identity),'phase receipt identity');}receipts[phase]=rows;}
 const newSchedules=[];
-if(enabled){const id=JSON.parse(receipts.enabled[0].after).expiryScheduledFunctionId;check(typeof id==='string','new schedule ID');const row=await ctx.db.system.get(id);check(row&&row.name==='aiSevenStoriesPublication20260910.js:expire'&&row.state.kind==='pending'&&row.scheduledTime===m.visibilityCutoff&&JSON.stringify(row.args)===JSON.stringify([m.identity]),'new expiry state');newSchedules.push(row);}
+if(enabled){const id=JSON.parse(receipts.enabled[0].after).expiryScheduledFunctionId;check(typeof id==='string','new schedule ID');const row=await ctx.db.system.get(id);check(row&&row.name==='aiSevenStoriesPublication20260910.js:expire'&&row.state.kind==='pending'&&row.scheduledTime===m.visibilityCutoff&&equal(row.args,[m.identity]),'new expiry state');newSchedules.push(row);}
 const targets=[];
 for(const pin of m.targets){
  const slug=pin.slug,runIds=[pin.contentRunId,...pin.sources.map(s=>s.runId)];unique(pin.sources,'sourceId','source IDs');unique(pin.sources,'runId','source runs');
