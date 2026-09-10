@@ -68,6 +68,7 @@ import {
 import { isEvidenceHumanReviewSuccessorContentSlug } from './lib/evidenceHumanReviewSuccessorCasData';
 import { isGd10_12mPlayV5ContentSlug } from './lib/gd10_12mPlayV5ImportPolicy';
 import { isReadingTogetherAiPublicationSlug } from './lib/aiReadingTogetherPublication20260910Data';
+import { isPowerOfPlaySlug } from './lib/powerOfPlayScope';
 import { assertNoPersistedReleaseGovernedContent } from './lib/clinicalReviewBatchProvenance';
 
 const GRANTABLE_ROLES = [
@@ -216,6 +217,7 @@ export function seedRunSkipsItem(item: Pick<Item, 'type' | 'slug'>): boolean {
     || isEvidenceHumanReviewSuccessorContentSlug(item.slug)
     || isGd10_12mPlayV5ContentSlug(item.slug)
     || isReadingTogetherAiPublicationSlug(item.slug)
+    || isPowerOfPlaySlug(item.slug)
     || isClinicalTwoSmallCasTargetSlug(item.slug)
     || isNutritionGuidesCasTargetSlug(item.slug);
 }
@@ -1892,7 +1894,8 @@ export const applyPublishedErrata = internalMutation({
         || isGd10_12mPlayV5ContentSlug(slug)
         || isBookActivityAttributionCorrectionSlug(slug)
         || isSevenStoryCorrectionSlug(slug)
-        || isThreeGuideCorrectionSlug(slug)) {
+        || isThreeGuideCorrectionSlug(slug)
+        || isPowerOfPlaySlug(slug)) {
         unchanged += 1;
         continue;
       }

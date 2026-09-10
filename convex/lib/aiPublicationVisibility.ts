@@ -39,6 +39,14 @@ import {
   READING_TOGETHER_RELEASE_ROOT,
   READING_TOGETHER_SLUG,
 } from './aiReadingTogetherPublication20260910Data';
+import { POWER_OF_PLAY_ARTIFACT, POWER_OF_PLAY_ARTIFACT_HASH } from './aiPowerOfPlayPublication20260910Artifact';
+import {
+  POWER_OF_PLAY_POLICY_VERSION,
+  POWER_OF_PLAY_RELEASE_DAYS,
+  POWER_OF_PLAY_RELEASE_ROOT,
+  POWER_OF_PLAY_SLUG,
+  POWER_OF_PLAY_PREIMAGE,
+} from './aiPowerOfPlayPublication20260910Data';
 import { todayIsoUtc } from './evidenceFreshness';
 
 type DatabaseContext = Pick<QueryCtx, 'db'> | Pick<MutationCtx, 'db'>;
@@ -66,18 +74,22 @@ export type Schema2AuditArtifact = Omit<AuditArtifact, 'schemaVersion' | 'policy
 type RegisteredArtifact =
   | { kind: 'legacy'; artifact: AuditArtifact; hash: string; releaseDays: number }
   | { kind: 'seven_stories'; artifact: Schema2AuditArtifact; hash: string; releaseDays: number }
-  | { kind: 'reading_together'; artifact: Schema2AuditArtifact; hash: string; releaseDays: number };
+  | { kind: 'reading_together'; artifact: Schema2AuditArtifact; hash: string; releaseDays: number }
+  | { kind: 'power_of_play'; artifact: Schema2AuditArtifact; hash: string; releaseDays: number };
 const SEVEN_STORY_RUNTIME_SLUGS = new Set<string>([
   'st_little_seed', 'st_ba_ba_sounds', 'st_when_i_feel_angry', 'st_taking_turns',
   'st_goodnight_moon_friend', 'st_visit_to_doctor', 'st_sharing_mango',
 ]);
 const SEVEN_STORY_MAX_SOURCES = 3;
-const COMBINED_ACTIVE_LIMIT = AI_PUBLICATION_MAX_ACTIVE_RELEASES + 7 + 1;
+const COMBINED_ACTIVE_LIMIT = AI_PUBLICATION_MAX_ACTIVE_RELEASES + 7 + 1 + 1;
 function isSevenStoryTarget(type: string, slug: string): boolean {
   return type === 'story' && SEVEN_STORY_RUNTIME_SLUGS.has(slug);
 }
 function isReadingTogetherTarget(type: string, slug: string): boolean {
   return type === 'lesson' && slug === READING_TOGETHER_SLUG;
+}
+function isPowerOfPlayTarget(type: string, slug: string): boolean {
+  return type === 'lesson' && slug === POWER_OF_PLAY_SLUG;
 }
 function sevenStoryArtifactHasExactScope(artifact: Schema2AuditArtifact): boolean {
   return artifact.schemaVersion === 2 && artifact.policyVersion === SEVEN_STORIES_POLICY_VERSION
@@ -119,6 +131,37 @@ function readingTogetherArtifactHasExactScope(artifact: Schema2AuditArtifact): b
     && target.independentAgentResults.some(result => result.role === 'semantic_audit');
 }
 
+function powerOfPlayArtifactHasExactScope(artifact: Schema2AuditArtifact): boolean {
+  const target = artifact.targets[0];
+  return artifact.schemaVersion === 2
+    && artifact.policyVersion === POWER_OF_PLAY_POLICY_VERSION
+    && artifact.releaseId === POWER_OF_PLAY_RELEASE_ROOT
+    && POWER_OF_PLAY_PREIMAGE.desiredRevision === 3
+    && artifact.targets.length === 1
+    && Boolean(target)
+    && isPowerOfPlayTarget(target.type, target.slug)
+    && target.verdict === 'pass'
+    && isSha256Hex(target.contentSnapshotHash)
+    && target.contentSnapshotHash === POWER_OF_PLAY_PREIMAGE.desiredContentSnapshotHash
+    && isSha256Hex(target.evidenceLinkSnapshotHash)
+    && target.evidenceLinkSnapshotHash === POWER_OF_PLAY_PREIMAGE.linkSnapshotHash
+    && target.mediaCount === 1
+    && isSha256Hex(target.mediaSnapshotHash)
+    && target.mediaSnapshotHash === POWER_OF_PLAY_PREIMAGE.mediaFullHash
+    && target.sources.length === 2
+    && new Set(target.sources.map(source => source.sourceId)).size === 2
+    && arraysEqual(target.sources.map(source => source.sourceId), POWER_OF_PLAY_PREIMAGE.sourceIds)
+    && target.sources.every(source => isSha256Hex(source.sourceSnapshotHash)
+      && source.sourceSnapshotHash === POWER_OF_PLAY_PREIMAGE.sourceRows.find(row => row.sourceId === source.sourceId)?.snapshotHash
+      && source.sourceUrl === POWER_OF_PLAY_PREIMAGE.sourceRows.find(row => row.sourceId === source.sourceId)?.url
+      && source.urlsChecked.length > 0 && source.urlsChecked.length <= 10
+      && source.urlsChecked.includes(source.sourceUrl))
+    && target.independentAgentResults.length === 2
+    && target.independentAgentResults.every(result => result.verdict === 'pass')
+    && target.independentAgentResults.some(result => result.role === 'source_research')
+    && target.independentAgentResults.some(result => result.role === 'semantic_audit');
+}
+
 /** Explicit compiled registry: an arbitrary database hash cannot authorize publication. */
 export function registeredAiPublicationArtifact(releaseId: string, artifactHash: string): RegisteredArtifact | null {
   const entries = [
@@ -139,6 +182,11 @@ export function registeredAiPublicationArtifact(releaseId: string, artifactHash:
   if (artifactHash === READING_TOGETHER_ARTIFACT_HASH && readingTogetherArtifactHasExactScope(readingArtifact)
     && releaseId === `${READING_TOGETHER_RELEASE_ROOT}:lesson:${READING_TOGETHER_SLUG}`) {
     return { kind: 'reading_together', artifact: readingArtifact, hash: READING_TOGETHER_ARTIFACT_HASH, releaseDays: READING_TOGETHER_RELEASE_DAYS };
+  }
+  const playArtifact: Schema2AuditArtifact = POWER_OF_PLAY_ARTIFACT;
+  if (artifactHash === POWER_OF_PLAY_ARTIFACT_HASH && powerOfPlayArtifactHasExactScope(playArtifact)
+    && releaseId === `${POWER_OF_PLAY_RELEASE_ROOT}:lesson:${POWER_OF_PLAY_SLUG}`) {
+    return { kind: 'power_of_play', artifact: playArtifact, hash: POWER_OF_PLAY_ARTIFACT_HASH, releaseDays: POWER_OF_PLAY_RELEASE_DAYS };
   }
   return null;
 }
@@ -170,7 +218,8 @@ export async function activeAiPublicationControl(ctx: DatabaseContext): Promise<
     if (
       !(isAiPublicationTarget(release.contentType, release.contentSlug)
         || isSevenStoryTarget(release.contentType, release.contentSlug)
-        || isReadingTogetherTarget(release.contentType, release.contentSlug))
+        || isReadingTogetherTarget(release.contentType, release.contentSlug)
+        || isPowerOfPlayTarget(release.contentType, release.contentSlug))
       || release.targetKey !== expectedKey
       || keys.has(expectedKey)
       || typeof release.releaseId !== 'string' || release.releaseId.length === 0
@@ -183,7 +232,8 @@ export async function activeAiPublicationControl(ctx: DatabaseContext): Promise<
   }
   if (releases.filter(r => isAiPublicationTarget(r.contentType, r.contentSlug)).length > AI_PUBLICATION_MAX_ACTIVE_RELEASES
     || releases.filter(r => isSevenStoryTarget(r.contentType, r.contentSlug)).length > 7
-    || releases.filter(r => isReadingTogetherTarget(r.contentType, r.contentSlug)).length > 1) return { complete: false, releases: [] };
+    || releases.filter(r => isReadingTogetherTarget(r.contentType, r.contentSlug)).length > 1
+    || releases.filter(r => isPowerOfPlayTarget(r.contentType, r.contentSlug)).length > 1) return { complete: false, releases: [] };
   return { complete: true, releases };
 }
 
@@ -375,18 +425,22 @@ async function schema2ReleaseMatchesCurrentState(
   release: Doc<'aiPublicationReleases'>,
   now: number,
   todayIso: string,
-  registered: Extract<RegisteredArtifact, { kind: 'seven_stories' | 'reading_together' }>,
+  registered: Extract<RegisteredArtifact, { kind: 'seven_stories' | 'reading_together' | 'power_of_play' }>,
 ): Promise<boolean> {
   const { artifact, releaseDays } = registered;
   const artifactHash = await sha256Canonical(artifact);
   const target = artifact.targets.find(t => t.type === content.type && t.slug === content.slug);
   const exactScope = registered.kind === 'seven_stories'
     ? sevenStoryArtifactHasExactScope(artifact)
-    : readingTogetherArtifactHasExactScope(artifact);
+    : registered.kind === 'reading_together'
+      ? readingTogetherArtifactHasExactScope(artifact)
+      : powerOfPlayArtifactHasExactScope(artifact);
   const exactTarget = registered.kind === 'seven_stories'
     ? isSevenStoryTarget(content.type, content.slug)
-    : isReadingTogetherTarget(content.type, content.slug);
-  const expectedRevision = registered.kind === 'seven_stories' ? 3 : 4;
+    : registered.kind === 'reading_together'
+      ? isReadingTogetherTarget(content.type, content.slug)
+      : isPowerOfPlayTarget(content.type, content.slug);
+  const expectedRevision = registered.kind === 'reading_together' ? 4 : 3;
   if (!target || !exactScope || artifactHash !== registered.hash
     || releaseDays < 1 || releaseDays > AI_PUBLICATION_MAX_RELEASE_DAYS
     || ![now, release.createdAt, release.expiresAt, artifact.auditStartedAt, artifact.auditCompletedAt].every(Number.isFinite)
@@ -481,7 +535,8 @@ export async function contentIsAiParentReadable(
 ): Promise<boolean> {
   if (!isAiPublicationTarget(content.type, content.slug)
     && !isSevenStoryTarget(content.type, content.slug)
-    && !isReadingTogetherTarget(content.type, content.slug)) return false;
+    && !isReadingTogetherTarget(content.type, content.slug)
+    && !isPowerOfPlayTarget(content.type, content.slug)) return false;
   const control = await activeAiPublicationControl(ctx);
   if (!control.complete) return false;
   const release = control.releases.find(
@@ -490,7 +545,7 @@ export async function contentIsAiParentReadable(
   return release ? await aiReleaseMatchesCurrentState(ctx, content, release, now, todayIso) : false;
 }
 
-/** Resolve only the bounded legacy-three, seven stories and one reading lesson. */
+/** Resolve only legacy-three, seven stories, one reading and one play lesson. */
 export async function activeAiParentReadableContent(
   ctx: DatabaseContext,
   now = Date.now(),
