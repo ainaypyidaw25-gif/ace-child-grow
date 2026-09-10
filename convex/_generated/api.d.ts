@@ -49,6 +49,7 @@ import type * as growth from "../growth.js";
 import type * as healthRecords from "../healthRecords.js";
 import type * as http from "../http.js";
 import type * as inherentPublicLinkCas from "../inherentPublicLinkCas.js";
+import type * as learningSourceAttributionCorrection from "../learningSourceAttributionCorrection.js";
 import type * as legacyCompletedPriorityCorrection from "../legacyCompletedPriorityCorrection.js";
 import type * as lib_aiAuditHash from "../lib/aiAuditHash.js";
 import type * as lib_aiEarlyMathProvenanceCorrectionData from "../lib/aiEarlyMathProvenanceCorrectionData.js";
@@ -68,6 +69,7 @@ import type * as lib_billingPeriods from "../lib/billingPeriods.js";
 import type * as lib_birth2mGrossMotorCasData from "../lib/birth2mGrossMotorCasData.js";
 import type * as lib_birth2mGrossMotorCorrection from "../lib/birth2mGrossMotorCorrection.js";
 import type * as lib_birth2mNutritionCasData from "../lib/birth2mNutritionCasData.js";
+import type * as lib_bookActivityAttributionCorrection from "../lib/bookActivityAttributionCorrection.js";
 import type * as lib_burmeseCopyAuditRelease from "../lib/burmeseCopyAuditRelease.js";
 import type * as lib_childDevelopmentRefreezeCorrectionCopy from "../lib/childDevelopmentRefreezeCorrectionCopy.js";
 import type * as lib_childDevelopmentRefreezeCorrectionData from "../lib/childDevelopmentRefreezeCorrectionData.js";
@@ -106,6 +108,7 @@ import type * as lib_evidenceSafetyRelease from "../lib/evidenceSafetyRelease.js
 import type * as lib_gd10_12mPlayV5CasData from "../lib/gd10_12mPlayV5CasData.js";
 import type * as lib_gd10_12mPlayV5ImportPolicy from "../lib/gd10_12mPlayV5ImportPolicy.js";
 import type * as lib_inherentPublicLinkCasData from "../lib/inherentPublicLinkCasData.js";
+import type * as lib_learningSourceAttributionCorrectionData from "../lib/learningSourceAttributionCorrectionData.js";
 import type * as lib_legacyCompletedPriorityCorrectionData from "../lib/legacyCompletedPriorityCorrectionData.js";
 import type * as lib_manualReviewContentCasData from "../lib/manualReviewContentCasData.js";
 import type * as lib_manualReviewEvidenceLinkCasData from "../lib/manualReviewEvidenceLinkCasData.js";
@@ -212,6 +215,7 @@ declare const fullApi: ApiFromModules<{
   healthRecords: typeof healthRecords;
   http: typeof http;
   inherentPublicLinkCas: typeof inherentPublicLinkCas;
+  learningSourceAttributionCorrection: typeof learningSourceAttributionCorrection;
   legacyCompletedPriorityCorrection: typeof legacyCompletedPriorityCorrection;
   "lib/aiAuditHash": typeof lib_aiAuditHash;
   "lib/aiEarlyMathProvenanceCorrectionData": typeof lib_aiEarlyMathProvenanceCorrectionData;
@@ -231,6 +235,7 @@ declare const fullApi: ApiFromModules<{
   "lib/birth2mGrossMotorCasData": typeof lib_birth2mGrossMotorCasData;
   "lib/birth2mGrossMotorCorrection": typeof lib_birth2mGrossMotorCorrection;
   "lib/birth2mNutritionCasData": typeof lib_birth2mNutritionCasData;
+  "lib/bookActivityAttributionCorrection": typeof lib_bookActivityAttributionCorrection;
   "lib/burmeseCopyAuditRelease": typeof lib_burmeseCopyAuditRelease;
   "lib/childDevelopmentRefreezeCorrectionCopy": typeof lib_childDevelopmentRefreezeCorrectionCopy;
   "lib/childDevelopmentRefreezeCorrectionData": typeof lib_childDevelopmentRefreezeCorrectionData;
@@ -269,6 +274,7 @@ declare const fullApi: ApiFromModules<{
   "lib/gd10_12mPlayV5CasData": typeof lib_gd10_12mPlayV5CasData;
   "lib/gd10_12mPlayV5ImportPolicy": typeof lib_gd10_12mPlayV5ImportPolicy;
   "lib/inherentPublicLinkCasData": typeof lib_inherentPublicLinkCasData;
+  "lib/learningSourceAttributionCorrectionData": typeof lib_learningSourceAttributionCorrectionData;
   "lib/legacyCompletedPriorityCorrectionData": typeof lib_legacyCompletedPriorityCorrectionData;
   "lib/manualReviewContentCasData": typeof lib_manualReviewContentCasData;
   "lib/manualReviewEvidenceLinkCasData": typeof lib_manualReviewEvidenceLinkCasData;
