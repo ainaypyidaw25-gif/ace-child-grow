@@ -1852,31 +1852,31 @@
       "3y",
       "guide"
     ],
-    "summaryMm": "အခြားကလေးများနှင့် ကစားခြင်းသည် ဝေမျှခြင်း၊ မိတ်ဆွေဖွဲ့ခြင်းနှင့် သင့်မြတ်စွာ ပေါင်းသင်းခြင်းကို လေ့ကျင့်ရန် အထောက်အကူပြုပါသည်။",
-    "summaryEn": "Playing with other children helps children practise sharing, friendship, and getting along.",
+    "summaryMm": "အခြားကလေးများနှင့် ကစားခြင်းက မိတ်ဆွေဖွဲ့ခြင်း၏ တန်ဖိုးနှင့် သင့်မြတ်စွာ ပေါင်းသင်းနည်းကို သင်ယူရန် ကူညီပေးပါသည်။",
+    "summaryEn": "Playing with other children helps children learn the value of friendship and how to get along.",
     "data": {
       "title": {
         "mm": "၃ နှစ် — လူမှုဆက်ဆံရေး",
         "en": "3 years — Social"
       },
       "why": {
-        "mm": "အခြားကလေးများနှင့် ကစားခြင်းသည် ဝေမျှခြင်း၊ မိတ်ဆွေဖွဲ့ခြင်းနှင့် သင့်မြတ်စွာ ပေါင်းသင်းခြင်းကို လေ့ကျင့်ရန် အထောက်အကူပြုပါသည်။",
-        "en": "Playing with other children helps children practise sharing, friendship, and getting along."
+        "mm": "အခြားကလေးများနှင့် ကစားခြင်းက မိတ်ဆွေဖွဲ့ခြင်း၏ တန်ဖိုးနှင့် သင့်မြတ်စွာ ပေါင်းသင်းနည်းကို သင်ယူရန် ကူညီပေးပါသည်။",
+        "en": "Playing with other children helps children learn the value of friendship and how to get along."
       },
       "observationQuestions": [
         {
-          "mm": "အခြားကလေးများနှင့် အတူ ကစားပါသလား။",
-          "en": "Plays alongside/with other children?"
+          "mm": "အခြားကလေးများကို သတိပြုပါသလား။",
+          "en": "Notices other children?"
         },
         {
-          "mm": "အလှည့်စောင့်ရန် ကြိုးစားပါသလား။",
-          "en": "Tries to take turns?"
+          "mm": "သူတို့နှင့် ကစားရန် ပါဝင်ပါသလား။",
+          "en": "Joins other children to play?"
         }
       ],
       "dailyActivities": [
         {
-          "mm": "အလှည့်ကျ ကစားနည်းများ (ဘောလုံးလှိမ့်) ကစားပါ။",
-          "en": "Play turn-taking games (roll a ball back)."
+          "mm": "အခြားကလေးများနှင့် ကစားရန် အားပေးပါ။",
+          "en": "Encourage play with other children."
         }
       ],
       "weeklyActivities": [
@@ -1887,8 +1887,8 @@
       ],
       "indoor": [
         {
-          "mm": "အရုပ်ဖြင့် လူမှုအခြေအနေများ ဟန်ဆောင် ကစားပါ။",
-          "en": "Role-play social scenes with dolls."
+          "mm": "ကလေးနှစ်ယောက်အတူ ကစားနိုင်မည့် ရိုးရှင်းသော အရုပ်များပေးပြီး အနီးကပ်ကြီးကြပ်ပါ။",
+          "en": "Offer simple toys for children to play with together and supervise nearby."
         }
       ],
       "outdoor": [
@@ -1899,13 +1899,13 @@
       ],
       "lowCost": [
         {
-          "mm": "အိမ်တွင် လူ ၂–၃ ဦးဖြင့် အလှည့်ကျ ကစားပါ။",
-          "en": "Turn-taking at home with family."
+          "mm": "မိသားစုဝင်ကလေး သို့မဟုတ် အခမဲ့ကစားကွင်းတွင် ကစားချိန် စီစဉ်ပါ။",
+          "en": "Arrange playtime with another child in the family or at a free play space."
         }
       ],
       "materials": {
-        "mm": "ဘောလုံး၊ အရုပ်။",
-        "en": "Ball, dolls."
+        "mm": "အသက်အရွယ်နှင့်ကိုက်ညီသော ကစားစရာများ။",
+        "en": "Age-appropriate play materials."
       },
       "safety": {
         "mm": "ကစားစဉ် ကြီးကြပ်၍ ဘေးကင်းစေပါ။ အစာတစ်ဆို့ခြင်း အန္တရာယ်သည် အသက် ၄ နှစ်အထိ ဆက်ရှိပါသည် — လမ်းလျှောက်တတ်၊ စကားပြောတတ်ပြီဆိုသော်လည်း အန္တရာယ် မကုန်သေးပါ။ စပျစ်သီးနှင့် ချယ်ရီခရမ်းချဉ်သီးများကို အလျားလိုက် လေးစိတ် ခွဲပေးပါ။ အခွံမာသီး အလုံးလိုက်၊ ပြောင်းဖူးပေါက်ပေါက်၊ မာကျောသော သကြားလုံး၊ အစေ့အဆန်များနှင့် မုန်လာဥနီ အစိမ်းများကို အသက် ၄ နှစ်အောက် ကလေးများအား မပေးပါနှင့်။ အမြဲ ထိုင်၍ စားခိုင်းပြီး စားနေစဉ် အနားတွင် ရှိပါ။",
@@ -1913,14 +1913,14 @@
       },
       "commonMistakes": [
         {
-          "mm": "ဝေမျှခြင်းကို အတင်းအကျပ် ခိုင်းခြင်း — နမူနာပြခြင်းက ပိုကောင်းသည်။",
-          "en": "Forcing sharing — modeling works better."
+          "mm": "ဖွံ့ဖြိုးမှုမှတ်တိုင်စာရင်းတစ်ခုတည်းဖြင့် ကလေးကို ရောဂါအတည်ပြုရန် ကြိုးစားခြင်း—ဤစာရင်းသည် စံသတ်မှတ်ထားသော ဖွံ့ဖြိုးမှုစစ်ဆေးရေးကိရိယာကို အစားမထိုးနိုင်ပါ။",
+          "en": "Using one milestone checklist to diagnose a child — it does not replace standardized screening."
         }
       ],
       "parentTips": [
         {
-          "mm": "ကြင်နာသော အပြုအမူကို တိတိကျကျ ချီးမွမ်း၍ အားပေးပါ။",
-          "en": "Praise kind behavior specifically."
+          "mm": "ကစားချိန်ကို စာမေးပွဲတစ်ခုလို မဖြစ်စေဘဲ ကလေးက အခြားကလေးများကို သတိပြု၍ ပါဝင်ကစားပုံကို သဘာဝကျကျ ကြည့်ပါ။",
+          "en": "Observe naturally how your child notices and joins peers without turning play into a test."
         }
       ],
       "faq": [
@@ -1946,8 +1946,8 @@
         "en": "If concerned about social development, consult a pediatrician."
       },
       "encouragement": {
-        "mm": "အခြားကလေးများနှင့် ကစားခွင့်ပေးခြင်းက ဝေမျှခြင်းနှင့် မိတ်ဆွေဖွဲ့ခြင်းကို လေ့ကျင့်ရန် အထောက်အကူပြုပါသည်။",
-        "en": "Playing with other children gives your child practice with sharing and friendship."
+        "mm": "အခြားကလေးများနှင့် ကစားခွင့်ပေးခြင်းက မိတ်ဆွေဖွဲ့ခြင်း၏ တန်ဖိုးနှင့် သင့်မြတ်စွာ ပေါင်းသင်းနည်းကို သင်ယူရန် အခွင့်အလမ်းပေးပါသည်။",
+        "en": "Playing with other children gives your child opportunities to learn the value of friendship and how to get along."
       }
     },
     "type": "guide",
@@ -1958,7 +1958,7 @@
     "version": 1,
     "clinicalStatus": "clinical_review",
     "media": [],
-    "searchText": "၃ နှစ် — လူမှုဆက်ဆံရေး 3 years — social အခြားကလေးများနှင့် ကစားခြင်းသည် ဝေမျှခြင်း၊ မိတ်ဆွေဖွဲ့ခြင်းနှင့် သင့်မြတ်စွာ ပေါင်းသင်းခြင်းကို လေ့ကျင့်ရန် အထောက်အကူပြုပါသည်။ playing with other children helps children practise sharing, friendship, and getting along. social 3y guide ၃ နှစ် — လူမှုဆက်ဆံရေး 3 years — social အခြားကလေးများနှင့် ကစားခြင်းသည် ဝေမျှခြင်း၊ မိတ်ဆွေဖွဲ့ခြင်းနှင့် သင့်မြတ်စွာ ပေါင်းသင်းခြင်းကို လေ့ကျင့်ရန် အထောက်အကူပြုပါသည်။ playing with other children helps children practise sharing, friendship, and getting along. အခြားကလေးများနှင့် အတူ ကစားပါသလား။ plays alongside/with other children? အလှည့်စောင့်ရန် ကြိုးစားပါသလား။ tries to take turns? အလှည့်ကျ ကစားနည်းများ (ဘောလုံးလှိမ့်) ကစားပါ။ play turn-taking games (roll a ball back). အခြားကလေးများနှင့် ကစားချိန် စီစဉ်ပါ။ arrange playtime with other children. အရုပ်ဖြင့် လူမှုအခြေအနေများ ဟန်ဆောင် ကစားပါ။ role-play social scenes with dolls. အုပ်စုဖြင့် ရိုးရှင်းသော ကစားနည်းများ ကစားပါ။ play simple group games outside. အိမ်တွင် လူ ၂–၃ ဦးဖြင့် အလှည့်ကျ ကစားပါ။ turn-taking at home with family. ဘောလုံး၊ အရုပ်။ ball, dolls. ကစားစဉ် ကြီးကြပ်၍ ဘေးကင်းစေပါ။ အစာတစ်ဆို့ခြင်း အန္တရာယ်သည် အသက် ၄ နှစ်အထိ ဆက်ရှိပါသည် — လမ်းလျှောက်တတ်၊ စကားပြောတတ်ပြီဆိုသော်လည်း အန္တရာယ် မကုန်သေးပါ။ စပျစ်သီးနှင့် ချယ်ရီခရမ်းချဉ်သီးများကို အလျားလိုက် လေးစိတ် ခွဲပေးပါ။ အခွံမာသီး အလုံးလိုက်၊ ပြောင်းဖူးပေါက်ပေါက်၊ မာကျောသော သကြားလုံး၊ အစေ့အဆန်များနှင့် မုန်လာဥနီ အစိမ်းများကို အသက် ၄ နှစ်အောက် ကလေးများအား မပေးပါနှင့်။ အမြဲ ထိုင်၍ စားခိုင်းပြီး စားနေစဉ် အနားတွင် ရှိပါ။ supervise group play for safety. choking remains a risk until about age 4 — walking and talking do not end it. cut grapes and cherry tomatoes into quarters lengthwise. do not give whole nuts, popcorn, hard sweets, seeds or raw carrot to a child under 4. always have your child sit to eat, and stay with them while they eat. ဝေမျှခြင်းကို အတင်းအကျပ် ခိုင်းခြင်း — နမူနာပြခြင်းက ပိုကောင်းသည်။ forcing sharing — modeling works better. ကြင်နာသော အပြုအမူကို တိတိကျကျ ချီးမွမ်း၍ အားပေးပါ။ praise kind behavior specifically. ၃ နှစ်အရွယ်တွင် အခြားကလေးများနှင့် မပေါင်းကစားသေးပါက ဘာလုပ်ရမလဲ။ what if my 3-year-old is not joining other children to play? cdc သည် အခြားကလေးများကို သတိပြု၍ သူတို့နှင့်အတူ ကစားခြင်းကို ၃ နှစ်အရွယ် ဖွံ့ဖြိုးမှုမှတ်တိုင်တစ်ခုအဖြစ် ဖော်ပြထားပါသည်။ ဤအရာကို မတွေ့ရပါက သို့မဟုတ် စိုးရိမ်ပါက ကလေး၏ ဆရာဝန်နှင့် တိုင်ပင်ပါ။ ဤဖွံ့ဖြိုးမှုမှတ်တိုင်စာရင်းသည် စံသတ်မှတ်၍ အတည်ပြုထားသော ဖွံ့ဖြိုးမှုစစ်ဆေးရေးကိရိယာကို အစားမထိုးနိုင်ပါ။ cdc lists noticing other children and joining them to play as a 3-year milestone. if you do not see this or you are concerned, talk with your child’s doctor. this milestone checklist is not a substitute for a standardized, validated developmental screening tool. ၃ နှစ်အရွယ်တွင် အခြားကလေးများကို သတိမပြုခြင်း သို့မဟုတ် ၎င်းတို့နှင့် ကစားရန် လုံးဝ မပါဝင်ခြင်း။ by 3 years: does not notice other children or join them to play. လူမှုဆက်ဆံရေး စိုးရိမ်စရာ တွေ့ပါက ကလေးကျန်းမာရေးဆရာဝန်နှင့် တိုင်ပင်ပါ။ if concerned about social development, consult a pediatrician. အခြားကလေးများနှင့် ကစားခွင့်ပေးခြင်းက ဝေမျှခြင်းနှင့် မိတ်ဆွေဖွဲ့ခြင်းကို လေ့ကျင့်ရန် အထောက်အကူပြုပါသည်။ playing with other children gives your child practice with sharing and friendship."
+    "searchText": "၃ နှစ် — လူမှုဆက်ဆံရေး 3 years — social အခြားကလေးများနှင့် ကစားခြင်းက မိတ်ဆွေဖွဲ့ခြင်း၏ တန်ဖိုးနှင့် သင့်မြတ်စွာ ပေါင်းသင်းနည်းကို သင်ယူရန် ကူညီပေးပါသည်။ playing with other children helps children learn the value of friendship and how to get along. social 3y guide ၃ နှစ် — လူမှုဆက်ဆံရေး 3 years — social အခြားကလေးများနှင့် ကစားခြင်းက မိတ်ဆွေဖွဲ့ခြင်း၏ တန်ဖိုးနှင့် သင့်မြတ်စွာ ပေါင်းသင်းနည်းကို သင်ယူရန် ကူညီပေးပါသည်။ playing with other children helps children learn the value of friendship and how to get along. အခြားကလေးများကို သတိပြုပါသလား။ notices other children? သူတို့နှင့် ကစားရန် ပါဝင်ပါသလား။ joins other children to play? အခြားကလေးများနှင့် ကစားရန် အားပေးပါ။ encourage play with other children. အခြားကလေးများနှင့် ကစားချိန် စီစဉ်ပါ။ arrange playtime with other children. ကလေးနှစ်ယောက်အတူ ကစားနိုင်မည့် ရိုးရှင်းသော အရုပ်များပေးပြီး အနီးကပ်ကြီးကြပ်ပါ။ offer simple toys for children to play with together and supervise nearby. အုပ်စုဖြင့် ရိုးရှင်းသော ကစားနည်းများ ကစားပါ။ play simple group games outside. မိသားစုဝင်ကလေး သို့မဟုတ် အခမဲ့ကစားကွင်းတွင် ကစားချိန် စီစဉ်ပါ။ arrange playtime with another child in the family or at a free play space. အသက်အရွယ်နှင့်ကိုက်ညီသော ကစားစရာများ။ age-appropriate play materials. ကစားစဉ် ကြီးကြပ်၍ ဘေးကင်းစေပါ။ အစာတစ်ဆို့ခြင်း အန္တရာယ်သည် အသက် ၄ နှစ်အထိ ဆက်ရှိပါသည် — လမ်းလျှောက်တတ်၊ စကားပြောတတ်ပြီဆိုသော်လည်း အန္တရာယ် မကုန်သေးပါ။ စပျစ်သီးနှင့် ချယ်ရီခရမ်းချဉ်သီးများကို အလျားလိုက် လေးစိတ် ခွဲပေးပါ။ အခွံမာသီး အလုံးလိုက်၊ ပြောင်းဖူးပေါက်ပေါက်၊ မာကျောသော သကြားလုံး၊ အစေ့အဆန်များနှင့် မုန်လာဥနီ အစိမ်းများကို အသက် ၄ နှစ်အောက် ကလေးများအား မပေးပါနှင့်။ အမြဲ ထိုင်၍ စားခိုင်းပြီး စားနေစဉ် အနားတွင် ရှိပါ။ supervise group play for safety. choking remains a risk until about age 4 — walking and talking do not end it. cut grapes and cherry tomatoes into quarters lengthwise. do not give whole nuts, popcorn, hard sweets, seeds or raw carrot to a child under 4. always have your child sit to eat, and stay with them while they eat. ဖွံ့ဖြိုးမှုမှတ်တိုင်စာရင်းတစ်ခုတည်းဖြင့် ကလေးကို ရောဂါအတည်ပြုရန် ကြိုးစားခြင်း—ဤစာရင်းသည် စံသတ်မှတ်ထားသော ဖွံ့ဖြိုးမှုစစ်ဆေးရေးကိရိယာကို အစားမထိုးနိုင်ပါ။ using one milestone checklist to diagnose a child — it does not replace standardized screening. ကစားချိန်ကို စာမေးပွဲတစ်ခုလို မဖြစ်စေဘဲ ကလေးက အခြားကလေးများကို သတိပြု၍ ပါဝင်ကစားပုံကို သဘာဝကျကျ ကြည့်ပါ။ observe naturally how your child notices and joins peers without turning play into a test. ၃ နှစ်အရွယ်တွင် အခြားကလေးများနှင့် မပေါင်းကစားသေးပါက ဘာလုပ်ရမလဲ။ what if my 3-year-old is not joining other children to play? cdc သည် အခြားကလေးများကို သတိပြု၍ သူတို့နှင့်အတူ ကစားခြင်းကို ၃ နှစ်အရွယ် ဖွံ့ဖြိုးမှုမှတ်တိုင်တစ်ခုအဖြစ် ဖော်ပြထားပါသည်။ ဤအရာကို မတွေ့ရပါက သို့မဟုတ် စိုးရိမ်ပါက ကလေး၏ ဆရာဝန်နှင့် တိုင်ပင်ပါ။ ဤဖွံ့ဖြိုးမှုမှတ်တိုင်စာရင်းသည် စံသတ်မှတ်၍ အတည်ပြုထားသော ဖွံ့ဖြိုးမှုစစ်ဆေးရေးကိရိယာကို အစားမထိုးနိုင်ပါ။ cdc lists noticing other children and joining them to play as a 3-year milestone. if you do not see this or you are concerned, talk with your child’s doctor. this milestone checklist is not a substitute for a standardized, validated developmental screening tool. ၃ နှစ်အရွယ်တွင် အခြားကလေးများကို သတိမပြုခြင်း သို့မဟုတ် ၎င်းတို့နှင့် ကစားရန် လုံးဝ မပါဝင်ခြင်း။ by 3 years: does not notice other children or join them to play. လူမှုဆက်ဆံရေး စိုးရိမ်စရာ တွေ့ပါက ကလေးကျန်းမာရေးဆရာဝန်နှင့် တိုင်ပင်ပါ။ if concerned about social development, consult a pediatrician. အခြားကလေးများနှင့် ကစားခွင့်ပေးခြင်းက မိတ်ဆွေဖွဲ့ခြင်း၏ တန်ဖိုးနှင့် သင့်မြတ်စွာ ပေါင်းသင်းနည်းကို သင်ယူရန် အခွင့်အလမ်းပေးပါသည်။ playing with other children gives your child opportunities to learn the value of friendship and how to get along."
   },
   {
     "ageGroupKey": "2_5y",

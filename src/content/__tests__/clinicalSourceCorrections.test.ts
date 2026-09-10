@@ -167,7 +167,7 @@ describe('clinically sourced content corrections', () => {
       'hc-choking-prevention-2026',
     ]);
     expect(SOURCE_BY_ID.get('cdc-milestones-3-years-2026')?.verifiedNote).toContain(
-      'learn sharing and friendship',
+      'value of friendship and how to get along',
     );
 
     const social = dataFor('gd_3y_social');
@@ -177,6 +177,8 @@ describe('clinically sourced content corrections', () => {
       'not a substitute for a standardized, validated developmental screening tool',
     );
     expect(JSON.stringify(social)).not.toContain('solo play is also healthy');
+    expect(JSON.stringify(social)).not.toContain('take turns');
+    expect(JSON.stringify(social)).not.toContain('sharing');
   });
 
   it('binds the 2.5-year emotional guide to current official emotion-coaching claims', () => {

@@ -34,8 +34,10 @@ Two static guide mappings that previously depended too heavily on ELOF are now
 bound to current official pages:
 
 - `guide:gd_3y_social`: `cdc-milestones-3-years-2026` supports the exact three-year
-  social milestone, peer play, sharing, friendship and act-early referral. The
-  existing current choking source remains separate.
+  social milestone, peer play, friendship, getting along and act-early referral.
+  The guide was narrowed to those exact claims instead of reusing older frozen
+  source records beyond their recorded scopes. The existing current choking
+  source remains separate.
 - `guide:gd_2_5y_emotional`:
   `cdc-emotion-coaching-toddlers-preschoolers-2026` supports common outbursts,
   safety first, calm caregiver modelling, naming and accepting emotions, and limits

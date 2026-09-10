@@ -1246,13 +1246,13 @@ export const CDC_SOURCES: EvidenceSource[] = [
     country: 'United States',
     url: 'https://www.cdc.gov/act-early/milestones/3-years.html',
     evidenceLevel: 'parent_education',
-    keywords: ['3 years', 'developmental milestones', 'social play', 'sharing', 'friendship', 'act early'],
+    keywords: ['3 years', 'developmental milestones', 'social play', 'friendship', 'getting along', 'act early'],
     topics: ['milestones', 'social_emotional', 'parenting'],
     ageMonthsMin: 36,
     ageMonthsMax: 36,
     verifiedOn: '2026-09-10',
     verifiedNote:
-      'The official CDC page prints this exact title and “May 15, 2026.” It defines milestones as things most children (75% or more) can do by an age, lists noticing other children and joining them to play at 3 years, and advises encouraging play with other children to help children learn sharing and friendship. It tells caregivers to act early and talk with the child’s doctor if a milestone is absent or there is another concern. The checklist is not a standardized screening tool.',
+      'The official CDC page prints this exact title and “May 15, 2026.” It defines milestones as things most children (75% or more) can do by an age, lists noticing other children and joining them to play at 3 years, and advises encouraging play with other children to help children learn the value of friendship and how to get along. It tells caregivers to act early and talk with the child’s doctor if a milestone is absent or there is another concern. The checklist is not a standardized screening tool.',
   }),
   s({
     id: 'cdc-milestone-checklists-2025',
