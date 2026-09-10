@@ -56,6 +56,7 @@ import { isManualReviewContentCasTargetSlug } from './lib/manualReviewContentCas
 import { isBirth2mNutritionCasTargetSlug } from './lib/birth2mNutritionCasData';
 import { isClinicalTwoSmallCasTargetSlug } from './lib/clinicalTwoSmallCasGuard';
 import { isBirth2mGrossMotorCorrectionSlug } from './lib/birth2mGrossMotorCorrection';
+import { isBookActivityAttributionCorrectionSlug } from './lib/bookActivityAttributionCorrection';
 import { isNutritionGuidesCasTargetSlug } from './lib/nutritionGuidesCasData';
 import { isOlderSafety2026ContentTargetSlug } from './lib/olderSafety2026CasData';
 import {
@@ -203,6 +204,7 @@ export function seedRunSkipsItem(item: Pick<Item, 'type' | 'slug'>): boolean {
     || isManualReviewContentCasTargetSlug(item.slug)
     || isBirth2mNutritionCasTargetSlug(item.slug)
     || isBirth2mGrossMotorCorrectionSlug(item.slug)
+    || isBookActivityAttributionCorrectionSlug(item.slug)
     || isOlderSafety2026ContentTargetSlug(item.slug)
     || isGdBirth2mEmotionalCasContentSlug(item.slug)
     || isUnicefSeenCountedConsumerSlug(item.slug)
@@ -1881,7 +1883,8 @@ export const applyPublishedErrata = internalMutation({
 
     for (const slug of slugs) {
       if (isClinicalTwoSmallCasTargetSlug(slug)
-        || isGd10_12mPlayV5ContentSlug(slug)) {
+        || isGd10_12mPlayV5ContentSlug(slug)
+        || isBookActivityAttributionCorrectionSlug(slug)) {
         unchanged += 1;
         continue;
       }
