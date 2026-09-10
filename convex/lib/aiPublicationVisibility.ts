@@ -23,10 +23,33 @@ import {
 import { AI_PUBLICATION_AUDIT_ARTIFACT } from './aiPublicationAuditArtifact';
 import {
   AI_PUBLICATION_AUDIT_ARTIFACT_HASH,
+  AI_PUBLICATION_RELEASE_ID,
 } from './aiPublicationReleaseData';
+import { EARLY_MATH_AUDIT_ARTIFACT, EARLY_MATH_AUDIT_ARTIFACT_HASH } from './aiEarlyMathPublication20260910Artifact';
+import { EARLY_MATH_RELEASE_ROOT, EARLY_MATH_RELEASE_DAYS } from './aiEarlyMathPublication20260910Data';
+import type { AiPublicationAuditTargetArtifact } from './aiPublicationAuditArtifact';
 import { todayIsoUtc } from './evidenceFreshness';
 
 type DatabaseContext = Pick<QueryCtx, 'db'> | Pick<MutationCtx, 'db'>;
+
+type AuditArtifact = Omit<typeof AI_PUBLICATION_AUDIT_ARTIFACT, 'artifactId' | 'releaseId' | 'model' | 'modelVersion' | 'auditedWorkspaceBaseCommit' | 'auditStartedAt' | 'auditCompletedAt' | 'summary' | 'limitations' | 'targets'> & {
+  artifactId: string; releaseId: string; model: string; modelVersion: string;
+  auditedWorkspaceBaseCommit: string; auditStartedAt: number; auditCompletedAt: number;
+  summary: string; limitations: readonly string[]; targets: readonly AiPublicationAuditTargetArtifact[];
+};
+
+/** Explicit compiled registry: an arbitrary database hash cannot authorize publication. */
+export function registeredAiPublicationArtifact(releaseId: string, artifactHash: string): {
+  artifact: AuditArtifact; hash: string; releaseDays: number;
+} | null {
+  const entries = [
+    { artifact: AI_PUBLICATION_AUDIT_ARTIFACT, hash: AI_PUBLICATION_AUDIT_ARTIFACT_HASH, root: AI_PUBLICATION_RELEASE_ID, releaseDays: AI_PUBLICATION_MAX_RELEASE_DAYS },
+    { artifact: EARLY_MATH_AUDIT_ARTIFACT, hash: EARLY_MATH_AUDIT_ARTIFACT_HASH, root: EARLY_MATH_RELEASE_ROOT, releaseDays: EARLY_MATH_RELEASE_DAYS },
+  ];
+  return entries.find((entry) => entry.hash === artifactHash && entry.artifact.targets.some(
+    (target) => releaseId === `${entry.root}:${target.type}:${target.slug}`,
+  )) ?? null;
+}
 
 type ActiveControl = {
   complete: boolean;
@@ -69,6 +92,7 @@ async function matchingCompletedRun(
   release: Doc<'aiPublicationReleases'>,
   expectedOutputHash: string,
   expectedSummary: string,
+  artifact: AuditArtifact,
 ): Promise<boolean> {
   const rows = await ctx.db
     .query('aiAuditRuns')
@@ -77,16 +101,16 @@ async function matchingCompletedRun(
   return rows.length === 1
     && rows[0].status === 'completed'
     && rows[0].releaseId === release.releaseId
-    && rows[0].provider === AI_PUBLICATION_AUDIT_ARTIFACT.provider
-    && rows[0].model === AI_PUBLICATION_AUDIT_ARTIFACT.model
-    && rows[0].modelVersion === AI_PUBLICATION_AUDIT_ARTIFACT.modelVersion
+    && rows[0].provider === artifact.provider
+    && rows[0].model === artifact.model
+    && rows[0].modelVersion === artifact.modelVersion
     && rows[0].policyVersion === AI_PUBLICATION_POLICY_VERSION
     && rows[0].gitCommit === release.gitCommit
     && rows[0].targetCount === 1
     && rows[0].summary === expectedSummary
-    && arraysEqual(rows[0].limitations, AI_PUBLICATION_AUDIT_ARTIFACT.limitations)
-    && rows[0].startedAt === AI_PUBLICATION_AUDIT_ARTIFACT.auditStartedAt
-    && rows[0].completedAt === AI_PUBLICATION_AUDIT_ARTIFACT.auditCompletedAt
+    && arraysEqual(rows[0].limitations, artifact.limitations)
+    && rows[0].startedAt === artifact.auditStartedAt
+    && rows[0].completedAt === artifact.auditCompletedAt
     && rows[0].outputHash === expectedOutputHash;
 }
 
@@ -97,13 +121,21 @@ export async function aiReleaseMatchesCurrentState(
   now: number,
   todayIso: string,
 ): Promise<boolean> {
-  const artifactHash = await sha256Canonical(AI_PUBLICATION_AUDIT_ARTIFACT);
-  const artifactTarget = AI_PUBLICATION_AUDIT_ARTIFACT.targets.find(
+  const registered = registeredAiPublicationArtifact(release.releaseId, release.auditArtifactHash);
+  if (!registered) return false;
+  const { artifact, releaseDays } = registered;
+  const artifactHash = await sha256Canonical(artifact);
+  const artifactTarget = artifact.targets.find(
     (target) => target.type === content.type && target.slug === content.slug,
   );
   if (
-    artifactHash !== AI_PUBLICATION_AUDIT_ARTIFACT_HASH
+    artifactHash !== registered.hash
     || !artifactTarget
+    || release.contentSnapshotHash !== artifactTarget.contentSnapshotHash
+    || release.evidenceLinkSnapshotHash !== artifactTarget.evidenceLinkSnapshotHash
+    || release.sourceSnapshots.length !== 1
+    || release.sourceSnapshots[0].sourceId !== artifactTarget.sourceId
+    || release.sourceSnapshots[0].sourceSnapshotHash !== artifactTarget.sourceSnapshotHash
     || release.status !== 'active'
     || release.contentId !== content._id
     || release.contentType !== content.type
@@ -119,6 +151,7 @@ export async function aiReleaseMatchesCurrentState(
     || !isSha256Hex(release.contentSnapshotHash)
     || !isSha256Hex(release.evidenceLinkSnapshotHash)
     || release.expiresAt < now
+    || release.expiresAt > artifact.auditCompletedAt + releaseDays * 86_400_000
     || release.expiresAt - release.createdAt > AI_PUBLICATION_MAX_RELEASE_DAYS * 86_400_000
   ) return false;
 
@@ -135,11 +168,11 @@ export async function aiReleaseMatchesCurrentState(
     kind: 'evidence',
   });
   const expectedNextAuditDate = new Date(
-    AI_PUBLICATION_AUDIT_ARTIFACT.auditCompletedAt
-    + (AI_PUBLICATION_MAX_RELEASE_DAYS - 1) * 86_400_000,
+    artifact.auditCompletedAt
+    + (releaseDays - 1) * 86_400_000,
   ).toISOString().slice(0, 10);
-  const expectedLimitations = [...artifactTarget.limitations, ...AI_PUBLICATION_AUDIT_ARTIFACT.limitations];
-  const expectedRunSummary = `${AI_PUBLICATION_AUDIT_ARTIFACT.summary} Target: ${content.type}:${content.slug}.`;
+  const expectedLimitations = [...artifactTarget.limitations, ...artifact.limitations];
+  const expectedRunSummary = `${artifact.summary} Target: ${content.type}:${content.slug}.`;
 
   const contentHash = await sha256Canonical(aiContentSnapshot(content));
   if (contentHash !== release.contentSnapshotHash) return false;
@@ -175,7 +208,7 @@ export async function aiReleaseMatchesCurrentState(
     && arraysEqual(contentAudits[0].sourceIds, link.sourceIds)
     && arraysEqual(contentAudits[0].checks, artifactTarget.contentChecks)
     && arraysEqual(contentAudits[0].limitations, expectedLimitations)
-    && contentAudits[0].auditedAt === AI_PUBLICATION_AUDIT_ARTIFACT.auditCompletedAt
+    && contentAudits[0].auditedAt === artifact.auditCompletedAt
     && contentAudits[0].nextAuditDate === expectedNextAuditDate
     && contentAudits[0].outputHash === expectedContentOutputHash
     && aiAuditIsCurrent(contentAudits[0].auditedAt, contentAudits[0].nextAuditDate, todayIso, now)
@@ -186,6 +219,7 @@ export async function aiReleaseMatchesCurrentState(
     release,
     expectedRunOutputHash,
     expectedRunSummary,
+    artifact,
   ))) return false;
 
   const sourceResults = await Promise.all(release.sourceSnapshots.map(async (snapshot) => {
@@ -213,7 +247,7 @@ export async function aiReleaseMatchesCurrentState(
       && arraysEqual(audits[0].urlsChecked, [artifactTarget.sourceUrl])
       && arraysEqual(audits[0].findings, artifactTarget.evidenceFindings)
       && arraysEqual(audits[0].limitations, expectedLimitations)
-      && audits[0].auditedAt === AI_PUBLICATION_AUDIT_ARTIFACT.auditCompletedAt
+      && audits[0].auditedAt === artifact.auditCompletedAt
       && audits[0].nextAuditDate === expectedNextAuditDate
       && audits[0].outputHash === expectedEvidenceOutputHash
       && aiAuditIsCurrent(audits[0].auditedAt, audits[0].nextAuditDate, todayIso, now)
@@ -225,6 +259,7 @@ export async function aiReleaseMatchesCurrentState(
       release,
       expectedRunOutputHash,
       expectedRunSummary,
+      artifact,
     ));
   }));
   return sourceResults.every(Boolean);

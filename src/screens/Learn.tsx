@@ -7,6 +7,7 @@ import { useAppState } from '../app/AppState';
 import { developmentalAgeMonths } from '../domain/age/age';
 import { ageGroup, resolveAgeGroup } from '../content/taxonomy';
 import { isNativeStoreBuild } from '../app/platform';
+import { AiPublicationDisclosure } from '../components/AiPublicationDisclosure';
 
 type LearnView = 'recommended' | 'lesson' | 'guide' | 'story';
 
@@ -226,6 +227,7 @@ export function Learn() {
                         {index === 0 && view === 'recommended' && <span className="rounded-pill bg-mint-soft px-2 py-0.5 text-[11px]">{L('ယနေ့အတွက်', 'Start here')}</span>}
                       </span>
                       <h3 className="mt-1 font-bold leading-7 text-ink">{locale === 'mm' ? item.titleMm : item.titleEn}</h3>
+                      <AiPublicationDisclosure publicationLane={item.publicationLane} locale={locale} compact />
                       {(item.summaryMm || item.summaryEn) && (
                         <p className="mt-1 line-clamp-2 text-sm leading-6 text-ink-soft">{locale === 'mm' ? item.summaryMm : item.summaryEn}</p>
                       )}

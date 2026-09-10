@@ -1,0 +1,65 @@
+{
+  "category": "early_mathematics",
+  "summaryMm": "နေ့စဉ်ဘဝထဲ ရေတွက်ခြင်း၊ ပုံသဏ္ဌာန်၊ နှိုင်းယှဉ်ခြင်း။",
+  "summaryEn": "Counting, shapes, and comparing in daily life.",
+  "durationMinutes": 3,
+  "tags": [
+    "early_mathematics",
+    "lesson"
+  ],
+  "data": {
+    "objectives": [
+      {
+        "mm": "နေ့စဉ်ဘဝ သင်္ချာ နည်းလမ်းများ သိရှိရန်။",
+        "en": "Learn everyday math moments."
+      }
+    ],
+    "readingMinutes": 3,
+    "body": {
+      "mm": "AI စစ်ဆေးမှု အသိပေးချက် — ဤအကြောင်းအရာကို AI ဖြင့် စစ်ဆေးထားသော်လည်း ဆေးဘက်ပညာရှင် သို့မဟုတ် မြန်မာဘာသာကို မိခင်ဘာသာစကားအဖြစ် အသုံးပြုသော စာတည်းဖြတ်သူက အတည်ပြုထားခြင်း မရှိပါ။ အထွေထွေပညာပေးအတွက်သာ ဖြစ်ပြီး ဆေးဘက်ဆိုင်ရာ အကြံပြုချက်၊ ကလေးဖွံ့ဖြိုးမှု စစ်ဆေးချက် သို့မဟုတ် ရောဂါဖော်ထုတ်ချက် မဟုတ်ပါ။\n\nသင်္ချာသည် စာအုပ်ထဲသာ မဟုတ်ပါ။ နေ့စဉ်တွေ့ရသော အရာများကို အတူရေတွက်ခြင်း၊ ပုံသဏ္ဌာန်များကို ရှာဖွေခြင်း၊ “ပိုကြီး/ပိုငယ်” ဟု နှိုင်းယှဉ်ခြင်းဖြင့် အစောပိုင်း သင်္ချာအယူအဆများကို အတူလေ့ကျင့်နိုင်ပါသည်။",
+      "en": "AI review notice — This content was reviewed by AI but has not been approved by a clinician or native Myanmar-language editor. It is for general education only and is not medical advice, developmental screening, or diagnosis.\n\nMath is not only in books. Count everyday things together, look for shapes, and compare “bigger/smaller” to practise early math ideas."
+    },
+    "quiz": [
+      {
+        "q": {
+          "mm": "နေ့စဉ်ဘဝတွင် အစောပိုင်း သင်္ချာကို အတူလေ့ကျင့်နိုင်သည့် ရိုးရှင်းသော နည်းတစ်ခုမှာ —",
+          "en": "One simple way to practise early math in daily life is —"
+        },
+        "options": [
+          {
+            "mm": "နေ့စဉ်တွေ့ရသော အရာများကို အတူရေတွက်ခြင်း",
+            "en": "counting everyday things together"
+          },
+          {
+            "mm": "ရုပ်ပုံကတ်များကိုသာ အလွတ်ကျက်စေခြင်း",
+            "en": "using only memorized flashcards"
+          }
+        ],
+        "answerIndex": 0
+      }
+    ],
+    "takeaway": {
+      "mm": "ရေတွက်ခြင်းကို နေ့စဉ်ဘဝထဲ ထည့်ပါ။",
+      "en": "Weave counting into your day."
+    },
+    "actionToday": {
+      "mm": "ယနေ့ ကလေးနှင့်အတူ အရာ ၅ ခု ရေတွက်ပါ။",
+      "en": "Count five things together today."
+    }
+  },
+  "media": [
+    {
+      "kind": "illustration",
+      "placeholder": true,
+      "offline": true
+    }
+  ],
+  "type": "lesson",
+  "slug": "lsn_early_math",
+  "titleMm": "အစောပိုင်း သင်္ချာ",
+  "titleEn": "Everyday early math",
+  "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
+  "version": 1,
+  "clinicalStatus": "clinical_review",
+  "searchText": "အစောပိုင်း သင်္ချာ everyday early math နေ့စဉ်ဘဝထဲ ရေတွက်ခြင်း၊ ပုံသဏ္ဌာန်၊ နှိုင်းယှဉ်ခြင်း။ counting, shapes, and comparing in daily life. early_mathematics lesson နေ့စဉ်ဘဝ သင်္ချာ နည်းလမ်းများ သိရှိရန်။ learn everyday math moments. ai စစ်ဆေးမှု အသိပေးချက် — ဤအကြောင်းအရာကို ai ဖြင့် စစ်ဆေးထားသော်လည်း ဆေးဘက်ပညာရှင် သို့မဟုတ် မြန်မာဘာသာကို မိခင်ဘာသာစကားအဖြစ် အသုံးပြုသော စာတည်းဖြတ်သူက အတည်ပြုထားခြင်း မရှိပါ။ အထွေထွေပညာပေးအတွက်သာ ဖြစ်ပြီး ဆေးဘက်ဆိုင်ရာ အကြံပြုချက်၊ ကလေးဖွံ့ဖြိုးမှု စစ်ဆေးချက် သို့မဟုတ် ရောဂါဖော်ထုတ်ချက် မဟုတ်ပါ။\n\nသင်္ချာသည် စာအုပ်ထဲသာ မဟုတ်ပါ။ နေ့စဉ်တွေ့ရသော အရာများကို အတူရေတွက်ခြင်း၊ ပုံသဏ္ဌာန်များကို ရှာဖွေခြင်း၊ “ပိုကြီး/ပိုငယ်” ဟု နှိုင်းယှဉ်ခြင်းဖြင့် အစောပိုင်း သင်္ချာအယူအဆများကို အတူလေ့ကျင့်နိုင်ပါသည်။ ai review notice — this content was reviewed by ai but has not been approved by a clinician or native myanmar-language editor. it is for general education only and is not medical advice, developmental screening, or diagnosis.\n\nmath is not only in books. count everyday things together, look for shapes, and compare “bigger/smaller” to practise early math ideas. နေ့စဉ်ဘဝတွင် အစောပိုင်း သင်္ချာကို အတူလေ့ကျင့်နိုင်သည့် ရိုးရှင်းသော နည်းတစ်ခုမှာ — one simple way to practise early math in daily life is — နေ့စဉ်တွေ့ရသော အရာများကို အတူရေတွက်ခြင်း counting everyday things together ရုပ်ပုံကတ်များကိုသာ အလွတ်ကျက်စေခြင်း using only memorized flashcards ရေတွက်ခြင်းကို နေ့စဉ်ဘဝထဲ ထည့်ပါ။ weave counting into your day. ယနေ့ ကလေးနှင့်အတူ အရာ ၅ ခု ရေတွက်ပါ။ count five things together today."
+}

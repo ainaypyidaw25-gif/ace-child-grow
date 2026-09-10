@@ -6,6 +6,8 @@ import {
   preflight,
 } from '../../../convex/aiPublication';
 import seedData from '../../../convex/seedData.json';
+// Archived seed from d6e6f459b626bb1d1c448386388c66daea8e7074: keep frozen v1 audits independent of later copy edits.
+import archivedMathSeed from './fixtures/aiEarlyMathSeedBefore20260910.json';
 import { sha256Canonical } from '../../../convex/lib/aiAuditHash';
 import { AI_PUBLICATION_AUDIT_ARTIFACT } from '../../../convex/lib/aiPublicationAuditArtifact';
 import { aiPublicationTargetKey, AI_PUBLICATION_POLICY_VERSION } from '../../../convex/lib/aiPublicationPolicy';
@@ -112,7 +114,9 @@ async function appliedContext(options?: {
       targetArtifactHash,
       kind: 'evidence',
     });
-    const seed = seedData.find((candidate) => candidate.slug === target.slug)!;
+    const seed = target.slug === archivedMathSeed.slug
+      ? structuredClone(archivedMathSeed)
+      : seedData.find((candidate) => candidate.slug === target.slug)!;
     const content = {
       ...seed,
       _id: contentId,

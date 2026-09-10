@@ -4699,17 +4699,17 @@
       "quiz": [
         {
           "q": {
-            "mm": "နေ့စဉ်ဘဝတွင် အစောပိုင်း သင်္ချာကို အတူလေ့ကျင့်နိုင်သည့် ရိုးရှင်းသော နည်းတစ်ခုမှာ —",
-            "en": "One simple way to practise early math in daily life is —"
+            "mm": "အစောပိုင်း သင်္ချာလေ့ကျင့်မှုကို ပျော်ရွှင်ဖွယ် ဖြစ်စေရန် ဘယ်လိုလုပ်နိုင်ပါသလဲ။",
+            "en": "How can you keep early math playful?"
           },
           "options": [
             {
-              "mm": "နေ့စဉ်တွေ့ရသော အရာများကို အတူရေတွက်ခြင်း",
-              "en": "counting everyday things together"
+              "mm": "အတူရေတွက်ပြီး ကလေး၏ စိတ်ဝင်စားမှုအတိုင်း လိုက်ပါ။",
+              "en": "Count together and follow the child’s interest."
             },
             {
-              "mm": "ရုပ်ပုံကတ်များကိုသာ အလွတ်ကျက်စေခြင်း",
-              "en": "using only memorized flashcards"
+              "mm": "အကြိမ်တိုင်း အဖြေမှန်ရရန် ဖိအားပေးပါ။",
+              "en": "Insist on a correct answer every time."
             }
           ],
           "answerIndex": 0
@@ -4720,8 +4720,8 @@
         "en": "Weave counting into your day."
       },
       "actionToday": {
-        "mm": "ယနေ့ ကလေးနှင့်အတူ အရာ ၅ ခု ရေတွက်ပါ။",
-        "en": "Count five things together today."
+        "mm": "ကလေး စိတ်ဝင်စားပါက ယနေ့ ပုံအနည်းငယ်ကို အတူရေတွက်ကြည့်ပါ။ ကလေးက ပါဝင်လိုလျှင် ပါဝင်နိုင်သလို ကြည့်နေရုံလည်း ရပါသည်။ စိတ်မဝင်စားတော့လျှင် ရပ်ပါ။",
+        "en": "If your child is interested, count a few pictures together today. Your child can join in or simply watch; stop when they lose interest."
       }
     },
     "media": [
@@ -4738,7 +4738,7 @@
     "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
     "version": 1,
     "clinicalStatus": "clinical_review",
-    "searchText": "အစောပိုင်း သင်္ချာ everyday early math နေ့စဉ်ဘဝထဲ ရေတွက်ခြင်း၊ ပုံသဏ္ဌာန်၊ နှိုင်းယှဉ်ခြင်း။ counting, shapes, and comparing in daily life. early_mathematics lesson နေ့စဉ်ဘဝ သင်္ချာ နည်းလမ်းများ သိရှိရန်။ learn everyday math moments. ai စစ်ဆေးမှု အသိပေးချက် — ဤအကြောင်းအရာကို ai ဖြင့် စစ်ဆေးထားသော်လည်း ဆေးဘက်ပညာရှင် သို့မဟုတ် မြန်မာဘာသာကို မိခင်ဘာသာစကားအဖြစ် အသုံးပြုသော စာတည်းဖြတ်သူက အတည်ပြုထားခြင်း မရှိပါ။ အထွေထွေပညာပေးအတွက်သာ ဖြစ်ပြီး ဆေးဘက်ဆိုင်ရာ အကြံပြုချက်၊ ကလေးဖွံ့ဖြိုးမှု စစ်ဆေးချက် သို့မဟုတ် ရောဂါဖော်ထုတ်ချက် မဟုတ်ပါ။\n\nသင်္ချာသည် စာအုပ်ထဲသာ မဟုတ်ပါ။ နေ့စဉ်တွေ့ရသော အရာများကို အတူရေတွက်ခြင်း၊ ပုံသဏ္ဌာန်များကို ရှာဖွေခြင်း၊ “ပိုကြီး/ပိုငယ်” ဟု နှိုင်းယှဉ်ခြင်းဖြင့် အစောပိုင်း သင်္ချာအယူအဆများကို အတူလေ့ကျင့်နိုင်ပါသည်။ ai review notice — this content was reviewed by ai but has not been approved by a clinician or native myanmar-language editor. it is for general education only and is not medical advice, developmental screening, or diagnosis.\n\nmath is not only in books. count everyday things together, look for shapes, and compare “bigger/smaller” to practise early math ideas. နေ့စဉ်ဘဝတွင် အစောပိုင်း သင်္ချာကို အတူလေ့ကျင့်နိုင်သည့် ရိုးရှင်းသော နည်းတစ်ခုမှာ — one simple way to practise early math in daily life is — နေ့စဉ်တွေ့ရသော အရာများကို အတူရေတွက်ခြင်း counting everyday things together ရုပ်ပုံကတ်များကိုသာ အလွတ်ကျက်စေခြင်း using only memorized flashcards ရေတွက်ခြင်းကို နေ့စဉ်ဘဝထဲ ထည့်ပါ။ weave counting into your day. ယနေ့ ကလေးနှင့်အတူ အရာ ၅ ခု ရေတွက်ပါ။ count five things together today."
+    "searchText": "အစောပိုင်း သင်္ချာ everyday early math နေ့စဉ်ဘဝထဲ ရေတွက်ခြင်း၊ ပုံသဏ္ဌာန်၊ နှိုင်းယှဉ်ခြင်း။ counting, shapes, and comparing in daily life. early_mathematics lesson နေ့စဉ်ဘဝ သင်္ချာ နည်းလမ်းများ သိရှိရန်။ learn everyday math moments. ai စစ်ဆေးမှု အသိပေးချက် — ဤအကြောင်းအရာကို ai ဖြင့် စစ်ဆေးထားသော်လည်း ဆေးဘက်ပညာရှင် သို့မဟုတ် မြန်မာဘာသာကို မိခင်ဘာသာစကားအဖြစ် အသုံးပြုသော စာတည်းဖြတ်သူက အတည်ပြုထားခြင်း မရှိပါ။ အထွေထွေပညာပေးအတွက်သာ ဖြစ်ပြီး ဆေးဘက်ဆိုင်ရာ အကြံပြုချက်၊ ကလေးဖွံ့ဖြိုးမှု စစ်ဆေးချက် သို့မဟုတ် ရောဂါဖော်ထုတ်ချက် မဟုတ်ပါ။\n\nသင်္ချာသည် စာအုပ်ထဲသာ မဟုတ်ပါ။ နေ့စဉ်တွေ့ရသော အရာများကို အတူရေတွက်ခြင်း၊ ပုံသဏ္ဌာန်များကို ရှာဖွေခြင်း၊ “ပိုကြီး/ပိုငယ်” ဟု နှိုင်းယှဉ်ခြင်းဖြင့် အစောပိုင်း သင်္ချာအယူအဆများကို အတူလေ့ကျင့်နိုင်ပါသည်။ ai review notice — this content was reviewed by ai but has not been approved by a clinician or native myanmar-language editor. it is for general education only and is not medical advice, developmental screening, or diagnosis.\n\nmath is not only in books. count everyday things together, look for shapes, and compare “bigger/smaller” to practise early math ideas. အစောပိုင်း သင်္ချာလေ့ကျင့်မှုကို ပျော်ရွှင်ဖွယ် ဖြစ်စေရန် ဘယ်လိုလုပ်နိုင်ပါသလဲ။ how can you keep early math playful? အတူရေတွက်ပြီး ကလေး၏ စိတ်ဝင်စားမှုအတိုင်း လိုက်ပါ။ count together and follow the child’s interest. အကြိမ်တိုင်း အဖြေမှန်ရရန် ဖိအားပေးပါ။ insist on a correct answer every time. ရေတွက်ခြင်းကို နေ့စဉ်ဘဝထဲ ထည့်ပါ။ weave counting into your day. ကလေး စိတ်ဝင်စားပါက ယနေ့ ပုံအနည်းငယ်ကို အတူရေတွက်ကြည့်ပါ။ ကလေးက ပါဝင်လိုလျှင် ပါဝင်နိုင်သလို ကြည့်နေရုံလည်း ရပါသည်။ စိတ်မဝင်စားတော့လျှင် ရပ်ပါ။ if your child is interested, count a few pictures together today. your child can join in or simply watch; stop when they lose interest."
   },
   {
     "category": "creativity",

@@ -52,10 +52,24 @@ describe('bounded AI-reviewed editorial lane copy', () => {
     expect(body.mm).not.toContain('အကောင်းဆုံး');
     expect(body.en).not.toMatch(/best (way|taught)/i);
     expect(quiz[0].q).toEqual({
-      mm: 'နေ့စဉ်ဘဝတွင် အစောပိုင်း သင်္ချာကို အတူလေ့ကျင့်နိုင်သည့် ရိုးရှင်းသော နည်းတစ်ခုမှာ —',
-      en: 'One simple way to practise early math in daily life is —',
+      mm: 'အစောပိုင်း သင်္ချာလေ့ကျင့်မှုကို ပျော်ရွှင်ဖွယ် ဖြစ်စေရန် ဘယ်လိုလုပ်နိုင်ပါသလဲ။',
+      en: 'How can you keep early math playful?',
     });
     expect(quiz[0].answerIndex).toBe(0);
+    expect(quiz[0].options).toEqual([
+      {
+        mm: 'အတူရေတွက်ပြီး ကလေး၏ စိတ်ဝင်စားမှုအတိုင်း လိုက်ပါ။',
+        en: 'Count together and follow the child’s interest.',
+      },
+      {
+        mm: 'အကြိမ်တိုင်း အဖြေမှန်ရရန် ဖိအားပေးပါ။',
+        en: 'Insist on a correct answer every time.',
+      },
+    ]);
+    expect(row.data.actionToday).toEqual({
+      mm: 'ကလေး စိတ်ဝင်စားပါက ယနေ့ ပုံအနည်းငယ်ကို အတူရေတွက်ကြည့်ပါ။ ကလေးက ပါဝင်လိုလျှင် ပါဝင်နိုင်သလို ကြည့်နေရုံလည်း ရပါသည်။ စိတ်မဝင်စားတော့လျှင် ရပ်ပါ။',
+      en: 'If your child is interested, count a few pictures together today. Your child can join in or simply watch; stop when they lose interest.',
+    });
   });
 
   it('marks both stories as fictional and avoids one-size-fits-all emotional claims', () => {

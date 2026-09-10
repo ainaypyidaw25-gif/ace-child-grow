@@ -139,9 +139,9 @@ export const LESSONS: SeedItem[] = [
     objectives: [b('နေ့စဉ်ဘဝ သင်္ချာ နည်းလမ်းများ သိရှိရန်။', 'Learn everyday math moments.')],
     readingMinutes: 3,
     body: b('AI စစ်ဆေးမှု အသိပေးချက် — ဤအကြောင်းအရာကို AI ဖြင့် စစ်ဆေးထားသော်လည်း ဆေးဘက်ပညာရှင် သို့မဟုတ် မြန်မာဘာသာကို မိခင်ဘာသာစကားအဖြစ် အသုံးပြုသော စာတည်းဖြတ်သူက အတည်ပြုထားခြင်း မရှိပါ။ အထွေထွေပညာပေးအတွက်သာ ဖြစ်ပြီး ဆေးဘက်ဆိုင်ရာ အကြံပြုချက်၊ ကလေးဖွံ့ဖြိုးမှု စစ်ဆေးချက် သို့မဟုတ် ရောဂါဖော်ထုတ်ချက် မဟုတ်ပါ။\n\nသင်္ချာသည် စာအုပ်ထဲသာ မဟုတ်ပါ။ နေ့စဉ်တွေ့ရသော အရာများကို အတူရေတွက်ခြင်း၊ ပုံသဏ္ဌာန်များကို ရှာဖွေခြင်း၊ “ပိုကြီး/ပိုငယ်” ဟု နှိုင်းယှဉ်ခြင်းဖြင့် အစောပိုင်း သင်္ချာအယူအဆများကို အတူလေ့ကျင့်နိုင်ပါသည်။', 'AI review notice — This content was reviewed by AI but has not been approved by a clinician or native Myanmar-language editor. It is for general education only and is not medical advice, developmental screening, or diagnosis.\n\nMath is not only in books. Count everyday things together, look for shapes, and compare “bigger/smaller” to practise early math ideas.'),
-    quiz: [q('နေ့စဉ်ဘဝတွင် အစောပိုင်း သင်္ချာကို အတူလေ့ကျင့်နိုင်သည့် ရိုးရှင်းသော နည်းတစ်ခုမှာ —', 'One simple way to practise early math in daily life is —', [['နေ့စဉ်တွေ့ရသော အရာများကို အတူရေတွက်ခြင်း', 'counting everyday things together'], ['ရုပ်ပုံကတ်များကိုသာ အလွတ်ကျက်စေခြင်း', 'using only memorized flashcards']], 0)],
+    quiz: [q('အစောပိုင်း သင်္ချာလေ့ကျင့်မှုကို ပျော်ရွှင်ဖွယ် ဖြစ်စေရန် ဘယ်လိုလုပ်နိုင်ပါသလဲ။', 'How can you keep early math playful?', [['အတူရေတွက်ပြီး ကလေး၏ စိတ်ဝင်စားမှုအတိုင်း လိုက်ပါ။', 'Count together and follow the child’s interest.'], ['အကြိမ်တိုင်း အဖြေမှန်ရရန် ဖိအားပေးပါ။', 'Insist on a correct answer every time.']], 0)],
     takeaway: b('ရေတွက်ခြင်းကို နေ့စဉ်ဘဝထဲ ထည့်ပါ။', 'Weave counting into your day.'),
-    actionToday: b('ယနေ့ ကလေးနှင့်အတူ အရာ ၅ ခု ရေတွက်ပါ။', 'Count five things together today.'),
+    actionToday: b('ကလေး စိတ်ဝင်စားပါက ယနေ့ ပုံအနည်းငယ်ကို အတူရေတွက်ကြည့်ပါ။ ကလေးက ပါဝင်လိုလျှင် ပါဝင်နိုင်သလို ကြည့်နေရုံလည်း ရပါသည်။ စိတ်မဝင်စားတော့လျှင် ရပ်ပါ။', 'If your child is interested, count a few pictures together today. Your child can join in or simply watch; stop when they lose interest.'),
   }),
   lesson({
     slug: 'creativity', category: 'creativity',
