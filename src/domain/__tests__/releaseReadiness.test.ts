@@ -31,9 +31,23 @@ const validPublishedTerms: LegalTermsRelease = {
 
 describe('production release readiness classification', () => {
   it('blocks release while paid-access Terms are explicitly a draft', () => {
-    expect(currentLegalTermsReadiness()).toMatchObject({
+    expect(currentLegalTermsReadiness({
+      ...validPublishedTerms,
+      status: 'draft',
+      version: 'draft-2026-08-05',
+      effectiveDate: null,
+      publishedAt: null,
+      approvalReceipt: null,
+    })).toMatchObject({
       level: 'blocked',
       code: 'legal_terms_draft',
+    });
+  });
+
+  it('recognizes the current Owner-approved Terms publication', () => {
+    expect(currentLegalTermsReadiness()).toMatchObject({
+      level: 'pass',
+      code: 'legal_terms_published',
     });
   });
 

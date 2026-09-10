@@ -85,21 +85,19 @@ describe('LegalPage locale correctness', () => {
     expect(document.documentElement.lang).toBe(documentLang('en'));
   });
 
-  // Fix 7 (production audit fix plan): the Terms of Service draft must never
-  // read as a finished, binding document until the owner has reviewed it.
-  it('shows the terms draft with the not-yet-binding notice, in both locales', () => {
+  it('shows the Owner-approved version and future effective date in both locales', () => {
     renderLegal('terms');
     expect(screen.getByRole('heading', { name: 'ဝန်ဆောင်မှုစည်းမျဉ်းများ' })).toBeTruthy();
-    expect(screen.getByRole('note').textContent).toMatch(/မူကြမ်း/);
-    expect(screen.getByText(/မူကြမ်း Version — draft-2026-08-05/)).toBeTruthy();
-    expect(screen.getByText(/အကျိုးသက်ရောက်မည့်နေ့ — အတည်မပြုရသေးပါ/)).toBeTruthy();
+    expect(screen.queryByRole('note')).toBeNull();
+    expect(screen.getByText(/Version — terms-2026-09-11-v1/)).toBeTruthy();
+    expect(screen.getByText(/အကျိုးသက်ရောက်သည့်နေ့ — 2026-09-11/)).toBeTruthy();
 
     fireEvent.click(screen.getByRole('button', { name: 'English' }));
 
     expect(screen.getByRole('heading', { name: 'Terms of Service' })).toBeTruthy();
-    expect(screen.getByRole('note').textContent).toMatch(/draft/i);
-    expect(screen.getByText(/Draft version — draft-2026-08-05/)).toBeTruthy();
-    expect(screen.getByText(/Effective date — not approved/)).toBeTruthy();
+    expect(screen.queryByRole('note')).toBeNull();
+    expect(screen.getByText(/Version — terms-2026-09-11-v1/)).toBeTruthy();
+    expect(screen.getByText(/Effective date — 2026-09-11/)).toBeTruthy();
     expect(screen.getByText(/Refunds/)).toBeTruthy();
   });
 
