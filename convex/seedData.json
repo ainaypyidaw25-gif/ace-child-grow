@@ -3958,8 +3958,8 @@
   },
   {
     "category": "understanding_development",
-    "summaryMm": "ကလေးများ မတူညီသော နယ်ပယ်များတွင် မိမိအရှိန်ဖြင့် ကြီးထွားပုံ။",
-    "summaryEn": "How children grow across areas at their own pace.",
+    "summaryMm": "ကလေးဖွံ့ဖြိုးမှုနှင့် အကြံဉာဏ်တောင်းခံသင့်သည့်အချိန်ကို နားလည်ခြင်း။",
+    "summaryEn": "Understanding development and when to ask for advice.",
     "durationMinutes": 3,
     "tags": [
       "understanding_development",
@@ -3972,41 +3972,41 @@
           "en": "Know the areas of development."
         },
         {
-          "mm": "“ပုံမှန်” အကွာအဝေး ကျယ်ပြန့်ကြောင်း နားလည်ရန်။",
-          "en": "Understand the wide normal range."
+          "mm": "ဖွံ့ဖြိုးမှုအကြောင်း အကြံဉာဏ်တောင်းခံသင့်သည့်အချိန်ကို သိရှိရန်။",
+          "en": "Know when to ask for advice about development."
         }
       ],
       "readingMinutes": 3,
       "body": {
-        "mm": "ကလေးဖွံ့ဖြိုးမှုဆိုသည်မှာ ကိုယ်လက်လှုပ်ရှားမှု၊ ဘာသာစကား၊ စဉ်းစားတွေးခေါ်မှု၊ စိတ်ခံစားမှုနှင့် လူမှုဆက်ဆံရေးတို့ တဖြည်းဖြည်း တိုးတက်လာခြင်း ဖြစ်သည်။ ကလေးတစ်ဦးနှင့်တစ်ဦး ဖွံ့ဖြိုးသည့်အချိန်နှင့် အရှိန် ကွာခြားနိုင်သည်။ ဖွံ့ဖြိုးမှုအဆင့်များသည် ယေဘုယျလမ်းညွှန်ချက်များသာဖြစ်ပြီး အောင်မြင်၊ မအောင်မြင် ဆုံးဖြတ်သည့် စာမေးပွဲ မဟုတ်ပါ။",
-        "en": "Child development is steady growth in movement, language, thinking, feelings, and social skills. Every child grows at their own pace. Milestones are guides, not a strict test."
+        "mm": "AI စစ်ဆေးမှု အသိပေးချက် — ဤအကြောင်းအရာကို AI ဖြင့် စစ်ဆေးထားသော်လည်း ဆေးဘက်ပညာရှင် သို့မဟုတ် မြန်မာဘာသာကို မိခင်ဘာသာစကားအဖြစ် အသုံးပြုသော စာတည်းဖြတ်သူက အတည်ပြုထားခြင်း မရှိပါ။ အထွေထွေပညာပေးအတွက်သာ ဖြစ်ပြီး ဆေးဘက်ဆိုင်ရာ အကြံပြုချက်၊ ကလေးဖွံ့ဖြိုးမှု စစ်ဆေးချက် သို့မဟုတ် ရောဂါဖော်ထုတ်ချက် မဟုတ်ပါ။\n\nကလေးဖွံ့ဖြိုးမှုတွင် လှုပ်ရှားခြင်း၊ ဆက်သွယ်ပြောဆိုခြင်း၊ စဉ်းစားခြင်း၊ သင်ယူခြင်းနှင့် အခြားသူများနှင့် ဆက်ဆံခြင်းတို့၌ ပြောင်းလဲလာမှုများ ပါဝင်ပါသည်။ ဖွံ့ဖြိုးမှုမှတ်တိုင် စာရင်းများက တိုးတက်မှုကို သတိပြုရန်နှင့် စိုးရိမ်ချက်များကို ဆွေးနွေးရန် အထောက်အကူပြုသော်လည်း ရောဂါဖော်ထုတ်ချက် မဟုတ်သကဲ့သို့ ဖွံ့ဖြိုးမှုစစ်ဆေးခြင်းကိုလည်း အစားမထိုးနိုင်ပါ။ ကလေး၏ ဖွံ့ဖြိုးမှုနှင့်ပတ်သက်၍ စိုးရိမ်ပါက စောင့်မနေဘဲ သက်ဆိုင်ရာ ကျန်းမာရေးပညာရှင်နှင့် ဆွေးနွေးပါ။",
+        "en": "AI review notice — This content was reviewed by AI but has not been approved by a clinician or native Myanmar-language editor. It is for general education only and is not medical advice, developmental screening, or diagnosis.\n\nChild development includes changes in how children move, communicate, think, learn, and relate to others. Milestone checklists help you notice progress and discuss concerns; they are not a diagnosis or a substitute for developmental screening. If you are concerned about your child’s development, talk with a qualified health professional rather than waiting."
       },
       "quiz": [
         {
           "q": {
-            "mm": "မှတ်တိုင်များသည် —",
-            "en": "Milestones are —"
+            "mm": "ဖွံ့ဖြိုးမှုမှတ်တိုင် စာရင်းများက စောင့်ရှောက်သူများကို —",
+            "en": "Milestone checklists help caregivers —"
           },
           "options": [
             {
-              "mm": "တင်းကျပ်သော စာမေးပွဲ",
-              "en": "a strict test"
+              "mm": "မိမိဘာသာ ရောဂါဖော်ထုတ်နိုင်စေသည်",
+              "en": "diagnose a condition on their own"
             },
             {
-              "mm": "လမ်းညွှန်များ",
-              "en": "general guides"
+              "mm": "တိုးတက်မှုကို သတိပြု၍ စိုးရိမ်ချက်များကို ဆွေးနွေးနိုင်စေသည်",
+              "en": "notice progress and discuss concerns"
             }
           ],
           "answerIndex": 1
         }
       ],
       "takeaway": {
-        "mm": "ကလေး၏ ကိုယ်ပိုင်အရှိန်ကို လေးစားပါ။",
-        "en": "Respect your child’s own pace."
+        "mm": "တိုးတက်မှုကို သတိပြု၍ စိုးရိမ်ပါက အကြံဉာဏ်တောင်းခံပါ။",
+        "en": "Notice progress and ask for advice when concerned."
       },
       "actionToday": {
-        "mm": "ယနေ့ ကလေး၏ အချက်ပြမှုနှင့် စိတ်ဝင်စားမှုကို လိုက်၍ အာရုံစိုက်ကစားချိန် အနည်းငယ် ပေးပါ။",
-        "en": "Spend some focused play time following your child’s cues and interests today."
+        "mm": "ယနေ့ ကလေး ကစားပုံ သို့မဟုတ် ဆက်သွယ်ပြောဆိုပုံကို သတိပြု၍ ကျန်းမာရေးပညာရှင်နှင့် ဆွေးနွေးလိုသော မေးခွန်းများရှိပါက ချရေးထားပါ။",
+        "en": "Notice how your child plays or communicates today, and write down any questions to discuss with a health professional."
       }
     },
     "media": [
@@ -4023,7 +4023,7 @@
     "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
     "version": 1,
     "clinicalStatus": "clinical_review",
-    "searchText": "ဖွံ့ဖြိုးမှုဆိုတာ ဘာလဲ what is child development? ကလေးများ မတူညီသော နယ်ပယ်များတွင် မိမိအရှိန်ဖြင့် ကြီးထွားပုံ။ how children grow across areas at their own pace. understanding_development lesson ဖွံ့ဖြိုးမှု နယ်ပယ်များကို သိရှိရန်။ know the areas of development. “ပုံမှန်” အကွာအဝေး ကျယ်ပြန့်ကြောင်း နားလည်ရန်။ understand the wide normal range. ကလေးဖွံ့ဖြိုးမှုဆိုသည်မှာ ကိုယ်လက်လှုပ်ရှားမှု၊ ဘာသာစကား၊ စဉ်းစားတွေးခေါ်မှု၊ စိတ်ခံစားမှုနှင့် လူမှုဆက်ဆံရေးတို့ တဖြည်းဖြည်း တိုးတက်လာခြင်း ဖြစ်သည်။ ကလေးတစ်ဦးနှင့်တစ်ဦး ဖွံ့ဖြိုးသည့်အချိန်နှင့် အရှိန် ကွာခြားနိုင်သည်။ ဖွံ့ဖြိုးမှုအဆင့်များသည် ယေဘုယျလမ်းညွှန်ချက်များသာဖြစ်ပြီး အောင်မြင်၊ မအောင်မြင် ဆုံးဖြတ်သည့် စာမေးပွဲ မဟုတ်ပါ။ child development is steady growth in movement, language, thinking, feelings, and social skills. every child grows at their own pace. milestones are guides, not a strict test. မှတ်တိုင်များသည် — milestones are — တင်းကျပ်သော စာမေးပွဲ a strict test လမ်းညွှန်များ general guides ကလေး၏ ကိုယ်ပိုင်အရှိန်ကို လေးစားပါ။ respect your child’s own pace. ယနေ့ ကလေး၏ အချက်ပြမှုနှင့် စိတ်ဝင်စားမှုကို လိုက်၍ အာရုံစိုက်ကစားချိန် အနည်းငယ် ပေးပါ။ spend some focused play time following your child’s cues and interests today."
+    "searchText": "ဖွံ့ဖြိုးမှုဆိုတာ ဘာလဲ what is child development? ကလေးဖွံ့ဖြိုးမှုနှင့် အကြံဉာဏ်တောင်းခံသင့်သည့်အချိန်ကို နားလည်ခြင်း။ understanding development and when to ask for advice. understanding_development lesson ဖွံ့ဖြိုးမှု နယ်ပယ်များကို သိရှိရန်။ know the areas of development. ဖွံ့ဖြိုးမှုအကြောင်း အကြံဉာဏ်တောင်းခံသင့်သည့်အချိန်ကို သိရှိရန်။ know when to ask for advice about development. ai စစ်ဆေးမှု အသိပေးချက် — ဤအကြောင်းအရာကို ai ဖြင့် စစ်ဆေးထားသော်လည်း ဆေးဘက်ပညာရှင် သို့မဟုတ် မြန်မာဘာသာကို မိခင်ဘာသာစကားအဖြစ် အသုံးပြုသော စာတည်းဖြတ်သူက အတည်ပြုထားခြင်း မရှိပါ။ အထွေထွေပညာပေးအတွက်သာ ဖြစ်ပြီး ဆေးဘက်ဆိုင်ရာ အကြံပြုချက်၊ ကလေးဖွံ့ဖြိုးမှု စစ်ဆေးချက် သို့မဟုတ် ရောဂါဖော်ထုတ်ချက် မဟုတ်ပါ။\n\nကလေးဖွံ့ဖြိုးမှုတွင် လှုပ်ရှားခြင်း၊ ဆက်သွယ်ပြောဆိုခြင်း၊ စဉ်းစားခြင်း၊ သင်ယူခြင်းနှင့် အခြားသူများနှင့် ဆက်ဆံခြင်းတို့၌ ပြောင်းလဲလာမှုများ ပါဝင်ပါသည်။ ဖွံ့ဖြိုးမှုမှတ်တိုင် စာရင်းများက တိုးတက်မှုကို သတိပြုရန်နှင့် စိုးရိမ်ချက်များကို ဆွေးနွေးရန် အထောက်အကူပြုသော်လည်း ရောဂါဖော်ထုတ်ချက် မဟုတ်သကဲ့သို့ ဖွံ့ဖြိုးမှုစစ်ဆေးခြင်းကိုလည်း အစားမထိုးနိုင်ပါ။ ကလေး၏ ဖွံ့ဖြိုးမှုနှင့်ပတ်သက်၍ စိုးရိမ်ပါက စောင့်မနေဘဲ သက်ဆိုင်ရာ ကျန်းမာရေးပညာရှင်နှင့် ဆွေးနွေးပါ။ ai review notice — this content was reviewed by ai but has not been approved by a clinician or native myanmar-language editor. it is for general education only and is not medical advice, developmental screening, or diagnosis.\n\nchild development includes changes in how children move, communicate, think, learn, and relate to others. milestone checklists help you notice progress and discuss concerns; they are not a diagnosis or a substitute for developmental screening. if you are concerned about your child’s development, talk with a qualified health professional rather than waiting. ဖွံ့ဖြိုးမှုမှတ်တိုင် စာရင်းများက စောင့်ရှောက်သူများကို — milestone checklists help caregivers — မိမိဘာသာ ရောဂါဖော်ထုတ်နိုင်စေသည် diagnose a condition on their own တိုးတက်မှုကို သတိပြု၍ စိုးရိမ်ချက်များကို ဆွေးနွေးနိုင်စေသည် notice progress and discuss concerns တိုးတက်မှုကို သတိပြု၍ စိုးရိမ်ပါက အကြံဉာဏ်တောင်းခံပါ။ notice progress and ask for advice when concerned. ယနေ့ ကလေး ကစားပုံ သို့မဟုတ် ဆက်သွယ်ပြောဆိုပုံကို သတိပြု၍ ကျန်းမာရေးပညာရှင်နှင့် ဆွေးနွေးလိုသော မေးခွန်းများရှိပါက ချရေးထားပါ။ notice how your child plays or communicates today, and write down any questions to discuss with a health professional."
   },
   {
     "category": "learning_through_play",
@@ -4547,8 +4547,8 @@
   },
   {
     "category": "emotional_development",
-    "summaryMm": "ကလေးများ ခံစားမှုကို ထိန်းရန် ကူညီနည်း။",
-    "summaryEn": "Help children handle strong emotions.",
+    "summaryMm": "ပြင်းထန်သော ခံစားမှုများ ရှိချိန်တွင် နွေးထွေးစွာ အပြန်အလှန်ဆက်ဆံ၍ ပံ့ပိုးပေးခြင်း။",
+    "summaryEn": "Warm, supportive interactions during strong emotions.",
     "durationMinutes": 3,
     "tags": [
       "emotional_development",
@@ -4557,41 +4557,41 @@
     "data": {
       "objectives": [
         {
-          "mm": "ခံစားမှု ထိန်းချုပ်မှုကို အားပေးရန်။",
-          "en": "Support emotional regulation."
+          "mm": "နွေးထွေး၍ ပံ့ပိုးပေးသော အပြန်အလှန်ဆက်ဆံမှုအကြောင်း သိရှိရန်။",
+          "en": "Learn about warm, supportive interactions."
         }
       ],
       "readingMinutes": 3,
       "body": {
-        "mm": "ကလေးများသည် ခံစားမှုကို ထိန်းရန် လေ့ကျင့်နေဆဲဖြစ်သည်။ ခံစားမှုကို အမည်တပ်ပေးပါ (“စိတ်ဆိုးနေတယ်နော်”)၊ တည်ငြိမ်စွာ ရှိနေပါ၊ ဘေးကင်းစေပါ။ ခံစားမှုကို “မဖြစ်သင့်” ဟု မဆိုပါနှင့် — အသိအမှတ်ပြုခြင်းက ကလေးကို ငြိမ်သက်စေသည်။",
-        "en": "Children are still learning to manage feelings. Name the feeling, stay calm, keep them safe. Don’t dismiss feelings — acknowledging them helps a child settle."
+        "mm": "AI စစ်ဆေးမှု အသိပေးချက် — ဤအကြောင်းအရာကို AI ဖြင့် စစ်ဆေးထားသော်လည်း ဆေးဘက်ပညာရှင် သို့မဟုတ် မြန်မာဘာသာကို မိခင်ဘာသာစကားအဖြစ် အသုံးပြုသော စာတည်းဖြတ်သူက အတည်ပြုထားခြင်း မရှိပါ။ အထွေထွေပညာပေးအတွက်သာ ဖြစ်ပြီး ဆေးဘက်ဆိုင်ရာ အကြံပြုချက်၊ ကလေးဖွံ့ဖြိုးမှု စစ်ဆေးချက် သို့မဟုတ် ရောဂါဖော်ထုတ်ချက် မဟုတ်ပါ။\n\nဘေးကင်း၍ တည်ငြိမ်ပြီး နွေးထွေးစွာ ပြုစုစောင့်ရှောက်ပေးသော ဆက်ဆံရေးများက ကလေးများ ခံစားမှုဆိုင်ရာ ကျွမ်းကျင်မှုများကို သင်ယူရာတွင် အထောက်အကူပြုနိုင်ပါသည်။ နွေးထွေးစွာ အာရုံစိုက်ပေးပြီး ကလေးက ဆက်သွယ်ဖော်ပြနေသည့်အရာကို တုံ့ပြန်ပါ။ ဤအပြန်အလှန်ဆက်ဆံမှုများသည် ရင်းနှီးဆက်ဆံရန်နှင့် သင်ယူရန် အခွင့်အလမ်းများသာ ဖြစ်ပြီး ကလေးက ချက်ချင်း ငြိမ်သက်လာမည်ဟု အာမခံခြင်း မဟုတ်ပါ။ ဤသင်ခန်းစာသည် ကလေး မသက်မသာဖြစ်နေသည့် အကြောင်းရင်းကို စစ်ဆေးအကဲဖြတ်ခြင်း မပြုပါ။",
+        "en": "AI review notice — This content was reviewed by AI but has not been approved by a clinician or native Myanmar-language editor. It is for general education only and is not medical advice, developmental screening, or diagnosis.\n\nSafe, stable and nurturing relationships can support children as they learn emotional skills. Offer warm attention and respond to what your child is communicating. These interactions are opportunities for connection and learning, not a promise that a child will become calm immediately. This lesson does not assess the cause of a child’s distress."
       },
       "quiz": [
         {
           "q": {
-            "mm": "ကလေး စိတ်တိုနေရင် အရင်ဆုံး —",
-            "en": "When a child is upset, first —"
+            "mm": "ဤသင်ခန်းစာက မည်သည့်အရာကို အားပေးပါသလဲ။",
+            "en": "What does this lesson encourage?"
           },
           "options": [
             {
-              "mm": "ခံစားမှုကို အမည်တပ်၍ တည်ငြိမ်စွာနေ",
-              "en": "name it and stay calm"
+              "mm": "နွေးထွေး၍ ပံ့ပိုးပေးသော အပြန်အလှန်ဆက်ဆံမှု",
+              "en": "warm, supportive interaction"
             },
             {
-              "mm": "ချက်ချင်း ပြစ်တင်",
-              "en": "scold immediately"
+              "mm": "ကလေးတိုင်းက ချက်ချင်း ငြိမ်သက်လာမည်ဟု မျှော်လင့်ခြင်း",
+              "en": "expecting every child to become calm immediately"
             }
           ],
           "answerIndex": 0
         }
       ],
       "takeaway": {
-        "mm": "သင်၏ တည်ငြိမ်မှုက ကလေး စိတ်ပြန်တည်ငြိမ်ရန် အထောက်အကူပြုနိုင်သည်။",
-        "en": "Your calm can help your child settle."
+        "mm": "ရင်းနှီးဆက်ဆံမှုသည် ပံ့ပိုးမှုကို ပေးနိုင်သော်လည်း ငြိမ်သက်လာမည်ဟု အာမခံခြင်း မဟုတ်ပါ။",
+        "en": "Connection offers support, not a guaranteed calming result."
       },
       "actionToday": {
-        "mm": "ယနေ့ ကလေး၏ ခံစားမှုတစ်ခုကို အမည်တပ်ပေးပါ။",
-        "en": "Name one of your child’s feelings today."
+        "mm": "ယနေ့ ကလေးက ဆက်သွယ်ဖော်ပြနေသည့်အရာကို သတိပြုပြီး နွေးထွေးစွာ တုံ့ပြန်ပါ။",
+        "en": "Today, notice what your child is communicating and respond warmly."
       }
     },
     "media": [
@@ -4603,12 +4603,12 @@
     ],
     "type": "lesson",
     "slug": "lsn_big_feelings",
-    "titleMm": "ကြီးမားသော ခံစားမှုများ",
+    "titleMm": "ပြင်းထန်သော ခံစားမှုများ ရှိချိန်တွင် ကူညီပံ့ပိုးခြင်း",
     "titleEn": "Helping with big feelings",
     "source": "ACE Child Grow editorial content — evidence-mapped general child-development and parent-education guidance",
     "version": 1,
     "clinicalStatus": "clinical_review",
-    "searchText": "ကြီးမားသော ခံစားမှုများ helping with big feelings ကလေးများ ခံစားမှုကို ထိန်းရန် ကူညီနည်း။ help children handle strong emotions. emotional_development lesson ခံစားမှု ထိန်းချုပ်မှုကို အားပေးရန်။ support emotional regulation. ကလေးများသည် ခံစားမှုကို ထိန်းရန် လေ့ကျင့်နေဆဲဖြစ်သည်။ ခံစားမှုကို အမည်တပ်ပေးပါ (“စိတ်ဆိုးနေတယ်နော်”)၊ တည်ငြိမ်စွာ ရှိနေပါ၊ ဘေးကင်းစေပါ။ ခံစားမှုကို “မဖြစ်သင့်” ဟု မဆိုပါနှင့် — အသိအမှတ်ပြုခြင်းက ကလေးကို ငြိမ်သက်စေသည်။ children are still learning to manage feelings. name the feeling, stay calm, keep them safe. don’t dismiss feelings — acknowledging them helps a child settle. ကလေး စိတ်တိုနေရင် အရင်ဆုံး — when a child is upset, first — ခံစားမှုကို အမည်တပ်၍ တည်ငြိမ်စွာနေ name it and stay calm ချက်ချင်း ပြစ်တင် scold immediately သင်၏ တည်ငြိမ်မှုက ကလေး စိတ်ပြန်တည်ငြိမ်ရန် အထောက်အကူပြုနိုင်သည်။ your calm can help your child settle. ယနေ့ ကလေး၏ ခံစားမှုတစ်ခုကို အမည်တပ်ပေးပါ။ name one of your child’s feelings today."
+    "searchText": "ပြင်းထန်သော ခံစားမှုများ ရှိချိန်တွင် ကူညီပံ့ပိုးခြင်း helping with big feelings ပြင်းထန်သော ခံစားမှုများ ရှိချိန်တွင် နွေးထွေးစွာ အပြန်အလှန်ဆက်ဆံ၍ ပံ့ပိုးပေးခြင်း။ warm, supportive interactions during strong emotions. emotional_development lesson နွေးထွေး၍ ပံ့ပိုးပေးသော အပြန်အလှန်ဆက်ဆံမှုအကြောင်း သိရှိရန်။ learn about warm, supportive interactions. ai စစ်ဆေးမှု အသိပေးချက် — ဤအကြောင်းအရာကို ai ဖြင့် စစ်ဆေးထားသော်လည်း ဆေးဘက်ပညာရှင် သို့မဟုတ် မြန်မာဘာသာကို မိခင်ဘာသာစကားအဖြစ် အသုံးပြုသော စာတည်းဖြတ်သူက အတည်ပြုထားခြင်း မရှိပါ။ အထွေထွေပညာပေးအတွက်သာ ဖြစ်ပြီး ဆေးဘက်ဆိုင်ရာ အကြံပြုချက်၊ ကလေးဖွံ့ဖြိုးမှု စစ်ဆေးချက် သို့မဟုတ် ရောဂါဖော်ထုတ်ချက် မဟုတ်ပါ။\n\nဘေးကင်း၍ တည်ငြိမ်ပြီး နွေးထွေးစွာ ပြုစုစောင့်ရှောက်ပေးသော ဆက်ဆံရေးများက ကလေးများ ခံစားမှုဆိုင်ရာ ကျွမ်းကျင်မှုများကို သင်ယူရာတွင် အထောက်အကူပြုနိုင်ပါသည်။ နွေးထွေးစွာ အာရုံစိုက်ပေးပြီး ကလေးက ဆက်သွယ်ဖော်ပြနေသည့်အရာကို တုံ့ပြန်ပါ။ ဤအပြန်အလှန်ဆက်ဆံမှုများသည် ရင်းနှီးဆက်ဆံရန်နှင့် သင်ယူရန် အခွင့်အလမ်းများသာ ဖြစ်ပြီး ကလေးက ချက်ချင်း ငြိမ်သက်လာမည်ဟု အာမခံခြင်း မဟုတ်ပါ။ ဤသင်ခန်းစာသည် ကလေး မသက်မသာဖြစ်နေသည့် အကြောင်းရင်းကို စစ်ဆေးအကဲဖြတ်ခြင်း မပြုပါ။ ai review notice — this content was reviewed by ai but has not been approved by a clinician or native myanmar-language editor. it is for general education only and is not medical advice, developmental screening, or diagnosis.\n\nsafe, stable and nurturing relationships can support children as they learn emotional skills. offer warm attention and respond to what your child is communicating. these interactions are opportunities for connection and learning, not a promise that a child will become calm immediately. this lesson does not assess the cause of a child’s distress. ဤသင်ခန်းစာက မည်သည့်အရာကို အားပေးပါသလဲ။ what does this lesson encourage? နွေးထွေး၍ ပံ့ပိုးပေးသော အပြန်အလှန်ဆက်ဆံမှု warm, supportive interaction ကလေးတိုင်းက ချက်ချင်း ငြိမ်သက်လာမည်ဟု မျှော်လင့်ခြင်း expecting every child to become calm immediately ရင်းနှီးဆက်ဆံမှုသည် ပံ့ပိုးမှုကို ပေးနိုင်သော်လည်း ငြိမ်သက်လာမည်ဟု အာမခံခြင်း မဟုတ်ပါ။ connection offers support, not a guaranteed calming result. ယနေ့ ကလေးက ဆက်သွယ်ဖော်ပြနေသည့်အရာကို သတိပြုပြီး နွေးထွေးစွာ တုံ့ပြန်ပါ။ today, notice what your child is communicating and respond warmly."
   },
   {
     "category": "social_skills",

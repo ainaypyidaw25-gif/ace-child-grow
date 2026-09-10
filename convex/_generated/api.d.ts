@@ -18,6 +18,7 @@ import type * as aiPublication from "../aiPublication.js";
 import type * as aiPublicationSuccessor20260909 from "../aiPublicationSuccessor20260909.js";
 import type * as aiReadingTogetherPublication20260910 from "../aiReadingTogetherPublication20260910.js";
 import type * as aiSevenStoriesPublication20260910 from "../aiSevenStoriesPublication20260910.js";
+import type * as aiTwoLessonsPublication20260910 from "../aiTwoLessonsPublication20260910.js";
 import type * as aiTwoStoriesPublication20260910 from "../aiTwoStoriesPublication20260910.js";
 import type * as animationPlan from "../animationPlan.js";
 import type * as appointments from "../appointments.js";
@@ -71,6 +72,8 @@ import type * as lib_aiReadingTogetherPublication20260910Data from "../lib/aiRea
 import type * as lib_aiSevenStoriesPreservation from "../lib/aiSevenStoriesPreservation.js";
 import type * as lib_aiSevenStoriesPublication20260910Artifact from "../lib/aiSevenStoriesPublication20260910Artifact.js";
 import type * as lib_aiSevenStoriesPublication20260910Data from "../lib/aiSevenStoriesPublication20260910Data.js";
+import type * as lib_aiTwoLessonsPublication20260910Artifact from "../lib/aiTwoLessonsPublication20260910Artifact.js";
+import type * as lib_aiTwoLessonsPublication20260910Data from "../lib/aiTwoLessonsPublication20260910Data.js";
 import type * as lib_aiTwoStoriesPublication20260910Artifact from "../lib/aiTwoStoriesPublication20260910Artifact.js";
 import type * as lib_aiTwoStoriesPublication20260910Data from "../lib/aiTwoStoriesPublication20260910Data.js";
 import type * as lib_asqDoctorVisitsLinkCasData from "../lib/asqDoctorVisitsLinkCasData.js";
@@ -106,6 +109,7 @@ import type * as lib_clinicalTwoSmallCasGuard from "../lib/clinicalTwoSmallCasGu
 import type * as lib_contentEditDiff from "../lib/contentEditDiff.js";
 import type * as lib_contentRetirements from "../lib/contentRetirements.js";
 import type * as lib_contentReviewRequirements from "../lib/contentReviewRequirements.js";
+import type * as lib_developmentFeelingsScope from "../lib/developmentFeelingsScope.js";
 import type * as lib_englishRefreezeCorrectionData from "../lib/englishRefreezeCorrectionData.js";
 import type * as lib_entitlements from "../lib/entitlements.js";
 import type * as lib_evidenceFreshness from "../lib/evidenceFreshness.js";
@@ -203,6 +207,7 @@ declare const fullApi: ApiFromModules<{
   aiPublicationSuccessor20260909: typeof aiPublicationSuccessor20260909;
   aiReadingTogetherPublication20260910: typeof aiReadingTogetherPublication20260910;
   aiSevenStoriesPublication20260910: typeof aiSevenStoriesPublication20260910;
+  aiTwoLessonsPublication20260910: typeof aiTwoLessonsPublication20260910;
   aiTwoStoriesPublication20260910: typeof aiTwoStoriesPublication20260910;
   animationPlan: typeof animationPlan;
   appointments: typeof appointments;
@@ -256,6 +261,8 @@ declare const fullApi: ApiFromModules<{
   "lib/aiSevenStoriesPreservation": typeof lib_aiSevenStoriesPreservation;
   "lib/aiSevenStoriesPublication20260910Artifact": typeof lib_aiSevenStoriesPublication20260910Artifact;
   "lib/aiSevenStoriesPublication20260910Data": typeof lib_aiSevenStoriesPublication20260910Data;
+  "lib/aiTwoLessonsPublication20260910Artifact": typeof lib_aiTwoLessonsPublication20260910Artifact;
+  "lib/aiTwoLessonsPublication20260910Data": typeof lib_aiTwoLessonsPublication20260910Data;
   "lib/aiTwoStoriesPublication20260910Artifact": typeof lib_aiTwoStoriesPublication20260910Artifact;
   "lib/aiTwoStoriesPublication20260910Data": typeof lib_aiTwoStoriesPublication20260910Data;
   "lib/asqDoctorVisitsLinkCasData": typeof lib_asqDoctorVisitsLinkCasData;
@@ -291,6 +298,7 @@ declare const fullApi: ApiFromModules<{
   "lib/contentEditDiff": typeof lib_contentEditDiff;
   "lib/contentRetirements": typeof lib_contentRetirements;
   "lib/contentReviewRequirements": typeof lib_contentReviewRequirements;
+  "lib/developmentFeelingsScope": typeof lib_developmentFeelingsScope;
   "lib/englishRefreezeCorrectionData": typeof lib_englishRefreezeCorrectionData;
   "lib/entitlements": typeof lib_entitlements;
   "lib/evidenceFreshness": typeof lib_evidenceFreshness;
