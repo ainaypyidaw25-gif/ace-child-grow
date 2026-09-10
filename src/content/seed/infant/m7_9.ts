@@ -1155,7 +1155,7 @@ const ACTIVITIES_B: SeedItem[] = [
       offline: true,
       tags: ['reading_activity', 'daily'],
     }),
-    'Shared book reading in the first year follows the AAP early-literacy policy, Canadian public-health early-literacy guidance, NHS learn-to-talk guidance and the shared book-reading research in the registry.',
+    'Shared book reading in the first year follows the AAP early-literacy policy, AAP HealthyChildren early-literacy guidance, NHS learn-to-talk guidance and the shared book-reading research in the registry.',
   ),
   kb(
     activity({

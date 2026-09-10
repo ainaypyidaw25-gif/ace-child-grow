@@ -1401,7 +1401,7 @@ const ACTIVITIES_C: SeedItem[] = [
       offline: true,
       tags: ['reading', 'book_sharing', 'vocabulary'],
     }),
-    'Daily book sharing in the first year is supported by the AAP literacy policy, the Canadian early-literacy guidance, the shared book-reading research paper and the NHS early-talking guidance held in the registry.',
+    'Daily book sharing in the first year is supported by the AAP literacy policy, the AAP HealthyChildren early-literacy guidance, the shared book-reading research paper and the NHS early-talking guidance held in the registry.',
   ),
   kb(
     activity({

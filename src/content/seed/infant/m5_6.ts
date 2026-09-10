@@ -1048,7 +1048,7 @@ const ACTIVITIES: SeedItem[] = [
       offline: true,
       tags: ['reading_activity', 'daily'],
     }),
-    'Shared book reading from infancy is supported by AAP literacy guidance, Health Canada early literacy guidance, NHS learn-to-talk advice and the shared book-reading research in the registry.',
+    'Shared book reading from infancy is supported by AAP literacy guidance, AAP HealthyChildren early literacy guidance, NHS learn-to-talk advice and the shared book-reading research in the registry.',
   ),
   kb(
     activity({
