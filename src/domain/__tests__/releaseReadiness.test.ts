@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   assessAiPublication,
   assessAiPublicationSuccessor,
+  assessEvidenceSourceReadiness,
   assessSixPictureStoriesPostflight,
   assessOwnerMerge,
   assessOwnerMergeV2,
@@ -280,5 +281,106 @@ describe('production release readiness classification', () => {
       { batchId: 'refreeze', status: 'completed', predecessorBatchId: 'original' },
       { batchId: 'still-stopped', status: 'stopped_changes_requested' },
     ])).toEqual(['still-stopped']);
+  });
+
+  it('blocks conventional published content with non-approved evidence', () => {
+    const assessment = assessEvidenceSourceReadiness({
+      aiPublicationExact: true,
+      sources: [{ sourceId: 'awaiting-conventional', reviewStatus: 'awaiting_review' }],
+      dependencies: [{
+        sourceId: 'awaiting-conventional',
+        contentSlug: 'published-guide',
+        contentStatus: 'published',
+        contentExists: true,
+        aiReleaseActive: false,
+        aiSourceSnapshotExact: false,
+      }],
+    });
+    expect(assessment.conventionalPublic).toMatchObject({
+      level: 'blocked',
+      code: 'conventional_public_source_not_approved',
+    });
+    expect(assessment.sourceIds.blockedConventionalPublic).toEqual([
+      'awaiting-conventional',
+    ]);
+  });
+
+  it('allows an awaiting source only through an exact disclosed AI gate', () => {
+    const input = {
+      aiPublicationExact: true,
+      sources: [{ sourceId: 'ai-audited-source', reviewStatus: 'awaiting_review' }],
+      dependencies: [{
+        sourceId: 'ai-audited-source',
+        contentSlug: 'ai-preview',
+        contentStatus: 'clinical_review',
+        contentExists: true,
+        aiReleaseActive: true,
+        aiSourceSnapshotExact: true,
+      }],
+    };
+    expect(assessEvidenceSourceReadiness(input)).toMatchObject({
+      aiPreview: {
+        level: 'pass',
+        code: 'ai_preview_sources_exact_without_human_approval',
+      },
+      sourceIds: { exactAiPreview: ['ai-audited-source'] },
+    });
+    expect(assessEvidenceSourceReadiness({
+      ...input,
+      aiPublicationExact: false,
+    })).toMatchObject({
+      aiPreview: {
+        level: 'blocked',
+        code: 'ai_preview_source_gate_not_exact',
+      },
+      sourceIds: { blockedAiPreview: ['ai-audited-source'] },
+    });
+    expect(assessEvidenceSourceReadiness({
+      ...input,
+      dependencies: [{ ...input.dependencies[0], aiSourceSnapshotExact: false }],
+    }).aiPreview).toMatchObject({ level: 'blocked' });
+  });
+
+  it('reports awaiting evidence linked only to unpublished content as advisory', () => {
+    const assessment = assessEvidenceSourceReadiness({
+      aiPublicationExact: true,
+      sources: [{ sourceId: 'unpublished-source', reviewStatus: 'awaiting_review' }],
+      dependencies: [{
+        sourceId: 'unpublished-source',
+        contentSlug: 'clinical-review-guide',
+        contentStatus: 'clinical_review',
+        contentExists: true,
+        aiReleaseActive: false,
+        aiSourceSnapshotExact: false,
+      }],
+    });
+    expect(assessment.unpublishedBacklog).toMatchObject({
+      level: 'advisory',
+      code: 'evidence_awaiting_unpublished_backlog',
+    });
+    expect(assessment.sourceIds.unpublishedBacklog).toEqual([
+      'unpublished-source',
+    ]);
+  });
+
+  it('does not block on an unlinked awaiting source', () => {
+    const assessment = assessEvidenceSourceReadiness({
+      aiPublicationExact: true,
+      sources: [{ sourceId: 'unused-awaiting-source', reviewStatus: 'awaiting_review' }],
+      dependencies: [],
+    });
+    expect(assessment.unlinked).toMatchObject({
+      level: 'pass',
+      code: 'unlinked_nonapproved_sources_not_blocking',
+    });
+    expect(assessment.sourceIds.unlinked).toEqual(['unused-awaiting-source']);
+    expect([
+      assessment.conventionalPublic,
+      assessment.aiPreview,
+      assessment.unpublishedBacklog,
+    ]).toEqual(expect.not.arrayContaining([
+      expect.objectContaining({ level: 'blocked' }),
+      expect.objectContaining({ level: 'advisory' }),
+    ]));
   });
 });
