@@ -6,12 +6,31 @@ import {
   GOOGLE_PLAY_DISTRIBUTION,
   NATIVE_STORE_DISTRIBUTION,
 } from '../app/distribution';
+import {
+  LEGAL_TERMS_RELEASE,
+  type LegalTermsRelease,
+} from '../domain/legalRelease';
 import { currentLegalTermsReadiness } from '../domain/releaseReadiness';
 import type { Locale } from '../domain/types';
 
 type LegalPageProps = { kind: 'privacy' | 'account-deletion' | 'terms' | 'support' | 'content-policy' };
 
 const supportEmail = 'admin-ace@acegroup.com.mm';
+
+export function legalTermsReleaseLabel(
+  locale: Locale,
+  release: LegalTermsRelease = LEGAL_TERMS_RELEASE,
+): string {
+  const published = currentLegalTermsReadiness(release).level === 'pass';
+  if (published && release.effectiveDate) {
+    return locale === 'mm'
+      ? `Version — ${release.version} · အကျိုးသက်ရောက်သည့်နေ့ — ${release.effectiveDate}`
+      : `Version — ${release.version} · Effective date — ${release.effectiveDate}`;
+  }
+  return locale === 'mm'
+    ? `မူကြမ်း Version — ${release.version} · အကျိုးသက်ရောက်မည့်နေ့ — အတည်မပြုရသေးပါ`
+    : `Draft version — ${release.version} · Effective date — not approved`;
+}
 
 // Public, unauthenticated legal pages (Google Play/App Store links and direct
 // visitors land here without ever opening the app), so they must render in
@@ -140,16 +159,17 @@ export function LegalPage({ kind }: LegalPageProps) {
         </PublicLegalShell>
       );
     }
+    const termsArePublished = currentLegalTermsReadiness().level === 'pass';
     return (
       <PublicLegalShell
         title={locale === 'mm' ? 'ဝန်ဆောင်မှုစည်းမျဉ်းများ' : 'Terms of Service'}
         locale={locale}
         setLocale={setLocale}
-        draft={currentLegalTermsReadiness().level !== 'pass'}
+        draft={!termsArePublished}
       >
+        <p className="text-sm text-ink-soft">{legalTermsReleaseLabel(locale)}</p>
         {locale === 'mm' ? (
           <>
-            <p className="text-sm text-ink-soft">မူကြမ်းရေးသားသည့်နေ့ — ၅ ဩဂုတ် ၂၀၂၆</p>
             <LegalSection title="ဝန်ဆောင်မှု အကြောင်း">
               ACE Child Grow ကို လက်ခံသုံးစွဲခြင်းဖြင့် ဤစည်းမျဉ်းများကို သဘောတူပါသည်။ App ကို မိဘနှင့် စောင့်ရှောက်သူများ အသုံးပြုရန် ရည်ရွယ်ပြီး အထွေထွေဖွံ့ဖြိုးရေးလမ်းညွှန်ချက်ဖြစ်သည်၊ ဆေးဘက်ဆိုင်ရာ ရောဂါစစ်ဆေးမှု သို့မဟုတ် ကုသမှု အစားထိုးအဖြစ် မဟုတ်ပါ။
             </LegalSection>
@@ -177,7 +197,6 @@ export function LegalPage({ kind }: LegalPageProps) {
           </>
         ) : (
           <>
-            <p className="text-sm text-ink-soft">Drafted — 5 August 2026</p>
             <LegalSection title="About this service">
               By using ACE Child Grow you agree to these terms. The app is intended for parents and caregivers, and provides general developmental guidance — it is not a medical diagnosis or a substitute for treatment.
             </LegalSection>

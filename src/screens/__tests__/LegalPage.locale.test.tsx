@@ -2,7 +2,11 @@ import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { LocaleProvider, documentLang } from '../../app/LocaleContext';
-import { LegalPage } from '../LegalPage';
+import {
+  LEGAL_TERMS_TEXT_SHA256,
+  type LegalTermsRelease,
+} from '../../domain/legalRelease';
+import { LegalPage, legalTermsReleaseLabel } from '../LegalPage';
 
 const paymentCapabilities = vi.hoisted(() => ({
   manualTransferAvailable: false,
@@ -87,12 +91,44 @@ describe('LegalPage locale correctness', () => {
     renderLegal('terms');
     expect(screen.getByRole('heading', { name: 'ဝန်ဆောင်မှုစည်းမျဉ်းများ' })).toBeTruthy();
     expect(screen.getByRole('note').textContent).toMatch(/မူကြမ်း/);
+    expect(screen.getByText(/မူကြမ်း Version — draft-2026-08-05/)).toBeTruthy();
+    expect(screen.getByText(/အကျိုးသက်ရောက်မည့်နေ့ — အတည်မပြုရသေးပါ/)).toBeTruthy();
 
     fireEvent.click(screen.getByRole('button', { name: 'English' }));
 
     expect(screen.getByRole('heading', { name: 'Terms of Service' })).toBeTruthy();
     expect(screen.getByRole('note').textContent).toMatch(/draft/i);
+    expect(screen.getByText(/Draft version — draft-2026-08-05/)).toBeTruthy();
+    expect(screen.getByText(/Effective date — not approved/)).toBeTruthy();
     expect(screen.getByText(/Refunds/)).toBeTruthy();
+  });
+
+  it('shows a version and effective date only for an exactly approved published release', () => {
+    const published: LegalTermsRelease = {
+      status: 'published',
+      version: 'terms-2026-09-15-v1',
+      effectiveDate: '2026-09-15',
+      publishedAt: '2026-09-14T12:00:00.000Z',
+      textDigest: LEGAL_TERMS_TEXT_SHA256,
+      approvalReceipt: {
+        receiptId: 'test-terms-approval-2026-09-15-v1',
+        approverId: 'test_owner_stable_id',
+        authority: 'owner',
+        approvedAt: '2026-09-14T11:30:00.000Z',
+        version: 'terms-2026-09-15-v1',
+        effectiveDate: '2026-09-15',
+        textDigest: LEGAL_TERMS_TEXT_SHA256,
+      },
+    };
+    expect(legalTermsReleaseLabel('en', published))
+      .toBe('Version — terms-2026-09-15-v1 · Effective date — 2026-09-15');
+    expect(legalTermsReleaseLabel('mm', published))
+      .toBe('Version — terms-2026-09-15-v1 · အကျိုးသက်ရောက်သည့်နေ့ — 2026-09-15');
+
+    expect(legalTermsReleaseLabel('en', {
+      ...published,
+      approvalReceipt: null,
+    })).toBe('Draft version — terms-2026-09-15-v1 · Effective date — not approved');
   });
 
   it('does not advertise manual transfer when no method is active', () => {
