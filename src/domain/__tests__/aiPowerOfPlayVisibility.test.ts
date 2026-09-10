@@ -244,7 +244,7 @@ describe('exact power-of-play schema2 visibility', () => {
       if (drift === 'unknown_artifact') f.release.auditArtifactHash = 'f'.repeat(64);
       if (drift === 'duplicate_target' || drift === 'overflow') f.tables.aiPublicationReleases.push({ ...f.release, _id: 'other', releaseId: 'other-root' });
       if (drift === 'duplicate_release_id') f.tables.aiPublicationReleases.push({ ...f.release, _id: 'other', targetKey: 'lesson\0lsn_reading_together', contentSlug: 'lsn_reading_together' });
-      if (drift === 'unknown_target') f.tables.aiPublicationReleases.push({ _id: 'unknown', status: 'active', releaseId: 'unknown', contentType: 'lesson', contentSlug: 'lsn_creativity', targetKey: 'lesson\0lsn_creativity' });
+      if (drift === 'unknown_target') f.tables.aiPublicationReleases.push({ _id: 'unknown', status: 'active', releaseId: 'unknown', contentType: 'lesson', contentSlug: 'lsn_unknown', targetKey: 'lesson\0lsn_unknown' });
       const checkedAt = drift === 'expired' ? Number(f.release.expiresAt) + 1 : now;
       const checkedDate = drift === 'audit_expired' ? '2099-01-01' : date;
       expect(await contentIsAiParentReadable(f.ctx as never, f.content as never, checkedAt, checkedDate)).toBe(false);

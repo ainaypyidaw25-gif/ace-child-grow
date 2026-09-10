@@ -54,6 +54,7 @@ import { isGd10_12mPlayV5ContentSlug } from './lib/gd10_12mPlayV5ImportPolicy';
 import { isReadingTogetherAiPublicationSlug } from './lib/aiReadingTogetherPublication20260910Data';
 import { isPowerOfPlaySlug } from './lib/powerOfPlayScope';
 import { isDevelopmentFeelingsSlug } from './lib/developmentFeelingsScope';
+import { isFourLessonSuccessorSlug } from './lib/fourLessonSuccessorScope';
 
 export { isPubliclyReadableStatus } from './lib/publicationVisibility';
 
@@ -641,6 +642,7 @@ export const importSeed = mutation({
         || isReadingTogetherAiPublicationSlug(it.slug)
         || isPowerOfPlaySlug(it.slug)
         || isDevelopmentFeelingsSlug(it.slug)
+        || isFourLessonSuccessorSlug(it.slug)
         || isClinicalTwoSmallCasTargetSlug(it.slug)
         || isNutritionGuidesCasTargetSlug(it.slug)) {
         skippedApproved += 1;

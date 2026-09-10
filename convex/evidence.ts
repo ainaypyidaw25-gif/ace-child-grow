@@ -89,6 +89,7 @@ import {
   isGd10_12mPlayV5Link,
   isGd10_12mPlayV5Source,
 } from './lib/gd10_12mPlayV5ImportPolicy';
+import { isFourLessonSuccessorLink } from './lib/fourLessonSuccessorScope';
 
 const REVIEW_STATUSES = [
   'evidence_required',
@@ -825,7 +826,8 @@ async function applyLinks(
       && !isUnicefSeenCountedConsumer(link.kind, link.slug)
       && !isEvidenceHumanReviewSuccessorTarget(link.kind, link.slug)
       && !isNutritionGuidesCasTarget(link.kind, link.slug)
-      && !isGd10_12mPlayV5Link(link.kind, link.slug)) {
+      && !isGd10_12mPlayV5Link(link.kind, link.slug)
+      && !isFourLessonSuccessorLink(link.kind, link.slug)) {
       activeLinks.push(link);
     } else {
       skipped += 1;
