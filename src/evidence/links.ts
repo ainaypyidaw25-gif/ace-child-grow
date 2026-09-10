@@ -288,7 +288,7 @@ export const EXPLICIT_CONTENT_SOURCES: Record<string, string[]> = {
   // The AI-audited educational preview uses one exact, government-authored
   // early-mathematics framework so its release can avoid mutating the widely
   // shared AAP Power of Play source record in production.
-  lsn_early_math: ['us-hhs-head-start-elof-2015'],
+  lsn_early_math: ['naeyc-nurturing-early-math-play-2022'],
   lsn_creativity: ['aap-power-of-play-2018'],
   lsn_problem_solving_parenting: ['jr-plosmed-parenting-2021', 'cdc-positive-parenting-toddlers-2026', 'jr-pakistan-lhw-2014'],
   lsn_special_needs_awareness: ['who-unicef-developmental-disabilities-2023', 'unicef-seen-counted-included-2022', 'aap-surveillance-2020', 'tb-ccitsn-3e-2004'],
