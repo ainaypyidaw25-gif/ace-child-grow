@@ -23,7 +23,7 @@ export type LegalTermsRelease = Readonly<{
  * It is evidence identity only; it is not an approval.
  */
 export const LEGAL_TERMS_TEXT_SHA256 =
-  'sha256:8c63df782ff32554e41b981b2b6cabc4dc3759c3172d5ba7920d01b952de053a' as const;
+  'sha256:fcae6447dfadb4df67cc5b6a339aafeb143556b71c0a3bfe6b65e4b4d03cbc6b' as const;
 
 export const LEGAL_TERMS_RELEASE: LegalTermsRelease = {
   status: 'draft',
