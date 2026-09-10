@@ -138,6 +138,9 @@ import type * as lib_skinToSkinRefreezeCorrectionData from "../lib/skinToSkinRef
 import type * as lib_swaimanCerebralPalsyLinkCasData from "../lib/swaimanCerebralPalsyLinkCasData.js";
 import type * as lib_swaimanSeizureLinkCasData from "../lib/swaimanSeizureLinkCasData.js";
 import type * as lib_swaimanSuddenWeaknessCasData from "../lib/swaimanSuddenWeaknessCasData.js";
+import type * as lib_threeGuideCorrectionData from "../lib/threeGuideCorrectionData.js";
+import type * as lib_threeGuideCorrectionHelpers from "../lib/threeGuideCorrectionHelpers.js";
+import type * as lib_threeGuideCorrectionScope from "../lib/threeGuideCorrectionScope.js";
 import type * as library from "../library.js";
 import type * as manualReviewContentCas from "../manualReviewContentCas.js";
 import type * as manualReviewEvidenceLinkCas from "../manualReviewEvidenceLinkCas.js";
@@ -172,6 +175,7 @@ import type * as subscriptions from "../subscriptions.js";
 import type * as swaimanCerebralPalsyLinkCas from "../swaimanCerebralPalsyLinkCas.js";
 import type * as swaimanSeizureLinkCas from "../swaimanSeizureLinkCas.js";
 import type * as swaimanSuddenWeaknessCas from "../swaimanSuddenWeaknessCas.js";
+import type * as threeGuideCorrection from "../threeGuideCorrection.js";
 import type * as unicefSeenCountedHumanReviewSuccessorCas from "../unicefSeenCountedHumanReviewSuccessorCas.js";
 import type * as unicefSeenCountedMetadataCas from "../unicefSeenCountedMetadataCas.js";
 
@@ -312,6 +316,9 @@ declare const fullApi: ApiFromModules<{
   "lib/swaimanCerebralPalsyLinkCasData": typeof lib_swaimanCerebralPalsyLinkCasData;
   "lib/swaimanSeizureLinkCasData": typeof lib_swaimanSeizureLinkCasData;
   "lib/swaimanSuddenWeaknessCasData": typeof lib_swaimanSuddenWeaknessCasData;
+  "lib/threeGuideCorrectionData": typeof lib_threeGuideCorrectionData;
+  "lib/threeGuideCorrectionHelpers": typeof lib_threeGuideCorrectionHelpers;
+  "lib/threeGuideCorrectionScope": typeof lib_threeGuideCorrectionScope;
   library: typeof library;
   manualReviewContentCas: typeof manualReviewContentCas;
   manualReviewEvidenceLinkCas: typeof manualReviewEvidenceLinkCas;
@@ -346,6 +353,7 @@ declare const fullApi: ApiFromModules<{
   swaimanCerebralPalsyLinkCas: typeof swaimanCerebralPalsyLinkCas;
   swaimanSeizureLinkCas: typeof swaimanSeizureLinkCas;
   swaimanSuddenWeaknessCas: typeof swaimanSuddenWeaknessCas;
+  threeGuideCorrection: typeof threeGuideCorrection;
   unicefSeenCountedHumanReviewSuccessorCas: typeof unicefSeenCountedHumanReviewSuccessorCas;
   unicefSeenCountedMetadataCas: typeof unicefSeenCountedMetadataCas;
 }>;

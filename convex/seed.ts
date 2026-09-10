@@ -58,6 +58,7 @@ import { isClinicalTwoSmallCasTargetSlug } from './lib/clinicalTwoSmallCasGuard'
 import { isBirth2mGrossMotorCorrectionSlug } from './lib/birth2mGrossMotorCorrection';
 import { isBookActivityAttributionCorrectionSlug } from './lib/bookActivityAttributionCorrection';
 import { isSevenStoryCorrectionSlug } from './lib/sevenStoryCorrectionScope';
+import { isThreeGuideCorrectionSlug } from './lib/threeGuideCorrectionScope';
 import { isNutritionGuidesCasTargetSlug } from './lib/nutritionGuidesCasData';
 import { isOlderSafety2026ContentTargetSlug } from './lib/olderSafety2026CasData';
 import {
@@ -207,6 +208,7 @@ export function seedRunSkipsItem(item: Pick<Item, 'type' | 'slug'>): boolean {
     || isBirth2mGrossMotorCorrectionSlug(item.slug)
     || isBookActivityAttributionCorrectionSlug(item.slug)
     || isSevenStoryCorrectionSlug(item.slug)
+    || isThreeGuideCorrectionSlug(item.slug)
     || isOlderSafety2026ContentTargetSlug(item.slug)
     || isGdBirth2mEmotionalCasContentSlug(item.slug)
     || isUnicefSeenCountedConsumerSlug(item.slug)
@@ -1887,7 +1889,8 @@ export const applyPublishedErrata = internalMutation({
       if (isClinicalTwoSmallCasTargetSlug(slug)
         || isGd10_12mPlayV5ContentSlug(slug)
         || isBookActivityAttributionCorrectionSlug(slug)
-        || isSevenStoryCorrectionSlug(slug)) {
+        || isSevenStoryCorrectionSlug(slug)
+        || isThreeGuideCorrectionSlug(slug)) {
         unchanged += 1;
         continue;
       }
