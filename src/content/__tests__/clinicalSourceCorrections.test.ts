@@ -851,7 +851,7 @@ describe('clinically sourced content corrections', () => {
       year: 2015,
       ageMonthsMin: 0,
       ageMonthsMax: 60,
-      reviewStatus: 'awaiting_review',
+      reviewStatus: 'retired',
     });
     expect(SOURCE_BY_ID.get('hc-mental-emotional-development-2026')).toMatchObject({
       year: 2026,

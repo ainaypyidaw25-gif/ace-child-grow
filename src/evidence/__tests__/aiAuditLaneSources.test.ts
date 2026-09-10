@@ -31,7 +31,7 @@ describe('bounded AI source-audit lane', () => {
       ageMonthsMin: 0,
       ageMonthsMax: 60,
       verifiedOn: '2026-08-19',
-      reviewStatus: 'awaiting_review',
+      reviewStatus: 'retired',
     });
     expect(SOURCE_BY_ID.get('naeyc-nurturing-early-math-play-2022')).toMatchObject({
       title: 'Rocking and Rolling. Nurturing Early Math Play and Discovery',
@@ -52,7 +52,9 @@ describe('bounded AI source-audit lane', () => {
     });
     expect(relatedContent('naeyc-nurturing-early-math-play-2022').lesson).toEqual(['lsn_early_math']);
     // A math article is not a replacement for unrelated social/emotional guidance.
-    expect(sourcesForContent('lsn_big_feelings', 'lesson')).toContain('us-hhs-head-start-elof-2015');
+    // The historical ELOF row is retired rather than repurposed under the same id.
+    expect(sourcesForContent('lsn_big_feelings', 'lesson')).not.toContain('us-hhs-head-start-elof-2015');
+    expect(Object.values(relatedContent('us-hhs-head-start-elof-2015')).flat()).toEqual([]);
   });
 
   it('uses outpatient waiting-area guidance instead of a baby-review schedule', () => {

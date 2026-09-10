@@ -550,6 +550,7 @@ export const GOVERNMENT_SOURCES: EvidenceSource[] = [
     year: 2015,
     country: 'United States',
     url: 'https://headstart.gov/sites/default/files/pdf/elof-ohs-framework.pdf',
+    reviewStatus: 'retired',
     evidenceLevel: 'expert_consensus',
     keywords: ['early learning outcomes', 'early mathematics', 'social development', 'emotional development', 'school readiness'],
     topics: ['milestones', 'cognitive', 'social_emotional', 'parenting', 'school_readiness', 'play'],
@@ -557,7 +558,7 @@ export const GOVERNMENT_SOURCES: EvidenceSource[] = [
     ageMonthsMax: 60,
     verifiedOn: '2026-08-19',
     verifiedNote:
-      'The official Head Start PDF cover prints this title, 2015 and the Office of Head Start corporate body. The framework describes overlapping developmental progressions from birth through 60 months; its preschool Mathematics Development domain explicitly covers counting and cardinality, measurement, patterns, geometry and spatial sense. It also says the framework is not an assessment tool or checklist and must not be used to conclude that a child has failed or is not ready.',
+      'Retained for audit only. The official Head Start PDF cover prints this title, 2015 and the Office of Head Start corporate body. The framework describes overlapping developmental progressions from birth through 60 months; its preschool Mathematics Development domain explicitly covers counting and cardinality, measurement, patterns, geometry and spatial sense. It also says the framework is not an assessment tool or checklist and must not be used to conclude that a child has failed or is not ready. Production had no live evidence links to this row on 2026-09-10, and no newer edition-equivalent Head Start framework was identified; do not use it as an active citation.',
   }),
   s({
     id: 'naeyc-nurturing-early-math-play-2022',
