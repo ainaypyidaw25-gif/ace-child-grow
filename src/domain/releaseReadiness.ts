@@ -267,6 +267,80 @@ export function assessAiPublicationSuccessor(
   };
 }
 
+export type AiPublicationReleaseIdentity = {
+  releaseRoot: string;
+  artifactHash: string;
+  snapshotSha256: string;
+};
+
+export type SixPictureStoriesPostflight = AiPublicationReleaseIdentity & {
+  phase: 'ready' | 'staged' | 'enabled' | 'drift';
+  activeReleaseCount: number;
+  previousReadable: boolean;
+  expiryScheduleExact: boolean;
+  parentReadable: boolean;
+  targets: Array<{
+    slug: string;
+    reviewRevision: number | null;
+    parentReadable: boolean;
+  }>;
+  blockers: string[];
+};
+
+const SIX_PICTURE_STORY_POSTFLIGHT_TARGETS = [
+  { slug: 'act_picture_story_2_5y', reviewRevision: 6 },
+  { slug: 'act_picture_story_3y', reviewRevision: 6 },
+  { slug: 'act_picture_story_3_5y', reviewRevision: 7 },
+  { slug: 'act_picture_story_4y', reviewRevision: 6 },
+  { slug: 'act_picture_story_4_5y', reviewRevision: 6 },
+  { slug: 'act_picture_story_5y', reviewRevision: 6 },
+] as const;
+
+export function assessSixPictureStoriesPostflight(
+  snapshot: SixPictureStoriesPostflight,
+  expectedIdentity: AiPublicationReleaseIdentity,
+): ReadinessFinding {
+  const blockers: string[] = [];
+  if (
+    snapshot.releaseRoot !== expectedIdentity.releaseRoot
+    || snapshot.artifactHash !== expectedIdentity.artifactHash
+    || snapshot.snapshotSha256 !== expectedIdentity.snapshotSha256
+  ) {
+    blockers.push('immutable release identity mismatch');
+  }
+  if (snapshot.phase !== 'enabled') blockers.push(`phase is ${snapshot.phase}`);
+  if (snapshot.activeReleaseCount !== 24) {
+    blockers.push(`active release count is ${snapshot.activeReleaseCount}, expected 24`);
+  }
+  if (!snapshot.previousReadable) blockers.push('previous eighteen previews are not exact/readable');
+  if (!snapshot.expiryScheduleExact) blockers.push('expiry schedule is absent or drifted');
+  if (!snapshot.parentReadable) blockers.push('six successor activities are not parent-readable');
+  if (snapshot.blockers.length > 0) blockers.push(...snapshot.blockers);
+
+  const targetsExact = snapshot.targets.length === SIX_PICTURE_STORY_POSTFLIGHT_TARGETS.length
+    && snapshot.targets.every((target, index) => {
+      const expected = SIX_PICTURE_STORY_POSTFLIGHT_TARGETS[index];
+      return target.slug === expected.slug
+        && target.reviewRevision === expected.reviewRevision
+        && target.parentReadable;
+    });
+  if (!targetsExact) blockers.push('exact six target revisions/read-back mismatch');
+
+  if (blockers.length > 0) {
+    return {
+      level: 'blocked',
+      code: 'ai_six_picture_stories_postflight_blocked',
+      detail: `Current six-picture-story release failed exact postflight: ${[...new Set(blockers)].join('; ')}.`,
+    };
+  }
+
+  return {
+    level: 'pass',
+    code: 'ai_six_picture_stories_postflight_exact',
+    detail: 'The immutable six-picture-story release is enabled with all 24 governed previews, exact expiry scheduling and complete parent read-back.',
+  };
+}
+
 export type ClinicalBatchSnapshot = {
   batchId: string;
   status: 'frozen' | 'active' | 'stopped_changes_requested' | 'completed' | 'invalidated';

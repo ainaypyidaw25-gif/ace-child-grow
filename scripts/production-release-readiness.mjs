@@ -90,7 +90,24 @@ async function readinessClassifiers() {
   const outfile = join(dir, 'classifiers.mjs');
   try {
     await build({
-      entryPoints: [resolve('src/domain/releaseReadiness.ts')],
+      stdin: {
+        contents: `
+          export * from './src/domain/releaseReadiness';
+          import {
+            SIX_PICTURE_STORIES_PREIMAGE,
+            SIX_PICTURE_STORIES_RELEASE_ROOT,
+          } from './convex/lib/aiSixPictureStoriesPublication20260910Data';
+          import {
+            SIX_PICTURE_STORIES_ARTIFACT_HASH,
+          } from './convex/lib/aiSixPictureStoriesPublication20260910Artifact';
+          export const currentSixPictureStoriesIdentity = Object.freeze({
+            releaseRoot: SIX_PICTURE_STORIES_RELEASE_ROOT,
+            artifactHash: SIX_PICTURE_STORIES_ARTIFACT_HASH,
+            snapshotSha256: SIX_PICTURE_STORIES_PREIMAGE.snapshotSha256,
+          });
+        `,
+        resolveDir: process.cwd(),
+      },
       bundle: true,
       format: 'esm',
       platform: 'node',
@@ -211,21 +228,34 @@ async function main() {
     sourceUnexpectedReferenceCategories: owner.sourceUnexpectedReferenceCategories,
   });
 
-  const ai = runConvex('aiPublicationSuccessor20260909:preflight', {
-    releaseId: '2026-09-09-ai-educational-preview-source-refresh-3',
+  const aiIdentity = classify.currentSixPictureStoriesIdentity;
+  const ai = runConvex('aiSixPictureStoriesPublication20260910:postflight', {
+    ...aiIdentity,
+    checkedAt: Date.now(),
   });
-  add('ai_preview', classify.assessAiPublicationSuccessor(ai), {
+  add('ai_preview', classify.assessSixPictureStoriesPostflight(ai, aiIdentity), {
+    releaseRoot: ai.releaseRoot,
+    artifactHash: ai.artifactHash,
+    snapshotSha256: ai.snapshotSha256,
     phase: ai.phase,
-    artifactExact: ai.artifactExact,
-    configEnabled: ai.configEnabled,
+    activeReleaseCount: ai.activeReleaseCount,
+    previousReadable: ai.previousReadable,
+    expiryScheduleExact: ai.expiryScheduleExact,
+    parentReadable: ai.parentReadable,
+    blockers: ai.blockers,
     targets: ai.targets.map((target) => ({
       slug: target.slug,
-      artifactVerdict: target.artifactVerdict,
-      contentExact: target.contentExact,
-      linkExact: target.linkExact,
-      sourceExact: target.sourceExact,
-      predecessorExact: target.predecessorExact,
+      reviewRevision: target.reviewRevision,
+      parentReadable: target.parentReadable,
     })),
+  });
+  add('ai_preview_history', {
+    level: 'advisory',
+    code: 'ai_publication_successor_20260909_historical_only',
+    detail: 'The 2026-09-09 diagnostic successor was intentionally never staged and is retained as historical evidence, not a current production-readiness gate.',
+  }, {
+    historicalReleaseId: '2026-09-09-ai-educational-preview-source-refresh-3',
+    currentGate: aiIdentity.releaseRoot,
   });
 
   const registry = runInlineQuery(`
