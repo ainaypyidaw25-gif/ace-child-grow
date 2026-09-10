@@ -134,7 +134,7 @@ export const EXPLICIT_CONTENT_SOURCES: Record<string, string[]> = {
   gd_10_12m_communication: ['who-care-for-child-development-2012', 'cdc-milestones-2026'],
   gd_3y_cognitive: ['aap-power-of-play-2018', 'tb-dbp-5e-2022'],
   gd_4y_problem_solving: ['aap-power-of-play-2018', 'tb-handbook-ecse-2016'],
-  gd_3y_social: ['cdc-milestones-3-years-2026', 'cdc-positive-parenting-toddlers-2-3-2026', 'cdc-positive-parenting-preschoolers-2026', 'hc-choking-prevention-2026'],
+  gd_3y_social: ['cdc-milestones-3-years-2026', 'hc-choking-prevention-2026'],
   gd_2_5y_emotional: ['cdc-emotion-coaching-toddlers-preschoolers-2026', 'hc-mental-emotional-development-2026'],
   gd_13_18m_self_help: ['tb-case-smith-9e-2025', 'tb-bright-futures-4e-2017'],
   gd_5_6m_play: ['aap-power-of-play-2018', 'who-care-for-child-development-2012', 'aap-digital-ecosystems-technical-2026', 'hc-screen-time-5cs-infants-2024'],

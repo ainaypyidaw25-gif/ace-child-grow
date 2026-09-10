@@ -164,10 +164,11 @@ describe('clinically sourced content corrections', () => {
 
     expect(sourcesForContent('gd_3y_social', 'guide')).toEqual([
       'cdc-milestones-3-years-2026',
-      'cdc-positive-parenting-toddlers-2-3-2026',
-      'cdc-positive-parenting-preschoolers-2026',
       'hc-choking-prevention-2026',
     ]);
+    expect(SOURCE_BY_ID.get('cdc-milestones-3-years-2026')?.verifiedNote).toContain(
+      'learn sharing and friendship',
+    );
 
     const social = dataFor('gd_3y_social');
     const answer = (social.faq as Array<{ a: { en: string } }>)[0].a.en;

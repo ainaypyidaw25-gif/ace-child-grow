@@ -195,7 +195,6 @@ describe('content links', () => {
       ).map((link) => link.kind + ':' + link.slug).sort()).toEqual([
         'guide:gd_2_5y_safety',
         'guide:gd_2y_safety',
-        'guide:gd_3y_social',
       ]);
     }
     for (const id of unused) {
