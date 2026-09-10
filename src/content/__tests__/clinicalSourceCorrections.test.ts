@@ -1171,7 +1171,7 @@ describe('clinically sourced content corrections', () => {
     const lessonAction = dataFor('lsn_what_is_development').actionToday as {
       mm: string; en: string;
     };
-    expect(lessonAction.en).toContain('following your child’s cues and interests');
+    expect(lessonAction.en).toContain('write down any questions to discuss with a health professional');
     expect(lessonAction.en).not.toContain('10');
 
     const newbornPlay = dataFor('gd_birth_2m_play');
