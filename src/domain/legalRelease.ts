@@ -26,10 +26,18 @@ export const LEGAL_TERMS_TEXT_SHA256 =
   'sha256:fcae6447dfadb4df67cc5b6a339aafeb143556b71c0a3bfe6b65e4b4d03cbc6b' as const;
 
 export const LEGAL_TERMS_RELEASE: LegalTermsRelease = {
-  status: 'draft',
-  version: 'draft-2026-08-05',
-  effectiveDate: null,
-  publishedAt: null,
+  status: 'published',
+  version: 'terms-2026-09-11-v1',
+  effectiveDate: '2026-09-11',
+  publishedAt: '2026-09-10T02:22:59.000Z',
   textDigest: LEGAL_TERMS_TEXT_SHA256,
-  approvalReceipt: null,
+  approvalReceipt: {
+    receiptId: 'owner-chat-20260910-terms-20260911-v1',
+    approverId: 'owner_lapyaewun',
+    authority: 'owner',
+    approvedAt: '2026-09-10T02:22:31.000Z',
+    version: 'terms-2026-09-11-v1',
+    effectiveDate: '2026-09-11',
+    textDigest: LEGAL_TERMS_TEXT_SHA256,
+  },
 } as const;

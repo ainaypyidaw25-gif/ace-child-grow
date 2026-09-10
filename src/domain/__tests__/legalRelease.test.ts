@@ -17,14 +17,22 @@ describe('paid-web Legal Terms release evidence', () => {
     expect(`sha256:${digest}`).toBe(LEGAL_TERMS_TEXT_SHA256);
   });
 
-  it('does not invent an approval receipt for the current draft', () => {
+  it('binds the Owner-approved September 11 release to its recorded receipt', () => {
     expect(LEGAL_TERMS_RELEASE).toMatchObject({
-      status: 'draft',
-      version: 'draft-2026-08-05',
-      effectiveDate: null,
-      publishedAt: null,
+      status: 'published',
+      version: 'terms-2026-09-11-v1',
+      effectiveDate: '2026-09-11',
+      publishedAt: '2026-09-10T02:22:59.000Z',
       textDigest: LEGAL_TERMS_TEXT_SHA256,
-      approvalReceipt: null,
+      approvalReceipt: {
+        receiptId: 'owner-chat-20260910-terms-20260911-v1',
+        approverId: 'owner_lapyaewun',
+        authority: 'owner',
+        approvedAt: '2026-09-10T02:22:31.000Z',
+        version: 'terms-2026-09-11-v1',
+        effectiveDate: '2026-09-11',
+        textDigest: LEGAL_TERMS_TEXT_SHA256,
+      },
     });
   });
 });
