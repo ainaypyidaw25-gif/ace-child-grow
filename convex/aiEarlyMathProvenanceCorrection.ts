@@ -7,7 +7,12 @@ import {
   type QueryCtx,
 } from './_generated/server';
 import { logAudit } from './audit';
-import { sha256Canonical } from './lib/aiAuditHash';
+import {
+  aiContentSnapshot,
+  aiEvidenceLinkSnapshot,
+  aiEvidenceSnapshot,
+  sha256Canonical,
+} from './lib/aiAuditHash';
 import { AI_PUBLICATION_CONFIG_KEY } from './lib/aiPublicationPolicy';
 import {
   AI_EARLY_MATH_PROVENANCE_CORRECTION_CAPTURED_AT,
@@ -61,9 +66,30 @@ const preflightResultValidator = v.object({
   reverseDependenciesExact: v.boolean(),
   persistedReleaseGovernedSource: v.boolean(),
   aiEvidenceAuditRows: v.number(),
-  aiPublicationReleaseRows: v.number(),
+  contentRows: v.number(),
+  contentExact: v.boolean(),
+  contentPublicationPointersCleared: v.boolean(),
+  contentReviewRows: v.number(),
+  contentReviewsExact: v.boolean(),
+  sourceAiSnapshotCanonicalSha256: v.union(v.string(), v.null()),
+  targetLinkSnapshotCanonicalSha256: v.union(v.string(), v.null()),
+  originalAiRunRows: v.number(),
+  originalAiRunExact: v.boolean(),
+  originalAiContentAuditRows: v.number(),
+  originalAiContentAuditExact: v.boolean(),
+  originalAiEvidenceAuditRows: v.number(),
+  originalAiEvidenceAuditExact: v.boolean(),
   aiPublicationConfigRows: v.number(),
   aiPublicationConfigEnabled: v.boolean(),
+  aiPublicationConfigExact: v.boolean(),
+  aiPublicationDisableAuditRows: v.number(),
+  aiPublicationDisableAuditExact: v.boolean(),
+  activeAiPublicationReleaseRows: v.number(),
+  revokedAiPublicationReleaseRows: v.number(),
+  revokedAiPublicationReleasesExact: v.boolean(),
+  revokedAiPublicationReleaseSetExact: v.boolean(),
+  aiPublicationRevokeAuditRows: v.number(),
+  aiPublicationRevokeAuditExact: v.boolean(),
   dataRowsChanged: v.literal(0),
   humanReviewDecision: v.literal('not_made'),
   publicationDecision: v.literal('not_made'),
@@ -97,9 +123,30 @@ type PreflightState = {
   reverseDependenciesExact: boolean;
   persistedReleaseGovernedSource: boolean;
   aiEvidenceAuditRows: number;
-  aiPublicationReleaseRows: number;
+  contentRows: number;
+  contentExact: boolean;
+  contentPublicationPointersCleared: boolean;
+  contentReviewRows: number;
+  contentReviewsExact: boolean;
+  sourceAiSnapshotCanonicalSha256: string | null;
+  targetLinkSnapshotCanonicalSha256: string | null;
+  originalAiRunRows: number;
+  originalAiRunExact: boolean;
+  originalAiContentAuditRows: number;
+  originalAiContentAuditExact: boolean;
+  originalAiEvidenceAuditRows: number;
+  originalAiEvidenceAuditExact: boolean;
   aiPublicationConfigRows: number;
   aiPublicationConfigEnabled: boolean;
+  aiPublicationConfigExact: boolean;
+  aiPublicationDisableAuditRows: number;
+  aiPublicationDisableAuditExact: boolean;
+  activeAiPublicationReleaseRows: number;
+  revokedAiPublicationReleaseRows: number;
+  revokedAiPublicationReleasesExact: boolean;
+  revokedAiPublicationReleaseSetExact: boolean;
+  aiPublicationRevokeAuditRows: number;
+  aiPublicationRevokeAuditExact: boolean;
   dataRowsChanged: 0;
   humanReviewDecision: 'not_made';
   publicationDecision: 'not_made';
@@ -180,8 +227,46 @@ export function aiEarlyMathCorrectionAuditBeforeJson(): string {
       rowId: spec.dependency.rowId,
       canonicalSha256: spec.dependency.exactCanonicalSha256,
     },
+    revokedTargetContents: spec.revokedTargetContents.map((content) => ({
+      rowId: content.rowId,
+      slug: content.slug,
+      canonicalSha256: content.exactCanonicalSha256,
+      snapshotCanonicalSha256: content.snapshotCanonicalSha256,
+      publicationPointersCleared: true,
+    })),
+    contentReviews: spec.contentReviews.map((target) => ({
+      slug: target.slug,
+      rows: target.rows.map((row) => ({
+        rowId: row.rowId,
+        canonicalSha256: row.exactCanonicalSha256,
+      })),
+    })),
+    originalAiAuditChain: {
+      runId: spec.originalAiAuditChain.runId,
+      runCanonicalSha256: spec.originalAiAuditChain.run.exactCanonicalSha256,
+      contentAuditCanonicalSha256:
+        spec.originalAiAuditChain.contentAudit.exactCanonicalSha256,
+      evidenceAuditCanonicalSha256:
+        spec.originalAiAuditChain.evidenceAudit.exactCanonicalSha256,
+    },
+    aiPublicationControl: {
+      rowId: spec.aiPublicationControl.rowId,
+      generation: spec.aiPublicationControl.generation,
+      enabled: false,
+      canonicalSha256: spec.aiPublicationControl.exactCanonicalSha256,
+      disableAuditCanonicalSha256:
+        spec.aiPublicationDisableAudit.exactCanonicalSha256,
+    },
+    revokedAiPublication: {
+      activeRows: 0,
+      releaseCanonicalSha256: spec.revokedAiPublicationReleases.map(
+        (release) => release.exactCanonicalSha256,
+      ),
+      releaseSetCanonicalSha256: spec.revokedAiPublicationReleaseSetCanonicalSha256,
+      revokeAuditCanonicalSha256:
+        spec.aiPublicationRevocationAudit.exactCanonicalSha256,
+    },
     aiEvidenceAuditRows: 0,
-    aiPublicationReleaseRows: 0,
   });
 }
 
@@ -218,6 +303,74 @@ async function exactRow(
   return String(row._id) === expected.rowId
     && row._creationTime === expected.creationTime
     && await sha256Canonical(row) === expected.exactCanonicalSha256;
+}
+
+async function exactAuditRow(
+  rows: Doc<'auditLogs'>[],
+  expected: {
+    rowId: string;
+    creationTime: number;
+    action: string;
+    entityTable: string;
+    entityId: string;
+    result: 'ok';
+    summarySha256: string;
+    exactCanonicalSha256: string;
+  },
+): Promise<boolean> {
+  if (rows.length !== 1) return false;
+  const row = rows[0];
+  return typeof row.summary === 'string'
+    && row.action === expected.action
+    && row.entityTable === expected.entityTable
+    && row.entityId === expected.entityId
+    && row.result === expected.result
+    && await sha256Canonical(row.summary) === expected.summarySha256
+    && await exactRow(row, expected);
+}
+
+async function exactRowSet(
+  rows: Array<{ _id: unknown; _creationTime: number }>,
+  expectedRows: readonly {
+    rowId: string;
+    creationTime: number;
+    exactCanonicalSha256: string;
+  }[],
+): Promise<boolean> {
+  if (rows.length !== expectedRows.length) return false;
+  return (await Promise.all(expectedRows.map(async (expected) => {
+    const row = rows.find((candidate) => String(candidate._id) === expected.rowId);
+    return Boolean(row && await exactRow(row, expected));
+  }))).every(Boolean);
+}
+
+async function exactRevokedRelease(
+  row: Doc<'aiPublicationReleases'>,
+  expected: typeof AI_EARLY_MATH_PROVENANCE_CORRECTION_SPEC.revokedAiPublicationReleases[number],
+): Promise<boolean> {
+  return await exactRow(row, expected)
+    && row.releaseId === expected.releaseId
+    && row.targetKey === expected.targetKey
+    && String(row.contentId) === expected.contentId
+    && row.contentType === expected.contentType
+    && row.contentSlug === expected.contentSlug
+    && row.status === expected.status
+    && row.reviewRevision === expected.reviewRevision
+    && row.contentUpdatedAt === expected.contentUpdatedAt
+    && row.contentSnapshotHash === expected.contentSnapshotHash
+    && row.evidenceLinkUpdatedAt === expected.evidenceLinkUpdatedAt
+    && row.evidenceLinkSnapshotHash === expected.evidenceLinkSnapshotHash
+    && await sha256Canonical(row.sourceSnapshots)
+      === await sha256Canonical(expected.sourceSnapshots)
+    && row.contentAuditRunId === expected.contentAuditRunId
+    && row.auditArtifactHash === expected.auditArtifactHash
+    && row.policyVersion === expected.policyVersion
+    && row.gitCommit === expected.gitCommit
+    && await sha256Canonical(row.operator) === expected.operatorSha256
+    && row.createdAt === expected.createdAt
+    && row.expiresAt === expected.expiresAt
+    && row.revokedAt === expected.revokedAt
+    && await sha256Canonical(row.revokeReason) === expected.revokeReasonSha256;
 }
 
 function sourceHumanReviewFieldsCleared(source: Doc<'evidenceSources'>): boolean {
@@ -344,12 +497,23 @@ async function preflightState(
 ): Promise<PreflightState> {
   const todayIso = todayIsoUtc(new Date(now));
   const spec = AI_EARLY_MATH_PROVENANCE_CORRECTION_SPEC;
-  const [sourceRows, targetLinks, allLinks, humanAuditRows, correctionAuditRows,
-    aiPublicationReleaseRows, aiPublicationConfigRows, persistedReleaseGovernedSource] = await Promise.all([
+  const [sourceRows, targetLinks, contentRowsByTarget, contentReviewRowsByTarget,
+    allLinks, humanAuditRows, correctionAuditRows,
+    aiPublicationConfigRows, aiPublicationDisableAuditRows, activeAiPublicationReleaseRows,
+    revokedReleaseRowsByTarget, revokedAiPublicationReleaseSetRows,
+    aiPublicationRevokeAuditRows, originalAiRunRows,
+    originalAiContentAuditRows, originalAiEvidenceAuditRows,
+    persistedReleaseGovernedSource] = await Promise.all([
     ctx.db.query('evidenceSources').withIndex('by_source_id', (q) =>
       q.eq('sourceId', spec.source.sourceId)).take(2),
     ctx.db.query('evidenceLinks').withIndex('by_kind_slug', (q) => q
       .eq('kind', spec.dependency.kind).eq('slug', spec.dependency.slug)).take(2),
+    Promise.all(spec.revokedTargetContents.map((expected) =>
+      ctx.db.query('libraryContent').withIndex('by_slug', (q) =>
+        q.eq('slug', expected.slug)).take(2))),
+    Promise.all(spec.contentReviews.map((expected) =>
+      ctx.db.query('contentReviews').withIndex('by_content', (q) =>
+        q.eq('contentSlug', expected.slug)).take(expected.rows.length + 1))),
     ctx.db.query('evidenceLinks').take(MAX_LINK_ROWS + 1),
     ctx.db.query('auditLogs').withIndex(
       'by_action_and_entity_table_and_entity_id_and_result',
@@ -365,10 +529,35 @@ async function preflightState(
         .eq('entityId', spec.source.sourceId)
         .eq('result', 'ok'),
     ).take(2),
-    ctx.db.query('aiPublicationReleases').withIndex('by_target_key', (q) =>
-      q.eq('targetKey', `${spec.dependency.kind}\u0000${spec.dependency.slug}`)).take(1),
     ctx.db.query('aiPublicationConfig').withIndex('by_key', (q) =>
       q.eq('key', AI_PUBLICATION_CONFIG_KEY)).take(2),
+    ctx.db.query('auditLogs').withIndex(
+      'by_action_and_entity_table_and_entity_id_and_result',
+      (q) => q.eq('action', spec.aiPublicationDisableAudit.action)
+        .eq('entityTable', spec.aiPublicationDisableAudit.entityTable)
+        .eq('entityId', spec.aiPublicationDisableAudit.entityId)
+        .eq('result', 'ok'),
+    ).take(2),
+    ctx.db.query('aiPublicationReleases').withIndex('by_status', (q) =>
+      q.eq('status', 'active')).take(1),
+    Promise.all(spec.revokedAiPublicationReleases.map((expected) =>
+      ctx.db.query('aiPublicationReleases').withIndex('by_target_key', (q) =>
+        q.eq('targetKey', expected.targetKey)).take(2))),
+    ctx.db.query('aiPublicationReleases').withIndex('by_status', (q) =>
+      q.eq('status', 'revoked')).take(spec.revokedAiPublicationReleases.length + 1),
+    ctx.db.query('auditLogs').withIndex(
+      'by_action_and_entity_table_and_entity_id_and_result',
+      (q) => q.eq('action', spec.aiPublicationRevocationAudit.action)
+        .eq('entityTable', spec.aiPublicationRevocationAudit.entityTable)
+        .eq('entityId', spec.aiPublicationRevocationAudit.entityId)
+        .eq('result', 'ok'),
+    ).take(2),
+    ctx.db.query('aiAuditRuns').withIndex('by_run_id', (q) =>
+      q.eq('runId', spec.originalAiAuditChain.runId)).take(2),
+    ctx.db.query('aiContentAudits').withIndex('by_run_id', (q) =>
+      q.eq('runId', spec.originalAiAuditChain.runId)).take(2),
+    ctx.db.query('aiEvidenceAudits').withIndex('by_run_id', (q) =>
+      q.eq('runId', spec.originalAiAuditChain.runId)).take(2),
     isPersistedReleaseGovernedSource(ctx, spec.source.sourceId),
   ]);
 
@@ -376,6 +565,29 @@ async function preflightState(
   const sourceFullHash = source ? await sha256Canonical(source) : null;
   const stableMetadataHash = source
     ? await sha256Canonical(aiEarlyMathStableSourceMetadata(source)) : null;
+  const sourceAiSnapshotHash = source
+    ? await sha256Canonical(aiEvidenceSnapshot(source)) : null;
+  const contentRows = contentRowsByTarget.reduce((count, rows) => count + rows.length, 0);
+  const contentExact = contentRowsByTarget.length === spec.revokedTargetContents.length
+    && (await Promise.all(contentRowsByTarget.map(async (rows, index) => {
+      if (rows.length !== 1) return false;
+      const content = rows[0];
+      const expected = spec.revokedTargetContents[index];
+      return content.updatedAt === expected.updatedAt
+        && content.reviewRevision === expected.reviewRevision
+        && await sha256Canonical(aiContentSnapshot(content))
+          === expected.snapshotCanonicalSha256
+        && await exactRow(content, expected);
+    }))).every(Boolean);
+  const contentPublicationPointersCleared = contentRowsByTarget.every((rows) =>
+    rows.length === 1
+    && rows[0].aiPublicationReleaseId === undefined
+    && rows[0].aiPublishedAt === undefined);
+  const contentReviewRows = contentReviewRowsByTarget
+    .reduce((count, rows) => count + rows.length, 0);
+  const contentReviewsExact = contentReviewRowsByTarget.length === spec.contentReviews.length
+    && (await Promise.all(contentReviewRowsByTarget.map((rows, index) =>
+      exactRowSet(rows, spec.contentReviews[index].rows)))).every(Boolean);
   const unrelatedAudit = humanAuditRows.find(
     (row) => String(row._id) === spec.unrelatedHumanReviewAudit.rowId,
   );
@@ -384,6 +596,8 @@ async function preflightState(
   );
   const targetLinkExact = targetLinks.length === 1
     && await exactRow(targetLinks[0], spec.dependency);
+  const targetLinkSnapshotHash = targetLinks.length === 1
+    ? await sha256Canonical(aiEvidenceLinkSnapshot(targetLinks[0])) : null;
   const reverseDependencies = allLinks.filter(
     (link) => link.sourceIds.includes(spec.source.sourceId),
   );
@@ -394,6 +608,44 @@ async function preflightState(
     && targetLinkExact
     && String(reverseDependencies[0]._id) === spec.dependency.rowId;
   const correction = await correctionAuditState(correctionAuditRows, source);
+  const aiPublicationConfigExact = aiPublicationConfigRows.length === 1
+    && aiPublicationConfigRows[0].key === spec.aiPublicationControl.key
+    && aiPublicationConfigRows[0].enabled === spec.aiPublicationControl.enabled
+    && aiPublicationConfigRows[0].generation === spec.aiPublicationControl.generation
+    && aiPublicationConfigRows[0].updatedAt === spec.aiPublicationControl.updatedAt
+    && await sha256Canonical(aiPublicationConfigRows[0].operator)
+      === spec.aiPublicationControl.operatorSha256
+    && await sha256Canonical(aiPublicationConfigRows[0].reason)
+      === spec.aiPublicationControl.reasonSha256
+    && await exactRow(aiPublicationConfigRows[0], spec.aiPublicationControl);
+  const aiPublicationDisableAuditExact = await exactAuditRow(
+    aiPublicationDisableAuditRows,
+    spec.aiPublicationDisableAudit,
+  );
+  const aiPublicationRevokeAuditExact = await exactAuditRow(
+    aiPublicationRevokeAuditRows,
+    spec.aiPublicationRevocationAudit,
+  );
+  const revokedAiPublicationReleasesExact = revokedReleaseRowsByTarget.length
+    === spec.revokedAiPublicationReleases.length
+    && (await Promise.all(revokedReleaseRowsByTarget.map(async (rows, index) =>
+      rows.length === 1
+      && await exactRevokedRelease(rows[0], spec.revokedAiPublicationReleases[index]))))
+      .every(Boolean);
+  const revokedAiPublicationReleaseRows = revokedReleaseRowsByTarget
+    .reduce((count, rows) => count + rows.length, 0);
+  const revokedReleaseSetSortedByReleaseId = [...revokedAiPublicationReleaseSetRows]
+    .sort((left, right) => left.releaseId.localeCompare(right.releaseId));
+  const revokedAiPublicationReleaseSetExact = revokedAiPublicationReleaseSetRows.length
+    === spec.revokedAiPublicationReleases.length
+    && await sha256Canonical(revokedReleaseSetSortedByReleaseId)
+      === spec.revokedAiPublicationReleaseSetCanonicalSha256;
+  const originalAiRunExact = originalAiRunRows.length === 1
+    && await exactRow(originalAiRunRows[0], spec.originalAiAuditChain.run);
+  const originalAiContentAuditExact = originalAiContentAuditRows.length === 1
+    && await exactRow(originalAiContentAuditRows[0], spec.originalAiAuditChain.contentAudit);
+  const originalAiEvidenceAuditExact = originalAiEvidenceAuditRows.length === 1
+    && await exactRow(originalAiEvidenceAuditRows[0], spec.originalAiAuditChain.evidenceAudit);
 
   const aiEvidenceAuditRows = source
     ? await ctx.db.query('aiEvidenceAudits').withIndex(
@@ -417,6 +669,7 @@ async function preflightState(
     && source.reviewScope === spec.source.reviewScope
     && sourceFullHash === spec.source.exactCanonicalSha256
     && stableMetadataHash === spec.source.stableMetadataCanonicalSha256
+    && sourceAiSnapshotHash === spec.source.aiSnapshotCanonicalSha256
     && await sha256Canonical(source.reviewer) === spec.source.reviewerSha256
     && await sha256Canonical(source.reviewerQualification)
       === spec.source.reviewerQualificationSha256
@@ -443,8 +696,16 @@ async function preflightState(
   if (!unrelatedHumanReviewAuditExact) {
     blockers.push('historical unrelated human-review audit is missing or drifted');
   }
+  if (!contentExact) blockers.push('a revoked-target content row drifted or duplicated');
+  if (!contentPublicationPointersCleared) {
+    blockers.push('a revoked target still carries an AI publication pointer');
+  }
+  if (!contentReviewsExact) blockers.push('revoked-target content review rows drifted');
   if (humanAuditRows.length > 2) blockers.push('unexpected extra successful human-review audit exists');
-  if (!targetLinkExact) blockers.push('lsn_early_math evidence link drifted');
+  if (!targetLinkExact
+    || targetLinkSnapshotHash !== spec.dependency.snapshotCanonicalSha256) {
+    blockers.push('lsn_early_math evidence link drifted');
+  }
   if (!reverseDependenciesExact) blockers.push('source reverse dependencies drifted or exceeded the scan bound');
   if (correctionAuditRows.length > 1) blockers.push('duplicate correction audit rows exist');
   if (persistedReleaseGovernedSource) {
@@ -453,11 +714,27 @@ async function preflightState(
   if (aiEvidenceAuditRows.length !== spec.expectedAiEvidenceAuditRows) {
     blockers.push('current source version has an unexpected AI evidence audit');
   }
-  if (aiPublicationReleaseRows.length !== spec.expectedAiPublicationReleaseRows) {
-    blockers.push('lsn_early_math has an unexpected AI publication release');
+  if (!originalAiRunExact || !originalAiContentAuditExact || !originalAiEvidenceAuditExact) {
+    blockers.push('original lsn_early_math AI audit chain is missing, duplicated or drifted');
   }
-  if (aiPublicationConfigRows.length > 1 || aiPublicationConfigEnabled) {
-    blockers.push('AI publication control is enabled or duplicated');
+  if (!aiPublicationConfigExact) {
+    blockers.push('AI publication control is not the exact disabled generation-2 row');
+  }
+  if (!aiPublicationDisableAuditExact) {
+    blockers.push('AI publication disable audit is missing, duplicated or drifted');
+  }
+  if (activeAiPublicationReleaseRows.length
+    !== spec.expectedActiveAiPublicationReleaseRows) {
+    blockers.push('an active AI publication release exists');
+  }
+  if (!revokedAiPublicationReleasesExact) {
+    blockers.push('the exact three revoked v1 AI publication releases are not preserved');
+  }
+  if (!revokedAiPublicationReleaseSetExact) {
+    blockers.push('the global revoked AI publication release set drifted');
+  }
+  if (!aiPublicationRevokeAuditExact) {
+    blockers.push('AI publication revoke audit is missing, duplicated or drifted');
   }
 
   let phase: PreflightState['phase'] = 'blocked';
@@ -521,9 +798,30 @@ async function preflightState(
     reverseDependenciesExact,
     persistedReleaseGovernedSource,
     aiEvidenceAuditRows: aiEvidenceAuditRows.length,
-    aiPublicationReleaseRows: aiPublicationReleaseRows.length,
+    contentRows,
+    contentExact,
+    contentPublicationPointersCleared,
+    contentReviewRows,
+    contentReviewsExact,
+    sourceAiSnapshotCanonicalSha256: sourceAiSnapshotHash,
+    targetLinkSnapshotCanonicalSha256: targetLinkSnapshotHash,
+    originalAiRunRows: originalAiRunRows.length,
+    originalAiRunExact,
+    originalAiContentAuditRows: originalAiContentAuditRows.length,
+    originalAiContentAuditExact,
+    originalAiEvidenceAuditRows: originalAiEvidenceAuditRows.length,
+    originalAiEvidenceAuditExact,
     aiPublicationConfigRows: aiPublicationConfigRows.length,
     aiPublicationConfigEnabled,
+    aiPublicationConfigExact,
+    aiPublicationDisableAuditRows: aiPublicationDisableAuditRows.length,
+    aiPublicationDisableAuditExact,
+    activeAiPublicationReleaseRows: activeAiPublicationReleaseRows.length,
+    revokedAiPublicationReleaseRows,
+    revokedAiPublicationReleasesExact,
+    revokedAiPublicationReleaseSetExact,
+    aiPublicationRevokeAuditRows: aiPublicationRevokeAuditRows.length,
+    aiPublicationRevokeAuditExact,
     dataRowsChanged: 0,
     humanReviewDecision: 'not_made',
     publicationDecision: 'not_made',
