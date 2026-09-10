@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import seedData from '../../../convex/seedData.json';
+// Archived math seed pins the original release, not later editable lesson copy.
+import archivedMathSeed from '../../domain/__tests__/fixtures/aiEarlyMathSeedBefore20260910.json';
 import {
   aiContentSnapshot,
   aiEvidenceLinkSnapshot,
@@ -46,7 +48,9 @@ describe('AI educational-preview policy', () => {
     expect(AI_PUBLICATION_AUDIT_ARTIFACT.targets.map(({ type, slug }) => `${type}:${slug}`))
       .toEqual(AI_PUBLICATION_RELEASE_TARGETS.map(({ type, slug }) => `${type}:${slug}`));
     for (const target of AI_PUBLICATION_RELEASE_TARGETS) {
-      const seed = seedData.find((row) => row.slug === target.slug);
+      const seed = target.slug === archivedMathSeed.slug
+        ? structuredClone(archivedMathSeed)
+        : seedData.find((row) => row.slug === target.slug);
       expect(seed).toBeDefined();
       expect(await sha256Canonical(aiContentSnapshot({
         ...seed!,

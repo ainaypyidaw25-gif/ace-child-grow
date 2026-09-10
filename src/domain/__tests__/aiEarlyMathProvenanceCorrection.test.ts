@@ -13,6 +13,8 @@ import {
 } from '../../../convex/lib/aiEarlyMathProvenanceCorrectionData';
 import { AI_PUBLICATION_SUCCESSOR_20260909_TARGETS } from '../../../convex/lib/aiPublicationSuccessor20260909Data';
 import seedData from '../../../convex/seedData.json';
+// Archived seed from d6e6f459b626bb1d1c448386388c66daea8e7074: reconstruct the historical correction preimage.
+import archivedMathSeed from './fixtures/aiEarlyMathSeedBefore20260910.json';
 
 type Row = Record<string, unknown>;
 
@@ -64,7 +66,9 @@ function targetLinkPreimage(): Row {
 
 function contentPreimages(): Row[] {
   return AI_EARLY_MATH_PROVENANCE_CORRECTION_SPEC.revokedTargetContents.map((spec) => {
-    const row = seedData.find((candidate) => candidate.slug === spec.slug);
+    const row = spec.slug === archivedMathSeed.slug
+      ? structuredClone(archivedMathSeed)
+      : seedData.find((candidate) => candidate.slug === spec.slug);
     if (!row) throw new Error(`missing ${spec.slug} seed row`);
     // `media` is seed-only input and is not stored on libraryContent documents.
     const { media: _media, ...content } = row;

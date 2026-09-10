@@ -1,5 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import seedData from '../../../convex/seedData.json';
+// Archived seed from d6e6f459b626bb1d1c448386388c66daea8e7074: preserve the blocked successor's exact input.
+import archivedMathSeed from './fixtures/aiEarlyMathSeedBefore20260910.json';
 import { preflight } from '../../../convex/aiPublicationSuccessor20260909';
 import {
   aiPublicationTargetKey,
@@ -42,7 +44,9 @@ function exactContext(options?: { driftSource?: boolean; disabled?: boolean }) {
     aiEvidenceAudits: [],
   };
   for (const target of AI_PUBLICATION_SUCCESSOR_20260909_TARGETS) {
-    const seed = seedData.find((row) => row.slug === target.slug)!;
+    const seed = target.slug === archivedMathSeed.slug
+      ? structuredClone(archivedMathSeed)
+      : seedData.find((row) => row.slug === target.slug)!;
     tables.libraryContent.push({
       ...seed,
       _id: target.contentId,

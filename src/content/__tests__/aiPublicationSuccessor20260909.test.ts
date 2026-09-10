@@ -1,5 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import seedData from '../../../convex/seedData.json';
+// Archived math seed pins the diagnostic successor's original content snapshot.
+import archivedMathSeed from '../../domain/__tests__/fixtures/aiEarlyMathSeedBefore20260910.json';
 import type { Doc } from '../../../convex/_generated/dataModel';
 import {
   aiContentSnapshot,
@@ -35,9 +37,11 @@ describe('AI educational-preview 2026-09-09 successor artifact', () => {
     expect(AI_PUBLICATION_SUCCESSOR_20260909_RELEASE_ID).not.toContain('2026-08-19');
   });
 
-  it('binds exact current content, link and full source snapshots', async () => {
+  it('binds the exact archived content, link and full source snapshots', async () => {
     for (const target of AI_PUBLICATION_SUCCESSOR_20260909_TARGETS) {
-      const seed = seedData.find((row) => row.slug === target.slug);
+      const seed = target.slug === archivedMathSeed.slug
+        ? structuredClone(archivedMathSeed)
+        : seedData.find((row) => row.slug === target.slug);
       expect(seed).toBeDefined();
       expect(await sha256Canonical(aiContentSnapshot({
         ...seed!,
