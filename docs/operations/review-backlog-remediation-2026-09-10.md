@@ -20,7 +20,7 @@ The local-versus-production authored-field comparison found 139 items with seed 
 
 These are mutually exclusive primary findings, not completed publication gates. Existing clinical requirements on 44 records in this 280-item packet overlap these groups. The earlier 282-item inventory counted 46 before the two stories left the pending queue. The 49 preparatory passes retain all missing human-review requirements and the reports' source/media verification limits. They are not release-ready approvals.
 
-Code verification after the attribution correction: 2,384 Vitest tests passed, build and lint passed, and 10 additional local node integrity/comparison tests passed. Initial seed parity failure was fixed by canonical regeneration of only the three targets' derived search text; no other seed record was changed.
+Earlier code verification of the initial attribution changes passed 2,384 Vitest tests, build/lint and 10 local node integrity/comparison tests, but subsequent PR review identified unsafe approval reuse through the internal seed path. Those executable changes have therefore been withdrawn; passing tests did not establish safe review invalidation. The final proposal-only state is covered by target-level immutable-seed regression tests and the canonical seed-dump contract.
 
 ## Concrete findings and current correction state
 
@@ -28,7 +28,7 @@ Code verification after the attribution correction: 2,384 Vitest tests passed, b
 - Unpublished guides contain choking-material, cord, sleep-surface and bilingual terminology issues. Reports identify exact fields, before/after proposals and current seed comparisons. These are not complete release payloads.
 - Milestone age claims and special-needs treatment/referral copy require targeted source or specialist review. The packet's 44-item clinical classification is not an exhaustive medical risk assessment.
 - All 24 pending printables were reviewed as metadata/preview records only. The actual printable payloads were not available in the captured packet, so no actual PDF/tool review is claimed.
-- Corrected AAP/HealthyChildren publisher attribution in the local authored and generated seeds for `act_board_book_point`, `act_lift_the_flap_book` and `act_first_words_book_share`. Only three evidence-summary strings and their derived generated `searchText` values changed. No status, revision, approval, source-link or history changes were made. This does not update production data.
+- AAP/HealthyChildren attribution corrections for `act_board_book_point`, `act_lift_the_flap_book` and `act_first_words_book_share` are **proposals only**, recorded in [the exact non-executable correction artifact](learning-source-attribution-proposals-2026-09-10.json). The authored and generated seed rows, including version and derived search text, are restored byte-for-byte to their pre-PR state. The normal internal `seed:run` preserves existing review revisions, and two targets also occur in a legacy errata release that retains revision; changing these seeds could therefore reuse old approvals. The generic wording editor protects `evidenceSummary`, so it is not a metadata correction route. A dedicated exact-preflight correction/refreeze must increment the current review revision, clear current reviewer-summary fields, preserve append-only human history and require review of the changed revision. No such production operation was added or run in this PR, and no importer/clinical policy was changed.
 
 ## Repeatable local checks
 

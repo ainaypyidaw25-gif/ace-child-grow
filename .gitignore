@@ -24,6 +24,8 @@ dist-harness/
 .git-credentials
 
 # Test / coverage
+# Private production review snapshots and local evidence reports
+/artifacts/
 coverage/
 playwright-report/
 test-results/

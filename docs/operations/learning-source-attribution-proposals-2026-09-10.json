@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "status": "proposal_only",
+  "executable": false,
+  "baselineCommit": "eb74686",
+  "reason": "The normal internal seed import preserves reviewRevision and can reuse existing decisions; evidenceSummary is protected in the generic wording editor. No revision-invalidating source-metadata correction workflow is implemented by this proposal.",
+  "requiredWorkflow": [
+    "Exact production content/link/source/review-history preflight",
+    "Dedicated owner-controlled metadata correction; increment current reviewRevision and clear current reviewer summary fields while preserving append-only decisions",
+    "Recompute derived searchText; preserve all non-target authored fields, links and historical sources",
+    "Refreeze governed batches where required; review the exact new revision before publication"
+  ],
+  "source": {
+    "sourceId": "hc-early-literacy-2023",
+    "publisher": "HealthyChildren.org (American Academy of Pediatrics)",
+    "url": "https://www.healthychildren.org/English/ages-stages/baby/Pages/Developmental-Milestones-of-Early-Literacy.aspx",
+    "pageUpdated": "2023-09-19",
+    "verifiedAt": "2026-09-10",
+    "scope": "Publisher attribution only; not human approval or validation of all activity instructions"
+  },
+  "targets": [
+    {
+      "slug": "act_board_book_point",
+      "field": "data.evidenceSummary",
+      "before": "Shared book reading from infancy is supported by AAP literacy guidance, Health Canada early literacy guidance, NHS learn-to-talk advice and the shared book-reading research in the registry.",
+      "after": "Shared book reading from infancy is supported by AAP literacy guidance, AAP HealthyChildren early literacy guidance, NHS learn-to-talk advice and the shared book-reading research in the registry.",
+      "baselineGeneratedRecordSha256": "99eb01230c50efb4fb85364ec900e5dded9edb3befa5ada1c0b4038cfd1b11f8",
+      "seedVersion": 1,
+      "seedChangeApplied": false,
+      "productionChangeApplied": false
+    },
+    {
+      "slug": "act_lift_the_flap_book",
+      "field": "data.evidenceSummary",
+      "before": "Shared book reading in the first year follows the AAP early-literacy policy, Canadian public-health early-literacy guidance, NHS learn-to-talk guidance and the shared book-reading research in the registry.",
+      "after": "Shared book reading in the first year follows the AAP early-literacy policy, AAP HealthyChildren early-literacy guidance, NHS learn-to-talk guidance and the shared book-reading research in the registry.",
+      "baselineGeneratedRecordSha256": "2ddb54e0e1ec3df7883dc8d48e9b67c1c075024c72437848d05a2dc80c883362",
+      "seedVersion": 1,
+      "seedChangeApplied": false,
+      "productionChangeApplied": false
+    },
+    {
+      "slug": "act_first_words_book_share",
+      "field": "data.evidenceSummary",
+      "before": "Daily book sharing in the first year is supported by the AAP literacy policy, the Canadian early-literacy guidance, the shared book-reading research paper and the NHS early-talking guidance held in the registry.",
+      "after": "Daily book sharing in the first year is supported by the AAP literacy policy, the AAP HealthyChildren early-literacy guidance, the shared book-reading research paper and the NHS early-talking guidance held in the registry.",
+      "baselineGeneratedRecordSha256": "c3252159a8ef9cc31eae3403f835fe738d63ec9b0dc208f7d0e67aa3fe28cb09",
+      "seedVersion": 1,
+      "seedChangeApplied": false,
+      "productionChangeApplied": false
+    }
+  ]
+}
