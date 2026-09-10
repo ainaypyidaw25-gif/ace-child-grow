@@ -27,6 +27,8 @@ import {
 } from './aiPublicationReleaseData';
 import { EARLY_MATH_AUDIT_ARTIFACT, EARLY_MATH_AUDIT_ARTIFACT_HASH } from './aiEarlyMathPublication20260910Artifact';
 import { EARLY_MATH_RELEASE_ROOT, EARLY_MATH_RELEASE_DAYS } from './aiEarlyMathPublication20260910Data';
+import { TWO_STORIES_ARTIFACT, TWO_STORIES_ARTIFACT_HASH } from './aiTwoStoriesPublication20260910Artifact';
+import { TWO_STORIES_RELEASE_ROOT, TWO_STORIES_RELEASE_DAYS } from './aiTwoStoriesPublication20260910Data';
 import type { AiPublicationAuditTargetArtifact } from './aiPublicationAuditArtifact';
 import { todayIsoUtc } from './evidenceFreshness';
 
@@ -45,6 +47,7 @@ export function registeredAiPublicationArtifact(releaseId: string, artifactHash:
   const entries = [
     { artifact: AI_PUBLICATION_AUDIT_ARTIFACT, hash: AI_PUBLICATION_AUDIT_ARTIFACT_HASH, root: AI_PUBLICATION_RELEASE_ID, releaseDays: AI_PUBLICATION_MAX_RELEASE_DAYS },
     { artifact: EARLY_MATH_AUDIT_ARTIFACT, hash: EARLY_MATH_AUDIT_ARTIFACT_HASH, root: EARLY_MATH_RELEASE_ROOT, releaseDays: EARLY_MATH_RELEASE_DAYS },
+    { artifact: TWO_STORIES_ARTIFACT, hash: TWO_STORIES_ARTIFACT_HASH, root: TWO_STORIES_RELEASE_ROOT, releaseDays: TWO_STORIES_RELEASE_DAYS },
   ];
   return entries.find((entry) => entry.hash === artifactHash && entry.artifact.targets.some(
     (target) => releaseId === `${entry.root}:${target.type}:${target.slug}`,

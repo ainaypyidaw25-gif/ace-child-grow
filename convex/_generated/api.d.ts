@@ -15,6 +15,7 @@ import type * as aiEarlyMathProvenanceCorrection from "../aiEarlyMathProvenanceC
 import type * as aiEarlyMathPublication20260910 from "../aiEarlyMathPublication20260910.js";
 import type * as aiPublication from "../aiPublication.js";
 import type * as aiPublicationSuccessor20260909 from "../aiPublicationSuccessor20260909.js";
+import type * as aiTwoStoriesPublication20260910 from "../aiTwoStoriesPublication20260910.js";
 import type * as animationPlan from "../animationPlan.js";
 import type * as appointments from "../appointments.js";
 import type * as asqDoctorVisitsLinkCas from "../asqDoctorVisitsLinkCas.js";
@@ -59,6 +60,8 @@ import type * as lib_aiPublicationReleaseData from "../lib/aiPublicationReleaseD
 import type * as lib_aiPublicationSuccessor20260909AuditArtifact from "../lib/aiPublicationSuccessor20260909AuditArtifact.js";
 import type * as lib_aiPublicationSuccessor20260909Data from "../lib/aiPublicationSuccessor20260909Data.js";
 import type * as lib_aiPublicationVisibility from "../lib/aiPublicationVisibility.js";
+import type * as lib_aiTwoStoriesPublication20260910Artifact from "../lib/aiTwoStoriesPublication20260910Artifact.js";
+import type * as lib_aiTwoStoriesPublication20260910Data from "../lib/aiTwoStoriesPublication20260910Data.js";
 import type * as lib_asqDoctorVisitsLinkCasData from "../lib/asqDoctorVisitsLinkCasData.js";
 import type * as lib_auth from "../lib/auth.js";
 import type * as lib_billingPeriods from "../lib/billingPeriods.js";
@@ -175,6 +178,7 @@ declare const fullApi: ApiFromModules<{
   aiEarlyMathPublication20260910: typeof aiEarlyMathPublication20260910;
   aiPublication: typeof aiPublication;
   aiPublicationSuccessor20260909: typeof aiPublicationSuccessor20260909;
+  aiTwoStoriesPublication20260910: typeof aiTwoStoriesPublication20260910;
   animationPlan: typeof animationPlan;
   appointments: typeof appointments;
   asqDoctorVisitsLinkCas: typeof asqDoctorVisitsLinkCas;
@@ -219,6 +223,8 @@ declare const fullApi: ApiFromModules<{
   "lib/aiPublicationSuccessor20260909AuditArtifact": typeof lib_aiPublicationSuccessor20260909AuditArtifact;
   "lib/aiPublicationSuccessor20260909Data": typeof lib_aiPublicationSuccessor20260909Data;
   "lib/aiPublicationVisibility": typeof lib_aiPublicationVisibility;
+  "lib/aiTwoStoriesPublication20260910Artifact": typeof lib_aiTwoStoriesPublication20260910Artifact;
+  "lib/aiTwoStoriesPublication20260910Data": typeof lib_aiTwoStoriesPublication20260910Data;
   "lib/asqDoctorVisitsLinkCasData": typeof lib_asqDoctorVisitsLinkCasData;
   "lib/auth": typeof lib_auth;
   "lib/billingPeriods": typeof lib_billingPeriods;
