@@ -97,11 +97,11 @@ describe('ContentDetail published story illustrations', () => {
     },
   );
 
-  it('does not repeat AI provenance on an AI-audited public story', () => {
+  it('discloses AI provenance on an AI-audited public story', () => {
     localStorage.setItem('ace-locale', 'en');
     renderStory('st_first_day_school');
-    expect(screen.queryByTestId('ai-publication-disclosure')).not.toBeInTheDocument();
-    expect(screen.queryByText(/AI-reviewed|AI review notice/i)).not.toBeInTheDocument();
+    expect(screen.getByTestId('ai-publication-disclosure')).toHaveTextContent('not approved by a human specialist');
+    expect(screen.getByTestId('ai-publication-disclosure')).toHaveTextContent('not medical advice');
     expect(screen.getByText('Story st_first_day_school')).toBeVisible();
   });
 });

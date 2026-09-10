@@ -14,6 +14,8 @@ The source/claim agent and separate bilingual-copy/safety agent rechecked the fi
 
 Two copy improvements precede publication: optional child-paced picture counting replaces a fixed five-object instruction; the caregiver quiz emphasizes play rather than pressure for correct answers. No benchmark, dosage or guaranteed outcome is claimed.
 
+The parent UI renders a per-item AI-only badge on library/learning cards and a full disclosure on detail pages, including offline records. The notice is separate from normal body-copy cleanup, so removing a duplicate body prefix cannot hide provenance. Conventional human-reviewed content does not receive this badge.
+
 ## Frozen release
 
 - Release: `2026-09-10-early-math-naeyc-ai-preview-v1:lesson:lsn_early_math`
