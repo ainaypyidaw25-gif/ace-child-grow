@@ -8,7 +8,6 @@ const LESSON = vi.hoisted(() => ({
   slug: 'lsn_creativity',
   titleMm: 'တီထွင်ဖန်တီးမှု အားပေးခြင်း',
   titleEn: 'Nurturing creativity',
-  asset: '/lessons/creativity/lsn_creativity.3e8ca55af0.webp',
 } as const));
 const EMPTY_RECORDS = vi.hoisted(() => [] as const);
 const PRODUCTION_RESULT = vi.hoisted(() => ({
@@ -57,7 +56,7 @@ function renderLesson() {
   );
 }
 
-describe('ContentDetail production creativity lesson illustration', () => {
+describe('ContentDetail successor creativity media blocker', () => {
   afterEach(() => {
     cleanup();
     localStorage.removeItem('ace-locale');
@@ -66,12 +65,11 @@ describe('ContentDetail production creativity lesson illustration', () => {
   it.each([
     ['mm', LESSON.titleMm],
     ['en', LESSON.titleEn],
-  ] as const)('renders the exact unique asset and %s title', (locale, title) => {
+  ] as const)('renders the %s title without the unreviewed legacy image', (locale, title) => {
     localStorage.setItem('ace-locale', locale);
     renderLesson();
 
     expect(screen.getByRole('heading', { name: title })).toBeVisible();
-    expect(screen.getByTestId('lesson-illustration')).toHaveAttribute('src', LESSON.asset);
-    expect(screen.getByTestId('lesson-illustration')).toHaveAttribute('alt', title);
+    expect(screen.queryByTestId('lesson-illustration')).not.toBeInTheDocument();
   });
 });

@@ -49,6 +49,8 @@ import {
 } from './aiPowerOfPlayPublication20260910Data';
 import { TWO_LESSONS_ARTIFACT, TWO_LESSONS_ARTIFACT_HASH } from './aiTwoLessonsPublication20260910Artifact';
 import { TWO_LESSONS_POLICY_VERSION, TWO_LESSONS_RELEASE_DAYS, TWO_LESSONS_RELEASE_ROOT, TWO_LESSONS_SLUGS, TWO_LESSONS_PREIMAGE } from './aiTwoLessonsPublication20260910Data';
+import { FOUR_LESSONS_ARTIFACT, FOUR_LESSONS_ARTIFACT_HASH } from './aiFourLessonsPublication20260910Artifact';
+import { FOUR_LESSONS_AGGREGATE_ACTIVE_CAP, FOUR_LESSONS_POLICY_VERSION, FOUR_LESSONS_RELEASE_DAYS, FOUR_LESSONS_RELEASE_ROOT, FOUR_LESSONS_SLUGS, FOUR_LESSONS_PREIMAGE } from './aiFourLessonsPublication20260910Data';
 import { todayIsoUtc } from './evidenceFreshness';
 
 type DatabaseContext = Pick<QueryCtx, 'db'> | Pick<MutationCtx, 'db'>;
@@ -78,19 +80,30 @@ type RegisteredArtifact =
   | { kind: 'seven_stories'; artifact: Schema2AuditArtifact; hash: string; releaseDays: number }
   | { kind: 'reading_together'; artifact: Schema2AuditArtifact; hash: string; releaseDays: number }
   | { kind: 'power_of_play'; artifact: Schema2AuditArtifact; hash: string; releaseDays: number }
-  | { kind: 'two_lessons'; artifact: Schema2AuditArtifact; hash: string; releaseDays: number };
+  | { kind: 'two_lessons'; artifact: Schema2AuditArtifact; hash: string; releaseDays: number }
+  | { kind: 'four_lessons'; artifact: Schema2AuditArtifact; hash: string; releaseDays: number };
 const SEVEN_STORY_RUNTIME_SLUGS = new Set<string>([
   'st_little_seed', 'st_ba_ba_sounds', 'st_when_i_feel_angry', 'st_taking_turns',
   'st_goodnight_moon_friend', 'st_visit_to_doctor', 'st_sharing_mango',
 ]);
 const SEVEN_STORY_MAX_SOURCES = 3;
-const COMBINED_ACTIVE_LIMIT = AI_PUBLICATION_MAX_ACTIVE_RELEASES + 7 + 1 + 1 + 2;
+const FOUR_LESSON_ACTIVE_LIMIT = 4;
+const COMBINED_ACTIVE_LIMIT = AI_PUBLICATION_MAX_ACTIVE_RELEASES + 7 + 1 + 1 + 2 + FOUR_LESSON_ACTIVE_LIMIT;
 const TWO_LESSON_RUNTIME_TARGETS = [
   { slug: 'lsn_what_is_development', revision: 3, sourceId: 'cdc-monitoring-screening-2026' },
   { slug: 'lsn_big_feelings', revision: 5, sourceId: 'aap-toxic-stress-2021' },
 ] as const;
 function isTwoLessonTarget(type: string, slug: string): boolean {
   return type === 'lesson' && TWO_LESSON_RUNTIME_TARGETS.some(target => target.slug === slug);
+}
+const FOUR_LESSON_RUNTIME_TARGETS = [
+  { slug: 'lsn_talk_more', revision: 3, sourceIds: ['cdc-milestones-2026', 'jr-weisleder-2013'] },
+  { slug: 'lsn_making_friends', revision: 4, sourceIds: ['aap-power-of-play-2018', 'cdc-positive-parenting-preschoolers-2026'] },
+  { slug: 'lsn_creativity', revision: 6, sourceIds: ['aap-power-of-play-2018', 'cdc-positive-parenting-preschoolers-2026'] },
+  { slug: 'lsn_prepare_preschool', revision: 5, sourceIds: ['cdc-milestones-2026', 'cdc-positive-parenting-preschoolers-2026'] },
+] as const;
+function isFourLessonTarget(type: string, slug: string): boolean {
+  return type === 'lesson' && FOUR_LESSON_RUNTIME_TARGETS.some(target => target.slug === slug);
 }
 function isSevenStoryTarget(type: string, slug: string): boolean {
   return type === 'story' && SEVEN_STORY_RUNTIME_SLUGS.has(slug);
@@ -208,6 +221,45 @@ function twoLessonsArtifactHasExactScope(artifact: Schema2AuditArtifact): boolea
     });
 }
 
+function fourLessonsArtifactHasExactScope(artifact: Schema2AuditArtifact): boolean {
+  return artifact.schemaVersion === 2
+    && artifact.policyVersion === FOUR_LESSONS_POLICY_VERSION
+    && artifact.releaseId === FOUR_LESSONS_RELEASE_ROOT
+    && FOUR_LESSONS_AGGREGATE_ACTIVE_CAP === COMBINED_ACTIVE_LIMIT
+    && arraysEqual(FOUR_LESSONS_SLUGS, FOUR_LESSON_RUNTIME_TARGETS.map(target => target.slug))
+    && FOUR_LESSONS_PREIMAGE.targets.length === 4
+    && artifact.targets.length === 4
+    && artifact.targets.every((target, index) => {
+      const exact = FOUR_LESSON_RUNTIME_TARGETS[index];
+      const preimage = FOUR_LESSONS_PREIMAGE.targets[index];
+      return target.type === 'lesson' && target.slug === exact.slug
+        && preimage.slug === exact.slug && preimage.desiredRevision === exact.revision
+        && target.verdict === 'pass'
+        && isSha256Hex(target.contentSnapshotHash)
+        && target.contentSnapshotHash === preimage.desiredContentSnapshotHash
+        && isSha256Hex(target.evidenceLinkSnapshotHash)
+        && target.evidenceLinkSnapshotHash === preimage.linkSnapshotHash
+        && target.mediaCount === 1 && isSha256Hex(target.mediaSnapshotHash)
+        && target.mediaSnapshotHash === preimage.mediaFullHash
+        && arraysEqual(preimage.sourceIds, exact.sourceIds)
+        && target.sources.length === exact.sourceIds.length
+        && arraysEqual(target.sources.map(source => source.sourceId), exact.sourceIds)
+        && target.sources.every(source => {
+          const sourceRow = preimage.sourceRows.find(row => row.sourceId === source.sourceId);
+          return Boolean(sourceRow)
+            && isSha256Hex(source.sourceSnapshotHash)
+            && source.sourceSnapshotHash === sourceRow?.snapshotHash
+            && source.sourceUrl === sourceRow?.url
+            && source.urlsChecked.length > 0 && source.urlsChecked.length <= 10
+            && source.urlsChecked.includes(source.sourceUrl);
+        })
+        && target.independentAgentResults.length === 2
+        && target.independentAgentResults.every(result => result.verdict === 'pass')
+        && target.independentAgentResults.some(result => result.role === 'source_research')
+        && target.independentAgentResults.some(result => result.role === 'semantic_audit');
+    });
+}
+
 /** Explicit compiled registry: an arbitrary database hash cannot authorize publication. */
 export function registeredAiPublicationArtifact(releaseId: string, artifactHash: string): RegisteredArtifact | null {
   const entries = [
@@ -238,6 +290,11 @@ export function registeredAiPublicationArtifact(releaseId: string, artifactHash:
   if (artifactHash === TWO_LESSONS_ARTIFACT_HASH && twoLessonsArtifactHasExactScope(twoLessonsArtifact)
     && TWO_LESSON_RUNTIME_TARGETS.some(target => releaseId === `${TWO_LESSONS_RELEASE_ROOT}:lesson:${target.slug}`)) {
     return { kind: 'two_lessons', artifact: twoLessonsArtifact, hash: TWO_LESSONS_ARTIFACT_HASH, releaseDays: TWO_LESSONS_RELEASE_DAYS };
+  }
+  const fourLessonsArtifact: Schema2AuditArtifact = FOUR_LESSONS_ARTIFACT;
+  if (artifactHash === FOUR_LESSONS_ARTIFACT_HASH && fourLessonsArtifactHasExactScope(fourLessonsArtifact)
+    && FOUR_LESSON_RUNTIME_TARGETS.some(target => releaseId === `${FOUR_LESSONS_RELEASE_ROOT}:lesson:${target.slug}`)) {
+    return { kind: 'four_lessons', artifact: fourLessonsArtifact, hash: FOUR_LESSONS_ARTIFACT_HASH, releaseDays: FOUR_LESSONS_RELEASE_DAYS };
   }
   return null;
 }
@@ -271,7 +328,8 @@ export async function activeAiPublicationControl(ctx: DatabaseContext): Promise<
         || isSevenStoryTarget(release.contentType, release.contentSlug)
         || isReadingTogetherTarget(release.contentType, release.contentSlug)
         || isPowerOfPlayTarget(release.contentType, release.contentSlug)
-        || isTwoLessonTarget(release.contentType, release.contentSlug))
+        || isTwoLessonTarget(release.contentType, release.contentSlug)
+        || isFourLessonTarget(release.contentType, release.contentSlug))
       || release.targetKey !== expectedKey
       || keys.has(expectedKey)
       || typeof release.releaseId !== 'string' || release.releaseId.length === 0
@@ -286,7 +344,8 @@ export async function activeAiPublicationControl(ctx: DatabaseContext): Promise<
     || releases.filter(r => isSevenStoryTarget(r.contentType, r.contentSlug)).length > 7
     || releases.filter(r => isReadingTogetherTarget(r.contentType, r.contentSlug)).length > 1
     || releases.filter(r => isPowerOfPlayTarget(r.contentType, r.contentSlug)).length > 1
-    || releases.filter(r => isTwoLessonTarget(r.contentType, r.contentSlug)).length > 2) return { complete: false, releases: [] };
+    || releases.filter(r => isTwoLessonTarget(r.contentType, r.contentSlug)).length > 2
+    || releases.filter(r => isFourLessonTarget(r.contentType, r.contentSlug)).length > FOUR_LESSON_ACTIVE_LIMIT) return { complete: false, releases: [] };
   return { complete: true, releases };
 }
 
@@ -478,7 +537,7 @@ async function schema2ReleaseMatchesCurrentState(
   release: Doc<'aiPublicationReleases'>,
   now: number,
   todayIso: string,
-  registered: Extract<RegisteredArtifact, { kind: 'seven_stories' | 'reading_together' | 'power_of_play' | 'two_lessons' }>,
+  registered: Extract<RegisteredArtifact, { kind: 'seven_stories' | 'reading_together' | 'power_of_play' | 'two_lessons' | 'four_lessons' }>,
 ): Promise<boolean> {
   const { artifact, releaseDays } = registered;
   const artifactHash = await sha256Canonical(artifact);
@@ -489,18 +548,24 @@ async function schema2ReleaseMatchesCurrentState(
       ? readingTogetherArtifactHasExactScope(artifact)
       : registered.kind === 'power_of_play'
         ? powerOfPlayArtifactHasExactScope(artifact)
-        : twoLessonsArtifactHasExactScope(artifact);
+        : registered.kind === 'two_lessons'
+          ? twoLessonsArtifactHasExactScope(artifact)
+          : fourLessonsArtifactHasExactScope(artifact);
   const exactTarget = registered.kind === 'seven_stories'
     ? isSevenStoryTarget(content.type, content.slug)
     : registered.kind === 'reading_together'
       ? isReadingTogetherTarget(content.type, content.slug)
       : registered.kind === 'power_of_play'
         ? isPowerOfPlayTarget(content.type, content.slug)
-        : isTwoLessonTarget(content.type, content.slug);
+        : registered.kind === 'two_lessons'
+          ? isTwoLessonTarget(content.type, content.slug)
+          : isFourLessonTarget(content.type, content.slug);
   const expectedRevision = registered.kind === 'reading_together' ? 4
     : registered.kind === 'two_lessons'
       ? TWO_LESSON_RUNTIME_TARGETS.find(target => target.slug === content.slug)?.revision
-      : 3;
+      : registered.kind === 'four_lessons'
+        ? FOUR_LESSON_RUNTIME_TARGETS.find(target => target.slug === content.slug)?.revision
+        : 3;
   if (!target || !exactScope || artifactHash !== registered.hash
     || releaseDays < 1 || releaseDays > AI_PUBLICATION_MAX_RELEASE_DAYS
     || ![now, release.createdAt, release.expiresAt, artifact.auditStartedAt, artifact.auditCompletedAt].every(Number.isFinite)
@@ -597,7 +662,8 @@ export async function contentIsAiParentReadable(
     && !isSevenStoryTarget(content.type, content.slug)
     && !isReadingTogetherTarget(content.type, content.slug)
     && !isPowerOfPlayTarget(content.type, content.slug)
-    && !isTwoLessonTarget(content.type, content.slug)) return false;
+    && !isTwoLessonTarget(content.type, content.slug)
+    && !isFourLessonTarget(content.type, content.slug)) return false;
   const control = await activeAiPublicationControl(ctx);
   if (!control.complete) return false;
   const release = control.releases.find(
@@ -606,7 +672,7 @@ export async function contentIsAiParentReadable(
   return release ? await aiReleaseMatchesCurrentState(ctx, content, release, now, todayIso) : false;
 }
 
-/** Resolve only the compiled legacy-three, seven stories and four exact lessons. */
+/** Resolve only the compiled legacy-three, seven stories and eight exact lessons. */
 export async function activeAiParentReadableContent(
   ctx: DatabaseContext,
   now = Date.now(),

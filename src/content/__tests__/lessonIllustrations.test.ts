@@ -4,11 +4,10 @@ import { resolve } from 'node:path';
 import { LESSON_ILLUSTRATIONS, lessonIllustration } from '../lessonIllustrations';
 
 const LANGUAGE_DEVELOPMENT_SLUGS = ['lsn_language_rich_home'] as const;
-const PREPARING_FOR_PRESCHOOL_SLUGS = ['lsn_prepare_preschool'] as const;
 const PROBLEM_SOLVING_SLUGS = ['lsn_problem_solving_parenting'] as const;
 const SCREEN_TIME_SLUGS = ['lsn_screen_time'] as const;
 const SLEEP_SLUGS = ['lsn_healthy_sleep'] as const;
-const CREATIVITY_SLUGS = ['lsn_creativity'] as const;
+const BLOCKED_SUCCESSOR_MEDIA_SLUGS = ['lsn_prepare_preschool', 'lsn_creativity'] as const;
 
 describe('published language-development lesson illustrations', () => {
   it('maps every targeted production slug to its own versioned WebP', () => {
@@ -45,26 +44,13 @@ describe('published language-development lesson illustrations', () => {
   });
 });
 
-describe('published preparing-for-preschool lesson illustrations', () => {
-  it('maps every targeted production slug to its own versioned WebP', () => {
-    const paths = PREPARING_FOR_PRESCHOOL_SLUGS.map((slug) => lessonIllustration(slug));
-
-    expect(new Set(paths).size).toBe(PREPARING_FOR_PRESCHOOL_SLUGS.length);
-    PREPARING_FOR_PRESCHOOL_SLUGS.forEach((slug) => {
-      expect(lessonIllustration(slug)).toMatch(
-        new RegExp(`/lessons/preparing_for_preschool/${slug}\\.[a-f0-9]{10}\\.webp$`),
-      );
+describe('successor lesson illustration fail-closed policy', () => {
+  it('hides static images that were not reviewed against the exact successor copy', () => {
+    BLOCKED_SUCCESSOR_MEDIA_SLUGS.forEach((slug) => {
+      expect(lessonIllustration(slug)).toBeUndefined();
     });
-  });
-
-  it('uses a unique file that exists and never falls back by category', () => {
-    const assetPath = lessonIllustration(PREPARING_FOR_PRESCHOOL_SLUGS[0]);
-    const otherPaths = LANGUAGE_DEVELOPMENT_SLUGS.map((slug) => lessonIllustration(slug));
-
-    expect(assetPath).toBeDefined();
-    expect(otherPaths).not.toContain(assetPath);
-    expect(existsSync(resolve(process.cwd(), 'public', assetPath!.slice(1)))).toBe(true);
     expect(lessonIllustration('preparing_for_preschool')).toBeUndefined();
+    expect(lessonIllustration('creativity')).toBeUndefined();
   });
 });
 
@@ -84,7 +70,6 @@ describe('published problem-solving lesson illustrations', () => {
     const assetPath = lessonIllustration(PROBLEM_SOLVING_SLUGS[0]);
     const otherPaths = [
       ...LANGUAGE_DEVELOPMENT_SLUGS,
-      ...PREPARING_FOR_PRESCHOOL_SLUGS,
     ].map((slug) => lessonIllustration(slug));
 
     expect(assetPath).toBeDefined();
@@ -110,7 +95,6 @@ describe('published screen-time lesson illustrations', () => {
     const assetPath = lessonIllustration(SCREEN_TIME_SLUGS[0]);
     const otherPaths = [
       ...LANGUAGE_DEVELOPMENT_SLUGS,
-      ...PREPARING_FOR_PRESCHOOL_SLUGS,
       ...PROBLEM_SOLVING_SLUGS,
     ].map((slug) => lessonIllustration(slug));
 
@@ -137,7 +121,6 @@ describe('published sleep lesson illustrations', () => {
     const assetPath = lessonIllustration(SLEEP_SLUGS[0]);
     const otherPaths = [
       ...LANGUAGE_DEVELOPMENT_SLUGS,
-      ...PREPARING_FOR_PRESCHOOL_SLUGS,
       ...PROBLEM_SOLVING_SLUGS,
       ...SCREEN_TIME_SLUGS,
     ].map((slug) => lessonIllustration(slug));
@@ -146,34 +129,5 @@ describe('published sleep lesson illustrations', () => {
     expect(otherPaths).not.toContain(assetPath);
     expect(existsSync(resolve(process.cwd(), 'public', assetPath!.slice(1)))).toBe(true);
     expect(lessonIllustration('sleep')).toBeUndefined();
-  });
-});
-
-describe('production creativity lesson illustrations', () => {
-  it('maps every targeted production slug to its own versioned WebP', () => {
-    const paths = CREATIVITY_SLUGS.map((slug) => lessonIllustration(slug));
-
-    expect(new Set(paths).size).toBe(CREATIVITY_SLUGS.length);
-    CREATIVITY_SLUGS.forEach((slug) => {
-      expect(lessonIllustration(slug)).toMatch(
-        new RegExp(`/lessons/creativity/${slug}\\.[a-f0-9]{10}\\.webp$`),
-      );
-    });
-  });
-
-  it('uses a unique file that exists and never falls back by category', () => {
-    const assetPath = lessonIllustration(CREATIVITY_SLUGS[0]);
-    const otherPaths = [
-      ...LANGUAGE_DEVELOPMENT_SLUGS,
-      ...PREPARING_FOR_PRESCHOOL_SLUGS,
-      ...PROBLEM_SOLVING_SLUGS,
-      ...SCREEN_TIME_SLUGS,
-      ...SLEEP_SLUGS,
-    ].map((slug) => lessonIllustration(slug));
-
-    expect(assetPath).toBeDefined();
-    expect(otherPaths).not.toContain(assetPath);
-    expect(existsSync(resolve(process.cwd(), 'public', assetPath!.slice(1)))).toBe(true);
-    expect(lessonIllustration('creativity')).toBeUndefined();
   });
 });

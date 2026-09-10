@@ -201,7 +201,7 @@ describe('exact reading-together lesson AI visibility', () => {
     if (drift === 'duplicate_config') f.tables.aiPublicationConfig.push({ ...f.tables.aiPublicationConfig[0] });
     if (drift === 'twelfth_active') { addPreviousTen(f.tables); f.tables.aiPublicationReleases.push({ ...f.release }); }
     if (drift === 'duplicate_release_id') { addPreviousTen(f.tables); f.tables.aiPublicationReleases[1].releaseId = releaseId; }
-    if (drift === 'unknown_target') f.tables.aiPublicationReleases.push({ releaseId: 'other', status: 'active', contentType: 'lesson', contentSlug: 'lsn_creativity', targetKey: 'lesson\0lsn_creativity' });
+    if (drift === 'unknown_target') f.tables.aiPublicationReleases.push({ releaseId: 'other', status: 'active', contentType: 'lesson', contentSlug: 'lsn_unknown', targetKey: 'lesson\0lsn_unknown' });
     if (drift === 'copy') f.content.titleMm = 'Changed';
     if (drift === 'revision') f.content.reviewRevision = 3;
     if (drift === 'human_summary') f.content.reviewerId = 'not-an-actual-human-review';

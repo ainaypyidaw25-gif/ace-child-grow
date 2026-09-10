@@ -895,15 +895,16 @@ describe('clinically sourced content corrections', () => {
   it('describes preschool readiness without ranking one developmental domain above all others', () => {
     const lesson = dataFor('lsn_prepare_preschool');
     expect((lesson.body as { en: string }).en).toContain(
-      'includes early learning as well as managing brief separation',
+      'Preschool readiness has more than one part.',
     );
     expect((lesson.takeaway as { en: string }).en).toBe(
-      'Social-emotional and self-help skills are important parts of preschool readiness.',
+      'Practise a new-place routine and one safe self-help step.',
     );
     expect(JSON.stringify(lesson)).not.toContain('matter most');
-    expect(sourcesForContent('lsn_prepare_preschool', 'lesson')).toContain(
-      'us-hhs-head-start-elof-2015',
-    );
+    expect(sourcesForContent('lsn_prepare_preschool', 'lesson')).toEqual([
+      'cdc-milestones-2026',
+      'cdc-positive-parenting-preschoolers-2026',
+    ]);
   });
 
   it('uses WHO/UNICEF CCD only for claim-direct caregiver play and communication guidance', () => {

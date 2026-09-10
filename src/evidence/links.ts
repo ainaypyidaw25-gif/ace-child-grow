@@ -276,7 +276,7 @@ export const EXPLICIT_CONTENT_SOURCES: Record<string, string[]> = {
   // --- Lessons --------------------------------------------------------------
   lsn_what_is_development: ['who-nurturing-care-2018', 'jr-lancet-ecd-coming-of-age-2017', 'aap-milestones-2022', 'jr-lancet-nurturing-care-2017', 'who-nurturing-care-practice-guide-2023', 'who-ncf-progress-2023', 'unicef-early-moments-2017', 'jr-lancet-inequality-2011', 'tb-caring-birth-to-5-8e-2024'],
   lsn_power_of_play: ['aap-power-of-play-2018', 'jr-jamaica-1991', 'who-care-for-child-development-2012', 'who-improving-ecd-2020'],
-  lsn_talk_more: ['jr-weisleder-2013', 'nhs-learn-to-talk-2023', 'tb-paul-language-6e-2024'],
+  lsn_talk_more: ['cdc-milestones-2026', 'jr-weisleder-2013'],
   lsn_reading_together: ['jr-dowdall-bookreading-2020', 'aap-literacy-2024', 'hc-early-literacy-2023'],
   lsn_gentle_discipline: ['aap-toxic-stress-2021', 'cdc-positive-parenting-toddlers-2026', 'jr-plosmed-parenting-2021'],
   lsn_balanced_meals: ['who-complementary-feeding-2023', 'cdc-foods-6-24m-2025', 'nice-ng247-maternal-child-nutrition-2025', 'who-unicef-iycf-strategy-2003', 'who-bfhi-2017', 'who-bf-counselling-2018', 'who-iycf-indicators-2021', 'unicef-sowc-2019', 'jr-lancet-undernutrition-2013'],
@@ -284,15 +284,15 @@ export const EXPLICIT_CONTENT_SOURCES: Record<string, string[]> = {
   lsn_home_safety: ['aap-drowning-2021', 'tb-bright-futures-4e-2017', 'cdc-positive-parenting-toddlers-2026', 'tb-caring-birth-to-5-8e-2024'],
   lsn_screen_time: ['aap-digital-ecosystems-policy-2026', 'aap-digital-ecosystems-technical-2026', 'jr-madigan-screen-language-2020', 'who-pa-sleep-under5-2019', 'hc-screen-time-5cs-2024', 'hc-screen-time-5cs-infants-2024', 'hc-screen-time-5cs-overview-2026', 'jr-madigan-screen-asq-2019'],
   lsn_big_feelings: ['aap-toxic-stress-2021', 'us-hhs-head-start-elof-2015', 'hc-mental-emotional-development-2026'],
-  lsn_making_friends: ['aap-power-of-play-2018', 'us-hhs-head-start-elof-2015', 'hc-mental-emotional-development-2026'],
+  lsn_making_friends: ['aap-power-of-play-2018', 'cdc-positive-parenting-preschoolers-2026'],
   // The AI-audited educational preview uses one exact, government-authored
   // early-mathematics framework so its release can avoid mutating the widely
   // shared AAP Power of Play source record in production.
   lsn_early_math: ['naeyc-nurturing-early-math-play-2022'],
-  lsn_creativity: ['aap-power-of-play-2018'],
+  lsn_creativity: ['aap-power-of-play-2018', 'cdc-positive-parenting-preschoolers-2026'],
   lsn_problem_solving_parenting: ['jr-plosmed-parenting-2021', 'cdc-positive-parenting-toddlers-2026', 'jr-pakistan-lhw-2014'],
   lsn_special_needs_awareness: ['who-unicef-developmental-disabilities-2023', 'unicef-seen-counted-included-2022', 'aap-surveillance-2020', 'tb-ccitsn-3e-2004'],
-  lsn_prepare_preschool: ['tb-handbook-ecse-2016', 'us-hhs-head-start-elof-2015'],
+  lsn_prepare_preschool: ['cdc-milestones-2026', 'cdc-positive-parenting-preschoolers-2026'],
   lsn_prepare_school: ['hc-early-literacy-2023', 'tb-handbook-ecse-2016', 'aap-literacy-2024'],
   lsn_doctor_visits: ['tb-bright-futures-4e-2017', 'nhs-baby-reviews-2023', 'cdc-monitoring-screening-2026', 'nhs-vaccinations-2023', 'cdc-immunization-schedule-2025', 'who-ia2030-2020', 'myanmar-nsp-newborn-child-2015'],
   lsn_parent_wellbeing: ['nice-ng194-postnatal-2021', 'aap-toxic-stress-2021'],
