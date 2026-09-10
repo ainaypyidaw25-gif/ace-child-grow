@@ -5,6 +5,7 @@ import {
   CDC_TODDLERS_2_3_SOURCE_ID,
   CHILD_DEVELOPMENT_REFREEZE_COPY,
 } from '../../../../convex/lib/childDevelopmentRefreezeCorrectionCopy';
+import { isSixPictureStorySuccessorSlug } from '../../../../convex/lib/sixPictureStorySuccessorScope';
 
 const b = (mm: string, en: string): Bilingual => ({ mm, en });
 type Skill = [domain: string, title: Bilingual, observe: Bilingual];
@@ -76,16 +77,19 @@ const CCD_OLDER_ACTIVITY_SLUGS = new Set([
   'act_tower_crash_2y',
   'act_action_song_2y',
   'act_large_puzzle_2y',
-  'act_picture_story_2_5y',
   'act_helper_sort_2_5y',
-  'act_picture_story_3y',
   'act_helper_sort_3y',
-  'act_picture_story_3_5y',
   'act_helper_sort_3_5y',
-  'act_picture_story_4y',
-  'act_picture_story_4_5y',
   'act_helper_sort_4_5y',
 ]);
+
+const PICTURE_STORY_SUCCESSOR_EVIDENCE_SUMMARY =
+  'Official play and milestone sources informed this optional picture-story activity. It is not a developmental test.';
+
+const PICTURE_STORY_SUCCESSOR_VARIATION = b(
+  'ကလေး စိတ်ဝင်စားမှု လျော့သွားလျှင် ပိုလွယ်အောင်လုပ်ပါ သို့မဟုတ် ရပ်နားပါ။',
+  'Simplify or stop when the child loses interest.',
+);
 
 const GUIDE_EDITORIAL: Record<string, GuideEditorial> = {
   nutrition: {
@@ -147,32 +151,32 @@ const PRESCHOOL_SOCIAL: Record<string, [Bilingual, Bilingual]> = {
 const PRESCHOOL_PLAY: Record<string, Play[]> = {
   '2_5y': [
     ['move_path_2_5y', b('မျဉ်းကျော် လှမ်းကစားခြင်း', 'Step-over path'), b('ခြေလှမ်းထိန်းချုပ်မှုနှင့် ဟန်ချက်', 'Step control and balance'), b('စက္ကူတိပ်မျဉ်း နှစ်ကြောင်း', 'Two paper-tape lines'), b('မျဉ်းတစ်ကြောင်းမှ တစ်ကြောင်းသို့ လှမ်းကာ “ရပ်”၊ “သွား” ဟု တစ်ဆင့်စီ ပြောပါ။', 'Step from one line to the next using one cue at a time: “stop” and “go.”'), b('ချော်မလဲနိုင်သော ကြမ်းပြင်တွင် လက်လှမ်းမီအနီးမှ ကြီးကြပ်ပါ။', 'Supervise within reach on a non-slip floor.'), ['gross_motor', 'play']],
-    ['picture_story_2_5y', b('ပုံနှစ်ပုံကို အမည်ပေးခြင်း', 'Name two pictures'), b('စကားလုံးနှင့် ပုံချိတ်ဆက်မှု', 'Connecting words and pictures'), b('ရင်းနှီးသော ပုံနှစ်ပုံ', 'Two familiar pictures'), b('ပုံတစ်ပုံစီကို ရွေးခိုင်းပြီး အရာဝတ္ထုနှင့် လုပ်ဆောင်ချက်ကို စကားတိုဖြင့် ပြောပါ။', 'Let the child choose each picture and name the object or action in a short phrase.'), b('အဖြေမှားသည်ဟု မပြောဘဲ ကလေးပြောသည့်စကားကို တိုးချဲ့ပေးပါ။', 'Do not label answers wrong; expand the child’s words.'), ['language', 'cognitive']],
+    ['picture_story_2_5y', b('ပုံနှစ်ပုံကို အမည်ပေးခြင်း', 'Name two pictures'), b('ရင်းနှီးသော ပုံများအကြောင်း ပြောဆိုရန် အခွင့်အရေး', 'An opportunity to talk about familiar pictures'), b('စာအုပ်ထဲက ပုံများ၊ ကိုယ်တိုင်ဆွဲထားသော ပုံများ သို့မဟုတ် ခိုင်ခံ့သော ပုံကတ်ကြီးနှစ်ကတ်', 'Two pictures in a book, drawings, or large sturdy picture cards'), b('ပုံတစ်ပုံစီကို ကလေးရွေးစေပြီး မြင်သည့်အရာ သို့မဟုတ် လုပ်ဆောင်ချက်အကြောင်း ပြောရန် ဖိတ်ခေါ်ပါ။ အသံ၊ အမူအရာ သို့မဟုတ် စကားလုံးဖြင့် တုံ့ပြန်မှုကို လက်ခံပါ။', 'Let the child choose each picture and invite them to talk about an object or action they see. Accept sounds, gestures, or words.'), b('အဖြေကို အမှားဟု မသတ်မှတ်ပါနှင့်။ ပုံကတ်သုံးပါက ကလေးပါးစပ်ထဲ မဝင်နိုင်အောင် ကြီးပြီး ခိုင်ခံ့သောကတ်များကို ရွေးပါ။', 'Do not label an answer wrong. If using cards, choose large, sturdy ones that cannot fit in the child’s mouth.'), ['language', 'play']],
     ['helper_sort_2_5y', b('ခြေအိတ်တွဲရှာခြင်း', 'Find matching socks'), b('တူရာရှာခြင်းနှင့် အိမ်မှုပါဝင်မှု', 'Matching and helping at home'), b('သန့်ရှင်းသော ခြေအိတ် ၃ တွဲ', 'Three pairs of clean socks'), b('တူသောခြေအိတ်နှစ်စုံကို ရှာပြီး ဘေးချင်းကပ်ထားခိုင်းပါ။', 'Find matching socks and place each pair together.'), b('ကလေးပါးစပ်ထဲဝင်နိုင်သော ပစ္စည်းငယ် မသုံးပါနှင့်။', 'Do not use small items that can fit in the child’s mouth.'), ['cognitive', 'self_help']],
   ],
   '3y': [
     ['move_path_3y', b('နှစ်ဆင့် လှုပ်ရှားကစားခြင်း', 'Two-step movement game'), b('နှစ်ဆင့်ညွှန်ကြားချက်နှင့် ကိုယ်လက်ညှိနှိုင်းမှု', 'Two-step directions and coordination'), b('စက္ကူတိပ်မျဉ်း', 'A paper-tape line'), b('“မျဉ်းပေါ်လျှောက်ပြီး လက်ခုပ်တီး” ကဲ့သို့ နှစ်ဆင့်ကို အတူစမ်းပါ။', 'Try two linked steps such as “walk on the line, then clap.”'), b('နေရာလွတ်နှင့် ချော်မလဲသောကြမ်းပြင်ကို သုံးပါ။', 'Use a clear, non-slip floor.'), ['gross_motor', 'communication']],
-    ['picture_story_3y', b('ဖြစ်ရပ်သုံးပုံ ပြောခြင်း', 'Tell a three-picture event'), b('အစ၊ အလယ်၊ အဆုံး စကားပြောမှု', 'Beginning-middle-end language'), b('နေ့စဉ်ဖြစ်ရပ် ပုံသုံးပုံ', 'Three pictures of a daily event'), b('ပုံများကိုကြည့်ပြီး “အရင်ဘာဖြစ်လဲ၊ ပြီးတော့ဘာလဲ” ဟု မေးပါ။', 'Ask, “What happened first, and what happened next?”'), b('ကလေး၏ စကားအဆင့်နှင့် ကိုက်ညီအောင် မေးခွန်းတိုသုံးပါ။', 'Use short questions suited to the child’s language level.'), ['language', 'cognitive']],
+    ['picture_story_3y', b('ဖြစ်ရပ်သုံးပုံ ပြောခြင်း', 'Tell a three-picture event'), b('အစတွင် ဖြစ်နိုင်သည့်အရာနှင့် နောက်ဖြစ်နိုင်သည့်အရာကို အတူပြောဆိုခြင်း', 'Talk together about what might happen first and next'), b('နေ့စဉ်ဖြစ်ရပ် ပုံသုံးပုံ', 'Three pictures of a daily event'), b('ပုံများကို အတူကြည့်ပြီး “အစမှာ ဘာဖြစ်နိုင်လဲ၊ နောက်တော့ ဘာဖြစ်နိုင်လဲ” ဟု မေးပါ။ ကလေးက လက်ညှိုးထိုးခြင်း၊ အမူအရာ သို့မဟုတ် စကားလုံးဖြင့် ပါဝင်နိုင်ပါသည်။', 'Look at the pictures together and ask, “What might happen first? What might happen next?” The child may point, gesture, or talk.'), b('မေးခွန်းတိုတိုသုံး၍ ကလေး၏ စိတ်ဝင်စားမှုကို လိုက်ပါ။ ဤကစားနည်းသည် စစ်ဆေးမှု မဟုတ်ပါ။', 'Keep questions short and follow the child’s interest; this is play, not a test.'), ['language', 'play']],
     ['helper_sort_3y', b('အရောင်တစ်မျိုးစီ ခွဲခြင်း', 'Sort by one color'), b('အရောင်ခွဲခြားမှုနှင့် အိမ်မှုပါဝင်မှု', 'Color sorting and helping'), b('အရောင်ကွဲ ပလတ်စတစ်ခွက် သို့မဟုတ် အဝတ်များ', 'Colored plastic cups or clothes'), b('အရောင်တစ်မျိုးကို စံပြပြီး ကျန်ပစ္စည်းများကို အရောင်အလိုက် ခွဲခိုင်းပါ။', 'Model one color group, then sort the rest by color.'), b('ဖန်၊ ချွန်ထက်သည့်ပစ္စည်း သို့မဟုတ် ဆေးဗူး မသုံးပါနှင့်။', 'Do not use glass, sharp items, or medicine containers.'), ['cognitive', 'self_help']],
   ],
   '3_5y': [
     ['move_path_3_5y', b('ခုန်–လှည့်–ရပ် လမ်းကြောင်း', 'Jump-turn-stop path'), b('ဟန်ချက်ပြန်ထိန်းမှုနှင့် နားထောင်မှု', 'Balance recovery and listening'), b('စက္ကူတိပ် အမှတ်သုံးခု', 'Three paper-tape markers'), b('အမှတ်များတွင် ခုန်၊ လှည့်၊ ရပ် လုပ်ဆောင်ချက်ကို အစီအစဉ်ပြောင်း၍ ပြောပါ။', 'Call out jump, turn, and stop at the markers in changing order.'), b('ပရိဘောဂနှင့် ဝေးသော ချော်မလဲသည့်နေရာတွင် ကစားပါ။', 'Play on a non-slip surface away from furniture.'), ['gross_motor', 'play']],
-    ['picture_story_3_5y', b('နေ့စဉ်လုပ်ရိုးလုပ်စဉ် ပုံစီခြင်း', 'Sequence a daily routine'), b('ဖြစ်ရပ်အစီအစဉ်နှင့် စကားပြောမှု', 'Event sequence and language'), b('သွားတိုက်ခြင်းကဲ့သို့ လုပ်ရိုးလုပ်စဉ်ပုံသုံးပုံ', 'Three pictures of a routine such as brushing'), b('ပုံများကို ရောပြီး ကလေးကို အစီအစဉ်ပြန်စီကာ ပြောပြခိုင်းပါ။', 'Mix the pictures, then invite the child to order and describe them.'), b('အမှားပြင်ပေးမည့်အစား “နောက်ဘာဖြစ်မလဲ” ဟု မေးပါ။', 'Instead of correcting, ask, “What happens next?”'), ['language', 'cognitive']],
+    ['picture_story_3_5y', b('နေ့စဉ်လုပ်ရိုးလုပ်စဉ် ပုံစီခြင်း', 'Sequence a daily routine'), b('ပုံများဖြင့် အဖြစ်အပျက်အစီအစဉ်တစ်ခု ဖန်တီးကစားခြင်း', 'Make and talk through a picture sequence'), b('ရင်းနှီးသော လုပ်ရိုးလုပ်စဉ် ပုံသုံးပုံ', 'Three pictures from a familiar routine'), b('ကလေးအတွက် သင့်လျော်သည်ဟု ထင်ရသည့်ပုံစံဖြင့် ပုံများကို စီကာ နောက်ဘာဖြစ်မည်ကို ပြောရန် ဖိတ်ခေါ်ပါ။ တစ်မျိုးထက်ပိုသော ပြောပုံကိုလည်း လက်ခံပါ။', 'Invite the child to arrange the pictures in a way that makes sense to them and talk about what happens next. More than one telling is okay.'), b('အစီအစဉ်ကို စစ်ဆေးချက်ကဲ့သို့ မပြင်ပါနှင့်။ “နောက်ဘာဖြစ်မလဲ” ဟု မေးပြီး အခြားပြောပုံကိုလည်း လက်ခံပါ။', 'Do not correct the order as a test; ask what happens next and accept another telling.'), ['language', 'play']],
     ['helper_sort_3_5y', b('အသုံးအလိုက် နှစ်စုခွဲခြင်း', 'Sort into two uses'), b('အမျိုးအစားခွဲခြင်းနှင့် ရှင်းပြမှု', 'Categorizing and explaining'), b('သန့်ရှင်းသော မီးဖိုချောင်နှင့် အဝတ်အစားပစ္စည်းကြီးများ', 'Large safe kitchen and clothing items'), b('ပစ္စည်းများကို “မီးဖိုချောင်သုံး” နှင့် “အဝတ်ဝတ်ရာသုံး” ဟု နှစ်စုခွဲပြီး ဘာကြောင့်လဲ မေးပါ။', 'Sort into “kitchen” and “clothing” groups and ask why.'), b('ချွန်ထက်၊ ကွဲလွယ် သို့မဟုတ် မျိုချနိုင်သောပစ္စည်း မသုံးပါနှင့်။', 'Avoid sharp, breakable, or swallowable items.'), ['cognitive', 'self_help']],
   ],
   '4y': [
     ['move_path_4y', b('ဘောလုံးယူ အတားအဆီးလမ်းကြောင်း', 'Ball-carry obstacle path'), b('ဟန်ချက်၊ လမ်းကြောင်းစီစဉ်မှုနှင့် လက်ထိန်းချုပ်မှု', 'Balance, motor planning, and hand control'), b('ဘောလုံးပျော့နှင့် စက္ကူတိပ်', 'A soft ball and paper tape'), b('ဘောလုံးကိုကိုင်၍ မျဉ်းကွေ့အတိုင်း လျှောက်ပြီး အဆုံးတွင် အဖော်ထံ လှိမ့်ပေးပါ။', 'Carry the ball along a curved line, then roll it to a partner.'), b('ပျော့သောဘောလုံးသုံးပြီး လမ်းကြောင်းကို ပရိဘောဂမှ ရှင်းထားပါ။', 'Use a soft ball and clear the path of furniture.'), ['gross_motor', 'problem_solving']],
-    ['picture_story_4y', b('အစနှင့်အဆုံးပါ ဇာတ်လမ်း', 'Story with a beginning and ending'), b('ဇာတ်လမ်းဖွဲ့မှုနှင့် စကားပြောမှု', 'Narrative and language'), b('လူနှင့်နေရာပါ ပုံသုံးပုံ', 'Three pictures showing people and places'), b('ဇာတ်ကောင်၊ ဖြစ်ရပ်နှင့် အဆုံးသတ်ကို ကလေးစိတ်ကူးဖြင့် ပြောခိုင်းပါ။', 'Invite the child to describe a character, an event, and an ending.'), b('စိတ်ကူးကို လက်ခံပြီး လိုအပ်မှ စကားလုံးတစ်လုံးစီ ဖြည့်ပေးပါ။', 'Accept the child’s ideas and add only an occasional helpful word.'), ['language', 'play']],
+    ['picture_story_4y', b('အစနှင့်အဆုံးပါ ဇာတ်လမ်း', 'Story with a beginning and ending'), b('ဇာတ်လမ်းပြောကစားခြင်း', 'Storytelling practice'), b('လူနှင့်နေရာပါ ပုံသုံးပုံ', 'Three pictures showing people and places'), b('ဇာတ်ကောင်၊ ဖြစ်ရပ်နှင့် အဆုံးသတ်တစ်ခုကို စိတ်ကူးကာ ပြောရန် ကလေးကို ဖိတ်ခေါ်ပါ။', 'Invite the child to imagine and describe a character, an event, and an ending.'), b('ကလေး၏ စိတ်ကူးကို လက်ခံပြီး လိုအပ်မှသာ စကားလုံးတစ်လုံးစီ ကူညီဖြည့်ပေးပါ။ ဇာတ်လမ်းအတွက် အဖြေမှန်တစ်မျိုးတည်း မရှိပါ။', 'Accept the child’s ideas and add only an occasional helpful word. There is no single correct story.'), ['language', 'play']],
     ['helper_sort_4y', b('အခန်းကဏ္ဍပါ အိမ်မှုကစားခြင်း', 'Pretend household roles'), b('စီစဉ်မှုနှင့် ပူးပေါင်းလုပ်ဆောင်မှု', 'Planning and cooperation'), b('သန့်ရှင်းသော အဝတ်နှင့် ပလတ်စတစ်ခွက်', 'Clean clothes and plastic cups'), b('“အဝတ်ခေါက်သူ”၊ “ခွက်စီသူ” အခန်းကဏ္ဍရွေးပြီး အလုပ်အစီအစဉ်ကို အတူပြောပါ။', 'Choose roles such as clothes folder and cup arranger, then plan the steps together.'), b('ကွဲလွယ်၊ ချွန်ထက် သို့မဟုတ် ဓာတုပစ္စည်းပါသောအရာ မသုံးပါနှင့်။', 'Avoid breakable, sharp, or chemical-containing items.'), ['social', 'self_help']],
   ],
   '4_5y': [
     ['move_path_4_5y', b('ခြေတစ်ဖက်ဟန်ချက် လမ်းကြောင်း', 'One-foot balance path'), b('ဟန်ချက်နှင့် လှုပ်ရှားမှုအစီအစဉ်', 'Balance and movement sequencing'), b('စက္ကူတိပ်အမှတ်များ', 'Paper-tape markers'), b('အမှတ်တစ်ခုစီတွင် ခြေတစ်ဖက်ပေါ် ခဏရပ်ပြီး နောက်အမှတ်သို့ လျှောက်ပါ။', 'Pause briefly on one foot at each marker, then walk to the next.'), b('လူကြီးအနီးတွင် ပြားညီ၊ ချော်မလဲသည့်နေရာ၌ ကစားပါ။', 'Play near an adult on a flat, non-slip surface.'), ['gross_motor', 'play']],
-    ['picture_story_4_5y', b('ပုံလေးပုံ အစီအစဉ်ဇာတ်လမ်း', 'Four-picture sequence story'), b('အစီအစဉ်မှတ်ဉာဏ်နှင့် စကားပြောမှု', 'Sequence memory and language'), b('ဖြစ်ရပ်ဆက်စပ်သည့် ပုံလေးပုံ', 'Four pictures from one event'), b('ပုံလေးပုံကို စီပြီး “အရင်၊ ပြီးတော့၊ နောက်ဆုံး” စကားလုံးဖြင့် ပြောခိုင်းပါ။', 'Order four pictures and retell using “first,” “then,” and “last.”'), b('ကလေးမသေချာလျှင် ရွေးချယ်စရာနှစ်ခုသာ ပေးပါ။', 'If the child is unsure, offer only two choices.'), ['language', 'cognitive']],
+    ['picture_story_4_5y', b('ပုံလေးပုံ အစီအစဉ်ဇာတ်လမ်း', 'Four-picture sequence story'), b('ပုံဇာတ်လမ်းတွင် အစီအစဉ်ပြ စကားလုံးများကို အသုံးပြုကစားခြင်း', 'Practise sequence words in a picture story'), b('ဖြစ်ရပ်ဆက်စပ်သည့် ပုံလေးပုံ', 'Four pictures from one event'), b('ပုံလေးပုံကို စီကာ “အရင်၊ ပြီးတော့၊ နောက်ဆုံး” ကဲ့သို့ စကားလုံးများသုံးပြီး ဇာတ်လမ်းပြောရန် ကလေးကို ဖိတ်ခေါ်ပါ။ အစီအစဉ်သည် အဖြေတစ်မျိုးတည်းနှင့် ကိုက်ညီရန် မလိုပါ။', 'Invite the child to arrange four pictures and tell a story using words such as “first,” “then,” and “last.” The order does not need to match one answer.'), b('ကလေးလိုအပ်ပါက ပုံအရေအတွက်ကို လျှော့ပေးပါ။ ဤကစားနည်းကို မှတ်ဉာဏ် သို့မဟုတ် ဖွံ့ဖြိုးမှုစစ်ဆေးချက်အဖြစ် မသုံးပါနှင့်။', 'Offer fewer pictures if wanted; do not treat the activity as a memory or developmental test.'), ['language', 'play']],
     ['helper_sort_4_5y', b('ခွဲပြီး ရေတွက်ကူညီခြင်း', 'Sort and count to help'), b('အမျိုးအစားခွဲခြင်း၊ ရေတွက်ခြင်းနှင့် ကိုယ်တိုင်လုပ်နိုင်မှု', 'Sorting, counting, and independence'), b('သန့်ရှင်းသော ဇွန်းကြီး သို့မဟုတ် ခြေအိတ်များ', 'Clean large spoons or socks'), b('အမျိုးအစားခွဲပြီး အစုတစ်စုလျှင် ၁ မှ ၅ အထိ ရေတွက်ပါ။', 'Sort into groups and count one to five in each group.'), b('အသုံးမပြုမီ ပစ္စည်းအရွယ်နှင့် သန့်ရှင်းမှုကို လူကြီးစစ်ပါ။', 'An adult should check item size and cleanliness first.'), ['cognitive', 'self_help']],
   ],
   '5y': [
     ['move_path_5y', b('ခုန်ပုံစံ မှတ်သားကစားခြင်း', 'Remember-the-hop pattern'), b('ဟန်ချက်၊ မှတ်ဉာဏ်နှင့် စည်းမျဉ်းလိုက်နာမှု', 'Balance, memory, and rule-following'), b('စက္ကူတိပ်အမှတ် လေးခု', 'Four paper-tape markers'), b('“ညာ–ဘယ်–နှစ်ခါ” ကဲ့သို့ ခုန်ပုံစံတိုတစ်ခု ပြပြီး ကလေးကို ပြန်လုပ်ခိုင်းပါ။', 'Model a short hop pattern such as “right-left-twice,” then invite the child to repeat it.'), b('အပြိုင်မလုပ်ဘဲ ကလေးပင်ပန်းလျှင် ရပ်နားပါ။', 'Do not make it a race; stop when the child is tired.'), ['gross_motor', 'cognitive']],
-    ['picture_story_5y', b('ပြဿနာနှင့် ဖြေရှင်းချက်ပါ ဇာတ်လမ်း', 'Problem-and-solution story'), b('အကြောင်းအကျိုးနှင့် ဇာတ်လမ်းဖွဲ့မှု', 'Cause-and-effect and narrative'), b('စိတ်ကူးပုံသုံးပုံ သို့မဟုတ် လေးပုံ', 'Three or four imaginary-scene pictures'), b('ဇာတ်ကောင်မှာ ဘာပြဿနာရှိသလဲ၊ ဘယ်လိုဖြေရှင်းမလဲ၊ နောက်ဆုံးဘာဖြစ်လဲ မေးပါ။', 'Ask what problem the character has, how it could be solved, and what happens at the end.'), b('အဖြေတစ်မျိုးတည်း မတောင်းဘဲ ဘေးကင်းသော စိတ်ကူးများကို လက်ခံပါ။', 'Do not require one correct answer; accept safe, imaginative solutions.'), ['language', 'problem_solving']],
+    ['picture_story_5y', b('ပြဿနာနှင့် ဖြေရှင်းချက်ပါ ဇာတ်လမ်း', 'Problem-and-solution story'), b('ပြဿနာ၊ ဖြစ်နိုင်သော စိတ်ကူးများနှင့် အဆုံးသတ်တစ်ခုကို စိတ်ကူးကစားခြင်း', 'Imagine a problem, possible ideas, and an ending'), b('စိတ်ကူးပုံသုံးပုံ သို့မဟုတ် လေးပုံ', 'Three or four imaginary-scene pictures'), b('ဇာတ်ကောင်တွင် ဘာပြဿနာရှိနိုင်သလဲ၊ ဘာစိတ်ကူးများ စမ်းကြည့်နိုင်သလဲနှင့် နောက်ဆုံး ဘာဖြစ်နိုင်သလဲကို မေးပါ။', 'Ask what problem the character might have, what ideas they could try, and what might happen at the end.'), b('အဖြေတစ်မျိုးတည်းကို မတောင်းဆိုပါနှင့်။ ကြင်နာမှုရှိသော သို့မဟုတ် လက်တွေ့လုပ်ဆောင်နိုင်သည့် စိတ်ကူးများကို လက်ခံပါ။', 'Do not require one correct answer; accept kind or workable ideas.'), ['language', 'play']],
     ['helper_sort_5y', b('စည်းမျဉ်းရွေး ခွဲခြားကစားခြင်း', 'Choose-a-rule sorting'), b('အကြောင်းပြချက်၊ စီစဉ်မှုနှင့် တာဝန်ယူမှု', 'Reasoning, planning, and responsibility'), b('သန့်ရှင်းသော အိမ်သုံးပစ္စည်းကြီးများ', 'Large, clean household items'), b('ကလေးကို ခွဲမည့်စည်းမျဉ်းရွေးခိုင်းပြီး အုပ်စုတစ်စုစီကို ဘာကြောင့် အဲဒီလိုထားသလဲ ရှင်းပြခိုင်းပါ။', 'Let the child choose the sorting rule and explain why each item belongs in its group.'), b('ဖန်၊ ဆေးဝါး၊ ဓာတုပစ္စည်းနှင့် ချွန်ထက်သည့်ပစ္စည်း မသုံးပါနှင့်။', 'Do not use glass, medicines, chemicals, or sharp items.'), ['cognitive', 'self_help']],
   ],
 };
@@ -331,19 +335,24 @@ for (const band of bands) {
     }), guideEvidenceSummary, guideSources));
   }
   for (const [slug, title, goal, materials, step, safety, domains] of band.play) {
+    const successor = isSixPictureStorySuccessorSlug(`act_${slug}`);
+    const evidenceSummary = successor
+      ? PICTURE_STORY_SUCCESSOR_EVIDENCE_SUMMARY
+      : `Play and developmental references support this age-adapted activity for ${band.en}.`;
     const activityItem = activity({ slug, title, summary: goal, ageGroupKey: band.key, domains, difficulty: 'easy', durationMinutes: 10,
       materials, setup: b('ဘေးကင်းပြီး နေရာလွတ်ရှိသောနေရာကို ရွေးပါ။', 'Choose a safe, clear space.'), instructions: [step], safety,
       indoor: true, outdoor: true, oneChild: true, group: true, parentChild: true,
-      outcomes: [goal], variations: [b('ကလေးပင်ပန်းလျှင် အဆင့်ကို လျှော့ပြီး ရပ်နားပါ။', 'Simplify or stop when the child is tired.')],
-      evidenceSummary: `Play and developmental references support this age-adapted activity for ${band.en}.`,
+      outcomes: [goal],
+      variations: [successor
+        ? PICTURE_STORY_SUCCESSOR_VARIATION
+        : b('ကလေးပင်ပန်းလျှင် အဆင့်ကို လျှော့ပြီး ရပ်နားပါ။', 'Simplify or stop when the child is tired.')],
+      evidenceSummary,
     });
     const activitySources = [...ACTIVITY_SOURCES];
-    if (CCD_OLDER_ACTIVITY_SLUGS.has(activityItem.slug)) {
+    if (!successor && CCD_OLDER_ACTIVITY_SLUGS.has(activityItem.slug)) {
       activitySources.push('who-care-for-child-development-2012');
     }
-    authored.push(linked(activityItem,
-      `Play and developmental references support this age-adapted activity for ${band.en}.`,
-      activitySources));
+    authored.push(linked(activityItem, evidenceSummary, activitySources));
   }
   const checklist = { ...printable({ key: `checklist_${band.key}`, format: 'A4 PDF',
     title: b(`${band.mm} — မိဘမှတ်သားစာရင်း`, `${band.en} — Parent observation sheet`),

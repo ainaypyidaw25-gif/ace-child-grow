@@ -235,7 +235,9 @@ async function main() {
       ctx.db.query('clinicalReviewBatches').take(101),
       ctx.db.query('evidenceSources').take(201),
       ctx.db.query('evidenceLinks').take(501),
-      ctx.db.query('aiPublicationReleases').withIndex('by_status', q => q.eq('status', 'active')).take(4),
+      // The reviewed aggregate AI-preview cap is 24. Read one extra row so an
+      // overflow fails closed instead of silently skipping source-drift checks.
+      ctx.db.query('aiPublicationReleases').withIndex('by_status', q => q.eq('status', 'active')).take(25),
     ]);
     const count = (rows, key) => {
       const out = {};
@@ -257,7 +259,14 @@ async function main() {
       }
     }
     return {
-      bounds: { content: content.length, reviews: reviews.length, batches: batches.length, sources: sources.length, links: links.length },
+      bounds: {
+        content: content.length,
+        reviews: reviews.length,
+        batches: batches.length,
+        sources: sources.length,
+        links: links.length,
+        activeReleases: releases.length,
+      },
       contentStatus: count(content, 'clinicalStatus'),
       reviewDecision: count(reviews, 'decision'),
       evidenceStatus: count(sources, 'reviewStatus'),
@@ -274,7 +283,8 @@ async function main() {
     || registry.bounds.reviews > 1000
     || registry.bounds.batches > 100
     || registry.bounds.sources > 200
-    || registry.bounds.links > 500;
+    || registry.bounds.links > 500
+    || registry.bounds.activeReleases > 24;
   add('bounded_registry', boundsExceeded ? {
     level: 'blocked',
     code: 'registry_bound_exceeded',

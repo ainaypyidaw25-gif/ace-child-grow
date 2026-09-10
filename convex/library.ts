@@ -55,6 +55,7 @@ import { isReadingTogetherAiPublicationSlug } from './lib/aiReadingTogetherPubli
 import { isPowerOfPlaySlug } from './lib/powerOfPlayScope';
 import { isDevelopmentFeelingsSlug } from './lib/developmentFeelingsScope';
 import { isFourLessonSuccessorSlug } from './lib/fourLessonSuccessorScope';
+import { isSixPictureStorySuccessorSlug } from './lib/sixPictureStorySuccessorScope';
 
 export { isPubliclyReadableStatus } from './lib/publicationVisibility';
 
@@ -643,6 +644,7 @@ export const importSeed = mutation({
         || isPowerOfPlaySlug(it.slug)
         || isDevelopmentFeelingsSlug(it.slug)
         || isFourLessonSuccessorSlug(it.slug)
+        || isSixPictureStorySuccessorSlug(it.slug)
         || isClinicalTwoSmallCasTargetSlug(it.slug)
         || isNutritionGuidesCasTargetSlug(it.slug)) {
         skippedApproved += 1;
