@@ -67,6 +67,7 @@ import {
 } from './lib/clinicalBlockerCasData';
 import { isEvidenceHumanReviewSuccessorContentSlug } from './lib/evidenceHumanReviewSuccessorCasData';
 import { isGd10_12mPlayV5ContentSlug } from './lib/gd10_12mPlayV5ImportPolicy';
+import { isReadingTogetherAiPublicationSlug } from './lib/aiReadingTogetherPublication20260910Data';
 import { assertNoPersistedReleaseGovernedContent } from './lib/clinicalReviewBatchProvenance';
 
 const GRANTABLE_ROLES = [
@@ -214,6 +215,7 @@ export function seedRunSkipsItem(item: Pick<Item, 'type' | 'slug'>): boolean {
     || isUnicefSeenCountedConsumerSlug(item.slug)
     || isEvidenceHumanReviewSuccessorContentSlug(item.slug)
     || isGd10_12mPlayV5ContentSlug(item.slug)
+    || isReadingTogetherAiPublicationSlug(item.slug)
     || isClinicalTwoSmallCasTargetSlug(item.slug)
     || isNutritionGuidesCasTargetSlug(item.slug);
 }
