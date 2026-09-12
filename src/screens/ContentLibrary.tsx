@@ -4,7 +4,6 @@ import { useLibraryContent } from '../app/useOfflineLibrary';
 import { useLocale } from '../app/LocaleContext';
 import { AGE_GROUPS, DOMAINS, CONTENT_TYPES, ageGroup, domain } from '../content/taxonomy';
 import { isAppleAppStoreBuild } from '../app/platform';
-import { AiPublicationDisclosure } from '../components/AiPublicationDisclosure';
 
 const TYPE_LABEL: Record<string, { mm: string; en: string; emoji: string }> = {
   milestone: { mm: 'မှတ်တိုင်', en: 'Milestones', emoji: '🎯' },
@@ -124,7 +123,6 @@ export function ContentLibrary() {
                   </span>
                 </div>
                 <h2 className="mt-1 font-semibold text-ink">{locale === 'mm' ? it.titleMm : it.titleEn}</h2>
-                <AiPublicationDisclosure publicationLane={it.publicationLane} locale={locale} compact />
                 {(it.summaryMm || it.summaryEn) && (
                   <p className="mt-1 text-sm text-ink-soft">{locale === 'mm' ? it.summaryMm : it.summaryEn}</p>
                 )}

@@ -6,9 +6,9 @@ const PUBLIC_AI_DISCLOSURE_PREFIXES = [
 ] as const;
 
 /**
- * Remove duplicate body prefixes; provenance stays in the governed snapshot.
- * AI-audited public items render a separate per-item disclosure in addition
- * to Content Policy. Callers must not treat this cleanup as that disclosure.
+ * Remove legacy per-item AI notice prefixes from public lesson and story copy.
+ * Governed provenance remains in the publication snapshot while public pages
+ * use the compact source block and the shared Content Policy/Terms guidance.
  */
 export function publicContentCopy(value: string): string {
   const prefix = PUBLIC_AI_DISCLOSURE_PREFIXES.find((candidate) => value.startsWith(candidate));
