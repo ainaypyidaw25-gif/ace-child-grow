@@ -61,22 +61,10 @@ export const ACTIVITY_ILLUSTRATIONS: Readonly<Record<string, string>> = {
     '/activities/10_12m/act_roll_the_ball_back.5a37c8d923.webp',
   act_water_pouring:
     '/activities/2y/act_water_pouring.3ba2a48346.webp',
-  act_picture_story_2_5y:
-    '/activities/2_5y/act_picture_story_2_5y.e12a8d8f05.webp',
   act_color_sort:
     '/activities/3y/act_color_sort.baca30dca4.webp',
-  act_picture_story_3y:
-    '/activities/3y/act_picture_story_3y.a49dcf95b8.webp',
-  act_picture_story_3_5y:
-    '/activities/3_5y/act_picture_story_3_5y.5db180fe30.webp',
   act_story_sequence:
     '/activities/4y/act_story_sequence.8064356734.webp',
-  act_picture_story_4y:
-    '/activities/4y/act_picture_story_4y.06e23ab395.webp',
-  act_picture_story_4_5y:
-    '/activities/4_5y/act_picture_story_4_5y.8375c98d12.webp',
-  act_picture_story_5y:
-    '/activities/5y/act_picture_story_5y.e5ae82b7da.webp',
 };
 
 export function activityIllustration(slug: string): string | undefined {

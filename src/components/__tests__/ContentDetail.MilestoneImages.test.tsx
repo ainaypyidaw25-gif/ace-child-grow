@@ -9,7 +9,7 @@ const MILESTONES = vi.hoisted(() => ({
     slug: 'ms_birth_2m_social_1',
     titleMm: 'မျက်လုံးချင်းဆုံ ကြည့်ခြင်း',
     titleEn: 'Makes eye contact',
-    asset: '/milestones/birth_2m/ms_birth_2m_social_1.44283ad7b3.webp',
+    asset: '/milestones/birth_2m/ms_birth_2m_social_1.2966e5b814.webp',
   },
   unknown: {
     slug: 'ms_unknown_detail_1',

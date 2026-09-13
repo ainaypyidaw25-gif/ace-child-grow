@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { MILESTONE_ILLUSTRATIONS, milestoneIllustration } from '../milestoneIllustrations';
@@ -17,6 +18,10 @@ const BIRTH_2M_SLUGS = [
   'ms_birth_2m_social_1',
   'ms_birth_2m_gross_motor_1',
 ] as const;
+
+const PARENT_VISIBLE_BIRTH_2M_SLUGS = BIRTH_2M_SLUGS.filter((slug) => (
+  slug !== 'ms_birth_2m_sleep_1' && slug !== 'ms_birth_2m_gross_motor_2'
+));
 
 const THREE_4M_SLUGS = [
   'ms_3_4m_cognitive_1',
@@ -151,6 +156,17 @@ describe('birth–2 month milestone illustrations', () => {
       expect(assetPath).toBeDefined();
       expect(existsSync(resolve(process.cwd(), 'public', assetPath!.slice(1))), slug).toBe(true);
       expect(review, `${slug} missing from image-QA record`).toContain(`\`${slug}\``);
+    });
+  });
+
+  it('binds every parent-visible filename hash to the exact asset bytes', () => {
+    PARENT_VISIBLE_BIRTH_2M_SLUGS.forEach((slug) => {
+      const assetPath = milestoneIllustration(slug);
+      expect(assetPath).toBeDefined();
+      const expectedHash = assetPath!.match(/\.([a-f0-9]{10})\.webp$/)?.[1];
+      const assetBytes = readFileSync(resolve(process.cwd(), 'public', assetPath!.slice(1)));
+      const actualHash = createHash('sha256').update(assetBytes).digest('hex').slice(0, 10);
+      expect(actualHash, slug).toBe(expectedHash);
     });
   });
 });

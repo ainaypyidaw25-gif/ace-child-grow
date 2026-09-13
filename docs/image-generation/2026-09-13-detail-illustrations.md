@@ -5,8 +5,9 @@
 - Tool: built-in `imagegen`
 - Output contract: exact-slug WebP, 1200×900 (4:3), under 500 KiB, SHA-256 prefix in filename
 - Intended surface: content detail hero only
-- Rendering: exact slug only; no category or age fallback
-- Release state: candidate branch; not deployed by this work
+- Proposed rendering: exact slug only; no category or age fallback
+- Release state: candidate files only; the 19 AI-lane assets are intentionally
+  not wired into runtime maps until a revision-bound media review is approved
 
 ## Final prompt set
 
@@ -73,6 +74,8 @@ production briefs and the selected derivative identities.
 - Selected assets passed scene, anatomy, cultural-respect, no-text/logo/watermark,
   1200×900 WebP, file-size, unique-hash, and filename-hash checks.
 - The six picture-story assets also passed exact card-count checks.
+- The 19 AI-lane assets (six activities, seven lessons, six stories) remain
+  unlinked so they cannot bypass the earlier placeholder-only release evidence.
 - Existing `lsn_creativity` and `lsn_prepare_preschool` files remain intentionally
   unmapped until the artwork is reviewed against the exact current lesson copy.
 - Library/list cards remain on their existing text/emoji design; this candidate

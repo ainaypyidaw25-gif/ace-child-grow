@@ -5,14 +5,8 @@ import { LocaleProvider } from '../../app/LocaleContext';
 import { ContentDetail } from '../../screens/ContentDetail';
 
 const STORIES = vi.hoisted(() => [
-  ['st_ba_ba_sounds', '“ဘ ဘ” အသံလေးများ', 'The “Ba-Ba” Sounds', '/stories/st_ba_ba_sounds.5248d497b0.webp'],
   ['st_first_day_school', 'ကျောင်း ပထမနေ့', 'My First Day at School', '/stories/st_first_day_school.a440d58f45.webp'],
-  ['st_goodnight_moon_friend', 'ကောင်းသောညပါ၊ လမင်းလေးရေ', 'Goodnight, Little Moon', '/stories/st_goodnight_moon_friend.3277dec574.webp'],
   ['st_little_seed', 'မျိုးစေ့ လေးရဲ့ ခရီး', 'The Little Seed’s Journey', '/stories/st_little_seed.46d4e79b59.webp'],
-  ['st_sharing_mango', 'သရက်သီး ဝေမျှခြင်း', 'Sharing the Mango', '/stories/st_sharing_mango.2dd66b6393.webp'],
-  ['st_taking_turns', 'အလှည့်ကျ ကစားရအောင်', 'Let’s Take Turns', '/stories/st_taking_turns.ece7af8fbf.webp'],
-  ['st_visit_to_doctor', 'ဆရာဝန်ထံ သွားရောက်ပြသခြင်း', 'A Visit to the Doctor', '/stories/st_visit_to_doctor.510f7446cc.webp'],
-  ['st_waiting_at_clinic', 'စောင့်ဆိုင်းရတဲ့အခါ', 'While We Wait', '/stories/st_waiting_at_clinic.3d58cc8c4c.webp'],
   ['st_when_i_feel_angry', 'စိတ်ဆိုးတဲ့အခါ', 'When I Feel Angry', '/stories/st_when_i_feel_angry.939e6bd987.webp'],
 ] as const);
 const EMPTY_RECORDS = vi.hoisted(() => [] as const);
