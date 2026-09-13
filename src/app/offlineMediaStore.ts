@@ -28,12 +28,11 @@ export function isOfflineMediaStorageAvailable(): boolean {
   }
 }
 
-export function offlineMediaCacheKey(assetId: string, generation?: string): string {
+export function offlineMediaCacheKey(assetId: string): string {
   const origin = typeof location !== 'undefined' && location.origin
     ? location.origin
     : 'https://offline.ace.invalid';
-  const versionedId = generation ? `${assetId}@${generation}` : assetId;
-  return new URL(`${CACHE_PATH}${encodeURIComponent(versionedId)}`, origin).toString();
+  return new URL(`${CACHE_PATH}${encodeURIComponent(assetId)}`, origin).toString();
 }
 
 export function mediaMimeMatchesKind(kind: string, mimeType: string): boolean {
@@ -86,8 +85,6 @@ export async function cacheOfflineMediaAsset(
   contentSlug: string,
   candidate: OfflineMediaCandidate,
   savedAt = Date.now(),
-  generation?: string,
-  allowEviction = true,
 ): Promise<OfflineMediaRecord | null> {
   if (!isOfflineMediaStorageAvailable() || !isDownloadableMedia(candidate)) return null;
   const source = offlineMediaSource(candidate);
@@ -107,16 +104,10 @@ export async function cacheOfflineMediaAsset(
       || !mediaMimeMatchesKind(candidate.kind, mimeType)
     ) return null;
 
-    // AI snapshot refreshes use a generation-specific key. That keeps the
-    // previously committed media bytes intact until the new content, sources,
-    // and complete media manifest have all passed validation and are saved.
-    const cacheKey = offlineMediaCacheKey(candidate.id, generation);
+    const cacheKey = offlineMediaCacheKey(candidate.id);
     const cache = await caches.open(OFFLINE_MEDIA_CACHE);
     const eviction = planMediaEviction(await cacheEntries(cache, cacheKey), blob.size);
-    // A staged atomic AI snapshot may temporarily need both old and new bytes.
-    // Refuse that refresh instead of evicting anything referenced by the prior
-    // committed record; the parent can retry after freeing device storage.
-    if (eviction === null || (!allowEviction && eviction.length > 0)) return null;
+    if (eviction === null) return null;
     await Promise.all(eviction.map((key) => cache.delete(key)));
 
     const headers = new Headers({
@@ -153,18 +144,10 @@ export async function cacheOfflineMediaForContent(
   contentSlug: string,
   candidates: OfflineMediaCandidate[],
   savedAt = Date.now(),
-  generation?: string,
-  allowEviction = true,
 ): Promise<OfflineMediaRecord[]> {
   const records: OfflineMediaRecord[] = [];
   for (const candidate of candidates) {
-    const record = await cacheOfflineMediaAsset(
-      contentSlug,
-      candidate,
-      savedAt,
-      generation,
-      allowEviction,
-    );
+    const record = await cacheOfflineMediaAsset(contentSlug, candidate, savedAt);
     if (record) records.push(record);
   }
   return records;

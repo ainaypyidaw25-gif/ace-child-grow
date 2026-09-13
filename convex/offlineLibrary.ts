@@ -1,7 +1,6 @@
 import { getAuthUserId } from '@convex-dev/auth/server';
 import { v } from 'convex/values';
 import { query } from './_generated/server';
-import { resolveEntitlements } from './lib/entitlements';
 import { contentIsParentReadable } from './lib/publicationVisibility';
 
 const offlineCitationValidator = v.object({
@@ -31,24 +30,6 @@ const offlineAiContentValidator = v.object({
   source: v.string(),
 });
 
-const offlineMediaCandidateValidator = v.object({
-  id: v.id('libraryMedia'),
-  kind: v.string(),
-  url: v.union(v.string(), v.null()),
-  storageUrl: v.union(v.string(), v.null()),
-  mimeType: v.union(v.string(), v.null()),
-  altMm: v.union(v.string(), v.null()),
-  altEn: v.union(v.string(), v.null()),
-  captionMm: v.union(v.string(), v.null()),
-  captionEn: v.union(v.string(), v.null()),
-  transcriptMm: v.union(v.string(), v.null()),
-  transcriptEn: v.union(v.string(), v.null()),
-  durationSeconds: v.union(v.number(), v.null()),
-  attributionMm: v.union(v.string(), v.null()),
-  attributionEn: v.union(v.string(), v.null()),
-  accessLevel: v.union(v.literal('free_sample'), v.literal('premium')),
-});
-
 /**
  * A transactionally consistent AI-lane content-and-citation snapshot for an
  * offline download. The caller supplies identity only: all wording, review
@@ -65,7 +46,6 @@ export const getAiSnapshot = query({
       allowed: v.literal(true),
       item: offlineAiContentValidator,
       sources: v.array(offlineCitationValidator),
-      media: v.array(offlineMediaCandidateValidator),
     }),
   ),
   handler: async (ctx, args) => {
@@ -110,35 +90,6 @@ export const getAiSnapshot = query({
       });
     }
 
-    const entitlements = await resolveEntitlements(ctx, userId);
-    const canViewPremium = entitlements.features.includes('premium_media');
-    const mediaRows = await ctx.db
-      .query('libraryMedia')
-      .withIndex('by_content', (q) => q.eq('contentSlug', item.slug))
-      .take(21);
-    if (mediaRows.length > 20) return { allowed: false as const };
-    const visibleMedia = mediaRows
-      .filter((row) => !row.placeholder && row.reviewStatus === 'approved')
-      .filter((row) => (row.accessLevel ?? 'free_sample') === 'free_sample' || canViewPremium)
-      .sort((a, b) => (a.sortOrder ?? 0) - (b.sortOrder ?? 0));
-    const media = await Promise.all(visibleMedia.map(async (row) => ({
-      id: row._id,
-      kind: row.kind,
-      url: row.url ?? null,
-      storageUrl: row.storageId ? await ctx.storage.getUrl(row.storageId) : null,
-      mimeType: row.mimeType ?? null,
-      altMm: row.altMm ?? null,
-      altEn: row.altEn ?? null,
-      captionMm: row.captionMm ?? null,
-      captionEn: row.captionEn ?? null,
-      transcriptMm: row.transcriptMm ?? null,
-      transcriptEn: row.transcriptEn ?? null,
-      durationSeconds: row.durationSeconds ?? null,
-      attributionMm: row.attributionMm ?? null,
-      attributionEn: row.attributionEn ?? null,
-      accessLevel: (row.accessLevel ?? 'free_sample') as 'free_sample' | 'premium',
-    })));
-
     return {
       allowed: true as const,
       item: {
@@ -161,7 +112,6 @@ export const getAiSnapshot = query({
         source: item.source,
       },
       sources,
-      media,
     };
   },
 });
