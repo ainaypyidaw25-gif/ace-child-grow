@@ -4,7 +4,6 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { SEVEN_STORIES_ARTIFACT } from '../../../convex/lib/aiSevenStoriesPublication20260910Artifact';
 import { LocaleProvider } from '../../app/LocaleContext';
 import { ContentDetail } from '../../screens/ContentDetail';
-import { AI_BADGE, AI_DISCLOSURE } from '../../domain/content/aiPublication';
 
 const state = vi.hoisted(() => ({
   remote: null as unknown,
@@ -31,7 +30,7 @@ function show(slug: string, locale: 'en' | 'mm') {
 describe('seven-story AI lane parent rendering contract', () => {
   afterEach(() => { cleanup(); localStorage.removeItem('ace-locale'); state.offline = []; });
 
-  it.each(SEVEN_STORIES_ARTIFACT.targets)('keeps every source and AI disclosure for $slug in both languages', (target) => {
+  it.each(SEVEN_STORIES_ARTIFACT.targets)('keeps every source without a per-item AI warning for $slug in both languages', (target) => {
     state.sources = target.sources.map(source => ({
       sourceId: source.sourceId, org: 'Fixture publisher', title: source.sourceId, url: source.sourceUrl,
     }));
@@ -42,9 +41,11 @@ describe('seven-story AI lane parent rendering contract', () => {
     } };
     for (const locale of ['en', 'mm'] as const) {
       const view = show(target.slug, locale);
-      const disclosure = screen.getByTestId('ai-publication-disclosure');
-      expect(disclosure).toHaveTextContent(AI_BADGE[locale]);
-      expect(disclosure).toHaveTextContent(AI_DISCLOSURE[locale]);
+      expect(screen.queryByTestId('ai-publication-disclosure')).toBeNull();
+      expect(screen.getByTestId('ai-publication-note')).toHaveTextContent(locale === 'en'
+        ? 'human specialist approval is pending'
+        : 'လူ့ပညာရှင် အတည်ပြုချက် စောင့်ဆိုင်းဆဲ');
+      expect(screen.queryByText(/not approved by a human specialist|လူ့ပညာရှင် အတည်ပြုချက် မရှိသေးပါ/i)).toBeNull();
       const references = screen.getByTestId('content-references');
       expect(within(references).getAllByRole('link')).toHaveLength(target.sources.length);
       for (const source of target.sources) {

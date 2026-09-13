@@ -16,7 +16,6 @@ import { approvedPrintablePayload } from '../domain/content/printableAvailabilit
 import { isAppleAppStoreBuild } from '../app/platform';
 import { ContentReferences } from '../components/ContentReferences';
 import { publicContentCopy } from '../domain/content/publicContentCopy';
-import { AiPublicationDisclosure } from '../components/AiPublicationDisclosure';
 
 type BL = { mm: string; en: string };
 
@@ -152,9 +151,6 @@ export function ContentDetail() {
           <p className="mt-1 text-ink-soft">{locale === 'mm' ? item.summaryMm : item.summaryEn}</p>
         )}
       </div>
-
-      {/* Keep provenance visible independently of the body-copy prefix cleanup. */}
-      <AiPublicationDisclosure publicationLane={item.publicationLane} locale={locale} />
 
       {mappedLessonIllustration && (
         <figure className="overflow-hidden rounded-card border border-line bg-white shadow-card">
@@ -475,6 +471,18 @@ export function ContentDetail() {
             </p>
           )}
         </Section>
+      )}
+
+      {item.publicationLane === 'ai_audited' && (
+        <p
+          className="border-t border-line pt-4 text-xs leading-6 text-ink-soft"
+          data-testid="ai-publication-note"
+        >
+          {L(
+            'AI ဖြင့် စစ်ဆေးထားသော ပညာပေးအကြောင်းအရာ — လူ့ပညာရှင် အတည်ပြုချက် စောင့်ဆိုင်းဆဲ။ ဆေးဘက်ဆိုင်ရာ အကြံပြုချက်၊ ဖွံ့ဖြိုးမှုစစ်ဆေးချက် သို့မဟုတ် ရောဂါဖော်ထုတ်ချက် မဟုတ်ပါ။',
+            'AI-audited educational content — human specialist approval is pending. Not medical advice, developmental screening, or diagnosis.',
+          )}
+        </p>
       )}
 
       <ContentReferences

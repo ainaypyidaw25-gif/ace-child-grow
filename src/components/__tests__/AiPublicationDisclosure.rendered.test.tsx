@@ -1,9 +1,8 @@
-import { cleanup, render, screen, within } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { LocaleProvider } from '../../app/LocaleContext';
 import { CONTENT_SEED } from '../../content/seed';
-import { AI_BADGE, AI_DISCLOSURE } from '../../domain/content/aiPublication';
 import { toOfflineRecord, type LibraryRowLike, type OfflineRecord } from '../../domain/offline/offlineLibrary';
 import { ContentDetail } from '../../screens/ContentDetail';
 import { ContentLibrary } from '../../screens/ContentLibrary';
@@ -31,11 +30,6 @@ function mathItem(publicationLane: LibraryRowLike['publicationLane'] = 'ai_audit
   return { ...seed, _id: 'math-row', publicationLane };
 }
 
-function pictureStoryItem(): LibraryRowLike {
-  const seed = CONTENT_SEED.find((row) => row.slug === 'act_picture_story_2_5y')!;
-  return { ...seed, _id: 'picture-story-row', publicationLane: 'ai_audited' };
-}
-
 function renderDetail() {
   return render(
     <MemoryRouter initialEntries={['/content/lsn_early_math']}>
@@ -46,7 +40,7 @@ function renderDetail() {
   );
 }
 
-describe('parent-facing AI publication disclosure', () => {
+describe('parent-facing provenance copy', () => {
   beforeEach(() => {
     state.remote = undefined;
     state.records = [];
@@ -56,60 +50,27 @@ describe('parent-facing AI publication disclosure', () => {
 
   it.each([
     ['en', 'online'], ['mm', 'online'], ['en', 'offline'], ['mm', 'offline'],
-  ] as const)('renders full %s AI-only disclosure in the %s lesson detail', async (locale, mode) => {
+  ] as const)('replaces the long per-item AI warning with a compact %s %s status note', async (locale, mode) => {
     localStorage.setItem('ace-locale', locale);
     const item = mathItem();
     if (mode === 'online') state.remote = { item, media: [], staff: false };
-    else {
-      state.records = [toOfflineRecord(item, 42)];
-      expect(state.records[0].publicationLane).toBe('ai_audited');
-    }
+    else state.records = [toOfflineRecord(item, 42)];
+
     renderDetail();
-    const disclosure = await screen.findByTestId('ai-publication-disclosure');
-    expect(disclosure).toBeVisible();
-    expect(disclosure).toHaveTextContent(AI_BADGE[locale]);
-    expect(disclosure).toHaveTextContent(AI_DISCLOSURE[locale]);
-    expect(screen.getAllByText(AI_DISCLOSURE[locale])).toHaveLength(1);
-    expect(screen.getByText(locale === 'en'
+
+    await waitFor(() => expect(screen.getByText(locale === 'en'
       ? /Math is not only in books\./
-      : /သင်္ချာသည် စာအုပ်ထဲသာ မဟုတ်ပါ။/)).toBeVisible();
-    // Prefix cleanup remains safe because a separate, unstripped disclosure is shown.
-    expect(screen.queryByText(/^AI review notice —/)).not.toBeInTheDocument();
-  });
-
-  it.each(['en', 'mm'] as const)(
-    'renders the canonical %s AI-only disclosure exactly once for a picture-story activity',
-    async (locale) => {
-      localStorage.setItem('ace-locale', locale);
-      state.remote = { item: pictureStoryItem(), media: [], staff: false };
-      renderDetail();
-
-      const disclosure = await screen.findByTestId('ai-publication-disclosure');
-      expect(disclosure).toBeVisible();
-      expect(disclosure).toHaveTextContent(AI_BADGE[locale]);
-      expect(disclosure).toHaveTextContent(AI_DISCLOSURE[locale]);
-      expect(screen.getAllByText(AI_DISCLOSURE[locale])).toHaveLength(1);
-      expect(screen.queryByText(/^AI review notice —/)).not.toBeInTheDocument();
-      expect(screen.getAllByText(locale === 'en'
-        ? 'An opportunity to talk about familiar pictures'
-        : 'ရင်းနှီးသော ပုံများအကြောင်း ပြောဆိုရန် အခွင့်အရေး')).toHaveLength(2);
-    },
-  );
-
-  it.each(['human_reviewed', 'missing'] as const)('does not add AI provenance to a %s lane', (lane) => {
-    localStorage.setItem('ace-locale', 'en');
-    const item = mathItem('human_reviewed');
-    if (lane === 'missing') delete item.publicationLane;
-    state.remote = { item, media: [], staff: false };
-    renderDetail();
+      : /သင်္ချာသည် စာအုပ်ထဲသာ မဟုတ်ပါ။/)).toBeVisible());
     expect(screen.queryByTestId('ai-publication-disclosure')).not.toBeInTheDocument();
-    expect(screen.queryByText(/^AI review notice —/)).not.toBeInTheDocument();
-    expect(screen.getByText(/Math is not only in books\./)).toBeVisible();
+    expect(screen.getByTestId('ai-publication-note')).toHaveTextContent(locale === 'en'
+      ? 'human specialist approval is pending'
+      : 'လူ့ပညာရှင် အတည်ပြုချက် စောင့်ဆိုင်းဆဲ');
+    expect(screen.queryByText(/not approved by a human specialist|လူ့ပညာရှင် အတည်ပြုချက် မရှိသေးပါ/i)).not.toBeInTheDocument();
   });
 
   it.each([
     ['en', 'library'], ['mm', 'library'], ['en', 'learn'], ['mm', 'learn'],
-  ] as const)('labels only the AI-audited card in the %s %s list', (locale, page) => {
+  ] as const)('omits per-item AI badges from the %s %s list', (locale, page) => {
     localStorage.setItem('ace-locale', locale);
     state.items = [mathItem(), {
       ...mathItem('human_reviewed'), _id: 'human-row', slug: 'human-lesson',
@@ -118,10 +79,8 @@ describe('parent-facing AI publication disclosure', () => {
     render(<MemoryRouter><LocaleProvider>
       {page === 'library' ? <ContentLibrary /> : <Learn />}
     </LocaleProvider></MemoryRouter>);
-    const mathCard = screen.getByRole('link', { name: new RegExp(locale === 'en' ? 'Everyday early math' : 'အစောပိုင်း သင်္ချာ') });
-    expect(within(mathCard).getByTestId('ai-publication-badge')).toHaveTextContent(AI_BADGE[locale]);
-    const humanCard = screen.getByRole('link', { name: new RegExp(locale === 'en' ? 'Another lesson' : 'အခြား သင်ခန်းစာ') });
-    expect(within(humanCard).queryByTestId('ai-publication-badge')).not.toBeInTheDocument();
-    expect(screen.getAllByTestId('ai-publication-badge')).toHaveLength(1);
+
+    expect(screen.queryByTestId('ai-publication-badge')).not.toBeInTheDocument();
+    expect(screen.queryByText(/AI-reviewed|AI ဖြင့် စစ်ဆေးထားသည်/i)).not.toBeInTheDocument();
   });
 });
