@@ -151,6 +151,7 @@ export function ContentDetail() {
         {(item.summaryMm || item.summaryEn) && (
           <p className="mt-1 text-ink-soft">{locale === 'mm' ? item.summaryMm : item.summaryEn}</p>
         )}
+        <AiPublicationStatus publicationLane={item.publicationLane} locale={locale} />
       </div>
 
       {mappedLessonIllustration && (
@@ -473,8 +474,6 @@ export function ContentDetail() {
           )}
         </Section>
       )}
-
-      <AiPublicationStatus publicationLane={item.publicationLane} locale={locale} />
 
       <ContentReferences
         sources={evidence?.allowed && Array.isArray(evidence.sources) ? evidence.sources : []}

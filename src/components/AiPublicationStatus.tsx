@@ -25,7 +25,7 @@ export function AiPublicationStatus({
   if (compact) {
     return (
       <span
-        className="mt-2 inline-flex rounded-pill bg-sky-soft px-2 py-0.5 text-[11px] font-semibold leading-5 text-sky-deep"
+        className="mt-2 inline-flex rounded-pill bg-mint-soft px-2 py-0.5 text-[11px] font-semibold leading-5 text-sky-deep"
         data-testid="ai-publication-badge"
       >
         {AI_ONLY_BADGE[locale]}
@@ -35,7 +35,7 @@ export function AiPublicationStatus({
 
   return (
     <p
-      className="border-t border-line pt-4 text-xs leading-6 text-ink-soft"
+      className="mt-3 border-t border-line pt-3 text-xs leading-6 text-ink-soft"
       data-testid="ai-publication-note"
     >
       {AI_STATUS_NOTE[locale]}

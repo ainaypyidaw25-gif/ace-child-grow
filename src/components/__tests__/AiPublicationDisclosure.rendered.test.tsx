@@ -58,13 +58,17 @@ describe('parent-facing provenance copy', () => {
 
     renderDetail();
 
-    await waitFor(() => expect(screen.getByText(locale === 'en'
+    const bodyPattern = locale === 'en'
       ? /Math is not only in books\./
-      : /သင်္ချာသည် စာအုပ်ထဲသာ မဟုတ်ပါ။/)).toBeVisible());
+      : /သင်္ချာသည် စာအုပ်ထဲသာ မဟုတ်ပါ။/;
+    await waitFor(() => expect(screen.getByText(bodyPattern)).toBeVisible());
+    const body = screen.getByText(bodyPattern);
     expect(screen.queryByTestId('ai-publication-disclosure')).not.toBeInTheDocument();
-    expect(screen.getByTestId('ai-publication-note')).toHaveTextContent(locale === 'en'
+    const note = screen.getByTestId('ai-publication-note');
+    expect(note).toHaveTextContent(locale === 'en'
       ? 'not approved by a clinician or native Myanmar-language editor'
       : 'ဆေးဘက်ပညာရှင် သို့မဟုတ် မိခင်ဘာသာစကား မြန်မာစာတည်းဖြတ်သူ၏ အတည်ပြုချက် မရှိသေးပါ');
+    expect(note.compareDocumentPosition(body) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
   it.each([
