@@ -11,8 +11,9 @@ const state = vi.hoisted(() => ({
   offline: [] as unknown[],
 }));
 vi.mock('convex/react', () => ({
-  useQuery: (_query: unknown, args: { audience?: string }) => args.audience === 'parent'
-    ? state.remote : { allowed: true, sources: state.sources },
+  useQuery: (_query: unknown, args: { kind?: string }) => args.kind
+    ? { allowed: true, sources: state.sources }
+    : state.remote,
 }));
 vi.mock('../../app/useOfflineLibrary', () => ({
   useDownloadedLibrary: () => ({ records: state.offline, loaded: true }),
@@ -30,7 +31,7 @@ function show(slug: string, locale: 'en' | 'mm') {
 describe('seven-story AI lane parent rendering contract', () => {
   afterEach(() => { cleanup(); localStorage.removeItem('ace-locale'); state.offline = []; });
 
-  it.each(SEVEN_STORIES_ARTIFACT.targets)('keeps every source without a per-item AI warning for $slug in both languages', (target) => {
+  it.each(SEVEN_STORIES_ARTIFACT.targets)('keeps every source with compact role-specific AI status for $slug in both languages', (target) => {
     state.sources = target.sources.map(source => ({
       sourceId: source.sourceId, org: 'Fixture publisher', title: source.sourceId, url: source.sourceUrl,
     }));
@@ -43,9 +44,8 @@ describe('seven-story AI lane parent rendering contract', () => {
       const view = show(target.slug, locale);
       expect(screen.queryByTestId('ai-publication-disclosure')).toBeNull();
       expect(screen.getByTestId('ai-publication-note')).toHaveTextContent(locale === 'en'
-        ? 'human specialist approval is pending'
-        : 'လူ့ပညာရှင် အတည်ပြုချက် စောင့်ဆိုင်းဆဲ');
-      expect(screen.queryByText(/not approved by a human specialist|လူ့ပညာရှင် အတည်ပြုချက် မရှိသေးပါ/i)).toBeNull();
+        ? 'not approved by a clinician or native Myanmar-language editor'
+        : 'ဆေးဘက်ပညာရှင် သို့မဟုတ် မိခင်ဘာသာစကား မြန်မာစာတည်းဖြတ်သူ၏ အတည်ပြုချက် မရှိသေးပါ');
       const references = screen.getByTestId('content-references');
       expect(within(references).getAllByRole('link')).toHaveLength(target.sources.length);
       for (const source of target.sources) {

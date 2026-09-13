@@ -97,12 +97,13 @@ describe('ContentDetail published story illustrations', () => {
     },
   );
 
-  it('omits the per-item AI warning on an AI-audited public story', () => {
+  it('uses compact role-specific status on an AI-audited public story', () => {
     localStorage.setItem('ace-locale', 'en');
     renderStory('st_first_day_school');
     expect(screen.queryByTestId('ai-publication-disclosure')).not.toBeInTheDocument();
-    expect(screen.queryByText(/not approved by a human specialist/i)).not.toBeInTheDocument();
-    expect(screen.getByTestId('ai-publication-note')).toHaveTextContent('human specialist approval is pending');
+    expect(screen.getByTestId('ai-publication-note')).toHaveTextContent(
+      'not approved by a clinician or native Myanmar-language editor',
+    );
     expect(screen.getByText('Story st_first_day_school')).toBeVisible();
   });
 });

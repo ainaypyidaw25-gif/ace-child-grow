@@ -6,13 +6,16 @@ import {
   formatBytes,
   isDownloadable,
   isDownloadableMedia,
+  hasValidOfflineReferences,
   offlineMediaSource,
+  sanitizeOfflineReferences,
   selectDownloadable,
   toOfflineRecord,
   totalBytes,
   totalMediaBytes,
   totalMediaCount,
   type OfflineMediaCandidate,
+  type OfflineReference,
   type LibraryRowLike,
 } from '../offline/offlineLibrary';
 import {
@@ -31,6 +34,14 @@ const row = (over: Partial<LibraryRowLike> = {}): LibraryRowLike => ({
   tags: ['sleep'],
   ageGroupKey: '1y',
   data: { body: { mm: 'က', en: 'a' } },
+  ...over,
+});
+
+const reference = (over: Partial<OfflineReference> = {}): OfflineReference => ({
+  sourceId: 'nhs-sleep',
+  org: 'NHS',
+  title: 'Sleep and young children',
+  url: 'https://www.nhs.uk/conditions/baby/health/sleep/',
   ...over,
 });
 
@@ -78,6 +89,30 @@ describe('what may be stored offline', () => {
     expect(record.tags).toEqual([]);
     expect(record.summaryMm).toBeUndefined();
     expect(record.data).toEqual({});
+  });
+
+  it('keeps only a complete HTTPS public citation snapshot', () => {
+    expect(sanitizeOfflineReferences([{
+      ...reference(),
+      reviewer: 'private workflow field',
+      reviewNote: 'must not be stored',
+    }])).toEqual([reference()]);
+  });
+
+  it.each([
+    [],
+    [reference({ url: 'http://example.com/source' })],
+    [reference({ url: 'javascript:alert(1)' })],
+    [reference({ title: ' ' })],
+    [reference(), reference()],
+  ].map((sources) => [sources]))('rejects an empty, partial, insecure or duplicate citation snapshot', (sources) => {
+    expect(sanitizeOfflineReferences(sources)).toBeNull();
+  });
+
+  it('distinguishes source-bound records from legacy downloads', () => {
+    expect(hasValidOfflineReferences({ publicationLane: 'ai_audited', references: [reference()] })).toBe(true);
+    expect(hasValidOfflineReferences({ publicationLane: 'ai_audited' })).toBe(false);
+    expect(hasValidOfflineReferences({ publicationLane: 'human_reviewed' })).toBe(true);
   });
 });
 
@@ -171,7 +206,7 @@ describe('reading the downloaded copy', () => {
     row({ slug: 'guide_a', type: 'guide', ageGroupKey: '1y', titleEn: 'Bedtime' }),
     row({ slug: 'guide_b', type: 'guide', ageGroupKey: '2y', titleEn: 'Tantrums' }),
     row({ slug: 'act_c', type: 'activity', ageGroupKey: '1y', titleEn: 'Stacking' }),
-  ], 1);
+  ], 1).map((record) => ({ ...record, references: [reference({ sourceId: `${record.slug}-source` })] }));
 
   it('filters by type', () => {
     expect(filterOfflineRecords(records, { type: 'activity' }).map((r) => r.slug)).toEqual(['act_c']);
@@ -189,6 +224,18 @@ describe('reading the downloaded copy', () => {
 
   it('returns a stable order', () => {
     expect(filterOfflineRecords(records, { type: 'guide' }).map((r) => r.slug)).toEqual(['guide_a', 'guide_b']);
+  });
+
+  it('hides legacy AI records that have no bound citation snapshot', () => {
+    expect(filterOfflineRecords([
+      toOfflineRecord(row({ publicationLane: 'ai_audited' }), 1),
+    ], { type: 'guide' })).toEqual([]);
+  });
+
+  it('retains conventional human-reviewed records without a citation snapshot', () => {
+    expect(filterOfflineRecords([
+      toOfflineRecord(row({ publicationLane: 'human_reviewed' }), 1),
+    ], { type: 'guide' })).toHaveLength(1);
   });
 });
 

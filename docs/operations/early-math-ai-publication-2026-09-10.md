@@ -14,7 +14,7 @@ The source/claim agent and separate bilingual-copy/safety agent rechecked the fi
 
 Two copy improvements precede publication: optional child-paced picture counting replaces a fixed five-object instruction; the caregiver quiz emphasizes play rather than pressure for correct answers. No benchmark, dosage or guaranteed outcome is claimed.
 
-The parent UI renders a per-item AI-only badge on library/learning cards and a full disclosure on detail pages, including offline records. The notice is separate from normal body-copy cleanup, so removing a duplicate body prefix cannot hide provenance. Conventional human-reviewed content does not receive this badge.
+The parent UI renders a per-item AI-only badge on library/learning cards and a compact role-specific disclosure immediately below the title/summary on detail pages, including offline records. The disclosure states that clinician and native Myanmar-language editor approval are absent and that the content is not medical advice, developmental screening, or diagnosis. This compact presentation supersedes the former large warning card without changing the human-approval state. The notice is separate from normal body-copy cleanup, so removing a duplicate body prefix cannot hide provenance. Conventional human-reviewed content does not receive this badge.
 
 ## Frozen release
 

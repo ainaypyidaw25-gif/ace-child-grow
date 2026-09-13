@@ -24,7 +24,7 @@ Publisher pages, abstracts and official search-index copies were accessible to d
 
 Two exact bundled illustrations were visually checked and their production bytes matched; see the correction runbook for asset hashes and the limited historical generation/Owner record. Five stories have no bundled illustration. All 21 database media records are placeholders. Runtime media hashes must fail closed if unreviewed media is introduced. No audio/PDF availability or independent legal rights clearance is claimed.
 
-Parent list and detail views must retain the English/Myanmar AI-only badge and full disclosure. Each body separately identifies original fiction. The ordinary human-review fields and append-only decisions are neither fabricated nor consumed by this AI lane.
+Parent list views must retain the English/Myanmar AI-only badge. Detail views must show a compact role-specific disclosure immediately below the title/summary stating that clinician and native Myanmar-language editor approval are absent and that the content is not medical advice, developmental screening, or diagnosis. This compact presentation supersedes the former large warning card without changing the human-approval state. Each body separately identifies original fiction. The ordinary human-review fields and append-only decisions are neither fabricated nor consumed by this AI lane.
 
 ## Release gates
 
