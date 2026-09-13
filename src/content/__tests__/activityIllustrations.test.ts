@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
+import { createHash } from 'node:crypto';
 import { existsSync, readFileSync, statSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { basename, resolve } from 'node:path';
 import { ACTIVITY_ILLUSTRATIONS, activityIllustration } from '../activityIllustrations';
 
 const BIRTH_2M_ACTIVITY_SLUGS = [
@@ -196,6 +197,12 @@ describe('published activity illustrations', () => {
       const filePath = resolve(process.cwd(), 'public', assetPath.slice(1));
       expect(existsSync(filePath)).toBe(true);
       expect(statSync(filePath).size).toBeLessThan(500 * 1024);
+
+      const digest = createHash('sha256')
+        .update(readFileSync(filePath))
+        .digest('hex')
+        .slice(0, 10);
+      expect(basename(filePath)).toContain(`.${digest}.webp`);
     });
   });
 

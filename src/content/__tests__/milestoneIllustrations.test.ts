@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { MILESTONE_ILLUSTRATIONS, milestoneIllustration } from '../milestoneIllustrations';
@@ -151,6 +152,17 @@ describe('birth–2 month milestone illustrations', () => {
       expect(assetPath).toBeDefined();
       expect(existsSync(resolve(process.cwd(), 'public', assetPath!.slice(1))), slug).toBe(true);
       expect(review, `${slug} missing from image-QA record`).toContain(`\`${slug}\``);
+    });
+  });
+
+  it('binds every reviewed filename hash to the exact asset bytes', () => {
+    BIRTH_2M_SLUGS.forEach((slug) => {
+      const assetPath = milestoneIllustration(slug);
+      expect(assetPath).toBeDefined();
+      const expectedHash = assetPath!.match(/\.([a-f0-9]{10})\.webp$/)?.[1];
+      const assetBytes = readFileSync(resolve(process.cwd(), 'public', assetPath!.slice(1)));
+      const actualHash = createHash('sha256').update(assetBytes).digest('hex').slice(0, 10);
+      expect(actualHash, slug).toBe(expectedHash);
     });
   });
 });

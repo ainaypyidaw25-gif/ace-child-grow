@@ -84,6 +84,8 @@ const GUIDES = vi.hoisted(() => [
   ['gd_2y_play', '၂ နှစ် — ကစားခြင်း လမ်းညွှန်', '2 years — play guide', '/guides/gd_2y_play.79ad541bd1.webp', 'clinical_review'],
   ['gd_2y_safety', '၂ နှစ် — ဘေးကင်းလုံခြုံရေး လမ်းညွှန်', '2 years — safety guide', '/guides/gd_2y_safety.91fe18f7fc.webp', 'clinical_review'],
   ['gd_2y_sleep', '၂ နှစ် — အိပ်စက်ခြင်း လမ်းညွှန်', '2 years — sleep guide', '/guides/gd_2y_sleep.873a520e2c.webp', 'clinical_review'],
+  ['gd_2_5y_nutrition', '၂ နှစ်ခွဲ — အာဟာရ လမ်းညွှန်', '2.5 years — nutrition guide', '/guides/gd_2_5y_nutrition.dd2148478f.webp', 'clinical_review'],
+  ['gd_2_5y_safety', '၂ နှစ်ခွဲ — ဘေးကင်းလုံခြုံရေး လမ်းညွှန်', '2.5 years — safety guide', '/guides/gd_2_5y_safety.09db279d76.webp', 'clinical_review'],
   ['gd_3y_cognitive', '၃ နှစ် — အသိဉာဏ် ဖွံ့ဖြိုးမှု', '3 years — Cognitive', '/guides/gd_3y_cognitive.6e4d7b1737.webp', 'clinical_review'],
   ['gd_3y_daily_routine', '၃ နှစ် — နေ့စဉ်လုပ်ရိုးလုပ်စဉ် လမ်းညွှန်', '3 years — daily routine guide', '/guides/gd_3y_daily_routine.819d380c64.webp', 'clinical_review'],
   ['gd_3y_nutrition', '၃ နှစ် — အာဟာရ လမ်းညွှန်', '3 years — nutrition guide', '/guides/gd_3y_nutrition.2077c69177.webp', 'clinical_review'],

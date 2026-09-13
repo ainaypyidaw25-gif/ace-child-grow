@@ -88,6 +88,8 @@ const PRODUCTION_GUIDE_SLUGS = [
   'gd_2y_play',
   'gd_2y_safety',
   'gd_2y_sleep',
+  'gd_2_5y_nutrition',
+  'gd_2_5y_safety',
   'gd_3y_cognitive',
   'gd_3y_daily_routine',
   'gd_3y_nutrition',

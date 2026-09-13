@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { existsSync, readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { createHash } from 'node:crypto';
+import { existsSync, readFileSync, statSync } from 'node:fs';
+import { basename, resolve } from 'node:path';
 import { LESSON_ILLUSTRATIONS, lessonIllustration } from '../lessonIllustrations';
 
 const LANGUAGE_DEVELOPMENT_SLUGS = ['lsn_language_rich_home'] as const;
@@ -23,7 +24,15 @@ describe('published language-development lesson illustrations', () => {
 
   it('resolves every mapped asset to an existing file under public', () => {
     Object.values(LESSON_ILLUSTRATIONS).forEach((assetPath) => {
-      expect(existsSync(resolve(process.cwd(), 'public', assetPath.slice(1)))).toBe(true);
+      const filePath = resolve(process.cwd(), 'public', assetPath.slice(1));
+      expect(existsSync(filePath)).toBe(true);
+      expect(statSync(filePath).size).toBeLessThan(500 * 1024);
+
+      const digest = createHash('sha256')
+        .update(readFileSync(filePath))
+        .digest('hex')
+        .slice(0, 10);
+      expect(basename(filePath)).toContain(`.${digest}.webp`);
     });
   });
 
