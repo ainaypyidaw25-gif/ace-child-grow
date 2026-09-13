@@ -9,8 +9,14 @@ import {
 } from '../storyIllustrations';
 
 const PUBLISHED_STORY_SLUGS = [
+  'st_ba_ba_sounds',
   'st_first_day_school',
+  'st_goodnight_moon_friend',
   'st_little_seed',
+  'st_sharing_mango',
+  'st_taking_turns',
+  'st_visit_to_doctor',
+  'st_waiting_at_clinic',
   'st_when_i_feel_angry',
 ] as const;
 

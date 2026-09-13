@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
+import { createHash } from 'node:crypto';
 import { existsSync, readFileSync, statSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { basename, resolve } from 'node:path';
+import sharp from 'sharp';
 import { ACTIVITY_ILLUSTRATIONS, activityIllustration } from '../activityIllustrations';
 
 const BIRTH_2M_ACTIVITY_SLUGS = [
@@ -50,9 +52,17 @@ const TEN_TO_TWELVE_MONTH_ACTIVITY_SLUGS = [
 
 const TWO_YEAR_ACTIVITY_SLUGS = ['act_water_pouring'] as const;
 
-const THREE_YEAR_ACTIVITY_SLUGS = ['act_color_sort'] as const;
+const TWO_AND_HALF_YEAR_ACTIVITY_SLUGS = ['act_picture_story_2_5y'] as const;
 
-const FOUR_YEAR_ACTIVITY_SLUGS = ['act_story_sequence'] as const;
+const THREE_YEAR_ACTIVITY_SLUGS = ['act_color_sort', 'act_picture_story_3y'] as const;
+
+const THREE_AND_HALF_YEAR_ACTIVITY_SLUGS = ['act_picture_story_3_5y'] as const;
+
+const FOUR_YEAR_ACTIVITY_SLUGS = ['act_story_sequence', 'act_picture_story_4y'] as const;
+
+const FOUR_AND_HALF_YEAR_ACTIVITY_SLUGS = ['act_picture_story_4_5y'] as const;
+
+const FIVE_YEAR_ACTIVITY_SLUGS = ['act_picture_story_5y'] as const;
 
 const TARGETED_ACTIVITY_SLUGS = [
   ...BIRTH_2M_ACTIVITY_SLUGS,
@@ -61,8 +71,12 @@ const TARGETED_ACTIVITY_SLUGS = [
   ...SEVEN_TO_NINE_MONTH_ACTIVITY_SLUGS,
   ...TEN_TO_TWELVE_MONTH_ACTIVITY_SLUGS,
   ...TWO_YEAR_ACTIVITY_SLUGS,
+  ...TWO_AND_HALF_YEAR_ACTIVITY_SLUGS,
   ...THREE_YEAR_ACTIVITY_SLUGS,
+  ...THREE_AND_HALF_YEAR_ACTIVITY_SLUGS,
   ...FOUR_YEAR_ACTIVITY_SLUGS,
+  ...FOUR_AND_HALF_YEAR_ACTIVITY_SLUGS,
+  ...FIVE_YEAR_ACTIVITY_SLUGS,
 ] as const;
 
 describe('published activity illustrations', () => {
@@ -75,15 +89,31 @@ describe('published activity illustrations', () => {
     expect(new Set(paths).size).toBe(TARGETED_ACTIVITY_SLUGS.length);
 
     TARGETED_ACTIVITY_SLUGS.forEach((slug) => {
-      const ageGroup = FOUR_YEAR_ACTIVITY_SLUGS.includes(
+      const ageGroup = FIVE_YEAR_ACTIVITY_SLUGS.includes(
+        slug as (typeof FIVE_YEAR_ACTIVITY_SLUGS)[number],
+      )
+        ? '5y'
+        : FOUR_AND_HALF_YEAR_ACTIVITY_SLUGS.includes(
+            slug as (typeof FOUR_AND_HALF_YEAR_ACTIVITY_SLUGS)[number],
+          )
+          ? '4_5y'
+          : FOUR_YEAR_ACTIVITY_SLUGS.includes(
         slug as (typeof FOUR_YEAR_ACTIVITY_SLUGS)[number],
       )
         ? '4y'
-        : THREE_YEAR_ACTIVITY_SLUGS.includes(
+        : THREE_AND_HALF_YEAR_ACTIVITY_SLUGS.includes(
+              slug as (typeof THREE_AND_HALF_YEAR_ACTIVITY_SLUGS)[number],
+            )
+          ? '3_5y'
+          : THREE_YEAR_ACTIVITY_SLUGS.includes(
               slug as (typeof THREE_YEAR_ACTIVITY_SLUGS)[number],
             )
           ? '3y'
-          : TWO_YEAR_ACTIVITY_SLUGS.includes(
+          : TWO_AND_HALF_YEAR_ACTIVITY_SLUGS.includes(
+                slug as (typeof TWO_AND_HALF_YEAR_ACTIVITY_SLUGS)[number],
+              )
+            ? '2_5y'
+            : TWO_YEAR_ACTIVITY_SLUGS.includes(
                 slug as (typeof TWO_YEAR_ACTIVITY_SLUGS)[number],
               )
             ? '2y'
@@ -182,12 +212,32 @@ describe('published activity illustrations', () => {
   it('maps every published 3-year slug to its approved unique asset', () => {
     expect(THREE_YEAR_ACTIVITY_SLUGS.map((slug) => activityIllustration(slug))).toEqual([
       '/activities/3y/act_color_sort.baca30dca4.webp',
+      '/activities/3y/act_picture_story_3y.a49dcf95b8.webp',
     ]);
   });
 
   it('maps the published 4-year slug to its approved unique asset', () => {
     expect(FOUR_YEAR_ACTIVITY_SLUGS.map((slug) => activityIllustration(slug))).toEqual([
       '/activities/4y/act_story_sequence.8064356734.webp',
+      '/activities/4y/act_picture_story_4y.06e23ab395.webp',
+    ]);
+  });
+
+  it('maps the six picture-story successor slugs to exact unique assets', () => {
+    expect([
+      ...TWO_AND_HALF_YEAR_ACTIVITY_SLUGS,
+      'act_picture_story_3y',
+      ...THREE_AND_HALF_YEAR_ACTIVITY_SLUGS,
+      'act_picture_story_4y',
+      ...FOUR_AND_HALF_YEAR_ACTIVITY_SLUGS,
+      ...FIVE_YEAR_ACTIVITY_SLUGS,
+    ].map((slug) => activityIllustration(slug))).toEqual([
+      '/activities/2_5y/act_picture_story_2_5y.e12a8d8f05.webp',
+      '/activities/3y/act_picture_story_3y.a49dcf95b8.webp',
+      '/activities/3_5y/act_picture_story_3_5y.5db180fe30.webp',
+      '/activities/4y/act_picture_story_4y.06e23ab395.webp',
+      '/activities/4_5y/act_picture_story_4_5y.8375c98d12.webp',
+      '/activities/5y/act_picture_story_5y.e5ae82b7da.webp',
     ]);
   });
 
@@ -196,7 +246,30 @@ describe('published activity illustrations', () => {
       const filePath = resolve(process.cwd(), 'public', assetPath.slice(1));
       expect(existsSync(filePath)).toBe(true);
       expect(statSync(filePath).size).toBeLessThan(500 * 1024);
+
+      const digest = createHash('sha256')
+        .update(readFileSync(filePath))
+        .digest('hex')
+        .slice(0, 10);
+      expect(basename(filePath)).toContain(`.${digest}.webp`);
     });
+  });
+
+  it('keeps every new picture-story asset at a responsive 4:3 WebP size', async () => {
+    const pictureStoryPaths = [
+      ...TWO_AND_HALF_YEAR_ACTIVITY_SLUGS,
+      'act_picture_story_3y',
+      ...THREE_AND_HALF_YEAR_ACTIVITY_SLUGS,
+      'act_picture_story_4y',
+      ...FOUR_AND_HALF_YEAR_ACTIVITY_SLUGS,
+      ...FIVE_YEAR_ACTIVITY_SLUGS,
+    ].map((slug) => activityIllustration(slug)!);
+    for (const assetPath of pictureStoryPaths) {
+      const metadata = await sharp(resolve(process.cwd(), 'public', assetPath.slice(1))).metadata();
+      expect(metadata.format).toBe('webp');
+      expect(metadata.width).toBe(1200);
+      expect(metadata.height).toBe(900);
+    }
   });
 
   it('never resolves an age group, domain, category, or unknown fallback', () => {
@@ -206,8 +279,12 @@ describe('published activity illustrations', () => {
     expect(activityIllustration('7_9m')).toBeUndefined();
     expect(activityIllustration('10_12m')).toBeUndefined();
     expect(activityIllustration('2y')).toBeUndefined();
+    expect(activityIllustration('2_5y')).toBeUndefined();
     expect(activityIllustration('3y')).toBeUndefined();
+    expect(activityIllustration('3_5y')).toBeUndefined();
     expect(activityIllustration('4y')).toBeUndefined();
+    expect(activityIllustration('4_5y')).toBeUndefined();
+    expect(activityIllustration('5y')).toBeUndefined();
     expect(activityIllustration('fine_motor')).toBeUndefined();
     expect(activityIllustration('play')).toBeUndefined();
     expect(activityIllustration('unknown')).toBeUndefined();

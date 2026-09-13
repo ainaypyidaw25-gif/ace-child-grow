@@ -1,12 +1,23 @@
 import { describe, expect, it } from 'vitest';
-import { existsSync, readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { createHash } from 'node:crypto';
+import { existsSync, readFileSync, statSync } from 'node:fs';
+import { basename, resolve } from 'node:path';
+import sharp from 'sharp';
 import { LESSON_ILLUSTRATIONS, lessonIllustration } from '../lessonIllustrations';
 
 const LANGUAGE_DEVELOPMENT_SLUGS = ['lsn_language_rich_home'] as const;
 const PROBLEM_SOLVING_SLUGS = ['lsn_problem_solving_parenting'] as const;
 const SCREEN_TIME_SLUGS = ['lsn_screen_time'] as const;
 const SLEEP_SLUGS = ['lsn_healthy_sleep'] as const;
+const AI_DETAIL_IMAGE_SLUGS = [
+  'lsn_big_feelings',
+  'lsn_early_math',
+  'lsn_making_friends',
+  'lsn_power_of_play',
+  'lsn_reading_together',
+  'lsn_talk_more',
+  'lsn_what_is_development',
+] as const;
 const BLOCKED_SUCCESSOR_MEDIA_SLUGS = ['lsn_prepare_preschool', 'lsn_creativity'] as const;
 
 describe('published language-development lesson illustrations', () => {
@@ -23,7 +34,35 @@ describe('published language-development lesson illustrations', () => {
 
   it('resolves every mapped asset to an existing file under public', () => {
     Object.values(LESSON_ILLUSTRATIONS).forEach((assetPath) => {
-      expect(existsSync(resolve(process.cwd(), 'public', assetPath.slice(1)))).toBe(true);
+      const filePath = resolve(process.cwd(), 'public', assetPath.slice(1));
+      expect(existsSync(filePath)).toBe(true);
+      expect(statSync(filePath).size).toBeLessThan(500 * 1024);
+
+      const digest = createHash('sha256')
+        .update(readFileSync(filePath))
+        .digest('hex')
+        .slice(0, 10);
+      expect(basename(filePath)).toContain(`.${digest}.webp`);
+    });
+  });
+
+  it('keeps every new AI-lane asset at a responsive 4:3 WebP size', async () => {
+    for (const slug of AI_DETAIL_IMAGE_SLUGS) {
+      const assetPath = lessonIllustration(slug)!;
+      const metadata = await sharp(resolve(process.cwd(), 'public', assetPath.slice(1))).metadata();
+      expect(metadata.format).toBe('webp');
+      expect(metadata.width).toBe(1200);
+      expect(metadata.height).toBe(900);
+    }
+  });
+
+  it('maps each new AI-lane lesson hero by exact slug without a fallback', () => {
+    const paths = AI_DETAIL_IMAGE_SLUGS.map((slug) => lessonIllustration(slug));
+    expect(new Set(paths).size).toBe(AI_DETAIL_IMAGE_SLUGS.length);
+    AI_DETAIL_IMAGE_SLUGS.forEach((slug) => {
+      expect(lessonIllustration(slug)).toMatch(
+        new RegExp(`^/lessons/${slug}/${slug}\\.[a-f0-9]{10}\\.webp$`),
+      );
     });
   });
 

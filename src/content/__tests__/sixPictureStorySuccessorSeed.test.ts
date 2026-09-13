@@ -81,14 +81,16 @@ describe('six source-corrected picture-story activity successors', () => {
     }
   });
 
-  it('preserves exact hidden placeholder media and adds no target-specific asset claim', () => {
+  it('preserves exact hidden database placeholders while using an exact static hero', () => {
     for (const target of SIX_PICTURE_STORY_SUCCESSOR_TARGETS) {
       const row = CONTENT_SEED.find((item) => item.slug === target.slug)!;
       expect(row.media, target.slug).toEqual([
         { kind: 'illustration', placeholder: true, offline: true },
         { kind: 'video', placeholder: true },
       ]);
-      expect(activityIllustration(target.slug), target.slug).toBeUndefined();
+      expect(activityIllustration(target.slug), target.slug).toMatch(
+        new RegExp(`^/activities/[^/]+/${target.slug}\\.[a-f0-9]{10}\\.webp$`),
+      );
     }
   });
 

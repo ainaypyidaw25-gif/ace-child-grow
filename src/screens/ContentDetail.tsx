@@ -10,6 +10,7 @@ import { ActivityScene } from '../components/ActivityScene';
 import { activityIllustration } from '../content/activityIllustrations';
 import { guideIllustration } from '../content/guideIllustrations';
 import { lessonIllustration } from '../content/lessonIllustrations';
+import { milestoneIllustration } from '../content/milestoneIllustrations';
 import { printableIllustration } from '../content/printableIllustrations';
 import { storyIllustration } from '../content/storyIllustrations';
 import { approvedPrintablePayload } from '../domain/content/printableAvailability';
@@ -108,6 +109,9 @@ export function ContentDetail() {
   const mappedGuideIllustration = item.type === 'guide'
     ? guideIllustration(item.slug)
     : undefined;
+  const mappedMilestoneIllustration = item.type === 'milestone'
+    ? milestoneIllustration(item.slug)
+    : undefined;
   const mappedPrintableIllustration = item.type === 'printable'
     ? printableIllustration(item.slug)
     : undefined;
@@ -120,6 +124,7 @@ export function ContentDetail() {
     && !(mappedLessonIllustration && asset.kind === 'illustration')
     && !(mappedActivityIllustration && asset.kind === 'illustration')
     && !(mappedGuideIllustration && asset.kind === 'illustration')
+    && !(mappedMilestoneIllustration && asset.kind === 'illustration')
     && !(mappedPrintableIllustration && asset.kind === 'illustration')
     && !(mappedStoryIllustration && asset.kind === 'illustration')
   ));
@@ -159,6 +164,21 @@ export function ContentDetail() {
         )}
         <AiPublicationStatus publicationLane={item.publicationLane} locale={locale} />
       </div>
+
+      {mappedMilestoneIllustration && (
+        <figure className="overflow-hidden rounded-card border border-line bg-white shadow-card">
+          <img
+            src={mappedMilestoneIllustration}
+            alt={locale === 'mm' ? item.titleMm : item.titleEn}
+            width={1200}
+            height={900}
+            loading="eager"
+            decoding="async"
+            data-testid="milestone-illustration"
+            className="aspect-[4/3] w-full bg-canvas object-cover"
+          />
+        </figure>
+      )}
 
       {mappedLessonIllustration && (
         <figure className="overflow-hidden rounded-card border border-line bg-white shadow-card">
