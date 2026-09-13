@@ -261,13 +261,25 @@ export function useOfflineDownload(): {
     // Anything held on the device that is no longer published must go: a
     // reviewer withdrawing content should not leave it readable offline.
     const remove = stored.map((r) => r.slug).filter((slug) => !availableSlugs.has(slug));
+    const currentKeys = new Set(available.flatMap((record) => (record.media ?? []).map((media) => media.cacheKey)));
+    const legacyAiKeys = [...new Set(stored
+      .filter((record) => record.publicationLane === 'ai_audited')
+      .flatMap((record) => record.media ?? [])
+      .map((media) => media.cacheKey)
+      .filter((cacheKey) => !currentKeys.has(cacheKey)))];
+    // The current AI publication lane is text-only. Remove every legacy AI
+    // byte before dropping its last durable key reference; if Cache Storage
+    // cannot confirm deletion, retain the previous IDB manifest and fail closed.
+    if (legacyAiKeys.length > 0 && !(await removeOfflineMedia(legacyAiKeys))) {
+      return { ok: false, saved: 0, removed: 0, mediaSaved: 0, failure: 'storage' };
+    }
     const ok = await saveRecords(available, remove);
     if (ok) {
-      const currentKeys = new Set(available.flatMap((record) => (record.media ?? []).map((media) => media.cacheKey)));
+      const legacyAiKeySet = new Set(legacyAiKeys);
       const staleKeys = stored
         .flatMap((record) => record.media ?? [])
         .map((media) => media.cacheKey)
-        .filter((cacheKey) => !currentKeys.has(cacheKey));
+        .filter((cacheKey) => !currentKeys.has(cacheKey) && !legacyAiKeySet.has(cacheKey));
       await removeOfflineMedia(staleKeys);
       publish(available);
     }

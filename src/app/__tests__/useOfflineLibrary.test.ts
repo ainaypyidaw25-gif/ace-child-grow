@@ -1,4 +1,4 @@
-import { act, renderHook } from '@testing-library/react';
+import { act, renderHook, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { OfflineRecord } from '../../domain/offline/offlineLibrary';
 
@@ -36,7 +36,11 @@ vi.mock('../offlineMediaStore', () => ({
   removeOfflineMedia,
 }));
 
-import { useOfflineDownload, withdrawUnavailableOfflineContent } from '../useOfflineLibrary';
+import {
+  useDownloadedLibrary,
+  useOfflineDownload,
+  withdrawUnavailableOfflineContent,
+} from '../useOfflineLibrary';
 
 function offlineRecord(slug: string, cacheKey?: string): OfflineRecord {
   return {
@@ -221,6 +225,36 @@ describe('source-bound offline download', () => {
     expect(convexQuery).toHaveBeenCalledTimes(1);
     expect(convexQuery).toHaveBeenCalledWith(expect.anything(), { slug: row.slug, kind: row.type });
     expect(removeOfflineMedia).toHaveBeenCalledWith([prior.media![0].cacheKey]);
+  });
+
+  it('fails before saving or publishing when legacy AI media cannot be removed', async () => {
+    const prior = offlineRecord(row.slug, 'https://offline/old-media');
+    readAllRecords.mockResolvedValue([{ ...prior, publicationLane: 'ai_audited', references: [source] }]);
+    isOfflineMediaStorageAvailable.mockReturnValue(true);
+    convexQuery.mockResolvedValue({
+      allowed: true,
+      item: atomicItem,
+      sources: [source],
+    });
+    removeOfflineMedia.mockResolvedValue(false);
+    const downloaded = renderHook(() => useDownloadedLibrary());
+    await waitFor(() => expect(downloaded.result.current.loaded).toBe(true));
+    const publishedBeforeAttempt = downloaded.result.current.records;
+    const { result } = renderHook(() => useOfflineDownload());
+
+    await act(async () => {
+      await expect(result.current.download([row])).resolves.toEqual({
+        ok: false,
+        saved: 0,
+        removed: 0,
+        mediaSaved: 0,
+        failure: 'storage',
+      });
+    });
+
+    expect(removeOfflineMedia).toHaveBeenCalledWith([prior.media![0].cacheKey]);
+    expect(saveRecords).not.toHaveBeenCalled();
+    expect(downloaded.result.current.records).toBe(publishedBeforeAttempt);
   });
 
   it('keeps partial valid media for conventional human-reviewed downloads', async () => {
