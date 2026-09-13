@@ -45,7 +45,11 @@ function context(rows: Record<string, Row[]>) {
       },
     };
   });
-  return { auth: {}, db: { query } };
+  return {
+    auth: {},
+    db: { query },
+    storage: { getUrl: vi.fn(async () => 'https://storage.example/current') },
+  };
 }
 
 function handler() {
@@ -111,7 +115,54 @@ describe('atomic AI offline snapshot', () => {
         source: aiItem.source,
       },
       sources: [source],
+      media: [],
     });
+  });
+
+  it('returns only approved parent-entitled media from the same snapshot', async () => {
+    const freeImage = {
+      _id: 'media-free',
+      contentSlug: aiItem.slug,
+      kind: 'illustration',
+      storageId: 'storage-free',
+      mimeType: 'image/webp',
+      altMm: 'လက်ရှိပုံ',
+      altEn: 'Current image',
+      placeholder: false,
+      reviewStatus: 'approved',
+      accessLevel: 'free_sample',
+      sortOrder: 2,
+    };
+    const rows = {
+      libraryContent: [aiItem],
+      evidenceLinks: [{ kind: 'lesson', slug: aiItem.slug, sourceIds: [source.sourceId] }],
+      evidenceSources: [source],
+      subscriptions: [],
+      familyCaregivers: [],
+      libraryMedia: [
+        { ...freeImage, _id: 'media-placeholder', placeholder: true, sortOrder: 0 },
+        { ...freeImage, _id: 'media-reviewing', reviewStatus: 'in_review', sortOrder: 1 },
+        freeImage,
+        { ...freeImage, _id: 'media-premium', accessLevel: 'premium', sortOrder: 3 },
+      ],
+    };
+    const ctx = context(rows);
+
+    await expect(handler()(ctx, { slug: aiItem.slug, kind: 'lesson' }))
+      .resolves.toMatchObject({
+        allowed: true,
+        media: [{
+          id: freeImage._id,
+          kind: freeImage.kind,
+          url: null,
+          storageUrl: 'https://storage.example/current',
+          mimeType: freeImage.mimeType,
+          altMm: freeImage.altMm,
+          altEn: freeImage.altEn,
+          accessLevel: 'free_sample',
+        }],
+      });
+    expect(ctx.storage.getUrl).toHaveBeenCalledWith(freeImage.storageId);
   });
 
   it('fails closed for unauthenticated, unreadable, wrong-kind and non-AI content', async () => {

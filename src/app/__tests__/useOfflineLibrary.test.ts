@@ -135,6 +135,7 @@ describe('source-bound offline download', () => {
       allowed: true,
       item: atomicItem,
       sources: [{ ...source, reviewer: 'not for offline storage', reviewNote: 'private' }],
+      media: [],
     });
     const { result } = renderHook(() => useOfflineDownload());
 
@@ -186,6 +187,7 @@ describe('source-bound offline download', () => {
 
   it('keeps the complete prior cache unchanged when the source request throws', async () => {
     readAllRecords.mockResolvedValue([{ ...offlineRecord(row.slug), references: [source] }]);
+    isOfflineMediaStorageAvailable.mockReturnValue(true);
     convexQuery.mockRejectedValue(new Error('offline during refresh'));
     const { result } = renderHook(() => useOfflineDownload());
 
@@ -194,7 +196,168 @@ describe('source-bound offline download', () => {
     });
 
     expect(saveRecords).not.toHaveBeenCalled();
+    expect(cacheOfflineMediaForContent).not.toHaveBeenCalled();
     expect(removeOfflineMedia).not.toHaveBeenCalled();
+  });
+
+  it('uses only current atomic AI media and never queries or reuses stale same-slug media', async () => {
+    const staleMedia = {
+      id: 'old-media',
+      kind: 'illustration' as const,
+      cacheKey: 'https://offline/old-media',
+      mimeType: 'image/png',
+      sizeBytes: 10,
+      savedAt: 1,
+    };
+    const currentCandidate = {
+      id: 'new-media',
+      kind: 'illustration',
+      url: 'https://cdn.example/new.png',
+      storageUrl: null,
+      mimeType: 'image/png',
+      altMm: null,
+      altEn: 'Current image',
+      captionMm: null,
+      captionEn: null,
+      transcriptMm: null,
+      transcriptEn: null,
+      durationSeconds: null,
+      attributionMm: null,
+      attributionEn: null,
+      accessLevel: 'free_sample',
+    };
+    const currentMedia = {
+      id: 'new-media',
+      kind: 'illustration' as const,
+      cacheKey: 'https://offline/new-media',
+      mimeType: 'image/png',
+      sizeBytes: 20,
+      savedAt: 2,
+    };
+    readAllRecords.mockResolvedValue([{
+      ...offlineRecord(row.slug),
+      publicationLane: 'ai_audited',
+      references: [source],
+      media: [staleMedia],
+    }]);
+    isOfflineMediaStorageAvailable.mockReturnValue(true);
+    convexQuery.mockResolvedValue({
+      allowed: true,
+      item: atomicItem,
+      sources: [source],
+      media: [currentCandidate],
+    });
+    cacheOfflineMediaForContent.mockResolvedValue([currentMedia]);
+    const { result } = renderHook(() => useOfflineDownload());
+
+    await act(async () => {
+      await expect(result.current.download([row])).resolves.toMatchObject({ ok: true, mediaSaved: 1 });
+    });
+
+    expect(convexQuery).toHaveBeenCalledTimes(1);
+    expect(convexQuery).toHaveBeenCalledWith(expect.anything(), { slug: row.slug, kind: row.type });
+    expect(cacheOfflineMediaForContent).toHaveBeenCalledWith(
+      row.slug,
+      [currentCandidate],
+      expect.any(Number),
+      expect.any(String),
+      false,
+    );
+    expect(saveRecords).toHaveBeenCalledWith([
+      expect.objectContaining({ media: [currentMedia] }),
+    ], []);
+    expect(saveRecords.mock.calls[0][0][0].media).not.toContainEqual(staleMedia);
+  });
+
+  it('writes empty AI media instead of reusing stale media when the atomic snapshot has none', async () => {
+    const prior = offlineRecord(row.slug, 'https://offline/old-media');
+    readAllRecords.mockResolvedValue([{ ...prior, publicationLane: 'ai_audited', references: [source] }]);
+    isOfflineMediaStorageAvailable.mockReturnValue(true);
+    convexQuery.mockResolvedValue({
+      allowed: true,
+      item: atomicItem,
+      sources: [source],
+      media: [],
+    });
+    cacheOfflineMediaForContent.mockResolvedValue([]);
+    const { result } = renderHook(() => useOfflineDownload());
+
+    await act(async () => {
+      await expect(result.current.download([row])).resolves.toMatchObject({ ok: true, mediaSaved: 0 });
+    });
+
+    expect(cacheOfflineMediaForContent).not.toHaveBeenCalled();
+    expect(saveRecords).toHaveBeenCalledWith([
+      expect.objectContaining({ media: [] }),
+    ], []);
+  });
+
+  it('preserves the prior AI record when any downloadable snapshot media cannot be cached', async () => {
+    const prior = {
+      ...offlineRecord(row.slug, 'https://offline/old-media'),
+      publicationLane: 'ai_audited' as const,
+      references: [source],
+    };
+    const currentCandidate = {
+      id: 'new-media',
+      kind: 'illustration',
+      url: 'https://cdn.example/new.png',
+      storageUrl: null,
+      mimeType: 'image/png',
+      altMm: null,
+      altEn: 'Current image',
+      captionMm: null,
+      captionEn: null,
+      transcriptMm: null,
+      transcriptEn: null,
+      durationSeconds: null,
+      attributionMm: null,
+      attributionEn: null,
+      accessLevel: 'free_sample',
+    };
+    readAllRecords.mockResolvedValue([prior]);
+    isOfflineMediaStorageAvailable.mockReturnValue(true);
+    convexQuery.mockResolvedValue({
+      allowed: true,
+      item: atomicItem,
+      sources: [source],
+      media: [
+        currentCandidate,
+        { ...currentCandidate, id: 'missing-media', url: 'https://cdn.example/missing.png' },
+        { ...currentCandidate, id: 'ignored-video', kind: 'video', url: 'https://cdn.example/video.mp4' },
+      ],
+    });
+    const stagedMedia = {
+      id: 'new-media',
+      kind: 'illustration' as const,
+      cacheKey: 'https://offline/new-media@staged',
+      mimeType: 'image/png',
+      sizeBytes: 20,
+      savedAt: 2,
+    };
+    cacheOfflineMediaForContent.mockResolvedValue([stagedMedia]);
+    const { result } = renderHook(() => useOfflineDownload());
+
+    await act(async () => {
+      await expect(result.current.download([row])).resolves.toEqual({
+        ok: false,
+        saved: 0,
+        removed: 0,
+        mediaSaved: 0,
+        failure: 'sources',
+      });
+    });
+
+    expect(cacheOfflineMediaForContent).toHaveBeenCalledWith(
+      row.slug,
+      [currentCandidate, expect.objectContaining({ id: 'missing-media' })],
+      expect.any(Number),
+      expect.any(String),
+      false,
+    );
+    expect(saveRecords).not.toHaveBeenCalled();
+    expect(removeOfflineMedia).toHaveBeenCalledWith([stagedMedia.cacheKey]);
+    expect(removeOfflineMedia).not.toHaveBeenCalledWith(expect.arrayContaining([prior.media![0].cacheKey]));
   });
 
   it('keeps conventional human-reviewed downloads compatible without an evidence lookup', async () => {

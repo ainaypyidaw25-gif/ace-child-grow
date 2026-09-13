@@ -3,6 +3,7 @@ import type { OfflineMediaCandidate } from '../../domain/offline/offlineLibrary'
 import {
   cacheOfflineMediaAsset,
   mediaMimeMatchesKind,
+  OFFLINE_MEDIA_BUDGET_BYTES,
   offlineMediaCacheKey,
   planMediaEviction,
 } from '../offlineMediaStore';
@@ -59,7 +60,9 @@ describe('caching a media response', () => {
     const fakeCache = {
       keys: vi.fn(async () => [...stored.keys()].map((url) => new Request(url))),
       match: vi.fn(async (request: RequestInfo | URL) => {
-        const key = typeof request === 'string' ? request : request.toString();
+        const key = typeof request === 'string'
+          ? request
+          : request instanceof Request ? request.url : request.toString();
         return stored.get(key)?.clone();
       }),
       put: vi.fn(async (request: RequestInfo | URL, response: Response) => {
@@ -86,5 +89,42 @@ describe('caching a media response', () => {
     expect(result?.sizeBytes).toBeGreaterThan(0);
     expect(result?.cacheKey).toContain('/__ace_offline_media__/asset_1');
     expect(fakeCache.put).toHaveBeenCalledOnce();
+  });
+
+  it('does not evict prior committed bytes while staging an atomic AI refresh', async () => {
+    const stored = new Map<string, Response>([[
+      'https://offline.ace.invalid/__ace_offline_media__/prior',
+      new Response(new Blob(['123456789'], { type: 'image/png' }), {
+        headers: {
+          'content-type': 'image/png',
+          'x-ace-saved-at': '1',
+          'x-ace-size': String(OFFLINE_MEDIA_BUDGET_BYTES),
+        },
+      }),
+    ]]);
+    const fakeCache = {
+      keys: vi.fn(async () => [...stored.keys()].map((url) => new Request(url))),
+      match: vi.fn(async (request: RequestInfo | URL) => {
+        const key = typeof request === 'string'
+          ? request
+          : request instanceof Request ? request.url : request.toString();
+        return stored.get(key)?.clone();
+      }),
+      put: vi.fn(),
+      delete: vi.fn(),
+    } as unknown as Cache;
+    vi.stubGlobal('caches', {
+      open: vi.fn(async () => fakeCache),
+      delete: vi.fn(async () => true),
+    });
+    vi.stubGlobal('fetch', vi.fn(async () => new Response(
+      new Blob(['png'], { type: 'image/png' }),
+      { status: 200, headers: { 'content-type': 'image/png' } },
+    )));
+
+    await expect(cacheOfflineMediaAsset('story_one', candidate(), 123, '123', false))
+      .resolves.toBeNull();
+    expect(fakeCache.delete).not.toHaveBeenCalled();
+    expect(fakeCache.put).not.toHaveBeenCalled();
   });
 });

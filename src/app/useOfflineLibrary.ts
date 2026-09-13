@@ -4,6 +4,7 @@ import { api } from '../../convex/_generated/api';
 import {
   filterOfflineRecords,
   hasValidOfflineReferences,
+  isDownloadableMedia,
   sanitizeOfflineReferences,
   selectDownloadable,
   toOfflineRecord,
@@ -131,7 +132,11 @@ const TYPES_WITH_MEDIA = new Set(['activity', 'lesson', 'story', 'special_need',
 async function addOfflineReferences(
   available: OfflineRecord[],
   savedAt: number,
-): Promise<{ ok: true; records: OfflineRecord[] } | { ok: false }> {
+): Promise<{
+  ok: true;
+  records: OfflineRecord[];
+  aiMediaBySlug: Map<string, OfflineMediaCandidate[]>;
+} | { ok: false }> {
   let convex: typeof import('../lib/convexClient')['convex'];
   try {
     ({ convex } = await import('../lib/convexClient'));
@@ -140,6 +145,7 @@ async function addOfflineReferences(
   }
 
   const enriched = [...available];
+  const aiMediaBySlug = new Map<string, OfflineMediaCandidate[]>();
   let nextIndex = 0;
   let failed = false;
   const worker = async () => {
@@ -175,6 +181,7 @@ async function addOfflineReferences(
           ...toOfflineRecord(result.item, savedAt),
           references,
         };
+        aiMediaBySlug.set(candidate.slug, result.media as OfflineMediaCandidate[]);
       } catch {
         failed = true;
       }
@@ -182,20 +189,34 @@ async function addOfflineReferences(
   };
 
   await Promise.all(Array.from({ length: Math.min(4, enriched.length) }, () => worker()));
-  return failed ? { ok: false } : { ok: true, records: enriched };
+  return failed ? { ok: false } : { ok: true, records: enriched, aiMediaBySlug };
 }
 
 async function addOfflineMedia(
   available: OfflineRecord[],
   stored: OfflineRecord[],
   savedAt: number,
-): Promise<OfflineRecord[]> {
-  if (!isOfflineMediaStorageAvailable()) return available.map((record) => ({ ...record, media: [] }));
+  aiMediaBySlug: ReadonlyMap<string, OfflineMediaCandidate[]>,
+): Promise<{ ok: true; records: OfflineRecord[] } | { ok: false }> {
+  const downloadableAiMedia = new Map(
+    [...aiMediaBySlug].map(([slug, candidates]) => [
+      slug,
+      candidates.filter(isDownloadableMedia),
+    ]),
+  );
+  if (!isOfflineMediaStorageAvailable()) {
+    if ([...downloadableAiMedia.values()].some((candidates) => candidates.length > 0)) {
+      return { ok: false };
+    }
+    return { ok: true, records: available.map((record) => ({ ...record, media: [] })) };
+  }
   // Load the authenticated client only after the parent taps Download. Reading
   // any library screen stays lightweight and test mocks do not need a client.
   const { convex } = await import('../lib/convexClient');
   const storedBySlug = new Map(stored.map((record) => [record.slug, record]));
   const enriched = [...available];
+  const stagedAiCacheKeys: string[] = [];
+  let aiFailed = false;
   let nextIndex = 0;
 
   // A bounded worker pool avoids opening hundreds of simultaneous Convex reads
@@ -206,6 +227,51 @@ async function addOfflineMedia(
       const index = nextIndex;
       nextIndex += 1;
       const record = enriched[index];
+      if (record.publicationLane === 'ai_audited') {
+        // AI content and media metadata came from one server transaction. Do
+        // not issue a later media query and never reuse same-slug prior media.
+        // Only illustration/audio with an HTTPS source are in the existing
+        // offline-media contract; video/animation metadata must not create a
+        // false incomplete-download failure.
+        const candidates = downloadableAiMedia.get(record.slug) ?? [];
+        if (candidates.length === 0) {
+          enriched[index] = { ...record, media: [] };
+          continue;
+        }
+        try {
+          const media = await cacheOfflineMediaForContent(
+            record.slug,
+            candidates,
+            savedAt,
+            String(savedAt),
+            false,
+          );
+          stagedAiCacheKeys.push(...media.map((asset) => asset.cacheKey));
+          const expectedIds = new Set(candidates.map((candidate) => candidate.id));
+          const actualIds = new Set(media.map((asset) => asset.id));
+          if (
+            expectedIds.size !== candidates.length
+            || actualIds.size !== media.length
+            || media.length !== candidates.length
+            || [...expectedIds].some((id) => !actualIds.has(id))
+          ) {
+            aiFailed = true;
+            continue;
+          }
+          const retained = await keepExistingOfflineMedia(media);
+          if (
+            retained.length !== media.length
+            || retained.some((asset) => !actualIds.has(asset.id))
+          ) {
+            aiFailed = true;
+            continue;
+          }
+          enriched[index] = { ...record, media: retained };
+        } catch {
+          aiFailed = true;
+        }
+        continue;
+      }
       if (!TYPES_WITH_MEDIA.has(record.type)) continue;
       try {
         const candidates = await convex.query(api.media.listForContent, { contentSlug: record.slug });
@@ -224,11 +290,18 @@ async function addOfflineMedia(
   };
 
   await Promise.all(Array.from({ length: Math.min(4, enriched.length) }, () => worker()));
+  if (aiFailed) {
+    // These are generation-specific staging keys, never keys referenced by the
+    // prior committed record. Cleaning them cannot damage the previous cache.
+    await removeOfflineMedia(stagedAiCacheKeys);
+    return { ok: false };
+  }
   for (let index = 0; index < enriched.length; index += 1) {
+    if (enriched[index].publicationLane === 'ai_audited') continue;
     const media = await keepExistingOfflineMedia(enriched[index].media ?? []);
     enriched[index] = { ...enriched[index], media };
   }
-  return enriched;
+  return { ok: true, records: enriched };
 }
 
 /** Save the currently published library to the device. */
@@ -249,7 +322,16 @@ export function useOfflineDownload(): {
     if (!sourceResult.ok) {
       return { ok: false, saved: 0, removed: 0, mediaSaved: 0, failure: 'sources' };
     }
-    const available = await addOfflineMedia(sourceResult.records, stored, now);
+    const mediaResult = await addOfflineMedia(
+      sourceResult.records,
+      stored,
+      now,
+      sourceResult.aiMediaBySlug,
+    );
+    if (!mediaResult.ok) {
+      return { ok: false, saved: 0, removed: 0, mediaSaved: 0, failure: 'sources' };
+    }
+    const available = mediaResult.records;
     const availableSlugs = new Set(available.map((record) => record.slug));
     // Anything held on the device that is no longer published must go: a
     // reviewer withdrawing content should not leave it readable offline.
