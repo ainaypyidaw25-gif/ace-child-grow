@@ -6,6 +6,7 @@ import {
   hasValidOfflineReferences,
   sanitizeOfflineReferences,
   selectDownloadable,
+  toOfflineRecord,
   type LibraryFilter,
   type LibraryRowLike,
   type OfflineMediaCandidate,
@@ -129,6 +130,7 @@ const TYPES_WITH_MEDIA = new Set(['activity', 'lesson', 'story', 'special_need',
 
 async function addOfflineReferences(
   available: OfflineRecord[],
+  savedAt: number,
 ): Promise<{ ok: true; records: OfflineRecord[] } | { ok: false }> {
   let convex: typeof import('../lib/convexClient')['convex'];
   try {
@@ -144,22 +146,35 @@ async function addOfflineReferences(
     while (nextIndex < enriched.length) {
       const index = nextIndex;
       nextIndex += 1;
-      const record = enriched[index];
-      if (record.publicationLane !== 'ai_audited') continue;
+      const candidate = enriched[index];
+      if (candidate.publicationLane !== 'ai_audited') continue;
       try {
-        const result = await convex.query(api.evidence.forContent, {
-          slug: record.slug,
-          kind: record.type,
-          audience: 'parent',
+        const result = await convex.query(api.offlineLibrary.getAiSnapshot, {
+          slug: candidate.slug,
+          kind: candidate.type,
         });
-        const references = result.allowed
-          ? sanitizeOfflineReferences(result.sources)
-          : null;
+        if (
+          !result.allowed
+          || result.item.slug !== candidate.slug
+          || result.item.type !== candidate.type
+          || result.item.clinicalStatus !== 'clinical_review'
+          || result.item.publicationLane !== 'ai_audited'
+        ) {
+          failed = true;
+          continue;
+        }
+        const references = sanitizeOfflineReferences(result.sources);
         if (!references) {
           failed = true;
           continue;
         }
-        enriched[index] = { ...record, references };
+        // Never combine the caller's possibly stale list row with a later
+        // evidence response. Persist only the content returned by the same
+        // server transaction as these exact citations.
+        enriched[index] = {
+          ...toOfflineRecord(result.item, savedAt),
+          references,
+        };
       } catch {
         failed = true;
       }
@@ -230,7 +245,7 @@ export function useOfflineDownload(): {
     // any lookup fails, the previous download remains intact in full. The
     // conventional human-reviewed catalogue keeps its existing offline
     // compatibility contract and is not blocked by an absent citation row.
-    const sourceResult = await addOfflineReferences(selected);
+    const sourceResult = await addOfflineReferences(selected, now);
     if (!sourceResult.ok) {
       return { ok: false, saved: 0, removed: 0, mediaSaved: 0, failure: 'sources' };
     }

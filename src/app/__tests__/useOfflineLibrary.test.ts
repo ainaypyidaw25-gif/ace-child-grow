@@ -121,11 +121,19 @@ describe('source-bound offline download', () => {
     title: 'Sleep and young children',
     url: 'https://www.nhs.uk/conditions/baby/health/sleep/',
   };
+  const atomicItem = {
+    ...row,
+    clinicalStatus: 'clinical_review',
+    titleMm: 'ဆာဗာမှ အသစ်',
+    titleEn: 'Fresh server copy',
+    data: { body: { mm: 'အသစ်', en: 'fresh' } },
+  };
 
-  it('stores only a sanitized parent citation snapshot with the content', async () => {
+  it('stores the newer atomic content snapshot instead of the stale caller row', async () => {
     readAllRecords.mockResolvedValue([]);
     convexQuery.mockResolvedValue({
       allowed: true,
+      item: atomicItem,
       sources: [{ ...source, reviewer: 'not for offline storage', reviewNote: 'private' }],
     });
     const { result } = renderHook(() => useOfflineDownload());
@@ -137,20 +145,24 @@ describe('source-bound offline download', () => {
     expect(convexQuery).toHaveBeenCalledWith(expect.anything(), {
       slug: row.slug,
       kind: row.type,
-      audience: 'parent',
     });
     expect(saveRecords).toHaveBeenCalledWith([
-      expect.objectContaining({ references: [source] }),
+      expect.objectContaining({
+        titleEn: 'Fresh server copy',
+        data: { body: { mm: 'အသစ်', en: 'fresh' } },
+        references: [source],
+      }),
     ], []);
     const saved = saveRecords.mock.calls[0][0][0];
+    expect(saved.titleEn).not.toBe(row.titleEn);
     expect(saved.references?.[0]).not.toHaveProperty('reviewer');
     expect(saved.references?.[0]).not.toHaveProperty('reviewNote');
   });
 
   it.each([
     { allowed: false, sources: [] },
-    { allowed: true, sources: [] },
-    { allowed: true, sources: [{ ...source, url: 'http://example.com/source' }] },
+    { allowed: true, item: atomicItem, sources: [] },
+    { allowed: true, item: atomicItem, sources: [{ ...source, url: 'http://example.com/source' }] },
   ])('keeps the complete prior cache unchanged when source verification fails', async (evidence) => {
     const prior = { ...offlineRecord(row.slug), references: [source] };
     readAllRecords.mockResolvedValue([prior]);

@@ -466,6 +466,11 @@ export const forContent = query({
       .query('libraryContent')
       .withIndex('by_slug', (qq) => qq.eq('slug', args.slug))
       .unique();
+    // A library slug's canonical kind is server-owned. Never let a caller use
+    // a same-slug link from another kind to select a different evidence set.
+    if (content && args.kind && args.kind !== content.type) {
+      return { allowed: true as const, sources: [] };
+    }
     const contentReadable = content ? await contentIsParentReadable(ctx, content) : false;
     const aiAuditedContent = Boolean(
       content
@@ -476,16 +481,18 @@ export const forContent = query({
     if ((parentAudience || !staff) && content && !contentReadable) {
       return { allowed: true as const, sources: [] };
     }
-    const link = args.kind
+    const canonicalKind = content?.type ?? args.kind;
+    const matchingLinks = canonicalKind
       ? await ctx.db
           .query('evidenceLinks')
-          .withIndex('by_kind_slug', (qq) => qq.eq('kind', args.kind as string).eq('slug', args.slug))
-          .unique()
+          .withIndex('by_kind_slug', (qq) => qq.eq('kind', canonicalKind).eq('slug', args.slug))
+          .take(2)
       : (await ctx.db
           .query('evidenceLinks')
           .withIndex('by_slug', (qq) => qq.eq('slug', args.slug))
-          .take(2))[0];
-    if (!link) return { allowed: true as const, sources: [] };
+          .take(2));
+    if (matchingLinks.length !== 1) return { allowed: true as const, sources: [] };
+    const link = matchingLinks[0];
     const sources = [];
     for (const id of link.sourceIds) {
       const src = await ctx.db
