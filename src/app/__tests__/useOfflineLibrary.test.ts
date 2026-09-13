@@ -1,7 +1,22 @@
+import { act, renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { OfflineRecord } from '../../domain/offline/offlineLibrary';
 
-const { readAllRecords, saveRecords, removeOfflineMedia } = vi.hoisted(() => ({
+const {
+  cacheOfflineMediaForContent,
+  clearOfflineMedia,
+  convexQuery,
+  isOfflineMediaStorageAvailable,
+  keepExistingOfflineMedia,
+  readAllRecords,
+  saveRecords,
+  removeOfflineMedia,
+} = vi.hoisted(() => ({
+  cacheOfflineMediaForContent: vi.fn(),
+  clearOfflineMedia: vi.fn(),
+  convexQuery: vi.fn(),
+  isOfflineMediaStorageAvailable: vi.fn(),
+  keepExistingOfflineMedia: vi.fn(),
   readAllRecords: vi.fn<() => Promise<OfflineRecord[]>>(),
   saveRecords: vi.fn<(
     put: OfflineRecord[],
@@ -11,16 +26,17 @@ const { readAllRecords, saveRecords, removeOfflineMedia } = vi.hoisted(() => ({
 }));
 
 vi.mock('convex/react', () => ({ useQuery: vi.fn() }));
+vi.mock('../../lib/convexClient', () => ({ convex: { query: convexQuery } }));
 vi.mock('../offlineStore', () => ({ readAllRecords, saveRecords }));
 vi.mock('../offlineMediaStore', () => ({
-  cacheOfflineMediaForContent: vi.fn(),
-  clearOfflineMedia: vi.fn(),
-  isOfflineMediaStorageAvailable: vi.fn(),
-  keepExistingOfflineMedia: vi.fn(),
+  cacheOfflineMediaForContent,
+  clearOfflineMedia,
+  isOfflineMediaStorageAvailable,
+  keepExistingOfflineMedia,
   removeOfflineMedia,
 }));
 
-import { withdrawUnavailableOfflineContent } from '../useOfflineLibrary';
+import { useOfflineDownload, withdrawUnavailableOfflineContent } from '../useOfflineLibrary';
 
 function offlineRecord(slug: string, cacheKey?: string): OfflineRecord {
   return {
@@ -46,7 +62,11 @@ function offlineRecord(slug: string, cacheKey?: string): OfflineRecord {
 
 beforeEach(() => {
   vi.clearAllMocks();
+  isOfflineMediaStorageAvailable.mockReturnValue(false);
+  clearOfflineMedia.mockResolvedValue(true);
+  keepExistingOfflineMedia.mockImplementation(async (media) => media);
   removeOfflineMedia.mockResolvedValue(true);
+  saveRecords.mockResolvedValue(true);
 });
 
 describe('automatic offline publication withdrawal', () => {
@@ -80,5 +100,103 @@ describe('automatic offline publication withdrawal', () => {
       .resolves.toEqual({ ok: true, removed: 0 });
     expect(saveRecords).not.toHaveBeenCalled();
     expect(removeOfflineMedia).not.toHaveBeenCalled();
+  });
+});
+
+describe('source-bound offline download', () => {
+  const row = {
+    _id: 'id-guide',
+    slug: 'guide_sleep',
+    type: 'guide',
+    clinicalStatus: 'published',
+    publicationLane: 'ai_audited' as const,
+    titleMm: 'အိပ်စက်ခြင်း',
+    titleEn: 'Sleep',
+    tags: ['sleep'],
+    data: {},
+  };
+  const source = {
+    sourceId: 'nhs-sleep',
+    org: 'NHS',
+    title: 'Sleep and young children',
+    url: 'https://www.nhs.uk/conditions/baby/health/sleep/',
+  };
+
+  it('stores only a sanitized parent citation snapshot with the content', async () => {
+    readAllRecords.mockResolvedValue([]);
+    convexQuery.mockResolvedValue({
+      allowed: true,
+      sources: [{ ...source, reviewer: 'not for offline storage', reviewNote: 'private' }],
+    });
+    const { result } = renderHook(() => useOfflineDownload());
+
+    await act(async () => {
+      await expect(result.current.download([row])).resolves.toMatchObject({ ok: true, saved: 1 });
+    });
+
+    expect(convexQuery).toHaveBeenCalledWith(expect.anything(), {
+      slug: row.slug,
+      kind: row.type,
+      audience: 'parent',
+    });
+    expect(saveRecords).toHaveBeenCalledWith([
+      expect.objectContaining({ references: [source] }),
+    ], []);
+    const saved = saveRecords.mock.calls[0][0][0];
+    expect(saved.references?.[0]).not.toHaveProperty('reviewer');
+    expect(saved.references?.[0]).not.toHaveProperty('reviewNote');
+  });
+
+  it.each([
+    { allowed: false, sources: [] },
+    { allowed: true, sources: [] },
+    { allowed: true, sources: [{ ...source, url: 'http://example.com/source' }] },
+  ])('keeps the complete prior cache unchanged when source verification fails', async (evidence) => {
+    const prior = { ...offlineRecord(row.slug), references: [source] };
+    readAllRecords.mockResolvedValue([prior]);
+    convexQuery.mockResolvedValue(evidence);
+    const { result } = renderHook(() => useOfflineDownload());
+
+    await act(async () => {
+      await expect(result.current.download([row])).resolves.toEqual({
+        ok: false,
+        saved: 0,
+        removed: 0,
+        mediaSaved: 0,
+        failure: 'sources',
+      });
+    });
+
+    expect(saveRecords).not.toHaveBeenCalled();
+    expect(cacheOfflineMediaForContent).not.toHaveBeenCalled();
+    expect(removeOfflineMedia).not.toHaveBeenCalled();
+  });
+
+  it('keeps the complete prior cache unchanged when the source request throws', async () => {
+    readAllRecords.mockResolvedValue([{ ...offlineRecord(row.slug), references: [source] }]);
+    convexQuery.mockRejectedValue(new Error('offline during refresh'));
+    const { result } = renderHook(() => useOfflineDownload());
+
+    await act(async () => {
+      await expect(result.current.download([row])).resolves.toMatchObject({ ok: false, failure: 'sources' });
+    });
+
+    expect(saveRecords).not.toHaveBeenCalled();
+    expect(removeOfflineMedia).not.toHaveBeenCalled();
+  });
+
+  it('keeps conventional human-reviewed downloads compatible without an evidence lookup', async () => {
+    readAllRecords.mockResolvedValue([]);
+    const { result } = renderHook(() => useOfflineDownload());
+
+    await act(async () => {
+      await expect(result.current.download([{ ...row, publicationLane: 'human_reviewed' }]))
+        .resolves.toMatchObject({ ok: true, saved: 1 });
+    });
+
+    expect(convexQuery).not.toHaveBeenCalled();
+    expect(saveRecords).toHaveBeenCalledWith([
+      expect.objectContaining({ slug: row.slug, publicationLane: 'human_reviewed' }),
+    ], []);
   });
 });

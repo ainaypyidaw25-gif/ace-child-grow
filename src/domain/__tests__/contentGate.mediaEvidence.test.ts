@@ -132,6 +132,22 @@ describe('ACG-GATE-002 — evidence.forContent gates unpublished content', () =>
     expect(result.sources).toHaveLength(1);
   });
 
+  it('does not let staff privileges bypass the explicit parent-audience gate', async () => {
+    const context = ctx({
+      profile: { staffRole: 'owner' },
+      rows: {
+        libraryContent: [{ slug: 'guide_x', type: 'guide', clinicalStatus: 'published' }],
+        evidenceLinks: [{ kind: 'guide', slug: 'guide_x', sourceIds: ['s1'] }],
+        evidenceSources: [{ ...approvedSource, nextReviewDate: '2026-08-17' }],
+      },
+    });
+    await expect(handler(evidenceForContent)(context, {
+      slug: 'guide_x',
+      kind: 'guide',
+      audience: 'parent',
+    })).resolves.toEqual({ allowed: true, sources: [] });
+  });
+
   it('does not expose a stale approved citation to a parent', async () => {
     const context = ctx({
       profile: null,

@@ -443,7 +443,11 @@ export const getSource = query({
 
 /** All references backing one content slug (used by the content detail view). */
 export const forContent = query({
-  args: { slug: v.string(), kind: v.optional(v.string()) },
+  args: {
+    slug: v.string(),
+    kind: v.optional(v.string()),
+    audience: v.optional(v.literal('parent')),
+  },
   returns: v.object({
     allowed: v.boolean(),
     sources: v.array(publicCitationValidator),
@@ -457,6 +461,7 @@ export const forContent = query({
     // no libraryContent row (safety_rule, hope_topic) are inherently public
     // safety references and remain visible. Mirrors library.getBySlug.
     const staff = await hasStaffRole(ctx, userId, ['owner', 'content_editor', 'language_reviewer', 'evidence_reviewer', 'clinical_reviewer']);
+    const parentAudience = args.audience === 'parent';
     const content = await ctx.db
       .query('libraryContent')
       .withIndex('by_slug', (qq) => qq.eq('slug', args.slug))
@@ -468,14 +473,18 @@ export const forContent = query({
       && content.aiPublicationReleaseId
       && contentReadable,
     );
-    if (!staff && content && !contentReadable) {
+    if ((parentAudience || !staff) && content && !contentReadable) {
       return { allowed: true as const, sources: [] };
     }
-    const links = await ctx.db
-      .query('evidenceLinks')
-      .withIndex('by_slug', (qq) => qq.eq('slug', args.slug))
-      .collect();
-    const link = args.kind ? links.find((l) => l.kind === args.kind) : links[0];
+    const link = args.kind
+      ? await ctx.db
+          .query('evidenceLinks')
+          .withIndex('by_kind_slug', (qq) => qq.eq('kind', args.kind as string).eq('slug', args.slug))
+          .unique()
+      : (await ctx.db
+          .query('evidenceLinks')
+          .withIndex('by_slug', (qq) => qq.eq('slug', args.slug))
+          .take(2))[0];
     if (!link) return { allowed: true as const, sources: [] };
     const sources = [];
     for (const id of link.sourceIds) {
@@ -492,7 +501,7 @@ export const forContent = query({
           aiAuditedContent
           || (
             src.reviewStatus === 'approved'
-            && (staff || publicationEvidenceIsEligible(src, todayIsoUtc()))
+            && ((staff && !parentAudience) || publicationEvidenceIsEligible(src, todayIsoUtc()))
           )
         )
       ) {

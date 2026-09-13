@@ -11,8 +11,9 @@ const state = vi.hoisted(() => ({
   offline: [] as unknown[],
 }));
 vi.mock('convex/react', () => ({
-  useQuery: (_query: unknown, args: { audience?: string }) => args.audience === 'parent'
-    ? state.remote : { allowed: true, sources: state.sources },
+  useQuery: (_query: unknown, args: { kind?: string }) => args.kind
+    ? { allowed: true, sources: state.sources }
+    : state.remote,
 }));
 vi.mock('../../app/useOfflineLibrary', () => ({
   useDownloadedLibrary: () => ({ records: state.offline, loaded: true }),

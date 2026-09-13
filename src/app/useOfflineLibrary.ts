@@ -3,6 +3,8 @@ import { useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import {
   filterOfflineRecords,
+  hasValidOfflineReferences,
+  sanitizeOfflineReferences,
   selectDownloadable,
   type LibraryFilter,
   type LibraryRowLike,
@@ -28,8 +30,9 @@ let memoryCache: OfflineRecord[] | null = null;
 const subscribers = new Set<(records: OfflineRecord[]) => void>();
 
 function publish(records: OfflineRecord[]): void {
-  memoryCache = records;
-  for (const notify of subscribers) notify(records);
+  const sourceBoundRecords = records.filter(hasValidOfflineReferences);
+  memoryCache = sourceBoundRecords;
+  for (const notify of subscribers) notify(sourceBoundRecords);
 }
 
 /** Read the downloaded library, loading it from the device once per session. */
@@ -119,9 +122,53 @@ export interface DownloadOutcome {
   saved: number;
   removed: number;
   mediaSaved: number;
+  failure?: 'sources' | 'storage';
 }
 
 const TYPES_WITH_MEDIA = new Set(['activity', 'lesson', 'story', 'special_need', 'printable']);
+
+async function addOfflineReferences(
+  available: OfflineRecord[],
+): Promise<{ ok: true; records: OfflineRecord[] } | { ok: false }> {
+  let convex: typeof import('../lib/convexClient')['convex'];
+  try {
+    ({ convex } = await import('../lib/convexClient'));
+  } catch {
+    return { ok: false };
+  }
+
+  const enriched = [...available];
+  let nextIndex = 0;
+  let failed = false;
+  const worker = async () => {
+    while (nextIndex < enriched.length) {
+      const index = nextIndex;
+      nextIndex += 1;
+      const record = enriched[index];
+      if (record.publicationLane !== 'ai_audited') continue;
+      try {
+        const result = await convex.query(api.evidence.forContent, {
+          slug: record.slug,
+          kind: record.type,
+          audience: 'parent',
+        });
+        const references = result.allowed
+          ? sanitizeOfflineReferences(result.sources)
+          : null;
+        if (!references) {
+          failed = true;
+          continue;
+        }
+        enriched[index] = { ...record, references };
+      } catch {
+        failed = true;
+      }
+    }
+  };
+
+  await Promise.all(Array.from({ length: Math.min(4, enriched.length) }, () => worker()));
+  return failed ? { ok: false } : { ok: true, records: enriched };
+}
 
 async function addOfflineMedia(
   available: OfflineRecord[],
@@ -178,7 +225,16 @@ export function useOfflineDownload(): {
     const now = Date.now();
     const selected = selectDownloadable(rows, now);
     const stored = await readAllRecords();
-    const available = await addOfflineMedia(selected, stored, now);
+    // Evidence is required for the AI-audited publication lane. Resolve its
+    // current parent-visible citations before touching media or IndexedDB. If
+    // any lookup fails, the previous download remains intact in full. The
+    // conventional human-reviewed catalogue keeps its existing offline
+    // compatibility contract and is not blocked by an absent citation row.
+    const sourceResult = await addOfflineReferences(selected);
+    if (!sourceResult.ok) {
+      return { ok: false, saved: 0, removed: 0, mediaSaved: 0, failure: 'sources' };
+    }
+    const available = await addOfflineMedia(sourceResult.records, stored, now);
     const availableSlugs = new Set(available.map((record) => record.slug));
     // Anything held on the device that is no longer published must go: a
     // reviewer withdrawing content should not leave it readable offline.
@@ -198,6 +254,7 @@ export function useOfflineDownload(): {
       saved: available.length,
       removed: remove.length,
       mediaSaved: available.reduce((sum, record) => sum + (record.media?.length ?? 0), 0),
+      failure: ok ? undefined : 'storage',
     };
   }, []);
 

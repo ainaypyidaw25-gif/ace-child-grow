@@ -24,11 +24,17 @@ export function ContentDetail() {
   const { slug = '' } = useParams();
   const { locale } = useLocale();
   const remote = useQuery(api.library.getBySlug, { slug, audience: 'parent' });
-  const evidence = useQuery(api.evidence.forContent, { slug });
   const { records, loaded } = useDownloadedLibrary();
   const offlineRecord = useMemo(
     () => records.find((record) => record.slug === slug),
     [records, slug],
+  );
+  const evidenceKind = remote && !('restricted' in remote)
+    ? remote.item.type
+    : offlineRecord?.type;
+  const evidence = useQuery(
+    api.evidence.forContent,
+    evidenceKind ? { slug, kind: evidenceKind, audience: 'parent' } : 'skip',
   );
   const [offlineMedia, setOfflineMedia] = useState<Array<OfflineMediaRecord & {
     _id: string;
@@ -476,7 +482,9 @@ export function ContentDetail() {
       )}
 
       <ContentReferences
-        sources={evidence?.allowed && Array.isArray(evidence.sources) ? evidence.sources : []}
+        sources={remote === undefined
+          ? offlineRecord?.references ?? []
+          : evidence?.allowed && Array.isArray(evidence.sources) ? evidence.sources : []}
       />
     </div>
   );

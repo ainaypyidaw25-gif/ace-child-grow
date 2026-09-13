@@ -68,8 +68,12 @@ export function OfflineDownloads() {
     setBusy(null);
     if (!result.ok) {
       setError(L(
-        'ဖုန်းတွင် သိမ်းဆည်း၍ မရပါ။ သိုလှောင်နေရာ လွတ်မလွတ် စစ်ဆေးပါ။',
-        'Could not save to this device. Check its available storage space.',
+        result.failure === 'sources'
+          ? 'ကိုးကားရင်းမြစ်များကို အပြည့်အစုံ အတည်မပြုနိုင်သဖြင့် မသိမ်းပါ။ ယခင်သိမ်းထားမှုကို မပြောင်းလဲထားပါ။'
+          : 'ဖုန်းတွင် သိမ်းဆည်း၍ မရပါ။ သိုလှောင်နေရာ လွတ်မလွတ် စစ်ဆေးပါ။',
+        result.failure === 'sources'
+          ? 'Sources could not be verified completely, so nothing was saved. The previous download was kept unchanged.'
+          : 'Could not save to this device. Check its available storage space.',
       ));
       return;
     }
