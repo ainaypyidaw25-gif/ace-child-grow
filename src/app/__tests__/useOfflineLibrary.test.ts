@@ -227,7 +227,7 @@ describe('source-bound offline download', () => {
     expect(removeOfflineMedia).toHaveBeenCalledWith([prior.media![0].cacheKey]);
   });
 
-  it('fails before saving or publishing when legacy AI media cannot be removed', async () => {
+  it('fails before human media caching, saving or publishing when legacy AI media cannot be removed', async () => {
     const prior = offlineRecord(row.slug, 'https://offline/old-media');
     readAllRecords.mockResolvedValue([{ ...prior, publicationLane: 'ai_audited', references: [source] }]);
     isOfflineMediaStorageAvailable.mockReturnValue(true);
@@ -237,13 +237,20 @@ describe('source-bound offline download', () => {
       sources: [source],
     });
     removeOfflineMedia.mockResolvedValue(false);
+    const humanRow = {
+      ...row,
+      _id: 'id-human',
+      slug: 'lesson-human',
+      type: 'lesson',
+      publicationLane: 'human_reviewed' as const,
+    };
     const downloaded = renderHook(() => useDownloadedLibrary());
     await waitFor(() => expect(downloaded.result.current.loaded).toBe(true));
     const publishedBeforeAttempt = downloaded.result.current.records;
     const { result } = renderHook(() => useOfflineDownload());
 
     await act(async () => {
-      await expect(result.current.download([row])).resolves.toEqual({
+      await expect(result.current.download([row, humanRow])).resolves.toEqual({
         ok: false,
         saved: 0,
         removed: 0,
@@ -253,6 +260,9 @@ describe('source-bound offline download', () => {
     });
 
     expect(removeOfflineMedia).toHaveBeenCalledWith([prior.media![0].cacheKey]);
+    expect(convexQuery).toHaveBeenCalledTimes(1);
+    expect(convexQuery).toHaveBeenCalledWith(expect.anything(), { slug: row.slug, kind: row.type });
+    expect(cacheOfflineMediaForContent).not.toHaveBeenCalled();
     expect(saveRecords).not.toHaveBeenCalled();
     expect(downloaded.result.current.records).toBe(publishedBeforeAttempt);
   });
