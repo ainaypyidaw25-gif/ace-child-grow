@@ -31,12 +31,65 @@ export interface OfflineRecord {
   publicationLane?: 'human_reviewed' | 'ai_audited';
   reviewScope?: string;
   source?: string;
+  /** Sanitized public citation snapshots saved with this exact offline copy. */
+  references?: OfflineReference[];
   /** The bilingual payload the reading screens render. */
   data: unknown;
   /** When this copy was taken, so a refresh can report staleness. */
   savedAt: number;
   /** Public educational media cached separately in Cache Storage. */
   media?: OfflineMediaRecord[];
+}
+
+export interface OfflineReference {
+  sourceId: string;
+  org: string;
+  title: string;
+  url: string;
+}
+
+/**
+ * Reduce a live evidence response to the public fields needed by the reader.
+ * Any malformed or insecure entry rejects the whole snapshot so an offline
+ * copy can never imply that a partial citation set is complete.
+ */
+export function sanitizeOfflineReferences(sources: readonly unknown[]): OfflineReference[] | null {
+  if (sources.length === 0) return null;
+  const references: OfflineReference[] = [];
+  const sourceIds = new Set<string>();
+
+  for (const value of sources) {
+    if (typeof value !== 'object' || value === null || Array.isArray(value)) return null;
+    const source = value as Record<string, unknown>;
+    if (
+      typeof source.sourceId !== 'string'
+      || typeof source.org !== 'string'
+      || typeof source.title !== 'string'
+      || typeof source.url !== 'string'
+    ) return null;
+
+    const sourceId = source.sourceId.trim();
+    const org = source.org.trim();
+    const title = source.title.trim();
+    const url = source.url.trim();
+    if (!sourceId || !org || !title || sourceIds.has(sourceId)) return null;
+    try {
+      if (new URL(url).protocol !== 'https:') return null;
+    } catch {
+      return null;
+    }
+    sourceIds.add(sourceId);
+    references.push({ sourceId, org, title, url });
+  }
+
+  return references;
+}
+
+export function hasValidOfflineReferences(
+  record: Pick<OfflineRecord, 'publicationLane' | 'references'>,
+): record is Pick<OfflineRecord, 'references'> & { references: OfflineReference[] } {
+  return record.publicationLane !== 'ai_audited'
+    || sanitizeOfflineReferences(record.references ?? []) !== null;
 }
 
 export interface OfflineMediaRecord {
@@ -225,6 +278,10 @@ export interface LibraryFilter {
 export function filterOfflineRecords(records: OfflineRecord[], filter: LibraryFilter): OfflineRecord[] {
   const needle = filter.q?.trim().toLowerCase();
   return records
+    // Older AI-lane downloads did not bind their copy to a citation snapshot.
+    // Hide those until an online refresh replaces them. Conventional human-
+    // reviewed downloads keep their existing compatibility contract.
+    .filter(hasValidOfflineReferences)
     .filter((record) => record.type === filter.type)
     .filter((record) => !filter.ageGroupKey || record.ageGroupKey === filter.ageGroupKey)
     .filter((record) => !filter.domainKey || record.domainKey === filter.domainKey)

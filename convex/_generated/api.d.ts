@@ -173,6 +173,7 @@ import type * as nativeMyanmarRefreezeCorrection from "../nativeMyanmarRefreezeC
 import type * as nativeMyanmarRefreezeCorrectionActions from "../nativeMyanmarRefreezeCorrectionActions.js";
 import type * as nhsSoothingHumanReviewSuccessorCas from "../nhsSoothingHumanReviewSuccessorCas.js";
 import type * as notifications from "../notifications.js";
+import type * as offlineLibrary from "../offlineLibrary.js";
 import type * as nutritionGuidesCas from "../nutritionGuidesCas.js";
 import type * as observations from "../observations.js";
 import type * as olderSafety2026Cas from "../olderSafety2026Cas.js";
@@ -370,6 +371,7 @@ declare const fullApi: ApiFromModules<{
   nativeMyanmarRefreezeCorrectionActions: typeof nativeMyanmarRefreezeCorrectionActions;
   nhsSoothingHumanReviewSuccessorCas: typeof nhsSoothingHumanReviewSuccessorCas;
   notifications: typeof notifications;
+  offlineLibrary: typeof offlineLibrary;
   nutritionGuidesCas: typeof nutritionGuidesCas;
   observations: typeof observations;
   olderSafety2026Cas: typeof olderSafety2026Cas;
