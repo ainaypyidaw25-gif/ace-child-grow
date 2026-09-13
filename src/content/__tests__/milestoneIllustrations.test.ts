@@ -19,10 +19,6 @@ const BIRTH_2M_SLUGS = [
   'ms_birth_2m_gross_motor_1',
 ] as const;
 
-const PARENT_VISIBLE_BIRTH_2M_SLUGS = BIRTH_2M_SLUGS.filter((slug) => (
-  slug !== 'ms_birth_2m_sleep_1' && slug !== 'ms_birth_2m_gross_motor_2'
-));
-
 const THREE_4M_SLUGS = [
   'ms_3_4m_cognitive_1',
   'ms_3_4m_communication_1',
@@ -159,8 +155,8 @@ describe('birth–2 month milestone illustrations', () => {
     });
   });
 
-  it('binds every parent-visible filename hash to the exact asset bytes', () => {
-    PARENT_VISIBLE_BIRTH_2M_SLUGS.forEach((slug) => {
+  it('binds every reviewed filename hash to the exact asset bytes', () => {
+    BIRTH_2M_SLUGS.forEach((slug) => {
       const assetPath = milestoneIllustration(slug);
       expect(assetPath).toBeDefined();
       const expectedHash = assetPath!.match(/\.([a-f0-9]{10})\.webp$/)?.[1];

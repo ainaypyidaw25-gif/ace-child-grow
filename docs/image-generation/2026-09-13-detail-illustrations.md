@@ -6,8 +6,9 @@
 - Output contract: exact-slug WebP, 1200×900 (4:3), under 500 KiB, SHA-256 prefix in filename
 - Intended surface: content detail hero only
 - Proposed rendering: exact slug only; no category or age fallback
-- Release state: candidate files only; the 19 AI-lane assets are intentionally
-  not wired into runtime maps until a revision-bound media review is approved
+- Release state: candidate files only; the 19 AI-lane assets are stored outside
+  `public/` and are intentionally absent from runtime maps, builds, and PWA caches
+  until a revision-bound media review is approved
 
 ## Final prompt set
 
@@ -47,25 +48,25 @@ production briefs and the selected derivative identities.
 
 | Slug | Versioned asset |
 | --- | --- |
-| `st_ba_ba_sounds` | `public/stories/st_ba_ba_sounds.5248d497b0.webp` |
-| `st_goodnight_moon_friend` | `public/stories/st_goodnight_moon_friend.3277dec574.webp` |
-| `st_sharing_mango` | `public/stories/st_sharing_mango.2dd66b6393.webp` |
-| `st_taking_turns` | `public/stories/st_taking_turns.ece7af8fbf.webp` |
-| `st_visit_to_doctor` | `public/stories/st_visit_to_doctor.510f7446cc.webp` |
-| `st_waiting_at_clinic` | `public/stories/st_waiting_at_clinic.3d58cc8c4c.webp` |
-| `lsn_big_feelings` | `public/lessons/lsn_big_feelings/lsn_big_feelings.bc16f1bff1.webp` |
-| `lsn_early_math` | `public/lessons/lsn_early_math/lsn_early_math.5d079e41dd.webp` |
-| `lsn_making_friends` | `public/lessons/lsn_making_friends/lsn_making_friends.5342357f4c.webp` |
-| `lsn_power_of_play` | `public/lessons/lsn_power_of_play/lsn_power_of_play.b298071ab2.webp` |
-| `lsn_reading_together` | `public/lessons/lsn_reading_together/lsn_reading_together.d4ade1d3a7.webp` |
-| `lsn_talk_more` | `public/lessons/lsn_talk_more/lsn_talk_more.fdb1ea691e.webp` |
-| `lsn_what_is_development` | `public/lessons/lsn_what_is_development/lsn_what_is_development.3dcf39368f.webp` |
-| `act_picture_story_2_5y` | `public/activities/2_5y/act_picture_story_2_5y.e12a8d8f05.webp` |
-| `act_picture_story_3y` | `public/activities/3y/act_picture_story_3y.a49dcf95b8.webp` |
-| `act_picture_story_3_5y` | `public/activities/3_5y/act_picture_story_3_5y.5db180fe30.webp` |
-| `act_picture_story_4y` | `public/activities/4y/act_picture_story_4y.06e23ab395.webp` |
-| `act_picture_story_4_5y` | `public/activities/4_5y/act_picture_story_4_5y.8375c98d12.webp` |
-| `act_picture_story_5y` | `public/activities/5y/act_picture_story_5y.e5ae82b7da.webp` |
+| `st_ba_ba_sounds` | `docs/image-generation/candidates/2026-09-13/stories/st_ba_ba_sounds.5248d497b0.webp` |
+| `st_goodnight_moon_friend` | `docs/image-generation/candidates/2026-09-13/stories/st_goodnight_moon_friend.3277dec574.webp` |
+| `st_sharing_mango` | `docs/image-generation/candidates/2026-09-13/stories/st_sharing_mango.2dd66b6393.webp` |
+| `st_taking_turns` | `docs/image-generation/candidates/2026-09-13/stories/st_taking_turns.ece7af8fbf.webp` |
+| `st_visit_to_doctor` | `docs/image-generation/candidates/2026-09-13/stories/st_visit_to_doctor.510f7446cc.webp` |
+| `st_waiting_at_clinic` | `docs/image-generation/candidates/2026-09-13/stories/st_waiting_at_clinic.3d58cc8c4c.webp` |
+| `lsn_big_feelings` | `docs/image-generation/candidates/2026-09-13/lessons/lsn_big_feelings.bc16f1bff1.webp` |
+| `lsn_early_math` | `docs/image-generation/candidates/2026-09-13/lessons/lsn_early_math.5d079e41dd.webp` |
+| `lsn_making_friends` | `docs/image-generation/candidates/2026-09-13/lessons/lsn_making_friends.5342357f4c.webp` |
+| `lsn_power_of_play` | `docs/image-generation/candidates/2026-09-13/lessons/lsn_power_of_play.b298071ab2.webp` |
+| `lsn_reading_together` | `docs/image-generation/candidates/2026-09-13/lessons/lsn_reading_together.d4ade1d3a7.webp` |
+| `lsn_talk_more` | `docs/image-generation/candidates/2026-09-13/lessons/lsn_talk_more.fdb1ea691e.webp` |
+| `lsn_what_is_development` | `docs/image-generation/candidates/2026-09-13/lessons/lsn_what_is_development.3dcf39368f.webp` |
+| `act_picture_story_2_5y` | `docs/image-generation/candidates/2026-09-13/activities/act_picture_story_2_5y.e12a8d8f05.webp` |
+| `act_picture_story_3y` | `docs/image-generation/candidates/2026-09-13/activities/act_picture_story_3y.a49dcf95b8.webp` |
+| `act_picture_story_3_5y` | `docs/image-generation/candidates/2026-09-13/activities/act_picture_story_3_5y.5db180fe30.webp` |
+| `act_picture_story_4y` | `docs/image-generation/candidates/2026-09-13/activities/act_picture_story_4y.06e23ab395.webp` |
+| `act_picture_story_4_5y` | `docs/image-generation/candidates/2026-09-13/activities/act_picture_story_4_5y.8375c98d12.webp` |
+| `act_picture_story_5y` | `docs/image-generation/candidates/2026-09-13/activities/act_picture_story_5y.e5ae82b7da.webp` |
 | `gd_2_5y_nutrition` | `public/guides/gd_2_5y_nutrition.dd2148478f.webp` |
 | `gd_2_5y_safety` | `public/guides/gd_2_5y_safety.09db279d76.webp` |
 
@@ -75,7 +76,8 @@ production briefs and the selected derivative identities.
   1200×900 WebP, file-size, unique-hash, and filename-hash checks.
 - The six picture-story assets also passed exact card-count checks.
 - The 19 AI-lane assets (six activities, seven lessons, six stories) remain
-  unlinked so they cannot bypass the earlier placeholder-only release evidence.
+  outside `public/` and unlinked so they cannot be served, precached, or bypass
+  the earlier placeholder-only release evidence.
 - Existing `lsn_creativity` and `lsn_prepare_preschool` files remain intentionally
   unmapped until the artwork is reviewed against the exact current lesson copy.
 - Library/list cards remain on their existing text/emoji design; this candidate
