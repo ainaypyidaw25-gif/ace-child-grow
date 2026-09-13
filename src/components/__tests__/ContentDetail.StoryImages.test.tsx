@@ -102,6 +102,7 @@ describe('ContentDetail published story illustrations', () => {
     renderStory('st_first_day_school');
     expect(screen.queryByTestId('ai-publication-disclosure')).not.toBeInTheDocument();
     expect(screen.queryByText(/not approved by a human specialist/i)).not.toBeInTheDocument();
+    expect(screen.getByTestId('ai-publication-note')).toHaveTextContent('human specialist approval is pending');
     expect(screen.getByText('Story st_first_day_school')).toBeVisible();
   });
 });

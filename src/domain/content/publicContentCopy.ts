@@ -8,7 +8,7 @@ const PUBLIC_AI_DISCLOSURE_PREFIXES = [
 /**
  * Remove legacy per-item AI notice prefixes from public lesson and story copy.
  * Governed provenance remains in the publication snapshot while public pages
- * use the compact source block and the shared Content Policy/Terms guidance.
+ * use a compact detail-page status note, sources, and shared policy guidance.
  */
 export function publicContentCopy(value: string): string {
   const prefix = PUBLIC_AI_DISCLOSURE_PREFIXES.find((candidate) => value.startsWith(candidate));

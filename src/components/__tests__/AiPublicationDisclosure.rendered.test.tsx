@@ -50,7 +50,7 @@ describe('parent-facing provenance copy', () => {
 
   it.each([
     ['en', 'online'], ['mm', 'online'], ['en', 'offline'], ['mm', 'offline'],
-  ] as const)('omits the per-item AI warning from the %s %s lesson detail', async (locale, mode) => {
+  ] as const)('replaces the long per-item AI warning with a compact %s %s status note', async (locale, mode) => {
     localStorage.setItem('ace-locale', locale);
     const item = mathItem();
     if (mode === 'online') state.remote = { item, media: [], staff: false };
@@ -62,7 +62,10 @@ describe('parent-facing provenance copy', () => {
       ? /Math is not only in books\./
       : /သင်္ချာသည် စာအုပ်ထဲသာ မဟုတ်ပါ။/)).toBeVisible());
     expect(screen.queryByTestId('ai-publication-disclosure')).not.toBeInTheDocument();
-    expect(screen.queryByText(/AI review notice|AI-reviewed|AI ဖြင့် စစ်ဆေးထားသည်/i)).not.toBeInTheDocument();
+    expect(screen.getByTestId('ai-publication-note')).toHaveTextContent(locale === 'en'
+      ? 'human specialist approval is pending'
+      : 'လူ့ပညာရှင် အတည်ပြုချက် စောင့်ဆိုင်းဆဲ');
+    expect(screen.queryByText(/not approved by a human specialist|လူ့ပညာရှင် အတည်ပြုချက် မရှိသေးပါ/i)).not.toBeInTheDocument();
   });
 
   it.each([

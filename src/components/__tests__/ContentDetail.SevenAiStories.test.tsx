@@ -42,7 +42,10 @@ describe('seven-story AI lane parent rendering contract', () => {
     for (const locale of ['en', 'mm'] as const) {
       const view = show(target.slug, locale);
       expect(screen.queryByTestId('ai-publication-disclosure')).toBeNull();
-      expect(screen.queryByText(/AI review notice|AI-reviewed|AI ဖြင့် စစ်ဆေးထားသည်/i)).toBeNull();
+      expect(screen.getByTestId('ai-publication-note')).toHaveTextContent(locale === 'en'
+        ? 'human specialist approval is pending'
+        : 'လူ့ပညာရှင် အတည်ပြုချက် စောင့်ဆိုင်းဆဲ');
+      expect(screen.queryByText(/not approved by a human specialist|လူ့ပညာရှင် အတည်ပြုချက် မရှိသေးပါ/i)).toBeNull();
       const references = screen.getByTestId('content-references');
       expect(within(references).getAllByRole('link')).toHaveLength(target.sources.length);
       for (const source of target.sources) {
