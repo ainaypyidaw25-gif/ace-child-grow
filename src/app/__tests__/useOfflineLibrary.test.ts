@@ -1,6 +1,6 @@
 import { act, renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import type { OfflineRecord } from '../../domain/offline/offlineLibrary';
+import type { OfflineMediaRecord, OfflineRecord } from '../../domain/offline/offlineLibrary';
 
 const {
   cacheOfflineMediaForContent,
@@ -357,6 +357,135 @@ describe('source-bound offline download', () => {
     );
     expect(saveRecords).not.toHaveBeenCalled();
     expect(removeOfflineMedia).toHaveBeenCalledWith([stagedMedia.cacheKey]);
+    expect(removeOfflineMedia).not.toHaveBeenCalledWith(expect.arrayContaining([prior.media![0].cacheKey]));
+  });
+
+  it('disables eviction for a mixed batch and validates AI media only after every write completes', async () => {
+    const humanRow = {
+      ...row,
+      _id: 'id-human',
+      slug: 'lesson_human',
+      type: 'lesson',
+      publicationLane: 'human_reviewed' as const,
+    };
+    const aiCandidate = {
+      id: 'ai-media',
+      kind: 'illustration',
+      url: 'https://cdn.example/ai.png',
+      storageUrl: null,
+      mimeType: 'image/png',
+      altMm: null,
+      altEn: 'AI snapshot image',
+      captionMm: null,
+      captionEn: null,
+      transcriptMm: null,
+      transcriptEn: null,
+      durationSeconds: null,
+      attributionMm: null,
+      attributionEn: null,
+      accessLevel: 'free_sample',
+    };
+    const humanCandidate = { ...aiCandidate, id: 'human-media', url: 'https://cdn.example/human.png' };
+    const aiMedia = {
+      id: aiCandidate.id,
+      kind: 'illustration' as const,
+      cacheKey: 'https://offline/ai-media@batch',
+      mimeType: 'image/png',
+      sizeBytes: 20,
+      savedAt: 2,
+    };
+    const humanMedia = { ...aiMedia, id: humanCandidate.id, cacheKey: 'https://offline/human-media@batch' };
+    let humanWriteComplete = false;
+
+    readAllRecords.mockResolvedValue([]);
+    isOfflineMediaStorageAvailable.mockReturnValue(true);
+    convexQuery
+      .mockResolvedValueOnce({
+        allowed: true,
+        item: atomicItem,
+        sources: [source],
+        media: [aiCandidate],
+      })
+      .mockResolvedValueOnce([humanCandidate]);
+    cacheOfflineMediaForContent.mockImplementation(async (slug, _candidates, _savedAt, _generation, allowEviction) => {
+      expect(allowEviction).toBe(false);
+      if (slug === humanRow.slug) {
+        humanWriteComplete = true;
+        return [humanMedia];
+      }
+      return [aiMedia];
+    });
+    keepExistingOfflineMedia.mockImplementation(async (media) => {
+      if (media.some((asset: OfflineMediaRecord) => asset.id === aiMedia.id)) {
+        expect(humanWriteComplete).toBe(true);
+      }
+      return media;
+    });
+    const { result } = renderHook(() => useOfflineDownload());
+
+    await act(async () => {
+      await expect(result.current.download([row, humanRow]))
+        .resolves.toMatchObject({ ok: true, saved: 2, mediaSaved: 2 });
+    });
+
+    expect(cacheOfflineMediaForContent).toHaveBeenCalledTimes(2);
+    const generations = cacheOfflineMediaForContent.mock.calls.map((call) => call[3]);
+    expect(new Set(generations).size).toBe(1);
+    expect(saveRecords).toHaveBeenCalledWith([
+      expect.objectContaining({ slug: row.slug, media: [aiMedia] }),
+      expect.objectContaining({ slug: humanRow.slug, media: [humanMedia] }),
+    ], []);
+  });
+
+  it('removes only staged generation keys when the record transaction fails', async () => {
+    const prior = {
+      ...offlineRecord(row.slug, 'https://offline/prior-media'),
+      publicationLane: 'ai_audited' as const,
+      references: [source],
+    };
+    const candidate = {
+      id: 'current-media',
+      kind: 'illustration',
+      url: 'https://cdn.example/current.png',
+      storageUrl: null,
+      mimeType: 'image/png',
+      altMm: null,
+      altEn: null,
+      captionMm: null,
+      captionEn: null,
+      transcriptMm: null,
+      transcriptEn: null,
+      durationSeconds: null,
+      attributionMm: null,
+      attributionEn: null,
+      accessLevel: 'free_sample',
+    };
+    const staged = {
+      id: candidate.id,
+      kind: 'illustration' as const,
+      cacheKey: 'https://offline/current-media@batch',
+      mimeType: 'image/png',
+      sizeBytes: 20,
+      savedAt: 2,
+    };
+    readAllRecords.mockResolvedValue([prior]);
+    isOfflineMediaStorageAvailable.mockReturnValue(true);
+    convexQuery.mockResolvedValue({
+      allowed: true,
+      item: atomicItem,
+      sources: [source],
+      media: [candidate],
+    });
+    cacheOfflineMediaForContent.mockResolvedValue([staged]);
+    saveRecords.mockResolvedValue(false);
+    const { result } = renderHook(() => useOfflineDownload());
+
+    await act(async () => {
+      await expect(result.current.download([row]))
+        .resolves.toMatchObject({ ok: false, failure: 'storage' });
+    });
+
+    expect(removeOfflineMedia).toHaveBeenCalledWith([staged.cacheKey]);
     expect(removeOfflineMedia).not.toHaveBeenCalledWith(expect.arrayContaining([prior.media![0].cacheKey]));
   });
 

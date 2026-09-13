@@ -197,7 +197,10 @@ async function addOfflineMedia(
   stored: OfflineRecord[],
   savedAt: number,
   aiMediaBySlug: ReadonlyMap<string, OfflineMediaCandidate[]>,
-): Promise<{ ok: true; records: OfflineRecord[] } | { ok: false }> {
+): Promise<
+  { ok: true; records: OfflineRecord[]; stagedCacheKeys: string[] }
+  | { ok: false; stagedCacheKeys: string[] }
+> {
   const downloadableAiMedia = new Map(
     [...aiMediaBySlug].map(([slug, candidates]) => [
       slug,
@@ -206,16 +209,20 @@ async function addOfflineMedia(
   );
   if (!isOfflineMediaStorageAvailable()) {
     if ([...downloadableAiMedia.values()].some((candidates) => candidates.length > 0)) {
-      return { ok: false };
+      return { ok: false, stagedCacheKeys: [] };
     }
-    return { ok: true, records: available.map((record) => ({ ...record, media: [] })) };
+    return {
+      ok: true,
+      records: available.map((record) => ({ ...record, media: [] })),
+      stagedCacheKeys: [],
+    };
   }
   // Load the authenticated client only after the parent taps Download. Reading
   // any library screen stays lightweight and test mocks do not need a client.
   const { convex } = await import('../lib/convexClient');
   const storedBySlug = new Map(stored.map((record) => [record.slug, record]));
   const enriched = [...available];
-  const stagedAiCacheKeys: string[] = [];
+  const stagedCacheKeys: string[] = [];
   let aiFailed = false;
   let nextIndex = 0;
 
@@ -246,7 +253,7 @@ async function addOfflineMedia(
             String(savedAt),
             false,
           );
-          stagedAiCacheKeys.push(...media.map((asset) => asset.cacheKey));
+          stagedCacheKeys.push(...media.map((asset) => asset.cacheKey));
           const expectedIds = new Set(candidates.map((candidate) => candidate.id));
           const actualIds = new Set(media.map((asset) => asset.id));
           if (
@@ -258,15 +265,7 @@ async function addOfflineMedia(
             aiFailed = true;
             continue;
           }
-          const retained = await keepExistingOfflineMedia(media);
-          if (
-            retained.length !== media.length
-            || retained.some((asset) => !actualIds.has(asset.id))
-          ) {
-            aiFailed = true;
-            continue;
-          }
-          enriched[index] = { ...record, media: retained };
+          enriched[index] = { ...record, media };
         } catch {
           aiFailed = true;
         }
@@ -275,12 +274,28 @@ async function addOfflineMedia(
       if (!TYPES_WITH_MEDIA.has(record.type)) continue;
       try {
         const candidates = await convex.query(api.media.listForContent, { contentSlug: record.slug });
+        const downloadable = (candidates as OfflineMediaCandidate[]).filter(isDownloadableMedia);
         const media = await cacheOfflineMediaForContent(
           record.slug,
-          candidates as OfflineMediaCandidate[],
+          downloadable,
           savedAt,
+          String(savedAt),
+          false,
         );
-        enriched[index] = { ...record, media };
+        stagedCacheKeys.push(...media.map((asset) => asset.cacheKey));
+        const expectedIds = new Set(downloadable.map((candidate) => candidate.id));
+        const actualIds = new Set(media.map((asset) => asset.id));
+        // Human-reviewed downloads retain their established best-effort
+        // behavior: an incomplete media refresh falls back to the committed
+        // same-slug media rather than blocking the text download.
+        enriched[index] = (
+          expectedIds.size === downloadable.length
+          && actualIds.size === media.length
+          && media.length === downloadable.length
+          && [...expectedIds].every((id) => actualIds.has(id))
+        )
+          ? { ...record, media }
+          : { ...record, media: storedBySlug.get(record.slug)?.media ?? [] };
       } catch {
         // A temporary media failure must not throw away a previously downloaded
         // asset. Text download can still complete and the parent may retry later.
@@ -290,18 +305,37 @@ async function addOfflineMedia(
   };
 
   await Promise.all(Array.from({ length: Math.min(4, enriched.length) }, () => worker()));
+  // All batch writes (including conventional human-reviewed media) are now
+  // complete and eviction was disabled for every one. Only at this global
+  // barrier is it safe to validate the complete AI generation in Cache Storage.
+  for (let index = 0; index < enriched.length; index += 1) {
+    const record = enriched[index];
+    if (record.publicationLane !== 'ai_audited') continue;
+    const candidates = downloadableAiMedia.get(record.slug) ?? [];
+    if (candidates.length === 0) continue;
+    const media = record.media ?? [];
+    const retained = await keepExistingOfflineMedia(media);
+    const expectedIds = new Set(candidates.map((candidate) => candidate.id));
+    const retainedIds = new Set(retained.map((asset) => asset.id));
+    if (
+      retained.length !== candidates.length
+      || retainedIds.size !== retained.length
+      || [...expectedIds].some((id) => !retainedIds.has(id))
+    ) {
+      aiFailed = true;
+      continue;
+    }
+    enriched[index] = { ...record, media: retained };
+  }
   if (aiFailed) {
-    // These are generation-specific staging keys, never keys referenced by the
-    // prior committed record. Cleaning them cannot damage the previous cache.
-    await removeOfflineMedia(stagedAiCacheKeys);
-    return { ok: false };
+    return { ok: false, stagedCacheKeys };
   }
   for (let index = 0; index < enriched.length; index += 1) {
     if (enriched[index].publicationLane === 'ai_audited') continue;
     const media = await keepExistingOfflineMedia(enriched[index].media ?? []);
     enriched[index] = { ...enriched[index], media };
   }
-  return { ok: true, records: enriched };
+  return { ok: true, records: enriched, stagedCacheKeys };
 }
 
 /** Save the currently published library to the device. */
@@ -329,6 +363,9 @@ export function useOfflineDownload(): {
       sourceResult.aiMediaBySlug,
     );
     if (!mediaResult.ok) {
+      // Generation-specific keys cannot be referenced by the prior committed
+      // manifest. Remove only those staged by this failed batch.
+      await removeOfflineMedia(mediaResult.stagedCacheKeys);
       return { ok: false, saved: 0, removed: 0, mediaSaved: 0, failure: 'sources' };
     }
     const available = mediaResult.records;
@@ -343,8 +380,14 @@ export function useOfflineDownload(): {
         .flatMap((record) => record.media ?? [])
         .map((media) => media.cacheKey)
         .filter((cacheKey) => !currentKeys.has(cacheKey));
-      await removeOfflineMedia(staleKeys);
+      const discardedStagedKeys = mediaResult.stagedCacheKeys
+        .filter((cacheKey) => !currentKeys.has(cacheKey));
+      await removeOfflineMedia([...staleKeys, ...discardedStagedKeys]);
       publish(available);
+    } else {
+      // IDB is the committed manifest. If that transaction fails, no staged
+      // generation is reachable and it must not accumulate as an orphan.
+      await removeOfflineMedia(mediaResult.stagedCacheKeys);
     }
     return {
       ok,
