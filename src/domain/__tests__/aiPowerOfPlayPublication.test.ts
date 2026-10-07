@@ -157,7 +157,10 @@ async function fixture() {
     }),
     patch: vi.fn(async (id: string, value: Row) => {
       const row = await db.get(id); if (!row) throw new Error('missing');
-      for (const [key, entry] of Object.entries(value)) entry === undefined ? delete row[key] : row[key] = entry;
+      for (const [key, entry] of Object.entries(value)) {
+        if (entry === undefined) delete row[key];
+        else row[key] = entry;
+      }
     }),
   };
   const scheduler = { runAt: vi.fn(async (time: number, _ref: unknown, args: Row) => {
