@@ -294,8 +294,10 @@ async function fixture() {
     patch: vi.fn(async (id: string, fields: Row) => {
       const row = await db.get(id);
       if (!row) throw new Error("missing");
-      for (const [k, v] of Object.entries(fields))
-        v === undefined ? delete row[k] : (row[k] = v);
+      for (const [k, v] of Object.entries(fields)) {
+        if (v === undefined) delete row[k];
+        else row[k] = v;
+      }
     }),
   };
   const scheduler = {
