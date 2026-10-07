@@ -46,7 +46,7 @@ describe('risk-scoped publication gate', () => {
   });
 
   it('keeps review-pending static samples out of parent screens', () => {
-    for (const file of ['MilestoneDemo', 'Activities', 'Learn']) {
+    for (const file of ['MilestoneDemo', 'Activities', 'Learn', 'Favorites']) {
       const source = readFileSync(`src/screens/${file}.tsx`, 'utf8');
       // Either the gated server query directly, or useLibraryContent — the
       // offline-aware wrapper around it. Never local sample content.
@@ -61,7 +61,7 @@ describe('risk-scoped publication gate', () => {
     expect(offlineHook).toContain('api.media.listForContent');
     const offlineDomain = readFileSync('src/domain/offline/offlineLibrary.ts', 'utf8');
     expect(offlineDomain).toContain("row.clinicalStatus === 'published'");
-    for (const file of ['HopeCenter', 'Favorites']) {
+    for (const file of ['HopeCenter']) {
       const source = readFileSync(`src/screens/${file}.tsx`, 'utf8');
       expect(source, file).toContain('isApprovedForParents');
       expect(source, file).not.toContain('ReviewOngoingNotice');
