@@ -3,7 +3,7 @@ import { v } from 'convex/values';
 import { getAuthUserId } from '@convex-dev/auth/server';
 import { requireOwner, requireUser } from './lib/auth';
 import { logAudit } from './audit';
-import { paidAccessPeriodEnd } from './lib/billingPeriods';
+import { billingPeriodMs, paidAccessPeriodEnd } from './lib/billingPeriods';
 import { isMmpayProductionConfigured } from './lib/mmpayConfig';
 
 const paidPlanValidator = v.union(v.literal('premium'), v.literal('family'));
@@ -427,11 +427,14 @@ export const reviewPaymentRequest = mutation({
         .withIndex('by_user', (q) => q.eq('userId', row.userId))
         .unique();
       const interval = row.planInterval ?? plan.interval;
+      const currentPeriodEnd = paidAccessPeriodEnd(now, interval, row.planKey, existing);
       const patch = {
+        entitlementChainId: currentPeriodEnd - billingPeriodMs(interval) > now
+          ? existing?.entitlementChainId : undefined,
         planKey: row.planKey,
         status: 'active' as const,
         provider: 'manual_verified',
-        currentPeriodEnd: paidAccessPeriodEnd(now, interval, row.planKey, existing),
+        currentPeriodEnd,
         cancelAtPeriodEnd: true,
         updatedAt: now,
       };
