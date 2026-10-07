@@ -4,7 +4,7 @@ import { api } from '../../convex/_generated/api';
 import { useLibraryContent } from '../app/useOfflineLibrary';
 import { useLocale } from '../app/LocaleContext';
 import { useAppState } from '../app/AppState';
-import { computeResult, type MilestoneResponseInput } from '../domain/rules/resultEngine';
+import { computeResult, type MilestoneResult } from '../domain/rules/resultEngine';
 import { SafetyBanner } from '../components/SafetyBanner';
 import type { DevelopmentDomain, MilestoneAnswer } from '../domain/types';
 import type { TranslationKey } from '../i18n';
@@ -71,7 +71,10 @@ export function MilestoneDemo() {
   const [urgentSymptomsAnswered, setUrgentSymptomsAnswered] = useState(false);
   const [urgentSymptomsExpanded, setUrgentSymptomsExpanded] = useState(false);
   const [lostSkill, setLostSkill] = useState<boolean | null>(null);
-  const [submitted, setSubmitted] = useState(false);
+  const [submittedResult, setSubmittedResult] = useState<{
+    result: MilestoneResult;
+    childNickname: string;
+  } | null>(null);
   const [busy, setBusy] = useState(false);
   const [saveError, setSaveError] = useState('');
 
@@ -87,15 +90,40 @@ export function MilestoneDemo() {
   }, [data]);
   const current = items[step];
   const answered = Object.keys(answers).length;
-  const result = useMemo(() => {
-    if (!submitted) return null;
-    const responses: MilestoneResponseInput[] = items.map((item, index) => ({
-      milestoneId: item.slug,
-      domain: normalizeDomain(item.domainKey),
-      answer: answers[index] ?? 'not_sure',
-    }));
-    return computeResult(responses, { confirmedSymptoms, lostSkill: lostSkill === true });
-  }, [submitted, answers, confirmedSymptoms, lostSkill, items]);
+  const result = submittedResult?.result;
+
+  if (result) {
+    return (
+      <div className="mx-auto max-w-2xl space-y-4">
+        {result.safety.urgent && <SafetyBanner />}
+        <section className={`rounded-[28px] border-2 ${STATE_COLOR[result.state]} bg-white p-6 shadow-card`}>
+          <p className="text-xs font-bold uppercase tracking-[0.16em] text-sky-deep">{submittedResult.childNickname}</p>
+          <h1 className="mt-2 text-xl font-bold">{t('report.title')}</h1>
+          <p className="mt-2 text-sm leading-7 text-ink-soft">
+            {t(result.guidanceKeys.consult)} · {t(result.guidanceKeys.repeatReview)}
+          </p>
+          <p className="mt-4 rounded-xl bg-canvas p-3 text-sm text-ink-soft">{t('result.disclaimer.nonDiagnostic')}</p>
+        </section>
+        {busy && <p role="status" className="text-sm text-ink-soft">
+          {locale === 'mm' ? 'ရလဒ်ကို ပြထားပါပြီ။ မှတ်တမ်း သိမ်းဆည်းနေသည်။' : 'Result shown. Saving the record…'}
+        </p>}
+        {saveError && <p role="status" className="text-sm text-state-red-deep">{saveError}</p>}
+        <button type="button" disabled={busy} className="rounded-pill bg-sky px-5 py-3 font-semibold text-white disabled:opacity-40" onClick={() => {
+          setSubmittedResult(null);
+          setSaveError('');
+          setStep(0);
+          setAnswers({});
+          setNotes({});
+          setConfirmedSymptoms([]);
+          setUrgentSymptomsAnswered(false);
+          setUrgentSymptomsExpanded(false);
+          setLostSkill(null);
+        }}>
+          {locale === 'mm' ? 'စစ်ဆေးစာရင်း အသစ်စမည်' : 'Start a new checklist'}
+        </button>
+      </div>
+    );
+  }
 
   if (!activeChild) return <NoChild />;
   if (data === undefined) return <p className="text-ink-soft" role="status">…</p>;
@@ -115,41 +143,13 @@ export function MilestoneDemo() {
     );
   }
 
-  if (result) {
-    return (
-      <div className="mx-auto max-w-2xl space-y-4">
-        {result.safety.urgent && <SafetyBanner />}
-        <section className={`rounded-[28px] border-2 ${STATE_COLOR[result.state]} bg-white p-6 shadow-card`}>
-          <p className="text-xs font-bold uppercase tracking-[0.16em] text-sky-deep">{activeChild.nickname}</p>
-          <h1 className="mt-2 text-xl font-bold">{t('report.title')}</h1>
-          <p className="mt-2 text-sm leading-7 text-ink-soft">
-            {t(result.guidanceKeys.consult)} · {t(result.guidanceKeys.repeatReview)}
-          </p>
-          <p className="mt-4 rounded-xl bg-canvas p-3 text-sm text-ink-soft">{t('result.disclaimer.nonDiagnostic')}</p>
-        </section>
-        <button type="button" className="rounded-pill bg-sky px-5 py-3 font-semibold text-white" onClick={() => {
-          setSubmitted(false);
-          setStep(0);
-          setAnswers({});
-          setNotes({});
-          setConfirmedSymptoms([]);
-          setUrgentSymptomsAnswered(false);
-          setUrgentSymptomsExpanded(false);
-          setLostSkill(null);
-        }}>
-          {locale === 'mm' ? 'စစ်ဆေးစာရင်း အသစ်စမည်' : 'Start a new checklist'}
-        </button>
-      </div>
-    );
-  }
-
   const question = locale === 'mm'
     ? textFromData(current.data, 'observeMm') ?? current.summaryMm ?? current.titleMm
     : textFromData(current.data, 'observeEn') ?? current.summaryEn ?? current.titleEn;
   const illustration = milestoneIllustration(current.slug);
 
   async function save() {
-    if (!activeChild || lostSkill === null || !urgentSymptomsAnswered) return;
+    if (busy || submittedResult || !activeChild || lostSkill === null || !urgentSymptomsAnswered) return;
     setBusy(true);
     setSaveError('');
     const responses = items.map((item, index) => ({
@@ -168,6 +168,9 @@ export function MilestoneDemo() {
       })),
       { confirmedSymptoms, lostSkill },
     );
+    // Show the exact outcome submitted to persistence without waiting for the
+    // network. Library refreshes and later input changes must not recompute it.
+    setSubmittedResult({ result: computed, childNickname: activeChild.nickname });
     try {
       await recordSession({
         childId: activeChild.id as never,
@@ -183,9 +186,11 @@ export function MilestoneDemo() {
         },
         responses,
       });
-      setSubmitted(true);
     } catch (error) {
-      console.error(error); setSaveError((locale === 'mm' ? 'သိမ်း၍ မရပါ။' : 'Could not save.'));
+      console.error(error);
+      setSaveError(locale === 'mm'
+        ? 'မှတ်တမ်း သိမ်း၍ မရပါ။ ဤရလဒ်ကို စက်ပေါ်တွင် တွက်ချက်ပြထားသည်။'
+        : 'Could not save the record. This result was calculated on this device.');
     } finally {
       setBusy(false);
     }
