@@ -141,6 +141,22 @@ failed). The test was not changed or weakened; it passed when rerun in its web
 distribution, while the native-specific contracts passed under the App Store
 flag as recorded above.
 
+Initial pushed PR head `1f07dd0569a0f6574fd2255c89a6f92d8848d86b` produced
+the following hosted evidence:
+
+- Playwright — PASS.
+- CodeQL JavaScript/TypeScript analysis and CodeQL summary — PASS.
+- Vercel preview build and preview-comment integration — PASS. This preview is
+  build evidence only; it is not an authorised production deployment or iOS
+  release.
+- `Typecheck, lint, unit tests, build` — **FAIL at its first substantive step,
+  `npm audit --audit-level=high`**. The log reports the same 10 findings (5
+  moderate, 5 high) documented above. Later job steps were skipped, not failed;
+  local runs supply their results but do not replace a green hosted gate.
+
+The final document-only head must retain these findings and receive its own
+hosted check run. No failing gate may be reclassified as passing.
+
 ## Apple account, signing and privacy gates — NOT VERIFIED
 
 - [ ] Confirm the Team ID in the signed archive and the live Apple Developer
