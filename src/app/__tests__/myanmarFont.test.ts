@@ -51,9 +51,10 @@ describe('Myanmar font', () => {
   });
 
   it('is imported before Tailwind, so the @import is legal CSS', () => {
-    // CSS requires @import to precede every rule. After @tailwind the browser
-    // drops it silently — the build succeeds and the font never loads.
-    expect(indexCss.indexOf('@fontsource')).toBeLessThan(indexCss.indexOf('@tailwind'));
+    // Both are CSS imports in v4. Keep the bundled font imports ahead of
+    // Tailwind's import so they are included in every distribution build.
+    expect(indexCss).toContain("@import 'tailwindcss'");
+    expect(indexCss.indexOf('@fontsource')).toBeLessThan(indexCss.indexOf("@import 'tailwindcss'"));
   });
 
   it('covers the weights the interface actually uses', () => {
