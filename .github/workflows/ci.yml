@@ -63,6 +63,9 @@ jobs:
       - name: Production build
         run: npm run build
 
+      - name: Verify legacy WebView utility coverage
+        run: npm run build:legacy-css:verify
+
       # Generic application builds must be reproducible and must never refresh
       # the separately approved social-publication queue as a side effect.
       - name: Assert production build leaves tracked sources unchanged
