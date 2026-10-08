@@ -10,9 +10,25 @@
 @import '@fontsource/noto-sans-myanmar/500.css';
 @import '@fontsource/noto-sans-myanmar/700.css';
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@config '../tailwind.config.ts';
+
+/* Keep the v3 defaults used by existing screens when rendered by Tailwind 4. */
+@theme {
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+
+@layer base {
+  *, ::before, ::after, ::backdrop, ::file-selector-button {
+    border-color: #e5e7eb;
+  }
+  input::placeholder, textarea::placeholder {
+    color: #9ca3af;
+  }
+  button:not(:disabled), [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
+}
 
 /* Myanmar-first typography. Body >= 16px, generous line-height, no clipped glyphs. */
 :root {

@@ -1,5 +1,11 @@
 # Dependency security repair, 2026-10-07
 
+> **Superseded on 2026-10-08.** The historical findings and Tailwind 3 blocker below describe the earlier 8.5.1 repair, not the current integrated dependency tree. The complete PR #253 history (Capacitor 8.5.2 plus Tailwind 4.3.3, legacy CSS fallback, build cleanup and compatibility checks) is now reconciled into the shared security branch and then into each feature branch. See [the successor security assessment](dependency-security-2026-10-08.md). The high-severity audit threshold, iOS 15 / Android API 24 support floors and feature-specific production holds are unchanged. Actual iOS 15 and older Android rendering/native acceptance still require device or simulator verification; the mocked fallback checks do not replace it. Audit, fallback coverage and CI must be checked on each final feature head, not inferred from PR #253 alone.
+
+The integration additionally requires both `color-mix()` and `CSS.registerProperty` support before selecting modern CSS. This closes the partial-support gap in browsers such as Safari 16.2/16.3: [WebKit's release notes](https://webkit.org/blog/13966/webkit-features-in-safari-16-4/) distinguish color-mix in 16.2 from the Properties and Values API in 16.4. Five unit cases exercise the capability gate, and a third hosted browser regression models missing property-registration support while leaving color-mix available. These changes live in the shared integration; PR #253 itself is unchanged.
+
+Per-feature validation initially found an extra generated `isolate` utility in the refund tree that was absent from the frozen CSS. The shared fallback now includes its equivalent `isolation: isolate` rule, and all three browser capability paths assert that computed property. The strict selector-coverage check is retained.
+
 This is a partial remediation shared by draft PRs #249 and #250. It is not a release approval. The existing `npm audit --audit-level=high` gate remains unchanged and must still fail while the remaining high-severity advisory applies.
 
 ## Changes
