@@ -95,6 +95,8 @@ export default defineSchema({
     provider: v.optional(v.string()),
     providerCustomerId: v.optional(v.string()),
     providerSubscriptionId: v.optional(v.string()),
+    // Identifies the current stack; reset on replacement grants/provider sync.
+    entitlementChainId: v.optional(v.string()),
     currentPeriodEnd: v.optional(v.number()),
     cancelAtPeriodEnd: v.optional(v.boolean()),
     trialStartedAt: v.optional(v.number()),
@@ -233,9 +235,18 @@ export default defineSchema({
     callbackReceivedAt: v.optional(v.number()),
     completedAt: v.optional(v.number()),
     lastSyncedAt: v.optional(v.number()),
+    // Immutable grant bounds plus refund-adjusted bounds for this order only.
+    entitlementChainId: v.optional(v.string()),
+    entitlementGrantedStart: v.optional(v.number()),
+    entitlementGrantedEnd: v.optional(v.number()),
+    entitlementStart: v.optional(v.number()),
+    entitlementEnd: v.optional(v.number()),
+    refundRemovedMs: v.optional(v.number()),
+    refundReconciliation: v.optional(v.union(v.literal('applied'), v.literal('superseded'), v.literal('legacy_unresolved'))),
     createdAt: v.number(),
     updatedAt: v.number(),
   })
+    .index('by_entitlement_chain_start', ['entitlementChainId', 'entitlementStart'])
     .index('by_order_id', ['orderId'])
     .index('by_user', ['userId'])
     .index('by_status', ['status'])

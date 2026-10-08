@@ -4,7 +4,7 @@ import type { Id } from './_generated/dataModel';
 import { internalMutation, internalQuery, query, type MutationCtx } from './_generated/server';
 import { logAudit } from './audit';
 import { requireOwner, requireUser } from './lib/auth';
-import { paidAccessPeriodEnd, type BillingInterval } from './lib/billingPeriods';
+import { billingPeriodMs, paidAccessPeriodEnd, type BillingInterval } from './lib/billingPeriods';
 
 const planKeyValidator = v.union(v.literal('premium'), v.literal('family'));
 const environmentValidator = v.union(v.literal('sandbox'), v.literal('production'));
@@ -307,12 +307,22 @@ async function applyUpdate(ctx: MutationCtx, update: Update, source: 'api' | 'we
       .withIndex('by_user', (q) => q.eq('userId', row.userId))
       .unique();
     const interval = row.planInterval ?? plan.interval;
+    const currentPeriodEnd = paidAccessPeriodEnd(now, interval, row.planKey, subscription);
+    const entitlementStart = currentPeriodEnd - billingPeriodMs(interval);
+    const entitlementChainId = entitlementStart > now
+      ? subscription?.entitlementChainId ?? row.orderId
+      : row.orderId;
+    await ctx.db.patch(row._id, {
+      entitlementChainId, entitlementStart, entitlementEnd: currentPeriodEnd,
+      entitlementGrantedStart: entitlementStart, entitlementGrantedEnd: currentPeriodEnd,
+    });
     const patch = {
+      entitlementChainId,
       planKey: row.planKey,
       status: 'active' as const,
       provider: 'myanmyanpay',
       providerSubscriptionId: row.orderId,
-      currentPeriodEnd: paidAccessPeriodEnd(now, interval, row.planKey, subscription),
+      currentPeriodEnd,
       cancelAtPeriodEnd: true,
       updatedAt: now,
     };
@@ -325,15 +335,50 @@ async function applyUpdate(ctx: MutationCtx, update: Update, source: 'api' | 'we
       .query('subscriptions')
       .withIndex('by_user', (q) => q.eq('userId', row.userId))
       .unique();
-    if (refundMatchesSubscription(subscription, row.orderId)) {
-      await ctx.db.patch(subscription._id, {
-        planKey: 'free',
-        status: 'active',
-        currentPeriodEnd: now,
-        cancelAtPeriodEnd: false,
-        updatedAt: now,
-      });
+    // Legacy rows have no trustworthy per-order bounds. Never guess from the
+    // latest provider ID or the mutable plan; preserve access for manual review.
+    let reconciliation: 'applied' | 'superseded' | 'legacy_unresolved' = 'legacy_unresolved';
+    let removedMs = 0;
+    if (row.entitlementChainId && row.entitlementStart !== undefined && row.entitlementEnd !== undefined) {
+      reconciliation = 'superseded';
+      if (subscription?.entitlementChainId === row.entitlementChainId
+        && subscription.planKey === row.planKey
+        && subscription.currentPeriodEnd !== undefined) {
+        reconciliation = 'applied';
+        removedMs = Math.max(0, Math.min(subscription.currentPeriodEnd, row.entitlementEnd)
+          - Math.max(now, row.entitlementStart));
+        // Compact later order bounds by only the unused refunded time. Manual
+        // extensions are preserved in the aggregate end (including gaps between
+        // tracked orders). Bound reads and fail atomically instead of truncating.
+        const later = await ctx.db.query('mmpayTransactions')
+          .withIndex('by_entitlement_chain_start', (q) => q
+            .eq('entitlementChainId', row.entitlementChainId)
+            .gte('entitlementStart', row.entitlementEnd))
+          .take(1001);
+        if (later.length > 1000) throw new Error('Entitlement stack requires batched reconciliation');
+        for (const order of later) {
+          if (order.status !== 'SUCCESS' || order.entitlementStart === undefined || order.entitlementEnd === undefined) continue;
+          await ctx.db.patch(order._id, {
+            entitlementStart: order.entitlementStart - removedMs,
+            entitlementEnd: order.entitlementEnd - removedMs,
+          });
+        }
+        const currentPeriodEnd = Math.max(now, subscription.currentPeriodEnd - removedMs);
+        const expired = currentPeriodEnd <= now;
+        await ctx.db.patch(subscription._id, {
+          ...(expired ? { planKey: 'free' as const, status: 'active' as const, cancelAtPeriodEnd: false } : {}),
+          currentPeriodEnd,
+          updatedAt: now,
+        });
+      }
     }
+    await ctx.db.patch(row._id, { refundRemovedMs: removedMs, refundReconciliation: reconciliation });
+    await logAudit(ctx, null, 'mmpay.refund.reconcile', 'mmpayTransactions', row._id,
+      `${row.orderId} · ${reconciliation} · removed ${removedMs} ms`, {
+        result: reconciliation === 'legacy_unresolved' ? 'rejected' : 'ok',
+        before: JSON.stringify({ subscription, start: row.entitlementStart, end: row.entitlementEnd }),
+        after: JSON.stringify({ reconciliation, removedMs }),
+      });
   }
 
   await logAudit(ctx, null, `mmpay.${source}.${update.status.toLowerCase()}`, 'mmpayTransactions', row._id, `${row.orderId} · ${update.amount} MMK`);

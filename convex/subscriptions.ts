@@ -144,7 +144,7 @@ export const grantPlan = mutation({
       createdAt: now,
       updatedAt: now,
     });
-    if (existing) await ctx.db.patch(existing._id, { planKey: args.planKey, status: 'active', provider: 'manual', updatedAt: now });
+    if (existing) await ctx.db.patch(existing._id, { planKey: args.planKey, status: 'active', provider: 'manual', entitlementChainId: undefined, updatedAt: now });
     await logAudit(ctx, ownerId, 'subscription.grant', 'subscriptions', subscriptionId, `${args.userId} · ${args.planKey}`);
     return { ok: true };
   },
@@ -257,7 +257,7 @@ export const syncProviderSubscription = internalMutation({
       .withIndex('by_user', (q) => q.eq('userId', args.userId))
       .unique();
     const now = Date.now();
-    const patch = { ...args, updatedAt: now };
+    const patch = { ...args, entitlementChainId: undefined, updatedAt: now };
     const subscriptionId = existing?._id ?? await ctx.db.insert('subscriptions', { ...patch, createdAt: now });
     if (existing) await ctx.db.patch(existing._id, patch);
     await logAudit(ctx, null, 'subscription.provider_sync', 'subscriptions', subscriptionId, `${args.provider} · ${args.planKey} · ${args.status}`);
