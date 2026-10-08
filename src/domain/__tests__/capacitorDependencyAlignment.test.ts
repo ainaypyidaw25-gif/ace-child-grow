@@ -11,7 +11,7 @@ describe('native Capacitor dependency alignment', () => {
   it('keeps the bridge, native platforms and CLI on the same exact patched release', () => {
     expect(version).toMatch(/^\d+\.\d+\.\d+$/);
     const [major, minor, patch] = version.split('.').map(Number);
-    expect(major > 8 || (major === 8 && (minor > 5 || (minor === 5 && patch >= 1)))).toBe(true);
+    expect(major > 8 || (major === 8 && (minor > 5 || (minor === 5 && patch >= 2)))).toBe(true);
     for (const name of ['@capacitor/core', '@capacitor/android', '@capacitor/ios', '@capacitor/cli']) {
       expect(manifest.dependencies[name] ?? manifest.devDependencies[name]).toBe(version);
       expect(lock.packages[`node_modules/${name}`].version).toBe(version);
@@ -31,7 +31,7 @@ describe('native Capacitor dependency alignment', () => {
       state: {
         version,
         // Verify the upstream tag again when changing the pinned native release.
-        revision: '6afa7424fd2fcd8ca1e577478e8a00af284b7e82',
+        revision: '0b6882e9a3288342aacf36348e5a94e4f1dd7b13',
       },
     });
   });
