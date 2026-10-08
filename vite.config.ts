@@ -13,6 +13,9 @@ export default defineConfig({
     alias: { '@': path.resolve(__dirname, 'src') },
   },
   build: {
+    // Native sync copies dist/ verbatim. Remove assets from previous web/store
+    // builds so old Tailwind CSS never enters the next bundle or PWA precache.
+    emptyOutDir: true,
     rollupOptions: {
       output: {
         // src/content/seed (bulk static content data) and src/evidence (the
