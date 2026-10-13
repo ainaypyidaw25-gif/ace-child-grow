@@ -18,6 +18,7 @@ import {
   CLINICAL_OLDER_SAFETY_RELEASE_BATCH_ROUTING_HASH,
   CLINICAL_REVIEW_BATCH_REGISTRY,
   CLINICAL_SAFETY_SUCCESSOR_BATCH_ROUTING_HASH,
+  CLINICAL_SOCIAL_GUIDE_BATCH_ROUTING_HASH,
   clinicalReviewBatchRoutingPayload,
 } from '../../../convex/lib/clinicalReviewBatchData';
 
@@ -133,6 +134,12 @@ describe('clinical newborn refreeze registry data', () => {
         activation: 'after_handoff',
         predecessor: 'clinical-safety-successor-14-2026-09-01-v1',
       },
+      {
+        sequence: 17,
+        batchId: 'clinical-social-guide-gd-7-9m-2026-10-13-v1',
+        activation: 'after_handoff',
+        predecessor: 'clinical-review-successor-14-2026-09-01-v1',
+      },
     ]);
 
     const expected = new Map([
@@ -150,6 +157,7 @@ describe('clinical newborn refreeze registry data', () => {
       ['clinical-evidence-successor-14-2026-09-01-v1', CLINICAL_EVIDENCE_SUCCESSOR_BATCH_ROUTING_HASH],
       ['clinical-safety-successor-14-2026-09-01-v1', CLINICAL_SAFETY_SUCCESSOR_BATCH_ROUTING_HASH],
       ['clinical-review-successor-14-2026-09-01-v1', CLINICAL_REVIEW_SUCCESSOR_BATCH_ROUTING_HASH],
+      ['clinical-social-guide-gd-7-9m-2026-10-13-v1', CLINICAL_SOCIAL_GUIDE_BATCH_ROUTING_HASH],
     ]);
     for (const registration of releases.slice(1)) {
       expect(await sha256Canonical(clinicalReviewBatchRoutingPayload(registration)))

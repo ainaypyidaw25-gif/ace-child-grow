@@ -149,11 +149,11 @@ describe('sequence-14 evidence successor registry handlers', () => {
     })).resolves.toMatchObject({
       ok: true,
       code: 'materialized',
-      createdBatches: 3,
-      createdAssignments: 42,
+      createdBatches: 4,
+      createdAssignments: 43,
     });
-    expect(ctx.tables.clinicalReviewBatches).toHaveLength(15);
-    expect(ctx.tables.clinicalReviewAssignments).toHaveLength(170);
+    expect(ctx.tables.clinicalReviewBatches).toHaveLength(16);
+    expect(ctx.tables.clinicalReviewAssignments).toHaveLength(171);
     expect(ctx.tables.clinicalReviewBatchReceipts).toHaveLength(8);
     expect(ctx.tables.contentReviews).toEqual(decisionsBefore);
     expect(ctx.tables.clinicalReviewBatches.find(

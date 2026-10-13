@@ -149,11 +149,11 @@ describe('sequence-12 native-Myanmar successor registry handlers', () => {
     })).resolves.toMatchObject({
       ok: true,
       code: 'materialized',
-      createdBatches: 5,
-      createdAssignments: 70,
+      createdBatches: 6,
+      createdAssignments: 71,
     });
-    expect(ctx.tables.clinicalReviewBatches).toHaveLength(15);
-    expect(ctx.tables.clinicalReviewAssignments).toHaveLength(170);
+    expect(ctx.tables.clinicalReviewBatches).toHaveLength(16);
+    expect(ctx.tables.clinicalReviewAssignments).toHaveLength(171);
     expect(ctx.tables.clinicalReviewBatchReceipts).toHaveLength(6);
     expect(ctx.tables.contentReviews).toEqual(decisionsBefore);
     expect(ctx.tables.clinicalReviewBatches.find(
