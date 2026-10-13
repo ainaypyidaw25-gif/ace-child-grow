@@ -55,6 +55,23 @@ function safetySnapshotContent(): Doc<'libraryContent'> {
 }
 
 describe('frozen older-safety clinical release batch', () => {
+  it('accepts a milestone with no optional advice pair but blocks a one-sided pair', () => {
+    const content = {
+      ...safetySnapshotContent(),
+      type: 'milestone',
+      data: {
+        observeMm: 'ကစားပုံကို စောင့်ကြည့်ပါ။',
+        observeEn: 'Observe the play.',
+        whyMm: 'ဟန်ဆောင်ကစားခြင်းကို လေ့လာရန် ဖြစ်သည်။',
+        whyEn: 'This observes pretend play.',
+      },
+    } as unknown as Doc<'libraryContent'>;
+
+    expect(snapshotFields(content)).toMatchObject({ blockers: [] });
+    (content.data as Record<string, unknown>).redMm = 'စိုးရိမ်လျှင် တိုင်ပင်ပါ။';
+    expect(snapshotFields(content).blockers).toContain('snapshot_field_missing:data.red');
+  });
+
   it('snapshots the complete safety-guide shape without inventing generic guide fields', () => {
     const result = snapshotFields(safetySnapshotContent());
 

@@ -22,7 +22,7 @@ describe('sequence-17 clinical social-guide batch data', () => {
 
   it('freezes only the requested 7-9 month social guide for Phyo Ko Ko', () => {
     expect(registration).toBeDefined();
-    expect(CLINICAL_REVIEW_BATCH_REGISTRY).toHaveLength(17);
+    expect(CLINICAL_REVIEW_BATCH_REGISTRY).toHaveLength(18);
     expect(registration).toMatchObject({
       sequence: 17,
       dimension: 'clinical',

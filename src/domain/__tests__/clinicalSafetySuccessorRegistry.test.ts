@@ -149,11 +149,11 @@ describe('sequence-15 safety successor registry handlers', () => {
     })).resolves.toMatchObject({
       ok: true,
       code: 'materialized',
-      createdBatches: 3,
-      createdAssignments: 29,
+      createdBatches: 4,
+      createdAssignments: 54,
     });
-    expect(ctx.tables.clinicalReviewBatches).toHaveLength(16);
-    expect(ctx.tables.clinicalReviewAssignments).toHaveLength(171);
+    expect(ctx.tables.clinicalReviewBatches).toHaveLength(17);
+    expect(ctx.tables.clinicalReviewAssignments).toHaveLength(196);
     expect(ctx.tables.clinicalReviewBatchReceipts).toHaveLength(9);
     expect(ctx.tables.contentReviews).toEqual(decisionsBefore);
     expect(ctx.tables.clinicalReviewBatches.find(

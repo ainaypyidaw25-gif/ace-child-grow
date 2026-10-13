@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { Authenticated, Unauthenticated, AuthLoading, useQuery } from 'convex/react';
 import { useAuthActions } from '@convex-dev/auth/react';
 import { lazy, Suspense, useEffect, useState, type ReactNode } from 'react';
@@ -259,7 +259,12 @@ function StandaloneScreen({ children }: { children: ReactNode }) {
 
 function AppRoutes() {
   const nativeStoreBuild = isNativeStoreBuild();
-  useOfflineWithdrawal();
+  const location = useLocation();
+  // Offline withdrawal protects parent-held downloads. Admin/reviewer screens
+  // do not consume that cache, and subscribing there can make a large manifest
+  // query compete with the exact clinical-batch read. Keep staff workflows
+  // isolated from this parent-only background job.
+  useOfflineWithdrawal(!location.pathname.startsWith('/admin'));
   return (
     <Routes>
       <Route path="/" element={<Bootstrap />} />

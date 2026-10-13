@@ -16,6 +16,7 @@ import {
   CLINICAL_NATIVE_MYANMAR_SUCCESSOR_BATCH_ROUTING_HASH,
   CLINICAL_NUTRITION_RELEASE_BATCH_ROUTING_HASH,
   CLINICAL_OLDER_SAFETY_RELEASE_BATCH_ROUTING_HASH,
+  CLINICAL_P1_REMAINING_BATCH_ROUTING_HASH,
   CLINICAL_REVIEW_BATCH_REGISTRY,
   CLINICAL_SAFETY_SUCCESSOR_BATCH_ROUTING_HASH,
   CLINICAL_SOCIAL_GUIDE_BATCH_ROUTING_HASH,
@@ -140,6 +141,12 @@ describe('clinical newborn refreeze registry data', () => {
         activation: 'after_handoff',
         predecessor: 'clinical-review-successor-14-2026-09-01-v1',
       },
+      {
+        sequence: 18,
+        batchId: 'clinical-p1-remaining-25-2026-10-14-v1',
+        activation: 'after_handoff',
+        predecessor: 'clinical-social-guide-gd-7-9m-2026-10-13-v1',
+      },
     ]);
 
     const expected = new Map([
@@ -158,6 +165,7 @@ describe('clinical newborn refreeze registry data', () => {
       ['clinical-safety-successor-14-2026-09-01-v1', CLINICAL_SAFETY_SUCCESSOR_BATCH_ROUTING_HASH],
       ['clinical-review-successor-14-2026-09-01-v1', CLINICAL_REVIEW_SUCCESSOR_BATCH_ROUTING_HASH],
       ['clinical-social-guide-gd-7-9m-2026-10-13-v1', CLINICAL_SOCIAL_GUIDE_BATCH_ROUTING_HASH],
+      ['clinical-p1-remaining-25-2026-10-14-v1', CLINICAL_P1_REMAINING_BATCH_ROUTING_HASH],
     ]);
     for (const registration of releases.slice(1)) {
       expect(await sha256Canonical(clinicalReviewBatchRoutingPayload(registration)))

@@ -102,6 +102,7 @@ import type * as lib_clinicalEnglishSuccessorBatchData from "../lib/clinicalEngl
 import type * as lib_clinicalEvidenceSuccessorBatchData from "../lib/clinicalEvidenceSuccessorBatchData.js";
 import type * as lib_clinicalNativeMyanmarRefreezeBatchData from "../lib/clinicalNativeMyanmarRefreezeBatchData.js";
 import type * as lib_clinicalNativeMyanmarSuccessorBatchData from "../lib/clinicalNativeMyanmarSuccessorBatchData.js";
+import type * as lib_clinicalP1RemainingBatchData from "../lib/clinicalP1RemainingBatchData.js";
 import type * as lib_clinicalRefreezeRegistryMigrationData from "../lib/clinicalRefreezeRegistryMigrationData.js";
 import type * as lib_clinicalReviewBatchContract from "../lib/clinicalReviewBatchContract.js";
 import type * as lib_clinicalReviewBatchData from "../lib/clinicalReviewBatchData.js";
@@ -301,6 +302,7 @@ declare const fullApi: ApiFromModules<{
   "lib/clinicalEvidenceSuccessorBatchData": typeof lib_clinicalEvidenceSuccessorBatchData;
   "lib/clinicalNativeMyanmarRefreezeBatchData": typeof lib_clinicalNativeMyanmarRefreezeBatchData;
   "lib/clinicalNativeMyanmarSuccessorBatchData": typeof lib_clinicalNativeMyanmarSuccessorBatchData;
+  "lib/clinicalP1RemainingBatchData": typeof lib_clinicalP1RemainingBatchData;
   "lib/clinicalRefreezeRegistryMigrationData": typeof lib_clinicalRefreezeRegistryMigrationData;
   "lib/clinicalReviewBatchContract": typeof lib_clinicalReviewBatchContract;
   "lib/clinicalReviewBatchData": typeof lib_clinicalReviewBatchData;

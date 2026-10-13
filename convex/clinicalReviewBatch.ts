@@ -199,11 +199,24 @@ export function snapshotFields(content: Doc<'libraryContent'>): { fields: Snapsh
     }
     fields.push({ path, labelMm, labelEn, valueMm, valueEn });
   };
+  const addOptionalPair = (
+    path: string,
+    labelMm: string,
+    labelEn: string,
+    valueMm: string | null,
+    valueEn: string | null,
+  ) => {
+    if (!valueMm && !valueEn) return;
+    add(path, labelMm, labelEn, valueMm, valueEn);
+  };
   if (!data) return { fields, blockers: ['snapshot_data_invalid'] };
   if (content.type === 'milestone') {
     add('data.observe', 'လေ့လာရန်', 'What to observe', cleanString(data.observeMm), cleanString(data.observeEn));
     add('data.why', 'အရေးပါပုံ', 'Why it matters', cleanString(data.whyMm), cleanString(data.whyEn));
-    add('data.red', 'ကျန်းမာရေးဝန်ထမ်းနှင့် တိုင်ပင်ရန်', 'When to seek advice', cleanString(data.redMm), cleanString(data.redEn));
+    // Legacy milestone rows may omit the optional advice pair entirely. Keep
+    // that valid shape reviewable, while a one-sided or partial pair remains a
+    // fail-closed bilingual blocker.
+    addOptionalPair('data.red', 'ကျန်းမာရေးဝန်ထမ်းနှင့် တိုင်ပင်ရန်', 'When to seek advice', cleanString(data.redMm), cleanString(data.redEn));
   } else if (content.type === 'activity') {
     const materials = bilingualObject(data.materials);
     const setup = bilingualObject(data.setup);

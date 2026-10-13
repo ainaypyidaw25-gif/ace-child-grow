@@ -86,8 +86,8 @@ export async function withdrawUnavailableOfflineContent(
 }
 
 /** Run once per live manifest revision from the authenticated app shell. */
-export function useOfflineWithdrawal(): void {
-  const manifest = useQuery(api.library.publicationManifest);
+export function useOfflineWithdrawal(enabled = true): void {
+  const manifest = useQuery(api.library.publicationManifest, enabled ? {} : 'skip');
   const manifestKey = manifest?.complete ? manifest.slugs.join('\u0000') : null;
 
   useEffect(() => {
