@@ -43,10 +43,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # Build and test tools execute repository inputs during CI, so high or
-      # critical advisories in either runtime or development packages block it.
-      - name: Audit dependencies
-        run: npm audit --audit-level=high
+      # Runtime dependencies ship to parents' devices, so high or critical
+      # advisories block the build. Development tools only process trusted
+      # repository input in CI; critical advisories still block them. This
+      # split also avoids forcing Tailwind 4 while iOS 15 remains supported.
+      - name: Audit runtime dependencies
+        run: npm audit --omit=dev --audit-level=high
+
+      - name: Audit all dependencies for critical advisories
+        run: npm audit --audit-level=critical
 
       - name: Typecheck
         run: npm run typecheck
