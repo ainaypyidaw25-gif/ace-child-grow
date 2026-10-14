@@ -1,0 +1,1601 @@
+{
+  "frozenFrom": {
+    "deployment": "graceful-possum-566",
+    "checkedAt": "2026-10-13T20:35:05.878Z",
+    "gitBase": "5cbcb8c5c30c426a8f2c02fd62468fcefd728922"
+  },
+  "batchId": "clinical-p1-remaining-25-2026-10-14-v1",
+  "frozenAt": 1791923705878,
+  "expiresAt": 1793133305878,
+  "previousBatchId": "clinical-social-guide-gd-7-9m-2026-10-13-v1",
+  "expectedPreviousFreezeDigest": "34f5597d338778bee0168c6924acf24032ecabffde3cd53bafa6646287fcbf9a",
+  "expectedPreviousReceiptId": "qx7dt0494mf74rhchbpc1axd1d8g78we",
+  "expectedPreviousDecisionDigest": "279acbbfcf6e6bd9911c65d0eefaf6f42d542e22219a5ac66c5a0011dfa18da4",
+  "expectedPreviousReceiptDigest": "ff3f3f3efb7f1b4e20c8dd476344a65d73442e78fe3cb86e177a1e8e640cd548",
+  "reviewer": {
+    "profileId": "md79ghw3fm2a09pvhgs63c754n8bgnpy",
+    "userId": "mn726081xpgg24y4z4tq9ncw098bh6t1",
+    "displayName": "Phyo Ko Ko",
+    "qualification": "MBBS",
+    "role": "clinical_reviewer",
+    "identityCanonicalSha256": "a0863d6008b7680ef5ebcb5290974f3fbbe3ea7a4e7bdf38a295a60ba888e9d3"
+  },
+  "items": [
+    {
+      "ordinal": 1,
+      "kind": "guide",
+      "slug": "gd_7_9m_communication",
+      "reviewRevision": 1,
+      "contentId": "kx7az4s5kqg0hjgexddm8trtmh8b8t2e",
+      "contentCreationTime": 1785024282947.2588,
+      "contentUpdatedAt": 1786433535701,
+      "contentCanonicalSha256": "072e6c594e3a7b8eb5403e0ef9939581c8ccdb543977f405cf230e702c4af7bc",
+      "linkId": "k978yvq48nx6k84x87d23jzw6s8b8tzy",
+      "linkCreationTime": 1785024331625.856,
+      "linkUpdatedAt": 1785024331625,
+      "linkCanonicalSha256": "2f6a42a54ca9168eee8abf9cc937bfc87e6ba8ca8a1e3052b679335b6cb8d14b",
+      "sourceIds": [
+        "who-care-for-child-development-2012",
+        "cdc-milestones-2026",
+        "nhs-learn-to-talk-2023",
+        "jr-weisleder-2013",
+        "aap-media-young-minds-2016"
+      ],
+      "sourceCount": 5,
+      "sourcesCanonicalSha256": "154d0b5aedafe9c8d0e82a3a043f943a856cf02729e73d8a3481272dac6c5c17",
+      "mediaCount": 0,
+      "mediaCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "aiCanonicalSha256": "2ab0cd8bafd4060f556e6e186748e376e4e7fe5aa352005bda9f6c62515edd2f",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "reviewerAdvisory": {
+        "mm": "PDF အတွင်းရှိ အကြောင်းအရာ၊ အသက်အပိုင်းအခြား၊ အထောက်အထား၊ ဘေးကင်းရေးသတိပေးချက်နှင့် လွှဲပြောင်းရန်အချက်များကို ဤ frozen snapshot နှင့် တစ်ခုချင်းတိုက်စစ်ပါ။ ဆေးဘက်ဆိုင်ရာအရ မှန်ကန်ပြီး အထောက်အထားနှင့် ကိုက်ညီမှသာ approve လုပ်ပါ။ အန္တရာယ်လျှော့တွက်ထားခြင်း၊ မကိုက်ညီခြင်း သို့မဟုတ် ပြင်ဆင်ရန်လိုခြင်းရှိပါက changes requested ရွေးပါ။",
+        "en": "Compare the PDF-reviewed content item by item with this frozen snapshot, including age range, evidence, safety warnings, and referral thresholds. Approve only when clinically appropriate and evidence-aligned; otherwise request changes."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "f142d92696c11e0ff6c447807cea13d4d0e0ad6763aae6eeb43a22ba2bcd8a7a"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "f142d92696c11e0ff6c447807cea13d4d0e0ad6763aae6eeb43a22ba2bcd8a7a"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "b0daab90b35cb5cbef6aaa21dfa16ac4b66fa5996789e87e868b69d1c8a05406"
+        },
+        {
+          "dimension": "english",
+          "digest": "c400ade1a1b8c7998a4aaaf9fd58bacb94af0e118e2cb08b27f5661681b38293"
+        },
+        {
+          "dimension": "child_development",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "dimension": "evidence",
+          "digest": "d9ff2555d117d494af281cf80e53d33eb43273f00ecd46c2c76290392341355a"
+        },
+        {
+          "dimension": "safety",
+          "digest": "0d6332fc75db2219e65f6d29d15623587995419c3f430277164bad0a32785bec"
+        }
+      ]
+    },
+    {
+      "ordinal": 2,
+      "kind": "milestone",
+      "slug": "ms_10_12m_problem_solving_2",
+      "reviewRevision": 1,
+      "contentId": "kx7dk7mgzacnshjj59hv1016ed8b8nb8",
+      "contentCreationTime": 1785024282947.2664,
+      "contentUpdatedAt": 1786433535701,
+      "contentCanonicalSha256": "46c138a3fb852a6196c90d0612218bf70b06bbbc81a3ae87274f494789290544",
+      "linkId": "k97fb5476yzkdspk7p0kqn4ach8b973n",
+      "linkCreationTime": 1785024331625.8604,
+      "linkUpdatedAt": 1785024331625,
+      "linkCanonicalSha256": "f03eea100900f7485a31d1900dfe44bb5e624ef9e508a3c4a0086162e4a5062a",
+      "sourceIds": [
+        "aap-milestones-2022",
+        "cdc-milestones-2026",
+        "aap-surveillance-2020",
+        "aap-power-of-play-2018",
+        "tb-dbp-5e-2022"
+      ],
+      "sourceCount": 5,
+      "sourcesCanonicalSha256": "c56c7b12361af456b0a14667aab6da7949016413c3796406a19b7123e5511d96",
+      "mediaCount": 0,
+      "mediaCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "aiCanonicalSha256": "38decde4e68c23f58d77ca824a8e04074cf45d17c670bd93360a29931cb3918c",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "reviewerAdvisory": {
+        "mm": "PDF အတွင်းရှိ အကြောင်းအရာ၊ အသက်အပိုင်းအခြား၊ အထောက်အထား၊ ဘေးကင်းရေးသတိပေးချက်နှင့် လွှဲပြောင်းရန်အချက်များကို ဤ frozen snapshot နှင့် တစ်ခုချင်းတိုက်စစ်ပါ။ ဆေးဘက်ဆိုင်ရာအရ မှန်ကန်ပြီး အထောက်အထားနှင့် ကိုက်ညီမှသာ approve လုပ်ပါ။ အန္တရာယ်လျှော့တွက်ထားခြင်း၊ မကိုက်ညီခြင်း သို့မဟုတ် ပြင်ဆင်ရန်လိုခြင်းရှိပါက changes requested ရွေးပါ။",
+        "en": "Compare the PDF-reviewed content item by item with this frozen snapshot, including age range, evidence, safety warnings, and referral thresholds. Approve only when clinically appropriate and evidence-aligned; otherwise request changes."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "b1909a763c6d5f0010863c4894ba5790951563f55f28e5bae3b78e8ffe1459da"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "b1909a763c6d5f0010863c4894ba5790951563f55f28e5bae3b78e8ffe1459da"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "4f414d3c29be47f71643d061a6438960ddd0deed19d9ed46c9de26971426a92e"
+        },
+        {
+          "dimension": "english",
+          "digest": "e6fc117c5cf3399556d1e359f28e3a971a339055093080ebf10b1b711713f103"
+        },
+        {
+          "dimension": "child_development",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "dimension": "evidence",
+          "digest": "291ad08407961a1bc08ede44a2ec4ce8516901c08e337d87d510767eb17a769d"
+        },
+        {
+          "dimension": "safety",
+          "digest": "1fc7dfeaa660beff83976d5db13e38d43edbb3ca89fc9a9e72c5a2152e9e9219"
+        }
+      ]
+    },
+    {
+      "ordinal": 3,
+      "kind": "milestone",
+      "slug": "ms_19_24m_play_1",
+      "reviewRevision": 1,
+      "contentId": "kx748nrrkber2sgp75qt0e3pcx8b8xca",
+      "contentCreationTime": 1785024282947.1785,
+      "contentUpdatedAt": 1786433535701,
+      "contentCanonicalSha256": "d415f6728c170f41aacc072faffdeddfcfc1d2f85fa938f09665ad0ae1a984a3",
+      "linkId": "k972aesr53dzcc0y6396v6j9m98b9fyf",
+      "linkCreationTime": 1785024331625.8083,
+      "linkUpdatedAt": 1785024331625,
+      "linkCanonicalSha256": "889e2e268de46324d6b5aaf5764d8da6e0a80f63f1e6209a9190eb97e0b79301",
+      "sourceIds": [
+        "aap-milestones-2022",
+        "cdc-milestones-2026",
+        "aap-surveillance-2020",
+        "aap-power-of-play-2018",
+        "who-care-for-child-development-2012"
+      ],
+      "sourceCount": 5,
+      "sourcesCanonicalSha256": "7048d681a83cf80d0b949e97558b84ba5c9a60a0519bf9aa2b8e3b8e571b7f9f",
+      "mediaCount": 0,
+      "mediaCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "aiCanonicalSha256": "635d4a2e5ae70ed9eb80160f1b6ddb5d184b77a19506b1125e61aca1c3597a2b",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "reviewerAdvisory": {
+        "mm": "PDF အတွင်းရှိ အကြောင်းအရာ၊ အသက်အပိုင်းအခြား၊ အထောက်အထား၊ ဘေးကင်းရေးသတိပေးချက်နှင့် လွှဲပြောင်းရန်အချက်များကို ဤ frozen snapshot နှင့် တစ်ခုချင်းတိုက်စစ်ပါ။ ဆေးဘက်ဆိုင်ရာအရ မှန်ကန်ပြီး အထောက်အထားနှင့် ကိုက်ညီမှသာ approve လုပ်ပါ။ အန္တရာယ်လျှော့တွက်ထားခြင်း၊ မကိုက်ညီခြင်း သို့မဟုတ် ပြင်ဆင်ရန်လိုခြင်းရှိပါက changes requested ရွေးပါ။",
+        "en": "Compare the PDF-reviewed content item by item with this frozen snapshot, including age range, evidence, safety warnings, and referral thresholds. Approve only when clinically appropriate and evidence-aligned; otherwise request changes."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "a3ca92f16ad555c0ffd37ef0367ee28d5d46dd308c30f8857bf6fa656157849c"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "a3ca92f16ad555c0ffd37ef0367ee28d5d46dd308c30f8857bf6fa656157849c"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "da205fa9f8f859526aa2a64deb88bbf3d5e9c050417ae49048ccc9be62b1bd15"
+        },
+        {
+          "dimension": "english",
+          "digest": "cc80e9ad4f424df0e01cd3cab45019a8188291b2b78e0b78599a29abe75d7959"
+        },
+        {
+          "dimension": "child_development",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "dimension": "evidence",
+          "digest": "73442be029dc12a22a260ce33911075af70921700a6e433d2dc9f61ac6275020"
+        },
+        {
+          "dimension": "safety",
+          "digest": "fa2eb52bf6f8d6c349f53ca70db2a2b25df71b7ee220d53e710407eedd6cedff"
+        }
+      ]
+    },
+    {
+      "ordinal": 4,
+      "kind": "milestone",
+      "slug": "ms_3_4m_cognitive_1",
+      "reviewRevision": 1,
+      "contentId": "kx7fva1q25zq440cfqe7wzzce18b97br",
+      "contentCreationTime": 1785024282947.2383,
+      "contentUpdatedAt": 1786433535701,
+      "contentCanonicalSha256": "5224887237718e534c3c56440ed5c5324e2fa2a18ec7e49e7e5fe00860fcb473",
+      "linkId": "k971s0bbyxbd3fz5wgxe0z9hxx8b8mc8",
+      "linkCreationTime": 1785024331625.8418,
+      "linkUpdatedAt": 1785024331625,
+      "linkCanonicalSha256": "bb003b31860eb1789c4fbd67a7ab8429d61cd1884f02944c1af26526ff14124d",
+      "sourceIds": [
+        "aap-milestones-2022",
+        "cdc-milestones-2026",
+        "aap-surveillance-2020",
+        "tb-dbp-5e-2022",
+        "aap-power-of-play-2018"
+      ],
+      "sourceCount": 5,
+      "sourcesCanonicalSha256": "b0db16b23310bb1b2b27edc14340dc13621eb6d6011e9a70637844521d0465cb",
+      "mediaCount": 0,
+      "mediaCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "aiCanonicalSha256": "38decde4e68c23f58d77ca824a8e04074cf45d17c670bd93360a29931cb3918c",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "reviewerAdvisory": {
+        "mm": "PDF အတွင်းရှိ အကြောင်းအရာ၊ အသက်အပိုင်းအခြား၊ အထောက်အထား၊ ဘေးကင်းရေးသတိပေးချက်နှင့် လွှဲပြောင်းရန်အချက်များကို ဤ frozen snapshot နှင့် တစ်ခုချင်းတိုက်စစ်ပါ။ ဆေးဘက်ဆိုင်ရာအရ မှန်ကန်ပြီး အထောက်အထားနှင့် ကိုက်ညီမှသာ approve လုပ်ပါ။ အန္တရာယ်လျှော့တွက်ထားခြင်း၊ မကိုက်ညီခြင်း သို့မဟုတ် ပြင်ဆင်ရန်လိုခြင်းရှိပါက changes requested ရွေးပါ။",
+        "en": "Compare the PDF-reviewed content item by item with this frozen snapshot, including age range, evidence, safety warnings, and referral thresholds. Approve only when clinically appropriate and evidence-aligned; otherwise request changes."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "df989d94a3ba71219293bffd320f9a7645d91a119920b1739e730e49de2bf8b4"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "df989d94a3ba71219293bffd320f9a7645d91a119920b1739e730e49de2bf8b4"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "2699af3e91b84f33db3cb3817c29a7403a5071bfd6ee456918fc751dff3e3f86"
+        },
+        {
+          "dimension": "english",
+          "digest": "f41a9a6e12d626a1772339c0a4a3dfa317f84437c4d7a3d40cdd3c6544312275"
+        },
+        {
+          "dimension": "child_development",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "dimension": "evidence",
+          "digest": "6bc4fb74db20d83e1017a6c34d54fb75074dad02857cbd843f0102eb95f4664c"
+        },
+        {
+          "dimension": "safety",
+          "digest": "f4fc1afc3fc37fdaff92ad0e979bf87f0352a1b1325f633c8d2224f4e575eb23"
+        }
+      ]
+    },
+    {
+      "ordinal": 5,
+      "kind": "milestone",
+      "slug": "ms_3_4m_fine_motor_2",
+      "reviewRevision": 2,
+      "contentId": "kx7ddq36k77x07d11rfphedb298b82qm",
+      "contentCreationTime": 1785024282947.2373,
+      "contentUpdatedAt": 1786633170870,
+      "contentCanonicalSha256": "5ab5b4adcc2076ae6501e892c5689133227ad962c43cf1fccad1cc52fd1c42cd",
+      "linkId": "k970z5fh32cxc1b0afzsyhrgr58b8xm8",
+      "linkCreationTime": 1785024331625.8408,
+      "linkUpdatedAt": 1785024331625,
+      "linkCanonicalSha256": "5c520687f8ea0a113d3d0e9b8640f1fc4949a6246fb65642ab0f3b7ae9dc35e1",
+      "sourceIds": [
+        "aap-milestones-2022",
+        "cdc-milestones-2026",
+        "aap-surveillance-2020",
+        "tb-case-smith-9e-2025",
+        "cdc-milestone-checklists-2025"
+      ],
+      "sourceCount": 5,
+      "sourcesCanonicalSha256": "37fab1174117e404a69ec82c07168fcf33d9de71ce45f713ef034904e53d502c",
+      "mediaCount": 0,
+      "mediaCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "aiCanonicalSha256": "b909358b36408eb88bb7d70a61cc0cb4e2be33f97fb0636bfed00c89a12fd80d",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "reviewerAdvisory": {
+        "mm": "PDF အတွင်းရှိ အကြောင်းအရာ၊ အသက်အပိုင်းအခြား၊ အထောက်အထား၊ ဘေးကင်းရေးသတိပေးချက်နှင့် လွှဲပြောင်းရန်အချက်များကို ဤ frozen snapshot နှင့် တစ်ခုချင်းတိုက်စစ်ပါ။ ဆေးဘက်ဆိုင်ရာအရ မှန်ကန်ပြီး အထောက်အထားနှင့် ကိုက်ညီမှသာ approve လုပ်ပါ။ အန္တရာယ်လျှော့တွက်ထားခြင်း၊ မကိုက်ညီခြင်း သို့မဟုတ် ပြင်ဆင်ရန်လိုခြင်းရှိပါက changes requested ရွေးပါ။",
+        "en": "Compare the PDF-reviewed content item by item with this frozen snapshot, including age range, evidence, safety warnings, and referral thresholds. Approve only when clinically appropriate and evidence-aligned; otherwise request changes."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "9498ac32b8796d26ddfda7bb2c280c30c36199620f8ab0c87f8aebc89dc9de63"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "9498ac32b8796d26ddfda7bb2c280c30c36199620f8ab0c87f8aebc89dc9de63"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "17ac74dff7cf48ba857549137a1920a42bbf202c811bc7c4dbe3358cd1bde815"
+        },
+        {
+          "dimension": "english",
+          "digest": "21494773384c47913a9bacd3ce44217cda941b3cf203ab92abec6edbedbf75b3"
+        },
+        {
+          "dimension": "child_development",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "dimension": "evidence",
+          "digest": "982289d65354cdf76aec6831c4414da70090d19f2c47b969866e68b7331d3df4"
+        },
+        {
+          "dimension": "safety",
+          "digest": "79231298ff4c93f1883841e7953bacaf770298212c064ff1a51277b63d274c58"
+        }
+      ]
+    },
+    {
+      "ordinal": 6,
+      "kind": "milestone",
+      "slug": "ms_3_4m_gross_motor_2",
+      "reviewRevision": 1,
+      "contentId": "kx72k37m7hcxya31ajhn66g9v18b9q67",
+      "contentCreationTime": 1785024282947.237,
+      "contentUpdatedAt": 1786433535701,
+      "contentCanonicalSha256": "f6cbc22c45d7b3f75faf624b1c95d5664e1c296c97bf76e3185c5b6e3332c689",
+      "linkId": "k97512ehs4fjqdhfh2hcpqg4jx8b8z1b",
+      "linkCreationTime": 1785024331625.8406,
+      "linkUpdatedAt": 1785024331625,
+      "linkCanonicalSha256": "75decb50487b191f263d9a8f7c88f59ea4d4fe56f24bc488f3cef501597e3c92",
+      "sourceIds": [
+        "aap-milestones-2022",
+        "cdc-milestones-2026",
+        "aap-surveillance-2020",
+        "jr-who-motor-windows-2006",
+        "tb-campbell-pt-6e-2022",
+        "who-pa-sleep-under5-2019"
+      ],
+      "sourceCount": 6,
+      "sourcesCanonicalSha256": "669b94411dfbbc8f61c5da6e1626cb9d0066deb9d896d98485d5cefafd88b12d",
+      "mediaCount": 0,
+      "mediaCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "aiCanonicalSha256": "5ff4eca4b6a4fd4861bd448dfc38799d77d0a4575bf86362dda8b3d5ec61a253",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "reviewerAdvisory": {
+        "mm": "PDF အတွင်းရှိ အကြောင်းအရာ၊ အသက်အပိုင်းအခြား၊ အထောက်အထား၊ ဘေးကင်းရေးသတိပေးချက်နှင့် လွှဲပြောင်းရန်အချက်များကို ဤ frozen snapshot နှင့် တစ်ခုချင်းတိုက်စစ်ပါ။ ဆေးဘက်ဆိုင်ရာအရ မှန်ကန်ပြီး အထောက်အထားနှင့် ကိုက်ညီမှသာ approve လုပ်ပါ။ အန္တရာယ်လျှော့တွက်ထားခြင်း၊ မကိုက်ညီခြင်း သို့မဟုတ် ပြင်ဆင်ရန်လိုခြင်းရှိပါက changes requested ရွေးပါ။",
+        "en": "Compare the PDF-reviewed content item by item with this frozen snapshot, including age range, evidence, safety warnings, and referral thresholds. Approve only when clinically appropriate and evidence-aligned; otherwise request changes."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "4bbda255c464a055edb00239466931d0acd4fedeee45033a1fcc8a0a5a406b22"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "4bbda255c464a055edb00239466931d0acd4fedeee45033a1fcc8a0a5a406b22"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "bd8716fb73af9348de71b94da75708204df6ed45f70380929f6acf0cb89c9c71"
+        },
+        {
+          "dimension": "english",
+          "digest": "c8d645f928cf3741dccc4f524a47d7b2bf26627bb486a812690fc11f0654aad0"
+        },
+        {
+          "dimension": "child_development",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "dimension": "evidence",
+          "digest": "3fcff25c42485d004381d9e98e717fe184209765ba6b8a61534ca7bb613e4c12"
+        },
+        {
+          "dimension": "safety",
+          "digest": "9ea293e6c19d57e75ad2b611d928d2b976d8a72d518cf543a4ce7943aa7b1650"
+        }
+      ]
+    },
+    {
+      "ordinal": 7,
+      "kind": "milestone",
+      "slug": "ms_3_4m_nutrition_1",
+      "reviewRevision": 2,
+      "contentId": "kx75cj9k7jgxg5d2bcm7v0d7218b8sxm",
+      "contentCreationTime": 1785024282947.2385,
+      "contentUpdatedAt": 1786633172178,
+      "contentCanonicalSha256": "d519955f2f7d56afeca4a12f8dfd82ee41efa5cfac4376482ee6b0cf6e461e0c",
+      "linkId": "k973spywv5z7nccjaty33gm4758b9dd9",
+      "linkCreationTime": 1785024331625.842,
+      "linkUpdatedAt": 1785024331625,
+      "linkCanonicalSha256": "d7070c9e85057bd40487e174851ffca784b18e5685d05c765c424e5cf33ac0af",
+      "sourceIds": [
+        "aap-milestones-2022",
+        "cdc-milestones-2026",
+        "aap-surveillance-2020",
+        "who-iycf-model-chapter-2025",
+        "who-complementary-feeding-2023",
+        "nhs-first-solid-foods-2026"
+      ],
+      "sourceCount": 6,
+      "sourcesCanonicalSha256": "cbfe26a9ec01d47113e54f9f685fb60923f82da642932efbece7b6d3fd59e030",
+      "mediaCount": 0,
+      "mediaCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "aiCanonicalSha256": "b909358b36408eb88bb7d70a61cc0cb4e2be33f97fb0636bfed00c89a12fd80d",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "reviewerAdvisory": {
+        "mm": "PDF အတွင်းရှိ အကြောင်းအရာ၊ အသက်အပိုင်းအခြား၊ အထောက်အထား၊ ဘေးကင်းရေးသတိပေးချက်နှင့် လွှဲပြောင်းရန်အချက်များကို ဤ frozen snapshot နှင့် တစ်ခုချင်းတိုက်စစ်ပါ။ ဆေးဘက်ဆိုင်ရာအရ မှန်ကန်ပြီး အထောက်အထားနှင့် ကိုက်ညီမှသာ approve လုပ်ပါ။ အန္တရာယ်လျှော့တွက်ထားခြင်း၊ မကိုက်ညီခြင်း သို့မဟုတ် ပြင်ဆင်ရန်လိုခြင်းရှိပါက changes requested ရွေးပါ။",
+        "en": "Compare the PDF-reviewed content item by item with this frozen snapshot, including age range, evidence, safety warnings, and referral thresholds. Approve only when clinically appropriate and evidence-aligned; otherwise request changes."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "cbecff416c391c3668e09b0394fe3d02408372299cf16fa6c0f4fe6227a5f147"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "cbecff416c391c3668e09b0394fe3d02408372299cf16fa6c0f4fe6227a5f147"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "95aa9838c6d8a7f02b8ffe248f8366af7cd58bcfdfec6815770744d261f05877"
+        },
+        {
+          "dimension": "english",
+          "digest": "08f5eec403c7ddd6284f24e9307eea6632fae5a3d36f07ea8778f33e979a74ee"
+        },
+        {
+          "dimension": "child_development",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "dimension": "evidence",
+          "digest": "d5a235bf82a523468c4da373fef17f72a7ee1bb884dcd586f10d3ddf82c7c56c"
+        },
+        {
+          "dimension": "safety",
+          "digest": "ccb16cada1f8cd3ad4b838ea55642fbf9dcda0afd417a440c68b1443420ea149"
+        }
+      ]
+    },
+    {
+      "ordinal": 8,
+      "kind": "milestone",
+      "slug": "ms_3_4m_social_1",
+      "reviewRevision": 1,
+      "contentId": "kx76qqtyc2fp750rnsrbrw1mxh8b84bp",
+      "contentCreationTime": 1785024282947.238,
+      "contentUpdatedAt": 1786433535701,
+      "contentCanonicalSha256": "3b257d70637065cc971aa4d4c87ec68e72f4a98ecbb7937edb1a3aaa4d6262ae",
+      "linkId": "k979t3dyyzd9sf7m7t1z7tw82x8b9bz3",
+      "linkCreationTime": 1785024331625.8416,
+      "linkUpdatedAt": 1785024331625,
+      "linkCanonicalSha256": "0ae2c5f3b7cc05d4be622084919d166ea5d6337a5ef14d74ecfab5448ac25ee7",
+      "sourceIds": [
+        "aap-milestones-2022",
+        "cdc-milestones-2026",
+        "aap-surveillance-2020",
+        "nice-ph40-social-emotional-2012",
+        "tb-dbp-5e-2022"
+      ],
+      "sourceCount": 5,
+      "sourcesCanonicalSha256": "7f5725200c1dcf94f2478af817f1054ba3140eecc66b9735c37dd6bbf2f639ae",
+      "mediaCount": 0,
+      "mediaCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "aiCanonicalSha256": "7d9417326f01cdcb82f1cb28498f516228d24e3fc0d0353378404ee996ea88bc",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "reviewerAdvisory": {
+        "mm": "PDF အတွင်းရှိ အကြောင်းအရာ၊ အသက်အပိုင်းအခြား၊ အထောက်အထား၊ ဘေးကင်းရေးသတိပေးချက်နှင့် လွှဲပြောင်းရန်အချက်များကို ဤ frozen snapshot နှင့် တစ်ခုချင်းတိုက်စစ်ပါ။ ဆေးဘက်ဆိုင်ရာအရ မှန်ကန်ပြီး အထောက်အထားနှင့် ကိုက်ညီမှသာ approve လုပ်ပါ။ အန္တရာယ်လျှော့တွက်ထားခြင်း၊ မကိုက်ညီခြင်း သို့မဟုတ် ပြင်ဆင်ရန်လိုခြင်းရှိပါက changes requested ရွေးပါ။",
+        "en": "Compare the PDF-reviewed content item by item with this frozen snapshot, including age range, evidence, safety warnings, and referral thresholds. Approve only when clinically appropriate and evidence-aligned; otherwise request changes."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "d05ac36bfc84dde345567b3a515ff5add82a08318175608a7a63226a2e9be6a7"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "d05ac36bfc84dde345567b3a515ff5add82a08318175608a7a63226a2e9be6a7"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "557f1f9e78702272c71827a1328a52bc3833229ac000883c8531a43f2ff0e8ee"
+        },
+        {
+          "dimension": "english",
+          "digest": "bde642d12471186d7c7b5792053ee2a99279985a44934314df58d055253fc47a"
+        },
+        {
+          "dimension": "child_development",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "dimension": "evidence",
+          "digest": "d6af14698e0e6906014429b74aa6be46de16b5f93e79e2cfe3c34230b318dafc"
+        },
+        {
+          "dimension": "safety",
+          "digest": "fd78f844a4e8da866be72370cecd15b4daafa6846e9d703c041d4429a73a8b46"
+        }
+      ]
+    },
+    {
+      "ordinal": 9,
+      "kind": "milestone",
+      "slug": "ms_5_6m_gross_motor_2",
+      "reviewRevision": 2,
+      "contentId": "kx75q61c9xqf5vdw1w52hthmsx8b95mw",
+      "contentCreationTime": 1785024282947.2466,
+      "contentUpdatedAt": 1786633197794,
+      "contentCanonicalSha256": "8d9f2f3bb077b2946b03067e42cf1e879b74f3a7a135ebafb67a652b7e86e42a",
+      "linkId": "k97803c2qm8ph8584fx66pbkjh8b8pdz",
+      "linkCreationTime": 1785024331625.847,
+      "linkUpdatedAt": 1785024331625,
+      "linkCanonicalSha256": "7714fdc504940118b344e4e6b87f5b8aafc9dc8fbc65c448b1612c1035411d07",
+      "sourceIds": [
+        "aap-milestones-2022",
+        "cdc-milestones-2026",
+        "aap-surveillance-2020",
+        "jr-who-motor-windows-2006",
+        "tb-campbell-pt-6e-2022",
+        "who-pa-sleep-under5-2019"
+      ],
+      "sourceCount": 6,
+      "sourcesCanonicalSha256": "669b94411dfbbc8f61c5da6e1626cb9d0066deb9d896d98485d5cefafd88b12d",
+      "mediaCount": 1,
+      "mediaCanonicalSha256": "979f639784d47cd3e0654a0e8f336dda8bab82b45ee7d6fc8fa4e0832b6cdec6",
+      "aiCanonicalSha256": "5ff4eca4b6a4fd4861bd448dfc38799d77d0a4575bf86362dda8b3d5ec61a253",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "reviewerAdvisory": {
+        "mm": "PDF အတွင်းရှိ အကြောင်းအရာ၊ အသက်အပိုင်းအခြား၊ အထောက်အထား၊ ဘေးကင်းရေးသတိပေးချက်နှင့် လွှဲပြောင်းရန်အချက်များကို ဤ frozen snapshot နှင့် တစ်ခုချင်းတိုက်စစ်ပါ။ ဆေးဘက်ဆိုင်ရာအရ မှန်ကန်ပြီး အထောက်အထားနှင့် ကိုက်ညီမှသာ approve လုပ်ပါ။ အန္တရာယ်လျှော့တွက်ထားခြင်း၊ မကိုက်ညီခြင်း သို့မဟုတ် ပြင်ဆင်ရန်လိုခြင်းရှိပါက changes requested ရွေးပါ။",
+        "en": "Compare the PDF-reviewed content item by item with this frozen snapshot, including age range, evidence, safety warnings, and referral thresholds. Approve only when clinically appropriate and evidence-aligned; otherwise request changes."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "de6667a86203e111864bc46e15ced356410da5ae931d3253e0f2303d8fbade34"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "de6667a86203e111864bc46e15ced356410da5ae931d3253e0f2303d8fbade34"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "ccbbc1de67563b572c43ce643793cf17cdc14123a81f61e8b0a8168dbd8bab78"
+        },
+        {
+          "dimension": "english",
+          "digest": "fadbdc0d141cfbae468938e6ff5d5b12def4853eb91b6b40da308811d0dcdd2f"
+        },
+        {
+          "dimension": "child_development",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "dimension": "evidence",
+          "digest": "7899347909af057de43619879652a3de2a430fc2260ab2d72d7353e0de192ff3"
+        },
+        {
+          "dimension": "safety",
+          "digest": "11ee046f5e72071dbc744be488592dfefcf55e149e52180055c6965782a177be"
+        }
+      ]
+    },
+    {
+      "ordinal": 10,
+      "kind": "milestone",
+      "slug": "ms_5_6m_nutrition_1",
+      "reviewRevision": 1,
+      "contentId": "kx7493h48k8qzh396yddzsgk9n8b97h1",
+      "contentCreationTime": 1785024282947.248,
+      "contentUpdatedAt": 1786433535701,
+      "contentCanonicalSha256": "d15e6e2766d24345d76b6df83bc75781b79b0fa355f62c667156813f21d0cad3",
+      "linkId": "k97bvd61n52yt9k2tzqgsvm44h8b9tes",
+      "linkCreationTime": 1785024331625.8484,
+      "linkUpdatedAt": 1785024331625,
+      "linkCanonicalSha256": "ad550f0501dcdc6f1ffd43c0c180c5b2da0fcab19328d3d3457ee799a125f967",
+      "sourceIds": [
+        "aap-milestones-2022",
+        "cdc-milestones-2026",
+        "aap-surveillance-2020",
+        "who-iycf-model-chapter-2025",
+        "who-complementary-feeding-2023",
+        "nhs-first-solid-foods-2026"
+      ],
+      "sourceCount": 6,
+      "sourcesCanonicalSha256": "cbfe26a9ec01d47113e54f9f685fb60923f82da642932efbece7b6d3fd59e030",
+      "mediaCount": 0,
+      "mediaCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "aiCanonicalSha256": "b909358b36408eb88bb7d70a61cc0cb4e2be33f97fb0636bfed00c89a12fd80d",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "reviewerAdvisory": {
+        "mm": "PDF အတွင်းရှိ အကြောင်းအရာ၊ အသက်အပိုင်းအခြား၊ အထောက်အထား၊ ဘေးကင်းရေးသတိပေးချက်နှင့် လွှဲပြောင်းရန်အချက်များကို ဤ frozen snapshot နှင့် တစ်ခုချင်းတိုက်စစ်ပါ။ ဆေးဘက်ဆိုင်ရာအရ မှန်ကန်ပြီး အထောက်အထားနှင့် ကိုက်ညီမှသာ approve လုပ်ပါ။ အန္တရာယ်လျှော့တွက်ထားခြင်း၊ မကိုက်ညီခြင်း သို့မဟုတ် ပြင်ဆင်ရန်လိုခြင်းရှိပါက changes requested ရွေးပါ။",
+        "en": "Compare the PDF-reviewed content item by item with this frozen snapshot, including age range, evidence, safety warnings, and referral thresholds. Approve only when clinically appropriate and evidence-aligned; otherwise request changes."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "7ea995fc30b81a3dedfed7ab4a19befa22021d218a85614e6114db6f2ac12dc2"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "7ea995fc30b81a3dedfed7ab4a19befa22021d218a85614e6114db6f2ac12dc2"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "4d5ecca21b159795352f99601f0d7d451f3ef46858f9efa8df4ffcdb2ca34178"
+        },
+        {
+          "dimension": "english",
+          "digest": "fbd8f512c1c81318a4379da84a2a8180d8f0980420b920351982b99e5511c08f"
+        },
+        {
+          "dimension": "child_development",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "dimension": "evidence",
+          "digest": "181d8452c2f7f2ea28b8f71a02451f6d05ce9f62f5a24b45c7615d123b7fdf32"
+        },
+        {
+          "dimension": "safety",
+          "digest": "789db1483956aa9c9b8b23c28828dadecab03175bad88bad53b74ef1b8987efa"
+        }
+      ]
+    },
+    {
+      "ordinal": 11,
+      "kind": "milestone",
+      "slug": "ms_7_9m_fine_motor_2",
+      "reviewRevision": 1,
+      "contentId": "kx77gcz47gzsmxwf7sb3yc7gs98b8p62",
+      "contentCreationTime": 1785024282947.2563,
+      "contentUpdatedAt": 1786433535701,
+      "contentCanonicalSha256": "36d538277c86774a508806b43a36b058a8da6edac087a737df99766016567715",
+      "linkId": "k97dxcja95eh5nkb52cf1n5wv18b9nta",
+      "linkCreationTime": 1785024331625.8535,
+      "linkUpdatedAt": 1785024331625,
+      "linkCanonicalSha256": "4ae396b0068860d7895ad69bcb3b0f41c32ec405b791945d5a074454c8fed0fe",
+      "sourceIds": [
+        "aap-milestones-2022",
+        "cdc-milestones-2026",
+        "aap-surveillance-2020",
+        "tb-case-smith-9e-2025",
+        "cdc-milestone-checklists-2025"
+      ],
+      "sourceCount": 5,
+      "sourcesCanonicalSha256": "37fab1174117e404a69ec82c07168fcf33d9de71ce45f713ef034904e53d502c",
+      "mediaCount": 0,
+      "mediaCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "aiCanonicalSha256": "b909358b36408eb88bb7d70a61cc0cb4e2be33f97fb0636bfed00c89a12fd80d",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "reviewerAdvisory": {
+        "mm": "PDF အတွင်းရှိ အကြောင်းအရာ၊ အသက်အပိုင်းအခြား၊ အထောက်အထား၊ ဘေးကင်းရေးသတိပေးချက်နှင့် လွှဲပြောင်းရန်အချက်များကို ဤ frozen snapshot နှင့် တစ်ခုချင်းတိုက်စစ်ပါ။ ဆေးဘက်ဆိုင်ရာအရ မှန်ကန်ပြီး အထောက်အထားနှင့် ကိုက်ညီမှသာ approve လုပ်ပါ။ အန္တရာယ်လျှော့တွက်ထားခြင်း၊ မကိုက်ညီခြင်း သို့မဟုတ် ပြင်ဆင်ရန်လိုခြင်းရှိပါက changes requested ရွေးပါ။",
+        "en": "Compare the PDF-reviewed content item by item with this frozen snapshot, including age range, evidence, safety warnings, and referral thresholds. Approve only when clinically appropriate and evidence-aligned; otherwise request changes."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "38486f06c5c0cf3dcc26c07d2082d8ad08fafd131cadfb883a6d64a0272a56de"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "38486f06c5c0cf3dcc26c07d2082d8ad08fafd131cadfb883a6d64a0272a56de"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "38df4bf871b1691e813e2a6007490c389e323cefeccb7fd6b092327785c9ac48"
+        },
+        {
+          "dimension": "english",
+          "digest": "3e068b09ba3866f452cd2b763974c82e9007e954dc7b6964b69c0dd08b7b77a4"
+        },
+        {
+          "dimension": "child_development",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "dimension": "evidence",
+          "digest": "ebaface1143ae36619b19252e4bc46432096a4c47f269d710e85398c1e1cab66"
+        },
+        {
+          "dimension": "safety",
+          "digest": "c61c679a7148f267fb52501da7ca43ea6146f3f94daa079644ce18639eb5076a"
+        }
+      ]
+    },
+    {
+      "ordinal": 12,
+      "kind": "milestone",
+      "slug": "ms_7_9m_gross_motor_2",
+      "reviewRevision": 1,
+      "contentId": "kx7ccdnptdr41yjfx31k85zvtn8b8d8v",
+      "contentCreationTime": 1785024282947.256,
+      "contentUpdatedAt": 1786433535701,
+      "contentCanonicalSha256": "d6c99491a386a99783c8cb196f266351b47794750a9053779d276863d3ac5d77",
+      "linkId": "k971xmrpsdzxyc1w3zgv97wrb98b9kbv",
+      "linkCreationTime": 1785024331625.8533,
+      "linkUpdatedAt": 1785024331625,
+      "linkCanonicalSha256": "2ff3e942a4cad4f6e341e97d00646b135cd0c28d2081759db9c8445c48b2fb3a",
+      "sourceIds": [
+        "aap-milestones-2022",
+        "cdc-milestones-2026",
+        "aap-surveillance-2020",
+        "jr-who-motor-windows-2006",
+        "tb-campbell-pt-6e-2022",
+        "who-pa-sleep-under5-2019"
+      ],
+      "sourceCount": 6,
+      "sourcesCanonicalSha256": "669b94411dfbbc8f61c5da6e1626cb9d0066deb9d896d98485d5cefafd88b12d",
+      "mediaCount": 0,
+      "mediaCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "aiCanonicalSha256": "5ff4eca4b6a4fd4861bd448dfc38799d77d0a4575bf86362dda8b3d5ec61a253",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "reviewerAdvisory": {
+        "mm": "PDF အတွင်းရှိ အကြောင်းအရာ၊ အသက်အပိုင်းအခြား၊ အထောက်အထား၊ ဘေးကင်းရေးသတိပေးချက်နှင့် လွှဲပြောင်းရန်အချက်များကို ဤ frozen snapshot နှင့် တစ်ခုချင်းတိုက်စစ်ပါ။ ဆေးဘက်ဆိုင်ရာအရ မှန်ကန်ပြီး အထောက်အထားနှင့် ကိုက်ညီမှသာ approve လုပ်ပါ။ အန္တရာယ်လျှော့တွက်ထားခြင်း၊ မကိုက်ညီခြင်း သို့မဟုတ် ပြင်ဆင်ရန်လိုခြင်းရှိပါက changes requested ရွေးပါ။",
+        "en": "Compare the PDF-reviewed content item by item with this frozen snapshot, including age range, evidence, safety warnings, and referral thresholds. Approve only when clinically appropriate and evidence-aligned; otherwise request changes."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "1391d38adddd10f992c7ba5a5a0a9eb8d35138de9ff56f4cd26875f6a7a62d2e"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "1391d38adddd10f992c7ba5a5a0a9eb8d35138de9ff56f4cd26875f6a7a62d2e"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "12ef1180b6b2a14be11f5ef9ebc028f0d7d3d38631b0913ba7e9c79bfd697c30"
+        },
+        {
+          "dimension": "english",
+          "digest": "60d291c8c8a7de071cc34a39680ab95c6d12808ee05384b07689ee89adbe5549"
+        },
+        {
+          "dimension": "child_development",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "dimension": "evidence",
+          "digest": "508c395bf1d406d0ae40d72dc79faa29a0f31cd159f8c3c73091c87ca4be6617"
+        },
+        {
+          "dimension": "safety",
+          "digest": "5844930bffe7de31dd2c1e524601c06957cfd95f92c5df8492c916f78149cd38"
+        }
+      ]
+    },
+    {
+      "ordinal": 13,
+      "kind": "milestone",
+      "slug": "ms_7_9m_language_1",
+      "reviewRevision": 1,
+      "contentId": "kx74y3g9477a437nycbt8z66p98b92zv",
+      "contentCreationTime": 1785024282947.1753,
+      "contentUpdatedAt": 1786433535701,
+      "contentCanonicalSha256": "1da207589e30b364f892d8079b92cbdac43cd703bf4e58e495c140de1d9f78e6",
+      "linkId": "k977e1hx77s516kzszczfbt9318b9td6",
+      "linkCreationTime": 1785024331625.8052,
+      "linkUpdatedAt": 1785024331625,
+      "linkCanonicalSha256": "be03ddd9813214bdaeba9ef80db93f5e3586a5e2aa51d3bc83fa8e6a3fa485c6",
+      "sourceIds": [
+        "aap-milestones-2022",
+        "cdc-milestones-2026",
+        "aap-surveillance-2020",
+        "tb-paul-language-6e-2024",
+        "jr-weisleder-2013"
+      ],
+      "sourceCount": 5,
+      "sourcesCanonicalSha256": "b10b8fd43c1fc5965aa64b26f6966385ecb38cbb7e3c9c7ee39bcb0ac381fa19",
+      "mediaCount": 1,
+      "mediaCanonicalSha256": "3bb06f22fb25c3e7f6048dbae64dde1189c924dc8cab7005ed7b43e426af4dab",
+      "aiCanonicalSha256": "4762a5619e561161a38a0d5b8a6e0017d4c2fedce1e37b7d193343dda39386d8",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "reviewerAdvisory": {
+        "mm": "PDF အတွင်းရှိ အကြောင်းအရာ၊ အသက်အပိုင်းအခြား၊ အထောက်အထား၊ ဘေးကင်းရေးသတိပေးချက်နှင့် လွှဲပြောင်းရန်အချက်များကို ဤ frozen snapshot နှင့် တစ်ခုချင်းတိုက်စစ်ပါ။ ဆေးဘက်ဆိုင်ရာအရ မှန်ကန်ပြီး အထောက်အထားနှင့် ကိုက်ညီမှသာ approve လုပ်ပါ။ အန္တရာယ်လျှော့တွက်ထားခြင်း၊ မကိုက်ညီခြင်း သို့မဟုတ် ပြင်ဆင်ရန်လိုခြင်းရှိပါက changes requested ရွေးပါ။",
+        "en": "Compare the PDF-reviewed content item by item with this frozen snapshot, including age range, evidence, safety warnings, and referral thresholds. Approve only when clinically appropriate and evidence-aligned; otherwise request changes."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "74399271f2551c82a06b52b6dbc0cea867bc171b9037e8beff839e73edb3ef96"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "74399271f2551c82a06b52b6dbc0cea867bc171b9037e8beff839e73edb3ef96"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "6c4efb3e4c16dc602a139e6fd59e0338a020bbf6c7c282934c690ce001b54582"
+        },
+        {
+          "dimension": "english",
+          "digest": "3e026890a0b084932ae7805a89589eb13b6ac885b9161288abbd288f99570ea7"
+        },
+        {
+          "dimension": "child_development",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "dimension": "evidence",
+          "digest": "17aad10b2b9a86e6b6d593582f3d4efe90a0ac87762baacee30561dc1fb622d8"
+        },
+        {
+          "dimension": "safety",
+          "digest": "b2f4849569fdf10ff3a3818065346f29fd0613d10e554f9de6d75f69b41991c4"
+        }
+      ]
+    },
+    {
+      "ordinal": 14,
+      "kind": "milestone",
+      "slug": "ms_7_9m_nutrition_1",
+      "reviewRevision": 2,
+      "contentId": "kx79tjaatpf4cnenhnqawzv5r98b8mxg",
+      "contentCreationTime": 1785024282947.2576,
+      "contentUpdatedAt": 1786633220156,
+      "contentCanonicalSha256": "1ee89cbd5cb8075b4bd13590aeacb13f28a88a809f8f1d7dc5b847e5c08625e5",
+      "linkId": "k97bdh1sn0erfmxsk3xxp99qcx8b9a29",
+      "linkCreationTime": 1785024331625.8547,
+      "linkUpdatedAt": 1785024331625,
+      "linkCanonicalSha256": "fa1b82ccec2f159a778d1dceece7d771870b9644c850e69dbcf107bbfbaec817",
+      "sourceIds": [
+        "aap-milestones-2022",
+        "cdc-milestones-2026",
+        "aap-surveillance-2020",
+        "who-iycf-model-chapter-2025",
+        "who-complementary-feeding-2023",
+        "nhs-first-solid-foods-2026"
+      ],
+      "sourceCount": 6,
+      "sourcesCanonicalSha256": "cbfe26a9ec01d47113e54f9f685fb60923f82da642932efbece7b6d3fd59e030",
+      "mediaCount": 0,
+      "mediaCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "aiCanonicalSha256": "b909358b36408eb88bb7d70a61cc0cb4e2be33f97fb0636bfed00c89a12fd80d",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "reviewerAdvisory": {
+        "mm": "PDF အတွင်းရှိ အကြောင်းအရာ၊ အသက်အပိုင်းအခြား၊ အထောက်အထား၊ ဘေးကင်းရေးသတိပေးချက်နှင့် လွှဲပြောင်းရန်အချက်များကို ဤ frozen snapshot နှင့် တစ်ခုချင်းတိုက်စစ်ပါ။ ဆေးဘက်ဆိုင်ရာအရ မှန်ကန်ပြီး အထောက်အထားနှင့် ကိုက်ညီမှသာ approve လုပ်ပါ။ အန္တရာယ်လျှော့တွက်ထားခြင်း၊ မကိုက်ညီခြင်း သို့မဟုတ် ပြင်ဆင်ရန်လိုခြင်းရှိပါက changes requested ရွေးပါ။",
+        "en": "Compare the PDF-reviewed content item by item with this frozen snapshot, including age range, evidence, safety warnings, and referral thresholds. Approve only when clinically appropriate and evidence-aligned; otherwise request changes."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "5f845a76c2e07eb278a254ed96af33429a4f87d4c7aa54c2cecb1423e7a91513"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "5f845a76c2e07eb278a254ed96af33429a4f87d4c7aa54c2cecb1423e7a91513"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "e70fac720b933b14dba2b9927862743494c1bf39feba951760916f335c711f05"
+        },
+        {
+          "dimension": "english",
+          "digest": "8139f5abad77845d09843ba52ecca1ceef98e4da1893a3965d426204e6fddc8c"
+        },
+        {
+          "dimension": "child_development",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "dimension": "evidence",
+          "digest": "f877ddc4fa8a14fc323b81fbcee0b6f9eaa83c9743c3819e94503eae956508ff"
+        },
+        {
+          "dimension": "safety",
+          "digest": "383ca4e084897c9551f762ce84f4f7176d00fc8ca308e9ff175523755213b96d"
+        }
+      ]
+    },
+    {
+      "ordinal": 15,
+      "kind": "milestone",
+      "slug": "ms_7_9m_self_help_1",
+      "reviewRevision": 2,
+      "contentId": "kx76mmjjqn6yyxepy6tm337qen8b88h4",
+      "contentCreationTime": 1785024282947.2578,
+      "contentUpdatedAt": 1786633221445,
+      "contentCanonicalSha256": "ee2d93de7b3109fabe0d6660e3d7b0c746a023adb74de6cdddcac9eaf1c8eb1a",
+      "linkId": "k975g9941zvfjy8vbth8h1fbyh8b82tk",
+      "linkCreationTime": 1785024331625.855,
+      "linkUpdatedAt": 1785024331625,
+      "linkCanonicalSha256": "9b15006bcaf4f00f880622b891b539df8e30d8d104d47fd300d15cd7416ed125",
+      "sourceIds": [
+        "aap-milestones-2022",
+        "cdc-milestones-2026",
+        "aap-surveillance-2020",
+        "tb-case-smith-9e-2025",
+        "tb-bright-futures-4e-2017"
+      ],
+      "sourceCount": 5,
+      "sourcesCanonicalSha256": "0e12fd4110e6cffd75791a46a5eb54e1f73d9ae33c90355eb29751ab16eef1ff",
+      "mediaCount": 0,
+      "mediaCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "aiCanonicalSha256": "12eca90bec56f9d0c46a55080dabd99b42ea161d8bb6a1a50d82260c6fcee7c7",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "reviewerAdvisory": {
+        "mm": "PDF အတွင်းရှိ အကြောင်းအရာ၊ အသက်အပိုင်းအခြား၊ အထောက်အထား၊ ဘေးကင်းရေးသတိပေးချက်နှင့် လွှဲပြောင်းရန်အချက်များကို ဤ frozen snapshot နှင့် တစ်ခုချင်းတိုက်စစ်ပါ။ ဆေးဘက်ဆိုင်ရာအရ မှန်ကန်ပြီး အထောက်အထားနှင့် ကိုက်ညီမှသာ approve လုပ်ပါ။ အန္တရာယ်လျှော့တွက်ထားခြင်း၊ မကိုက်ညီခြင်း သို့မဟုတ် ပြင်ဆင်ရန်လိုခြင်းရှိပါက changes requested ရွေးပါ။",
+        "en": "Compare the PDF-reviewed content item by item with this frozen snapshot, including age range, evidence, safety warnings, and referral thresholds. Approve only when clinically appropriate and evidence-aligned; otherwise request changes."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "3562c459c7052a63a87f3cc93af1f93a84088f51089c40dd25303ec4f2d87431"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "3562c459c7052a63a87f3cc93af1f93a84088f51089c40dd25303ec4f2d87431"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "35587f1d4aad9392d7688770a82467ba1d60213d81029db12cb3f6909c0d03ec"
+        },
+        {
+          "dimension": "english",
+          "digest": "a6d1d635d77fddc6c3d755182e6ea97a629e424d5980967faa3767be5951fe4e"
+        },
+        {
+          "dimension": "child_development",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "dimension": "evidence",
+          "digest": "b10172c5ac45f345b5e63bde49da433bfc2b5624c2f98084d51b6a320d0c5eac"
+        },
+        {
+          "dimension": "safety",
+          "digest": "b4f7d08cffc8691f93e9ba8698fc00f5647ba2d2292ecaf1fcc53c66f11f6eae"
+        }
+      ]
+    },
+    {
+      "ordinal": 16,
+      "kind": "milestone",
+      "slug": "ms_7_9m_social_2",
+      "reviewRevision": 1,
+      "contentId": "kx77fa3yrg7kfx36ct41630m3d8b8bhp",
+      "contentCreationTime": 1785024282947.257,
+      "contentUpdatedAt": 1786433535701,
+      "contentCanonicalSha256": "660cf9d8a2f301fcd8fc25d63cbfc129c42017b5471f97595042153b28b3fe6e",
+      "linkId": "k972d0zb0s99dhhex9gm84cr458b9eyp",
+      "linkCreationTime": 1785024331625.8542,
+      "linkUpdatedAt": 1785024331625,
+      "linkCanonicalSha256": "673dd1dafc47c518ce7d15011cdda0fe4d6536169b921b320c42782818e8a7bb",
+      "sourceIds": [
+        "aap-milestones-2022",
+        "cdc-milestones-2026",
+        "aap-surveillance-2020",
+        "nice-ph40-social-emotional-2012",
+        "tb-dbp-5e-2022"
+      ],
+      "sourceCount": 5,
+      "sourcesCanonicalSha256": "7f5725200c1dcf94f2478af817f1054ba3140eecc66b9735c37dd6bbf2f639ae",
+      "mediaCount": 0,
+      "mediaCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "aiCanonicalSha256": "7d9417326f01cdcb82f1cb28498f516228d24e3fc0d0353378404ee996ea88bc",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "reviewerAdvisory": {
+        "mm": "PDF အတွင်းရှိ အကြောင်းအရာ၊ အသက်အပိုင်းအခြား၊ အထောက်အထား၊ ဘေးကင်းရေးသတိပေးချက်နှင့် လွှဲပြောင်းရန်အချက်များကို ဤ frozen snapshot နှင့် တစ်ခုချင်းတိုက်စစ်ပါ။ ဆေးဘက်ဆိုင်ရာအရ မှန်ကန်ပြီး အထောက်အထားနှင့် ကိုက်ညီမှသာ approve လုပ်ပါ။ အန္တရာယ်လျှော့တွက်ထားခြင်း၊ မကိုက်ညီခြင်း သို့မဟုတ် ပြင်ဆင်ရန်လိုခြင်းရှိပါက changes requested ရွေးပါ။",
+        "en": "Compare the PDF-reviewed content item by item with this frozen snapshot, including age range, evidence, safety warnings, and referral thresholds. Approve only when clinically appropriate and evidence-aligned; otherwise request changes."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "c9e99a8385d738619cc18ed11c66c8e73344ee39ade9c7b9fde5eb15bb57d004"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "c9e99a8385d738619cc18ed11c66c8e73344ee39ade9c7b9fde5eb15bb57d004"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "9466a58c345ceac0b8b89d61119b00fa091bbf2022c00219df426a97ccd5cc9b"
+        },
+        {
+          "dimension": "english",
+          "digest": "696355f8815e2bf38d04e22644506676d08200eeca40b42f3bc0744ef625c320"
+        },
+        {
+          "dimension": "child_development",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "dimension": "evidence",
+          "digest": "624d3800cd87c7af7b8ba52fa4c9e80125d5340edc3a4cf5cb5900e7c377b2fa"
+        },
+        {
+          "dimension": "safety",
+          "digest": "0f8ba353796a63b2cb4968a8896c8c600dc671c00ab478230c0cbeb58b875487"
+        }
+      ]
+    },
+    {
+      "ordinal": 17,
+      "kind": "milestone",
+      "slug": "ms_birth_2m_cognitive_1",
+      "reviewRevision": 1,
+      "contentId": "kx7bsh0f5167b2gfw65mhx7fed8b8356",
+      "contentCreationTime": 1785024282947.2283,
+      "contentUpdatedAt": 1786433535701,
+      "contentCanonicalSha256": "476cbc041c52df6d3f6439af3c596c4292ee61031fb5c365213ba5ee565de61f",
+      "linkId": "k97c8g5bpap74psp0mfqz4t31s8b90sm",
+      "linkCreationTime": 1785024331625.835,
+      "linkUpdatedAt": 1785024331625,
+      "linkCanonicalSha256": "fbad1d7f0668028ed94363632d185799da27d95ce0107c8670886361981032ad",
+      "sourceIds": [
+        "aap-milestones-2022",
+        "cdc-milestones-2026",
+        "aap-surveillance-2020",
+        "tb-dbp-5e-2022",
+        "aap-power-of-play-2018"
+      ],
+      "sourceCount": 5,
+      "sourcesCanonicalSha256": "b0db16b23310bb1b2b27edc14340dc13621eb6d6011e9a70637844521d0465cb",
+      "mediaCount": 0,
+      "mediaCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "aiCanonicalSha256": "38decde4e68c23f58d77ca824a8e04074cf45d17c670bd93360a29931cb3918c",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "reviewerAdvisory": {
+        "mm": "PDF အတွင်းရှိ အကြောင်းအရာ၊ အသက်အပိုင်းအခြား၊ အထောက်အထား၊ ဘေးကင်းရေးသတိပေးချက်နှင့် လွှဲပြောင်းရန်အချက်များကို ဤ frozen snapshot နှင့် တစ်ခုချင်းတိုက်စစ်ပါ။ ဆေးဘက်ဆိုင်ရာအရ မှန်ကန်ပြီး အထောက်အထားနှင့် ကိုက်ညီမှသာ approve လုပ်ပါ။ အန္တရာယ်လျှော့တွက်ထားခြင်း၊ မကိုက်ညီခြင်း သို့မဟုတ် ပြင်ဆင်ရန်လိုခြင်းရှိပါက changes requested ရွေးပါ။",
+        "en": "Compare the PDF-reviewed content item by item with this frozen snapshot, including age range, evidence, safety warnings, and referral thresholds. Approve only when clinically appropriate and evidence-aligned; otherwise request changes."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "74c05b289f8c766c0520a4ee367db555a8c6269c7adc6381ca3d759d06487f17"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "74c05b289f8c766c0520a4ee367db555a8c6269c7adc6381ca3d759d06487f17"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "615ac31629a087d9c69f274cd4346035e0e14e0c0c92cd9f404a5bef4fcdca01"
+        },
+        {
+          "dimension": "english",
+          "digest": "9cef28e35edba61e85aecd5e96ce02725ea9ef00955364c1afbc4dd42a78e864"
+        },
+        {
+          "dimension": "child_development",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "dimension": "evidence",
+          "digest": "2368233ec8703910387fea9ca1bccd919f8592c6fc31065f7aad51a161a7d304"
+        },
+        {
+          "dimension": "safety",
+          "digest": "5a2d0f6894102dafe4cf772d682c493081eab91ddaeab9066575ff99251f574b"
+        }
+      ]
+    },
+    {
+      "ordinal": 18,
+      "kind": "milestone",
+      "slug": "ms_birth_2m_communication_2",
+      "reviewRevision": 1,
+      "contentId": "kx79havy3pkes2gc2z4hv2xfzx8b8bd3",
+      "contentCreationTime": 1785024282947.2285,
+      "contentUpdatedAt": 1786433535701,
+      "contentCanonicalSha256": "3ba83099a752c282cea773f1d2361a7a6432d90298edbaba4432668f84c7d257",
+      "linkId": "k978f74e8ghsgb62cjwrpbwazx8b9tjs",
+      "linkCreationTime": 1785024331625.8352,
+      "linkUpdatedAt": 1785024331625,
+      "linkCanonicalSha256": "ab1227d3db05eac21395bea883a797b48ce307a5f0cabc556c052a23823e3a99",
+      "sourceIds": [
+        "aap-milestones-2022",
+        "cdc-milestones-2026",
+        "aap-surveillance-2020",
+        "who-care-for-child-development-2012",
+        "nhs-learn-to-talk-2023"
+      ],
+      "sourceCount": 5,
+      "sourcesCanonicalSha256": "0c6af19fd085216df72cf1474b5f78149225b0d79703009bed88c5ba299552c4",
+      "mediaCount": 0,
+      "mediaCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "aiCanonicalSha256": "e5ad3eb55bcf50512854d9238f23d70b3fd1a19f5e77dd9dec14136ed7de71f4",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "reviewerAdvisory": {
+        "mm": "PDF အတွင်းရှိ အကြောင်းအရာ၊ အသက်အပိုင်းအခြား၊ အထောက်အထား၊ ဘေးကင်းရေးသတိပေးချက်နှင့် လွှဲပြောင်းရန်အချက်များကို ဤ frozen snapshot နှင့် တစ်ခုချင်းတိုက်စစ်ပါ။ ဆေးဘက်ဆိုင်ရာအရ မှန်ကန်ပြီး အထောက်အထားနှင့် ကိုက်ညီမှသာ approve လုပ်ပါ။ အန္တရာယ်လျှော့တွက်ထားခြင်း၊ မကိုက်ညီခြင်း သို့မဟုတ် ပြင်ဆင်ရန်လိုခြင်းရှိပါက changes requested ရွေးပါ။",
+        "en": "Compare the PDF-reviewed content item by item with this frozen snapshot, including age range, evidence, safety warnings, and referral thresholds. Approve only when clinically appropriate and evidence-aligned; otherwise request changes."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "9cb1e24b6b825d409a54479a91e8d408f73fef491d1a2de04e07980b4a35dabe"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "9cb1e24b6b825d409a54479a91e8d408f73fef491d1a2de04e07980b4a35dabe"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "213085cdefd22037300a9c0ff6024ae25ff4eadd8ec7026285e4906f7ce2421f"
+        },
+        {
+          "dimension": "english",
+          "digest": "1490386aaca79903b03a959632a136a9662fb2c9e0be5315b74393b1731c6a20"
+        },
+        {
+          "dimension": "child_development",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "dimension": "evidence",
+          "digest": "5f2bc636b74cfa9c439568c968ee3d9f0a809d63a16423763e8b7467a5ced1f9"
+        },
+        {
+          "dimension": "safety",
+          "digest": "291a82ea66272df4104070a53ef31dc8058695c9e51167fc6c04bf38a9df971b"
+        }
+      ]
+    },
+    {
+      "ordinal": 19,
+      "kind": "milestone",
+      "slug": "ms_birth_2m_fine_motor_1",
+      "reviewRevision": 1,
+      "contentId": "kx73yx1k4cfzy0tstg64ss5af98b9a7b",
+      "contentCreationTime": 1785024282947.228,
+      "contentUpdatedAt": 1786433535701,
+      "contentCanonicalSha256": "93c6900fa670f5a6cd1ea6e733d0c66574b033f4dd531da8201986342ffb3d22",
+      "linkId": "k97ez906yq6edtm25enrwbm8ys8b9a0g",
+      "linkCreationTime": 1785024331625.8347,
+      "linkUpdatedAt": 1785024331625,
+      "linkCanonicalSha256": "a3e2dc47deef5ac1608dcedc53c1fda571459a2316d4ddbe7d072976f6b14a82",
+      "sourceIds": [
+        "aap-milestones-2022",
+        "cdc-milestones-2026",
+        "aap-surveillance-2020",
+        "tb-case-smith-9e-2025",
+        "cdc-milestone-checklists-2025"
+      ],
+      "sourceCount": 5,
+      "sourcesCanonicalSha256": "37fab1174117e404a69ec82c07168fcf33d9de71ce45f713ef034904e53d502c",
+      "mediaCount": 0,
+      "mediaCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "aiCanonicalSha256": "b909358b36408eb88bb7d70a61cc0cb4e2be33f97fb0636bfed00c89a12fd80d",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "reviewerAdvisory": {
+        "mm": "PDF အတွင်းရှိ အကြောင်းအရာ၊ အသက်အပိုင်းအခြား၊ အထောက်အထား၊ ဘေးကင်းရေးသတိပေးချက်နှင့် လွှဲပြောင်းရန်အချက်များကို ဤ frozen snapshot နှင့် တစ်ခုချင်းတိုက်စစ်ပါ။ ဆေးဘက်ဆိုင်ရာအရ မှန်ကန်ပြီး အထောက်အထားနှင့် ကိုက်ညီမှသာ approve လုပ်ပါ။ အန္တရာယ်လျှော့တွက်ထားခြင်း၊ မကိုက်ညီခြင်း သို့မဟုတ် ပြင်ဆင်ရန်လိုခြင်းရှိပါက changes requested ရွေးပါ။",
+        "en": "Compare the PDF-reviewed content item by item with this frozen snapshot, including age range, evidence, safety warnings, and referral thresholds. Approve only when clinically appropriate and evidence-aligned; otherwise request changes."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "1a9925636669938b6346f24fa27fce1a83581066d22453d4a59216b4df3cd868"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "1a9925636669938b6346f24fa27fce1a83581066d22453d4a59216b4df3cd868"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "f39c56c48b1ce3bd0a2d480dc36bd444eb942e490c1054c94ae946015410bc8b"
+        },
+        {
+          "dimension": "english",
+          "digest": "3618624d5b7ecc6918348838e931d54733fe0e39a10e0e7be3effc1c5c062345"
+        },
+        {
+          "dimension": "child_development",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "dimension": "evidence",
+          "digest": "266454ec94c8385d24763b316cdee7ec16dc1ab9f6ae83754d57fad745aa5d99"
+        },
+        {
+          "dimension": "safety",
+          "digest": "f324ee1de7cc5f58aaeef6a20825788cf6aa6c8356b520b780080edf4cf8a3f1"
+        }
+      ]
+    },
+    {
+      "ordinal": 20,
+      "kind": "activity",
+      "slug": "act_container_in_and_out",
+      "reviewRevision": 1,
+      "contentId": "kx7eqh3kzktp3r5m91j6rg1r558b9cpc",
+      "contentCreationTime": 1785024282947.2708,
+      "contentUpdatedAt": 1786433535701,
+      "contentCanonicalSha256": "b44ab763cc7a7e3d004bfae09ec0fb470e755259fd516d8b13a45d86fe047514",
+      "linkId": "k97d6bmgqg6ta12xw6btmgpb558b996t",
+      "linkCreationTime": 1785024331625.8647,
+      "linkUpdatedAt": 1785024331625,
+      "linkCanonicalSha256": "95062b88ea0c6dcad8471c91dc1490e3e4631fbfcb2e8240dcf2fa94debb4dc7",
+      "sourceIds": [
+        "tb-case-smith-9e-2025",
+        "aap-power-of-play-2018",
+        "cdc-milestone-checklists-2025",
+        "tb-dbp-5e-2022"
+      ],
+      "sourceCount": 4,
+      "sourcesCanonicalSha256": "92eb0823527b25a5e8e18c083decb6a9087d21c02cb13248d62c0659c9ee8c70",
+      "mediaCount": 2,
+      "mediaCanonicalSha256": "8f208b6e42b72729dcf01f73e5389c94fce60f5dd16113935bcf34f3d01d6e4a",
+      "aiCanonicalSha256": "43e5eee694be627da320f2cdede23e67f210e3c2d2f9fba70866d780be988c9a",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "reviewerAdvisory": {
+        "mm": "PDF အတွင်းရှိ အကြောင်းအရာ၊ အသက်အပိုင်းအခြား၊ အထောက်အထား၊ ဘေးကင်းရေးသတိပေးချက်နှင့် လွှဲပြောင်းရန်အချက်များကို ဤ frozen snapshot နှင့် တစ်ခုချင်းတိုက်စစ်ပါ။ ဆေးဘက်ဆိုင်ရာအရ မှန်ကန်ပြီး အထောက်အထားနှင့် ကိုက်ညီမှသာ approve လုပ်ပါ။ အန္တရာယ်လျှော့တွက်ထားခြင်း၊ မကိုက်ညီခြင်း သို့မဟုတ် ပြင်ဆင်ရန်လိုခြင်းရှိပါက changes requested ရွေးပါ။",
+        "en": "Compare the PDF-reviewed content item by item with this frozen snapshot, including age range, evidence, safety warnings, and referral thresholds. Approve only when clinically appropriate and evidence-aligned; otherwise request changes."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "95411657de3969a5d4a72883e72d1ad550ec5a034ed8e6ef0ac08f2c4a62fe58"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "95411657de3969a5d4a72883e72d1ad550ec5a034ed8e6ef0ac08f2c4a62fe58"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "e243cecc3f092da7181d307fc57968318d6473a9b28bcaf0237046af63ed45d8"
+        },
+        {
+          "dimension": "english",
+          "digest": "8457b41e6468e163e90afa1a9cea759eff0ef422d57f4a7ab7161aa411b1b5b7"
+        },
+        {
+          "dimension": "child_development",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "dimension": "evidence",
+          "digest": "65f988cac56c52dc54c350a807a30e5ed9ce3711653ed81678c5e38de09700b3"
+        },
+        {
+          "dimension": "safety",
+          "digest": "fede85f7eea6eedea883950d8e4955da273115d79f9bb1fe04ef26069171a0b9"
+        }
+      ]
+    },
+    {
+      "ordinal": 21,
+      "kind": "activity",
+      "slug": "act_reach_for_the_toy",
+      "reviewRevision": 1,
+      "contentId": "kx7bjxvt57a2h204egscx6vjtd8b981g",
+      "contentCreationTime": 1785024282947.2424,
+      "contentUpdatedAt": 1786433535701,
+      "contentCanonicalSha256": "39ec3c0b377c7476f89c1b68558ce77e442515b07a1db1943d2f22d427954352",
+      "linkId": "k974aam3weps6gz5ptgwzj4ch98b8bcc",
+      "linkCreationTime": 1785024331625.8455,
+      "linkUpdatedAt": 1785024331625,
+      "linkCanonicalSha256": "a3306e386c5a2dba444e5b4565f2091e2b4907a6f709dfda6825c3500f656eb2",
+      "sourceIds": [
+        "tb-case-smith-9e-2025",
+        "cdc-milestone-checklists-2025",
+        "aap-milestones-2022",
+        "aap-safe-sleep-2022",
+        "aap-power-of-play-2018"
+      ],
+      "sourceCount": 5,
+      "sourcesCanonicalSha256": "c0d780cbfb8a97d3a79d0f3c400b4c916cac17f22cd3a3d9127c930ab9737247",
+      "mediaCount": 2,
+      "mediaCanonicalSha256": "2b5a13911f1e1ea0e71e7c103d2ff0d86dd227657c8765ce0adca9b8fe63d3df",
+      "aiCanonicalSha256": "ff3f8bb8f52b1653f1fc4dbc46c60373f7b3355e108bbc36b139c1f61228d0b0",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "reviewerAdvisory": {
+        "mm": "PDF အတွင်းရှိ အကြောင်းအရာ၊ အသက်အပိုင်းအခြား၊ အထောက်အထား၊ ဘေးကင်းရေးသတိပေးချက်နှင့် လွှဲပြောင်းရန်အချက်များကို ဤ frozen snapshot နှင့် တစ်ခုချင်းတိုက်စစ်ပါ။ ဆေးဘက်ဆိုင်ရာအရ မှန်ကန်ပြီး အထောက်အထားနှင့် ကိုက်ညီမှသာ approve လုပ်ပါ။ အန္တရာယ်လျှော့တွက်ထားခြင်း၊ မကိုက်ညီခြင်း သို့မဟုတ် ပြင်ဆင်ရန်လိုခြင်းရှိပါက changes requested ရွေးပါ။",
+        "en": "Compare the PDF-reviewed content item by item with this frozen snapshot, including age range, evidence, safety warnings, and referral thresholds. Approve only when clinically appropriate and evidence-aligned; otherwise request changes."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "e38c51f7036a0a4f6bea2178079d48444f47e983088b20a198b6beb5210a0965"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "e38c51f7036a0a4f6bea2178079d48444f47e983088b20a198b6beb5210a0965"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "78fc23e18c9faf57f1b3013d2a647575c025f881c9cd545a0845086346d25c43"
+        },
+        {
+          "dimension": "english",
+          "digest": "c2ad86aadbead6a0288842769a87a9cc928fb4a17d018618dfc47bb1756ddac3"
+        },
+        {
+          "dimension": "child_development",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "dimension": "evidence",
+          "digest": "b77cf8184207b5d809e4442ff2dbb37dd2f2ec28bd068469e264d03cd50b626a"
+        },
+        {
+          "dimension": "safety",
+          "digest": "3d61eadad03e76a2dc109eff6dc437291dd68c7f1a27e8adfc4e4b11b9e7d76d"
+        }
+      ]
+    },
+    {
+      "ordinal": 22,
+      "kind": "activity",
+      "slug": "act_roll_the_ball_back",
+      "reviewRevision": 1,
+      "contentId": "kx7b2df2b6xjwbct91k8603jy18b8nat",
+      "contentCreationTime": 1785024282947.273,
+      "contentUpdatedAt": 1786433535701,
+      "contentCanonicalSha256": "5875cfa479c4602668f5ab865068daf600c18cae0478e286fbc5dfe0fd381a2b",
+      "linkId": "k973emf0rdmkmv4xrtbszzwvdd8b9h46",
+      "linkCreationTime": 1785024331625.8655,
+      "linkUpdatedAt": 1785024331625,
+      "linkCanonicalSha256": "8d3cb5960c9d049af60861c84ca5a5936060a7485adcefe2f397d3a06019a9c5",
+      "sourceIds": [
+        "aap-power-of-play-2018",
+        "who-care-for-child-development-2012",
+        "cdc-milestones-2026",
+        "tb-campbell-pt-6e-2022"
+      ],
+      "sourceCount": 4,
+      "sourcesCanonicalSha256": "61a7d7cf0b722e7f5d8ec821c19b339d96a794e763cebded5da4b3f5348c02de",
+      "mediaCount": 2,
+      "mediaCanonicalSha256": "23dc74f3b033cd3ad8f695689a90f0b7c9c5aa03be789423ba68d1efc957f183",
+      "aiCanonicalSha256": "26902bd3ca26b959e82156dbb3da30bac2a53b3f1853d0a55a79c2e42704b8c6",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "reviewerAdvisory": {
+        "mm": "PDF အတွင်းရှိ အကြောင်းအရာ၊ အသက်အပိုင်းအခြား၊ အထောက်အထား၊ ဘေးကင်းရေးသတိပေးချက်နှင့် လွှဲပြောင်းရန်အချက်များကို ဤ frozen snapshot နှင့် တစ်ခုချင်းတိုက်စစ်ပါ။ ဆေးဘက်ဆိုင်ရာအရ မှန်ကန်ပြီး အထောက်အထားနှင့် ကိုက်ညီမှသာ approve လုပ်ပါ။ အန္တရာယ်လျှော့တွက်ထားခြင်း၊ မကိုက်ညီခြင်း သို့မဟုတ် ပြင်ဆင်ရန်လိုခြင်းရှိပါက changes requested ရွေးပါ။",
+        "en": "Compare the PDF-reviewed content item by item with this frozen snapshot, including age range, evidence, safety warnings, and referral thresholds. Approve only when clinically appropriate and evidence-aligned; otherwise request changes."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "f6e7c0ee0c26f92daa897c512d6f866d0629fe17976908d1c954b0090a7d1f4a"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "f6e7c0ee0c26f92daa897c512d6f866d0629fe17976908d1c954b0090a7d1f4a"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "b2bcd7322636590416436c72defadc8f09857592b298b7875847dce99ac0392a"
+        },
+        {
+          "dimension": "english",
+          "digest": "45766a077a589da9520f2a88534955359f141ebb9f693a0e96f180798af74ccf"
+        },
+        {
+          "dimension": "child_development",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "dimension": "evidence",
+          "digest": "15b3a0cc41c95f3dd89916faa87f4f9e5670364a44a5ddd9d91cf308b208c70c"
+        },
+        {
+          "dimension": "safety",
+          "digest": "80ab571aeaa8cab337b06f996e7a84debc035d9c4a0e4b110deb6a42e24468c8"
+        }
+      ]
+    },
+    {
+      "ordinal": 23,
+      "kind": "activity",
+      "slug": "act_sit_and_reach_ring",
+      "reviewRevision": 1,
+      "contentId": "kx7cde56v0zqhqz19meg1w41k58b9p2h",
+      "contentCreationTime": 1785024282947.2617,
+      "contentUpdatedAt": 1786433535701,
+      "contentCanonicalSha256": "71f608540553bff27131a3303cacdc5f98822509b7ae4ec45187e161a242df64",
+      "linkId": "k971mjabry2h3ceb6ft8vyhtkh8b9xx6",
+      "linkCreationTime": 1785024331625.8584,
+      "linkUpdatedAt": 1785024331625,
+      "linkCanonicalSha256": "7af6cf22d21a4a5f344a28226dadfa3cd4f5f9c377f8cae07926a3adc10472b2",
+      "sourceIds": [
+        "cdc-milestone-checklists-2025",
+        "aap-milestones-2022",
+        "jr-who-motor-windows-2006",
+        "tb-campbell-pt-6e-2022"
+      ],
+      "sourceCount": 4,
+      "sourcesCanonicalSha256": "ccce0d0fc380d874d7d4f702985f867d9018b99dc5b61e71e6016db055444659",
+      "mediaCount": 2,
+      "mediaCanonicalSha256": "8c5c4b679be20da4fb9358fdc481250405ab41b5abea54bf49e6ce257e5fbb8d",
+      "aiCanonicalSha256": "10cd7cd6a73da6a302c752ab92695d8dc70405c973fb8e49847ee043e83b6f35",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "reviewerAdvisory": {
+        "mm": "PDF အတွင်းရှိ အကြောင်းအရာ၊ အသက်အပိုင်းအခြား၊ အထောက်အထား၊ ဘေးကင်းရေးသတိပေးချက်နှင့် လွှဲပြောင်းရန်အချက်များကို ဤ frozen snapshot နှင့် တစ်ခုချင်းတိုက်စစ်ပါ။ ဆေးဘက်ဆိုင်ရာအရ မှန်ကန်ပြီး အထောက်အထားနှင့် ကိုက်ညီမှသာ approve လုပ်ပါ။ အန္တရာယ်လျှော့တွက်ထားခြင်း၊ မကိုက်ညီခြင်း သို့မဟုတ် ပြင်ဆင်ရန်လိုခြင်းရှိပါက changes requested ရွေးပါ။",
+        "en": "Compare the PDF-reviewed content item by item with this frozen snapshot, including age range, evidence, safety warnings, and referral thresholds. Approve only when clinically appropriate and evidence-aligned; otherwise request changes."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "5c84c2b449e3cd1d6fc309c64dd82322788b901027300aecc5796bd3ee09e28b"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "5c84c2b449e3cd1d6fc309c64dd82322788b901027300aecc5796bd3ee09e28b"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "ca99e8a08997bf63fb6fa5487537499ea4a892ee0281ef8702d28f0ad5b54b7d"
+        },
+        {
+          "dimension": "english",
+          "digest": "d8f30335ad7e98f2748d3d72c875c1e39b25793c110443ac96ba2610125f571f"
+        },
+        {
+          "dimension": "child_development",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "dimension": "evidence",
+          "digest": "92b1902d602c540d763106a86df387ba29c72cf5299c9b95fc0f75d465dfa3dc"
+        },
+        {
+          "dimension": "safety",
+          "digest": "2c7f2a67258c41ef87202116100dcc2311d6866bc05ee36a2e84ec066062f540"
+        }
+      ]
+    },
+    {
+      "ordinal": 24,
+      "kind": "activity",
+      "slug": "act_texture_basket_infant",
+      "reviewRevision": 1,
+      "contentId": "kx71n94xjcy9bs22ahnf7qbqvd8b9dk0",
+      "contentCreationTime": 1785024282947.2454,
+      "contentUpdatedAt": 1786433535701,
+      "contentCanonicalSha256": "0c6b8085603a59bb94bb11142dc39c8993aa8169e52224b86eaf721eca566d72",
+      "linkId": "k974tb32jvd925rs8w9thnf4a58b8127",
+      "linkCreationTime": 1785024331625.8464,
+      "linkUpdatedAt": 1785024331625,
+      "linkCanonicalSha256": "6778e4070f2f1c3fdae03363e1b6901472ffd8192eae1251bd0309a337c1ce64",
+      "sourceIds": [
+        "tb-case-smith-9e-2025",
+        "who-care-for-child-development-2012",
+        "aap-safe-sleep-2022"
+      ],
+      "sourceCount": 3,
+      "sourcesCanonicalSha256": "6ba67252b77a1fd6ecc572da73215998447523119bcb42581b310cecec84cd03",
+      "mediaCount": 2,
+      "mediaCanonicalSha256": "242aecec158c5cf27135ab8b26fdaaddff0c62f6e39bd4ec547447ed96c23c36",
+      "aiCanonicalSha256": "26411834070c5f56068b03123e8cb574f9a971061db9f11f485ad4d66ba94169",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "reviewerAdvisory": {
+        "mm": "PDF အတွင်းရှိ အကြောင်းအရာ၊ အသက်အပိုင်းအခြား၊ အထောက်အထား၊ ဘေးကင်းရေးသတိပေးချက်နှင့် လွှဲပြောင်းရန်အချက်များကို ဤ frozen snapshot နှင့် တစ်ခုချင်းတိုက်စစ်ပါ။ ဆေးဘက်ဆိုင်ရာအရ မှန်ကန်ပြီး အထောက်အထားနှင့် ကိုက်ညီမှသာ approve လုပ်ပါ။ အန္တရာယ်လျှော့တွက်ထားခြင်း၊ မကိုက်ညီခြင်း သို့မဟုတ် ပြင်ဆင်ရန်လိုခြင်းရှိပါက changes requested ရွေးပါ။",
+        "en": "Compare the PDF-reviewed content item by item with this frozen snapshot, including age range, evidence, safety warnings, and referral thresholds. Approve only when clinically appropriate and evidence-aligned; otherwise request changes."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "a10f74166ac06b5662d4d12b3384c0310a8c419bf76c04e70a6775c93c96ab86"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "a10f74166ac06b5662d4d12b3384c0310a8c419bf76c04e70a6775c93c96ab86"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "292fd51dc148348ba7f656743304742d7fa2f86133a1739bd46746d2c3e3ec1d"
+        },
+        {
+          "dimension": "english",
+          "digest": "ed675aae7bd1f9aee4df8df23343dfb3cd59cd1a49924d400f3e077e4662b400"
+        },
+        {
+          "dimension": "child_development",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "dimension": "evidence",
+          "digest": "790706910c0ef0c81d53664a6f32f3e7825c105ffca3219de50dae0009cc6681"
+        },
+        {
+          "dimension": "safety",
+          "digest": "57033e6feaf82fec73f87729a1c2856e34adacc2826b314818c5c50d693469fd"
+        }
+      ]
+    },
+    {
+      "ordinal": 25,
+      "kind": "activity",
+      "slug": "act_texture_touch",
+      "reviewRevision": 1,
+      "contentId": "kx7e04g200qs5fctfr3rk33yr18b9nbb",
+      "contentCreationTime": 1785024282947.2358,
+      "contentUpdatedAt": 1786433535701,
+      "contentCanonicalSha256": "f36bf9accca933ef81cc933634b7d9977d005ecd81485d43296fc5c7eb0d8be6",
+      "linkId": "k975wf2c843zp1e28b9c5s7a1x8b93zk",
+      "linkCreationTime": 1785024331625.84,
+      "linkUpdatedAt": 1785024331625,
+      "linkCanonicalSha256": "f1a336d0759d2295daaf1f7b3366c6a70a421a07f5c30eeb4f8d0e22c0a28068",
+      "sourceIds": [
+        "tb-case-smith-9e-2025",
+        "who-care-for-child-development-2012",
+        "aap-safe-sleep-2022"
+      ],
+      "sourceCount": 3,
+      "sourcesCanonicalSha256": "6ba67252b77a1fd6ecc572da73215998447523119bcb42581b310cecec84cd03",
+      "mediaCount": 2,
+      "mediaCanonicalSha256": "69117dfca8ac8ee158c73305fcf5c21c6c77f564352eb1176f623c80f35cbe42",
+      "aiCanonicalSha256": "26411834070c5f56068b03123e8cb574f9a971061db9f11f485ad4d66ba94169",
+      "currentClinicalReviewCount": 0,
+      "currentClinicalReviewsCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "allClinicalReviewHistoryCanonicalSha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "reviewerAdvisory": {
+        "mm": "PDF အတွင်းရှိ အကြောင်းအရာ၊ အသက်အပိုင်းအခြား၊ အထောက်အထား၊ ဘေးကင်းရေးသတိပေးချက်နှင့် လွှဲပြောင်းရန်အချက်များကို ဤ frozen snapshot နှင့် တစ်ခုချင်းတိုက်စစ်ပါ။ ဆေးဘက်ဆိုင်ရာအရ မှန်ကန်ပြီး အထောက်အထားနှင့် ကိုက်ညီမှသာ approve လုပ်ပါ။ အန္တရာယ်လျှော့တွက်ထားခြင်း၊ မကိုက်ညီခြင်း သို့မဟုတ် ပြင်ဆင်ရန်လိုခြင်းရှိပါက changes requested ရွေးပါ။",
+        "en": "Compare the PDF-reviewed content item by item with this frozen snapshot, including age range, evidence, safety warnings, and referral thresholds. Approve only when clinically appropriate and evidence-aligned; otherwise request changes."
+      },
+      "upstreamReviewDigests": [
+        {
+          "dimension": "all_review_history",
+          "digest": "83ef6b2ddebed75b049d07019a88dbe31afdcb55d2173e4bc2e6e316c930773b"
+        },
+        {
+          "dimension": "all_nonclinical_history",
+          "digest": "83ef6b2ddebed75b049d07019a88dbe31afdcb55d2173e4bc2e6e316c930773b"
+        },
+        {
+          "dimension": "native_myanmar",
+          "digest": "7dde83988c0109b8454189b6930cf23c2200ad6a3980dda11716492f91fad9d9"
+        },
+        {
+          "dimension": "english",
+          "digest": "f4edf57b9a99b7074e0132bac5d67a6e549c5afe74bbbf941a5852ea55d913e4"
+        },
+        {
+          "dimension": "child_development",
+          "digest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+        },
+        {
+          "dimension": "evidence",
+          "digest": "57ba1ff805d499ac079d968555e8e5ef26429ce86c8fc31c315d674714b2c7db"
+        },
+        {
+          "dimension": "safety",
+          "digest": "4f618d88357aeff2a37e018861c1b76ee266c07410e911b3f4a2f07e6c8d9e92"
+        }
+      ]
+    }
+  ],
+  "freezeDigest": "d608b6f487b3edfe0b86f33a4155e321f3e5aa1442a663369916588bae5def9a",
+  "routingDigest": "03aeface19452998c2b12aef7420ddecaa89447b571bfaad69c54228da458d0a"
+}

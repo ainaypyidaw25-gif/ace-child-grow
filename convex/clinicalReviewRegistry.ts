@@ -35,6 +35,20 @@ const resultValidator = v.object({
   createdAssignments: v.number(),
 });
 
+/**
+ * Admin/CLI-only diagnostic for one code-registered batch. It runs the exact
+ * read-only live preflight used by activation and returns no content body.
+ */
+export const activationBlockersForRegisteredBatch = internalQuery({
+  args: { batchId: v.string() },
+  returns: v.array(v.string()),
+  handler: async (ctx, args) => {
+    const registration = registrationById(args.batchId);
+    if (!registration) return ['registration_missing'];
+    return await registeredBatchActivationBlockers(ctx, registration, todayIsoUtc());
+  },
+});
+
 const MAX_REGISTERED_RELEASES = 20;
 const MAX_REGISTERED_BATCHES = MAX_REGISTERED_RELEASES + 1;
 

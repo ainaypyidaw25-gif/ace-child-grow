@@ -102,6 +102,7 @@ import type * as lib_clinicalEnglishSuccessorBatchData from "../lib/clinicalEngl
 import type * as lib_clinicalEvidenceSuccessorBatchData from "../lib/clinicalEvidenceSuccessorBatchData.js";
 import type * as lib_clinicalNativeMyanmarRefreezeBatchData from "../lib/clinicalNativeMyanmarRefreezeBatchData.js";
 import type * as lib_clinicalNativeMyanmarSuccessorBatchData from "../lib/clinicalNativeMyanmarSuccessorBatchData.js";
+import type * as lib_clinicalP1RemainingBatchData from "../lib/clinicalP1RemainingBatchData.js";
 import type * as lib_clinicalRefreezeRegistryMigrationData from "../lib/clinicalRefreezeRegistryMigrationData.js";
 import type * as lib_clinicalReviewBatchContract from "../lib/clinicalReviewBatchContract.js";
 import type * as lib_clinicalReviewBatchData from "../lib/clinicalReviewBatchData.js";
@@ -110,6 +111,7 @@ import type * as lib_clinicalReviewCopyRelease from "../lib/clinicalReviewCopyRe
 import type * as lib_clinicalReviewRegistryContract from "../lib/clinicalReviewRegistryContract.js";
 import type * as lib_clinicalReviewSuccessorBatchData from "../lib/clinicalReviewSuccessorBatchData.js";
 import type * as lib_clinicalSafetySuccessorBatchData from "../lib/clinicalSafetySuccessorBatchData.js";
+import type * as lib_clinicalSocialGuideBatchData from "../lib/clinicalSocialGuideBatchData.js";
 import type * as lib_clinicalTwoSmallCasData from "../lib/clinicalTwoSmallCasData.js";
 import type * as lib_clinicalTwoSmallCasGuard from "../lib/clinicalTwoSmallCasGuard.js";
 import type * as lib_contentEditDiff from "../lib/contentEditDiff.js";
@@ -173,9 +175,9 @@ import type * as nativeMyanmarRefreezeCorrection from "../nativeMyanmarRefreezeC
 import type * as nativeMyanmarRefreezeCorrectionActions from "../nativeMyanmarRefreezeCorrectionActions.js";
 import type * as nhsSoothingHumanReviewSuccessorCas from "../nhsSoothingHumanReviewSuccessorCas.js";
 import type * as notifications from "../notifications.js";
-import type * as offlineLibrary from "../offlineLibrary.js";
 import type * as nutritionGuidesCas from "../nutritionGuidesCas.js";
 import type * as observations from "../observations.js";
+import type * as offlineLibrary from "../offlineLibrary.js";
 import type * as olderSafety2026Cas from "../olderSafety2026Cas.js";
 import type * as olderSafety2026CasV2 from "../olderSafety2026CasV2.js";
 import type * as ownerAccountMerge from "../ownerAccountMerge.js";
@@ -300,6 +302,7 @@ declare const fullApi: ApiFromModules<{
   "lib/clinicalEvidenceSuccessorBatchData": typeof lib_clinicalEvidenceSuccessorBatchData;
   "lib/clinicalNativeMyanmarRefreezeBatchData": typeof lib_clinicalNativeMyanmarRefreezeBatchData;
   "lib/clinicalNativeMyanmarSuccessorBatchData": typeof lib_clinicalNativeMyanmarSuccessorBatchData;
+  "lib/clinicalP1RemainingBatchData": typeof lib_clinicalP1RemainingBatchData;
   "lib/clinicalRefreezeRegistryMigrationData": typeof lib_clinicalRefreezeRegistryMigrationData;
   "lib/clinicalReviewBatchContract": typeof lib_clinicalReviewBatchContract;
   "lib/clinicalReviewBatchData": typeof lib_clinicalReviewBatchData;
@@ -308,6 +311,7 @@ declare const fullApi: ApiFromModules<{
   "lib/clinicalReviewRegistryContract": typeof lib_clinicalReviewRegistryContract;
   "lib/clinicalReviewSuccessorBatchData": typeof lib_clinicalReviewSuccessorBatchData;
   "lib/clinicalSafetySuccessorBatchData": typeof lib_clinicalSafetySuccessorBatchData;
+  "lib/clinicalSocialGuideBatchData": typeof lib_clinicalSocialGuideBatchData;
   "lib/clinicalTwoSmallCasData": typeof lib_clinicalTwoSmallCasData;
   "lib/clinicalTwoSmallCasGuard": typeof lib_clinicalTwoSmallCasGuard;
   "lib/contentEditDiff": typeof lib_contentEditDiff;
@@ -371,9 +375,9 @@ declare const fullApi: ApiFromModules<{
   nativeMyanmarRefreezeCorrectionActions: typeof nativeMyanmarRefreezeCorrectionActions;
   nhsSoothingHumanReviewSuccessorCas: typeof nhsSoothingHumanReviewSuccessorCas;
   notifications: typeof notifications;
-  offlineLibrary: typeof offlineLibrary;
   nutritionGuidesCas: typeof nutritionGuidesCas;
   observations: typeof observations;
+  offlineLibrary: typeof offlineLibrary;
   olderSafety2026Cas: typeof olderSafety2026Cas;
   olderSafety2026CasV2: typeof olderSafety2026CasV2;
   ownerAccountMerge: typeof ownerAccountMerge;

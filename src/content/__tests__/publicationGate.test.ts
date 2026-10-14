@@ -106,7 +106,7 @@ describe('risk-scoped publication gate', () => {
     expect(offlineHook).toContain('removeOfflineMedia');
 
     const app = readFileSync('src/app/App.tsx', 'utf8');
-    expect(app).toContain('useOfflineWithdrawal();');
+    expect(app).toContain("useOfflineWithdrawal(!location.pathname.startsWith('/admin'));\n");
   });
 
   it('does not allow parents to complete an unpublished activity', () => {
