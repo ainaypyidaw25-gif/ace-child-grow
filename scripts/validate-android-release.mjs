@@ -153,6 +153,23 @@ function sourceSnapshot() {
   return { commit, clean: status.trim().length === 0 };
 }
 
+function permissionsFor(bundlePath, bundletoolPath) {
+  const result = spawnSync('python3', [
+    'scripts/check-android-permissions.py',
+    '--bundle', bundlePath,
+    '--bundletool', bundletoolPath,
+  ], { encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 });
+  if (result.error || ![0, 2].includes(result.status)) {
+    throw new Error('Candidate AAB permission inspection failed; Python 3.11+ and bundletool are required.');
+  }
+  const report = JSON.parse(result.stdout);
+  if (typeof report.pass !== 'boolean' || !Array.isArray(report.checks)
+      || report.sha256 !== sha256File(bundlePath)) {
+    throw new Error('Permission report is invalid or does not match the candidate AAB.');
+  }
+  return report;
+}
+
 function positiveInteger(value, label) {
   if (value === null) return null;
   const parsed = Number(value);
@@ -209,6 +226,7 @@ function main() {
   const certificate = certificateFor(bundlePath);
   const previousCertificate = previousBundlePath === null ? null : certificateFor(previousBundlePath);
   const manifest = manifestFor(bundletoolPath, bundlePath);
+  const permissions = permissionsFor(bundlePath, bundletoolPath);
   const source = sourceSnapshot();
   const artifact = {
     ...manifest,
@@ -228,14 +246,19 @@ function main() {
     sourceClean: source.clean,
   });
   const report = {
-    ready: assessment.ready,
+    ready: assessment.ready && permissions.pass,
     bundle: bundlePath,
     previousBundle: previousBundlePath,
     gradle,
     artifact,
     certificate,
     source,
-    checks: assessment.checks,
+    permissions,
+    checks: [...assessment.checks, {
+      id: 'candidate_permissions_reviewed',
+      pass: permissions.pass,
+      detail: 'Every AAB module must use reviewed permissions (including signature-protected AndroidX receiver guard); base target SDK must be 36.',
+    }],
   };
 
   if (options.json) console.log(JSON.stringify(report, null, 2));
@@ -249,3 +272,4 @@ try {
   console.error(`ERROR: ${error instanceof Error ? error.message : 'Android validation failed.'}`);
   process.exitCode = 1;
 }
+

@@ -48,6 +48,33 @@ to the current reviewed commit.
 
 ## Validate the exact AAB
 
+Install Python 3.11+ in addition to Java/keytool/jarsigner. The validator invokes
+`scripts/check-android-permissions.py` against the exact candidate AAB and checks
+the returned SHA-256. It discovers every module manifest in the archive, dumps
+each through bundletool, and parses the XML. Missing tools, failed dumps, invalid
+XML, unexpected permissions, or a base target SDK other than the reviewed 36
+block validation. No source-only audit can satisfy this artifact gate.
+
+The current parent-only build permits INTERNET and ACCESS_NETWORK_STATE (the
+Capacitor network status plugin). AndroidX's exact app-owned
+`mm.com.acegroup.acechildgrow.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION` is also
+accepted only with a matching signature-protected declaration. This does not add
+any permission to the app. A new permission or SDK requires a reviewed policy
+decision and an explicit gate update; do not broaden the allowlist to make a
+failed release pass.
+
+Regression tests and source-only checks:
+
+```sh
+python3 -B -m unittest discover -s scripts/tests -p 'test_android_permissions.py' -v
+python3 scripts/check-android-permissions.py --source android/app/src
+```
+
+The source audit includes main and variant manifests. It excludes transitive
+library manifests, which are covered only by the mandatory final AAB inspection.
+See [October 2026 policy audit](google-play-policy-2026-10.md) for Console and
+device evidence that remains separate from artifact validation.
+
 Download the current `bundletool-all-*.jar` from the official
 `google/bundletool` release page and verify the published SHA-256 digest. Then
 run:
@@ -127,3 +154,4 @@ evidence-backed actions:
 
 If any value changes after approval, stop and rerun the full gate. Never infer
 publication from a local build, an uploaded draft or a successful web deploy.
+
