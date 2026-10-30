@@ -66,7 +66,7 @@ failed release pass.
 Regression tests and source-only checks:
 
 ```sh
-python3 -m unittest discover -s scripts/tests -p 'test_android_permissions.py' -v
+python3 -B -m unittest discover -s scripts/tests -p 'test_android_permissions.py' -v
 python3 scripts/check-android-permissions.py --source android/app/src
 ```
 
