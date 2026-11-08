@@ -48,13 +48,29 @@ describe('native store review readiness contract', () => {
     expect(entitlements).toContain('com.apple.developer.applesignin');
     expect(entitlements).toContain('applinks:child.acegroup.com.mm');
     expect(project).toContain('CODE_SIGN_ENTITLEMENTS = App/App.entitlements;');
-    expect(project).toContain('CURRENT_PROJECT_VERSION = 10;');
+    expect(project).toContain('CURRENT_PROJECT_VERSION = 11;');
     expect(aasa.applinks.details).toEqual([{
       appID: 'QK8ZAZ4RHW.mm.com.acegroup.acechildgrow',
       paths: ['/'],
     }]);
     expect(vercel).toContain('/.well-known/apple-app-site-association');
     expect(vercel).toContain('application/json');
+  });
+
+  it('declares iOS privacy usage strings for photo features reachable in the App Store build', () => {
+    // iOS terminates the app (TCC crash) when WKWebView opens the camera or the
+    // share sheet's "Save Image" without these Info.plist keys.
+    expect(read('src/screens/MilestoneGallery.tsx')).toContain('accept="image/*"');
+    expect(read('src/screens/MilestoneKeepsake.tsx')).toContain('navigator.share({ files');
+    const plist = read('ios/App/App/Info.plist');
+    for (const key of [
+      'NSCameraUsageDescription',
+      'NSPhotoLibraryUsageDescription',
+      'NSPhotoLibraryAddUsageDescription',
+    ]) {
+      const match = plist.match(new RegExp(`<key>${key}</key>\\s*<string>([^<]+)</string>`));
+      expect(match?.[1]?.trim().length ?? 0, key).toBeGreaterThan(20);
+    }
   });
 
   it('forces parent screens through the parent-audience catalogue gate', () => {
